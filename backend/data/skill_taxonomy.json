@@ -1,0 +1,576 @@
+[
+  {
+    "skill_id": "SK001",
+    "name": "Python",
+    "category": "Programming Languages",
+    "aliases": ["python3", "python programming"],
+    "jobstreet_frequency": 1312
+  },
+  {
+    "skill_id": "SK002",
+    "name": "Java",
+    "category": "Programming Languages",
+    "aliases": ["java programming", "core java"],
+    "jobstreet_frequency": 1789
+  },
+  {
+    "skill_id": "SK003",
+    "name": "JavaScript",
+    "category": "Programming Languages",
+    "aliases": ["js", "es6", "es2015"],
+    "jobstreet_frequency": 1463
+  },
+  {
+    "skill_id": "SK004",
+    "name": "TypeScript",
+    "category": "Programming Languages",
+    "aliases": ["ts"],
+    "jobstreet_frequency": 307
+  },
+  {
+    "skill_id": "SK005",
+    "name": "PHP",
+    "category": "Programming Languages",
+    "aliases": ["php programming"],
+    "jobstreet_frequency": 777
+  },
+  {
+    "skill_id": "SK006",
+    "name": "Swift",
+    "category": "Programming Languages",
+    "aliases": ["swift programming"],
+    "jobstreet_frequency": 256
+  },
+  {
+    "skill_id": "SK007",
+    "name": "Kotlin",
+    "category": "Programming Languages",
+    "aliases": ["kotlin programming"],
+    "jobstreet_frequency": 120
+  },
+  {
+    "skill_id": "SK008",
+    "name": "Golang",
+    "category": "Programming Languages",
+    "aliases": ["go", "go programming"],
+    "jobstreet_frequency": 90
+  },
+  {
+    "skill_id": "SK009",
+    "name": "Scala",
+    "category": "Programming Languages",
+    "aliases": [],
+    "jobstreet_frequency": 46
+  },
+  {
+    "skill_id": "SK010",
+    "name": "Ruby",
+    "category": "Programming Languages",
+    "aliases": ["ruby on rails"],
+    "jobstreet_frequency": 75
+  },
+  {
+    "skill_id": "SK011",
+    "name": "C++",
+    "category": "Programming Languages",
+    "aliases": ["cpp", "c plus plus"],
+    "jobstreet_frequency": 1
+  },
+  {
+    "skill_id": "SK012",
+    "name": "C#",
+    "category": "Programming Languages",
+    "aliases": ["csharp", "dotnet"],
+    "jobstreet_frequency": 2
+  },
+  {
+    "skill_id": "SK013",
+    "name": "React",
+    "category": "Web and Mobile Development",
+    "aliases": ["reactjs", "react.js"],
+    "jobstreet_frequency": 819
+  },
+  {
+    "skill_id": "SK014",
+    "name": "Angular",
+    "category": "Web and Mobile Development",
+    "aliases": ["angularjs", "angular.js"],
+    "jobstreet_frequency": 482
+  },
+  {
+    "skill_id": "SK015",
+    "name": "Vue",
+    "category": "Web and Mobile Development",
+    "aliases": ["vuejs", "vue.js"],
+    "jobstreet_frequency": 273
+  },
+  {
+    "skill_id": "SK016",
+    "name": "Node.js",
+    "category": "Web and Mobile Development",
+    "aliases": ["nodejs", "node"],
+    "jobstreet_frequency": 262
+  },
+  {
+    "skill_id": "SK017",
+    "name": "Spring",
+    "category": "Web and Mobile Development",
+    "aliases": ["spring boot", "spring framework"],
+    "jobstreet_frequency": 499
+  },
+  {
+    "skill_id": "SK018",
+    "name": "Laravel",
+    "category": "Web and Mobile Development",
+    "aliases": [],
+    "jobstreet_frequency": 309
+  },
+  {
+    "skill_id": "SK019",
+    "name": "Django",
+    "category": "Web and Mobile Development",
+    "aliases": [],
+    "jobstreet_frequency": 57
+  },
+  {
+    "skill_id": "SK020",
+    "name": "Flask",
+    "category": "Web and Mobile Development",
+    "aliases": [],
+    "jobstreet_frequency": 22
+  },
+  {
+    "skill_id": "SK021",
+    "name": "Express",
+    "category": "Web and Mobile Development",
+    "aliases": ["express.js", "expressjs"],
+    "jobstreet_frequency": 181
+  },
+  {
+    "skill_id": "SK022",
+    "name": "HTML",
+    "category": "Web and Mobile Development",
+    "aliases": ["html5"],
+    "jobstreet_frequency": 836
+  },
+  {
+    "skill_id": "SK023",
+    "name": "CSS",
+    "category": "Web and Mobile Development",
+    "aliases": ["css3"],
+    "jobstreet_frequency": 862
+  },
+  {
+    "skill_id": "SK024",
+    "name": "Android Development",
+    "category": "Web and Mobile Development",
+    "aliases": ["android", "android app"],
+    "jobstreet_frequency": 552
+  },
+  {
+    "skill_id": "SK025",
+    "name": "iOS Development",
+    "category": "Web and Mobile Development",
+    "aliases": ["ios", "ios app"],
+    "jobstreet_frequency": 474
+  },
+  {
+    "skill_id": "SK026",
+    "name": "Flutter",
+    "category": "Web and Mobile Development",
+    "aliases": [],
+    "jobstreet_frequency": 264
+  },
+  {
+    "skill_id": "SK027",
+    "name": "React Native",
+    "category": "Web and Mobile Development",
+    "aliases": [],
+    "jobstreet_frequency": 207
+  },
+  {
+    "skill_id": "SK028",
+    "name": "REST API",
+    "category": "Web and Mobile Development",
+    "aliases": ["restful", "rest", "api development"],
+    "jobstreet_frequency": 1092
+  },
+  {
+    "skill_id": "SK029",
+    "name": "SQL",
+    "category": "Databases",
+    "aliases": ["structured query language"],
+    "jobstreet_frequency": 2751
+  },
+  {
+    "skill_id": "SK030",
+    "name": "MySQL",
+    "category": "Databases",
+    "aliases": [],
+    "jobstreet_frequency": 806
+  },
+  {
+    "skill_id": "SK031",
+    "name": "PostgreSQL",
+    "category": "Databases",
+    "aliases": ["postgres"],
+    "jobstreet_frequency": 234
+  },
+  {
+    "skill_id": "SK032",
+    "name": "MongoDB",
+    "category": "Databases",
+    "aliases": ["mongo"],
+    "jobstreet_frequency": 237
+  },
+  {
+    "skill_id": "SK033",
+    "name": "Oracle",
+    "category": "Databases",
+    "aliases": ["oracle db", "oracle database"],
+    "jobstreet_frequency": 994
+  },
+  {
+    "skill_id": "SK034",
+    "name": "Redis",
+    "category": "Databases",
+    "aliases": [],
+    "jobstreet_frequency": 128
+  },
+  {
+    "skill_id": "SK035",
+    "name": "Elasticsearch",
+    "category": "Databases",
+    "aliases": ["elastic search"],
+    "jobstreet_frequency": 50
+  },
+  {
+    "skill_id": "SK036",
+    "name": "NoSQL",
+    "category": "Databases",
+    "aliases": ["non-relational database"],
+    "jobstreet_frequency": 0
+  },
+  {
+    "skill_id": "SK037",
+    "name": "AWS",
+    "category": "Cloud and Infrastructure",
+    "aliases": ["amazon web services", "amazon aws"],
+    "jobstreet_frequency": 1272
+  },
+  {
+    "skill_id": "SK038",
+    "name": "Azure",
+    "category": "Cloud and Infrastructure",
+    "aliases": ["microsoft azure"],
+    "jobstreet_frequency": 1427
+  },
+  {
+    "skill_id": "SK039",
+    "name": "GCP",
+    "category": "Cloud and Infrastructure",
+    "aliases": ["google cloud", "google cloud platform"],
+    "jobstreet_frequency": 253
+  },
+  {
+    "skill_id": "SK040",
+    "name": "Docker",
+    "category": "Cloud and Infrastructure",
+    "aliases": ["containerisation", "containers"],
+    "jobstreet_frequency": 363
+  },
+  {
+    "skill_id": "SK041",
+    "name": "Kubernetes",
+    "category": "Cloud and Infrastructure",
+    "aliases": ["k8s"],
+    "jobstreet_frequency": 374
+  },
+  {
+    "skill_id": "SK042",
+    "name": "Linux",
+    "category": "Cloud and Infrastructure",
+    "aliases": ["unix", "ubuntu", "centos"],
+    "jobstreet_frequency": 1178
+  },
+  {
+    "skill_id": "SK043",
+    "name": "Terraform",
+    "category": "Cloud and Infrastructure",
+    "aliases": ["infrastructure as code"],
+    "jobstreet_frequency": 147
+  },
+  {
+    "skill_id": "SK044",
+    "name": "Jenkins",
+    "category": "Cloud and Infrastructure",
+    "aliases": [],
+    "jobstreet_frequency": 239
+  },
+  {
+    "skill_id": "SK045",
+    "name": "Networking",
+    "category": "Cloud and Infrastructure",
+    "aliases": ["computer networks", "network administration"],
+    "jobstreet_frequency": 1185
+  },
+  {
+    "skill_id": "SK046",
+    "name": "Cloud Computing",
+    "category": "Cloud and Infrastructure",
+    "aliases": ["cloud services", "cloud platforms"],
+    "jobstreet_frequency": 251
+  },
+  {
+    "skill_id": "SK047",
+    "name": "Machine Learning",
+    "category": "Data and AI",
+    "aliases": ["ml", "predictive modelling"],
+    "jobstreet_frequency": 683
+  },
+  {
+    "skill_id": "SK048",
+    "name": "Deep Learning",
+    "category": "Data and AI",
+    "aliases": ["neural networks", "dl"],
+    "jobstreet_frequency": 94
+  },
+  {
+    "skill_id": "SK049",
+    "name": "NLP",
+    "category": "Data and AI",
+    "aliases": ["natural language processing", "text mining"],
+    "jobstreet_frequency": 51
+  },
+  {
+    "skill_id": "SK050",
+    "name": "TensorFlow",
+    "category": "Data and AI",
+    "aliases": [],
+    "jobstreet_frequency": 63
+  },
+  {
+    "skill_id": "SK051",
+    "name": "PyTorch",
+    "category": "Data and AI",
+    "aliases": [],
+    "jobstreet_frequency": 54
+  },
+  {
+    "skill_id": "SK052",
+    "name": "Pandas",
+    "category": "Data and AI",
+    "aliases": [],
+    "jobstreet_frequency": 21
+  },
+  {
+    "skill_id": "SK053",
+    "name": "NumPy",
+    "category": "Data and AI",
+    "aliases": ["numpy"],
+    "jobstreet_frequency": 16
+  },
+  {
+    "skill_id": "SK054",
+    "name": "scikit-learn",
+    "category": "Data and AI",
+    "aliases": ["sklearn"],
+    "jobstreet_frequency": 25
+  },
+  {
+    "skill_id": "SK055",
+    "name": "Data Analysis",
+    "category": "Data and AI",
+    "aliases": ["data analytics", "data wrangling"],
+    "jobstreet_frequency": 580
+  },
+  {
+    "skill_id": "SK056",
+    "name": "Data Science",
+    "category": "Data and AI",
+    "aliases": [],
+    "jobstreet_frequency": 442
+  },
+  {
+    "skill_id": "SK057",
+    "name": "Big Data",
+    "category": "Data and AI",
+    "aliases": [],
+    "jobstreet_frequency": 330
+  },
+  {
+    "skill_id": "SK058",
+    "name": "Apache Spark",
+    "category": "Data and AI",
+    "aliases": ["spark"],
+    "jobstreet_frequency": 149
+  },
+  {
+    "skill_id": "SK059",
+    "name": "Hadoop",
+    "category": "Data and AI",
+    "aliases": [],
+    "jobstreet_frequency": 126
+  },
+  {
+    "skill_id": "SK060",
+    "name": "Agile",
+    "category": "Software Engineering Practices",
+    "aliases": ["agile methodology", "agile development"],
+    "jobstreet_frequency": 1975
+  },
+  {
+    "skill_id": "SK061",
+    "name": "Scrum",
+    "category": "Software Engineering Practices",
+    "aliases": ["scrum methodology"],
+    "jobstreet_frequency": 720
+  },
+  {
+    "skill_id": "SK062",
+    "name": "DevOps",
+    "category": "Software Engineering Practices",
+    "aliases": [],
+    "jobstreet_frequency": 894
+  },
+  {
+    "skill_id": "SK063",
+    "name": "CI/CD",
+    "category": "Software Engineering Practices",
+    "aliases": ["continuous integration", "continuous deployment", "continuous delivery"],
+    "jobstreet_frequency": 538
+  },
+  {
+    "skill_id": "SK064",
+    "name": "Git",
+    "category": "Software Engineering Practices",
+    "aliases": ["github", "gitlab", "version control"],
+    "jobstreet_frequency": 675
+  },
+  {
+    "skill_id": "SK065",
+    "name": "Software Testing",
+    "category": "Software Engineering Practices",
+    "aliases": ["qa", "quality assurance", "test automation"],
+    "jobstreet_frequency": 233
+  },
+  {
+    "skill_id": "SK066",
+    "name": "Unit Testing",
+    "category": "Software Engineering Practices",
+    "aliases": ["junit", "pytest", "unit test"],
+    "jobstreet_frequency": 260
+  },
+  {
+    "skill_id": "SK067",
+    "name": "Selenium",
+    "category": "Software Engineering Practices",
+    "aliases": [],
+    "jobstreet_frequency": 164
+  },
+  {
+    "skill_id": "SK068",
+    "name": "Design Patterns",
+    "category": "Software Engineering Practices",
+    "aliases": ["software design patterns", "gang of four"],
+    "jobstreet_frequency": 189
+  },
+  {
+    "skill_id": "SK069",
+    "name": "Microservices",
+    "category": "Software Engineering Practices",
+    "aliases": ["microservice architecture"],
+    "jobstreet_frequency": 271
+  },
+  {
+    "skill_id": "SK070",
+    "name": "UML",
+    "category": "Software Engineering Practices",
+    "aliases": ["unified modelling language", "uml diagrams"],
+    "jobstreet_frequency": 47
+  },
+  {
+    "skill_id": "SK071",
+    "name": "Software Architecture",
+    "category": "Software Engineering Practices",
+    "aliases": ["system architecture", "solution architecture"],
+    "jobstreet_frequency": 0
+  },
+  {
+    "skill_id": "SK072",
+    "name": "Requirements Engineering",
+    "category": "Software Engineering Practices",
+    "aliases": ["requirements analysis", "requirements gathering"],
+    "jobstreet_frequency": 0
+  },
+  {
+    "skill_id": "SK073",
+    "name": "Object-Oriented Programming",
+    "category": "Software Engineering Practices",
+    "aliases": ["oop", "object oriented"],
+    "jobstreet_frequency": 0
+  },
+  {
+    "skill_id": "SK074",
+    "name": "Data Structures",
+    "category": "Software Engineering Practices",
+    "aliases": ["algorithms", "data structures and algorithms"],
+    "jobstreet_frequency": 0
+  },
+  {
+    "skill_id": "SK075",
+    "name": "Blockchain",
+    "category": "Emerging Technologies",
+    "aliases": ["smart contracts", "decentralised applications"],
+    "jobstreet_frequency": 129
+  },
+  {
+    "skill_id": "SK076",
+    "name": "Cyber Security",
+    "category": "Emerging Technologies",
+    "aliases": ["information security", "cybersecurity", "network security"],
+    "jobstreet_frequency": 381
+  },
+  {
+    "skill_id": "SK077",
+    "name": "Internet of Things",
+    "category": "Emerging Technologies",
+    "aliases": ["iot"],
+    "jobstreet_frequency": 0
+  },
+  {
+    "skill_id": "SK078",
+    "name": "Project Management",
+    "category": "Soft Skills",
+    "aliases": ["programme management"],
+    "jobstreet_frequency": 1825
+  },
+  {
+    "skill_id": "SK079",
+    "name": "Communication",
+    "category": "Soft Skills",
+    "aliases": ["communication skills", "verbal communication", "written communication"],
+    "jobstreet_frequency": 6206
+  },
+  {
+    "skill_id": "SK080",
+    "name": "Problem Solving",
+    "category": "Soft Skills",
+    "aliases": ["analytical thinking", "critical thinking"],
+    "jobstreet_frequency": 807
+  },
+  {
+    "skill_id": "SK081",
+    "name": "Teamwork",
+    "category": "Soft Skills",
+    "aliases": ["collaboration", "team player"],
+    "jobstreet_frequency": 576
+  },
+  {
+    "skill_id": "SK082",
+    "name": "User Experience",
+    "category": "Soft Skills",
+    "aliases": ["ux", "usability", "human computer interaction", "hci"],
+    "jobstreet_frequency": 0
+  }
+]
