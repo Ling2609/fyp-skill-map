@@ -6,6 +6,8 @@ Sources:
      Filter: SE-relevant broader concept categories only
   2. JobStreet Malaysian job postings - jobstreet_all_job_dataset.csv
      Filter: 'Information & Communication Technology' category only
+  3. Supplementary skills: common ICT skills not in ESCO but present in
+     Malaysian job market, evidenced by JobStreet frequency analysis
 
 Output:
   - data/skill_taxonomy.json         (taxonomy with ESCO URI + market frequency)
@@ -73,15 +75,23 @@ WEB_MOBILE_SKILLS = {
 
 # ── Category mapping ─────────────────────────────────────────────────────────
 def map_category(broader_str, skill_name=""):
+    """Map ESCO broader concept to taxonomy category.
+    Checks skill name first to handle misclassified web/mobile skills.
+    """
     name_lower = str(skill_name).lower().strip()
     b = str(broader_str).lower()
 
+    # Skill name takes priority for web/mobile
     if name_lower in WEB_MOBILE_SKILLS:
         return "Web and Mobile Development"
+
+    # Then check broader concept
     if any(x in b for x in ["style sheet", "web programming", "mobile operating"]):
         return "Web and Mobile Development"
     elif any(x in b for x in ["computer programming", "programming computer"]):
         return "Programming Languages"
+    elif any(x in b for x in ["data structure", "algorithm"]):
+        return "Software Engineering Practices"
     elif any(x in b for x in ["database", "query language", "data extraction"]):
         return "Databases"
     elif any(x in b for x in ["cloud", "ict infrastructure", "tools for software configuration"]):
@@ -123,9 +133,10 @@ print(f"  Total text length: {len(all_text):,} characters")
 print("\nStep 3: Computing market frequency for each skill...")
 
 def get_frequency(label, alt_labels):
+    """Count occurrences of skill label + aliases in ICT job descriptions."""
     terms = [str(label).lower().strip()]
     if pd.notna(alt_labels) and str(alt_labels).strip():
-        extras = [a.strip().lower() for a in str(alt_labels).split("\n") if a.strip()]
+        extras = [a.strip().lower() for a in str(alt_labels).split("|") if a.strip()]
         terms.extend(extras)
     total = 0
     for term in terms:
@@ -142,10 +153,10 @@ for _, row in esco_filtered.iterrows():
 
     aliases = []
     if pd.notna(row.get("altLabels", "")):
-        aliases = [
-            a.strip() for a in str(row["altLabels"]).split("\n")
-            if a.strip() and a.strip().lower() != str(row["preferredLabel"]).lower()
-        ]
+        for alias in str(row["altLabels"]).split("|"):
+            alias = alias.strip()
+            if alias and alias.lower() != str(row["preferredLabel"]).lower():
+                aliases.append(alias)
 
     taxonomy.append({
         "skill_id": None,
@@ -167,8 +178,83 @@ taxonomy.sort(key=lambda x: -x["jobstreet_frequency"])
 for i, skill in enumerate(taxonomy, start=1):
     skill["skill_id"] = f"SK{i:03d}"
 
-# ── 4. Save outputs ──────────────────────────────────────────────────────────
-print("\nStep 4: Saving outputs...")
+# ── 4. Add supplementary skills not in ESCO ──────────────────────────────────
+# These are common ICT skills absent from ESCO v1.2.1 but clearly present
+# in the Malaysian ICT job market. Frequencies are from JobStreet analysis.
+print("\nStep 4: Adding supplementary skills...")
+
+supplementary = [
+    {"name": "Docker", "category": "Cloud and Infrastructure",
+     "aliases": ["containerisation", "docker container", "docker compose"],
+     "jobstreet_frequency": 363},
+    {"name": "Git", "category": "Software Engineering Practices",
+     "aliases": ["github", "gitlab", "version control", "git version control"],
+     "jobstreet_frequency": 675},
+    {"name": "REST API", "category": "Web and Mobile Development",
+     "aliases": ["restful api", "restful web services", "rest", "api development"],
+     "jobstreet_frequency": 1092},
+    {"name": "Networking", "category": "Cloud and Infrastructure",
+     "aliases": ["computer networking", "network administration", "tcp/ip", "osi model"],
+     "jobstreet_frequency": 1185},
+    {"name": "Linux", "category": "Cloud and Infrastructure",
+     "aliases": ["unix", "ubuntu", "centos", "linux administration"],
+     "jobstreet_frequency": 1178},
+    {"name": "AWS", "category": "Cloud and Infrastructure",
+     "aliases": ["amazon web services", "amazon aws"],
+     "jobstreet_frequency": 1272},
+    {"name": "Azure", "category": "Cloud and Infrastructure",
+     "aliases": ["microsoft azure"],
+     "jobstreet_frequency": 1427},
+    {"name": "Spring Boot", "category": "Web and Mobile Development",
+     "aliases": ["spring framework", "spring"],
+     "jobstreet_frequency": 499},
+    {"name": "React", "category": "Web and Mobile Development",
+     "aliases": ["reactjs", "react.js"],
+     "jobstreet_frequency": 819},
+    {"name": "Object-Oriented Programming", "category": "Software Engineering Practices",
+     "aliases": ["oop", "object oriented", "object-oriented"],
+     "jobstreet_frequency": 0},
+    {"name": "Data Structures and Algorithms", "category": "Software Engineering Practices",
+     "aliases": ["dsa", "data structures", "algorithm design"],
+     "jobstreet_frequency": 0},
+    {"name": "Kubernetes", "category": "Cloud and Infrastructure",
+     "aliases": ["k8s"],
+     "jobstreet_frequency": 374},
+    {"name": "CI/CD", "category": "Software Engineering Practices",
+     "aliases": ["continuous integration", "continuous deployment", "continuous delivery"],
+     "jobstreet_frequency": 538},
+    {"name": "Microservices", "category": "Software Engineering Practices",
+     "aliases": ["microservice architecture", "microservice"],
+     "jobstreet_frequency": 271},
+    {"name": "Machine Learning", "category": "Data and AI",
+     "aliases": ["ml", "predictive modelling", "predictive modeling"],
+     "jobstreet_frequency": 469},
+    {"name": "Deep Learning", "category": "Data and AI",
+     "aliases": ["neural network", "dl"],
+     "jobstreet_frequency": 94},
+]
+
+next_id = len(taxonomy) + 1
+for item in supplementary:
+    taxonomy.append({
+        "skill_id": f"SK{next_id:03d}",
+        "name": item["name"],
+        "category": item["category"],
+        "aliases": item["aliases"],
+        "description": "",
+        "esco_uri": "",
+        "esco_skill_type": "supplementary",
+        "esco_broader": "supplementary — not in ESCO v1.2.1",
+        "jobstreet_frequency": item["jobstreet_frequency"],
+        "source": "Supplementary — JobStreet MY ICT frequency analysis"
+    })
+    next_id += 1
+
+print(f"  Supplementary skills added: {len(supplementary)}")
+print(f"  Total skills: {len(taxonomy)}")
+
+# ── 5. Save outputs ──────────────────────────────────────────────────────────
+print("\nStep 5: Saving outputs...")
 Path("data").mkdir(exist_ok=True)
 
 with open("data/skill_taxonomy.json", "w", encoding="utf-8") as f:
@@ -193,7 +279,7 @@ evidence_df = pd.DataFrame(evidence_rows)
 evidence_df.to_csv("data/skill_frequency_evidence.csv", index=False)
 print(f"  skill_frequency_evidence.csv saved ({len(evidence_df)} rows)")
 
-# ── 5. Summary ───────────────────────────────────────────────────────────────
+# ── 6. Summary ───────────────────────────────────────────────────────────────
 print("\n" + "=" * 60)
 print("TAXONOMY SUMMARY")
 print("=" * 60)
@@ -213,7 +299,8 @@ print(f"Skills with market frequency = 0: {len(zero_freq)} (academically valid p
 print(f"\nTop 20 by Malaysian ICT job market frequency:")
 print(f"{'Rank':<6} {'Skill':<40} {'Category':<30} {'Freq':>6}")
 print("-" * 85)
-for i, s in enumerate(taxonomy[:20], 1):
+top20 = sorted(taxonomy, key=lambda x: -x["jobstreet_frequency"])[:20]
+for i, s in enumerate(top20, 1):
     print(f"{i:<6} {s['name']:<40} {s['category']:<30} {s['jobstreet_frequency']:>6}")
 
 print("\nDone.")
