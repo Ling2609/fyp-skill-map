@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.database import Base, engine
-from app.routers import auth
+from app.routers import auth, modules
 from app.models import user, module
 
 Base.metadata.create_all(bind=engine)
@@ -17,7 +17,7 @@ app.add_middleware(
 )
 
 app.include_router(auth.router)
-
+app.include_router(modules.router)
 @app.get("/")
 def root():
     return {"status": "ok", "message": "FYP Skill Map API running"}
