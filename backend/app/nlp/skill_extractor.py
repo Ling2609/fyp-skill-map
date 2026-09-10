@@ -61,6 +61,7 @@ class SkillExtractor:
                     model=self.model,
                     system_instruction=system,
                     input=prompt,
+                    extra_body={"generation_config": {"temperature": 0}},
                 )
                 text = interaction.output_text.strip()
 
