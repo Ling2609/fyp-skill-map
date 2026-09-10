@@ -33,14 +33,14 @@ Extract between 5 and 15 skills students would learn, depending on the module sc
 
 Return ONLY a JSON array, example: ["Python programming", "SQL", "data modelling"]"""
 
-JOB_SYSTEM = "You are a job requirements analyser. Extract specific technical and professional skills from job descriptions. Return ONLY a valid JSON array of skill strings, no explanation, no markdown, maximum 12 skills."
+JOB_SYSTEM = "You are a job requirements analyser. Extract specific technical and professional skills from job descriptions. Return ONLY a valid JSON array of skill strings, no explanation, no markdown. Extract between 5 and 15 skills depending on the job complexity."
 
 JOB_PROMPT = """Job Title: {title}
 
 Job Description:
 {description}
 
-Extract the top 12 required skills. Each skill should be:
+Extract between 5 and 15 skills depending on the job complexity. Each skill should be:
 - Specific and concise (2-4 words maximum)
 - A real technical or professional skill
 - Industry-standard terminology
@@ -148,9 +148,6 @@ class SkillExtractor:
         """Extract skills from a job posting dict."""
         description = job.get("descriptions", "")
         title = job.get("job_title", "")
-
-        if len(description) > 2000:
-            description = description[:2000]
 
         prompt = JOB_PROMPT.format(title=title, description=description)
         skills = self._call_groq(JOB_SYSTEM, prompt)
