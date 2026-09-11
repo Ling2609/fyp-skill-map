@@ -66,7 +66,10 @@ export default function Modules() {
   if (loading) {
     return (
       <div className="h-[calc(100vh-64px)] bg-gray-50 flex items-center justify-center">
-        <p className="text-gray-500">Loading modules...</p>
+        <div className="text-center">
+          <div className="w-10 h-10 border-4 border-blue-700 border-t-transparent rounded-full animate-spin mx-auto mb-3" />
+          <p className="text-gray-500 text-sm">Loading modules...</p>
+        </div>
       </div>
     )
   }

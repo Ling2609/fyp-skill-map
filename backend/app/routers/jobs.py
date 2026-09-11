@@ -1,9 +1,31 @@
 from fastapi import APIRouter, Depends
+from sqlalchemy import distinct
 from sqlalchemy.orm import Session
 from app.database import get_db
 from app.models.job import Job, JobSkill
 
 router = APIRouter(prefix="/jobs", tags=["jobs"])
+
+
+@router.get("/stats")
+def get_job_stats(db: Session = Depends(get_db)):
+    """Get statistics about stored jobs."""
+    total_jobs = db.query(Job).count()
+    total_skills = db.query(JobSkill).count()
+    return {
+        "total_jobs": total_jobs,
+        "total_skills": total_skills,
+        "avg_skills_per_job": round(total_skills / total_jobs, 1) if total_jobs > 0 else 0,
+    }
+
+
+@router.get("/subcategories")
+def get_subcategories(db: Session = Depends(get_db)):
+    """Get unique subcategories from stored jobs."""
+    subcats = db.query(distinct(Job.subcategory)).filter(
+        Job.subcategory != None
+    ).all()
+    return sorted([s[0] for s in subcats if s[0]])
 
 
 @router.get("/")
@@ -27,15 +49,3 @@ def get_jobs(skip: int = 0, limit: int = 20, db: Session = Depends(get_db)):
             "skill_count": len(skills),
         })
     return result
-
-
-@router.get("/stats")
-def get_job_stats(db: Session = Depends(get_db)):
-    """Get statistics about stored jobs."""
-    total_jobs = db.query(Job).count()
-    total_skills = db.query(JobSkill).count()
-    return {
-        "total_jobs": total_jobs,
-        "total_skills": total_skills,
-        "avg_skills_per_job": round(total_skills / total_jobs, 1) if total_jobs > 0 else 0,
-    }
