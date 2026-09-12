@@ -44,7 +44,7 @@ export default function JobDetail() {
 
   if (loading) {
     return (
-      <div className="h-[calc(100vh-64px)] bg-gray-50 flex items-center justify-center">
+      <div className="h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <div className="w-8 h-8 border-4 border-blue-700 border-t-transparent rounded-full animate-spin mx-auto mb-3" />
           <p className="text-gray-500 text-sm">Analysing skill gap...</p>
@@ -55,7 +55,7 @@ export default function JobDetail() {
 
   if (error) {
     return (
-      <div className="h-[calc(100vh-64px)] bg-gray-50 flex items-center justify-center">
+      <div className="h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <p className="text-red-500 text-sm mb-4">{error}</p>
           <button onClick={() => navigate(-1)} className="text-blue-700 text-sm hover:underline">← Go back</button>
@@ -70,7 +70,7 @@ export default function JobDetail() {
   const descLines = formatDescription(gap?.job?.description)
 
   return (
-    <div className="h-[calc(100vh-64px)] bg-gray-50 flex flex-col">
+    <div className="h-screen bg-gray-50 flex flex-col">
 
       {/* Top nav */}
       <div className="bg-white border-b border-gray-100 px-8 py-3 shrink-0">

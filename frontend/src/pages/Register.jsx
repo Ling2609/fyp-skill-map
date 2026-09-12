@@ -23,7 +23,7 @@ export default function Register() {
   }
 
   return (
-    <div className="min-h-[calc(100vh-64px)] bg-gray-50 flex items-center justify-center">
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center">
       <div className="bg-white rounded-xl shadow-md p-8 w-full max-w-md">
         <h1 className="text-2xl font-bold text-gray-800 mb-2">Create account</h1>
         <p className="text-gray-500 text-sm mb-6">Start mapping your skills to your career</p>

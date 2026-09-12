@@ -105,7 +105,7 @@ export default function Recommend() {
   const hasMore = results && visibleCount < results.recommendations.length
 
   return (
-    <div className="h-[calc(100vh-64px)] bg-gray-50 flex flex-col">
+    <div className="h-screen bg-gray-50 flex flex-col">
 
       {/* Header */}
       <div className="bg-white border-b border-gray-100 px-8 pt-5 pb-4 shrink-0">

@@ -11,7 +11,7 @@ export default function Dashboard() {
   }, [])
 
   return (
-    <div className="h-[calc(100vh-64px)] bg-gray-50 flex flex-col justify-center p-6">
+    <div className="h-screen bg-gray-50 flex flex-col justify-center p-6">
       <div className="max-w-5xl mx-auto w-full">
 
         {/* Header */}
