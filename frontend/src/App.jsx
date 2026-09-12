@@ -5,6 +5,7 @@ import Login from './pages/Login'
 import Dashboard from './pages/Dashboard'
 import Modules from './pages/Modules'
 import Recommend from './pages/Recommend'
+import JobDetail from './pages/JobDetail'
 
 function PrivateRoute({ children }) {
   return localStorage.getItem('token') ? children : <Navigate to="/login" />
@@ -21,6 +22,7 @@ export default function App() {
         <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
         <Route path="/modules" element={<PrivateRoute><Modules /></PrivateRoute>} />
         <Route path="/recommend" element={<PrivateRoute><Recommend /></PrivateRoute>} />
+        <Route path="/jobs/:jobId" element={<PrivateRoute><JobDetail /></PrivateRoute>} />
       </Routes>
     </>
   )
