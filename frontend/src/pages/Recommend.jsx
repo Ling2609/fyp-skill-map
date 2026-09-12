@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import api from '../api'
 
@@ -14,7 +14,7 @@ export default function Recommend() {
   const navigate = useNavigate()
 
   const stored = sessionStorage.getItem('selectedModules')
-  const modules = stored ? JSON.parse(stored) : []
+  const modules = useMemo(() => (stored ? JSON.parse(stored) : []), [stored])
 
   const [results, setResults] = useState(null)
   const [loading, setLoading] = useState(false)
@@ -26,7 +26,7 @@ export default function Recommend() {
   const [activeCategory, setActiveCategory] = useState('all')
   const [visibleCount, setVisibleCount] = useState(10)
 
-  const doSearch = async (role, count) => {
+  const doSearch = useCallback(async (role, count) => {
     setLoading(true)
     setError('')
     setResults(null)
@@ -56,7 +56,7 @@ export default function Recommend() {
       setError(err.response?.data?.detail || 'Failed to get recommendations')
       setLoading(false)
     }
-  }
+  }, [modules])
 
   useEffect(() => {
     if (!stored || modules.length === 0) {
@@ -69,7 +69,7 @@ export default function Recommend() {
 
     // Auto load all matches on page open
     setTimeout(() => doSearch('', 50), 0)
-  }, [])
+  }, [doSearch, modules.length, navigate, stored])
 
   if (!stored || modules.length === 0) return null
 
