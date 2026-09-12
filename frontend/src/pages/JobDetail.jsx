@@ -8,16 +8,6 @@ const GRADE_LABELS = {
 
 const gradeLabel = (weight) => GRADE_LABELS[weight] || ''
 
-const formatDescription = (text) => {
-  if (!text) return []
-  // Split on multiple spaces or numbered points
-  return text
-    .replace(/\s{2,}/g, '\n')
-    .split('\n')
-    .map(s => s.trim())
-    .filter(s => s.length > 10)
-}
-
 export default function JobDetail() {
   const navigate = useNavigate()
   const { jobId } = useParams()
@@ -67,8 +57,6 @@ export default function JobDetail() {
   const coverage = gap?.summary?.coverage_percent || 0
   const coverageColor = coverage >= 70 ? 'text-green-600' : coverage >= 40 ? 'text-yellow-600' : 'text-red-500'
   const barColor = coverage >= 70 ? 'bg-green-500' : coverage >= 40 ? 'bg-yellow-500' : 'bg-red-400'
-  const descLines = formatDescription(gap?.job?.description)
-
   return (
     <div className="h-screen bg-gray-50 flex flex-col">
 
@@ -141,17 +129,12 @@ export default function JobDetail() {
           {/* Job Description tab */}
           {activeTab === 'description' && (
             <div className="bg-white rounded-xl p-6 border border-gray-100 shadow-sm">
-              {descLines.length > 0 ? (
-                <ul className="space-y-2">
-                  {descLines.map((line, idx) => (
-                    <li key={idx} className="flex items-start gap-2 text-sm text-gray-600">
-                      <span className="text-gray-300 mt-1 shrink-0">•</span>
-                      <span>{line}</span>
-                    </li>
-                  ))}
-                </ul>
+              {gap?.job?.description ? (
+                <p className="text-sm text-gray-600 leading-relaxed whitespace-pre-line">
+                  {gap.job.description}
+                </p>
               ) : (
-                <p className="text-gray-400 text-sm">No job description available.</p>
+                <p className="text-sm text-gray-400">No description available.</p>
               )}
             </div>
           )}
