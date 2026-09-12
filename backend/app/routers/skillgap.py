@@ -138,6 +138,8 @@ def analyse_skill_gap(payload: SkillGapRequest, db: Session = Depends(get_db)):
             "job_title": job.job_title,
             "company": job.company,
             "location": job.location,
+            "salary": job.salary,
+            "description": job.description,  # add this
         },
         "summary": {
             "job_skills_total": len(job_skills),
