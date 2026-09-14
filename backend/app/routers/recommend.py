@@ -15,6 +15,8 @@ embedder = Embedder()
 _job_cache = {}
 _cache_built = False
 
+SIMILARITY_THRESHOLD = 0.6
+
 
 def build_job_cache():
     global _job_cache, _cache_built
@@ -46,6 +48,32 @@ def build_job_cache():
         db.close()
 
 
+def compute_skill_coverage(grad_skill_names: list, grad_embeddings: np.ndarray,
+                           job_skills: list, job_embeddings: np.ndarray) -> float:
+    """
+    Compute skill coverage: % of job skills matched by graduate skills.
+    Uses SBERT similarity with threshold for matching.
+    """
+    if not job_skills or not grad_skill_names:
+        return 0.0
+
+    matched = 0
+    for j_idx in range(len(job_skills)):
+        job_vec = job_embeddings[j_idx]
+        best_score = 0.0
+        for g_idx in range(len(grad_skill_names)):
+            grad_vec = grad_embeddings[g_idx]
+            score = float(np.dot(job_vec, grad_vec) / (
+                np.linalg.norm(job_vec) * np.linalg.norm(grad_vec) + 1e-8
+            ))
+            if score > best_score:
+                best_score = score
+        if best_score >= SIMILARITY_THRESHOLD:
+            matched += 1
+
+    return round((matched / len(job_skills)) * 100, 1)
+
+
 class ModuleInput(BaseModel):
     module_code: str
     grade: float
@@ -54,7 +82,7 @@ class ModuleInput(BaseModel):
 class RecommendRequest(BaseModel):
     modules: list[ModuleInput]
     top_n: int = 10
-    role_filter: str = ""  # optional job title keyword filter
+    role_filter: str = ""
 
 
 def grade_weight(grade: float) -> float:
@@ -71,13 +99,10 @@ def recommend_jobs(payload: RecommendRequest, db: Session = Depends(get_db)):
     if not payload.modules:
         raise HTTPException(status_code=400, detail="No modules provided")
 
-    # Build job cache if not done
     build_job_cache()
 
-    # Collect weighted skills per module
+    # Build graduate skill profile
     skill_weights = {}
-    module_skill_map = {}  # category → skills for diverse display
-
     for mod_input in payload.modules:
         module = db.query(Module).filter(Module.code == mod_input.module_code).first()
         if not module:
@@ -91,7 +116,7 @@ def recommend_jobs(payload: RecommendRequest, db: Session = Depends(get_db)):
     if not skill_weights:
         raise HTTPException(status_code=404, detail="No skills found for provided modules")
 
-    # Build profile text with grade weighting
+    # Build profile text for SBERT ranking
     profile_skills = []
     for skill, weight in sorted(skill_weights.items(), key=lambda x: -x[1]):
         repeats = 3 if weight >= 0.9 else 2 if weight >= 0.7 else 1
@@ -100,25 +125,45 @@ def recommend_jobs(payload: RecommendRequest, db: Session = Depends(get_db)):
     profile_text = " ".join(profile_skills)
     profile_vec = embedder.embed(profile_text)
 
-    # If role filter provided, embed it and combine with profile
+    # Apply role filter
     if payload.role_filter.strip():
         role_vec = embedder.embed(payload.role_filter.strip())
-        # Weighted combination: 60% profile, 40% role preference
         profile_vec = 0.6 * profile_vec + 0.4 * role_vec
         profile_vec = profile_vec / (np.linalg.norm(profile_vec) + 1e-8)
 
-    # Score jobs from cache
-    results = []
+    # Step 1: Rank all jobs by SBERT score to get top N candidates
+    sbert_scores = []
     for job_id, cached in _job_cache.items():
         job_vec = cached["vec"]
         score = float(np.dot(profile_vec, job_vec) / (
             np.linalg.norm(profile_vec) * np.linalg.norm(job_vec) + 1e-8
         ))
-
-        # Optional: boost score if job title contains role filter keyword
         if payload.role_filter.strip():
             if payload.role_filter.lower() in cached["job_title"].lower():
                 score = min(score * 1.2, 1.0)
+        sbert_scores.append((job_id, score))
+
+    sbert_scores.sort(key=lambda x: -x[1])
+    top_candidates = sbert_scores[:payload.top_n]
+
+    # Step 2: Compute skill coverage for top N jobs
+    grad_skill_names = list(skill_weights.keys())
+    all_skill_texts = grad_skill_names + []
+    grad_embeddings = embedder.embed_batch(grad_skill_names) if grad_skill_names else np.array([])
+
+    results = []
+    for job_id, sbert_score in top_candidates:
+        cached = _job_cache[job_id]
+        job_skills = cached["skills"]
+
+        if not job_skills:
+            coverage = 0.0
+        else:
+            job_embeddings = embedder.embed_batch(job_skills)
+            coverage = compute_skill_coverage(
+                grad_skill_names, grad_embeddings,
+                job_skills, job_embeddings
+            )
 
         results.append({
             "job_id": cached["job_id"],
@@ -127,35 +172,22 @@ def recommend_jobs(payload: RecommendRequest, db: Session = Depends(get_db)):
             "location": cached["location"],
             "subcategory": cached["subcategory"],
             "salary": cached["salary"],
-            "match_score": round(score, 4),
-            "match_percent": round(score * 100, 1),
-            "top_job_skills": cached["skills"][:5],
+            "match_score": coverage / 100,
+            "match_percent": coverage,
+            "top_job_skills": job_skills[:5],
         })
 
-    results.sort(key=lambda x: -x["match_score"])
-    top_results = results[:payload.top_n]
-
-    # Diverse top skills — sample from different modules
-    sorted_skills = sorted(skill_weights.items(), key=lambda x: -x[1])
-    seen = set()
-    diverse_skills = []
-    for skill, _ in sorted_skills:
-        words = skill.split()
-        key = words[-1] if words else skill
-        if key not in seen:
-            seen.add(key)
-            diverse_skills.append(skill)
-        if len(diverse_skills) >= 10:
-            break
+    # Sort by skill coverage (most accurate metric)
+    results.sort(key=lambda x: -x["match_percent"])
 
     return {
         "graduate_profile": {
             "modules_count": len(payload.modules),
             "unique_skills": len(skill_weights),
-            "top_skills": diverse_skills,
+            "top_skills": list(skill_weights.keys())[:10],
         },
         "role_filter": payload.role_filter,
-        "recommendations": top_results,
+        "recommendations": results,
         "total_jobs_compared": len(_job_cache),
     }
 
