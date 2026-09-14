@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import api from '../api'
 
@@ -14,7 +14,7 @@ export default function Recommend() {
   const navigate = useNavigate()
 
   const stored = sessionStorage.getItem('selectedModules')
-  const modules = useMemo(() => (stored ? JSON.parse(stored) : []), [stored])
+  const modules = stored ? JSON.parse(stored) : []
 
   const [results, setResults] = useState(null)
   const [loading, setLoading] = useState(false)
@@ -26,7 +26,9 @@ export default function Recommend() {
   const [activeCategory, setActiveCategory] = useState('all')
   const [visibleCount, setVisibleCount] = useState(10)
 
-  const doSearch = useCallback(async (role, count) => {
+  const doSearch = async (role, count) => {
+    const searchRole = role !== undefined ? role : roleFilter
+    const searchCount = count || 50
     setLoading(true)
     setError('')
     setResults(null)
@@ -42,13 +44,17 @@ export default function Recommend() {
     try {
       const res = await api.post('/recommend/', {
         modules,
-        top_n: count || 50,
-        role_filter: role || '',
+        top_n: searchCount,
+        role_filter: searchRole,
       })
       clearInterval(stepInterval)
       setLoadingProgress(100)
       setTimeout(() => {
         setResults(res.data)
+        // Save results to sessionStorage
+        sessionStorage.setItem('lastRecommendResults', JSON.stringify(res.data))
+        sessionStorage.setItem('lastRoleFilter', searchRole)
+        sessionStorage.setItem('lastActiveCategory', activeCategory)
         setLoading(false)
       }, 300)
     } catch (err) {
@@ -56,20 +62,34 @@ export default function Recommend() {
       setError(err.response?.data?.detail || 'Failed to get recommendations')
       setLoading(false)
     }
-  }, [modules])
+  }
 
   useEffect(() => {
     if (!stored || modules.length === 0) {
       navigate('/modules')
       return
     }
+
     api.get('/jobs/subcategories')
       .then(res => setSubcategories(res.data))
       .catch(() => {})
 
-    // Auto load all matches on page open
-    setTimeout(() => doSearch('', 50), 0)
-  }, [doSearch, modules.length, navigate, stored])
+    // Restore previous results if available
+    const savedResults = sessionStorage.getItem('lastRecommendResults')
+    const savedRole = sessionStorage.getItem('lastRoleFilter')
+    const savedCategory = sessionStorage.getItem('lastActiveCategory')
+
+    if (savedResults) {
+      setTimeout(() => {
+        setResults(JSON.parse(savedResults))
+        if (savedRole) setRoleFilter(savedRole)
+        if (savedCategory) setActiveCategory(savedCategory)
+      }, 0)
+    } else {
+      // Auto search only if no saved results
+      setTimeout(() => doSearch('', 50), 0)
+    }
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   if (!stored || modules.length === 0) return null
 
@@ -90,14 +110,14 @@ export default function Recommend() {
   }
 
   const getMatchDotColor = (percent) => {
-    if (percent >= 50) return 'bg-green-500'
-    if (percent >= 35) return 'bg-yellow-500'
+    if (percent >= 70) return 'bg-green-500'
+    if (percent >= 40) return 'bg-yellow-500'
     return 'bg-red-400'
   }
 
   const getMatchTextColor = (percent) => {
-    if (percent >= 50) return 'text-green-600'
-    if (percent >= 35) return 'text-yellow-600'
+    if (percent >= 70) return 'text-green-600'
+    if (percent >= 40) return 'text-yellow-600'
     return 'text-red-500'
   }
 
@@ -108,30 +128,27 @@ export default function Recommend() {
     <div className="h-screen bg-gray-50 flex flex-col">
 
       {/* Header */}
-      <div className="bg-white border-b border-gray-100 px-8 pt-5 pb-4 shrink-0">
+      <div className="bg-white border-b border-gray-100 px-8 pt-5 pb-4 flex-shrink-0">
         <div className="max-w-4xl mx-auto">
 
           {/* Title row */}
           <div className="flex items-center justify-between mb-4">
             <div>
               <h1 className="text-xl font-bold text-gray-800">Job Recommendations</h1>
-              <p className="text-xs text-gray-400 mt-0.5">
+              <p className="text-gray-500 text-xs mt-0.5">
                 {modules.length} modules selected
                 {results && ` · ${results.total_jobs_compared} jobs compared · ${results.recommendations.length} matches found`}
               </p>
             </div>
-            <button
-              onClick={() => navigate('/modules')}
-              className="text-xs text-blue-600 hover:underline"
-            >
+            <button onClick={() => navigate('/modules')} className="text-xs text-blue-600 hover:underline">
               ← Edit Modules
             </button>
           </div>
 
           {/* Search bar */}
-          <div className="flex gap-2 mb-4">
+          <div className="flex gap-2 mb-3">
             <div className="flex-1 flex items-center gap-2 bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5">
-              <svg className="w-4 h-4 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-4 h-4 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
               <input
@@ -160,11 +177,11 @@ export default function Recommend() {
             </button>
           </div>
 
-          {/* Category chips — single row horizontal scroll */}
+          {/* Category chips */}
           <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
             <button
               onClick={() => handleCategoryClick('all')}
-              className={`text-xs px-3 py-1.5 rounded-full border transition shrink-0 ${
+              className={`text-xs px-3 py-1.5 rounded-full border transition flex-shrink-0 ${
                 activeCategory === 'all'
                   ? 'bg-blue-700 text-white border-blue-700'
                   : 'bg-white text-gray-600 border-gray-200 hover:border-blue-400 hover:text-blue-700'
@@ -177,7 +194,7 @@ export default function Recommend() {
                 key={cat}
                 onClick={() => handleCategoryClick(cat)}
                 disabled={loading}
-                className={`text-xs px-3 py-1.5 rounded-full border transition disabled:opacity-50 shrink-0 whitespace-nowrap ${
+                className={`text-xs px-3 py-1.5 rounded-full border transition disabled:opacity-50 flex-shrink-0 whitespace-nowrap ${
                   activeCategory === cat
                     ? 'bg-blue-700 text-white border-blue-700'
                     : 'bg-white text-gray-600 border-gray-200 hover:border-blue-400 hover:text-blue-700'
@@ -190,7 +207,7 @@ export default function Recommend() {
         </div>
       </div>
 
-      {/* Content area */}
+      {/* Content */}
       <div className="flex-1 overflow-auto px-8 py-4">
         <div className="max-w-4xl mx-auto">
 
@@ -235,12 +252,9 @@ export default function Recommend() {
                       className="bg-white rounded-xl px-5 py-4 border border-gray-100 cursor-pointer hover:border-blue-200 hover:shadow-sm transition group"
                     >
                       <div className="flex items-start gap-4">
-                        {/* Rank */}
-                        <div className="w-6 h-6 rounded-full bg-gray-100 flex items-center justify-center text-xs font-semibold text-gray-400 shrink-0 mt-0.5 group-hover:bg-blue-50 group-hover:text-blue-600 transition">
+                        <div className="w-6 h-6 rounded-full bg-gray-100 flex items-center justify-center text-xs font-semibold text-gray-400 flex-shrink-0 mt-0.5 group-hover:bg-blue-50 group-hover:text-blue-600 transition">
                           {idx + 1}
                         </div>
-
-                        {/* Job info */}
                         <div className="flex-1 min-w-0">
                           <div className="flex items-start justify-between gap-3">
                             <div className="min-w-0">
@@ -251,16 +265,13 @@ export default function Recommend() {
                                 {job.company} · {job.location}
                               </p>
                             </div>
-                            {/* Match score */}
-                            <div className="flex items-center gap-1.5 shrink-0">
-                              <div className={`w-2 h-2 rounded-full shrink-0 ${getMatchDotColor(job.match_percent)}`} />
+                            <div className="flex items-center gap-1.5 flex-shrink-0">
+                              <div className={`w-2 h-2 rounded-full flex-shrink-0 ${getMatchDotColor(job.match_percent)}`} />
                               <span className={`text-xs font-semibold ${getMatchTextColor(job.match_percent)}`}>
                                 {job.match_percent}% match
                               </span>
                             </div>
                           </div>
-
-                          {/* Tags */}
                           <div className="flex gap-1.5 mt-2 flex-wrap">
                             <span className="text-xs bg-blue-50 text-blue-600 px-2 py-0.5 rounded-full font-medium">
                               {job.subcategory}
@@ -271,10 +282,7 @@ export default function Recommend() {
                               </span>
                             )}
                             {job.top_job_skills?.slice(0, 3).map(skill => (
-                              <span
-                                key={skill}
-                                className="text-xs text-gray-400 px-2 py-0.5 rounded-full border border-gray-100"
-                              >
+                              <span key={skill} className="text-xs text-gray-400 px-2 py-0.5 rounded-full border border-gray-100">
                                 {skill}
                               </span>
                             ))}
