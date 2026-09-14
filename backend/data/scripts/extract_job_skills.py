@@ -17,7 +17,7 @@ from app.database import SessionLocal
 from app.models.job import Job, JobSkill
 from app.nlp.skill_extractor import SkillExtractor
 
-SAMPLE_SIZE = 500
+SAMPLE_SIZE = 1000
 
 def sample_jobs(df: pd.DataFrame, n: int) -> pd.DataFrame:
     """Stratified sample across subcategories."""

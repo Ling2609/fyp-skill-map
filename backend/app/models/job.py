@@ -15,6 +15,7 @@ class Job(Base):
     subcategory = Column(String)
     salary = Column(String)
     description = Column(String)
+    formatted_description = Column(String, nullable=True)  # JSON array of bullet strings
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
 
