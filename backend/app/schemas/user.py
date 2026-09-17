@@ -2,18 +2,22 @@ from pydantic import BaseModel, EmailStr
 from app.models.user import UserRole
 
 class UserRegister(BaseModel):
-    full_name: str
+    username: str
+    first_name: str
+    last_name: str
     email: EmailStr
     password: str
     role: UserRole = UserRole.student
 
 class UserLogin(BaseModel):
-    email: EmailStr
+    email: str
     password: str
 
 class UserOut(BaseModel):
     id: int
-    full_name: str
+    username: str
+    first_name: str
+    last_name: str
     email: str
     role: UserRole
 
