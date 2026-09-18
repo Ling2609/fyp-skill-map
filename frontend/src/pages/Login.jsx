@@ -1,13 +1,45 @@
-import { useState } from 'react'
-import { useNavigate, Link } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { useNavigate, Link, useLocation } from 'react-router-dom'
 import api from '../api'
+
+// Toast component
+const Toast = ({ onClose }) => {
+  useEffect(() => {
+    const timer = setTimeout(onClose, 8000)
+    return () => clearTimeout(timer)
+  }, [onClose])
+
+  return (
+    <div className="fixed top-6 right-6 z-50 flex items-center gap-3 bg-white border border-green-200 shadow-lg rounded-xl px-4 py-3 animate-in slide-in-from-bottom-2">
+      <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center shrink-0">
+        <svg className="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+        </svg>
+      </div>
+      <div className="min-w-0">
+        <p className="text-sm font-medium text-gray-800">Account created!</p>
+        <p className="text-xs text-gray-500">Please sign in to continue.</p>
+      </div>
+      <button
+        onClick={onClose}
+        className="text-gray-400 hover:text-gray-600 ml-2 shrink-0"
+      >
+        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+  )
+}
 
 export default function Login() {
   const navigate = useNavigate()
+  const location = useLocation()
   const [form, setForm] = useState({ email: '', password: '' })
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
+  const [showToast, setShowToast] = useState(!!location.state?.message)
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -26,6 +58,10 @@ export default function Login() {
 
   return (
     <div className="min-h-screen bg-linear-to-br from-blue-50 to-slate-100 flex items-center justify-center p-4">
+
+      {/* Toast notification */}
+      {showToast && <Toast message={location.state?.message} onClose={() => setShowToast(false)} />}
+
       <div className="bg-white rounded-2xl shadow-lg p-8 w-full max-w-md">
 
         {/* Logo */}

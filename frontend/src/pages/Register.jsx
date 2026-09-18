@@ -160,7 +160,7 @@ export default function Register() {
         password: form.password,
         role: form.role,
       })
-      navigate('/login')
+      navigate('/login', { state: { message: 'Account created successfully! Please sign in.' } })
     } catch (err) {
       setError(err.response?.data?.detail || 'Registration failed')
     } finally {
@@ -173,8 +173,8 @@ export default function Register() {
 
   return (
     <div className="min-h-screen bg-linear-to-br from-blue-50 to-slate-100 flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl shadow-lg p-8 w-full max-w-md">
-        <div className="mb-5">
+      <div className="bg-white rounded-2xl shadow-lg p-5 w-full max-w-md">
+        <div className="mb-3">
           <h1 className="text-2xl font-bold text-gray-900 leading-tight">Create account</h1>
           <p className="text-gray-500 text-sm mt-1">Start mapping your skills to your career</p>
         </div>
@@ -183,7 +183,7 @@ export default function Register() {
           <div className="bg-red-50 text-red-600 text-sm px-4 py-3 rounded-lg mb-4">{error}</div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-3">
 
           {/* Username */}
           <div>
@@ -390,7 +390,7 @@ export default function Register() {
           </button>
         </form>
 
-        <p className="text-sm text-center text-gray-500 mt-5">
+        <p className="text-sm text-center text-gray-500 mt-3">
           Already have an account?{' '}
           <Link to="/login" className="text-blue-700 font-medium hover:underline">Sign in</Link>
         </p>
