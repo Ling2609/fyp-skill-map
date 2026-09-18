@@ -4,14 +4,21 @@ import api from '../api'
 
 const getPasswordStrength = (password) => {
   if (!password) return { score: 0, label: '', color: '' }
-  let score = 0
-  if (password.length >= 8) score++
-  if (password.length >= 12) score++
-  if (/[A-Z]/.test(password)) score++
-  if (/[0-9]/.test(password)) score++
-  if (/[^a-zA-Z0-9]/.test(password)) score++
-  if (score <= 1) return { score, label: 'Weak', color: 'bg-red-400' }
-  if (score <= 3) return { score, label: 'Medium', color: 'bg-yellow-400' }
+
+  // Below minimum length = always Weak regardless of complexity
+  if (password.length < 8) return { score: 1, label: 'Weak', color: 'bg-red-400' }
+
+  let score = 1 // base score for meeting minimum length
+  if (password.length >= 12) score++ // bonus for longer
+  if (password.length >= 16) score++ // bonus for even longer
+  if (/[A-Z]/.test(password)) score++ // uppercase letter
+  if (/[0-9]/.test(password)) score++ // number
+  if (/[^a-zA-Z0-9]/.test(password)) score++ // symbol
+
+  score = Math.min(score, 5) // cap at 5
+
+  if (score <= 2) return { score, label: 'Weak', color: 'bg-red-400' }
+  if (score <= 4) return { score, label: 'Medium', color: 'bg-yellow-400' }
   return { score, label: 'Strong', color: 'bg-green-500' }
 }
 
@@ -45,6 +52,7 @@ export default function Register() {
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirm, setShowConfirm] = useState(false)
   const [focused, setFocused] = useState('')
+  const [attemptedSubmit, setAttemptedSubmit] = useState(false)
 
   const [usernameStatus, setUsernameStatus] = useState('idle')
   const [usernameMessage, setUsernameMessage] = useState('')
@@ -118,7 +126,7 @@ export default function Register() {
       form.email.length > 0 &&
       form.password.length >= 8 &&
       form.password === form.confirm_password &&
-      passwordStrength.score >= 2
+      passwordStrength.score >= 3
   }
 
   const handleBlur = (field) => {
@@ -131,7 +139,16 @@ export default function Register() {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    setAttemptedSubmit(true)
+
+    const newErrors = {
+      first_name: validateName(form.first_name),
+      last_name: validateName(form.last_name),
+    }
+    setErrors(newErrors)
+
     if (!isFormValid()) return
+
     setError('')
     setLoading(true)
     try {
@@ -181,6 +198,7 @@ export default function Register() {
                 className={`w-full border rounded-lg px-3 py-2 text-sm pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
                   usernameStatus === 'available' ? 'border-green-400' :
                   usernameStatus === 'taken' || usernameStatus === 'invalid' ? 'border-red-400' :
+                  attemptedSubmit && usernameStatus !== 'available' ? 'border-red-400' :
                   'border-gray-300'
                 }`}
                 placeholder="johndoe_123"
@@ -194,6 +212,9 @@ export default function Register() {
                 usernameStatus === 'taken' || usernameStatus === 'invalid' ? 'text-red-500' :
                 'text-gray-400'
               }`}>{usernameMessage}</p>
+            )}
+            {attemptedSubmit && usernameStatus !== 'available' && !usernameMessage && (
+              <p className="text-xs text-red-500 mt-1">Please enter a valid available username</p>
             )}
             {focused === 'username' && !usernameMessage && (
               <p className="text-xs text-gray-400 mt-1">Letters, numbers, dots and underscores only</p>
@@ -241,10 +262,13 @@ export default function Register() {
               onChange={e => setForm({ ...form, email: e.target.value })}
               onFocus={() => setFocused('email')}
               onBlur={() => setFocused('')}
-              className={inputClass(false)}
+              className={inputClass(attemptedSubmit && !form.email)}
               placeholder="jane@example.com"
               required
             />
+            {attemptedSubmit && !form.email && (
+              <p className="text-xs text-red-500 mt-1">Email is required</p>
+            )}
           </div>
 
           {/* Password */}
@@ -257,7 +281,10 @@ export default function Register() {
                 onChange={e => setForm({ ...form, password: e.target.value })}
                 onFocus={() => setFocused('password')}
                 onBlur={() => setFocused('')}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className={`w-full border rounded-lg px-3 py-2 text-sm pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                  attemptedSubmit && (form.password.length < 8 || passwordStrength.score < 3)
+                    ? 'border-red-400' : 'border-gray-300'
+                }`}
                 placeholder="••••••••"
                 required
                 minLength={8}
@@ -266,18 +293,38 @@ export default function Register() {
                 <EyeIcon show={showPassword} />
               </button>
             </div>
+
+            {/* Strength bar — shows when typing */}
             {form.password && (
               <div className="mt-2">
                 <div className="flex gap-1 mb-1">
                   {[1, 2, 3, 4, 5].map(i => (
-                    <div key={i} className={`h-1 flex-1 rounded-full transition-all ${i <= passwordStrength.score ? passwordStrength.color : 'bg-gray-200'}`} />
+                    <div
+                      key={i}
+                      className={`h-1 flex-1 rounded-full transition-all ${
+                        i <= passwordStrength.score ? passwordStrength.color : 'bg-gray-200'
+                      }`}
+                    />
                   ))}
                 </div>
-                <p className={`text-xs ${passwordStrength.score <= 1 ? 'text-red-500' : passwordStrength.score <= 3 ? 'text-yellow-600' : 'text-green-600'}`}>
+                <p className={`text-xs ${
+                  passwordStrength.score <= 2 ? 'text-red-500' :
+                  passwordStrength.score <= 4 ? 'text-yellow-600' : 'text-green-600'
+                }`}>
                   {passwordStrength.label} password
                 </p>
               </div>
             )}
+
+            {/* Error messages on submit */}
+            {attemptedSubmit && form.password.length < 8 && (
+              <p className="text-xs text-red-500 mt-1">Password must be at least 8 characters</p>
+            )}
+            {attemptedSubmit && form.password.length >= 8 && passwordStrength.score < 3 && (
+              <p className="text-xs text-red-500 mt-1">Password is too weak — Medium strength required</p>
+            )}
+
+            {/* Hint — only when focused */}
             {focused === 'password' && (
               <p className="text-xs text-gray-400 mt-1">
                 Min 8 characters with uppercase, numbers and symbols.
@@ -299,7 +346,8 @@ export default function Register() {
                 onBlur={() => setFocused('')}
                 className={`w-full border rounded-lg px-3 py-2 text-sm pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
                   form.confirm_password && form.password === form.confirm_password ? 'border-green-400' :
-                  form.confirm_password && form.password !== form.confirm_password ? 'border-red-400' :
+                  (form.confirm_password && form.password !== form.confirm_password) ||
+                  (attemptedSubmit && !form.confirm_password) ? 'border-red-400' :
                   'border-gray-300'
                 }`}
                 placeholder="••••••••"
@@ -314,6 +362,9 @@ export default function Register() {
             )}
             {form.confirm_password && form.password === form.confirm_password && (
               <p className="text-xs text-green-600 mt-1">Passwords match</p>
+            )}
+            {attemptedSubmit && !form.confirm_password && (
+              <p className="text-xs text-red-500 mt-1">Please confirm your password</p>
             )}
           </div>
 
@@ -332,7 +383,7 @@ export default function Register() {
 
           <button
             type="submit"
-            disabled={loading || !isFormValid()}
+            disabled={loading}
             className="w-full bg-blue-700 text-white py-2.5 rounded-lg font-medium hover:bg-blue-800 transition disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? 'Creating account...' : 'Create account'}
