@@ -254,7 +254,16 @@ export default function JobDetail() {
                     gap?.missing_skills?.map((item, idx) => (
                       <div key={idx} className="flex items-center justify-between gap-3 pb-2.5 border-b border-gray-50 last:border-0 last:pb-0">
                         <span className="text-xs font-medium text-gray-700">{item.job_skill}</span>
-                        <span className="text-xs text-red-500 bg-red-50 px-2 py-0.5 rounded-full shrink-0">Missing</span>
+                        <div className="flex items-center gap-1.5 shrink-0">
+                          <span className="text-xs text-red-500 bg-red-50 px-2 py-0.5 rounded-full">Missing</span>
+                          <button
+                            onClick={() => navigate(`/chatbot?skill=${encodeURIComponent(item.job_skill)}&job=${encodeURIComponent(gap?.job?.job_title || '')}`)}
+                            className="text-xs text-blue-600 bg-blue-50 hover:bg-blue-100 px-2 py-0.5 rounded-full transition"
+                            title="Get a learning plan for this skill"
+                          >
+                            Learn →
+                          </button>
+                        </div>
                       </div>
                     ))
                   )}

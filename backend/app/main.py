@@ -2,8 +2,9 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.database import Base, engine
-from app.routers import auth, modules, jobs, recommend, skillgap
+from app.routers import auth, modules, jobs, recommend, skillgap, chatbot, profile
 from app.models import user, module, job
+from app.models import profile as profile_model  # noqa: F401 — registers tables with Base
 
 
 @asynccontextmanager
@@ -30,6 +31,8 @@ app.include_router(modules.router)
 app.include_router(jobs.router)
 app.include_router(recommend.router)
 app.include_router(skillgap.router)
+app.include_router(chatbot.router)
+app.include_router(profile.router)
 
 
 @app.get("/")
