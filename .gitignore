@@ -4,6 +4,7 @@ backend/__pycache__/
 backend/**/__pycache__/
 backend/.env
 backend/data/*.csv
+backend/test_credentials.txt
 
 # Node
 frontend/node_modules/
