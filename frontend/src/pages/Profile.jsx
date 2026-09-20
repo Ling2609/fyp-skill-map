@@ -351,7 +351,7 @@ function CertificationsTab({ certs, onRefresh }) {
   )
 }
 
-// ── Modules tab ───────────────────────────────────────────────────────────────
+// ── Modules tab (moved from Modules page) ─────────────────────────────────────
 
 function ModulesTab() {
   const navigate = useNavigate()
@@ -415,6 +415,8 @@ function ModulesTab() {
 
   return (
     <div className="space-y-5">
+
+      {/* Action bar */}
       <div className="bg-white rounded-2xl border border-gray-100 shadow-sm px-6 py-4 flex items-center justify-between">
         <div>
           <p className="text-sm font-semibold text-gray-800">Select your modules and grades</p>
@@ -433,6 +435,7 @@ function ModulesTab() {
         </button>
       </div>
 
+      {/* Year tabs */}
       <div className="flex gap-2">
         {[1, 2, 3].map(year => (
           <button
@@ -449,7 +452,10 @@ function ModulesTab() {
         ))}
       </div>
 
+      {/* Split panel */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+
+        {/* Compulsory */}
         <div className="lg:col-span-2 bg-white rounded-2xl border border-gray-100 shadow-sm">
           <div className="px-6 py-4 border-b border-gray-100">
             <h3 className="text-sm font-semibold text-gray-700">Compulsory Modules</h3>
@@ -479,6 +485,7 @@ function ModulesTab() {
           </div>
         </div>
 
+        {/* Electives */}
         <div className="bg-white rounded-2xl border border-gray-100 shadow-sm">
           <div className="px-6 py-4 border-b border-gray-100">
             <h3 className="text-sm font-semibold text-gray-700">Elective Modules</h3>
@@ -554,14 +561,17 @@ export default function Profile() {
   }, [])
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      <div className="bg-white border-b border-gray-100 px-8 py-6">
+    <div className="h-screen bg-slate-50 flex flex-col">
+
+      {/* Page header — pinned */}
+      <div className="bg-white border-b border-gray-100 px-8 py-6 shrink-0">
         <div className="max-w-6xl mx-auto">
           <h1 className="text-2xl font-bold text-gray-900">My Profile</h1>
           <p className="text-sm text-gray-500 mt-1">Build your skill profile from projects, certifications, and academic modules</p>
         </div>
       </div>
 
+      <div className="flex-1 overflow-auto">
       <div className="max-w-6xl mx-auto px-8 py-8 space-y-6">
 
         {/* Skill summary banner */}
@@ -572,7 +582,7 @@ export default function Profile() {
               <p className="text-xs text-gray-400 mt-0.5">Automatically extracted from your projects and certifications</p>
             </div>
             {!profileLoading && profile && (
-              <div className="flex items-center gap-4 shrink-0">
+              <div className="flex items-center gap-4 text-right shrink-0">
                 <div className="text-center">
                   <p className="text-2xl font-bold text-blue-700">{profile.total}</p>
                   <p className="text-xs text-gray-400">unique skills</p>
@@ -637,10 +647,17 @@ export default function Profile() {
         </div>
 
         {/* Tab content */}
-        {activeTab === 'projects' && <ProjectsTab projects={projects} onRefresh={fetchAll} />}
-        {activeTab === 'certs' && <CertificationsTab certs={certs} onRefresh={fetchAll} />}
-        {activeTab === 'modules' && <ModulesTab />}
+        {activeTab === 'projects' && (
+          <ProjectsTab projects={projects} onRefresh={fetchAll} />
+        )}
+        {activeTab === 'certs' && (
+          <CertificationsTab certs={certs} onRefresh={fetchAll} />
+        )}
+        {activeTab === 'modules' && (
+          <ModulesTab />
+        )}
 
+      </div>
       </div>
     </div>
   )

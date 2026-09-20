@@ -10,6 +10,34 @@ const LOADING_STEPS = [
   'Almost done...',
 ]
 
+function NoModulesState() {
+  const navigate = useNavigate()
+  return (
+    <div className="h-screen bg-gray-50 flex flex-col items-center justify-center gap-6 px-8 text-center">
+      <div className="w-16 h-16 rounded-2xl bg-blue-50 flex items-center justify-center">
+        <svg className="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+        </svg>
+      </div>
+      <div>
+        <h2 className="text-lg font-bold text-gray-800 mb-1">No modules selected yet</h2>
+        <p className="text-sm text-gray-500 max-w-sm">
+          Select the modules you've studied and your grades — we'll match you with jobs that fit your academic skills.
+        </p>
+      </div>
+      <button
+        onClick={() => navigate('/profile?tab=modules')}
+        className="bg-blue-700 text-white px-6 py-3 rounded-xl text-sm font-medium hover:bg-blue-800 transition flex items-center gap-2"
+      >
+        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+        </svg>
+        Select My Modules
+      </button>
+    </div>
+  )
+}
+
 export default function Recommend() {
   const navigate = useNavigate()
 
@@ -51,7 +79,6 @@ export default function Recommend() {
       setLoadingProgress(100)
       setTimeout(() => {
         setResults(res.data)
-        // Save results to sessionStorage
         sessionStorage.setItem('lastRecommendResults', JSON.stringify(res.data))
         sessionStorage.setItem('lastRoleFilter', searchRole)
         sessionStorage.setItem('lastActiveCategory', activeCategory)
@@ -65,16 +92,12 @@ export default function Recommend() {
   }
 
   useEffect(() => {
-    if (!stored || modules.length === 0) {
-      navigate('/modules')
-      return
-    }
+    if (!stored || modules.length === 0) return
 
     api.get('/jobs/subcategories')
       .then(res => setSubcategories(res.data))
       .catch(() => {})
 
-    // Restore previous results if available
     const savedResults = sessionStorage.getItem('lastRecommendResults')
     const savedRole = sessionStorage.getItem('lastRoleFilter')
     const savedCategory = sessionStorage.getItem('lastActiveCategory')
@@ -86,12 +109,12 @@ export default function Recommend() {
         if (savedCategory) setActiveCategory(savedCategory)
       }, 0)
     } else {
-      // Auto search only if no saved results
       setTimeout(() => doSearch('', 50), 0)
     }
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
-  if (!stored || modules.length === 0) return null
+  // Show empty state instead of redirecting
+  if (!stored || modules.length === 0) return <NoModulesState />
 
   const handleCategoryClick = (cat) => {
     setActiveCategory(cat)
@@ -127,20 +150,23 @@ export default function Recommend() {
   return (
     <div className="h-screen bg-gray-50 flex flex-col">
 
-      {/* Header */}
+      {/* Header — pinned */}
       <div className="bg-white border-b border-gray-100 px-8 pt-5 pb-4 shrink-0">
         <div className="max-w-4xl mx-auto">
 
           {/* Title row */}
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h1 className="text-xl font-bold text-gray-800">Job Recommendations</h1>
+              <h1 className="text-xl font-bold text-gray-800">Job Matches</h1>
               <p className="text-gray-500 text-xs mt-0.5">
                 {modules.length} modules selected
                 {results && ` · ${results.total_jobs_compared} jobs compared · ${results.recommendations.length} matches found`}
               </p>
             </div>
-            <button onClick={() => navigate('/modules')} className="text-xs text-blue-600 hover:underline">
+            <button
+              onClick={() => navigate('/profile?tab=modules')}
+              className="text-xs text-blue-600 hover:underline"
+            >
               ← Edit Modules
             </button>
           </div>
@@ -207,7 +233,7 @@ export default function Recommend() {
         </div>
       </div>
 
-      {/* Content */}
+      {/* Content — scrollable */}
       <div className="flex-1 overflow-auto px-8 py-4">
         <div className="max-w-4xl mx-auto">
 
