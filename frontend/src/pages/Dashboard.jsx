@@ -164,13 +164,13 @@ export default function Dashboard() {
                   className="flex items-center justify-between gap-3 py-2.5 border-b border-gray-50 last:border-0 cursor-pointer hover:bg-gray-50 rounded-lg px-2 transition"
                 >
                   <div className="flex items-center gap-3 min-w-0">
-                    <span className="text-xs text-gray-400 w-4 flex-shrink-0">{idx + 1}</span>
+                    <span className="text-xs text-gray-400 w-4 shrink-0">{idx + 1}</span>
                     <div className="min-w-0">
                       <p className="text-sm font-medium text-gray-800 truncate">{job.job_title}</p>
                       <p className="text-xs text-gray-400">{job.company} · {job.location}</p>
                     </div>
                   </div>
-                  <div className="flex items-center gap-1.5 flex-shrink-0">
+                  <div className="flex items-center gap-1.5 shrink-0">
                     <div className={`w-2 h-2 rounded-full ${getDotColor(job.match_percent)}`} />
                     <span className={`text-xs font-semibold ${getMatchColor(job.match_percent)}`}>
                       {job.match_percent}%

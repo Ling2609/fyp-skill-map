@@ -128,7 +128,7 @@ export default function Recommend() {
     <div className="h-screen bg-gray-50 flex flex-col">
 
       {/* Header */}
-      <div className="bg-white border-b border-gray-100 px-8 pt-5 pb-4 flex-shrink-0">
+      <div className="bg-white border-b border-gray-100 px-8 pt-5 pb-4 shrink-0">
         <div className="max-w-4xl mx-auto">
 
           {/* Title row */}
@@ -148,7 +148,7 @@ export default function Recommend() {
           {/* Search bar */}
           <div className="flex gap-2 mb-3">
             <div className="flex-1 flex items-center gap-2 bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5">
-              <svg className="w-4 h-4 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-4 h-4 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
               <input
@@ -181,7 +181,7 @@ export default function Recommend() {
           <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
             <button
               onClick={() => handleCategoryClick('all')}
-              className={`text-xs px-3 py-1.5 rounded-full border transition flex-shrink-0 ${
+              className={`text-xs px-3 py-1.5 rounded-full border transition shrink-0 ${
                 activeCategory === 'all'
                   ? 'bg-blue-700 text-white border-blue-700'
                   : 'bg-white text-gray-600 border-gray-200 hover:border-blue-400 hover:text-blue-700'
@@ -194,7 +194,7 @@ export default function Recommend() {
                 key={cat}
                 onClick={() => handleCategoryClick(cat)}
                 disabled={loading}
-                className={`text-xs px-3 py-1.5 rounded-full border transition disabled:opacity-50 flex-shrink-0 whitespace-nowrap ${
+                className={`text-xs px-3 py-1.5 rounded-full border transition disabled:opacity-50 shrink-0 whitespace-nowrap ${
                   activeCategory === cat
                     ? 'bg-blue-700 text-white border-blue-700'
                     : 'bg-white text-gray-600 border-gray-200 hover:border-blue-400 hover:text-blue-700'
@@ -252,7 +252,7 @@ export default function Recommend() {
                       className="bg-white rounded-xl px-5 py-4 border border-gray-100 cursor-pointer hover:border-blue-200 hover:shadow-sm transition group"
                     >
                       <div className="flex items-start gap-4">
-                        <div className="w-6 h-6 rounded-full bg-gray-100 flex items-center justify-center text-xs font-semibold text-gray-400 flex-shrink-0 mt-0.5 group-hover:bg-blue-50 group-hover:text-blue-600 transition">
+                        <div className="w-6 h-6 rounded-full bg-gray-100 flex items-center justify-center text-xs font-semibold text-gray-400 shrink-0 mt-0.5 group-hover:bg-blue-50 group-hover:text-blue-600 transition">
                           {idx + 1}
                         </div>
                         <div className="flex-1 min-w-0">
@@ -265,8 +265,8 @@ export default function Recommend() {
                                 {job.company} · {job.location}
                               </p>
                             </div>
-                            <div className="flex items-center gap-1.5 flex-shrink-0">
-                              <div className={`w-2 h-2 rounded-full flex-shrink-0 ${getMatchDotColor(job.match_percent)}`} />
+                            <div className="flex items-center gap-1.5 shrink-0">
+                              <div className={`w-2 h-2 rounded-full shrink-0 ${getMatchDotColor(job.match_percent)}`} />
                               <span className={`text-xs font-semibold ${getMatchTextColor(job.match_percent)}`}>
                                 {job.match_percent}% match
                               </span>
