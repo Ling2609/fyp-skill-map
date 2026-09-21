@@ -438,50 +438,50 @@ export default function Profile() {
     <div className="h-screen bg-slate-50 flex flex-col">
 
       {/* ── Pinned header ── */}
-      <div className="bg-white border-b border-gray-100 shrink-0">
+      <div className="bg-white shadow-sm shrink-0">
 
         {/* Title + stats row */}
-        <div className="max-w-6xl mx-auto px-8 pt-6 pb-4 flex items-start justify-between">
+        <div className="max-w-5xl mx-auto px-8 pt-5 pb-3 flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">My Profile</h1>
-            <p className="text-sm text-gray-400 mt-0.5">Build your skill profile from projects, certifications, and modules</p>
+            <h1 className="text-xl font-bold text-gray-900">My Profile</h1>
+            <p className="text-xs text-gray-400 mt-0.5">Build your skill profile from projects, certifications, and modules</p>
           </div>
 
-          {/* Stats — always render placeholders to hold space */}
-          <div className="flex items-center gap-6 pt-1">
+          {/* Stats */}
+          <div className="flex items-center gap-5">
             <div className="text-center">
-              <p className="text-2xl font-bold text-blue-700 leading-none">
+              <p className="text-xl font-bold text-blue-700 leading-none">
                 {profileLoading ? '—' : (profile?.total ?? 0)}
               </p>
-              <p className="text-xs text-gray-400 mt-1">Skills</p>
+              <p className="text-xs text-gray-400 mt-0.5">Skills</p>
             </div>
-            <div className="w-px h-10 bg-gray-100" />
+            <div className="w-px h-8 bg-gray-100" />
             <div className="text-center">
-              <p className="text-2xl font-bold text-gray-700 leading-none">
+              <p className="text-xl font-bold text-gray-700 leading-none">
                 {profileLoading ? '—' : projects.length}
               </p>
-              <p className="text-xs text-gray-400 mt-1">Projects</p>
+              <p className="text-xs text-gray-400 mt-0.5">Projects</p>
             </div>
-            <div className="w-px h-10 bg-gray-100" />
+            <div className="w-px h-8 bg-gray-100" />
             <div className="text-center">
-              <p className="text-2xl font-bold text-gray-700 leading-none">
+              <p className="text-xl font-bold text-gray-700 leading-none">
                 {profileLoading ? '—' : certs.length}
               </p>
-              <p className="text-xs text-gray-400 mt-1">Certs</p>
+              <p className="text-xs text-gray-400 mt-0.5">Certs</p>
             </div>
           </div>
         </div>
 
-        {/* Skills row — only when skills exist */}
+        {/* Skills chips — only when present */}
         {!profileLoading && profile?.skills?.length > 0 && (
-          <div className="max-w-6xl mx-auto px-8 pb-4 flex flex-wrap gap-1.5">
+          <div className="max-w-5xl mx-auto px-8 pb-3 flex flex-wrap gap-1.5">
             {profile.skills.map((s, i) => <SkillChip key={i} skill={s} />)}
           </div>
         )}
 
         {/* Tab bar */}
-        <div className="max-w-6xl mx-auto px-8">
-          <div className="flex gap-0 border-b border-transparent -mb-px">
+        <div className="max-w-5xl mx-auto px-8 border-t border-gray-100">
+          <div className="flex">
             {TABS.map(tab => {
               const isActive = activeTab === tab.key
               const count = tab.key === 'projects' ? projects.length : tab.key === 'certs' ? certs.length : null
@@ -489,10 +489,10 @@ export default function Profile() {
                 <button
                   key={tab.key}
                   onClick={() => setActiveTab(tab.key)}
-                  className={`flex items-center gap-2 px-5 py-3 text-sm font-medium border-b-2 transition-colors ${
+                  className={`flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 transition-colors ${
                     isActive
                       ? 'border-blue-700 text-blue-700'
-                      : 'border-transparent text-gray-500 hover:text-gray-800 hover:border-gray-300'
+                      : 'border-transparent text-gray-500 hover:text-gray-800 hover:border-gray-200'
                   }`}
                 >
                   {tab.label}
@@ -512,7 +512,7 @@ export default function Profile() {
 
       {/* ── Scrollable content ── */}
       <div className="flex-1 overflow-auto">
-        <div className="max-w-6xl mx-auto px-8 py-6">
+        <div className="max-w-5xl mx-auto px-8 py-6">
           {activeTab === 'projects'  && <ProjectsTab      projects={projects} onRefresh={fetchAll} />}
           {activeTab === 'certs'     && <CertificationsTab certs={certs}       onRefresh={fetchAll} />}
           {activeTab === 'modules'   && <ModulesTab />}
