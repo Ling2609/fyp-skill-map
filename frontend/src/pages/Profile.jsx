@@ -272,15 +272,13 @@ function ModulesTab() {
   const [selectedYear, setSelectedYear] = useState(1)
   const [selections, setSelections] = useState({})
   const [loading, setLoading] = useState(true)
+  const allCompulsory = modules.filter(m => m.type === 'common' || m.type === 'specialised')
+  const allCompulsoryGraded = allCompulsory.every(m => selections[m.code] !== undefined && selections[m.code] !== '')
 
   useEffect(() => {
     api.get('/modules/').then(res => {
       setModules(res.data)
-      const defaults = {}
-      res.data.forEach(mod => {
-        if (mod.type === 'common' || mod.type === 'specialised') defaults[mod.code] = 3.0
-      })
-      setSelections(defaults)
+      setSelections({})
       setLoading(false)
     })
   }, [])
@@ -288,11 +286,10 @@ function ModulesTab() {
   const yearModules = modules.filter(m => m.level === selectedYear)
   const compulsory = yearModules.filter(m => m.type === 'common' || m.type === 'specialised')
   const electives = yearModules.filter(m => m.type === 'elective')
-  const selectedCount = Object.keys(selections).length
 
   const toggleElective = (code) => setSelections(prev => {
     if (prev[code] !== undefined) { const u = { ...prev }; delete u[code]; return u }
-    return { ...prev, [code]: 3.0 }
+    return { ...prev, [code]: '' }
   })
 
   const setGrade = (code, grade) => setSelections(prev => ({ ...prev, [code]: parseFloat(grade) }))
@@ -328,14 +325,18 @@ function ModulesTab() {
         </div>
         <button
           onClick={handleGetRecommendations}
-          disabled={selectedCount === 0}
+          disabled={!allCompulsoryGraded}
           className="bg-blue-700 text-white px-5 py-2.5 rounded-xl text-sm font-medium hover:bg-blue-800 disabled:opacity-50 transition flex items-center gap-2"
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
           </svg>
           Get Job Matches
-          {selectedCount > 0 && <span className="bg-blue-600 text-xs px-1.5 py-0.5 rounded-full">{selectedCount}</span>}
+          {!allCompulsoryGraded && (
+            <span className="bg-blue-500 text-xs px-1.5 py-0.5 rounded-full">
+              {allCompulsory.filter(m => !selections[m.code]).length} missing
+            </span>
+          )}
         </button>
       </div>
 
@@ -356,8 +357,12 @@ function ModulesTab() {
                     <p className="text-xs text-gray-400">{mod.code}</p>
                   </div>
                 </div>
-                <select value={selections[mod.code] ?? 3.0} onChange={e => setGrade(mod.code, e.target.value)}
-                  className="ml-4 border border-gray-200 rounded-lg px-2 py-1 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 shrink-0">
+                <select
+                  value={selections[mod.code] ?? ''}
+                  onChange={e => setGrade(mod.code, e.target.value)}
+                  className="ml-4 border border-gray-200 rounded-lg px-2 py-1 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 shrink-0"
+                >
+                  <option value="" disabled>Select grade</option>
                   {GRADE_OPTIONS.map(g => <option key={g.value} value={g.value}>{g.label}</option>)}
                 </select>
               </div>
@@ -383,8 +388,9 @@ function ModulesTab() {
                     <p className="text-sm font-medium text-gray-800">{mod.name}</p>
                     <p className="text-xs text-gray-400">{mod.code}</p>
                     {selections[mod.code] !== undefined && (
-                      <select value={selections[mod.code]} onChange={e => setGrade(mod.code, e.target.value)}
+                      <select value={selections[mod.code] ?? ''} onChange={e => setGrade(mod.code, e.target.value)}
                         className="mt-2 border border-gray-200 rounded-lg px-2 py-1 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full">
+                        <option value="" disabled>Select grade</option>
                         {GRADE_OPTIONS.map(g => <option key={g.value} value={g.value}>{g.label}</option>)}
                       </select>
                     )}
