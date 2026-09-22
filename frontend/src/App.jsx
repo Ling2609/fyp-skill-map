@@ -19,7 +19,7 @@ function Layout({ children }) {
     <div className="flex min-h-screen bg-slate-100">
       <Sidebar />
       <main
-        className="flex-1 min-h-screen transition-all duration-300"
+        className="flex-1 min-h-screen min-w-0 overflow-x-hidden transition-all duration-300"
         style={{ marginLeft: collapsed ? '64px' : '224px' }}
       >
         {children}
