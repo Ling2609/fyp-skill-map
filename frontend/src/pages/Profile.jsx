@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import PageHeader from '../components/PageHeader'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import api from '../api'
 
@@ -438,81 +439,67 @@ export default function Profile() {
     <div className="h-screen bg-slate-50 flex flex-col">
 
       {/* ── Pinned header ── */}
-      <div className="bg-white shadow-sm shrink-0">
-
+      <PageHeader>
         {/* Title + stats row */}
-        <div className="max-w-5xl mx-auto px-8 pt-5 pb-3 flex items-center justify-between">
+        <div className="flex items-start justify-between mb-4 pt-1">
           <div>
-            <h1 className="text-xl font-bold text-gray-900">My Profile</h1>
-            <p className="text-xs text-gray-400 mt-0.5">Build your skill profile from projects, certifications, and modules</p>
+            <p className="text-[11px] font-semibold text-blue-600 uppercase tracking-widest mb-2">My Profile</p>
+            <h1 className="text-2xl font-semibold tracking-tight text-slate-900">Skill Profile</h1>
+            <p className="text-sm text-slate-500 mt-1">Build your profile from projects, certifications, and modules</p>
           </div>
 
           {/* Stats */}
-          <div className="flex items-center gap-5">
-            <div className="text-center">
-              <p className="text-xl font-bold text-blue-700 leading-none">
-                {profileLoading ? '—' : (profile?.total ?? 0)}
-              </p>
-              <p className="text-xs text-gray-400 mt-0.5">Skills</p>
-            </div>
-            <div className="w-px h-8 bg-gray-100" />
-            <div className="text-center">
-              <p className="text-xl font-bold text-gray-700 leading-none">
-                {profileLoading ? '—' : projects.length}
-              </p>
-              <p className="text-xs text-gray-400 mt-0.5">Projects</p>
-            </div>
-            <div className="w-px h-8 bg-gray-100" />
-            <div className="text-center">
-              <p className="text-xl font-bold text-gray-700 leading-none">
-                {profileLoading ? '—' : certs.length}
-              </p>
-              <p className="text-xs text-gray-400 mt-0.5">Certs</p>
-            </div>
+          <div className="flex items-center gap-0 mt-1">
+            {[
+              { label: 'Skills', value: profileLoading ? '—' : (profile?.total ?? 0) },
+              { label: 'Projects', value: profileLoading ? '—' : projects.length },
+              { label: 'Certs', value: profileLoading ? '—' : certs.length },
+            ].map(({ label, value }, i, arr) => (
+              <div key={label} className="flex items-center">
+                <div className="text-center px-6">
+                  <p className="text-2xl font-semibold tracking-tight text-slate-900 leading-none tabular-nums">
+                    {value}
+                  </p>
+                  <p className="text-xs text-slate-400 mt-1 font-medium">{label}</p>
+                </div>
+                {i < arr.length - 1 && <div className="w-px h-10 bg-slate-400" />}
+              </div>
+            ))}
           </div>
         </div>
 
-        {/* Skills chips — only when present */}
-        {!profileLoading && profile?.skills?.length > 0 && (
-          <div className="max-w-5xl mx-auto px-8 pb-3 flex flex-wrap gap-1.5">
-            {profile.skills.map((s, i) => <SkillChip key={i} skill={s} />)}
-          </div>
-        )}
-
-        {/* Tab bar */}
-        <div className="max-w-5xl mx-auto px-8 border-t border-gray-100">
-          <div className="flex">
-            {TABS.map(tab => {
-              const isActive = activeTab === tab.key
-              const count = tab.key === 'projects' ? projects.length : tab.key === 'certs' ? certs.length : null
-              return (
-                <button
-                  key={tab.key}
-                  onClick={() => setActiveTab(tab.key)}
-                  className={`flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 transition-colors ${
-                    isActive
-                      ? 'border-blue-700 text-blue-700'
-                      : 'border-transparent text-gray-500 hover:text-gray-800 hover:border-gray-200'
-                  }`}
-                >
-                  {tab.label}
-                  {count !== null && (
-                    <span className={`text-xs px-1.5 py-0.5 rounded-full font-medium ${
-                      isActive ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-500'
-                    }`}>
-                      {count}
-                    </span>
-                  )}
-                </button>
-              )
-            })}
-          </div>
+        {/* Tab bar — visually separated from header content */}
+        <div className="flex border-t border-slate-200 mt-2 -mx-8 px-8">
+          {TABS.map(tab => {
+            const isActive = activeTab === tab.key
+            const count = tab.key === 'projects' ? projects.length : tab.key === 'certs' ? certs.length : null
+            return (
+              <button
+                key={tab.key}
+                onClick={() => setActiveTab(tab.key)}
+                className={`flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 transition-colors ${
+                  isActive
+                    ? 'border-blue-600 text-blue-700'
+                    : 'border-transparent text-slate-500 hover:text-slate-800 hover:border-slate-200'
+                }`}
+              >
+                {tab.label}
+                {count !== null && (
+                  <span className={`text-xs px-1.5 py-0.5 rounded-full font-medium ${
+                    isActive ? 'bg-blue-100 text-blue-700' : 'bg-slate-100 text-slate-500'
+                  }`}>
+                    {count}
+                  </span>
+                )}
+              </button>
+            )
+          })}
         </div>
-      </div>
+      </PageHeader>
 
       {/* ── Scrollable content ── */}
       <div className="flex-1 overflow-auto">
-        <div className="max-w-5xl mx-auto px-8 py-6">
+        <div className="px-8 py-6">
           {activeTab === 'projects'  && <ProjectsTab      projects={projects} onRefresh={fetchAll} />}
           {activeTab === 'certs'     && <CertificationsTab certs={certs}       onRefresh={fetchAll} />}
           {activeTab === 'modules'   && <ModulesTab />}

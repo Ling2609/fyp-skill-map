@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import api from '../api'
+import PageHeader from '../components/PageHeader'
 
 const getGreeting = () => {
   const hour = new Date().getHours()
@@ -34,12 +35,7 @@ export default function Dashboard() {
       const modules = JSON.parse(savedModules)
       return {
         topJobs: [],
-        profileStats: {
-          skills: null,
-          bestMatch: null,
-          bestMatchTitle: null,
-          modules: modules.length,
-        },
+        profileStats: { skills: null, bestMatch: null, bestMatchTitle: null, modules: modules.length },
       }
     }
 
@@ -52,127 +48,106 @@ export default function Dashboard() {
 
   const firstName = user?.first_name || 'there'
 
-  const getMatchColor = (percent) => {
-    if (percent >= 70) return 'text-green-600'
-    if (percent >= 40) return 'text-yellow-600'
-    return 'text-red-500'
-  }
-
-  const getDotColor = (percent) => {
-    if (percent >= 70) return 'bg-green-500'
-    if (percent >= 40) return 'bg-yellow-500'
-    return 'bg-red-400'
-  }
+  // Semantic match colors only — not used as decoration anywhere else
+  const getMatchColor = (pct) => pct >= 70 ? 'text-emerald-600' : pct >= 40 ? 'text-amber-600' : 'text-rose-500'
+  const getDotColor  = (pct) => pct >= 70 ? 'bg-emerald-500' : pct >= 40 ? 'bg-amber-500' : 'bg-rose-400'
 
   return (
-    <div className="min-h-screen p-8">
-      <div className="max-w-5xl mx-auto space-y-6">
+    <div className="min-h-screen bg-slate-50">
 
-        {/* Greeting */}
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">
-            {getGreeting()}, {firstName}! 👋
-          </h1>
-          <p className="text-gray-500 mt-1 text-sm">
-            Track your skills and discover your next opportunity in the Malaysian job market.
-          </p>
+      <PageHeader>
+        <div className="flex items-end justify-between pb-5">
+          <div>
+            <p className="text-[11px] font-semibold text-blue-600 uppercase tracking-widest mb-2">Dashboard</p>
+            <h1 className="text-2xl font-semibold tracking-tight text-slate-900">
+              {getGreeting()}, {firstName} 👋
+            </h1>
+            <p className="text-sm text-slate-500 mt-1">
+              Track your skills and discover opportunities in the Malaysian job market.
+            </p>
+          </div>
+          <button
+            onClick={() => navigate('/recommend')}
+            className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+            </svg>
+            Find Jobs
+          </button>
         </div>
+      </PageHeader>
 
-        {/* Profile Stats */}
+      <div className="px-8 py-6 space-y-6">
+
+        {/* Stats strip */}
         {profileStats && (
           <div className="grid grid-cols-3 gap-4">
-            <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
-              <div className="flex items-center gap-3 mb-2">
-                <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
-                  <svg className="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                </div>
-                <p className="text-sm text-gray-500">Your Skills</p>
+            {[
+              {
+                label: 'Skills Identified',
+                value: profileStats.skills ?? '—',
+                sub: profileStats.skills ? `from ${profileStats.modules} modules` : 'run job match first',
+                dim: !profileStats.skills,
+              },
+              {
+                label: 'Best Match',
+                value: profileStats.bestMatch ? `${profileStats.bestMatch}%` : '—',
+                sub: profileStats.bestMatchTitle || 'find jobs to see',
+                dim: !profileStats.bestMatch,
+                matchPct: profileStats.bestMatch,
+              },
+              {
+                label: 'Modules Selected',
+                value: profileStats.modules,
+                sub: profileStats.modules > 0 ? 'modules configured' : 'none selected yet',
+                dim: false,
+              },
+            ].map(({ label, value, sub, dim, matchPct }) => (
+              <div key={label} className="bg-white rounded-xl p-5 border border-slate-200">
+                <p className="text-xs font-medium text-slate-400 uppercase tracking-wider mb-3">{label}</p>
+                <p className={`text-3xl font-semibold tracking-tight leading-none ${
+                  dim ? 'text-slate-200' :
+                  matchPct ? getMatchColor(matchPct) :
+                  'text-slate-900'
+                }`}>
+                  {value}
+                </p>
+                <p className="text-xs text-slate-400 mt-1.5 truncate">{sub}</p>
               </div>
-              {profileStats.skills ? (
-                <>
-                  <p className="text-3xl font-bold text-blue-700">{profileStats.skills}</p>
-                  <p className="text-xs text-gray-400 mt-1">from {profileStats.modules} modules</p>
-                </>
-              ) : (
-                <>
-                  <p className="text-3xl font-bold text-gray-300">—</p>
-                  <p className="text-xs text-gray-400 mt-1">select modules first</p>
-                </>
-              )}
-            </div>
-
-            <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
-              <div className="flex items-center gap-3 mb-2">
-                <div className="w-8 h-8 bg-green-50 rounded-lg flex items-center justify-center">
-                  <svg className="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-                  </svg>
-                </div>
-                <p className="text-sm text-gray-500">Best Match</p>
-              </div>
-              {profileStats.bestMatch ? (
-                <>
-                  <p className={`text-3xl font-bold ${getMatchColor(profileStats.bestMatch)}`}>
-                    {profileStats.bestMatch}%
-                  </p>
-                  <p className="text-xs text-gray-400 mt-1 truncate">{profileStats.bestMatchTitle}</p>
-                </>
-              ) : (
-                <>
-                  <p className="text-3xl font-bold text-gray-300">—</p>
-                  <p className="text-xs text-gray-400 mt-1">find jobs first</p>
-                </>
-              )}
-            </div>
-
-            <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
-              <div className="flex items-center gap-3 mb-2">
-                <div className="w-8 h-8 bg-purple-50 rounded-lg flex items-center justify-center">
-                  <svg className="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                  </svg>
-                </div>
-                <p className="text-sm text-gray-500">Modules Selected</p>
-              </div>
-              <p className="text-3xl font-bold text-purple-600">{profileStats.modules}</p>
-              <p className="text-xs text-gray-400 mt-1">
-                {profileStats.modules > 0 ? 'modules configured' : 'none selected yet'}
-              </p>
-            </div>
+            ))}
           </div>
         )}
 
-        {/* Top Job Matches */}
+        {/* Top matches */}
         {topJobs.length > 0 && (
-          <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-sm font-semibold text-gray-700">Top Job Matches</h2>
+          <div className="bg-white rounded-xl border border-slate-200">
+            <div className="flex items-center justify-between px-5 pt-4 pb-3 border-b border-slate-100">
+              <h2 className="text-sm font-semibold text-slate-700">Top Job Matches</h2>
               <button
                 onClick={() => navigate('/recommend')}
-                className="text-xs text-blue-600 hover:underline"
+                className="text-xs text-blue-600 font-medium hover:text-blue-700"
               >
                 View all →
               </button>
             </div>
-            <div className="space-y-2">
+            <div className="divide-y divide-slate-50">
               {topJobs.map((job, idx) => (
                 <div
                   key={job.job_id}
                   onClick={() => navigate(`/jobs/${encodeURIComponent(job.job_id)}`)}
-                  className="flex items-center justify-between gap-3 py-2.5 border-b border-gray-50 last:border-0 cursor-pointer hover:bg-gray-50 rounded-lg px-2 transition"
+                  className="flex items-center justify-between gap-3 px-5 py-3 cursor-pointer hover:bg-slate-50 transition"
                 >
                   <div className="flex items-center gap-3 min-w-0">
-                    <span className="text-xs text-gray-400 w-4 shrink-0">{idx + 1}</span>
+                    <span className="text-xs text-slate-300 w-4 shrink-0 font-medium tabular-nums">{idx + 1}</span>
                     <div className="min-w-0">
-                      <p className="text-sm font-medium text-gray-800 truncate">{job.job_title}</p>
-                      <p className="text-xs text-gray-400">{job.company} · {job.location}</p>
+                      <p className="text-sm font-medium text-slate-800 truncate">{job.job_title}</p>
+                      <p className="text-xs text-slate-400">{job.company} · {job.location}</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-1.5 shrink-0">
-                    <div className={`w-2 h-2 rounded-full ${getDotColor(job.match_percent)}`} />
-                    <span className={`text-xs font-semibold ${getMatchColor(job.match_percent)}`}>
+                    <div className={`w-1.5 h-1.5 rounded-full ${getDotColor(job.match_percent)}`} />
+                    <span className={`text-xs font-semibold tabular-nums ${getMatchColor(job.match_percent)}`}>
                       {job.match_percent}%
                     </span>
                   </div>
@@ -182,43 +157,67 @@ export default function Dashboard() {
           </div>
         )}
 
-        {/* Feature Cards */}
+        {/* Feature grid */}
         <div className="grid grid-cols-2 gap-4">
-          <div
-            onClick={() => navigate('/modules')}
-            className="bg-white rounded-xl p-5 shadow-sm border border-gray-100 cursor-pointer hover:border-blue-300 hover:shadow-md transition group"
-          >
-            <div className="text-2xl mb-3">📚</div>
-            <h2 className="text-base font-semibold text-gray-800 group-hover:text-blue-700 transition">My Modules</h2>
-            <p className="text-sm text-gray-500 mt-1">Select your modules and grades to build your skill profile</p>
-            <span className="inline-block mt-3 text-sm text-blue-700 font-medium">Get started →</span>
-          </div>
+          {[
+            {
+              label: 'My Modules',
+              desc: 'Select your modules and grades to build your skill profile',
+              cta: 'Get started',
+              path: '/modules',
+              icon: (
+                <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                </svg>
+              ),
+            },
+            {
+              label: 'Job Recommendations',
+              desc: 'Find jobs that match your skills from the Malaysian job market',
+              cta: 'Explore jobs',
+              path: '/recommend',
+              icon: (
+                <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+              ),
+            },
+            {
+              label: 'AI Career Assistant',
+              desc: 'Get personalised guidance on your career and skill development',
+              cta: 'Chat now',
+              path: '/chatbot',
+              icon: (
+                <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+                </svg>
+              ),
+            },
+          ].map(({ label, desc, cta, path, icon }) => (
+            <div
+              key={label}
+              onClick={() => navigate(path)}
+              className="bg-white rounded-xl p-5 border border-slate-200 cursor-pointer hover:border-blue-200 hover:shadow-sm transition group"
+            >
+              <div className="w-9 h-9 bg-blue-50 rounded-lg flex items-center justify-center mb-4 group-hover:bg-blue-100 transition">
+                {icon}
+              </div>
+              <h2 className="text-sm font-semibold text-slate-800">{label}</h2>
+              <p className="text-sm text-slate-500 mt-1 leading-relaxed">{desc}</p>
+              <span className="inline-block mt-3 text-sm text-blue-600 font-medium">{cta} →</span>
+            </div>
+          ))}
 
-          <div
-            onClick={() => navigate('/recommend')}
-            className="bg-white rounded-xl p-5 shadow-sm border border-gray-100 cursor-pointer hover:border-blue-300 hover:shadow-md transition group"
-          >
-            <div className="text-2xl mb-3">💼</div>
-            <h2 className="text-base font-semibold text-gray-800 group-hover:text-blue-700 transition">Job Recommendations</h2>
-            <p className="text-sm text-gray-500 mt-1">Find jobs that match your skills from the Malaysian job market</p>
-            <span className="inline-block mt-3 text-sm text-blue-700 font-medium">Explore jobs →</span>
-          </div>
-
-          <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100 opacity-60">
-            <div className="text-2xl mb-3">🔍</div>
-            <h2 className="text-base font-semibold text-gray-800">Skill Gap Analysis</h2>
-            <p className="text-sm text-gray-500 mt-1">See exactly which skills you need for your target job</p>
-            <span className="inline-block mt-3 text-sm text-gray-400 font-medium">Select a job first →</span>
-          </div>
-
-          <div
-            onClick={() => navigate('/chatbot')}
-            className="bg-white rounded-xl p-5 shadow-sm border border-gray-100 cursor-pointer hover:border-blue-300 hover:shadow-md transition group"
-          >
-            <div className="text-2xl mb-3">🤖</div>
-            <h2 className="text-base font-semibold text-gray-800 group-hover:text-blue-700 transition">AI Career Assistant</h2>
-            <p className="text-sm text-gray-500 mt-1">Get personalised guidance on your skill development path</p>
-            <span className="inline-block mt-3 text-sm text-blue-700 font-medium">Chat now →</span>
+          {/* Disabled card */}
+          <div className="bg-white rounded-xl p-5 border border-slate-200 opacity-40">
+            <div className="w-9 h-9 bg-slate-100 rounded-lg flex items-center justify-center mb-4">
+              <svg className="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+              </svg>
+            </div>
+            <h2 className="text-sm font-semibold text-slate-700">Skill Gap Analysis</h2>
+            <p className="text-sm text-slate-400 mt-1 leading-relaxed">See exactly which skills you need for your target role</p>
+            <span className="inline-block mt-3 text-sm text-slate-400 font-medium">Select a job first →</span>
           </div>
         </div>
 
