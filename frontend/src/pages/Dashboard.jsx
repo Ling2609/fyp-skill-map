@@ -15,7 +15,7 @@ export default function Dashboard() {
   const [user, setUser] = useState(null)
   const [{ topJobs, profileStats }] = useState(() => {
     const savedResults = sessionStorage.getItem('lastRecommendResults')
-    const savedModules = sessionStorage.getItem('selectedModules')
+    const savedModules = localStorage.getItem('selectedModules')
 
     if (savedResults) {
       const data = JSON.parse(savedResults)

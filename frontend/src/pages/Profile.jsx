@@ -299,7 +299,7 @@ function ModulesTab() {
 
   const handleGetRecommendations = () => {
     const moduleList = Object.entries(selections).map(([code, grade]) => ({ module_code: code, grade }))
-    sessionStorage.setItem('selectedModules', JSON.stringify(moduleList))
+    localStorage.setItem('selectedModules', JSON.stringify(moduleList))
     navigate('/recommend')
   }
 

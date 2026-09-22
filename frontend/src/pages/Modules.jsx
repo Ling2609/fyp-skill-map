@@ -57,7 +57,7 @@ export default function Modules() {
       module_code: code,
       grade,
     }))
-    sessionStorage.setItem('selectedModules', JSON.stringify(moduleList))
+    localStorage.setItem('selectedModules', JSON.stringify(moduleList))
     navigate('/recommend')
   }
 

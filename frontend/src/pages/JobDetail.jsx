@@ -18,7 +18,7 @@ export default function JobDetail() {
   const [bullets, setBullets] = useState(null)
   const [bulletsLoading, setBulletsLoading] = useState(false)
 
-  const stored = sessionStorage.getItem('selectedModules')
+  const stored = localStorage.getItem('selectedModules')
   const modules = stored ? JSON.parse(stored) : []
 
   useEffect(() => {

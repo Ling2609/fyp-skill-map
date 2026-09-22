@@ -42,7 +42,7 @@ function NoModulesState() {
 export default function Recommend() {
   const navigate = useNavigate()
 
-  const stored = sessionStorage.getItem('selectedModules')
+  const stored = localStorage.getItem('selectedModules')
   const modules = stored ? JSON.parse(stored) : []
 
   const [results, setResults] = useState(null)
