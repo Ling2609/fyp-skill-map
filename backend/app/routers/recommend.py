@@ -4,14 +4,16 @@ from pydantic import BaseModel
 from app.database import SessionLocal, get_db
 from app.models.module import Module, ModuleSkill
 from app.models.job import Job, JobSkill
+from app.models.profile import UserProject, UserCertification
 from app.nlp.embedder import Embedder
+from app.routers.auth import get_current_user
+from app.models.user import User
 import numpy as np
 
 router = APIRouter(prefix="/recommend", tags=["recommend"])
 
 embedder = Embedder()
 
-# Job embedding cache
 _job_cache = {}
 _cache_built = False
 
@@ -48,15 +50,9 @@ def build_job_cache():
         db.close()
 
 
-def compute_skill_coverage(grad_skill_names: list, grad_embeddings: np.ndarray,
-                           job_skills: list, job_embeddings: np.ndarray) -> float:
-    """
-    Compute skill coverage: % of job skills matched by graduate skills.
-    Uses SBERT similarity with threshold for matching.
-    """
+def compute_skill_coverage(grad_skill_names, grad_embeddings, job_skills, job_embeddings):
     if not job_skills or not grad_skill_names:
         return 0.0
-
     matched = 0
     for j_idx in range(len(job_skills)):
         job_vec = job_embeddings[j_idx]
@@ -70,7 +66,6 @@ def compute_skill_coverage(grad_skill_names: list, grad_embeddings: np.ndarray,
                 best_score = score
         if best_score >= SIMILARITY_THRESHOLD:
             matched += 1
-
     return round((matched / len(job_skills)) * 100, 1)
 
 
@@ -81,6 +76,7 @@ class ModuleInput(BaseModel):
 
 class RecommendRequest(BaseModel):
     modules: list[ModuleInput]
+    extra_skills: list[str] = []
     top_n: int = 10
     role_filter: str = ""
 
@@ -94,14 +90,33 @@ def grade_weight(grade: float) -> float:
     else: return 0.5
 
 
+def get_profile_skills_for_user(user_id: int, db: Session) -> list[str]:
+    """Fetch all extracted/mapped skills from a user's projects and certifications."""
+    skills = []
+    projects = db.query(UserProject).filter(UserProject.user_id == user_id).all()
+    for p in projects:
+        if p.extracted_skills:
+            skills.extend(p.extracted_skills)
+    certs = db.query(UserCertification).filter(UserCertification.user_id == user_id).all()
+    for c in certs:
+        if c.mapped_skills:
+            skills.extend(c.mapped_skills)
+    # deduplicate, lowercase
+    return list({s.lower() for s in skills if s})
+
+
 @router.post("/")
-def recommend_jobs(payload: RecommendRequest, db: Session = Depends(get_db)):
+def recommend_jobs(
+    payload: RecommendRequest,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),   # ← NEW
+):
     if not payload.modules:
         raise HTTPException(status_code=400, detail="No modules provided")
 
     build_job_cache()
 
-    # Build graduate skill profile
+    # ── Module skills ──────────────────────────────────────────────────────────
     skill_weights = {}
     for mod_input in payload.modules:
         module = db.query(Module).filter(Module.code == mod_input.module_code).first()
@@ -116,7 +131,17 @@ def recommend_jobs(payload: RecommendRequest, db: Session = Depends(get_db)):
     if not skill_weights:
         raise HTTPException(status_code=404, detail="No skills found for provided modules")
 
-    # Build profile text for SBERT ranking
+    # ── Profile skills (projects + certs) ─────────────────────────────────────
+    extra = [s.lower() for s in payload.extra_skills] if payload.extra_skills \
+            else get_profile_skills_for_user(current_user.id, db)
+
+    EXTRA_WEIGHT = 0.7   # treat like a B grade
+    for skill in extra:
+        if skill not in skill_weights:
+            skill_weights[skill] = EXTRA_WEIGHT
+        # if module already gave a higher weight, keep it
+
+    # ── Build SBERT profile vector ─────────────────────────────────────────────
     profile_skills = []
     for skill, weight in sorted(skill_weights.items(), key=lambda x: -x[1]):
         repeats = 3 if weight >= 0.9 else 2 if weight >= 0.7 else 1
@@ -125,13 +150,12 @@ def recommend_jobs(payload: RecommendRequest, db: Session = Depends(get_db)):
     profile_text = " ".join(profile_skills)
     profile_vec = embedder.embed(profile_text)
 
-    # Apply role filter
     if payload.role_filter.strip():
         role_vec = embedder.embed(payload.role_filter.strip())
         profile_vec = 0.6 * profile_vec + 0.4 * role_vec
         profile_vec = profile_vec / (np.linalg.norm(profile_vec) + 1e-8)
 
-    # Step 1: Rank all jobs by SBERT score to get top N candidates
+    # ── Rank jobs ──────────────────────────────────────────────────────────────
     sbert_scores = []
     for job_id, cached in _job_cache.items():
         job_vec = cached["vec"]
@@ -146,25 +170,20 @@ def recommend_jobs(payload: RecommendRequest, db: Session = Depends(get_db)):
     sbert_scores.sort(key=lambda x: -x[1])
     top_candidates = sbert_scores[:payload.top_n]
 
-    # Step 2: Compute skill coverage for top N jobs
     grad_skill_names = list(skill_weights.keys())
-    all_skill_texts = grad_skill_names + []
     grad_embeddings = embedder.embed_batch(grad_skill_names) if grad_skill_names else np.array([])
 
     results = []
     for job_id, sbert_score in top_candidates:
         cached = _job_cache[job_id]
         job_skills = cached["skills"]
-
         if not job_skills:
             coverage = 0.0
         else:
             job_embeddings = embedder.embed_batch(job_skills)
             coverage = compute_skill_coverage(
-                grad_skill_names, grad_embeddings,
-                job_skills, job_embeddings
+                grad_skill_names, grad_embeddings, job_skills, job_embeddings
             )
-
         results.append({
             "job_id": cached["job_id"],
             "job_title": cached["job_title"],
@@ -177,7 +196,6 @@ def recommend_jobs(payload: RecommendRequest, db: Session = Depends(get_db)):
             "top_job_skills": job_skills[:5],
         })
 
-    # Sort by skill coverage (most accurate metric)
     results.sort(key=lambda x: -x["match_percent"])
 
     return {
@@ -185,6 +203,7 @@ def recommend_jobs(payload: RecommendRequest, db: Session = Depends(get_db)):
             "modules_count": len(payload.modules),
             "unique_skills": len(skill_weights),
             "top_skills": list(skill_weights.keys())[:10],
+            "profile_skills_included": len(extra), 
         },
         "role_filter": payload.role_filter,
         "recommendations": results,

@@ -71,8 +71,10 @@ export default function Recommend() {
     }, 800)
 
     try {
+      const extra_skills = JSON.parse(localStorage.getItem('extraSkills') || '[]')
       const res = await api.post('/recommend/', {
         modules,
+        extra_skills,
         top_n: searchCount,
         role_filter: searchRole,
       })

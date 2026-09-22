@@ -266,11 +266,10 @@ function CertificationsTab({ certs, onRefresh }) {
 
 // ── Modules tab ───────────────────────────────────────────────────────────────
 
-function ModulesTab() {
+function ModulesTab({ selections, setSelections }) {
   const navigate = useNavigate()
   const [modules, setModules] = useState([])
   const [selectedYear, setSelectedYear] = useState(1)
-  const [selections, setSelections] = useState({})
   const [loading, setLoading] = useState(true)
   const allCompulsory = modules.filter(m => m.type === 'common' || m.type === 'specialised')
   const allCompulsoryGraded = allCompulsory.every(m => selections[m.code] !== undefined && selections[m.code] !== '')
@@ -278,7 +277,6 @@ function ModulesTab() {
   useEffect(() => {
     api.get('/modules/').then(res => {
       setModules(res.data)
-      setSelections({})
       setLoading(false)
     })
   }, [])
@@ -294,9 +292,23 @@ function ModulesTab() {
 
   const setGrade = (code, grade) => setSelections(prev => ({ ...prev, [code]: parseFloat(grade) }))
 
-  const handleGetRecommendations = () => {
-    const moduleList = Object.entries(selections).map(([code, grade]) => ({ module_code: code, grade }))
+  const handleGetRecommendations = async () => {
+    const moduleList = Object.entries(selections).map(([code, grade]) => ({
+      module_code: code,
+      grade,
+    }))
+
+    // Fetch profile skills (projects + certs)
+    let extra_skills = []
+    try {
+      const res = await api.get('/profile/skills')
+      extra_skills = res.data.skills ?? []
+    } catch {
+      // non-fatal — recommend will fall back to DB lookup on the server
+    }
+
     localStorage.setItem('selectedModules', JSON.stringify(moduleList))
+    localStorage.setItem('extraSkills', JSON.stringify(extra_skills))
     navigate('/recommend')
   }
 
@@ -419,9 +431,17 @@ export default function Profile() {
   const [certs, setCerts] = useState([])
   const [profile, setProfile] = useState(null)
   const [profileLoading, setProfileLoading] = useState(true)
+  const [moduleSelections, setModuleSelections] = useState(() => {
+    try { return JSON.parse(localStorage.getItem('moduleSelections') || '{}') }
+    catch { return {} }
+  })
   const [activeTab, setActiveTab] = useState(
     searchParams.get('tab') === 'modules' ? 'modules' : 'projects'
   )
+
+  useEffect(() => {
+    localStorage.setItem('moduleSelections', JSON.stringify(moduleSelections))
+  }, [moduleSelections])
 
   const fetchAll = () => {
     setProfileLoading(true)
@@ -508,7 +528,7 @@ export default function Profile() {
         <div className="px-8 py-6">
           {activeTab === 'projects'  && <ProjectsTab      projects={projects} onRefresh={fetchAll} />}
           {activeTab === 'certs'     && <CertificationsTab certs={certs}       onRefresh={fetchAll} />}
-          {activeTab === 'modules'   && <ModulesTab />}
+          {activeTab === 'modules'   && <ModulesTab selections={moduleSelections} setSelections={setModuleSelections} />}
         </div>
       </div>
 
