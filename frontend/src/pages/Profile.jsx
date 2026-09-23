@@ -266,7 +266,7 @@ function CertificationsTab({ certs, onRefresh }) {
 
 // ── Modules tab ───────────────────────────────────────────────────────────────
 
-function ModulesTab({ onUnsavedChange }) {
+function ModulesTab({ onUnsavedChange, onSaved }) {
   const [modules, setModules] = useState([])
   const [selections, setSelections] = useState({})
   const [savedSelections, setSavedSelections] = useState({})
@@ -275,7 +275,11 @@ function ModulesTab({ onUnsavedChange }) {
   const [saving, setSaving] = useState(false)
   const [saveStatus, setSaveStatus] = useState('') // '', 'saved', 'error'
 
-  const hasUnsaved = JSON.stringify(selections) !== JSON.stringify(savedSelections)
+  // Only entries with a real grade value (number, not '' or undefined)
+  const gradedSelections = (s) =>
+    Object.fromEntries(Object.entries(s).filter(([, v]) => v !== '' && v !== undefined))
+
+  const hasUnsaved = JSON.stringify(gradedSelections(selections)) !== JSON.stringify(gradedSelections(savedSelections))
 
   // Notify parent of unsaved state changes
   useEffect(() => {
@@ -298,15 +302,16 @@ function ModulesTab({ onUnsavedChange }) {
   }, [])
 
   const saveGrades = async () => {
+    // Send only entries with a real grade — backend will delete anything not in this list
     const grades = Object.entries(selections)
       .filter(([, g]) => g !== '' && g !== undefined)
       .map(([module_code, grade]) => ({ module_code, grade }))
-    if (!grades.length) return
     setSaving(true)
     try {
       await api.post('/profile/modules', { grades })
-      setSavedSelections({ ...selections })
+      setSavedSelections(gradedSelections(selections))
       setSaveStatus('saved')
+      onSaved?.()  // refresh header stats
       setTimeout(() => setSaveStatus(''), 2500)
     } catch {
       setSaveStatus('error')
@@ -333,42 +338,41 @@ function ModulesTab({ onUnsavedChange }) {
   return (
     <div className="space-y-5">
 
-      {/* Year tabs + Save Grades */}
-      <div className="flex items-center justify-between gap-3">
-        <div className="flex gap-2">
-          {[1, 2, 3].map(year => (
-            <button key={year} onClick={() => setSelectedYear(year)}
-              className={`px-5 py-2 rounded-xl text-sm font-medium border transition ${
-                selectedYear === year
-                  ? 'bg-blue-700 text-white border-blue-700 shadow-sm'
-                  : 'bg-white text-gray-600 border-gray-200 hover:border-blue-300 hover:text-blue-700'
-              }`}>
-              Year {year}
-            </button>
-          ))}
-        </div>
-        <div className="flex items-center gap-3">
-          {saveStatus === 'saved' && (
-            <span className="text-xs text-green-600 font-medium flex items-center gap-1">
-              <span className="w-1.5 h-1.5 rounded-full bg-green-500 inline-block" />
-              Saved
-            </span>
-          )}
-          {saveStatus === 'error' && (
-            <span className="text-xs text-red-500 font-medium">Failed to save</span>
-          )}
-          <button
-            onClick={saveGrades}
-            disabled={!hasUnsaved || saving}
-            className={`px-4 py-2 rounded-xl text-sm font-medium border transition flex items-center gap-2 ${
-              hasUnsaved
-                ? 'bg-blue-700 text-white border-blue-700 hover:bg-blue-800'
-                : 'bg-gray-100 text-gray-500 border-gray-300 cursor-not-allowed'
-            }`}
-          >
-            {saving ? <><Spinner size="sm" />Saving…</> : 'Save Grades'}
+      {/* Unsaved banner — only shown when there are real grade changes */}
+      {hasUnsaved ? (
+        <div className="flex items-center justify-between gap-4 bg-amber-50 border border-amber-300 rounded-xl px-5 py-3">
+          <div className="flex items-center gap-2.5">
+            <svg className="w-4 h-4 text-amber-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
+            </svg>
+            <span className="text-sm font-medium text-amber-800">You have unsaved grade changes</span>
+          </div>
+          <button onClick={saveGrades} disabled={saving}
+            className="shrink-0 bg-amber-500 hover:bg-amber-600 text-white text-sm font-semibold px-4 py-1.5 rounded-lg transition flex items-center gap-2 disabled:opacity-60">
+            {saving ? <><Spinner size="sm" />Saving…</> : '💾 Save now'}
           </button>
         </div>
+      ) : saveStatus === 'saved' ? (
+        <div className="flex items-center gap-2 text-sm text-green-600 font-medium px-1">
+          <span className="w-2 h-2 rounded-full bg-green-500 inline-block" />
+          Grades saved successfully
+        </div>
+      ) : saveStatus === 'error' ? (
+        <div className="text-sm text-red-500 font-medium px-1">Failed to save — please try again</div>
+      ) : null}
+
+      {/* Year tabs */}
+      <div className="flex gap-2">
+        {[1, 2, 3].map(year => (
+          <button key={year} onClick={() => setSelectedYear(year)}
+            className={`px-5 py-2 rounded-xl text-sm font-medium border transition ${
+              selectedYear === year
+                ? 'bg-blue-700 text-white border-blue-700 shadow-sm'
+                : 'bg-white text-gray-600 border-gray-200 hover:border-blue-300 hover:text-blue-700'
+            }`}>
+            Year {year}
+          </button>
+        ))}
       </div>
 
       {/* Split panels */}
@@ -562,7 +566,7 @@ export default function Profile() {
       {/* ── Scrollable content ── */}
       <div className="flex-1 overflow-auto">
         <div className="px-8 py-6">
-          {activeTab === 'modules'   && <ModulesTab onUnsavedChange={setModulesHasUnsaved} />}
+          {activeTab === 'modules'   && <ModulesTab onUnsavedChange={setModulesHasUnsaved} onSaved={fetchAll} />}
           {activeTab === 'projects'  && <ProjectsTab  projects={projects} onRefresh={fetchAll} />}
           {activeTab === 'certs'     && <CertificationsTab certs={certs}  onRefresh={fetchAll} />}
         </div>

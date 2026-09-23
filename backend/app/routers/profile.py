@@ -336,16 +336,23 @@ def save_module_grades(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
-    if not payload.grades:
-        raise HTTPException(status_code=400, detail="No grades provided")
-
     for item in payload.grades:
         if not (0.0 <= item.grade <= 4.0):
             raise HTTPException(
                 status_code=422,
                 detail=f"Grade for {item.module_code} must be between 0.0 and 4.0"
             )
-        # Upsert — update if exists, insert if not
+
+    incoming_codes = {item.module_code for item in payload.grades}
+
+    # Delete modules that were removed (unticked electives, cleared grades)
+    db.query(UserModule).filter(
+        UserModule.user_id == current_user.id,
+        UserModule.module_code.notin_(incoming_codes),
+    ).delete(synchronize_session=False)
+
+    # Upsert the ones that remain
+    for item in payload.grades:
         existing = db.query(UserModule).filter(
             UserModule.user_id == current_user.id,
             UserModule.module_code == item.module_code,
