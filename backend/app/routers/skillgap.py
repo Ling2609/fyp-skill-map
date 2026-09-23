@@ -4,6 +4,9 @@ from pydantic import BaseModel
 from app.database import get_db
 from app.models.module import Module, ModuleSkill
 from app.models.job import Job, JobSkill
+from app.models.user_module import UserModule
+from app.routers.auth import get_current_user
+from app.models.user import User
 from app.nlp.embedder import Embedder
 import numpy as np
 
@@ -20,7 +23,7 @@ class ModuleInput(BaseModel):
 
 
 class SkillGapRequest(BaseModel):
-    modules: list[ModuleInput]
+    modules: list[ModuleInput] = []   # optional — if empty, read from DB
     job_id: str  # job_id from the jobs table
 
 
@@ -34,7 +37,11 @@ def grade_weight(grade: float) -> float:
 
 
 @router.post("/")
-def analyse_skill_gap(payload: SkillGapRequest, db: Session = Depends(get_db)):
+def analyse_skill_gap(
+    payload: SkillGapRequest,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
     """
     Analyse skill gap between a graduate profile and a specific job.
 
@@ -44,6 +51,21 @@ def analyse_skill_gap(payload: SkillGapRequest, db: Session = Depends(get_db)):
     - graduate_only_skills: skills the graduate has not required by this job
     - gap_score: % of job skills covered by graduate
     """
+
+    # If no modules sent, load from DB
+    if not payload.modules:
+        saved = db.query(UserModule).filter(
+            UserModule.user_id == current_user.id
+        ).all()
+        if not saved:
+            raise HTTPException(
+                status_code=400,
+                detail="No module grades saved. Please save your grades on the Profile page first."
+            )
+        payload.modules = [
+            ModuleInput(module_code=m.module_code, grade=m.grade)
+            for m in saved
+        ]
 
     # Get graduate skills
     graduate_skills = {}

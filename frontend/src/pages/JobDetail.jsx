@@ -18,20 +18,18 @@ export default function JobDetail() {
   const [bullets, setBullets] = useState(null)
   const [bulletsLoading, setBulletsLoading] = useState(false)
 
-  const stored = localStorage.getItem('selectedModules')
-  const modules = stored ? JSON.parse(stored) : []
-
   useEffect(() => {
-    if (!stored || modules.length === 0) {
-      navigate('/modules')
-    } else {
-      api.post('/skillgap/', { modules, job_id: decodeURIComponent(jobId) })
-        .then(res => { setGap(res.data); setLoading(false) })
-        .catch(err => {
-          setError(err.response?.data?.detail || 'Failed to load skill gap analysis')
+    api.post('/skillgap/', { job_id: decodeURIComponent(jobId) })
+      .then(res => { setGap(res.data); setLoading(false) })
+      .catch(err => {
+        const detail = err.response?.data?.detail || 'Failed to load skill gap analysis'
+        if (err.response?.status === 400) {
+          navigate('/profile')
+        } else {
+          setError(detail)
           setLoading(false)
-        })
-    }
+        }
+      })
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {

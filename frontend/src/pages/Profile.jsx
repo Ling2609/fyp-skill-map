@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import PageHeader from '../components/PageHeader'
 import { useSearchParams } from 'react-router-dom'
 import api from '../api'
@@ -266,7 +266,7 @@ function CertificationsTab({ certs, onRefresh }) {
 
 // ── Modules tab ───────────────────────────────────────────────────────────────
 
-function ModulesTab() {
+function ModulesTab({ onUnsavedChange }) {
   const [modules, setModules] = useState([])
   const [selections, setSelections] = useState({})
   const [savedSelections, setSavedSelections] = useState({})
@@ -276,6 +276,11 @@ function ModulesTab() {
   const [saveStatus, setSaveStatus] = useState('') // '', 'saved', 'error'
 
   const hasUnsaved = JSON.stringify(selections) !== JSON.stringify(savedSelections)
+
+  // Notify parent of unsaved state changes
+  useEffect(() => {
+    onUnsavedChange?.(hasUnsaved)
+  }, [hasUnsaved, onUnsavedChange])
 
   useEffect(() => {
     Promise.all([
@@ -452,6 +457,27 @@ export default function Profile() {
     : searchParams.get('tab') === 'certs' ? 'certs'
     : 'modules'
   )
+  const [modulesHasUnsaved, setModulesHasUnsaved] = useState(false)
+
+  // Warn on browser/tab close when unsaved
+  useEffect(() => {
+    const handler = (e) => {
+      if (modulesHasUnsaved) {
+        e.preventDefault()
+        e.returnValue = ''
+      }
+    }
+    window.addEventListener('beforeunload', handler)
+    return () => window.removeEventListener('beforeunload', handler)
+  }, [modulesHasUnsaved])
+
+  const handleTabChange = useCallback((key) => {
+    if (key !== 'modules' && modulesHasUnsaved) {
+      const ok = window.confirm('You have unsaved grade changes. Leave without saving?')
+      if (!ok) return
+    }
+    setActiveTab(key)
+  }, [modulesHasUnsaved])
 
   const fetchAll = () => {
     setProfileLoading(true)
@@ -512,7 +538,7 @@ export default function Profile() {
             return (
               <button
                 key={tab.key}
-                onClick={() => setActiveTab(tab.key)}
+                onClick={() => handleTabChange(tab.key)}
                 className={`flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 transition-colors ${
                   isActive
                     ? 'border-blue-600 text-blue-700'
@@ -536,7 +562,7 @@ export default function Profile() {
       {/* ── Scrollable content ── */}
       <div className="flex-1 overflow-auto">
         <div className="px-8 py-6">
-          {activeTab === 'modules'   && <ModulesTab />}
+          {activeTab === 'modules'   && <ModulesTab onUnsavedChange={setModulesHasUnsaved} />}
           {activeTab === 'projects'  && <ProjectsTab  projects={projects} onRefresh={fetchAll} />}
           {activeTab === 'certs'     && <CertificationsTab certs={certs}  onRefresh={fetchAll} />}
         </div>

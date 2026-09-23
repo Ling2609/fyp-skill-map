@@ -230,8 +230,17 @@ def get_skill_profile(
 ):
     projects = db.query(UserProject).filter(UserProject.user_id == current_user.id).all()
     certs = db.query(UserCertification).filter(UserCertification.user_id == current_user.id).all()
+    saved_modules = db.query(UserModule).filter(UserModule.user_id == current_user.id).all()
 
     all_skills = []
+
+    # Skills from modules (via ModuleSkill table)
+    for um in saved_modules:
+        module_skills = db.query(ModuleSkill).filter(
+            ModuleSkill.module_code == um.module_code
+        ).all()
+        all_skills.extend([ms.skill_name for ms in module_skills])
+
     for p in projects:
         all_skills.extend(p.extracted_skills or [])
     for c in certs:
@@ -245,9 +254,15 @@ def get_skill_profile(
             seen.add(key)
             unique_skills.append(s)
 
+    from_modules = sum(
+        db.query(ModuleSkill).filter(ModuleSkill.module_code == um.module_code).count()
+        for um in saved_modules
+    )
+
     return {
         "skills": unique_skills,
         "total": len(unique_skills),
+        "from_modules": from_modules,
         "from_projects": sum(len(p.extracted_skills or []) for p in projects),
         "from_certs": sum(len(c.mapped_skills or []) for c in certs),
     }
