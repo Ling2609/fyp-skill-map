@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, Link, useLocation } from 'react-router-dom'
 import api from '../api'
+import { useAuth } from '../context/useAuth'
 
 // Toast component
 const Toast = ({ onClose }) => {
@@ -35,6 +36,7 @@ const Toast = ({ onClose }) => {
 export default function Login() {
   const navigate = useNavigate()
   const location = useLocation()
+  const { login } = useAuth()
   const [form, setForm] = useState({ email: '', password: '' })
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
@@ -47,7 +49,7 @@ export default function Login() {
     setLoading(true)
     try {
       const res = await api.post('/auth/login', form)
-      localStorage.setItem('token', res.data.access_token)
+      await login(res.data.access_token)
       navigate('/dashboard')
     } catch (err) {
       setError(err.response?.data?.detail || 'Invalid email or password')
