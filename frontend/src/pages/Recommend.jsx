@@ -21,19 +21,19 @@ function NoModulesState() {
         </svg>
       </div>
       <div>
-        <h2 className="text-base font-semibold text-slate-800 mb-1">No modules selected yet</h2>
+        <h2 className="text-base font-semibold text-slate-800 mb-1">Your skill profile is empty</h2>
         <p className="text-sm text-slate-500 max-w-sm">
-          Select the modules you've studied and your grades — we'll match you with jobs that fit your academic profile.
+          Add your module grades, projects, or certifications on your Profile page — we'll match you with jobs that fit your skills.
         </p>
       </div>
       <button
-        onClick={() => navigate('/profile?tab=modules')}
+        onClick={() => navigate('/profile')}
         className="bg-blue-600 text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-blue-700 transition flex items-center gap-2"
       >
         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
         </svg>
-        Select My Modules
+        Build My Profile
       </button>
     </div>
   )
@@ -42,9 +42,7 @@ function NoModulesState() {
 export default function Recommend() {
   const navigate = useNavigate()
 
-  const stored = localStorage.getItem('selectedModules')
-  const modules = stored ? JSON.parse(stored) : []
-
+  const [moduleCount, setModuleCount] = useState(null) // null = loading, 0 = none saved
   const [results, setResults] = useState(null)
   const [loading, setLoading] = useState(false)
   const [loadingStep, setLoadingStep] = useState(0)
@@ -71,10 +69,9 @@ export default function Recommend() {
     }, 800)
 
     try {
-      const extra_skills = JSON.parse(localStorage.getItem('extraSkills') || '[]')
       const res = await api.post('/recommend/', {
-        modules,
-        extra_skills,
+        modules: [],        // server reads from DB
+        extra_skills: [],   // server reads from DB
         top_n: searchCount,
         role_filter: searchRole,
       })
@@ -95,28 +92,37 @@ export default function Recommend() {
   }
 
   useEffect(() => {
-    if (!stored || modules.length === 0) return
+    // Check if user has saved grades
+    api.get('/profile/modules').then(res => {
+      const count = res.data.grades?.length ?? 0
+      setModuleCount(count)
+      if (count === 0) return
 
-    api.get('/jobs/subcategories')
-      .then(res => setSubcategories(res.data))
-      .catch(() => {})
+      api.get('/jobs/subcategories').catch(() => {})
+        .then(res => res && setSubcategories(res.data))
 
-    const savedResults = sessionStorage.getItem('lastRecommendResults')
-    const savedRole = sessionStorage.getItem('lastRoleFilter')
-    const savedCategory = sessionStorage.getItem('lastActiveCategory')
+      const savedResults = sessionStorage.getItem('lastRecommendResults')
+      const savedRole = sessionStorage.getItem('lastRoleFilter')
+      const savedCategory = sessionStorage.getItem('lastActiveCategory')
 
-    if (savedResults) {
-      setTimeout(() => {
+      if (savedResults) {
         setResults(JSON.parse(savedResults))
         if (savedRole) setRoleFilter(savedRole)
         if (savedCategory) setActiveCategory(savedCategory)
-      }, 0)
-    } else {
-      setTimeout(() => doSearch('', 50), 0)
-    }
+      } else {
+        doSearch('', 50)
+      }
+    }).catch(() => setModuleCount(0))
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
-  if (!stored || modules.length === 0) return <NoModulesState />
+  // Still checking DB
+  if (moduleCount === null) return (
+    <div className="h-screen bg-slate-50 flex items-center justify-center">
+      <div className="w-5 h-5 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
+    </div>
+  )
+
+  if (moduleCount === 0) return <NoModulesState />
 
   const handleCategoryClick = (cat) => {
     setActiveCategory(cat)
@@ -129,7 +135,6 @@ export default function Recommend() {
     doSearch(roleFilter, 50)
   }
 
-  // Semantic only — match quality indicator
   const getMatchDotColor  = (pct) => pct >= 70 ? 'bg-emerald-500' : pct >= 40 ? 'bg-amber-500' : 'bg-rose-400'
   const getMatchTextColor = (pct) => pct >= 70 ? 'text-emerald-600' : pct >= 40 ? 'text-amber-600' : 'text-rose-500'
 
@@ -146,7 +151,7 @@ export default function Recommend() {
               <p className="text-[11px] font-semibold text-blue-600 uppercase tracking-widest mb-2">Job Matches</p>
               <h1 className="text-2xl font-semibold tracking-tight text-slate-900">Find Your Best Fit</h1>
               <p className="text-sm text-slate-500 mt-1">
-                {modules.length} modules selected
+                Matched from your full skill profile
                 {results && ` · ${results.total_jobs_compared} jobs compared · ${results.recommendations.length} matches`}
               </p>
             </div>
@@ -176,9 +181,7 @@ export default function Recommend() {
                 <button
                   onClick={() => { setRoleFilter(''); setActiveCategory('all'); doSearch('', 50) }}
                   className="text-slate-400 hover:text-slate-600 text-xs"
-                >
-                  ✕
-                </button>
+                >✕</button>
               )}
             </div>
             <button
@@ -210,9 +213,7 @@ export default function Recommend() {
         </div>
       </PageHeader>
 
-      {/* Content */}
       <div className="flex-1 overflow-auto px-8 py-4">
-
         {loading && (
           <div className="flex flex-col items-center justify-center py-20 gap-4">
             <div className="w-full max-w-xs">
@@ -221,19 +222,14 @@ export default function Recommend() {
                 <span className="text-blue-600 font-medium tabular-nums">{loadingProgress}%</span>
               </div>
               <div className="w-full bg-slate-100 rounded-full h-1">
-                <div
-                  className="bg-blue-600 h-1 rounded-full transition-all duration-500"
-                  style={{ width: `${loadingProgress}%` }}
-                />
+                <div className="bg-blue-600 h-1 rounded-full transition-all duration-500" style={{ width: `${loadingProgress}%` }} />
               </div>
             </div>
           </div>
         )}
 
         {error && !loading && (
-          <div className="bg-rose-50 text-rose-600 text-sm px-4 py-3 rounded-lg border border-rose-100 mb-4">
-            {error}
-          </div>
+          <div className="bg-rose-50 text-rose-600 text-sm px-4 py-3 rounded-lg border border-rose-100 mb-4">{error}</div>
         )}
 
         {results && !loading && (
@@ -255,53 +251,35 @@ export default function Recommend() {
                       <div className="flex-1 min-w-0">
                         <div className="flex items-start justify-between gap-3">
                           <div className="min-w-0">
-                            <p className="font-medium text-slate-800 text-sm truncate group-hover:text-blue-700 transition">
-                              {job.job_title}
-                            </p>
-                            <p className="text-xs text-slate-400 mt-0.5">
-                              {job.company} · {job.location}
-                            </p>
+                            <p className="font-medium text-slate-800 text-sm truncate group-hover:text-blue-700 transition">{job.job_title}</p>
+                            <p className="text-xs text-slate-400 mt-0.5">{job.company} · {job.location}</p>
                           </div>
                           <div className="flex items-center gap-1.5 shrink-0">
                             <div className={`w-1.5 h-1.5 rounded-full ${getMatchDotColor(job.match_percent)}`} />
-                            <span className={`text-xs font-semibold tabular-nums ${getMatchTextColor(job.match_percent)}`}>
-                              {job.match_percent}%
-                            </span>
+                            <span className={`text-xs font-semibold tabular-nums ${getMatchTextColor(job.match_percent)}`}>{job.match_percent}%</span>
                           </div>
                         </div>
                         <div className="flex gap-1.5 mt-2.5 flex-wrap">
-                          <span className="text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded-md font-medium">
-                            {job.subcategory}
-                          </span>
+                          <span className="text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded-md font-medium">{job.subcategory}</span>
                           {job.salary && job.salary !== 'nan' && (
-                            <span className="text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded-md font-medium">
-                              {job.salary}
-                            </span>
+                            <span className="text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded-md font-medium">{job.salary}</span>
                           )}
                           {job.top_job_skills?.slice(0, 3).map(skill => (
-                            <span key={skill} className="text-xs text-slate-400 px-2 py-0.5 rounded-md border border-slate-200">
-                              {skill}
-                            </span>
+                            <span key={skill} className="text-xs text-slate-400 px-2 py-0.5 rounded-md border border-slate-200">{skill}</span>
                           ))}
                         </div>
                       </div>
                     </div>
                   </div>
                 ))}
-
                 {hasMore && (
-                  <button
-                    onClick={() => setVisibleCount(prev => prev + 10)}
-                    className="w-full py-3 bg-white border border-slate-200 rounded-xl text-sm text-slate-500 hover:border-blue-300 hover:text-blue-600 transition mt-2"
-                  >
+                  <button onClick={() => setVisibleCount(prev => prev + 10)}
+                    className="w-full py-3 bg-white border border-slate-200 rounded-xl text-sm text-slate-500 hover:border-blue-300 hover:text-blue-600 transition mt-2">
                     Show more ({results.recommendations.length - visibleCount} remaining)
                   </button>
                 )}
-
                 {!hasMore && results.recommendations.length > 0 && (
-                  <p className="text-center text-xs text-slate-400 py-3">
-                    All {results.recommendations.length} matches shown
-                  </p>
+                  <p className="text-center text-xs text-slate-400 py-3">All {results.recommendations.length} matches shown</p>
                 )}
               </>
             )}

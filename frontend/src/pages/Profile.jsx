@@ -266,20 +266,50 @@ function CertificationsTab({ certs, onRefresh }) {
 
 // ── Modules tab ───────────────────────────────────────────────────────────────
 
-function ModulesTab({ selections, setSelections }) {
+function ModulesTab() {
   const navigate = useNavigate()
   const [modules, setModules] = useState([])
+  const [selections, setSelections] = useState({})
+  const [savedSelections, setSavedSelections] = useState({})
   const [selectedYear, setSelectedYear] = useState(1)
   const [loading, setLoading] = useState(true)
+  const [saving, setSaving] = useState(false)
+  const [saveStatus, setSaveStatus] = useState('') // '', 'saved', 'error'
+
   const allCompulsory = modules.filter(m => m.type === 'common' || m.type === 'specialised')
   const allCompulsoryGraded = allCompulsory.every(m => selections[m.code] !== undefined && selections[m.code] !== '')
+  const hasUnsaved = JSON.stringify(selections) !== JSON.stringify(savedSelections)
 
   useEffect(() => {
-    api.get('/modules/').then(res => {
-      setModules(res.data)
-      setLoading(false)
-    })
+    Promise.all([
+      api.get('/modules/'),
+      api.get('/profile/modules'),
+    ]).then(([modRes, gradeRes]) => {
+      setModules(modRes.data)
+      const saved = {}
+      for (const { module_code, grade } of gradeRes.data.grades) {
+        saved[module_code] = grade
+      }
+      setSelections(saved)
+      setSavedSelections(saved)
+    }).catch(console.error).finally(() => setLoading(false))
   }, [])
+
+  const saveGrades = async () => {
+    const grades = Object.entries(selections)
+      .filter(([, g]) => g !== '' && g !== undefined)
+      .map(([module_code, grade]) => ({ module_code, grade }))
+    if (!grades.length) return
+    setSaving(true)
+    try {
+      await api.post('/profile/modules', { grades })
+      setSavedSelections({ ...selections })
+      setSaveStatus('saved')
+      setTimeout(() => setSaveStatus(''), 2500)
+    } catch {
+      setSaveStatus('error')
+    } finally { setSaving(false) }
+  }
 
   const yearModules = modules.filter(m => m.level === selectedYear)
   const compulsory = yearModules.filter(m => m.type === 'common' || m.type === 'specialised')
@@ -293,22 +323,7 @@ function ModulesTab({ selections, setSelections }) {
   const setGrade = (code, grade) => setSelections(prev => ({ ...prev, [code]: parseFloat(grade) }))
 
   const handleGetRecommendations = async () => {
-    const moduleList = Object.entries(selections).map(([code, grade]) => ({
-      module_code: code,
-      grade,
-    }))
-
-    // Fetch profile skills (projects + certs)
-    let extra_skills = []
-    try {
-      const res = await api.get('/profile/skills')
-      extra_skills = res.data.skills ?? []
-    } catch {
-      // non-fatal — recommend will fall back to DB lookup on the server
-    }
-
-    localStorage.setItem('selectedModules', JSON.stringify(moduleList))
-    localStorage.setItem('extraSkills', JSON.stringify(extra_skills))
+    if (hasUnsaved) await saveGrades()
     navigate('/recommend')
   }
 
@@ -319,7 +334,7 @@ function ModulesTab({ selections, setSelections }) {
   )
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-5 pb-24">
 
       {/* Year tabs + CTA */}
       <div className="flex items-center justify-between">
@@ -337,7 +352,7 @@ function ModulesTab({ selections, setSelections }) {
         </div>
         <button
           onClick={handleGetRecommendations}
-          disabled={!allCompulsoryGraded}
+          disabled={!allCompulsoryGraded || saving}
           className="bg-blue-700 text-white px-5 py-2.5 rounded-xl text-sm font-medium hover:bg-blue-800 disabled:opacity-50 transition flex items-center gap-2"
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -413,6 +428,40 @@ function ModulesTab({ selections, setSelections }) {
           </div>
         </div>
       </div>
+
+      {/* Sticky bottom bar — unsaved changes */}
+      <div className={`fixed bottom-0 left-0 right-0 z-20 transition-all duration-300 ${hasUnsaved || saveStatus ? 'translate-y-0' : 'translate-y-full'}`}>
+        <div className="mx-auto max-w-7xl px-8 pb-4" style={{ paddingLeft: '256px' }}>
+          <div className="bg-slate-900 text-white rounded-2xl px-5 py-3.5 flex items-center justify-between shadow-xl">
+            <div className="flex items-center gap-3">
+              {saveStatus === 'saved' ? (
+                <>
+                  <span className="w-2 h-2 rounded-full bg-green-400 shrink-0" />
+                  <span className="text-sm text-slate-300">All changes saved</span>
+                </>
+              ) : saveStatus === 'error' ? (
+                <>
+                  <span className="w-2 h-2 rounded-full bg-red-400 shrink-0" />
+                  <span className="text-sm text-slate-300">Failed to save — try again</span>
+                </>
+              ) : (
+                <>
+                  <span className="w-2 h-2 rounded-full bg-amber-400 shrink-0" />
+                  <span className="text-sm text-slate-300">You have unsaved changes</span>
+                </>
+              )}
+            </div>
+            <button
+              onClick={saveGrades}
+              disabled={saving || saveStatus === 'saved'}
+              className="bg-white text-slate-900 text-sm font-medium px-4 py-2 rounded-xl hover:bg-slate-100 disabled:opacity-50 transition flex items-center gap-2"
+            >
+              {saving ? <><Spinner size="sm" />Saving…</> : 'Save Grades'}
+            </button>
+          </div>
+        </div>
+      </div>
+
     </div>
   )
 }
@@ -431,17 +480,9 @@ export default function Profile() {
   const [certs, setCerts] = useState([])
   const [profile, setProfile] = useState(null)
   const [profileLoading, setProfileLoading] = useState(true)
-  const [moduleSelections, setModuleSelections] = useState(() => {
-    try { return JSON.parse(localStorage.getItem('moduleSelections') || '{}') }
-    catch { return {} }
-  })
   const [activeTab, setActiveTab] = useState(
     searchParams.get('tab') === 'modules' ? 'modules' : 'projects'
   )
-
-  useEffect(() => {
-    localStorage.setItem('moduleSelections', JSON.stringify(moduleSelections))
-  }, [moduleSelections])
 
   const fetchAll = () => {
     setProfileLoading(true)
@@ -528,7 +569,7 @@ export default function Profile() {
         <div className="px-8 py-6">
           {activeTab === 'projects'  && <ProjectsTab      projects={projects} onRefresh={fetchAll} />}
           {activeTab === 'certs'     && <CertificationsTab certs={certs}       onRefresh={fetchAll} />}
-          {activeTab === 'modules'   && <ModulesTab selections={moduleSelections} setSelections={setModuleSelections} />}
+          {activeTab === 'modules' && <ModulesTab />}
         </div>
       </div>
 
