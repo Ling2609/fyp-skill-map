@@ -5,13 +5,13 @@ import PageHeader from '../components/PageHeader'
 
 const LOADING_STEPS = [
   'Building your skill profile...',
-  'Analysing your grades...',
+  'Analysing your strengths...',
   'Comparing against job market...',
   'Ranking best matches...',
   'Almost done...',
 ]
 
-function NoModulesState() {
+function NoSkillsState() {
   const navigate = useNavigate()
   return (
     <div className="h-screen bg-slate-50 flex flex-col items-center justify-center gap-5 px-8 text-center">
@@ -26,10 +26,8 @@ function NoModulesState() {
           Add your module grades, projects, or certifications on your Profile page — we'll match you with jobs that fit your skills.
         </p>
       </div>
-      <button
-        onClick={() => navigate('/profile')}
-        className="bg-blue-600 text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-blue-700 transition flex items-center gap-2"
-      >
+      <button onClick={() => navigate('/profile')}
+        className="bg-blue-600 text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-blue-700 transition flex items-center gap-2">
         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
         </svg>
@@ -42,7 +40,7 @@ function NoModulesState() {
 export default function Recommend() {
   const navigate = useNavigate()
 
-  const [moduleCount, setModuleCount] = useState(null) // null = loading, 0 = none saved
+  const [skillCount, setSkillCount] = useState(null) // null = loading, 0 = empty profile
   const [results, setResults] = useState(null)
   const [loading, setLoading] = useState(false)
   const [loadingStep, setLoadingStep] = useState(0)
@@ -70,8 +68,8 @@ export default function Recommend() {
 
     try {
       const res = await api.post('/recommend/', {
-        modules: [],        // server reads from DB
-        extra_skills: [],   // server reads from DB
+        modules: [],
+        extra_skills: [],
         top_n: searchCount,
         role_filter: searchRole,
       })
@@ -92,10 +90,10 @@ export default function Recommend() {
   }
 
   useEffect(() => {
-    // Check if user has saved grades
-    api.get('/profile/modules').then(res => {
-      const count = res.data.grades?.length ?? 0
-      setModuleCount(count)
+    // Check total skills across ALL sources (modules + projects + certs)
+    api.get('/profile/skills').then(res => {
+      const count = res.data.total ?? 0
+      setSkillCount(count)
       if (count === 0) return
 
       api.get('/jobs/subcategories').catch(() => {})
@@ -112,17 +110,16 @@ export default function Recommend() {
       } else {
         doSearch('', 50)
       }
-    }).catch(() => setModuleCount(0))
+    }).catch(() => setSkillCount(0))
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Still checking DB
-  if (moduleCount === null) return (
+  if (skillCount === null) return (
     <div className="h-screen bg-slate-50 flex items-center justify-center">
       <div className="w-5 h-5 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
     </div>
   )
 
-  if (moduleCount === 0) return <NoModulesState />
+  if (skillCount === 0) return <NoSkillsState />
 
   const handleCategoryClick = (cat) => {
     setActiveCategory(cat)
@@ -143,7 +140,6 @@ export default function Recommend() {
 
   return (
     <div className="h-screen bg-slate-50 flex flex-col">
-
       <PageHeader>
         <div>
           <div className="flex items-start justify-between mb-4 pt-1">
@@ -155,57 +151,41 @@ export default function Recommend() {
                 {results && ` · ${results.total_jobs_compared} jobs compared · ${results.recommendations.length} matches`}
               </p>
             </div>
-            <button
-              onClick={() => navigate('/profile?tab=modules')}
-              className="text-xs text-slate-400 hover:text-blue-600 transition mt-1"
-            >
-              ← Edit modules
+            <button onClick={() => navigate('/profile')}
+              className="text-xs text-slate-400 hover:text-blue-600 transition mt-1">
+              ← Update profile
             </button>
           </div>
 
-          {/* Search */}
           <div className="flex gap-2 mb-3">
             <div className="flex-1 flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-lg px-3.5 py-2.5">
               <svg className="w-4 h-4 text-slate-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
-              <input
-                type="text"
-                value={roleFilter}
+              <input type="text" value={roleFilter}
                 onChange={e => setRoleFilter(e.target.value)}
                 onKeyDown={e => e.key === 'Enter' && handleFindJobs()}
                 placeholder="Search by role e.g. Software Engineer, Data Analyst..."
-                className="flex-1 bg-transparent text-sm focus:outline-none text-slate-700 placeholder-slate-400"
-              />
+                className="flex-1 bg-transparent text-sm focus:outline-none text-slate-700 placeholder-slate-400" />
               {roleFilter && (
-                <button
-                  onClick={() => { setRoleFilter(''); setActiveCategory('all'); doSearch('', 50) }}
-                  className="text-slate-400 hover:text-slate-600 text-xs"
-                >✕</button>
+                <button onClick={() => { setRoleFilter(''); setActiveCategory('all'); doSearch('', 50) }}
+                  className="text-slate-400 hover:text-slate-600 text-xs">✕</button>
               )}
             </div>
-            <button
-              onClick={handleFindJobs}
-              disabled={loading}
-              className="bg-blue-600 text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-blue-700 transition disabled:opacity-50"
-            >
+            <button onClick={handleFindJobs} disabled={loading}
+              className="bg-blue-600 text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-blue-700 transition disabled:opacity-50">
               {loading ? 'Searching…' : 'Search'}
             </button>
           </div>
 
-          {/* Category chips */}
           <div className="flex gap-1.5 overflow-x-auto pb-3 scrollbar-hide">
             {['all', ...subcategories].map(cat => (
-              <button
-                key={cat}
-                onClick={() => handleCategoryClick(cat)}
-                disabled={loading}
+              <button key={cat} onClick={() => handleCategoryClick(cat)} disabled={loading}
                 className={`text-xs px-3 py-1.5 rounded-full border transition shrink-0 whitespace-nowrap font-medium disabled:opacity-50 ${
                   activeCategory === cat
                     ? 'bg-blue-600 text-white border-blue-600'
                     : 'bg-white text-slate-500 border-slate-200 hover:border-blue-300 hover:text-blue-600'
-                }`}
-              >
+                }`}>
                 {cat === 'all' ? 'All categories' : cat}
               </button>
             ))}
@@ -241,11 +221,8 @@ export default function Recommend() {
             ) : (
               <>
                 {visibleJobs.map((job, idx) => (
-                  <div
-                    key={job.job_id}
-                    onClick={() => navigate(`/jobs/${encodeURIComponent(job.job_id)}`)}
-                    className="bg-white rounded-xl px-5 py-4 border border-slate-200 cursor-pointer hover:border-blue-200 hover:shadow-sm transition group"
-                  >
+                  <div key={job.job_id} onClick={() => navigate(`/jobs/${encodeURIComponent(job.job_id)}`)}
+                    className="bg-white rounded-xl px-5 py-4 border border-slate-200 cursor-pointer hover:border-blue-200 hover:shadow-sm transition group">
                     <div className="flex items-start gap-4">
                       <span className="w-5 text-xs text-slate-300 font-medium tabular-nums mt-0.5 shrink-0">{idx + 1}</span>
                       <div className="flex-1 min-w-0">

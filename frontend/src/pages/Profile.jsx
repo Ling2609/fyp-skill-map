@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import PageHeader from '../components/PageHeader'
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useSearchParams } from 'react-router-dom'
 import api from '../api'
 
 // ── Shared ────────────────────────────────────────────────────────────────────
@@ -69,54 +69,43 @@ function ProjectsTab({ projects, onRefresh }) {
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
-
-      {/* Form — narrower */}
       <div className="lg:col-span-2 bg-white rounded-2xl border border-gray-200 p-6 self-start">
         <h3 className="text-sm font-semibold text-gray-800 mb-0.5">Add a Project</h3>
         <p className="text-xs text-gray-400 mb-5">AI will extract technical skills from your description.</p>
         <form onSubmit={handleAdd} className="space-y-4">
           <div>
             <label className="block text-xs font-medium text-gray-600 mb-1.5">Project Name <span className="text-red-400">*</span></label>
-            <input
-              type="text" value={form.name}
+            <input type="text" value={form.name}
               onChange={e => setForm(p => ({ ...p, name: e.target.value }))}
               placeholder="e.g. Inventory Management System"
               className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
-            />
+              required />
           </div>
           <div>
             <label className="block text-xs font-medium text-gray-600 mb-1.5">Description <span className="text-red-400">*</span></label>
-            <textarea
-              value={form.description}
+            <textarea value={form.description}
               onChange={e => setForm(p => ({ ...p, description: e.target.value }))}
               placeholder="What you built, tech stack, key features..."
               rows={5}
               className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
-              required
-            />
+              required />
           </div>
           <div>
             <label className="block text-xs font-medium text-gray-600 mb-1.5">GitHub URL <span className="text-gray-300 font-normal">(optional)</span></label>
-            <input
-              type="url" value={form.github_url}
+            <input type="url" value={form.github_url}
               onChange={e => setForm(p => ({ ...p, github_url: e.target.value }))}
               placeholder="https://github.com/username/repo"
-              className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
+              className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" />
           </div>
           {error && <p className="text-xs text-red-500 bg-red-50 rounded-lg px-3 py-2">{error}</p>}
-          <button
-            type="submit"
+          <button type="submit"
             disabled={loading || !form.name.trim() || !form.description.trim()}
-            className="w-full bg-blue-700 text-white text-sm font-medium py-2.5 rounded-xl hover:bg-blue-800 disabled:opacity-40 transition flex items-center justify-center gap-2"
-          >
+            className="w-full bg-blue-700 text-white text-sm font-medium py-2.5 rounded-xl hover:bg-blue-800 disabled:opacity-40 transition flex items-center justify-center gap-2">
             {loading ? (<><Spinner size="sm" />Extracting skills…</>) : 'Add Project'}
           </button>
         </form>
       </div>
 
-      {/* List — wider */}
       <div className="lg:col-span-3">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-sm font-semibold text-gray-800">Your Projects</h3>
@@ -187,44 +176,35 @@ function CertificationsTab({ certs, onRefresh }) {
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
-
-      {/* Form */}
       <div className="lg:col-span-2 bg-white rounded-2xl border border-gray-200 p-6 self-start">
         <h3 className="text-sm font-semibold text-gray-800 mb-0.5">Add a Certification</h3>
         <p className="text-xs text-gray-400 mb-5">AI will map it to the skills it validates.</p>
         <form onSubmit={handleAdd} className="space-y-4">
           <div>
             <label className="block text-xs font-medium text-gray-600 mb-1.5">Certification Name <span className="text-red-400">*</span></label>
-            <input
-              type="text" value={form.cert_name}
+            <input type="text" value={form.cert_name}
               onChange={e => setForm(c => ({ ...c, cert_name: e.target.value }))}
               placeholder="e.g. AWS Certified Solutions Architect"
               className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
-            />
+              required />
           </div>
           <div>
             <label className="block text-xs font-medium text-gray-600 mb-1.5">Issuer <span className="text-red-400">*</span></label>
-            <input
-              type="text" value={form.issuer}
+            <input type="text" value={form.issuer}
               onChange={e => setForm(c => ({ ...c, issuer: e.target.value }))}
               placeholder="e.g. Amazon Web Services"
               className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
-            />
+              required />
           </div>
           {error && <p className="text-xs text-red-500 bg-red-50 rounded-lg px-3 py-2">{error}</p>}
-          <button
-            type="submit"
+          <button type="submit"
             disabled={loading || !form.cert_name.trim() || !form.issuer.trim()}
-            className="w-full bg-blue-700 text-white text-sm font-medium py-2.5 rounded-xl hover:bg-blue-800 disabled:opacity-40 transition flex items-center justify-center gap-2"
-          >
+            className="w-full bg-blue-700 text-white text-sm font-medium py-2.5 rounded-xl hover:bg-blue-800 disabled:opacity-40 transition flex items-center justify-center gap-2">
             {loading ? (<><Spinner size="sm" />Mapping skills…</>) : 'Add Certification'}
           </button>
         </form>
       </div>
 
-      {/* List */}
       <div className="lg:col-span-3">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-sm font-semibold text-gray-800">Your Certifications</h3>
@@ -267,17 +247,14 @@ function CertificationsTab({ certs, onRefresh }) {
 // ── Modules tab ───────────────────────────────────────────────────────────────
 
 function ModulesTab() {
-  const navigate = useNavigate()
   const [modules, setModules] = useState([])
   const [selections, setSelections] = useState({})
   const [savedSelections, setSavedSelections] = useState({})
   const [selectedYear, setSelectedYear] = useState(1)
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
-  const [saveStatus, setSaveStatus] = useState('') // '', 'saved', 'error'
+  const [saveStatus, setSaveStatus] = useState('')
 
-  const allCompulsory = modules.filter(m => m.type === 'common' || m.type === 'specialised')
-  const allCompulsoryGraded = allCompulsory.every(m => selections[m.code] !== undefined && selections[m.code] !== '')
   const hasUnsaved = JSON.stringify(selections) !== JSON.stringify(savedSelections)
 
   useEffect(() => {
@@ -322,11 +299,6 @@ function ModulesTab() {
 
   const setGrade = (code, grade) => setSelections(prev => ({ ...prev, [code]: parseFloat(grade) }))
 
-  const handleGetRecommendations = async () => {
-    if (hasUnsaved) await saveGrades()
-    navigate('/recommend')
-  }
-
   if (loading) return (
     <div className="flex items-center justify-center py-24 gap-3 text-gray-400">
       <Spinner /><span className="text-sm">Loading modules…</span>
@@ -334,9 +306,9 @@ function ModulesTab() {
   )
 
   return (
-    <div className="space-y-5 pb-24">
+    <div className="space-y-5">
 
-      {/* Year tabs + CTA */}
+      {/* Year tabs + Save button in same row */}
       <div className="flex items-center justify-between">
         <div className="flex gap-2">
           {[1, 2, 3].map(year => (
@@ -350,21 +322,29 @@ function ModulesTab() {
             </button>
           ))}
         </div>
-        <button
-          onClick={handleGetRecommendations}
-          disabled={!allCompulsoryGraded || saving}
-          className="bg-blue-700 text-white px-5 py-2.5 rounded-xl text-sm font-medium hover:bg-blue-800 disabled:opacity-50 transition flex items-center gap-2"
-        >
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-          </svg>
-          Get Job Matches
-          {!allCompulsoryGraded && (
-            <span className="bg-blue-500 text-xs px-1.5 py-0.5 rounded-full">
-              {allCompulsory.filter(m => !selections[m.code]).length} missing
+
+        {/* Save button — right side, inline */}
+        <div className="flex items-center gap-3">
+          {saveStatus === 'saved' && (
+            <span className="text-xs text-emerald-600 font-medium flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block" />
+              Saved
             </span>
           )}
-        </button>
+          {saveStatus === 'error' && (
+            <span className="text-xs text-red-500">Failed to save</span>
+          )}
+          <button
+            onClick={saveGrades}
+            disabled={!hasUnsaved || saving}
+            className="px-4 py-2 rounded-xl text-sm font-medium border transition
+            disabled:cursor-not-allowed
+            enabled:bg-blue-700 enabled:text-white enabled:border-blue-700 enabled:hover:bg-blue-800
+            disabled:bg-gray-100 disabled:text-gray-500 disabled:border-gray-300"
+          >
+            {saving ? 'Saving…' : 'Save Grades'}
+          </button>
+        </div>
       </div>
 
       {/* Split panels */}
@@ -384,11 +364,9 @@ function ModulesTab() {
                     <p className="text-xs text-gray-400">{mod.code}</p>
                   </div>
                 </div>
-                <select
-                  value={selections[mod.code] ?? ''}
+                <select value={selections[mod.code] ?? ''}
                   onChange={e => setGrade(mod.code, e.target.value)}
-                  className="ml-4 border border-gray-200 rounded-lg px-2 py-1 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 shrink-0"
-                >
+                  className="ml-4 border border-gray-200 rounded-lg px-2 py-1 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 shrink-0">
                   <option value="" disabled>Select grade</option>
                   {GRADE_OPTIONS.map(g => <option key={g.value} value={g.value}>{g.label}</option>)}
                 </select>
@@ -429,39 +407,6 @@ function ModulesTab() {
         </div>
       </div>
 
-      {/* Sticky bottom bar — unsaved changes */}
-      <div className={`fixed bottom-0 left-0 right-0 z-20 transition-all duration-300 ${hasUnsaved || saveStatus ? 'translate-y-0' : 'translate-y-full'}`}>
-        <div className="mx-auto max-w-7xl px-8 pb-4" style={{ paddingLeft: '256px' }}>
-          <div className="bg-slate-900 text-white rounded-2xl px-5 py-3.5 flex items-center justify-between shadow-xl">
-            <div className="flex items-center gap-3">
-              {saveStatus === 'saved' ? (
-                <>
-                  <span className="w-2 h-2 rounded-full bg-green-400 shrink-0" />
-                  <span className="text-sm text-slate-300">All changes saved</span>
-                </>
-              ) : saveStatus === 'error' ? (
-                <>
-                  <span className="w-2 h-2 rounded-full bg-red-400 shrink-0" />
-                  <span className="text-sm text-slate-300">Failed to save — try again</span>
-                </>
-              ) : (
-                <>
-                  <span className="w-2 h-2 rounded-full bg-amber-400 shrink-0" />
-                  <span className="text-sm text-slate-300">You have unsaved changes</span>
-                </>
-              )}
-            </div>
-            <button
-              onClick={saveGrades}
-              disabled={saving || saveStatus === 'saved'}
-              className="bg-white text-slate-900 text-sm font-medium px-4 py-2 rounded-xl hover:bg-slate-100 disabled:opacity-50 transition flex items-center gap-2"
-            >
-              {saving ? <><Spinner size="sm" />Saving…</> : 'Save Grades'}
-            </button>
-          </div>
-        </div>
-      </div>
-
     </div>
   )
 }
@@ -469,9 +414,9 @@ function ModulesTab() {
 // ── Main ──────────────────────────────────────────────────────────────────────
 
 const TABS = [
-  { key: 'projects',  label: 'Projects' },
-  { key: 'certs',     label: 'Certifications' },
-  { key: 'modules',   label: 'Modules' },
+  { key: 'modules',  label: 'Modules' },
+  { key: 'projects', label: 'Projects' },
+  { key: 'certs',    label: 'Certifications' },
 ]
 
 export default function Profile() {
@@ -481,7 +426,9 @@ export default function Profile() {
   const [profile, setProfile] = useState(null)
   const [profileLoading, setProfileLoading] = useState(true)
   const [activeTab, setActiveTab] = useState(
-    searchParams.get('tab') === 'modules' ? 'modules' : 'projects'
+    searchParams.get('tab') === 'projects' ? 'projects'
+    : searchParams.get('tab') === 'certs' ? 'certs'
+    : 'modules'
   )
 
   const fetchAll = () => {
@@ -504,18 +451,13 @@ export default function Profile() {
 
   return (
     <div className="h-screen bg-slate-50 flex flex-col">
-
-      {/* ── Pinned header ── */}
       <PageHeader>
-        {/* Title + stats row */}
         <div className="flex items-start justify-between mb-4 pt-1">
           <div>
             <p className="text-[11px] font-semibold text-blue-600 uppercase tracking-widest mb-2">My Profile</p>
             <h1 className="text-2xl font-semibold tracking-tight text-slate-900">Skill Profile</h1>
-            <p className="text-sm text-slate-500 mt-1">Build your profile from projects, certifications, and modules</p>
+            <p className="text-sm text-slate-500 mt-1">Build your profile from modules, projects, and certifications</p>
           </div>
-
-          {/* Stats */}
           <div className="flex items-center gap-0 mt-1">
             {[
               { label: 'Skills', value: profileLoading ? '—' : (profile?.total ?? 0) },
@@ -524,9 +466,7 @@ export default function Profile() {
             ].map(({ label, value }, i, arr) => (
               <div key={label} className="flex items-center">
                 <div className="text-center px-6">
-                  <p className="text-2xl font-semibold tracking-tight text-slate-900 leading-none tabular-nums">
-                    {value}
-                  </p>
+                  <p className="text-2xl font-semibold tracking-tight text-slate-900 leading-none tabular-nums">{value}</p>
                   <p className="text-xs text-slate-400 mt-1 font-medium">{label}</p>
                 </div>
                 {i < arr.length - 1 && <div className="w-px h-10 bg-slate-400" />}
@@ -535,28 +475,20 @@ export default function Profile() {
           </div>
         </div>
 
-        {/* Tab bar — visually separated from header content */}
         <div className="flex border-t border-slate-200 mt-2 -mx-8 px-8">
           {TABS.map(tab => {
             const isActive = activeTab === tab.key
             const count = tab.key === 'projects' ? projects.length : tab.key === 'certs' ? certs.length : null
             return (
-              <button
-                key={tab.key}
-                onClick={() => setActiveTab(tab.key)}
+              <button key={tab.key} onClick={() => setActiveTab(tab.key)}
                 className={`flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 transition-colors ${
-                  isActive
-                    ? 'border-blue-600 text-blue-700'
-                    : 'border-transparent text-slate-500 hover:text-slate-800 hover:border-slate-200'
-                }`}
-              >
+                  isActive ? 'border-blue-600 text-blue-700' : 'border-transparent text-slate-500 hover:text-slate-800 hover:border-slate-200'
+                }`}>
                 {tab.label}
                 {count !== null && (
                   <span className={`text-xs px-1.5 py-0.5 rounded-full font-medium ${
                     isActive ? 'bg-blue-100 text-blue-700' : 'bg-slate-100 text-slate-500'
-                  }`}>
-                    {count}
-                  </span>
+                  }`}>{count}</span>
                 )}
               </button>
             )
@@ -564,15 +496,13 @@ export default function Profile() {
         </div>
       </PageHeader>
 
-      {/* ── Scrollable content ── */}
       <div className="flex-1 overflow-auto">
         <div className="px-8 py-6">
-          {activeTab === 'projects'  && <ProjectsTab      projects={projects} onRefresh={fetchAll} />}
-          {activeTab === 'certs'     && <CertificationsTab certs={certs}       onRefresh={fetchAll} />}
-          {activeTab === 'modules' && <ModulesTab />}
+          {activeTab === 'modules'  && <ModulesTab />}
+          {activeTab === 'projects' && <ProjectsTab  projects={projects} onRefresh={fetchAll} />}
+          {activeTab === 'certs'    && <CertificationsTab certs={certs}  onRefresh={fetchAll} />}
         </div>
       </div>
-
     </div>
   )
 }
