@@ -1,5 +1,6 @@
 import { NavLink, useNavigate } from 'react-router-dom'
 import { useSidebar } from './SidebarContext'
+import { useAuth } from '../context/useAuth'
 
 const NAV_ITEMS = [
   {
@@ -40,12 +41,15 @@ const NAV_ITEMS = [
   },
 ]
 
+const ROLE_LABEL = { student: 'For Graduates', employer: 'For Employers', admin: 'Admin Panel' }
+
 export default function Sidebar() {
   const navigate = useNavigate()
   const { collapsed, setCollapsed } = useSidebar()
+  const { user, logout: authLogout } = useAuth()
 
   const logout = () => {
-    localStorage.removeItem('token')
+    authLogout()
     navigate('/login')
   }
 
@@ -63,7 +67,7 @@ export default function Sidebar() {
             </div>
             <div className="min-w-0">
               <p className="text-sm font-semibold text-slate-900 leading-none tracking-tight">SkillMap</p>
-              <p className="text-[10px] text-slate-400 mt-0.5 font-medium tracking-wide uppercase">For Graduates</p>
+              <p className="text-[10px] text-slate-400 mt-0.5 font-medium tracking-wide uppercase">{ROLE_LABEL[user?.role] ?? 'SkillMap'}</p>
             </div>
           </div>
         )}

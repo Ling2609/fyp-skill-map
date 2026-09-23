@@ -17,6 +17,9 @@ from app.routers.auth import get_current_user
 from app.models.user import User
 from app.config import settings
 
+from app.models.user_module import UserModule, UserSkillCache
+from app.models.module import ModuleSkill, Module
+
 router = APIRouter(prefix="/profile", tags=["profile"])
 MODEL = "openai/gpt-oss-120b"
 
@@ -247,4 +250,117 @@ def get_skill_profile(
         "total": len(unique_skills),
         "from_projects": sum(len(p.extracted_skills or []) for p in projects),
         "from_certs": sum(len(c.mapped_skills or []) for c in certs),
+    }
+
+# ── Module grades ──────────────────────────────────────────────────────────────
+class ModuleGradeInput(BaseModel):
+    module_code: str
+    grade: float
+
+class ModuleGradesPayload(BaseModel):
+    grades: list[ModuleGradeInput]
+
+
+def rebuild_skill_cache(user_id: int, db: Session):
+    """Recompute and replace the user's full skill cache from modules + projects + certs."""
+    # Delete existing cache for this user
+    db.query(UserSkillCache).filter(UserSkillCache.user_id == user_id).delete()
+
+    skill_weights: dict[str, tuple[float, str]] = {}  # skill_name → (weight, source)
+
+    # ── From saved modules ─────────────────────────────────────────────────────
+    saved_modules = db.query(UserModule).filter(UserModule.user_id == user_id).all()
+    for um in saved_modules:
+        grade = um.grade
+        if grade >= 4.0:   weight = 1.0
+        elif grade >= 3.7: weight = 0.9
+        elif grade >= 3.3: weight = 0.8
+        elif grade >= 3.0: weight = 0.7
+        elif grade >= 2.7: weight = 0.6
+        else:              weight = 0.5
+
+        module_skills = db.query(ModuleSkill).filter(
+            ModuleSkill.module_code == um.module_code
+        ).all()
+        for ms in module_skills:
+            name = ms.skill_name.lower()
+            existing_weight, _ = skill_weights.get(name, (0, "module"))
+            if weight > existing_weight:
+                skill_weights[name] = (weight, "module")
+
+    # ── From projects ──────────────────────────────────────────────────────────
+    projects = db.query(UserProject).filter(UserProject.user_id == user_id).all()
+    for p in projects:
+        for skill in (p.extracted_skills or []):
+            name = skill.lower()
+            if name not in skill_weights:
+                skill_weights[name] = (0.7, "project")
+
+    # ── From certifications ────────────────────────────────────────────────────
+    certs = db.query(UserCertification).filter(UserCertification.user_id == user_id).all()
+    for c in certs:
+        for skill in (c.mapped_skills or []):
+            name = skill.lower()
+            if name not in skill_weights:
+                skill_weights[name] = (0.7, "cert")
+
+    # ── Write new cache rows ───────────────────────────────────────────────────
+    for skill_name, (weight, source) in skill_weights.items():
+        db.add(UserSkillCache(
+            user_id=user_id,
+            skill_name=skill_name,
+            weight=weight,
+            source=source,
+        ))
+    db.commit()
+
+
+@router.post("/modules")
+def save_module_grades(
+    payload: ModuleGradesPayload,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    if not payload.grades:
+        raise HTTPException(status_code=400, detail="No grades provided")
+
+    for item in payload.grades:
+        if not (0.0 <= item.grade <= 4.0):
+            raise HTTPException(
+                status_code=422,
+                detail=f"Grade for {item.module_code} must be between 0.0 and 4.0"
+            )
+        # Upsert — update if exists, insert if not
+        existing = db.query(UserModule).filter(
+            UserModule.user_id == current_user.id,
+            UserModule.module_code == item.module_code,
+        ).first()
+        if existing:
+            existing.grade = item.grade
+        else:
+            db.add(UserModule(
+                user_id=current_user.id,
+                module_code=item.module_code,
+                grade=item.grade,
+            ))
+
+    db.commit()
+    rebuild_skill_cache(current_user.id, db)
+
+    return {"saved": len(payload.grades), "message": "Module grades saved."}
+
+
+@router.get("/modules")
+def get_module_grades(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    saved = db.query(UserModule).filter(
+        UserModule.user_id == current_user.id
+    ).all()
+    return {
+        "grades": [
+            {"module_code": m.module_code, "grade": m.grade}
+            for m in saved
+        ]
     }

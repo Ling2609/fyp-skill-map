@@ -1,5 +1,6 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { SidebarProvider, useSidebar } from './components/SidebarContext'
+import { useAuth } from './context/useAuth'
 import Sidebar from './components/Sidebar'
 import Register from './pages/Register'
 import Login from './pages/Login'
@@ -9,8 +10,12 @@ import JobDetail from './pages/JobDetail'
 import Chatbot from './pages/Chatbot'
 import Profile from './pages/Profile'
 
-function PrivateRoute({ children }) {
-  return localStorage.getItem('token') ? children : <Navigate to="/login" />
+function RoleRoute({ children, roles }) {
+  const { user, loading } = useAuth()
+  if (loading) return null
+  if (!user) return <Navigate to="/login" />
+  if (roles && !roles.includes(user.role)) return <Navigate to="/dashboard" />
+  return children
 }
 
 function Layout({ children }) {
@@ -34,12 +39,12 @@ function AppRoutes() {
       <Route path="/" element={<Navigate to="/login" />} />
       <Route path="/register" element={<Register />} />
       <Route path="/login" element={<Login />} />
-      <Route path="/dashboard" element={<PrivateRoute><Layout><Dashboard /></Layout></PrivateRoute>} />
+      <Route path="/dashboard" element={<RoleRoute><Layout><Dashboard /></Layout></RoleRoute>} />
       <Route path="/modules" element={<Navigate to="/profile?tab=modules" replace />} />
-      <Route path="/recommend" element={<PrivateRoute><Layout><Recommend /></Layout></PrivateRoute>} />
-      <Route path="/jobs/:jobId" element={<PrivateRoute><Layout><JobDetail /></Layout></PrivateRoute>} />
-      <Route path="/chatbot" element={<PrivateRoute><Layout><Chatbot /></Layout></PrivateRoute>} />
-      <Route path="/profile" element={<PrivateRoute><Layout><Profile /></Layout></PrivateRoute>} />
+      <Route path="/recommend" element={<RoleRoute roles={['student']}><Layout><Recommend /></Layout></RoleRoute>} />
+      <Route path="/jobs/:jobId" element={<RoleRoute><Layout><JobDetail /></Layout></RoleRoute>} />
+      <Route path="/chatbot" element={<RoleRoute><Layout><Chatbot /></Layout></RoleRoute>} />
+      <Route path="/profile" element={<RoleRoute><Layout><Profile /></Layout></RoleRoute>} />
     </Routes>
   )
 }

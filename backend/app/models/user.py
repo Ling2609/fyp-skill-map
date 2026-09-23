@@ -1,5 +1,5 @@
 import enum
-from sqlalchemy import Column, Integer, String, Enum, DateTime
+from sqlalchemy import Column, Integer, String, Enum, DateTime, Boolean, JSON
 from sqlalchemy.sql import func
 from app.database import Base
 
@@ -19,3 +19,6 @@ class User(Base):
     hashed_password = Column(String, nullable=False)
     role = Column(Enum(UserRole), default=UserRole.student)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
+    is_visible_to_employers = Column(Boolean, default=False, nullable=False)
+    is_active               = Column(Boolean, default=True, nullable=False)
+    notification_prefs      = Column(JSON, nullable=False, server_default='{}')

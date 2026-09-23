@@ -8,6 +8,7 @@ from app.models.profile import UserProject, UserCertification
 from app.nlp.embedder import Embedder
 from app.routers.auth import get_current_user
 from app.models.user import User
+from app.models.user_module import UserModule
 import numpy as np
 
 router = APIRouter(prefix="/recommend", tags=["recommend"])
@@ -75,7 +76,7 @@ class ModuleInput(BaseModel):
 
 
 class RecommendRequest(BaseModel):
-    modules: list[ModuleInput]
+    modules: list[ModuleInput] = []   # optional override — if empty, read from DB
     extra_skills: list[str] = []
     top_n: int = 10
     role_filter: str = ""
@@ -111,8 +112,23 @@ def recommend_jobs(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),   # ← NEW
 ):
-    if not payload.modules:
-        raise HTTPException(status_code=400, detail="No modules provided")
+    # Load modules from DB if not passed in request
+    if payload.modules:
+        modules_to_use = payload.modules
+    else:
+        saved = db.query(UserModule).filter(
+            UserModule.user_id == current_user.id
+        ).all()
+        if not saved:
+            raise HTTPException(
+                status_code=400,
+                detail="No module grades saved. Please save your grades on the Profile page first."
+            )
+        modules_to_use = [
+            ModuleInput(module_code=m.module_code, grade=m.grade)
+            for m in saved
+        ]
+    payload.modules = modules_to_use
 
     build_job_cache()
 
