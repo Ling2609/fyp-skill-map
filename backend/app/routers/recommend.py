@@ -172,19 +172,34 @@ def recommend_jobs(
         profile_vec = profile_vec / (np.linalg.norm(profile_vec) + 1e-8)
 
     # ── Rank jobs ──────────────────────────────────────────────────────────────
+    # Check if role_filter matches a known subcategory exactly (pill click)
+    role_filter_stripped = payload.role_filter.strip()
+    known_subcategories = {cached["subcategory"] for cached in _job_cache.values() if cached.get("subcategory")}
+    is_subcategory_filter = role_filter_stripped in known_subcategories
+
     sbert_scores = []
     for job_id, cached in _job_cache.items():
+        # Hard-filter by subcategory when the filter matches one exactly
+        if is_subcategory_filter and cached.get("subcategory") != role_filter_stripped:
+            continue
         job_vec = cached["vec"]
         score = float(np.dot(profile_vec, job_vec) / (
             np.linalg.norm(profile_vec) * np.linalg.norm(job_vec) + 1e-8
         ))
-        if payload.role_filter.strip():
-            if payload.role_filter.lower() in cached["job_title"].lower():
-                score = min(score * 1.2, 1.0)
+        if role_filter_stripped and not is_subcategory_filter:
+            # Additive boost so exact title matches always float to the top
+            title_lower = cached["job_title"].lower()
+            filter_lower = role_filter_stripped.lower()
+            if filter_lower in title_lower:
+                score = min(score + 0.2, 1.0)
+            # Smaller boost for word-level partial match (e.g. "engineer" in "Software Engineer")
+            elif any(word in title_lower for word in filter_lower.split() if len(word) > 3):
+                score = min(score + 0.08, 1.0)
         sbert_scores.append((job_id, score))
 
     sbert_scores.sort(key=lambda x: -x[1])
-    top_candidates = sbert_scores[:payload.top_n]
+    # Return all candidates when top_n is 0 or very large, else respect the limit
+    top_candidates = sbert_scores if payload.top_n <= 0 else sbert_scores[:payload.top_n]
 
     grad_skill_names = list(skill_weights.keys())
     grad_embeddings = embedder.embed_batch(grad_skill_names) if grad_skill_names else np.array([])
@@ -200,6 +215,13 @@ def recommend_jobs(
             coverage = compute_skill_coverage(
                 grad_skill_names, grad_embeddings, job_skills, job_embeddings
             )
+
+        # Hybrid score: 50% SBERT semantic fit + 50% per-skill coverage
+        # This keeps ranking and displayed % consistent with each other
+        # sbert_score is already 0-1, coverage is 0-100 → normalise to 0-1
+        hybrid = 0.5 * sbert_score + 0.5 * (coverage / 100)
+        hybrid_percent = round(hybrid * 100, 1)
+
         results.append({
             "job_id": cached["job_id"],
             "job_title": cached["job_title"],
@@ -207,8 +229,8 @@ def recommend_jobs(
             "location": cached["location"],
             "subcategory": cached["subcategory"],
             "salary": cached["salary"],
-            "match_score": coverage / 100,
-            "match_percent": coverage,
+            "match_score": hybrid,
+            "match_percent": hybrid_percent,
             "top_job_skills": job_skills[:5],
         })
 

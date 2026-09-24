@@ -53,7 +53,7 @@ export default function Recommend() {
 
   const doSearch = async (role, count) => {
     const searchRole = role !== undefined ? role : roleFilter
-    const searchCount = count || 50
+    const searchCount = count || 0  // 0 = return all results
     setLoading(true)
     setError('')
     setResults(null)
@@ -70,7 +70,7 @@ export default function Recommend() {
       const res = await api.post('/recommend/', {
         modules: [],
         extra_skills: [],
-        top_n: searchCount,
+        top_n: searchCount,  // 0 = all
         role_filter: searchRole,
       })
       clearInterval(stepInterval)
@@ -123,17 +123,17 @@ export default function Recommend() {
 
   const handleCategoryClick = (cat) => {
     setActiveCategory(cat)
-    if (cat === 'all') { setRoleFilter(''); doSearch('', 50) }
-    else { setRoleFilter(cat); doSearch(cat, 50) }
+    if (cat === 'all') { setRoleFilter(''); doSearch('', 0) }
+    else { setRoleFilter(cat); doSearch(cat, 0) }
   }
 
   const handleFindJobs = () => {
     setActiveCategory('all')
-    doSearch(roleFilter, 50)
+    doSearch(roleFilter, 0)
   }
 
-  const getMatchDotColor  = (pct) => pct >= 70 ? 'bg-emerald-500' : pct >= 40 ? 'bg-amber-500' : 'bg-rose-400'
-  const getMatchTextColor = (pct) => pct >= 70 ? 'text-emerald-600' : pct >= 40 ? 'text-amber-600' : 'text-rose-500'
+  const getMatchBgColor = (pct) => pct >= 70 ? 'bg-emerald-50 text-emerald-700' : pct >= 40 ? 'bg-amber-50 text-amber-700' : 'bg-rose-50 text-rose-600'
+  const getAccentColor  = (pct) => pct >= 70 ? 'bg-emerald-400' : pct >= 40 ? 'bg-amber-400' : 'bg-rose-400'
 
   const visibleJobs = results?.recommendations?.slice(0, visibleCount) || []
   const hasMore = results && visibleCount < results.recommendations.length
@@ -148,7 +148,7 @@ export default function Recommend() {
               <h1 className="text-2xl font-semibold tracking-tight text-slate-900">Find Your Best Fit</h1>
               <p className="text-sm text-slate-500 mt-1">
                 Matched from your full skill profile
-                {results && ` · ${results.total_jobs_compared} jobs compared · ${results.recommendations.length} matches`}
+                {results && ` · ${results.total_jobs_compared} jobs compared · ${results.recommendations.length} ranked`}
               </p>
             </div>
             <button onClick={() => navigate('/profile')}
@@ -222,29 +222,31 @@ export default function Recommend() {
               <>
                 {visibleJobs.map((job, idx) => (
                   <div key={job.job_id} onClick={() => navigate(`/jobs/${encodeURIComponent(job.job_id)}`)}
-                    className="bg-white rounded-xl px-5 py-4 border border-slate-200 cursor-pointer hover:border-blue-200 hover:shadow-sm transition group">
-                    <div className="flex items-start gap-4">
-                      <span className="w-5 text-xs text-slate-300 font-medium tabular-nums mt-0.5 shrink-0">{idx + 1}</span>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-start justify-between gap-3">
+                    className="bg-white rounded-xl border border-slate-200 cursor-pointer hover:border-blue-200 hover:shadow-sm transition group overflow-hidden flex">
+                    {/* Left accent bar */}
+                    <div className={`w-1 shrink-0 ${getAccentColor(job.match_percent)}`} />
+                    <div className="flex-1 px-4 py-3.5 min-w-0">
+                      <div className="flex items-center justify-between gap-3">
+                        <div className="flex items-center gap-2.5 min-w-0">
+                          <span className="text-xs text-slate-300 font-medium tabular-nums shrink-0 w-4">{idx + 1}</span>
                           <div className="min-w-0">
-                            <p className="font-medium text-slate-800 text-sm truncate group-hover:text-blue-700 transition">{job.job_title}</p>
-                            <p className="text-xs text-slate-400 mt-0.5">{job.company} · {job.location}</p>
-                          </div>
-                          <div className="flex items-center gap-1.5 shrink-0">
-                            <div className={`w-1.5 h-1.5 rounded-full ${getMatchDotColor(job.match_percent)}`} />
-                            <span className={`text-xs font-semibold tabular-nums ${getMatchTextColor(job.match_percent)}`}>{job.match_percent}%</span>
+                            <p className="font-semibold text-slate-800 text-sm truncate group-hover:text-blue-700 transition leading-snug">{job.job_title}</p>
+                            <p className="text-xs text-slate-400 mt-0.5 truncate">{job.company} · {job.location}</p>
                           </div>
                         </div>
-                        <div className="flex gap-1.5 mt-2.5 flex-wrap">
-                          <span className="text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded-md font-medium">{job.subcategory}</span>
-                          {job.salary && job.salary !== 'nan' && (
-                            <span className="text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded-md font-medium">{job.salary}</span>
-                          )}
-                          {job.top_job_skills?.slice(0, 3).map(skill => (
-                            <span key={skill} className="text-xs text-slate-400 px-2 py-0.5 rounded-md border border-slate-200">{skill}</span>
-                          ))}
-                        </div>
+                        {/* Match % pill */}
+                        <span className={`shrink-0 text-xs font-bold tabular-nums px-2.5 py-1 rounded-full ${getMatchBgColor(job.match_percent)}`}>
+                          {job.match_percent}%
+                        </span>
+                      </div>
+                      <div className="flex gap-1.5 mt-2.5 flex-wrap">
+                        <span className="text-xs bg-slate-100 text-slate-500 px-2 py-0.5 rounded-md font-medium">{job.subcategory}</span>
+                        {job.salary && job.salary !== 'nan' && (
+                          <span className="text-xs bg-slate-100 text-slate-500 px-2 py-0.5 rounded-md font-medium">{job.salary}</span>
+                        )}
+                        {job.top_job_skills?.slice(0, 3).map(skill => (
+                          <span key={skill} className="text-xs text-slate-400 px-2 py-0.5 rounded-md border border-slate-200">{skill}</span>
+                        ))}
                       </div>
                     </div>
                   </div>
