@@ -49,6 +49,7 @@ export default function Sidebar() {
   const { user, logout: authLogout } = useAuth()
 
   const logout = () => {
+    sessionStorage.clear()
     authLogout()
     navigate('/login')
   }

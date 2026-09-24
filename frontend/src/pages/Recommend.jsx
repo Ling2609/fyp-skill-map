@@ -51,9 +51,10 @@ export default function Recommend() {
   const [activeCategory, setActiveCategory] = useState('all')
   const [visibleCount, setVisibleCount] = useState(10)
 
-  const doSearch = async (role, count) => {
+  const doSearch = async (role, count, category) => {
     const searchRole = role !== undefined ? role : roleFilter
     const searchCount = count || 0  // 0 = return all results
+    const searchCategory = category !== undefined ? category : activeCategory
     setLoading(true)
     setError('')
     setResults(null)
@@ -79,7 +80,7 @@ export default function Recommend() {
         setResults(res.data)
         sessionStorage.setItem('lastRecommendResults', JSON.stringify(res.data))
         sessionStorage.setItem('lastRoleFilter', searchRole)
-        sessionStorage.setItem('lastActiveCategory', activeCategory)
+        sessionStorage.setItem('lastActiveCategory', searchCategory)
         setLoading(false)
       }, 300)
     } catch (err) {
@@ -108,7 +109,7 @@ export default function Recommend() {
         if (savedRole) setRoleFilter(savedRole)
         if (savedCategory) setActiveCategory(savedCategory)
       } else {
-        doSearch('', 50)
+        doSearch('', 50, 'all')
       }
     }).catch(() => setSkillCount(0))
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
@@ -123,13 +124,13 @@ export default function Recommend() {
 
   const handleCategoryClick = (cat) => {
     setActiveCategory(cat)
-    if (cat === 'all') { setRoleFilter(''); doSearch('', 0) }
-    else { setRoleFilter(cat); doSearch(cat, 0) }
+    if (cat === 'all') { setRoleFilter(''); doSearch('', 0, 'all') }
+    else { setRoleFilter(cat); doSearch(cat, 0, cat) }
   }
 
   const handleFindJobs = () => {
     setActiveCategory('all')
-    doSearch(roleFilter, 0)
+    doSearch(roleFilter, 0, 'all')
   }
 
   const getMatchBgColor = (pct) => pct >= 70 ? 'bg-emerald-50 text-emerald-700' : pct >= 40 ? 'bg-amber-50 text-amber-700' : 'bg-rose-50 text-rose-600'
@@ -168,7 +169,7 @@ export default function Recommend() {
                 placeholder="Search by role e.g. Software Engineer, Data Analyst..."
                 className="flex-1 bg-transparent text-sm focus:outline-none text-slate-700 placeholder-slate-400" />
               {roleFilter && (
-                <button onClick={() => { setRoleFilter(''); setActiveCategory('all'); doSearch('', 50) }}
+                <button onClick={() => { setRoleFilter(''); setActiveCategory('all'); doSearch('', 50, 'all') }}
                   className="text-slate-400 hover:text-slate-600 text-xs">✕</button>
               )}
             </div>
