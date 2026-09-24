@@ -10,6 +10,24 @@ from app.routers.auth import get_current_user
 from app.models.user import User
 from app.models.user_module import UserModule
 import numpy as np
+import re
+
+SENIORITY_PATTERNS = {
+    "junior":  r"\b(junior|jr\.?|entry.?level|graduate|intern|trainee|associate)\b",
+    "senior":  r"\b(senior|sr\.?|specialist)\b",
+    "lead":    r"\b(lead|principal|staff|architect)\b",
+    "manager": r"\b(manager|director|head\s+of|vp|chief)\b",
+}
+
+SENIORITY_RANK = {"junior": 0, "unspecified": 1, "mid": 1, "senior": 2, "lead": 3, "manager": 4}
+PENALTY_PER_STEP = 0.12
+
+def classify_seniority(title: str) -> str:
+    t = title.lower()
+    for level, pattern in SENIORITY_PATTERNS.items():
+        if re.search(pattern, t):
+            return level
+    return "unspecified"
 
 router = APIRouter(prefix="/recommend", tags=["recommend"])
 
@@ -186,6 +204,16 @@ def recommend_jobs(
         score = float(np.dot(profile_vec, job_vec) / (
             np.linalg.norm(profile_vec) * np.linalg.norm(job_vec) + 1e-8
         ))
+        
+        # Seniority penalty
+        job_rank = SENIORITY_RANK.get(classify_seniority(cached["job_title"]), 1)
+        # Calculate the gap between the job's seniority and the user's seniority (assumed to be junior)
+        gap = max(0, job_rank - 0)  # user = junior (rank 0)
+        if gap >= 3:
+            score = 0.0  # hard-exclude manager-level
+        else:
+            score = max(0.0, score - gap * PENALTY_PER_STEP)
+            
         if role_filter_stripped and not is_subcategory_filter:
             # Additive boost so exact title matches always float to the top
             title_lower = cached["job_title"].lower()
@@ -198,30 +226,30 @@ def recommend_jobs(
         sbert_scores.append((job_id, score))
 
     sbert_scores.sort(key=lambda x: -x[1])
-    # Return all candidates when top_n is 0 or very large, else respect the limit
     top_candidates = sbert_scores if payload.top_n <= 0 else sbert_scores[:payload.top_n]
 
     grad_skill_names = list(skill_weights.keys())
     grad_embeddings = embedder.embed_batch(grad_skill_names) if grad_skill_names else np.array([])
 
+    # ── Coverage only on top 200 by SBERT, rest get sbert_score * 100 as approximation
+    COVERAGE_LIMIT = 200
+    coverage_candidates = top_candidates[:COVERAGE_LIMIT]
+    cheap_candidates = top_candidates[COVERAGE_LIMIT:]
+
     results = []
-    for job_id, sbert_score in top_candidates:
+
+    for job_id, sbert_score in coverage_candidates:
         cached = _job_cache[job_id]
         job_skills = cached["skills"]
-        if not job_skills:
+        if not job_skills or not grad_skill_names:
             coverage = 0.0
         else:
             job_embeddings = embedder.embed_batch(job_skills)
             coverage = compute_skill_coverage(
                 grad_skill_names, grad_embeddings, job_skills, job_embeddings
             )
-
-        # Hybrid score: 50% SBERT semantic fit + 50% per-skill coverage
-        # This keeps ranking and displayed % consistent with each other
-        # sbert_score is already 0-1, coverage is 0-100 → normalise to 0-1
         hybrid = 0.5 * sbert_score + 0.5 * (coverage / 100)
         hybrid_percent = round(hybrid * 100, 1)
-
         results.append({
             "job_id": cached["job_id"],
             "job_title": cached["job_title"],
@@ -232,6 +260,22 @@ def recommend_jobs(
             "match_score": hybrid,
             "match_percent": hybrid_percent,
             "top_job_skills": job_skills[:5],
+        })
+
+    # Remaining jobs get SBERT-only score (no coverage computation)
+    for job_id, sbert_score in cheap_candidates:
+        cached = _job_cache[job_id]
+        hybrid_percent = round(sbert_score * 100, 1)
+        results.append({
+            "job_id": cached["job_id"],
+            "job_title": cached["job_title"],
+            "company": cached["company"],
+            "location": cached["location"],
+            "subcategory": cached["subcategory"],
+            "salary": cached["salary"],
+            "match_score": sbert_score,
+            "match_percent": hybrid_percent,
+            "top_job_skills": cached["skills"][:5],
         })
 
     results.sort(key=lambda x: -x["match_percent"])

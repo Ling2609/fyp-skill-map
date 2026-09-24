@@ -79,20 +79,20 @@ def get_subcategories(db: Session = Depends(get_db)):
 
 @router.get("/{job_id}/description")
 def get_job_description(job_id: str, db: Session = Depends(get_db)):
-    """
-    Get formatted description. Always tries Groq first for best quality.
-    Falls back to rule-based if Groq fails. Caches in DB.
-    """
     decoded_id = job_id.replace("%2E", ".").replace("%20", " ")
     job = db.query(Job).filter(Job.job_id == decoded_id).first()
     if not job:
         raise HTTPException(status_code=404, detail="Job not found")
 
-    # Return cached version if exists
+    # Return cached version only if it looks well-formatted
     if job.formatted_description:
         try:
             bullets = json.loads(job.formatted_description)
-            return {"bullets": bullets, "cached": True}
+            has_headers = any(b.startswith('## ') for b in bullets)
+            is_wall = len(bullets) <= 1 and any(len(b) > 300 for b in bullets)
+            if bullets and has_headers and not is_wall:
+                return {"bullets": bullets, "cached": True}
+            # Bad cache — fall through to regenerate
         except json.JSONDecodeError:
             pass
 
@@ -101,7 +101,6 @@ def get_job_description(job_id: str, db: Session = Depends(get_db)):
 
     bullets = []
 
-    # Always try Groq first for best quality
     try:
         extractor = get_extractor()
         groq_bullets = extractor.format_job_description(job.job_title, job.description)
@@ -110,17 +109,14 @@ def get_job_description(job_id: str, db: Session = Depends(get_db)):
     except Exception as e:
         print(f"Groq failed: {e}")
 
-    # Fallback to rules if Groq fails or returns too few bullets
     if len(bullets) < 3:
         bullets = format_description_rules(job.description)
 
-    # Cache in DB
     if bullets:
         job.formatted_description = json.dumps(bullets)
         db.commit()
 
     return {"bullets": bullets, "cached": False}
-
 
 @router.get("/")
 def get_jobs(skip: int = 0, limit: int = 20, db: Session = Depends(get_db)):
