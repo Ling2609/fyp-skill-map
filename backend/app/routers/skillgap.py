@@ -120,10 +120,17 @@ def analyse_skill_gap(
                 "grade_weight": graduate_skills.get(best_match, 0),
             })
         else:
+            # Explain why: related skill exists but not close enough = partly covered,
+            # no similar skill at all = not in modules. (Grade does not affect matching.)
+            if best_score >= 0.4:
+                gap_reason = f"Partly covered in {skill_module_map.get(best_match, 'a module')}"
+            else:
+                gap_reason = "Not in your modules"
             missing.append({
                 "job_skill": job_skill,
                 "closest_graduate_skill": best_match,
                 "similarity": round(best_score, 3),
+                "gap_reason": gap_reason,
             })
 
     # Grad skills not required by this job

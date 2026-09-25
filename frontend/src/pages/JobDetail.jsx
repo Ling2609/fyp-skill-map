@@ -250,14 +250,24 @@ export default function JobDetail() {
                     <p className="text-xs text-gray-400">No missing skills — great match!</p>
                   ) : (
                     gap?.missing_skills?.map((item, idx) => (
-                      <div key={idx} className="flex items-center justify-between gap-3 pb-2.5 border-b border-gray-50 last:border-0 last:pb-0">
-                        <span className="text-xs font-medium text-gray-700">{item.job_skill}</span>
+                      <div key={idx} className="flex items-center justify-between gap-2 pb-2.5 border-b border-gray-50 last:border-0 last:pb-0">
+                        <div className="min-w-0 flex-1">
+                          <span className="text-xs font-medium text-gray-700">{item.job_skill}</span>
+                          {item.gap_reason && (
+                            <p className={`text-[10px] mt-0.5 ${
+                              item.gap_reason.startsWith('Partly')
+                                ? 'text-amber-500'
+                                : 'text-red-400'
+                            }`}>
+                              {item.gap_reason}
+                            </p>
+                          )}
+                        </div>
                         <button
-                          onClick={() => navigate(`/chatbot?skill=${encodeURIComponent(item.job_skill)}&job=${encodeURIComponent(gap?.job?.job_title || '')}`)}
+                          onClick={() => navigate(`/chatbot?skill=${encodeURIComponent(item.job_skill)}&job=${encodeURIComponent(gap?.job?.job_title || '')}&reason=${encodeURIComponent(item.gap_reason || '')}`)}
                           className="text-xs text-blue-600 bg-blue-50 hover:bg-blue-100 px-2.5 py-1 rounded-full transition font-medium shrink-0"
-                          title="Get a learning plan for this skill"
                         >
-                          Get learning plan →
+                          Learn →
                         </button>
                       </div>
                     ))
@@ -272,20 +282,14 @@ export default function JobDetail() {
                     <div className="w-2 h-2 rounded-full bg-blue-500 shrink-0" />
                     <h2 className="text-sm font-semibold text-gray-700">Your Bonus Skills</h2>
                   </div>
-                  <p className="text-xs text-gray-400 mb-3">Not required for this role but adds value to your profile</p>
-                  <div className="flex flex-wrap gap-1.5 mb-3">
+                  <p className="text-xs text-gray-400 mb-3">Extra skills that strengthen your profile.</p>
+                  <div className="grid grid-cols-2 gap-1.5 mb-3">
                     {gap.graduate_only_skills.slice(0, 10).map((item, idx) => (
-                      <span key={idx} className="text-xs text-blue-600 bg-blue-50 border border-blue-100 px-2.5 py-1 rounded-full">
+                      <span key={idx} title={item.skill} className="text-xs text-blue-600 bg-blue-50 border border-blue-100 px-2.5 py-1 rounded-full text-center truncate">
                         {item.skill}
                       </span>
                     ))}
                   </div>
-                  <button
-                    onClick={() => navigate(`/chatbot?context=bonus&job=${encodeURIComponent(gap?.job?.job_title || '')}&skills=${encodeURIComponent(gap.graduate_only_skills.slice(0, 5).map(s => s.skill).join(', '))}`)}
-                    className="text-xs text-blue-600 hover:text-blue-700 hover:underline transition"
-                  >
-                    Explore how to leverage these skills →
-                  </button>
                 </div>
               )}
             </div>
