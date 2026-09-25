@@ -188,7 +188,7 @@ export default function JobDetail() {
 
         {/* Skill Gap Tab */}
         {activeTab === 'gap' && (
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-4 items-start">
 
             {/* Skills you have */}
             <div className="bg-white rounded-xl p-5 border border-gray-100 shadow-sm">
@@ -283,7 +283,7 @@ export default function JobDetail() {
                     <h2 className="text-sm font-semibold text-gray-700">Your Bonus Skills</h2>
                   </div>
                   <p className="text-xs text-gray-400 mb-3">Extra skills that strengthen your profile.</p>
-                  <div className="flex flex-wrap gap-1.5 mb-3">
+                  <div className="flex flex-wrap gap-1.5">
                     {gap.graduate_only_skills.slice(0, 10).map((item, idx) => (
                       <span key={idx} className="grow text-xs whitespace-nowrap text-blue-600 bg-blue-50 border border-blue-100 px-2.5 py-1 rounded-full text-center">
                         {item.skill}
