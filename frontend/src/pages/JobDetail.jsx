@@ -19,16 +19,12 @@ export default function JobDetail() {
   const [bulletsLoading, setBulletsLoading] = useState(false)
 
   useEffect(() => {
-    api.post('/skillgap/', { job_id: decodeURIComponent(jobId) })
+    // Pass empty modules — backend reads them from DB for the logged-in user
+    api.post('/skillgap/', { modules: [], job_id: decodeURIComponent(jobId) })
       .then(res => { setGap(res.data); setLoading(false) })
       .catch(err => {
-        const detail = err.response?.data?.detail || 'Failed to load skill gap analysis'
-        if (err.response?.status === 400) {
-          navigate('/profile')
-        } else {
-          setError(detail)
-          setLoading(false)
-        }
+        setError(err.response?.data?.detail || 'Failed to load skill gap analysis')
+        setLoading(false)
       })
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -203,22 +199,26 @@ export default function JobDetail() {
                   <span className="ml-1.5 text-xs font-normal text-gray-400">({gap?.summary?.matched_skills})</span>
                 </h2>
               </div>
-              <div className="space-y-2.5">
+              <div className="space-y-2">
                 {gap?.matched_skills?.length === 0 ? (
                   <p className="text-xs text-gray-400">No matched skills found</p>
                 ) : (
                   gap?.matched_skills?.map((item, idx) => (
-                    <div key={idx} className="flex items-center justify-between gap-3 pb-2.5 border-b border-gray-50 last:border-0 last:pb-0">
+                    <div key={idx} className="flex items-center justify-between gap-2 pb-2 border-b border-gray-50 last:border-0 last:pb-0">
                       <div className="min-w-0 flex-1">
-                        <div className="flex items-center gap-1.5 flex-wrap">
+                        <div className="flex items-center gap-1.5">
                           <span className="text-xs font-medium text-gray-800">{item.job_skill}</span>
                           {gradeLabel(item.grade_weight) && (
-                            <span className="text-xs bg-blue-50 text-blue-600 px-1.5 py-0.5 rounded font-semibold">
+                            <span className="text-[10px] bg-blue-50 text-blue-600 px-1.5 py-0.5 rounded font-semibold">
                               {gradeLabel(item.grade_weight)}
                             </span>
                           )}
                         </div>
-                        <span className="text-xs text-gray-400">via {item.matched_graduate_skill}</span>
+                        {(item.matched_via_module || item.matched_graduate_skill) && (
+                          <span className="text-[10px] text-gray-400">
+                            {item.matched_via_module || item.matched_graduate_skill}
+                          </span>
+                        )}
                       </div>
                       <span className={`text-xs font-semibold px-2 py-0.5 rounded-full shrink-0 ${
                         item.similarity >= 0.8 ? 'text-green-700 bg-green-50' :
@@ -252,16 +252,13 @@ export default function JobDetail() {
                     gap?.missing_skills?.map((item, idx) => (
                       <div key={idx} className="flex items-center justify-between gap-3 pb-2.5 border-b border-gray-50 last:border-0 last:pb-0">
                         <span className="text-xs font-medium text-gray-700">{item.job_skill}</span>
-                        <div className="flex items-center gap-1.5 shrink-0">
-                          <span className="text-xs text-red-500 bg-red-50 px-2 py-0.5 rounded-full">Missing</span>
-                          <button
-                            onClick={() => navigate(`/chatbot?skill=${encodeURIComponent(item.job_skill)}&job=${encodeURIComponent(gap?.job?.job_title || '')}`)}
-                            className="text-xs text-blue-600 bg-blue-50 hover:bg-blue-100 px-2 py-0.5 rounded-full transition"
-                            title="Get a learning plan for this skill"
-                          >
-                            Learn →
-                          </button>
-                        </div>
+                        <button
+                          onClick={() => navigate(`/chatbot?skill=${encodeURIComponent(item.job_skill)}&job=${encodeURIComponent(gap?.job?.job_title || '')}`)}
+                          className="text-xs text-blue-600 bg-blue-50 hover:bg-blue-100 px-2.5 py-1 rounded-full transition font-medium shrink-0"
+                          title="Get a learning plan for this skill"
+                        >
+                          Get learning plan →
+                        </button>
                       </div>
                     ))
                   )}
@@ -275,14 +272,20 @@ export default function JobDetail() {
                     <div className="w-2 h-2 rounded-full bg-blue-500 shrink-0" />
                     <h2 className="text-sm font-semibold text-gray-700">Your Bonus Skills</h2>
                   </div>
-                  <p className="text-xs text-gray-400 mb-3">Not required but adds value</p>
-                  <div className="flex flex-wrap gap-1.5">
+                  <p className="text-xs text-gray-400 mb-3">Not required for this role but adds value to your profile</p>
+                  <div className="flex flex-wrap gap-1.5 mb-3">
                     {gap.graduate_only_skills.slice(0, 10).map((item, idx) => (
                       <span key={idx} className="text-xs text-blue-600 bg-blue-50 border border-blue-100 px-2.5 py-1 rounded-full">
                         {item.skill}
                       </span>
                     ))}
                   </div>
+                  <button
+                    onClick={() => navigate(`/chatbot?context=bonus&job=${encodeURIComponent(gap?.job?.job_title || '')}&skills=${encodeURIComponent(gap.graduate_only_skills.slice(0, 5).map(s => s.skill).join(', '))}`)}
+                    className="text-xs text-blue-600 hover:text-blue-700 hover:underline transition"
+                  >
+                    Explore how to leverage these skills →
+                  </button>
                 </div>
               )}
             </div>
