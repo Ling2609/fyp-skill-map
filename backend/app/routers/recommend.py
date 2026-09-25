@@ -53,10 +53,10 @@ def build_job_cache():
                 continue
             skill_names = [s.skill_name for s in job_skills]
             skill_text = " ".join(skill_names)
-            # Embed the combined skill text for SBERT ranking
             vec = embedder.embed(skill_text)
-            # Pre-embed individual skill vectors for coverage computation at request time
+            # Pre-embed and pre-normalise job skill vectors at startup
             skill_vecs = embedder.embed_batch(skill_names)
+            skill_vecs = skill_vecs / (np.linalg.norm(skill_vecs, axis=1, keepdims=True) + 1e-8)
             _job_cache[job.id] = {
                 "vec": vec,
                 "job_id": job.job_id,
@@ -66,7 +66,7 @@ def build_job_cache():
                 "subcategory": job.subcategory,
                 "salary": job.salary,
                 "skills": skill_names,
-                "skill_vecs": skill_vecs,  # pre-computed — no embed_batch at request time
+                "skill_vecs": skill_vecs,
             }
         _cache_built = True
         print(f"Job cache built: {len(_job_cache)} jobs with pre-computed skill vectors")
@@ -74,24 +74,16 @@ def build_job_cache():
         db.close()
 
 
-def compute_skill_coverage(grad_skill_names, grad_embeddings, job_skills, job_skill_vecs):
-    """Compute what % of job skills are covered by the graduate's skills."""
-    if not job_skills or not grad_skill_names:
+def compute_skill_coverage(grad_embeddings_normed, job_skills, job_skill_vecs):
+    """Compute what % of job skills are covered by the graduate's skills.
+    grad_embeddings_normed and job_skill_vecs must already be L2-normalised.
+    """
+    if not job_skills or not len(grad_embeddings_normed):
         return 0.0
-    matched = 0
-    for j_idx in range(len(job_skills)):
-        job_vec = job_skill_vecs[j_idx]
-        best_score = 0.0
-        for g_idx in range(len(grad_skill_names)):
-            grad_vec = grad_embeddings[g_idx]
-            score = float(np.dot(job_vec, grad_vec) / (
-                np.linalg.norm(job_vec) * np.linalg.norm(grad_vec) + 1e-8
-            ))
-            if score > best_score:
-                best_score = score
-        if best_score >= SIMILARITY_THRESHOLD:
-            matched += 1
-    return round((matched / len(job_skills)) * 100, 1)
+    sim_matrix = job_skill_vecs @ grad_embeddings_normed.T  # (J, G) — one matmul
+    best_scores = sim_matrix.max(axis=1)
+    matched = (best_scores >= SIMILARITY_THRESHOLD).sum()
+    return round(float(matched / len(job_skills)) * 100, 1)
 
 
 class ModuleInput(BaseModel):
@@ -192,53 +184,61 @@ def recommend_jobs(
         profile_vec = 0.6 * profile_vec + 0.4 * role_vec
         profile_vec = profile_vec / (np.linalg.norm(profile_vec) + 1e-8)
 
-    # ── Grad skill embeddings for coverage (embed once, reuse across all jobs) ─
+    # ── Grad skill embeddings — embed once, normalise once ─────────────────────
     grad_skill_names = list(skill_weights.keys())
-    grad_embeddings = embedder.embed_batch(grad_skill_names) if grad_skill_names else np.array([])
+    if grad_skill_names:
+        grad_embeddings = embedder.embed_batch(grad_skill_names)
+        grad_embeddings = grad_embeddings / (np.linalg.norm(grad_embeddings, axis=1, keepdims=True) + 1e-8)
+    else:
+        grad_embeddings = np.array([])
 
-    # ── Rank jobs ──────────────────────────────────────────────────────────────
+    # ── SBERT ranking over all jobs ────────────────────────────────────────────
     role_filter_stripped = payload.role_filter.strip()
     known_subcategories = {cached["subcategory"] for cached in _job_cache.values() if cached.get("subcategory")}
     is_subcategory_filter = role_filter_stripped in known_subcategories
 
-    results = []
+    sbert_scores = []
     for job_id, cached in _job_cache.items():
         if is_subcategory_filter and cached.get("subcategory") != role_filter_stripped:
             continue
-
         job_vec = cached["vec"]
-        sbert_score = float(np.dot(profile_vec, job_vec) / (
+        score = float(np.dot(profile_vec, job_vec) / (
             np.linalg.norm(profile_vec) * np.linalg.norm(job_vec) + 1e-8
         ))
 
-        # ── Seniority penalty ──────────────────────────────────────────────────
+        # Seniority penalty
         job_rank = SENIORITY_RANK.get(classify_seniority(cached["job_title"]), 1)
         gap = max(0, job_rank - 0)
         if gap >= 3:
-            sbert_score = 0.0
+            score = 0.0
         else:
-            sbert_score = max(0.0, sbert_score - gap * PENALTY_PER_STEP)
+            score = max(0.0, score - gap * PENALTY_PER_STEP)
 
-        # ── Title boost ────────────────────────────────────────────────────────
+        # Title boost
         if role_filter_stripped and not is_subcategory_filter:
             title_lower = cached["job_title"].lower()
             filter_lower = role_filter_stripped.lower()
             if filter_lower in title_lower:
-                sbert_score = min(sbert_score + 0.2, 1.0)
+                score = min(score + 0.2, 1.0)
             elif any(word in title_lower for word in filter_lower.split() if len(word) > 3):
-                sbert_score = min(sbert_score + 0.08, 1.0)
+                score = min(score + 0.08, 1.0)
 
-        # ── Skill coverage using pre-computed vectors (no embed call) ──────────
+        sbert_scores.append((job_id, score))
+
+    sbert_scores.sort(key=lambda x: -x[1])
+    top_candidates = sbert_scores if payload.top_n <= 0 else sbert_scores[:payload.top_n]
+
+    # ── Coverage on top candidates only — uses pre-computed + pre-normalised vecs ──
+    results = []
+    for job_id, sbert_score in top_candidates:
+        cached = _job_cache[job_id]
         job_skills = cached["skills"]
-        job_skill_vecs = cached["skill_vecs"]
         coverage = compute_skill_coverage(
-            grad_skill_names, grad_embeddings, job_skills, job_skill_vecs
-        ) if job_skills and grad_skill_names else 0.0
+            grad_embeddings, job_skills, cached["skill_vecs"]
+        ) if job_skills and len(grad_embeddings) else 0.0
 
-        # ── Hybrid score ───────────────────────────────────────────────────────
         hybrid = 0.5 * sbert_score + 0.5 * (coverage / 100)
         hybrid_percent = round(hybrid * 100, 1)
-
         results.append({
             "job_id": cached["job_id"],
             "job_title": cached["job_title"],
@@ -252,9 +252,6 @@ def recommend_jobs(
         })
 
     results.sort(key=lambda x: -x["match_percent"])
-
-    if payload.top_n > 0:
-        results = results[:payload.top_n]
 
     return {
         "graduate_profile": {

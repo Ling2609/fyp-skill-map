@@ -109,7 +109,7 @@ export default function Recommend() {
         if (savedRole) setRoleFilter(savedRole)
         if (savedCategory) setActiveCategory(savedCategory)
       } else {
-        doSearch('', 50, 'all')
+        doSearch('', 100, 'all')
       }
     }).catch(() => setSkillCount(0))
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
@@ -124,13 +124,13 @@ export default function Recommend() {
 
   const handleCategoryClick = (cat) => {
     setActiveCategory(cat)
-    if (cat === 'all') { setRoleFilter(''); doSearch('', 0, 'all') }
+    if (cat === 'all') { setRoleFilter(''); doSearch('', 100, 'all') }
     else { setRoleFilter(cat); doSearch(cat, 0, cat) }
   }
 
   const handleFindJobs = () => {
     setActiveCategory('all')
-    doSearch(roleFilter, 0, 'all')
+    doSearch(roleFilter, 100, 'all')
   }
 
   const getMatchBgColor = (pct) => pct >= 70 ? 'bg-emerald-50 text-emerald-700' : pct >= 40 ? 'bg-amber-50 text-amber-700' : 'bg-rose-50 text-rose-600'
@@ -169,7 +169,7 @@ export default function Recommend() {
                 placeholder="Search by role e.g. Software Engineer, Data Analyst..."
                 className="flex-1 bg-transparent text-sm focus:outline-none text-slate-700 placeholder-slate-400" />
               {roleFilter && (
-                <button onClick={() => { setRoleFilter(''); setActiveCategory('all'); doSearch('', 50, 'all') }}
+                <button onClick={() => { setRoleFilter(''); setActiveCategory('all'); doSearch('', 100, 'all') }}
                   className="text-slate-400 hover:text-slate-600 text-xs">✕</button>
               )}
             </div>
