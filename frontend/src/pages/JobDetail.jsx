@@ -8,6 +8,12 @@ const GRADE_LABELS = {
 
 const gradeLabel = (weight) => GRADE_LABELS[weight] || ''
 
+const STATUS_STYLES = {
+  missing: { icon: '✕', circle: 'bg-red-100 text-red-600', text: 'text-red-500' },
+  partial: { icon: '!', circle: 'bg-amber-100 text-amber-700', text: 'text-amber-600' },
+  matched: { icon: '✓', circle: 'bg-green-100 text-green-700', text: 'text-gray-400' },
+}
+
 export default function JobDetail() {
   const navigate = useNavigate()
   const { jobId } = useParams()
@@ -66,6 +72,25 @@ export default function JobDetail() {
   const coverage = gap?.summary?.coverage_percent || 0
   const coverageColor = coverage >= 70 ? 'text-green-600' : coverage >= 40 ? 'text-yellow-600' : 'text-red-500'
   const barColor = coverage >= 70 ? 'bg-green-500' : coverage >= 40 ? 'bg-yellow-500' : 'bg-red-400'
+
+  // One list of every job requirement: gaps first (most actionable), then matches by strength
+  const gapRows = (gap?.missing_skills || []).map(m => ({
+    ...m,
+    status: m.gap_reason?.startsWith('Partly') ? 'partial' : 'missing',
+  }))
+  const matchedRows = [...(gap?.matched_skills || [])]
+    .sort((a, b) => b.similarity - a.similarity)
+    .map(m => ({ ...m, status: 'matched' }))
+  const requirementRows = [
+    ...gapRows.filter(r => r.status === 'missing'),
+    ...gapRows.filter(r => r.status === 'partial'),
+    ...matchedRows,
+  ]
+  const counts = {
+    matched: matchedRows.length,
+    partial: gapRows.filter(r => r.status === 'partial').length,
+    missing: gapRows.filter(r => r.status === 'missing').length,
+  }
 
   return (
     <div className="min-h-screen">
@@ -186,113 +211,97 @@ export default function JobDetail() {
           </div>
         )}
 
-        {/* Skill Gap Tab */}
+        {/* Skill Gap Tab — one checklist of the job's requirements (LinkedIn "How you match" pattern) */}
         {activeTab === 'gap' && (
-          <div className="grid grid-cols-2 gap-4 items-start">
+          <div className="space-y-4">
 
-            {/* Skills you have */}
-            <div className="bg-white rounded-xl p-5 border border-gray-100 shadow-sm">
-              <div className="flex items-center gap-2 mb-4">
-                <div className="w-2 h-2 rounded-full bg-green-500 shrink-0" />
+            {/* Required skills checklist */}
+            <div className="bg-white rounded-xl border border-gray-100 shadow-sm">
+              <div className="flex flex-wrap items-center justify-between gap-3 px-5 py-4 border-b border-gray-100">
                 <h2 className="text-sm font-semibold text-gray-700">
-                  Skills You Have
-                  <span className="ml-1.5 text-xs font-normal text-gray-400">({gap?.summary?.matched_skills})</span>
+                  Required Skills
+                  <span className="ml-1.5 text-xs font-normal text-gray-400">({requirementRows.length})</span>
                 </h2>
+                <div className="flex flex-wrap gap-1.5 text-[11px] font-medium">
+                  <span className="px-2 py-0.5 rounded-full bg-green-50 text-green-700">✓ {counts.matched} matched</span>
+                  {counts.partial > 0 && (
+                    <span className="px-2 py-0.5 rounded-full bg-amber-50 text-amber-700">! {counts.partial} partly covered</span>
+                  )}
+                  {counts.missing > 0 && (
+                    <span className="px-2 py-0.5 rounded-full bg-red-50 text-red-600">✕ {counts.missing} missing</span>
+                  )}
+                </div>
               </div>
-              <div className="space-y-2">
-                {gap?.matched_skills?.length === 0 ? (
-                  <p className="text-xs text-gray-400">No matched skills found</p>
-                ) : (
-                  gap?.matched_skills?.map((item, idx) => (
-                    <div key={idx} className="flex items-center justify-between gap-2 pb-2 border-b border-gray-50 last:border-0 last:pb-0">
-                      <div className="min-w-0 flex-1">
-                        <div className="flex items-center gap-1.5">
+
+              {requirementRows.length === 0 ? (
+                <p className="text-xs text-gray-400 px-5 py-4">No skills found for this job.</p>
+              ) : (
+                <ul className="divide-y divide-gray-50">
+                  {requirementRows.map((item, idx) => {
+                    const s = STATUS_STYLES[item.status]
+                    const isMatched = item.status === 'matched'
+                    return (
+                      <li key={idx} className="flex items-center gap-3 px-5 py-2.5">
+                        {/* Status icon */}
+                        <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0 ${s.circle}`}>
+                          {s.icon}
+                        </span>
+
+                        {/* Skill name + grade */}
+                        <div className="flex items-center gap-1.5 w-60 shrink-0">
                           <span className="text-xs font-medium text-gray-800">{item.job_skill}</span>
-                          {gradeLabel(item.grade_weight) && (
+                          {isMatched && gradeLabel(item.grade_weight) && (
                             <span className="text-[10px] bg-blue-50 text-blue-600 px-1.5 py-0.5 rounded font-semibold">
                               {gradeLabel(item.grade_weight)}
                             </span>
                           )}
                         </div>
-                        {(item.matched_via_module || item.matched_graduate_skill) && (
-                          <span className="text-[10px] text-gray-400">
-                            {item.matched_via_module || item.matched_graduate_skill}
+
+                        {/* Where it came from / why it's missing */}
+                        <span className={`flex-1 min-w-0 text-[11px] ${s.text}`}>
+                          {isMatched ? (item.matched_via_module || item.matched_graduate_skill) : item.gap_reason}
+                        </span>
+
+                        {/* Action / score */}
+                        {isMatched ? (
+                          <span className={`text-xs font-semibold px-2 py-0.5 rounded-full shrink-0 ${
+                            item.similarity >= 0.8 ? 'text-green-700 bg-green-50' :
+                            item.similarity >= 0.65 ? 'text-yellow-700 bg-yellow-50' :
+                            'text-orange-700 bg-orange-50'
+                          }`}>
+                            {Math.round(item.similarity * 100)}%
                           </span>
+                        ) : (
+                          <button
+                            onClick={() => navigate(`/chatbot?skill=${encodeURIComponent(item.job_skill)}&job=${encodeURIComponent(gap?.job?.job_title || '')}&reason=${encodeURIComponent(item.gap_reason || '')}`)}
+                            className="text-xs text-blue-600 bg-blue-50 hover:bg-blue-100 px-2.5 py-1 rounded-full transition font-medium shrink-0"
+                          >
+                            Learn →
+                          </button>
                         )}
-                      </div>
-                      <span className={`text-xs font-semibold px-2 py-0.5 rounded-full shrink-0 ${
-                        item.similarity >= 0.8 ? 'text-green-700 bg-green-50' :
-                        item.similarity >= 0.65 ? 'text-yellow-700 bg-yellow-50' :
-                        'text-orange-700 bg-orange-50'
-                      }`}>
-                        {Math.round(item.similarity * 100)}%
-                      </span>
-                    </div>
-                  ))
-                )}
-              </div>
-            </div>
-
-            {/* Right column */}
-            <div className="space-y-4">
-
-              {/* Skills to develop */}
-              <div className="bg-white rounded-xl p-5 border border-gray-100 shadow-sm">
-                <div className="flex items-center gap-2 mb-4">
-                  <div className="w-2 h-2 rounded-full bg-red-400 shrink-0" />
-                  <h2 className="text-sm font-semibold text-gray-700">
-                    Skills to Develop
-                    <span className="ml-1.5 text-xs font-normal text-gray-400">({gap?.summary?.missing_skills})</span>
-                  </h2>
-                </div>
-                <div className="space-y-2.5">
-                  {gap?.missing_skills?.length === 0 ? (
-                    <p className="text-xs text-gray-400">No missing skills — great match!</p>
-                  ) : (
-                    gap?.missing_skills?.map((item, idx) => (
-                      <div key={idx} className="flex items-center justify-between gap-2 pb-2.5 border-b border-gray-50 last:border-0 last:pb-0">
-                        <div className="min-w-0 flex-1">
-                          <span className="text-xs font-medium text-gray-700">{item.job_skill}</span>
-                          {item.gap_reason && (
-                            <p className={`text-[10px] mt-0.5 ${
-                              item.gap_reason.startsWith('Partly')
-                                ? 'text-amber-500'
-                                : 'text-red-400'
-                            }`}>
-                              {item.gap_reason}
-                            </p>
-                          )}
-                        </div>
-                        <button
-                          onClick={() => navigate(`/chatbot?skill=${encodeURIComponent(item.job_skill)}&job=${encodeURIComponent(gap?.job?.job_title || '')}&reason=${encodeURIComponent(item.gap_reason || '')}`)}
-                          className="text-xs text-blue-600 bg-blue-50 hover:bg-blue-100 px-2.5 py-1 rounded-full transition font-medium shrink-0"
-                        >
-                          Learn →
-                        </button>
-                      </div>
-                    ))
-                  )}
-                </div>
-              </div>
-
-              {/* Bonus skills */}
-              {gap?.graduate_only_skills?.length > 0 && (
-                <div className="bg-white rounded-xl p-5 border border-gray-100 shadow-sm">
-                  <div className="flex items-center gap-2 mb-2">
-                    <div className="w-2 h-2 rounded-full bg-blue-500 shrink-0" />
-                    <h2 className="text-sm font-semibold text-gray-700">Your Bonus Skills</h2>
-                  </div>
-                  <p className="text-xs text-gray-400 mb-3">Extra skills that strengthen your profile.</p>
-                  <div className="flex flex-wrap gap-1.5">
-                    {gap.graduate_only_skills.slice(0, 10).map((item, idx) => (
-                      <span key={idx} className="grow text-xs whitespace-nowrap text-blue-600 bg-blue-50 border border-blue-100 px-2.5 py-1 rounded-full text-center">
-                        {item.skill}
-                      </span>
-                    ))}
-                  </div>
-                </div>
+                      </li>
+                    )
+                  })}
+                </ul>
               )}
             </div>
+
+            {/* Bonus skills */}
+            {gap?.graduate_only_skills?.length > 0 && (
+              <div className="bg-white rounded-xl px-5 py-4 border border-gray-100 shadow-sm">
+                <div className="flex items-baseline gap-2 mb-3">
+                  <h2 className="text-sm font-semibold text-gray-700">Your Bonus Skills</h2>
+                  <span className="text-xs text-gray-400">Extra skills that strengthen your profile.</span>
+                </div>
+                <div className="flex flex-wrap gap-1.5">
+                  {gap.graduate_only_skills.slice(0, 10).map((item, idx) => (
+                    <span key={idx} className="text-xs whitespace-nowrap text-blue-600 bg-blue-50 border border-blue-100 px-2.5 py-1 rounded-full">
+                      {item.skill}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         )}
       </div>
