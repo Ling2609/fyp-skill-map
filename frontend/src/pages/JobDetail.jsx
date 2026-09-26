@@ -8,6 +8,21 @@ const GRADE_LABELS = {
 
 const gradeLabel = (weight) => GRADE_LABELS[weight] || ''
 
+// Match strength = how closely your module skill fits the job requirement (SBERT similarity).
+// Shown as a word, not a %, so it isn't confused with the module grade.
+const matchStrength = (sim) =>
+  sim >= 0.8 ? { label: 'Strong match', style: 'text-green-700 bg-green-50' } :
+  sim >= 0.7 ? { label: 'Good match', style: 'text-yellow-700 bg-yellow-50' } :
+               { label: 'Fair match', style: 'text-orange-700 bg-orange-50' }
+
+// If the job's wording differs from your skill, show your skill so the user sees what it matched
+const matchSource = (item) => {
+  const sameName = item.job_skill?.toLowerCase() === item.matched_graduate_skill?.toLowerCase()
+  const module = item.matched_via_module
+  if (sameName || !item.matched_graduate_skill) return module
+  return module ? `via ${item.matched_graduate_skill} · ${module}` : `via ${item.matched_graduate_skill}`
+}
+
 const STATUS_STYLES = {
   missing: { icon: '✕', circle: 'bg-red-100 text-red-600', text: 'text-red-500' },
   partial: { icon: '!', circle: 'bg-amber-100 text-amber-700', text: 'text-amber-600' },
@@ -233,6 +248,10 @@ export default function JobDetail() {
                 </div>
               </div>
 
+              <p className="px-5 pt-3 text-[11px] text-gray-400">
+                Letter = your module grade. Match = how closely a skill from your modules fits this job's requirement.
+              </p>
+
               {requirementRows.length === 0 ? (
                 <p className="text-xs text-gray-400 px-5 py-4">No skills found for this job.</p>
               ) : (
@@ -259,19 +278,21 @@ export default function JobDetail() {
 
                         {/* Where it came from / why it's missing */}
                         <span className={`flex-1 min-w-0 text-[11px] ${s.text}`}>
-                          {isMatched ? (item.matched_via_module || item.matched_graduate_skill) : item.gap_reason}
+                          {isMatched ? matchSource(item) : item.gap_reason}
                         </span>
 
-                        {/* Action / score */}
-                        {isMatched ? (
-                          <span className={`text-xs font-semibold px-2 py-0.5 rounded-full shrink-0 ${
-                            item.similarity >= 0.8 ? 'text-green-700 bg-green-50' :
-                            item.similarity >= 0.65 ? 'text-yellow-700 bg-yellow-50' :
-                            'text-orange-700 bg-orange-50'
-                          }`}>
-                            {Math.round(item.similarity * 100)}%
-                          </span>
-                        ) : (
+                        {/* Action / match strength */}
+                        {isMatched ? (() => {
+                          const m = matchStrength(item.similarity)
+                          return (
+                            <span
+                              title={`${Math.round(item.similarity * 100)}% similarity between the job requirement and your module skill`}
+                              className={`text-[11px] font-semibold px-2 py-0.5 rounded-full shrink-0 ${m.style}`}
+                            >
+                              {m.label}
+                            </span>
+                          )
+                        })() : (
                           <button
                             onClick={() => navigate(`/chatbot?skill=${encodeURIComponent(item.job_skill)}&job=${encodeURIComponent(gap?.job?.job_title || '')}&reason=${encodeURIComponent(item.gap_reason || '')}`)}
                             className="text-xs text-blue-600 bg-blue-50 hover:bg-blue-100 px-2.5 py-1 rounded-full transition font-medium shrink-0"

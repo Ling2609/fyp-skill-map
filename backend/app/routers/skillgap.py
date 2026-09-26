@@ -133,8 +133,11 @@ def analyse_skill_gap(
                 "gap_reason": gap_reason,
             })
 
-    # Grad skills not required by this job
+    # Grad skills not related to this job's requirements.
+    # Exclude skills used for a match AND skills behind a "Partly covered" gap —
+    # otherwise the same skill shows as both "related to a gap" and "extra".
     matched_grad_skills = {m["matched_graduate_skill"] for m in matched}
+    matched_grad_skills |= {m["closest_graduate_skill"] for m in missing if m["similarity"] >= 0.4}
     graduate_only = [
         {"skill": s, "grade_weight": graduate_skills[s]}
         for s in grad_skill_names
