@@ -241,6 +241,12 @@ export default function Recommend() {
                         </span>
                       </div>
                       <div className="flex gap-1.5 mt-2.5 flex-wrap">
+                        {job.source === 'live' && (
+                          <span className="text-xs bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-md font-semibold">Hiring now</span>
+                        )}
+                        {job.country && job.country !== 'MY' && (
+                          <span className="text-xs bg-slate-100 text-slate-500 px-2 py-0.5 rounded-md font-medium">{job.country === 'SG' ? 'Singapore' : job.country}</span>
+                        )}
                         <span className="text-xs bg-slate-100 text-slate-500 px-2 py-0.5 rounded-md font-medium">{job.subcategory}</span>
                         {job.salary && job.salary !== 'nan' && (
                           <span className="text-xs bg-slate-100 text-slate-500 px-2 py-0.5 rounded-md font-medium">{job.salary}</span>

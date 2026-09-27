@@ -13,3 +13,6 @@ frontend/.env
 # OS
 .DS_Store
 Thumbs.db
+
+# Live job API cache (third-party data, regenerate with fetch_live_jobs.py)
+backend/data/live_jobs_cache.json

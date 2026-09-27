@@ -8,6 +8,17 @@ const GRADE_LABELS = {
 
 const gradeLabel = (weight) => GRADE_LABELS[weight] || ''
 
+// "today", "3 days ago", "2 weeks ago"
+const postedAgo = (iso) => {
+  if (!iso) return ''
+  const days = Math.floor((Date.now() - new Date(iso).getTime()) / 86400000)
+  if (isNaN(days)) return ''
+  if (days <= 0) return 'today'
+  if (days === 1) return 'yesterday'
+  if (days < 14) return `${days} days ago`
+  return `${Math.floor(days / 7)} weeks ago`
+}
+
 const GAP_STYLES = {
   missing: { icon: '✕', circle: 'bg-red-100 text-red-600', text: 'text-red-500' },
   partial: { icon: '!', circle: 'bg-amber-100 text-amber-700', text: 'text-amber-600' },
@@ -123,6 +134,25 @@ export default function JobDetail() {
             <div className="flex-1 min-w-0">
               <h1 className="text-xl font-bold text-gray-800">{gap?.job?.job_title}</h1>
               <p className="text-sm text-gray-500 mt-1">{gap?.job?.company} · {gap?.job?.location}</p>
+              {/* Live jobs (JSearch): real apply link. Dataset jobs (JobStreet 2024): provenance only,
+                  because those postings have closed and are used for market analysis */}
+              {gap?.job?.source === 'live' ? (
+                <div className="mt-3 flex flex-wrap items-center gap-3">
+                  <a
+                    href={gap.job.source_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-xs font-semibold text-white bg-blue-700 hover:bg-blue-800 px-3.5 py-1.5 rounded-full transition"
+                  >
+                    Apply on {gap.job.publisher || 'employer site'} ↗
+                  </a>
+                  {postedAgo(gap.job.listing_date) && (
+                    <span className="text-[11px] text-gray-400">Posted {postedAgo(gap.job.listing_date)}</span>
+                  )}
+                </div>
+              ) : (
+                <p className="text-[11px] text-gray-400 mt-0.5">Job posting data from JobStreet (2024)</p>
+              )}
               <div className="mt-2">
                 {gap?.job?.salary && gap.job.salary !== 'nan' ? (
                   <span className="text-xs bg-green-50 text-green-700 px-2.5 py-1 rounded-full font-medium">

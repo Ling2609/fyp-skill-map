@@ -188,6 +188,11 @@ def analyse_skill_gap(
             "location": job.location,
             "salary": job.salary,
             "description": job.description,
+            "source": job.source,
+            "source_url": job.source_url,
+            "publisher": job.publisher,
+            "listing_date": job.listing_date.isoformat() if job.listing_date else None,
+            "country": job.country,
         },
         "summary": {
             "job_skills_total": len(job_skills),

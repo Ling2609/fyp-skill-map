@@ -16,6 +16,12 @@ class Job(Base):
     salary = Column(String)
     description = Column(String)
     formatted_description = Column(String, nullable=True)  # JSON array of bullet strings
+    # Where the job came from
+    source = Column(String, nullable=False, default="dataset", server_default="dataset")  # "dataset" (JobStreet 2024) or "live" (JSearch)
+    source_url = Column(String, nullable=True)       # apply link (live jobs only)
+    publisher = Column(String, nullable=True)        # e.g. LinkedIn, Hiredly (live jobs only)
+    listing_date = Column(DateTime(timezone=True), nullable=True)
+    country = Column(String(2), nullable=False, default="MY", server_default="MY")  # ISO code; stats use MY only
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
 

@@ -65,6 +65,8 @@ def build_job_cache():
                 "location": job.location,
                 "subcategory": job.subcategory,
                 "salary": job.salary,
+                "source": job.source,
+                "country": job.country,
                 "skills": skill_names,
                 "skill_vecs": skill_vecs,
             }
@@ -246,6 +248,8 @@ def recommend_jobs(
             "location": cached["location"],
             "subcategory": cached["subcategory"],
             "salary": cached["salary"],
+            "source": cached["source"],
+            "country": cached["country"],
             "match_score": hybrid,
             "match_percent": hybrid_percent,
             "top_job_skills": job_skills[:5],
