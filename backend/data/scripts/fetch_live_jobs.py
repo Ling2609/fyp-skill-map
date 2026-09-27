@@ -133,7 +133,7 @@ def format_salary(job: dict) -> str | None:
     period = (job.get("job_salary_period") or "").lower()
     per = {"month": " per month", "year": " per year", "hour": " per hour"}.get(period, "")
     fmt = lambda v: f"{cur} {int(v):,}".strip()
-    return f"{fmt(lo)} – {fmt(hi)}{per}" if lo and hi else f"{fmt(lo or hi)}{per}"
+    return f"{fmt(lo)} - {fmt(hi)}{per}" if lo and hi else f"{fmt(lo or hi)}{per}"
 
 
 def parse_date(value: str | None):
@@ -145,8 +145,10 @@ def parse_date(value: str | None):
         return None
 
 
-def fetch(query: str, country: str) -> list[dict]:
-    """Call JSearch; retry up to 3 times on timeouts. Returns [] instead of crashing."""
+def fetch(query: str, country: str) -> list[dict] | None:
+    """Call JSearch; retry up to 3 times on timeouts.
+    Returns None if the call failed, so the caller knows not to cache it
+    (an empty list means the API worked but found no jobs)."""
     headers = {"x-rapidapi-key": settings.jsearch_key, "x-rapidapi-host": API_HOST}
     params = {"query": query, "country": country, "date_posted": "month", "num_pages": str(PAGES[country])}
     for attempt in range(1, 4):
@@ -158,11 +160,15 @@ def fetch(query: str, country: str) -> list[dict]:
             continue
         if not r.ok:
             print(f"  ! HTTP {r.status_code}: {r.text[:200]}")
-            return []
-        data = r.json().get("data")
+            return None
+        try:
+            data = r.json().get("data")
+        except ValueError:
+            print(f"  ! response was not JSON: {r.text[:200]}")
+            return None
         return data if isinstance(data, list) else (data or {}).get("jobs", [])
     print("  ! giving up on this query")
-    return []
+    return None
 
 
 def clean_company(name: str) -> str:
@@ -179,7 +185,8 @@ def load_cache() -> dict:
 
 
 def run(dry_run: bool, use_cache: bool, new_only: bool):
-    cache = load_cache() if (use_cache or new_only) else {}
+    # Always load the old cache, so a failed query in a full refresh keeps its previous results
+    cache = load_cache()
     if use_cache:
         if not cache:
             sys.exit(f"No cache found at {CACHE_FILE}. Run with --dry-run first.")
@@ -205,6 +212,10 @@ def run(dry_run: bool, use_cache: bool, new_only: bool):
             else:
                 results = fetch(query, country)
                 credits += PAGES[country]
+                if results is None:
+                    # Failed call: keep any older cached results and retry this query next run
+                    print("  ! skipped (not cached, will be retried next run)")
+                    continue
                 cache[query] = results
             for j in results:
                 stats["fetched"] += 1

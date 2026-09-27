@@ -11,6 +11,7 @@ from app.models.user import User
 from app.models.user_module import UserModule
 import numpy as np
 import re
+import threading
 
 SENIORITY_PATTERNS = {
     "junior":  r"\b(junior|jr\.?|entry.?level|graduate|intern|trainee|associate)\b",
@@ -34,27 +35,43 @@ router = APIRouter(prefix="/recommend", tags=["recommend"])
 embedder = Embedder()
 
 _job_cache = {}
-_cache_built = False
+_cache_lock = threading.Lock()   # requests run in parallel threads; one cache update at a time
 
 SIMILARITY_THRESHOLD = 0.6
 
 
 def build_job_cache():
-    global _job_cache, _cache_built
-    if _cache_built:
-        return
-    print("Building job embedding cache (this runs once at startup)...")
+    """Keep the in-memory job cache in sync with the database.
+    First call (at startup) embeds every job. Later calls (each /recommend request)
+    only embed jobs added since, e.g. by fetch_live_jobs.py, and drop deleted ones,
+    so new live jobs appear without restarting uvicorn."""
+    with _cache_lock:
+        _sync_job_cache()
+
+
+def _sync_job_cache():
     db = SessionLocal()
     try:
-        jobs = db.query(Job).all()
-        for job in jobs:
-            job_skills = db.query(JobSkill).filter(JobSkill.job_id == job.id).all()
-            if not job_skills:
+        # Jobs that have skills (a job's skills are committed together, so this is safe mid-fetch)
+        db_ids = {row[0] for row in db.query(JobSkill.job_id).distinct()}
+        for gone in set(_job_cache) - db_ids:
+            del _job_cache[gone]
+        new_ids = db_ids - set(_job_cache)
+        if not new_ids:
+            return
+        print(f"Adding {len(new_ids)} jobs to the job embedding cache...")
+
+        skills_by_job = {}
+        for s in db.query(JobSkill).filter(JobSkill.job_id.in_(new_ids)).all():
+            skills_by_job.setdefault(s.job_id, []).append(s.skill_name)
+
+        for job in db.query(Job).filter(Job.id.in_(new_ids)).all():
+            skill_names = skills_by_job.get(job.id)
+            if not skill_names:
                 continue
-            skill_names = [s.skill_name for s in job_skills]
             skill_text = " ".join(skill_names)
             vec = embedder.embed(skill_text)
-            # Pre-embed and pre-normalise job skill vectors at startup
+            # Pre-embed and pre-normalise job skill vectors once per job
             skill_vecs = embedder.embed_batch(skill_names)
             skill_vecs = skill_vecs / (np.linalg.norm(skill_vecs, axis=1, keepdims=True) + 1e-8)
             _job_cache[job.id] = {
@@ -70,8 +87,7 @@ def build_job_cache():
                 "skills": skill_names,
                 "skill_vecs": skill_vecs,
             }
-        _cache_built = True
-        print(f"Job cache built: {len(_job_cache)} jobs with pre-computed skill vectors")
+        print(f"Job cache ready: {len(_job_cache)} jobs with pre-computed skill vectors")
     finally:
         db.close()
 
@@ -199,11 +215,11 @@ def recommend_jobs(
 
     # ── SBERT ranking over all jobs ────────────────────────────────────────────
     role_filter_stripped = payload.role_filter.strip()
-    known_subcategories = {cached["subcategory"] for cached in _job_cache.values() if cached.get("subcategory")}
+    known_subcategories = {cached["subcategory"] for cached in list(_job_cache.values()) if cached.get("subcategory")}
     is_subcategory_filter = role_filter_stripped in known_subcategories
 
     sbert_scores = []
-    for job_id, cached in _job_cache.items():
+    for job_id, cached in list(_job_cache.items()):
         if not payload.include_past and cached.get("source") != "live":
             continue
         if is_subcategory_filter and cached.get("subcategory") != role_filter_stripped:
@@ -238,7 +254,9 @@ def recommend_jobs(
     # ── Coverage on top candidates only — uses pre-computed + pre-normalised vecs ──
     results = []
     for job_id, sbert_score in top_candidates:
-        cached = _job_cache[job_id]
+        cached = _job_cache.get(job_id)
+        if cached is None:   # removed by a cache update from another request meanwhile
+            continue
         job_skills = cached["skills"]
         matched, total = compute_skill_coverage(grad_embeddings, job_skills, cached["skill_vecs"])
         coverage = round(matched / total * 100, 1) if total else 0.0
@@ -277,7 +295,7 @@ def recommend_jobs(
         "role_filter": payload.role_filter,
         "recommendations": results,
         "total_jobs_compared": sum(
-            1 for c in _job_cache.values() if payload.include_past or c.get("source") == "live"
+            1 for c in list(_job_cache.values()) if payload.include_past or c.get("source") == "live"
         ),
     }
 

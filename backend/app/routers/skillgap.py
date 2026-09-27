@@ -142,7 +142,7 @@ def analyse_skill_gap(
                 "grade_weight": graduate_skills.get(best_match, 0),
                 "evidence_source": skill_source_type.get(best_match, "module"),  # module / project / cert
                 # direct  = your skill is essentially the same as the requirement (≥ 0.8)
-                # related = you studied a close topic, not this exact skill (0.6–0.79)
+                # related = you studied a close topic, not this exact skill (0.6-0.79)
                 "evidence": "direct" if best_score >= DIRECT_THRESHOLD else "related",
             })
         else:

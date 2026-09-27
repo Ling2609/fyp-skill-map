@@ -31,6 +31,7 @@ export function AuthProvider({ children }) {
   }, [])
 
   const login = async (token) => {
+    sessionStorage.clear()   // don't show a previous user's cached job matches
     localStorage.setItem('token', token)
     try {
       const res = await api.get('/auth/me')

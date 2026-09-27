@@ -133,12 +133,23 @@ export default function Chatbot() {
 
   const currentMode = MODES.find(m => m.key === mode)
 
-  const getContext = useCallback(() => {
+  const userSkills = useRef(null)   // loaded once from /profile/skills
+
+  const getContext = useCallback(async () => {
     const ctx = {}
+    // The student's real skill profile (works even if Job Matches wasn't opened yet)
+    if (userSkills.current === null) {
+      try {
+        const res = await api.get('/profile/skills')
+        userSkills.current = res.data.skills || []
+      } catch {
+        userSkills.current = []
+      }
+    }
+    ctx.user_skills = userSkills.current
     const savedResults = sessionStorage.getItem('lastRecommendResults')
     if (savedResults) {
       const data = JSON.parse(savedResults)
-      ctx.user_skills = data.graduate_profile?.skills || []
       ctx.matched_jobs = data.recommendations?.slice(0, 3).map(j => ({
         job_title: j.job_title,
         company: j.company,
@@ -153,10 +164,11 @@ export default function Chatbot() {
   const sendMessages = useCallback(async (msgs) => {
     setLoading(true)
     try {
-      const ctx = getContext()
+      const ctx = await getContext()
       const res = await api.post('/chatbot/', {
         mode,
-        messages: msgs.map(m => ({ role: m.role, content: m.content })),
+        // Only the last 20 messages: keeps each request small (backend limit is 40)
+        messages: msgs.slice(-20).map(m => ({ role: m.role, content: m.content })),
         ...ctx,
       })
       setMessages(prev => [...prev, { role: 'assistant', content: res.data.reply }])
@@ -217,7 +229,7 @@ export default function Chatbot() {
   }
 
   const switchMode = (newMode) => {
-    if (newMode === mode) return
+    if (newMode === mode || loading) return   // don't switch while a reply is on its way
     hasAutoSent.current = false
     setMode(newMode)
   }
@@ -238,7 +250,8 @@ export default function Chatbot() {
               <button
                 key={m.key}
                 onClick={() => switchMode(m.key)}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
+                disabled={loading}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-all disabled:cursor-not-allowed ${
                   mode === m.key
                     ? 'bg-white text-slate-800 shadow-sm'
                     : 'text-slate-500 hover:text-slate-700'

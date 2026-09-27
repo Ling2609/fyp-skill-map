@@ -5,6 +5,8 @@ from sqlalchemy import distinct
 from sqlalchemy.orm import Session
 from app.database import get_db
 from app.models.job import Job, JobSkill
+from app.models.user import User
+from app.routers.auth import get_current_user
 
 router = APIRouter(prefix="/jobs", tags=["jobs"])
 
@@ -81,7 +83,11 @@ def get_subcategories(include_past: bool = False, db: Session = Depends(get_db))
 
 
 @router.get("/{job_id}/description")
-def get_job_description(job_id: str, db: Session = Depends(get_db)):
+def get_job_description(
+    job_id: str,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),  # logged-in only: this can call Groq
+):
     decoded_id = job_id.replace("%2E", ".").replace("%20", " ")
     job = db.query(Job).filter(Job.job_id == decoded_id).first()
     if not job:

@@ -1,4 +1,4 @@
-import { Fragment, useState, useEffect } from 'react'
+import { Fragment, useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import api from '../api'
 import PageHeader from '../components/PageHeader'
@@ -40,7 +40,7 @@ function NoSkillsState() {
 export default function Recommend() {
   const navigate = useNavigate()
 
-  const [skillCount, setSkillCount] = useState(null) // null = loading, 0 = empty profile
+  const [skillCount, setSkillCount] = useState(null) // null = loading, 0 = empty profile, -1 = failed to load
   const [results, setResults] = useState(null)
   const [sortBy, setSortBy] = useState('fit')   // 'fit' | 'skills'
   const [loading, setLoading] = useState(false)
@@ -51,8 +51,10 @@ export default function Recommend() {
   const [subcategories, setSubcategories] = useState([])
   const [activeCategory, setActiveCategory] = useState('all')
   const [visibleCount, setVisibleCount] = useState(10)
+  const latestSearch = useRef(0)   // only the newest search may update the page
 
   const doSearch = async (role, count, category) => {
+    const searchId = ++latestSearch.current
     const searchRole = role !== undefined ? role : roleFilter
     const searchCount = count || 0  // 0 = return all results
     const searchCategory = category !== undefined ? category : activeCategory
@@ -76,8 +78,10 @@ export default function Recommend() {
         role_filter: searchRole,
       })
       clearInterval(stepInterval)
+      if (searchId !== latestSearch.current) return   // a newer search has started, ignore this one
       setLoadingProgress(100)
       setTimeout(() => {
+        if (searchId !== latestSearch.current) return
         setResults(res.data)
         sessionStorage.setItem('lastRecommendResults', JSON.stringify(res.data))
         sessionStorage.setItem('lastRoleFilter', searchRole)
@@ -86,6 +90,7 @@ export default function Recommend() {
       }, 300)
     } catch (err) {
       clearInterval(stepInterval)
+      if (searchId !== latestSearch.current) return
       setError(err.response?.data?.detail || 'Failed to get recommendations')
       setLoading(false)
     }
@@ -115,7 +120,11 @@ export default function Recommend() {
       } else {
         doSearch('', 0, 'all')
       }
-    }).catch(() => setSkillCount(0))
+    }).catch(() => {
+      // Not "empty profile": the request failed (e.g. server down). Show the error instead.
+      setError('Could not load your skill profile. Please check the server is running and refresh.')
+      setSkillCount(-1)
+    })
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   if (skillCount === null) return (

@@ -24,7 +24,8 @@ export default function Dashboard() {
         topJobs: top3,
         profileStats: {
           skills: data.graduate_profile?.unique_skills || 0,
-          bestMatch: top3[0]?.coverage_percent ?? top3[0]?.match_percent ?? 0,   // skill coverage, same as Job Detail
+          // Skill coverage of the #1 job (Best fit order), whole number like Job Detail; null = no jobs yet
+          bestMatch: top3[0] ? Math.round(top3[0].coverage_percent ?? top3[0].match_percent ?? 0) : null,
           bestMatchTitle: top3[0]?.job_title || null,
           modules: data.graduate_profile?.modules_count || 0,
         },
@@ -82,10 +83,10 @@ export default function Dashboard() {
                 dim: !profileStats.skills,
               },
               {
-                label: 'Best Match',
-                value: profileStats.bestMatch ? `${profileStats.bestMatch}%` : '—',
+                label: 'Top Match',
+                value: profileStats.bestMatch != null ? `${profileStats.bestMatch}%` : '—',
                 sub: profileStats.bestMatchTitle || 'find jobs to see',
-                dim: !profileStats.bestMatch,
+                dim: profileStats.bestMatch == null,
                 matchPct: profileStats.bestMatch,
               },
               {
@@ -99,7 +100,7 @@ export default function Dashboard() {
                 <p className="text-xs font-medium text-slate-400 uppercase tracking-wider mb-3">{label}</p>
                 <p className={`text-3xl font-semibold tracking-tight leading-none ${
                   dim ? 'text-slate-200' :
-                  matchPct ? getMatchColor(matchPct) :
+                  matchPct != null ? getMatchColor(matchPct) :
                   'text-slate-900'
                 }`}>
                   {value}

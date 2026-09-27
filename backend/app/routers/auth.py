@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
 from app.database import get_db
-from app.models.user import User
+from app.models.user import User, UserRole
 from app.schemas.user import UserRegister, UserLogin, UserOut, Token
 from app.auth.utils import hash_password, verify_password, create_access_token, decode_token
 
@@ -101,7 +101,7 @@ def register(payload: UserRegister, db: Session = Depends(get_db)):
         last_name=payload.last_name.strip(),
         email=payload.email,
         hashed_password=hash_password(payload.password),
-        role=payload.role,
+        role=UserRole(payload.role),
     )
     db.add(user)
     db.commit()

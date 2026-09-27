@@ -162,7 +162,13 @@ export default function Register() {
       })
       navigate('/login', { state: { message: 'Account created successfully! Please sign in.' } })
     } catch (err) {
-      setError(err.response?.data?.detail || 'Registration failed')
+      // FastAPI sends a string for our own errors, but a list for validation (422) errors
+      const detail = err.response?.data?.detail
+      setError(
+        Array.isArray(detail)
+          ? detail.map(d => (d.msg || '').replace(/^Value error, /, '')).join('. ')
+          : detail || 'Registration failed'
+      )
     } finally {
       setLoading(false)
     }
@@ -288,6 +294,7 @@ export default function Register() {
                 placeholder="••••••••"
                 required
                 minLength={8}
+                maxLength={72}
               />
               <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-2.5">
                 <EyeIcon show={showPassword} />

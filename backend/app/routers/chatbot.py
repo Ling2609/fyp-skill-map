@@ -5,10 +5,12 @@ Chatbot router — two modes:
 
 Context-aware: receives user skill profile, target job, and exact skill gaps.
 """
-from fastapi import APIRouter, HTTPException
-from pydantic import BaseModel
+from fastapi import APIRouter, Depends, HTTPException
+from pydantic import BaseModel, Field
 from groq import Groq
 from app.config import settings
+from app.models.user import User
+from app.routers.auth import get_current_user
 
 router = APIRouter(prefix="/chatbot", tags=["chatbot"])
 
@@ -28,7 +30,7 @@ Your role:
 - Use their skill profile and job match data to give personalised career direction advice
 - Suggest specific job roles or career paths that suit them
 - Be encouraging but realistic — if there are skill gaps, address them honestly
-- Keep responses concise (3–5 sentences max per reply) and conversational
+- Keep responses concise (3-5 sentences max per reply) and conversational
 - Reference their actual skills and matched jobs when relevant
 - Focus on the Malaysian market context
 
@@ -39,7 +41,7 @@ SKILL_DEVELOPMENT_SYSTEM = """You are a technical learning guide specialising in
 Your role:
 - For each missing skill the user asks about, provide a clear, structured learning path
 - Suggest SPECIFIC free resources: exact Coursera courses, YouTube channels/playlists, official docs, freeCodeCamp tutorials
-- Estimate realistic time to learn (e.g., "2–3 weeks with 1 hour/day")
+- Estimate realistic time to learn (e.g., "2-3 weeks with 1 hour/day")
 - Show how the skill connects to the user's target job role
 - Keep responses focused — one skill at a time, actionable steps
 
@@ -56,12 +58,12 @@ Tone: Direct and practical. No fluff."""
 
 class Message(BaseModel):
     role: str
-    content: str
+    content: str = Field(max_length=4000)
 
 
 class ChatRequest(BaseModel):
     mode: str
-    messages: list[Message]
+    messages: list[Message] = Field(max_length=40)  # keeps each Groq call small
     user_skills: list[str] | None = None
     missing_skills: list[str] | None = None
     matched_jobs: list[dict] | None = None
@@ -93,7 +95,7 @@ def build_context_block(req: ChatRequest) -> str:
 # ── Endpoint ──────────────────────────────────────────────────────────────────
 
 @router.post("/")
-def chat(req: ChatRequest):
+def chat(req: ChatRequest, current_user: User = Depends(get_current_user)):
     if req.mode not in ("career_counsellor", "skill_development"):
         raise HTTPException(status_code=400, detail="mode must be 'career_counsellor' or 'skill_development'")
     if not req.messages:
