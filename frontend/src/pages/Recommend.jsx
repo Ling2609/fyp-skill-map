@@ -42,6 +42,8 @@ export default function Recommend() {
 
   const [skillCount, setSkillCount] = useState(null) // null = loading, 0 = empty profile
   const [results, setResults] = useState(null)
+  const [sortBy, setSortBy] = useState('fit')   // 'fit' | 'skills'
+  const [liveOnly, setLiveOnly] = useState(false) // true = only jobs you can apply to now
   const [loading, setLoading] = useState(false)
   const [loadingStep, setLoadingStep] = useState(0)
   const [loadingProgress, setLoadingProgress] = useState(0)
@@ -104,12 +106,15 @@ export default function Recommend() {
       const savedRole = sessionStorage.getItem('lastRoleFilter')
       const savedCategory = sessionStorage.getItem('lastActiveCategory')
 
-      if (savedResults) {
-        setResults(JSON.parse(savedResults))
+      // Results saved by an older version lack skills_total → fetch fresh instead of showing old scores
+      const parsed = savedResults ? JSON.parse(savedResults) : null
+      const isCurrent = parsed?.recommendations?.length ? 'skills_total' in parsed.recommendations[0] : false
+      if (isCurrent) {
+        setResults(parsed)
         if (savedRole) setRoleFilter(savedRole)
         if (savedCategory) setActiveCategory(savedCategory)
       } else {
-        doSearch('', 100, 'all')
+        doSearch('', 0, 'all')
       }
     }).catch(() => setSkillCount(0))
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
@@ -124,20 +129,29 @@ export default function Recommend() {
 
   const handleCategoryClick = (cat) => {
     setActiveCategory(cat)
-    if (cat === 'all') { setRoleFilter(''); doSearch('', 100, 'all') }
+    if (cat === 'all') { setRoleFilter(''); doSearch('', 0, 'all') }
     else { setRoleFilter(cat); doSearch(cat, 0, cat) }
   }
 
   const handleFindJobs = () => {
     setActiveCategory('all')
-    doSearch(roleFilter, 100, 'all')
+    doSearch(roleFilter, 0, 'all')
   }
 
   const getMatchBgColor = (pct) => pct >= 70 ? 'bg-emerald-50 text-emerald-700' : pct >= 40 ? 'bg-amber-50 text-amber-700' : 'bg-rose-50 text-rose-600'
   const getAccentColor  = (pct) => pct >= 70 ? 'bg-emerald-400' : pct >= 40 ? 'bg-amber-400' : 'bg-rose-400'
 
-  const visibleJobs = results?.recommendations?.slice(0, visibleCount) || []
-  const hasMore = results && visibleCount < results.recommendations.length
+  // Displayed number = skill coverage (same as Job Detail). Default order = "best fit" (backend ranking,
+  // which also weighs overall profile similarity and seniority); "most skills" re-sorts by coverage.
+  const coverageOf = (job) => job.coverage_percent ?? job.match_percent
+  const allJobs = results?.recommendations || []
+  const liveCount = allJobs.filter(j => j.source === 'live').length
+  const shownJobs = liveOnly ? allJobs.filter(j => j.source === 'live') : allJobs
+  const sortedJobs = sortBy === 'skills'
+    ? [...shownJobs].sort((a, b) => coverageOf(b) - coverageOf(a) || b.match_score - a.match_score)
+    : shownJobs
+  const visibleJobs = sortedJobs.slice(0, visibleCount)
+  const hasMore = results && visibleCount < sortedJobs.length
 
   return (
     <div className="h-screen bg-slate-50 flex flex-col">
@@ -146,7 +160,7 @@ export default function Recommend() {
           <div className="flex items-start justify-between mb-4 pt-1">
             <div>
               <p className="text-[11px] font-semibold text-blue-600 uppercase tracking-widest mb-2">Job Matches</p>
-              <h1 className="text-2xl font-semibold tracking-tight text-slate-900">Find Your Best Fit</h1>
+              <h1 className="text-2xl font-semibold tracking-tight text-slate-900">Explore Your Career Fit</h1>
               <p className="text-sm text-slate-500 mt-1">
                 Matched from your full skill profile
                 {results && ` · ${results.total_jobs_compared} jobs compared · ${results.recommendations.length} ranked`}
@@ -169,7 +183,7 @@ export default function Recommend() {
                 placeholder="Search by role e.g. Software Engineer, Data Analyst..."
                 className="flex-1 bg-transparent text-sm focus:outline-none text-slate-700 placeholder-slate-400" />
               {roleFilter && (
-                <button onClick={() => { setRoleFilter(''); setActiveCategory('all'); doSearch('', 100, 'all') }}
+                <button onClick={() => { setRoleFilter(''); setActiveCategory('all'); doSearch('', 0, 'all') }}
                   className="text-slate-400 hover:text-slate-600 text-xs">✕</button>
               )}
             </div>
@@ -215,6 +229,35 @@ export default function Recommend() {
 
         {results && !loading && (
           <div className="space-y-1.5">
+            {results.recommendations?.length > 0 && (
+              <div className="flex flex-wrap items-center justify-between gap-2 pb-1 text-xs">
+                {/* Left: which jobs to show */}
+                <Toggle
+                  label="Show"
+                  value={liveOnly ? 'live' : 'all'}
+                  onChange={v => { setLiveOnly(v === 'live'); setVisibleCount(10) }}
+                  options={[
+                    { key: 'all', label: 'All jobs', hint: 'Current openings plus 2024 JobStreet postings (market data)' },
+                    { key: 'live', label: `Hiring now (${liveCount})`, hint: 'Only current openings you can apply to' },
+                  ]}
+                />
+                {/* Right: order */}
+                <Toggle
+                  label="Sort by"
+                  value={sortBy}
+                  onChange={v => { setSortBy(v); setVisibleCount(10) }}
+                  options={[
+                    { key: 'fit', label: 'Best fit', hint: 'Skills matched, plus how well your whole profile and level fit the role' },
+                    { key: 'skills', label: 'Most skills matched', hint: 'Highest share of required skills you already have' },
+                  ]}
+                />
+              </div>
+            )}
+            {liveOnly && results.recommendations?.length > 0 && sortedJobs.length === 0 && (
+              <div className="bg-white rounded-xl p-8 text-center border border-slate-200">
+                <p className="text-slate-400 text-sm">No current openings match this search. Try "All jobs".</p>
+              </div>
+            )}
             {results.recommendations?.length === 0 ? (
               <div className="bg-white rounded-xl p-10 text-center border border-slate-200">
                 <p className="text-slate-400 text-sm">No matches found. Try a broader search or different category.</p>
@@ -225,7 +268,7 @@ export default function Recommend() {
                   <div key={job.job_id} onClick={() => navigate(`/jobs/${encodeURIComponent(job.job_id)}`)}
                     className="bg-white rounded-xl border border-slate-200 cursor-pointer hover:border-blue-200 hover:shadow-sm transition group overflow-hidden flex">
                     {/* Left accent bar */}
-                    <div className={`w-1 shrink-0 ${getAccentColor(job.match_percent)}`} />
+                    <div className={`w-1 shrink-0 ${getAccentColor(coverageOf(job))}`} />
                     <div className="flex-1 px-4 py-3.5 min-w-0">
                       <div className="flex items-center justify-between gap-3">
                         <div className="flex items-center gap-2.5 min-w-0">
@@ -236,8 +279,11 @@ export default function Recommend() {
                           </div>
                         </div>
                         {/* Match % pill */}
-                        <span className={`shrink-0 text-xs font-bold tabular-nums px-2.5 py-1 rounded-full ${getMatchBgColor(job.match_percent)}`}>
-                          {job.match_percent}%
+                        <span
+                          title="Required skills you already have"
+                          className={`shrink-0 text-xs font-bold tabular-nums px-2.5 py-1 rounded-full ${getMatchBgColor(coverageOf(job))}`}
+                        >
+                          {job.skills_total ? `${job.skills_matched}/${job.skills_total} skills` : `${job.match_percent}%`}
                         </span>
                       </div>
                       <div className="flex gap-1.5 mt-2.5 flex-wrap">
@@ -261,17 +307,38 @@ export default function Recommend() {
                 {hasMore && (
                   <button onClick={() => setVisibleCount(prev => prev + 10)}
                     className="w-full py-3 bg-white border border-slate-200 rounded-xl text-sm text-slate-500 hover:border-blue-300 hover:text-blue-600 transition mt-2">
-                    Show more ({results.recommendations.length - visibleCount} remaining)
+                    Show more ({sortedJobs.length - visibleCount} remaining)
                   </button>
                 )}
-                {!hasMore && results.recommendations.length > 0 && (
-                  <p className="text-center text-xs text-slate-400 py-3">All {results.recommendations.length} matches shown</p>
+                {!hasMore && sortedJobs.length > 0 && (
+                  <p className="text-center text-xs text-slate-400 py-3">All {sortedJobs.length} matches shown</p>
                 )}
               </>
             )}
           </div>
         )}
       </div>
+    </div>
+  )
+}
+
+// "Sort by  Best fit | Most skills matched" style text toggle
+function Toggle({ label, value, onChange, options }) {
+  return (
+    <div className="flex items-center gap-1.5">
+      <span className="text-slate-400">{label}</span>
+      {options.map((opt, i) => (
+        <span key={opt.key} className="flex items-center gap-1.5">
+          {i > 0 && <span className="text-slate-300">|</span>}
+          <button
+            title={opt.hint}
+            onClick={() => onChange(opt.key)}
+            className={`transition ${value === opt.key ? 'text-blue-700 font-semibold' : 'text-slate-500 hover:text-slate-700'}`}
+          >
+            {opt.label}
+          </button>
+        </span>
+      ))}
     </div>
   )
 }

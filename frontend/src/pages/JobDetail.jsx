@@ -134,26 +134,8 @@ export default function JobDetail() {
             <div className="flex-1 min-w-0">
               <h1 className="text-xl font-bold text-gray-800">{gap?.job?.job_title}</h1>
               <p className="text-sm text-gray-500 mt-1">{gap?.job?.company} · {gap?.job?.location}</p>
-              {/* Live jobs (JSearch): real apply link. Dataset jobs (JobStreet 2024): provenance only,
-                  because those postings have closed and are used for market analysis */}
-              {gap?.job?.source === 'live' ? (
-                <div className="mt-3 flex flex-wrap items-center gap-3">
-                  <a
-                    href={gap.job.source_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-xs font-semibold text-white bg-blue-700 hover:bg-blue-800 px-3.5 py-1.5 rounded-full transition"
-                  >
-                    Apply on {gap.job.publisher || 'employer site'} ↗
-                  </a>
-                  {postedAgo(gap.job.listing_date) && (
-                    <span className="text-[11px] text-gray-400">Posted {postedAgo(gap.job.listing_date)}</span>
-                  )}
-                </div>
-              ) : (
-                <p className="text-[11px] text-gray-400 mt-0.5">Job posting data from JobStreet (2024)</p>
-              )}
-              <div className="mt-2">
+              {/* Salary + where the posting comes from */}
+              <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1">
                 {gap?.job?.salary && gap.job.salary !== 'nan' ? (
                   <span className="text-xs bg-green-50 text-green-700 px-2.5 py-1 rounded-full font-medium">
                     💰 {gap.job.salary}
@@ -161,11 +143,29 @@ export default function JobDetail() {
                 ) : (
                   <span className="text-xs text-gray-400">Salary not disclosed</span>
                 )}
+                {gap?.job?.source === 'live' ? (
+                  postedAgo(gap.job.listing_date) && (
+                    <span className="text-[11px] text-gray-400">Posted {postedAgo(gap.job.listing_date)}</span>
+                  )
+                ) : (
+                  <span className="text-[11px] text-gray-400">Job posting data from JobStreet (2024)</span>
+                )}
               </div>
             </div>
-            <div className="text-right shrink-0">
+            {/* Right: the score, and the main action underneath it (live jobs only) */}
+            <div className="text-right shrink-0 flex flex-col items-end">
               <p className={`text-4xl font-bold ${coverageColor}`}>{coverage}%</p>
-              <p className="text-xs text-gray-400 mt-0.5">skill match</p>
+              <p className="text-xs text-gray-400 mt-0.5">of required skills</p>
+              {gap?.job?.source === 'live' && gap.job.source_url && (
+                <a
+                  href={gap.job.source_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-3 text-xs font-semibold text-white bg-blue-700 hover:bg-blue-800 px-3.5 py-1.5 rounded-full transition"
+                >
+                  Apply on {gap.job.publisher || 'employer site'} ↗
+                </a>
+              )}
             </div>
           </div>
 

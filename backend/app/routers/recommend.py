@@ -77,15 +77,16 @@ def build_job_cache():
 
 
 def compute_skill_coverage(grad_embeddings_normed, job_skills, job_skill_vecs):
-    """Compute what % of job skills are covered by the graduate's skills.
-    grad_embeddings_normed and job_skill_vecs must already be L2-normalised.
+    """How many of the job's required skills the graduate covers.
+    Returns (matched_count, total_count). Both inputs must already be L2-normalised.
+    Same rule as Job Detail's skill gap: best cosine similarity >= SIMILARITY_THRESHOLD.
     """
     if not job_skills or not len(grad_embeddings_normed):
-        return 0.0
+        return 0, len(job_skills or [])
     sim_matrix = job_skill_vecs @ grad_embeddings_normed.T  # (J, G) — one matmul
     best_scores = sim_matrix.max(axis=1)
-    matched = (best_scores >= SIMILARITY_THRESHOLD).sum()
-    return round(float(matched / len(job_skills)) * 100, 1)
+    matched = int((best_scores >= SIMILARITY_THRESHOLD).sum())
+    return matched, len(job_skills)
 
 
 class ModuleInput(BaseModel):
@@ -235,10 +236,12 @@ def recommend_jobs(
     for job_id, sbert_score in top_candidates:
         cached = _job_cache[job_id]
         job_skills = cached["skills"]
-        coverage = compute_skill_coverage(
-            grad_embeddings, job_skills, cached["skill_vecs"]
-        ) if job_skills and len(grad_embeddings) else 0.0
+        matched, total = compute_skill_coverage(grad_embeddings, job_skills, cached["skill_vecs"])
+        coverage = round(matched / total * 100, 1) if total else 0.0
 
+        # Ranking score ("best fit"): skill coverage + whole-profile similarity + seniority/title
+        # adjustments. Used for ORDER only. What the student SEES is skill coverage (X of N),
+        # the same number Job Detail shows, so a job never shows two different "match" numbers.
         hybrid = 0.5 * sbert_score + 0.5 * (coverage / 100)
         hybrid_percent = round(hybrid * 100, 1)
         results.append({
@@ -251,7 +254,10 @@ def recommend_jobs(
             "source": cached["source"],
             "country": cached["country"],
             "match_score": hybrid,
-            "match_percent": hybrid_percent,
+            "match_percent": hybrid_percent,      # ranking score (kept for sorting / debugging)
+            "coverage_percent": coverage,          # shown to the student
+            "skills_matched": matched,
+            "skills_total": total,
             "top_job_skills": job_skills[:5],
         })
 

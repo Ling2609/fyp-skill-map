@@ -24,7 +24,7 @@ export default function Dashboard() {
         topJobs: top3,
         profileStats: {
           skills: data.graduate_profile?.unique_skills || 0,
-          bestMatch: top3[0]?.match_percent || 0,
+          bestMatch: top3[0]?.coverage_percent ?? top3[0]?.match_percent ?? 0,   // skill coverage, same as Job Detail
           bestMatchTitle: top3[0]?.job_title || null,
           modules: data.graduate_profile?.modules_count || 0,
         },
@@ -137,9 +137,9 @@ export default function Dashboard() {
                     </div>
                   </div>
                   <div className="flex items-center gap-1.5 shrink-0">
-                    <div className={`w-1.5 h-1.5 rounded-full ${getDotColor(job.match_percent)}`} />
-                    <span className={`text-xs font-semibold tabular-nums ${getMatchColor(job.match_percent)}`}>
-                      {job.match_percent}%
+                    <div className={`w-1.5 h-1.5 rounded-full ${getDotColor(job.coverage_percent ?? job.match_percent)}`} />
+                    <span className={`text-xs font-semibold tabular-nums ${getMatchColor(job.coverage_percent ?? job.match_percent)}`}>
+                      {job.skills_total ? `${job.skills_matched}/${job.skills_total} skills` : `${job.match_percent}%`}
                     </span>
                   </div>
                 </div>

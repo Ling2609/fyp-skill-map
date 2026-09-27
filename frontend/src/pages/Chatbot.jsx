@@ -142,7 +142,7 @@ export default function Chatbot() {
       ctx.matched_jobs = data.recommendations?.slice(0, 3).map(j => ({
         job_title: j.job_title,
         company: j.company,
-        match_percent: j.match_percent,
+        match_percent: j.coverage_percent ?? j.match_percent,   // % of required skills the student has
       })) || []
     }
     if (preloadJob) ctx.job_title = preloadJob
