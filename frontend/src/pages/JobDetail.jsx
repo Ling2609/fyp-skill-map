@@ -229,8 +229,7 @@ export default function JobDetail() {
             <div className="bg-white rounded-xl border border-gray-100 shadow-sm">
               <div className="px-5 py-4 border-b border-gray-100">
                 <h2 className="text-sm font-semibold text-gray-700">
-                  To learn for this job
-                  <span className="ml-1.5 text-xs font-normal text-gray-400">({gapRows.length})</span>
+                  <span className="text-red-600">{gapRows.length} {gapRows.length === 1 ? 'skill' : 'skills'}</span> to learn for this job
                 </h2>
               </div>
               {gapRows.length === 0 ? (
@@ -265,13 +264,12 @@ export default function JobDetail() {
             <div className="bg-white rounded-xl border border-gray-100 shadow-sm">
               <div className="flex items-center justify-between gap-3 px-5 py-4 border-b border-gray-100">
                 <h2 className="text-sm font-semibold text-gray-700">
-                  You already have
-                  <span className="ml-1.5 text-xs font-normal text-gray-400">({matchedRows.length} of {totalRequired})</span>
+                  You already have <span className="text-green-700">{matchedRows.length} of {totalRequired}</span> required skills
                 </h2>
                 {matchedRows.length > 0 && (
                   <button
                     onClick={() => setShowSources(v => !v)}
-                    className="text-xs text-gray-500 hover:text-blue-600 transition"
+                    className="text-xs font-medium text-blue-600 bg-blue-50 hover:bg-blue-100 border border-blue-100 px-3 py-1 rounded-full transition"
                   >
                     {showSources ? 'Hide sources ▴' : 'Show where these come from ▾'}
                   </button>

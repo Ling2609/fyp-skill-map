@@ -5,6 +5,7 @@ from app.database import get_db
 from app.models.module import Module, ModuleSkill
 from app.models.job import Job, JobSkill
 from app.models.user_module import UserModule
+from app.models.profile import UserProject, UserCertification
 from app.routers.auth import get_current_user
 from app.models.user import User
 from app.nlp.embedder import Embedder
@@ -14,7 +15,9 @@ router = APIRouter(prefix="/skillgap", tags=["skill-gap"])
 
 embedder = Embedder()
 
-SIMILARITY_THRESHOLD = 0.6
+SIMILARITY_THRESHOLD = 0.6   # at or above = counts as matched
+DIRECT_THRESHOLD = 0.8       # at or above = direct evidence (same skill, different wording)
+BONUS_RELEVANCE_MIN = 0.3    # extra skills below this are unrelated to the job, so hidden
 
 
 class ModuleInput(BaseModel):
@@ -60,6 +63,7 @@ def analyse_skill_gap(
     # Collect graduate skills + which module each came from
     graduate_skills = {}    # skill_name -> weight
     skill_module_map = {}   # skill_name -> module name
+    skill_source_type = {}  # skill_name -> "module" / "project" / "cert"
     for mod_input in payload.modules:
         module = db.query(Module).filter(Module.code == mod_input.module_code).first()
         if not module:
@@ -71,6 +75,24 @@ def analyse_skill_gap(
             if name not in graduate_skills or weight > graduate_skills[name]:
                 graduate_skills[name] = weight
                 skill_module_map[name] = module.name
+                skill_source_type[name] = "module"
+
+    # Projects + certifications add evidence too (same as recommend.py), so a skill
+    # proven in a project counts here as well. Module evidence wins if both exist,
+    # because it carries a grade.
+    PROFILE_WEIGHT = 0.7
+    for p in db.query(UserProject).filter(UserProject.user_id == current_user.id).all():
+        for name in (p.extracted_skills or []):
+            if name and name not in graduate_skills:
+                graduate_skills[name] = PROFILE_WEIGHT
+                skill_module_map[name] = f"Project: {p.name}"
+                skill_source_type[name] = "project"
+    for c in db.query(UserCertification).filter(UserCertification.user_id == current_user.id).all():
+        for name in (c.mapped_skills or []):
+            if name and name not in graduate_skills:
+                graduate_skills[name] = PROFILE_WEIGHT
+                skill_module_map[name] = f"Certification: {c.cert_name}"
+                skill_source_type[name] = "cert"
 
     if not graduate_skills:
         raise HTTPException(status_code=404, detail="No skills found for modules")
@@ -118,6 +140,10 @@ def analyse_skill_gap(
                 "matched_via_module": skill_module_map.get(best_match, ""),
                 "similarity": round(best_score, 3),
                 "grade_weight": graduate_skills.get(best_match, 0),
+                "evidence_source": skill_source_type.get(best_match, "module"),  # module / project / cert
+                # direct  = your skill is essentially the same as the requirement (≥ 0.8)
+                # related = you studied a close topic, not this exact skill (0.6–0.79)
+                "evidence": "direct" if best_score >= DIRECT_THRESHOLD else "related",
             })
         else:
             # Explain why: related skill exists but not close enough = partly covered,
@@ -125,7 +151,7 @@ def analyse_skill_gap(
             if best_score >= 0.4:
                 gap_reason = f"Partly covered in {skill_module_map.get(best_match, 'a module')}"
             else:
-                gap_reason = "Not in your modules"
+                gap_reason = "Not in your modules or projects"
             missing.append({
                 "job_skill": job_skill,
                 "closest_graduate_skill": best_match,
@@ -138,11 +164,19 @@ def analyse_skill_gap(
     # otherwise the same skill shows as both "related to a gap" and "extra".
     matched_grad_skills = {m["matched_graduate_skill"] for m in matched}
     matched_grad_skills |= {m["closest_graduate_skill"] for m in missing if m["similarity"] >= 0.4}
-    graduate_only = [
-        {"skill": s, "grade_weight": graduate_skills[s]}
-        for s in grad_skill_names
-        if s not in matched_grad_skills
-    ]
+    # Keep only extras that are still relevant to THIS job (worth mentioning in a CV
+    # or interview), most relevant first. Unrelated ones (e.g. Python syntax for a
+    # networking role) are dropped instead of padding the list.
+    grad_relevance = sim_matrix.max(axis=0)  # best score of each grad skill vs any job skill
+    graduate_only = sorted(
+        (
+            {"skill": s, "grade_weight": graduate_skills[s], "relevance": round(float(grad_relevance[g]), 3)}
+            for g, s in enumerate(grad_skill_names)
+            if s not in matched_grad_skills and grad_relevance[g] >= BONUS_RELEVANCE_MIN
+        ),
+        key=lambda x: x["relevance"],
+        reverse=True,
+    )
 
     gap_score = len(matched) / len(job_skills) * 100 if job_skills else 0
 
@@ -164,5 +198,5 @@ def analyse_skill_gap(
         },
         "matched_skills": matched,
         "missing_skills": missing,
-        "graduate_only_skills": graduate_only[:10],
+        "graduate_only_skills": graduate_only[:8],
     }
