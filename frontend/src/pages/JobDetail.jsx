@@ -8,25 +8,9 @@ const GRADE_LABELS = {
 
 const gradeLabel = (weight) => GRADE_LABELS[weight] || ''
 
-// Match strength = how closely your module skill fits the job requirement (SBERT similarity).
-// Shown as a word, not a %, so it isn't confused with the module grade.
-const matchStrength = (sim) =>
-  sim >= 0.8 ? { label: 'Strong match', style: 'text-green-700 bg-green-50' } :
-  sim >= 0.7 ? { label: 'Good match', style: 'text-yellow-700 bg-yellow-50' } :
-               { label: 'Fair match', style: 'text-orange-700 bg-orange-50' }
-
-// If the job's wording differs from your skill, show your skill so the user sees what it matched
-const matchSource = (item) => {
-  const sameName = item.job_skill?.toLowerCase() === item.matched_graduate_skill?.toLowerCase()
-  const module = item.matched_via_module
-  if (sameName || !item.matched_graduate_skill) return module
-  return module ? `via ${item.matched_graduate_skill} · ${module}` : `via ${item.matched_graduate_skill}`
-}
-
-const STATUS_STYLES = {
+const GAP_STYLES = {
   missing: { icon: '✕', circle: 'bg-red-100 text-red-600', text: 'text-red-500' },
   partial: { icon: '!', circle: 'bg-amber-100 text-amber-700', text: 'text-amber-600' },
-  matched: { icon: '✓', circle: 'bg-green-100 text-green-700', text: 'text-gray-400' },
 }
 
 export default function JobDetail() {
@@ -38,6 +22,7 @@ export default function JobDetail() {
   const [activeTab, setActiveTab] = useState('description')
   const [bullets, setBullets] = useState(null)
   const [bulletsLoading, setBulletsLoading] = useState(false)
+  const [showSources, setShowSources] = useState(false)
 
   useEffect(() => {
     // Pass empty modules — backend reads them from DB for the logged-in user
@@ -88,24 +73,34 @@ export default function JobDetail() {
   const coverageColor = coverage >= 70 ? 'text-green-600' : coverage >= 40 ? 'text-yellow-600' : 'text-red-500'
   const barColor = coverage >= 70 ? 'bg-green-500' : coverage >= 40 ? 'bg-yellow-500' : 'bg-red-400'
 
-  // One list of every job requirement: gaps first (most actionable), then matches by strength
-  const gapRows = (gap?.missing_skills || []).map(m => ({
-    ...m,
-    status: m.gap_reason?.startsWith('Partly') ? 'partial' : 'missing',
-  }))
+  // Layout B (summary first): 1) what to learn, 2) what you already have, 3) what else to mention.
+  // Gaps: Missing first, then Partly covered.
+  const gapRows = (gap?.missing_skills || [])
+    .map(m => ({ ...m, status: m.gap_reason?.startsWith('Partly') ? 'partial' : 'missing' }))
+    .sort((a, b) => (a.status === b.status ? 0 : a.status === 'missing' ? -1 : 1))
+
+  // Matches: strongest first. Fallbacks keep the page correct with an older backend.
   const matchedRows = [...(gap?.matched_skills || [])]
     .sort((a, b) => b.similarity - a.similarity)
-    .map(m => ({ ...m, status: 'matched' }))
-  const requirementRows = [
-    ...gapRows.filter(r => r.status === 'missing'),
-    ...gapRows.filter(r => r.status === 'partial'),
-    ...matchedRows,
-  ]
-  const counts = {
-    matched: matchedRows.length,
-    partial: gapRows.filter(r => r.status === 'partial').length,
-    missing: gapRows.filter(r => r.status === 'missing').length,
-  }
+    .map(m => ({
+      ...m,
+      evidence: m.evidence || (m.similarity >= 0.8 ? 'direct' : 'related'),
+      evidence_source: m.evidence_source || 'module',
+    }))
+
+  // "Show where these come from": group matched skills by their source (module / project / cert)
+  const sourceGroups = Object.entries(
+    matchedRows.reduce((acc, m) => {
+      const key = m.matched_via_module || 'Other'
+      if (!acc[key]) {
+        acc[key] = { grade: m.evidence_source === 'module' ? gradeLabel(m.grade_weight) : '', items: [] }
+      }
+      acc[key].items.push(m)
+      return acc
+    }, {})
+  ).sort((a, b) => b[1].items.length - a[1].items.length)
+
+  const totalRequired = gapRows.length + matchedRows.length
 
   return (
     <div className="min-h-screen">
@@ -226,80 +221,39 @@ export default function JobDetail() {
           </div>
         )}
 
-        {/* Skill Gap Tab — one checklist of the job's requirements (LinkedIn "How you match" pattern) */}
+        {/* Skill Gap Tab — summary first (progressive disclosure): learn → have → mention */}
         {activeTab === 'gap' && (
           <div className="space-y-4">
 
-            {/* Required skills checklist */}
+            {/* 1. To learn */}
             <div className="bg-white rounded-xl border border-gray-100 shadow-sm">
-              <div className="flex flex-wrap items-center justify-between gap-3 px-5 py-4 border-b border-gray-100">
+              <div className="px-5 py-4 border-b border-gray-100">
                 <h2 className="text-sm font-semibold text-gray-700">
-                  Required Skills
-                  <span className="ml-1.5 text-xs font-normal text-gray-400">({requirementRows.length})</span>
+                  To learn for this job
+                  <span className="ml-1.5 text-xs font-normal text-gray-400">({gapRows.length})</span>
                 </h2>
-                <div className="flex flex-wrap gap-1.5 text-[11px] font-medium">
-                  <span className="px-2 py-0.5 rounded-full bg-green-50 text-green-700">✓ {counts.matched} matched</span>
-                  {counts.partial > 0 && (
-                    <span className="px-2 py-0.5 rounded-full bg-amber-50 text-amber-700">! {counts.partial} partly covered</span>
-                  )}
-                  {counts.missing > 0 && (
-                    <span className="px-2 py-0.5 rounded-full bg-red-50 text-red-600">✕ {counts.missing} missing</span>
-                  )}
-                </div>
               </div>
-
-              <p className="px-5 pt-3 text-[11px] text-gray-400">
-                Letter = your module grade. Match = how closely a skill from your modules fits this job's requirement.
-              </p>
-
-              {requirementRows.length === 0 ? (
-                <p className="text-xs text-gray-400 px-5 py-4">No skills found for this job.</p>
+              {gapRows.length === 0 ? (
+                <p className="text-xs text-gray-500 px-5 py-4">Nothing to learn. You cover every skill this job lists.</p>
               ) : (
                 <ul className="divide-y divide-gray-50">
-                  {requirementRows.map((item, idx) => {
-                    const s = STATUS_STYLES[item.status]
-                    const isMatched = item.status === 'matched'
+                  {gapRows.map((item, idx) => {
+                    const s = GAP_STYLES[item.status]
                     return (
                       <li key={idx} className="flex items-center gap-3 px-5 py-2.5">
-                        {/* Status icon */}
                         <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0 ${s.circle}`}>
                           {s.icon}
                         </span>
-
-                        {/* Skill name + grade */}
-                        <div className="flex items-center gap-1.5 w-60 shrink-0">
-                          <span className="text-xs font-medium text-gray-800">{item.job_skill}</span>
-                          {isMatched && gradeLabel(item.grade_weight) && (
-                            <span className="text-[10px] bg-blue-50 text-blue-600 px-1.5 py-0.5 rounded font-semibold">
-                              {gradeLabel(item.grade_weight)}
-                            </span>
-                          )}
-                        </div>
-
-                        {/* Where it came from / why it's missing */}
+                        <span className="text-xs font-medium text-gray-800 w-60 shrink-0">{item.job_skill}</span>
                         <span className={`flex-1 min-w-0 text-[11px] ${s.text}`}>
-                          {isMatched ? matchSource(item) : item.gap_reason}
+                          {item.status === 'missing' ? 'Not covered yet' : item.gap_reason}
                         </span>
-
-                        {/* Action / match strength */}
-                        {isMatched ? (() => {
-                          const m = matchStrength(item.similarity)
-                          return (
-                            <span
-                              title={`${Math.round(item.similarity * 100)}% similarity between the job requirement and your module skill`}
-                              className={`text-[11px] font-semibold px-2 py-0.5 rounded-full shrink-0 ${m.style}`}
-                            >
-                              {m.label}
-                            </span>
-                          )
-                        })() : (
-                          <button
-                            onClick={() => navigate(`/chatbot?skill=${encodeURIComponent(item.job_skill)}&job=${encodeURIComponent(gap?.job?.job_title || '')}&reason=${encodeURIComponent(item.gap_reason || '')}`)}
-                            className="text-xs text-blue-600 bg-blue-50 hover:bg-blue-100 px-2.5 py-1 rounded-full transition font-medium shrink-0"
-                          >
-                            Learn →
-                          </button>
-                        )}
+                        <button
+                          onClick={() => navigate(`/chatbot?skill=${encodeURIComponent(item.job_skill)}&job=${encodeURIComponent(gap?.job?.job_title || '')}&reason=${encodeURIComponent(item.gap_reason || '')}`)}
+                          className="text-xs text-blue-600 bg-blue-50 hover:bg-blue-100 px-2.5 py-1 rounded-full transition font-medium shrink-0"
+                        >
+                          Learn →
+                        </button>
                       </li>
                     )
                   })}
@@ -307,15 +261,72 @@ export default function JobDetail() {
               )}
             </div>
 
-            {/* Bonus skills */}
-            {gap?.graduate_only_skills?.length > 0 && (
-              <div className="bg-white rounded-xl px-5 py-4 border border-gray-100 shadow-sm">
-                <div className="flex items-baseline gap-2 mb-3">
-                  <h2 className="text-sm font-semibold text-gray-700">Your Bonus Skills</h2>
-                  <span className="text-xs text-gray-400">Extra skills that strengthen your profile.</span>
+            {/* 2. You already have — chips by default, grouped by source on click */}
+            <div className="bg-white rounded-xl border border-gray-100 shadow-sm">
+              <div className="flex items-center justify-between gap-3 px-5 py-4 border-b border-gray-100">
+                <h2 className="text-sm font-semibold text-gray-700">
+                  You already have
+                  <span className="ml-1.5 text-xs font-normal text-gray-400">({matchedRows.length} of {totalRequired})</span>
+                </h2>
+                {matchedRows.length > 0 && (
+                  <button
+                    onClick={() => setShowSources(v => !v)}
+                    className="text-xs text-gray-500 hover:text-blue-600 transition"
+                  >
+                    {showSources ? 'Hide sources ▴' : 'Show where these come from ▾'}
+                  </button>
+                )}
+              </div>
+
+              {matchedRows.length === 0 ? (
+                <p className="text-xs text-gray-400 px-5 py-4">None of this job's skills match your record yet.</p>
+              ) : !showSources ? (
+                <div className="flex flex-wrap gap-1.5 px-5 py-4">
+                  {matchedRows.map((item, idx) => (
+                    <span key={idx} className="inline-flex items-center gap-1.5 text-xs text-gray-700 bg-slate-50 border border-gray-200 px-2.5 py-1 rounded-lg">
+                      <span className="text-green-600 font-bold">✓</span>
+                      {item.job_skill}
+                    </span>
+                  ))}
                 </div>
-                <div className="flex flex-wrap gap-1.5">
-                  {gap.graduate_only_skills.slice(0, 10).map((item, idx) => (
+              ) : (
+                <div className="divide-y divide-gray-50">
+                  {sourceGroups.map(([source, group]) => (
+                    <div key={source} className="px-5 py-3">
+                      <div className="flex items-center gap-1.5 mb-2">
+                        <span className="text-xs font-semibold text-gray-700">{source}</span>
+                        {group.grade && (
+                          <span className="text-[10px] bg-blue-50 text-blue-600 px-1.5 py-0.5 rounded font-semibold">{group.grade}</span>
+                        )}
+                      </div>
+                      <div className="flex flex-wrap gap-1.5">
+                        {group.items.map((item, idx) => (
+                          <span key={idx} className="inline-flex items-center gap-1.5 text-xs text-gray-700 bg-slate-50 border border-gray-200 px-2.5 py-1 rounded-lg">
+                            <span className="text-green-600 font-bold">✓</span>
+                            {item.job_skill}
+                            {item.evidence === 'related' && item.matched_graduate_skill && (
+                              <span className="text-[10px] text-gray-400">via {item.matched_graduate_skill}</span>
+                            )}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* 3. Also mention */}
+            {gap?.graduate_only_skills?.length > 0 && (
+              <div className="bg-white rounded-xl border border-gray-100 shadow-sm">
+                <div className="px-5 py-4 border-b border-gray-100">
+                  <h2 className="text-sm font-semibold text-gray-700">
+                    Also mention in your CV
+                    <span className="ml-1.5 text-xs font-normal text-gray-400">(not required, but related)</span>
+                  </h2>
+                </div>
+                <div className="flex flex-wrap gap-1.5 px-5 py-4">
+                  {gap.graduate_only_skills.map((item, idx) => (
                     <span key={idx} className="text-xs whitespace-nowrap text-blue-600 bg-blue-50 border border-blue-100 px-2.5 py-1 rounded-full">
                       {item.skill}
                     </span>
