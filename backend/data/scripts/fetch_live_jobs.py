@@ -14,12 +14,12 @@ Quality rules (see references.md → Data Limitations):
 Needs JSEARCH_KEY in backend/.env (never commit the key).
 
 Usage (from the backend folder):
-  python data/scripts/fetch_live_jobs.py --dry-run               # call API, preview, save raw results to cache
+  python data/scripts/fetch_live_jobs.py --dry-run --new-only    # fetch ONLY queries not in the cache yet, preview
   python data/scripts/fetch_live_jobs.py --use-cache             # save + extract skills from the cache (0 credits)
-  python data/scripts/fetch_live_jobs.py                         # call API and save in one go
+  python data/scripts/fetch_live_jobs.py --dry-run               # refresh: re-fetch every query (e.g. before the demo)
 
-Credits: 1 per page. Malaysia queries fetch 2 pages, Singapore 1 → 27 credits per API run
-(of 200/month). Using --use-cache after a dry run costs nothing.
+Credits: 1 per page. Malaysia queries fetch 2 pages, Singapore 1. A full refresh of all queries
+costs ~43 credits (of 200/month); --new-only costs only the new queries; --use-cache costs nothing.
 """
 
 import argparse
@@ -63,37 +63,64 @@ QUERIES = [
     ("QA test engineer in Malaysia",              "my", "Testing & Quality Assurance"),
     ("business analyst IT in Malaysia",           "my", "Business/Systems Analysts"),
     ("cloud devops engineer in Malaysia",         "my", "Engineering - Software"),
+    # added 27 Sep to grow the live pool towards ~200
+    ("full stack developer in Malaysia",          "my", "Developers/Programmers"),
+    ("mobile app developer in Malaysia",          "my", "Developers/Programmers"),
+    ("AI machine learning engineer in Malaysia",  "my", "Engineering - Software"),
+    ("data engineer in Malaysia",                 "my", "Database Development & Administration"),
+    ("UI UX designer in Malaysia",                "my", "Web Development & Production"),
+    ("SAP ERP consultant in Malaysia",            "my", "Consultants"),
+    ("IT graduate programme in Malaysia",         "my", "Developers/Programmers"),
+    ("IT project coordinator in Malaysia",        "my", "Programme & Project Management"),
     ("software engineer in Singapore",            "sg", "Engineering - Software"),
     ("network engineer in Singapore",             "sg", "Engineering - Network"),
     ("data analyst in Singapore",                 "sg", "Database Development & Administration"),
     # removed "graduate IT trainee in Singapore": it only returned an HR internship
 ]
 
-# Only apply links from these publishers / domains are kept (safety: students click these)
+# Only apply links from these publishers / domains are kept (safety: students click these).
+# Decided from the 27 Sep cache: aggregators that only repost snippets (Trabajo.org, JobLeads,
+# Jooble, BeBee, Jobrapido, Jobsora, Recruit.net, Expertini) are left out on purpose.
 TRUSTED_PUBLISHERS = [
+    # job boards
     "linkedin", "jobstreet", "hiredly", "maukerja", "glassdoor", "indeed",
-    "mycareersfuture", "careers@gov", "jobsdb", "grabjobs",
+    "mycareersfuture", "careers@gov", "jobsdb", "grabjobs", "foundit", "jobstore",
+    # established recruitment agencies
+    "randstad", "hays", "michael page", "robert half", "red global", "efinancialcareers",
 ]
 TRUSTED_DOMAINS = [  # company career sites / applicant tracking systems
     "linkedin.com", "jobstreet.com", "hiredly.com", "maukerja.my", "glassdoor.",
-    "indeed.com", "mycareersfuture.gov.sg", "careers.gov.sg",
+    "indeed.com", "mycareersfuture.gov.sg", "careers.gov.sg", "foundit.",
     "myworkdayjobs.com", "eightfold.ai", "greenhouse.io", "lever.co",
     "smartrecruiters.com", "successfactors.", "oraclecloud.com", "taleo.net",
 ]
+BLOCKED_DOMAINS = ["liveblog365", "blogspot.", "wordpress.com", "expertini"]  # spam seen in testing
+BLOCKED_PUBLISHERS = [  # snippet-only aggregators: never trusted, whatever the other rules say
+    "trabajo", "jobleads", "jooble", "bebee", "jobrapido", "jobsora", "recruit.net", "expertini",
+]
 
 
-def is_trusted(publisher: str, url: str) -> bool:
+def is_trusted(publisher: str, url: str, employer: str = "") -> bool:
     pub = (publisher or "").lower()
     domain = urlparse(url or "").netloc.lower()
-    return any(t in pub for t in TRUSTED_PUBLISHERS) or any(d in domain for d in TRUSTED_DOMAINS)
+    if any(b in domain for b in BLOCKED_DOMAINS) or any(b in pub for b in BLOCKED_PUBLISHERS):
+        return False
+    if any(t in pub for t in TRUSTED_PUBLISHERS) or any(d in domain for d in TRUSTED_DOMAINS):
+        return True
+    # The company's own careers site, e.g. "Careers At Mastercard", "Cisco Careers", "TNG EWallet"
+    if "careers" in pub and "@" not in pub:
+        return True
+    first_word = (employer or "").lower().split(" ")[0] if employer else ""
+    return len(first_word) >= 3 and first_word in pub
 
 
 def pick_apply_link(job: dict) -> tuple[str | None, str | None]:
     """Return (url, publisher) of the first trusted apply option, else (None, None)."""
+    employer = job.get("employer_name") or ""
     options = [(job.get("job_apply_link"), job.get("job_publisher"))]
     options += [(o.get("apply_link"), o.get("publisher")) for o in (job.get("apply_options") or [])]
     for url, publisher in options:
-        if url and is_trusted(publisher, url):
+        if url and is_trusted(publisher, url, employer):
             return url, publisher
     return None, None
 
@@ -143,18 +170,25 @@ def clean_company(name: str) -> str:
     return re.sub(r"^\d+\s+", "", (name or "").strip())
 
 
-def run(dry_run: bool, use_cache: bool):
+def load_cache() -> dict:
+    try:
+        with open(CACHE_FILE, encoding="utf-8") as f:
+            return json.load(f)
+    except FileNotFoundError:
+        return {}
+
+
+def run(dry_run: bool, use_cache: bool, new_only: bool):
+    cache = load_cache() if (use_cache or new_only) else {}
     if use_cache:
-        try:
-            with open(CACHE_FILE, encoding="utf-8") as f:
-                cache = json.load(f)
-        except FileNotFoundError:
+        if not cache:
             sys.exit(f"No cache found at {CACHE_FILE}. Run with --dry-run first.")
         print(f"Using cached API results from {CACHE_FILE} (0 credits)")
-    else:
-        if not settings.jsearch_key:
-            sys.exit("JSEARCH_KEY is missing. Add JSEARCH_KEY=your-key to backend/.env first.")
-        cache = {}
+    elif not settings.jsearch_key:
+        sys.exit("JSEARCH_KEY is missing. Add JSEARCH_KEY=your-key to backend/.env first.")
+    elif new_only:
+        missing = [q for q, _, _ in QUERIES if q not in cache]
+        print(f"--new-only: {len(missing)} new queries to fetch, {len(QUERIES) - len(missing)} reused from cache")
 
     extractor = None if dry_run else SkillExtractor()
     db = SessionLocal()
@@ -166,7 +200,7 @@ def run(dry_run: bool, use_cache: bool):
     try:
         for query, country, subcategory in QUERIES:
             print(f"\n=== {query} ({country.upper()}) ===")
-            if use_cache:
+            if use_cache or (new_only and query in cache):
                 results = cache.get(query, [])
             else:
                 results = fetch(query, country)
@@ -249,7 +283,7 @@ def run(dry_run: bool, use_cache: bool):
                 time.sleep(2)  # Groq rate limit
     finally:
         db.close()
-        if not use_cache and cache:
+        if not use_cache and credits and cache:
             with open(CACHE_FILE, "w", encoding="utf-8") as f:
                 json.dump(cache, f)
             print(f"\nRaw API results saved to {CACHE_FILE}")
@@ -271,5 +305,6 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--dry-run", action="store_true", help="preview only, nothing saved to the database")
     parser.add_argument("--use-cache", action="store_true", help="reuse the last API results (0 credits)")
+    parser.add_argument("--new-only", action="store_true", help="only call the API for queries not in the cache yet")
     args = parser.parse_args()
-    run(args.dry_run, args.use_cache)
+    run(args.dry_run, args.use_cache, args.new_only)

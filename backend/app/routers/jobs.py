@@ -70,10 +70,13 @@ def get_job_stats(db: Session = Depends(get_db)):
 
 
 @router.get("/subcategories")
-def get_subcategories(db: Session = Depends(get_db)):
-    subcats = db.query(distinct(Job.subcategory)).filter(
-        Job.subcategory != None
-    ).all()
+def get_subcategories(include_past: bool = False, db: Session = Depends(get_db)):
+    """Category chips for Job Matches. By default only categories that have current openings,
+    so no chip leads to an empty list."""
+    q = db.query(distinct(Job.subcategory)).filter(Job.subcategory != None)
+    if not include_past:
+        q = q.filter(Job.source == "live")
+    subcats = q.all()
     return sorted([s[0] for s in subcats if s[0]])
 
 

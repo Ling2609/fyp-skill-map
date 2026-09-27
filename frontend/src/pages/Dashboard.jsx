@@ -19,7 +19,7 @@ export default function Dashboard() {
 
     if (savedResults) {
       const data = JSON.parse(savedResults)
-      const top3 = data.recommendations?.slice(0, 3) || []
+      const top3 = data.recommendations?.slice(0, 3) || []   // live jobs only (from /recommend)
       return {
         topJobs: top3,
         profileStats: {

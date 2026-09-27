@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { Fragment, useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import api from '../api'
 import PageHeader from '../components/PageHeader'
@@ -43,7 +43,6 @@ export default function Recommend() {
   const [skillCount, setSkillCount] = useState(null) // null = loading, 0 = empty profile
   const [results, setResults] = useState(null)
   const [sortBy, setSortBy] = useState('fit')   // 'fit' | 'skills'
-  const [liveOnly, setLiveOnly] = useState(false) // true = only jobs you can apply to now
   const [loading, setLoading] = useState(false)
   const [loadingStep, setLoadingStep] = useState(0)
   const [loadingProgress, setLoadingProgress] = useState(0)
@@ -144,12 +143,12 @@ export default function Recommend() {
   // Displayed number = skill coverage (same as Job Detail). Default order = "best fit" (backend ranking,
   // which also weighs overall profile similarity and seniority); "most skills" re-sorts by coverage.
   const coverageOf = (job) => job.coverage_percent ?? job.match_percent
+  // Job Matches shows only current openings (the backend no longer sends past 2024 postings;
+  // those are used for Career Paths and market statistics instead)
   const allJobs = results?.recommendations || []
-  const liveCount = allJobs.filter(j => j.source === 'live').length
-  const shownJobs = liveOnly ? allJobs.filter(j => j.source === 'live') : allJobs
   const sortedJobs = sortBy === 'skills'
-    ? [...shownJobs].sort((a, b) => coverageOf(b) - coverageOf(a) || b.match_score - a.match_score)
-    : shownJobs
+    ? [...allJobs].sort((a, b) => coverageOf(b) - coverageOf(a) || b.match_score - a.match_score)
+    : allJobs
   const visibleJobs = sortedJobs.slice(0, visibleCount)
   const hasMore = results && visibleCount < sortedJobs.length
 
@@ -163,7 +162,7 @@ export default function Recommend() {
               <h1 className="text-2xl font-semibold tracking-tight text-slate-900">Explore Your Career Fit</h1>
               <p className="text-sm text-slate-500 mt-1">
                 Matched from your full skill profile
-                {results && ` · ${results.total_jobs_compared} jobs compared · ${results.recommendations.length} ranked`}
+                {results && ` · ${results.total_jobs_compared} current openings compared`}
               </p>
             </div>
             <button onClick={() => navigate('/profile')}
@@ -231,16 +230,7 @@ export default function Recommend() {
           <div className="space-y-1.5">
             {results.recommendations?.length > 0 && (
               <div className="flex flex-wrap items-center justify-between gap-2 pb-1 text-xs">
-                {/* Left: which jobs to show */}
-                <Toggle
-                  label="Show"
-                  value={liveOnly ? 'live' : 'all'}
-                  onChange={v => { setLiveOnly(v === 'live'); setVisibleCount(10) }}
-                  options={[
-                    { key: 'all', label: 'All jobs', hint: 'Current openings plus 2024 JobStreet postings (market data)' },
-                    { key: 'live', label: `Hiring now (${liveCount})`, hint: 'Only current openings you can apply to' },
-                  ]}
-                />
+                <span className="text-slate-400">{allJobs.length} current openings</span>
                 {/* Right: order */}
                 <Toggle
                   label="Sort by"
@@ -253,19 +243,15 @@ export default function Recommend() {
                 />
               </div>
             )}
-            {liveOnly && results.recommendations?.length > 0 && sortedJobs.length === 0 && (
-              <div className="bg-white rounded-xl p-8 text-center border border-slate-200">
-                <p className="text-slate-400 text-sm">No current openings match this search. Try "All jobs".</p>
-              </div>
-            )}
             {results.recommendations?.length === 0 ? (
               <div className="bg-white rounded-xl p-10 text-center border border-slate-200">
-                <p className="text-slate-400 text-sm">No matches found. Try a broader search or different category.</p>
+                <p className="text-slate-400 text-sm">No current openings match this search. Try a broader search or another category.</p>
               </div>
             ) : (
               <>
                 {visibleJobs.map((job, idx) => (
-                  <div key={job.job_id} onClick={() => navigate(`/jobs/${encodeURIComponent(job.job_id)}`)}
+                  <Fragment key={job.job_id}>
+                  <div onClick={() => navigate(`/jobs/${encodeURIComponent(job.job_id)}`)}
                     className="bg-white rounded-xl border border-slate-200 cursor-pointer hover:border-blue-200 hover:shadow-sm transition group overflow-hidden flex">
                     {/* Left accent bar */}
                     <div className={`w-1 shrink-0 ${getAccentColor(coverageOf(job))}`} />
@@ -287,9 +273,6 @@ export default function Recommend() {
                         </span>
                       </div>
                       <div className="flex gap-1.5 mt-2.5 flex-wrap">
-                        {job.source === 'live' && (
-                          <span className="text-xs bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-md font-semibold">Hiring now</span>
-                        )}
                         {job.country && job.country !== 'MY' && (
                           <span className="text-xs bg-slate-100 text-slate-500 px-2 py-0.5 rounded-md font-medium">{job.country === 'SG' ? 'Singapore' : job.country}</span>
                         )}
@@ -303,6 +286,7 @@ export default function Recommend() {
                       </div>
                     </div>
                   </div>
+                  </Fragment>
                 ))}
                 {hasMore && (
                   <button onClick={() => setVisibleCount(prev => prev + 10)}

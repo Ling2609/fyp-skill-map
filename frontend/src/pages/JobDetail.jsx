@@ -128,51 +128,43 @@ export default function JobDetail() {
 
       <div className="px-6 py-5 max-w-4xl mx-auto space-y-4">
 
-        {/* Job header */}
+        {/* Job header: info + action on top, one score row underneath */}
         <div className="bg-white rounded-xl p-6 border border-gray-100 shadow-sm">
           <div className="flex items-start justify-between gap-6">
             <div className="flex-1 min-w-0">
               <h1 className="text-xl font-bold text-gray-800">{gap?.job?.job_title}</h1>
               <p className="text-sm text-gray-500 mt-1">{gap?.job?.company} · {gap?.job?.location}</p>
-              {/* Salary + where the posting comes from */}
-              <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1">
-                {gap?.job?.salary && gap.job.salary !== 'nan' ? (
-                  <span className="text-xs bg-green-50 text-green-700 px-2.5 py-1 rounded-full font-medium">
-                    💰 {gap.job.salary}
-                  </span>
-                ) : (
-                  <span className="text-xs text-gray-400">Salary not disclosed</span>
-                )}
-                {gap?.job?.source === 'live' ? (
-                  postedAgo(gap.job.listing_date) && (
-                    <span className="text-[11px] text-gray-400">Posted {postedAgo(gap.job.listing_date)}</span>
-                  )
-                ) : (
-                  <span className="text-[11px] text-gray-400">Job posting data from JobStreet (2024)</span>
-                )}
-              </div>
+              <p className="text-xs text-gray-400 mt-1.5">
+                {gap?.job?.salary && gap.job.salary !== 'nan'
+                  ? <span className="text-green-700 font-medium">{gap.job.salary}</span>
+                  : 'Salary not disclosed'}
+                {gap?.job?.source === 'live'
+                  ? (postedAgo(gap.job.listing_date) ? ` · Posted ${postedAgo(gap.job.listing_date)}` : '')
+                  : ' · Past posting from JobStreet (2024)'}
+              </p>
             </div>
-            {/* Right: the score, and the main action underneath it (live jobs only) */}
-            <div className="text-right shrink-0 flex flex-col items-end">
-              <p className={`text-4xl font-bold ${coverageColor}`}>{coverage}%</p>
-              <p className="text-xs text-gray-400 mt-0.5">of required skills</p>
-              {gap?.job?.source === 'live' && gap.job.source_url && (
-                <a
-                  href={gap.job.source_url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mt-3 text-xs font-semibold text-white bg-blue-700 hover:bg-blue-800 px-3.5 py-1.5 rounded-full transition"
-                >
-                  Apply on {gap.job.publisher || 'employer site'} ↗
-                </a>
-              )}
-            </div>
+            {gap?.job?.source === 'live' && gap.job.source_url && (
+              <a
+                href={gap.job.source_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="shrink-0 text-sm font-semibold text-white bg-blue-700 hover:bg-blue-800 px-4 py-2 rounded-lg transition"
+              >
+                Apply on {gap.job.publisher || 'employer site'} ↗
+              </a>
+            )}
           </div>
 
-          <div className="mt-4">
-            <div className="flex justify-between text-xs text-gray-400 mb-1.5">
-              <span>{gap?.summary?.matched_skills} of {gap?.summary?.job_skills_total} required skills matched</span>
-              <span>{gap?.summary?.missing_skills} to develop</span>
+          {/* Score: one number, one bar (they say the same thing) */}
+          <div className="mt-5">
+            <div className="flex items-baseline justify-between mb-1.5">
+              <p className="text-sm text-gray-600">
+                <span className={`text-2xl font-bold ${coverageColor}`}>{Math.round(coverage)}%</span>
+                <span className="ml-2">
+                  of required skills · {gap?.summary?.matched_skills} of {gap?.summary?.job_skills_total} matched
+                </span>
+              </p>
+              <span className="text-xs text-gray-400">{gap?.summary?.missing_skills} to develop</span>
             </div>
             <div className="w-full bg-gray-100 rounded-full h-2">
               <div className={`h-2 rounded-full ${barColor}`} style={{ width: `${coverage}%` }} />

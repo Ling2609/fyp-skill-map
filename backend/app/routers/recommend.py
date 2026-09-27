@@ -99,6 +99,8 @@ class RecommendRequest(BaseModel):
     extra_skills: list[str] = []
     top_n: int = 10
     role_filter: str = ""
+    include_past: bool = False   # False = live jobs only (you can apply). Past 2024 postings are data
+                                 # for Career Paths / market stats, not recommendations
 
 
 def grade_weight(grade: float) -> float:
@@ -202,6 +204,8 @@ def recommend_jobs(
 
     sbert_scores = []
     for job_id, cached in _job_cache.items():
+        if not payload.include_past and cached.get("source") != "live":
+            continue
         if is_subcategory_filter and cached.get("subcategory") != role_filter_stripped:
             continue
         job_vec = cached["vec"]
@@ -272,7 +276,9 @@ def recommend_jobs(
         },
         "role_filter": payload.role_filter,
         "recommendations": results,
-        "total_jobs_compared": len(_job_cache),
+        "total_jobs_compared": sum(
+            1 for c in _job_cache.values() if payload.include_past or c.get("source") == "live"
+        ),
     }
 
 
