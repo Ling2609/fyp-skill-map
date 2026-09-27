@@ -8,12 +8,12 @@ from app.models.user_module import UserModule
 from app.models.profile import UserProject, UserCertification
 from app.routers.auth import get_current_user
 from app.models.user import User
-from app.nlp.embedder import Embedder
+from app.nlp.embedder import get_embedder
 import numpy as np
 
 router = APIRouter(prefix="/skillgap", tags=["skill-gap"])
 
-embedder = Embedder()
+embedder = get_embedder()
 
 SIMILARITY_THRESHOLD = 0.6   # at or above = counts as matched
 DIRECT_THRESHOLD = 0.8       # at or above = direct evidence (same skill, different wording)
@@ -111,7 +111,7 @@ def analyse_skill_gap(
     # Embed all skills in one batch call, then split
     grad_skill_names = list(graduate_skills.keys())
     all_skills = grad_skill_names + job_skills
-    embeddings = embedder.embed_batch(all_skills)
+    embeddings = embedder.embed_cached(all_skills)
 
     grad_embeddings = embeddings[:len(grad_skill_names)]
     job_embeddings  = embeddings[len(grad_skill_names):]
@@ -142,7 +142,7 @@ def analyse_skill_gap(
                 "grade_weight": graduate_skills.get(best_match, 0),
                 "evidence_source": skill_source_type.get(best_match, "module"),  # module / project / cert
                 # direct  = your skill is essentially the same as the requirement (≥ 0.8)
-                # related = you studied a close topic, not this exact skill (0.6-0.79)
+                # related = you studied a close topic, not this exact skill (0.6–0.79)
                 "evidence": "direct" if best_score >= DIRECT_THRESHOLD else "related",
             })
         else:

@@ -5,7 +5,7 @@ from app.database import SessionLocal, get_db
 from app.models.module import Module, ModuleSkill
 from app.models.job import Job, JobSkill
 from app.models.profile import UserProject, UserCertification
-from app.nlp.embedder import Embedder
+from app.nlp.embedder import get_embedder
 from app.routers.auth import get_current_user
 from app.models.user import User
 from app.models.user_module import UserModule
@@ -32,7 +32,7 @@ def classify_seniority(title: str) -> str:
 
 router = APIRouter(prefix="/recommend", tags=["recommend"])
 
-embedder = Embedder()
+embedder = get_embedder()   # shared with skillgap.py; vectors cached on disk
 
 _job_cache = {}
 _cache_lock = threading.Lock()   # requests run in parallel threads; one cache update at a time
@@ -65,14 +65,22 @@ def _sync_job_cache():
         for s in db.query(JobSkill).filter(JobSkill.job_id.in_(new_ids)).all():
             skills_by_job.setdefault(s.job_id, []).append(s.skill_name)
 
-        for job in db.query(Job).filter(Job.id.in_(new_ids)).all():
-            skill_names = skills_by_job.get(job.id)
-            if not skill_names:
-                continue
-            skill_text = " ".join(skill_names)
-            vec = embedder.embed(skill_text)
-            # Pre-embed and pre-normalise job skill vectors once per job
-            skill_vecs = embedder.embed_batch(skill_names)
+        new_jobs = [j for j in db.query(Job).filter(Job.id.in_(new_ids)).all() if skills_by_job.get(j.id)]
+
+        # Embed everything the new jobs need in ONE call: each skill name + each job's joined skill text.
+        # Skill names repeat a lot across jobs ("SQL", "Python"), and vectors are saved to disk,
+        # so after the first run only genuinely new text goes through the model.
+        texts = []
+        for job in new_jobs:
+            texts.extend(skills_by_job[job.id])
+            texts.append(" ".join(skills_by_job[job.id]))
+        vec_of = dict(zip(texts, embedder.embed_cached(texts))) if texts else {}
+
+        for job in new_jobs:
+            skill_names = skills_by_job[job.id]
+            vec = vec_of[" ".join(skill_names)]
+            # Pre-normalise job skill vectors once per job
+            skill_vecs = np.stack([vec_of[n] for n in skill_names])
             skill_vecs = skill_vecs / (np.linalg.norm(skill_vecs, axis=1, keepdims=True) + 1e-8)
             _job_cache[job.id] = {
                 "vec": vec,
@@ -208,7 +216,7 @@ def recommend_jobs(
     # ── Grad skill embeddings — embed once, normalise once ─────────────────────
     grad_skill_names = list(skill_weights.keys())
     if grad_skill_names:
-        grad_embeddings = embedder.embed_batch(grad_skill_names)
+        grad_embeddings = embedder.embed_cached(grad_skill_names)
         grad_embeddings = grad_embeddings / (np.linalg.norm(grad_embeddings, axis=1, keepdims=True) + 1e-8)
     else:
         grad_embeddings = np.array([])
