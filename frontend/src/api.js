@@ -19,7 +19,10 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     const isLoginCall = error.config?.url?.includes('/auth/login')
-    if (error.response?.status === 401 && !isLoginCall && localStorage.getItem('token')) {
+    // On public pages (e.g. an old token while opening Register) just drop the token;
+    // AuthContext handles that case, no need to reload the page to /login
+    const onPublicPage = ['/', '/login', '/register'].includes(window.location.pathname)
+    if (error.response?.status === 401 && !isLoginCall && !onPublicPage && localStorage.getItem('token')) {
       localStorage.removeItem('token')
       sessionStorage.clear()
       window.location.href = '/login?expired=1'

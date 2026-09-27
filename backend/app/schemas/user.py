@@ -17,7 +17,7 @@ class UserRegister(BaseModel):
         if len(v) < 8:
             raise ValueError("Password must be at least 8 characters")
         if len(v.encode("utf-8")) > 72:  # bcrypt only accepts up to 72 bytes
-            raise ValueError("Password must be at most 72 characters")
+            raise ValueError("Password is too long (max 72 bytes, e.g. 72 English letters)")
         return v
 
 class UserLogin(BaseModel):

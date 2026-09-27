@@ -44,6 +44,11 @@ export default function Login() {
   const [showPassword, setShowPassword] = useState(false)
   const [showToast, setShowToast] = useState(!!location.state?.message)
 
+  // Show "session expired" once, then tidy the URL so a refresh doesn't show it again
+  useEffect(() => {
+    if (sessionExpired) navigate('/login', { replace: true })
+  }, [sessionExpired, navigate])
+
   const handleSubmit = async (e) => {
     e.preventDefault()
     setError('')

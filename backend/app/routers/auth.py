@@ -1,6 +1,7 @@
 import re
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer
+from jose import JWTError
 from sqlalchemy.orm import Session
 from app.database import get_db
 from app.models.user import User, UserRole
@@ -39,15 +40,17 @@ def validate_username_format(username: str) -> tuple[bool, str]:
 
 
 def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
+    # Only a bad/expired token is a 401. A database error must NOT look like
+    # "session expired", or the frontend would log the user out for a server problem.
     try:
         payload = decode_token(token)
         user_id = int(payload.get("sub"))
-        user = db.query(User).filter(User.id == user_id).first()
-        if not user:
-            raise HTTPException(status_code=401, detail="User not found")
-        return user
-    except Exception:
+    except (JWTError, TypeError, ValueError):
         raise HTTPException(status_code=401, detail="Invalid token")
+    user = db.query(User).filter(User.id == user_id).first()
+    if not user:
+        raise HTTPException(status_code=401, detail="User not found")
+    return user
 
 
 @router.get("/me", response_model=UserOut)

@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from pydantic import BaseModel
+from typing import Annotated
+from pydantic import BaseModel, Field
 from app.database import SessionLocal, get_db
 from app.models.module import Module, ModuleSkill
 from app.models.job import Job, JobSkill
@@ -120,7 +121,7 @@ class ModuleInput(BaseModel):
 
 class RecommendRequest(BaseModel):
     modules: list[ModuleInput] = []
-    extra_skills: list[str] = []
+    extra_skills: list[Annotated[str, Field(max_length=100)]] = Field(default=[], max_length=50)
     top_n: int = 10
     role_filter: str = ""
     include_past: bool = False   # False = live jobs only (you can apply). Past 2024 postings are data

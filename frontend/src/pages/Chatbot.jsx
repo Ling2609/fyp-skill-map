@@ -143,10 +143,10 @@ export default function Chatbot() {
         const res = await api.get('/profile/skills')
         userSkills.current = res.data.skills || []
       } catch {
-        userSkills.current = []
+        // leave it as null so the next message tries again
       }
     }
-    ctx.user_skills = userSkills.current
+    ctx.user_skills = userSkills.current ?? []
     const savedResults = sessionStorage.getItem('lastRecommendResults')
     if (savedResults) {
       const data = JSON.parse(savedResults)
@@ -168,15 +168,19 @@ export default function Chatbot() {
       const res = await api.post('/chatbot/', {
         mode,
         // Only the last 20 messages: keeps each request small (backend limit is 40)
-        messages: msgs.slice(-20).map(m => ({ role: m.role, content: m.content })),
+        messages: msgs.filter(m => !m.failed).slice(-20).map(m => ({ role: m.role, content: m.content })),
         ...ctx,
       })
       setMessages(prev => [...prev, { role: 'assistant', content: res.data.reply }])
     } catch {
-      setMessages(prev => [...prev, {
-        role: 'assistant',
-        content: 'Something went wrong. Please try again.',
-      }])
+      // Mark the message that failed so it isn't re-sent with every later message
+      // (otherwise one bad message, e.g. too long, would break the whole chat)
+      setMessages(prev => {
+        const next = [...prev]
+        const last = next.length - 1
+        if (last >= 0 && next[last].role === 'user') next[last] = { ...next[last], failed: true }
+        return [...next, { role: 'assistant', content: 'Something went wrong. Please try again.', failed: true }]
+      })
     } finally {
       setLoading(false)
     }
@@ -295,6 +299,7 @@ export default function Chatbot() {
             onChange={e => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder={currentMode.placeholder}
+            maxLength={4000}
             rows={1}
             className="flex-1 resize-none rounded-xl border border-slate-200 px-4 py-3 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition leading-relaxed"
             style={{ maxHeight: '120px', overflowY: 'auto' }}

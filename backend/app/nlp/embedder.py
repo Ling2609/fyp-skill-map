@@ -18,6 +18,7 @@ Why embed_cached exists:
     instead of re-embedding ~2,400 jobs.
 """
 
+import json
 import os
 import threading
 from pathlib import Path
@@ -40,13 +41,17 @@ class Embedder:
         print(f"Embedder loaded: {MODEL_NAME} ({len(self._cache)} cached vectors)")
 
     # ── Plain embedding (no cache) ────────────────────────────────────────────
+    # The model is shared by parallel requests; its tokenizer isn't safe to use from two
+    # threads at once, so every model call goes through the same lock.
     def embed(self, text: str) -> np.ndarray:
         """Embed a single text string into a 384-dim vector."""
-        return self.model.encode(text, convert_to_numpy=True)
+        with self._lock:
+            return self.model.encode(text, convert_to_numpy=True)
 
     def embed_batch(self, texts: list[str]) -> np.ndarray:
         """Embed a list of texts — faster than one by one."""
-        return self.model.encode(texts, convert_to_numpy=True, show_progress_bar=False)
+        with self._lock:
+            return self.model.encode(texts, convert_to_numpy=True, show_progress_bar=False)
 
     def similarity(self, vec1: np.ndarray, vec2: np.ndarray) -> float:
         """Cosine similarity between two vectors. Returns float 0-1."""
@@ -75,19 +80,31 @@ class Embedder:
 
     def _load_cache(self):
         try:
-            data = np.load(CACHE_FILE, allow_pickle=False)
-            if str(data["model"]) != MODEL_NAME:   # e.g. after fine-tuning (B5): start fresh
-                return
-            self._cache = dict(zip(data["texts"].tolist(), data["vectors"]))
-        except (FileNotFoundError, KeyError, ValueError, OSError):
+            with np.load(CACHE_FILE, allow_pickle=False) as data:
+                if str(data["model"]) != MODEL_NAME:   # e.g. after fine-tuning (B5): start fresh
+                    return
+                texts = json.loads(str(data["texts"]))
+                self._cache = dict(zip(texts, data["vectors"]))
+        except FileNotFoundError:
+            self._cache = {}
+        except Exception as e:   # damaged/old-format file: ignore it, it gets rebuilt
+            print(f"Embedding cache unreadable ({type(e).__name__}), rebuilding it")
             self._cache = {}
 
     def _save_cache(self):
-        texts = list(self._cache)
-        tmp = CACHE_FILE.with_name("embedding_cache.tmp.npz")
-        np.savez(tmp, model=np.array(MODEL_NAME), texts=np.array(texts),
-                 vectors=np.stack([self._cache[t] for t in texts]))
-        os.replace(tmp, CACHE_FILE)   # write-then-rename, so a crash never leaves a broken file
+        """Best effort: a failed save (e.g. Windows antivirus holding the file) must never
+        break a request, the vectors are already in memory and will be saved next time."""
+        try:
+            texts = list(self._cache)
+            CACHE_FILE.parent.mkdir(parents=True, exist_ok=True)
+            tmp = CACHE_FILE.with_name("embedding_cache.tmp.npz")
+            # Texts stored as one JSON string: a numpy string array pads every text to the
+            # longest one, which makes the file balloon
+            np.savez(tmp, model=np.array(MODEL_NAME), texts=np.array(json.dumps(texts)),
+                     vectors=np.stack([self._cache[t] for t in texts]))
+            os.replace(tmp, CACHE_FILE)   # write-then-rename, so a crash never leaves a broken file
+        except Exception as e:
+            print(f"Could not save embedding cache ({type(e).__name__}: {e}); will retry later")
 
 
 _shared: Embedder | None = None
