@@ -108,7 +108,7 @@ export default function Dashboard() {
               {
                 label: 'Openings You Align With',
                 value: profileStats.aligned,
-                sub: `of ${profileStats.openings} current openings · you cover ≥ half the skills`,
+                sub: `of ${profileStats.openings} openings · ≥ half the skills`,
                 dim: profileStats.aligned === 0,
               },
               {

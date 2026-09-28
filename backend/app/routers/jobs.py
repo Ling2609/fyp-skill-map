@@ -112,11 +112,11 @@ def get_job_description(
 
     try:
         extractor = get_extractor()
-        groq_bullets = extractor.format_job_description(job.job_title, job.description)
-        if groq_bullets and len(groq_bullets) >= 3:
-            bullets = groq_bullets
+        llm_bullets = extractor.format_job_description(job.job_title, job.description)   # Gemini
+        if llm_bullets and len(llm_bullets) >= 3:
+            bullets = llm_bullets
     except Exception as e:
-        print(f"Groq failed: {e}")
+        print(f"Description formatting failed: {e}")
 
     if len(bullets) < 3:
         bullets = format_description_rules(job.description)

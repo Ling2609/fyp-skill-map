@@ -1,7 +1,10 @@
 """
-Skill Extractor using Groq (GPT-OSS-120B)
-===========================================
-Uses Groq's free API to extract skills and format job descriptions.
+Skill Extractor
+===============
+- Skill extraction (modules, jobs): gpt-oss-120b via the Groq API. Every skill used for
+  matching comes from this ONE model, so module and job skills are worded consistently.
+- Job description formatting (display only): Gemini, to keep Groq's daily token limit for
+  skill extraction. If Gemini is unavailable, jobs.py falls back to rule-based formatting.
 """
 
 import json
@@ -14,6 +17,22 @@ from dotenv import load_dotenv
 load_dotenv()
 
 client = Groq(api_key=os.getenv("GROQ_API_KEY"))
+
+# Gemini is used ONLY for formatting job descriptions (see module docstring)
+GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-3.1-flash-lite")
+_gemini_client = None
+
+
+def _gemini():
+    """Create the Gemini client on first use; None if no key is configured."""
+    global _gemini_client
+    if _gemini_client is None:
+        key = os.getenv("GEMINI_API_KEY")
+        if not key:
+            return None
+        from google import genai
+        _gemini_client = genai.Client(api_key=key)
+    return _gemini_client
 
 # Module skills are extracted from the module DESCRIPTOR (name + description), not the
 # name alone. Name-only extraction guessed skills from the title and padded towards the
@@ -193,4 +212,28 @@ class SkillExtractor:
         if not description:
             return []
         prompt = JOB_FORMAT_PROMPT.format(title=title, description=description)
-        return self._call_groq(JOB_FORMAT_SYSTEM, prompt)
+        return self._call_gemini(JOB_FORMAT_SYSTEM, prompt)
+
+    def _call_gemini(self, system: str, prompt: str, retries: int = 2) -> list[str]:
+        """Call Gemini and parse a JSON array. Returns [] on failure (caller falls back)."""
+        gemini = _gemini()
+        if gemini is None:
+            print("  GEMINI_API_KEY not set: using rule-based formatting")
+            return []
+        from google.genai import types
+        for attempt in range(retries):
+            try:
+                response = gemini.models.generate_content(
+                    model=GEMINI_MODEL,
+                    contents=prompt,
+                    config=types.GenerateContentConfig(system_instruction=system),
+                )
+                result = extract_json_array((response.text or "").strip())
+                if result:
+                    return [str(s).strip() for s in result if s]
+                print(f"  Gemini: could not parse response on attempt {attempt + 1}")
+            except Exception as e:
+                print(f"  Gemini error on attempt {attempt + 1}: {e}")
+            if attempt < retries - 1:
+                time.sleep(3)
+        return []
