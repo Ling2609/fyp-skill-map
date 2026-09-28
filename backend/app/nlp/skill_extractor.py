@@ -46,7 +46,8 @@ Description: {description}
 
 List between 3 and 10 skills this module teaches. Fewer is better than guessing. Each skill must:
 - Come from the description (stated, or directly implied by a stated topic)
-- Use industry wording employers recognise (e.g. "SQL querying", "database normalisation")
+- Keep the level the description states: an introductory or "basic" topic stays basic (e.g. "basic object-oriented programming", not "object-oriented design"; "algorithmic thinking", not "algorithm design")
+- Prefer the description's own terms, in industry wording employers recognise (e.g. "SQL querying", "database normalisation")
 - Be concise (1-4 words)
 - Not repeat another skill in different words
 
