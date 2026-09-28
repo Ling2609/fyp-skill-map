@@ -13,39 +13,34 @@ const getGreeting = () => {
 export default function Dashboard() {
   const navigate = useNavigate()
   const [user, setUser] = useState(null)
-  const [{ topJobs, profileStats }] = useState(() => {
-    const savedResults = sessionStorage.getItem('lastRecommendResults')
-    const savedModules = localStorage.getItem('selectedModules')
-
-    if (savedResults) {
-      const data = JSON.parse(savedResults)
-      const top3 = data.recommendations?.slice(0, 3) || []   // live jobs only (from /recommend)
-      return {
-        topJobs: top3,
-        profileStats: {
-          skills: data.graduate_profile?.unique_skills || 0,
-          // Skill coverage of the #1 job (Best fit order), whole number like Job Detail; null = no jobs yet
-          bestMatch: top3[0] ? Math.round(top3[0].coverage_percent ?? top3[0].match_percent ?? 0) : null,
-          bestMatchTitle: top3[0]?.job_title || null,
-          modules: data.graduate_profile?.modules_count || 0,
-        },
-      }
-    }
-
-    if (savedModules) {
-      const modules = JSON.parse(savedModules)
-      return {
-        topJobs: [],
-        profileStats: { skills: null, bestMatch: null, bestMatchTitle: null, modules: modules.length },
-      }
-    }
-
-    return { topJobs: [], profileStats: null }
-  })
+  // Summary comes from the backend on every visit, so it's never stale and works
+  // before Job Matches has been opened. Same request as Job Matches' default view
+  // (all live jobs, Best fit order), so the top 3 here are the top 3 there.
+  const [summary, setSummary] = useState(null)   // null = loading
+  const [emptyProfile, setEmptyProfile] = useState(false)
+  const [loadError, setLoadError] = useState('')
 
   useEffect(() => {
     api.get('/auth/me').then(res => setUser(res.data)).catch(() => {})
+    api.post('/recommend/', { top_n: 0, role_filter: '' })
+      .then(res => setSummary(res.data))
+      .catch(err => {
+        if (err.response?.status === 400) setEmptyProfile(true)   // no modules, projects or certs yet
+        else setLoadError('Could not load your summary. Please check the server is running and refresh.')
+      })
   }, [])
+
+  const topJobs = summary?.recommendations?.slice(0, 3) || []
+  const profile = summary?.graduate_profile
+  const profileStats = profile && {
+    skills: profile.unique_skills,
+    extraSkills: profile.profile_skills_included,   // skills only projects/certs add
+    modules: profile.modules_count,
+    // Skill coverage of the #1 job, whole number like Job Detail; null = no live jobs yet
+    bestMatch: topJobs[0] ? Math.round(topJobs[0].coverage_percent) : null,
+    bestMatchTitle: topJobs[0]?.job_title || null,
+  }
+  const loading = !summary && !emptyProfile && !loadError
 
   const firstName = user?.first_name || 'there'
 
@@ -72,27 +67,57 @@ export default function Dashboard() {
 
       <div className="px-8 py-6 space-y-6">
 
+        {loadError && <p className="text-sm text-rose-500">{loadError}</p>}
+
+        {emptyProfile && (
+          <div className="bg-white rounded-xl p-5 border border-slate-200 flex items-center justify-between gap-4">
+            <div>
+              <p className="text-sm font-semibold text-slate-800">Your skill profile is empty</p>
+              <p className="text-sm text-slate-500 mt-0.5">Add your module grades, a project or a certification to see your job matches.</p>
+            </div>
+            <button
+              onClick={() => navigate('/profile')}
+              className="shrink-0 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg px-4 py-2 transition"
+            >
+              Set up profile
+            </button>
+          </div>
+        )}
+
         {/* Stats strip */}
+        {loading && (
+          <div className="grid grid-cols-3 gap-4">
+            {[0, 1, 2].map(i => (
+              <div key={i} className="bg-white rounded-xl p-5 border border-slate-200 animate-pulse">
+                <div className="h-3 w-24 bg-slate-100 rounded mb-4" />
+                <div className="h-7 w-16 bg-slate-100 rounded" />
+              </div>
+            ))}
+          </div>
+        )}
+
         {profileStats && (
           <div className="grid grid-cols-3 gap-4">
             {[
               {
                 label: 'Skills Identified',
-                value: profileStats.skills ?? '—',
-                sub: profileStats.skills ? `from ${profileStats.modules} modules` : 'run job match first',
-                dim: !profileStats.skills,
+                value: profileStats.skills,
+                sub: profileStats.extraSkills
+                  ? `from ${profileStats.modules} modules + projects/certs`
+                  : `from ${profileStats.modules} modules`,
+                dim: false,
               },
               {
                 label: 'Top Match',
                 value: profileStats.bestMatch != null ? `${profileStats.bestMatch}%` : '—',
-                sub: profileStats.bestMatchTitle || 'find jobs to see',
+                sub: profileStats.bestMatchTitle || 'no current openings yet',
                 dim: profileStats.bestMatch == null,
                 matchPct: profileStats.bestMatch,
               },
               {
-                label: 'Modules Selected',
+                label: 'Modules Recorded',
                 value: profileStats.modules,
-                sub: profileStats.modules > 0 ? 'modules configured' : 'none selected yet',
+                sub: profileStats.modules > 0 ? 'in your academic record' : 'none recorded yet',
                 dim: false,
               },
             ].map(({ label, value, sub, dim, matchPct }) => (
@@ -138,9 +163,9 @@ export default function Dashboard() {
                     </div>
                   </div>
                   <div className="flex items-center gap-1.5 shrink-0">
-                    <div className={`w-1.5 h-1.5 rounded-full ${getDotColor(job.coverage_percent ?? job.match_percent)}`} />
-                    <span className={`text-xs font-semibold tabular-nums ${getMatchColor(job.coverage_percent ?? job.match_percent)}`}>
-                      {job.skills_total ? `${job.skills_matched}/${job.skills_total} skills` : `${job.match_percent}%`}
+                    <div className={`w-1.5 h-1.5 rounded-full ${getDotColor(job.coverage_percent)}`} />
+                    <span className={`text-xs font-semibold tabular-nums ${getMatchColor(job.coverage_percent)}`}>
+                      {`${job.skills_matched}/${job.skills_total} skills`}
                     </span>
                   </div>
                 </div>
