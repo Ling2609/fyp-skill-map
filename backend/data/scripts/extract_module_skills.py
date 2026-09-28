@@ -1,7 +1,7 @@
 """
 Module Skill Extraction Pipeline
 =================================
-Runs Gemini skill extraction on all modules and stores results in PostgreSQL.
+Runs Groq skill extraction on each module's descriptor (name + description) and stores results in PostgreSQL.
 Run once — results are stored and reused from DB.
 
 Usage:
@@ -16,7 +16,7 @@ sys.path.append(".")
 
 from app.database import SessionLocal
 from app.models.module import Module, ModuleSkill
-from app.nlp.skill_extractor import SkillExtractor
+from app.nlp.skill_extractor import MODULE_EXTRACTED_BY, SkillExtractor
 
 def run():
     print("=" * 60)
@@ -68,7 +68,7 @@ def run():
             db.commit()
             db.refresh(db_module)
 
-            # Extract skills via Gemini
+            # Extract skills from the descriptor via Groq
             result = extractor.extract_from_module(mod)
             skills = result["extracted_skills"]
             print(f"  Extracted {len(skills)} skills: {skills}")
@@ -79,6 +79,7 @@ def run():
                     module_id=db_module.id,
                     module_code=mod["code"],
                     skill_name=skill_name,
+                    extracted_by=MODULE_EXTRACTED_BY,
                 )
                 db.add(db_skill)
 

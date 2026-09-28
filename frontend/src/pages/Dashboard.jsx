@@ -3,6 +3,9 @@ import { useNavigate } from 'react-router-dom'
 import api from '../api'
 import PageHeader from '../components/PageHeader'
 
+// A job counts as "aligned" when you cover at least half its required skills
+const ALIGNED_MIN_COVERAGE = 50
+
 const getGreeting = () => {
   const hour = new Date().getHours()
   if (hour < 12) return 'Good morning'
@@ -32,9 +35,12 @@ export default function Dashboard() {
 
   const topJobs = summary?.recommendations?.slice(0, 3) || []
   const profile = summary?.graduate_profile
+  const allJobs = summary?.recommendations || []
   const profileStats = profile && {
-    skills: profile.unique_skills,
-    extraSkills: profile.profile_skills_included,   // skills only projects/certs add
+    // Openings where the student covers at least half the required skills. Replaces a raw
+    // skill count, which is a vanity number (doesn't lead to any action; see references.md)
+    aligned: allJobs.filter(j => j.coverage_percent >= ALIGNED_MIN_COVERAGE).length,
+    openings: allJobs.length,
     modules: profile.modules_count,
     // Skill coverage of the #1 job, whole number like Job Detail; null = no live jobs yet
     bestMatch: topJobs[0] ? Math.round(topJobs[0].coverage_percent) : null,
@@ -100,12 +106,10 @@ export default function Dashboard() {
           <div className="grid grid-cols-3 gap-4">
             {[
               {
-                label: 'Skills Identified',
-                value: profileStats.skills,
-                sub: profileStats.extraSkills
-                  ? `from ${profileStats.modules} modules + projects/certs`
-                  : `from ${profileStats.modules} modules`,
-                dim: false,
+                label: 'Openings You Align With',
+                value: profileStats.aligned,
+                sub: `of ${profileStats.openings} current openings · you cover ≥ half the skills`,
+                dim: profileStats.aligned === 0,
               },
               {
                 label: 'Top Match',

@@ -15,16 +15,23 @@ load_dotenv()
 
 client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 
-MODULE_SYSTEM = "You are an academic skill analyser. Given a university module name, extract the specific technical and professional skills that students would learn in this module. Return ONLY a valid JSON array of skill strings, no explanation, no markdown. Extract between 5 and 15 skills depending on the module scope."
+# Module skills are extracted from the module DESCRIPTOR (name + description), not the
+# name alone. Name-only extraction guessed skills from the title and padded towards the
+# maximum (e.g. NumPy / Pandas for an intro Python module that teaches neither).
+MODULE_EXTRACTED_BY = "gpt-oss-120b:descriptor-v1"   # stored in module_skills.extracted_by
+
+MODULE_SYSTEM = "You are an academic skill analyser. Given a university module descriptor, list the technical and professional skills the module actually teaches, based only on its description. Never add tools, frameworks or topics the description does not mention or directly imply. Return ONLY a valid JSON array of skill strings, no explanation, no markdown."
 
 MODULE_PROMPT = """Module: {module_name}
+Description: {description}
 
-Extract between 5 and 15 skills students would learn, depending on the module scope. Each skill should be:
-- Specific (e.g. "Python programming" not just "programming")
-- Industry-relevant (terms employers would recognise)
-- Concise (2-4 words maximum)
+List between 3 and 10 skills this module teaches. Fewer is better than guessing. Each skill must:
+- Come from the description (stated, or directly implied by a stated topic)
+- Use industry wording employers recognise (e.g. "SQL querying", "database normalisation")
+- Be concise (1-4 words)
+- Not repeat another skill in different words
 
-Return ONLY a JSON array, example: ["Python programming", "SQL", "data modelling"]"""
+Return ONLY a JSON array, example: ["SQL querying", "entity-relationship modelling", "database normalisation"]"""
 
 JOB_SKILLS_SYSTEM = "You are a job requirements analyser. Extract specific technical and professional skills from job descriptions. Return ONLY a valid JSON array of skill strings, no explanation, no markdown. Extract between 5 and 15 skills depending on the job complexity."
 
@@ -145,7 +152,10 @@ class SkillExtractor:
     def extract_from_module(self, module: dict) -> dict:
         """Extract skills from a module dict."""
         name = module.get("name", "")
-        prompt = MODULE_PROMPT.format(module_name=name)
+        description = (module.get("description") or "").strip()
+        if not description:
+            raise ValueError(f"Module {module.get('code')} has no description: skills must come from the descriptor")
+        prompt = MODULE_PROMPT.format(module_name=name, description=description)
         skills = self._call_groq(MODULE_SYSTEM, prompt)
 
         return {
