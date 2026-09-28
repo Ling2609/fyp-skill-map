@@ -36,8 +36,8 @@ export default function JobDetail() {
   const [showSources, setShowSources] = useState(false)
 
   useEffect(() => {
-    // Pass empty modules — backend reads them from DB for the logged-in user
-    api.post('/skillgap/', { modules: [], job_id: decodeURIComponent(jobId) })
+    // The backend builds the profile from the logged-in user's saved record
+    api.post('/skillgap/', { job_id: decodeURIComponent(jobId) })
       .then(res => { setGap(res.data); setLoading(false) })
       .catch(err => {
         setError(err.response?.data?.detail || 'Failed to load skill gap analysis')

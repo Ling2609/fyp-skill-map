@@ -72,8 +72,6 @@ export default function Recommend() {
 
     try {
       const res = await api.post('/recommend/', {
-        modules: [],
-        extra_skills: [],
         top_n: searchCount,  // 0 = all
         role_filter: searchRole,
       })

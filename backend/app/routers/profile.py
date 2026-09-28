@@ -3,7 +3,7 @@ Profile router — user's personal skill profile built from:
   - Projects: name + description + optional GitHub → Groq extracts skills
   - Certifications: cert name + issuer → Groq maps to skills
 
-GET /profile/skills returns the combined, deduplicated skill list.
+GET /profile/skills returns the shared Graduate Skill Profile (app/services/skill_profile.py).
 """
 import json
 from fastapi import APIRouter, Depends, HTTPException
@@ -17,8 +17,8 @@ from app.routers.auth import get_current_user
 from app.models.user import User
 from app.config import settings
 
-from app.models.user_module import UserModule, UserSkillCache
-from app.models.module import ModuleSkill, Module
+from app.models.user_module import UserModule
+from app.services.skill_profile import build_skill_profile
 
 router = APIRouter(prefix="/profile", tags=["profile"])
 MODEL = "openai/gpt-oss-120b"
@@ -228,43 +228,15 @@ def get_skill_profile(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
-    projects = db.query(UserProject).filter(UserProject.user_id == current_user.id).all()
-    certs = db.query(UserCertification).filter(UserCertification.user_id == current_user.id).all()
-    saved_modules = db.query(UserModule).filter(UserModule.user_id == current_user.id).all()
-
-    all_skills = []
-
-    # Skills from modules (via ModuleSkill table)
-    for um in saved_modules:
-        module_skills = db.query(ModuleSkill).filter(
-            ModuleSkill.module_code == um.module_code
-        ).all()
-        all_skills.extend([ms.skill_name for ms in module_skills])
-
-    for p in projects:
-        all_skills.extend(p.extracted_skills or [])
-    for c in certs:
-        all_skills.extend(c.mapped_skills or [])
-
-    seen = set()
-    unique_skills = []
-    for s in all_skills:
-        key = s.lower().strip()
-        if key and key not in seen:
-            seen.add(key)
-            unique_skills.append(s)
-
-    from_modules = sum(
-        db.query(ModuleSkill).filter(ModuleSkill.module_code == um.module_code).count()
-        for um in saved_modules
-    )
-
+    """The same Graduate Skill Profile Job Matches and Skill Gap use (also fed to the chatbot)."""
+    profile = build_skill_profile(current_user.id, db)
+    by_source = lambda src: sum(1 for ev in profile.values() if ev.source == src)
     return {
-        "skills": unique_skills,
-        "total": len(unique_skills),
-        "from_modules": from_modules,
-        "from_projects": sum(len(p.extracted_skills or []) for p in projects),
-        "from_certs": sum(len(c.mapped_skills or []) for c in certs),
+        "skills": [ev.name for ev in profile.values()],
+        "total": len(profile),
+        "from_modules": by_source("module"),
+        "from_projects": by_source("project"),
+        "from_certs": by_source("cert"),
     }
 
 # ── Module grades ──────────────────────────────────────────────────────────────
@@ -274,60 +246,6 @@ class ModuleGradeInput(BaseModel):
 
 class ModuleGradesPayload(BaseModel):
     grades: list[ModuleGradeInput]
-
-
-def rebuild_skill_cache(user_id: int, db: Session):
-    """Recompute and replace the user's full skill cache from modules + projects + certs."""
-    # Delete existing cache for this user
-    db.query(UserSkillCache).filter(UserSkillCache.user_id == user_id).delete()
-
-    skill_weights: dict[str, tuple[float, str]] = {}  # skill_name → (weight, source)
-
-    # ── From saved modules ─────────────────────────────────────────────────────
-    saved_modules = db.query(UserModule).filter(UserModule.user_id == user_id).all()
-    for um in saved_modules:
-        grade = um.grade
-        if grade >= 4.0:   weight = 1.0
-        elif grade >= 3.7: weight = 0.9
-        elif grade >= 3.3: weight = 0.8
-        elif grade >= 3.0: weight = 0.7
-        elif grade >= 2.7: weight = 0.6
-        else:              weight = 0.5
-
-        module_skills = db.query(ModuleSkill).filter(
-            ModuleSkill.module_code == um.module_code
-        ).all()
-        for ms in module_skills:
-            name = ms.skill_name.lower()
-            existing_weight, _ = skill_weights.get(name, (0, "module"))
-            if weight > existing_weight:
-                skill_weights[name] = (weight, "module")
-
-    # ── From projects ──────────────────────────────────────────────────────────
-    projects = db.query(UserProject).filter(UserProject.user_id == user_id).all()
-    for p in projects:
-        for skill in (p.extracted_skills or []):
-            name = skill.lower()
-            if name not in skill_weights:
-                skill_weights[name] = (0.7, "project")
-
-    # ── From certifications ────────────────────────────────────────────────────
-    certs = db.query(UserCertification).filter(UserCertification.user_id == user_id).all()
-    for c in certs:
-        for skill in (c.mapped_skills or []):
-            name = skill.lower()
-            if name not in skill_weights:
-                skill_weights[name] = (0.7, "cert")
-
-    # ── Write new cache rows ───────────────────────────────────────────────────
-    for skill_name, (weight, source) in skill_weights.items():
-        db.add(UserSkillCache(
-            user_id=user_id,
-            skill_name=skill_name,
-            weight=weight,
-            source=source,
-        ))
-    db.commit()
 
 
 @router.post("/modules")
@@ -367,7 +285,6 @@ def save_module_grades(
             ))
 
     db.commit()
-    rebuild_skill_cache(current_user.id, db)
 
     return {"saved": len(payload.grades), "message": "Module grades saved."}
 

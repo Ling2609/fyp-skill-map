@@ -2,41 +2,24 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
 from app.database import get_db
-from app.models.module import Module, ModuleSkill
 from app.models.job import Job, JobSkill
-from app.models.user_module import UserModule
-from app.models.profile import UserProject, UserCertification
 from app.routers.auth import get_current_user
 from app.models.user import User
 from app.nlp.embedder import get_embedder
-import numpy as np
+from app.services.skill_profile import (
+    DIRECT_THRESHOLD, EMPTY_PROFILE_MESSAGE, MATCH_THRESHOLD, PARTLY_THRESHOLD,
+    build_skill_profile, normalise_rows,
+)
 
 router = APIRouter(prefix="/skillgap", tags=["skill-gap"])
 
 embedder = get_embedder()
 
-SIMILARITY_THRESHOLD = 0.6   # at or above = counts as matched
-DIRECT_THRESHOLD = 0.8       # at or above = direct evidence (same skill, different wording)
 BONUS_RELEVANCE_MIN = 0.3    # extra skills below this are unrelated to the job, so hidden
 
 
-class ModuleInput(BaseModel):
-    module_code: str
-    grade: float
-
-
 class SkillGapRequest(BaseModel):
-    modules: list[ModuleInput] = []   # optional — if empty, read from DB
     job_id: str
-
-
-def grade_weight(grade: float) -> float:
-    if grade >= 4.0: return 1.0
-    elif grade >= 3.7: return 0.9
-    elif grade >= 3.3: return 0.8
-    elif grade >= 3.0: return 0.7
-    elif grade >= 2.7: return 0.6
-    else: return 0.5
 
 
 @router.post("/")
@@ -45,57 +28,14 @@ def analyse_skill_gap(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
-    # If no modules sent, load from DB
-    if not payload.modules:
-        saved = db.query(UserModule).filter(
-            UserModule.user_id == current_user.id
-        ).all()
-        if not saved:
-            raise HTTPException(
-                status_code=400,
-                detail="No module grades saved. Please save your grades on the Profile page first."
-            )
-        payload.modules = [
-            ModuleInput(module_code=m.module_code, grade=m.grade)
-            for m in saved
-        ]
-
-    # Collect graduate skills + which module each came from
-    graduate_skills = {}    # skill_name -> weight
-    skill_module_map = {}   # skill_name -> module name
-    skill_source_type = {}  # skill_name -> "module" / "project" / "cert"
-    for mod_input in payload.modules:
-        module = db.query(Module).filter(Module.code == mod_input.module_code).first()
-        if not module:
-            continue
-        skills = db.query(ModuleSkill).filter(ModuleSkill.module_id == module.id).all()
-        weight = grade_weight(mod_input.grade)
-        for skill in skills:
-            name = skill.skill_name
-            if name not in graduate_skills or weight > graduate_skills[name]:
-                graduate_skills[name] = weight
-                skill_module_map[name] = module.name
-                skill_source_type[name] = "module"
-
-    # Projects + certifications add evidence too (same as recommend.py), so a skill
-    # proven in a project counts here as well. Module evidence wins if both exist,
-    # because it carries a grade.
-    PROFILE_WEIGHT = 0.7
-    for p in db.query(UserProject).filter(UserProject.user_id == current_user.id).all():
-        for name in (p.extracted_skills or []):
-            if name and name not in graduate_skills:
-                graduate_skills[name] = PROFILE_WEIGHT
-                skill_module_map[name] = f"Project: {p.name}"
-                skill_source_type[name] = "project"
-    for c in db.query(UserCertification).filter(UserCertification.user_id == current_user.id).all():
-        for name in (c.mapped_skills or []):
-            if name and name not in graduate_skills:
-                graduate_skills[name] = PROFILE_WEIGHT
-                skill_module_map[name] = f"Certification: {c.cert_name}"
-                skill_source_type[name] = "cert"
-
-    if not graduate_skills:
-        raise HTTPException(status_code=404, detail="No skills found for modules")
+    # One shared Graduate Skill Profile (modules + grades, projects, certifications).
+    # Module evidence wins over project/cert evidence because it carries a grade.
+    profile = build_skill_profile(current_user.id, db)
+    if not profile:
+        raise HTTPException(status_code=400, detail=EMPTY_PROFILE_MESSAGE)
+    graduate_skills = {ev.name: ev.weight for ev in profile.values()}       # skill_name -> weight
+    skill_module_map = {ev.name: ev.source_name for ev in profile.values()} # skill_name -> where it came from
+    skill_source_type = {ev.name: ev.source for ev in profile.values()}     # "module" / "project" / "cert"
 
     # Get job
     job = db.query(Job).filter(Job.job_id == payload.job_id).first()
@@ -117,8 +57,8 @@ def analyse_skill_gap(
     job_embeddings  = embeddings[len(grad_skill_names):]
 
     # Normalise both matrices once — then similarity = matmul (no per-pair norm)
-    grad_embeddings = grad_embeddings / (np.linalg.norm(grad_embeddings, axis=1, keepdims=True) + 1e-8)
-    job_embeddings  = job_embeddings  / (np.linalg.norm(job_embeddings,  axis=1, keepdims=True) + 1e-8)
+    grad_embeddings = normalise_rows(grad_embeddings)
+    job_embeddings  = normalise_rows(job_embeddings)
 
     # One matmul: sim_matrix[j, g] = cosine similarity between job skill j and grad skill g
     sim_matrix = job_embeddings @ grad_embeddings.T  # (J, G)
@@ -133,7 +73,7 @@ def analyse_skill_gap(
         best_score = float(best_scores[j_idx])
         best_match = grad_skill_names[int(best_indices[j_idx])]
 
-        if best_score >= SIMILARITY_THRESHOLD:
+        if best_score >= MATCH_THRESHOLD:
             matched.append({
                 "job_skill": job_skill,
                 "matched_graduate_skill": best_match,
@@ -148,7 +88,7 @@ def analyse_skill_gap(
         else:
             # Explain why: related skill exists but not close enough = partly covered,
             # no similar skill at all = not in modules. (Grade does not affect matching.)
-            if best_score >= 0.4:
+            if best_score >= PARTLY_THRESHOLD:
                 gap_reason = f"Partly covered in {skill_module_map.get(best_match, 'a module')}"
             else:
                 gap_reason = "Not in your modules or projects"
@@ -163,7 +103,7 @@ def analyse_skill_gap(
     # Exclude skills used for a match AND skills behind a "Partly covered" gap —
     # otherwise the same skill shows as both "related to a gap" and "extra".
     matched_grad_skills = {m["matched_graduate_skill"] for m in matched}
-    matched_grad_skills |= {m["closest_graduate_skill"] for m in missing if m["similarity"] >= 0.4}
+    matched_grad_skills |= {m["closest_graduate_skill"] for m in missing if m["similarity"] >= PARTLY_THRESHOLD}
     # Keep only extras that are still relevant to THIS job (worth mentioning in a CV
     # or interview), most relevant first. Unrelated ones (e.g. Python syntax for a
     # networking role) are dropped instead of padding the list.

@@ -1,15 +1,15 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from typing import Annotated
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 from app.database import SessionLocal, get_db
 from app.models.module import Module, ModuleSkill
 from app.models.job import Job, JobSkill
-from app.models.profile import UserProject, UserCertification
 from app.nlp.embedder import get_embedder
 from app.routers.auth import get_current_user
 from app.models.user import User
-from app.models.user_module import UserModule
+from app.services.skill_profile import (
+    EMPTY_PROFILE_MESSAGE, build_skill_profile, count_modules, normalise_rows, skill_coverage,
+)
 import numpy as np
 import re
 import threading
@@ -37,8 +37,6 @@ embedder = get_embedder()   # shared with skillgap.py; vectors cached on disk
 
 _job_cache = {}
 _cache_lock = threading.Lock()   # requests run in parallel threads; one cache update at a time
-
-SIMILARITY_THRESHOLD = 0.6
 
 
 def build_job_cache():
@@ -82,7 +80,7 @@ def _sync_job_cache():
             vec = vec_of[" ".join(skill_names)]
             # Pre-normalise job skill vectors once per job
             skill_vecs = np.stack([vec_of[n] for n in skill_names])
-            skill_vecs = skill_vecs / (np.linalg.norm(skill_vecs, axis=1, keepdims=True) + 1e-8)
+            skill_vecs = normalise_rows(skill_vecs)
             _job_cache[job.id] = {
                 "vec": vec,
                 "job_id": job.job_id,
@@ -101,53 +99,11 @@ def _sync_job_cache():
         db.close()
 
 
-def compute_skill_coverage(grad_embeddings_normed, job_skills, job_skill_vecs):
-    """How many of the job's required skills the graduate covers.
-    Returns (matched_count, total_count). Both inputs must already be L2-normalised.
-    Same rule as Job Detail's skill gap: best cosine similarity >= SIMILARITY_THRESHOLD.
-    """
-    if not job_skills or not len(grad_embeddings_normed):
-        return 0, len(job_skills or [])
-    sim_matrix = job_skill_vecs @ grad_embeddings_normed.T  # (J, G) — one matmul
-    best_scores = sim_matrix.max(axis=1)
-    matched = int((best_scores >= SIMILARITY_THRESHOLD).sum())
-    return matched, len(job_skills)
-
-
-class ModuleInput(BaseModel):
-    module_code: str
-    grade: float
-
-
 class RecommendRequest(BaseModel):
-    modules: list[ModuleInput] = []
-    extra_skills: list[Annotated[str, Field(max_length=100)]] = Field(default=[], max_length=50)
     top_n: int = 10
     role_filter: str = ""
     include_past: bool = False   # False = live jobs only (you can apply). Past 2024 postings are data
                                  # for Career Paths / market stats, not recommendations
-
-
-def grade_weight(grade: float) -> float:
-    if grade >= 4.0: return 1.0
-    elif grade >= 3.7: return 0.9
-    elif grade >= 3.3: return 0.8
-    elif grade >= 3.0: return 0.7
-    elif grade >= 2.7: return 0.6
-    else: return 0.5
-
-
-def get_profile_skills_for_user(user_id: int, db: Session) -> list[str]:
-    skills = []
-    projects = db.query(UserProject).filter(UserProject.user_id == user_id).all()
-    for p in projects:
-        if p.extracted_skills:
-            skills.extend(p.extracted_skills)
-    certs = db.query(UserCertification).filter(UserCertification.user_id == user_id).all()
-    for c in certs:
-        if c.mapped_skills:
-            skills.extend(c.mapped_skills)
-    return list({s.lower() for s in skills if s})
 
 
 @router.post("/")
@@ -156,49 +112,13 @@ def recommend_jobs(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
-    # Load modules from DB if not passed in request
-    if payload.modules:
-        modules_to_use = payload.modules
-    else:
-        saved = db.query(UserModule).filter(
-            UserModule.user_id == current_user.id
-        ).all()
-        if not saved:
-            raise HTTPException(
-                status_code=400,
-                detail="No module grades saved. Please save your grades on the Profile page first."
-            )
-        modules_to_use = [
-            ModuleInput(module_code=m.module_code, grade=m.grade)
-            for m in saved
-        ]
-    payload.modules = modules_to_use
+    # One shared Graduate Skill Profile (modules + grades, projects, certifications)
+    profile = build_skill_profile(current_user.id, db)
+    if not profile:
+        raise HTTPException(status_code=400, detail=EMPTY_PROFILE_MESSAGE)
+    skill_weights = {key: ev.weight for key, ev in profile.items()}
 
     build_job_cache()
-
-    # ── Module skills ──────────────────────────────────────────────────────────
-    skill_weights = {}
-    for mod_input in payload.modules:
-        module = db.query(Module).filter(Module.code == mod_input.module_code).first()
-        if not module:
-            continue
-        skills = db.query(ModuleSkill).filter(ModuleSkill.module_id == module.id).all()
-        weight = grade_weight(mod_input.grade)
-        for skill in skills:
-            name = skill.skill_name.lower()
-            skill_weights[name] = max(skill_weights.get(name, 0), weight)
-
-    if not skill_weights:
-        raise HTTPException(status_code=404, detail="No skills found for provided modules")
-
-    # ── Profile skills (projects + certs) ─────────────────────────────────────
-    extra = [s.lower() for s in payload.extra_skills] if payload.extra_skills \
-            else get_profile_skills_for_user(current_user.id, db)
-
-    EXTRA_WEIGHT = 0.7
-    for skill in extra:
-        if skill not in skill_weights:
-            skill_weights[skill] = EXTRA_WEIGHT
 
     # ── Build SBERT profile vector ─────────────────────────────────────────────
     profile_skills = []
@@ -217,8 +137,7 @@ def recommend_jobs(
     # ── Grad skill embeddings — embed once, normalise once ─────────────────────
     grad_skill_names = list(skill_weights.keys())
     if grad_skill_names:
-        grad_embeddings = embedder.embed_cached(grad_skill_names)
-        grad_embeddings = grad_embeddings / (np.linalg.norm(grad_embeddings, axis=1, keepdims=True) + 1e-8)
+        grad_embeddings = normalise_rows(embedder.embed_cached(grad_skill_names))
     else:
         grad_embeddings = np.array([])
 
@@ -267,7 +186,8 @@ def recommend_jobs(
         if cached is None:   # removed by a cache update from another request meanwhile
             continue
         job_skills = cached["skills"]
-        matched, total = compute_skill_coverage(grad_embeddings, job_skills, cached["skill_vecs"])
+        total = len(job_skills)
+        matched = skill_coverage(grad_embeddings, cached["skill_vecs"], total)
         coverage = round(matched / total * 100, 1) if total else 0.0
 
         # Ranking score ("best fit"): skill coverage + whole-profile similarity + seniority/title
@@ -296,10 +216,10 @@ def recommend_jobs(
 
     return {
         "graduate_profile": {
-            "modules_count": len(payload.modules),
+            "modules_count": count_modules(current_user.id, db),
             "unique_skills": len(skill_weights),
             "top_skills": list(skill_weights.keys())[:10],
-            "profile_skills_included": len(extra),
+            "profile_skills_included": sum(1 for ev in profile.values() if ev.source != "module"),
         },
         "role_filter": payload.role_filter,
         "recommendations": results,
