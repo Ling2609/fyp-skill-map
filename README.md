@@ -115,6 +115,7 @@ Run every script from `backend/` with the venv active, e.g. `python scripts/tool
 | `live_jobs/fetch_live_jobs.py` | Fetches live jobs and extracts their skills. `--dry-run`, `--use-cache`, `--new-only` | JSearch, Groq |
 | `tools/check_skill_profile.py` | Read-only: a student's skill count, sources and near-duplicates. `--no-sbert` | – |
 | `tools/format_all_descriptions.py` | Pre-formats job descriptions in bulk | Gemini |
+| `tools/remove_duplicate_jobs.py` | Lists live jobs saved twice (same title, company, location) and deletes the extra copies after you confirm | – |
 
 Groq's free tier allows about 200,000 tokens a day (≈ 100 jobs). Don't run two Groq-heavy scripts on the same day. To save long output: `PYTHONIOENCODING=utf-8 python <script> 2>&1 | tee out.txt`.
 

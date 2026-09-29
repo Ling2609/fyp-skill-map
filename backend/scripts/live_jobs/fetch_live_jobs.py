@@ -38,6 +38,7 @@ sys.path.append(".")
 from app.config import settings
 from app.database import SessionLocal
 from app.models.job import Job, JobSkill
+from app.services.job_keys import job_key
 from app.nlp.skill_extractor import SkillExtractor
 
 API_URL = "https://jsearch.p.rapidapi.com/search-v2"
@@ -201,7 +202,11 @@ def run(dry_run: bool, use_cache: bool, new_only: bool):
     db = SessionLocal()
     stats = {"fetched": 0, "untrusted": 0, "short": 0, "duplicate": 0, "saved": 0, "no_skills": 0}
     seen = set()           # job_ref already handled this run
-    seen_titles = set()    # (title, company): the same posting can come back with different ids
+    seen_titles = set()    # job_key (title, company, location): the same posting can come back with different ids
+    # Live jobs already in the database, by job_key → job_ref. A posting fetched again on a
+    # later run (or via another publisher) gets a new id; this stops it being saved twice (F9)
+    saved_keys = {job_key(t, c, l): ref for ref, t, c, l in
+                  db.query(Job.job_id, Job.job_title, Job.company, Job.location).filter(Job.source == "live")}
     credits = 0
 
     try:
@@ -233,9 +238,14 @@ def run(dry_run: bool, use_cache: bool, new_only: bool):
                 # Stable, URL-safe id (JSearch ids contain / + =)
                 company = clean_company(j.get("employer_name"))
                 job_ref = "live_" + hashlib.sha1((j.get("job_id") or url).encode()).hexdigest()[:16]
-                title_key = (title.strip().lower(), company.lower())
+                location = ", ".join(x for x in [j.get("job_city"), j.get("job_state")] if x) \
+                    or ("Malaysia" if country == "my" else "Singapore")
+                title_key = job_key(title, company, location)
                 if job_ref in seen or title_key in seen_titles:
                     stats["duplicate"] += 1
+                    continue
+                if saved_keys.get(title_key, job_ref) != job_ref:
+                    stats["duplicate"] += 1  # same job already saved under another id
                     continue
                 existing = db.query(Job).filter(Job.job_id == job_ref).first()
                 if existing:
@@ -252,8 +262,6 @@ def run(dry_run: bool, use_cache: bool, new_only: bool):
                 seen.add(job_ref)
                 seen_titles.add(title_key)
 
-                location = ", ".join(x for x in [j.get("job_city"), j.get("job_state")] if x) \
-                    or ("Malaysia" if country == "my" else "Singapore")
                 print(f"  + {title[:55]} | {company} | via {publisher} | {len(desc)} chars")
 
                 if dry_run:
@@ -286,9 +294,10 @@ def run(dry_run: bool, use_cache: bool, new_only: bool):
                     db.commit()
                     stats["no_skills"] += 1
                     continue
-                for name in skills:
+                for name in dict.fromkeys(skills):   # same skill twice in one job counts once
                     db.add(JobSkill(job_id=db_job.id, job_ref=job_ref, skill_name=name))
                 db.commit()
+                saved_keys[title_key] = job_ref
                 stats["saved"] += 1
                 print(f"    {len(skills)} skills: {skills[:5]}")
                 time.sleep(2)  # Groq rate limit

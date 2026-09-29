@@ -6,6 +6,10 @@ Planning, reasoning and research behind each decision are in the project roadmap
 ## 29 Sep 2026 — Project structure for all three roles
 
 Files moved with **names unchanged** and history kept (`git log --follow <file>`).
+- (this commit) **Duplicate live jobs (F9).** One rule for "same job" (title + company + location, ignoring case,
+  punctuation and spacing) in `app/services/job_keys.py`. `scripts/tools/remove_duplicate_jobs.py` lists duplicates and deletes
+  the extra copies after confirmation, keeping the most recently posted one. `fetch_live_jobs.py` now also skips a posting
+  already saved under another id (e.g. from another publisher), and saves each skill only once per job.
 - (this commit) Small fixes: Gemini AFC warning off, `ModuleSkill.extracted_by` default removed (every script sets
   the real label), unused import, script and migration usage lines updated to the new paths; README and this changelog.
 - `536252d` Unused `UserSkillCache` model removed; `migrate_drop_user_skills_cache.py` drops its table.
