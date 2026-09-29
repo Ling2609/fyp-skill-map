@@ -6,12 +6,26 @@ Planning, reasoning and research behind each decision are in the project roadmap
 ## 29 Sep 2026 — Project structure for all three roles
 
 Files moved with **names unchanged** and history kept (`git log --follow <file>`).
-- (this commit) **Job level on every match** (A7, F10). The level is read from the title, checking the most senior first
+- (this commit) **Live-job queries generated from market data**, replacing the hand-written list.
+  `scripts/live_jobs/generate_live_queries.py` reduces each 2024 JobStreet ICT title to its role ("Senior Java Developer
+  (KL)" → "java developer"; manager and lead titles, non-ICT and one-word roles left out), takes the top role of every ICT
+  subcategory, then fills the budget with the most common remaining roles, skipping roles that only add words to a chosen
+  one ("IT support executive" after "IT support"). The list is saved to `data/live_job_queries.json`, which
+  `fetch_live_jobs.py` reads. The job level and ICT title rules moved to `app/services/job_titles.py` so the API, the
+  fetcher and the generator use the same rules.
+- (this commit) `scripts/tools/remove_non_ict_jobs.py` removes non-ICT live jobs saved before the title check (e.g. a marine
+  engineering "Graduate Programme" that the A7 entry-level ranking had lifted to the top). Job level now also reads plural
+  titles ("Internships", "Graduate Trainees") as entry level.
+- (previous commit) **Live jobs must have an ICT title.** Broad queries such as "IT intern" also returned electrical, HR and
+  finance jobs, which would have been saved under an ICT subcategory. `fetch_live_jobs.py` now skips a job whose title has
+  no ICT word (software, developer, data, network, IT, …) before Groq sees it, and lists each skipped title. Jobs already
+  saved are not affected.
+- `b2ca3f5` **Job level on every match** (A7, F10). The level is read from the title, checking the most senior first
   (so "Senior Associate" is senior, not entry level), and "intern", "internship", "fresh graduate" and "graduate programme"
   now count as entry level; "specialist" no longer counts as senior. Job Matches and the Dashboard tag each job as
   Entry level / Senior / Lead / Manager (no tag when the title doesn't say). Senior roles are **ranked lower, never hidden**:
   the level penalty now applies to the whole Best-fit score instead of only its similarity half.
-- (previous commit) **Graduate-level job queries** (A7): `fetch_live_jobs.py` adds 10 Malaysian queries (junior developer,
+- `b119d65` **Graduate-level job queries** (A7): `fetch_live_jobs.py` adds 10 Malaysian queries (junior developer,
   fresh graduate IT, IT intern, junior data analyst / network engineer / QA tester, technical support graduate, Android iOS
   developer, software engineer in Penang and in Johor), so more live openings suit fresh graduates. "mobile app developer"
   removed (0 usable jobs). 32 queries in total.

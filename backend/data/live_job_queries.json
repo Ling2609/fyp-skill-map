@@ -1,0 +1,179 @@
+{
+  "generated": "2026-09-29",
+  "method": "Top ICT role of every JobStreet 2024 ICT subcategory, then the most common remaining roles overall (manager/lead titles excluded, overlapping roles skipped)",
+  "source": "data/jobstreet_clean.csv",
+  "budget": {
+    "my": 25,
+    "sg": 3
+  },
+  "queries": [
+    {
+      "query": "software engineer in Malaysia",
+      "country": "my",
+      "subcategory": "Developers/Programmers",
+      "postings_2024": 208
+    },
+    {
+      "query": "software developer in Malaysia",
+      "country": "my",
+      "subcategory": "Developers/Programmers",
+      "postings_2024": 142
+    },
+    {
+      "query": "business analyst in Malaysia",
+      "country": "my",
+      "subcategory": "Business/Systems Analysts",
+      "postings_2024": 116
+    },
+    {
+      "query": "IT executive in Malaysia",
+      "country": "my",
+      "subcategory": "Management",
+      "postings_2024": 90
+    },
+    {
+      "query": "full stack developer in Malaysia",
+      "country": "my",
+      "subcategory": "Developers/Programmers",
+      "postings_2024": 84
+    },
+    {
+      "query": "frontend developer in Malaysia",
+      "country": "my",
+      "subcategory": "Developers/Programmers",
+      "postings_2024": 64
+    },
+    {
+      "query": "java developer in Malaysia",
+      "country": "my",
+      "subcategory": "Developers/Programmers",
+      "postings_2024": 49
+    },
+    {
+      "query": "system analyst in Malaysia",
+      "country": "my",
+      "subcategory": "Business/Systems Analysts",
+      "postings_2024": 47
+    },
+    {
+      "query": "network engineer in Malaysia",
+      "country": "my",
+      "subcategory": "Networks & Systems Administration",
+      "postings_2024": 45
+    },
+    {
+      "query": "system engineer in Malaysia",
+      "country": "my",
+      "subcategory": "Networks & Systems Administration",
+      "postings_2024": 43
+    },
+    {
+      "query": "data analyst in Malaysia",
+      "country": "my",
+      "subcategory": "Business/Systems Analysts",
+      "postings_2024": 36
+    },
+    {
+      "query": "database administrator in Malaysia",
+      "country": "my",
+      "subcategory": "Database Development & Administration",
+      "postings_2024": 34
+    },
+    {
+      "query": "web developer in Malaysia",
+      "country": "my",
+      "subcategory": "Developers/Programmers",
+      "postings_2024": 34
+    },
+    {
+      "query": "IT engineer in Malaysia",
+      "country": "my",
+      "subcategory": "Networks & Systems Administration",
+      "postings_2024": 30
+    },
+    {
+      "query": "backend developer in Malaysia",
+      "country": "my",
+      "subcategory": "Developers/Programmers",
+      "postings_2024": 30
+    },
+    {
+      "query": "IT support in Malaysia",
+      "country": "my",
+      "subcategory": "Help Desk & IT Support",
+      "postings_2024": 25
+    },
+    {
+      "query": "technical support engineer in Malaysia",
+      "country": "my",
+      "subcategory": "Help Desk & IT Support",
+      "postings_2024": 23
+    },
+    {
+      "query": "mobile developer in Malaysia",
+      "country": "my",
+      "subcategory": "Developers/Programmers",
+      "postings_2024": 20
+    },
+    {
+      "query": "software tester in Malaysia",
+      "country": "my",
+      "subcategory": "Testing & Quality Assurance",
+      "postings_2024": 19
+    },
+    {
+      "query": "IT technician in Malaysia",
+      "country": "my",
+      "subcategory": "Help Desk & IT Support",
+      "postings_2024": 19
+    },
+    {
+      "query": "system administrator in Malaysia",
+      "country": "my",
+      "subcategory": "Networks & Systems Administration",
+      "postings_2024": 17
+    },
+    {
+      "query": "cybersecurity engineer in Malaysia",
+      "country": "my",
+      "subcategory": "Security",
+      "postings_2024": 14
+    },
+    {
+      "query": "AI engineer in Malaysia",
+      "country": "my",
+      "subcategory": "Engineering - Software",
+      "postings_2024": 9
+    },
+    {
+      "query": "ERP consultant in Malaysia",
+      "country": "my",
+      "subcategory": "Consultants",
+      "postings_2024": 8
+    },
+    {
+      "query": "scrum master in Malaysia",
+      "country": "my",
+      "subcategory": "Programme & Project Management",
+      "postings_2024": 5
+    },
+    {
+      "query": "software engineer in Singapore",
+      "country": "sg",
+      "subcategory": "Developers/Programmers",
+      "postings_2024": 208
+    },
+    {
+      "query": "business analyst in Singapore",
+      "country": "sg",
+      "subcategory": "Business/Systems Analysts",
+      "postings_2024": 116
+    },
+    {
+      "query": "IT executive in Singapore",
+      "country": "sg",
+      "subcategory": "Management",
+      "postings_2024": 90
+    }
+  ]
+}

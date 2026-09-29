@@ -10,6 +10,7 @@ Quality rules (see references.md → Data Limitations):
   2. Description ≥ 800 characters     → enough text for skill extraction
   3. Posted within the last month
   4. No duplicates (same job fetched twice is skipped)
+  5. ICT job title (e.g. "Electrical Engineer" is skipped before Groq sees it; app/services/job_titles.py)
 
 Needs JSEARCH_KEY in backend/.env (never commit the key).
 
@@ -18,9 +19,12 @@ Usage (from the backend folder):
   python scripts/live_jobs/fetch_live_jobs.py --use-cache             # save + extract skills from the cache (0 credits)
   python scripts/live_jobs/fetch_live_jobs.py --dry-run               # refresh: re-fetch every query (e.g. before the demo)
 
-Credits: 1 per page. Malaysia queries fetch 2 pages, Singapore 1. A full refresh of all 32 queries
-costs ~61 credits (of 200/month); --new-only costs only the new queries (the 10 graduate-level
-queries added 29 Sep = ~20 credits); --use-cache costs nothing.
+Queries: data/live_job_queries.json, generated from the 2024 JobStreet data by
+generate_live_queries.py (the most common ICT roles per subcategory). Regenerate it to change them.
+
+Credits: 1 per page. Malaysia queries fetch 2 pages, Singapore 1 (the generator prints the total,
+~53 for the default 25 + 3 queries, of 200/month); --new-only costs only queries not fetched
+before; --use-cache costs nothing.
 """
 
 import argparse
@@ -40,6 +44,7 @@ from app.config import settings
 from app.database import SessionLocal
 from app.models.job import Job, JobSkill
 from app.services.job_keys import job_key
+from app.services.job_titles import is_ict_title
 from app.nlp.skill_extractor import SkillExtractor
 
 API_URL = "https://jsearch.p.rapidapi.com/search-v2"
@@ -50,44 +55,18 @@ MIN_SKILLS = 3                     # fewer than this = extraction failed or inco
 PAGES = {"my": 2, "sg": 1}        # pages per query (10 jobs per page, 1 credit per page)
 CACHE_FILE = "data/live_jobs_cache.json"
 
-# (search query, country, subcategory to store — matches the JobStreet ICT subcategories
-#  so the Job Matches category chips keep working)
-QUERIES = [
-    ("software engineer in Malaysia",            "my", "Engineering - Software"),
-    ("graduate software developer in Malaysia",   "my", "Developers/Programmers"),
-    ("web developer in Malaysia",                 "my", "Web Development & Production"),
-    ("network engineer in Malaysia",              "my", "Engineering - Network"),
-    ("system administrator in Malaysia",          "my", "Networks & Systems Administration"),
-    ("IT support engineer in Malaysia",           "my", "Help Desk & IT Support"),
-    ("data analyst in Malaysia",                  "my", "Database Development & Administration"),
-    ("database administrator in Malaysia",        "my", "Database Development & Administration"),
-    ("cyber security analyst in Malaysia",        "my", "Security"),
-    ("QA test engineer in Malaysia",              "my", "Testing & Quality Assurance"),
-    ("business analyst IT in Malaysia",           "my", "Business/Systems Analysts"),
-    ("cloud devops engineer in Malaysia",         "my", "Engineering - Software"),
-    # added 27 Sep to grow the live pool towards ~200
-    ("full stack developer in Malaysia",          "my", "Developers/Programmers"),
-    # "mobile app developer in Malaysia" removed 29 Sep: it returned 0 usable jobs (see "Android iOS developer" below)
-    ("AI machine learning engineer in Malaysia",  "my", "Engineering - Software"),
-    ("data engineer in Malaysia",                 "my", "Database Development & Administration"),
-    ("UI UX designer in Malaysia",                "my", "Web Development & Production"),
-    ("SAP ERP consultant in Malaysia",            "my", "Consultants"),
-    ("IT graduate programme in Malaysia",         "my", "Developers/Programmers"),
-    ("IT project coordinator in Malaysia",        "my", "Programme & Project Management"),
-    ("software engineer in Singapore",            "sg", "Engineering - Software"),
-    ("network engineer in Singapore",             "sg", "Engineering - Network"),
-    ("data analyst in Singapore",                 "sg", "Database Development & Administration"),
-    ("junior software developer in Malaysia",     "my", "Developers/Programmers"),
-    ("fresh graduate IT in Malaysia",             "my", "Developers/Programmers"),
-    ("IT intern in Malaysia",                     "my", "Developers/Programmers"),
-    ("junior data analyst in Malaysia",           "my", "Database Development & Administration"),
-    ("junior network engineer in Malaysia",       "my", "Engineering - Network"),
-    ("Android iOS developer in Malaysia",         "my", "Developers/Programmers"),
-    ("software engineer in Penang",               "my", "Engineering - Software"),
-    ("software engineer in Johor",                "my", "Engineering - Software"),
-    ("junior QA tester in Malaysia",              "my", "Testing & Quality Assurance"),
-    ("technical support graduate in Malaysia",    "my", "Help Desk & IT Support"),
-]
+QUERIES_FILE = "data/live_job_queries.json"   # made by generate_live_queries.py from the 2024 market data
+
+
+def load_queries() -> list[tuple[str, str, str]]:
+    """(search query, country, subcategory to store). The subcategory is the JobStreet ICT
+    subcategory the query was generated from, so the Job Matches category chips keep working."""
+    try:
+        with open(QUERIES_FILE, encoding="utf-8") as f:
+            data = json.load(f)
+    except FileNotFoundError:
+        sys.exit(f"{QUERIES_FILE} not found. Run: python scripts/live_jobs/generate_live_queries.py --save")
+    return [(q["query"], q["country"], q["subcategory"]) for q in data["queries"]]
 
 # Only apply links from these publishers / domains are kept (safety: students click these).
 # Decided from the 27 Sep cache: aggregators that only repost snippets (Trabajo.org, JobLeads,
@@ -196,6 +175,7 @@ def load_cache() -> dict:
 
 
 def run(dry_run: bool, use_cache: bool, new_only: bool):
+    queries = load_queries()
     # Always load the old cache, so a failed query in a full refresh keeps its previous results
     cache = load_cache()
     if use_cache:
@@ -205,12 +185,12 @@ def run(dry_run: bool, use_cache: bool, new_only: bool):
     elif not settings.jsearch_key:
         sys.exit("JSEARCH_KEY is missing. Add JSEARCH_KEY=your-key to backend/.env first.")
     elif new_only:
-        missing = [q for q, _, _ in QUERIES if q not in cache]
-        print(f"--new-only: {len(missing)} new queries to fetch, {len(QUERIES) - len(missing)} reused from cache")
+        missing = [q for q, _, _ in queries if q not in cache]
+        print(f"--new-only: {len(missing)} new queries to fetch, {len(queries) - len(missing)} reused from cache")
 
     extractor = None if dry_run else SkillExtractor()
     db = SessionLocal()
-    stats = {"fetched": 0, "untrusted": 0, "short": 0, "duplicate": 0, "saved": 0, "no_skills": 0}
+    stats = {"fetched": 0, "not_ict": 0, "untrusted": 0, "short": 0, "duplicate": 0, "saved": 0, "no_skills": 0}
     seen = set()           # job_ref already handled this run
     seen_titles = set()    # job_key (title, company, location): the same posting can come back with different ids
     # Live jobs already in the database, by job_key → job_ref. A posting fetched again on a
@@ -220,7 +200,7 @@ def run(dry_run: bool, use_cache: bool, new_only: bool):
     credits = 0
 
     try:
-        for query, country, subcategory in QUERIES:
+        for query, country, subcategory in queries:
             print(f"\n=== {query} ({country.upper()}) ===")
             if use_cache or (new_only and query in cache):
                 results = cache.get(query, [])
@@ -237,6 +217,10 @@ def run(dry_run: bool, use_cache: bool, new_only: bool):
                 title = j.get("job_title") or ""
                 desc = j.get("job_description") or ""
 
+                if not is_ict_title(title):
+                    stats["not_ict"] += 1
+                    print(f"  - not ICT, skipped: {title[:55]}")
+                    continue
                 url, publisher = pick_apply_link(j)
                 if not url:
                     stats["untrusted"] += 1
@@ -322,6 +306,7 @@ def run(dry_run: bool, use_cache: bool, new_only: bool):
     print("DRY RUN (nothing saved)" if dry_run else "DONE")
     print("=" * 60)
     print(f"  Fetched from API:          {stats['fetched']}")
+    print(f"  Dropped, not an ICT title: {stats['not_ict']}")
     print(f"  Dropped, untrusted source: {stats['untrusted']}")
     print(f"  Dropped, short description:{stats['short']:>4}")
     print(f"  Dropped, duplicate:        {stats['duplicate']}")

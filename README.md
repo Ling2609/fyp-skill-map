@@ -47,14 +47,15 @@ fyp-skill-map/
 │   │   ├── database.py     PostgreSQL connection
 │   │   ├── routers/        HTTP endpoints by feature: auth, modules, jobs, recommend, skillgap, profile, chatbot
 │   │   │                   (planned: employer.py, admin.py)
-│   │   ├── services/       skill_profile.py: the one Graduate Skill Profile + matching thresholds
+│   │   ├── services/       skill_profile.py: the one Graduate Skill Profile + matching thresholds;
+│   │   │                   job_titles.py: job level + ICT title rule; job_keys.py: duplicate-job rule
 │   │   ├── nlp/            skill_extractor.py (LLM calls), embedder.py (SBERT + disk cache)
 │   │   ├── models/         database tables (SQLAlchemy)
 │   │   ├── schemas/        request / response shapes (Pydantic)
 │   │   └── auth/           password hashing and JWT helpers
 │   ├── scripts/            command-line jobs, never imported by the app (see table below)
 │   │   ├── pipeline/       build the data: clean JobStreet, taxonomy, extract job / module skills
-│   │   ├── live_jobs/      fetch current jobs from JSearch
+│   │   ├── live_jobs/      generate search queries from market data, fetch current jobs from JSearch
 │   │   └── tools/          diagnostics and maintenance
 │   ├── migrations/         one-off database changes (see below)
 │   ├── data/               data files only: modules.json, skill_taxonomy.json, caches
@@ -112,10 +113,12 @@ Run every script from `backend/` with the venv active, e.g. `python scripts/tool
 | `pipeline/extract_job_skills.py` | Extracts skills for the 2024 JobStreet sample (resumable) | Groq |
 | `pipeline/extract_module_skills.py` | First-time setup: loads `modules.json` and extracts module skills | Groq |
 | `pipeline/reextract_module_skills.py` | Re-extracts module skills from name + description; backs up old skills first. `--dry-run`, `--module CODE` | Groq |
-| `live_jobs/fetch_live_jobs.py` | Fetches live jobs and extracts their skills. `--dry-run`, `--use-cache`, `--new-only` | JSearch, Groq |
+| `live_jobs/generate_live_queries.py` | Builds the search queries from the most common ICT roles per subcategory in the 2024 JobStreet data; writes `data/live_job_queries.json`. Preview by default, `--save`, `--my N --sg N` | – |
+| `live_jobs/fetch_live_jobs.py` | Fetches live jobs for those queries (non-ICT titles skipped) and extracts their skills. `--dry-run`, `--use-cache`, `--new-only` | JSearch, Groq |
 | `tools/check_skill_profile.py` | Read-only: a student's skill count, sources and near-duplicates. `--no-sbert` | – |
 | `tools/format_all_descriptions.py` | Pre-formats job descriptions in bulk | Gemini |
 | `tools/remove_duplicate_jobs.py` | Lists live jobs saved twice (same title, company, location) and deletes the extra copies after you confirm | – |
+| `tools/remove_non_ict_jobs.py` | Lists saved live jobs whose title isn't an ICT role (same rule as the fetcher) and deletes them after you confirm | – |
 
 Groq's free tier allows about 200,000 tokens a day (≈ 100 jobs). Don't run two Groq-heavy scripts on the same day. To save long output: `PYTHONIOENCODING=utf-8 python <script> 2>&1 | tee out.txt`.
 

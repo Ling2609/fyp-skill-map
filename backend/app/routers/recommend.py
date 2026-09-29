@@ -7,39 +7,21 @@ from app.models.job import Job, JobSkill
 from app.nlp.embedder import get_embedder
 from app.routers.auth import get_current_user
 from app.models.user import User
+from app.services.job_titles import SENIORITY_RANK, classify_seniority
 from app.services.skill_profile import (
     EMPTY_PROFILE_MESSAGE, build_skill_profile, count_modules, normalise_rows, skill_coverage,
 )
 import numpy as np
-import re
 import threading
 
-# Job level from the title (roadmap A7 + F10). Checked from the MOST senior level down, so
-# "Senior Associate" is senior and "Senior Manager" is manager, not entry level.
-# Titles are only a hint (many "junior" postings still ask for years of experience), so the
-# level is shown on each card and senior roles are ranked lower; nothing is hidden.
-SENIORITY_PATTERNS = {
-    "manager": r"\b(manager|director|head\s+of|vp|chief)\b",
-    "lead":    r"\b(lead|principal|staff|architect)\b",
-    "senior":  r"\b(senior|sr\.?)\b",
-    "junior":  r"\b(junior|jr\.?|entry.?level|fresh\s+grad(uate)?s?|graduate|intern|internship|trainee|associate)\b",
-}
-
-SENIORITY_RANK = {"junior": 0, "unspecified": 1, "senior": 2, "lead": 3, "manager": 4}
+# Senior roles are ranked lower, never hidden (A7): the level is shown on each card instead
 PENALTY_PER_STEP = 0.12   # taken off the ranking score per level above entry level
-
-
-def classify_seniority(title: str) -> str:
-    t = (title or "").lower()
-    for level, pattern in SENIORITY_PATTERNS.items():
-        if re.search(pattern, t):
-            return level
-    return "unspecified"
 
 
 def seniority_penalty(level: str) -> float:
     """Graduates are entry level, so each level above that costs PENALTY_PER_STEP."""
     return SENIORITY_RANK.get(level, 1) * PENALTY_PER_STEP
+
 
 router = APIRouter(prefix="/recommend", tags=["recommend"])
 
