@@ -3,8 +3,12 @@ Run once to add the live-job columns to the jobs table.
 Existing (2024 JobStreet) rows become source='dataset', country='MY'.
 
 Usage (from the backend folder):
-  python migrate_add_live_job_columns.py
+  python migrations/migrate_add_live_job_columns.py
+(Already applied to the existing database. A fresh database gets these tables/columns from app/models/.)
 """
+import sys
+sys.path.append(".")   # run from backend/
+
 from sqlalchemy import text
 
 from app.database import engine

@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useLocation } from 'react-router-dom'
-import api from '../api'
-import PageHeader from '../components/PageHeader'
+import api from '../../api'
+import PageHeader from '../../components/PageHeader'
 
 const MODES = [
   {

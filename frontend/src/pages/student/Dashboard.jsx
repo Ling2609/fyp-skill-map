@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import api from '../api'
-import PageHeader from '../components/PageHeader'
+import api from '../../api'
+import PageHeader from '../../components/PageHeader'
 
 // A job counts as "aligned" when you cover at least half its required skills
 const ALIGNED_MIN_COVERAGE = 50

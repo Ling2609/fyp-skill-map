@@ -14,9 +14,9 @@ Quality rules (see references.md → Data Limitations):
 Needs JSEARCH_KEY in backend/.env (never commit the key).
 
 Usage (from the backend folder):
-  python data/scripts/fetch_live_jobs.py --dry-run --new-only    # fetch ONLY queries not in the cache yet, preview
-  python data/scripts/fetch_live_jobs.py --use-cache             # save + extract skills from the cache (0 credits)
-  python data/scripts/fetch_live_jobs.py --dry-run               # refresh: re-fetch every query (e.g. before the demo)
+  python scripts/live_jobs/fetch_live_jobs.py --dry-run --new-only    # fetch ONLY queries not in the cache yet, preview
+  python scripts/live_jobs/fetch_live_jobs.py --use-cache             # save + extract skills from the cache (0 credits)
+  python scripts/live_jobs/fetch_live_jobs.py --dry-run               # refresh: re-fetch every query (e.g. before the demo)
 
 Credits: 1 per page. Malaysia queries fetch 2 pages, Singapore 1. A full refresh of all queries
 costs ~43 credits (of 200/month); --new-only costs only the new queries; --use-cache costs nothing.

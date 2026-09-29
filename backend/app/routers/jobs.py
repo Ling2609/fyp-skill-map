@@ -1,5 +1,4 @@
 import json
-import re
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import distinct
 from sqlalchemy.orm import Session

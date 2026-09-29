@@ -18,9 +18,9 @@ Nothing else needs rebuilding: profiles are built live (A1) and new skill names 
 embedded on first use (embedding cache).
 
 Usage (from backend/, venv active):
-  python data/scripts/reextract_module_skills.py --dry-run --module SE-L1-005   # 1 Groq call, prints old vs new
-  python data/scripts/reextract_module_skills.py --dry-run                       # all modules, no DB writes
-  python data/scripts/reextract_module_skills.py                                 # real run
+  python scripts/pipeline/reextract_module_skills.py --dry-run --module SE-L1-005   # 1 Groq call, prints old vs new
+  python scripts/pipeline/reextract_module_skills.py --dry-run                       # all modules, no DB writes
+  python scripts/pipeline/reextract_module_skills.py                                 # real run
 """
 import json
 import sys

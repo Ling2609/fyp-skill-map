@@ -13,7 +13,7 @@ Steps:
 
 Usage:
   cd backend
-  python data/scripts/clean_jobstreet.py
+  python scripts/pipeline/clean_jobstreet.py
 """
 
 import pandas as pd

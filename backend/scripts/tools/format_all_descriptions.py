@@ -6,7 +6,7 @@ Run once — results cached permanently.
 
 Usage:
   cd backend
-  python data/scripts/format_all_descriptions.py
+  python scripts/tools/format_all_descriptions.py
 
 Options:
   --preview    Show first 5 jobs without saving (dry run)

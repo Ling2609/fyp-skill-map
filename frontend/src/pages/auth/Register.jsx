@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
-import api from '../api'
+import api from '../../api'
 
 const getPasswordStrength = (password) => {
   if (!password) return { score: 0, label: '', color: '' }

@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
-import PageHeader from '../components/PageHeader'
+import PageHeader from '../../components/PageHeader'
 import { useSearchParams } from 'react-router-dom'
-import api from '../api'
+import api from '../../api'
 
 // ── Shared ────────────────────────────────────────────────────────────────────
 

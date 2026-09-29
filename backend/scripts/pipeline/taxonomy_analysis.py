@@ -15,7 +15,7 @@ Output:
 
 Usage:
   cd backend
-  python data/scripts/taxonomy_analysis.py
+  python scripts/pipeline/taxonomy_analysis.py
 
 Citation:
   "This service uses the ESCO classification of the European Commission."
