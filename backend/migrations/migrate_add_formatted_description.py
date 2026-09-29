@@ -2,6 +2,9 @@
 Run once to add the formatted_description column to the jobs table.
 Usage: python migrate_add_formatted_description.py
 """
+import sys
+sys.path.append(".")
+
 from app.database import engine
 from sqlalchemy import text
 

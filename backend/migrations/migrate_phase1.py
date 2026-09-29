@@ -5,6 +5,9 @@ Alters: users table (adds is_visible_to_employers, is_active, notification_prefs
 Creates: password_reset_otps table
 Usage: python migrate_phase1.py
 """
+import sys
+sys.path.append(".")
+
 from app.database import engine
 from sqlalchemy import text
 

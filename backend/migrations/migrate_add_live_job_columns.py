@@ -5,6 +5,9 @@ Existing (2024 JobStreet) rows become source='dataset', country='MY'.
 Usage (from the backend folder):
   python migrate_add_live_job_columns.py
 """
+import sys
+sys.path.append(".")
+
 from sqlalchemy import text
 
 from app.database import engine
