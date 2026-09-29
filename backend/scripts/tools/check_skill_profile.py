@@ -5,8 +5,8 @@ Shows where the "Skills Identified" number comes from and how much of it is
 near-duplicate wording ("Python" / "Python programming"), i.e. what A8 would merge.
 
 Usage (from backend/, venv active):
-  python data/scripts/check_skill_profile.py <username or email>
-  python data/scripts/check_skill_profile.py <username> --no-sbert   # skip the SBERT check
+  python scripts/tools/check_skill_profile.py <username or email>
+  python scripts/tools/check_skill_profile.py <username> --no-sbert   # skip the SBERT check
 """
 import re
 import sys

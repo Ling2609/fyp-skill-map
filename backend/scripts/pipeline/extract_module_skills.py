@@ -6,7 +6,7 @@ Run once — results are stored and reused from DB.
 
 Usage:
   cd backend
-  python data/scripts/extract_module_skills.py
+  python scripts/pipeline/extract_module_skills.py
 """
 
 import sys

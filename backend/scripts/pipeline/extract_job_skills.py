@@ -1,11 +1,11 @@
 """
 Job Skill Extraction Pipeline
 ==============================
-Samples 1000 jobs from jobstreet_clean.csv (stratified by subcategory),
+Samples SAMPLE_SIZE (6,000) jobs from jobstreet_clean.csv (stratified by subcategory),
 extracts skills via Groq, stores in PostgreSQL.
 
 Run once from backend/ folder:
-    python data/scripts/extract_job_skills.py
+    python scripts/pipeline/extract_job_skills.py
 """
 
 import sys

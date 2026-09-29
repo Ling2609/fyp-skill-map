@@ -3,7 +3,7 @@ Run once to add the live-job columns to the jobs table.
 Existing (2024 JobStreet) rows become source='dataset', country='MY'.
 
 Usage (from the backend folder):
-  python migrate_add_live_job_columns.py
+  python migrations/migrate_add_live_job_columns.py
 """
 import sys
 sys.path.append(".")

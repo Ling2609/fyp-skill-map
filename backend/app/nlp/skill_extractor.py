@@ -227,7 +227,11 @@ class SkillExtractor:
                 response = gemini.models.generate_content(
                     model=GEMINI_MODEL,
                     contents=prompt,
-                    config=types.GenerateContentConfig(system_instruction=system),
+                    config=types.GenerateContentConfig(
+                        system_instruction=system,
+                        # no tools are passed; turning AFC off also silences its warning
+                        automatic_function_calling=types.AutomaticFunctionCallingConfig(disable=True),
+                    ),
                 )
                 result = extract_json_array((response.text or "").strip())
                 if result:

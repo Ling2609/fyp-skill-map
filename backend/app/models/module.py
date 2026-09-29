@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, JSON, DateTime, ForeignKey
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
 from sqlalchemy.sql import func
 from app.database import Base
 
@@ -22,5 +22,5 @@ class ModuleSkill(Base):
     module_id = Column(Integer, ForeignKey("modules.id"), nullable=False)
     module_code = Column(String, nullable=False)
     skill_name = Column(String, nullable=False)
-    extracted_by = Column(String, default="gemini-3.6-flash")
+    extracted_by = Column(String, nullable=True)   # set by the extraction script, e.g. "gpt-oss-120b:descriptor-v1"
     created_at = Column(DateTime(timezone=True), server_default=func.now())

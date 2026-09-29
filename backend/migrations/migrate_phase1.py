@@ -3,7 +3,8 @@ Phase 1 migration — run once.
 Creates: user_modules, user_skills_cache tables
 Alters: users table (adds is_visible_to_employers, is_active, notification_prefs)
 Creates: password_reset_otps table
-Usage: python migrate_phase1.py
+Usage (from backend/): python migrations/migrate_phase1.py
+(user_skills_cache was dropped again on 29 Sep 2026: see migrate_drop_user_skills_cache.py)
 """
 import sys
 sys.path.append(".")
