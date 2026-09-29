@@ -1,0 +1,203 @@
+SkillExtractor initialised with openai/gpt-oss-120b via Groq
+
+[1/40] SE-L1-001 Introduction to Networking: 12 → 6
+   description: Covers fundamental networking concepts including OSI model, TCP/IP protocols, network topologies, IP addressing, subnetting, routing and basic network configuration and troubleshooting.
+   old: TCP/IP fundamentals; Subnetting and CIDR; LAN/WAN setup; Network troubleshooting; Routing protocol configuration; VLAN implementation; Wi-Fi network setup; Network security basics; OSI model analysis; IP addressing scheme; Network device configuration; Network performance monitoring
+   new: OSI model fundamentals; TCP/IP protocol basics; Network topology identification; IP addressing; Subnetting; Network troubleshooting
+
+[2/40] SE-L1-002 Systems Software and Computing Concepts: 12 → 7
+   description: Introduces operating systems concepts including process management, memory management, file systems, concurrency and computer architecture. Covers CPU organisation and system-level programming.
+   old: C system programming; Operating system concepts; Memory management; Concurrency control; Kernel debugging; Assembly language; Performance profiling; File system design; Virtualization technologies; System call interface; Process scheduling; Thread synchronization
+   new: process management; memory management; file system administration; concurrency fundamentals; computer architecture; CPU organization; system-level programming
+
+[3/40] SE-L1-003 Introduction to Databases: 12 → 5
+   description: Covers relational database design, entity-relationship modelling, normalisation and SQL querying. Students design and implement relational databases using a database management system.
+   old: SQL querying; Relational schema design; Entity-relationship modeling; Database normalization; Data definition language; Data manipulation language; Transaction management; Index creation; Query optimization; Database security basics; MySQL administration; Backup and recovery
+   new: relational database design; entity-relationship modelling; database normalisation; SQL querying; relational database implementation
+
+[4/40] SE-L1-004 Digital Thinking and Innovation: 12 → 5
+   description: Introduces design thinking, creative problem solving and innovation frameworks. Students develop critical thinking, ideation and prototyping skills for technology-driven solutions.
+   old: Design thinking; Agile prototyping; Digital strategy; User experience design; Data analytics; Emerging technology scouting; Innovation management; Low-code development; Digital storytelling; AI ethics assessment; Business model canvas; Change management
+   new: design thinking; creative problem solving; critical thinking; ideation; prototyping
+
+[5/40] SE-L1-005 Python Programming: 12 → 8
+   description: Introduces programming using Python including variables, control structures, functions, lists, dictionaries, file handling and basic object-oriented programming. Emphasis on algorithmic thinking and problem solving.
+   old: Python syntax; Object-oriented Python; Data structures; Exception handling; File I/O; Debugging techniques; Unit testing; NumPy usage; Pandas data analysis; Web scraping; API integration; Version control
+   new: Python programming; control structures; functions; data structures; file handling; basic object-oriented programming; algorithmic thinking; problem solving
+
+[6/40] SE-L1-006 Systems Analysis and Design: 12 → 7
+   description: Covers the software development lifecycle, requirements gathering, use case modelling, data flow diagrams and UML system design. Students analyse business requirements and produce system specifications.
+   old: Requirements elicitation; Use case modeling; UML diagramming; Data flow diagramming; Entity-relationship design; Process modeling; Feasibility analysis; Stakeholder analysis; System prototyping; Agile methodology; Software specification writing; Change management
+   new: software development lifecycle; requirements gathering; use case modelling; data flow diagramming; UML system design; business requirements analysis; system specification writing
+
+[7/40] SE-L1-007 Integrated Computer Systems: 12 → 5
+   description: Explores hardware and software integration including computer architecture, assembly language basics, input/output systems and embedded computing concepts.
+   old: Embedded C programming; Microcontroller interfacing; FPGA design; Real-time OS; Device driver development; System integration testing; Hardware-software co-design; Network protocol implementation; Performance profiling; Virtualization technologies; IoT platform integration; Debugging with JTAG
+   new: computer architecture; assembly language basics; input/output systems; embedded computing; hardware-software integration
+
+[8/40] SE-L1-008 Fundamental of Entrepreneurship: 12 → 6
+   description: Introduces entrepreneurial thinking, business model development, startup ecosystems and innovation management. Students develop communication, teamwork and business planning skills.
+   old: Opportunity identification; Business model design; Market research analysis; Financial forecasting; Pitch deck creation; Stakeholder negotiation; Lean startup methodology; Risk assessment; Venture financing basics; Customer validation; Strategic planning; Intellectual property basics
+   new: Entrepreneurial thinking; Business model development; Innovation management; Communication; Teamwork; Business planning
+
+[9/40] SE-L1-009 Introduction to Object-Oriented Programming: 10 → 7
+   description: Covers object-oriented programming principles including classes, objects, inheritance, polymorphism, encapsulation and abstraction. Students implement OOP solutions using Java.
+   old: Java programming; Class design; Inheritance implementation; Polymorphism usage; Encapsulation techniques; UML modeling; OOP debugging; Unit testing; Code refactoring; Design pattern basics
+   new: object-oriented programming; Java programming; class implementation; inheritance; polymorphism; encapsulation; abstraction
+
+[10/40] SE-L1-010 Mathematical Concepts for Computing: 10 → 7
+   description: Covers discrete mathematics, logic, sets, functions, graph theory, probability and combinatorics applied to computing. Builds mathematical foundations for algorithm analysis.
+   old: Discrete mathematics; Linear algebra; Probability theory; Graph algorithms; Complexity analysis; Numerical methods; Mathematical modeling; Combinatorial optimization; Boolean logic; Matrix computation
+   new: logical reasoning; set theory; function concepts; graph theory; probability fundamentals; combinatorial analysis; algorithmic analysis
+
+[11/40] SE-L1-011 Introduction to Artificial Intelligence: 12 → 5
+   description: Introduces AI concepts including search algorithms, knowledge representation, machine learning basics and intelligent agents. Students explore AI techniques applied to real-world problems.
+   old: Python programming; Machine learning fundamentals; Data preprocessing; Search algorithms; Neural network basics; Probabilistic reasoning; Knowledge representation; AI ethics; Computer vision basics; Natural language processing; Reinforcement learning intro; Model evaluation techniques
+   new: search algorithms; knowledge representation; basic machine learning; intelligent agents; AI problem solving
+
+[12/40] SE-L1-012 Fundamentals of Web Design and Development: 12 → 6
+   description: Covers HTML, CSS and JavaScript fundamentals for building responsive web pages. Students learn web design principles, accessibility and basic front-end development techniques.
+   old: HTML5 markup; CSS3 styling; Responsive design; JavaScript fundamentals; UI/UX design; Web accessibility; Git version control; Bootstrap framework; Cross-browser testing; Performance optimization; SEO basics; Wireframing prototypes
+   new: HTML markup; CSS styling; JavaScript programming; Responsive design; Web accessibility; Front-end development
+
+[13/40] SE-L2-001 Innovation Process: 12 → 6
+   description: Examines structured approaches to innovation including lean startup, Agile methodologies and design sprints. Students apply innovation frameworks to develop and validate technology product ideas.
+   old: Design thinking; Ideation facilitation; Business model canvas; Rapid prototyping; Market validation; Patent landscape analysis; Innovation metrics; Agile sprint planning; Stakeholder pitching; Trend analysis; Lean startup methodology; User research
+   new: Lean startup; Agile methodology; Design sprint facilitation; Innovation framework application; Technology product validation; Product idea development
+
+[14/40] SE-L2-002 Research Methods for Computing and Technology: 12 → 6
+   description: Covers quantitative and qualitative research methodologies, literature review techniques, research design, data collection and academic writing for computing research.
+   old: Literature review; Research design; Survey methodology; Experimental prototyping; Statistical analysis; Data visualization; Python scripting; R programming; Ethical compliance; Academic writing; Citation management; Reproducible research
+   new: quantitative research; qualitative research; literature review; research design; data collection; academic writing
+
+[15/40] SE-L2-003 Programming for Data Analysis: 12 → 7
+   description: Introduces data analysis using Python libraries including NumPy, Pandas and Matplotlib. Topics include data cleaning, exploratory data analysis, statistical analysis and data visualisation.
+   old: Python programming; R programming; Data wrangling; Data visualization; Statistical analysis; Pandas library; NumPy arrays; Data cleaning; Exploratory analysis; SQL querying; Machine learning basics; Version control
+   new: Python data analysis; Data cleaning; Exploratory data analysis; Statistical analysis; Data visualisation; NumPy usage; Pandas usage
+
+[16/40] SE-L2-004 System Development Methods: 12 → 8
+   description: Covers software development methodologies including Agile, Scrum, Waterfall and DevOps. Students learn sprint planning, backlog management, continuous integration and software project management.
+   old: Agile Scrum; UML modeling; Requirements analysis; Test case design; Git version control; Continuous integration; Object-oriented design; Database schema design; Rapid prototyping; Risk assessment; Code review; Software architecture
+   new: Agile development; Scrum framework; Waterfall development; DevOps practices; Sprint planning; Backlog management; Continuous integration; Software project management
+
+[17/40] SE-L2-005 Object Oriented Development with Java: 12 → 6
+   description: Advanced Java programming covering design patterns, collections framework, exception handling, multithreading, file I/O and building enterprise-grade object-oriented applications using Java.
+   old: Java programming; Object-oriented design; UML modeling; Design patterns; JUnit testing; Exception handling; GUI development; Concurrency programming; Maven build; Code refactoring; Spring REST API; Git version control
+   new: Advanced Java programming; Design patterns; Collections framework; Exception handling; Multithreading; File I/O
+
+[18/40] SE-L2-006 Requirements Engineering: 12 → 9
+   description: Covers techniques for eliciting, analysing, specifying and validating software requirements including functional and non-functional requirements, use cases, user stories and requirements traceability.
+   old: Stakeholder analysis; Elicitation interviewing; Use case modeling; Functional specification writing; Non-functional requirements analysis; Requirements traceability; Requirements validation; Change management; Requirements prioritization; Agile backlog grooming; Requirements documentation; Workshop facilitation
+   new: Requirements elicitation; Requirements analysis; Requirements specification; Requirements validation; Functional requirements definition; Non-functional requirements definition; Use case modeling; User story creation; Requirements traceability
+
+[19/40] SE-L2-007 Enterprise Systems: 12 → 6
+   description: Examines enterprise application architecture, ERP systems, middleware and integration patterns using Jakarta EE. Students design and evaluate large-scale enterprise software solutions.
+   old: ERP implementation; SAP configuration; Business process modeling; Data integration; Workflow automation; System analysis; Change management; Business intelligence reporting; Cloud ERP deployment; Vendor management; Process reengineering; Requirements gathering
+   new: enterprise application architecture; ERP systems; middleware integration; integration patterns; Jakarta EE development; large-scale software design
+
+[20/40] SE-L2-008 Data Structures: 10 → 7
+   description: Covers fundamental data structures including arrays, linked lists, stacks, queues, trees, graphs and hash tables. Emphasis on algorithm complexity analysis, sorting and searching techniques.
+   old: Linked list implementation; Binary tree traversal; Hash table design; Complexity analysis; Memory management; Algorithm optimization; Dynamic array usage; Graph representation; Stack implementation; Queue implementation
+   new: Array manipulation; Linked list implementation; Stack usage; Tree traversal; Algorithm complexity analysis; Sorting techniques; Searching techniques
+
+[21/40] SE-L2-009 Software Testing: 12 → 7
+   description: Covers software testing strategies including unit testing, integration testing, system testing and acceptance testing. Topics include test-driven development, automated testing and quality assurance.
+   old: Test case design; Automated test scripting; Defect tracking; Performance testing; Security testing; Regression testing; Test automation frameworks; Continuous integration testing; API testing; Test data generation; Usability testing; Test metrics analysis
+   new: unit testing; integration testing; system testing; acceptance testing; test-driven development; automated testing; quality assurance
+
+[22/40] SE-L2-010 Software Architecture: 12 → 6
+   description: Introduces architectural styles and patterns including MVC, microservices, layered architecture and event-driven systems. Students design scalable and maintainable software architectures.
+   old: Architectural patterns; UML modeling; Microservices design; API design; Performance modeling; Scalability engineering; Cloud-native architecture; Security architecture; Container orchestration; System decomposition; Technology evaluation; Architectural decision analysis
+   new: MVC architecture; microservices architecture; layered architecture; event-driven architecture; scalable architecture design; maintainable architecture design
+
+[23/40] SE-L2-011 Design Methods: 12 → 5
+   description: Covers UML modelling, design patterns including Singleton, Factory and Observer, and software design principles including SOLID. Students apply design techniques to produce robust software designs.
+   old: Design thinking; User research; Ideation facilitation; Wireframe prototyping; Usability testing; Design documentation; Concept sketching; Design rationale articulation; Design evaluation; Sustainable design; Design for manufacturing; Stakeholder analysis
+   new: UML modelling; Singleton pattern; Factory pattern; Observer pattern; SOLID principles
+
+[24/40] SE-L2-012 Concurrent Programming: 12 → 8
+   description: Covers multithreading, synchronisation, parallel computing, deadlock prevention and concurrent data structures. Students implement concurrent programs and analyse race conditions and thread safety.
+   old: Thread synchronization; Lock-free programming; Parallel algorithm design; Multithreaded debugging; Concurrency pattern implementation; Performance profiling; GPU kernel development; Message-passing interfaces; Concurrent data structures; Race condition detection; Asynchronous programming; Thread pool management
+   new: Multithreading; Synchronisation; Parallel computing; Deadlock prevention; Concurrent data structures; Race condition analysis; Thread safety assessment; Concurrent programming implementation
+
+[25/40] SE-L2-013 Further Web Design and Development: 12 → 6
+   description: Advanced web development covering React, REST API design, authentication, state management and full-stack application development using JavaScript and CSS frameworks.
+   old: Advanced CSS3; JavaScript ES6; Responsive design; UI/UX prototyping; Web accessibility; Performance optimization; CMS integration; Git version control; REST API integration; Progressive web apps; Front-end testing; SEO optimization
+   new: React development; REST API design; authentication implementation; state management; full-stack development; JavaScript programming
+
+[26/40] SE-L2-014 Mobile App Engineering: 12 → 7
+   description: Covers mobile application development for Android and iOS platforms. Topics include UI design, lifecycle management, data persistence, REST APIs and publishing mobile applications using Kotlin or Swift.
+   old: Swift programming; Kotlin development; Flutter UI design; REST API integration; Mobile app testing; Performance optimization; Git version control; App Store deployment; Play Store publishing; Firebase backend integration; Mobile security practices; Agile sprint planning
+   new: Android development; iOS development; UI design; lifecycle management; data persistence; REST API integration; mobile app publishing
+
+[27/40] SE-L3-001 Venture Building: 12 → 6
+   description: Focuses on building technology ventures including business model canvas, market validation, pitch development and startup financing. Students develop entrepreneurial and leadership skills.
+   old: Business model design; Lean startup methodology; Pitch deck creation; Market validation research; Financial modelling; Fundraising strategy; Customer discovery; Agile project management; Startup legal basics; Investor relations; Go-to-market planning; KPI tracking
+   new: Business model canvas; Market validation; Pitch development; Startup financing; Entrepreneurial skills; Leadership skills
+
+[28/40] SE-L3-002 Development and Operations: 11 → 5
+   description: Covers DevOps practices including CI/CD pipelines, containerisation with Docker, infrastructure as code using Terraform, monitoring and cloud deployment on AWS or Azure.
+   old: CI/CD pipeline design; Docker containerization; Kubernetes orchestration; Infrastructure as Code; Git version control; Automated testing; AWS cloud deployment; Monitoring and logging; Bash scripting; Ansible configuration management; Release management
+   new: CI/CD pipelines; Docker containerisation; Terraform infrastructure as code; Cloud deployment; Monitoring
+
+[29/40] SE-L3-003 Investigations in Software Engineering: 10 → 3
+   description: A research-based module where students investigate current topics and challenges in software engineering through literature review, experimentation and critical analysis.
+   old: Git version control; Agile development practices; Software design patterns; Automated testing frameworks; Continuous integration pipelines; Static code analysis; Performance profiling; Requirements elicitation techniques; Software metrics analysis; Empirical research methods
+   new: literature review; experimental investigation; critical analysis
+
+[30/40] SE-L3-004 Project Management: 12 → 8
+   description: Covers software project planning, estimation, scheduling, risk management and team leadership. Students apply Agile and Scrum project management tools including Gantt charts and earned value analysis.
+   old: Agile methodology; Risk assessment; Stakeholder communication; Budget forecasting; Critical path analysis; Project scheduling; Resource allocation; Earned value management; Scope definition; Change control; Project charter development; Team leadership
+   new: software project planning; project estimation; project scheduling; risk management; team leadership; Agile methodology; Scrum framework; earned value analysis
+
+[31/40] SE-L3-005 Design Patterns: 10 → 4
+   description: Advanced coverage of Gang of Four design patterns, architectural patterns and anti-patterns using Java. Students apply creational, structural and behavioural patterns to solve complex software design problems.
+   old: Object-oriented design; Design pattern implementation; UML diagramming; Refactoring techniques; Software architecture modeling; Dependency injection; Concurrency pattern usage; Anti-pattern identification; Test-driven development; Design pattern documentation
+   new: Design pattern implementation; Software architecture design; Anti-pattern analysis; Java programming
+
+[32/40] SE-L3-006 Software Quality Engineering: 12 → 6
+   description: Covers software quality metrics, static analysis, code reviews, test automation frameworks, performance testing and continuous quality improvement in software development.
+   old: Test case design; Automated testing; Test automation frameworks; Static code analysis; Performance testing; Regression testing; Defect tracking; Quality metrics; Continuous integration; Test-driven development; Code review; Risk-based testing
+   new: Software quality metrics; Static analysis; Code reviews; Test automation; Performance testing; Continuous quality improvement
+
+[33/40] SE-L3-007 User Experience: 12 → 6
+   description: Covers UX research methods, usability testing, wireframing, prototyping and interaction design. Students apply human-centred design principles to evaluate and improve software interfaces.
+   old: User research; Persona creation; Wireframe design; Interactive prototyping; Usability testing; Information architecture; Heuristic evaluation; Accessibility design; Journey mapping; A/B testing; UX analytics; Design thinking
+   new: UX research; usability testing; wireframing; prototyping; interaction design; human-centred design
+
+[34/40] SE-L3-008 Project in Software Engineering: 10 → 5
+   description: Final year project requiring students to design, develop and evaluate a software engineering solution for a real-world problem demonstrating technical, analytical and project management skills.
+   old: Agile Scrum; Requirements elicitation; UML modeling; Git version control; Test-driven development; Continuous integration; Code review; Software architecture design; Risk management; Stakeholder communication
+   new: software design; software development; solution evaluation; analytical thinking; project management
+
+[35/40] SE-L3-009 Designing and Developing Applications on Cloud: 12 → 5
+   description: Covers cloud application development using AWS or Azure. Topics include serverless computing, cloud-native architecture, microservices deployment, Docker containers and cloud security.
+   old: Cloud architecture design; AWS Lambda development; Azure Functions programming; Docker containerization; Kubernetes orchestration; CI/CD pipeline implementation; Terraform IaC scripting; Serverless application design; Microservices development; Cloud security best practices; API gateway configuration; Cloud cost optimization
+   new: serverless computing; cloud-native architecture; microservices deployment; Docker containers; cloud security
+
+[36/40] SE-L3-010 Distributed Computer Systems: 12 → 6
+   description: Covers distributed system concepts including consistency, fault tolerance, CAP theorem, distributed databases, message queues and designing distributed applications.
+   old: Distributed algorithms; Fault tolerance design; Cloud computing; Microservices architecture; Load balancing; Consensus protocols; Distributed storage; Network programming; Parallel programming; Scalability engineering; Container orchestration; Message queueing
+   new: Consistency management; Fault tolerance design; CAP theorem analysis; Distributed database design; Message queue integration; Distributed application design
+
+[37/40] SE-L3-011 Enterprise Programming for Distributed Applications: 12 → 5
+   description: Covers enterprise Java frameworks including Jakarta EE, RESTful web services, microservices and distributed application design patterns for large-scale systems.
+   old: Java EE development; Microservices design; RESTful API development; Docker containerization; Kubernetes orchestration; Message queue integration; Distributed caching; Fault tolerance patterns; CI/CD pipeline implementation; AWS deployment; Concurrency programming; Transaction management
+   new: Enterprise Java development; RESTful API development; Microservices implementation; Distributed application design; Design pattern application
+
+[38/40] SE-L3-012 Blockchain Development: 12 → 5
+   description: Introduces blockchain technology, smart contracts, decentralised applications and consensus mechanisms. Students build and deploy blockchain-based solutions.
+   old: Solidity programming; Smart contract development; Ethereum architecture; Hyperledger Fabric; dApp development; Cryptographic hashing; Consensus algorithms; Tokenomics design; Blockchain security auditing; Web3.js integration; NFT creation; Gas optimization
+   new: Blockchain fundamentals; Smart contract development; Decentralized application development; Consensus mechanism understanding; Deploying blockchain solutions
+
+[39/40] SE-L3-013 Advanced Database Systems: 13 → 6
+   description: Covers advanced database topics including query optimisation, transaction management, distributed databases, NoSQL systems including MongoDB and big data storage solutions.
+   old: SQL query optimization; NoSQL data modeling; Distributed database design; Database performance tuning; Data replication strategies; CAP theorem analysis; Indexing techniques; Transaction management; Stored procedure development; Big data integration; Graph database querying; Data warehousing; ETL pipeline design
+   new: query optimisation; transaction management; distributed databases; NoSQL databases; MongoDB; big data storage
+
+[40/40] SE-L3-014 Optimisation and Deep Learning: 12 → 6
+   description: Covers mathematical optimisation techniques and deep learning architectures including neural networks, backpropagation, CNNs and RNNs. Students implement and train deep learning models using Python.
+   old: Convex optimization; Gradient descent; TensorFlow modeling; PyTorch implementation; Hyperparameter tuning; Loss function design; Stochastic optimization; Neural network architecture; GPU acceleration; Model deployment; Reinforcement learning basics; Bayesian optimization
+   new: mathematical optimisation; neural network implementation; backpropagation; CNN modeling; RNN modeling; Python for deep learning
+
+DRY RUN (nothing saved): 40 modules, 468 → 244 skills
