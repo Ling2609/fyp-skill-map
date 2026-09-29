@@ -18,8 +18,9 @@ Usage (from the backend folder):
   python scripts/live_jobs/fetch_live_jobs.py --use-cache             # save + extract skills from the cache (0 credits)
   python scripts/live_jobs/fetch_live_jobs.py --dry-run               # refresh: re-fetch every query (e.g. before the demo)
 
-Credits: 1 per page. Malaysia queries fetch 2 pages, Singapore 1. A full refresh of all queries
-costs ~43 credits (of 200/month); --new-only costs only the new queries; --use-cache costs nothing.
+Credits: 1 per page. Malaysia queries fetch 2 pages, Singapore 1. A full refresh of all 32 queries
+costs ~61 credits (of 200/month); --new-only costs only the new queries (the 10 graduate-level
+queries added 29 Sep = ~20 credits); --use-cache costs nothing.
 """
 
 import argparse
@@ -66,7 +67,7 @@ QUERIES = [
     ("cloud devops engineer in Malaysia",         "my", "Engineering - Software"),
     # added 27 Sep to grow the live pool towards ~200
     ("full stack developer in Malaysia",          "my", "Developers/Programmers"),
-    ("mobile app developer in Malaysia",          "my", "Developers/Programmers"),
+    # "mobile app developer in Malaysia" removed 29 Sep: it returned 0 usable jobs (see "Android iOS developer" below)
     ("AI machine learning engineer in Malaysia",  "my", "Engineering - Software"),
     ("data engineer in Malaysia",                 "my", "Database Development & Administration"),
     ("UI UX designer in Malaysia",                "my", "Web Development & Production"),
@@ -76,7 +77,16 @@ QUERIES = [
     ("software engineer in Singapore",            "sg", "Engineering - Software"),
     ("network engineer in Singapore",             "sg", "Engineering - Network"),
     ("data analyst in Singapore",                 "sg", "Database Development & Administration"),
-    # removed "graduate IT trainee in Singapore": it only returned an HR internship
+    ("junior software developer in Malaysia",     "my", "Developers/Programmers"),
+    ("fresh graduate IT in Malaysia",             "my", "Developers/Programmers"),
+    ("IT intern in Malaysia",                     "my", "Developers/Programmers"),
+    ("junior data analyst in Malaysia",           "my", "Database Development & Administration"),
+    ("junior network engineer in Malaysia",       "my", "Engineering - Network"),
+    ("Android iOS developer in Malaysia",         "my", "Developers/Programmers"),
+    ("software engineer in Penang",               "my", "Engineering - Software"),
+    ("software engineer in Johor",                "my", "Engineering - Software"),
+    ("junior QA tester in Malaysia",              "my", "Testing & Quality Assurance"),
+    ("technical support graduate in Malaysia",    "my", "Help Desk & IT Support"),
 ]
 
 # Only apply links from these publishers / domains are kept (safety: students click these).
