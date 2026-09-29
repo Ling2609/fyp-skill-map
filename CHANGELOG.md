@@ -6,17 +6,17 @@ Planning, reasoning and research behind each decision are in the project roadmap
 ## 29 Sep 2026 — Project structure for all three roles
 
 Files moved with **names unchanged** and history kept (`git log --follow <file>`).
-- (this commit) **Live-job queries generated from market data**, replacing the hand-written list.
+- `32b2415` **Live-job queries generated from market data**, replacing the hand-written list.
   `scripts/live_jobs/generate_live_queries.py` reduces each 2024 JobStreet ICT title to its role ("Senior Java Developer
   (KL)" → "java developer"; manager and lead titles, non-ICT and one-word roles left out), takes the top role of every ICT
   subcategory, then fills the budget with the most common remaining roles, skipping roles that only add words to a chosen
   one ("IT support executive" after "IT support"). The list is saved to `data/live_job_queries.json`, which
   `fetch_live_jobs.py` reads. The job level and ICT title rules moved to `app/services/job_titles.py` so the API, the
   fetcher and the generator use the same rules.
-- (this commit) `scripts/tools/remove_non_ict_jobs.py` removes non-ICT live jobs saved before the title check (e.g. a marine
+- `32b2415` `scripts/tools/remove_non_ict_jobs.py` removes non-ICT live jobs saved before the title check (e.g. a marine
   engineering "Graduate Programme" that the A7 entry-level ranking had lifted to the top). Job level now also reads plural
   titles ("Internships", "Graduate Trainees") as entry level.
-- (previous commit) **Live jobs must have an ICT title.** Broad queries such as "IT intern" also returned electrical, HR and
+- `32b2415` **Live jobs must have an ICT title.** Broad queries such as "IT intern" also returned electrical, HR and
   finance jobs, which would have been saved under an ICT subcategory. `fetch_live_jobs.py` now skips a job whose title has
   no ICT word (software, developer, data, network, IT, …) before Groq sees it, and lists each skipped title. Jobs already
   saved are not affected.
@@ -28,7 +28,8 @@ Files moved with **names unchanged** and history kept (`git log --follow <file>`
 - `b119d65` **Graduate-level job queries** (A7): `fetch_live_jobs.py` adds 10 Malaysian queries (junior developer,
   fresh graduate IT, IT intern, junior data analyst / network engineer / QA tester, technical support graduate, Android iOS
   developer, software engineer in Penang and in Johor), so more live openings suit fresh graduates. "mobile app developer"
-  removed (0 usable jobs). 32 queries in total.
+  removed (0 usable jobs). 32 queries in total. Superseded by `32b2415`: most of these returned
+  non-ICT or duplicate jobs, which led to generating queries from market data.
 - `947b39c` **Duplicate live jobs (F9).** One rule for "same job" (title + company + location, ignoring case,
   punctuation and spacing) in `app/services/job_keys.py`. `scripts/tools/remove_duplicate_jobs.py` lists duplicates and deletes
   the extra copies after confirmation, keeping the most recently posted one. `fetch_live_jobs.py` now also skips a posting
