@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import api from '../../api'
 import PageHeader from '../../components/PageHeader'
+import LevelTag from '../../components/LevelTag'
 
 // A job counts as "aligned" when you cover at least half its required skills
 const ALIGNED_MIN_COVERAGE = 50
@@ -163,7 +164,10 @@ export default function Dashboard() {
                     <span className="text-xs text-slate-300 w-4 shrink-0 font-medium tabular-nums">{idx + 1}</span>
                     <div className="min-w-0">
                       <p className="text-sm font-medium text-slate-800 truncate">{job.job_title}</p>
-                      <p className="text-xs text-slate-400">{job.company} · {job.location}</p>
+                      <div className="flex items-center gap-1.5 mt-0.5 min-w-0">
+                        <LevelTag level={job.level} />
+                        <p className="text-xs text-slate-400 truncate">{job.company} · {job.location}</p>
+                      </div>
                     </div>
                   </div>
                   <div className="flex items-center gap-1.5 shrink-0">

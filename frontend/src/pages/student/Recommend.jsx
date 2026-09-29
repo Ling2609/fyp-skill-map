@@ -2,6 +2,7 @@ import { Fragment, useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import api from '../../api'
 import PageHeader from '../../components/PageHeader'
+import LevelTag from '../../components/LevelTag'
 
 const LOADING_STEPS = [
   'Building your skill profile...',
@@ -108,9 +109,9 @@ export default function Recommend() {
       const savedRole = sessionStorage.getItem('lastRoleFilter')
       const savedCategory = sessionStorage.getItem('lastActiveCategory')
 
-      // Results saved by an older version lack skills_total → fetch fresh instead of showing old scores
+      // Results saved by an older version lack the job level → fetch fresh instead of showing the old order
       const parsed = savedResults ? JSON.parse(savedResults) : null
-      const isCurrent = parsed?.recommendations?.length ? 'skills_total' in parsed.recommendations[0] : false
+      const isCurrent = parsed?.recommendations?.length ? 'level' in parsed.recommendations[0] : false
       if (isCurrent) {
         setResults(parsed)
         if (savedRole) setRoleFilter(savedRole)
@@ -244,7 +245,7 @@ export default function Recommend() {
                   value={sortBy}
                   onChange={v => { setSortBy(v); setVisibleCount(10) }}
                   options={[
-                    { key: 'fit', label: 'Best fit', hint: 'Skills matched, plus how well your whole profile and level fit the role' },
+                    { key: 'fit', label: 'Best fit', hint: 'Skills matched and how well your whole profile fits the role; senior roles rank lower' },
                     { key: 'skills', label: 'Most skills matched', hint: 'Highest share of required skills you already have' },
                   ]}
                 />
@@ -280,6 +281,7 @@ export default function Recommend() {
                         </span>
                       </div>
                       <div className="flex gap-1.5 mt-2.5 flex-wrap">
+                        <LevelTag level={job.level} />
                         {job.country && job.country !== 'MY' && (
                           <span className="text-xs bg-slate-100 text-slate-500 px-2 py-0.5 rounded-md font-medium">{job.country === 'SG' ? 'Singapore' : job.country}</span>
                         )}

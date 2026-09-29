@@ -6,11 +6,20 @@ Planning, reasoning and research behind each decision are in the project roadmap
 ## 29 Sep 2026 — Project structure for all three roles
 
 Files moved with **names unchanged** and history kept (`git log --follow <file>`).
-- (this commit) **Duplicate live jobs (F9).** One rule for "same job" (title + company + location, ignoring case,
+- (this commit) **Job level on every match** (A7, F10). The level is read from the title, checking the most senior first
+  (so "Senior Associate" is senior, not entry level), and "intern", "internship", "fresh graduate" and "graduate programme"
+  now count as entry level; "specialist" no longer counts as senior. Job Matches and the Dashboard tag each job as
+  Entry level / Senior / Lead / Manager (no tag when the title doesn't say). Senior roles are **ranked lower, never hidden**:
+  the level penalty now applies to the whole Best-fit score instead of only its similarity half.
+- (previous commit) **Graduate-level job queries** (A7): `fetch_live_jobs.py` adds 10 Malaysian queries (junior developer,
+  fresh graduate IT, IT intern, junior data analyst / network engineer / QA tester, technical support graduate, Android iOS
+  developer, software engineer in Penang and in Johor), so more live openings suit fresh graduates. "mobile app developer"
+  removed (0 usable jobs). 32 queries in total.
+- `947b39c` **Duplicate live jobs (F9).** One rule for "same job" (title + company + location, ignoring case,
   punctuation and spacing) in `app/services/job_keys.py`. `scripts/tools/remove_duplicate_jobs.py` lists duplicates and deletes
   the extra copies after confirmation, keeping the most recently posted one. `fetch_live_jobs.py` now also skips a posting
   already saved under another id (e.g. from another publisher), and saves each skill only once per job.
-- (this commit) Small fixes: Gemini AFC warning off, `ModuleSkill.extracted_by` default removed (every script sets
+- `e0c3423` Small fixes: Gemini AFC warning off, `ModuleSkill.extracted_by` default removed (every script sets
   the real label), unused import, script and migration usage lines updated to the new paths; README and this changelog.
 - `536252d` Unused `UserSkillCache` model removed; `migrate_drop_user_skills_cache.py` drops its table.
   A11 run outputs moved to `docs/evidence/` (`a11_run.txt`: all 40 modules old vs new; `dryrun.txt`: the reviewed dry run).

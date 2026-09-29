@@ -66,7 +66,7 @@ fyp-skill-map/
         │   ├── student/    Dashboard, Recommend (Job Matches), JobDetail, Profile, Chatbot
         │   ├── employer/   (planned)
         │   └── admin/      (planned)
-        ├── components/     shared: Sidebar, PageHeader
+        ├── components/     shared: Sidebar, PageHeader, LevelTag
         ├── context/        logged-in user (AuthContext)
         ├── api.js          axios client, adds the login token to every request
         └── App.jsx         routes; RoleRoute limits pages by role

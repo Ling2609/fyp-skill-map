@@ -14,22 +14,32 @@ import numpy as np
 import re
 import threading
 
+# Job level from the title (roadmap A7 + F10). Checked from the MOST senior level down, so
+# "Senior Associate" is senior and "Senior Manager" is manager, not entry level.
+# Titles are only a hint (many "junior" postings still ask for years of experience), so the
+# level is shown on each card and senior roles are ranked lower; nothing is hidden.
 SENIORITY_PATTERNS = {
-    "junior":  r"\b(junior|jr\.?|entry.?level|graduate|intern|trainee|associate)\b",
-    "senior":  r"\b(senior|sr\.?|specialist)\b",
-    "lead":    r"\b(lead|principal|staff|architect)\b",
     "manager": r"\b(manager|director|head\s+of|vp|chief)\b",
+    "lead":    r"\b(lead|principal|staff|architect)\b",
+    "senior":  r"\b(senior|sr\.?)\b",
+    "junior":  r"\b(junior|jr\.?|entry.?level|fresh\s+grad(uate)?s?|graduate|intern|internship|trainee|associate)\b",
 }
 
-SENIORITY_RANK = {"junior": 0, "unspecified": 1, "mid": 1, "senior": 2, "lead": 3, "manager": 4}
-PENALTY_PER_STEP = 0.12
+SENIORITY_RANK = {"junior": 0, "unspecified": 1, "senior": 2, "lead": 3, "manager": 4}
+PENALTY_PER_STEP = 0.12   # taken off the ranking score per level above entry level
+
 
 def classify_seniority(title: str) -> str:
-    t = title.lower()
+    t = (title or "").lower()
     for level, pattern in SENIORITY_PATTERNS.items():
         if re.search(pattern, t):
             return level
     return "unspecified"
+
+
+def seniority_penalty(level: str) -> float:
+    """Graduates are entry level, so each level above that costs PENALTY_PER_STEP."""
+    return SENIORITY_RANK.get(level, 1) * PENALTY_PER_STEP
 
 router = APIRouter(prefix="/recommend", tags=["recommend"])
 
@@ -91,6 +101,7 @@ def _sync_job_cache():
                 "salary": job.salary,
                 "source": job.source,
                 "country": job.country,
+                "level": classify_seniority(job.job_title),
                 "skills": skill_names,
                 "skill_vecs": skill_vecs,
             }
@@ -157,14 +168,6 @@ def recommend_jobs(
             np.linalg.norm(profile_vec) * np.linalg.norm(job_vec) + 1e-8
         ))
 
-        # Seniority penalty
-        job_rank = SENIORITY_RANK.get(classify_seniority(cached["job_title"]), 1)
-        gap = max(0, job_rank - 0)
-        if gap >= 3:
-            score = 0.0
-        else:
-            score = max(0.0, score - gap * PENALTY_PER_STEP)
-
         # Title boost
         if role_filter_stripped and not is_subcategory_filter:
             title_lower = cached["job_title"].lower()
@@ -176,7 +179,8 @@ def recommend_jobs(
 
         sbert_scores.append((job_id, score))
 
-    sbert_scores.sort(key=lambda x: -x[1])
+    # Shortlist for coverage: the same level penalty, so a senior role doesn't take an entry-level role's place
+    sbert_scores.sort(key=lambda x: -(x[1] - seniority_penalty(_job_cache[x[0]]["level"])))
     top_candidates = sbert_scores if payload.top_n <= 0 else sbert_scores[:payload.top_n]
 
     # ── Coverage on top candidates only — uses pre-computed + pre-normalised vecs ──
@@ -190,10 +194,11 @@ def recommend_jobs(
         matched = skill_coverage(grad_embeddings, cached["skill_vecs"], total)
         coverage = round(matched / total * 100, 1) if total else 0.0
 
-        # Ranking score ("best fit"): skill coverage + whole-profile similarity + seniority/title
-        # adjustments. Used for ORDER only. What the student SEES is skill coverage (X of N),
-        # the same number Job Detail shows, so a job never shows two different "match" numbers.
-        hybrid = 0.5 * sbert_score + 0.5 * (coverage / 100)
+        # Ranking score ("best fit"): skill coverage + whole-profile similarity (+ title boost),
+        # minus the level penalty. Used for ORDER only. What the student SEES is skill coverage
+        # (X of N), the same number Job Detail shows, plus the job's level as a tag.
+        level = cached["level"]
+        hybrid = max(0.0, 0.5 * sbert_score + 0.5 * (coverage / 100) - seniority_penalty(level))
         hybrid_percent = round(hybrid * 100, 1)
         results.append({
             "job_id": cached["job_id"],
@@ -207,6 +212,7 @@ def recommend_jobs(
             "match_score": hybrid,
             "match_percent": hybrid_percent,      # ranking score (kept for sorting / debugging)
             "coverage_percent": coverage,          # shown to the student
+            "level": level,                        # junior / unspecified / senior / lead / manager
             "skills_matched": matched,
             "skills_total": total,
             "top_job_skills": job_skills[:5],
