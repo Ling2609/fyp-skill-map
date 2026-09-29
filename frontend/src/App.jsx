@@ -2,13 +2,13 @@ import { Routes, Route, Navigate } from 'react-router-dom'
 import { SidebarProvider, useSidebar } from './components/SidebarContext'
 import { useAuth } from './context/useAuth'
 import Sidebar from './components/Sidebar'
-import Register from "./pages/auth/Register";
-import Login from "./pages/auth/Login";
-import Dashboard from "./pages/student/Dashboard";
-import Recommend from "./pages/student/Recommend";
-import JobDetail from "./pages/student/JobDetail";
-import Chatbot from "./pages/student/Chatbot";
-import Profile from "./pages/student/Profile";
+import Register from './pages/auth/Register';
+import Login from './pages/auth/Login';
+import Dashboard from './pages/student/Dashboard';
+import Recommend from './pages/student/Recommend';
+import JobDetail from './pages/student/JobDetail';
+import Chatbot from './pages/student/Chatbot';
+import Profile from './pages/student/Profile';
 
 function RoleRoute({ children, roles }) {
   const { user, loading } = useAuth()
