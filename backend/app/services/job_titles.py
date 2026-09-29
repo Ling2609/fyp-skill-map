@@ -44,7 +44,10 @@ ICT_TITLE_WORDS = re.compile(
     # roles named by their technology (seen in real results: "Backend Engineer", "Senior Linux Administrator")
     r"|back.?end|front.?end|react(\.js)?|php|java|python|\.net|dotnet|flutter|kotlin|linux|vmware|azure|aws"
     r"|ci\s?/\s?cd|analytics|servicenow|systems?\s+development|mobile\s+(engineer|developer)|uiux|ui\s+ux"
-    r"|security\s+(analyst|engineer|operations)|incident\s+response|threat|siem|automated\s+testing|test\s+automation)(?!\w)",
+    r"|security\s+(analyst|engineer|operations)|incident\s+response|threat|siem|automated\s+testing|test\s+automation"
+    # added after the 29 Sep generated-query dry run ("Service Desk Specialist", "Senior Firewall Engineer"…)
+    r"|service\s+desk|firewall|enterprise\s+resources?\s+planning|tech\s+support|agile|scrum|product\s+owner"
+    r")s?(?!\w)",   # s?: plurals too ("System Engineers", "Developers")
     re.IGNORECASE,
 )
 ICT_TITLE_ACRONYMS = re.compile(r"\b(IT|ICT|AI|ML|QA|UI|UX|SAP|SRE|DBA|BI|SOC|API)\b")   # case-sensitive: "IT", not "it"
@@ -53,7 +56,16 @@ ICT_TITLE_ACRONYMS = re.compile(r"\b(IT|ICT|AI|ML|QA|UI|UX|SAP|SRE|DBA|BI|SOC|AP
 ICT_TITLE_PRODUCTS = re.compile(r"servicenow|azure|vmware|kubernetes|salesforce", re.IGNORECASE)
 
 
+# "System engineer" and "data center" also appear in electrical and mechanical jobs
+# ("Senior Power Systems Engineer (Data Center)", "Mechanical (Rotary) System Engineer").
+# Those are skipped unless the title also names software work.
+NON_ICT_ENGINEERING = re.compile(r"\b(electrical|mechanical|civil|chemical|power\s+systems?|rotary|hvac)\b", re.IGNORECASE)
+SOFTWARE_WORDS = re.compile(r"\b(software|developer|programmer|programming)\b", re.IGNORECASE)
+
+
 def is_ict_title(title: str) -> bool:
     title = title or ""
+    if NON_ICT_ENGINEERING.search(title) and not SOFTWARE_WORDS.search(title):
+        return False
     return bool(ICT_TITLE_WORDS.search(title) or ICT_TITLE_ACRONYMS.search(title)
                 or ICT_TITLE_PRODUCTS.search(title))

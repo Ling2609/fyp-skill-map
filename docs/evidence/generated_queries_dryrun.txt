@@ -1,0 +1,209 @@
+--new-only: 20 new queries to fetch, 8 reused from cache
+
+=== software engineer in Malaysia (MY) ===
+
+=== software developer in Malaysia (MY) ===
+  + Software Engineer - Core Banking | Techstreet Malaysia | via Foundit.my | 2212 chars
+  + Software Engineer – Java / React | Diksha Technologies | via LinkedIn | 1244 chars
+  + Senior PHP Software Engineer | Stampede Solution | via Indeed | 2893 chars
+  + Software Developer (AI-Assisted Development) | Brighten Business Consulting Sdn Bhd | via Indeed | 4010 chars
+  + Software Engineer (Contract) | Intel | via LinkedIn | 4328 chars
+  + Executive Officer, GT-GWB Application Delivery Treasury | CIMB Group Malaysia | via Cloud Sign In | 3866 chars
+
+=== business analyst in Malaysia (MY) ===
+  + Business Analyst - Solution and Functional | PRIVASIA Technology Berhad | via LinkedIn | 1973 chars
+  - not ICT, skipped: Strategic Business Requirements Analyst | Drive Innovat
+  - not ICT, skipped: Business Reporting (Associate Analyst) - Leasing 1 1
+  + Senior IT Business Analyst ( Manufacturing Execution Sy | MYO Medtronic Malaysia Operations | via Workday | 9360 chars
+  + Business Analyst | Cisco Live | via Foundit.my | 2972 chars
+  - not ICT, skipped: Business Information Analyst
+  - not ICT, skipped: Senior Business Development Analyst
+
+=== IT executive in Malaysia (MY) ===
+  + IT Executive | Grab | via Grab Careers | 5262 chars
+  + BD Executive (IT Services) | JOS (MALAYSIA) SDN BHD | via Indeed | 2290 chars
+  - not ICT, skipped: Senior Service Delivery Manager
+  - not ICT, skipped: Recruitment Executive
+  - not ICT, skipped: Territory Account Executive, Malaysia
+  - not ICT, skipped: EXECUTIVE (MALAYSIA)
+  - not ICT, skipped: Executive, China Desk
+  - not ICT, skipped: Partner Account Executive - SMB & Mid-Market
+  - not ICT, skipped: Project Manager (Based in Japan)
+  - not ICT, skipped: Executive II
+  - not ICT, skipped: Senior Manager, Product Deployment
+  - not ICT, skipped: Operations Executive
+  - not ICT, skipped: Senior Accounts Executive
+  + Executive/Senior Executive, AI & Automation Analyst | Allianz Insurance | via Allianz Careers | 3239 chars
+  - not ICT, skipped: Junior Account Executive (URGENT)
+  - not ICT, skipped: Operations & Admin Executive
+  - not ICT, skipped: Operations Executive - Kuching, Malaysia
+  - not ICT, skipped: Customer Service Executive
+
+=== full stack developer in Malaysia (MY) ===
+
+=== frontend developer in Malaysia (MY) ===
+  + Senior Frontend Developer (Vue.js) | respond.io | via LinkedIn | 4727 chars
+  + Angular Developer | Tata Consultancy Services | via Foundit.my | 3943 chars
+
+=== java developer in Malaysia (MY) ===
+  + Backend Developer | Lavu Tech Solutions Sdn Bhd | via Foundit.my | 3127 chars
+  + IT Capacity Developer (Java or Python) | Randstad Malaysia | via Randstad Malaysia | 929 chars
+  + Java developer | Kamlax Global Technologies Sdn Bhd | via Foundit.my | 1480 chars
+  + Java developer | Zentact Systems Pte Ltd | via Foundit.my | 1099 chars
+  + Lead Backend Engineer (JAVA) | Ryt Bank | via LinkedIn | 3558 chars
+
+=== system analyst in Malaysia (MY) ===
+  + Senior Risk Systems Analyst | OxyData Software Sdn Bhd | via Foundit.my | 1770 chars
+  + Senior/Lead System Analyst | PARK AND PARTNERS CONSULTANCY PTE. LTD. | via Jobstreet | 2716 chars
+
+=== network engineer in Malaysia (MY) ===
+
+=== system engineer in Malaysia (MY) ===
+  + Senior Power Systems Engineer (Data Center) - KL | Randstad Malaysia | via Randstad Malaysia | 2957 chars
+  + Senior Mechanical (Rotary) System Engineer | Air Liquide | via LinkedIn | 7287 chars
+  + IT Systems Engineer | SolveIT Consultant Sdn Bhd | via Maukerja | 2729 chars
+  - not ICT, skipped: Engineer II, Mechanical Systems Engineering
+  + Senior Systems Engineer (Mobile Device Management) | Grab | via Grab Careers | 5208 chars
+  + Automation System Engineer | RoviSys | via LinkedIn | 2250 chars
+  - not ICT, skipped: L1 to L1.5 System Engineers
+  - not ICT, skipped: Lead Engineer, Systems/Applications Design
+  + Electrical Systems Engineer | Winston M&E Sdn Bhd | via Maukerja | 2187 chars
+
+=== data analyst in Malaysia (MY) ===
+
+=== database administrator in Malaysia (MY) ===
+
+=== web developer in Malaysia (MY) ===
+
+=== IT engineer in Malaysia (MY) ===
+  + Senior Sales Engineer, IT Infrastructure Solutions | JAC Recruitment Malaysia | via JAC Recruitment Malaysia | 2893 chars
+  + Lead Backend Engineer (Product/System/SaaS/PaaS) | Qode Jobs | via LinkedIn | 2663 chars
+  - not ICT, skipped: Product & System Application Engineer (PreSales)
+  + Senior IT Cloud Engineer | Grab | via Grab Careers | 4998 chars
+  - not ICT, skipped: Enterprise Technology Engineer
+  - not ICT, skipped: Continuous Improvement Senior Engineer
+  + Software Test Engineer (Network & Servers) | Celestica International LP | via Careers At Celestica | 5944 chars
+  + Senior Android Platform Engineer | EverestEngineering | via LinkedIn | 3531 chars
+  - not ICT, skipped: Staff Silicon Design Verification Engineer
+  + Product Technical Engineer (IT) | The Hub's Engineering (Malaysia) Sdn Bhd | via Maukerja | 3155 chars
+  + Network Security Engineer | Hilti Careers | via Hilti Careers | 2570 chars
+
+=== backend developer in Malaysia (MY) ===
+  + Back End Developer | BJAK | via LinkedIn | 3814 chars
+  + Backend Developer | Lavu Tech Solutions Sdn Bhd | via Foundit.my | 920 chars
+  + Website Operations & Backend Developer | Conplex Marketing | via Maukerja | 1804 chars
+
+=== IT support in Malaysia (MY) ===
+  ! attempt 1 failed (ReadTimeout), retrying...
+  + IT Admin Cum Coordinator | Rosemallow Technologies Pvt Ltd | via LinkedIn | 1797 chars
+  + Vice President, GT-TBS, GCDB Application Delivery Non-D | CIMB Group Malaysia | via Cloud Sign In | 4382 chars
+  - not ICT, skipped: Remote Customer Support Manager - Malaysia
+  + Manager, IT SAP Support | Abbott Laboratories | via Abbott Jobs | 3311 chars
+  - not ICT, skipped: MS Engineer L3
+  + AI Engagement Manager | Allianz Insurance | via Allianz Careers | 4536 chars
+  + IT Operations Analyst | Accenture | via Accenture | 1422 chars
+  + Technical Support Protege Trainee | Hitachi Careers | via Hitachi Careers - Hitachi Global | 3962 chars
+  - not ICT, skipped: MID AND PM SHIFT CUSTOMER SERVICE (PREPAID)
+
+=== technical support engineer in Malaysia (MY) ===
+  + Technical Support Engineer | Emerson | via Foundit.my | 3344 chars
+  - not ICT, skipped: Engineer Technical Services
+  - not ICT, skipped: Customer Engineer: Remote Tech Support
+  + Cloud Support | GRIT | via LinkedIn | 1678 chars
+  - not ICT, skipped: ENGINEERING SUPPORT ENGINEER
+  - not ICT, skipped: Support Engineer(Remote/Pos)
+  - not ICT, skipped: 05 - Operations Engineering Support 2
+
+=== mobile developer in Malaysia (MY) ===
+  + Android Developer (Kotlin) | Leanis Solutions Sdn Bhd | via LinkedIn | 4176 chars
+  + Senior Specialist, iOS Developer | TNG Digital | via TNG EWallet | 1384 chars
+
+=== software tester in Malaysia (MY) ===
+  + Software Test Engineer (Automation) | Michael Page | via Foundit.my | 2104 chars
+  + Automation Tester / Manager (Selenium, Appium) | Techstreet Malaysia | via LinkedIn | 913 chars
+  + Part-Time Software Tester | IP FOKUS SDN BHD | via Glassdoor | 1616 chars
+  + Senior Automation Tester  (Java, Selenium) | Ambition | via LinkedIn | 2966 chars
+  + Software Test Engineer | Tec D (Malaysia) Sdn. Bhd. | via TD SYNNEX Careers | 5233 chars
+  + Senior Specialist, Software Quality Assurance | TNG Digital | via TNG EWallet | 1069 chars
+
+=== IT technician in Malaysia (MY) ===
+  + IT Technician | KAIFA TECHNOLOGY MALAYSIA SDN BHD | via Indeed | 947 chars
+  - not ICT, skipped: Service Desk Specialist I
+  - not ICT, skipped: Critical Environment Technician
+  - not ICT, skipped: Technician, Production
+  - not ICT, skipped: Technician 3
+  - not ICT, skipped: Critical Environment Technician
+  - not ICT, skipped: Installation Technician
+  - not ICT, skipped: Test Technician
+  - not ICT, skipped: Technician-Kuching, Sarawak
+  + Technician - Data Center | Wesco | via LinkedIn | 4355 chars
+  - not ICT, skipped: Service Technician - Field
+  - not ICT, skipped: Fine Tuner
+  - not ICT, skipped: Technician III
+
+=== system administrator in Malaysia (MY) ===
+
+=== cybersecurity engineer in Malaysia (MY) ===
+  + Infrastructure & Cybersecurity Engineer | Sunway Group | via LinkedIn | 2808 chars
+  + Senior Security Engineer — Privacy & Data Security | Bitdeer (NASDAQ: BTDR) | via LinkedIn | 5665 chars
+  + Senior SIEM Engineer | Randstad Malaysia | via Randstad Malaysia | 3697 chars
+  - not ICT, skipped: Senior Firewall Engineer (6+ yrs) – Enterprise Security
+  + Cybersecurity Consultant - Penetration Testing | Bitdefender | via Foundit.my | 4000 chars
+
+=== AI engineer in Malaysia (MY) ===
+  + Senior AI Engineer | Michael Page | via Michael Page | 5959 chars
+  + AI Engineer – Agent Reasoning & Multimodal Dialogue | Shopee | via Foundit.my | 2732 chars
+  + Autonomous Driving, Robotics & Physical AI Engineer | HelloWorld Robotics | via Foundit.my | 4534 chars
+  + Specialist, AI & Automation Developer | U Mobile | via LinkedIn | 2706 chars
+  + AI Data Scientist | Lancesoft Malaysia | via LinkedIn | 2202 chars
+  + AI Engineer (Mr. Robot Project) | MR DIY International | via LinkedIn | 7686 chars
+  + AI Solutions Engineer | NTT DATA | via NTT DATA Careers | 5652 chars
+  + AI/ML, GenAI Intern | Seagate Technology | via Jobstore | 3745 chars
+  + Staff Engineer/Tech Lead, Agentic Payments (AI Commerce | Reap | via LinkedIn | 5051 chars
+
+=== ERP consultant in Malaysia (MY) ===
+  + ERP Transformation Consultant | Robert Walters | via Robert Walters Malaysia | 8411 chars
+  + ERP Executive ( Junior) | Michael Page | via Michael Page | 2338 chars
+  - not ICT, skipped: Enterprise Resources Planning Consultant
+  + ERP Functional / Business Systems Analyst | Michael Page | via Michael Page | 2562 chars
+
+=== scrum master in Malaysia (MY) ===
+  - not ICT, skipped: Agile Project Manager
+  - not ICT, skipped: Strategic Agile Delivery Lead
+  - not ICT, skipped: Product Owner & Delivery Lead — Agile, End-to-End Deliv
+
+=== software engineer in Singapore (SG) ===
+
+=== business analyst in Singapore (SG) ===
+  - not ICT, skipped: Business Process Senior Analyst role (permanent role) w
+  + Senior Business Analyst (Temenos, Murex, SWIFT, Sophis, | EXASOFT CONSULTING PTE. LTD. | via MyCareersFuture | 2119 chars
+  + Business Analyst (Customer Onboarding) - Banking, 1-yea | Evolution Recruitment Solutions Pte Ltd | via Jobstreet | 1147 chars
+  + Associate/Senior Associate (12 months contract), Data M | Temasek International Pte Ltd | via EFinancialCareers | 4804 chars
+  + Director, WRB Business Finance, Products Business Analy | Standard Chartered Singapore | via LinkedIn Singapore | 5888 chars
+  + Business Analyst [Tester | 12 Months Contract] | BGC GROUP PTE. LTD. | via MyCareersFuture | 3973 chars
+  - not ICT, skipped: Ecommerce Analyst
+
+=== IT executive in Singapore (SG) ===
+  + Senior Executive, IT (Contract) | Football Association of Singapore | via MyCareersFuture | 5044 chars
+  + Data Engineer (Regional Role) | Randstad Singapore | via Randstad Singapore | 2951 chars
+  + Event Engineer (AV System/IT), IT Services | Amazon | via LinkedIn Singapore | 4561 chars
+  - not ICT, skipped: Test Manager (Tech PMO) | Bank | Contract
+  + IT Executive / Senior IT Executive | JESTAC PTE. LTD. | via MyCareersFuture | 2407 chars
+  + IT Infrastructure Ops Lead | Univers | via LinkedIn Singapore | 5761 chars
+  + Enterprise Technical Support (Level 2) | M1 Limited | via LinkedIn Singapore | 1784 chars
+  - not ICT, skipped: Lead / Senior Product Manager, Republic of Singapore Ai
+  - not ICT, skipped: Enterprise Sales Executive
+  - not ICT, skipped: Senior Business Operations Executive
+
+Raw API results saved to data/live_jobs_cache.json
+
+============================================================
+DRY RUN (nothing saved)
+============================================================
+  Fetched from API:          494
+  Dropped, not an ICT title: 56
+  Dropped, untrusted source: 236
+  Dropped, short description:  42
+  Dropped, duplicate:        78
+  Would save:                82
+  API credits used:          38

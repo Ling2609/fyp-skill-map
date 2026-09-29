@@ -6,6 +6,10 @@ Planning, reasoning and research behind each decision are in the project roadmap
 ## 29 Sep 2026 — Project structure for all three roles
 
 Files moved with **names unchanged** and history kept (`git log --follow <file>`).
+- (this commit) **ICT title rule tuned on the first generated-query dry run** (494 results, `docs/evidence/generated_queries_dryrun.txt`).
+  Now kept: plurals ("System Engineers"), service desk, firewall, ERP spelled out, tech support, agile / scrum / product owner.
+  Now skipped: electrical, mechanical, power-systems and similar engineering titles, unless they also name software work.
+  11 of 245 titles seen that day changed, all as intended.
 - `32b2415` **Live-job queries generated from market data**, replacing the hand-written list.
   `scripts/live_jobs/generate_live_queries.py` reduces each 2024 JobStreet ICT title to its role ("Senior Java Developer
   (KL)" → "java developer"; manager and lead titles, non-ICT and one-word roles left out), takes the top role of every ICT
