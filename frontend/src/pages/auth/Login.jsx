@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, Link, useLocation } from 'react-router-dom'
-import api from '../api'
-import { useAuth } from '../context/useAuth'
+import api from '../../api'
+import { useAuth } from '../../context/useAuth'
 
 // Toast component
 const Toast = ({ onClose }) => {

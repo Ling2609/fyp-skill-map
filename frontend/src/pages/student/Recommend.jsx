@@ -1,7 +1,7 @@
 import { Fragment, useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
-import api from '../api'
-import PageHeader from '../components/PageHeader'
+import api from '../../api'
+import PageHeader from '../../components/PageHeader'
 
 const LOADING_STEPS = [
   'Building your skill profile...',
