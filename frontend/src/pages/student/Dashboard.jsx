@@ -4,9 +4,6 @@ import api from '../../api'
 import PageHeader from '../../components/PageHeader'
 import LevelTag from '../../components/LevelTag'
 
-// A job counts as "aligned" when you cover at least half its required skills
-const ALIGNED_MIN_COVERAGE = 50
-
 const getGreeting = () => {
   const hour = new Date().getHours()
   if (hour < 12) return 'Good morning'
@@ -36,12 +33,13 @@ export default function Dashboard() {
 
   const topJobs = summary?.recommendations?.slice(0, 3) || []
   const profile = summary?.graduate_profile
-  const allJobs = summary?.recommendations || []
+  const nextSkill = summary?.skills_to_learn?.[0]
   const profileStats = profile && {
-    // Openings where the student covers at least half the required skills. Replaces a raw
-    // skill count, which is a vanity number (doesn't lead to any action; see references.md)
-    aligned: allJobs.filter(j => j.coverage_percent >= ALIGNED_MIN_COVERAGE).length,
-    openings: allJobs.length,
+    // The skill missing most often in the student's top matches: an action, not a vanity count.
+    // Replaced "Openings you align with" (step 2, 30 Sep): with only skills you have counting,
+    // that count fell to a handful and no longer led anywhere (see references.md, "Dashboard metric")
+    nextSkill: nextSkill?.skill || null,
+    nextSkillSub: nextSkill ? `missing in ${nextSkill.jobs} of your top ${nextSkill.of_top} matches` : 'no current openings yet',
     modules: profile.modules_count,
     // Skill coverage of the #1 job, whole number like Job Detail; null = no live jobs yet
     bestMatch: topJobs[0] ? Math.round(topJobs[0].coverage_percent) : null,
@@ -107,10 +105,11 @@ export default function Dashboard() {
           <div className="grid grid-cols-3 gap-4">
             {[
               {
-                label: 'Openings You Align With',
-                value: profileStats.aligned,
-                sub: `of ${profileStats.openings} openings · ≥ half the skills`,
-                dim: profileStats.aligned === 0,
+                label: 'Skill to Learn Next',
+                value: profileStats.nextSkill || '—',
+                sub: profileStats.nextSkillSub,
+                dim: !profileStats.nextSkill,
+                text: true,
               },
               {
                 label: 'Top Match',
@@ -125,10 +124,10 @@ export default function Dashboard() {
                 sub: profileStats.modules > 0 ? 'in your academic record' : 'none recorded yet',
                 dim: false,
               },
-            ].map(({ label, value, sub, dim, matchPct }) => (
+            ].map(({ label, value, sub, dim, matchPct, text }) => (
               <div key={label} className="bg-white rounded-xl p-5 border border-slate-200">
                 <p className="text-xs font-medium text-slate-400 uppercase tracking-wider mb-3">{label}</p>
-                <p className={`text-3xl font-semibold tracking-tight leading-none ${
+                <p className={`${text ? 'text-xl truncate' : 'text-3xl'} font-semibold tracking-tight leading-none ${
                   dim ? 'text-slate-200' :
                   matchPct != null ? getMatchColor(matchPct) :
                   'text-slate-900'

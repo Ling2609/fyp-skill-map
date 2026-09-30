@@ -82,7 +82,6 @@ export default function Recommend() {
       setTimeout(() => {
         if (searchId !== latestSearch.current) return
         setResults(res.data)
-        sessionStorage.setItem('lastRecommendResults', JSON.stringify(res.data))
         sessionStorage.setItem('lastRoleFilter', searchRole)
         sessionStorage.setItem('lastActiveCategory', searchCategory)
         setLoading(false)
@@ -105,20 +104,14 @@ export default function Recommend() {
       api.get('/jobs/subcategories').catch(() => {})
         .then(res => res && setSubcategories(res.data))
 
-      const savedResults = sessionStorage.getItem('lastRecommendResults')
-      const savedRole = sessionStorage.getItem('lastRoleFilter')
-      const savedCategory = sessionStorage.getItem('lastActiveCategory')
-
-      // Results saved by an older version lack the job level → fetch fresh instead of showing the old order
-      const parsed = savedResults ? JSON.parse(savedResults) : null
-      const isCurrent = parsed?.recommendations?.length ? 'level' in parsed.recommendations[0] : false
-      if (isCurrent) {
-        setResults(parsed)
-        if (savedRole) setRoleFilter(savedRole)
-        if (savedCategory) setActiveCategory(savedCategory)
-      } else {
-        doSearch('', 0, 'all')
-      }
+      // Keep the last search, but always fetch fresh results: saved results went stale after a
+      // profile or matching change and showed different numbers from Job Detail (30 Sep)
+      sessionStorage.removeItem('lastRecommendResults')   // left by older versions
+      const savedRole = sessionStorage.getItem('lastRoleFilter') || ''
+      const savedCategory = sessionStorage.getItem('lastActiveCategory') || 'all'
+      setRoleFilter(savedRole)
+      setActiveCategory(savedCategory)
+      doSearch(savedRole, 0, savedCategory)
     }).catch(() => {
       // Not "empty profile": the request failed (e.g. server down). Show the error instead.
       setError('Could not load your skill profile. Please check the server is running and refresh.')

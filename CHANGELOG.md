@@ -3,9 +3,20 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 30 Sep 2026 — Only skills you have count (step 2)
+
+- (this commit) **Coverage counts only skills the student has**: the same skill (A8) or SBERT >= 0.8. Before, any
+  skill at 0.6 counted, and 52% of all matches were only related (0.6-0.79); in a labelled sample only 9 of 60 related
+  pairs were the same skill, while 29 of 30 pairs at >= 0.8 were (`docs/evidence/step2_scoring_summary.txt`,
+  `step2_related_sample_labels.csv`, `scripts/tools/compare_scoring.py`). Related skills now show on Job Detail as
+  gaps that "build on your X" (with Learn →); related knowledge still lifts a job in Best fit via profile similarity.
+  Dashboard: "Openings you align with" replaced by **"Skill to learn next"** (the skill missing most often in your
+  top 20 matches, new `skills_to_learn` in `/recommend/`). Job Matches no longer shows a saved old list (always
+  fetches fresh, keeps the last search); the chatbot fetches its top jobs itself.
+
 ## 30 Sep 2026 — Skill normalisation (A8)
 
-- (this commit) **A8 layer 2**: `scripts/pipeline/decide_skill_merges.py` asks gpt-oss-120b (via Groq, temperature 0)
+- `13641f3` **A8 layer 2**: `scripts/pipeline/decide_skill_merges.py` asks gpt-oss-120b (via Groq, temperature 0)
   whether pairs of close skill names are clearly the same skill ("SQL Server" = "MS SQL Server"; "CSS" ≠ "HTML/CSS").
   Answers are saved in `data/skill_merges.json` so each pair is asked once; resumable; stops at Groq's daily limit.
   All 1,777 pairs asked: 634 judged the same. **Blind test** of the harder pairs (Claude labelled 75 pairs without

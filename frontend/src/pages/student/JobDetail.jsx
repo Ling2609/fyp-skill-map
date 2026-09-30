@@ -22,7 +22,9 @@ const postedAgo = (iso) => {
 const GAP_STYLES = {
   missing: { icon: '✕', circle: 'bg-red-100 text-red-600', text: 'text-red-500' },
   partial: { icon: '!', circle: 'bg-amber-100 text-amber-700', text: 'text-amber-600' },
+  related: { icon: '~', circle: 'bg-blue-100 text-blue-700', text: 'text-blue-600' },
 }
+const GAP_ORDER = { missing: 0, partial: 1, related: 2 }
 
 export default function JobDetail() {
   const navigate = useNavigate()
@@ -85,10 +87,12 @@ export default function JobDetail() {
   const barColor = coverage >= 70 ? 'bg-green-500' : coverage >= 40 ? 'bg-yellow-500' : 'bg-red-400'
 
   // Layout B (summary first): 1) what to learn, 2) what you already have, 3) what else to mention.
-  // Gaps: Missing first, then Partly covered.
+  // Gaps: Missing first, then Partly covered, then Related (a close skill of yours to build on).
+  // Only skills you have count towards the %; related ones are gaps with a head start (step 2).
   const gapRows = (gap?.missing_skills || [])
-    .map(m => ({ ...m, status: m.gap_reason?.startsWith('Partly') ? 'partial' : 'missing' }))
-    .sort((a, b) => (a.status === b.status ? 0 : a.status === 'missing' ? -1 : 1))
+    .map(m => ({ ...m, status: m.status || (m.gap_reason?.startsWith('Partly') ? 'partial' : 'missing') }))
+    .sort((a, b) => GAP_ORDER[a.status] - GAP_ORDER[b.status])
+  const relatedCount = gapRows.filter(r => r.status === 'related').length
 
   // Matches: strongest first. Fallbacks keep the page correct with an older backend.
   const matchedRows = [...(gap?.matched_skills || [])]
@@ -161,10 +165,12 @@ export default function JobDetail() {
               <p className="text-sm text-gray-600">
                 <span className={`text-2xl font-bold ${coverageColor}`}>{Math.round(coverage)}%</span>
                 <span className="ml-2">
-                  of required skills · {gap?.summary?.matched_skills} of {gap?.summary?.job_skills_total} matched
+                  of required skills · you have {gap?.summary?.matched_skills} of {gap?.summary?.job_skills_total}
                 </span>
               </p>
-              <span className="text-xs text-gray-400">{gap?.summary?.missing_skills} to develop</span>
+              <span className="text-xs text-gray-400">
+                {gap?.summary?.missing_skills} to develop{relatedCount > 0 && ` · ${relatedCount} build on skills you have`}
+              </span>
             </div>
             <div className="w-full bg-gray-100 rounded-full h-2">
               <div className={`h-2 rounded-full ${barColor}`} style={{ width: `${coverage}%` }} />
@@ -324,7 +330,7 @@ export default function JobDetail() {
                           <span key={idx} className="inline-flex items-center gap-1.5 text-xs text-gray-700 bg-slate-50 border border-gray-200 px-2.5 py-1 rounded-lg">
                             <span className="text-green-600 font-bold">✓</span>
                             {item.job_skill}
-                            {item.evidence === 'related' && item.matched_graduate_skill && (
+                            {item.matched_graduate_skill && item.matched_graduate_skill.toLowerCase() !== item.job_skill.toLowerCase() && (
                               <span className="text-[10px] text-gray-400">via {item.matched_graduate_skill}</span>
                             )}
                           </span>

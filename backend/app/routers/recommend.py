@@ -10,13 +10,16 @@ from app.models.user import User
 from app.services.job_titles import SENIORITY_RANK, classify_seniority
 from app.services.skill_names import canonical_key, dedupe_skills
 from app.services.skill_profile import (
-    EMPTY_PROFILE_MESSAGE, build_skill_profile, count_modules, normalise_rows, profile_spellings, skill_coverage,
+    EMPTY_PROFILE_MESSAGE, build_skill_profile, count_modules, matched_mask, normalise_rows, profile_spellings,
 )
-import numpy as np
 import threading
+from collections import Counter
+
+import numpy as np
 
 # Senior roles are ranked lower, never hidden (A7): the level is shown on each card instead
 PENALTY_PER_STEP = 0.12   # taken off the ranking score per level above entry level
+TO_LEARN_FROM_TOP = 20    # "skills to learn next" = skills missing most often in the student's top 20 matches
 
 
 def seniority_penalty(level: str) -> float:
@@ -178,7 +181,8 @@ def recommend_jobs(
             continue
         job_skills = cached["skills"]
         total = len(job_skills)
-        matched = skill_coverage(grad_embeddings, cached["skill_vecs"], total, spelling_keys, owner, cached["skill_keys"])
+        has = matched_mask(grad_embeddings, cached["skill_vecs"], spelling_keys, owner, cached["skill_keys"])
+        matched = int(has.sum())
         coverage = round(matched / total * 100, 1) if total else 0.0
 
         # Ranking score ("best fit"): skill coverage + whole-profile similarity (+ title boost),
@@ -203,9 +207,19 @@ def recommend_jobs(
             "skills_matched": matched,
             "skills_total": total,
             "top_job_skills": job_skills[:5],
+            "_to_learn": [(k, n) for k, n, h in zip(cached["skill_keys"], job_skills, has) if not h],
         })
 
     results.sort(key=lambda x: -x["match_percent"])
+
+    # Skills to learn next: the skills the student lacks, counted over their top matches (Dashboard card)
+    to_learn, names = Counter(), {}
+    for r in results[:TO_LEARN_FROM_TOP]:
+        for key, name in r["_to_learn"]:
+            to_learn[key] += 1
+            names.setdefault(key, name)
+    for r in results:
+        del r["_to_learn"]
 
     return {
         "graduate_profile": {
@@ -216,6 +230,8 @@ def recommend_jobs(
         },
         "role_filter": payload.role_filter,
         "recommendations": results,
+        "skills_to_learn": [{"skill": names[k], "jobs": n, "of_top": min(TO_LEARN_FROM_TOP, len(results))}
+                            for k, n in to_learn.most_common(5)],
         "total_jobs_compared": sum(
             1 for c in list(_job_cache.values()) if payload.include_past or c.get("source") == "live"
         ),

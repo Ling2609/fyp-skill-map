@@ -19,9 +19,13 @@ from app.models.user_module import UserModule
 from app.services.skill_names import canonical_key
 
 # ── Matching thresholds (SBERT cosine similarity) ─────────────────────────────
-MATCH_THRESHOLD = 0.6    # at or above = the student has this skill (counts as matched)
-DIRECT_THRESHOLD = 0.8   # at or above = direct evidence (same skill, different wording)
-PARTLY_THRESHOLD = 0.4   # 0.4–0.59 = partly covered (a related skill exists)
+# Only skills the student has count towards coverage (step 2, 30 Sep): the same skill (A8 canonical key,
+# similarity 1.0) or SBERT >= 0.8 (29 of 30 real student-job pairs were the same skill). Related skills
+# (0.6-0.79) are shown, not counted: only 9 of 60 were the same skill (docs/evidence/step2_related_sample_labels.csv).
+# Related knowledge still lifts a job in the Best-fit order through the whole-profile similarity.
+MATCH_THRESHOLD = 0.8    # at or above = the student has this skill (counts as matched)
+RELATED_THRESHOLD = 0.6  # 0.6-0.79 = related: a close skill to build on (shown, not counted)
+PARTLY_THRESHOLD = 0.4   # 0.4-0.59 = partly covered
 
 # Projects and certifications are self-declared and carry no grade
 SELF_DECLARED_WEIGHT = 0.7
@@ -140,11 +144,11 @@ def similarity_matrix(job_vecs_normed: np.ndarray, spelling_vecs_normed: np.ndar
     return sims
 
 
-def skill_coverage(spelling_vecs_normed: np.ndarray, job_skill_vecs_normed: np.ndarray, total: int,
-                   spelling_keys: list[str], owner: list[int], job_keys: list[str]) -> int:
-    """How many of the job's skills the student covers (best similarity >= MATCH_THRESHOLD).
+def matched_mask(spelling_vecs_normed: np.ndarray, job_skill_vecs_normed: np.ndarray,
+                 spelling_keys: list[str], owner: list[int], job_keys: list[str]) -> np.ndarray:
+    """For each job skill: does the student have it (best similarity >= MATCH_THRESHOLD)?
     The same rule Skill Gap uses, so Job Matches and Job Detail always agree."""
-    if not total or not len(spelling_vecs_normed):
-        return 0
+    if not len(job_skill_vecs_normed) or not len(spelling_vecs_normed):
+        return np.zeros(len(job_skill_vecs_normed), dtype=bool)
     best = similarity_matrix(job_skill_vecs_normed, spelling_vecs_normed, job_keys, spelling_keys, owner).max(axis=1)
-    return int((best >= MATCH_THRESHOLD).sum())
+    return best >= MATCH_THRESHOLD

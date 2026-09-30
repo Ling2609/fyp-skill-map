@@ -1,0 +1,30 @@
+Step 2: which matched skills count towards coverage? (30 Sep 2026, her database, student low1: 178 skills, 214 live jobs)
+Command: python scripts/tools/compare_scoring.py low1   (read-only)
+
+Why job skills counted as matched before step 2 (806 in total):
+  same skill (A8 canonical key)   272 (34%)
+  SBERT >= 0.8                    115 (14%)
+  SBERT 0.6-0.79 ("related")      419 (52%)
+
+Sensitivity: live jobs at or above each coverage, by credit given to a related skill
+  related credit    avg   >= 30%  >= 40%  >= 50%
+  0                 15%      33      11       3
+  0.25              19%      47      13       3
+  0.33              20%      55      19       3
+  0.5               23%      75      27      10
+  1 (before)        31%     113      79      47
+The ">= 50%" count ("openings you align with") depends mostly on the credit chosen, not on the student.
+
+Labelled sample (step2_related_sample_labels.csv): 90 random student-skill -> job-skill pairs, labelled by Claude
+("does the student have the job's skill?": y / partly / n):
+  SBERT >= 0.8     30 pairs (12 distinct): y 29, partly 1, n 0
+  related 0.6-0.79 60 pairs: y 9 (15%), partly 32, n 19
+      0.60-0.65: y 1, partly 11, n 11 | 0.65-0.70: y 3, partly 11, n 7 | 0.70-0.80: y 5, partly 10, n 1
+  e.g. n: computer architecture -> Information Architecture, Business planning -> Business Analysis,
+       Searching techniques -> Search Engine Optimization; partly: Cloud deployment -> AWS Cloud
+
+Decision (her, 30 Sep): only skills the student has count (A8 same skill or SBERT >= 0.8). Related skills
+are shown as gaps that build on a skill she has, not counted; a partial credit (0.25-0.5) was rejected
+because any value is a judgement that can't be measured without manual labels. Related knowledge still
+lifts a job in the Best-fit order through the whole-profile SBERT similarity. Possible later improvement:
+an LLM check of related pairs (same / related / different), as in A8.

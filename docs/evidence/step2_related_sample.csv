@@ -1,0 +1,91 @@
+﻿student skill,job skill,has the job skill? (y / partly / n),similarity,group,job
+data collection,Data Warehousing,,0.667,related,Data Engineer
+microservices architecture,Microservices,,0.894,sbert >= 0.8,Software Developer (AI-Assisted Development)
+Searching techniques,Search Engine Optimization,,0.636,related,IT Manager cum Web Developer
+Docker containers,Docker,,0.851,sbert >= 0.8,Cloud Infrastructure Engineer
+Functional requirements definition,Functional Specification Development,,0.716,related,Business Analyst - Solution and Functional
+usability testing,Mobile Testing,,0.61,related,Part-Time Software Tester
+Quality assurance,Data quality analysis,,0.646,related,Alteryx Automation Data Analyst
+UX research,User Research,,0.669,related,UI/UX Analyst
+computer architecture,Information Architecture,,0.638,related,UI/UX Analyst
+Docker containers,Docker,,0.851,sbert >= 0.8,Cloud & DevOps
+project management,Project Leadership,,0.783,related,SAP Implementation Consultant/Lead (KUL)
+cloud-native architecture,Cloud Architecture,,0.794,related,Software & Cloud Engineer
+Python programming,Python Scripting,,0.829,sbert >= 0.8,"Technical Consulting Engineer, Networking (Japanese Speaker)"
+Unit testing,Test Planning,,0.666,related,"Senior Specialist, Software Quality Assurance"
+System testing,Software Testing,,0.808,sbert >= 0.8,Software Project Manager
+System testing,System Verification,,0.634,related,System Development Engineer in Malaysia(Open for Fresh Gradu
+Statistical analysis,Data Analysis,,0.778,related,Network Security Engineer
+Scrum framework,Agile Scrum,,0.847,sbert >= 0.8,"Business Architect / Business Analyst, Technology Solutions "
+Scrum framework,Agile Scrum,,0.847,sbert >= 0.8,Software Engineer Fresh Graduate
+Searching techniques,Information Retrieval,,0.616,related,"Software Engineer, Machine Learning"
+software design,System Design,,0.714,related,Lead Backend Engineer (JAVA)
+cloud-native architecture,Google Cloud Platform,,0.616,related,Software & Cloud Engineer
+project management,Project Reporting,,0.682,related,Manager - IT (Project Management Office - Digital)
+SQL querying,SQL,,0.837,sbert >= 0.8,"Application Support Engineer, Cards IT"
+Scrum framework,Agile Scrum,,0.847,sbert >= 0.8,Data Analyst- Logistics & Supply Chain
+process management,Business process improvement,,0.654,related,ERP Executive ( Junior)
+Statistical analysis,Data analysis,,0.778,related,"Data Analyst, Mandarin Transcripts"
+cloud-native architecture,Cloud data platforms,,0.631,related,Data Engineer (Regional Role)
+Terraform provisioning,Terraform,,0.767,related,AI Engineering Graduate Talent Trainee
+SQL querying,SQL,,0.837,sbert >= 0.8,"Data Analyst (Executive / Senior Executive), Insight, PHCC ("
+SQL querying,SQL,,0.837,sbert >= 0.8,IT Manager cum Web Developer
+Requirements validation,Data validation,,0.64,related,Alteryx Automation Data Analyst
+file system administration,Windows Administration,,0.619,related,Product Technical Engineer (IT)
+Functional requirements definition,Functional Configuration,,0.606,related,SAP PP / PS Functional Consultant
+Docker containers,Docker,,0.851,sbert >= 0.8,Lead Backend Engineer (JAVA)
+software project planning,Project Planning,,0.839,sbert >= 0.8,Senior IT Business Analyst ( Manufacturing Execution System 
+SQL querying,SQL development,,0.602,related,Sales Data Engineer
+Test automation,Scripting Automation,,0.703,related,Senior SIEM Engineer
+SQL querying,SQL,,0.837,sbert >= 0.8,Software Test Engineer (Automation)
+Unit testing,Instrumented Testing,,0.677,related,Android Developer (Kotlin)
+CI/CD pipelines,CI/CD,,0.692,related,Software Developer (AI-Assisted Development)
+hardware-software integration,System Integration,,0.64,related,Technical Support Engineer
+Python programming,Python scripting,,0.829,sbert >= 0.8,Software Quality Engineer
+Test automation,Workflow automation,,0.664,related,ServiceNowBusiness Analyst-Malaysia
+Scrum framework,Agile Scrum,,0.847,sbert >= 0.8,Senior Software QA Engineer (Automation)
+entity-relationship modelling,Data modeling,,0.635,related,AI Data Scientist
+Cloud deployment,AWS Cloud,,0.672,related,Digital Operations L2 Cloud Support Engineer - APAC
+SQL querying,SQL,,0.837,sbert >= 0.8,WEB DEVELOPER
+Performance testing,Performance Tuning,,0.67,related,Database Administrator (Asia)
+Docker containers,Docker,,0.851,sbert >= 0.8,Software Developer (AI-Assisted Development)
+Performance testing,Performance Optimization,,0.614,related,Software Engineer (AI Training)
+process management,Process Automation,,0.753,related,Business Analyst
+Unit testing,Regression Testing,,0.638,related,"Automation Tester / Manager (Selenium, Appium)"
+Statistical analysis,Data analysis,,0.778,related,IT Technician
+software development,Programming Development,,0.847,sbert >= 0.8,Senior IT Business Analyst ( Manufacturing Execution System 
+System monitoring,Network Monitoring,,0.742,related,Network Engineer
+Python programming,Python Scripting,,0.829,sbert >= 0.8,Software Test Engineer
+Agile development,Agile Collaboration,,0.771,related,UI/UX Analyst
+microservices architecture,Microservices,,0.894,sbert >= 0.8,Back End Developer
+Network troubleshooting,System troubleshooting,,0.682,related,ERP Executive ( Junior)
+Performance testing,Test parallelization,,0.639,related,Senior CI/CD Engineer
+embedded computing,Embedded Analytics,,0.658,related,SAP Project System Functional Consultant
+SQL querying,SQL,,0.837,sbert >= 0.8,Software Engineer (Contract)
+Cloud deployment,AWS Cloud,,0.672,related,IT Infrastructure Ops Lead
+Test automation,Automation Design,,0.705,related,"Specialist, AI & Automation Developer"
+process management,Business Process Modeling,,0.689,related,Senior IT Business Analyst ( Manufacturing Execution System 
+Cloud deployment,Azure Cloud,,0.606,related,IT Infrastructure Ops Lead
+Agile development,Agile Project Management,,0.825,sbert >= 0.8,Agile Project Manager
+Acceptance testing,User Acceptance Testing Support,,0.822,sbert >= 0.8,Business Analyst - Solution and Functional
+Docker containers,Docker,,0.851,sbert >= 0.8,Quality Assurance Automation Lead
+Automated testing,API Testing,,0.614,related,Software Test Engineer (Automation)
+Use case modeling,Test Case Design,,0.614,related,Software Test Engineer
+System testing,Software Testing,,0.808,sbert >= 0.8,Software Engineer (Contract)
+Test automation,Automation tools,,0.756,related,Software Quality Engineer
+SQL querying,MySQL,,0.62,related,Web Developer Zibeline International Publishing Sdn Bhd
+Performance testing,Performance Tuning,,0.67,related,Database Administrator Lead
+relational database implementation,Database Management,,0.677,related,IT Manager cum Web Developer
+cloud security,Cloud Computing,,0.703,related,"Business Architect / Business Analyst, Technology Solutions "
+Business planning,Business Analysis,,0.65,related,"Specialist, AI & Automation Developer"
+Searching techniques,Semantic Search,,0.655,related,AI Engineer
+DevOps practices,DevOps,,0.833,sbert >= 0.8,T&T Intern - Innovation & Cloud Development Centre (Software
+data collection,Data acquisition,,0.655,related,"Automation Software Engineer, Central Maintenance"
+Business planning,Business Analysis,,0.65,related,Senior/Lead System Analyst
+Cloud deployment,Azure Cloud,,0.606,related,Specialist Database Administrator (MS-SQL)
+Teamwork,Team collaboration,,0.764,related,Network Engineer Graduate Program
+SQL querying,MySQL,,0.62,related,Java developer
+Python programming,Python Scripting,,0.829,sbert >= 0.8,Senior Software QA Engineer (Automation)
+software design,Solution Design,,0.66,related,Senior/Lead System Analyst
+Acceptance testing,User Acceptance Testing,,0.923,sbert >= 0.8,Business Analyst [Tester | 12 Months Contract]
+Docker containers,Docker,,0.851,sbert >= 0.8,Software & Cloud Engineer

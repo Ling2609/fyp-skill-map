@@ -134,6 +134,7 @@ export default function Chatbot() {
   const currentMode = MODES.find(m => m.key === mode)
 
   const userSkills = useRef(null)   // loaded once from /profile/skills
+  const topJobs = useRef(null)      // loaded once from /recommend/ (same list as Job Matches' default view)
 
   const getContext = useCallback(async () => {
     const ctx = {}
@@ -147,15 +148,19 @@ export default function Chatbot() {
       }
     }
     ctx.user_skills = userSkills.current ?? []
-    const savedResults = sessionStorage.getItem('lastRecommendResults')
-    if (savedResults) {
-      const data = JSON.parse(savedResults)
-      ctx.matched_jobs = data.recommendations?.slice(0, 3).map(j => ({
-        job_title: j.job_title,
-        company: j.company,
-        match_percent: j.coverage_percent ?? j.match_percent,   // % of required skills the student has
-      })) || []
+    if (topJobs.current === null) {
+      try {
+        const res = await api.post('/recommend/', { top_n: 0, role_filter: '' })
+        topJobs.current = res.data.recommendations?.slice(0, 3).map(j => ({
+          job_title: j.job_title,
+          company: j.company,
+          match_percent: j.coverage_percent ?? j.match_percent,   // % of required skills the student has
+        })) || []
+      } catch {
+        // leave it as null so the next message tries again
+      }
     }
+    if (topJobs.current?.length) ctx.matched_jobs = topJobs.current
     if (preloadJob) ctx.job_title = preloadJob
     if (preloadSkill) ctx.target_skill = preloadSkill
     return ctx

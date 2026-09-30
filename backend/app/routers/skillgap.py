@@ -8,7 +8,7 @@ from app.models.user import User
 from app.nlp.embedder import get_embedder
 from app.services.skill_names import canonical_key, dedupe_skills
 from app.services.skill_profile import (
-    DIRECT_THRESHOLD, EMPTY_PROFILE_MESSAGE, MATCH_THRESHOLD, PARTLY_THRESHOLD,
+    EMPTY_PROFILE_MESSAGE, MATCH_THRESHOLD, PARTLY_THRESHOLD, RELATED_THRESHOLD,
     build_skill_profile, normalise_rows, profile_spellings, similarity_matrix,
 )
 
@@ -73,6 +73,7 @@ def analyse_skill_gap(
         best_match = grad_skill_names[int(best_indices[j_idx])]
 
         if best_score >= MATCH_THRESHOLD:
+            # The student has this skill: same skill (A8) or SBERT >= 0.8
             matched.append({
                 "job_skill": job_skill,
                 "matched_graduate_skill": best_match,
@@ -80,21 +81,23 @@ def analyse_skill_gap(
                 "similarity": round(best_score, 3),
                 "grade_weight": graduate_skills.get(best_match, 0),
                 "evidence_source": skill_source_type.get(best_match, "module"),  # module / project / cert
-                # direct  = your skill is essentially the same as the requirement (≥ 0.8)
-                # related = you studied a close topic, not this exact skill (0.6–0.79)
-                "evidence": "direct" if best_score >= DIRECT_THRESHOLD else "related",
+                "evidence": "direct",
             })
         else:
-            # Explain why: related skill exists but not close enough = partly covered,
-            # no similar skill at all = not in modules. (Grade does not affect matching.)
-            if best_score >= PARTLY_THRESHOLD:
-                gap_reason = f"Partly covered in {skill_module_map.get(best_match, 'a module')}"
+            # A gap. Explain how far away it is (grade does not affect matching):
+            #   related (0.6-0.79) = a close skill to build on, partly (0.4-0.59), missing (< 0.4)
+            source = skill_module_map.get(best_match, "a module")
+            if best_score >= RELATED_THRESHOLD:
+                status, gap_reason = "related", f"Builds on your {best_match} ({source})"
+            elif best_score >= PARTLY_THRESHOLD:
+                status, gap_reason = "partial", f"Partly covered in {source}"
             else:
-                gap_reason = "Not in your modules or projects"
+                status, gap_reason = "missing", "Not in your modules or projects"
             missing.append({
                 "job_skill": job_skill,
                 "closest_graduate_skill": best_match,
                 "similarity": round(best_score, 3),
+                "status": status,
                 "gap_reason": gap_reason,
             })
 
