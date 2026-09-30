@@ -1,0 +1,76 @@
+﻿id,skill A,skill B,similarity,LLM: same?,Claude (blind): same?,agree
+1,Jenkins,Jenkins CI,0.907,y,y,y
+2,SQL,Microsoft SQL,0.934,n,n,y
+3,Scrum Agile,Scrum,0.864,y,y,y
+4,SAP Cloud Platform,SAP Business Technology Platform,0.854,y,y,y
+5,Flow Control,control flow,0.93,y,n,n
+6,VB scripting,VBScript,0.88,y,y,y
+7,Test Script Development,Test Script Design,0.883,n,n,y
+8,AWS CloudWatch,CloudWatch,0.885,y,y,y
+9,Postman Testing,Postman API Testing,0.908,y,y,y
+10,OpenShift,OpenShift Platform,0.89,y,y,y
+11,Linux Scripting,Linux Shell Scripting,0.899,n,n,y
+12,Mobile Application Testing,Mobile Software Testing,0.936,y,y,y
+13,Supplier Liaison,Vendor liaison,0.871,y,y,y
+14,Webhook implementation,Webhook Integration,0.93,y,y,y
+15,Design Patterns,Design pattern application,0.898,n,y,n
+16,MS Office,MS Office Suite,0.85,y,y,y
+17,VMware,VMware ESXi,0.88,n,n,y
+18,Endpoint Management,Linux endpoint management,0.865,y,n,n
+19,Organizational Change Management,Organizational Change,0.884,n,n,y
+20,SAS,SASS,0.87,n,n,y
+21,SD-WAN,SD-WAN Technology,0.878,y,y,y
+22,Hardware driver development,Device driver development,0.888,y,y,y
+23,ASP.NET MVC5,ASP.NET MVC,0.929,n,n,y
+24,VBA scripting,VB scripting,0.859,n,n,y
+25,SAP WM Module,SAP WM,0.858,y,y,y
+26,Commissioning,Commissioning activities,0.893,y,y,y
+27,Databricks Implementation,Databricks,0.86,n,y,n
+28,MVC Architecture,MVC,0.857,y,y,y
+29,Microsoft SCCM,SCCM,0.898,y,y,y
+30,Game optimization,Game performance optimization,0.896,y,y,y
+31,POS Management,POS System Management,0.911,y,y,y
+32,CMMI Implementation,CMMI Process,0.872,n,n,y
+33,Splunk,Splunk SIEM,0.875,n,y,n
+34,LAN Administration,LAN Management,0.881,y,y,y
+35,Azure Management,Azure Cloud Management,0.919,y,y,y
+36,Unix OS,Unix,0.876,y,y,y
+37,Roadmap Development,Roadmap Creation,0.921,y,y,y
+38,Microservices,Microservices Architecture,0.894,y,y,y
+39,ABAP OO,ABAP OOP,0.91,y,y,y
+40,Firebase,Google Firebase,0.909,y,y,y
+41,CISM Certification,CISA Certification,0.884,n,n,y
+42,System Programming,system-level programming,0.889,y,y,y
+43,CloudWatch Monitoring,CloudWatch,0.854,y,y,y
+44,SonarQube analysis,SonarQube static analysis,0.872,y,y,y
+45,Security Incident Management,Security Incident Handling,0.865,y,y,y
+46,Hardware diagnostics,IT Hardware Diagnostics,0.878,y,y,y
+47,Immutable.js,Immutable.js Library,0.927,y,y,y
+48,Access Management,Access Rights Management,0.87,y,y,y
+49,SDLC Management,SDLC Implementation,0.851,n,n,y
+50,iOS Development,iOS native development,0.894,y,n,n
+51,Wireshark analysis,Wireshark packet analysis,0.916,y,y,y
+52,Network Cabling,LAN Cabling,0.861,n,n,y
+53,Dart,Flutter Dart,0.867,y,n,n
+54,Avaya VoIP,AVAYA Telephony,0.87,y,n,n
+55,Network Fiber Optic Cabling,Fiber Optic Cabling,0.936,y,y,y
+56,Electronic circuit analysis,Electrical circuit analysis,0.888,y,n,n
+57,Vue.js,Vue.js framework,0.911,y,y,y
+58,Technical Scheduling,Scheduling,0.874,n,n,y
+59,Mentoring,Coaching & Mentoring,0.858,n,n,y
+60,Serverless computing,Serverless Architecture,0.861,y,n,n
+61,System Patching,Software Patching,0.885,n,n,y
+62,Azure Administration,Azure Administrator,0.885,y,y,y
+63,Web Performance,Website Performance,0.92,y,y,y
+64,Program Evaluation,software evaluation,0.855,n,n,y
+65,Load Balancer Management,Load Balancer,0.933,n,y,n
+66,HTML5 Markup,HTML markup,0.895,y,n,n
+67,SAP,SAP Finance,0.872,n,n,y
+68,AWS EKS,EKS,0.852,y,y,y
+69,Mentoring Juniors,Mentoring junior staff,0.863,y,y,y
+70,Multilingual Communication,Multi-language Communication,0.857,y,y,y
+71,LAN/WAN design,WAN/LAN Engineering,0.872,y,n,n
+72,Traceability system,Traceability Management,0.931,n,n,y
+73,SAP,SAP PI,0.855,n,n,y
+74,Procurement,Procurement Coordination,0.855,n,n,y
+75,WAN/LAN Networking,WAN/LAN Engineering,0.884,n,n,y

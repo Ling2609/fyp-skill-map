@@ -1,0 +1,7 @@
+{
+ "_about": "Human decisions on skill merges; they win over the LLM (see app/services/skill_names.py). 'same' = merge, 'different' = never merge.",
+ "same": [],
+ "different": [
+  ["Provisioning Services", "Service Provisioning"]
+ ]
+}

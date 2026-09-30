@@ -8,7 +8,7 @@ Built live from the source tables on each request (modules + grades, projects,
 certifications). That's 3 small queries, far cheaper than the SBERT work that
 follows, and it can never go stale when a project or certification changes.
 """
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 import numpy as np
 from sqlalchemy.orm import Session
@@ -16,6 +16,7 @@ from sqlalchemy.orm import Session
 from app.models.module import Module, ModuleSkill
 from app.models.profile import UserCertification, UserProject
 from app.models.user_module import UserModule
+from app.services.skill_names import canonical_key
 
 # ── Matching thresholds (SBERT cosine similarity) ─────────────────────────────
 MATCH_THRESHOLD = 0.6    # at or above = the student has this skill (counts as matched)
@@ -49,13 +50,19 @@ class SkillEvidence:
     source: str             # "module" / "project" / "cert"
     source_name: str        # module name, "Project: X" or "Certification: Y"
     grade: float | None = None
+    spellings: list[str] = field(default_factory=list)   # every spelling of this skill in the profile (A8)
 
 
 def build_skill_profile(user_id: int, db: Session) -> dict[str, SkillEvidence]:
-    """The student's skills, keyed by lower-cased name so "Python" and "python"
-    count once. Module evidence wins over project/cert evidence (it carries a grade);
-    between modules, the best grade wins."""
+    """The student's skills, keyed by canonical skill (app/services/skill_names.py), so "Python",
+    "python" and "Python programming" count once. Module evidence wins over project/cert evidence (it carries a grade);
+    between modules, the best grade wins. Every spelling is kept (SkillEvidence.spellings) and matched,
+    so merging spellings never loses a match one of them would have found."""
     profile: dict[str, SkillEvidence] = {}
+    spellings: dict[str, dict[str, str]] = {}      # key -> {lower-case spelling: spelling}
+
+    def seen(key, name):
+        spellings.setdefault(key, {}).setdefault(name.strip().lower(), name.strip())
 
     # Modules: one joined query instead of one query per module
     rows = (
@@ -67,9 +74,10 @@ def build_skill_profile(user_id: int, db: Session) -> dict[str, SkillEvidence]:
         .all()
     )
     for skill_name, module_name, grade in rows:
-        key = (skill_name or "").strip().lower()
+        key = canonical_key(skill_name)
         if not key:
             continue
+        seen(key, skill_name)
         weight = grade_weight(grade)
         current = profile.get(key)
         if current is None or weight > current.weight:
@@ -78,7 +86,9 @@ def build_skill_profile(user_id: int, db: Session) -> dict[str, SkillEvidence]:
     # Self-declared evidence only adds skills the academic record doesn't already cover
     def add_self_declared(names, source, source_name):
         for name in names or []:
-            key = (name or "").strip().lower()
+            key = canonical_key(name)
+            if key:
+                seen(key, name)
             if key and key not in profile:
                 profile[key] = SkillEvidence(name.strip(), SELF_DECLARED_WEIGHT, source, source_name)
 
@@ -87,7 +97,20 @@ def build_skill_profile(user_id: int, db: Session) -> dict[str, SkillEvidence]:
     for c in db.query(UserCertification).filter(UserCertification.user_id == user_id).order_by(UserCertification.id):
         add_self_declared(c.mapped_skills, "cert", f"Certification: {c.cert_name}")
 
+    for key, ev in profile.items():     # the shown name first, then the other spellings
+        ev.spellings = [ev.name] + [s for low, s in spellings[key].items() if low != ev.name.lower()]
     return profile
+
+
+def profile_spellings(profile: dict[str, SkillEvidence]) -> tuple[list[str], list[str], list[int]]:
+    """One row per spelling: (spellings, their canonical keys, index of their skill in the profile)."""
+    names, keys, owner = [], [], []
+    for g, (key, ev) in enumerate(profile.items()):
+        for s in ev.spellings or [ev.name]:
+            names.append(s)
+            keys.append(key)
+            owner.append(g)
+    return names, keys, owner
 
 
 def count_modules(user_id: int, db: Session) -> int:
@@ -99,10 +122,29 @@ def normalise_rows(vecs: np.ndarray) -> np.ndarray:
     return vecs / (np.linalg.norm(vecs, axis=1, keepdims=True) + 1e-8)
 
 
-def skill_coverage(grad_vecs_normed: np.ndarray, job_skill_vecs_normed: np.ndarray, total: int) -> int:
+def similarity_matrix(job_vecs_normed: np.ndarray, spelling_vecs_normed: np.ndarray,
+                      job_keys: list[str], spelling_keys: list[str], owner: list[int]) -> np.ndarray:
+    """sims[j, g] = how close job skill j is to graduate skill g: the best of g's spellings
+    (rows from profile_spellings). The same canonical skill ("MS SQL Server" / "SQL Server")
+    counts as identical (1.0), whatever SBERT says."""
+    rows = job_vecs_normed @ spelling_vecs_normed.T
+    key_row = {k: r for r, k in enumerate(spelling_keys)}
+    for j, k in enumerate(job_keys):
+        r = key_row.get(k)
+        if r is not None:
+            rows[j, r] = 1.0
+    owner = np.asarray(owner)
+    sims = np.full((rows.shape[0], owner.max() + 1), -1.0)
+    for g in range(sims.shape[1]):
+        sims[:, g] = rows[:, owner == g].max(axis=1)
+    return sims
+
+
+def skill_coverage(spelling_vecs_normed: np.ndarray, job_skill_vecs_normed: np.ndarray, total: int,
+                   spelling_keys: list[str], owner: list[int], job_keys: list[str]) -> int:
     """How many of the job's skills the student covers (best similarity >= MATCH_THRESHOLD).
     The same rule Skill Gap uses, so Job Matches and Job Detail always agree."""
-    if not total or not len(grad_vecs_normed):
+    if not total or not len(spelling_vecs_normed):
         return 0
-    best = (job_skill_vecs_normed @ grad_vecs_normed.T).max(axis=1)
+    best = similarity_matrix(job_skill_vecs_normed, spelling_vecs_normed, job_keys, spelling_keys, owner).max(axis=1)
     return int((best >= MATCH_THRESHOLD).sum())

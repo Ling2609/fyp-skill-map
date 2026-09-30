@@ -5,7 +5,25 @@ Planning, reasoning and research behind each decision are in the project roadmap
 
 ## 30 Sep 2026 — Skill normalisation (A8)
 
-- (this commit) **A8 analysis.** `scripts/tools/check_skill_mapping.py --taxonomy`: mapping the 8,305 skill names onto the
+- (this commit) **A8 layer 2**: `scripts/pipeline/decide_skill_merges.py` asks gpt-oss-120b (via Groq, temperature 0)
+  whether pairs of close skill names are clearly the same skill ("SQL Server" = "MS SQL Server"; "CSS" ≠ "HTML/CSS").
+  Answers are saved in `data/skill_merges.json` so each pair is asked once; resumable; stops at Groq's daily limit.
+  All 1,777 pairs asked: 634 judged the same. **Blind test** of the harder pairs (Claude labelled 75 pairs without
+  seeing the answers, `docs/evidence/a8_llm_eval.csv`): 41 of 50 "same" answers right (**precision 82%**, target 95%);
+  errors were narrower names ("Dart" vs "Flutter Dart"), versions ("HTML5" vs "HTML"), look-alikes ("Flow Control"
+  vs "control flow") and different activities. So `--verify` adds a second, stricter check of every "same" pair
+  (Chain-of-Verification); a pair is merged only if both checks say "same". After `--verify`: 349 pairs kept. Fresh
+  blind test of 50 kept pairs (`docs/evidence/a8_llm_eval_verified.csv`): 49 right (**precision 98%**). Trade-off:
+  stricter means some real synonyms stay separate (lower recall), which is the safer error for gap analysis.
+  **A8 now used in matching.** `canonical_key()` in `app/services/skill_names.py` = rule key + verified LLM merges
+  (groups are never chained across a pair judged different; human decisions in `data/skill_merge_overrides.json`
+  win). The graduate profile, job skills (duplicates in one job removed) and the skill gap page all compare by it:
+  a job skill with the same canonical key as a graduate skill counts as a direct match, whatever SBERT says.
+  A merged skill keeps every spelling (`SkillEvidence.spellings`) and each one is compared, so merging never loses a
+  match (keeping only one spelling had dropped a Nokia job from 9/12 to 8/12 on her profile).
+  `scripts/tools/compare_match_pages.py` shows, for one job, each skill's best match on both pages.
+  Also fixed: "Node.js Development" and "Vue.js framework" now get the same key as "Node.js" and "Vue.js".
+- `78b7409` **A8 analysis.** `scripts/tools/check_skill_mapping.py --taxonomy`: mapping the 8,305 skill names onto the
   ESCO-based taxonomy matched only ~15% of skill uses exactly, and SBERT suggestions never reached 95% precision in
   any similarity band (110 labelled rows, `docs/evidence/a8_mapping_sample_labels.csv`, `a8_taxonomy_summary.txt`).
   So A8 groups the database's own skill names instead: rules in `app/services/skill_names.py` ("Power BI" = "PowerBI"

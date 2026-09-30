@@ -8,8 +8,9 @@ from app.nlp.embedder import get_embedder
 from app.routers.auth import get_current_user
 from app.models.user import User
 from app.services.job_titles import SENIORITY_RANK, classify_seniority
+from app.services.skill_names import canonical_key, dedupe_skills
 from app.services.skill_profile import (
-    EMPTY_PROFILE_MESSAGE, build_skill_profile, count_modules, normalise_rows, skill_coverage,
+    EMPTY_PROFILE_MESSAGE, build_skill_profile, count_modules, normalise_rows, profile_spellings, skill_coverage,
 )
 import numpy as np
 import threading
@@ -53,8 +54,10 @@ def _sync_job_cache():
         print(f"Adding {len(new_ids)} jobs to the job embedding cache...")
 
         skills_by_job = {}
-        for s in db.query(JobSkill).filter(JobSkill.job_id.in_(new_ids)).all():
+        for s in db.query(JobSkill).filter(JobSkill.job_id.in_(new_ids)).order_by(JobSkill.id).all():
             skills_by_job.setdefault(s.job_id, []).append(s.skill_name)
+        # One entry per canonical skill: "Python" + "Python programming" is one requirement (A8)
+        skills_by_job = {j: dedupe_skills(names) for j, names in skills_by_job.items()}
 
         new_jobs = [j for j in db.query(Job).filter(Job.id.in_(new_ids)).all() if skills_by_job.get(j.id)]
 
@@ -85,6 +88,7 @@ def _sync_job_cache():
                 "country": job.country,
                 "level": classify_seniority(job.job_title),
                 "skills": skill_names,
+                "skill_keys": [canonical_key(n) for n in skill_names],
                 "skill_vecs": skill_vecs,
             }
         print(f"Job cache ready: {len(_job_cache)} jobs with pre-computed skill vectors")
@@ -109,7 +113,9 @@ def recommend_jobs(
     profile = build_skill_profile(current_user.id, db)
     if not profile:
         raise HTTPException(status_code=400, detail=EMPTY_PROFILE_MESSAGE)
-    skill_weights = {key: ev.weight for key, ev in profile.items()}
+    # Every spelling is embedded; canonical keys decide "same skill" (A8). Never embed the keys.
+    spellings, spelling_keys, owner = profile_spellings(profile)
+    skill_weights = {ev.name: ev.weight for ev in profile.values()}
 
     build_job_cache()
 
@@ -128,9 +134,8 @@ def recommend_jobs(
         profile_vec = profile_vec / (np.linalg.norm(profile_vec) + 1e-8)
 
     # ── Grad skill embeddings — embed once, normalise once ─────────────────────
-    grad_skill_names = list(skill_weights.keys())
-    if grad_skill_names:
-        grad_embeddings = normalise_rows(embedder.embed_cached(grad_skill_names))
+    if spellings:
+        grad_embeddings = normalise_rows(embedder.embed_cached(spellings))
     else:
         grad_embeddings = np.array([])
 
@@ -173,7 +178,7 @@ def recommend_jobs(
             continue
         job_skills = cached["skills"]
         total = len(job_skills)
-        matched = skill_coverage(grad_embeddings, cached["skill_vecs"], total)
+        matched = skill_coverage(grad_embeddings, cached["skill_vecs"], total, spelling_keys, owner, cached["skill_keys"])
         coverage = round(matched / total * 100, 1) if total else 0.0
 
         # Ranking score ("best fit"): skill coverage + whole-profile similarity (+ title boost),

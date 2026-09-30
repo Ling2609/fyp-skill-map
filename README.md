@@ -58,7 +58,7 @@ fyp-skill-map/
 │   │   ├── live_jobs/      generate search queries from market data, fetch current jobs from JSearch
 │   │   └── tools/          diagnostics and maintenance
 │   ├── migrations/         one-off database changes (see below)
-│   ├── data/               data files only: modules.json, skill_taxonomy.json, caches
+│   ├── data/               data files only: modules.json, skill_taxonomy.json, skill_merges.json (+ overrides), caches
 │   └── requirements.txt
 └── frontend/
     └── src/
@@ -113,9 +113,11 @@ Run every script from `backend/` with the venv active, e.g. `python scripts/tool
 | `pipeline/extract_job_skills.py` | Extracts skills for the 2024 JobStreet sample (resumable) | Groq |
 | `pipeline/extract_module_skills.py` | First-time setup: loads `modules.json` and extracts module skills | Groq |
 | `pipeline/reextract_module_skills.py` | Re-extracts module skills from name + description; backs up old skills first. `--dry-run`, `--module CODE` | Groq |
+| `pipeline/decide_skill_merges.py` | A8 layer 2: asks the LLM whether close skill names (SBERT ≥ 0.85, after the layer-1 rules) are the same skill; answers saved in `data/skill_merges.json`, resumable, stops at Groq's daily limit. `--dry-run`, `--limit N`, `--verify` (second, stricter check; merge only if both say same) | Groq |
 | `live_jobs/generate_live_queries.py` | Builds the search queries from the most common ICT roles per subcategory in the 2024 JobStreet data; writes `data/live_job_queries.json`. Preview by default, `--save`, `--my N --sg N` | – |
 | `live_jobs/fetch_live_jobs.py` | Fetches live jobs for those queries (non-ICT titles skipped) and extracts their skills. `--dry-run`, `--use-cache`, `--new-only` | JSearch, Groq |
 | `tools/check_skill_profile.py` | Read-only: a student's skill count, sources and near-duplicates. `--no-sbert` | – |
+| `tools/compare_match_pages.py` | Read-only debug (A8): for one job, each job skill's best matching student skill (and spelling) and its score, as Job Matches and Job Detail compute it. `<user> "<job title>"` | – |
 | `tools/format_all_descriptions.py` | Pre-formats job descriptions in bulk | Gemini |
 | `tools/remove_duplicate_jobs.py` | Lists live jobs saved twice (same title, company, location) and deletes the extra copies after you confirm | – |
 | `tools/remove_non_ict_jobs.py` | Lists saved live jobs whose title isn't an ICT role (same rule as the fetcher) and deletes them after you confirm | – |

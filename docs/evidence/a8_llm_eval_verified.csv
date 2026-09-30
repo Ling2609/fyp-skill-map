@@ -1,0 +1,76 @@
+﻿id,skill A,skill B,similarity,merged (both LLM checks same)?,Claude (blind): same?,agree
+1,IBM WebSphere Application Server,WebSphere server,0.901,n,y,n
+2,Code reviews,Code Review,0.922,y,y,y
+3,Modbus protocol,Modbus communication,0.922,y,y,y
+4,OS configuration,Operating system configuration,0.93,y,y,y
+5,Azure Cloud,Azure,0.898,y,y,y
+6,Power Automate,MS Power Automate,0.889,y,y,y
+7,ServiceNow Platform,ServiceNow,0.856,y,y,y
+8,Routing,Network Routing,0.908,y,y,y
+9,macOS Support,Mac OS support,0.888,y,y,y
+10,Vulkan API,Vulkan,0.9,y,y,y
+11,AWS networking,Cloud networking AWS,0.898,y,y,y
+12,Redis Administration,Redis Management,0.902,y,y,y
+13,Solaris,Solaris OS,0.86,y,y,y
+14,Windows Administration,Windows system administration,0.896,y,y,y
+15,HTML/CSS,HTML and CSS,0.931,y,y,y
+16,LAN/WAN networking,WAN/LAN Engineering,0.879,n,n,y
+17,Service Desk Ticketing,Help Desk Ticketing,0.852,n,y,n
+18,Spring Boot,Java Spring Boot,0.855,y,y,y
+19,GitHub Actions CI,CI/CD GitHub Actions,0.887,n,y,n
+20,ERP Administration,ERP System Administration,0.924,y,y,y
+21,Virtual machine migration,VM Migration,0.908,y,y,y
+22,Vendor liaison,Vendor Support Liaison,0.921,n,n,y
+23,WebLogic Server,Oracle WebLogic Server,0.928,y,y,y
+24,Windows OS Troubleshooting,Windows Troubleshooting,0.895,n,y,n
+25,PMO Leadership,PMO Management,0.859,n,n,y
+26,CCTV Management,CCTV Administration,0.901,y,y,y
+27,Google Cloud SQL,Cloud SQL,0.895,y,y,y
+28,Apache HTTP Server,Apache server,0.918,y,y,y
+29,HR Systems,HRM systems,0.92,y,y,y
+30,Azure Cloud,Azure Cloud Platform,0.905,n,y,n
+31,User Access Management,User Access Control,0.883,n,n,y
+32,Responsive Design,Responsive Web Design,0.894,n,y,n
+33,Storyboard,Storyboarding,0.871,y,y,y
+34,Video conferencing,Polycom Video Conferencing,0.865,n,n,y
+35,Microsoft Dataverse,Dataverse,0.923,y,y,y
+36,Provisioning Services,Service Provisioning,0.936,y,n,n
+37,PostgreSQL,PostgreSQL database,0.873,y,y,y
+38,Router Management,Router Administration,0.889,y,y,y
+39,Camstar,Camstar MES,0.861,y,y,y
+40,PostgreSQL,PostgreSQL SQL,0.871,y,y,y
+41,Windows OS,Windows Operating System,0.909,y,y,y
+42,Virtual Desktop,Desktop Virtualization,0.893,n,y,n
+43,eCommerce catalogue management,E-commerce Catalog Management,0.893,y,y,y
+44,RMA processing,RMA Process,0.901,y,y,y
+45,Security Access Control,Access Control Management,0.86,n,n,y
+46,CMake build,C++ CMake,0.877,n,n,y
+47,SharePoint,MS SharePoint,0.875,y,y,y
+48,N-tier Architecture,Multi-tier Architecture,0.892,y,y,y
+49,Microsoft 365 Administration,Microsoft 365 admin,0.875,y,y,y
+50,Telecommunication Systems,Telecom Systems,0.91,y,y,y
+51,Procurement Process,Procurement Processing,0.917,y,y,y
+52,AWS Certification,AWS Certified,0.925,n,y,n
+53,MS SQL Administration,SQL Server Administration,0.921,y,y,y
+54,Data Center Architecture,Data Centre Design,0.862,n,n,y
+55,User Administration,User Management,0.85,y,y,y
+56,ITIL v4 Foundation,ITIL 4 Foundation,0.931,y,y,y
+57,Firewall Administration,Firewall Management,0.905,y,y,y
+58,Mentorship,Mentoring,0.93,y,y,y
+59,High Availability,High-Availability Systems,0.874,n,y,n
+60,CMS Management,CMS administration,0.888,y,y,y
+61,FortiGate,Fortinet FortiGate,0.9,y,y,y
+62,Backend Integration,Backend Systems Integration,0.867,n,y,n
+63,Office 365,Office 365 Suite,0.873,y,y,y
+64,Problem Diagnosis,Issue Diagnosis,0.894,n,y,n
+65,Mobile UI/UX,Mobile UI/UX Design,0.928,n,y,n
+66,SASS,SASS/SCSS,0.89,n,y,n
+67,MongoDB,MongoDB NoSQL,0.854,y,y,y
+68,Schedule Monitoring,Schedule Tracking,0.857,n,y,n
+69,ERP Application Support,ERP software support,0.912,y,y,y
+70,Basic networking,Network Basics,0.877,y,y,y
+71,Script Development,Scripting,0.857,n,y,n
+72,GitHub Version Control,GitHub Versioning,0.903,y,y,y
+73,ERP Application Support,ERP System Support,0.884,n,y,n
+74,C#,.NET C#,0.917,n,y,n
+75,Business Central,Microsoft Business Central,0.861,y,y,y

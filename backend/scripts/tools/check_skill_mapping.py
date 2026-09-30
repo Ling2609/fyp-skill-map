@@ -177,7 +177,7 @@ def group_report(counts: Counter):
     for name, total, g in multi[:20]:
         others = [s for s, _ in g.most_common() if s != name]
         more = f" +{len(others) - 5} more" if len(others) > 5 else ""
-        print(f"  {total:>6}×  {name}  <-  {' | '.join(others[:5])}{more}")
+        print(f"  {total:>6}x  {name}  <-  {' | '.join(others[:5])}{more}")
 
     with open(EVIDENCE + "a8_rule_groups.csv", "w", newline="", encoding="utf-8-sig") as f:
         w = csv.writer(f)

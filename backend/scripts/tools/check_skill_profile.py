@@ -81,7 +81,7 @@ def main():
             by_src[ev.source] += 1
         print("\nCOUNT")
         print(f"  Raw rows: {raw_total} from {len(saved)} modules, {raw_proj} from projects, {raw_cert} from certs")
-        print(f"  Shown as 'Skills Identified' (unique, case-insensitive): {len(profile)}")
+        print(f"  Skills in the profile (unique after A8 skill-name grouping): {len(profile)}")
         print(f"     modules {by_src['module']} · projects {by_src['project']} · certs {by_src['cert']}")
 
         # ── 3. Near-duplicates (what A8 would merge) ────────────────────────────

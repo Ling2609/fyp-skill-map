@@ -6,9 +6,10 @@ from app.models.job import Job, JobSkill
 from app.routers.auth import get_current_user
 from app.models.user import User
 from app.nlp.embedder import get_embedder
+from app.services.skill_names import canonical_key, dedupe_skills
 from app.services.skill_profile import (
     DIRECT_THRESHOLD, EMPTY_PROFILE_MESSAGE, MATCH_THRESHOLD, PARTLY_THRESHOLD,
-    build_skill_profile, normalise_rows,
+    build_skill_profile, normalise_rows, profile_spellings, similarity_matrix,
 )
 
 router = APIRouter(prefix="/skillgap", tags=["skill-gap"])
@@ -42,26 +43,24 @@ def analyse_skill_gap(
     if not job:
         raise HTTPException(status_code=404, detail="Job not found")
 
-    job_skills_db = db.query(JobSkill).filter(JobSkill.job_id == job.id).all()
+    job_skills_db = db.query(JobSkill).filter(JobSkill.job_id == job.id).order_by(JobSkill.id).all()
     if not job_skills_db:
         raise HTTPException(status_code=404, detail="No skills found for this job")
 
-    job_skills = [s.skill_name for s in job_skills_db]
+    # One entry per canonical skill, same as Job Matches (A8), so both pages show the same "X of N"
+    job_skills = dedupe_skills([s.skill_name for s in job_skills_db])
 
-    # Embed all skills in one batch call, then split
-    grad_skill_names = list(graduate_skills.keys())
-    all_skills = grad_skill_names + job_skills
-    embeddings = embedder.embed_cached(all_skills)
+    # Embed every spelling of the student's skills and the job skills in one batch call, then split
+    grad_skill_names = list(graduate_skills.keys())          # one per skill, same order as the profile
+    spellings, spelling_keys, owner = profile_spellings(profile)
+    embeddings = embedder.embed_cached(spellings + job_skills)
+    spelling_embeddings = normalise_rows(embeddings[:len(spellings)])
+    job_embeddings = normalise_rows(embeddings[len(spellings):])
 
-    grad_embeddings = embeddings[:len(grad_skill_names)]
-    job_embeddings  = embeddings[len(grad_skill_names):]
-
-    # Normalise both matrices once — then similarity = matmul (no per-pair norm)
-    grad_embeddings = normalise_rows(grad_embeddings)
-    job_embeddings  = normalise_rows(job_embeddings)
-
-    # One matmul: sim_matrix[j, g] = cosine similarity between job skill j and grad skill g
-    sim_matrix = job_embeddings @ grad_embeddings.T  # (J, G)
+    # sim_matrix[j, g] = best cosine similarity between job skill j and any spelling of grad skill g;
+    # the same canonical skill ("MS SQL Server" / "SQL Server") counts as 1.0 (direct)
+    sim_matrix = similarity_matrix(job_embeddings, spelling_embeddings,
+                                   [canonical_key(s) for s in job_skills], spelling_keys, owner)  # (J, G)
 
     best_scores  = sim_matrix.max(axis=1)            # best grad match score per job skill
     best_indices = sim_matrix.argmax(axis=1)         # which grad skill matched best
