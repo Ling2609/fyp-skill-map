@@ -1,0 +1,43 @@
+A8 skill normalisation: first analysis (taxonomy mapping), run on her database 30 Sep 2026 00:48
+Command: python scripts/tools/check_skill_mapping.py   (now: --taxonomy)
+
+9483 skill names in the database, 8305 after ignoring case and punctuation
+Taxonomy: 462 skills, 1698 names and aliases
+
+How each skill name would map:
+  exact name / alias                    180 names ( 2.2%)      4128 uses (13.4%)
+  exact after dropping filler words      86 names ( 1.0%)       628 uses ( 2.0%)
+  SBERT similarity 0.9–1.0               98 names ( 1.2%)       895 uses ( 2.9%)
+  SBERT similarity 0.8–0.9              434 names ( 5.2%)      2628 uses ( 8.6%)
+  SBERT similarity 0.7–0.8              900 names (10.8%)      3690 uses (12.0%)
+  SBERT similarity 0.6–0.7             1484 names (17.9%)      5595 uses (18.2%)
+  SBERT similarity 0.0–0.6             5123 names (61.7%)     13129 uses (42.8%)
+
+Most used skills with NO close taxonomy skill (similarity < 0.6), i.e. gaps in the taxonomy:
+    262×  Problem solving   (nearest: propose ICT solutions to business problems, 0.53)
+    241×  Stakeholder Management   (nearest: Agile project management, 0.41)
+    195×  Technical documentation   (nearest: use interface description language, 0.55)
+    162×  Incident Management   (nearest: software anomalies, 0.49)
+    126×  Team Leadership   (nearest: Agile project management, 0.39)
+    118×  Change Management   (nearest: Process-based management, 0.48)
+    118×  Technical support   (nearest: propose ICT solutions to business problems, 0.55)
+    114×  Stakeholder Communication   (nearest: internet governance, 0.41)
+    111×  Network troubleshooting   (nearest: Networking, 0.55)
+    109×  Troubleshooting   (nearest: debug software, 0.49)
+     96×  Customer service   (nearest: web services, 0.58)
+     89×  Cross-functional Collaboration   (nearest: web based collaborative platforms, 0.58)
+     89×  Communication Skills   (nearest: design interaction model, 0.50)
+     82×  Power BI   (nearest: Git, 0.40)
+     80×  Root Cause Analysis   (nearest: debug software, 0.43)
+
+Labelling of the 110-row sample (a8_mapping_sample_labels.csv):
+  Claude labelled all rows (y 56, n 45, unsure 9); the author spot-checked 22 blind rows (9 Claude-unsure + 13 random).
+  Both definite on 7 rows: agreed on 5, disagreed on 2 (both about how general a match may be:
+  "Low-level programming -> computer programming", "Unix/Linux -> Linux"). The author marked 12 of 22 as unsure.
+  Final labels: merge only if clearly the same skill; unsure = no merge.
+  Correct suggestions by method (final labels): filler-word rule 10/10; SBERT 0.95+ 17/20, 0.85-0.95 13/20,
+  0.75-0.85 10/21, 0.65-0.75 5/19, 0.55-0.65 3/20. SBERT never reached 95% in any similarity band (e.g. Containerization -> Docker 0.98, NGINX -> proxy servers 0.96,
+  Visual Studio Code -> Visual Basic 0.86 are all wrong).
+Conclusion: the ESCO-based taxonomy covers only ~15% of skill uses exactly, and SBERT-to-taxonomy mapping is not
+precise enough. A8 therefore groups the database's own skill names (rules, then an LLM check of close pairs), and
+keeps the taxonomy as a label where it matches exactly.

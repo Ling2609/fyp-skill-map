@@ -3,6 +3,19 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 30 Sep 2026 — Skill normalisation (A8)
+
+- (this commit) **A8 analysis.** `scripts/tools/check_skill_mapping.py --taxonomy`: mapping the 8,305 skill names onto the
+  ESCO-based taxonomy matched only ~15% of skill uses exactly, and SBERT suggestions never reached 95% precision in
+  any similarity band (110 labelled rows, `docs/evidence/a8_mapping_sample_labels.csv`, `a8_taxonomy_summary.txt`).
+  So A8 groups the database's own skill names instead: rules in `app/services/skill_names.py` ("Power BI" = "PowerBI"
+  = "Microsoft Power BI", "React JS" = "React", "Python programming" = "Python"); the default report shows the
+  groups and counts the close pairs an LLM check would need.
+  First run on her data: 9,483 names → 7,828 skills (1,655 spellings merged). 40 random merges checked: 39 clearly
+  the same, 1 arguable ("Linux development" → Linux) (`a8_rule_merge_sample_labels.csv`). Two rule bugs found in the
+  top groups and fixed: "Microsoft Teams Collaboration" was merged into "Team Collaboration" (vendor prefix now dropped
+  only for listed products such as Excel, Power BI, Kafka) and "Methodologies" ≠ "Methodology" (plural "-ies" added).
+
 ## 29 Sep 2026 — Project structure for all three roles
 
 Files moved with **names unchanged** and history kept (`git log --follow <file>`).

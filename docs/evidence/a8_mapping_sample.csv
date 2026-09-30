@@ -1,0 +1,111 @@
+﻿skill,suggested_taxonomy_skill,correct (y/n),method,similarity,uses
+Server Migration,migrate existing data,,sbert,0.580,1
+REST API development,REST API,,filler,1.000,4
+Agile Environment,Agile development,,sbert,0.957,1
+Credit Card Systems,ATM systems,,sbert,0.557,5
+SAP Testing,SAP Data Services,,sbert,0.753,1
+Parallel Testing,perform software unit testing,,sbert,0.626,1
+DevOps Tools,DevOps,,filler,1.000,1
+Excel Dashboard,use spreadsheets software,,sbert,0.565,1
+System Requirements,hardware platforms,,sbert,0.751,1
+Database maintenance,maintain database performance,,sbert,0.871,2
+IT infrastructure planning,define ICT network design policies,,sbert,0.578,1
+Script Development,use scripting programming,,sbert,0.851,1
+WAN Design,design computer network,,sbert,0.940,3
+Smart contract development,smart contract,,filler,1.000,2
+Apache server,Apache Tomcat,,sbert,0.608,1
+Performance analysis,ICT performance analysis methods,,sbert,0.900,2
+Manufacturing operations,hardware industry,,sbert,0.669,1
+Relational Databases,database,,sbert,0.952,8
+Containerization,Docker,,sbert,0.978,4
+iOS Development,iOS,,filler,1.000,34
+VOIP implementation,transmission technology,,sbert,0.861,1
+Docker containers,Docker,,sbert,0.950,43
+Visual Design,use automatic programming,,sbert,0.733,1
+IT Risk Assessment,assessment of risks and threats,,sbert,0.673,2
+Mobile CI/CD,CI/CD,,sbert,0.783,2
+IP network design,design computer network,,sbert,0.696,1
+Azure Virtual Desktop,Azure,,sbert,0.722,2
+Network Security Architecture,Networking,,sbert,0.591,2
+Embedded Systems Development,embedded systems,,filler,1.000,1
+ASP.NET MVC,ASP.NET,,sbert,0.750,26
+Visual Studio Code,Visual Basic,,sbert,0.859,1
+Active Directory GPO,distributed directory information services,,sbert,0.725,1
+Linux Fundamentals,Linux,,filler,1.000,1
+DevOps Methodologies,DevOps,,sbert,0.951,2
+Informix Administration,IBM Informix,,sbert,0.832,1
+Analytics & Metrics,data analytics,,sbert,0.689,1
+DevOps Engineering,DevOps,,sbert,0.942,1
+Python for deep learning,Python (computer programming),,sbert,0.627,1
+Algorithms design,Data Structures and Algorithms,,sbert,0.965,2
+.NET (VB),Visual Basic,,sbert,0.963,1
+Git Versioning,Git,,sbert,0.914,7
+Hadoop Administration,Hadoop,,sbert,0.857,1
+Unix Administration,Linux,,sbert,0.830,10
+AWS cloud security,cloud security and compliance,,sbert,0.814,2
+GRC tools,Groovy,,sbert,0.584,2
+SAP HR Configuration,SAP Data Services,,sbert,0.619,1
+Microservices Architecture,Microservices,,sbert,0.992,37
+Windows Operating System,operating systems,,sbert,0.853,1
+Computer Hardware,hardware components,,sbert,0.823,1
+Unix scripting,use scripting programming,,sbert,0.810,2
+NGINX server,proxy servers,,sbert,0.955,1
+Cyber threat intelligence,conduct threat intelligence,,sbert,0.923,1
+AI Vendor Management,software components suppliers,,sbert,0.596,1
+React JS,React,,sbert,0.976,6
+Data Cleansing,perform data cleansing,,sbert,0.980,5
+Functional analysis,use functional programming,,sbert,0.583,2
+Threat intelligence analysis,conduct threat intelligence,,sbert,0.818,5
+Object Oriented ABAP,ABAP,,sbert,0.807,1
+PCB Design,printed circuit boards,,sbert,0.769,2
+Microservice design,Microservices,,sbert,0.901,1
+High availability infrastructure,information structure,,sbert,0.561,1
+VBScript scripting,VBScript,,sbert,0.961,1
+Multithreading,use concurrent programming,,sbert,0.635,6
+Global Deployment,CI/CD,,sbert,0.724,1
+SAP Procurement,SAP Data Services,,sbert,0.775,1
+SQL Performance Tuning,maintain database performance,,sbert,0.730,5
+Telecommunications,call-centre technologies,,sbert,0.682,2
+Contact Center Operations,call-centre technologies,,sbert,0.760,1
+Android programming,Android (mobile operating systems),,filler,1.000,1
+Confidential data handling,information confidentiality,,sbert,0.855,1
+Low-level programming,computer programming,,sbert,0.682,1
+Database Security,maintain database security,,sbert,0.910,11
+Concurrent Programming,use concurrent programming,,sbert,0.957,1
+Multi-threaded Programming,use concurrent programming,,sbert,0.739,1
+Unix/Linux,Linux,,sbert,0.890,7
+Management Information Systems,information architecture,,sbert,0.705,1
+Web Scraping,data mining,,sbert,0.881,2
+Software Design Patterns,use software design patterns,,sbert,0.954,2
+Security Framework Development,ICT security standards,,sbert,0.836,1
+React library,React,,filler,1.000,1
+OBS Studio,Outsourcing model,,sbert,0.784,1
+Cybersecurity Compliance,ICT security standards,,sbert,0.901,1
+Security Controls Design,assessment of risks and threats,,sbert,0.617,2
+Multiplayer networking,Networking,,sbert,0.772,1
+Control Testing,perform software unit testing,,sbert,0.640,2
+LAN design,design computer network,,sbert,0.943,2
+Analytics Strategy,web analytics,,sbert,0.716,1
+VB.NET programming,Visual Basic,,filler,1.000,1
+WordPress Development,WordPress,,filler,1.000,12
+Prototyping,Prototyping development,,sbert,0.957,10
+Data Encryption,manage cloud data and storage,,sbert,0.734,3
+Linux OS,Linux,,sbert,0.924,13
+OMP Software,OmniPage,,sbert,0.737,1
+Report design,develop reporting software,,sbert,0.753,1
+Quality Control,implement data quality processes,,sbert,0.593,7
+Optical Fiber Networks,transmission technology,,sbert,0.785,1
+Website Maintenance,manage website,,sbert,0.813,5
+Data Modeling,data models,,sbert,0.966,78
+IBM IIB,DB2,,sbert,0.706,2
+VM Virtualization,operating systems,,sbert,0.769,2
+Mac OS support,operating systems,,sbert,0.552,1
+Test Automation Frameworks,tools for ICT test automation,,sbert,0.864,4
+Maintenance Testing,perform software unit testing,,sbert,0.601,1
+Microsoft SQL Server,SQL Server,,sbert,0.983,26
+Networking protocols,network standards,,sbert,0.961,1
+RESTful APIs,REST API,,sbert,0.961,25
+Web Application Customization,create software design,,sbert,0.581,1
+Debugging Tools,ICT debugging tools,,sbert,0.959,1
+WAN,design computer network,,sbert,0.702,1
+Bitbucket version control,Git,,sbert,0.736,2
