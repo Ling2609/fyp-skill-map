@@ -19,13 +19,13 @@ from app.models.user_module import UserModule
 from app.services.skill_names import canonical_key
 
 # ── Matching thresholds (SBERT cosine similarity) ─────────────────────────────
-# Only skills the student has count towards coverage (step 2, 30 Sep): the same skill (A8 canonical key,
-# similarity 1.0) or SBERT >= 0.8 (29 of 30 real student-job pairs were the same skill). Related skills
-# (0.6-0.79) are shown, not counted: only 9 of 60 were the same skill (docs/evidence/step2_related_sample_labels.csv).
-# Related knowledge still lifts a job in the Best-fit order through the whole-profile similarity.
-MATCH_THRESHOLD = 0.8    # at or above = the student has this skill (counts as matched)
-RELATED_THRESHOLD = 0.6  # 0.6-0.79 = related: a close skill to build on (shown, not counted)
-PARTLY_THRESHOLD = 0.4   # 0.4-0.59 = partly covered
+# A job skill counts only if the student has it (step 2, 30 Sep): the same skill (A8 canonical key,
+# similarity 1.0) or SBERT >= 0.8 (29 of 30 real student-job pairs were the same skill). Everything else
+# is a gap, shown without a "related" reason: at 0.6-0.79 only 9 of 60 pairs were the same skill
+# (docs/evidence/step2_scoring_summary.txt). Related knowledge still lifts a job in the Best-fit order
+# through the whole-profile similarity.
+MATCH_THRESHOLD = 0.7    # at or above = the student has this skill
+RELATED_THRESHOLD = 0.6  # research only (scripts/tools/compare_scoring.py): the old "matched" line
 
 # Projects and certifications are self-declared and carry no grade
 SELF_DECLARED_WEIGHT = 0.7

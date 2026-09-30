@@ -19,12 +19,6 @@ const postedAgo = (iso) => {
   return `${Math.floor(days / 7)} weeks ago`
 }
 
-const GAP_STYLES = {
-  missing: { icon: '✕', circle: 'bg-red-100 text-red-600', text: 'text-red-500' },
-  partial: { icon: '!', circle: 'bg-amber-100 text-amber-700', text: 'text-amber-600' },
-  related: { icon: '~', circle: 'bg-blue-100 text-blue-700', text: 'text-blue-600' },
-}
-const GAP_ORDER = { missing: 0, partial: 1, related: 2 }
 
 export default function JobDetail() {
   const navigate = useNavigate()
@@ -86,20 +80,16 @@ export default function JobDetail() {
   const coverageColor = coverage >= 70 ? 'text-green-600' : coverage >= 40 ? 'text-yellow-600' : 'text-red-500'
   const barColor = coverage >= 70 ? 'bg-green-500' : coverage >= 40 ? 'bg-yellow-500' : 'bg-red-400'
 
-  // Layout B (summary first): 1) what to learn, 2) what you already have, 3) what else to mention.
-  // Gaps: Missing first, then Partly covered, then Related (a close skill of yours to build on).
-  // Only skills you have count towards the %; related ones are gaps with a head start (step 2).
-  const gapRows = (gap?.missing_skills || [])
-    .map(m => ({ ...m, status: m.status || (m.gap_reason?.startsWith('Partly') ? 'partial' : 'missing') }))
-    .sort((a, b) => GAP_ORDER[a.status] - GAP_ORDER[b.status])
-  const relatedCount = gapRows.filter(r => r.status === 'related').length
+  // Layout (summary first): 1) what to learn, 2) what you already have (with where it comes from).
+  // Only skills you have count (same skill, or SBERT >= 0.8). Gaps carry no "partly / related" reason:
+  // below 0.8 closeness is not reliable evidence, so it isn't shown as one (step 2, 30 Sep).
+  const gapRows = gap?.missing_skills || []
 
   // Matches: strongest first. Fallbacks keep the page correct with an older backend.
   const matchedRows = [...(gap?.matched_skills || [])]
     .sort((a, b) => b.similarity - a.similarity)
     .map(m => ({
       ...m,
-      evidence: m.evidence || (m.similarity >= 0.8 ? 'direct' : 'related'),
       evidence_source: m.evidence_source || 'module',
     }))
 
@@ -108,7 +98,12 @@ export default function JobDetail() {
     matchedRows.reduce((acc, m) => {
       const key = m.matched_via_module || 'Other'
       if (!acc[key]) {
-        acc[key] = { grade: m.evidence_source === 'module' ? gradeLabel(m.grade_weight) : '', items: [] }
+        acc[key] = {
+          // Module names like "Project in Software Engineering" read like a project, so say what it is
+          label: m.evidence_source === 'module' && key !== 'Other' ? `Module: ${key}` : key,
+          grade: m.evidence_source === 'module' ? gradeLabel(m.grade_weight) : '',
+          items: [],
+        }
       }
       acc[key].items.push(m)
       return acc
@@ -168,9 +163,7 @@ export default function JobDetail() {
                   of required skills · you have {gap?.summary?.matched_skills} of {gap?.summary?.job_skills_total}
                 </span>
               </p>
-              <span className="text-xs text-gray-400">
-                {gap?.summary?.missing_skills} to develop{relatedCount > 0 && ` · ${relatedCount} build on skills you have`}
-              </span>
+              <span className="text-xs text-gray-400">{gap?.summary?.missing_skills} to develop</span>
             </div>
             <div className="w-full bg-gray-100 rounded-full h-2">
               <div className={`h-2 rounded-full ${barColor}`} style={{ width: `${coverage}%` }} />
@@ -249,7 +242,7 @@ export default function JobDetail() {
           </div>
         )}
 
-        {/* Skill Gap Tab — summary first (progressive disclosure): learn → have → mention */}
+        {/* Skill Gap Tab — summary first: to learn → you already have (with where it comes from) */}
         {activeTab === 'gap' && (
           <div className="space-y-4">
 
@@ -265,16 +258,12 @@ export default function JobDetail() {
               ) : (
                 <ul className="divide-y divide-gray-50">
                   {gapRows.map((item, idx) => {
-                    const s = GAP_STYLES[item.status]
                     return (
                       <li key={idx} className="flex items-center gap-3 px-5 py-2.5">
-                        <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0 ${s.circle}`}>
-                          {s.icon}
+                        <span className="w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0 bg-red-100 text-red-600">
+                          ✕
                         </span>
-                        <span className="text-xs font-medium text-gray-800 w-60 shrink-0">{item.job_skill}</span>
-                        <span className={`flex-1 min-w-0 text-[11px] ${s.text}`}>
-                          {item.status === 'missing' ? 'Not covered yet' : item.gap_reason}
-                        </span>
+                        <span className="flex-1 min-w-0 text-xs font-medium text-gray-800">{item.job_skill}</span>
                         <button
                           onClick={() => navigate(`/chatbot?skill=${encodeURIComponent(item.job_skill)}&job=${encodeURIComponent(gap?.job?.job_title || '')}&reason=${encodeURIComponent(item.gap_reason || '')}`)}
                           className="text-xs text-blue-600 bg-blue-50 hover:bg-blue-100 px-2.5 py-1 rounded-full transition font-medium shrink-0"
@@ -320,7 +309,7 @@ export default function JobDetail() {
                   {sourceGroups.map(([source, group]) => (
                     <div key={source} className="px-5 py-3">
                       <div className="flex items-center gap-1.5 mb-2">
-                        <span className="text-xs font-semibold text-gray-700">{source}</span>
+                        <span className="text-xs font-semibold text-gray-700">{group.label}</span>
                         {group.grade && (
                           <span className="text-[10px] bg-blue-50 text-blue-600 px-1.5 py-0.5 rounded font-semibold">{group.grade}</span>
                         )}
@@ -342,24 +331,6 @@ export default function JobDetail() {
               )}
             </div>
 
-            {/* 3. Also mention */}
-            {gap?.graduate_only_skills?.length > 0 && (
-              <div className="bg-white rounded-xl border border-gray-100 shadow-sm">
-                <div className="px-5 py-4 border-b border-gray-100">
-                  <h2 className="text-sm font-semibold text-gray-700">
-                    Also mention in your CV
-                    <span className="ml-1.5 text-xs font-normal text-gray-400">(not required, but related)</span>
-                  </h2>
-                </div>
-                <div className="flex flex-wrap gap-1.5 px-5 py-4">
-                  {gap.graduate_only_skills.map((item, idx) => (
-                    <span key={idx} className="text-xs whitespace-nowrap text-blue-600 bg-blue-50 border border-blue-100 px-2.5 py-1 rounded-full">
-                      {item.skill}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            )}
           </div>
         )}
       </div>

@@ -156,8 +156,9 @@ export default function Chatbot() {
           company: j.company,
           match_percent: j.coverage_percent ?? j.match_percent,   // % of required skills the student has
         })) || []
-      } catch {
-        // leave it as null so the next message tries again
+      } catch (err) {
+        // Empty profile (400): no jobs to mention, don't ask again. Other errors: try again next message
+        if (err.response?.status === 400) topJobs.current = []
       }
     }
     if (topJobs.current?.length) ctx.matched_jobs = topJobs.current

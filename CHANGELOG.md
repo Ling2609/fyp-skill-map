@@ -8,11 +8,14 @@ Planning, reasoning and research behind each decision are in the project roadmap
 - (this commit) **Coverage counts only skills the student has**: the same skill (A8) or SBERT >= 0.8. Before, any
   skill at 0.6 counted, and 52% of all matches were only related (0.6-0.79); in a labelled sample only 9 of 60 related
   pairs were the same skill, while 29 of 30 pairs at >= 0.8 were (`docs/evidence/step2_scoring_summary.txt`,
-  `step2_related_sample_labels.csv`, `scripts/tools/compare_scoring.py`). Related skills now show on Job Detail as
-  gaps that "build on your X" (with Learn →); related knowledge still lifts a job in Best fit via profile similarity.
-  Dashboard: "Openings you align with" replaced by **"Skill to learn next"** (the skill missing most often in your
-  top 20 matches, new `skills_to_learn` in `/recommend/`). Job Matches no longer shows a saved old list (always
-  fetches fresh, keeps the last search); the chatbot fetches its top jobs itself.
+  `step2_related_sample_labels.csv`, `scripts/tools/compare_scoring.py`). Partial credit (0.25-0.5) was rejected: any
+  value is a judgement that can't be measured without manual labels. **Skill Gap is now strict and plain**: skills you
+  have (with the module and grade they come from, "via X" when worded differently) and skills to learn, with no
+  "partly covered" / "builds on" reasons and no "Also mention in your CV" (both came from SBERT closeness below 0.8,
+  which is not reliable evidence; weak explanations mislead users, Papenmeier et al. 2019). Related knowledge still
+  lifts a job in Best fit via profile similarity. Dashboard: "Openings you align with" replaced by **"Skill to learn
+  next"** (the skill missing most often in your top 20 matches; `skills_to_learn` in `/recommend/`). Job Matches no
+  longer shows a saved old list (always fetches fresh, keeps the last search); the chatbot fetches its top jobs itself.
 
 ## 30 Sep 2026 — Skill normalisation (A8)
 

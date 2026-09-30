@@ -8,15 +8,13 @@ from app.models.user import User
 from app.nlp.embedder import get_embedder
 from app.services.skill_names import canonical_key, dedupe_skills
 from app.services.skill_profile import (
-    EMPTY_PROFILE_MESSAGE, MATCH_THRESHOLD, PARTLY_THRESHOLD, RELATED_THRESHOLD,
+    EMPTY_PROFILE_MESSAGE, MATCH_THRESHOLD,
     build_skill_profile, normalise_rows, profile_spellings, similarity_matrix,
 )
 
 router = APIRouter(prefix="/skillgap", tags=["skill-gap"])
 
 embedder = get_embedder()
-
-BONUS_RELEVANCE_MIN = 0.3    # extra skills below this are unrelated to the job, so hidden
 
 
 class SkillGapRequest(BaseModel):
@@ -84,41 +82,16 @@ def analyse_skill_gap(
                 "evidence": "direct",
             })
         else:
-            # A gap. Explain how far away it is (grade does not affect matching):
-            #   related (0.6-0.79) = a close skill to build on, partly (0.4-0.59), missing (< 0.4)
-            source = skill_module_map.get(best_match, "a module")
-            if best_score >= RELATED_THRESHOLD:
-                status, gap_reason = "related", f"Builds on your {best_match} ({source})"
-            elif best_score >= PARTLY_THRESHOLD:
-                status, gap_reason = "partial", f"Partly covered in {source}"
-            else:
-                status, gap_reason = "missing", "Not in your modules or projects"
+            # A gap. No "partly covered" / "builds on" reason: below 0.8 SBERT closeness is not reliable
+            # evidence (step 2: 9 of 60 related pairs were the same skill), and a plausible but weak
+            # explanation misleads (Papenmeier et al. 2019). Closest skill kept for research only.
             missing.append({
                 "job_skill": job_skill,
                 "closest_graduate_skill": best_match,
                 "similarity": round(best_score, 3),
-                "status": status,
-                "gap_reason": gap_reason,
+                "status": "missing",
+                "gap_reason": "Not in your record yet",
             })
-
-    # Grad skills not related to this job's requirements.
-    # Exclude skills used for a match AND skills behind a "Partly covered" gap —
-    # otherwise the same skill shows as both "related to a gap" and "extra".
-    matched_grad_skills = {m["matched_graduate_skill"] for m in matched}
-    matched_grad_skills |= {m["closest_graduate_skill"] for m in missing if m["similarity"] >= PARTLY_THRESHOLD}
-    # Keep only extras that are still relevant to THIS job (worth mentioning in a CV
-    # or interview), most relevant first. Unrelated ones (e.g. Python syntax for a
-    # networking role) are dropped instead of padding the list.
-    grad_relevance = sim_matrix.max(axis=0)  # best score of each grad skill vs any job skill
-    graduate_only = sorted(
-        (
-            {"skill": s, "grade_weight": graduate_skills[s], "relevance": round(float(grad_relevance[g]), 3)}
-            for g, s in enumerate(grad_skill_names)
-            if s not in matched_grad_skills and grad_relevance[g] >= BONUS_RELEVANCE_MIN
-        ),
-        key=lambda x: x["relevance"],
-        reverse=True,
-    )
 
     gap_score = len(matched) / len(job_skills) * 100 if job_skills else 0
 
@@ -145,5 +118,4 @@ def analyse_skill_gap(
         },
         "matched_skills": matched,
         "missing_skills": missing,
-        "graduate_only_skills": graduate_only[:8],
     }

@@ -23,8 +23,11 @@ Labelled sample (step2_related_sample_labels.csv): 90 random student-skill -> jo
   e.g. n: computer architecture -> Information Architecture, Business planning -> Business Analysis,
        Searching techniques -> Search Engine Optimization; partly: Cloud deployment -> AWS Cloud
 
-Decision (her, 30 Sep): only skills the student has count (A8 same skill or SBERT >= 0.8). Related skills
-are shown as gaps that build on a skill she has, not counted; a partial credit (0.25-0.5) was rejected
-because any value is a judgement that can't be measured without manual labels. Related knowledge still
-lifts a job in the Best-fit order through the whole-profile SBERT similarity. Possible later improvement:
-an LLM check of related pairs (same / related / different), as in A8.
+Decision (her, 30 Sep): only skills the student has count (A8 same skill or SBERT >= 0.8). Skill Gap is
+strict and plain: have / to learn, with no "related" or "partly covered" reasons and no CV extras, because
+closeness below 0.8 is not reliable evidence (9 of 60 above) and weak explanations mislead users
+(Papenmeier et al. 2019). A partial credit (0.25-0.5) was rejected: any value is a judgement that can't be
+measured without manual labels. Related knowledge still lifts a job in the Best-fit order through the
+whole-profile SBERT similarity. Known cost: real matches below 0.8 are missed (e.g. Teamwork vs Team
+collaboration, 0.76). Planned fix, to agree with the supervisor: fine-tune SBERT on skill pairs
+(ESCO alternative labels, pairs mined from job ads, A8 pairs), evaluated on SkillMatch-1K.

@@ -39,7 +39,8 @@ export default function Dashboard() {
     // Replaced "Openings you align with" (step 2, 30 Sep): with only skills you have counting,
     // that count fell to a handful and no longer led anywhere (see references.md, "Dashboard metric")
     nextSkill: nextSkill?.skill || null,
-    nextSkillSub: nextSkill ? `missing in ${nextSkill.jobs} of your top ${nextSkill.of_top} matches` : 'no current openings yet',
+    nextSkillSub: nextSkill ? `missing in ${nextSkill.jobs} of your top ${nextSkill.of_top} matches`
+      : topJobs.length ? 'you have every skill your top matches list' : 'no current openings yet',
     modules: profile.modules_count,
     // Skill coverage of the #1 job, whole number like Job Detail; null = no live jobs yet
     bestMatch: topJobs[0] ? Math.round(topJobs[0].coverage_percent) : null,
@@ -127,7 +128,7 @@ export default function Dashboard() {
             ].map(({ label, value, sub, dim, matchPct, text }) => (
               <div key={label} className="bg-white rounded-xl p-5 border border-slate-200">
                 <p className="text-xs font-medium text-slate-400 uppercase tracking-wider mb-3">{label}</p>
-                <p className={`${text ? 'text-xl truncate' : 'text-3xl'} font-semibold tracking-tight leading-none ${
+                <p title={text ? String(value) : undefined} className={`${text ? 'text-xl truncate' : 'text-3xl'} font-semibold tracking-tight leading-none ${
                   dim ? 'text-slate-200' :
                   matchPct != null ? getMatchColor(matchPct) :
                   'text-slate-900'

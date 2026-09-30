@@ -1,5 +1,5 @@
 """
-Step 2 research (read-only): how does the student's coverage change under different rules for
+Step 2 research (reads the database, writes only the sample CSV below): how does the student's coverage change under different rules for
 "which matched skills count"? Nothing in the app changes. Result (30 Sep): the app uses A since step 2.
 
   now      : every job skill with best similarity >= 0.6 counts fully (the app before step 2)
@@ -44,6 +44,9 @@ def main():
             print("User not found")
             return
         profile = build_skill_profile(user.id, db)
+        if not profile:
+            print("Empty profile: nothing to compare")
+            return
         spellings, keys, _ = profile_spellings(profile)
         vecs = normalise_rows(get_embedder().embed_cached(spellings))
         key_set = set(keys)
@@ -85,7 +88,7 @@ def main():
         for label, i in (("now", 2), ("A", 3), ("A-strict", 4), ("B", 5)):
             cov = [r[i] / r[1] for r in rows]
             print(f"  {label:<9} average coverage {round(100 * np.mean(cov)):>3}%   jobs at >= 50% "
-                  f"(Dashboard 'openings you align with'): {sum(x >= 0.5 for x in cov)}")
+                  f"(the old Dashboard card 'openings you align with'): {sum(x >= 0.5 for x in cov)}")
         print("\nSensitivity: live jobs at or above each coverage, by credit for a Related skill")
         print(f"  {'related credit':<15} {'avg':>5} {'>= 30%':>7} {'>= 40%':>7} {'>= 50%':>7}")
         for credit in (0, 0.25, 0.33, 0.5, 1):
@@ -105,7 +108,7 @@ def main():
                 w.writerow([a, b, "", sim, group, job])
         print(f"\n{len(sample)} pairs written to {out} for labelling")
 
-        total = sum(kinds.values())
+        total = sum(kinds.values()) or 1
         print(f"\nWhy job skills counted as matched now ({total} in total):")
         for k, v in kinds.items():
             print(f"  {k:<13} {v:>5} ({round(100 * v / total)}%)")
