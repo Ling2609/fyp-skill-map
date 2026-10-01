@@ -3,7 +3,7 @@ Step 2 research (reads the database, writes only the sample CSV below): how does
 "which matched skills count"? Nothing in the app changes. Result (30 Sep): the app uses A since step 2.
 
   now      : every job skill with best similarity >= 0.6 counts fully (the app before step 2)
-  A        : only Direct counts. Direct = same skill (A8 canonical key) or SBERT >= 0.8  (the app since step 2)
+  A        : only Direct counts. Direct = same skill (A8 canonical key) or SBERT >= 0.8  (tested; the app uses 0.7, see step2_scoring_summary.txt)
   A-strict : only the same skill (A8 canonical key) counts
   B        : Direct counts 1, Related (0.6-0.79) counts 0.5
 Sensitivity: Related credit 0 / 0.25 / 0.33 / 0.5 / 1, with openings at >= 30 / 40 / 50% coverage.

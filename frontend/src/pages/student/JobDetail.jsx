@@ -81,8 +81,8 @@ export default function JobDetail() {
   const barColor = coverage >= 70 ? 'bg-green-500' : coverage >= 40 ? 'bg-yellow-500' : 'bg-red-400'
 
   // Layout (summary first): 1) what to learn, 2) what you already have (with where it comes from).
-  // Only skills you have count (same skill, or SBERT >= 0.8). Gaps carry no "partly / related" reason:
-  // below 0.8 closeness is not reliable evidence, so it isn't shown as one (step 2, 30 Sep).
+  // Only skills you have count (same skill, or SBERT >= 0.7). Gaps carry no "partly / related" reason:
+  // below 0.7 closeness is not reliable evidence, so it isn't shown as one (step 2, 30 Sep).
   const gapRows = gap?.missing_skills || []
 
   // Matches: strongest first. Fallbacks keep the page correct with an older backend.

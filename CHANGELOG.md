@@ -3,19 +3,25 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
-## 30 Sep 2026 — Only skills you have count (step 2)
+## 30 Sep – 1 Oct 2026 — Only skills you have count (step 2)
 
-- (this commit) **Coverage counts only skills the student has**: the same skill (A8) or SBERT >= 0.8. Before, any
-  skill at 0.6 counted, and 52% of all matches were only related (0.6-0.79); in a labelled sample only 9 of 60 related
+- (this commit) Comments and evidence updated to the 0.7 threshold used since `7aea173` (they still said 0.8).
+- `7aea173` **Threshold 0.7, not 0.8**: on the Nokia job (about 7 of 12 skills really held) 0.6 counted 9 (2 wrong),
+  0.8 counted 2 (missed 5), 0.7 counts 6 (1 wrong); the labelled 0.70-0.79 band was 15 of 16 at least mostly right.
+  Plus the audit fixes: Dashboard message when nothing is missing, full skill name on hover, chatbot stops re-asking
+  on an empty profile, dead code removed, script guards.
+- `0cb287e` **Coverage counts only skills the student has**: the same skill (A8) or SBERT above the threshold. Before,
+  any skill at 0.6 counted, and 52% of all matches were only related (0.6-0.79); in a labelled sample only 9 of 60 related
   pairs were the same skill, while 29 of 30 pairs at >= 0.8 were (`docs/evidence/step2_scoring_summary.txt`,
-  `step2_related_sample_labels.csv`, `scripts/tools/compare_scoring.py`). Partial credit (0.25-0.5) was rejected: any
-  value is a judgement that can't be measured without manual labels. **Skill Gap is now strict and plain**: skills you
-  have (with the module and grade they come from, "via X" when worded differently) and skills to learn, with no
-  "partly covered" / "builds on" reasons and no "Also mention in your CV" (both came from SBERT closeness below 0.8,
-  which is not reliable evidence; weak explanations mislead users, Papenmeier et al. 2019). Related knowledge still
+  `step2_related_sample_labels.csv`). Partial credit (0.25-0.5) was rejected: any value is a judgement that can't be
+  measured without manual labels. **Skill Gap is now strict and plain**: skills you have (with the module and grade
+  they come from, "via X" when worded differently) and skills to learn, with no "partly covered" / "builds on" reasons
+  and no "Also mention in your CV" (weak explanations mislead users, Papenmeier et al. 2019). Related knowledge still
   lifts a job in Best fit via profile similarity. Dashboard: "Openings you align with" replaced by **"Skill to learn
   next"** (the skill missing most often in your top 20 matches; `skills_to_learn` in `/recommend/`). Job Matches no
   longer shows a saved old list (always fetches fresh, keeps the last search); the chatbot fetches its top jobs itself.
+- `2108fd3` `scripts/tools/compare_scoring.py`: coverage under different rules for which matches count, sensitivity
+  table, random sample of related pairs (`docs/evidence/step2_related_sample.csv`, labelled in `..._labels.csv`).
 
 ## 30 Sep 2026 — Skill normalisation (A8)
 

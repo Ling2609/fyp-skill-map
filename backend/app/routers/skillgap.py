@@ -71,7 +71,7 @@ def analyse_skill_gap(
         best_match = grad_skill_names[int(best_indices[j_idx])]
 
         if best_score >= MATCH_THRESHOLD:
-            # The student has this skill: same skill (A8) or SBERT >= 0.8
+            # The student has this skill: same skill (A8) or SBERT >= 0.7
             matched.append({
                 "job_skill": job_skill,
                 "matched_graduate_skill": best_match,
@@ -82,7 +82,7 @@ def analyse_skill_gap(
                 "evidence": "direct",
             })
         else:
-            # A gap. No "partly covered" / "builds on" reason: below 0.8 SBERT closeness is not reliable
+            # A gap. No "partly covered" / "builds on" reason: below 0.7 SBERT closeness is not reliable
             # evidence (step 2: 9 of 60 related pairs were the same skill), and a plausible but weak
             # explanation misleads (Papenmeier et al. 2019). Closest skill kept for research only.
             missing.append({

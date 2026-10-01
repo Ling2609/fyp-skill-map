@@ -20,9 +20,9 @@ from app.services.skill_names import canonical_key
 
 # ── Matching thresholds (SBERT cosine similarity) ─────────────────────────────
 # A job skill counts only if the student has it (step 2, 30 Sep): the same skill (A8 canonical key,
-# similarity 1.0) or SBERT >= 0.8 (29 of 30 real student-job pairs were the same skill). Everything else
-# is a gap, shown without a "related" reason: at 0.6-0.79 only 9 of 60 pairs were the same skill
-# (docs/evidence/step2_scoring_summary.txt). Related knowledge still lifts a job in the Best-fit order
+# similarity 1.0) or SBERT >= 0.7 (labelled sample: >= 0.8 29 of 30 the same skill, 0.70-0.79 15 of 16 at least
+# mostly right, below 0.7 about 40% wrong; Nokia check: 0.8 missed 5 real matches). Everything else is a gap,
+# shown without a "related" reason (docs/evidence/step2_scoring_summary.txt). Related knowledge still lifts a job in the Best-fit order
 # through the whole-profile similarity.
 MATCH_THRESHOLD = 0.7    # at or above = the student has this skill
 RELATED_THRESHOLD = 0.6  # research only (scripts/tools/compare_scoring.py): the old "matched" line
