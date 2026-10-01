@@ -3,6 +3,13 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 1 Oct 2026 — Small fixes
+
+- d24d998: Job Matches sort hints in plain words ("Most skills matched" no longer says "required", since jobs
+  with no required skills are scored on their listed ones). CHANGELOG: v1 pair counts corrected to 6,101
+  (4,242 / 901 / 958).
+- (this commit) This entry, left out of d24d998.
+
 ## 1 Oct 2026 — Skill relationship model: first training run (Colab)
 
 - (this commit) Trained on `pairs_esco_onet_v1.csv`, 3 seeds. Test macro-F1: SBERT cosine (today's method) 0.490;
