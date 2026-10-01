@@ -3,7 +3,7 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
-## 2 Oct 2026 — Reference set of real SkillMap pairs (Stage 2B), first two judges
+## 2 Oct 2026 — Reference set of real SkillMap pairs (Stage 2B), three judges
 
 - (this commit) `scripts/skill_relations/sample_reference_pairs.py`: 400 pairs "module skill → job skill" from the
   database, picked per SBERT cosine band instead of at random (real matches are rare among 209 × 7,018 candidate
@@ -11,7 +11,8 @@ Planning, reasoning and research behind each decision are in the project roadmap
   saved for weighting (0.85+ 69 · 0.75–0.85 255 · 0.65–0.75 784 · 0.55–0.65 2,292 · < 0.55 1,463,272), so results
   are reported per band and any overall figure is weighted. Output `data/skill_relations/reference_pairs_v1.csv`.
 - `scripts/skill_relations/judge_reference_pairs.py`: one LLM judge per run with the label guide (names only).
-  Judges so far: Claude (labelled in the chat, `label_claude.csv`) and Qwen3.8-27B on Groq (`label_qwen.csv`).
+  Judges: Claude (labelled in the chat, `label_claude.csv`), Qwen3.8-27B on Groq (`label_qwen.csv`) and
+  gpt-oss-120b on Groq (`label_gpt_oss.csv`).
   Gemini was planned but dropped as a judge (3.8 Flash overloaded, 2.5 Flash retired for new users, flash-lite too
   small) and stays on job-description formatting only. Third judge gpt-oss-120b (`label_gpt_oss.csv`). Agreement: Fleiss' κ 0.47 (moderate; pairwise Cohen's κ
   0.40–0.53); 204 / 400 pairs unanimous on the 3 training classes (high-confidence set), 374 with a 2-of-3 majority.

@@ -1,4 +1,4 @@
-id,a,b,cosine,band,band_population,job_source,label_claude,label_gpt_oss,label_gemini,author_check
+id,a,b,cosine,band,band_population,job_source,label_claude,label_gpt_oss,label_qwen,author_check
 1,Statistical analysis,Research Analysis,0.663,0.65-0.75,784,2024,,,,
 2,System testing,Software Testing,0.808,0.75-0.85,255,2024+live,,,,
 3,big data storage,Storage Management,0.667,0.65-0.75,784,2024+live,,,,

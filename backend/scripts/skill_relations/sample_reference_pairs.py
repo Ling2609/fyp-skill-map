@@ -41,7 +41,7 @@ BANDS = [
     ("0.55-0.65", 0.55, 0.65, 100),
     ("<0.55", -1.0, 0.55, 40),
 ]
-JUDGE_COLUMNS = ["label_claude", "label_gpt_oss", "label_gemini", "author_check"]
+JUDGE_COLUMNS = ["label_claude", "label_gpt_oss", "label_qwen", "author_check"]
 
 
 def sample_pairs(mod_names, mod_keys, job_names, job_keys, sims, seed=SEED):
