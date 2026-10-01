@@ -5,7 +5,7 @@ Planning, reasoning and research behind each decision are in the project roadmap
 
 ## 1 Oct 2026 — Fix plan, Stage 1: job skills with evidence
 
-- (this commit) **Dry run of evidence-based job extraction** (`scripts/pipeline/extract_job_skills_v2.py`, no
+- (c0379d5) **Dry run of evidence-based job extraction** (`scripts/pipeline/extract_job_skills_v2.py`, no
   database writes). The LLM must return each skill with a verbatim quote from the ad, its type (hard / soft) and
   level (required / preferred / trained / unspecified), using Groq's strict JSON schema. `app/services/evidence.py`
   checks each quote is in the ad (fuzzy, 85%, because LLMs tidy text when quoting) and rejects skills without one,
@@ -32,7 +32,11 @@ Planning, reasoning and research behind each decision are in the project roadmap
   v2 had removed v1's "list every skill the advert asks for or will teach", leaving only "do not list" rules.
   Restored. `--repeat N` extracts the same ad N times and reports stability (Jaccard of hard skills);
   `--company` picks one ad when titles repeat.
-- (storage, separate commit) `job_skills` gets `evidence_quote`, `level`, `skill_type`, `match_score`
+- v6, a second "what did you miss" pass (gleaning, Edge et al. 2024). v5 fixed the prompt (Nokia: programme
+  content now "trained", no tracks or traits) but `--repeat 3` on the NEXTDC ad gave 14, 8 and 31 hard skills
+  (Jaccard 0.43, 8 in every run): runs stop early at random. The second pass shows the model its own list and
+  asks only for missing skills; each item records its pass, so the gain is measurable. `--no-glean` for one pass.
+- Storage (same commit): `job_skills` gets `evidence_quote`, `level`, `skill_type`, `match_score`
   (`migrations/migrate_add_job_skill_evidence.py`, plus the index on `job_id` from F15). Full ad text:
   `scripts/tools/restore_full_descriptions.py` puts back the text cut at 2,000 / 6,000 characters, and
   `fetch_live_jobs.py` no longer cuts new live ads. Tested on a fresh database with the old table layout:
