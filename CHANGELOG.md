@@ -13,9 +13,9 @@ Planning, reasoning and research behind each decision are in the project roadmap
 - `scripts/skill_relations/judge_reference_pairs.py`: one LLM judge per run with the label guide (names only).
   Judges so far: Claude (labelled in the chat, `label_claude.csv`) and Qwen3.8-27B on Groq (`label_qwen.csv`).
   Gemini was planned but dropped as a judge (3.8 Flash overloaded, 2.5 Flash retired for new users, flash-lite too
-  small) and stays on job-description formatting only. Claude vs Qwen: 62% same label, Cohen's κ 0.53 (moderate);
-  Qwen counts more pairs as satisfying (156 vs 100). gpt-oss-120b is the third judge, still to run.
-  
+  small) and stays on job-description formatting only. Third judge gpt-oss-120b (`label_gpt_oss.csv`). Agreement: Fleiss' κ 0.47 (moderate; pairwise Cohen's κ
+  0.40–0.53); 204 / 400 pairs unanimous on the 3 training classes (high-confidence set), 374 with a 2-of-3 majority.
+
 ## 1 Oct 2026 — Small fixes
 
 - d24d998: Job Matches sort hints in plain words ("Most skills matched" no longer says "required", since jobs
