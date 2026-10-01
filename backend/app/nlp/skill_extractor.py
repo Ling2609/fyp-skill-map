@@ -67,6 +67,104 @@ Extract between 5 and 15 skills. Each skill should be:
 
 Return ONLY a JSON array, example: ["Python", "REST API", "SQL", "Docker", "Agile"]"""
 
+# ── Job skills with evidence (fix plan, Stage 1) ─────────────────────────────────────────────────
+# Every skill must quote the ad; app/services/evidence.py checks the quote is really there, so skills
+# with no supporting words are rejected. Level and type are tagged from the quote's context.
+JOB_EVIDENCE_VERSION = "gpt-oss-120b:evidence-v6"   # stored in job_skills.extracted_by
+# v2 (1 Oct dry run on 10 live ads): v1 returned ~2x the old count, with duties ("Escalation", "Research"),
+# work conditions ("Willingness to travel"), generic parents ("Programming language" next to Python) and
+# quotes joined with "...". v2 adds rules for each. v3 (Nokia ad): team / track names listed as skills
+# ("Customer Engineering", "Service Delivery"), personality traits ("Curiosity", "Self-driven"), one idea
+# listed twice ("Automation" + "Network automation"), programme curriculum not marked "trained". v4 (20 ads, seeds 42 + 7): "C#, Python, or equivalent", "OSCP or
+# CREST CRT" listed as separate skills, so a student with one of them got a false gap for the other ->
+# alternative_group: alternatives share one label; Stage 3 counts the group once, met by any member.
+# v5 (same 10 ads): recall fell (NEXTDC 22 -> 5 skills; Nokia's programme content dropped) because v2 had
+# removed v1's "list every skill the advert asks for or will teach", leaving only "do not list" rules.
+# Restored, with named tools / products / certifications / standards called out.
+# v6 (NEXTDC x3 on v5: 14, 8, 31 hard skills, Jaccard 0.43): same prompt + a second "what did you miss" pass.
+
+JOB_EVIDENCE_SYSTEM = (
+    "You extract skills from job adverts. A skill is something a person can learn and show: a tool, "
+    "technology, programming language, method, standard, area of technical knowledge, or an interpersonal "
+    "ability. List EVERY skill the advert asks for, prefers, or says the role will teach; never skip a named "
+    "tool, product, platform, certification or standard. For each one, copy the exact words from the advert that mention it (evidence_quote: one "
+    "continuous verbatim span, never reworded, never shortened with '...', never invented). If no words in "
+    "the advert mention a skill, do not list it."
+)
+
+JOB_EVIDENCE_PROMPT = """Rules for each skill:
+- skill: a short, standard name (1-4 words), e.g. "REST APIs", "Python", "Stakeholder communication";
+  never a copied phrase ("AV systems deployment and troubleshooting" -> "AV systems")
+- evidence_quote: one continuous span copied word for word from the advert (5-15 words is ideal). Never
+  join two places with "..."; if the words are far apart, quote the part that names the skill.
+- type: "hard" for technical or domain skills; "soft" for interpersonal or personal skills
+- level: "required" (the candidate must already have it: requirements, qualifications, must, need),
+  "preferred" (preferred, nice to have, advantage, a plus), "trained" (the role will teach it: you will
+  learn, training, learning phase, what a graduate or training programme covers), "unspecified" (only
+  mentioned as part of the job's duties, or no clue either way)
+
+Do NOT list:
+- duties or tasks that are not skills ("Escalation", "Research", "Benchmarking", "Documentation of
+  incidents", "Mechanical setup support") - list the skill behind the task only if the advert names one
+- names of teams, departments, business units or programme tracks the person may join ("Customer
+  Engineering", "Service Delivery", "Network Transformation Programs")
+- personality traits and attitudes ("Curiosity", "Passion for technology", "Self-driven", "Proactive");
+  soft skills that can be learned and shown stay ("Communication", "Teamwork", "Problem-solving")
+- work conditions or personal circumstances ("Willingness to travel", "Shift work", "Flexible delivery",
+  "Driving licence")
+- degrees, years of experience, languages spoken, benefits, or the company's own products unless the
+  advert asks for skill in them
+- a generic parent next to its specific items: if the advert says "Python or Java", list Python and Java,
+  not also "Programming languages"; a bare category word ("Networks", "Storage", "Operating systems") only
+  when the advert names nothing more specific for it
+One skill per idea: if two names in the advert mean the same thing, list it once with the more specific
+name ("network automation" and "automation" -> "Network automation"; "computer networking" and "network
+fundamentals" -> "Computer networking").
+Group sensibly: modules or editions of one product are one skill ("F5 LTM, GTM, APM" -> "F5 BIG-IP");
+separate technologies stay separate ("BGP, OSPF" -> "BGP", "OSPF").
+- alternative_group: when the advert accepts ANY ONE of several options ("C#, Python, or equivalent",
+  "OSCP or CREST CRT", "tools such as Power BI or Tableau"), list each option and give them the same short
+  label (e.g. "BI tool"); otherwise "". Items that are all wanted ("SQL and Python") get "".
+
+Example advert: "Requirements: Bachelor in IT. Strong SQL and Python skills. Experience with Power BI or Tableau is a plus.
+You will learn our ETL tooling during onboarding. Good communication skills."
+Example output: {{"skills": [
+ {{"skill": "SQL", "evidence_quote": "Strong SQL and Python skills", "type": "hard", "level": "required", "alternative_group": ""}},
+ {{"skill": "Python", "evidence_quote": "Strong SQL and Python skills", "type": "hard", "level": "required", "alternative_group": ""}},
+ {{"skill": "Power BI", "evidence_quote": "Experience with Power BI or Tableau is a plus", "type": "hard", "level": "preferred", "alternative_group": "BI tool"}},
+ {{"skill": "Tableau", "evidence_quote": "Experience with Power BI or Tableau is a plus", "type": "hard", "level": "preferred", "alternative_group": "BI tool"}},
+ {{"skill": "ETL", "evidence_quote": "You will learn our ETL tooling", "type": "hard", "level": "trained", "alternative_group": ""}},
+ {{"skill": "Communication", "evidence_quote": "Good communication skills", "type": "soft", "level": "required", "alternative_group": ""}}]}}
+
+Return only JSON in the example's shape: {{"skills": [...]}}
+
+Job Title: {title}
+
+Advert:
+{description}"""
+
+JOB_EVIDENCE_SCHEMA = {
+    "type": "object",
+    "properties": {"skills": {"type": "array", "items": {
+        "type": "object",
+        "properties": {
+            "skill": {"type": "string"},
+            "evidence_quote": {"type": "string"},
+            "type": {"type": "string", "enum": ["hard", "soft"]},
+            "level": {"type": "string", "enum": ["required", "preferred", "trained", "unspecified"]},
+            "alternative_group": {"type": "string"},
+        },
+        "required": ["skill", "evidence_quote", "type", "level", "alternative_group"],
+        "additionalProperties": False,
+    }}},
+    "required": ["skills"],
+    "additionalProperties": False,
+}
+
+JOB_GLEAN_PROMPT = """Some skills in the advert may still be missing from your list. Read the whole advert again,
+section by section (duties, requirements, preferred, what you will learn), and return ONLY skills that are not
+in your list yet, with the same rules and the same JSON shape. If nothing is missing, return {"skills": []}."""
+
 JOB_FORMAT_SYSTEM = """You are a professional job description writer. Your task is to read, understand, and rewrite a raw job description into clean structured bullet points.
 
 IMPORTANT: You are REWRITING, not copying. Read the full content, understand what it means, then write it properly.
@@ -142,6 +240,10 @@ class SkillExtractor:
     def __init__(self):
         self.client = client
         self.model = "openai/gpt-oss-120b"
+        # Strict JSON schema first; dropped (for this run) if Groq refuses it
+        self._evidence_format = [{"type": "json_schema",
+                                  "json_schema": {"name": "job_skills", "strict": True, "schema": JOB_EVIDENCE_SCHEMA}},
+                                 {"type": "json_object"}]
         print(f"SkillExtractor initialised with {self.model} via Groq")
 
     def _call_groq(self, system: str, prompt: str, retries: int = 3) -> list[str]:
@@ -203,6 +305,50 @@ class SkillExtractor:
             "formatted_bullets": [],
             "skill_count": len(skills),
         }
+
+    def extract_job_skills_with_evidence(self, title: str, description: str, retries: int = 3,
+                                         glean: bool = True) -> list[dict]:
+        """Skills with evidence quotes, type, level and alternative_group (unchecked: run
+        app.services.evidence.verify_skills next). Uses Groq's strict JSON-schema mode, falling back to plain
+        JSON mode if the schema is refused.
+
+        glean: a second pass shows the model its own list and asks only for skills it missed ("gleaning",
+        Edge et al. 2024, GraphRAG). Added 1 Oct: the same ad extracted 3 times gave 14, 8 and 31 hard skills
+        (one complete run, two that stopped early), so a single pass is not reliable enough. Each item gets
+        "pass": 1 or 2, so the gain from the second pass can be measured."""
+        messages = [{"role": "system", "content": JOB_EVIDENCE_SYSTEM},
+                    {"role": "user", "content": JOB_EVIDENCE_PROMPT.format(title=title, description=description)}]
+        first = self._ask_skills(messages, retries)
+        if first is None:
+            return []
+        items = [{**s, "pass": 1} for s in first]
+        if glean:
+            seen = {s["skill"].strip().lower() for s in items}
+            messages += [{"role": "assistant", "content": json.dumps({"skills": first})},
+                         {"role": "user", "content": JOB_GLEAN_PROMPT}]
+            more = self._ask_skills(messages, retries) or []
+            items += [{**s, "pass": 2} for s in more if s["skill"].strip().lower() not in seen]
+        return items
+
+    def _ask_skills(self, messages: list[dict], retries: int) -> list[dict] | None:
+        """One schema-checked call; None if every attempt failed. Re-raises Groq's daily token limit."""
+        for attempt in range(retries):
+            try:
+                response = self.client.chat.completions.create(
+                    model=self.model, messages=messages, temperature=0, response_format=self._evidence_format[0])
+                data = json.loads(response.choices[0].message.content)
+                return [s for s in data.get("skills", []) if isinstance(s, dict) and s.get("skill")]
+            except Exception as e:
+                text = str(e).lower()
+                if "tokens per day" in text or "tpd" in text:
+                    raise
+                if "json_schema" in text and len(self._evidence_format) > 1:
+                    print("  strict JSON schema refused, using JSON mode")
+                    self._evidence_format.pop(0)
+                    continue
+                print(f"  attempt {attempt + 1} failed: {str(e)[:120]}")
+                time.sleep(5)
+        return None
 
     def format_job_description(self, title: str, description: str) -> list[str]:
         """

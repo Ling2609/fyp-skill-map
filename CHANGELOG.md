@@ -3,6 +3,41 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 1 Oct 2026 — Fix plan, Stage 1: job skills with evidence
+
+- (this commit) **Dry run of evidence-based job extraction** (`scripts/pipeline/extract_job_skills_v2.py`, no
+  database writes). The LLM must return each skill with a verbatim quote from the ad, its type (hard / soft) and
+  level (required / preferred / trained / unspecified), using Groq's strict JSON schema. `app/services/evidence.py`
+  checks each quote is in the ad (fuzzy, 85%, because LLMs tidy text when quoting) and rejects skills without one,
+  and reads cue words in the quote's sentence and section heading to flag level disagreements. Tested on the Nokia
+  ad text: an invented "Troubleshooting" is rejected, reworded quotes still match, headings like "Nice to have:"
+  and "What You'll Learn" set the level of the list under them.
+- Prompt v2 after the first dry run (10 live ads: 249 skills, 9 rejected, ~2× the old count). v1 listed duties
+  ("Escalation", "Research"), work conditions ("Willingness to travel"), generic parents ("Programming language"
+  next to Python) and joined quotes with "..." (so Splunk, Docker and others were rejected though they are in
+  the ad). v2 adds a rule for each; the quote check now splits on "..." and needs every part in the ad. The dry
+  run reads the full live text from `data/live_jobs_cache.json` (the database copy is cut at 6,000 characters).
+- Prompt v3 after the Nokia re-run (29 skills, 0 rejected): team and track names ("Customer Engineering",
+  "Service Delivery"), personality traits ("Curiosity", "Self-driven") and one idea listed twice ("Automation" +
+  "Network automation") are now excluded; what a graduate programme covers counts as "trained". `--print-ad`
+  prints the checked ad text.
+- Prompt v4 after 20 more ads (seeds 42 and 7: 383 skills, 0 rejected, ~19 per ad; the "..." fix kept Splunk,
+  Docker, Kubernetes): ads often accept alternatives ("C#, Python, or equivalent", "OSCP or CREST CRT"), and
+  listing each as a separate skill gave a student with one of them a false gap for the other. Each skill now
+  has `alternative_group`; a group is kept only if its members quote the same words and those words offer a
+  choice ("or", "such as", "e.g."), otherwise each skill counts on its own. Dry-run CSV is now one file per
+  prompt version.
+- Prompt v5 after the v4 re-run (seed 7: 167 skills, 13.1 hard-skill requirements per ad, 5 either-or groups,
+  all correct): recall fell (NEXTDC Network Engineer 22 -> 5 skills; Nokia's programme content dropped). Cause:
+  v2 had removed v1's "list every skill the advert asks for or will teach", leaving only "do not list" rules.
+  Restored. `--repeat N` extracts the same ad N times and reports stability (Jaccard of hard skills);
+  `--company` picks one ad when titles repeat.
+- (storage, separate commit) `job_skills` gets `evidence_quote`, `level`, `skill_type`, `match_score`
+  (`migrations/migrate_add_job_skill_evidence.py`, plus the index on `job_id` from F15). Full ad text:
+  `scripts/tools/restore_full_descriptions.py` puts back the text cut at 2,000 / 6,000 characters, and
+  `fetch_live_jobs.py` no longer cuts new live ads. Tested on a fresh database with the old table layout:
+  migration safe to rerun; only cut-off copies of the same ad are replaced; second run changes nothing.
+
 ## 30 Sep – 1 Oct 2026 — Only skills you have count (step 2)
 
 - (this commit) Comments and evidence updated to the 0.7 threshold used since `7aea173` (they still said 0.8).

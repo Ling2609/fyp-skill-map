@@ -33,4 +33,10 @@ class JobSkill(Base):
     job_ref = Column(String, nullable=False)
     skill_name = Column(String, nullable=False)
     extracted_by = Column(String, default="openai/gpt-oss-120b")
+    # Fix plan Stage 1 (migrate_add_job_skill_evidence.py); NULL for skills extracted before it
+    evidence_quote = Column(String, nullable=True)   # words from the ad that mention the skill
+    level = Column(String, nullable=True)            # required / preferred / trained / unspecified
+    skill_type = Column(String, nullable=True)       # hard / soft
+    match_score = Column(Float, nullable=True)       # quote vs ad text, 1.0 = exact
+    alternative_group = Column(String, nullable=True)  # same label = the ad accepts any one of these
     created_at = Column(DateTime(timezone=True), server_default=func.now())

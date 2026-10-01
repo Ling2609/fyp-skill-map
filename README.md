@@ -113,6 +113,7 @@ Run every script from `backend/` with the venv active, e.g. `python scripts/tool
 | `pipeline/extract_job_skills.py` | Extracts skills for the 2024 JobStreet sample (resumable) | Groq |
 | `pipeline/extract_module_skills.py` | First-time setup: loads `modules.json` and extracts module skills | Groq |
 | `pipeline/reextract_module_skills.py` | Re-extracts module skills from name + description; backs up old skills first. `--dry-run`, `--module CODE` | Groq |
+| `pipeline/extract_job_skills_v2.py` | Fix plan Stage 1 dry run: job skills with an evidence quote, type (hard/soft) and level (required/preferred/trained); quotes checked against the ad (`app/services/evidence.py`), unsupported skills rejected; compared with the stored skills. No database writes. `--title`, `--live N`, `--dataset N` | Groq |
 | `pipeline/decide_skill_merges.py` | A8 layer 2: asks the LLM whether close skill names (SBERT ≥ 0.85, after the layer-1 rules) are the same skill; answers saved in `data/skill_merges.json`, resumable, stops at Groq's daily limit. `--dry-run`, `--limit N`, `--verify` (second, stricter check; merge only if both say same) | Groq |
 | `live_jobs/generate_live_queries.py` | Builds the search queries from the most common ICT roles per subcategory in the 2024 JobStreet data; writes `data/live_job_queries.json`. Preview by default, `--save`, `--my N --sg N` | – |
 | `live_jobs/fetch_live_jobs.py` | Fetches live jobs for those queries (non-ICT titles skipped) and extracts their skills. `--dry-run`, `--use-cache`, `--new-only` | JSearch, Groq |
@@ -120,6 +121,7 @@ Run every script from `backend/` with the venv active, e.g. `python scripts/tool
 | `tools/compare_scoring.py` | Read-only (step 2): a student's coverage under different rules for which matched skills count, sensitivity table, and a random sample of related pairs for labelling (`docs/evidence/`) | – |
 | `tools/compare_match_pages.py` | Read-only debug (A8): for one job, each job skill's best matching student skill (and spelling) and its score, as Job Matches and Job Detail compute it. `<user> "<job title>"` | – |
 | `tools/format_all_descriptions.py` | Pre-formats job descriptions in bulk | Gemini |
+| `tools/restore_full_descriptions.py` | Puts the full ad text back into `jobs.description` (2024 ads were stored cut at 2,000 characters, live ads at 6,000) from `data/jobstreet_clean.csv` and `data/live_jobs_cache.json`. Preview by default, `--save` | – |
 | `tools/remove_duplicate_jobs.py` | Lists live jobs saved twice (same title, company, location) and deletes the extra copies after you confirm | – |
 | `tools/remove_non_ict_jobs.py` | Lists saved live jobs whose title isn't an ICT role (same rule as the fetcher) and deletes them after you confirm | – |
 | `tools/check_skill_mapping.py` | Read-only (A8): groups the skill names in the database by rules (`app/services/skill_names.py`) and counts the close pairs an LLM would check; `--taxonomy` for the first analysis against `skill_taxonomy.json`. Writes evidence CSVs to `docs/evidence/` | – |
@@ -136,6 +138,7 @@ Groq's free tier allows about 200,000 tokens a day (≈ 100 jobs). Don't run two
 | `migrate_phase1.py` | 23 Sep 2026 | `user_modules`, `user_skills_cache`, `password_reset_otps`, new `users` columns |
 | `migrate_add_live_job_columns.py` | 27 Sep 2026 | live-job columns on `jobs` |
 | `migrate_drop_user_skills_cache.py` | 29 Sep 2026 | drops the unused `user_skills_cache` |
+| `migrate_add_job_skill_evidence.py` | 1 Oct 2026 | adds `evidence_quote`, `level`, `skill_type`, `match_score`, `alternative_group` to `job_skills` (fix plan Stage 1) and an index on `job_skills.job_id` |
 
 A **new, empty** database doesn't need them: the tables are created from `app/models/` when the API starts. To apply one: `python migrations/<file>.py` from `backend/`. A new database change gets a new `migrate_<what_it_does>.py` and a row in this table.
 

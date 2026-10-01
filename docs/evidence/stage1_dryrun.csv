@@ -1,0 +1,831 @@
+﻿date,job_id,source,job_title,skill,result,type,level,level_cue,match_score,evidence_quote
+2026-10-01,live_91efd359f1689d0b,live,Network Security Engineer,Network security,keep,hard,required,,1.0,development and implementation of secure network solutions
+2026-10-01,live_91efd359f1689d0b,live,Network Security Engineer,SASE architecture,keep,hard,required,,1.0,latest technologies based on SASE architecture
+2026-10-01,live_91efd359f1689d0b,live,Network Security Engineer,Cloud security,keep,hard,required,,1.0,enabling accelerated transition to cloud-based enterprise security
+2026-10-01,live_91efd359f1689d0b,live,Network Security Engineer,OT network security,keep,hard,required,,1.0,and OT network security
+2026-10-01,live_91efd359f1689d0b,live,Network Security Engineer,Architectural documentation,keep,hard,required,,1.0,Development of architectural documentation
+2026-10-01,live_91efd359f1689d0b,live,Network Security Engineer,Architecture reviews,keep,hard,required,,1.0,participation in architecture reviews
+2026-10-01,live_91efd359f1689d0b,live,Network Security Engineer,Process standardization,keep,hard,required,,1.0,improve and standardize our processes and documentation
+2026-10-01,live_91efd359f1689d0b,live,Network Security Engineer,Root cause analysis,keep,hard,required,,1.0,getting to the root cause of issues
+2026-10-01,live_91efd359f1689d0b,live,Network Security Engineer,Automation,keep,hard,required,,1.0,"participate in, or lead, automation efforts"
+2026-10-01,live_91efd359f1689d0b,live,Network Security Engineer,Data analysis,keep,hard,required,,1.0,Strong passion and interest in a combination of data analysis & networking field
+2026-10-01,live_91efd359f1689d0b,live,Network Security Engineer,Networking,keep,hard,required,,1.0,Strong passion and interest in a combination of data analysis & networking field
+2026-10-01,live_91efd359f1689d0b,live,Network Security Engineer,Learning agility,keep,soft,required,,1.0,Strong learning agility
+2026-10-01,live_91efd359f1689d0b,live,Network Security Engineer,Problem solving,keep,soft,required,,1.0,good problem-solving skills
+2026-10-01,live_91efd359f1689d0b,live,Network Security Engineer,Interpersonal skills,keep,soft,required,,1.0,Strong interpersonal skills
+2026-10-01,live_91efd359f1689d0b,live,Network Security Engineer,Communication skills,keep,soft,required,,1.0,strong communication skills
+2026-10-01,live_91efd359f1689d0b,live,Network Security Engineer,Scripting,keep,hard,preferred,,1.0,"Proficiency in scripting (eg. Python, Powershell) is an added advantage"
+2026-10-01,live_91efd359f1689d0b,live,Network Security Engineer,Python,keep,hard,preferred,,1.0,"Proficiency in scripting (eg. Python, Powershell) is an added advantage"
+2026-10-01,live_91efd359f1689d0b,live,Network Security Engineer,PowerShell,keep,hard,preferred,,1.0,"Proficiency in scripting (eg. Python, Powershell) is an added advantage"
+2026-10-01,live_ca39fceedf53e6f6,live,Network Engineer,CheckPoint Firewall,keep,hard,required,,1.0,Knowledge on CheckPoint Firewalls in terms of troubleshooting issues and also BAU rule base updates
+2026-10-01,live_ca39fceedf53e6f6,live,Network Engineer,NAT,keep,hard,required,,1.0,Knowledge on CheckPoint Firewalls in terms of troubleshooting issues and also BAU rule base updates
+2026-10-01,live_ca39fceedf53e6f6,live,Network Engineer,Application/URL filtering,keep,hard,required,,1.0,Knowledge on CheckPoint Firewalls in terms of troubleshooting issues and also BAU rule base updates
+2026-10-01,live_ca39fceedf53e6f6,live,Network Engineer,Zscaler Internet Access,keep,hard,required,,1.0,"Knowledge on Zscaler Internet Access / Bluecoat ProxySG product in terms of troubleshooting whitelisting issues, SSL interception, cert validation etc."
+2026-10-01,live_ca39fceedf53e6f6,live,Network Engineer,Bluecoat ProxySG,keep,hard,required,,1.0,"Knowledge on Zscaler Internet Access / Bluecoat ProxySG product in terms of troubleshooting whitelisting issues, SSL interception, cert validation etc."
+2026-10-01,live_ca39fceedf53e6f6,live,Network Engineer,SSL interception,keep,hard,required,,1.0,"Knowledge on Zscaler Internet Access / Bluecoat ProxySG product in terms of troubleshooting whitelisting issues, SSL interception, cert validation etc."
+2026-10-01,live_ca39fceedf53e6f6,live,Network Engineer,Certificate validation,keep,hard,required,,1.0,"Knowledge on Zscaler Internet Access / Bluecoat ProxySG product in terms of troubleshooting whitelisting issues, SSL interception, cert validation etc."
+2026-10-01,live_ca39fceedf53e6f6,live,Network Engineer,F5 APM,keep,hard,required,,1.0,"Kxpert knowledge on F5 APM, LTM, GTM, configuration and troubleshooting"
+2026-10-01,live_ca39fceedf53e6f6,live,Network Engineer,F5 LTM,keep,hard,required,,1.0,"Kxpert knowledge on F5 APM, LTM, GTM, configuration and troubleshooting"
+2026-10-01,live_ca39fceedf53e6f6,live,Network Engineer,F5 GTM,keep,hard,required,,1.0,"Kxpert knowledge on F5 APM, LTM, GTM, configuration and troubleshooting"
+2026-10-01,live_ca39fceedf53e6f6,live,Network Engineer,BGP,keep,hard,required,,1.0,"Knowledge on Routing (e.g. BGP, EIGRP, OSPF, PIM, GRE, VRF etc.), Switching (VPC, STP, etherchannel etc.), configuration and troubleshooting"
+2026-10-01,live_ca39fceedf53e6f6,live,Network Engineer,EIGRP,keep,hard,required,,1.0,"Knowledge on Routing (e.g. BGP, EIGRP, OSPF, PIM, GRE, VRF etc.), Switching (VPC, STP, etherchannel etc.), configuration and troubleshooting"
+2026-10-01,live_ca39fceedf53e6f6,live,Network Engineer,OSPF,keep,hard,required,,1.0,"Knowledge on Routing (e.g. BGP, EIGRP, OSPF, PIM, GRE, VRF etc.), Switching (VPC, STP, etherchannel etc.), configuration and troubleshooting"
+2026-10-01,live_ca39fceedf53e6f6,live,Network Engineer,PIM,keep,hard,required,,1.0,"Knowledge on Routing (e.g. BGP, EIGRP, OSPF, PIM, GRE, VRF etc.), Switching (VPC, STP, etherchannel etc.), configuration and troubleshooting"
+2026-10-01,live_ca39fceedf53e6f6,live,Network Engineer,GRE,keep,hard,required,,1.0,"Knowledge on Routing (e.g. BGP, EIGRP, OSPF, PIM, GRE, VRF etc.), Switching (VPC, STP, etherchannel etc.), configuration and troubleshooting"
+2026-10-01,live_ca39fceedf53e6f6,live,Network Engineer,VRF,keep,hard,required,,1.0,"Knowledge on Routing (e.g. BGP, EIGRP, OSPF, PIM, GRE, VRF etc.), Switching (VPC, STP, etherchannel etc.), configuration and troubleshooting"
+2026-10-01,live_ca39fceedf53e6f6,live,Network Engineer,VPC,keep,hard,required,,1.0,"Knowledge on Routing (e.g. BGP, EIGRP, OSPF, PIM, GRE, VRF etc.), Switching (VPC, STP, etherchannel etc.), configuration and troubleshooting"
+2026-10-01,live_ca39fceedf53e6f6,live,Network Engineer,STP,keep,hard,required,,1.0,"Knowledge on Routing (e.g. BGP, EIGRP, OSPF, PIM, GRE, VRF etc.), Switching (VPC, STP, etherchannel etc.), configuration and troubleshooting"
+2026-10-01,live_ca39fceedf53e6f6,live,Network Engineer,EtherChannel,keep,hard,required,,1.0,"Knowledge on Routing (e.g. BGP, EIGRP, OSPF, PIM, GRE, VRF etc.), Switching (VPC, STP, etherchannel etc.), configuration and troubleshooting"
+2026-10-01,live_ca39fceedf53e6f6,live,Network Engineer,IPSec VPN,keep,hard,required,,1.0,"VPN technologies experience be it IPSec using firewalls, routers or other interoperable devices, both setup and troubleshooting"
+2026-10-01,live_ca39fceedf53e6f6,live,Network Engineer,Cisco Nexus,keep,hard,required,,1.0,"Nexus 9K, 7K, 5K, and 2K configuration and troubeshooting"
+2026-10-01,live_ca39fceedf53e6f6,live,Network Engineer,Cisco Wireless LAN,keep,hard,required,,1.0,Cisco Wireless LAN configuration and troubleshooting
+2026-10-01,live_ca39fceedf53e6f6,live,Network Engineer,Aruba Wireless LAN,keep,hard,required,,1.0,Aruba Wireless LAN configuration and troubleshooting
+2026-10-01,live_ca39fceedf53e6f6,live,Network Engineer,Wireshark analysis,keep,hard,required,,1.0,Knoweldge on analyzing packet capture/wireshark output
+2026-10-01,live_ca39fceedf53e6f6,live,Network Engineer,McAfee NSM,keep,hard,required,,1.0,Knowledge on supporting McAfee NSM and IPS sensors
+2026-10-01,live_ca39fceedf53e6f6,live,Network Engineer,HP Network Automation,keep,hard,required,,1.0,Knowledge on supporting HP Network Automation (HPNA) Tool
+2026-10-01,live_ca39fceedf53e6f6,live,Network Engineer,Cisco ISE,keep,hard,required,,1.0,Knowledge on supporting Cisco ISE / Cisco ACS
+2026-10-01,live_ca39fceedf53e6f6,live,Network Engineer,Azure VNET peering,keep,hard,required,,1.0,"Knowledge on Azure networking (VNET peering, ExpressRoute, NSG etc)"
+2026-10-01,live_ca39fceedf53e6f6,live,Network Engineer,Azure ExpressRoute,keep,hard,required,,1.0,"Knowledge on Azure networking (VNET peering, ExpressRoute, NSG etc)"
+2026-10-01,live_ca39fceedf53e6f6,live,Network Engineer,Azure NSG,keep,hard,required,,1.0,"Knowledge on Azure networking (VNET peering, ExpressRoute, NSG etc)"
+2026-10-01,live_fed68894be50c806,live,Fresh Graduate Engineer - Physical Design / Test Developer,Synthesis,keep,hard,required,,1.0,"Assist in synthesis, floor planning, placement, CTS, and routing."
+2026-10-01,live_fed68894be50c806,live,Fresh Graduate Engineer - Physical Design / Test Developer,Floor planning,keep,hard,required,,1.0,"Assist in synthesis, floor planning, placement, CTS, and routing."
+2026-10-01,live_fed68894be50c806,live,Fresh Graduate Engineer - Physical Design / Test Developer,Placement,keep,hard,required,,1.0,"Assist in synthesis, floor planning, placement, CTS, and routing."
+2026-10-01,live_fed68894be50c806,live,Fresh Graduate Engineer - Physical Design / Test Developer,CTS,keep,hard,required,,1.0,"Assist in synthesis, floor planning, placement, CTS, and routing."
+2026-10-01,live_fed68894be50c806,live,Fresh Graduate Engineer - Physical Design / Test Developer,Routing,keep,hard,required,,1.0,"Assist in synthesis, floor planning, placement, CTS, and routing."
+2026-10-01,live_fed68894be50c806,live,Fresh Graduate Engineer - Physical Design / Test Developer,Timing analysis,keep,hard,required,,1.0,"Perform timing analysis, power optimization, and physical verification DRC/LVS checks."
+2026-10-01,live_fed68894be50c806,live,Fresh Graduate Engineer - Physical Design / Test Developer,Power optimization,keep,hard,required,,1.0,"Perform timing analysis, power optimization, and physical verification DRC/LVS checks."
+2026-10-01,live_fed68894be50c806,live,Fresh Graduate Engineer - Physical Design / Test Developer,Physical verification,keep,hard,required,,1.0,"Perform timing analysis, power optimization, and physical verification DRC/LVS checks."
+2026-10-01,live_fed68894be50c806,live,Fresh Graduate Engineer - Physical Design / Test Developer,DRC/LVS checks,keep,hard,required,,1.0,"Perform timing analysis, power optimization, and physical verification DRC/LVS checks."
+2026-10-01,live_fed68894be50c806,live,Fresh Graduate Engineer - Physical Design / Test Developer,Digital logic fundamentals,keep,hard,required,required,1.0,"Understanding of digital logic fundamentals, including logic gates and circuit timing."
+2026-10-01,live_fed68894be50c806,live,Fresh Graduate Engineer - Physical Design / Test Developer,Logic gates,keep,hard,required,required,1.0,"Understanding of digital logic fundamentals, including logic gates and circuit timing."
+2026-10-01,live_fed68894be50c806,live,Fresh Graduate Engineer - Physical Design / Test Developer,Circuit timing,keep,hard,required,required,1.0,"Understanding of digital logic fundamentals, including logic gates and circuit timing."
+2026-10-01,live_fed68894be50c806,live,Fresh Graduate Engineer - Physical Design / Test Developer,VLSI design flow,keep,hard,required,required,1.0,Basic knowledge of VLSI design flow and scripting (TCL/Python/Perl).
+2026-10-01,live_fed68894be50c806,live,Fresh Graduate Engineer - Physical Design / Test Developer,TCL,keep,hard,required,required,1.0,Basic knowledge of VLSI design flow and scripting (TCL/Python/Perl).
+2026-10-01,live_fed68894be50c806,live,Fresh Graduate Engineer - Physical Design / Test Developer,Python,keep,hard,required,required,1.0,Basic knowledge of VLSI design flow and scripting (TCL/Python/Perl).
+2026-10-01,live_fed68894be50c806,live,Fresh Graduate Engineer - Physical Design / Test Developer,Perl,keep,hard,required,required,1.0,Basic knowledge of VLSI design flow and scripting (TCL/Python/Perl).
+2026-10-01,live_fed68894be50c806,live,Fresh Graduate Engineer - Physical Design / Test Developer,EDA tools,keep,hard,preferred,preferred,1.0,Familiarity with EDA tools (Synopsys/Cadence) is an advantage.
+2026-10-01,live_fed68894be50c806,live,Fresh Graduate Engineer - Physical Design / Test Developer,Synopsys,keep,hard,preferred,preferred,1.0,Familiarity with EDA tools (Synopsys/Cadence) is an advantage.
+2026-10-01,live_fed68894be50c806,live,Fresh Graduate Engineer - Physical Design / Test Developer,Cadence,keep,hard,preferred,preferred,1.0,Familiarity with EDA tools (Synopsys/Cadence) is an advantage.
+2026-10-01,live_fed68894be50c806,live,Fresh Graduate Engineer - Physical Design / Test Developer,Analytical skills,keep,soft,required,required,1.0,Strong analytical and teamwork skills; eager to learn.
+2026-10-01,live_fed68894be50c806,live,Fresh Graduate Engineer - Physical Design / Test Developer,Teamwork,keep,soft,required,required,1.0,Strong analytical and teamwork skills; eager to learn.
+2026-10-01,live_fed68894be50c806,live,Fresh Graduate Engineer - Physical Design / Test Developer,Collaboration,keep,soft,required,,1.0,Collaborate with design and DFT teams for successful tape-out.
+2026-10-01,live_fed68894be50c806,live,Fresh Graduate Engineer - Physical Design / Test Developer,Test program writing,keep,hard,required,,1.0,Writing simple test programs / software
+2026-10-01,live_fed68894be50c806,live,Fresh Graduate Engineer - Physical Design / Test Developer,Test hardware design,keep,hard,required,,1.0,Designing test hardware / fixture
+2026-10-01,live_fed68894be50c806,live,Fresh Graduate Engineer - Physical Design / Test Developer,Mechanical setup support,keep,hard,required,,1.0,Supporting mechanical setup (with vendors)
+2026-10-01,live_fed68894be50c806,live,Fresh Graduate Engineer - Physical Design / Test Developer,Test system operation,keep,hard,required,,1.0,Set up and run test systems
+2026-10-01,live_fed68894be50c806,live,Fresh Graduate Engineer - Physical Design / Test Developer,Test program debugging,keep,hard,required,,1.0,Install and debug test program
+2026-10-01,live_fed68894be50c806,live,Fresh Graduate Engineer - Physical Design / Test Developer,System build integration,keep,hard,required,,1.0,Support system build and integration
+2026-10-01,live_fed68894be50c806,live,Fresh Graduate Engineer - Physical Design / Test Developer,Test system performance improvement,keep,hard,required,,1.0,Improve test system performance
+2026-10-01,live_fed68894be50c806,live,Fresh Graduate Engineer - Physical Design / Test Developer,Test coverage assurance,keep,hard,required,,1.0,Ensure test coverage and accuracy
+2026-10-01,live_fed68894be50c806,live,Fresh Graduate Engineer - Physical Design / Test Developer,Automation support,keep,hard,required,,1.0,Support automation and reliability
+2026-10-01,live_fed68894be50c806,live,Fresh Graduate Engineer - Physical Design / Test Developer,Programming language,keep,hard,required,preferred,1.0,"Basic knowledge of any programming language, preferably LabVIEW."
+2026-10-01,live_fed68894be50c806,live,Fresh Graduate Engineer - Physical Design / Test Developer,LabVIEW,keep,hard,required,preferred,1.0,"Basic knowledge of any programming language, preferably LabVIEW."
+2026-10-01,live_fed68894be50c806,live,Fresh Graduate Engineer - Physical Design / Test Developer,Multimeter,keep,hard,required,required,1.0,Knowledge and hands-on experience with Multimeter & Oscilloscope.
+2026-10-01,live_fed68894be50c806,live,Fresh Graduate Engineer - Physical Design / Test Developer,Oscilloscope,keep,hard,required,required,1.0,Knowledge and hands-on experience with Multimeter & Oscilloscope.
+2026-10-01,live_fed68894be50c806,live,Fresh Graduate Engineer - Physical Design / Test Developer,Testing concepts,keep,hard,required,required,1.0,Understand basic testing concepts.
+2026-10-01,live_eca71c72e724fbb4,live,Cybersecurity Consultant - Penetration Testing,Penetration testing,keep,hard,required,required,1.0,Minimum of 2 year of experience in penetration testing
+2026-10-01,live_eca71c72e724fbb4,live,Cybersecurity Consultant - Penetration Testing,Vulnerability assessments,keep,hard,required,required,1.0,penetration testing or vulnerability assessments
+2026-10-01,live_eca71c72e724fbb4,live,Cybersecurity Consultant - Penetration Testing,Web application testing,keep,hard,required,,1.0,performing web and mobile application penetration testing
+2026-10-01,live_eca71c72e724fbb4,live,Cybersecurity Consultant - Penetration Testing,Mobile application testing,keep,hard,required,,1.0,performing web and mobile application penetration testing
+2026-10-01,live_eca71c72e724fbb4,live,Cybersecurity Consultant - Penetration Testing,Network penetration testing,keep,hard,required,,1.0,performing web and mobile application penetration testing
+2026-10-01,live_eca71c72e724fbb4,live,Cybersecurity Consultant - Penetration Testing,Source code review,keep,hard,required,,1.0,source code reviews
+2026-10-01,live_eca71c72e724fbb4,live,Cybersecurity Consultant - Penetration Testing,Red team assessments,keep,hard,required,,1.0,red team assessments
+2026-10-01,live_eca71c72e724fbb4,live,Cybersecurity Consultant - Penetration Testing,Social engineering,keep,hard,required,,1.0,conducting social engineering exercises
+2026-10-01,live_eca71c72e724fbb4,live,Cybersecurity Consultant - Penetration Testing,Security controls,keep,hard,required,required,1.0,Knowledge of security controls
+2026-10-01,live_eca71c72e724fbb4,live,Cybersecurity Consultant - Penetration Testing,Networks,keep,hard,required,required,1.0,networks and operating systems
+2026-10-01,live_eca71c72e724fbb4,live,Cybersecurity Consultant - Penetration Testing,Operating systems,keep,hard,required,required,1.0,networks and operating systems
+2026-10-01,live_eca71c72e724fbb4,live,Cybersecurity Consultant - Penetration Testing,OSCP certification,keep,hard,required,required,1.0,Minimally possess OSCP
+2026-10-01,live_eca71c72e724fbb4,live,Cybersecurity Consultant - Penetration Testing,CREST CRT certification,keep,hard,required,required,1.0,Minimally possess OSCP or CREST CRT
+2026-10-01,live_eca71c72e724fbb4,live,Cybersecurity Consultant - Penetration Testing,Other cybersecurity certifications,keep,hard,preferred,preferred,1.0,Other cybersecurity certifications would be an added advantage
+2026-10-01,live_eca71c72e724fbb4,live,Cybersecurity Consultant - Penetration Testing,Analytical skills,keep,soft,required,required,1.0,Strong analytical and problem-solving skills
+2026-10-01,live_eca71c72e724fbb4,live,Cybersecurity Consultant - Penetration Testing,Problem-solving,keep,soft,required,required,1.0,Strong analytical and problem-solving skills
+2026-10-01,live_eca71c72e724fbb4,live,Cybersecurity Consultant - Penetration Testing,Creative thinking,keep,soft,required,required,1.0,think creatively
+2026-10-01,live_eca71c72e724fbb4,live,Cybersecurity Consultant - Penetration Testing,Independent work,keep,soft,required,required,1.0,work independently
+2026-10-01,live_eca71c72e724fbb4,live,Cybersecurity Consultant - Penetration Testing,Fast-paced adaptability,keep,soft,required,required,1.0,"Ability to thrive in a fast-paced, dynamic environment"
+2026-10-01,live_eca71c72e724fbb4,live,Cybersecurity Consultant - Penetration Testing,Collaborative mindset,keep,soft,required,required,1.0,Collaborative mindset
+2026-10-01,live_eca71c72e724fbb4,live,Cybersecurity Consultant - Penetration Testing,Cross-functional teamwork,keep,soft,required,required,1.0,work effectively in cross-functional teams
+2026-10-01,live_eca71c72e724fbb4,live,Cybersecurity Consultant - Penetration Testing,Communication,keep,soft,required,required,1.0,"Strong communication, writing and interpersonal skills"
+2026-10-01,live_eca71c72e724fbb4,live,Cybersecurity Consultant - Penetration Testing,Writing,keep,soft,required,required,1.0,"Strong communication, writing and interpersonal skills"
+2026-10-01,live_eca71c72e724fbb4,live,Cybersecurity Consultant - Penetration Testing,Interpersonal skills,keep,soft,required,required,1.0,"Strong communication, writing and interpersonal skills"
+2026-10-01,live_eca71c72e724fbb4,live,Cybersecurity Consultant - Penetration Testing,Willingness to travel,keep,soft,required,required,1.0,Willingness to travel overseas
+2026-10-01,live_eca71c72e724fbb4,live,Cybersecurity Consultant - Penetration Testing,Flexible delivery,keep,soft,required,required,1.0,"Flexible approach to delivery, including the ability to support extended hours"
+2026-10-01,live_eca71c72e724fbb4,live,Cybersecurity Consultant - Penetration Testing,IoT testing,keep,hard,trained,,0.904,Opportunities to learn and perform a variety of security assessments beyond penetration testing such as; IoT testing
+2026-10-01,live_eca71c72e724fbb4,live,Cybersecurity Consultant - Penetration Testing,Threat hunting,keep,hard,trained,,1.0,collaborate with defensive disciplines such as threat hunting
+2026-10-01,live_eca71c72e724fbb4,live,Cybersecurity Consultant - Penetration Testing,Offensive security,keep,hard,required,,1.0,Offensive Security team
+2026-10-01,live_eca71c72e724fbb4,live,Cybersecurity Consultant - Penetration Testing,Cloud security assessments,reject: quote not in ad,hard,trained,,0.815,Opportunities to learn and perform a variety of security assessments beyond penetration testing such as; cloud security assessments
+2026-10-01,live_eca71c72e724fbb4,live,Cybersecurity Consultant - Penetration Testing,Blockchain security,reject: quote not in ad,hard,trained,,0.837,Opportunities to learn and perform a variety of security assessments beyond penetration testing such as; blockchain security
+2026-10-01,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,SECS/GEM,keep,hard,required,required,1.0,Hands-on experience with SECS/GEM
+2026-10-01,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,C#/.NET,keep,hard,required,required,1.0,Strong C# / .NET development skills
+2026-10-01,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,REST / Web APIs,keep,hard,required,required,1.0,Experience developing and consuming REST / Web APIs
+2026-10-01,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,AI-assisted coding tools,keep,hard,required,required,1.0,Familiar with AI-assisted coding tools such as Claude Code
+2026-10-01,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,Object-oriented design,keep,hard,required,required,1.0,Good understanding of object-oriented design and software architecture
+2026-10-01,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,Software architecture,keep,hard,required,required,1.0,Good understanding of object-oriented design and software architecture
+2026-10-01,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,Debugging,keep,hard,required,required,1.0,Strong debugging and problem-solving skills
+2026-10-01,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,Problem-solving,keep,soft,required,required,1.0,Strong debugging and problem-solving skills
+2026-10-01,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,Asynchronous communication,keep,hard,required,required,1.0,"Comfortable working with asynchronous communication, networking and system integration"
+2026-10-01,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,Networking,keep,hard,required,required,1.0,"Comfortable working with asynchronous communication, networking and system integration"
+2026-10-01,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,System integration,keep,hard,required,required,1.0,"Comfortable working with asynchronous communication, networking and system integration"
+2026-10-01,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,Equipment interfaces,keep,hard,required,,1.0,Develop SECS/GEM equipment interfaces and communication protocols
+2026-10-01,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,MES integration,keep,hard,unspecified,,1.0,"Connect semiconductor equipment with MES, EAP, databases and factory systems"
+2026-10-01,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,SDK development,keep,hard,unspecified,,1.0,"Build reusable SDKs, libraries and communication components"
+2026-10-01,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,Simulator development,keep,hard,unspecified,,1.0,"Develop simulators, diagnostic tools and engineering utilities"
+2026-10-01,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,Customer communication,keep,soft,unspecified,,1.0,Work directly with customers and engineers to understand equipment behaviour
+2026-10-01,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,GEM300,keep,hard,preferred,,1.0,Experience in any of the following is a plus: GEM300
+2026-10-01,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,Semiconductor equipment,keep,hard,preferred,,0.922,Experience in any of the following is a plus: Semiconductor equipment or factory automation
+2026-10-01,live_6c14b31977332464,live,Business Analyst Intern,Requirements gathering,keep,hard,required,required,1.0,Assist in gathering and documenting business requirements from stakeholders
+2026-10-01,live_6c14b31977332464,live,Business Analyst Intern,Process mapping,keep,hard,required,,1.0,Assist in documenting and analysing existing business processes and workflows
+2026-10-01,live_6c14b31977332464,live,Business Analyst Intern,Flowchart creation,keep,hard,required,,1.0,"Develop process maps, flowcharts, and supporting documentation to represent current operations"
+2026-10-01,live_6c14b31977332464,live,Business Analyst Intern,Data collection,keep,hard,required,,1.0,"Collect, validate, and organize business and operational data from various sources"
+2026-10-01,live_6c14b31977332464,live,Business Analyst Intern,Basic data analysis,keep,hard,required,required,1.0,Perform basic data analysis to support decision-making and project requirements
+2026-10-01,live_6c14b31977332464,live,Business Analyst Intern,Microsoft Excel,keep,hard,required,,1.0,Proficiency in Microsoft Excel and PowerPoint
+2026-10-01,live_6c14b31977332464,live,Business Analyst Intern,Microsoft PowerPoint,keep,hard,required,,1.0,Proficiency in Microsoft Excel and PowerPoint
+2026-10-01,live_6c14b31977332464,live,Business Analyst Intern,Structured data handling,keep,hard,required,,1.0,Ability to work with structured data and perform basic data analysis
+2026-10-01,live_6c14b31977332464,live,Business Analyst Intern,Process mapping tools,keep,hard,preferred,preferred,1.0,"Familiarity with process mapping tools, business analysis techniques, or documentation tools is an advantage"
+2026-10-01,live_6c14b31977332464,live,Business Analyst Intern,Business analysis techniques,keep,hard,preferred,preferred,1.0,"Familiarity with process mapping tools, business analysis techniques, or documentation tools is an advantage"
+2026-10-01,live_6c14b31977332464,live,Business Analyst Intern,Documentation tools,keep,hard,preferred,preferred,1.0,"Familiarity with process mapping tools, business analysis techniques, or documentation tools is an advantage"
+2026-10-01,live_6c14b31977332464,live,Business Analyst Intern,Systems knowledge,keep,hard,preferred,preferred,1.0,"Technical knowledge or understanding of systems, applications, or digital products is a plus"
+2026-10-01,live_6c14b31977332464,live,Business Analyst Intern,Applications knowledge,keep,hard,preferred,preferred,1.0,"Technical knowledge or understanding of systems, applications, or digital products is a plus"
+2026-10-01,live_6c14b31977332464,live,Business Analyst Intern,Digital products knowledge,keep,hard,preferred,preferred,1.0,"Technical knowledge or understanding of systems, applications, or digital products is a plus"
+2026-10-01,live_6c14b31977332464,live,Business Analyst Intern,UAT coordination,keep,hard,required,,1.0,Support the planning and coordination of User Acceptance Testing (UAT) activities
+2026-10-01,live_6c14b31977332464,live,Business Analyst Intern,Test scenario design,keep,hard,required,,1.0,"Assist in preparing test scenarios, test cases, and testing documentation"
+2026-10-01,live_6c14b31977332464,live,Business Analyst Intern,Test case creation,keep,hard,required,,1.0,"Assist in preparing test scenarios, test cases, and testing documentation"
+2026-10-01,live_6c14b31977332464,live,Business Analyst Intern,Testing documentation,keep,hard,required,,1.0,"Assist in preparing test scenarios, test cases, and testing documentation"
+2026-10-01,live_6c14b31977332464,live,Business Analyst Intern,Research,keep,hard,required,,1.0,"Conduct research on existing business artifacts, systems, products, and industry best practices"
+2026-10-01,live_6c14b31977332464,live,Business Analyst Intern,Benchmarking,keep,hard,required,,1.0,Assist in benchmarking and identifying opportunities for process and product improvements
+2026-10-01,live_382395358c7f052d,live,Senior IT Business Analyst ( Manufacturing Execution System ),Business process definition,keep,hard,required,required,1.0,"Experience in business process definition, modelling, requirements definition and technology solution research."
+2026-10-01,live_382395358c7f052d,live,Senior IT Business Analyst ( Manufacturing Execution System ),Facilitation,keep,soft,required,required,1.0,Experience in facilitating small to large groups through challenging discussions.
+2026-10-01,live_382395358c7f052d,live,Senior IT Business Analyst ( Manufacturing Execution System ),MES implementation,keep,hard,required,required,1.0,Experience with MES ( Manufacturing Execution System ) Implementations ongoing development and support.
+2026-10-01,live_382395358c7f052d,live,Senior IT Business Analyst ( Manufacturing Execution System ),Product Transfer onboarding,keep,hard,required,required,1.0,Product Transfers onboarding IT activities.
+2026-10-01,live_382395358c7f052d,live,Senior IT Business Analyst ( Manufacturing Execution System ),MES integration,keep,hard,required,required,1.0,"Experience with MES ( Manufacturing Execution System ) Integrations to Manufacturing Equipment’s and Other Applications ( ERP, Labelling etc)."
+2026-10-01,live_382395358c7f052d,live,Senior IT Business Analyst ( Manufacturing Execution System ),ERP,keep,hard,preferred,preferred,1.0,ERP understanding
+2026-10-01,live_382395358c7f052d,live,Senior IT Business Analyst ( Manufacturing Execution System ),System integration,keep,hard,preferred,preferred,1.0,System integration knowledge
+2026-10-01,live_382395358c7f052d,live,Senior IT Business Analyst ( Manufacturing Execution System ),Programming,keep,hard,preferred,preferred,1.0,Programming/development background
+2026-10-01,live_382395358c7f052d,live,Senior IT Business Analyst ( Manufacturing Execution System ),Infrastructure,keep,hard,preferred,preferred,1.0,Infrastructure awareness
+2026-10-01,live_382395358c7f052d,live,Senior IT Business Analyst ( Manufacturing Execution System ),Database,keep,hard,preferred,preferred,1.0,Database knowledge
+2026-10-01,live_382395358c7f052d,live,Senior IT Business Analyst ( Manufacturing Execution System ),Reporting tools,keep,hard,preferred,preferred,1.0,Reporting tools experience
+2026-10-01,live_382395358c7f052d,live,Senior IT Business Analyst ( Manufacturing Execution System ),Project planning,keep,hard,unspecified,,1.0,Create project plans including timelines and milestones and track progress.
+2026-10-01,live_382395358c7f052d,live,Senior IT Business Analyst ( Manufacturing Execution System ),Communication planning,keep,hard,unspecified,,1.0,"Communication planning, information distribution, performance reporting, and administrative closure."
+2026-10-01,live_382395358c7f052d,live,Senior IT Business Analyst ( Manufacturing Execution System ),SDVLC,keep,hard,unspecified,,1.0,System Development Validation Life Cycle Methodology (SDVLC)
+2026-10-01,live_382395358c7f052d,live,Senior IT Business Analyst ( Manufacturing Execution System ),Business analysis,keep,hard,unspecified,required,1.0,"Analyze business requirements, operational processes, and data relationships/configurations"
+2026-10-01,live_382395358c7f052d,live,Senior IT Business Analyst ( Manufacturing Execution System ),Stakeholder communication,keep,soft,unspecified,required,1.0,Communicate with numerous functional areas
+2026-10-01,live_382395358c7f052d,live,Senior IT Business Analyst ( Manufacturing Execution System ),Process improvement,keep,soft,unspecified,,1.0,Facilitate process development and improvement activities
+2026-10-01,live_4b0481bfc00baf4b,live,Digital Operations L2 Cloud Support Engineer - APAC,Cloud Infrastructure,keep,hard,required,,1.0,"Operate the Digital Solutions provided by SICPA and the underlying Cloud Infrastructure (maintain, deploy upgrades, manage resources, ensure business continuity)"
+2026-10-01,live_4b0481bfc00baf4b,live,Digital Operations L2 Cloud Support Engineer - APAC,Configuration Management,keep,hard,required,,1.0,Perform configuration changes and deployment of new versions
+2026-10-01,live_4b0481bfc00baf4b,live,Digital Operations L2 Cloud Support Engineer - APAC,Incident Response,keep,hard,required,,1.0,Respond to Incidents and Requests escalated by Digital Operations L1 Support
+2026-10-01,live_4b0481bfc00baf4b,live,Digital Operations L2 Cloud Support Engineer - APAC,Ticketing Tool,keep,hard,required,,1.0,Update Incidents and Requests in Ticketing tool
+2026-10-01,live_4b0481bfc00baf4b,live,Digital Operations L2 Cloud Support Engineer - APAC,Technical Troubleshooting,keep,hard,required,,1.0,"Perform technical troubleshooting and resolve incidents, or identify bugs and complex technical issues"
+2026-10-01,live_4b0481bfc00baf4b,live,Digital Operations L2 Cloud Support Engineer - APAC,Root Cause Analysis,keep,hard,required,,1.0,"Perform Root Cause Analysis, document findings and drive corrective actions"
+2026-10-01,live_4b0481bfc00baf4b,live,Digital Operations L2 Cloud Support Engineer - APAC,Escalation,keep,hard,required,,1.0,Escalate Incidents and Requests to L3 Support where appropriate
+2026-10-01,live_4b0481bfc00baf4b,live,Digital Operations L2 Cloud Support Engineer - APAC,Knowledge Base,keep,hard,required,,1.0,Maintain Knowledge Base
+2026-10-01,live_4b0481bfc00baf4b,live,Digital Operations L2 Cloud Support Engineer - APAC,Process Documentation,keep,hard,required,,1.0,Contribute to the maintenance of Process Documentation
+2026-10-01,live_4b0481bfc00baf4b,live,Digital Operations L2 Cloud Support Engineer - APAC,Cloud Deployment,keep,hard,required,,1.0,experience in deployment and management of applications on Cloud infrastructure
+2026-10-01,live_4b0481bfc00baf4b,live,Digital Operations L2 Cloud Support Engineer - APAC,Solution Administration,keep,hard,required,,1.0,solution administration
+2026-10-01,live_4b0481bfc00baf4b,live,Digital Operations L2 Cloud Support Engineer - APAC,Customer Support,keep,soft,required,,1.0,customer support
+2026-10-01,live_4b0481bfc00baf4b,live,Digital Operations L2 Cloud Support Engineer - APAC,Service Management,keep,hard,required,,1.0,service management
+2026-10-01,live_4b0481bfc00baf4b,live,Digital Operations L2 Cloud Support Engineer - APAC,Project Management,keep,soft,preferred,preferred,1.0,Experience in project management is an advantage
+2026-10-01,live_4b0481bfc00baf4b,live,Digital Operations L2 Cloud Support Engineer - APAC,Kafka,keep,hard,required,,1.0,Strong technical skills in Kafka
+2026-10-01,live_4b0481bfc00baf4b,live,Digital Operations L2 Cloud Support Engineer - APAC,SQL,keep,hard,required,,1.0,"Strong technical skills in Kafka, SQL (PostgreSQL/Oracle)"
+2026-10-01,live_4b0481bfc00baf4b,live,Digital Operations L2 Cloud Support Engineer - APAC,PostgreSQL,keep,hard,required,,1.0,SQL (PostgreSQL/Oracle)
+2026-10-01,live_4b0481bfc00baf4b,live,Digital Operations L2 Cloud Support Engineer - APAC,Oracle,keep,hard,required,,1.0,SQL (PostgreSQL/Oracle)
+2026-10-01,live_4b0481bfc00baf4b,live,Digital Operations L2 Cloud Support Engineer - APAC,AWS,keep,hard,required,,0.853,Strong technical skills in ... AWS
+2026-10-01,live_4b0481bfc00baf4b,live,Digital Operations L2 Cloud Support Engineer - APAC,Bash,keep,hard,required,,1.0,Familiarity with scripting and automation tools such as Bash
+2026-10-01,live_4b0481bfc00baf4b,live,Digital Operations L2 Cloud Support Engineer - APAC,Python,keep,hard,required,,0.939,Familiarity with scripting and automation tools such as ... Python
+2026-10-01,live_4b0481bfc00baf4b,live,Digital Operations L2 Cloud Support Engineer - APAC,Postman,keep,hard,required,,0.896,Familiarity with scripting and automation tools such as ... Postman
+2026-10-01,live_4b0481bfc00baf4b,live,Digital Operations L2 Cloud Support Engineer - APAC,CI/CD,keep,hard,required,,1.0,CI/CD platforms including ArgoCD and Argo Workflows
+2026-10-01,live_4b0481bfc00baf4b,live,Digital Operations L2 Cloud Support Engineer - APAC,ArgoCD,keep,hard,required,,1.0,CI/CD platforms including ArgoCD
+2026-10-01,live_4b0481bfc00baf4b,live,Digital Operations L2 Cloud Support Engineer - APAC,Analytical Skills,keep,soft,required,,1.0,Excellent analytical and problem-solving abilities
+2026-10-01,live_4b0481bfc00baf4b,live,Digital Operations L2 Cloud Support Engineer - APAC,Problem Solving,keep,soft,required,,1.0,Excellent analytical and problem-solving abilities
+2026-10-01,live_4b0481bfc00baf4b,live,Digital Operations L2 Cloud Support Engineer - APAC,Stakeholder Management,keep,soft,required,,1.0,Strong stakeholder management
+2026-10-01,live_4b0481bfc00baf4b,live,Digital Operations L2 Cloud Support Engineer - APAC,Customer Service,keep,soft,required,,1.0,customer service
+2026-10-01,live_4b0481bfc00baf4b,live,Digital Operations L2 Cloud Support Engineer - APAC,Splunk,reject: quote not in ad,hard,required,,0.811,Strong technical skills in ... Splunk
+2026-10-01,live_4b0481bfc00baf4b,live,Digital Operations L2 Cloud Support Engineer - APAC,AWS CloudWatch,reject: quote not in ad,hard,required,,0.667,Strong technical skills in ... AWS CloudWatch
+2026-10-01,live_4b0481bfc00baf4b,live,Digital Operations L2 Cloud Support Engineer - APAC,Grafana,reject: quote not in ad,hard,required,,0.789,Strong technical skills in ... Grafana
+2026-10-01,live_4b0481bfc00baf4b,live,Digital Operations L2 Cloud Support Engineer - APAC,Prometheus,reject: quote not in ad,hard,required,,0.756,Strong technical skills in ... Prometheus
+2026-10-01,live_4b0481bfc00baf4b,live,Digital Operations L2 Cloud Support Engineer - APAC,Docker,reject: quote not in ad,hard,required,,0.757,Strong technical skills in ... Docker
+2026-10-01,live_4b0481bfc00baf4b,live,Digital Operations L2 Cloud Support Engineer - APAC,Kubernetes,reject: quote not in ad,hard,required,,0.707,Strong technical skills in ... Kubernetes
+2026-10-01,live_4b0481bfc00baf4b,live,Digital Operations L2 Cloud Support Engineer - APAC,Argo Workflows,reject: quote not in ad,hard,required,,0.773,CI/CD platforms including ... Argo Workflows
+2026-10-01,live_31eecb6dda5fc2b9,live,Senior SIEM Engineer,SIEM platform engineering,keep,hard,required,,1.0,strong hands-on experience in SIEM platform engineering
+2026-10-01,live_31eecb6dda5fc2b9,live,Senior SIEM Engineer,Security monitoring,keep,hard,required,,1.0,"strong hands-on experience in SIEM platform engineering, security monitoring"
+2026-10-01,live_31eecb6dda5fc2b9,live,Senior SIEM Engineer,Detection engineering,keep,hard,required,required,1.0,Hands-on detection engineering experience
+2026-10-01,live_31eecb6dda5fc2b9,live,Senior SIEM Engineer,SIEM architecture,keep,hard,required,required,1.0,"Strong knowledge of SIEM architecture, performance tuning, capacity planning and optimisation"
+2026-10-01,live_31eecb6dda5fc2b9,live,Senior SIEM Engineer,Performance tuning,keep,hard,required,required,1.0,"Strong knowledge of SIEM architecture, performance tuning, capacity planning and optimisation"
+2026-10-01,live_31eecb6dda5fc2b9,live,Senior SIEM Engineer,Capacity planning,keep,hard,required,required,1.0,"Strong knowledge of SIEM architecture, performance tuning, capacity planning and optimisation"
+2026-10-01,live_31eecb6dda5fc2b9,live,Senior SIEM Engineer,Optimisation,keep,hard,required,required,1.0,"Strong knowledge of SIEM architecture, performance tuning, capacity planning and optimisation"
+2026-10-01,live_31eecb6dda5fc2b9,live,Senior SIEM Engineer,Large-scale SIEM platforms,keep,hard,required,,1.0,"Architect, build and operate large-scale SIEM platforms across on-premises, cloud or hybrid environments"
+2026-10-01,live_31eecb6dda5fc2b9,live,Senior SIEM Engineer,Hybrid cloud environments,keep,hard,required,,1.0,"large-scale SIEM platforms across on-premises, cloud or hybrid environments"
+2026-10-01,live_31eecb6dda5fc2b9,live,Senior SIEM Engineer,SIEM infrastructure,keep,hard,required,,1.0,"Design and maintain SIEM infrastructure with strong availability, performance, scalability and cost efficiency"
+2026-10-01,live_31eecb6dda5fc2b9,live,Senior SIEM Engineer,High-volume log ingestion,keep,hard,required,,1.0,"Manage high-volume security log ingestion and onboard log sources across cloud, endpoint, network, identity, SaaS and applications"
+2026-10-01,live_31eecb6dda5fc2b9,live,Senior SIEM Engineer,Log source onboarding,keep,hard,required,,1.0,"onboard log sources across cloud, endpoint, network, identity, SaaS and applications"
+2026-10-01,live_31eecb6dda5fc2b9,live,Senior SIEM Engineer,IaC,keep,hard,required,,1.0,"Automate SIEM deployment, configuration, upgrades and content management using IaC, CI/CD and scripting"
+2026-10-01,live_31eecb6dda5fc2b9,live,Senior SIEM Engineer,CI/CD,keep,hard,required,,1.0,"Automate SIEM deployment, configuration, upgrades and content management using IaC, CI/CD and scripting"
+2026-10-01,live_31eecb6dda5fc2b9,live,Senior SIEM Engineer,Scripting,keep,hard,required,,1.0,"Automate SIEM deployment, configuration, upgrades and content management using IaC, CI/CD and scripting"
+2026-10-01,live_31eecb6dda5fc2b9,live,Senior SIEM Engineer,Linux/OS,keep,hard,required,,1.0,"Troubleshoot complex SIEM issues involving Linux/OS, networking, storage, query performance and data integrity"
+2026-10-01,live_31eecb6dda5fc2b9,live,Senior SIEM Engineer,Networking,keep,hard,required,,1.0,"Troubleshoot complex SIEM issues involving Linux/OS, networking, storage, query performance and data integrity"
+2026-10-01,live_31eecb6dda5fc2b9,live,Senior SIEM Engineer,Storage,keep,hard,required,,1.0,"Troubleshoot complex SIEM issues involving Linux/OS, networking, storage, query performance and data integrity"
+2026-10-01,live_31eecb6dda5fc2b9,live,Senior SIEM Engineer,Query performance,keep,hard,required,,1.0,"Troubleshoot complex SIEM issues involving Linux/OS, networking, storage, query performance and data integrity"
+2026-10-01,live_31eecb6dda5fc2b9,live,Senior SIEM Engineer,Data integrity,keep,hard,required,,1.0,"Troubleshoot complex SIEM issues involving Linux/OS, networking, storage, query performance and data integrity"
+2026-10-01,live_31eecb6dda5fc2b9,live,Senior SIEM Engineer,MITRE ATT&CK,keep,hard,required,,1.0,"Design, review and optimise security detection rules and use cases aligned with MITRE ATT&CK"
+2026-10-01,live_31eecb6dda5fc2b9,live,Senior SIEM Engineer,Threat hunting,keep,hard,required,,1.0,"Support threat hunting, security monitoring and incident response through performant SIEM search and analytics"
+2026-10-01,live_31eecb6dda5fc2b9,live,Senior SIEM Engineer,Incident response,keep,hard,required,required,1.0,"Good understanding of incident response, threat detection and MITRE ATT&CK"
+2026-10-01,live_31eecb6dda5fc2b9,live,Senior SIEM Engineer,Alert triage,keep,soft,required,,1.0,"improve alert triage, investigation and response workflows"
+2026-10-01,live_31eecb6dda5fc2b9,live,Senior SIEM Engineer,Investigation,keep,soft,required,,1.0,"improve alert triage, investigation and response workflows"
+2026-10-01,live_31eecb6dda5fc2b9,live,Senior SIEM Engineer,Response workflows,keep,soft,required,,1.0,"improve alert triage, investigation and response workflows"
+2026-10-01,live_31eecb6dda5fc2b9,live,Senior SIEM Engineer,Mentoring,keep,soft,required,,1.0,Mentor junior SIEM and detection engineers and provide technical guidance during major security incidents
+2026-10-01,live_a1c3268440de0d2c,live,Senior Software Engineer - Java,Java,keep,hard,required,,1.0,"extensive experience in Java, SpringBoot, MySQL and microservices architecture"
+2026-10-01,live_a1c3268440de0d2c,live,Senior Software Engineer - Java,SpringBoot,keep,hard,required,,1.0,"extensive experience in Java, SpringBoot, MySQL and microservices architecture"
+2026-10-01,live_a1c3268440de0d2c,live,Senior Software Engineer - Java,MySQL,keep,hard,required,,1.0,"extensive experience in Java, SpringBoot, MySQL and microservices architecture"
+2026-10-01,live_a1c3268440de0d2c,live,Senior Software Engineer - Java,microservices architecture,keep,hard,required,,1.0,"extensive experience in Java, SpringBoot, MySQL and microservices architecture"
+2026-10-01,live_a1c3268440de0d2c,live,Senior Software Engineer - Java,Kafka,keep,hard,required,,1.0,"focus on Java, SpringBoot, Kafka, and MySQL"
+2026-10-01,live_a1c3268440de0d2c,live,Senior Software Engineer - Java,RESTful API development,keep,hard,required,,1.0,Experience with RESTful API development and integration
+2026-10-01,live_a1c3268440de0d2c,live,Senior Software Engineer - Java,Git,keep,hard,required,,1.0,Familiarity with version control systems (e.g. Git)
+2026-10-01,live_a1c3268440de0d2c,live,Senior Software Engineer - Java,Agile development methodologies,keep,hard,required,,1.0,Knowledge of agile development methodologies
+2026-10-01,live_a1c3268440de0d2c,live,Senior Software Engineer - Java,Security principles,keep,hard,required,,1.0,Understanding of security principles and how they apply to banking systems
+2026-10-01,live_a1c3268440de0d2c,live,Senior Software Engineer - Java,Mambu,keep,hard,preferred,preferred,1.0,Experience with Mambu is a plus
+2026-10-01,live_a1c3268440de0d2c,live,Senior Software Engineer - Java,AWS,keep,hard,required,,1.0,Experience with cloud platforms (e.g. AWS)
+2026-10-01,live_a1c3268440de0d2c,live,Senior Software Engineer - Java,Code reviews,keep,hard,required,,1.0,Participate in code reviews and provide constructive feedback
+2026-10-01,live_a1c3268440de0d2c,live,Senior Software Engineer - Java,Technical documentation,keep,hard,required,,1.0,Write and maintain technical documentation
+2026-10-01,live_a1c3268440de0d2c,live,Senior Software Engineer - Java,Problem-solving,keep,soft,required,,1.0,Excellent problem-solving skills and attention to details
+2026-10-01,live_a1c3268440de0d2c,live,Senior Software Engineer - Java,Attention to details,keep,soft,required,,1.0,Excellent problem-solving skills and attention to details
+2026-10-01,live_a1c3268440de0d2c,live,Senior Software Engineer - Java,Communication,keep,soft,required,,1.0,Strong communication and teamwork skills
+2026-10-01,live_a1c3268440de0d2c,live,Senior Software Engineer - Java,Teamwork,keep,soft,required,,1.0,Strong communication and teamwork skills
+2026-10-01,live_148f68aed0d22576,live,Network Engineer Graduate Program,Python,keep,hard,preferred,preferred,1.0,"exposure to computer networking, Python, cloud technologies, automation, APIs, data analytics, or AI/ML through coursework, internships, or personal projects"
+2026-10-01,live_148f68aed0d22576,live,Network Engineer Graduate Program,REST APIs,keep,hard,unspecified,,1.0,"you'll build programming fundamentals (Python, REST APIs, JSON)"
+2026-10-01,live_148f68aed0d22576,live,Network Engineer Graduate Program,JSON,keep,hard,unspecified,,1.0,"you'll build programming fundamentals (Python, REST APIs, JSON)"
+2026-10-01,live_148f68aed0d22576,live,Network Engineer Graduate Program,network automation,keep,hard,unspecified,,1.0,"covering network automation, cloud, AI/ML, and internet technologies"
+2026-10-01,live_148f68aed0d22576,live,Network Engineer Graduate Program,cloud,keep,hard,unspecified,,1.0,"covering network automation, cloud, AI/ML, and internet technologies"
+2026-10-01,live_148f68aed0d22576,live,Network Engineer Graduate Program,AI/ML,keep,hard,unspecified,,1.0,"covering network automation, cloud, AI/ML, and internet technologies"
+2026-10-01,live_148f68aed0d22576,live,Network Engineer Graduate Program,IP technologies,keep,hard,unspecified,,1.0,"covering network fundamentals, automation, cloud, AI/ML, IP technologies, security, and software development"
+2026-10-01,live_148f68aed0d22576,live,Network Engineer Graduate Program,security,keep,hard,unspecified,,1.0,"covering network fundamentals, automation, cloud, AI/ML, IP technologies, security, and software development"
+2026-10-01,live_148f68aed0d22576,live,Network Engineer Graduate Program,software development,keep,hard,unspecified,,1.0,"covering network fundamentals, automation, cloud, AI/ML, IP technologies, security, and software development"
+2026-10-01,live_148f68aed0d22576,live,Network Engineer Graduate Program,data analytics,keep,hard,preferred,preferred,1.0,"exposure to computer networking, Python, cloud technologies, automation, APIs, data analytics, or AI/ML through coursework, internships, or personal projects"
+2026-10-01,live_148f68aed0d22576,live,Network Engineer Graduate Program,APIs,keep,hard,preferred,preferred,1.0,"exposure to computer networking, Python, cloud technologies, automation, APIs, data analytics, or AI/ML through coursework, internships, or personal projects"
+2026-10-01,live_148f68aed0d22576,live,Network Engineer Graduate Program,communication,keep,soft,required,,1.0,"Strong problem-solving, communication (English), and teamwork skills"
+2026-10-01,live_148f68aed0d22576,live,Network Engineer Graduate Program,teamwork,keep,soft,required,,1.0,"Strong problem-solving, communication (English), and teamwork skills"
+2026-10-01,live_148f68aed0d22576,live,Network Engineer Graduate Program,problem-solving,keep,soft,required,,1.0,"Strong problem-solving, communication (English), and teamwork skills"
+2026-10-01,live_148f68aed0d22576,live,Network Engineer Graduate Program,presentation skills,keep,soft,unspecified,,1.0,strengthen communication and presentation skills
+2026-10-01,live_91efd359f1689d0b,live,Network Security Engineer,Network security,keep,hard,unspecified,,1.0,development and implementation of secure network solutions
+2026-10-01,live_91efd359f1689d0b,live,Network Security Engineer,SASE,keep,hard,unspecified,,1.0,based on SASE architecture
+2026-10-01,live_91efd359f1689d0b,live,Network Security Engineer,Cloud security,keep,hard,unspecified,,1.0,cloud-based enterprise security
+2026-10-01,live_91efd359f1689d0b,live,Network Security Engineer,OT network security,keep,hard,unspecified,,1.0,OT network security
+2026-10-01,live_91efd359f1689d0b,live,Network Security Engineer,Architectural documentation,keep,hard,unspecified,,1.0,Development of architectural documentation
+2026-10-01,live_91efd359f1689d0b,live,Network Security Engineer,Architecture reviews,keep,hard,unspecified,,1.0,participation in architecture reviews
+2026-10-01,live_91efd359f1689d0b,live,Network Security Engineer,Automation,keep,hard,unspecified,,1.0,"participate in, or lead, automation efforts"
+2026-10-01,live_91efd359f1689d0b,live,Network Security Engineer,Data analysis,keep,hard,unspecified,,1.0,data analysis & networking field
+2026-10-01,live_91efd359f1689d0b,live,Network Security Engineer,Networking,keep,hard,unspecified,,1.0,data analysis & networking field
+2026-10-01,live_91efd359f1689d0b,live,Network Security Engineer,Learning agility,keep,soft,required,,1.0,Strong learning agility
+2026-10-01,live_91efd359f1689d0b,live,Network Security Engineer,Problem solving,keep,soft,required,,1.0,good problem-solving skills
+2026-10-01,live_91efd359f1689d0b,live,Network Security Engineer,Interpersonal skills,keep,soft,required,,1.0,Strong interpersonal skills
+2026-10-01,live_91efd359f1689d0b,live,Network Security Engineer,Communication,keep,soft,required,,1.0,strong communication skills
+2026-10-01,live_91efd359f1689d0b,live,Network Security Engineer,Python,keep,hard,preferred,,1.0,"Proficiency in scripting (eg. Python, Powershell) is an added advantage"
+2026-10-01,live_91efd359f1689d0b,live,Network Security Engineer,Powershell,keep,hard,preferred,,1.0,"Proficiency in scripting (eg. Python, Powershell) is an added advantage"
+2026-10-01,live_ca39fceedf53e6f6,live,Network Engineer,CheckPoint Firewalls,keep,hard,required,,1.0,Knowledge on CheckPoint Firewalls in terms of troubleshooting issues and also BAU rule base updates.
+2026-10-01,live_ca39fceedf53e6f6,live,Network Engineer,NAT,keep,hard,required,,1.0,"NAT, application/URL filtering IPS, and other blades"
+2026-10-01,live_ca39fceedf53e6f6,live,Network Engineer,Application/URL filtering,keep,hard,required,,1.0,"NAT, application/URL filtering IPS, and other blades"
+2026-10-01,live_ca39fceedf53e6f6,live,Network Engineer,IPS,keep,hard,required,,1.0,"NAT, application/URL filtering IPS, and other blades"
+2026-10-01,live_ca39fceedf53e6f6,live,Network Engineer,Zscaler Internet Access,keep,hard,required,,1.0,Knowledge on Zscaler Internet Access / Bluecoat ProxySG product
+2026-10-01,live_ca39fceedf53e6f6,live,Network Engineer,Bluecoat ProxySG,keep,hard,required,,1.0,Knowledge on Zscaler Internet Access / Bluecoat ProxySG product
+2026-10-01,live_ca39fceedf53e6f6,live,Network Engineer,SSL interception,keep,hard,required,,1.0,"SSL interception, cert validation etc."
+2026-10-01,live_ca39fceedf53e6f6,live,Network Engineer,F5 APM,keep,hard,required,,1.0,"Kxpert knowledge on F5 APM, LTM, GTM, configuration and troubleshooting."
+2026-10-01,live_ca39fceedf53e6f6,live,Network Engineer,F5 LTM,keep,hard,required,,1.0,"Kxpert knowledge on F5 APM, LTM, GTM, configuration and troubleshooting."
+2026-10-01,live_ca39fceedf53e6f6,live,Network Engineer,F5 GTM,keep,hard,required,,1.0,"Kxpert knowledge on F5 APM, LTM, GTM, configuration and troubleshooting."
+2026-10-01,live_ca39fceedf53e6f6,live,Network Engineer,BGP,keep,hard,required,,1.0,"Knowledge on Routing (e.g. BGP, EIGRP, OSPF, PIM, GRE, VRF etc.)"
+2026-10-01,live_ca39fceedf53e6f6,live,Network Engineer,EIGRP,keep,hard,required,,1.0,"Knowledge on Routing (e.g. BGP, EIGRP, OSPF, PIM, GRE, VRF etc.)"
+2026-10-01,live_ca39fceedf53e6f6,live,Network Engineer,OSPF,keep,hard,required,,1.0,"Knowledge on Routing (e.g. BGP, EIGRP, OSPF, PIM, GRE, VRF etc.)"
+2026-10-01,live_ca39fceedf53e6f6,live,Network Engineer,PIM,keep,hard,required,,1.0,"Knowledge on Routing (e.g. BGP, EIGRP, OSPF, PIM, GRE, VRF etc.)"
+2026-10-01,live_ca39fceedf53e6f6,live,Network Engineer,GRE,keep,hard,required,,1.0,"Knowledge on Routing (e.g. BGP, EIGRP, OSPF, PIM, GRE, VRF etc.)"
+2026-10-01,live_ca39fceedf53e6f6,live,Network Engineer,VRF,keep,hard,required,,1.0,"Knowledge on Routing (e.g. BGP, EIGRP, OSPF, PIM, GRE, VRF etc.)"
+2026-10-01,live_ca39fceedf53e6f6,live,Network Engineer,VPC,keep,hard,required,,1.0,"Switching (VPC, STP, etherchannel etc.)"
+2026-10-01,live_ca39fceedf53e6f6,live,Network Engineer,STP,keep,hard,required,,1.0,"Switching (VPC, STP, etherchannel etc.)"
+2026-10-01,live_ca39fceedf53e6f6,live,Network Engineer,Etherchannel,keep,hard,required,,1.0,"Switching (VPC, STP, etherchannel etc.)"
+2026-10-01,live_ca39fceedf53e6f6,live,Network Engineer,VPN,keep,hard,required,,1.0,"VPN technologies experience be it IPSec using firewalls, routers or other interoperable devices, both setup and troubleshooting"
+2026-10-01,live_ca39fceedf53e6f6,live,Network Engineer,IPSec,keep,hard,required,,1.0,"VPN technologies experience be it IPSec using firewalls, routers or other interoperable devices, both setup and troubleshooting"
+2026-10-01,live_ca39fceedf53e6f6,live,Network Engineer,Nexus 9K,keep,hard,required,,1.0,"Nexus 9K, 7K, 5K, and 2K configuration and troubeshooting"
+2026-10-01,live_ca39fceedf53e6f6,live,Network Engineer,Nexus 7K,keep,hard,required,,1.0,"Nexus 9K, 7K, 5K, and 2K configuration and troubeshooting"
+2026-10-01,live_ca39fceedf53e6f6,live,Network Engineer,Nexus 5K,keep,hard,required,,1.0,"Nexus 9K, 7K, 5K, and 2K configuration and troubeshooting"
+2026-10-01,live_ca39fceedf53e6f6,live,Network Engineer,Nexus 2K,keep,hard,required,,1.0,"Nexus 9K, 7K, 5K, and 2K configuration and troubeshooting"
+2026-10-01,live_ca39fceedf53e6f6,live,Network Engineer,Cisco Wireless LAN,keep,hard,required,,1.0,Cisco Wireless LAN configuration and troubleshooting.
+2026-10-01,live_ca39fceedf53e6f6,live,Network Engineer,Aruba Wireless LAN,keep,hard,required,,1.0,Aruba Wireless LAN configuration and troubleshooting.
+2026-10-01,live_ca39fceedf53e6f6,live,Network Engineer,Wireshark,keep,hard,required,,1.0,Knoweldge on analyzing packet capture/wireshark output
+2026-10-01,live_ca39fceedf53e6f6,live,Network Engineer,McAfee NSM,keep,hard,required,,1.0,supporting McAfee NSM and IPS sensors
+2026-10-01,live_ca39fceedf53e6f6,live,Network Engineer,HP Network Automation,keep,hard,required,,1.0,supporting HP Network Automation (HPNA) Tool
+2026-10-01,live_ca39fceedf53e6f6,live,Network Engineer,Cisco ISE,keep,hard,required,,1.0,supporting Cisco ISE / Cisco ACS
+2026-10-01,live_ca39fceedf53e6f6,live,Network Engineer,Cisco ACS,keep,hard,required,,1.0,supporting Cisco ISE / Cisco ACS
+2026-10-01,live_ca39fceedf53e6f6,live,Network Engineer,Azure networking,keep,hard,required,,1.0,"Knowledge on Azure networking (VNET peering, ExpressRoute, NSG etc)"
+2026-10-01,live_ca39fceedf53e6f6,live,Network Engineer,VNET peering,keep,hard,required,,1.0,"Knowledge on Azure networking (VNET peering, ExpressRoute, NSG etc)"
+2026-10-01,live_ca39fceedf53e6f6,live,Network Engineer,ExpressRoute,keep,hard,required,,1.0,"Knowledge on Azure networking (VNET peering, ExpressRoute, NSG etc)"
+2026-10-01,live_ca39fceedf53e6f6,live,Network Engineer,NSG,keep,hard,required,,1.0,"Knowledge on Azure networking (VNET peering, ExpressRoute, NSG etc)"
+2026-10-01,live_fed68894be50c806,live,Fresh Graduate Engineer - Physical Design / Test Developer,Synthesis,keep,hard,required,,1.0,"Assist in synthesis, floor planning, placement, CTS, and routing."
+2026-10-01,live_fed68894be50c806,live,Fresh Graduate Engineer - Physical Design / Test Developer,Floor planning,keep,hard,required,,1.0,"Assist in synthesis, floor planning, placement, CTS, and routing."
+2026-10-01,live_fed68894be50c806,live,Fresh Graduate Engineer - Physical Design / Test Developer,Placement,keep,hard,required,,1.0,"Assist in synthesis, floor planning, placement, CTS, and routing."
+2026-10-01,live_fed68894be50c806,live,Fresh Graduate Engineer - Physical Design / Test Developer,CTS,keep,hard,required,,1.0,"Assist in synthesis, floor planning, placement, CTS, and routing."
+2026-10-01,live_fed68894be50c806,live,Fresh Graduate Engineer - Physical Design / Test Developer,Routing,keep,hard,required,,1.0,"Assist in synthesis, floor planning, placement, CTS, and routing."
+2026-10-01,live_fed68894be50c806,live,Fresh Graduate Engineer - Physical Design / Test Developer,Timing analysis,keep,hard,required,,1.0,"Perform timing analysis, power optimization, and physical verification DRC/LVS checks."
+2026-10-01,live_fed68894be50c806,live,Fresh Graduate Engineer - Physical Design / Test Developer,Power optimization,keep,hard,required,,1.0,"Perform timing analysis, power optimization, and physical verification DRC/LVS checks."
+2026-10-01,live_fed68894be50c806,live,Fresh Graduate Engineer - Physical Design / Test Developer,DRC,keep,hard,required,,1.0,"Perform timing analysis, power optimization, and physical verification DRC/LVS checks."
+2026-10-01,live_fed68894be50c806,live,Fresh Graduate Engineer - Physical Design / Test Developer,LVS,keep,hard,required,,1.0,"Perform timing analysis, power optimization, and physical verification DRC/LVS checks."
+2026-10-01,live_fed68894be50c806,live,Fresh Graduate Engineer - Physical Design / Test Developer,Digital logic,keep,hard,required,required,1.0,"Understanding of digital logic fundamentals, including logic gates and circuit timing."
+2026-10-01,live_fed68894be50c806,live,Fresh Graduate Engineer - Physical Design / Test Developer,Logic gates,keep,hard,required,required,1.0,"Understanding of digital logic fundamentals, including logic gates and circuit timing."
+2026-10-01,live_fed68894be50c806,live,Fresh Graduate Engineer - Physical Design / Test Developer,Circuit timing,keep,hard,required,required,1.0,"Understanding of digital logic fundamentals, including logic gates and circuit timing."
+2026-10-01,live_fed68894be50c806,live,Fresh Graduate Engineer - Physical Design / Test Developer,VLSI design flow,keep,hard,required,required,1.0,Basic knowledge of VLSI design flow and scripting (TCL/Python/Perl).
+2026-10-01,live_fed68894be50c806,live,Fresh Graduate Engineer - Physical Design / Test Developer,TCL,keep,hard,required,required,1.0,Basic knowledge of VLSI design flow and scripting (TCL/Python/Perl).
+2026-10-01,live_fed68894be50c806,live,Fresh Graduate Engineer - Physical Design / Test Developer,Python,keep,hard,required,required,1.0,Basic knowledge of VLSI design flow and scripting (TCL/Python/Perl).
+2026-10-01,live_fed68894be50c806,live,Fresh Graduate Engineer - Physical Design / Test Developer,Perl,keep,hard,required,required,1.0,Basic knowledge of VLSI design flow and scripting (TCL/Python/Perl).
+2026-10-01,live_fed68894be50c806,live,Fresh Graduate Engineer - Physical Design / Test Developer,Synopsys,keep,hard,preferred,preferred,1.0,Familiarity with EDA tools (Synopsys/Cadence) is an advantage.
+2026-10-01,live_fed68894be50c806,live,Fresh Graduate Engineer - Physical Design / Test Developer,Cadence,keep,hard,preferred,preferred,1.0,Familiarity with EDA tools (Synopsys/Cadence) is an advantage.
+2026-10-01,live_fed68894be50c806,live,Fresh Graduate Engineer - Physical Design / Test Developer,Analytical,keep,soft,required,required,1.0,Strong analytical and teamwork skills; eager to learn.
+2026-10-01,live_fed68894be50c806,live,Fresh Graduate Engineer - Physical Design / Test Developer,Teamwork,keep,soft,required,required,1.0,Strong analytical and teamwork skills; eager to learn.
+2026-10-01,live_fed68894be50c806,live,Fresh Graduate Engineer - Physical Design / Test Developer,Test programming,keep,hard,required,,1.0,Writing simple test programs / software
+2026-10-01,live_fed68894be50c806,live,Fresh Graduate Engineer - Physical Design / Test Developer,Test hardware design,keep,hard,required,,1.0,Designing test hardware / fixture
+2026-10-01,live_fed68894be50c806,live,Fresh Graduate Engineer - Physical Design / Test Developer,Debugging,keep,hard,required,,1.0,Install and debug test program
+2026-10-01,live_fed68894be50c806,live,Fresh Graduate Engineer - Physical Design / Test Developer,System integration,keep,hard,required,,1.0,Support system build and integration
+2026-10-01,live_fed68894be50c806,live,Fresh Graduate Engineer - Physical Design / Test Developer,Automation,keep,hard,required,,1.0,Support automation and reliability
+2026-10-01,live_fed68894be50c806,live,Fresh Graduate Engineer - Physical Design / Test Developer,LabVIEW,keep,hard,required,preferred,1.0,"Basic knowledge of any programming language, preferably LabVIEW."
+2026-10-01,live_fed68894be50c806,live,Fresh Graduate Engineer - Physical Design / Test Developer,Multimeter,keep,hard,required,required,1.0,Knowledge and hands-on experience with Multimeter & Oscilloscope.
+2026-10-01,live_eca71c72e724fbb4,live,Cybersecurity Consultant - Penetration Testing,Penetration testing,keep,hard,required,required,1.0,penetration testing or vulnerability assessments
+2026-10-01,live_eca71c72e724fbb4,live,Cybersecurity Consultant - Penetration Testing,Vulnerability assessments,keep,hard,required,required,1.0,penetration testing or vulnerability assessments
+2026-10-01,live_eca71c72e724fbb4,live,Cybersecurity Consultant - Penetration Testing,Web application testing,keep,hard,required,,1.0,web and mobile application penetration testing
+2026-10-01,live_eca71c72e724fbb4,live,Cybersecurity Consultant - Penetration Testing,Mobile application testing,keep,hard,required,,1.0,web and mobile application penetration testing
+2026-10-01,live_eca71c72e724fbb4,live,Cybersecurity Consultant - Penetration Testing,Network penetration testing,keep,hard,required,,1.0,network penetration testing
+2026-10-01,live_eca71c72e724fbb4,live,Cybersecurity Consultant - Penetration Testing,Source code reviews,keep,hard,required,,1.0,source code reviews
+2026-10-01,live_eca71c72e724fbb4,live,Cybersecurity Consultant - Penetration Testing,Red team assessments,keep,hard,required,,1.0,red team assessments
+2026-10-01,live_eca71c72e724fbb4,live,Cybersecurity Consultant - Penetration Testing,Social engineering,keep,hard,required,,1.0,conducting social engineering exercises
+2026-10-01,live_eca71c72e724fbb4,live,Cybersecurity Consultant - Penetration Testing,Security controls,keep,hard,required,required,1.0,Knowledge of security controls
+2026-10-01,live_eca71c72e724fbb4,live,Cybersecurity Consultant - Penetration Testing,Networks,keep,hard,required,required,1.0,networks and operating systems
+2026-10-01,live_eca71c72e724fbb4,live,Cybersecurity Consultant - Penetration Testing,Operating systems,keep,hard,required,required,1.0,networks and operating systems
+2026-10-01,live_eca71c72e724fbb4,live,Cybersecurity Consultant - Penetration Testing,OSCP,keep,hard,required,required,1.0,Minimally possess OSCP or CREST CRT
+2026-10-01,live_eca71c72e724fbb4,live,Cybersecurity Consultant - Penetration Testing,CREST CRT,keep,hard,required,required,1.0,Minimally possess OSCP or CREST CRT
+2026-10-01,live_eca71c72e724fbb4,live,Cybersecurity Consultant - Penetration Testing,Other cybersecurity certifications,keep,hard,preferred,preferred,1.0,Other cybersecurity certifications would be an added advantage
+2026-10-01,live_eca71c72e724fbb4,live,Cybersecurity Consultant - Penetration Testing,Analytical skills,keep,soft,required,required,1.0,Strong analytical and problem-solving skills
+2026-10-01,live_eca71c72e724fbb4,live,Cybersecurity Consultant - Penetration Testing,Problem-solving,keep,soft,required,required,1.0,Strong analytical and problem-solving skills
+2026-10-01,live_eca71c72e724fbb4,live,Cybersecurity Consultant - Penetration Testing,Communication,keep,soft,required,required,1.0,"Strong communication, writing and interpersonal skills"
+2026-10-01,live_eca71c72e724fbb4,live,Cybersecurity Consultant - Penetration Testing,Writing,keep,soft,required,required,1.0,"Strong communication, writing and interpersonal skills"
+2026-10-01,live_eca71c72e724fbb4,live,Cybersecurity Consultant - Penetration Testing,Interpersonal skills,keep,soft,required,required,1.0,"Strong communication, writing and interpersonal skills"
+2026-10-01,live_eca71c72e724fbb4,live,Cybersecurity Consultant - Penetration Testing,Collaborative mindset,keep,soft,required,required,1.0,Collaborative mindset
+2026-10-01,live_eca71c72e724fbb4,live,Cybersecurity Consultant - Penetration Testing,Cloud security assessments,keep,hard,unspecified,,1.0,cloud security assessments
+2026-10-01,live_eca71c72e724fbb4,live,Cybersecurity Consultant - Penetration Testing,Blockchain security,keep,hard,unspecified,,1.0,blockchain security
+2026-10-01,live_eca71c72e724fbb4,live,Cybersecurity Consultant - Penetration Testing,IoT testing,keep,hard,unspecified,,1.0,IoT testing
+2026-10-01,live_eca71c72e724fbb4,live,Cybersecurity Consultant - Penetration Testing,Threat hunting,keep,hard,unspecified,,1.0,threat hunting
+2026-10-01,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,SECS/GEM,keep,hard,required,required,1.0,Hands-on experience with SECS/GEM
+2026-10-01,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,C#,keep,hard,required,required,1.0,Strong C# / .NET development skills
+2026-10-01,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,.NET,keep,hard,required,required,1.0,Strong C# / .NET development skills
+2026-10-01,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,REST APIs,keep,hard,required,required,1.0,Experience developing and consuming REST / Web APIs
+2026-10-01,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,Web APIs,keep,hard,required,required,1.0,Experience developing and consuming REST / Web APIs
+2026-10-01,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,Claude Code,keep,hard,required,required,1.0,"Familiar with AI-assisted coding tools such as Claude Code, Codex, or similar development assistants"
+2026-10-01,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,Codex,keep,hard,required,required,1.0,"Familiar with AI-assisted coding tools such as Claude Code, Codex, or similar development assistants"
+2026-10-01,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,Object-oriented design,keep,hard,required,required,1.0,Good understanding of object-oriented design and software architecture
+2026-10-01,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,Software architecture,keep,hard,required,required,1.0,Good understanding of object-oriented design and software architecture
+2026-10-01,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,Debugging,keep,hard,required,required,1.0,Strong debugging and problem-solving skills
+2026-10-01,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,Problem-solving,keep,soft,required,required,1.0,Strong debugging and problem-solving skills
+2026-10-01,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,Asynchronous communication,keep,hard,required,required,1.0,"Comfortable working with asynchronous communication, networking and system integration"
+2026-10-01,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,Networking,keep,hard,required,required,1.0,"Comfortable working with asynchronous communication, networking and system integration"
+2026-10-01,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,System integration,keep,hard,required,required,1.0,"Comfortable working with asynchronous communication, networking and system integration"
+2026-10-01,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,MES,keep,hard,unspecified,,1.0,"Connect semiconductor equipment with MES, EAP, databases and factory systems"
+2026-10-01,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,EAP,keep,hard,unspecified,,1.0,"Connect semiconductor equipment with MES, EAP, databases and factory systems"
+2026-10-01,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,Databases,keep,hard,unspecified,,1.0,"Connect semiconductor equipment with MES, EAP, databases and factory systems"
+2026-10-01,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,SDKs,keep,hard,unspecified,,1.0,"Build reusable SDKs, libraries and communication components"
+2026-10-01,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,Libraries,keep,hard,unspecified,,1.0,"Build reusable SDKs, libraries and communication components"
+2026-10-01,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,Communication components,keep,hard,unspecified,,1.0,"Build reusable SDKs, libraries and communication components"
+2026-10-01,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,Simulators,keep,hard,unspecified,,1.0,"Develop simulators, diagnostic tools and engineering utilities"
+2026-10-01,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,Diagnostic tools,keep,hard,unspecified,,1.0,"Develop simulators, diagnostic tools and engineering utilities"
+2026-10-01,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,Engineering utilities,keep,hard,unspecified,,1.0,"Develop simulators, diagnostic tools and engineering utilities"
+2026-10-01,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,Troubleshooting,keep,hard,unspecified,,1.0,Troubleshoot equipment communication and integration issues
+2026-10-01,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,Customer communication,keep,soft,unspecified,,1.0,Work directly with customers and engineers to understand equipment behaviour
+2026-10-01,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,GEM300,keep,hard,preferred,preferred,1.0,GEM300
+2026-10-01,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,Semiconductor equipment,keep,hard,preferred,preferred,1.0,Semiconductor equipment or factory automation
+2026-10-01,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,Factory automation,keep,hard,preferred,preferred,1.0,Semiconductor equipment or factory automation
+2026-10-01,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,WPF,keep,hard,preferred,preferred,1.0,WPF / MVVM
+2026-10-01,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,MVVM,keep,hard,preferred,preferred,1.0,WPF / MVVM
+2026-10-01,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,OPC UA,keep,hard,preferred,preferred,1.0,OPC UA
+2026-10-01,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,PLC communication,keep,hard,preferred,preferred,1.0,PLC communication
+2026-10-01,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,TCP/IP,keep,hard,preferred,preferred,1.0,"TCP/IP, WebSockets or gRPC"
+2026-10-01,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,WebSockets,keep,hard,preferred,preferred,1.0,"TCP/IP, WebSockets or gRPC"
+2026-10-01,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,gRPC,keep,hard,preferred,preferred,1.0,"TCP/IP, WebSockets or gRPC"
+2026-10-01,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,SCADA,keep,hard,preferred,preferred,1.0,"MES, EAP, SCADA, SPC or RMS systems"
+2026-10-01,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,SPC,keep,hard,preferred,preferred,1.0,"MES, EAP, SCADA, SPC or RMS systems"
+2026-10-01,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,RMS,keep,hard,preferred,preferred,1.0,"MES, EAP, SCADA, SPC or RMS systems"
+2026-10-01,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,Mitsubishi PLC,keep,hard,preferred,preferred,1.0,"Mitsubishi, Omron, Siemens or Beckhoff PLCs"
+2026-10-01,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,Omron PLC,keep,hard,preferred,preferred,1.0,"Mitsubishi, Omron, Siemens or Beckhoff PLCs"
+2026-10-01,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,Siemens PLC,keep,hard,preferred,preferred,1.0,"Mitsubishi, Omron, Siemens or Beckhoff PLCs"
+2026-10-01,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,Beckhoff PLC,keep,hard,preferred,preferred,1.0,"Mitsubishi, Omron, Siemens or Beckhoff PLCs"
+2026-10-01,live_5b6f58dc0d1e2dac,live,"Urgent!!! Junior Network Engineer (Switch, IP CCTV)",Switch,keep,hard,required,required,1.0,"Experienced in networking product like Switch, Wireless Access Point, Router and other networking related product"
+2026-10-01,live_5b6f58dc0d1e2dac,live,"Urgent!!! Junior Network Engineer (Switch, IP CCTV)",Wireless Access Point,keep,hard,required,required,1.0,"Experienced in networking product like Switch, Wireless Access Point, Router and other networking related product"
+2026-10-01,live_5b6f58dc0d1e2dac,live,"Urgent!!! Junior Network Engineer (Switch, IP CCTV)",Router,keep,hard,required,required,1.0,"Experienced in networking product like Switch, Wireless Access Point, Router and other networking related product"
+2026-10-01,live_5b6f58dc0d1e2dac,live,"Urgent!!! Junior Network Engineer (Switch, IP CCTV)",IP CCTV,keep,hard,required,required,1.0,"Good knowledge in the fields of Business Network system such as Gateway, Switch, AP and IP CCTV"
+2026-10-01,live_5b6f58dc0d1e2dac,live,"Urgent!!! Junior Network Engineer (Switch, IP CCTV)",Gateway,keep,hard,required,required,1.0,"Good knowledge in the fields of Business Network system such as Gateway, Switch, AP and IP CCTV"
+2026-10-01,live_5b6f58dc0d1e2dac,live,"Urgent!!! Junior Network Engineer (Switch, IP CCTV)",CCNA,keep,hard,preferred,preferred,1.0,Possess CCNA/CCNP and other networking certificate would be an added advantage
+2026-10-01,live_5b6f58dc0d1e2dac,live,"Urgent!!! Junior Network Engineer (Switch, IP CCTV)",CCNP,keep,hard,preferred,preferred,1.0,Possess CCNA/CCNP and other networking certificate would be an added advantage
+2026-10-01,live_5b6f58dc0d1e2dac,live,"Urgent!!! Junior Network Engineer (Switch, IP CCTV)",Troubleshooting,keep,hard,required,required,1.0,Experienced in handling and troubleshoot technical issues
+2026-10-01,live_5b6f58dc0d1e2dac,live,"Urgent!!! Junior Network Engineer (Switch, IP CCTV)",Collaboration,keep,soft,unspecified,,1.0,"Collaborate with the team and others to identify, troubleshoot and find resolutions for technical problems"
+2026-10-01,live_5b6f58dc0d1e2dac,live,"Urgent!!! Junior Network Engineer (Switch, IP CCTV)",Presentation,keep,soft,unspecified,,1.0,deliver formal technical proposals / presentations to clients
+2026-10-01,live_148f68aed0d22576,live,Network Engineer Graduate Program,Network fundamentals,keep,hard,unspecified,,1.0,"covering network fundamentals, automation, cloud, AI/ML, IP technologies"
+2026-10-01,live_148f68aed0d22576,live,Network Engineer Graduate Program,Automation,keep,hard,preferred,preferred,1.0,"exposure to computer networking, Python, cloud technologies, automation, APIs, data analytics, or AI/ML"
+2026-10-01,live_148f68aed0d22576,live,Network Engineer Graduate Program,AI/ML,keep,hard,preferred,preferred,1.0,"exposure to computer networking, Python, cloud technologies, automation, APIs, data analytics, or AI/ML"
+2026-10-01,live_148f68aed0d22576,live,Network Engineer Graduate Program,Cloud,keep,hard,preferred,preferred,1.0,"exposure to computer networking, Python, cloud technologies, automation, APIs, data analytics, or AI/ML"
+2026-10-01,live_148f68aed0d22576,live,Network Engineer Graduate Program,Computer networking,keep,hard,preferred,preferred,1.0,"exposure to computer networking, Python, cloud technologies, automation, APIs, data analytics, or AI/ML"
+2026-10-01,live_148f68aed0d22576,live,Network Engineer Graduate Program,Data analytics,keep,hard,preferred,preferred,1.0,"exposure to computer networking, Python, cloud technologies, automation, APIs, data analytics, or AI/ML"
+2026-10-01,live_148f68aed0d22576,live,Network Engineer Graduate Program,Python,keep,hard,unspecified,,1.0,"programming fundamentals (Python, REST APIs, JSON)"
+2026-10-01,live_148f68aed0d22576,live,Network Engineer Graduate Program,REST APIs,keep,hard,unspecified,,1.0,"programming fundamentals (Python, REST APIs, JSON)"
+2026-10-01,live_148f68aed0d22576,live,Network Engineer Graduate Program,JSON,keep,hard,unspecified,,1.0,"programming fundamentals (Python, REST APIs, JSON)"
+2026-10-01,live_148f68aed0d22576,live,Network Engineer Graduate Program,Security,keep,hard,unspecified,,1.0,"covering network fundamentals, automation, cloud, AI/ML, IP technologies, security, and software development"
+2026-10-01,live_148f68aed0d22576,live,Network Engineer Graduate Program,IP technologies,keep,hard,unspecified,,1.0,"covering network fundamentals, automation, cloud, AI/ML, IP technologies, security, and software development"
+2026-10-01,live_148f68aed0d22576,live,Network Engineer Graduate Program,Software development,keep,hard,unspecified,,1.0,"covering network fundamentals, automation, cloud, AI/ML, IP technologies, security, and software development"
+2026-10-01,live_148f68aed0d22576,live,Network Engineer Graduate Program,Network automation,keep,hard,unspecified,,1.0,network automation
+2026-10-01,live_148f68aed0d22576,live,Network Engineer Graduate Program,Performance monitoring,keep,hard,unspecified,,1.0,security and performance monitoring
+2026-10-01,live_148f68aed0d22576,live,Network Engineer Graduate Program,Project Management,keep,hard,unspecified,,1.0,Project Management
+2026-10-01,live_148f68aed0d22576,live,Network Engineer Graduate Program,Customer Engineering,keep,hard,unspecified,,1.0,Customer Engineering
+2026-10-01,live_148f68aed0d22576,live,Network Engineer Graduate Program,Service Delivery,keep,hard,unspecified,,1.0,Service Delivery
+2026-10-01,live_148f68aed0d22576,live,Network Engineer Graduate Program,Network Integration,keep,hard,unspecified,,1.0,Network Integration
+2026-10-01,live_148f68aed0d22576,live,Network Engineer Graduate Program,Network Transformation Programs,keep,hard,unspecified,,1.0,Network Transformation Programs
+2026-10-01,live_148f68aed0d22576,live,Network Engineer Graduate Program,Communication,keep,soft,required,,1.0,"Strong problem-solving, communication (English), and teamwork skills"
+2026-10-01,live_148f68aed0d22576,live,Network Engineer Graduate Program,Teamwork,keep,soft,required,,1.0,"Strong problem-solving, communication (English), and teamwork skills"
+2026-10-01,live_148f68aed0d22576,live,Network Engineer Graduate Program,Problem-solving,keep,soft,required,,1.0,"Strong problem-solving, communication (English), and teamwork skills"
+2026-10-01,live_148f68aed0d22576,live,Network Engineer Graduate Program,Curiosity,keep,soft,required,,1.0,"Curiosity, learning agility, and passion for technology"
+2026-10-01,live_148f68aed0d22576,live,Network Engineer Graduate Program,Learning agility,keep,soft,required,,1.0,"Curiosity, learning agility, and passion for technology"
+2026-10-01,live_148f68aed0d22576,live,Network Engineer Graduate Program,Passion for technology,keep,soft,required,,1.0,"Curiosity, learning agility, and passion for technology"
+2026-10-01,live_148f68aed0d22576,live,Network Engineer Graduate Program,Self-driven,keep,soft,required,,1.0,"Self-driven, adaptable, and proactive"
+2026-10-01,live_148f68aed0d22576,live,Network Engineer Graduate Program,Adaptable,keep,soft,required,,1.0,"Self-driven, adaptable, and proactive"
+2026-10-01,live_148f68aed0d22576,live,Network Engineer Graduate Program,Proactive,keep,soft,required,,1.0,"Self-driven, adaptable, and proactive"
+2026-10-01,live_148f68aed0d22576,live,Network Engineer Graduate Program,Presentation skills,keep,soft,unspecified,,1.0,strengthen communication and presentation skills
+2026-10-01,live_91efd359f1689d0b,live,Network Security Engineer,Network security,keep,hard,unspecified,,1.0,development and implementation of secure network solutions
+2026-10-01,live_91efd359f1689d0b,live,Network Security Engineer,SASE,keep,hard,unspecified,,1.0,"based on SASE architecture, enabling accelerated transition to cloud-based enterprise security, and OT network security"
+2026-10-01,live_91efd359f1689d0b,live,Network Security Engineer,Cloud security,keep,hard,unspecified,,1.0,"based on SASE architecture, enabling accelerated transition to cloud-based enterprise security, and OT network security"
+2026-10-01,live_91efd359f1689d0b,live,Network Security Engineer,OT security,keep,hard,unspecified,,1.0,"based on SASE architecture, enabling accelerated transition to cloud-based enterprise security, and OT network security"
+2026-10-01,live_91efd359f1689d0b,live,Network Security Engineer,Architectural documentation,keep,hard,unspecified,,1.0,Development of architectural documentation
+2026-10-01,live_91efd359f1689d0b,live,Network Security Engineer,Architecture reviews,keep,hard,unspecified,,1.0,participation in architecture reviews
+2026-10-01,live_91efd359f1689d0b,live,Network Security Engineer,Automation,keep,hard,unspecified,,1.0,"participate in, or lead, automation efforts"
+2026-10-01,live_91efd359f1689d0b,live,Network Security Engineer,Data analysis,keep,hard,unspecified,,1.0,Strong passion and interest in a combination of data analysis & networking field
+2026-10-01,live_91efd359f1689d0b,live,Network Security Engineer,Networking,keep,hard,unspecified,,1.0,Strong passion and interest in a combination of data analysis & networking field
+2026-10-01,live_91efd359f1689d0b,live,Network Security Engineer,Learning agility,keep,soft,required,,1.0,Strong learning agility
+2026-10-01,live_91efd359f1689d0b,live,Network Security Engineer,Problem solving,keep,soft,required,,1.0,good problem-solving skills
+2026-10-01,live_91efd359f1689d0b,live,Network Security Engineer,Interpersonal skills,keep,soft,required,,1.0,Strong interpersonal skills
+2026-10-01,live_91efd359f1689d0b,live,Network Security Engineer,Communication,keep,soft,required,,1.0,strong communication skills
+2026-10-01,live_91efd359f1689d0b,live,Network Security Engineer,Python,keep,hard,preferred,,1.0,"Proficiency in scripting (eg. Python, Powershell) is an added advantage"
+2026-10-01,live_91efd359f1689d0b,live,Network Security Engineer,Powershell,keep,hard,preferred,,1.0,"Proficiency in scripting (eg. Python, Powershell) is an added advantage"
+2026-10-01,live_ca39fceedf53e6f6,live,Network Engineer,CheckPoint Firewalls,keep,hard,required,,1.0,Knowledge on CheckPoint Firewalls in terms of troubleshooting issues
+2026-10-01,live_ca39fceedf53e6f6,live,Network Engineer,NAT,keep,hard,required,,1.0,"NAT, application/URL filtering IPS"
+2026-10-01,live_ca39fceedf53e6f6,live,Network Engineer,Application/URL filtering,keep,hard,required,,1.0,"NAT, application/URL filtering IPS"
+2026-10-01,live_ca39fceedf53e6f6,live,Network Engineer,IPS,keep,hard,required,,1.0,"NAT, application/URL filtering IPS"
+2026-10-01,live_ca39fceedf53e6f6,live,Network Engineer,Zscaler Internet Access,keep,hard,required,,1.0,Knowledge on Zscaler Internet Access / Bluecoat ProxySG product
+2026-10-01,live_ca39fceedf53e6f6,live,Network Engineer,Bluecoat ProxySG,keep,hard,required,,1.0,Knowledge on Zscaler Internet Access / Bluecoat ProxySG product
+2026-10-01,live_ca39fceedf53e6f6,live,Network Engineer,F5 APM,keep,hard,required,,1.0,"Kxpert knowledge on F5 APM, LTM, GTM"
+2026-10-01,live_ca39fceedf53e6f6,live,Network Engineer,F5 LTM,keep,hard,required,,1.0,"Kxpert knowledge on F5 APM, LTM, GTM"
+2026-10-01,live_ca39fceedf53e6f6,live,Network Engineer,F5 GTM,keep,hard,required,,1.0,"Kxpert knowledge on F5 APM, LTM, GTM"
+2026-10-01,live_ca39fceedf53e6f6,live,Network Engineer,BGP,keep,hard,required,,1.0,"Knowledge on Routing (e.g. BGP, EIGRP, OSPF, PIM, GRE, VRF"
+2026-10-01,live_ca39fceedf53e6f6,live,Network Engineer,EIGRP,keep,hard,required,,1.0,"Knowledge on Routing (e.g. BGP, EIGRP, OSPF, PIM, GRE, VRF"
+2026-10-01,live_ca39fceedf53e6f6,live,Network Engineer,OSPF,keep,hard,required,,1.0,"Knowledge on Routing (e.g. BGP, EIGRP, OSPF, PIM, GRE, VRF"
+2026-10-01,live_ca39fceedf53e6f6,live,Network Engineer,PIM,keep,hard,required,,1.0,"Knowledge on Routing (e.g. BGP, EIGRP, OSPF, PIM, GRE, VRF"
+2026-10-01,live_ca39fceedf53e6f6,live,Network Engineer,GRE,keep,hard,required,,1.0,"Knowledge on Routing (e.g. BGP, EIGRP, OSPF, PIM, GRE, VRF"
+2026-10-01,live_ca39fceedf53e6f6,live,Network Engineer,VRF,keep,hard,required,,1.0,"Knowledge on Routing (e.g. BGP, EIGRP, OSPF, PIM, GRE, VRF"
+2026-10-01,live_ca39fceedf53e6f6,live,Network Engineer,VPC,keep,hard,required,,1.0,"Switching (VPC, STP, etherchannel"
+2026-10-01,live_ca39fceedf53e6f6,live,Network Engineer,STP,keep,hard,required,,1.0,"Switching (VPC, STP, etherchannel"
+2026-10-01,live_ca39fceedf53e6f6,live,Network Engineer,etherchannel,keep,hard,required,,1.0,"Switching (VPC, STP, etherchannel"
+2026-10-01,live_ca39fceedf53e6f6,live,Network Engineer,IPSec,keep,hard,required,,1.0,VPN technologies experience be it IPSec using firewalls
+2026-10-01,live_ca39fceedf53e6f6,live,Network Engineer,Nexus 9K,keep,hard,required,,1.0,"Nexus 9K, 7K, 5K, and 2K configuration"
+2026-10-01,live_ca39fceedf53e6f6,live,Network Engineer,Nexus 7K,keep,hard,required,,1.0,"Nexus 9K, 7K, 5K, and 2K configuration"
+2026-10-01,live_ca39fceedf53e6f6,live,Network Engineer,Nexus 5K,keep,hard,required,,1.0,"Nexus 9K, 7K, 5K, and 2K configuration"
+2026-10-01,live_fed68894be50c806,live,Fresh Graduate Engineer - Physical Design / Test Developer,Synthesis,keep,hard,unspecified,,1.0,"Assist in synthesis, floor planning, placement, CTS, and routing."
+2026-10-01,live_fed68894be50c806,live,Fresh Graduate Engineer - Physical Design / Test Developer,Floor planning,keep,hard,unspecified,,1.0,"Assist in synthesis, floor planning, placement, CTS, and routing."
+2026-10-01,live_fed68894be50c806,live,Fresh Graduate Engineer - Physical Design / Test Developer,Placement,keep,hard,unspecified,,1.0,"Assist in synthesis, floor planning, placement, CTS, and routing."
+2026-10-01,live_fed68894be50c806,live,Fresh Graduate Engineer - Physical Design / Test Developer,CTS,keep,hard,unspecified,,1.0,"Assist in synthesis, floor planning, placement, CTS, and routing."
+2026-10-01,live_fed68894be50c806,live,Fresh Graduate Engineer - Physical Design / Test Developer,Routing,keep,hard,unspecified,,1.0,"Assist in synthesis, floor planning, placement, CTS, and routing."
+2026-10-01,live_fed68894be50c806,live,Fresh Graduate Engineer - Physical Design / Test Developer,Timing analysis,keep,hard,unspecified,,1.0,"Perform timing analysis, power optimization, and physical verification DRC/LVS checks."
+2026-10-01,live_fed68894be50c806,live,Fresh Graduate Engineer - Physical Design / Test Developer,Power optimization,keep,hard,unspecified,,1.0,"Perform timing analysis, power optimization, and physical verification DRC/LVS checks."
+2026-10-01,live_fed68894be50c806,live,Fresh Graduate Engineer - Physical Design / Test Developer,DRC/LVS checks,keep,hard,unspecified,,1.0,"Perform timing analysis, power optimization, and physical verification DRC/LVS checks."
+2026-10-01,live_fed68894be50c806,live,Fresh Graduate Engineer - Physical Design / Test Developer,Documentation,keep,hard,unspecified,,1.0,"Support on documentation and report design progress, metrics and issues."
+2026-10-01,live_fed68894be50c806,live,Fresh Graduate Engineer - Physical Design / Test Developer,Digital logic,keep,hard,required,required,1.0,"Understanding of digital logic fundamentals, including logic gates and circuit timing."
+2026-10-01,live_fed68894be50c806,live,Fresh Graduate Engineer - Physical Design / Test Developer,VLSI design flow,keep,hard,required,required,1.0,Basic knowledge of VLSI design flow and scripting (TCL/Python/Perl).
+2026-10-01,live_fed68894be50c806,live,Fresh Graduate Engineer - Physical Design / Test Developer,TCL,keep,hard,required,required,1.0,Basic knowledge of VLSI design flow and scripting (TCL/Python/Perl).
+2026-10-01,live_fed68894be50c806,live,Fresh Graduate Engineer - Physical Design / Test Developer,Python,keep,hard,required,required,1.0,Basic knowledge of VLSI design flow and scripting (TCL/Python/Perl).
+2026-10-01,live_fed68894be50c806,live,Fresh Graduate Engineer - Physical Design / Test Developer,Perl,keep,hard,required,required,1.0,Basic knowledge of VLSI design flow and scripting (TCL/Python/Perl).
+2026-10-01,live_fed68894be50c806,live,Fresh Graduate Engineer - Physical Design / Test Developer,Synopsys,keep,hard,preferred,preferred,1.0,Familiarity with EDA tools (Synopsys/Cadence) is an advantage.
+2026-10-01,live_fed68894be50c806,live,Fresh Graduate Engineer - Physical Design / Test Developer,Cadence,keep,hard,preferred,preferred,1.0,Familiarity with EDA tools (Synopsys/Cadence) is an advantage.
+2026-10-01,live_fed68894be50c806,live,Fresh Graduate Engineer - Physical Design / Test Developer,Analytical,keep,soft,required,required,1.0,Strong analytical and teamwork skills; eager to learn.
+2026-10-01,live_eca71c72e724fbb4,live,Cybersecurity Consultant - Penetration Testing,Penetration testing,keep,hard,required,required,1.0,penetration testing or vulnerability assessments
+2026-10-01,live_eca71c72e724fbb4,live,Cybersecurity Consultant - Penetration Testing,Vulnerability assessments,keep,hard,required,required,1.0,penetration testing or vulnerability assessments
+2026-10-01,live_eca71c72e724fbb4,live,Cybersecurity Consultant - Penetration Testing,Web application penetration testing,keep,hard,required,,1.0,web and mobile application penetration testing
+2026-10-01,live_eca71c72e724fbb4,live,Cybersecurity Consultant - Penetration Testing,Mobile application penetration testing,keep,hard,required,,1.0,web and mobile application penetration testing
+2026-10-01,live_eca71c72e724fbb4,live,Cybersecurity Consultant - Penetration Testing,Network penetration testing,keep,hard,required,,1.0,network penetration testing
+2026-10-01,live_eca71c72e724fbb4,live,Cybersecurity Consultant - Penetration Testing,Source code reviews,keep,hard,required,,1.0,source code reviews
+2026-10-01,live_eca71c72e724fbb4,live,Cybersecurity Consultant - Penetration Testing,Red team assessments,keep,hard,required,,1.0,red team assessments
+2026-10-01,live_eca71c72e724fbb4,live,Cybersecurity Consultant - Penetration Testing,Social engineering exercises,keep,hard,required,,1.0,conducting social engineering exercises
+2026-10-01,live_eca71c72e724fbb4,live,Cybersecurity Consultant - Penetration Testing,Security controls,keep,hard,required,required,1.0,Knowledge of security controls
+2026-10-01,live_eca71c72e724fbb4,live,Cybersecurity Consultant - Penetration Testing,Networks,keep,hard,required,required,1.0,networks and operating systems
+2026-10-01,live_eca71c72e724fbb4,live,Cybersecurity Consultant - Penetration Testing,Operating systems,keep,hard,required,required,1.0,networks and operating systems
+2026-10-01,live_eca71c72e724fbb4,live,Cybersecurity Consultant - Penetration Testing,OSCP,keep,hard,required,required,1.0,Minimally possess OSCP or CREST CRT
+2026-10-01,live_eca71c72e724fbb4,live,Cybersecurity Consultant - Penetration Testing,CREST CRT,keep,hard,required,required,1.0,Minimally possess OSCP or CREST CRT
+2026-10-01,live_eca71c72e724fbb4,live,Cybersecurity Consultant - Penetration Testing,Other cybersecurity certifications,keep,hard,preferred,preferred,1.0,Other cybersecurity certifications would be an added advantage
+2026-10-01,live_eca71c72e724fbb4,live,Cybersecurity Consultant - Penetration Testing,Analytical skills,keep,soft,required,required,1.0,Strong analytical and problem-solving skills
+2026-10-01,live_eca71c72e724fbb4,live,Cybersecurity Consultant - Penetration Testing,Communication,keep,soft,required,required,1.0,"Strong communication, writing and interpersonal skills"
+2026-10-01,live_eca71c72e724fbb4,live,Cybersecurity Consultant - Penetration Testing,Interpersonal skills,keep,soft,required,required,1.0,"Strong communication, writing and interpersonal skills"
+2026-10-01,live_eca71c72e724fbb4,live,Cybersecurity Consultant - Penetration Testing,Collaboration,keep,soft,required,required,1.0,Collaborative mindset
+2026-10-01,live_eca71c72e724fbb4,live,Cybersecurity Consultant - Penetration Testing,Cloud security assessments,keep,hard,trained,,1.0,cloud security assessments
+2026-10-01,live_eca71c72e724fbb4,live,Cybersecurity Consultant - Penetration Testing,Blockchain security,keep,hard,trained,,1.0,blockchain security
+2026-10-01,live_eca71c72e724fbb4,live,Cybersecurity Consultant - Penetration Testing,IoT testing,keep,hard,trained,,1.0,IoT testing
+2026-10-01,live_eca71c72e724fbb4,live,Cybersecurity Consultant - Penetration Testing,Threat hunting,keep,hard,trained,,1.0,threat hunting
+2026-10-01,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,SECS/GEM,keep,hard,required,required,1.0,Hands-on experience with SECS/GEM
+2026-10-01,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,C#,keep,hard,required,required,1.0,Strong C# / .NET development skills
+2026-10-01,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,.NET,keep,hard,required,required,1.0,Strong C# / .NET development skills
+2026-10-01,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,REST / Web APIs,keep,hard,required,required,1.0,Experience developing and consuming REST / Web APIs
+2026-10-01,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,AI-assisted coding tools,keep,hard,required,required,1.0,"Familiar with AI-assisted coding tools such as Claude Code, Codex, or similar development assistants"
+2026-10-01,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,Object-oriented design,keep,hard,required,required,1.0,Good understanding of object-oriented design and software architecture
+2026-10-01,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,Software architecture,keep,hard,required,required,1.0,Good understanding of object-oriented design and software architecture
+2026-10-01,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,Debugging,keep,hard,required,required,1.0,Strong debugging and problem-solving skills
+2026-10-01,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,Problem-solving,keep,hard,required,required,1.0,Strong debugging and problem-solving skills
+2026-10-01,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,Asynchronous communication,keep,hard,required,required,1.0,"Comfortable working with asynchronous communication, networking and system integration"
+2026-10-01,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,Networking,keep,hard,required,required,1.0,"Comfortable working with asynchronous communication, networking and system integration"
+2026-10-01,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,System integration,keep,hard,required,required,1.0,"Comfortable working with asynchronous communication, networking and system integration"
+2026-10-01,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,SDK development,keep,hard,unspecified,,1.0,"Build reusable SDKs, libraries and communication components"
+2026-10-01,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,Customer communication,keep,soft,unspecified,,1.0,Work directly with customers and engineers to understand equipment behaviour
+2026-10-01,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,GEM300,keep,hard,preferred,preferred,1.0,GEM300
+2026-10-01,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,Semiconductor equipment,keep,hard,preferred,preferred,1.0,Semiconductor equipment or factory automation
+2026-10-01,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,Factory automation,keep,hard,preferred,preferred,1.0,Semiconductor equipment or factory automation
+2026-10-01,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,WPF,keep,hard,preferred,preferred,1.0,WPF / MVVM
+2026-10-01,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,MVVM,keep,hard,preferred,preferred,1.0,WPF / MVVM
+2026-10-01,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,OPC UA,keep,hard,preferred,preferred,1.0,OPC UA
+2026-10-01,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,PLC communication,keep,hard,preferred,preferred,1.0,PLC communication
+2026-10-01,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,TCP/IP,keep,hard,preferred,preferred,1.0,"TCP/IP, WebSockets or gRPC"
+2026-10-01,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,WebSockets,keep,hard,preferred,preferred,1.0,"TCP/IP, WebSockets or gRPC"
+2026-10-01,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,gRPC,keep,hard,preferred,preferred,1.0,"TCP/IP, WebSockets or gRPC"
+2026-10-01,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,MES,keep,hard,preferred,preferred,1.0,"MES, EAP, SCADA, SPC or RMS systems"
+2026-10-01,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,EAP,keep,hard,preferred,preferred,1.0,"MES, EAP, SCADA, SPC or RMS systems"
+2026-10-01,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,SCADA,keep,hard,preferred,preferred,1.0,"MES, EAP, SCADA, SPC or RMS systems"
+2026-10-01,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,SPC,keep,hard,preferred,preferred,1.0,"MES, EAP, SCADA, SPC or RMS systems"
+2026-10-01,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,RMS,keep,hard,preferred,preferred,1.0,"MES, EAP, SCADA, SPC or RMS systems"
+2026-10-01,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,Mitsubishi PLC,keep,hard,preferred,preferred,1.0,"Mitsubishi, Omron, Siemens or Beckhoff PLCs"
+2026-10-01,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,Omron PLC,keep,hard,preferred,preferred,1.0,"Mitsubishi, Omron, Siemens or Beckhoff PLCs"
+2026-10-01,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,Siemens PLC,keep,hard,preferred,preferred,1.0,"Mitsubishi, Omron, Siemens or Beckhoff PLCs"
+2026-10-01,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,Beckhoff PLC,keep,hard,preferred,preferred,1.0,"Mitsubishi, Omron, Siemens or Beckhoff PLCs"
+2026-10-01,live_6c14b31977332464,live,Business Analyst Intern,Microsoft Excel,keep,hard,required,,1.0,Proficiency in Microsoft Excel and PowerPoint
+2026-10-01,live_6c14b31977332464,live,Business Analyst Intern,PowerPoint,keep,hard,required,,1.0,Proficiency in Microsoft Excel and PowerPoint
+2026-10-01,live_6c14b31977332464,live,Business Analyst Intern,Data analysis,keep,hard,required,,1.0,Ability to work with structured data and perform basic data analysis
+2026-10-01,live_6c14b31977332464,live,Business Analyst Intern,Process mapping,keep,hard,preferred,preferred,1.0,"Familiarity with process mapping tools, business analysis techniques, or documentation tools"
+2026-10-01,live_6c14b31977332464,live,Business Analyst Intern,Business analysis,keep,hard,preferred,preferred,1.0,"Familiarity with process mapping tools, business analysis techniques, or documentation tools"
+2026-10-01,live_6c14b31977332464,live,Business Analyst Intern,Documentation tools,keep,hard,preferred,preferred,1.0,"Familiarity with process mapping tools, business analysis techniques, or documentation tools"
+2026-10-01,live_6c14b31977332464,live,Business Analyst Intern,Systems knowledge,keep,hard,preferred,preferred,1.0,"Technical knowledge or understanding of systems, applications, or digital products is a plus"
+2026-10-01,live_6c14b31977332464,live,Business Analyst Intern,Communication,keep,soft,required,,1.0,Strong written and verbal communication skills in English
+2026-10-01,live_6c14b31977332464,live,Business Analyst Intern,Presentation skills,keep,soft,required,,1.0,Confident in presentations and stakeholder interactions
+2026-10-01,live_6c14b31977332464,live,Business Analyst Intern,Interpersonal skills,keep,soft,required,,1.0,Good interpersonal and relationship management skills
+2026-10-01,live_6c14b31977332464,live,Business Analyst Intern,Analytical thinking,keep,soft,required,,1.0,Strong analytical thinking and problem-solving abilities
+2026-10-01,live_6c14b31977332464,live,Business Analyst Intern,Attention to detail,keep,soft,required,,1.0,Highly organized with strong attention to detail
+2026-10-01,live_6c14b31977332464,live,Business Analyst Intern,Collaboration,keep,soft,required,,1.0,"Proactive, eager to learn, and able to work collaboratively within cross-functional teams"
+2026-10-01,live_6c14b31977332464,live,Business Analyst Intern,Requirements gathering,keep,hard,unspecified,required,1.0,"requirements gathering, process documentation"
+2026-10-01,live_6c14b31977332464,live,Business Analyst Intern,Process documentation,keep,hard,unspecified,required,1.0,"requirements gathering, process documentation"
+2026-10-01,live_6c14b31977332464,live,Business Analyst Intern,UAT coordination,keep,hard,unspecified,,1.0,User Acceptance Testing (UAT) Coordination
+2026-10-01,live_382395358c7f052d,live,Senior IT Business Analyst ( Manufacturing Execution System ),Business process definition,keep,hard,required,required,1.0,"Experience in business process definition, modelling, requirements definition and technology solution research."
+2026-10-01,live_382395358c7f052d,live,Senior IT Business Analyst ( Manufacturing Execution System ),Business process modelling,keep,hard,required,required,1.0,"Experience in business process definition, modelling, requirements definition and technology solution research."
+2026-10-01,live_382395358c7f052d,live,Senior IT Business Analyst ( Manufacturing Execution System ),Requirements definition,keep,hard,required,required,1.0,"Experience in business process definition, modelling, requirements definition and technology solution research."
+2026-10-01,live_382395358c7f052d,live,Senior IT Business Analyst ( Manufacturing Execution System ),Facilitation,keep,soft,required,required,1.0,Experience in facilitating small to large groups through challenging discussions.
+2026-10-01,live_382395358c7f052d,live,Senior IT Business Analyst ( Manufacturing Execution System ),MES,keep,hard,required,required,1.0,Experience with MES ( Manufacturing Execution System ) Implementations ongoing development and support.
+2026-10-01,live_382395358c7f052d,live,Senior IT Business Analyst ( Manufacturing Execution System ),MES Integration,keep,hard,required,required,1.0,"Experience with MES ( Manufacturing Execution System ) Integrations to Manufacturing Equipment’s and Other Applications ( ERP, Labelling etc)."
+2026-10-01,live_382395358c7f052d,live,Senior IT Business Analyst ( Manufacturing Execution System ),ERP,keep,hard,required,required,1.0,"Experience with MES ( Manufacturing Execution System ) Integrations to Manufacturing Equipment’s and Other Applications ( ERP, Labelling etc)."
+2026-10-01,live_382395358c7f052d,live,Senior IT Business Analyst ( Manufacturing Execution System ),System integration,keep,hard,preferred,preferred,1.0,System integration knowledge
+2026-10-01,live_382395358c7f052d,live,Senior IT Business Analyst ( Manufacturing Execution System ),Programming,keep,hard,preferred,preferred,1.0,Programming/development background
+2026-10-01,live_382395358c7f052d,live,Senior IT Business Analyst ( Manufacturing Execution System ),Infrastructure,keep,hard,preferred,preferred,1.0,Infrastructure awareness
+2026-10-01,live_382395358c7f052d,live,Senior IT Business Analyst ( Manufacturing Execution System ),Database,keep,hard,preferred,preferred,1.0,Database knowledge
+2026-10-01,live_382395358c7f052d,live,Senior IT Business Analyst ( Manufacturing Execution System ),Reporting tools,keep,hard,preferred,preferred,1.0,Reporting tools experience
+2026-10-01,live_382395358c7f052d,live,Senior IT Business Analyst ( Manufacturing Execution System ),Communication,keep,soft,unspecified,required,1.0,Communicate with numerous functional areas
+2026-10-01,live_382395358c7f052d,live,Senior IT Business Analyst ( Manufacturing Execution System ),Information protection,keep,hard,unspecified,,1.0,Information Protection Policies and Standards
+2026-10-01,live_4b0481bfc00baf4b,live,Digital Operations L2 Cloud Support Engineer - APAC,Kafka,keep,hard,required,,1.0,"Strong technical skills in Kafka, SQL (PostgreSQL/Oracle), Splunk, AWS CloudWatch, Grafana, Prometheus, Docker, Kubernetes, AWS."
+2026-10-01,live_4b0481bfc00baf4b,live,Digital Operations L2 Cloud Support Engineer - APAC,SQL,keep,hard,required,,1.0,"Strong technical skills in Kafka, SQL (PostgreSQL/Oracle), Splunk, AWS CloudWatch, Grafana, Prometheus, Docker, Kubernetes, AWS."
+2026-10-01,live_4b0481bfc00baf4b,live,Digital Operations L2 Cloud Support Engineer - APAC,Splunk,keep,hard,required,,1.0,"Strong technical skills in Kafka, SQL (PostgreSQL/Oracle), Splunk, AWS CloudWatch, Grafana, Prometheus, Docker, Kubernetes, AWS."
+2026-10-01,live_4b0481bfc00baf4b,live,Digital Operations L2 Cloud Support Engineer - APAC,AWS CloudWatch,keep,hard,required,,1.0,"Strong technical skills in Kafka, SQL (PostgreSQL/Oracle), Splunk, AWS CloudWatch, Grafana, Prometheus, Docker, Kubernetes, AWS."
+2026-10-01,live_4b0481bfc00baf4b,live,Digital Operations L2 Cloud Support Engineer - APAC,Grafana,keep,hard,required,,1.0,"Strong technical skills in Kafka, SQL (PostgreSQL/Oracle), Splunk, AWS CloudWatch, Grafana, Prometheus, Docker, Kubernetes, AWS."
+2026-10-01,live_4b0481bfc00baf4b,live,Digital Operations L2 Cloud Support Engineer - APAC,Prometheus,keep,hard,required,,1.0,"Strong technical skills in Kafka, SQL (PostgreSQL/Oracle), Splunk, AWS CloudWatch, Grafana, Prometheus, Docker, Kubernetes, AWS."
+2026-10-01,live_4b0481bfc00baf4b,live,Digital Operations L2 Cloud Support Engineer - APAC,Docker,keep,hard,required,,1.0,"Strong technical skills in Kafka, SQL (PostgreSQL/Oracle), Splunk, AWS CloudWatch, Grafana, Prometheus, Docker, Kubernetes, AWS."
+2026-10-01,live_4b0481bfc00baf4b,live,Digital Operations L2 Cloud Support Engineer - APAC,Kubernetes,keep,hard,required,,1.0,"Strong technical skills in Kafka, SQL (PostgreSQL/Oracle), Splunk, AWS CloudWatch, Grafana, Prometheus, Docker, Kubernetes, AWS."
+2026-10-01,live_4b0481bfc00baf4b,live,Digital Operations L2 Cloud Support Engineer - APAC,AWS,keep,hard,required,,1.0,"Strong technical skills in Kafka, SQL (PostgreSQL/Oracle), Splunk, AWS CloudWatch, Grafana, Prometheus, Docker, Kubernetes, AWS."
+2026-10-01,live_4b0481bfc00baf4b,live,Digital Operations L2 Cloud Support Engineer - APAC,Bash,keep,hard,required,,1.0,"Familiarity with scripting and automation tools such as Bash, Python, Postman, and CI/CD platforms including ArgoCD and Argo Workflows."
+2026-10-01,live_4b0481bfc00baf4b,live,Digital Operations L2 Cloud Support Engineer - APAC,Python,keep,hard,required,,1.0,"Familiarity with scripting and automation tools such as Bash, Python, Postman, and CI/CD platforms including ArgoCD and Argo Workflows."
+2026-10-01,live_4b0481bfc00baf4b,live,Digital Operations L2 Cloud Support Engineer - APAC,Postman,keep,hard,required,,1.0,"Familiarity with scripting and automation tools such as Bash, Python, Postman, and CI/CD platforms including ArgoCD and Argo Workflows."
+2026-10-01,live_4b0481bfc00baf4b,live,Digital Operations L2 Cloud Support Engineer - APAC,ArgoCD,keep,hard,required,,1.0,"Familiarity with scripting and automation tools such as Bash, Python, Postman, and CI/CD platforms including ArgoCD and Argo Workflows."
+2026-10-01,live_4b0481bfc00baf4b,live,Digital Operations L2 Cloud Support Engineer - APAC,Argo Workflows,keep,hard,required,,1.0,"Familiarity with scripting and automation tools such as Bash, Python, Postman, and CI/CD platforms including ArgoCD and Argo Workflows."
+2026-10-01,live_4b0481bfc00baf4b,live,Digital Operations L2 Cloud Support Engineer - APAC,ITIL,keep,hard,preferred,preferred,1.0,ITIL certification is a plus.
+2026-10-01,live_4b0481bfc00baf4b,live,Digital Operations L2 Cloud Support Engineer - APAC,Problem solving,keep,soft,required,,1.0,Excellent analytical and problem-solving abilities
+2026-10-01,live_4b0481bfc00baf4b,live,Digital Operations L2 Cloud Support Engineer - APAC,Stakeholder management,keep,soft,required,,1.0,"Strong stakeholder management, customer service, communication, and documentation skills."
+2026-10-01,live_4b0481bfc00baf4b,live,Digital Operations L2 Cloud Support Engineer - APAC,Customer service,keep,soft,required,,1.0,"Strong stakeholder management, customer service, communication, and documentation skills."
+2026-10-01,live_4b0481bfc00baf4b,live,Digital Operations L2 Cloud Support Engineer - APAC,Communication,keep,soft,required,,1.0,"Strong stakeholder management, customer service, communication, and documentation skills."
+2026-10-01,live_4b0481bfc00baf4b,live,Digital Operations L2 Cloud Support Engineer - APAC,Documentation,keep,soft,required,,1.0,"Strong stakeholder management, customer service, communication, and documentation skills."
+2026-10-01,live_4b0481bfc00baf4b,live,Digital Operations L2 Cloud Support Engineer - APAC,Organization,keep,soft,required,,1.0,Highly organized with the ability to prioritize tasks and manage multiple activities in a fast-paced environment.
+2026-10-01,live_4b0481bfc00baf4b,live,Digital Operations L2 Cloud Support Engineer - APAC,Teamwork,keep,soft,required,required,1.0,"A proactive, resilient team player who thrives under pressure"
+2026-10-01,live_31eecb6dda5fc2b9,live,Senior SIEM Engineer,SIEM platform,keep,hard,required,,1.0,strong hands-on experience in SIEM platform engineering
+2026-10-01,live_31eecb6dda5fc2b9,live,Senior SIEM Engineer,Security monitoring,keep,hard,required,,1.0,"strong hands-on experience in SIEM platform engineering, security monitoring"
+2026-10-01,live_31eecb6dda5fc2b9,live,Senior SIEM Engineer,Detection engineering,keep,hard,required,required,1.0,Hands-on detection engineering experience
+2026-10-01,live_31eecb6dda5fc2b9,live,Senior SIEM Engineer,SOC,keep,hard,required,required,1.0,supporting 24x7 SOC environments
+2026-10-01,live_31eecb6dda5fc2b9,live,Senior SIEM Engineer,MITRE ATT&CK,keep,hard,required,,1.0,aligned with MITRE ATT&CK
+2026-10-01,live_31eecb6dda5fc2b9,live,Senior SIEM Engineer,Cloud platforms,keep,hard,required,required,1.0,"Strong foundation in Linux, networking and cloud platforms"
+2026-10-01,live_31eecb6dda5fc2b9,live,Senior SIEM Engineer,Linux,keep,hard,required,required,1.0,"Strong foundation in Linux, networking and cloud platforms"
+2026-10-01,live_31eecb6dda5fc2b9,live,Senior SIEM Engineer,Networking,keep,hard,required,required,1.0,"Strong foundation in Linux, networking and cloud platforms"
+2026-10-01,live_31eecb6dda5fc2b9,live,Senior SIEM Engineer,IaC,keep,hard,required,,1.0,"using IaC, CI/CD"
+2026-10-01,live_31eecb6dda5fc2b9,live,Senior SIEM Engineer,CI/CD,keep,hard,required,,1.0,"using IaC, CI/CD"
+2026-10-01,live_31eecb6dda5fc2b9,live,Senior SIEM Engineer,Scripting,keep,hard,required,required,1.0,"Proficiency in scripting, automation, IaC and CI/CD"
+2026-10-01,live_31eecb6dda5fc2b9,live,Senior SIEM Engineer,Splunk,keep,hard,required,,1.0,SIEM Engineer / SIEM Platform / Security Monitoring / Detection Engineering / SOC / Splunk / Log Management
+2026-10-01,live_31eecb6dda5fc2b9,live,Senior SIEM Engineer,Log Management,keep,hard,required,,1.0,SIEM Engineer / SIEM Platform / Security Monitoring / Detection Engineering / SOC / Splunk / Log Management
+2026-10-01,live_31eecb6dda5fc2b9,live,Senior SIEM Engineer,Incident response,keep,hard,required,required,1.0,Good understanding of incident response
+2026-10-01,live_31eecb6dda5fc2b9,live,Senior SIEM Engineer,Threat hunting,keep,hard,unspecified,,1.0,Support threat hunting
+2026-10-01,live_31eecb6dda5fc2b9,live,Senior SIEM Engineer,Security telemetry,keep,hard,required,required,1.0,Experience integrating security telemetry
+2026-10-01,live_31eecb6dda5fc2b9,live,Senior SIEM Engineer,Capacity planning,keep,hard,required,,1.0,capacity planning
+2026-10-01,live_31eecb6dda5fc2b9,live,Senior SIEM Engineer,Performance tuning,keep,hard,required,,1.0,SIEM performance tuning
+2026-10-01,live_31eecb6dda5fc2b9,live,Senior SIEM Engineer,EPS/TPS modelling,keep,hard,unspecified,,1.0,EPS/TPS modelling
+2026-10-01,live_31eecb6dda5fc2b9,live,Senior SIEM Engineer,Problem solving,keep,soft,required,required,1.0,Strong troubleshooting and problem-solving skills
+2026-10-01,live_a1c3268440de0d2c,live,Senior Software Engineer - Java,Java,keep,hard,required,required,1.0,"Minimum 5 years working experience in Java, Springboot"
+2026-10-01,live_a1c3268440de0d2c,live,Senior Software Engineer - Java,SpringBoot,keep,hard,required,required,1.0,"Minimum 5 years working experience in Java, Springboot"
+2026-10-01,live_a1c3268440de0d2c,live,Senior Software Engineer - Java,MySQL,keep,hard,required,,1.0,"Proven experience as a software engineer with a focus on Java, SpringBoot, Kafka, and MySQL"
+2026-10-01,live_a1c3268440de0d2c,live,Senior Software Engineer - Java,Kafka,keep,hard,required,,1.0,"Proven experience as a software engineer with a focus on Java, SpringBoot, Kafka, and MySQL"
+2026-10-01,live_a1c3268440de0d2c,live,Senior Software Engineer - Java,Microservices architecture,keep,hard,required,,1.0,Strong understanding of microservices architecture and implementation
+2026-10-01,live_a1c3268440de0d2c,live,Senior Software Engineer - Java,RESTful API development,keep,hard,required,,1.0,Experience with RESTful API development and integration
+2026-10-01,live_a1c3268440de0d2c,live,Senior Software Engineer - Java,Git,keep,hard,required,,1.0,Familiarity with version control systems (e.g. Git)
+2026-10-01,live_a1c3268440de0d2c,live,Senior Software Engineer - Java,Agile development,keep,hard,required,,1.0,Knowledge of agile development methodologies
+2026-10-01,live_a1c3268440de0d2c,live,Senior Software Engineer - Java,Security principles,keep,hard,required,,1.0,Understanding of security principles and how they apply to banking systems
+2026-10-01,live_a1c3268440de0d2c,live,Senior Software Engineer - Java,Mambu,keep,hard,preferred,preferred,1.0,Experience with Mambu is a plus
+2026-10-01,live_a1c3268440de0d2c,live,Senior Software Engineer - Java,AWS,keep,hard,unspecified,,1.0,Experience with cloud platforms (e.g. AWS)
+2026-10-01,live_a1c3268440de0d2c,live,Senior Software Engineer - Java,Communication,keep,soft,required,,1.0,Strong communication and teamwork skills
+2026-10-01,live_a1c3268440de0d2c,live,Senior Software Engineer - Java,Teamwork,keep,soft,required,,1.0,Strong communication and teamwork skills
+2026-10-01,live_a1c3268440de0d2c,live,Senior Software Engineer - Java,Problem-solving,keep,soft,required,,1.0,Excellent problem-solving skills and attention to details
+2026-10-01,live_a1c3268440de0d2c,live,Senior Software Engineer - Java,Attention to detail,keep,soft,required,,1.0,Excellent problem-solving skills and attention to details
+2026-10-01,live_5b6f58dc0d1e2dac,live,"Urgent!!! Junior Network Engineer (Switch, IP CCTV)",Switch,keep,hard,required,required,1.0,"Experienced in networking product like Switch, Wireless Access Point, Router and other networking related product"
+2026-10-01,live_5b6f58dc0d1e2dac,live,"Urgent!!! Junior Network Engineer (Switch, IP CCTV)",Wireless Access Point,keep,hard,required,required,1.0,"Experienced in networking product like Switch, Wireless Access Point, Router and other networking related product"
+2026-10-01,live_5b6f58dc0d1e2dac,live,"Urgent!!! Junior Network Engineer (Switch, IP CCTV)",Router,keep,hard,required,required,1.0,"Experienced in networking product like Switch, Wireless Access Point, Router and other networking related product"
+2026-10-01,live_5b6f58dc0d1e2dac,live,"Urgent!!! Junior Network Engineer (Switch, IP CCTV)",IP CCTV,keep,hard,required,required,1.0,"Good knowledge in the fields of Business Network system such as Gateway, Switch, AP and IP CCTV"
+2026-10-01,live_5b6f58dc0d1e2dac,live,"Urgent!!! Junior Network Engineer (Switch, IP CCTV)",Gateway,keep,hard,required,required,1.0,"Good knowledge in the fields of Business Network system such as Gateway, Switch, AP and IP CCTV"
+2026-10-01,live_5b6f58dc0d1e2dac,live,"Urgent!!! Junior Network Engineer (Switch, IP CCTV)",CCNA,keep,hard,preferred,preferred,1.0,Possess CCNA/CCNP and other networking certificate would be an added advantage
+2026-10-01,live_5b6f58dc0d1e2dac,live,"Urgent!!! Junior Network Engineer (Switch, IP CCTV)",CCNP,keep,hard,preferred,preferred,1.0,Possess CCNA/CCNP and other networking certificate would be an added advantage
+2026-10-01,live_5b6f58dc0d1e2dac,live,"Urgent!!! Junior Network Engineer (Switch, IP CCTV)",Presentation,keep,soft,unspecified,,1.0,deliver formal technical proposals / presentations to clients
+2026-10-01,live_5e41ea511adbcf36,live,ESG Data Analyst,ESG reporting,keep,hard,required,,1.0,"Lead end-to-end ESG reporting activities across Environmental, Social and Governance pillars."
+2026-10-01,live_5e41ea511adbcf36,live,ESG Data Analyst,GRI,keep,hard,required,,1.0,"Ensure compliance with recognised reporting frameworks including GRI, ESRS, TCFD, ISSB and IFRS Sustainability Standards."
+2026-10-01,live_5e41ea511adbcf36,live,ESG Data Analyst,ESRS,keep,hard,required,,1.0,"Ensure compliance with recognised reporting frameworks including GRI, ESRS, TCFD, ISSB and IFRS Sustainability Standards."
+2026-10-01,live_5e41ea511adbcf36,live,ESG Data Analyst,TCFD,keep,hard,required,,1.0,"Ensure compliance with recognised reporting frameworks including GRI, ESRS, TCFD, ISSB and IFRS Sustainability Standards."
+2026-10-01,live_5e41ea511adbcf36,live,ESG Data Analyst,ISSB,keep,hard,required,,1.0,"Ensure compliance with recognised reporting frameworks including GRI, ESRS, TCFD, ISSB and IFRS Sustainability Standards."
+2026-10-01,live_5e41ea511adbcf36,live,ESG Data Analyst,IFRS Sustainability Standards,keep,hard,required,,1.0,"Ensure compliance with recognised reporting frameworks including GRI, ESRS, TCFD, ISSB and IFRS Sustainability Standards."
+2026-10-01,live_5e41ea511adbcf36,live,ESG Data Analyst,Data collection,keep,hard,required,,1.0,"Collect, validate and consolidate sustainability data from multiple business units and regional offices."
+2026-10-01,live_5e41ea511adbcf36,live,ESG Data Analyst,Carbon accounting,keep,hard,required,,1.0,"Manage carbon accounting data including Scope 1, Scope 2 and Scope 3 emissions reporting."
+2026-10-01,live_5e41ea511adbcf36,live,ESG Data Analyst,Power BI,keep,hard,preferred,,1.0,using reporting tools such as Power BI
+2026-10-01,live_5e41ea511adbcf36,live,ESG Data Analyst,Tableau,keep,hard,preferred,preferred,1.0,"Advanced Excel skills with exposure to Power BI, Tableau, SQL or other reporting tools advantageous."
+2026-10-01,live_5e41ea511adbcf36,live,ESG Data Analyst,SQL,keep,hard,preferred,preferred,1.0,"Advanced Excel skills with exposure to Power BI, Tableau, SQL or other reporting tools advantageous."
+2026-10-01,live_5e41ea511adbcf36,live,ESG Data Analyst,Excel,keep,hard,preferred,preferred,1.0,"Advanced Excel skills with exposure to Power BI, Tableau, SQL or other reporting tools advantageous."
+2026-10-01,live_5e41ea511adbcf36,live,ESG Data Analyst,Communication,keep,soft,required,,1.0,Excellent communication skills with the ability to engage regional and global stakeholders.
+2026-10-01,live_5e41ea511adbcf36,live,ESG Data Analyst,Stakeholder engagement,keep,soft,required,,1.0,"Coordinate with regional stakeholders to improve ESG data quality, governance and audit readiness."
+2026-10-01,live_5e41ea511adbcf36,live,ESG Data Analyst,Data analysis,keep,hard,required,,1.0,"Analyse ESG performance data and identify trends, risks and opportunities for improvement."
+2026-10-01,live_5e41ea511adbcf36,live,ESG Data Analyst,Dashboard development,keep,hard,required,,1.0,"Support the development of ESG dashboards, reports and visualisations using reporting tools such as Power BI."
+2026-10-01,live_5e41ea511adbcf36,live,ESG Data Analyst,Sustainability metrics,keep,hard,required,,1.0,"Experience managing sustainability metrics including carbon emissions, waste, energy usage and social governance indicators."
+2026-10-01,live_5e41ea511adbcf36,live,ESG Data Analyst,Data governance,keep,hard,unspecified,,1.0,"improve ESG data quality, governance and audit readiness."
+2026-10-01,live_95bcb0bf755717a3,live,Junior AI Engineer Generative & Agentic AI,Python,keep,hard,required,,1.0,Develop AI services and APIs using Python and FastAPI.
+2026-10-01,live_95bcb0bf755717a3,live,Junior AI Engineer Generative & Agentic AI,FastAPI,keep,hard,required,,1.0,Develop AI services and APIs using Python and FastAPI.
+2026-10-01,live_95bcb0bf755717a3,live,Junior AI Engineer Generative & Agentic AI,SQL,keep,hard,required,,1.0,"Use SQL to retrieve, process and integrate data into AI applications."
+2026-10-01,live_95bcb0bf755717a3,live,Junior AI Engineer Generative & Agentic AI,LangChain,keep,hard,required,,1.0,Develop AI agents and multi-agent workflows using frameworks such as LangGraph and LangChain.
+2026-10-01,live_95bcb0bf755717a3,live,Junior AI Engineer Generative & Agentic AI,LangGraph,keep,hard,required,,1.0,Develop AI agents and multi-agent workflows using frameworks such as LangGraph and LangChain.
+2026-10-01,live_95bcb0bf755717a3,live,Junior AI Engineer Generative & Agentic AI,Large Language Models,keep,hard,required,,1.0,"including LLMs, RAG, embeddings, APIs and prompt engineering."
+2026-10-01,live_95bcb0bf755717a3,live,Junior AI Engineer Generative & Agentic AI,RAG,keep,hard,required,,1.0,"including LLMs, RAG, embeddings, APIs and prompt engineering."
+2026-10-01,live_95bcb0bf755717a3,live,Junior AI Engineer Generative & Agentic AI,embeddings,keep,hard,required,,1.0,"including LLMs, RAG, embeddings, APIs and prompt engineering."
+2026-10-01,live_95bcb0bf755717a3,live,Junior AI Engineer Generative & Agentic AI,APIs,keep,hard,required,,1.0,"including LLMs, RAG, embeddings, APIs and prompt engineering."
+2026-10-01,live_95bcb0bf755717a3,live,Junior AI Engineer Generative & Agentic AI,prompt engineering,keep,hard,required,,1.0,"including LLMs, RAG, embeddings, APIs and prompt engineering."
+2026-10-01,live_95bcb0bf755717a3,live,Junior AI Engineer Generative & Agentic AI,Git,keep,hard,required,,1.0,Familiarity with Git and modern software-development practices.
+2026-10-01,live_95bcb0bf755717a3,live,Junior AI Engineer Generative & Agentic AI,Docker,keep,hard,preferred,preferred,1.0,"Exposure to FastAPI, LangChain, LangGraph, Docker, Azure, React or vector databases would be an advantage."
+2026-10-01,live_95bcb0bf755717a3,live,Junior AI Engineer Generative & Agentic AI,Azure,keep,hard,preferred,preferred,1.0,"Exposure to FastAPI, LangChain, LangGraph, Docker, Azure, React or vector databases would be an advantage."
+2026-10-01,live_95bcb0bf755717a3,live,Junior AI Engineer Generative & Agentic AI,React,keep,hard,preferred,preferred,1.0,"Exposure to FastAPI, LangChain, LangGraph, Docker, Azure, React or vector databases would be an advantage."
+2026-10-01,live_95bcb0bf755717a3,live,Junior AI Engineer Generative & Agentic AI,vector databases,keep,hard,preferred,preferred,1.0,"Exposure to FastAPI, LangChain, LangGraph, Docker, Azure, React or vector databases would be an advantage."
+2026-10-01,live_95bcb0bf755717a3,live,Junior AI Engineer Generative & Agentic AI,analytical and problem-solving,keep,soft,required,,1.0,Strong analytical and problem-solving skills.
+2026-10-01,live_95bcb0bf755717a3,live,Junior AI Engineer Generative & Agentic AI,communication,keep,soft,required,,1.0,Good communication and teamwork skills
+2026-10-01,live_95bcb0bf755717a3,live,Junior AI Engineer Generative & Agentic AI,teamwork,keep,soft,required,,1.0,Good communication and teamwork skills
+2026-10-01,live_e01ead5ec2843792,live,Website Operations & Backend Developer,DNS,keep,hard,required,,1.0,"domains, DNS and SSL certificates"
+2026-10-01,live_e01ead5ec2843792,live,Website Operations & Backend Developer,SSL certificates,keep,hard,required,,1.0,"domains, DNS and SSL certificates"
+2026-10-01,live_e01ead5ec2843792,live,Website Operations & Backend Developer,Hosting,keep,hard,required,,1.0,hosting environments
+2026-10-01,live_e01ead5ec2843792,live,Website Operations & Backend Developer,Payment gateways,keep,hard,required,,1.0,"payment gateways, checkout flows and payment-related integrations"
+2026-10-01,live_e01ead5ec2843792,live,Website Operations & Backend Developer,APIs,keep,hard,required,,1.0,APIs and webhooks
+2026-10-01,live_e01ead5ec2843792,live,Website Operations & Backend Developer,Webhooks,keep,hard,required,,1.0,APIs and webhooks
+2026-10-01,live_e01ead5ec2843792,live,Website Operations & Backend Developer,Google Tag Manager,keep,hard,required,,1.0,"tracking pixels, Google Tag Manager and analytics tools"
+2026-10-01,live_e01ead5ec2843792,live,Website Operations & Backend Developer,Tracking pixels,keep,hard,required,,1.0,"tracking pixels, Google Tag Manager and analytics tools"
+2026-10-01,live_e01ead5ec2843792,live,Website Operations & Backend Developer,Website uptime,keep,hard,required,,1.0,"monitor website uptime, speed, security and overall technical performance"
+2026-10-01,live_e01ead5ec2843792,live,Website Operations & Backend Developer,Troubleshooting,keep,hard,required,,1.0,"troubleshoot bugs, failed payments, broken integrations and tracking issues"
+2026-10-01,live_e01ead5ec2843792,live,Website Operations & Backend Developer,Version control,keep,hard,required,,1.0,backups and version control
+2026-10-01,live_e01ead5ec2843792,live,Website Operations & Backend Developer,Backups,keep,hard,required,,1.0,backups and version control
+2026-10-01,live_e01ead5ec2843792,live,Website Operations & Backend Developer,CMS,keep,hard,required,,1.0,maintain CMS platforms
+2026-10-01,live_e01ead5ec2843792,live,Website Operations & Backend Developer,Databases,keep,hard,required,,1.0,"databases, forms and automated website workflows"
+2026-10-01,live_e01ead5ec2843792,live,Website Operations & Backend Developer,Internationalization,keep,hard,required,,1.0,"support international requirements including multiple currencies, languages and regional payment methods"
+2026-10-01,live_e01ead5ec2843792,live,Website Operations & Backend Developer,Landing pages,keep,hard,required,,1.0,launch landing pages and conversion improvements
+2026-10-01,live_e01ead5ec2843792,live,Website Operations & Backend Developer,Technical documentation,keep,hard,required,,1.0,maintain clear technical documentation
+2026-10-01,live_e01ead5ec2843792,live,Website Operations & Backend Developer,HTML,keep,hard,required,,1.0,"including HTML, CSS, JavaScript and a backend language"
+2026-10-01,live_e01ead5ec2843792,live,Website Operations & Backend Developer,CSS,keep,hard,required,,1.0,"including HTML, CSS, JavaScript and a backend language"
+2026-10-01,live_e01ead5ec2843792,live,Website Operations & Backend Developer,JavaScript,keep,hard,required,,1.0,"including HTML, CSS, JavaScript and a backend language"
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,Juniper,keep,hard,required,,1.0,"Juniper, Fortinet, Ivanti, OpenGear and Aruba environment"
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,Fortinet,keep,hard,required,,1.0,"Juniper, Fortinet, Ivanti, OpenGear and Aruba environment"
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,Ivanti,keep,hard,required,,1.0,"Juniper, Fortinet, Ivanti, OpenGear and Aruba environment"
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,OpenGear,keep,hard,required,,1.0,"Juniper, Fortinet, Ivanti, OpenGear and Aruba environment"
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,Aruba,keep,hard,required,,1.0,"Juniper, Fortinet, Ivanti, OpenGear and Aruba environment"
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,CLI,keep,hard,required,,1.0,solving problems at the CLI
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,Scripting,keep,hard,unspecified,,1.0,"Scripting, automation and AI assisted tooling"
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,Automation,keep,hard,unspecified,,1.0,"Scripting, automation and AI assisted tooling"
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,AI assisted tooling,keep,hard,preferred,,1.0,"Scripting, automation and AI assisted tooling"
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,Switching,keep,hard,required,,1.0,"Operating, configuring and troubleshooting switching, routing, firewalls, VPN and wireless"
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,Routing,keep,hard,required,,1.0,"Operating, configuring and troubleshooting switching, routing, firewalls, VPN and wireless"
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,Firewalls,keep,hard,required,,1.0,"Operating, configuring and troubleshooting switching, routing, firewalls, VPN and wireless"
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,VPN,keep,hard,required,,1.0,"Operating, configuring and troubleshooting switching, routing, firewalls, VPN and wireless"
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,Wireless,keep,hard,required,,1.0,"Operating, configuring and troubleshooting switching, routing, firewalls, VPN and wireless"
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,HA,keep,hard,required,required,1.0,HA and segmentation
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,Segmentation,keep,hard,required,required,1.0,HA and segmentation
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,OT/ICS,keep,hard,preferred,preferred,1.0,OT/ICS exposure
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,IEC 62443,keep,hard,preferred,preferred,1.0,IEC 62443 style segmentation
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,Python,keep,hard,preferred,preferred,1.0,Python or Ansible automation
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,Ansible,keep,hard,preferred,preferred,1.0,Python or Ansible automation
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,ClearPass,keep,hard,preferred,preferred,1.0,ClearPass
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,JNCIA-MIST,keep,hard,required,required,1.0,"JNCIA-MIST or JNCIA-SEC, or willing to obtain within your first 90 days"
+2026-10-01,live_6c2f0a5cbfa5d114,live,Support Engineer – ERP Application Support (2+ years),IFCA Net,keep,hard,unspecified,,1.0,"Provide functional and technical support for enterprise applications, including: IFCA Net"
+2026-10-01,live_6c2f0a5cbfa5d114,live,Support Engineer – ERP Application Support (2+ years),IFCA Mall,keep,hard,unspecified,,0.955,"Provide functional and technical support for enterprise applications, including: IFCA Mall"
+2026-10-01,live_6c2f0a5cbfa5d114,live,Support Engineer – ERP Application Support (2+ years),I-Residential,keep,hard,unspecified,,0.88,"Provide functional and technical support for enterprise applications, including: I-Residential"
+2026-10-01,live_6c2f0a5cbfa5d114,live,Support Engineer – ERP Application Support (2+ years),CSS System,keep,hard,unspecified,,0.921,"Provide functional and technical support for enterprise applications, including: CSS System"
+2026-10-01,live_6c2f0a5cbfa5d114,live,Support Engineer – ERP Application Support (2+ years),UiPath,keep,hard,preferred,preferred,1.0,"Familiarity with RPA / UiPath, Talend, ABBYY FlexiCapture, or similar enterprise technologies is an advantage"
+2026-10-01,live_6c2f0a5cbfa5d114,live,Support Engineer – ERP Application Support (2+ years),RPA,keep,hard,preferred,preferred,1.0,"Familiarity with RPA / UiPath, Talend, ABBYY FlexiCapture, or similar enterprise technologies is an advantage"
+2026-10-01,live_6c2f0a5cbfa5d114,live,Support Engineer – ERP Application Support (2+ years),Talend,keep,hard,preferred,preferred,1.0,"Familiarity with RPA / UiPath, Talend, ABBYY FlexiCapture, or similar enterprise technologies is an advantage"
+2026-10-01,live_6c2f0a5cbfa5d114,live,Support Engineer – ERP Application Support (2+ years),ABBYY FlexiCapture,keep,hard,preferred,preferred,1.0,"Familiarity with RPA / UiPath, Talend, ABBYY FlexiCapture, or similar enterprise technologies is an advantage"
+2026-10-01,live_6c2f0a5cbfa5d114,live,Support Engineer – ERP Application Support (2+ years),JIRA,keep,hard,preferred,preferred,1.0,"Knowledge of JIRA, ITSM, CI/CD tools and processes is preferred"
+2026-10-01,live_6c2f0a5cbfa5d114,live,Support Engineer – ERP Application Support (2+ years),ITSM,keep,hard,preferred,preferred,1.0,"Knowledge of JIRA, ITSM, CI/CD tools and processes is preferred"
+2026-10-01,live_6c2f0a5cbfa5d114,live,Support Engineer – ERP Application Support (2+ years),CI/CD,keep,hard,preferred,preferred,1.0,"Knowledge of JIRA, ITSM, CI/CD tools and processes is preferred"
+2026-10-01,live_6c2f0a5cbfa5d114,live,Support Engineer – ERP Application Support (2+ years),ITIL,keep,hard,preferred,preferred,1.0,"ITIL, COBIT, or TOGAF certification is an added advantage"
+2026-10-01,live_6c2f0a5cbfa5d114,live,Support Engineer – ERP Application Support (2+ years),COBIT,keep,hard,preferred,preferred,1.0,"ITIL, COBIT, or TOGAF certification is an added advantage"
+2026-10-01,live_6c2f0a5cbfa5d114,live,Support Engineer – ERP Application Support (2+ years),TOGAF,keep,hard,preferred,preferred,1.0,"ITIL, COBIT, or TOGAF certification is an added advantage"
+2026-10-01,live_6c2f0a5cbfa5d114,live,Support Engineer – ERP Application Support (2+ years),Troubleshooting,keep,hard,required,,1.0,"Strong troubleshooting, analytical, and problem-solving skills"
+2026-10-01,live_6c2f0a5cbfa5d114,live,Support Engineer – ERP Application Support (2+ years),Communication,keep,soft,required,,1.0,"Strong communication and interpersonal skills, with the ability to work effectively with business users and cross-functional technical teams"
+2026-10-01,live_6c2f0a5cbfa5d114,live,Support Engineer – ERP Application Support (2+ years),Interpersonal,keep,soft,required,,1.0,"Strong communication and interpersonal skills, with the ability to work effectively with business users and cross-functional technical teams"
+2026-10-01,live_6c2f0a5cbfa5d114,live,Support Engineer – ERP Application Support (2+ years),Stakeholder management,keep,soft,required,,1.0,"Strong stakeholder and client relationship management skills, including handling post-go-live support and escalations"
+2026-10-01,live_c3adc57fd20b1d57,live,"Event Engineer (AV System/IT), IT Services",Windows,keep,hard,required,,1.0,Windows/Mac OS support
+2026-10-01,live_c3adc57fd20b1d57,live,"Event Engineer (AV System/IT), IT Services",Mac OS,keep,hard,required,,1.0,Windows/Mac OS support
+2026-10-01,live_c3adc57fd20b1d57,live,"Event Engineer (AV System/IT), IT Services",Hardware troubleshooting,keep,hard,required,,1.0,User hardware/software/peripheral support
+2026-10-01,live_c3adc57fd20b1d57,live,"Event Engineer (AV System/IT), IT Services",Software troubleshooting,keep,hard,required,,1.0,User hardware/software/peripheral support
+2026-10-01,live_c3adc57fd20b1d57,live,"Event Engineer (AV System/IT), IT Services",Video Conferencing,keep,hard,required,,1.0,Provide break/fix support for Video Conferencing equipment
+2026-10-01,live_c3adc57fd20b1d57,live,"Event Engineer (AV System/IT), IT Services",Livestreaming,keep,hard,unspecified,,1.0,autonomously support livestreaming events
+2026-10-01,live_c3adc57fd20b1d57,live,"Event Engineer (AV System/IT), IT Services",Video editing,keep,hard,unspecified,required,1.0,Edit video content as required
+2026-10-01,live_c3adc57fd20b1d57,live,"Event Engineer (AV System/IT), IT Services",Networking fundamentals,keep,hard,required,required,1.0,networking fundamentals
+2026-10-01,live_c3adc57fd20b1d57,live,"Event Engineer (AV System/IT), IT Services",DNS,keep,hard,preferred,preferred,1.0,"networking (such as DNS, DHCP, SSL, OSI Model, and TCP/IP)"
+2026-10-01,live_c3adc57fd20b1d57,live,"Event Engineer (AV System/IT), IT Services",DHCP,keep,hard,preferred,preferred,1.0,"networking (such as DNS, DHCP, SSL, OSI Model, and TCP/IP)"
+2026-10-01,live_c3adc57fd20b1d57,live,"Event Engineer (AV System/IT), IT Services",SSL,keep,hard,preferred,preferred,1.0,"networking (such as DNS, DHCP, SSL, OSI Model, and TCP/IP)"
+2026-10-01,live_c3adc57fd20b1d57,live,"Event Engineer (AV System/IT), IT Services",OSI Model,keep,hard,preferred,preferred,1.0,"networking (such as DNS, DHCP, SSL, OSI Model, and TCP/IP)"
+2026-10-01,live_c3adc57fd20b1d57,live,"Event Engineer (AV System/IT), IT Services",TCP/IP,keep,hard,preferred,preferred,1.0,"networking (such as DNS, DHCP, SSL, OSI Model, and TCP/IP)"
+2026-10-01,live_c3adc57fd20b1d57,live,"Event Engineer (AV System/IT), IT Services",Active Directory,keep,hard,preferred,preferred,1.0,"Windows Server technologies: AD, DFS, Print Services, SCCM"
+2026-10-01,live_c3adc57fd20b1d57,live,"Event Engineer (AV System/IT), IT Services",DFS,keep,hard,preferred,preferred,1.0,"Windows Server technologies: AD, DFS, Print Services, SCCM"
+2026-10-01,live_c3adc57fd20b1d57,live,"Event Engineer (AV System/IT), IT Services",Print Services,keep,hard,preferred,preferred,1.0,"Windows Server technologies: AD, DFS, Print Services, SCCM"
+2026-10-01,live_c3adc57fd20b1d57,live,"Event Engineer (AV System/IT), IT Services",SCCM,keep,hard,preferred,preferred,1.0,"Windows Server technologies: AD, DFS, Print Services, SCCM"
+2026-10-01,live_c3adc57fd20b1d57,live,"Event Engineer (AV System/IT), IT Services",PC repair,keep,hard,preferred,preferred,1.0,"PC repair, troubleshooting, deployment"
+2026-10-01,live_c3adc57fd20b1d57,live,"Event Engineer (AV System/IT), IT Services",IT service delivery,keep,hard,preferred,preferred,1.0,"IT client, server, and network service delivery"
+2026-10-01,live_c3adc57fd20b1d57,live,"Event Engineer (AV System/IT), IT Services",Linux,keep,hard,required,required,1.0,Linux Operating systems support experience
+2026-10-01,live_c3adc57fd20b1d57,live,"Event Engineer (AV System/IT), IT Services",AV systems,keep,hard,required,required,1.0,AV systems deployment and troubleshooting
+2026-10-01,live_c3adc57fd20b1d57,live,"Event Engineer (AV System/IT), IT Services",Audio Visual,keep,hard,required,,1.0,audio visual and video conferencing
+2026-10-01,live_c3adc57fd20b1d57,live,"Event Engineer (AV System/IT), IT Services",Ticketing system,keep,hard,unspecified,,1.0,Track your work via our ticketing system
+2026-10-01,live_c3adc57fd20b1d57,live,"Event Engineer (AV System/IT), IT Services",Communication,keep,soft,required,required,1.0,Strong communication skills
+2026-10-01,live_c3adc57fd20b1d57,live,"Event Engineer (AV System/IT), IT Services",Relationship building,keep,soft,unspecified,,1.0,Create and maintain excellent relationships
+2026-10-01,live_c3adc57fd20b1d57,live,"Event Engineer (AV System/IT), IT Services",Customer service,keep,soft,unspecified,,1.0,Provide courteous phone and chat support
+2026-10-01,live_c3adc57fd20b1d57,live,"Event Engineer (AV System/IT), IT Services",Training,keep,soft,unspecified,,1.0,Train customers to use self-service tools
+2026-10-01,live_5d25b4cc1dbf001a,live,Software Engineer (Contract),C#,keep,hard,required,required,1.0,"Proficiency in software development languages such as C#, Python, or equivalent"
+2026-10-01,live_5d25b4cc1dbf001a,live,Software Engineer (Contract),Python,keep,hard,required,required,1.0,"Proficiency in software development languages such as C#, Python, or equivalent"
+2026-10-01,live_5d25b4cc1dbf001a,live,Software Engineer (Contract),SQL programming,keep,hard,required,required,1.0,SQL programming (MS or Oracle)
+2026-10-01,live_5d25b4cc1dbf001a,live,Software Engineer (Contract),MVVM,keep,hard,required,required,1.0,"e.g., MVVM WPF, ASP.Net MVC, MVP"
+2026-10-01,live_5d25b4cc1dbf001a,live,Software Engineer (Contract),WPF,keep,hard,required,required,1.0,"e.g., MVVM WPF, ASP.Net MVC, MVP"
+2026-10-01,live_5d25b4cc1dbf001a,live,Software Engineer (Contract),ASP.Net MVC,keep,hard,required,required,1.0,"e.g., MVVM WPF, ASP.Net MVC, MVP"
+2026-10-01,live_5d25b4cc1dbf001a,live,Software Engineer (Contract),MVP,keep,hard,required,required,1.0,"e.g., MVVM WPF, ASP.Net MVC, MVP"
+2026-10-01,live_5d25b4cc1dbf001a,live,Software Engineer (Contract),JavaScript,keep,hard,required,required,1.0,open-source languages such as JavaScript or others
+2026-10-01,live_5d25b4cc1dbf001a,live,Software Engineer (Contract),Communication,keep,soft,preferred,preferred,1.0,Strong communication and teamwork skills
+2026-10-01,live_5d25b4cc1dbf001a,live,Software Engineer (Contract),Teamwork,keep,soft,preferred,preferred,1.0,Strong communication and teamwork skills
+2026-10-01,live_5d25b4cc1dbf001a,live,Software Engineer (Contract),Problem-solving,keep,soft,preferred,preferred,1.0,Problem-solving and analytical skills
+2026-10-01,live_5d25b4cc1dbf001a,live,Software Engineer (Contract),Analytical,keep,soft,preferred,preferred,1.0,Problem-solving and analytical skills
+2026-10-01,live_5d25b4cc1dbf001a,live,Software Engineer (Contract),Initiative,keep,soft,preferred,preferred,1.0,"Initiative and adaptability to thrive in a dynamic, fast-paced environment"
+2026-10-01,live_5d25b4cc1dbf001a,live,Software Engineer (Contract),Adaptability,keep,soft,preferred,preferred,1.0,"Initiative and adaptability to thrive in a dynamic, fast-paced environment"
+2026-10-01,live_5d25b4cc1dbf001a,live,Software Engineer (Contract),Passion for learning,keep,soft,preferred,preferred,1.0,Passion for learning and applying the latest technology trends
+2026-10-01,live_5d25b4cc1dbf001a,live,Software Engineer (Contract),Collaborative mindset,keep,soft,preferred,preferred,1.0,collaborative mindset
+2026-10-01,live_1cc1bb50cd6d1018,live,Software Quality Engineer,Python,keep,hard,required,,1.0,Proficiency in Python and basic software workflows
+2026-10-01,live_1cc1bb50cd6d1018,live,Software Quality Engineer,Git,keep,hard,required,,1.0,"version control, revision tracking via Git"
+2026-10-01,live_1cc1bb50cd6d1018,live,Software Quality Engineer,LLM APIs,keep,hard,required,,1.0,"enterprise AI capabilities (e.g., Gemini, LLM APIs)"
+2026-10-01,live_1cc1bb50cd6d1018,live,Software Quality Engineer,GD&T,keep,hard,required,,1.0,"drawing reviews, GD&T verification"
+2026-10-01,live_1cc1bb50cd6d1018,live,Software Quality Engineer,DFM,keep,hard,required,,1.0,"GD&T checks, DFM analysis"
+2026-10-01,live_1cc1bb50cd6d1018,live,Software Quality Engineer,PPAP,keep,hard,required,,1.0,quality compliance (PPAP)
+2026-10-01,live_1cc1bb50cd6d1018,live,Software Quality Engineer,FMEA,keep,hard,required,,1.0,"standard quality frameworks (DFM, PPAP, FMEA)"
+2026-10-01,live_1cc1bb50cd6d1018,live,Software Quality Engineer,API integrations,keep,hard,required,,1.0,code for data processing and API integrations
+2026-10-01,live_1cc1bb50cd6d1018,live,Software Quality Engineer,User Acceptance Testing,keep,hard,required,,1.0,Design and conduct User Acceptance Testing (UAT)
+2026-10-01,live_1cc1bb50cd6d1018,live,Software Quality Engineer,Code review,keep,hard,required,,1.0,"Provide technical guidance, code review, and project coordination"
+2026-10-01,live_1cc1bb50cd6d1018,live,Software Quality Engineer,Documentation,keep,hard,required,,1.0,"Maintain clear documentation, tool repositories"
+2026-10-01,live_1cc1bb50cd6d1018,live,Software Quality Engineer,Analytical skills,keep,soft,required,,1.0,Strong analytical skills with the ability to coordinate junior developers
+2026-10-01,live_1cc1bb50cd6d1018,live,Software Quality Engineer,Team coordination,keep,soft,required,,1.0,"coordinate junior developers, prioritize project backlogs"
+2026-10-01,live_2ca2d0b6d1805d81,live,"Data Analyst, Business Intelligence Platform (Vice President)",Power BI Service,keep,hard,required,,1.0,Power BI Service running on Microsoft Fabric capacity
+2026-10-01,live_2ca2d0b6d1805d81,live,"Data Analyst, Business Intelligence Platform (Vice President)",Power BI Report Server,keep,hard,required,,1.0,"Microsoft Power BI Report Server, Power BI Service and Power BI Desktop"
+2026-10-01,live_2ca2d0b6d1805d81,live,"Data Analyst, Business Intelligence Platform (Vice President)",Power BI Desktop,keep,hard,required,,1.0,"Microsoft Power BI Report Server, Power BI Service and Power BI Desktop"
+2026-10-01,live_2ca2d0b6d1805d81,live,"Data Analyst, Business Intelligence Platform (Vice President)",Microsoft Fabric,keep,hard,required,,1.0,"Microsoft Fabric capacity administration, monitoring, governance, and workload management for Power BI Service"
+2026-10-01,live_2ca2d0b6d1805d81,live,"Data Analyst, Business Intelligence Platform (Vice President)",Data modeling,keep,hard,required,,1.0,Data modeling
+2026-10-01,live_2ca2d0b6d1805d81,live,"Data Analyst, Business Intelligence Platform (Vice President)",SQL Server Reporting Services,keep,hard,required,,1.0,SQL Server Reporting Services (SSRS)
+2026-10-01,live_2ca2d0b6d1805d81,live,"Data Analyst, Business Intelligence Platform (Vice President)",SQL,keep,hard,required,,1.0,SQL (Starburst)
+2026-10-01,live_2ca2d0b6d1805d81,live,"Data Analyst, Business Intelligence Platform (Vice President)",AWS data services,keep,hard,required,,1.0,AWS data services and integration patterns relevant to analytics and reporting
+2026-10-01,live_2ca2d0b6d1805d81,live,"Data Analyst, Business Intelligence Platform (Vice President)",Python scripting,keep,hard,required,,1.0,Python scripting
+2026-10-01,live_2ca2d0b6d1805d81,live,"Data Analyst, Business Intelligence Platform (Vice President)",Jenkins,keep,hard,required,,1.0,Jenkins for Power BI report deployment
+2026-10-01,live_2ca2d0b6d1805d81,live,"Data Analyst, Business Intelligence Platform (Vice President)",Bitbucket,keep,hard,required,,1.0,Bitbucket for source code management
+2026-10-01,live_2ca2d0b6d1805d81,live,"Data Analyst, Business Intelligence Platform (Vice President)",Microsoft Copilot Studio,keep,hard,required,,1.0,"Microsoft Copilot Studio, Microsoft 365, Power Apps, Power Automate, and SharePoint"
+2026-10-01,live_2ca2d0b6d1805d81,live,"Data Analyst, Business Intelligence Platform (Vice President)",Microsoft 365,keep,hard,required,,1.0,"Microsoft Copilot Studio, Microsoft 365, Power Apps, Power Automate, and SharePoint"
+2026-10-01,live_2ca2d0b6d1805d81,live,"Data Analyst, Business Intelligence Platform (Vice President)",Power Apps,keep,hard,required,,1.0,"Microsoft Copilot Studio, Microsoft 365, Power Apps, Power Automate, and SharePoint"
+2026-10-01,live_2ca2d0b6d1805d81,live,"Data Analyst, Business Intelligence Platform (Vice President)",Power Automate,keep,hard,required,,1.0,"Microsoft Copilot Studio, Microsoft 365, Power Apps, Power Automate, and SharePoint"
+2026-10-01,live_2ca2d0b6d1805d81,live,"Data Analyst, Business Intelligence Platform (Vice President)",SharePoint,keep,hard,required,,1.0,"Microsoft Copilot Studio, Microsoft 365, Power Apps, Power Automate, and SharePoint"
+2026-10-01,live_2ca2d0b6d1805d81,live,"Data Analyst, Business Intelligence Platform (Vice President)",Stakeholder management,keep,soft,required,,1.0,Strong stakeholder management and communication skills
+2026-10-01,live_2ca2d0b6d1805d81,live,"Data Analyst, Business Intelligence Platform (Vice President)",Communication,keep,soft,required,,1.0,Strong stakeholder management and communication skills
+2026-10-01,live_2ca2d0b6d1805d81,live,"Data Analyst, Business Intelligence Platform (Vice President)",Coordination,keep,soft,required,,1.0,"Proven ability to coordinate delivery across developers, technology teams, security, risk, operations, vendors, and business stakeholders"
+2026-10-01,live_2ca2d0b6d1805d81,live,"Data Analyst, Business Intelligence Platform (Vice President)",Problem solving,keep,soft,required,,1.0,Pragmatic problem-solving mindset
+2026-10-01,live_2ca2d0b6d1805d81,live,"Data Analyst, Business Intelligence Platform (Vice President)",Planning,keep,soft,required,,1.0,"Effective planning and execution across roadmaps, milestones, dependencies, risks, and concurrent project tracks"
+2026-10-01,live_2ca2d0b6d1805d81,live,"Data Analyst, Business Intelligence Platform (Vice President)",Execution,keep,soft,required,,1.0,"Effective planning and execution across roadmaps, milestones, dependencies, risks, and concurrent project tracks"
+2026-10-01,live_2ca2d0b6d1805d81,live,"Data Analyst, Business Intelligence Platform (Vice President)",Mentoring,keep,soft,required,,1.0,"Comfortable challenging constructively, setting engineering expectations, mentoring developers, and acting as a trusted technical escalation point"
+2026-10-01,live_2ca2d0b6d1805d81,live,"Data Analyst, Business Intelligence Platform (Vice President)",Autonomy,keep,soft,required,,1.0,"Autonomy, intellectual curiosity, sound judgement, attention to detail, and a strong drive for simplification and continuous improvement"
+2026-10-01,live_2ca2d0b6d1805d81,live,"Data Analyst, Business Intelligence Platform (Vice President)",Intellectual curiosity,keep,soft,required,,1.0,"Autonomy, intellectual curiosity, sound judgement, attention to detail, and a strong drive for simplification and continuous improvement"
+2026-10-01,live_2ca2d0b6d1805d81,live,"Data Analyst, Business Intelligence Platform (Vice President)",Attention to detail,keep,soft,required,,1.0,"Autonomy, intellectual curiosity, sound judgement, attention to detail, and a strong drive for simplification and continuous improvement"
+2026-10-01,live_2ca2d0b6d1805d81,live,"Data Analyst, Business Intelligence Platform (Vice President)",Continuous improvement,keep,soft,required,,1.0,"Autonomy, intellectual curiosity, sound judgement, attention to detail, and a strong drive for simplification and continuous improvement"

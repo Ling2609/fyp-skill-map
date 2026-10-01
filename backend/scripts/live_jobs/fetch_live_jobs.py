@@ -270,7 +270,7 @@ def run(dry_run: bool, use_cache: bool, new_only: bool):
                     category="Information & Communication Technology",
                     subcategory=subcategory,
                     salary=format_salary(j),
-                    description=desc[:6000],
+                    description=desc,   # full text: the evidence check needs the whole ad
                     source="live",
                     source_url=url,
                     publisher=publisher,
