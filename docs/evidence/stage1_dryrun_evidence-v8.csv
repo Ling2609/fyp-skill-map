@@ -124,3 +124,277 @@
 2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,Python,keep,hard,preferred,preferred,1.0,,Python or Ansible automation
 2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,Ansible,keep,hard,preferred,preferred,1.0,,Python or Ansible automation
 2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,AI coding assistants,keep,hard,preferred,preferred,1.0,,comfort using AI coding assistants
+2026-10-01,live_5b6f58dc0d1e2dac,live,"Urgent!!! Junior Network Engineer (Switch, IP CCTV)",Troubleshooting,keep,hard,required,,1.0,,troubleshoot and find resolutions for technical problems
+2026-10-01,live_5b6f58dc0d1e2dac,live,"Urgent!!! Junior Network Engineer (Switch, IP CCTV)",Product testing,keep,hard,required,,1.0,,Responsible for new product test
+2026-10-01,live_5b6f58dc0d1e2dac,live,"Urgent!!! Junior Network Engineer (Switch, IP CCTV)",Technical presentation,keep,soft,required,,1.0,,deliver formal technical proposals / presentations to clients
+2026-10-01,live_5b6f58dc0d1e2dac,live,"Urgent!!! Junior Network Engineer (Switch, IP CCTV)",Switch,keep,hard,required,required,1.0,,"Experienced in networking product like Switch, Wireless Access Point, Router"
+2026-10-01,live_5b6f58dc0d1e2dac,live,"Urgent!!! Junior Network Engineer (Switch, IP CCTV)",Wireless Access Point,keep,hard,required,required,1.0,,"Experienced in networking product like Switch, Wireless Access Point, Router"
+2026-10-01,live_5b6f58dc0d1e2dac,live,"Urgent!!! Junior Network Engineer (Switch, IP CCTV)",Router,keep,hard,required,required,1.0,,"Experienced in networking product like Switch, Wireless Access Point, Router"
+2026-10-01,live_5b6f58dc0d1e2dac,live,"Urgent!!! Junior Network Engineer (Switch, IP CCTV)",Gateway,keep,hard,required,required,1.0,,"Good knowledge in the fields of Business Network system such as Gateway, Switch, AP and IP CCTV"
+2026-10-01,live_5b6f58dc0d1e2dac,live,"Urgent!!! Junior Network Engineer (Switch, IP CCTV)",AP,keep,hard,required,required,1.0,,"Good knowledge in the fields of Business Network system such as Gateway, Switch, AP and IP CCTV"
+2026-10-01,live_5b6f58dc0d1e2dac,live,"Urgent!!! Junior Network Engineer (Switch, IP CCTV)",IP CCTV,keep,hard,required,required,1.0,,"Good knowledge in the fields of Business Network system such as Gateway, Switch, AP and IP CCTV"
+2026-10-01,live_5b6f58dc0d1e2dac,live,"Urgent!!! Junior Network Engineer (Switch, IP CCTV)",CCNA,keep,hard,preferred,preferred,1.0,,Possess CCNA/CCNP and other networking certificate would be an added advantage
+2026-10-01,live_5b6f58dc0d1e2dac,live,"Urgent!!! Junior Network Engineer (Switch, IP CCTV)",CCNP,keep,hard,preferred,preferred,1.0,,Possess CCNA/CCNP and other networking certificate would be an added advantage
+2026-10-01,live_5e41ea511adbcf36,live,ESG Data Analyst,GRI,keep,hard,required,,1.0,,"GRI, ESRS, TCFD, ISSB and IFRS Sustainability Standards"
+2026-10-01,live_5e41ea511adbcf36,live,ESG Data Analyst,ESRS,keep,hard,required,,1.0,,"GRI, ESRS, TCFD, ISSB and IFRS Sustainability Standards"
+2026-10-01,live_5e41ea511adbcf36,live,ESG Data Analyst,TCFD,keep,hard,required,,1.0,,"GRI, ESRS, TCFD, ISSB and IFRS Sustainability Standards"
+2026-10-01,live_5e41ea511adbcf36,live,ESG Data Analyst,ISSB,keep,hard,required,,1.0,,"GRI, ESRS, TCFD, ISSB and IFRS Sustainability Standards"
+2026-10-01,live_5e41ea511adbcf36,live,ESG Data Analyst,IFRS Sustainability Standards,keep,hard,required,,1.0,,"GRI, ESRS, TCFD, ISSB and IFRS Sustainability Standards"
+2026-10-01,live_5e41ea511adbcf36,live,ESG Data Analyst,Carbon accounting,keep,hard,required,,1.0,,"Manage carbon accounting data including Scope 1, Scope 2 and Scope 3 emissions reporting"
+2026-10-01,live_5e41ea511adbcf36,live,ESG Data Analyst,Power BI,keep,hard,required,,1.0,,using reporting tools such as Power BI
+2026-10-01,live_5e41ea511adbcf36,live,ESG Data Analyst,Sustainability metrics,keep,hard,required,,1.0,,"managing sustainability metrics including carbon emissions, waste, energy usage and social governance indicators"
+2026-10-01,live_5e41ea511adbcf36,live,ESG Data Analyst,Excel,keep,hard,preferred,preferred,1.0,,Advanced Excel skills
+2026-10-01,live_5e41ea511adbcf36,live,ESG Data Analyst,Tableau,keep,hard,preferred,preferred,1.0,,"exposure to Power BI, Tableau, SQL"
+2026-10-01,live_5e41ea511adbcf36,live,ESG Data Analyst,SQL,keep,hard,preferred,preferred,1.0,,"exposure to Power BI, Tableau, SQL"
+2026-10-01,live_5e41ea511adbcf36,live,ESG Data Analyst,Communication,keep,soft,required,,1.0,,Excellent communication skills
+2026-10-01,live_95bcb0bf755717a3,live,Junior AI Engineer Generative & Agentic AI,AI agents,keep,hard,unspecified,,1.0,,"supporting the development of practical enterprise AI solutions, including AI agents"
+2026-10-01,live_95bcb0bf755717a3,live,Junior AI Engineer Generative & Agentic AI,multi-agent workflows,keep,hard,unspecified,,1.0,,"including AI agents, multi-agent workflows, Retrieval-Augmented Generation"
+2026-10-01,live_95bcb0bf755717a3,live,Junior AI Engineer Generative & Agentic AI,Retrieval-Augmented Generation,keep,hard,unspecified,,1.0,,"multi-agent workflows, Retrieval-Augmented Generation (RAG) solutions"
+2026-10-01,live_95bcb0bf755717a3,live,Junior AI Engineer Generative & Agentic AI,APIs,keep,hard,unspecified,,1.0,,APIs and AI-powered applications
+2026-10-01,live_95bcb0bf755717a3,live,Junior AI Engineer Generative & Agentic AI,Python,keep,hard,required,,1.0,,"use technologies such as Python, SQL, LangChain, LangGraph and FastAPI"
+2026-10-01,live_95bcb0bf755717a3,live,Junior AI Engineer Generative & Agentic AI,SQL,keep,hard,required,,1.0,,"use technologies such as Python, SQL, LangChain, LangGraph and FastAPI"
+2026-10-01,live_95bcb0bf755717a3,live,Junior AI Engineer Generative & Agentic AI,LangChain,keep,hard,required,,1.0,,"use technologies such as Python, SQL, LangChain, LangGraph and FastAPI"
+2026-10-01,live_95bcb0bf755717a3,live,Junior AI Engineer Generative & Agentic AI,LangGraph,keep,hard,required,,1.0,,"use technologies such as Python, SQL, LangChain, LangGraph and FastAPI"
+2026-10-01,live_95bcb0bf755717a3,live,Junior AI Engineer Generative & Agentic AI,FastAPI,keep,hard,required,,1.0,,"use technologies such as Python, SQL, LangChain, LangGraph and FastAPI"
+2026-10-01,live_95bcb0bf755717a3,live,Junior AI Engineer Generative & Agentic AI,programming fundamentals,keep,hard,required,,1.0,,"Strong programming fundamentals, an understanding of modern Generative AI concepts"
+2026-10-01,live_95bcb0bf755717a3,live,Junior AI Engineer Generative & Agentic AI,Generative AI concepts,keep,hard,required,,1.0,,understanding of modern Generative AI concepts
+2026-10-01,live_95bcb0bf755717a3,live,Junior AI Engineer Generative & Agentic AI,Large Language Models,keep,hard,required,,1.0,,connect Large Language Models (LLMs) with enterprise data
+2026-10-01,live_95bcb0bf755717a3,live,Junior AI Engineer Generative & Agentic AI,AI evaluation frameworks,keep,hard,required,,1.0,,"Support the development of AI evaluation frameworks covering accuracy, groundedness and reliability"
+2026-10-01,live_95bcb0bf755717a3,live,Junior AI Engineer Generative & Agentic AI,containerization,keep,hard,required,,1.0,,Support the containerization and deployment of AI applications on Azure
+2026-10-01,live_95bcb0bf755717a3,live,Junior AI Engineer Generative & Agentic AI,Azure,keep,hard,required,,1.0,,deployment of AI applications on Azure
+2026-10-01,live_95bcb0bf755717a3,live,Junior AI Engineer Generative & Agentic AI,Git,keep,hard,required,,1.0,,"Apply modern software-development practices, including Git/version control, testing and documentation"
+2026-10-01,live_95bcb0bf755717a3,live,Junior AI Engineer Generative & Agentic AI,testing,keep,hard,required,,1.0,,"including Git/version control, testing and documentation"
+2026-10-01,live_95bcb0bf755717a3,live,Junior AI Engineer Generative & Agentic AI,documentation,keep,hard,required,,1.0,,"including Git/version control, testing and documentation"
+2026-10-01,live_95bcb0bf755717a3,live,Junior AI Engineer Generative & Agentic AI,LLMs,keep,hard,required,,1.0,,"including LLMs, RAG, embeddings, APIs and prompt engineering"
+2026-10-01,live_95bcb0bf755717a3,live,Junior AI Engineer Generative & Agentic AI,RAG,keep,hard,required,,1.0,,"including LLMs, RAG, embeddings, APIs and prompt engineering"
+2026-10-01,live_95bcb0bf755717a3,live,Junior AI Engineer Generative & Agentic AI,embeddings,keep,hard,required,,1.0,,"including LLMs, RAG, embeddings, APIs and prompt engineering"
+2026-10-01,live_95bcb0bf755717a3,live,Junior AI Engineer Generative & Agentic AI,prompt engineering,keep,hard,required,,1.0,,"including LLMs, RAG, embeddings, APIs and prompt engineering"
+2026-10-01,live_95bcb0bf755717a3,live,Junior AI Engineer Generative & Agentic AI,analytical skills,keep,soft,required,,1.0,,Strong analytical and problem-solving skills
+2026-10-01,live_95bcb0bf755717a3,live,Junior AI Engineer Generative & Agentic AI,problem-solving skills,keep,soft,required,,1.0,,Strong analytical and problem-solving skills
+2026-10-01,live_95bcb0bf755717a3,live,Junior AI Engineer Generative & Agentic AI,communication,keep,soft,required,,1.0,,Good communication and teamwork skills
+2026-10-01,live_95bcb0bf755717a3,live,Junior AI Engineer Generative & Agentic AI,teamwork,keep,soft,required,,1.0,,Good communication and teamwork skills
+2026-10-01,live_95bcb0bf755717a3,live,Junior AI Engineer Generative & Agentic AI,Docker,keep,hard,preferred,preferred,1.0,,"Exposure to FastAPI, LangChain, LangGraph, Docker, Azure, React or vector databases would be an advantage"
+2026-10-01,live_95bcb0bf755717a3,live,Junior AI Engineer Generative & Agentic AI,React,keep,hard,preferred,preferred,1.0,,"Exposure to FastAPI, LangChain, LangGraph, Docker, Azure, React or vector databases would be an advantage"
+2026-10-01,live_95bcb0bf755717a3,live,Junior AI Engineer Generative & Agentic AI,vector databases,keep,hard,preferred,preferred,1.0,,"Exposure to FastAPI, LangChain, LangGraph, Docker, Azure, React or vector databases would be an advantage"
+2026-10-01,live_e01ead5ec2843792,live,Website Operations & Backend Developer,Website backend,keep,hard,unspecified,,1.0,,"Manage website backends, hosting"
+2026-10-01,live_e01ead5ec2843792,live,Website Operations & Backend Developer,Hosting,keep,hard,unspecified,,1.0,,"Manage website backends, hosting"
+2026-10-01,live_e01ead5ec2843792,live,Website Operations & Backend Developer,DNS,keep,hard,unspecified,,1.0,,"domains, DNS and SSL certificates"
+2026-10-01,live_e01ead5ec2843792,live,Website Operations & Backend Developer,SSL certificates,keep,hard,unspecified,,1.0,,"domains, DNS and SSL certificates"
+2026-10-01,live_e01ead5ec2843792,live,Website Operations & Backend Developer,Payment gateway,keep,hard,unspecified,,1.0,,Set up and maintain payment gateways
+2026-10-01,live_e01ead5ec2843792,live,Website Operations & Backend Developer,Checkout flow,keep,hard,unspecified,,1.0,,checkout flows and payment-related integrations
+2026-10-01,live_e01ead5ec2843792,live,Website Operations & Backend Developer,Payment integration,keep,hard,unspecified,,1.0,,checkout flows and payment-related integrations
+2026-10-01,live_e01ead5ec2843792,live,Website Operations & Backend Developer,Third‑party platform integration,keep,hard,unspecified,,1.0,,Connect websites with third-party platforms
+2026-10-01,live_e01ead5ec2843792,live,Website Operations & Backend Developer,API,keep,hard,unspecified,,1.0,,through APIs and webhooks
+2026-10-01,live_e01ead5ec2843792,live,Website Operations & Backend Developer,Webhook,keep,hard,unspecified,,1.0,,through APIs and webhooks
+2026-10-01,live_e01ead5ec2843792,live,Website Operations & Backend Developer,Redirect management,keep,hard,unspecified,,1.0,,"Manage redirects, URL structures"
+2026-10-01,live_e01ead5ec2843792,live,Website Operations & Backend Developer,URL structure,keep,hard,unspecified,,1.0,,"Manage redirects, URL structures"
+2026-10-01,live_e01ead5ec2843792,live,Website Operations & Backend Developer,Website migration,keep,hard,unspecified,,1.0,,migrations and international domains
+2026-10-01,live_e01ead5ec2843792,live,Website Operations & Backend Developer,International domain,keep,hard,unspecified,,1.0,,migrations and international domains
+2026-10-01,live_e01ead5ec2843792,live,Website Operations & Backend Developer,Tracking pixel,keep,hard,unspecified,,1.0,,"Install and test tracking pixels, Google Tag Manager"
+2026-10-01,live_e01ead5ec2843792,live,Website Operations & Backend Developer,Google Tag Manager,keep,hard,unspecified,,1.0,,"Install and test tracking pixels, Google Tag Manager"
+2026-10-01,live_e01ead5ec2843792,live,Website Operations & Backend Developer,Analytics tool,keep,hard,unspecified,,1.0,,"Install and test tracking pixels, Google Tag Manager and analytics tools"
+2026-10-01,live_e01ead5ec2843792,live,Website Operations & Backend Developer,Uptime monitoring,keep,hard,unspecified,,1.0,,"Monitor website uptime, speed, security"
+2026-10-01,live_e01ead5ec2843792,live,Website Operations & Backend Developer,Performance monitoring,keep,hard,unspecified,,1.0,,"Monitor website uptime, speed, security"
+2026-10-01,live_e01ead5ec2843792,live,Website Operations & Backend Developer,Website security,keep,hard,unspecified,,1.0,,"Monitor website uptime, speed, security"
+2026-10-01,live_e01ead5ec2843792,live,Website Operations & Backend Developer,Troubleshooting,keep,hard,unspecified,,1.0,,"Troubleshoot bugs, failed payments, broken integrations and tracking issues"
+2026-10-01,live_e01ead5ec2843792,live,Website Operations & Backend Developer,Deployment,keep,hard,unspecified,,1.0,,"Manage deployments, staging environments"
+2026-10-01,live_e01ead5ec2843792,live,Website Operations & Backend Developer,Staging environment,keep,hard,unspecified,,1.0,,"Manage deployments, staging environments"
+2026-10-01,live_e01ead5ec2843792,live,Website Operations & Backend Developer,Backup,keep,hard,unspecified,,1.0,,backups and version control
+2026-10-01,live_e01ead5ec2843792,live,Website Operations & Backend Developer,Version control,keep,hard,unspecified,,1.0,,backups and version control
+2026-10-01,live_e01ead5ec2843792,live,Website Operations & Backend Developer,CMS platform,keep,hard,unspecified,,1.0,,"Maintain CMS platforms, databases, forms"
+2026-10-01,live_e01ead5ec2843792,live,Website Operations & Backend Developer,Database,keep,hard,unspecified,,1.0,,"Maintain CMS platforms, databases, forms"
+2026-10-01,live_e01ead5ec2843792,live,Website Operations & Backend Developer,Form,keep,hard,unspecified,,1.0,,"Maintain CMS platforms, databases, forms"
+2026-10-01,live_e01ead5ec2843792,live,Website Operations & Backend Developer,Automated website workflow,keep,hard,unspecified,required,1.0,,and automated website workflows
+2026-10-01,live_e01ead5ec2843792,live,Website Operations & Backend Developer,Multi‑currency support,keep,hard,unspecified,,1.0,,"multiple currencies, languages and regional payment methods"
+2026-10-01,live_e01ead5ec2843792,live,Website Operations & Backend Developer,Multilingual support,keep,hard,unspecified,,1.0,,"multiple currencies, languages and regional payment methods"
+2026-10-01,live_e01ead5ec2843792,live,Website Operations & Backend Developer,Regional payment method,keep,hard,unspecified,,1.0,,"multiple currencies, languages and regional payment methods"
+2026-10-01,live_e01ead5ec2843792,live,Website Operations & Backend Developer,Landing page,keep,hard,unspecified,,1.0,,launch landing pages and conversion improvements
+2026-10-01,live_e01ead5ec2843792,live,Website Operations & Backend Developer,Conversion optimization,keep,hard,unspecified,,1.0,,launch landing pages and conversion improvements
+2026-10-01,live_e01ead5ec2843792,live,Website Operations & Backend Developer,Technical documentation,keep,hard,unspecified,,1.0,,Maintain clear technical documentation for every website and integration
+2026-10-01,live_e01ead5ec2843792,live,Website Operations & Backend Developer,General coding,keep,hard,required,preferred,1.0,,Strong general coding knowledge
+2026-10-01,live_e01ead5ec2843792,live,Website Operations & Backend Developer,HTML,keep,hard,required,,1.0,,"including HTML, CSS, JavaScript and a backend language"
+2026-10-01,live_e01ead5ec2843792,live,Website Operations & Backend Developer,CSS,keep,hard,required,,1.0,,"including HTML, CSS, JavaScript and a backend language"
+2026-10-01,live_e01ead5ec2843792,live,Website Operations & Backend Developer,JavaScript,keep,hard,required,,1.0,,"including HTML, CSS, JavaScript and a backend language"
+2026-10-01,live_e01ead5ec2843792,live,Website Operations & Backend Developer,Backend language,keep,hard,required,,1.0,,"including HTML, CSS, JavaScript and a backend language"
+2026-10-01,live_e01ead5ec2843792,live,Website Operations & Backend Developer,Stripe,keep,hard,required,,1.0,Payment gateway,"Experience with payment gateways such as Stripe, PayPal or similar"
+2026-10-01,live_e01ead5ec2843792,live,Website Operations & Backend Developer,PayPal,keep,hard,required,,1.0,Payment gateway,"Experience with payment gateways such as Stripe, PayPal or similar"
+2026-10-01,live_e01ead5ec2843792,live,Website Operations & Backend Developer,Analytics,keep,hard,required,,1.0,,"Experience with analytics, tracking pixels and Google Tag Manager"
+2026-10-01,live_e01ead5ec2843792,live,Website Operations & Backend Developer,Domain management,keep,hard,required,,1.0,,"Understanding of APIs, webhooks, databases, hosting and domain management"
+2026-10-01,live_e01ead5ec2843792,live,Website Operations & Backend Developer,Data protection,keep,hard,required,,1.0,,"Strong knowledge of website security, backups and data protection"
+2026-10-01,live_e01ead5ec2843792,live,Website Operations & Backend Developer,Website management,keep,hard,required,,1.0,,Able to independently manage multiple websites and solve technical issues quickly
+2026-10-01,live_e01ead5ec2843792,live,Website Operations & Backend Developer,Problem solving,keep,soft,required,,1.0,,Able to independently manage multiple websites and solve technical issues quickly
+2026-10-01,live_e01ead5ec2843792,live,Website Operations & Backend Developer,International website management,keep,hard,preferred,,1.0,,Experience managing international or high-traffic websites is highly desirable
+2026-10-01,live_e01ead5ec2843792,live,Website Operations & Backend Developer,High‑traffic website management,keep,hard,preferred,,1.0,,Experience managing international or high-traffic websites is highly desirable
+2026-10-01,live_e01ead5ec2843792,live,Website Operations & Backend Developer,Technical ownership,keep,hard,unspecified,,1.0,,take full technical ownership of a global website portfolio
+2026-10-01,live_e01ead5ec2843792,live,Website Operations & Backend Developer,Website portfolio management,keep,hard,unspecified,,1.0,,take full technical ownership of a global website portfolio
+2026-10-01,live_e01ead5ec2843792,live,Website Operations & Backend Developer,Website tracking,keep,hard,unspecified,,1.0,,"keep every site secure, reliable, accurately tracked"
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,Network engineering,keep,hard,required,,1.0,,hands on network engineer to operate and continuously improve the IT and OT network estate
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,IT network,keep,hard,required,,1.0,,operate and continuously improve the IT and OT network estate
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,OT network,keep,hard,required,,1.0,,operate and continuously improve the IT and OT network estate
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,Juniper,keep,hard,required,,1.0,,"Juniper, Fortinet, Ivanti, OpenGear and Aruba environment"
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,Fortinet,keep,hard,required,,1.0,,"Juniper, Fortinet, Ivanti, OpenGear and Aruba environment"
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,Ivanti,keep,hard,required,,1.0,,"Juniper, Fortinet, Ivanti, OpenGear and Aruba environment"
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,OpenGear,keep,hard,required,,1.0,,"Juniper, Fortinet, Ivanti, OpenGear and Aruba environment"
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,Aruba,keep,hard,required,,1.0,,"Juniper, Fortinet, Ivanti, OpenGear and Aruba environment"
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,CLI troubleshooting,keep,hard,required,,1.0,,prefers solving problems at the CLI
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,Scripting,keep,hard,unspecified,,1.0,,"Scripting, automation and AI assisted tooling are a growth area"
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,Automation,keep,hard,unspecified,,1.0,,"Scripting, automation and AI assisted tooling are a growth area"
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,AI assisted tooling,keep,hard,unspecified,,1.0,,"Scripting, automation and AI assisted tooling are a growth area"
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,Switching,keep,hard,required,,1.0,,"Operating, configuring and troubleshooting switching, routing, firewalls, VPN and wireless"
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,Routing,keep,hard,required,,1.0,,"Operating, configuring and troubleshooting switching, routing, firewalls, VPN and wireless"
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,Firewalls,keep,hard,required,,1.0,,"Operating, configuring and troubleshooting switching, routing, firewalls, VPN and wireless"
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,VPN,keep,hard,required,,1.0,,"Operating, configuring and troubleshooting switching, routing, firewalls, VPN and wireless"
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,Wireless,keep,hard,required,,1.0,,"Operating, configuring and troubleshooting switching, routing, firewalls, VPN and wireless"
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,Monitoring,keep,hard,unspecified,,1.0,,"Establishing core monitoring and logging: device onboarding, alert rules and dashboards"
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,Logging,keep,hard,unspecified,,1.0,,"Establishing core monitoring and logging: device onboarding, alert rules and dashboards"
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,Device onboarding,keep,hard,unspecified,,1.0,,"Establishing core monitoring and logging: device onboarding, alert rules and dashboards"
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,Alert rules,keep,hard,unspecified,,1.0,,"Establishing core monitoring and logging: device onboarding, alert rules and dashboards"
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,Dashboards,keep,hard,unspecified,,1.0,,"Establishing core monitoring and logging: device onboarding, alert rules and dashboards"
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,ITSM,keep,hard,unspecified,,1.0,,"Integrating monitoring with ITSM, CMDB and DCIM where possible"
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,CMDB,keep,hard,unspecified,,1.0,,"Integrating monitoring with ITSM, CMDB and DCIM where possible"
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,DCIM,keep,hard,unspecified,,1.0,,"Integrating monitoring with ITSM, CMDB and DCIM where possible"
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,Configuration backup,keep,hard,unspecified,,1.0,,"automation of repetitive tasks such as config backup, compliance checks and bulk changes"
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,Compliance checks,keep,hard,unspecified,,1.0,,"automation of repetitive tasks such as config backup, compliance checks and bulk changes"
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,Bulk changes,keep,hard,unspecified,,1.0,,"automation of repetitive tasks such as config backup, compliance checks and bulk changes"
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,HA,keep,hard,required,required,1.0,,"strong hands on experience ... switching, routing, firewalls, VPN, HA and segmentation"
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,Segmentation,keep,hard,required,required,1.0,,"strong hands on experience ... switching, routing, firewalls, VPN, HA and segmentation"
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,CLI,keep,hard,required,required,1.0,,comfortable diagnosing across multiple vendor platforms from the CLI
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,Enterprise wireless,keep,hard,required,required,1.0,,Solid grasp of enterprise wireless fundamentals
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,Remote access VPN,keep,hard,required,required,1.0,,remote access VPN
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,Out-of-band management,keep,hard,required,required,1.0,,out of band management
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,JNCIA-MIST,keep,hard,required,required,1.0,Certification,"JNCIA-MIST or JNCIA-SEC, or willing to obtain within your first 90 days"
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,JNCIA-SEC,keep,hard,required,required,1.0,Certification,"JNCIA-MIST or JNCIA-SEC, or willing to obtain within your first 90 days"
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,Juniper Mist,keep,hard,preferred,preferred,1.0,,"Juniper (Mist, EX, QFX, SRX, MX)"
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,Juniper EX,keep,hard,preferred,preferred,1.0,,"Juniper (Mist, EX, QFX, SRX, MX)"
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,Juniper QFX,keep,hard,preferred,preferred,1.0,,"Juniper (Mist, EX, QFX, SRX, MX)"
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,Juniper SRX,keep,hard,preferred,preferred,1.0,,"Juniper (Mist, EX, QFX, SRX, MX)"
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,Juniper MX,keep,hard,preferred,preferred,1.0,,"Juniper (Mist, EX, QFX, SRX, MX)"
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,FortiGate,keep,hard,preferred,preferred,1.0,,Fortinet (FortiGate/FMG/FAZ)
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,Fortinet FMG,keep,hard,preferred,preferred,1.0,,Fortinet (FortiGate/FMG/FAZ)
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,Fortinet FAZ,keep,hard,preferred,preferred,1.0,,Fortinet (FortiGate/FMG/FAZ)
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,ClearPass,keep,hard,preferred,preferred,1.0,,ClearPass
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,Ivanti VPN,keep,hard,preferred,preferred,1.0,,Ivanti VPN
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,OT/ICS,keep,hard,preferred,preferred,1.0,,OT/ICS exposure
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,IEC 62443,keep,hard,preferred,preferred,1.0,,IEC 62443 style segmentation
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,Python,keep,hard,preferred,preferred,1.0,,Python or Ansible automation
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,Ansible,keep,hard,preferred,preferred,1.0,,Python or Ansible automation
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,AI coding assistants,keep,hard,preferred,preferred,1.0,,comfort using AI coding assistants
+2026-10-01,live_6c2f0a5cbfa5d114,live,Support Engineer – ERP Application Support (2+ years),Application support,keep,hard,unspecified,,1.0,,Provide functional and technical support for enterprise applications
+2026-10-01,live_6c2f0a5cbfa5d114,live,Support Engineer – ERP Application Support (2+ years),IFCA Net,keep,hard,unspecified,,1.0,,IFCA Net
+2026-10-01,live_6c2f0a5cbfa5d114,live,Support Engineer – ERP Application Support (2+ years),IFCA Mall,keep,hard,unspecified,,1.0,,IFCA Mall
+2026-10-01,live_6c2f0a5cbfa5d114,live,Support Engineer – ERP Application Support (2+ years),RPA,keep,hard,unspecified,preferred,1.0,,RPA / UiPath
+2026-10-01,live_6c2f0a5cbfa5d114,live,Support Engineer – ERP Application Support (2+ years),UiPath,keep,hard,unspecified,preferred,1.0,,RPA / UiPath
+2026-10-01,live_6c2f0a5cbfa5d114,live,Support Engineer – ERP Application Support (2+ years),Talend,keep,hard,unspecified,preferred,1.0,,Talend
+2026-10-01,live_6c2f0a5cbfa5d114,live,Support Engineer – ERP Application Support (2+ years),ABBYY FlexiCapture,keep,hard,unspecified,preferred,1.0,,ABBYY FlexiCapture
+2026-10-01,live_6c2f0a5cbfa5d114,live,Support Engineer – ERP Application Support (2+ years),I-Residential,keep,hard,unspecified,,1.0,,I-Residential
+2026-10-01,live_6c2f0a5cbfa5d114,live,Support Engineer – ERP Application Support (2+ years),CSS System,keep,hard,unspecified,,1.0,,CSS System
+2026-10-01,live_6c2f0a5cbfa5d114,live,Support Engineer – ERP Application Support (2+ years),Application performance monitoring,keep,hard,unspecified,,1.0,,"Monitor application performance and ensure system availability, reliability, and stability"
+2026-10-01,live_6c2f0a5cbfa5d114,live,Support Engineer – ERP Application Support (2+ years),Troubleshooting,keep,hard,unspecified,,1.0,,"Investigate, troubleshoot, and resolve incidents, service requests, and application issues within agreed SLAs"
+2026-10-01,live_6c2f0a5cbfa5d114,live,Support Engineer – ERP Application Support (2+ years),Root cause analysis,keep,hard,unspecified,,1.0,,Perform root cause analysis (RCA) for recurring issues and recommend long-term solutions
+2026-10-01,live_6c2f0a5cbfa5d114,live,Support Engineer – ERP Application Support (2+ years),Application enhancements,keep,hard,unspecified,,1.0,,"Support application enhancements, upgrades, and system implementation projects"
+2026-10-01,live_6c2f0a5cbfa5d114,live,Support Engineer – ERP Application Support (2+ years),Testing,keep,hard,unspecified,required,1.0,,"Participate in requirements clarification, testing, deployment, and post-go-live support"
+2026-10-01,live_6c2f0a5cbfa5d114,live,Support Engineer – ERP Application Support (2+ years),RPA implementation,keep,hard,unspecified,,1.0,,"Assist with automation initiatives, including RPA implementation and enhancement"
+2026-10-01,live_6c2f0a5cbfa5d114,live,Support Engineer – ERP Application Support (2+ years),Technical documentation,keep,hard,unspecified,,1.0,,Maintain proper technical and system documentation for application changes and support processes
+2026-10-01,live_6c2f0a5cbfa5d114,live,Support Engineer – ERP Application Support (2+ years),IT standards compliance,keep,hard,unspecified,,1.0,,"Ensure applications and implemented solutions comply with Group IT standards, policies, and procedures"
+2026-10-01,live_6c2f0a5cbfa5d114,live,Support Engineer – ERP Application Support (2+ years),Audit compliance,keep,hard,unspecified,required,1.0,,Support audit and compliance activities when required
+2026-10-01,live_6c2f0a5cbfa5d114,live,Support Engineer – ERP Application Support (2+ years),Business application support,keep,hard,unspecified,,1.0,,Business Application Support
+2026-10-01,live_6c2f0a5cbfa5d114,live,Support Engineer – ERP Application Support (2+ years),Business process improvement,keep,hard,unspecified,,1.0,,Assist business users in troubleshooting system-related issues and improving business processes
+2026-10-01,live_6c2f0a5cbfa5d114,live,Support Engineer – ERP Application Support (2+ years),Collaboration,keep,soft,unspecified,,1.0,,Work closely with business users and technical teams to ensure smooth day-to-day operations
+2026-10-01,live_6c2f0a5cbfa5d114,live,Support Engineer – ERP Application Support (2+ years),Escalation management,keep,hard,unspecified,,1.0,,Manage and resolve escalations from the support team and maintain strong relationships with business stakeholders after system go-live
+2026-10-01,live_6c2f0a5cbfa5d114,live,Support Engineer – ERP Application Support (2+ years),Enterprise applications support,keep,hard,preferred,preferred,1.0,,Experience supporting enterprise applications or property management systems is preferred
+2026-10-01,live_6c2f0a5cbfa5d114,live,Support Engineer – ERP Application Support (2+ years),IFCA ERP,keep,hard,preferred,required,1.0,,Experience with IFCA ERP / IFCA systems will be a strong advantage
+2026-10-01,live_6c2f0a5cbfa5d114,live,Support Engineer – ERP Application Support (2+ years),Application implementation,keep,hard,preferred,required,1.0,,"Experience with application implementation, enhancement, upgrade, testing, and post-go-live support"
+2026-10-01,live_6c2f0a5cbfa5d114,live,Support Engineer – ERP Application Support (2+ years),JIRA,keep,hard,preferred,preferred,1.0,,"Knowledge of JIRA, ITSM, CI/CD tools and processes is preferred"
+2026-10-01,live_6c2f0a5cbfa5d114,live,Support Engineer – ERP Application Support (2+ years),ITSM,keep,hard,preferred,preferred,1.0,,"Knowledge of JIRA, ITSM, CI/CD tools and processes is preferred"
+2026-10-01,live_6c2f0a5cbfa5d114,live,Support Engineer – ERP Application Support (2+ years),CI/CD,keep,hard,preferred,preferred,1.0,,"Knowledge of JIRA, ITSM, CI/CD tools and processes is preferred"
+2026-10-01,live_6c2f0a5cbfa5d114,live,Support Engineer – ERP Application Support (2+ years),ITIL,keep,hard,preferred,preferred,1.0,,"ITIL, COBIT, or TOGAF certification is an added advantage"
+2026-10-01,live_6c2f0a5cbfa5d114,live,Support Engineer – ERP Application Support (2+ years),COBIT,keep,hard,preferred,preferred,1.0,,"ITIL, COBIT, or TOGAF certification is an added advantage"
+2026-10-01,live_6c2f0a5cbfa5d114,live,Support Engineer – ERP Application Support (2+ years),TOGAF,keep,hard,preferred,preferred,1.0,,"ITIL, COBIT, or TOGAF certification is an added advantage"
+2026-10-01,live_6c2f0a5cbfa5d114,live,Support Engineer – ERP Application Support (2+ years),Problem-solving,keep,soft,unspecified,,1.0,,"Strong troubleshooting, analytical, and problem-solving skills"
+2026-10-01,live_6c2f0a5cbfa5d114,live,Support Engineer – ERP Application Support (2+ years),Communication,keep,soft,unspecified,,1.0,,"Strong communication and interpersonal skills, with the ability to work effectively with business users and cross-functional technical teams"
+2026-10-01,live_6c2f0a5cbfa5d114,live,Support Engineer – ERP Application Support (2+ years),Stakeholder management,keep,soft,required,,1.0,,Strong stakeholder and client relationship management skills
+2026-10-01,live_6c2f0a5cbfa5d114,live,Support Engineer – ERP Application Support (2+ years),Client relationship management,keep,soft,required,,1.0,,Strong stakeholder and client relationship management skills
+2026-10-01,live_6c2f0a5cbfa5d114,live,Support Engineer – ERP Application Support (2+ years),Teamwork,keep,soft,required,,1.0,,collaborating effectively within a team
+2026-10-01,live_c3adc57fd20b1d57,live,"Event Engineer (AV System/IT), IT Services",AV systems,keep,hard,required,required,1.0,,AV systems deployment and troubleshooting
+2026-10-01,live_c3adc57fd20b1d57,live,"Event Engineer (AV System/IT), IT Services",Video conferencing,keep,hard,unspecified,,1.0,,leading-edge video conferencing and audio visual (AV) support
+2026-10-01,live_c3adc57fd20b1d57,live,"Event Engineer (AV System/IT), IT Services",Audio visual,keep,hard,unspecified,,1.0,,leading-edge video conferencing and audio visual (AV) support
+2026-10-01,live_c3adc57fd20b1d57,live,"Event Engineer (AV System/IT), IT Services",IT software,keep,hard,unspecified,,1.0,,"audio visual and video conferencing large scope of IT software, hardware, and networking disciplines"
+2026-10-01,live_c3adc57fd20b1d57,live,"Event Engineer (AV System/IT), IT Services",Hardware,keep,hard,unspecified,,1.0,,"audio visual and video conferencing large scope of IT software, hardware, and networking disciplines"
+2026-10-01,live_c3adc57fd20b1d57,live,"Event Engineer (AV System/IT), IT Services",Networking,keep,hard,unspecified,,1.0,,"audio visual and video conferencing large scope of IT software, hardware, and networking disciplines"
+2026-10-01,live_c3adc57fd20b1d57,live,"Event Engineer (AV System/IT), IT Services",Livestreaming,keep,hard,unspecified,,1.0,,autonomously support livestreaming events and video content creation
+2026-10-01,live_c3adc57fd20b1d57,live,"Event Engineer (AV System/IT), IT Services",Video content creation,keep,hard,unspecified,,1.0,,autonomously support livestreaming events and video content creation
+2026-10-01,live_c3adc57fd20b1d57,live,"Event Engineer (AV System/IT), IT Services",Windows OS,keep,hard,unspecified,,1.0,,Windows/Mac OS support
+2026-10-01,live_c3adc57fd20b1d57,live,"Event Engineer (AV System/IT), IT Services",Mac OS,keep,hard,unspecified,,1.0,,Windows/Mac OS support
+2026-10-01,live_c3adc57fd20b1d57,live,"Event Engineer (AV System/IT), IT Services",Hardware support,keep,hard,unspecified,,1.0,,User hardware/software/peripheral support
+2026-10-01,live_c3adc57fd20b1d57,live,"Event Engineer (AV System/IT), IT Services",Software support,keep,hard,unspecified,,1.0,,User hardware/software/peripheral support
+2026-10-01,live_c3adc57fd20b1d57,live,"Event Engineer (AV System/IT), IT Services",Peripheral support,keep,hard,unspecified,,1.0,,User hardware/software/peripheral support
+2026-10-01,live_c3adc57fd20b1d57,live,"Event Engineer (AV System/IT), IT Services",Video Conferencing equipment,keep,hard,unspecified,,1.0,,Provide break/fix support for Video Conferencing equipment in meeting rooms
+2026-10-01,live_c3adc57fd20b1d57,live,"Event Engineer (AV System/IT), IT Services",Video Conferencing technology,keep,hard,unspecified,,1.0,,assistance on using Video Conferencing technology
+2026-10-01,live_c3adc57fd20b1d57,live,"Event Engineer (AV System/IT), IT Services",Displays,keep,hard,unspecified,,1.0,,"displays, projectors, speakers, microphones, cameras, telephones, laptops, media players, document cameras"
+2026-10-01,live_c3adc57fd20b1d57,live,"Event Engineer (AV System/IT), IT Services",Projectors,keep,hard,unspecified,,1.0,,"displays, projectors, speakers, microphones, cameras, telephones, laptops, media players, document cameras"
+2026-10-01,live_c3adc57fd20b1d57,live,"Event Engineer (AV System/IT), IT Services",Speakers,keep,hard,unspecified,,1.0,,"displays, projectors, speakers, microphones, cameras, telephones, laptops, media players, document cameras"
+2026-10-01,live_c3adc57fd20b1d57,live,"Event Engineer (AV System/IT), IT Services",Microphones,keep,hard,unspecified,,1.0,,"displays, projectors, speakers, microphones, cameras, telephones, laptops, media players, document cameras"
+2026-10-01,live_c3adc57fd20b1d57,live,"Event Engineer (AV System/IT), IT Services",Cameras,keep,hard,unspecified,,1.0,,"displays, projectors, speakers, microphones, cameras, telephones, laptops, media players, document cameras"
+2026-10-01,live_c3adc57fd20b1d57,live,"Event Engineer (AV System/IT), IT Services",Self-service tools,keep,hard,unspecified,,1.0,,Train customers to use self-service tools to schedule their own spaces
+2026-10-01,live_c3adc57fd20b1d57,live,"Event Engineer (AV System/IT), IT Services",Remote recording,keep,hard,unspecified,,1.0,,"finding event services including production, livestreaming and remote recording"
+2026-10-01,live_c3adc57fd20b1d57,live,"Event Engineer (AV System/IT), IT Services",Phone support,keep,soft,unspecified,,1.0,,Provide courteous phone and chat support to customers
+2026-10-01,live_c3adc57fd20b1d57,live,"Event Engineer (AV System/IT), IT Services",Chat support,keep,soft,unspecified,,1.0,,Provide courteous phone and chat support to customers
+2026-10-01,live_c3adc57fd20b1d57,live,"Event Engineer (AV System/IT), IT Services",Relationship building,keep,soft,unspecified,,1.0,,Create and maintain excellent relationships with our internal customers and co-workers
+2026-10-01,live_c3adc57fd20b1d57,live,"Event Engineer (AV System/IT), IT Services",Ticketing system,keep,hard,unspecified,,1.0,,Track your work via our ticketing system
+2026-10-01,live_c3adc57fd20b1d57,live,"Event Engineer (AV System/IT), IT Services",Presentation formatting,keep,hard,unspecified,,1.0,,Assist event organizers with presentation formatting
+2026-10-01,live_c3adc57fd20b1d57,live,"Event Engineer (AV System/IT), IT Services",Camera operation,keep,hard,unspecified,,1.0,,operation of cameras and livestream equipment
+2026-10-01,live_c3adc57fd20b1d57,live,"Event Engineer (AV System/IT), IT Services",Livestream equipment,keep,hard,unspecified,,1.0,,operation of cameras and livestream equipment
+2026-10-01,live_c3adc57fd20b1d57,live,"Event Engineer (AV System/IT), IT Services",Video editing,keep,hard,unspecified,required,1.0,,Edit video content as required
+2026-10-01,live_c3adc57fd20b1d57,live,"Event Engineer (AV System/IT), IT Services",Video conferencing interfaces,keep,hard,required,required,1.0,,"AV systems deployment and troubleshooting, video conferencing interfaces, signal flows, operations, and maintenance"
+2026-10-01,live_c3adc57fd20b1d57,live,"Event Engineer (AV System/IT), IT Services",Signal flows,keep,hard,required,required,1.0,,"AV systems deployment and troubleshooting, video conferencing interfaces, signal flows, operations, and maintenance"
+2026-10-01,live_c3adc57fd20b1d57,live,"Event Engineer (AV System/IT), IT Services",Operations,keep,hard,required,required,1.0,,"AV systems deployment and troubleshooting, video conferencing interfaces, signal flows, operations, and maintenance"
+2026-10-01,live_c3adc57fd20b1d57,live,"Event Engineer (AV System/IT), IT Services",Maintenance,keep,hard,required,required,1.0,,"AV systems deployment and troubleshooting, video conferencing interfaces, signal flows, operations, and maintenance"
+2026-10-01,live_c3adc57fd20b1d57,live,"Event Engineer (AV System/IT), IT Services",Networking fundamentals,keep,hard,required,required,1.0,,"Windows/Mac OS, networking fundamentals, hardware/software troubleshooting"
+2026-10-01,live_c3adc57fd20b1d57,live,"Event Engineer (AV System/IT), IT Services",Hardware troubleshooting,keep,hard,required,required,1.0,,"Windows/Mac OS, networking fundamentals, hardware/software troubleshooting"
+2026-10-01,live_c3adc57fd20b1d57,live,"Event Engineer (AV System/IT), IT Services",Software troubleshooting,keep,hard,required,required,1.0,,"Windows/Mac OS, networking fundamentals, hardware/software troubleshooting"
+2026-10-01,live_c3adc57fd20b1d57,live,"Event Engineer (AV System/IT), IT Services",Communication,keep,soft,required,required,1.0,,Strong communication skills with experience supporting senior executives
+2026-10-01,live_c3adc57fd20b1d57,live,"Event Engineer (AV System/IT), IT Services",Linux OS,keep,hard,required,required,1.0,,"Windows, Mac or Linux Operating systems support experience"
+2026-10-01,live_c3adc57fd20b1d57,live,"Event Engineer (AV System/IT), IT Services",DNS,keep,hard,preferred,preferred,1.0,,"networking (such as DNS, DHCP, SSL, OSI Model, and TCP/IP) experience"
+2026-10-01,live_c3adc57fd20b1d57,live,"Event Engineer (AV System/IT), IT Services",DHCP,keep,hard,preferred,preferred,1.0,,"networking (such as DNS, DHCP, SSL, OSI Model, and TCP/IP) experience"
+2026-10-01,live_c3adc57fd20b1d57,live,"Event Engineer (AV System/IT), IT Services",SSL,keep,hard,preferred,preferred,1.0,,"networking (such as DNS, DHCP, SSL, OSI Model, and TCP/IP) experience"
+2026-10-01,live_c3adc57fd20b1d57,live,"Event Engineer (AV System/IT), IT Services",OSI Model,keep,hard,preferred,preferred,1.0,,"networking (such as DNS, DHCP, SSL, OSI Model, and TCP/IP) experience"
+2026-10-01,live_c3adc57fd20b1d57,live,"Event Engineer (AV System/IT), IT Services",TCP/IP,keep,hard,preferred,preferred,1.0,,"networking (such as DNS, DHCP, SSL, OSI Model, and TCP/IP) experience"
+2026-10-01,live_c3adc57fd20b1d57,live,"Event Engineer (AV System/IT), IT Services",Active Directory,keep,hard,preferred,preferred,1.0,,"Windows Server technologies: AD, DFS, Print Services, SCCM experience"
+2026-10-01,live_c3adc57fd20b1d57,live,"Event Engineer (AV System/IT), IT Services",DFS,keep,hard,preferred,preferred,1.0,,"Windows Server technologies: AD, DFS, Print Services, SCCM experience"
+2026-10-01,live_c3adc57fd20b1d57,live,"Event Engineer (AV System/IT), IT Services",Print Services,keep,hard,preferred,preferred,1.0,,"Windows Server technologies: AD, DFS, Print Services, SCCM experience"
+2026-10-01,live_c3adc57fd20b1d57,live,"Event Engineer (AV System/IT), IT Services",SCCM,keep,hard,preferred,preferred,1.0,,"Windows Server technologies: AD, DFS, Print Services, SCCM experience"
+2026-10-01,live_c3adc57fd20b1d57,live,"Event Engineer (AV System/IT), IT Services",PC repair,keep,hard,preferred,preferred,1.0,,"PC repair, troubleshooting, deployment and liquidation experience"
+2026-10-01,live_c3adc57fd20b1d57,live,"Event Engineer (AV System/IT), IT Services",PC troubleshooting,keep,hard,preferred,preferred,1.0,,"PC repair, troubleshooting, deployment and liquidation experience"
+2026-10-01,live_c3adc57fd20b1d57,live,"Event Engineer (AV System/IT), IT Services",PC deployment,keep,hard,preferred,preferred,1.0,,"PC repair, troubleshooting, deployment and liquidation experience"
+2026-10-01,live_c3adc57fd20b1d57,live,"Event Engineer (AV System/IT), IT Services",IT client service delivery,keep,hard,preferred,preferred,1.0,,"IT client, server, and network service delivery experience"
+2026-10-01,live_c3adc57fd20b1d57,live,"Event Engineer (AV System/IT), IT Services",Server service delivery,keep,hard,preferred,preferred,1.0,,"IT client, server, and network service delivery experience"
+2026-10-01,live_c3adc57fd20b1d57,live,"Event Engineer (AV System/IT), IT Services",Network service delivery,keep,hard,preferred,preferred,1.0,,"IT client, server, and network service delivery experience"
+2026-10-01,live_5d25b4cc1dbf001a,live,Software Engineer (Contract),C#,keep,hard,required,required,1.0,,"Proficiency in software development languages such as C#, Python, or equivalent"
+2026-10-01,live_5d25b4cc1dbf001a,live,Software Engineer (Contract),Python,keep,hard,required,required,1.0,,"Proficiency in software development languages such as C#, Python, or equivalent"
+2026-10-01,live_5d25b4cc1dbf001a,live,Software Engineer (Contract),SQL,keep,hard,required,required,1.0,,and SQL programming (MS or Oracle)
+2026-10-01,live_5d25b4cc1dbf001a,live,Software Engineer (Contract),MVVM,keep,hard,required,required,1.0,framework,"design patterns and frameworks (e.g., MVVM WPF, ASP.Net MVC, MVP)"
+2026-10-01,live_5d25b4cc1dbf001a,live,Software Engineer (Contract),WPF,keep,hard,required,required,1.0,framework,"design patterns and frameworks (e.g., MVVM WPF, ASP.Net MVC, MVP)"
+2026-10-01,live_5d25b4cc1dbf001a,live,Software Engineer (Contract),ASP.Net MVC,keep,hard,required,required,1.0,framework,"design patterns and frameworks (e.g., MVVM WPF, ASP.Net MVC, MVP)"
+2026-10-01,live_5d25b4cc1dbf001a,live,Software Engineer (Contract),MVP,keep,hard,required,required,1.0,framework,"design patterns and frameworks (e.g., MVVM WPF, ASP.Net MVC, MVP)"
+2026-10-01,live_5d25b4cc1dbf001a,live,Software Engineer (Contract),JavaScript,keep,hard,required,required,1.0,,open-source languages such as JavaScript or others
+2026-10-01,live_5d25b4cc1dbf001a,live,Software Engineer (Contract),Communication,keep,soft,preferred,preferred,1.0,,Strong communication and teamwork skills
+2026-10-01,live_5d25b4cc1dbf001a,live,Software Engineer (Contract),Teamwork,keep,soft,preferred,preferred,1.0,,Strong communication and teamwork skills
+2026-10-01,live_5d25b4cc1dbf001a,live,Software Engineer (Contract),Problem-solving,keep,soft,preferred,preferred,1.0,,Problem-solving and analytical skills to articulate complex technical issues
+2026-10-01,live_5d25b4cc1dbf001a,live,Software Engineer (Contract),Analytical,keep,soft,preferred,preferred,1.0,,Problem-solving and analytical skills to articulate complex technical issues
+2026-10-01,live_1cc1bb50cd6d1018,live,Software Quality Engineer,GD&T,keep,hard,required,,1.0,,GD&T checks
+2026-10-01,live_1cc1bb50cd6d1018,live,Software Quality Engineer,DFM,keep,hard,required,,1.0,,DFM analysis
+2026-10-01,live_1cc1bb50cd6d1018,live,Software Quality Engineer,PPAP,keep,hard,required,,1.0,,PPAP
+2026-10-01,live_1cc1bb50cd6d1018,live,Software Quality Engineer,FAI,keep,hard,required,,1.0,,FAI
+2026-10-01,live_1cc1bb50cd6d1018,live,Software Quality Engineer,User Acceptance Testing,keep,hard,unspecified,,1.0,,"testing, validation (UAT)"
+2026-10-01,live_1cc1bb50cd6d1018,live,Software Quality Engineer,Python,keep,hard,required,,1.0,,Python scripts
+2026-10-01,live_1cc1bb50cd6d1018,live,Software Quality Engineer,code review,keep,hard,required,,1.0,,"Provide technical guidance, code review"
+2026-10-01,live_1cc1bb50cd6d1018,live,Software Quality Engineer,API integration,keep,hard,required,,1.0,,API integrations
+2026-10-01,live_1cc1bb50cd6d1018,live,Software Quality Engineer,data processing,keep,hard,required,,1.0,,"write, debug, and evaluate code for data processing"
+2026-10-01,live_1cc1bb50cd6d1018,live,Software Quality Engineer,Git,keep,hard,required,,1.0,,revision tracking via Git
+2026-10-01,live_1cc1bb50cd6d1018,live,Software Quality Engineer,Gemini,keep,hard,required,,1.0,,"enterprise AI capabilities (e.g., Gemini, LLM APIs)"
+2026-10-01,live_1cc1bb50cd6d1018,live,Software Quality Engineer,LLM APIs,keep,hard,required,,1.0,,"enterprise AI capabilities (e.g., Gemini, LLM APIs)"
+2026-10-01,live_1cc1bb50cd6d1018,live,Software Quality Engineer,Mechanical engineering,keep,hard,required,,1.0,,Solid understanding of mechanical engineering fundamentals
+2026-10-01,live_1cc1bb50cd6d1018,live,Software Quality Engineer,technical drawing,keep,hard,required,,1.0,,technical drawings
+2026-10-01,live_1cc1bb50cd6d1018,live,Software Quality Engineer,FMEA,keep,hard,required,,1.0,,FMEA
+2026-10-01,live_1cc1bb50cd6d1018,live,Software Quality Engineer,Problem solving,keep,soft,required,,1.0,,Strong analytical skills
+2026-10-01,live_1cc1bb50cd6d1018,live,Software Quality Engineer,Supervision,keep,soft,required,,1.0,,coordinate junior developers

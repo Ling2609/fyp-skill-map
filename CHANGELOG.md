@@ -3,6 +3,16 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 1 Oct 2026 — Stage 3A revised: unspecified skills are a fallback
+
+- (this commit) The coverage % now counts **required** hard skills only. Unspecified skills are used only when an
+  ad requires none ("of listed skills"), and preferred only when it has neither ("of preferred skills"). Evidence
+  (v8 dry run, 6 unseen ads): sentence-by-sentence extraction labels most duty phrases "unspecified" ("URL
+  structure", "Escalation management"; ~40 in one ad), which diluted the % for every student; on NEXTDC × 4 the
+  required skills were near-identical (18/18/18/22) while the items that changed between runs were all
+  unspecified. Old skills without a level still count as before (40-response regression identical); tested on
+  seeded jobs with required, unspecified-only and preferred-only skills.
+
 ## 1 Oct 2026 — Fix plan, Stage 1: sentence-by-sentence extraction (v7)
 
 - (this commit) The second "what did you miss" pass (v6) did not help: NEXTDC × 3 gave 39, 24 and 12 hard skills

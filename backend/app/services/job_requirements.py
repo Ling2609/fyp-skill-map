@@ -6,13 +6,19 @@ alternative_group (the ad accepts any one of the group, e.g. "C#, Python, or equ
 these; skills extracted before Stage 1 have none, and are treated exactly as before: every skill a
 requirement on its own. So nothing changes until a job is re-extracted.
 
-  core      = hard skills that are required or unspecified -> the displayed coverage %
-  bonus     = hard skills that are preferred               -> "nice to have" line + small ranking bonus
-  learn     = skills the role will teach (trained)          -> "you'll learn on the job", never a gap
-  soft      = soft skills                                   -> listed separately, not in the %
+  core      = hard skills that are required                 -> the displayed coverage %
+  duty      = hard skills that are unspecified (mostly from the duties) -> used only if the ad requires nothing
+  bonus     = hard skills that are preferred               -> "nice to have" box + small ranking bonus
+  learn     = skills the role will teach (trained)          -> never a gap, not shown
+  soft      = soft skills                                   -> not in the %, not shown (they are in the description)
 An either-or group counts as one requirement, met if the student has any member.
-A job with no core skills (e.g. a graduate programme that asks for nothing specific) is scored on its
-preferred skills instead (basis = "preferred"), so it never shows a fake 0% or 100%.
+Fallback when an ad lists no required hard skill: score on its unspecified skills (basis "unspecified"),
+and if there are none either, on its preferred skills (basis "preferred"), so it never shows a fake 0% or 100%.
+
+Why unspecified is a fallback, not core (1 Oct, v8 dry run on 6 unseen ads): sentence-by-sentence extraction
+labels most duty phrases "unspecified" ("URL structure", "Escalation management"), up to ~40 per ad, which
+diluted the % for every student; and on NEXTDC x 4 the required skills were near-identical (18/18/18/22),
+while the items that changed between runs were all unspecified (config backup, bulk changes...).
 
 Why: required qualifications decide eligibility and preferred ones separate stronger candidates (UIC
 screening guidance); one clear meaning per number keeps the explanation honest. The ranking bonus weight
@@ -23,7 +29,6 @@ from dataclasses import dataclass
 from app.services.skill_names import canonical_key
 
 BONUS_WEIGHT = 0.05      # ranking only: at most +0.05 for having every nice-to-have skill (< one level step, 0.12)
-CORE_LEVELS = {None, "", "required", "unspecified"}
 
 
 @dataclass
@@ -42,7 +47,9 @@ class JobSkillItem:
             return "learn"
         if self.level == "preferred":
             return "bonus"
-        return "core"
+        if self.level == "unspecified":
+            return "duty"
+        return "core"            # required, or no level (skills extracted before Stage 1: counted as before)
 
 
 def job_skill_items(rows) -> list[JobSkillItem]:
@@ -87,8 +94,12 @@ def score_job(items: list[JobSkillItem], has) -> dict:
     """has[i] = the student has item i. Returns the coverage shown to the student and the parts around it."""
     core, bonus = units(items, "core"), units(items, "bonus")
     basis = "required"
-    if not core and bonus:           # nothing required: score on the preferred skills instead
-        core, bonus, basis = bonus, [], "preferred"
+    if not core:                      # nothing required: the unspecified skills, else the preferred ones
+        duty = units(items, "duty")
+        if duty:
+            core, basis = duty, "unspecified"
+        elif bonus:
+            core, bonus, basis = bonus, [], "preferred"
     met = [any(has[i] for i in u) for u in core]
     bonus_met = [any(has[i] for i in u) for u in bonus]
     total = len(core)

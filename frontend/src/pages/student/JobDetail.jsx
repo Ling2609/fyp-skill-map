@@ -112,7 +112,9 @@ export default function JobDetail() {
 
   const totalRequired = gapRows.length + matchedRows.length
   // Stage 3A: the % counts required skills; a job that requires nothing specific is scored on its preferred ones
-  const basisWord = gap?.summary?.coverage_basis === 'preferred' ? 'preferred' : 'required'
+  // What the % counts: required skills; if the ad requires none, the skills it lists without a level, else its preferred ones
+  const basisWord = { preferred: 'preferred', unspecified: 'listed' }[gap?.summary?.coverage_basis] || 'required'
+  const BasisWord = basisWord[0].toUpperCase() + basisWord.slice(1)
   // Nice-to-have skills: shown apart, never in the %. (Skills the role will teach and soft skills are left
   // out of the % too, but not listed here: the first reads oddly to a student, the second is in the description.)
   const niceToHave = gap?.nice_to_have || []
@@ -255,7 +257,7 @@ export default function JobDetail() {
             <div className="bg-white rounded-xl border border-gray-100 shadow-sm">
               <div className="px-5 py-4 border-b border-gray-100">
                 <h2 className="text-sm font-semibold text-gray-700">
-                  {basisWord === 'required' ? 'Required' : 'Preferred'} skills you're missing <span className="text-red-600">({gapRows.length})</span>
+                  {BasisWord} skills you're missing <span className="text-red-600">({gapRows.length})</span>
                 </h2>
               </div>
               {gapRows.length === 0 ? (
@@ -286,7 +288,7 @@ export default function JobDetail() {
             <div className="bg-white rounded-xl border border-gray-100 shadow-sm">
               <div className="flex items-center justify-between gap-3 px-5 py-4 border-b border-gray-100">
                 <h2 className="text-sm font-semibold text-gray-700">
-                  {basisWord === 'required' ? 'Required' : 'Preferred'} skills you have <span className="text-green-700">({matchedRows.length} of {totalRequired})</span>
+                  {BasisWord} skills you have <span className="text-green-700">({matchedRows.length} of {totalRequired})</span>
                 </h2>
                 {matchedRows.length > 0 && (
                   <button
