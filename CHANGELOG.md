@@ -3,6 +3,29 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 1 Oct 2026 — Skill relationship model: training set v1 from public data + notebook
+
+- (this commit) **No LLM needed for a first model** ("distant supervision": labels from existing expert data).
+  `scripts/skill_relations/build_pairs_esco_onet.py` builds 6,102 pairs from ESCO v1.2.1 (digital skills: synonyms = SAME,
+  skill → broader skill = NARROWER, skill relations and siblings = RELATED), O*NET 31.0 Software Skills (hot
+  technologies → their software category = NARROWER, tools in the same small IT category = RELATED), A8's
+  verified same pairs, and random unrelated pairs (DIFFERENT); BROADER = NARROWER reversed. Split by skill
+  (hierarchy pairs follow the parent; negatives drawn within a split): 4,231 train / 911 val / 960 test.
+  Ambiguous ESCO "related" pairs where one name contains the other ("perform data mining" / "data mining") are
+  dropped. Known noise: some non-ICT ESCO skills, loose synonyms, broad O*NET categories; negatives are easy.
+- `scripts/skill_relations/train_relation_model.ipynb` (Colab): SBERT cosine baseline (0.7 / 0.6) vs a cross-encoder
+  fine-tuned from the app's all-MiniLM-L6-v2 (3 classes, class weights, best epoch on val, 3 seeds); reports
+  macro-F1, confusion matrix and a direction test (NARROWER vs the same pair reversed). Tested end to end on CPU
+  with a tiny stand-in model.
+
+- Naming: folders and files named by purpose like the rest of the repo (`scripts/skill_relations/`,
+  `data/skill_relations/`), not by the plan's stage numbers; `docs/stage2_label_guide.md` renamed to
+  `docs/skill_relation_label_guide.md`. Pairs are now built in a fixed order (Python sets were iterated in a
+  different order on every start), so every run gives the same file: 6,101 pairs.
+
+- Fixed: `build_pairs_esco_onet.py` read `skill_merges.json` without `encoding="utf-8"`, so on Windows one
+  A8 name came out garbled ("Wiâ€‘Fi management"); found by running the script on Windows and comparing files.
+
 ## 1 Oct 2026 — Stage 3A revised: unspecified skills are a fallback
 
 - (this commit) The coverage % now counts **required** hard skills only. Unspecified skills are used only when an

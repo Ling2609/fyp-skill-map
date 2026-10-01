@@ -4,6 +4,8 @@ backend/__pycache__/
 backend/**/__pycache__/
 backend/.env
 backend/data/*.csv
+# Public reference data downloaded by hand (ESCO, O*NET): large, re-downloadable, see README
+backend/data/external/
 backend/test_credentials.txt
 
 # Node

@@ -108,3 +108,4 @@ watchfiles==1.2.0
 weasel==1.0.0
 websockets==16.1.1
 wrapt==2.4.0
+nbformat==5.11.1
