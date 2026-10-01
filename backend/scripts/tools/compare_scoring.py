@@ -3,11 +3,12 @@ Step 2 research (reads the database, writes only the sample CSV below): how does
 "which matched skills count"? Nothing in the app changes. Result (30 Sep): the app uses A since step 2.
 
   now      : every job skill with best similarity >= 0.6 counts fully (the app before step 2)
-  A        : only Direct counts. Direct = same skill (A8 canonical key) or SBERT >= 0.8  (tested; the app uses 0.7, see step2_scoring_summary.txt)
+  A        : only Direct counts. Direct = same skill (A8 canonical key) or SBERT >= MATCH_THRESHOLD
+             (0.8 when first run on 30 Sep; the app uses 0.7 since 1 Oct, see step2_scoring_summary.txt)
   A-strict : only the same skill (A8 canonical key) counts
-  B        : Direct counts 1, Related (0.6-0.79) counts 0.5
+  B        : Direct counts 1, Related (RELATED_THRESHOLD up to MATCH_THRESHOLD) counts 0.5
 Sensitivity: Related credit 0 / 0.25 / 0.33 / 0.5 / 1, with openings at >= 30 / 40 / 50% coverage.
-Also writes ../docs/evidence/step2_related_sample.csv: 60 random Related pairs and 30 SBERT >= 0.8 pairs
+Also writes ../docs/evidence/step2_related_sample.csv: 60 random Related pairs and 30 SBERT >= MATCH_THRESHOLD pairs
 (student skill -> job skill), to label "does the student really have the job's skill?".
 
 Usage (from backend/, venv active):
@@ -52,9 +53,10 @@ def main():
         key_set = set(keys)
         recommend.build_job_cache()
 
-        rows, kinds = [], {"same key": 0, "sbert >= 0.8": 0, "0.6-0.79": 0}
+        hi, band = f"sbert >= {MATCH_THRESHOLD}", f"{RELATED_THRESHOLD}-{MATCH_THRESHOLD}"   # labels follow the thresholds
+        rows, kinds = [], {"same key": 0, hi: 0, band: 0}
         counts = []              # (direct, related, N) per job
-        pairs = {"related": [], "sbert >= 0.8": []}
+        pairs = {"related": [], hi: []}
         for c in recommend._job_cache.values():
             if c.get("source") != "live" or not c["skills"]:
                 continue
@@ -66,12 +68,12 @@ def main():
             n = len(c["skills"])
             counts.append((int(direct.sum()), int(related.sum()), n))
             for j in range(n):
-                kind = "related" if related[j] else "sbert >= 0.8" if direct[j] and not same[j] else None
+                kind = "related" if related[j] else hi if direct[j] and not same[j] else None
                 if kind:
                     pairs[kind].append((spellings[arg[j]], c["skills"][j], round(float(best[j]), 3), c["job_title"][:60]))
             kinds["same key"] += int(same.sum())
-            kinds["sbert >= 0.8"] += int((direct & ~same).sum())
-            kinds["0.6-0.79"] += int(related.sum())
+            kinds[hi] += int((direct & ~same).sum())
+            kinds[band] += int(related.sum())
             rows.append((c["job_title"][:44], n, int((direct | related).sum()), int(direct.sum()),
                          int(same.sum()), direct.sum() + 0.5 * related.sum()))
 
@@ -98,7 +100,7 @@ def main():
 
         rng = random.Random(42)
         sample = [("related", *p) for p in rng.sample(pairs["related"], min(60, len(pairs["related"])))]
-        sample += [("sbert >= 0.8", *p) for p in rng.sample(pairs["sbert >= 0.8"], min(30, len(pairs["sbert >= 0.8"])))]
+        sample += [(hi, *p) for p in rng.sample(pairs[hi], min(30, len(pairs[hi])))]
         rng.shuffle(sample)     # so the labeller can't tell the group from the order
         out = "../docs/evidence/step2_related_sample.csv"
         with open(out, "w", newline="", encoding="utf-8-sig") as f:

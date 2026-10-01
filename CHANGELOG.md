@@ -5,6 +5,14 @@ Planning, reasoning and research behind each decision are in the project roadmap
 
 ## 1 Oct 2026 — Fix plan, Stage 1: job skills with evidence
 
+- (this commit) **Saving the new extraction** (`extract_job_skills_v2.py --save`, not run on the real data yet):
+  replaces a job's skills with the checked ones (one row per skill by A8 key, strongest level kept), copies
+  the old rows once to `job_skills_pre_stage1` so `--undo` can restore them, and keeps the old skills when the
+  new extraction has fewer than 3 hard skills. `--all-live` resumes where it stopped and ends cleanly at Groq's
+  daily limit. Fixed: the reject loop reused the run counter `r`. Tested on a test database with a stand-in
+  extractor (save, too-few-skills, daily limit, resume, undo).
+- (this commit) `compare_scoring.py`: output labels follow the thresholds (they still said "sbert >= 0.8" and
+  "0.6-0.79" while the code uses 0.7); found by an external review.
 - (c0379d5) **Dry run of evidence-based job extraction** (`scripts/pipeline/extract_job_skills_v2.py`, no
   database writes). The LLM must return each skill with a verbatim quote from the ad, its type (hard / soft) and
   level (required / preferred / trained / unspecified), using Groq's strict JSON schema. `app/services/evidence.py`

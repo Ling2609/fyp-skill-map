@@ -1,6 +1,13 @@
 """
-Stage 1 dry run: extract job skills WITH evidence quotes and check them, next to the skills stored now.
-Writes nothing to the database. Uses Groq (about 2-4k tokens per ad).
+Stage 1: extract job skills WITH evidence quotes and check them, next to the skills stored now.
+Dry run by default (writes nothing to the database). Uses Groq (about 5-10k tokens per ad with the second pass).
+
+--save replaces each job's stored skills with the checked ones (evidence, level, type, either-or group,
+extracted_by = the prompt version). The old rows are copied once to job_skills_pre_stage1 first, so
+--undo can put them back. --all-live processes every live job not yet saved with this version; it resumes
+where it stopped and ends cleanly at Groq's daily limit. A job keeps its old skills if the new extraction
+has fewer than 3 hard skills (failed or empty call). Restart uvicorn afterwards (the job cache does not
+re-read skills of jobs it already holds).
 
 For each ad it prints every skill the LLM returned: KEEP (quote found in the ad) or REJECT (quote not
 there = unsupported), with type (hard/soft), level (required/preferred/trained/unspecified) and whether
@@ -17,6 +24,8 @@ Usage (from backend/, venv active):
   python scripts/pipeline/extract_job_skills_v2.py --live 10 --seed 7                    # 10 different live jobs
   python scripts/pipeline/extract_job_skills_v2.py --title "Network Engineer" --company NEXTDC --repeat 3
   add --print-ad to also print the ad text that was checked
+  python scripts/pipeline/extract_job_skills_v2.py --all-live --save                     # bulk: all live jobs
+  python scripts/pipeline/extract_job_skills_v2.py --undo                                # put the old skills back
 """
 import argparse
 import csv
@@ -29,6 +38,8 @@ from datetime import date
 
 sys.path.append(".")
 
+from sqlalchemy import text as sql
+
 from app.database import SessionLocal
 from app.models.job import Job, JobSkill
 from app.services.evidence import verify_skills
@@ -37,6 +48,42 @@ from app.services.skill_names import canonical_key
 OUT = "../docs/evidence/stage1_dryrun_{version}.csv"     # one file per prompt version
 CSV_2024 = "data/jobstreet_clean.csv"
 LIVE_CACHE = "data/live_jobs_cache.json"
+BACKUP = "job_skills_pre_stage1"
+MIN_HARD = 3
+LEVEL_RANK = {"required": 0, "unspecified": 1, "preferred": 2, "trained": 3}   # strongest first
+
+
+def save_skills(db, job, kept: list[dict], version: str) -> int:
+    """Replace the job's stored skills with the checked ones; old rows are backed up once. Returns rows saved."""
+    db.execute(sql(f"CREATE TABLE IF NOT EXISTS {BACKUP} AS TABLE job_skills WITH NO DATA"))
+    db.execute(sql(f"INSERT INTO {BACKUP} SELECT * FROM job_skills WHERE job_id = :j "
+                   f"AND NOT EXISTS (SELECT 1 FROM {BACKUP} WHERE job_id = :j)"), {"j": job.id})
+    # One row per skill (A8 canonical key); if a skill appears twice, keep its strongest level
+    best = {}
+    for k in sorted(kept, key=lambda k: LEVEL_RANK.get(k.get("level"), 1)):
+        best.setdefault(canonical_key(k["skill"]) or k["skill"].lower(), k)
+    db.query(JobSkill).filter(JobSkill.job_id == job.id).delete()
+    for k in best.values():
+        db.add(JobSkill(job_id=job.id, job_ref=job.job_id, skill_name=k["skill"].strip(), extracted_by=version,
+                        evidence_quote=k.get("evidence_quote"), level=k.get("level"), skill_type=k.get("type"),
+                        match_score=k.get("match_score"), alternative_group=k.get("alternative_group") or None))
+    db.commit()
+    return len(best)
+
+
+def undo(db):
+    """Put back the skills backed up before --save, for every job in the backup."""
+    exists = db.execute(sql("SELECT to_regclass(:t)"), {"t": BACKUP}).scalar()
+    if not exists:
+        print("Nothing to undo: no backup table")
+        return
+    ids = [i for (i,) in db.execute(sql(f"SELECT DISTINCT job_id FROM {BACKUP}"))]
+    for i in ids:
+        db.query(JobSkill).filter(JobSkill.job_id == i).delete()
+        db.execute(sql(f"INSERT INTO job_skills SELECT * FROM {BACKUP} WHERE job_id = :j"), {"j": i})
+    db.execute(sql(f"DROP TABLE {BACKUP}"))
+    db.commit()
+    print(f"Old skills restored for {len(ids)} jobs; backup table removed. Restart uvicorn.")
 
 
 def full_text_2024() -> dict:
@@ -72,12 +119,27 @@ def main():
     ap.add_argument("--company", help="with --title: part of the company name (e.g. NEXTDC)")
     ap.add_argument("--repeat", type=int, default=1, help="extract each ad N times and report how stable the result is")
     ap.add_argument("--no-glean", action="store_true", help="one pass only (no 'what did you miss' pass)")
+    ap.add_argument("--save", action="store_true", help="write the checked skills to the database")
+    ap.add_argument("--all-live", action="store_true", help="every live job not yet saved with this prompt version")
+    ap.add_argument("--undo", action="store_true", help="restore the skills stored before --save")
     ap.add_argument("--print-ad", action="store_true", help="also print the ad text that was checked")
     args = ap.parse_args()
 
     db = SessionLocal()
     try:
+        if args.undo:
+            undo(db)
+            return
+        from app.nlp.skill_extractor import JOB_EVIDENCE_VERSION
+        if args.save and args.repeat > 1:
+            print("--save with --repeat makes no sense: pick one")
+            return
         jobs = []
+        if args.all_live:
+            done = {i for (i,) in db.query(JobSkill.job_id).filter(JobSkill.extracted_by == JOB_EVIDENCE_VERSION).distinct()}
+            pool = db.query(Job).filter(Job.source == "live").order_by(Job.id).all()
+            jobs += [j for j in pool if j.id not in done]
+            print(f"Live jobs: {len(pool)}, already saved with {JOB_EVIDENCE_VERSION}: {len(pool) - len(jobs)}, to do: {len(jobs)}")
         if args.title:
             q = db.query(Job).filter(Job.source == "live", Job.job_title.ilike(f"%{args.title}%"))
             if args.company:
@@ -101,9 +163,8 @@ def main():
 
         from app.nlp.skill_extractor import SkillExtractor
         extractor = SkillExtractor()
-        from app.nlp.skill_extractor import JOB_EVIDENCE_VERSION
         out = OUT.format(version=JOB_EVIDENCE_VERSION.split(":")[-1])
-        totals = {"kept": 0, "rejected": 0, "conflict": 0, "old": 0, "grouped": 0, "units": 0, "pass2": 0}
+        totals = {"kept": 0, "rejected": 0, "conflict": 0, "old": 0, "grouped": 0, "units": 0, "pass2": 0, "saved": 0, "kept_old": 0}
         new_file = not os.path.exists(out)
         with open(out, "a", newline="", encoding="utf-8-sig") as f:
             w = csv.writer(f)
@@ -118,7 +179,14 @@ def main():
                 print(f"\n=== {job.job_title} ({job.company}) [{job.source}, {len(text)} chars{extra}{f', run {r + 1}/{args.repeat}' if args.repeat > 1 else ''}]")
                 if args.print_ad and r == 0:
                     print("----- ad text -----\n" + text + "\n-------------------")
-                items = extractor.extract_job_skills_with_evidence(job.job_title, text, glean=not args.no_glean)
+                try:
+                    items = extractor.extract_job_skills_with_evidence(job.job_title, text, glean=not args.no_glean)
+                except Exception as e:
+                    if "tokens per day" in str(e).lower():
+                        print(f"\nGroq daily limit reached. Saved {totals['saved']} jobs this run; run the same "
+                              f"command again tomorrow, it carries on where it stopped.")
+                        break
+                    raise
                 kept, rejected = verify_skills(items, text)
                 for k in kept:
                     flag = f"  <- cue says {k['level_cue']}" if k["level_conflict"] else ""
@@ -128,8 +196,8 @@ def main():
                         flag += f"  [either: {k['alternative_group']}]"
                     print(f"  KEEP   {k['skill'][:30]:<30} {k['type']:<5} {k['level']:<11}{flag}")
                     print(f"         \"{k['evidence_quote'][:90]}\"")
-                for r in rejected:
-                    print(f"  REJECT {r['skill'][:30]:<30} ({r['reason']}, match {r['match_score']}) \"{r.get('evidence_quote', '')[:60]}\"")
+                for rj in rejected:
+                    print(f"  REJECT {rj['skill'][:30]:<30} ({rj['reason']}, match {rj['match_score']}) \"{rj.get('evidence_quote', '')[:60]}\"")
                 old = [s for (s,) in db.query(JobSkill.skill_name).filter(JobSkill.job_id == job.id)]
                 old_keys = {canonical_key(s): s for s in old}
                 new_keys = {canonical_key(k["skill"]): k["skill"] for k in kept}
@@ -147,6 +215,15 @@ def main():
                     len({k["alternative_group"].lower() for k in kept if k["type"] == "hard" and k["alternative_group"]})
                 if groups:
                     print(f"  either-or groups: {', '.join(sorted(groups))}")
+                if args.save:
+                    hard = sum(1 for k in kept if k["type"] == "hard")
+                    if hard < MIN_HARD:
+                        totals["kept_old"] += 1
+                        print(f"  NOT SAVED: only {hard} hard skills; old skills kept")
+                    else:
+                        n_saved = save_skills(db, job, kept, JOB_EVIDENCE_VERSION)
+                        totals["saved"] += 1
+                        print(f"  SAVED {n_saved} skills (old ones backed up in {BACKUP})")
                 for k in kept + rejected:
                     w.writerow([date.today().isoformat(), job.job_id, job.source, job.job_title, k["skill"],
                                 "keep" if k in kept else "reject: " + k["reason"], k.get("type"), k.get("level"),
@@ -167,6 +244,8 @@ def main():
               f"{totals['grouped']} skills in groups), {totals['pass2']} kept skills found only by the 2nd pass, "
               f"level cue disagrees on {totals['conflict']}; "
               f"old extraction had {totals['old']} skills. Details in {out}")
+        if args.save:
+            print(f"Saved: {totals['saved']} jobs; kept old skills: {totals['kept_old']}. Restart uvicorn to see them.")
     finally:
         db.close()
 
