@@ -118,7 +118,7 @@ def main():
     ap.add_argument("--seed", type=int, default=42)
     ap.add_argument("--company", help="with --title: part of the company name (e.g. NEXTDC)")
     ap.add_argument("--repeat", type=int, default=1, help="extract each ad N times and report how stable the result is")
-    ap.add_argument("--no-glean", action="store_true", help="one pass only (no 'what did you miss' pass)")
+    ap.add_argument("--no-glean", action="store_true", help="one pass only (no re-asking for skipped sentences)")
     ap.add_argument("--save", action="store_true", help="write the checked skills to the database")
     ap.add_argument("--all-live", action="store_true", help="every live job not yet saved with this prompt version")
     ap.add_argument("--undo", action="store_true", help="restore the skills stored before --save")
@@ -172,6 +172,7 @@ def main():
                 w.writerow(["date", "job_id", "source", "job_title", "skill", "result", "type", "level",
                             "level_cue", "match_score", "alternative_group", "evidence_quote"])
             runs = {}                      # job id -> hard-skill keys of each run (--repeat)
+            core_runs = {}                 # the same, required + unspecified only (what the coverage % counts)
             for job, r in [(j, r) for j in jobs for r in range(args.repeat)]:
                 text = full.get(job.job_id) or job.description or ""
                 stored = len(job.description or "")
@@ -188,6 +189,10 @@ def main():
                         break
                     raise
                 kept, rejected = verify_skills(items, text)
+                done, n_sent = getattr(extractor, "last_coverage", (0, 0))
+                calls = getattr(extractor, "last_calls", [])
+                print(f"  sentences answered: {done}/{n_sent}" + ("" if done == n_sent else "  <- some skipped twice")
+                      + f"; calls: {', '.join(f'{f}/{t}' for f, t in calls) or '-'} (finish reason / output tokens)")
                 for k in kept:
                     flag = f"  <- cue says {k['level_cue']}" if k["level_conflict"] else ""
                     if k.get("pass") == 2:
@@ -202,6 +207,8 @@ def main():
                 old_keys = {canonical_key(s): s for s in old}
                 new_keys = {canonical_key(k["skill"]): k["skill"] for k in kept}
                 runs.setdefault(job.id, []).append({canonical_key(k["skill"]) for k in kept if k["type"] == "hard"})
+                core_runs.setdefault(job.id, []).append({canonical_key(k["skill"]) for k in kept if k["type"] == "hard"
+                                                         and k.get("level") in ("required", "unspecified")})
                 print(f"  old extraction only: {', '.join(v for k, v in old_keys.items() if k not in new_keys) or '-'}")
                 print(f"  new extraction only: {', '.join(v for k, v in new_keys.items() if k not in old_keys) or '-'}")
                 totals["kept"] += len(kept)
@@ -230,13 +237,16 @@ def main():
                                 k.get("level_cue"), k.get("match_score"), k.get("alternative_group", ""),
                                 k.get("evidence_quote")])
         if args.repeat > 1:
-            print("\nStability across runs (hard skills; Jaccard = shared / all, 1.0 = identical):")
-            for job in jobs:
-                sets = runs.get(job.id, [])
+            print("\nStability across runs (Jaccard = shared / all, 1.0 = identical):")
+
+            def stability(sets):
                 jac = [len(a & b) / max(len(a | b), 1) for x, a in enumerate(sets) for b in sets[x + 1:]]
                 always = set.intersection(*sets) if sets else set()
-                print(f"  {job.job_title[:50]:<50} sizes {[len(x) for x in sets]}, mean Jaccard "
-                      f"{sum(jac) / max(len(jac), 1):.2f}, in every run {len(always)}")
+                return f"sizes {[len(x) for x in sets]}, mean Jaccard {sum(jac) / max(len(jac), 1):.2f}, in every run {len(always)}"
+            for job in jobs:
+                print(f"  {job.job_title[:50]:<50}")
+                print(f"    all hard skills:                {stability(runs.get(job.id, []))}")
+                print(f"    required + unspecified (the %): {stability(core_runs.get(job.id, []))}")
         n = totals["kept"] + totals["rejected"]
         print(f"\n{len(jobs)} ads: {n} skills returned, {totals['kept']} kept, {totals['rejected']} rejected "
               f"({round(100 * totals['rejected'] / max(n, 1))}%), {round(totals['kept'] / (len(jobs) * args.repeat), 1)} kept per ad, "

@@ -3,6 +3,26 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 1 Oct 2026 — Fix plan, Stage 1: sentence-by-sentence extraction (v7)
+
+- (this commit) The second "what did you miss" pass (v6) did not help: NEXTDC × 3 gave 39, 24 and 12 hard skills
+  (mean Jaccard 0.44 vs 0.43 before; `docs/evidence/stage1_dryrun_evidence-v6.csv`). The first pass stops part-way
+  through the ad at random, and the second pass repeats that randomness. v7 sends the ad as numbered sentences,
+  each with its section heading, and the model must answer for every sentence number; code checks the numbers,
+  re-asks only for skipped sentences and prints "sentences answered: X/Y". Long ads go in batches of 45.
+  `evidence._segments(include_headings=True)` keeps heading-like lines (a short "Python, SQL, Docker" line was
+  being dropped as a heading), and "Desirable: Kafka." with text after the colon is no longer a heading.
+- v8, the actual cause: NEXTDC × 3 on v7 gave 2 / 34 / 3 hard skills. The two bad runs were exactly the ones with
+  Groq "Failed to validate JSON" errors and answered only 8 and 9 of 34 sentences; the good run answered 34 of 34.
+  gpt-oss is a reasoning model whose hidden reasoning shares the output budget (Groq docs: the default "may be
+  too low for complex reasoning"), so long reasoning cuts the JSON short. Now `max_completion_tokens=16384` and
+  `reasoning_effort="low"` (dropped if Groq refuses it), and each call reports finish reason and output tokens
+  ("calls: stop/1234") so a cut-off answer shows up in the dry run.
+  Result (NEXTDC × 3): 34 of 34 sentences answered in every run, no cut-off answers; hard skills 33 / 47 / 44,
+  mean Jaccard 0.71 (was 0.43), 29 in every run. The remaining differences are granularity (product models such
+  as Juniper EX / QFX listed in two runs) and duty-like items (config backup, bulk changes). The stability report
+  now also shows the required + unspecified skills alone, the ones the coverage % counts.
+
 ## 1 Oct 2026 — Fix plan, Stage 2: label guide
 
 - (this commit) `docs/stage2_label_guide.md`: one written rule set for SAME / NARROWER / BROADER / RELATED /

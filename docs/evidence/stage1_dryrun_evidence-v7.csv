@@ -1,0 +1,40 @@
+﻿date,job_id,source,job_title,skill,result,type,level,level_cue,match_score,alternative_group,evidence_quote
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,Cloud,keep,hard,unspecified,,1.0,,Where Cloud lives
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,AI,keep,hard,unspecified,,1.0,,AI thrives
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,Network engineering,keep,hard,required,,1.0,,hands on network engineer
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,Juniper,keep,hard,required,,1.0,,"in a Juniper, Fortinet, Ivanti, OpenGear and Aruba environment"
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,Fortinet,keep,hard,required,,1.0,,"in a Juniper, Fortinet, Ivanti, OpenGear and Aruba environment"
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,Ivanti,keep,hard,required,,1.0,,"in a Juniper, Fortinet, Ivanti, OpenGear and Aruba environment"
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,OpenGear,keep,hard,required,,1.0,,"in a Juniper, Fortinet, Ivanti, OpenGear and Aruba environment"
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,Aruba,keep,hard,required,,1.0,,"in a Juniper, Fortinet, Ivanti, OpenGear and Aruba environment"
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,CLI,keep,hard,preferred,,1.0,,solving problems at the CLI
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,Scripting,keep,hard,unspecified,,1.0,,"Scripting, automation and AI assisted tooling are a growth area here"
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,Automation,keep,hard,unspecified,,1.0,,"Scripting, automation and AI assisted tooling are a growth area here"
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,AI assisted tooling,keep,hard,unspecified,,1.0,,"Scripting, automation and AI assisted tooling are a growth area here"
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,Switching,keep,hard,unspecified,,1.0,,"switching, routing, firewalls, VPN and wireless"
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,Routing,keep,hard,unspecified,,1.0,,"switching, routing, firewalls, VPN and wireless"
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,Firewalls,keep,hard,unspecified,,1.0,,"switching, routing, firewalls, VPN and wireless"
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,VPN,keep,hard,unspecified,,1.0,,"switching, routing, firewalls, VPN and wireless"
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,Wireless,keep,hard,unspecified,,1.0,,"switching, routing, firewalls, VPN and wireless"
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,Monitoring,keep,hard,unspecified,,1.0,,"core monitoring and logging: device onboarding, alert rules and dashboards"
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,ITSM,keep,hard,unspecified,,1.0,,"ITSM, CMDB and DCIM"
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,CMDB,keep,hard,unspecified,,1.0,,"ITSM, CMDB and DCIM"
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,DCIM,keep,hard,unspecified,,1.0,,"ITSM, CMDB and DCIM"
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,HA,keep,hard,required,required,1.0,,"switching, routing, firewalls, VPN, HA and segmentation"
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,Segmentation,keep,hard,required,required,1.0,,"switching, routing, firewalls, VPN, HA and segmentation"
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,Troubleshooting,keep,hard,required,required,1.0,,Genuine troubleshooting ownership
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,Enterprise wireless,keep,hard,required,required,1.0,,enterprise wireless fundamentals
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,Remote access VPN,keep,hard,required,required,1.0,,remote access VPN
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,Out of band management,keep,hard,required,required,1.0,,out of band management
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,JNCIA-MIST,keep,hard,required,required,1.0,Juniper certification,JNCIA-MIST or JNCIA-SEC
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,JNCIA-SEC,keep,hard,required,required,1.0,Juniper certification,JNCIA-MIST or JNCIA-SEC
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,ClearPass,keep,hard,preferred,preferred,1.0,,ClearPass
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,Ivanti VPN,keep,hard,preferred,preferred,1.0,,Ivanti VPN
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,OT/ICS,keep,hard,preferred,preferred,1.0,,OT/ICS exposure
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,IEC 62443,keep,hard,preferred,preferred,1.0,,IEC 62443 style segmentation
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,Python,keep,hard,preferred,preferred,1.0,Automation tool,Python or Ansible automation
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,Ansible,keep,hard,preferred,preferred,1.0,Automation tool,Python or Ansible automation
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,AI coding assistants,keep,hard,preferred,preferred,1.0,,AI coding assistants
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,Cloud,keep,hard,unspecified,,1.0,,Where Cloud lives
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,AI,keep,hard,unspecified,,1.0,,AI thrives
+2026-10-01,live_fcd9f6eb988ba722,live,Network Engineer,Juniper,keep,hard,required,,1.0,,"in a Juniper, Fortinet, Ivanti, OpenGear and Aruba environment"

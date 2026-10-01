@@ -70,7 +70,7 @@ Return ONLY a JSON array, example: ["Python", "REST API", "SQL", "Docker", "Agil
 # ── Job skills with evidence (fix plan, Stage 1) ─────────────────────────────────────────────────
 # Every skill must quote the ad; app/services/evidence.py checks the quote is really there, so skills
 # with no supporting words are rejected. Level and type are tagged from the quote's context.
-JOB_EVIDENCE_VERSION = "gpt-oss-120b:evidence-v6"   # stored in job_skills.extracted_by
+JOB_EVIDENCE_VERSION = "gpt-oss-120b:evidence-v8"   # stored in job_skills.extracted_by
 # v2 (1 Oct dry run on 10 live ads): v1 returned ~2x the old count, with duties ("Escalation", "Research"),
 # work conditions ("Willingness to travel"), generic parents ("Programming language" next to Python) and
 # quotes joined with "...". v2 adds rules for each. v3 (Nokia ad): team / track names listed as skills
@@ -82,6 +82,17 @@ JOB_EVIDENCE_VERSION = "gpt-oss-120b:evidence-v6"   # stored in job_skills.extra
 # removed v1's "list every skill the advert asks for or will teach", leaving only "do not list" rules.
 # Restored, with named tools / products / certifications / standards called out.
 # v6 (NEXTDC x3 on v5: 14, 8, 31 hard skills, Jaccard 0.43): same prompt + a second "what did you miss" pass.
+# v7 (NEXTDC x3 on v6: 39, 24, 12, Jaccard 0.44 - no better): the first pass stops part-way through the ad at
+# random, and asking "what did you miss" repeats the same randomness. Now the ad goes in as numbered sentences
+# (each with its section heading) and the model must return an entry for EVERY sentence; code checks the
+# numbers and re-asks only for sentences it skipped. Completeness becomes checkable instead of hoped for.
+# v8 (NEXTDC x3 on v7: 2 / 34 / 3 hard skills; the two bad runs were exactly the ones with "Failed to validate
+# JSON" errors and answered 8 and 9 of 34 sentences, the good run 34 of 34). Cause: gpt-oss is a reasoning
+# model and its hidden reasoning shares the output budget (Groq: the default "may be too low for complex
+# reasoning"), so long reasoning cuts the JSON short. Fix: max_completion_tokens 16384, reasoning_effort low,
+# and every call reports finish_reason / tokens so a cut-off answer is visible.
+EVIDENCE_MAX_TOKENS = 16384
+EVIDENCE_REASONING = "low"
 
 JOB_EVIDENCE_SYSTEM = (
     "You extract skills from job adverts. A skill is something a person can learn and show: a tool, "
@@ -143,27 +154,57 @@ Job Title: {title}
 Advert:
 {description}"""
 
-JOB_EVIDENCE_SCHEMA = {
+JOB_SENTENCES_PROMPT = JOB_EVIDENCE_PROMPT.split("Example advert:")[0] + """The advert is given as numbered sentences; the section heading each sentence sits under is in brackets.
+Go through EVERY sentence in order. Return one entry per sentence number, with the skills that sentence mentions
+(an empty list if it mentions none). The evidence_quote must be words from that same sentence.
+
+Example input:
+[1] (Requirements) Strong SQL and Python skills.
+[2] (Requirements) Experience with Power BI or Tableau is a plus.
+[3] (About us) We are a fast-growing bank.
+[4] (What you will learn) You will learn our ETL tooling during onboarding.
+Example output: {{"sentences": [
+ {{"id": 1, "skills": [
+   {{"skill": "SQL", "evidence_quote": "Strong SQL and Python skills", "type": "hard", "level": "required", "alternative_group": ""}},
+   {{"skill": "Python", "evidence_quote": "Strong SQL and Python skills", "type": "hard", "level": "required", "alternative_group": ""}}]}},
+ {{"id": 2, "skills": [
+   {{"skill": "Power BI", "evidence_quote": "Experience with Power BI or Tableau is a plus", "type": "hard", "level": "preferred", "alternative_group": "BI tool"}},
+   {{"skill": "Tableau", "evidence_quote": "Experience with Power BI or Tableau is a plus", "type": "hard", "level": "preferred", "alternative_group": "BI tool"}}]}},
+ {{"id": 3, "skills": []}},
+ {{"id": 4, "skills": [
+   {{"skill": "ETL", "evidence_quote": "You will learn our ETL tooling", "type": "hard", "level": "trained", "alternative_group": ""}}]}}]}}
+
+Return only JSON in the example's shape, one entry for each of the {n} sentences.
+
+Job Title: {title}
+
+Advert sentences:
+{sentences}"""
+
+_SKILL_ITEM = {
     "type": "object",
-    "properties": {"skills": {"type": "array", "items": {
-        "type": "object",
-        "properties": {
-            "skill": {"type": "string"},
-            "evidence_quote": {"type": "string"},
-            "type": {"type": "string", "enum": ["hard", "soft"]},
-            "level": {"type": "string", "enum": ["required", "preferred", "trained", "unspecified"]},
-            "alternative_group": {"type": "string"},
-        },
-        "required": ["skill", "evidence_quote", "type", "level", "alternative_group"],
-        "additionalProperties": False,
-    }}},
-    "required": ["skills"],
+    "properties": {
+        "skill": {"type": "string"},
+        "evidence_quote": {"type": "string"},
+        "type": {"type": "string", "enum": ["hard", "soft"]},
+        "level": {"type": "string", "enum": ["required", "preferred", "trained", "unspecified"]},
+        "alternative_group": {"type": "string"},
+    },
+    "required": ["skill", "evidence_quote", "type", "level", "alternative_group"],
     "additionalProperties": False,
 }
-
-JOB_GLEAN_PROMPT = """Some skills in the advert may still be missing from your list. Read the whole advert again,
-section by section (duties, requirements, preferred, what you will learn), and return ONLY skills that are not
-in your list yet, with the same rules and the same JSON shape. If nothing is missing, return {"skills": []}."""
+JOB_EVIDENCE_SCHEMA = {
+    "type": "object",
+    "properties": {"sentences": {"type": "array", "items": {
+        "type": "object",
+        "properties": {"id": {"type": "integer"}, "skills": {"type": "array", "items": _SKILL_ITEM}},
+        "required": ["id", "skills"],
+        "additionalProperties": False,
+    }}},
+    "required": ["sentences"],
+    "additionalProperties": False,
+}
+SENTENCES_PER_CALL = 45     # long ads go in batches, so no single answer gets too long
 
 JOB_FORMAT_SYSTEM = """You are a professional job description writer. Your task is to read, understand, and rewrite a raw job description into clean structured bullet points.
 
@@ -244,6 +285,8 @@ class SkillExtractor:
         self._evidence_format = [{"type": "json_schema",
                                   "json_schema": {"name": "job_skills", "strict": True, "schema": JOB_EVIDENCE_SCHEMA}},
                                  {"type": "json_object"}]
+        self._reasoning_ok = True     # reasoning_effort accepted (dropped if Groq refuses it)
+        self.last_calls = []
         print(f"SkillExtractor initialised with {self.model} via Groq")
 
     def _call_groq(self, system: str, prompt: str, retries: int = 3) -> list[str]:
@@ -309,35 +352,61 @@ class SkillExtractor:
     def extract_job_skills_with_evidence(self, title: str, description: str, retries: int = 3,
                                          glean: bool = True) -> list[dict]:
         """Skills with evidence quotes, type, level and alternative_group (unchecked: run
-        app.services.evidence.verify_skills next). Uses Groq's strict JSON-schema mode, falling back to plain
-        JSON mode if the schema is refused.
+        app.services.evidence.verify_skills next). The ad goes in as numbered sentences with their section
+        headings; the model must answer for every sentence. glean: re-ask once for any sentence numbers the
+        answer skipped (each item records "pass": 1 or 2 and its "sentence_id")."""
+        from app.services.evidence import _segments
+        segs = _segments(description, include_headings=True) or [("", line.strip()) for line in description.splitlines() if line.strip()]
+        lines = {i + 1: (f"[{i + 1}] ({h.rstrip(':')}) {t}" if h else f"[{i + 1}] {t}") for i, (h, t) in enumerate(segs)}
+        items, answered = [], set()
+        self.last_calls = []          # (finish_reason, completion tokens) per call, for the dry-run report
+        ids = list(lines)
+        for start in range(0, len(ids), SENTENCES_PER_CALL):
+            batch = ids[start:start + SENTENCES_PER_CALL]
+            got = self._ask_sentences(title, [lines[i] for i in batch], retries)
+            items += [{**sk, "pass": 1, "sentence_id": sid} for sid, sks in got.items() if sid in batch for sk in sks]
+            answered |= set(got) & set(batch)
+        missing = [i for i in ids if i not in answered]
+        if glean and missing:
+            for start in range(0, len(missing), SENTENCES_PER_CALL):
+                batch = missing[start:start + SENTENCES_PER_CALL]
+                got = self._ask_sentences(title, [lines[i] for i in batch], retries)
+                items += [{**sk, "pass": 2, "sentence_id": sid} for sid, sks in got.items() if sid in batch for sk in sks]
+                answered |= set(got) & set(batch)
+        self.last_coverage = (len(answered), len(ids))     # sentences answered / sentences in the ad
+        # one entry per skill name (the same skill can appear in several sentences); first mention wins
+        seen, out = set(), []
+        for it in items:
+            k = it["skill"].strip().lower()
+            if k not in seen:
+                seen.add(k)
+                out.append(it)
+        return out
 
-        glean: a second pass shows the model its own list and asks only for skills it missed ("gleaning",
-        Edge et al. 2024, GraphRAG). Added 1 Oct: the same ad extracted 3 times gave 14, 8 and 31 hard skills
-        (one complete run, two that stopped early), so a single pass is not reliable enough. Each item gets
-        "pass": 1 or 2, so the gain from the second pass can be measured."""
+    def _ask_sentences(self, title: str, numbered: list[str], retries: int) -> dict[int, list[dict]]:
+        """One schema-checked call for a batch of numbered sentences -> {sentence id: skills}. Empty on failure.
+        Re-raises Groq's daily token limit."""
         messages = [{"role": "system", "content": JOB_EVIDENCE_SYSTEM},
-                    {"role": "user", "content": JOB_EVIDENCE_PROMPT.format(title=title, description=description)}]
-        first = self._ask_skills(messages, retries)
-        if first is None:
-            return []
-        items = [{**s, "pass": 1} for s in first]
-        if glean:
-            seen = {s["skill"].strip().lower() for s in items}
-            messages += [{"role": "assistant", "content": json.dumps({"skills": first})},
-                         {"role": "user", "content": JOB_GLEAN_PROMPT}]
-            more = self._ask_skills(messages, retries) or []
-            items += [{**s, "pass": 2} for s in more if s["skill"].strip().lower() not in seen]
-        return items
-
-    def _ask_skills(self, messages: list[dict], retries: int) -> list[dict] | None:
-        """One schema-checked call; None if every attempt failed. Re-raises Groq's daily token limit."""
+                    {"role": "user", "content": JOB_SENTENCES_PROMPT.format(
+                        title=title, n=len(numbered), sentences="\n".join(numbered))}]
         for attempt in range(retries):
             try:
+                extra = {"max_completion_tokens": EVIDENCE_MAX_TOKENS}
+                if self._reasoning_ok:
+                    extra["reasoning_effort"] = EVIDENCE_REASONING
                 response = self.client.chat.completions.create(
-                    model=self.model, messages=messages, temperature=0, response_format=self._evidence_format[0])
-                data = json.loads(response.choices[0].message.content)
-                return [s for s in data.get("skills", []) if isinstance(s, dict) and s.get("skill")]
+                    model=self.model, messages=messages, temperature=0, response_format=self._evidence_format[0], **extra)
+                choice = response.choices[0]
+                usage = getattr(response, "usage", None)
+                self.last_calls.append((getattr(choice, "finish_reason", None), getattr(usage, "completion_tokens", None)))
+                if getattr(choice, "finish_reason", None) == "length":
+                    print(f"  answer cut off at the token limit ({getattr(usage, 'completion_tokens', '?')} tokens)")
+                data = json.loads(choice.message.content)
+                out = {}
+                for entry in data.get("sentences", []):
+                    if isinstance(entry, dict) and isinstance(entry.get("id"), int):
+                        out[entry["id"]] = [sk for sk in entry.get("skills", []) if isinstance(sk, dict) and sk.get("skill")]
+                return out
             except Exception as e:
                 text = str(e).lower()
                 if "tokens per day" in text or "tpd" in text:
@@ -346,9 +415,14 @@ class SkillExtractor:
                     print("  strict JSON schema refused, using JSON mode")
                     self._evidence_format.pop(0)
                     continue
+                if "reasoning_effort" in text and self._reasoning_ok:
+                    print("  reasoning_effort refused, using the default")
+                    self._reasoning_ok = False
+                    continue
+                self.last_calls.append(("error", None))
                 print(f"  attempt {attempt + 1} failed: {str(e)[:120]}")
                 time.sleep(5)
-        return None
+        return {}
 
     def format_job_description(self, title: str, description: str) -> list[str]:
         """

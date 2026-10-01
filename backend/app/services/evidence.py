@@ -77,17 +77,22 @@ def _title_like(line: str) -> bool:
     return len(words) <= 6 and sum(w[0].isupper() for w in words) >= max(1, len(words) - 1)
 
 
-def _segments(ad_text: str) -> list[tuple[str, str]]:
+def _segments(ad_text: str, include_headings: bool = False) -> list[tuple[str, str]]:
     """(section heading, sentence) for every sentence of the ad. A heading covers the list under it and
-    one paragraph; a paragraph after its list, or a second paragraph, starts unheaded text."""
+    one paragraph; a paragraph after its list, or a second paragraph, starts unheaded text.
+    include_headings: also return the heading lines themselves (as their own sentence), so the extractor sees
+    every line of the ad: a short line like "Python, SQL, Docker" looks like a heading but holds skills."""
     out, heading, in_list, paragraph_used = [], "", False, False
     for raw in (ad_text or "").splitlines():
         bullet = raw.lstrip().startswith(("-", "*", "\u2022", "\u00b7"))     # a list item is never a heading
         line = raw.strip(" \t-*\u2022\u00b7")
         if not line:
             continue
-        if not bullet and len(line) <= _HEADING_MAX and (
+        inline_text = ":" in line and not line.rstrip().endswith(":")    # "Desirable: Kafka." is content
+        if not bullet and not inline_text and len(line) <= _HEADING_MAX and (
                 line.endswith(":") or line.isupper() or _title_like(line)):
+            if include_headings:
+                out.append((heading, line))
             heading, in_list, paragraph_used = line, False, False
             continue
         if bullet:
