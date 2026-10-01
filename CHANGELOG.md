@@ -3,6 +3,18 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 1 Oct 2026 — Fix plan, Stage 3A: how job skills count
+
+- (this commit) **Required skills = the shown %; the rest shown apart** (`app/services/job_requirements.py`, used
+  by Job Matches and Job Detail). Coverage counts hard skills that are required or unspecified; an either-or
+  group ("C# or Java") counts once, met by any member. Preferred skills: a "Nice-to-have skills" box on Job
+  Detail (bonus, not in the %) plus a small ranking bonus (at most +0.05, less than one level step). Skills the
+  role will teach and soft skills are left out of the % and not listed (her review: "you'll learn on the job"
+  reads oddly; soft skills are already in the description). Skill Gap headings say "Required skills you're
+  missing / you have". A job with no required skills is scored on its preferred ones ("of preferred skills"). Skills extracted before Stage 1 have no level, so they count as
+  before: the 40-response regression (old vs new code, same data) is identical. Tested on seeded jobs with
+  levels and in the browser. Research: references.md "Scoring must-have vs nice-to-have".
+
 ## 1 Oct 2026 — Fix plan, Stage 1: job skills with evidence
 
 - (this commit) **Saving the new extraction** (`extract_job_skills_v2.py --save`, not run on the real data yet):

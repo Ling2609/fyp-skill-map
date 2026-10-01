@@ -8,7 +8,7 @@ from app.nlp.embedder import get_embedder
 from app.routers.auth import get_current_user
 from app.models.user import User
 from app.services.job_titles import SENIORITY_RANK, classify_seniority
-from app.services.skill_names import canonical_key, dedupe_skills
+from app.services.job_requirements import BONUS_WEIGHT, job_skill_items, score_job, unit_name
 from app.services.skill_profile import (
     EMPTY_PROFILE_MESSAGE, build_skill_profile, count_modules, matched_mask, normalise_rows, profile_spellings,
 )
@@ -56,11 +56,13 @@ def _sync_job_cache():
             return
         print(f"Adding {len(new_ids)} jobs to the job embedding cache...")
 
-        skills_by_job = {}
+        rows_by_job = {}
         for s in db.query(JobSkill).filter(JobSkill.job_id.in_(new_ids)).order_by(JobSkill.id).all():
-            skills_by_job.setdefault(s.job_id, []).append(s.skill_name)
-        # One entry per canonical skill: "Python" + "Python programming" is one requirement (A8)
-        skills_by_job = {j: dedupe_skills(names) for j, names in skills_by_job.items()}
+            rows_by_job.setdefault(s.job_id, []).append(s)
+        # One entry per canonical skill: "Python" + "Python programming" is one requirement (A8),
+        # with its level / type / either-or group (Stage 3A; empty for skills extracted before Stage 1)
+        items_by_job = {j: job_skill_items(rows) for j, rows in rows_by_job.items()}
+        skills_by_job = {j: [it.name for it in items] for j, items in items_by_job.items()}
 
         new_jobs = [j for j in db.query(Job).filter(Job.id.in_(new_ids)).all() if skills_by_job.get(j.id)]
 
@@ -91,7 +93,8 @@ def _sync_job_cache():
                 "country": job.country,
                 "level": classify_seniority(job.job_title),
                 "skills": skill_names,
-                "skill_keys": [canonical_key(n) for n in skill_names],
+                "items": items_by_job[job.id],
+                "skill_keys": [it.key for it in items_by_job[job.id]],
                 "skill_vecs": skill_vecs,
             }
         print(f"Job cache ready: {len(_job_cache)} jobs with pre-computed skill vectors")
@@ -180,16 +183,18 @@ def recommend_jobs(
         if cached is None:   # removed by a cache update from another request meanwhile
             continue
         job_skills = cached["skills"]
-        total = len(job_skills)
+        items = cached["items"]
         has = matched_mask(grad_embeddings, cached["skill_vecs"], spelling_keys, owner, cached["skill_keys"])
-        matched = int(has.sum())
-        coverage = round(matched / total * 100, 1) if total else 0.0
+        # Stage 3A: coverage = required skills held (either-or group = 1); preferred = small ranking bonus
+        sc = score_job(items, has)
+        matched, total, coverage = sc["matched"], sc["total"], sc["coverage"]
 
-        # Ranking score ("best fit"): skill coverage + whole-profile similarity (+ title boost),
-        # minus the level penalty. Used for ORDER only. What the student SEES is skill coverage
-        # (X of N), the same number Job Detail shows, plus the job's level as a tag.
+        # Ranking score ("best fit"): skill coverage + whole-profile similarity (+ title boost) + a small
+        # bonus for nice-to-have skills, minus the level penalty. Used for ORDER only. What the student SEES
+        # is skill coverage (X of N required), the same number Job Detail shows, plus the job's level as a tag.
         level = cached["level"]
-        hybrid = max(0.0, 0.5 * sbert_score + 0.5 * (coverage / 100) - seniority_penalty(level))
+        hybrid = max(0.0, 0.5 * sbert_score + 0.5 * (coverage / 100) + BONUS_WEIGHT * sc["bonus_ratio"]
+                     - seniority_penalty(level))
         hybrid_percent = round(hybrid * 100, 1)
         results.append({
             "job_id": cached["job_id"],
@@ -206,8 +211,13 @@ def recommend_jobs(
             "level": level,                        # junior / unspecified / senior / lead / manager
             "skills_matched": matched,
             "skills_total": total,
+            "coverage_basis": sc["basis"],                 # "required", or "preferred" when nothing is required
+            "bonus_matched": sum(sc["bonus_met"]),
+            "bonus_total": len(sc["bonus_units"]),
             "top_job_skills": job_skills[:5],
-            "_to_learn": [(k, n) for k, n, h in zip(cached["skill_keys"], job_skills, has) if not h],
+            # Missing required skills (an either-or group is one, named "C# or Python")
+            "_to_learn": [("|".join(sorted(items[i].key for i in u)), unit_name(items, u))
+                          for u, ok in zip(sc["core_units"], sc["core_met"]) if not ok],
         })
 
     results.sort(key=lambda x: -x["match_percent"])

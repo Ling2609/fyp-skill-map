@@ -6,7 +6,7 @@ from app.models.job import Job, JobSkill
 from app.routers.auth import get_current_user
 from app.models.user import User
 from app.nlp.embedder import get_embedder
-from app.services.skill_names import canonical_key, dedupe_skills
+from app.services.job_requirements import job_skill_items, score_job, unit_name
 from app.services.skill_profile import (
     EMPTY_PROFILE_MESSAGE, MATCH_THRESHOLD,
     build_skill_profile, normalise_rows, profile_spellings, similarity_matrix,
@@ -45,8 +45,10 @@ def analyse_skill_gap(
     if not job_skills_db:
         raise HTTPException(status_code=404, detail="No skills found for this job")
 
-    # One entry per canonical skill, same as Job Matches (A8), so both pages show the same "X of N"
-    job_skills = dedupe_skills([s.skill_name for s in job_skills_db])
+    # One entry per canonical skill, same as Job Matches (A8), so both pages show the same "X of N",
+    # with level / type / either-or group (Stage 3A; empty for skills extracted before Stage 1)
+    items = job_skill_items(job_skills_db)
+    job_skills = [it.name for it in items]
 
     # Embed every spelling of the student's skills and the job skills in one batch call, then split
     grad_skill_names = list(graduate_skills.keys())          # one per skill, same order as the profile
@@ -58,42 +60,50 @@ def analyse_skill_gap(
     # sim_matrix[j, g] = best cosine similarity between job skill j and any spelling of grad skill g;
     # the same canonical skill ("MS SQL Server" / "SQL Server") counts as 1.0 (direct)
     sim_matrix = similarity_matrix(job_embeddings, spelling_embeddings,
-                                   [canonical_key(s) for s in job_skills], spelling_keys, owner)  # (J, G)
+                                   [it.key for it in items], spelling_keys, owner)  # (J, G)
 
     best_scores  = sim_matrix.max(axis=1)            # best grad match score per job skill
     best_indices = sim_matrix.argmax(axis=1)         # which grad skill matched best
 
-    matched = []
-    missing = []
+    has = best_scores >= MATCH_THRESHOLD     # the student has job skill j: same skill (A8) or SBERT >= 0.7
+    sc = score_job(items, has)
 
-    for j_idx, job_skill in enumerate(job_skills):
-        best_score = float(best_scores[j_idx])
+    def evidence(j_idx):
+        """The student's skill that covers job skill j_idx, and where it comes from."""
         best_match = grad_skill_names[int(best_indices[j_idx])]
+        return {
+            "matched_graduate_skill": best_match,
+            "matched_via_module": skill_module_map.get(best_match, ""),
+            "similarity": round(float(best_scores[j_idx]), 3),
+            "grade_weight": graduate_skills.get(best_match, 0),
+            "evidence_source": skill_source_type.get(best_match, "module"),  # module / project / cert
+            "evidence": "direct",
+        }
 
-        if best_score >= MATCH_THRESHOLD:
-            # The student has this skill: same skill (A8) or SBERT >= 0.7
-            matched.append({
-                "job_skill": job_skill,
-                "matched_graduate_skill": best_match,
-                "matched_via_module": skill_module_map.get(best_match, ""),
-                "similarity": round(best_score, 3),
-                "grade_weight": graduate_skills.get(best_match, 0),
-                "evidence_source": skill_source_type.get(best_match, "module"),  # module / project / cert
-                "evidence": "direct",
-            })
+    matched, missing = [], []
+    # One row per requirement (an either-or group is one row, e.g. "C# or Python")
+    for unit, ok in zip(sc["core_units"], sc["core_met"]):
+        name = unit_name(items, unit)
+        if ok:
+            j_idx = next(i for i in unit if has[i])
+            matched.append({"job_skill": name, **evidence(j_idx)})
         else:
             # A gap. No "partly covered" / "builds on" reason: below 0.7 SBERT closeness is not reliable
             # evidence (step 2: 9 of 60 related pairs were the same skill), and a plausible but weak
             # explanation misleads (Papenmeier et al. 2019). Closest skill kept for research only.
+            j_idx = max(unit, key=lambda i: best_scores[i])
             missing.append({
-                "job_skill": job_skill,
-                "closest_graduate_skill": best_match,
-                "similarity": round(best_score, 3),
+                "job_skill": name,
+                "closest_graduate_skill": grad_skill_names[int(best_indices[j_idx])],
+                "similarity": round(float(best_scores[j_idx]), 3),
                 "status": "missing",
                 "gap_reason": "Not in your record yet",
             })
 
-    gap_score = len(matched) / len(job_skills) * 100 if job_skills else 0
+    # Nice to have (preferred): shown apart, never in the %; empty until a job is re-extracted (Stage 1)
+    nice_to_have = [{"job_skill": unit_name(items, u), "has": ok} for u, ok in zip(sc["bonus_units"], sc["bonus_met"])]
+
+    gap_score = sc["coverage"]
 
     return {
         "job": {
@@ -110,12 +120,16 @@ def analyse_skill_gap(
             "country": job.country,
         },
         "summary": {
-            "job_skills_total": len(job_skills),
+            "job_skills_total": sc["total"],
             "matched_skills": len(matched),
             "missing_skills": len(missing),
             "gap_score": round(gap_score, 1),
             "coverage_percent": round(gap_score, 1),
+            "coverage_basis": sc["basis"],      # "required", or "preferred" when the job requires nothing specific
         },
         "matched_skills": matched,
         "missing_skills": missing,
+        "nice_to_have": nice_to_have,           # [{job_skill, has}]
+        "learn_on_job": sc["learn"],            # skills the role will teach: never a gap
+        "soft_skills": sc["soft"],              # listed apart, not in the %
     }

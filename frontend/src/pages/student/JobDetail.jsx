@@ -111,6 +111,11 @@ export default function JobDetail() {
   ).sort((a, b) => b[1].items.length - a[1].items.length)
 
   const totalRequired = gapRows.length + matchedRows.length
+  // Stage 3A: the % counts required skills; a job that requires nothing specific is scored on its preferred ones
+  const basisWord = gap?.summary?.coverage_basis === 'preferred' ? 'preferred' : 'required'
+  // Nice-to-have skills: shown apart, never in the %. (Skills the role will teach and soft skills are left
+  // out of the % too, but not listed here: the first reads oddly to a student, the second is in the description.)
+  const niceToHave = gap?.nice_to_have || []
 
   return (
     <div className="min-h-screen">
@@ -160,7 +165,7 @@ export default function JobDetail() {
               <p className="text-sm text-gray-600">
                 <span className={`text-2xl font-bold ${coverageColor}`}>{Math.round(coverage)}%</span>
                 <span className="ml-2">
-                  of required skills · you have {gap?.summary?.matched_skills} of {gap?.summary?.job_skills_total}
+                  of {basisWord} skills · you have {gap?.summary?.matched_skills} of {gap?.summary?.job_skills_total}
                 </span>
               </p>
               <span className="text-xs text-gray-400">{gap?.summary?.missing_skills} to develop</span>
@@ -250,11 +255,11 @@ export default function JobDetail() {
             <div className="bg-white rounded-xl border border-gray-100 shadow-sm">
               <div className="px-5 py-4 border-b border-gray-100">
                 <h2 className="text-sm font-semibold text-gray-700">
-                  <span className="text-red-600">{gapRows.length} {gapRows.length === 1 ? 'skill' : 'skills'}</span> to learn for this job
+                  {basisWord === 'required' ? 'Required' : 'Preferred'} skills you're missing <span className="text-red-600">({gapRows.length})</span>
                 </h2>
               </div>
               {gapRows.length === 0 ? (
-                <p className="text-xs text-gray-500 px-5 py-4">Nothing to learn. You cover every skill this job lists.</p>
+                <p className="text-xs text-gray-500 px-5 py-4">None. You have every {basisWord} skill this job lists.</p>
               ) : (
                 <ul className="divide-y divide-gray-50">
                   {gapRows.map((item, idx) => {
@@ -281,7 +286,7 @@ export default function JobDetail() {
             <div className="bg-white rounded-xl border border-gray-100 shadow-sm">
               <div className="flex items-center justify-between gap-3 px-5 py-4 border-b border-gray-100">
                 <h2 className="text-sm font-semibold text-gray-700">
-                  You already have <span className="text-green-700">{matchedRows.length} of {totalRequired}</span> required skills
+                  {basisWord === 'required' ? 'Required' : 'Preferred'} skills you have <span className="text-green-700">({matchedRows.length} of {totalRequired})</span>
                 </h2>
                 {matchedRows.length > 0 && (
                   <button
@@ -330,6 +335,26 @@ export default function JobDetail() {
                 </div>
               )}
             </div>
+
+            {/* 3. Nice-to-have skills: a bonus, not counted in the % (only for jobs extracted with levels, Stage 1) */}
+            {niceToHave.length > 0 && (
+              <div className="bg-white rounded-xl border border-gray-100 shadow-sm">
+                <div className="px-5 py-4 border-b border-gray-100">
+                  <h2 className="text-sm font-semibold text-gray-700">
+                    Nice-to-have skills <span className="text-green-700">({niceToHave.filter(n => n.has).length} of {niceToHave.length})</span>
+                    <span className="ml-2 font-normal text-xs text-gray-400">bonus · not counted in the %</span>
+                  </h2>
+                </div>
+                <div className="flex flex-wrap gap-1.5 px-5 py-4">
+                  {niceToHave.map((item, idx) => (
+                    <span key={idx} className="inline-flex items-center gap-1.5 text-xs text-gray-700 bg-slate-50 border border-gray-200 px-2.5 py-1 rounded-lg">
+                      {item.has && <span className="text-green-600 font-bold">✓</span>}
+                      {item.job_skill}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
 
           </div>
         )}
