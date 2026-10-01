@@ -6,6 +6,7 @@ backend/.env
 backend/data/*.csv
 # Public reference data downloaded by hand (ESCO, O*NET): large, re-downloadable, see README
 backend/data/external/
+backend/data/relation_model*/
 backend/test_credentials.txt
 
 # Node

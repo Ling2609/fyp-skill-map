@@ -1,0 +1,38 @@
+{
+ "pairs_csv": "pairs_esco_onet_v1.csv",
+ "model": "sentence-transformers/all-MiniLM-L6-v2",
+ "seeds": [
+  13,
+  42,
+  77
+ ],
+ "epochs": 4,
+ "baseline_macro_f1": 0.48978510299812267,
+ "test_macro_f1": [
+  0.7516159318249082,
+  0.7440996204901943,
+  0.7368475988694568
+ ],
+ "direction_model": 0.7276119402985075,
+ "direction_cosine": 0.5,
+ "runs": [
+  {
+   "seed": 13,
+   "val_f1": 0.7738439728366114,
+   "test_f1": 0.7516159318249082,
+   "minutes": 0.3
+  },
+  {
+   "seed": 42,
+   "val_f1": 0.760731239593329,
+   "test_f1": 0.7440996204901943,
+   "minutes": 0.3
+  },
+  {
+   "seed": 77,
+   "val_f1": 0.7537935080043295,
+   "test_f1": 0.7368475988694568,
+   "minutes": 0.3
+  }
+ ]
+}

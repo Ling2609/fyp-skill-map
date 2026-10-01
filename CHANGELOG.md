@@ -3,6 +3,17 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 1 Oct 2026 — Skill relationship model: first training run (Colab)
+
+- (this commit) Trained on `pairs_esco_onet_v1.csv`, 3 seeds. Test macro-F1: SBERT cosine (today's method) 0.490;
+  model 4 epochs 0.744 ± 0.006; **model 10 epochs 0.770** (seeds 0.770 / 0.770 / 0.769). Epochs chosen on val,
+  not test (best val mean 0.763 → 0.780); val plateaus after ~epoch 5, so the limit is the data (noisy ESCO/O*NET
+  labels), not training length. SATISFIES precision 0.87 → 0.84, recall 0.52 → 0.78. Direction test (268
+  NARROWER/BROADER pairs): model 0.750, cosine 0.500 (cosine scores both orders the same).
+- Results in `docs/evidence/relation_model/` (`esco_onet_4epochs.json`, `esco_onet_10epochs.json`). The trained
+  model (`backend/data/relation_model_esco_onet/`, ~90 MB) is not in git; rebuild it with the notebook.
+- `make_notebook.py`: default 10 epochs (was 4).
+
 ## 1 Oct 2026 — Skill relationship model: training set v1 from public data + notebook
 
 - (this commit) **No LLM needed for a first model** ("distant supervision": labels from existing expert data).

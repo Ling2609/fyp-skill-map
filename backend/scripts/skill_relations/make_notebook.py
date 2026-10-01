@@ -25,7 +25,7 @@ from sklearn.metrics import f1_score, classification_report, confusion_matrix
 MODEL_NAME = os.environ.get("MODEL_NAME", "sentence-transformers/all-MiniLM-L6-v2")  # the app's SBERT model
 PAIRS_CSV = os.environ.get("PAIRS_CSV", "pairs_esco_onet_v1.csv")
 SEEDS = [int(s) for s in os.environ.get("SEEDS", "13,42,77").split(",")]
-EPOCHS, LR, BATCH, MAX_LEN = int(os.environ.get("EPOCHS", 4)), 2e-5, 32, 64
+EPOCHS, LR, BATCH, MAX_LEN = int(os.environ.get("EPOCHS", 10)), 2e-5, 32, 64
 LABELS = ["SATISFIES", "RELATED", "NOT"]
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 print("device:", DEVICE, "| model:", MODEL_NAME)""")
