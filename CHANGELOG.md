@@ -3,6 +3,19 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 2 Oct 2026 — Reference set of real SkillMap pairs (Stage 2B), first two judges
+
+- (this commit) `scripts/skill_relations/sample_reference_pairs.py`: 400 pairs "module skill → job skill" from the
+  database, picked per SBERT cosine band instead of at random (real matches are rare among 209 × 7,018 candidate
+  pairs), skills seen in training and same-A8 pairs left out, at most 3 pairs per skill, rows shuffled. Band sizes
+  saved for weighting (0.85+ 69 · 0.75–0.85 255 · 0.65–0.75 784 · 0.55–0.65 2,292 · < 0.55 1,463,272), so results
+  are reported per band and any overall figure is weighted. Output `data/skill_relations/reference_pairs_v1.csv`.
+- `scripts/skill_relations/judge_reference_pairs.py`: one LLM judge per run with the label guide (names only).
+  Judges so far: Claude (labelled in the chat, `label_claude.csv`) and Qwen3.8-27B on Groq (`label_qwen.csv`).
+  Gemini was planned but dropped as a judge (3.8 Flash overloaded, 2.5 Flash retired for new users, flash-lite too
+  small) and stays on job-description formatting only. Claude vs Qwen: 62% same label, Cohen's κ 0.53 (moderate);
+  Qwen counts more pairs as satisfying (156 vs 100). gpt-oss-120b is the third judge, still to run.
+  
 ## 1 Oct 2026 — Small fixes
 
 - d24d998: Job Matches sort hints in plain words ("Most skills matched" no longer says "required", since jobs
