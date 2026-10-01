@@ -14,7 +14,7 @@ Planning, reasoning and research behind each decision are in the project roadmap
   Judges: Claude (labelled in the chat, `label_claude.csv`), Qwen3.8-27B on Groq (`label_qwen.csv`) and
   gpt-oss-120b on Groq (`label_gpt_oss.csv`).
   Gemini was planned but dropped as a judge (3.8 Flash overloaded, 2.5 Flash retired for new users, flash-lite too
-  small) and stays on job-description formatting only. Third judge gpt-oss-120b (`label_gpt_oss.csv`). Agreement: Fleiss' κ 0.47 (moderate; pairwise Cohen's κ
+  small) and stays on job-description formatting only. Agreement: Fleiss' κ 0.47 (moderate; pairwise Cohen's κ
   0.40–0.53); 204 / 400 pairs unanimous on the 3 training classes (high-confidence set), 374 with a 2-of-3 majority.
 
 ## 1 Oct 2026 — Small fixes
