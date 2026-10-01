@@ -17,11 +17,11 @@ Planning, reasoning and research behind each decision are in the project roadmap
 ## 1 Oct 2026 — Skill relationship model: training set v1 from public data + notebook
 
 - (this commit) **No LLM needed for a first model** ("distant supervision": labels from existing expert data).
-  `scripts/skill_relations/build_pairs_esco_onet.py` builds 6,102 pairs from ESCO v1.2.1 (digital skills: synonyms = SAME,
+  `scripts/skill_relations/build_pairs_esco_onet.py` builds 6,101 pairs from ESCO v1.2.1 (digital skills: synonyms = SAME,
   skill → broader skill = NARROWER, skill relations and siblings = RELATED), O*NET 31.0 Software Skills (hot
   technologies → their software category = NARROWER, tools in the same small IT category = RELATED), A8's
   verified same pairs, and random unrelated pairs (DIFFERENT); BROADER = NARROWER reversed. Split by skill
-  (hierarchy pairs follow the parent; negatives drawn within a split): 4,231 train / 911 val / 960 test.
+  (hierarchy pairs follow the parent; negatives drawn within a split): 4,242 train / 901 val / 958 test.
   Ambiguous ESCO "related" pairs where one name contains the other ("perform data mining" / "data mining") are
   dropped. Known noise: some non-ICT ESCO skills, loose synonyms, broad O*NET categories; negatives are easy.
 - `scripts/skill_relations/train_relation_model.ipynb` (Colab): SBERT cosine baseline (0.7 / 0.6) vs a cross-encoder

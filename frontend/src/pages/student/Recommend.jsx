@@ -238,8 +238,8 @@ export default function Recommend() {
                   value={sortBy}
                   onChange={v => { setSortBy(v); setVisibleCount(10) }}
                   options={[
-                    { key: 'fit', label: 'Best fit', hint: 'Skills matched and how well your whole profile fits the role; senior roles rank lower' },
-                    { key: 'skills', label: 'Most skills matched', hint: 'Highest share of required skills you already have' },
+                    { key: 'fit', label: 'Best fit', hint: 'Mixes skills matched, how close your overall profile is to the role, and entry-level roles first' },
+                    { key: 'skills', label: 'Most skills matched', hint: 'Jobs where you already have the most of the skills they ask for' },
                   ]}
                 />
               </div>
