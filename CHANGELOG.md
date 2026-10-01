@@ -3,6 +3,13 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 1 Oct 2026 — Fix plan, Stage 2: label guide
+
+- (this commit) `docs/stage2_label_guide.md`: one written rule set for SAME / NARROWER / BROADER / RELATED /
+  DIFFERENT (student skill → job skill: "would a recruiter accept that having A means having B?", asked both
+  ways), tie-break rules (cautious label wins), 14 worked examples. Used by the LLM labelling prompt, the three
+  judges of the reference set and the author's spot-check, so labels mean the same thing everywhere.
+
 ## 1 Oct 2026 — Fix plan, Stage 3A: how job skills count
 
 - (this commit) **Required skills = the shown %; the rest shown apart** (`app/services/job_requirements.py`, used
