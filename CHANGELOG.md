@@ -3,6 +3,16 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 2 Oct 2026 — Abbreviation dictionary (A8 add-on)
+
+- (this commit) `scripts/pipeline/find_abbreviations.py`: short form ↔ long form pairs ("RAG" = "Retrieval-Augmented
+  Generation") from 2,660 job ads (Schwartz & Hearst 2003 letter check, word initials first) and ESCO alternative
+  labels; spelling variants grouped; only meanings a SkillMap skill uses (270). 66 auto (one meaning, ≥ 2 ads), 204
+  judged by gpt-oss-120b (usual meaning in ICT ads?), every proposed pair checked by Qwen3.8-27B; merged only if
+  both agree, at most one meaning per short form → 155 merges (models disagreed on 22). Author blind check of 20
+  merged pairs: 19 agree (95%). Merges written to `skill_merge_overrides.json`; fixes duplicates such as LLMs /
+  Large Language Models within one ad.
+  
 ## 2 Oct 2026 — Reference-set result: the v1 relationship model does not beat cosine on real pairs
 
 - (this commit) `merge_reference_labels.py`: three judges merged; Fleiss' κ 0.47; 204 unanimous pairs (79 SATISFIES,

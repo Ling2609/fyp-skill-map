@@ -1,7 +1,631 @@
 {
  "_about": "Human decisions on skill merges; they win over the LLM (see app/services/skill_names.py). 'same' = merge, 'different' = never merge.",
- "same": [],
+ "same": [
+  [
+   "SLA",
+   "service level agreements"
+  ],
+  [
+   "UAT",
+   "User Acceptance Testing"
+  ],
+  [
+   "KPIs",
+   "key performance indicators"
+  ],
+  [
+   "RDBMS",
+   "Relational Database Management Systems"
+  ],
+  [
+   "IaC",
+   "infrastructure as code"
+  ],
+  [
+   "POC",
+   "Proof of Concept"
+  ],
+  [
+   "MVC",
+   "Model-View-Controller"
+  ],
+  [
+   "GCP",
+   "Google Cloud Platform"
+  ],
+  [
+   "RCA",
+   "root cause analysis"
+  ],
+  [
+   "CISSP",
+   "Certified Information Systems Security Professional"
+  ],
+  [
+   "RAG",
+   "Retrieval-Augmented Generation"
+  ],
+  [
+   "AWS",
+   "Amazon Web Services"
+  ],
+  [
+   "TDD",
+   "Test-Driven Development"
+  ],
+  [
+   "LLMs",
+   "Large Language Models"
+  ],
+  [
+   "CI",
+   "continuous integration"
+  ],
+  [
+   "SaaS",
+   "Software as a Service"
+  ],
+  [
+   "CISM",
+   "Certified Information Security Manager"
+  ],
+  [
+   "SIT",
+   "System Integration Testing"
+  ],
+  [
+   "CEH",
+   "Certified Ethical Hacker"
+  ],
+  [
+   "DR",
+   "Disaster Recovery"
+  ],
+  [
+   "LAN",
+   "local area networks"
+  ],
+  [
+   "CMS",
+   "Content Management System"
+  ],
+  [
+   "SOA",
+   "Service Oriented Architecture"
+  ],
+  [
+   "HIS",
+   "Hospital Information System"
+  ],
+  [
+   "RBAC",
+   "role-based access control"
+  ],
+  [
+   "QA",
+   "Quality Assurance"
+  ],
+  [
+   "SSRS",
+   "SQL Server Reporting Services"
+  ],
+  [
+   "ML",
+   "machine learning"
+  ],
+  [
+   "IPS",
+   "intrusion prevention systems"
+  ],
+  [
+   "STLC",
+   "Software Testing Life Cycle"
+  ],
+  [
+   "AD",
+   "Active Directory"
+  ],
+  [
+   "IDS",
+   "intrusion detection systems"
+  ],
+  [
+   "NLP",
+   "natural language processing"
+  ],
+  [
+   "TFS",
+   "Team Foundation server"
+  ],
+  [
+   "IIS",
+   "Internet Information Services"
+  ],
+  [
+   "MIS",
+   "Management Information System"
+  ],
+  [
+   "CRM",
+   "Customer Relationship Management"
+  ],
+  [
+   "FSD",
+   "Functional Specification Document"
+  ],
+  [
+   "ITSM",
+   "IT service management"
+  ],
+  [
+   "SDN",
+   "Software Defined Networking"
+  ],
+  [
+   "BDD",
+   "Behaviour Driven Development"
+  ],
+  [
+   "ORM",
+   "object-relational mapping"
+  ],
+  [
+   "NIST",
+   "National Institute of Standards and Technology"
+  ],
+  [
+   "HTML",
+   "Hypertext markup language"
+  ],
+  [
+   "WMS",
+   "Warehouse Management Systems"
+  ],
+  [
+   "RHEL",
+   "Red Hat Enterprise Linux"
+  ],
+  [
+   "BI",
+   "Business Intelligence"
+  ],
+  [
+   "EUC",
+   "end-user computing"
+  ],
+  [
+   "OOD",
+   "Object-Oriented Design"
+  ],
+  [
+   "PMI",
+   "Project Management Institute"
+  ],
+  [
+   "TPM",
+   "Trusted Platform Modules"
+  ],
+  [
+   "SPA",
+   "Single Page Applications"
+  ],
+  [
+   "CRISC",
+   "Certified in Risk and Information Systems Control"
+  ],
+  [
+   "HA",
+   "high availability"
+  ],
+  [
+   "WANs",
+   "wide area networks"
+  ],
+  [
+   "SDLC",
+   "software development life cycle"
+  ],
+  [
+   "ERP",
+   "Enterprise Resource Planning"
+  ],
+  [
+   "AI",
+   "artificial intelligence"
+  ],
+  [
+   "OOP",
+   "Object-Oriented Programming"
+  ],
+  [
+   "CI/CD",
+   "Continuous Integration/Continuous Deployment"
+  ],
+  [
+   "RPA",
+   "Robotic Process Automation"
+  ],
+  [
+   "SOC",
+   "Security Operations Center"
+  ],
+  [
+   "UI",
+   "User Interface"
+  ],
+  [
+   "SIEM",
+   "Security Information and Event Management"
+  ],
+  [
+   "MES",
+   "Manufacturing Execution System"
+  ],
+  [
+   "BRD",
+   "Business Requirement Documents"
+  ],
+  [
+   "PMO",
+   "Project Management Office"
+  ],
+  [
+   "CCNA",
+   "Cisco Certified Network Associate"
+  ],
+  [
+   "SEO",
+   "Search engine optimization"
+  ],
+  [
+   "BPM",
+   "Business Process Management"
+  ],
+  [
+   "DNS",
+   "Domain Name System"
+  ],
+  [
+   "ITIL",
+   "Information Technology Infrastructure Library"
+  ],
+  [
+   "GRC",
+   "Governance Risk and Compliance Management"
+  ],
+  [
+   "EDR",
+   "endpoint detection and response"
+  ],
+  [
+   "IoT",
+   "Internet of Things"
+  ],
+  [
+   "UC",
+   "Unified Communications"
+  ],
+  [
+   "JCL",
+   "Job Control Language"
+  ],
+  [
+   "MFA",
+   "multi-factor authentication"
+  ],
+  [
+   "NAS",
+   "Network Attached Storage"
+  ],
+  [
+   "MCSE",
+   "Microsoft Certified System Engineer"
+  ],
+  [
+   "UML",
+   "Unified Modelling Language"
+  ],
+  [
+   "Mutex",
+   "mutual exclusion"
+  ],
+  [
+   "DCS",
+   "distributed control system"
+  ],
+  [
+   "CAP",
+   "Certified Analytics Professional"
+  ],
+  [
+   "STP",
+   "straight-through processing"
+  ],
+  [
+   "SOAR",
+   "Security Orchestration Automation and Response"
+  ],
+  [
+   "VM",
+   "Virtual Machines"
+  ],
+  [
+   "ERD",
+   "Entity Relationship Diagram"
+  ],
+  [
+   "FinTech",
+   "financial technology"
+  ],
+  [
+   "RFP",
+   "request for proposal"
+  ],
+  [
+   "TCO",
+   "Total Cost of Ownership"
+  ],
+  [
+   "HSM",
+   "Hardware Security Module"
+  ],
+  [
+   "DLP",
+   "Data Loss Prevention"
+  ],
+  [
+   "QAT",
+   "Quality Assurance Testing"
+  ],
+  [
+   "CISA",
+   "Certified Information Systems Auditor"
+  ],
+  [
+   "PMBOK",
+   "Project Management Body of Knowledge"
+  ],
+  [
+   "J2EE",
+   "Java 2 Platform Enterprise Edition"
+  ],
+  [
+   "REST",
+   "Representational State Transfer"
+  ],
+  [
+   "QMS",
+   "Quality Management System"
+  ],
+  [
+   "ASM",
+   "Automatic Storage Management"
+  ],
+  [
+   "HRMS",
+   "Human Resource Management System"
+  ],
+  [
+   "CD",
+   "continuous delivery"
+  ],
+  [
+   "HCI",
+   "Human-Computer Interaction"
+  ],
+  [
+   "DevEx",
+   "developer experience"
+  ],
+  [
+   "UFT",
+   "Unified Functional Testing"
+  ],
+  [
+   "PLC",
+   "programmable logic controller"
+  ],
+  [
+   "IAM",
+   "Identity Access Management"
+  ],
+  [
+   "RTO",
+   "Recovery Time Objective"
+  ],
+  [
+   "BCP",
+   "Business Continuity Planning"
+  ],
+  [
+   "VDI",
+   "Virtual Desktop Infrastructure"
+  ],
+  [
+   "WAF",
+   "Web Application Firewalls"
+  ],
+  [
+   "CTI",
+   "Cyber Threat Intelligence"
+  ],
+  [
+   "M365",
+   "Microsoft 365"
+  ],
+  [
+   "SSR",
+   "Server-Side Rendering"
+  ],
+  [
+   "ARM",
+   "Azure Resource Manager"
+  ],
+  [
+   "ALM",
+   "Application Lifecycle Management"
+  ],
+  [
+   "AKS",
+   "Azure Kubernetes Service"
+  ],
+  [
+   "ITAM",
+   "IT Asset Management"
+  ],
+  [
+   "CMDB",
+   "Configuration Management Database"
+  ],
+  [
+   "IM",
+   "Incident Management"
+  ],
+  [
+   "WPO",
+   "Web performance optimization"
+  ],
+  [
+   "UAR",
+   "USer Access Review"
+  ],
+  [
+   "EF",
+   "Entity Framework"
+  ],
+  [
+   "MarTech",
+   "Marketing Tech"
+  ],
+  [
+   "MCITP",
+   "Microsoft Certified IT Professional"
+  ],
+  [
+   "ETL",
+   "extract transformation and load"
+  ],
+  [
+   "SCADA",
+   "Supervisory Control and Data Acquisition"
+  ],
+  [
+   "SSG",
+   "Static Site Generation"
+  ],
+  [
+   "SAC",
+   "SAP Analytics Cloud"
+  ],
+  [
+   "TTXs",
+   "Table Top Exercises"
+  ],
+  [
+   "AAD",
+   "Azure Active Directory"
+  ],
+  [
+   "DL",
+   "/Deep Learning"
+  ],
+  [
+   "PAM",
+   "Privileged Access Management"
+  ],
+  [
+   "SOW",
+   "statement of work"
+  ],
+  [
+   "MUI",
+   "Material UI"
+  ],
+  [
+   "AAS",
+   "Azure Analysis Services"
+  ],
+  [
+   "CICS",
+   "Customer Information Control System"
+  ],
+  [
+   "CSDM",
+   "Common Service Data Model"
+  ],
+  [
+   "SOAP",
+   "Simple Object Access Protocol"
+  ],
+  [
+   "BCM",
+   "Business Continuity Management"
+  ],
+  [
+   "GIS",
+   "Geographic Information System"
+  ],
+  [
+   "SSIS",
+   "SQL Server Integration Services"
+  ],
+  [
+   "BA",
+   "Business Analyst"
+  ],
+  [
+   "LANS",
+   "Local area networks"
+  ],
+  [
+   "EPP",
+   "Endpoint Protection"
+  ],
+  [
+   "IA",
+   "Information Architecture"
+  ],
+  [
+   "BGP",
+   "Border Gateway Protocol"
+  ],
+  [
+   "FPGA",
+   "field-programmable gate arrays"
+  ],
+  [
+   "AR",
+   "augmented reality"
+  ],
+  [
+   "ODI",
+   "Oracle Data Integrator"
+  ],
+  [
+   "LMS",
+   "learning management systems"
+  ],
+  [
+   "COBIT",
+   "control objectives for information and related technology"
+  ],
+  [
+   "VB",
+   "Visual Basic"
+  ],
+  [
+   "OCR",
+   "optical character recognition software"
+  ]
+ ],
  "different": [
-  ["Provisioning Services", "Service Provisioning"]
+  [
+   "Provisioning Services",
+   "Service Provisioning"
+  ],
+  [
+   "SbE",
+   "Specification by Example"
+  ]
  ]
 }
