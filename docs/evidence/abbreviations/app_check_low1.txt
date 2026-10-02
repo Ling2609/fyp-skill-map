@@ -1,0 +1,32 @@
+1. Live jobs that listed the same skill twice (now counted once):
+   0 of 214 live jobs
+
+2. low1's skills that now match a live job skill through a merge:
+   software development lifecycle = SDLC: 3 job(s), e.g. MES IT Engineer (Support and Development)
+   software development lifecycle = SDLC knowledge: 1 job(s), e.g. ServiceNowBusiness Analyst-Malaysia
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|##########| 103/103 [00:00<00:00, 22698.12it/s]
+Embedder loaded: all-MiniLM-L6-v2 (14157 cached vectors)
+low1 vs MES IT Engineer (Support and Development) (Celestica International LP), job id 3174
+
+Profile: 178 skills, 180 spellings
+Adding 2556 jobs to the job embedding cache...
+Job cache ready: 2556 jobs with pre-computed skill vectors
+
+job skill                    best skill (spelling that scored)                            Matches  Detail
+C# Programming               Java programming                                               0.572   0.572
+JavaScript                   Java programming                                               0.389   0.389
+ERP Systems                  ERP systems                                                    1.000   1.000
+Shop Floor Control           control flow                                                   0.350   0.350
+Project Management           project management                                             1.000   1.000
+Application Integration      enterprise application architecture                            0.588   0.588
+SDLC                         software development lifecycle                                 1.000   1.000
+Technical Documentation      Requirements specification                                     0.439   0.439
+Problem Solving              problem solving                                                1.000   1.000
+IT Infrastructure            Infrastructure as code                                         0.657   0.657
+
+Matched (>= 0.7): Job Matches 4/10, Job Detail 4/10
+
+Profile skills with more than one spelling (2):
+  use case modelling | Use case modeling
+  Automated testing | Test automation
