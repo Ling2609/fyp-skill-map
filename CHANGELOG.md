@@ -3,6 +3,18 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 2 Oct 2026 — Training set v2: candidates and label merge (labelling in progress)
+
+- (this commit) `build_pairs_skillmap.py`: 1,200 candidate pairs from 2,348 SkillMap job skills (close 650, word-overlap
+  hard negatives 350, far 100, abbreviation merges 100), each in both orders (2,400 rows); all 511 reference-set skill
+  keys left out. Abbreviation pairs have a median SBERT cosine of 0.29, i.e. SBERT does not see "WAF" = "Web
+  Application Firewalls".
+- `judge_reference_pairs.py`: `--pairs`, `--out-dir`, `--batch`, so the same blind judges label the v2 pairs.
+  Training judges are gpt-oss-120b and Qwen3.8-27B; Claude, the third judge of the test set, stays out of training.
+- `merge_training_labels.py`: keeps a pair only if both judges give the same label in both orders and the orders
+  mirror; BROADER → RELATED; output in the v1 format for the notebook. Labelling runs over several days (free Groq
+  tier, 200k tokens per model per day; 678 / 2,400 rows by gpt-oss on day 1).
+  
 ## 2 Oct 2026 — Abbreviation dictionary (A8 add-on)
 
 - (this commit) `scripts/pipeline/find_abbreviations.py`: short form ↔ long form pairs ("RAG" = "Retrieval-Augmented
@@ -12,7 +24,7 @@ Planning, reasoning and research behind each decision are in the project roadmap
   both agree, at most one meaning per short form → 155 merges (models disagreed on 22). Author blind check of 20
   merged pairs: 19 agree (95%). Merges written to `skill_merge_overrides.json`; fixes duplicates such as LLMs /
   Large Language Models within one ad.
-  
+
 ## 2 Oct 2026 — Reference-set result: the v1 relationship model does not beat cosine on real pairs
 
 - (this commit) `merge_reference_labels.py`: three judges merged; Fleiss' κ 0.47; 204 unanimous pairs (79 SATISFIES,
