@@ -17,6 +17,8 @@ Usage (from backend/, venv active):
   python scripts/skill_relations/judge_reference_pairs.py --judge gemini                # all 400
   python scripts/skill_relations/judge_reference_pairs.py --judge gpt_oss
   python scripts/skill_relations/judge_reference_pairs.py --judge qwen --limit 20
+Training set v2 (same judges, other pairs and folder):
+  python scripts/skill_relations/judge_reference_pairs.py --judge gpt_oss --pairs data/skill_relations/pairs_skillmap_v2_candidates.csv --out-dir data/skill_relations/v2_labels --batch 40
 """
 import argparse
 import json
@@ -125,7 +127,7 @@ def is_busy(err: Exception) -> bool:
     return any(w in msg for w in ("429", "rate limit", "resource_exhausted", "503", "unavailable", "overloaded"))
 
 
-def run(judge: str, limit: int | None, ask=None, pairs_csv=PAIRS_CSV, out_dir=OUT_DIR, pause=2.0):
+def run(judge: str, limit: int | None, ask=None, pairs_csv=PAIRS_CSV, out_dir=OUT_DIR, pause=2.0, batch_size=BATCH):
     ask = ask or ASK[judge]
     pairs = pd.read_csv(pairs_csv)[["id", "a", "b"]]
     if limit:
@@ -142,7 +144,7 @@ def run(judge: str, limit: int | None, ask=None, pairs_csv=PAIRS_CSV, out_dir=OU
 
     failures, waits = 0, 0
     while not todo.empty and failures < 3 and waits < 10:
-        batch = todo.head(BATCH)
+        batch = todo.head(batch_size)
         user = "\n".join(f"{i}. {a} -> {b}" for i, a, b in zip(batch.id, batch.a, batch.b))
         try:
             got = parse(ask(system, user), set(int(i) for i in batch.id))
@@ -182,11 +184,14 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--judge", required=True, choices=sorted(ASK))
     ap.add_argument("--limit", type=int, help="only the first N pairs (a test run)")
+    ap.add_argument("--pairs", default=PAIRS_CSV, help="pairs to label (id, a, b); default: the reference set")
+    ap.add_argument("--out-dir", default=OUT_DIR, help="where label_<judge>.csv is written")
+    ap.add_argument("--batch", type=int, default=BATCH, help="pairs per call (larger = fewer calls, same tokens)")
     args = ap.parse_args()
     key = "GEMINI_API_KEY" if args.judge == "gemini" else "GROQ_API_KEY"
     if not os.getenv(key):
         sys.exit(f"{key} is not set in backend/.env")
-    run(args.judge, args.limit)
+    run(args.judge, args.limit, pairs_csv=args.pairs, out_dir=args.out_dir, batch_size=args.batch)
 
 
 if __name__ == "__main__":

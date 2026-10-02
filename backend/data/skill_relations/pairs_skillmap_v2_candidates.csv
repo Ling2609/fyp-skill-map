@@ -1,0 +1,2401 @@
+id,pair,a,b,kind,cosine,order
+1,28,Financial Analysis,Business Analysis,close,0.73,ba
+2,179,Server Backup,Backup Restore,close,0.672,ba
+3,1007,SOAR playbook development,Issue Tracking,far,0.12,ba
+4,919,Azure Security Center,Azure Networking,overlap,0.625,ba
+5,651,Network Segmentation,Network Switches,overlap,0.373,ab
+6,773,Source Control,Git Version Control,overlap,0.433,ba
+7,377,IT Governance,IT Risk Management,close,0.624,ab
+8,658,Functional Documentation,Documentation Standards,overlap,0.539,ba
+9,406,T-SQL,SQL Querying,close,0.661,ba
+10,440,Cloud Architecture,Cloud Solutions,close,0.721,ab
+11,631,Security Frameworks,Security Hardening,close,0.604,ab
+12,622,IT Budget Management,Cost Management,close,0.608,ba
+13,278,Mandarin Language,Thai language,close,0.582,ab
+14,66,Unix Administration,Linux,close,0.596,ba
+15,479,Application Support,Technical Support,close,0.564,ab
+16,889,IPsec VPN,VPN,overlap,0.711,ab
+17,976,Vulnerability Assessment,Vulnerability Management,overlap,0.79,ab
+18,928,Client Consulting,Client Interaction,overlap,0.599,ab
+19,1178,Unified Functional Testing,UFT,abbrev,0.243,ba
+20,665,gRPC API,REST API,overlap,0.417,ab
+21,947,UI/UX development,HP-UX Administration,overlap,0.401,ba
+22,74,Performance Optimization,Workflow optimization,close,0.628,ab
+23,109,Backup Management,Backup Solutions,close,0.802,ab
+24,502,System Analysis,System Performance Optimization,close,0.591,ab
+25,826,Inventory Control,Source Control,overlap,0.441,ab
+26,737,Data Reporting,Data Reconciliation,overlap,0.559,ba
+27,963,Mobile UI/UX,UX Design,overlap,0.482,ab
+28,761,Oracle RDBMS,Oracle RAC,overlap,0.562,ba
+29,1164,SSR,Server-Side Rendering,abbrev,0.157,ab
+30,1110,Supervisory Control and Data Acquisition,SCADA,abbrev,0.39,ba
+31,23,Microsoft SQL,SQL Database Management,close,0.678,ab
+32,954,SAP Analytics Cloud,Web Analytics,overlap,0.526,ab
+33,148,Routing,OSPF routing,close,0.659,ba
+34,355,Project Leadership,Agile Project Management,close,0.58,ba
+35,987,Azure Monitor,Azure Data Factory,overlap,0.495,ba
+36,394,Workflow Customization,Workflow Configuration,close,0.709,ba
+37,15,System Documentation,System Implementation,close,0.584,ab
+38,853,Theme Customization,Report Customization,overlap,0.502,ba
+39,477,SQL Query Optimization,Database Tuning,close,0.555,ba
+40,287,SAP ERP,Oracle ERP,close,0.737,ba
+41,841,Level 3 support,L2 Support,overlap,0.496,ba
+42,689,Quantitative Analysis,Process analysis,overlap,0.495,ba
+43,1138,Unified Communications,UC,abbrev,0.272,ba
+44,1024,Endpoint Protection,Karma,far,0.085,ab
+45,729,Security Frameworks,Security Automation,overlap,0.56,ab
+46,775,Windows Server 2012,Web Server Administration,overlap,0.371,ba
+47,39,Windows 10,Windows 10/11,close,0.824,ab
+48,207,Risk-Based Testing,Testing,close,0.632,ab
+49,1058,Adobe InDesign,Backup Restore,far,0.087,ab
+50,219,SAP Reporting,SAP BTP,close,0.592,ba
+51,802,Google Analytics,Predictive Analytics,overlap,0.621,ab
+52,839,DNS Management,DNS,overlap,0.781,ba
+53,892,Low-latency programming,Rust programming,overlap,0.377,ab
+54,646,PL/SQL,Oracle SQL,close,0.685,ba
+55,14,Redshift,AWS Redshift,close,0.793,ba
+56,131,SAP Basis,SAP Reporting,close,0.627,ab
+57,1152,SEO,Search engine optimization,abbrev,0.603,ab
+58,1188,Single Page Applications,SPA,abbrev,0.13,ba
+59,669,Agile Scrum,Agile Testing,overlap,0.704,ab
+60,526,Integration Architecture,ERP Integration,close,0.551,ba
+61,132,IT Risk Assessment,Security Assessment,close,0.577,ab
+62,351,Service Management,Workforce Management,close,0.559,ab
+63,617,System Troubleshooting,Software Troubleshooting,close,0.832,ba
+64,449,Test Management,Test Execution,close,0.68,ba
+65,731,End-User Support,Hypercare Support,overlap,0.417,ab
+66,414,Windows Forms,ASP.NET Web Forms,close,0.663,ba
+67,158,Security Strategy Development,Technology Strategy,close,0.551,ab
+68,105,Mobile-First Development,Mobile App Architecture,close,0.585,ba
+69,117,Agile Documentation,Agile Collaboration,close,0.608,ba
+70,120,OA Framework,Odoo development,close,0.561,ab
+71,934,Post-sales support,Production Support,overlap,0.579,ab
+72,1131,Internet Information Services,IIS,abbrev,0.429,ba
+73,340,Network Fundamentals,Cloud Networking,close,0.552,ba
+74,1166,local area networks,LAN,abbrev,0.552,ba
+75,357,Consulting Experience,Security Consulting,close,0.654,ab
+76,82,Printer Maintenance,Printer Support,close,0.696,ab
+77,343,Test Planning,Test Reporting,close,0.613,ab
+78,943,Data Modeling,BPMN Modeling,overlap,0.412,ba
+79,1155,POC,Proof of Concept,abbrev,0.177,ab
+80,424,SQL Scripting,Scripting,close,0.668,ba
+81,910,CL Programming,COBOL Programming,overlap,0.553,ab
+82,78,Process Mapping,Business Process Design,close,0.574,ba
+83,1041,Service Improvement,Build automation,far,0.116,ba
+84,1195,Large Language Models,LLMs,abbrev,0.142,ba
+85,929,Functional Testing,Espresso Testing,overlap,0.437,ba
+86,1176,System Integration Testing,SIT,abbrev,0.072,ba
+87,511,Budget Forecasting,Budget tracking,close,0.708,ab
+88,183,SQLite,Microsoft SQL,close,0.565,ba
+89,805,UI/UX development,UI/UX Design,overlap,0.835,ab
+90,1109,MFA,multi-factor authentication,abbrev,0.428,ab
+91,52,AWS cloud security,AWS VPC,close,0.591,ab
+92,353,SAP ABAP,SAP WM Module,close,0.573,ab
+93,54,IDS/IPS,IDS/IPS Management,close,0.891,ab
+94,136,Google Cloud SQL,SQL Database,close,0.581,ab
+95,835,GDPR compliance,Compliance Management,overlap,0.549,ba
+96,234,Workflow optimization,Business Process Optimization,close,0.705,ba
+97,489,Change Control,Control-M,close,0.572,ab
+98,51,Application debugging,Application Troubleshooting,close,0.776,ab
+99,294,SAP QM,SAP Administration,close,0.7,ba
+100,1081,Network Testing,Service Transition,far,0.13,ab
+101,885,MES troubleshooting,MES Integration,overlap,0.56,ba
+102,724,Interpersonal Communication,Email Communication,overlap,0.569,ba
+103,169,IT Operations Management,Service Management,close,0.589,ab
+104,244,Security Operations Center,IAM security,close,0.585,ba
+105,914,JavaScript Scripting,Linux/Unix scripting,overlap,0.507,ab
+106,855,SharePoint Administration,SharePoint,overlap,0.695,ba
+107,579,Operations Management,Logistics Coordination,close,0.556,ba
+108,1140,CSDM,Common Service Data Model,abbrev,0.214,ab
+109,733,Wireless LAN,Aruba Wireless,overlap,0.484,ba
+110,864,Predictive Analytics,Reporting & Analytics,overlap,0.605,ab
+111,1187,ODI,Oracle Data Integrator,abbrev,0.088,ab
+112,1071,ERP Configuration,Service Desk,far,0.272,ab
+113,780,Playwright Automation,Mobile QA automation,overlap,0.354,ba
+114,895,Physical Security Management,Network Security,overlap,0.549,ba
+115,186,VPC networking,IPsec VPN,close,0.663,ba
+116,174,SQL Querying,SQL Scripting,close,0.671,ab
+117,287,Oracle ERP,SAP ERP,close,0.737,ab
+118,77,Migration Planning,Database Migration,close,0.669,ba
+119,32,Linux Scripting,JavaScript Scripting,close,0.589,ba
+120,1162,TFS,Team Foundation server,abbrev,0.453,ab
+121,367,Cloud Architecture,Network Architecture,close,0.611,ab
+122,437,SAP ABAP,SAP Business One,close,0.7,ab
+123,226,DHCP DNS Configuration,DNS Configuration,close,0.779,ab
+124,867,Microsoft Dynamics 365,Microsoft Endpoint Manager,overlap,0.352,ab
+125,312,Apache,Apache NiFi,close,0.594,ab
+126,150,Test Case Development,Diagnostic Testing,close,0.585,ba
+127,950,Microsoft Word,Microsoft Navision,overlap,0.35,ab
+128,216,PHP,CodeIgniter,close,0.624,ba
+129,41,Agile Development,Agile Collaboration,close,0.771,ab
+130,777,Linux OS support,LAN/WAN support,overlap,0.308,ba
+131,352,Azure services,Azure Storage,close,0.692,ab
+132,741,Financial Consulting,Financial Reconciliation,overlap,0.452,ab
+133,337,Bash scripting,Bash,close,0.796,ba
+134,72,Knowledge Base Documentation,Software Documentation,close,0.72,ab
+135,692,Requirements Engineering,Business Requirements Analysis,overlap,0.696,ba
+136,1174,MCSE,Microsoft Certified System Engineer,abbrev,0.29,ab
+137,759,Business Application Support,Web Application Architecture,overlap,0.352,ab
+138,880,Firebase Analytics,Advanced Analytics,overlap,0.534,ba
+139,80,Test Reporting,SSRS Reporting,close,0.611,ba
+140,154,Network Security,Web Security,close,0.654,ab
+141,577,Software Support,Software Installation,close,0.597,ba
+142,999,Oracle EBS,Oracle,overlap,0.758,ba
+143,703,Cross-platform mobile,Cross-functional Collaboration,overlap,0.358,ba
+144,1012,SIEM,OpenShift,far,0.118,ba
+145,17,Cost Benefit Analysis,Cost Analysis,close,0.788,ba
+146,486,Application Testing,Manual Testing,close,0.615,ab
+147,706,Cross-browser Testing,Cross-functional Leadership,overlap,0.192,ab
+148,818,Office 365 Support,Onsite Support,overlap,0.467,ab
+149,239,Technical Design Documentation,Agile Documentation,close,0.603,ba
+150,838,ASP.NET Core,C# .NET,overlap,0.633,ab
+151,137,Equipment Troubleshooting,Troubleshooting,close,0.72,ab
+152,1191,UML,Unified Modelling Language,abbrev,0.291,ab
+153,447,SAP Solution Manager,SAP CO,close,0.658,ba
+154,550,Network performance optimization,Mobile Performance Optimization,close,0.605,ba
+155,888,ITIL Framework,ITIL Change Management,overlap,0.69,ab
+156,1061,IT Risk Assessment,AWS SageMaker,far,0.082,ba
+157,618,Technical Design Documentation,Documentation Preparation,close,0.623,ba
+158,621,Hardware Deployment,Cloud Deployment,close,0.594,ba
+159,544,Cybersecurity Practices,Cybersecurity Management,close,0.772,ba
+160,571,Business Process Design,Process Improvement,close,0.62,ab
+161,586,Windows OS,OS configuration,close,0.677,ba
+162,161,Payment Integration,Integration design,close,0.559,ba
+163,329,End-User Support,End User Computing,close,0.748,ab
+164,1033,R,Unity development,far,0.1,ab
+165,431,Vulnerability Remediation,Vulnerability Scanning,close,0.612,ab
+166,723,Training Development,Staff Training,overlap,0.701,ba
+167,172,Security Consulting,Client Consulting,close,0.603,ba
+168,50,Cybersecurity Management,Cybersecurity Awareness,close,0.707,ba
+169,831,Adobe Photoshop,Adobe InDesign,overlap,0.547,ba
+170,341,AWS,AWS VPC,close,0.632,ab
+171,1091,LAN Configuration,Golang,far,0.125,ba
+172,1038,Email Communication,SIT Testing,far,0.006,ab
+173,693,Mobile App Testing,Localization Testing,overlap,0.393,ba
+174,992,Model Deployment,AI Model Deployment,overlap,0.744,ba
+175,641,English Mandarin,Bilingual English Chinese,close,0.749,ba
+176,405,Test data management,Test Framework Development,close,0.6,ba
+177,236,Issue Investigation,Issue Tracking,close,0.562,ab
+178,200,Security Patch Management,Security Management,close,0.575,ba
+179,1043,AML compliance,AutoCAD design,far,0.021,ab
+180,314,System Troubleshooting,PC Troubleshooting,close,0.786,ba
+181,351,Workforce Management,Service Management,close,0.559,ba
+182,979,ALV Reporting,Compliance Reporting,overlap,0.409,ab
+183,1192,DLP,Data Loss Prevention,abbrev,0.161,ab
+184,509,Cross-platform mobile,Mobile Performance Optimization,close,0.554,ab
+185,611,System Configuration,PC Setup,close,0.563,ba
+186,178,PC Troubleshooting,Hardware debugging,close,0.622,ba
+187,839,DNS,DNS Management,overlap,0.781,ab
+188,544,Cybersecurity Management,Cybersecurity Practices,close,0.772,ab
+189,925,Windows 10/11,Windows 7,overlap,0.585,ab
+190,474,Information Security,Security Monitoring,close,0.568,ab
+191,1139,Software Defined Networking,SDN,abbrev,0.658,ba
+192,383,SAP ByDesign,SAP MM,close,0.682,ab
+193,906,Mobile Performance Optimization,JMeter Performance Testing,overlap,0.357,ba
+194,864,Reporting & Analytics,Predictive Analytics,overlap,0.605,ba
+195,400,SAP PI/PO,SAP Integration,close,0.602,ba
+196,611,PC Setup,System Configuration,close,0.563,ab
+197,121,Application debugging,Software Troubleshooting,close,0.671,ab
+198,1048,Search relevance evaluation,Agile Scrum,far,0.024,ba
+199,975,Functional Documentation,Network documentation,overlap,0.432,ab
+200,1084,Customer Relationship Management,Process Modeling,far,0.283,ab
+201,139,VBScript,VBA scripting,close,0.773,ba
+202,622,Cost Management,IT Budget Management,close,0.608,ab
+203,649,Microsoft Office,Microsoft Excel,close,0.57,ba
+204,670,Technology Research,Legal Technology,overlap,0.502,ba
+205,845,Prometheus Monitoring,SIEM Monitoring,overlap,0.468,ab
+206,931,Server Configuration,Server Administration,overlap,0.645,ba
+207,386,ERP Integration,Application Integration,close,0.58,ba
+208,1130,CMDB,Configuration Management Database,abbrev,0.378,ab
+209,175,Marketing Automation,Automation Framework Design,close,0.553,ba
+210,335,Windows Server Administration,User Administration,close,0.655,ba
+211,613,SLA Management,SaaS Development,close,0.577,ba
+212,46,Data Backup Management,Data Storage,close,0.606,ab
+213,951,Power electronics,Power Query,overlap,0.461,ab
+214,683,Database Schema Design,Database troubleshooting,overlap,0.447,ab
+215,1187,Oracle Data Integrator,ODI,abbrev,0.088,ba
+216,950,Microsoft Navision,Microsoft Word,overlap,0.35,ba
+217,154,Web Security,Network Security,close,0.654,ba
+218,359,Firewall Configuration,Fortinet firewall,close,0.672,ab
+219,871,OSPF routing,Routing and Switching,overlap,0.544,ab
+220,958,Vulkan API,REST API Design,overlap,0.208,ba
+221,519,Service Request Fulfillment,Service Transition,close,0.558,ab
+222,83,Electrical Maintenance,Plant Maintenance,close,0.59,ab
+223,933,Data Reporting,Data Security,overlap,0.443,ab
+224,151,Security Management,Cybersecurity Management,close,0.776,ba
+225,608,SIEM Integration,SIEM Monitoring,close,0.707,ab
+226,761,Oracle RAC,Oracle RDBMS,overlap,0.562,ab
+227,899,System Performance Optimization,System Performance Monitoring,overlap,0.696,ba
+228,591,Financial Consulting,Strategic Consulting,close,0.705,ab
+229,545,Service Reporting,ServiceNow Administration,close,0.583,ba
+230,1111,Visual Basic,VB,abbrev,0.681,ba
+231,942,Network performance monitoring,Network Programming,overlap,0.505,ab
+232,594,Spring Cloud,Cloud Solutions,close,0.588,ba
+233,70,Switch Management,Network Switching,close,0.657,ba
+234,85,SDLC Compliance,SDLC Methodologies,close,0.752,ab
+235,485,Azure Administration,Azure services,close,0.745,ab
+236,2,Electrical Maintenance,Software Maintenance,close,0.587,ab
+237,65,Report Development,SSRS Reporting,close,0.674,ab
+238,29,Excel VBA,Google Sheets,close,0.595,ab
+239,313,Cloud Deployment,Workstation Deployment,close,0.617,ab
+240,995,White Box Testing,Black box testing,overlap,0.775,ba
+241,596,MES Support,MES Integration,close,0.661,ba
+242,65,SSRS Reporting,Report Development,close,0.674,ba
+243,408,API Security,API Management,close,0.68,ba
+244,835,Compliance Management,GDPR compliance,overlap,0.549,ab
+245,100,Incident Resolution,Incident Review,close,0.656,ab
+246,487,Project Deployment,Code Deployment,close,0.747,ba
+247,849,Process Modeling,Process Mapping,overlap,0.703,ba
+248,272,SAP Support,SAP Business One,close,0.762,ba
+249,333,iOS Testing,iOS Deployment,close,0.576,ba
+250,128,Cloud Computing,Cloud Technologies,close,0.825,ab
+251,1149,ARM,Azure Resource Manager,abbrev,0.167,ab
+252,574,Device Deployment,Deployment Orchestration,close,0.589,ba
+253,726,Production Planning,Test Planning,overlap,0.413,ab
+254,415,Security Operations Center,Azure Security Center,close,0.665,ba
+255,625,Business Process Automation,Test Automation,close,0.574,ab
+256,1151,MUI,Material UI,abbrev,0.139,ab
+257,66,Linux,Unix Administration,close,0.596,ab
+258,1190,WPO,Web performance optimization,abbrev,0.139,ab
+259,119,Oracle PL/SQL,Oracle Reports Development,close,0.627,ab
+260,52,AWS VPC,AWS cloud security,close,0.591,ba
+261,790,IT Strategy,Data Strategy,overlap,0.467,ba
+262,399,.NET Core,ASP.NET Core MVC,close,0.684,ba
+263,1135,RBAC,role-based access control,abbrev,0.295,ab
+264,705,C# .NET,C#,overlap,0.935,ba
+265,780,Mobile QA automation,Playwright Automation,overlap,0.354,ab
+266,211,Web Applications,Progressive Web Apps,close,0.631,ba
+267,331,Web Application Security,System Security,close,0.642,ba
+268,1012,OpenShift,SIEM,far,0.118,ab
+269,348,Windows Support,IT infrastructure support,close,0.561,ba
+270,482,MES Integration,Salesforce Integration,close,0.553,ab
+271,64,Web Application Testing,Test Execution,close,0.609,ba
+272,972,NIST Cybersecurity Framework,NIST Framework,overlap,0.76,ba
+273,817,Cisco networking,Cisco Firewall,overlap,0.645,ba
+274,1059,Report Customization,Data Extraction,far,0.149,ba
+275,171,Hybrid Cloud Architecture,Cloud Computing,close,0.606,ba
+276,93,Data Management,Access Management,close,0.567,ba
+277,920,Microsoft 365 Exchange,Microsoft Intune,overlap,0.351,ba
+278,142,IT Security Management,Security policy enforcement,close,0.601,ab
+279,567,Service Delivery,Project Delivery,close,0.599,ba
+280,755,Application Testing,Web Application Architecture,overlap,0.409,ab
+281,197,Virtualization,Microsoft Hyper-V,close,0.639,ba
+282,547,Data Integrity,Data Verification,close,0.651,ab
+283,886,User Experience Design,User Administration,overlap,0.398,ba
+284,23,SQL Database Management,Microsoft SQL,close,0.678,ba
+285,1119,Domain Name System,DNS,abbrev,0.615,ba
+286,805,UI/UX Design,UI/UX development,overlap,0.835,ba
+287,67,IT Asset Management,IT Consulting,close,0.566,ab
+288,663,Cisco ISE,Cisco CUBE,overlap,0.421,ba
+289,985,Oracle Finance,Oracle R12,overlap,0.639,ab
+290,364,Manufacturing Integration,Integration design,close,0.6,ba
+291,206,Cloud cost optimization,Cloud Infrastructure,close,0.621,ab
+292,1072,IT Service Desk,Qlik,far,0.207,ab
+293,1118,Azure Analysis Services,AAS,abbrev,0.281,ba
+294,166,Process Documentation,Technical Design Documentation,close,0.561,ab
+295,376,Documentation Preparation,IT Documentation,close,0.608,ab
+296,940,Digital Platform Management,Cross-Platform Development,overlap,0.541,ba
+297,462,Cybersecurity Risk Assessment,Cybersecurity Practices,close,0.727,ba
+298,210,Performance Optimization,Performance Monitoring,close,0.623,ba
+299,570,Compliance Testing,Manual Testing,close,0.562,ab
+300,212,User Training,System training,close,0.684,ba
+301,450,Sales Operations,Sales Strategy,close,0.762,ab
+302,731,Hypercare Support,End-User Support,overlap,0.417,ba
+303,902,Business Process Mapping,Data Mapping,overlap,0.498,ab
+304,642,AWS EC2,AWS EKS,close,0.71,ab
+305,201,DNS Configuration,DNS Management,close,0.79,ab
+306,893,Test Documentation,Test Planning,overlap,0.524,ab
+307,635,IT Operations,IT Project Coordination,close,0.572,ab
+308,237,Database Optimization,System Performance Optimization,close,0.59,ab
+309,240,Azure services,Azure Data Factory,close,0.605,ba
+310,357,Security Consulting,Consulting Experience,close,0.654,ba
+311,278,Thai language,Mandarin Language,close,0.582,ba
+312,60,SmartForms,Windows Forms,close,0.615,ab
+313,461,Google Cloud,Cloud services,close,0.745,ba
+314,774,Issue Tracking,Budget tracking,overlap,0.435,ba
+315,245,JMS Messaging,JMS,close,0.763,ba
+316,784,Security Administration,OWASP Security,overlap,0.481,ba
+317,229,Reporting Automation,Technical Reporting,close,0.661,ab
+318,868,Firewall Configuration,IDS/IPS configuration,overlap,0.445,ab
+319,489,Control-M,Change Control,close,0.572,ba
+320,811,SNMP monitoring,Server Monitoring,overlap,0.501,ba
+321,564,Team Coordination,Team Collaboration,close,0.79,ba
+322,374,Security Risk Assessment,Security Operations,close,0.55,ba
+323,2,Software Maintenance,Electrical Maintenance,close,0.587,ba
+324,360,NIST Cybersecurity Framework,Cybersecurity,close,0.652,ba
+325,1091,Golang,LAN Configuration,far,0.125,ab
+326,319,Web Application Development,Web Application Testing,close,0.706,ab
+327,598,SAP PS,SAP Project Systems,close,0.694,ba
+328,260,Security Best Practices,Security Controls Design,close,0.609,ab
+329,563,Azure ML,Azure SQL,close,0.649,ab
+330,917,Cloud cost optimization,Cloud Development,overlap,0.682,ab
+331,1135,role-based access control,RBAC,abbrev,0.295,ba
+332,188,Network Administration,Network Engineering,close,0.655,ab
+333,296,Security Compliance,Compliance Reporting,close,0.717,ba
+334,1023,Multi-site support,Cabling Installation,far,0.034,ba
+335,962,UAT Support,System Support,overlap,0.419,ba
+336,620,Documentation creation,Technical Documentation,close,0.678,ab
+337,701,KPI Reporting,Project Reporting,overlap,0.456,ab
+338,652,Server Maintenance,Server Backup,overlap,0.521,ba
+339,1031,WebLogic Server,Network Engineering,far,0.282,ba
+340,863,Distributed Systems Design,Distributed teams,overlap,0.568,ab
+341,346,Incident Investigation,Incident Management,close,0.774,ba
+342,921,IT Operations Management,IT Project Coordination,overlap,0.576,ab
+343,1025,Huawei Networking,Customer Support,far,0.095,ba
+344,129,Wireless LAN,LAN/WAN,close,0.645,ba
+345,908,Payment Gateway Integration,API Gateway,overlap,0.501,ba
+346,838,C# .NET,ASP.NET Core,overlap,0.633,ba
+347,738,PC installation,PC Troubleshooting,overlap,0.558,ab
+348,1063,VMware Administration,PMO Reporting,far,0.104,ba
+349,292,EDI Integration,Integration Architecture,close,0.568,ab
+350,1088,Asset Tracking,VB6,far,0.088,ab
+351,567,Project Delivery,Service Delivery,close,0.599,ab
+352,714,Roadmap Planning,Migration Planning,overlap,0.416,ba
+353,436,Report Generation,Data Reporting,close,0.636,ba
+354,911,Build automation,GUI Automation,overlap,0.531,ab
+355,1051,Security tool evaluation,Axure,far,0.132,ba
+356,160,Automation Anywhere,Automation Framework Design,close,0.589,ab
+357,603,Public Cloud,Cloud Sales,close,0.564,ba
+358,468,Security Operations,Security Management,close,0.801,ba
+359,1016,Non-functional Testing,On-page SEO,far,0.056,ab
+360,830,Test Coordination,Team Coordination,overlap,0.558,ba
+361,570,Manual Testing,Compliance Testing,close,0.562,ba
+362,822,Oracle EBS,Oracle Finance,overlap,0.643,ab
+363,498,Security Administration,Information Security Management,close,0.733,ba
+364,1115,PMBOK,Project Management Body of Knowledge,abbrev,0.163,ab
+365,24,SAP Integration,SAP FICO,close,0.606,ba
+366,910,COBOL Programming,CL Programming,overlap,0.553,ba
+367,1181,LANS,Local area networks,abbrev,0.548,ab
+368,1188,SPA,Single Page Applications,abbrev,0.13,ab
+369,926,Bilingual English Mandarin,Bilingual English Chinese,overlap,0.869,ba
+370,361,Solution Selling,Sales Support,close,0.579,ba
+371,252,Data Architecture,Data Structures,close,0.711,ab
+372,1074,Unix/Linux,Robotics Development,far,0.217,ab
+373,518,Cloud Architecture,Cloud Networking,close,0.721,ab
+374,672,End-User Support,Client Support,overlap,0.598,ba
+375,45,Email Administration,ERP Administration,close,0.591,ab
+376,927,Database Tuning,Performance Tuning,overlap,0.728,ab
+377,1034,ISO 27001,Postman,far,0.091,ab
+378,1011,GxP Compliance,Payroll Processing,far,0.173,ab
+379,653,Cross-functional Communication,Cross-Platform Development,overlap,0.289,ab
+380,722,Excel Services,OData Services,overlap,0.476,ab
+381,535,Incident Response Planning,Disaster Recovery Planning,close,0.585,ba
+382,693,Localization Testing,Mobile App Testing,overlap,0.393,ab
+383,1019,Printer Maintenance,Remote monitoring,far,0.207,ab
+384,327,LAN/WAN support,WAN Design,close,0.704,ab
+385,301,Troubleshooting,First-Level Troubleshooting,close,0.766,ba
+386,1054,Data Migration,React,far,0.079,ab
+387,1052,Defect Management,Stakeholder Presentation,far,0.193,ab
+388,369,WebSphere,IBM WebSphere MQ,close,0.687,ba
+389,135,OS configuration,System Configuration,close,0.787,ab
+390,173,RabbitMQ messaging,JMS Messaging,close,0.621,ba
+391,1034,Postman,ISO 27001,far,0.091,ba
+392,447,SAP CO,SAP Solution Manager,close,0.658,ab
+393,255,Mechanical Engineering,Electrical Engineering,close,0.599,ba
+394,915,Backup Administration,IT Administration,overlap,0.447,ab
+395,98,SAP,SAP SD,close,0.881,ab
+396,162,System Integration Testing,Compatibility Testing,close,0.58,ba
+397,996,Database Integration,Data Integration,overlap,0.766,ab
+398,146,AWS EKS,AWS EMR,close,0.666,ab
+399,1037,Axure,KPI Management,far,0.065,ab
+400,836,Apache Flink,Apache Tomcat,overlap,0.404,ab
+401,1060,ASP.NET Web Forms,Real-time OS,far,0.041,ab
+402,91,Cybersecurity Governance,Security Governance,close,0.786,ab
+403,349,Test Execution,System Integration Testing,close,0.565,ba
+404,203,Oracle Database,Database Integration,close,0.552,ba
+405,788,Cross-Platform Development,Cross-functional Collaboration,overlap,0.48,ba
+406,900,Agile Documentation,BRD Documentation,overlap,0.422,ab
+407,3,CSS3,CSS,close,0.798,ba
+408,68,Networking,Network Basics,close,0.793,ba
+409,299,Routing and Switching,BGP routing,close,0.593,ba
+410,671,Application Troubleshooting,Application Portfolio Management,overlap,0.296,ba
+411,419,Mobile Testing,Cross-platform mobile,close,0.571,ba
+412,554,Network Engineering,Network Optimization,close,0.648,ab
+413,851,Compatibility Testing,Cross-Browser Compatibility,overlap,0.475,ab
+414,221,Documentation Standards,Tender Documentation,close,0.627,ab
+415,1194,SSRS,SQL Server Reporting Services,abbrev,0.611,ab
+416,1184,IT Asset Management,ITAM,abbrev,0.397,ba
+417,736,Financial Reconciliation,Financial Management,overlap,0.625,ba
+418,732,Delta Lake,Data Lake,overlap,0.601,ba
+419,85,SDLC Methodologies,SDLC Compliance,close,0.752,ba
+420,1099,Unity 3D,VPN Management,far,0.081,ab
+421,184,AWS cloud security,AWS networking,close,0.604,ab
+422,430,Rapid Prototyping,Software prototyping,close,0.805,ab
+423,897,Network Automation,Mobile QA automation,overlap,0.478,ba
+424,944,Device Deployment,Network device debugging,overlap,0.352,ab
+425,191,Vulnerability Scanning,Vulnerability Assessment,close,0.808,ba
+426,1004,License Compliance,SAP Cloud,far,0.126,ab
+427,282,Networking Technologies,Network Programming,close,0.661,ab
+428,1029,IT Service Management,Python,far,0.228,ab
+429,624,Master Data Management,Maintenance Master Data,close,0.718,ba
+430,606,Finance process knowledge,Business Process Analysis,close,0.573,ba
+431,440,Cloud Solutions,Cloud Architecture,close,0.721,ba
+432,728,Data Center Design,Data Cleansing,overlap,0.22,ab
+433,163,Team Mentoring,Coaching and Mentoring,close,0.848,ba
+434,859,Mobile App Architecture,App Store Publishing,overlap,0.402,ba
+435,833,Database Optimization,Index Optimization,overlap,0.604,ab
+436,927,Performance Tuning,Database Tuning,overlap,0.728,ba
+437,889,VPN,IPsec VPN,overlap,0.711,ba
+438,158,Technology Strategy,Security Strategy Development,close,0.551,ba
+439,384,eCommerce catalogue management,E-commerce Analytics,close,0.6,ba
+440,772,System Documentation,Network documentation,overlap,0.596,ba
+441,1066,SIEM Monitoring,Audio Post-Production,far,0.131,ba
+442,985,Oracle R12,Oracle Finance,overlap,0.639,ba
+443,342,ISO 8583,ISO 14001,close,0.753,ba
+444,857,ERP Support,Client Support,overlap,0.498,ba
+445,933,Data Security,Data Reporting,overlap,0.443,ba
+446,574,Deployment Orchestration,Device Deployment,close,0.589,ab
+447,222,Network Device Configuration,Hardware Configuration,close,0.601,ba
+448,201,DNS Management,DNS Configuration,close,0.79,ba
+449,111,Warehouse Management Systems,Logistics management,close,0.68,ba
+450,207,Testing,Risk-Based Testing,close,0.632,ba
+451,1128,ASM,Automatic Storage Management,abbrev,0.112,ab
+452,590,SAP MDG,SAP Finance,close,0.674,ba
+453,404,Technical Communication,Telecom Engineering,close,0.598,ab
+454,729,Security Automation,Security Frameworks,overlap,0.56,ba
+455,63,Security Policy Development,Policy Enforcement,close,0.602,ba
+456,1145,PLC,programmable logic controller,abbrev,0.387,ab
+457,861,Business Requirements Documentation,Business Architecture,overlap,0.425,ab
+458,1006,Printer Maintenance,macOS Support,far,0.155,ba
+459,707,Data Governance,Governance Framework,overlap,0.568,ab
+460,924,Cantonese Language,Arabic language,overlap,0.463,ba
+461,1094,ELV Systems,SOC Operations,far,0.334,ab
+462,507,Routing protocols,Multicast routing,close,0.611,ba
+463,517,User Access Control,Access Control,close,0.891,ba
+464,269,Unix scripting,Linux Shell Scripting,close,0.867,ba
+465,241,Cost Analysis,Cost Reduction,close,0.675,ab
+466,1111,VB,Visual Basic,abbrev,0.681,ab
+467,791,Interpersonal Communication,English Mandarin Communication,overlap,0.507,ba
+468,1105,CISA,Certified Information Systems Auditor,abbrev,0.23,ab
+469,834,Application debugging,Network device debugging,overlap,0.517,ab
+470,1170,GCP,Google Cloud Platform,abbrev,0.603,ab
+471,766,Market trend analysis,Log Analysis,overlap,0.343,ba
+472,1040,Cisco Certifications,Network Configuration,far,0.182,ab
+473,244,IAM security,Security Operations Center,close,0.585,ab
+474,1172,STP,straight-through processing,abbrev,0.251,ab
+475,143,Server Administration,Server-side development,close,0.607,ab
+476,1083,Message Queues,IDoc Integration,far,0.054,ba
+477,198,Testing and debugging,Test Case Development,close,0.636,ba
+478,689,Process analysis,Quantitative Analysis,overlap,0.495,ab
+479,1054,React,Data Migration,far,0.079,ba
+480,323,Change Management,Change Request Management,close,0.605,ab
+481,755,Web Application Architecture,Application Testing,overlap,0.409,ba
+482,790,Data Strategy,IT Strategy,overlap,0.467,ab
+483,332,SAP Customization,SAP S/4HANA,close,0.581,ab
+484,204,Scrum Master,Agile Development,close,0.568,ba
+485,491,Test Documentation,Manual Testing,close,0.672,ba
+486,242,Electrical Engineering,Electrical equipment,close,0.69,ab
+487,411,Incident Ticket Management,Incident Response Planning,close,0.632,ba
+488,25,SAP ERP,SAP ECC,close,0.718,ba
+489,456,Data Architecture,Data Integration,close,0.607,ab
+490,363,Service Desk Operations,Service Desk Support,close,0.812,ab
+491,626,Linux,Red Hat Linux,close,0.732,ab
+492,535,Disaster Recovery Planning,Incident Response Planning,close,0.585,ab
+493,63,Policy Enforcement,Security Policy Development,close,0.602,ab
+494,1183,EF,Entity Framework,abbrev,0.526,ab
+495,847,Power BI Service,IT Service Management,overlap,0.301,ba
+496,401,Security Protocols,Security Operations,close,0.654,ba
+497,6,SAP Administration,SAP,close,0.899,ba
+498,284,Escalation Management,Issue Escalation,close,0.781,ab
+499,1079,Pre-sales Engineering,Caching mechanisms,far,0.045,ba
+500,513,IT Documentation,Technical Documentation,close,0.72,ab
+501,181,Database Tuning,Database Performance Tuning,close,0.941,ba
+502,575,Production Deployment,Hardware Deployment,close,0.647,ba
+503,55,Data Architecture,Data Strategy,close,0.639,ab
+504,101,Cloud Infrastructure,IT infrastructure integration,close,0.551,ab
+505,269,Linux Shell Scripting,Unix scripting,close,0.867,ab
+506,306,Remote Troubleshooting,Remote Support,close,0.622,ba
+507,521,Windows 10/11,Windows,close,0.591,ba
+508,469,ServiceNow Ticketing,ServiceNow ITOM,close,0.577,ba
+509,1045,Agile Scrum,Network Automation,far,0.15,ab
+510,1008,SOP Development,Technical Training,far,0.204,ab
+511,464,Process Mapping,Process Documentation,close,0.641,ba
+512,281,WordPress,Microsoft Word,close,0.583,ba
+513,24,SAP FICO,SAP Integration,close,0.606,ab
+514,1106,PMO,Project Management Office,abbrev,0.282,ab
+515,604,Web Server Administration,System Administration,close,0.581,ba
+516,1181,Local area networks,LANS,abbrev,0.548,ba
+517,381,Technical Pre-sales,Sales negotiation,close,0.588,ba
+518,644,UI/UX Design,Mobile UI/UX,close,0.66,ba
+519,637,IDS/IPS,IP Address Management,close,0.581,ab
+520,236,Issue Tracking,Issue Investigation,close,0.562,ba
+521,759,Web Application Architecture,Business Application Support,overlap,0.352,ba
+522,446,Data Science,Data Warehouse,close,0.637,ab
+523,1141,augmented reality,AR,abbrev,0.425,ba
+524,149,Hadoop ecosystem,Cloudera Hadoop,close,0.739,ba
+525,310,System Security,Network Security Architecture,close,0.607,ba
+526,678,Hardware Installation,Installation Configuration,overlap,0.579,ab
+527,174,SQL Scripting,SQL Querying,close,0.671,ba
+528,157,Security Operations,Security Reporting,close,0.624,ab
+529,621,Cloud Deployment,Hardware Deployment,close,0.594,ab
+530,981,Technical Writing,User Story Writing,overlap,0.497,ab
+531,978,Git Version Control,Git workflow,overlap,0.687,ab
+532,1009,Routing protocols,Logistics management,far,0.225,ba
+533,315,Business Analysis,Business Intelligence,close,0.583,ba
+534,787,Routing configuration,OSPF routing,overlap,0.634,ba
+535,509,Mobile Performance Optimization,Cross-platform mobile,close,0.554,ba
+536,341,AWS VPC,AWS,close,0.632,ba
+537,1200,HCI,Human-Computer Interaction,abbrev,0.442,ab
+538,1130,Configuration Management Database,CMDB,abbrev,0.378,ba
+539,855,SharePoint,SharePoint Administration,overlap,0.695,ab
+540,118,Deployment Automation,Continuous Deployment,close,0.728,ba
+541,555,MySQL Database,SQL Database Management,close,0.562,ab
+542,901,Postman API,Vulkan API,overlap,0.124,ab
+543,650,Data Integration,Data Reconciliation,close,0.616,ab
+544,1103,Red Hat Enterprise Linux,RHEL,abbrev,0.534,ba
+545,393,SAP QM,SAP Fiori,close,0.563,ba
+546,8,Google Analytics,Business Intelligence,close,0.59,ba
+547,768,Windows OS,Windows OS Support,overlap,0.839,ab
+548,252,Data Structures,Data Architecture,close,0.711,ba
+549,520,Intrusion Detection,Security Monitoring,close,0.627,ab
+550,70,Network Switching,Switch Management,close,0.657,ab
+551,753,L1 Helpdesk Support,IT Operations Support,overlap,0.224,ba
+552,536,SAP HANA,SAP Data Services,close,0.633,ba
+553,330,SAP Training,SAP ABAP,close,0.692,ba
+554,112,Code maintenance,Code documentation,close,0.559,ba
+555,685,Wireless Networking,Wireless Access Points,overlap,0.697,ba
+556,127,Web Application Architecture,Web Application Testing,close,0.569,ab
+557,359,Fortinet firewall,Firewall Configuration,close,0.672,ba
+558,746,Network Basics,Network Administration,overlap,0.603,ab
+559,300,LAN/WAN support,SD-WAN,close,0.593,ab
+560,536,SAP Data Services,SAP HANA,close,0.633,ab
+561,4,System Support,System Integration,close,0.615,ba
+562,303,Infrastructure monitoring,Monitoring Automation,close,0.557,ab
+563,1134,Privileged Access Management,PAM,abbrev,0.251,ba
+564,444,Process analysis,System Analysis,close,0.62,ab
+565,873,Big Data Architecture,Business Architecture,overlap,0.462,ab
+566,664,Dashboard Reporting,Business Intelligence Reporting,overlap,0.552,ba
+567,978,Git workflow,Git Version Control,overlap,0.687,ba
+568,88,SQL Database,Oracle SQL,close,0.683,ba
+569,132,Security Assessment,IT Risk Assessment,close,0.577,ba
+570,101,IT infrastructure integration,Cloud Infrastructure,close,0.551,ba
+571,1168,NIST,National Institute of Standards and Technology,abbrev,0.353,ab
+572,1106,Project Management Office,PMO,abbrev,0.282,ba
+573,852,Front-end debugging,End User Computing,overlap,0.336,ba
+574,540,Server Deployment,Model Deployment,close,0.573,ba
+575,68,Network Basics,Networking,close,0.793,ab
+576,116,Security Frameworks,System Security,close,0.657,ab
+577,896,KPI Analysis,KPI Development,overlap,0.777,ba
+578,878,CISM Certification,CRISC Certification,overlap,0.567,ab
+579,96,Testing,Test Case Design,close,0.613,ba
+580,853,Report Customization,Theme Customization,overlap,0.502,ab
+581,30,SAP Cloud,SAP Solution Manager,close,0.704,ab
+582,958,REST API Design,Vulkan API,overlap,0.208,ab
+583,271,GUI Automation,Automation Scripting,close,0.681,ba
+584,1150,BGP,Border Gateway Protocol,abbrev,0.494,ab
+585,796,Qualitative research,Technology Research,overlap,0.511,ab
+586,56,SharePoint Online,Microsoft O365,close,0.555,ba
+587,435,SAP Reporting,SAP Training,close,0.683,ab
+588,578,IoT Integration,Network Integration,close,0.592,ab
+589,569,Test Documentation,Test Plan Development,close,0.556,ab
+590,610,Troubleshooting,Problem Diagnosis,close,0.607,ba
+591,697,Software License Management,Software prototyping,overlap,0.271,ab
+592,561,Tableau Visualization,Data Visualization,close,0.602,ba
+593,1003,UFT,RDBMS,far,0.246,ba
+594,988,Production Support,Pre-sales support,overlap,0.542,ba
+595,249,Supply Chain IT,Supply Chain Management,close,0.778,ab
+596,1031,Network Engineering,WebLogic Server,far,0.282,ab
+597,231,Project Reporting,Reporting & Analytics,close,0.623,ab
+598,261,Supplier negotiation,Vendor Management,close,0.553,ab
+599,904,Service Desk,IT Service Management,overlap,0.54,ba
+600,602,SAP Support,SAP Fiori,close,0.565,ba
+601,11,HTTP/HTTPS Protocols,Security Protocols,close,0.621,ab
+602,17,Cost Analysis,Cost Benefit Analysis,close,0.788,ab
+603,628,Network Architecture,Software Architecture,close,0.627,ab
+604,385,SAP Workflow,Workflow Configuration,close,0.576,ab
+605,350,Python Scripting,Linux/Unix scripting,close,0.612,ba
+606,1015,Healthcare Domain Knowledge,Japanese (JLPT N3),far,-0.001,ab
+607,1040,Network Configuration,Cisco Certifications,far,0.182,ba
+608,422,Banking domain,Payments Domain,close,0.706,ab
+609,247,Security system installation,Security Administration,close,0.585,ba
+610,837,Firebase integration,CRM Integration,overlap,0.37,ba
+611,382,Infrastructure Automation,Build automation,close,0.625,ba
+612,22,E-commerce Analytics,E-commerce Platforms,close,0.595,ab
+613,356,SAP MDG,SAP Integration,close,0.623,ba
+614,922,Database development,Database Design,overlap,0.762,ba
+615,47,Client Training,Client Onboarding,close,0.638,ba
+616,633,Configuration Management,System Deployment,close,0.556,ab
+617,673,Software prototyping,Software QA,overlap,0.415,ab
+618,378,Server Troubleshooting,Application Troubleshooting,close,0.618,ba
+619,4,System Integration,System Support,close,0.615,ab
+620,928,Client Interaction,Client Consulting,overlap,0.599,ba
+621,992,AI Model Deployment,Model Deployment,overlap,0.744,ab
+622,51,Application Troubleshooting,Application debugging,close,0.776,ba
+623,576,Salesforce Sales Cloud,Cloud Solutions,close,0.603,ba
+624,744,Customer Communication,Customer Service,overlap,0.722,ab
+625,941,SQL Database,SQL Optimization,overlap,0.575,ab
+626,986,Project Documentation,Project Reporting,overlap,0.593,ab
+627,817,Cisco Firewall,Cisco networking,overlap,0.645,ab
+628,1116,Business Process Management,BPM,abbrev,0.561,ba
+629,816,Microsoft Outlook,Microsoft Teams Integration,overlap,0.311,ba
+630,1027,Apache NiFi,Application Lifecycle Management,far,0.052,ba
+631,873,Business Architecture,Big Data Architecture,overlap,0.462,ba
+632,1168,National Institute of Standards and Technology,NIST,abbrev,0.353,ba
+633,453,Azure SQL,Microsoft SQL,close,0.673,ab
+634,898,Account Reconciliation,Account Planning,overlap,0.658,ba
+635,71,SAP Customization,ERP Customization,close,0.566,ba
+636,695,Warehouse Management,Data Warehouse Design,overlap,0.614,ba
+637,763,Azure Data Factory,Azure DevOps,overlap,0.553,ab
+638,120,Odoo development,OA Framework,close,0.561,ba
+639,885,MES Integration,MES troubleshooting,overlap,0.56,ab
+640,1036,Business Process Documentation,Requirements Engineering,far,0.38,ab
+641,1059,Data Extraction,Report Customization,far,0.149,ab
+642,1144,Java 2 Platform Enterprise Edition,J2EE,abbrev,0.46,ba
+643,587,Test Coordination,Test Case Design,close,0.572,ba
+644,18,Unix/Linux administration,Red Hat Linux,close,0.567,ba
+645,503,Puppet Automation,Data Automation,close,0.556,ba
+646,110,Organizational Skills,Research skills,close,0.576,ab
+647,140,Software Troubleshooting,Remote Troubleshooting,close,0.574,ba
+648,276,Spring Cloud,Spring Java,close,0.642,ab
+649,21,Windows Support,Operating Systems,close,0.604,ba
+650,1056,Enterprise Architecture,macOS Administration,far,0.258,ab
+651,1100,ERP Support,Software Training,far,0.206,ab
+652,97,LAN/WAN Management,Network Management,close,0.73,ab
+653,54,IDS/IPS Management,IDS/IPS,close,0.891,ba
+654,397,AWS data services,AWS Cloud Services,close,0.855,ba
+655,246,OS configuration,Operating Systems,close,0.665,ba
+656,390,SAP ByDesign,SAP PS,close,0.734,ab
+657,1098,PowerBI reporting,Windows Forms,far,0.005,ab
+658,183,Microsoft SQL,SQLite,close,0.565,ab
+659,1028,Security Testing,Microsoft Visio,far,0.088,ab
+660,1142,SSG,Static Site Generation,abbrev,0.136,ab
+661,213,Microsoft Dynamics CRM,CRM Management,close,0.664,ba
+662,27,Advanced Analytics,Advanced Excel,close,0.604,ab
+663,29,Google Sheets,Excel VBA,close,0.595,ba
+664,367,Network Architecture,Cloud Architecture,close,0.611,ba
+665,826,Source Control,Inventory Control,overlap,0.441,ba
+666,382,Build automation,Infrastructure Automation,close,0.625,ab
+667,412,Manual Testing,Test Management,close,0.571,ab
+668,507,Multicast routing,Routing protocols,close,0.611,ab
+669,1186,Manufacturing Execution System,MES,abbrev,0.15,ba
+670,800,ITIL Processes,Manufacturing processes,overlap,0.455,ab
+671,15,System Implementation,System Documentation,close,0.584,ba
+672,1193,SLA,service level agreements,abbrev,0.276,ab
+673,42,AWS IAM,AWS CloudWatch,close,0.608,ba
+674,49,Compliance Monitoring,IT Security Compliance,close,0.614,ab
+675,599,System Design,Product Design,close,0.56,ba
+676,205,Proactive Monitoring,PRTG monitoring,close,0.579,ab
+677,1013,Workflow optimization,EDKII framework,far,0.142,ba
+678,993,Remote Access Support,POS System Support,overlap,0.367,ba
+679,559,Project Documentation,System Documentation,close,0.684,ab
+680,206,Cloud Infrastructure,Cloud cost optimization,close,0.621,ba
+681,989,Retail Operations,Service Desk Operations,overlap,0.504,ab
+682,930,Healthcare Domain Knowledge,Healthcare IT,overlap,0.42,ab
+683,974,Risk-Based Testing,Third-Party Risk Assessment,overlap,0.476,ab
+684,214,POS System Support,POS System Integration,close,0.834,ba
+685,1056,macOS Administration,Enterprise Architecture,far,0.258,ba
+686,1029,Python,IT Service Management,far,0.228,ba
+687,1118,AAS,Azure Analysis Services,abbrev,0.281,ab
+688,1014,Travel Coordination,Cisco CUBE,far,0.16,ba
+689,211,Progressive Web Apps,Web Applications,close,0.631,ab
+690,274,Application Support,Business Application Support,close,0.766,ab
+691,757,Database Backup,Server Backup,overlap,0.719,ab
+692,809,Service Level Management,Level 3 support,overlap,0.395,ba
+693,438,iOS Testing,Security Testing,close,0.577,ab
+694,977,Shift Support,Service Desk Support,overlap,0.425,ba
+695,347,Technical Troubleshooting,Hardware debugging,close,0.572,ba
+696,800,Manufacturing processes,ITIL Processes,overlap,0.455,ba
+697,93,Access Management,Data Management,close,0.567,ab
+698,313,Workstation Deployment,Cloud Deployment,close,0.617,ba
+699,1195,LLMs,Large Language Models,abbrev,0.142,ab
+700,552,NumPy,Python,close,0.554,ab
+701,465,Application Testing,Test Scenario Design,close,0.574,ab
+702,1129,IA,Information Architecture,abbrev,0.212,ab
+703,525,EIGRP routing,Routing configuration,close,0.581,ab
+704,824,PL/SQL,SQL Optimization,overlap,0.54,ab
+705,616,Oracle RAC,Oracle PL/SQL,close,0.554,ba
+706,46,Data Storage,Data Backup Management,close,0.606,ba
+707,18,Red Hat Linux,Unix/Linux administration,close,0.567,ab
+708,472,Kubernetes,Kubernetes AKS,close,0.837,ab
+709,362,Windows Administration,Unix/Linux administration,close,0.565,ba
+710,670,Legal Technology,Technology Research,overlap,0.502,ab
+711,874,IT infrastructure integration,IT fundamentals,overlap,0.424,ba
+712,597,Mobile UI Design,Mobile UI/UX Design,close,0.929,ab
+713,636,Azure services,Azure Synapse,close,0.584,ab
+714,721,IT Infrastructure,IT Infrastructure Design,overlap,0.859,ab
+715,1145,programmable logic controller,PLC,abbrev,0.387,ba
+716,1169,IDS,intrusion detection systems,abbrev,0.41,ab
+717,865,Performance Monitoring,Prometheus Monitoring,overlap,0.408,ab
+718,850,Mantis Tool,Security Tool Configuration,overlap,0.295,ab
+719,948,User Support,User Administration,overlap,0.618,ba
+720,843,End User Computing,User Access Management,overlap,0.477,ab
+721,585,Business Process Automation,Automation Framework Design,close,0.575,ba
+722,821,Remote Support,Production Support,overlap,0.547,ba
+723,746,Network Administration,Network Basics,overlap,0.603,ba
+724,69,Cloud Deployment,Production Deployment,close,0.726,ab
+725,396,Vendor Negotiation,Procurement Coordination,close,0.574,ba
+726,411,Incident Response Planning,Incident Ticket Management,close,0.632,ab
+727,325,Client Interaction,Client Support,close,0.659,ab
+728,326,Blueprint reading,Business Blueprinting,close,0.667,ab
+729,939,Lakehouse Architecture,MVP Architecture,overlap,0.323,ab
+730,441,Mobile Security,Security Protocols,close,0.551,ab
+731,983,Chinese Communication,Bilingual English Chinese,overlap,0.59,ba
+732,431,Vulnerability Scanning,Vulnerability Remediation,close,0.612,ba
+733,1190,Web performance optimization,WPO,abbrev,0.139,ba
+734,516,Knowledge Base Documentation,Business Documentation,close,0.656,ab
+735,1055,ELV Systems,Virtual Tape Library,far,0.199,ab
+736,1021,Data-driven Decision Making,Data Extraction,far,0.348,ab
+737,685,Wireless Access Points,Wireless Networking,overlap,0.697,ab
+738,169,Service Management,IT Operations Management,close,0.589,ba
+739,971,Citrix Virtual Apps,Virtual Desktop Infrastructure,overlap,0.503,ab
+740,1154,optical character recognition software,OCR,abbrev,0.56,ba
+741,220,Metrics Reporting,Report Development,close,0.552,ab
+742,430,Software prototyping,Rapid Prototyping,close,0.805,ba
+743,1086,Mobile UI/UX Design,Hardware Maintenance,far,0.104,ba
+744,747,Office 365 administration,Printer Administration,overlap,0.395,ab
+745,667,PowerBI reporting,KPI Reporting,overlap,0.516,ba
+746,506,Network performance monitoring,Performance Metrics,close,0.566,ab
+747,1141,AR,augmented reality,abbrev,0.425,ab
+748,948,User Administration,User Support,overlap,0.618,ab
+749,451,Scripting,Unix scripting,close,0.834,ab
+750,410,Security Patch Management,Security Hardening,close,0.607,ba
+751,225,LAN/WAN support,LAN Administration,close,0.611,ba
+752,1138,UC,Unified Communications,abbrev,0.272,ab
+753,1023,Cabling Installation,Multi-site support,far,0.034,ab
+754,727,Red Hat Linux,Linux Shell Scripting,overlap,0.344,ba
+755,240,Azure Data Factory,Azure services,close,0.605,ab
+756,528,Security Best Practices,Security Updates,close,0.619,ab
+757,929,Espresso Testing,Functional Testing,overlap,0.437,ab
+758,28,Business Analysis,Financial Analysis,close,0.73,ab
+759,161,Integration design,Payment Integration,close,0.559,ab
+760,214,POS System Integration,POS System Support,close,0.834,ab
+761,600,Cisco networking,Network Protocols,close,0.552,ab
+762,918,Blockchain integration,AI Integration,overlap,0.428,ba
+763,1105,Certified Information Systems Auditor,CISA,abbrev,0.23,ba
+764,16,SAP PS,SAP BTP,close,0.703,ba
+765,982,RMA Coordination,Project Coordination,overlap,0.458,ba
+766,537,Unix/Linux administration,Linux Server,close,0.627,ba
+767,609,Security Patching,Security Compliance,close,0.588,ba
+768,571,Process Improvement,Business Process Design,close,0.62,ba
+769,1196,wide area networks,WANs,abbrev,0.351,ba
+770,955,HIPAA Compliance,GxP Compliance,overlap,0.344,ba
+771,1071,Service Desk,ERP Configuration,far,0.272,ba
+772,531,Database Design,Data Modeling,close,0.568,ab
+773,1033,Unity development,R,far,0.1,ba
+774,715,Version Upgrade,SVN Version Control,overlap,0.39,ba
+775,1174,Microsoft Certified System Engineer,MCSE,abbrev,0.29,ba
+776,197,Microsoft Hyper-V,Virtualization,close,0.639,ab
+777,1121,IAM,Identity Access Management,abbrev,0.183,ab
+778,316,Network documentation,Technical Documentation,close,0.611,ab
+779,1000,LAN design,LAN/WAN design,overlap,0.854,ab
+780,1117,Network Attached Storage,NAS,abbrev,0.439,ba
+781,1020,Linux,Commissioning,far,0.093,ba
+782,182,Vector databases,Data Structures,close,0.56,ba
+783,652,Server Backup,Server Maintenance,overlap,0.521,ab
+784,875,L2 Support,L3 Support,overlap,0.793,ab
+785,335,User Administration,Windows Server Administration,close,0.655,ab
+786,476,Application Support,Application Security,close,0.604,ba
+787,739,Client Training,IT Training Delivery,overlap,0.46,ab
+788,303,Monitoring Automation,Infrastructure monitoring,close,0.557,ba
+789,43,Process Improvement,Process Documentation,close,0.581,ba
+790,1062,Agile Testing,VB.NET,far,0.069,ab
+791,344,Automation Anywhere,GUI Automation,close,0.555,ab
+792,1134,PAM,Privileged Access Management,abbrev,0.251,ab
+793,719,Software Architecture,Project Management Software,overlap,0.453,ba
+794,813,ASP.NET Core,ASP.NET,overlap,0.712,ba
+795,1053,Server-side development,Microsoft Fabric,far,0.16,ba
+796,232,Information Security Management,Vulnerability Management,close,0.626,ab
+797,1096,vSphere Administration,Test Plan Development,far,0.116,ba
+798,994,ISO Standards,ISO 9001 Compliance,overlap,0.722,ba
+799,539,System training,End-User Training,close,0.643,ba
+800,226,DNS Configuration,DHCP DNS Configuration,close,0.779,ba
+801,490,System Support,System training,close,0.568,ab
+802,786,Workflow optimization,SEO Optimization,overlap,0.427,ba
+803,267,Service Delivery Management,Continuous Delivery,close,0.589,ba
+804,422,Payments Domain,Banking domain,close,0.706,ba
+805,141,Network Management,Network Switching,close,0.654,ab
+806,260,Security Controls Design,Security Best Practices,close,0.609,ba
+807,170,Software Patching,Bug Fixing,close,0.619,ba
+808,255,Electrical Engineering,Mechanical Engineering,close,0.599,ab
+809,666,CAD Modeling,Process Modeling,overlap,0.436,ab
+810,794,Shell Scripting,Unix Shell Scripting,overlap,0.942,ab
+811,1178,UFT,Unified Functional Testing,abbrev,0.243,ab
+812,1166,LAN,local area networks,abbrev,0.552,ab
+813,523,Service Desk Support,Service Desk Reporting,close,0.675,ba
+814,706,Cross-functional Leadership,Cross-browser Testing,overlap,0.192,ba
+815,804,Installation Configuration,PC installation,overlap,0.671,ab
+816,127,Web Application Testing,Web Application Architecture,close,0.569,ba
+817,1189,high availability,HA,abbrev,0.139,ba
+818,398,IT Management,IT Infrastructure Management,close,0.77,ba
+819,701,Project Reporting,KPI Reporting,overlap,0.456,ba
+820,203,Database Integration,Oracle Database,close,0.552,ab
+821,798,B2B Integration,Chatbot Integration,overlap,0.254,ab
+822,629,Technical proposal writing,Proposal Management,close,0.669,ba
+823,987,Azure Data Factory,Azure Monitor,overlap,0.495,ab
+824,177,Oracle Reports Development,Reporting Automation,close,0.603,ab
+825,138,IT Operations Management,IT Operations Support,close,0.804,ab
+826,1191,Unified Modelling Language,UML,abbrev,0.291,ba
+827,965,Security Consulting,Security Tool Configuration,overlap,0.533,ba
+828,157,Security Reporting,Security Operations,close,0.624,ba
+829,848,Business Process Automation,Business Process Mapping,overlap,0.681,ab
+830,1150,Border Gateway Protocol,BGP,abbrev,0.494,ba
+831,997,KPI Development,KPI Management,overlap,0.847,ab
+832,1143,GRC,Governance Risk and Compliance Management,abbrev,0.052,ab
+833,314,PC Troubleshooting,System Troubleshooting,close,0.786,ab
+834,854,Email Communication,Email Administration,overlap,0.653,ba
+835,847,IT Service Management,Power BI Service,overlap,0.301,ab
+836,152,SAP SD,SAP Finance,close,0.793,ba
+837,87,Security Operations Center,IT security controls,close,0.55,ba
+838,380,PL/SQL,Microsoft SQL,close,0.734,ba
+839,82,Printer Support,Printer Maintenance,close,0.696,ba
+840,1148,OOD,Object-Oriented Design,abbrev,0.301,ab
+841,801,Node.js Backend,Backend Integration,overlap,0.592,ba
+842,250,Knowledge Base Documentation,Knowledge Base,close,0.772,ba
+843,597,Mobile UI/UX Design,Mobile UI Design,close,0.929,ba
+844,737,Data Reconciliation,Data Reporting,overlap,0.559,ab
+845,742,User Story Writing,User Experience Design,overlap,0.393,ba
+846,983,Bilingual English Chinese,Chinese Communication,overlap,0.59,ab
+847,288,Incident Response,ServiceNow Incident Management,close,0.586,ab
+848,581,IT Risk Assessment,IT Security Solutions,close,0.573,ab
+849,692,Business Requirements Analysis,Requirements Engineering,overlap,0.696,ab
+850,326,Business Blueprinting,Blueprint reading,close,0.667,ba
+851,43,Process Documentation,Process Improvement,close,0.581,ab
+852,39,Windows 10/11,Windows 10,close,0.824,ba
+853,180,SAP Administration,SAP PI/PO,close,0.665,ab
+854,942,Network Programming,Network performance monitoring,overlap,0.505,ba
+855,834,Network device debugging,Application debugging,overlap,0.517,ba
+856,841,L2 Support,Level 3 support,overlap,0.496,ab
+857,1022,IT Operations Support,Advanced Process Control,far,0.394,ba
+858,470,Business Documentation,Business Blueprinting,close,0.618,ba
+859,721,IT Infrastructure Design,IT Infrastructure,overlap,0.859,ba
+860,1120,CRISC,Certified in Risk and Information Systems Control,abbrev,0.285,ab
+861,699,Cisco Firewall,Firewall,overlap,0.806,ab
+862,765,Cloud Computing,Edge Computing,overlap,0.537,ab
+863,537,Linux Server,Unix/Linux administration,close,0.627,ab
+864,747,Printer Administration,Office 365 administration,overlap,0.395,ba
+865,1011,Payroll Processing,GxP Compliance,far,0.173,ba
+866,1003,RDBMS,UFT,far,0.246,ab
+867,793,Automation Framework Design,EDKII framework,overlap,0.309,ab
+868,998,Power Apps,Microsoft Power Platform,overlap,0.695,ba
+869,966,Security Testing,Product Testing,overlap,0.604,ba
+870,888,ITIL Change Management,ITIL Framework,overlap,0.69,ba
+871,176,IT Infrastructure Management,Infrastructure Design,close,0.592,ba
+872,944,Network device debugging,Device Deployment,overlap,0.352,ba
+873,522,Web Services,Web Application Architecture,close,0.62,ba
+874,902,Data Mapping,Business Process Mapping,overlap,0.498,ba
+875,494,IT Training Delivery,Training Facilitation,close,0.559,ab
+876,1154,OCR,optical character recognition software,abbrev,0.56,ab
+877,316,Technical Documentation,Network documentation,close,0.611,ba
+878,907,User Feedback Analysis,SWOT Analysis,overlap,0.305,ba
+879,560,Service Delivery Management,Media Delivery,close,0.56,ba
+880,119,Oracle Reports Development,Oracle PL/SQL,close,0.627,ba
+881,778,Networking Technologies,VPC networking,overlap,0.462,ab
+882,1108,Entity Relationship Diagram,ERD,abbrev,0.166,ba
+883,539,End-User Training,System training,close,0.643,ab
+884,779,Business Automation,Business Analysis,overlap,0.442,ba
+885,155,Information Security Policies,Security Best Practices,close,0.615,ab
+886,247,Security Administration,Security system installation,close,0.585,ab
+887,89,ITIL Incident Management,ITIL Foundation,close,0.596,ba
+888,1158,Recovery Time Objective,RTO,abbrev,0.155,ba
+889,806,Mobile CI/CD,GitLab CI/CD,overlap,0.537,ba
+890,680,Proactive Monitoring,Prometheus Monitoring,overlap,0.454,ab
+891,1156,BA,Business Analyst,abbrev,0.439,ab
+892,989,Service Desk Operations,Retail Operations,overlap,0.504,ba
+893,522,Web Application Architecture,Web Services,close,0.62,ab
+894,578,Network Integration,IoT Integration,close,0.592,ba
+895,743,Reporting & Analytics,Reporting,overlap,0.702,ba
+896,744,Customer Service,Customer Communication,overlap,0.722,ba
+897,643,Hardware Configuration,Software Configuration,close,0.56,ab
+898,778,VPC networking,Networking Technologies,overlap,0.462,ba
+899,221,Tender Documentation,Documentation Standards,close,0.627,ba
+900,783,Backup Strategies,Veeam Backup,overlap,0.634,ab
+901,35,CAD Modeling,AutoCAD,close,0.59,ba
+902,1136,Human Resource Management System,HRMS,abbrev,0.634,ba
+903,514,Stakeholder Coordination,Stakeholder Collaboration,close,0.904,ba
+904,199,Team Collaboration,Team Mentoring,close,0.58,ab
+905,656,Change Impact Evaluation,Impact Analysis,overlap,0.732,ab
+906,372,Agile Collaboration,Agile Coaching,close,0.593,ba
+907,276,Spring Java,Spring Cloud,close,0.642,ba
+908,1149,Azure Resource Manager,ARM,abbrev,0.167,ba
+909,716,Google Cloud Platform,Huawei Cloud,overlap,0.421,ab
+910,807,Power Query,Power Automate,overlap,0.46,ba
+911,290,SOAP,SoapUI,close,0.782,ab
+912,22,E-commerce Platforms,E-commerce Analytics,close,0.595,ba
+913,424,Scripting,SQL Scripting,close,0.668,ab
+914,680,Prometheus Monitoring,Proactive Monitoring,overlap,0.454,ba
+915,691,Data Storage,Dell EMC Storage,overlap,0.529,ab
+916,249,Supply Chain Management,Supply Chain IT,close,0.778,ba
+917,153,Network Management,Network performance optimization,close,0.63,ab
+918,694,AWS VPC,AWS RDS,overlap,0.55,ba
+919,109,Backup Solutions,Backup Management,close,0.802,ba
+920,480,Testing & Validation,Test Scenario Design,close,0.581,ab
+921,581,IT Security Solutions,IT Risk Assessment,close,0.573,ba
+922,926,Bilingual English Chinese,Bilingual English Mandarin,overlap,0.869,ab
+923,3,CSS,CSS3,close,0.798,ab
+924,262,UI Layout,UI/UX Design,close,0.687,ab
+925,413,Cisco networking,Cisco ACI,close,0.632,ba
+926,308,Testing and Deployment,Test Framework Development,close,0.581,ba
+927,230,Report Generation,Security Reporting,close,0.554,ab
+928,311,Public Cloud,Cloud Development,close,0.672,ba
+929,86,Website Maintenance,Code maintenance,close,0.64,ba
+930,1096,Test Plan Development,vSphere Administration,far,0.116,ab
+931,378,Application Troubleshooting,Server Troubleshooting,close,0.618,ab
+932,1112,Customer Relationship Management,CRM,abbrev,0.503,ba
+933,1172,straight-through processing,STP,abbrev,0.251,ba
+934,479,Technical Support,Application Support,close,0.564,ba
+935,708,Control-M Scheduling,GitHub Version Control,overlap,0.09,ab
+936,1016,On-page SEO,Non-functional Testing,far,0.056,ba
+937,395,Access Control Systems,Privileged Access Management,close,0.646,ab
+938,738,PC Troubleshooting,PC installation,overlap,0.558,ba
+939,459,IT Consulting,IT Service Desk,close,0.567,ab
+940,659,IT Troubleshooting,IT Support,overlap,0.379,ba
+941,114,SAP ERP 6.0,SAP BW,close,0.629,ba
+942,824,SQL Optimization,PL/SQL,overlap,0.54,ba
+943,339,Security Audits,Security policy enforcement,close,0.561,ab
+944,301,First-Level Troubleshooting,Troubleshooting,close,0.766,ab
+945,776,Testing and Deployment,Project Deployment,overlap,0.656,ba
+946,483,Wholesale Payments,Payment Integration,close,0.559,ba
+947,1065,Journey Mapping,Korean language,far,0.103,ab
+948,1116,BPM,Business Process Management,abbrev,0.561,ab
+949,870,Dynamics 365 Finance,Microsoft 365 Exchange,overlap,0.477,ab
+950,339,Security policy enforcement,Security Audits,close,0.561,ba
+951,453,Microsoft SQL,Azure SQL,close,0.673,ba
+952,499,Performance troubleshooting,Performance Management,close,0.554,ba
+953,529,Process Design,Business Process Design,close,0.853,ba
+954,216,CodeIgniter,PHP,close,0.624,ab
+955,527,ETL Processes,ETL pipelines,close,0.735,ba
+956,135,System Configuration,OS configuration,close,0.787,ba
+957,1132,Web Application Firewalls,WAF,abbrev,0.164,ba
+958,266,Network Operations,Networking,close,0.74,ba
+959,38,SIEM implementation,SIEM Monitoring,close,0.789,ab
+960,1139,SDN,Software Defined Networking,abbrev,0.658,ab
+961,1063,PMO Reporting,VMware Administration,far,0.104,ab
+962,452,Documentation Preparation,Technical Documentation,close,0.716,ab
+963,956,Pre-sales support,POS System Support,overlap,0.348,ba
+964,381,Sales negotiation,Technical Pre-sales,close,0.588,ab
+965,829,Web Services Integration,SIEM Integration,overlap,0.336,ba
+966,45,ERP Administration,Email Administration,close,0.591,ba
+967,248,Hybrid Cloud,Cloud Computing,close,0.617,ba
+968,1026,JavaScript Scripting,Remote Desktop Support,far,0.109,ab
+969,957,Dynamics 365 Business Central,Microsoft 365 Exchange,overlap,0.534,ba
+970,219,SAP BTP,SAP Reporting,close,0.592,ab
+971,1039,Uniapp,Data Analytics,far,0.109,ba
+972,36,AWS RDS,AWS Athena,close,0.557,ba
+973,209,System Migration,Virtual machine migration,close,0.693,ab
+974,526,ERP Integration,Integration Architecture,close,0.551,ab
+975,305,Business Process Mapping,Process Modeling,close,0.602,ab
+976,872,IT Security Compliance,Mobile Security,overlap,0.484,ab
+977,402,MySQL Administration,MySQL Database,close,0.71,ab
+978,541,SAP Configuration,SAP ABAP,close,0.664,ba
+979,617,Software Troubleshooting,System Troubleshooting,close,0.832,ab
+980,391,Physics Simulation,Simulation software,close,0.592,ab
+981,417,Software Maintenance,Preventive Maintenance,close,0.593,ba
+982,202,Financial Domain Knowledge,Financial Systems,close,0.624,ab
+983,1176,SIT,System Integration Testing,abbrev,0.072,ab
+984,19,Azure Cloud Services,AWS Cloud Architecture,close,0.558,ba
+985,261,Vendor Management,Supplier negotiation,close,0.553,ba
+986,122,Manufacturing processes,Production Planning,close,0.643,ab
+987,797,VMware Administration,VMware vSAN,overlap,0.671,ab
+988,882,Windows Imaging,Windows 10/11,overlap,0.372,ba
+989,1102,REST,Representational State Transfer,abbrev,0.097,ab
+990,95,Data Management,Account Management,close,0.552,ba
+991,195,Mentoring,Coaching and Mentoring,close,0.868,ba
+992,862,User Account Management,End-User Training,overlap,0.384,ba
+993,682,Risk Mitigation,Risk-Based Testing,overlap,0.59,ba
+994,961,Vulnerability Assessment,Cybersecurity Risk Assessment,overlap,0.616,ba
+995,1080,Bug Tracking,OAuth,far,0.084,ab
+996,953,Wireless Access Point Setup,Wireless Technologies,overlap,0.47,ab
+997,751,CRM Integration,CCTV System Integration,overlap,0.331,ba
+998,879,DevOps CI/CD,Azure DevOps,overlap,0.618,ba
+999,463,Contract Management,CRM Management,close,0.557,ab
+1000,405,Test Framework Development,Test data management,close,0.6,ab
+1001,553,Testing and debugging,Network Testing,close,0.561,ba
+1002,372,Agile Coaching,Agile Collaboration,close,0.593,ab
+1003,774,Budget tracking,Issue Tracking,overlap,0.435,ab
+1004,58,Network Administration,Infrastructure Management,close,0.565,ba
+1005,283,Test Case Development,Risk-Based Testing,close,0.572,ba
+1006,952,LSMW Data Migration,Data Visualization,overlap,0.176,ba
+1007,635,IT Project Coordination,IT Operations,close,0.572,ba
+1008,282,Network Programming,Networking Technologies,close,0.661,ba
+1009,854,Email Administration,Email Communication,overlap,0.653,ab
+1010,803,Multilingual Communication,Effective Communication,overlap,0.544,ba
+1011,84,Mobile UI Design,UI/UX Design,close,0.682,ab
+1012,235,Networking,Network Support,close,0.692,ab
+1013,829,SIEM Integration,Web Services Integration,overlap,0.336,ab
+1014,1049,Testing & Validation,PC hardware troubleshooting,far,0.18,ba
+1015,1018,Retail Domain Knowledge,Nuxt.js,far,0.131,ba
+1016,887,Remote Diagnosis,Remote Assistance,overlap,0.614,ba
+1017,740,Marketing Analytics,Predictive Analytics,overlap,0.612,ab
+1018,1057,Wi-Fi Administration,Oscilloscope operation,far,0.243,ba
+1019,1041,Build automation,Service Improvement,far,0.116,ab
+1020,175,Automation Framework Design,Marketing Automation,close,0.553,ab
+1021,163,Coaching and Mentoring,Team Mentoring,close,0.848,ab
+1022,122,Production Planning,Manufacturing processes,close,0.643,ba
+1023,500,IT Asset Management,IT Infrastructure Design,close,0.563,ab
+1024,645,IT Security Compliance,Compliance Management,close,0.631,ba
+1025,84,UI/UX Design,Mobile UI Design,close,0.682,ba
+1026,448,Server Maintenance,Database maintenance,close,0.708,ba
+1027,217,Web Security,Security Monitoring,close,0.606,ba
+1028,248,Cloud Computing,Hybrid Cloud,close,0.617,ab
+1029,435,SAP Training,SAP Reporting,close,0.683,ba
+1030,129,LAN/WAN,Wireless LAN,close,0.645,ab
+1031,1068,2nd Level Support,Pentaho ETL,far,0.094,ab
+1032,833,Index Optimization,Database Optimization,overlap,0.604,ba
+1033,752,Model Deployment,Deployment Orchestration,overlap,0.578,ba
+1034,865,Prometheus Monitoring,Performance Monitoring,overlap,0.408,ba
+1035,1047,Firebase,Knowledge Base Documentation,far,0.244,ba
+1036,956,POS System Support,Pre-sales support,overlap,0.348,ab
+1037,959,LAN/WAN Management,LAN design,overlap,0.711,ba
+1038,205,PRTG monitoring,Proactive Monitoring,close,0.579,ba
+1039,1186,MES,Manufacturing Execution System,abbrev,0.15,ab
+1040,513,Technical Documentation,IT Documentation,close,0.72,ba
+1041,916,Exchange Server,Apache Web Server,overlap,0.294,ba
+1042,963,UX Design,Mobile UI/UX,overlap,0.482,ba
+1043,1165,SIEM,Security Information and Event Management,abbrev,0.171,ab
+1044,420,Enterprise Systems,Manufacturing ERP,close,0.556,ab
+1045,423,Cloud Development,Adobe Creative Cloud,close,0.6,ba
+1046,655,Network Fundamentals,Network Integration,overlap,0.64,ab
+1047,718,Access Control Management,Advanced Process Control,overlap,0.465,ab
+1048,769,Postman API Testing,gRPC API,overlap,0.2,ba
+1049,892,Rust programming,Low-latency programming,overlap,0.377,ba
+1050,720,AWS IAM,AWS Glue,overlap,0.455,ba
+1051,149,Cloudera Hadoop,Hadoop ecosystem,close,0.739,ab
+1052,345,ServiceNow Incident Management,ServiceNow ITOM,close,0.588,ab
+1053,646,Oracle SQL,PL/SQL,close,0.685,ab
+1054,471,System Design,Network Design,close,0.616,ba
+1055,1067,Webpack Bundler,RPG,far,0.046,ba
+1056,639,SAP Configuration,SAP Workflow,close,0.768,ab
+1057,754,Windows OS Support,Tier 2 Support,overlap,0.378,ba
+1058,1078,Snowflake,Mac OS,far,0.146,ba
+1059,1044,Prompt Engineering,Windows Clustering,far,0.057,ab
+1060,913,Mobile UI/UX Design,UX Design,overlap,0.606,ab
+1061,62,IAM security,Security Incident Management,close,0.58,ab
+1062,389,Query Optimization,Database Tuning,close,0.603,ba
+1063,1182,Warehouse Management Systems,WMS,abbrev,0.304,ba
+1064,912,Network Testing,Non-functional Testing,overlap,0.414,ab
+1065,294,SAP Administration,SAP QM,close,0.7,ab
+1066,1170,Google Cloud Platform,GCP,abbrev,0.603,ba
+1067,582,STL,STLC Knowledge,close,0.629,ab
+1068,821,Production Support,Remote Support,overlap,0.547,ab
+1069,246,Operating Systems,OS configuration,close,0.665,ab
+1070,298,IT Technical Support,IT Security Compliance,close,0.566,ba
+1071,875,L3 Support,L2 Support,overlap,0.793,ba
+1072,634,SAP Cloud,Cloud Solutions,close,0.593,ba
+1073,1066,Audio Post-Production,SIEM Monitoring,far,0.131,ab
+1074,61,Business Process Automation,Automation Scripting,close,0.615,ba
+1075,1073,Information Security Management,Go-to-Market Strategy,far,0.141,ba
+1076,768,Windows OS Support,Windows OS,overlap,0.839,ba
+1077,728,Data Cleansing,Data Center Design,overlap,0.22,ba
+1078,189,IT Budget Management,Budget Control,close,0.69,ba
+1079,760,Security Architecture,OWASP Security,overlap,0.481,ba
+1080,391,Simulation software,Physics Simulation,close,0.592,ba
+1081,866,Mobile Security,Mobile Performance Optimization,overlap,0.476,ba
+1082,1160,ETL,extract transformation and load,abbrev,0.165,ab
+1083,592,Information Security Compliance,Security Compliance,close,0.882,ab
+1084,1125,Business Continuity Planning,BCP,abbrev,0.305,ba
+1085,392,Issue Tracking,Application Troubleshooting,close,0.605,ba
+1086,1147,AWS,Amazon Web Services,abbrev,0.661,ab
+1087,258,SAP ByDesign,SAP CO,close,0.756,ab
+1088,696,Google Cloud Platform,Cloud Technologies,overlap,0.551,ba
+1089,1026,Remote Desktop Support,JavaScript Scripting,far,0.109,ba
+1090,584,E‑commerce management,E-commerce Analytics,close,0.694,ba
+1091,615,Software Engineering,Requirements Engineering,close,0.593,ba
+1092,943,BPMN Modeling,Data Modeling,overlap,0.412,ab
+1093,25,SAP ECC,SAP ERP,close,0.718,ab
+1094,1052,Stakeholder Presentation,Defect Management,far,0.193,ba
+1095,615,Requirements Engineering,Software Engineering,close,0.593,ab
+1096,676,SAP Support,Remote Desktop Support,overlap,0.356,ba
+1097,375,AWS IAM,AWS Solutions Architect,close,0.586,ab
+1098,395,Privileged Access Management,Access Control Systems,close,0.646,ba
+1099,437,SAP Business One,SAP ABAP,close,0.7,ba
+1100,476,Application Security,Application Support,close,0.604,ab
+1101,884,Performance Tuning,Performance Optimization,overlap,0.744,ba
+1102,820,Monitoring & Alerting,Monitoring Automation,overlap,0.664,ab
+1103,102,Market data integration,Data Integration,close,0.742,ba
+1104,630,Server Troubleshooting,Electronics troubleshooting,close,0.6,ba
+1105,6,SAP,SAP Administration,close,0.899,ab
+1106,709,Service Delivery Management,Power BI Service,overlap,0.355,ba
+1107,1119,DNS,Domain Name System,abbrev,0.615,ab
+1108,665,REST API,gRPC API,overlap,0.417,ba
+1109,404,Telecom Engineering,Technical Communication,close,0.598,ba
+1110,1075,Retail Payments,Adobe Illustrator,far,0.095,ba
+1111,688,Business Continuity,Business Architecture,overlap,0.456,ba
+1112,993,POS System Support,Remote Access Support,overlap,0.367,ab
+1113,1177,RCA,root cause analysis,abbrev,0.107,ab
+1114,722,OData Services,Excel Services,overlap,0.476,ba
+1115,730,CommVault Backup,Database Backup,overlap,0.505,ab
+1116,814,Incident Investigation,Incident Response Planning,overlap,0.652,ab
+1117,710,SAP Analytics Cloud,Google Cloud SQL,overlap,0.459,ba
+1118,77,Database Migration,Migration Planning,close,0.669,ab
+1119,427,Software Installation,Desktop Installation,close,0.554,ba
+1120,279,Jira Ticketing,Jira Software,close,0.629,ba
+1121,309,System Deployment,Testing and Deployment,close,0.686,ab
+1122,620,Technical Documentation,Documentation creation,close,0.678,ba
+1123,110,Research skills,Organizational Skills,close,0.576,ba
+1124,493,Red Hat OpenShift,Redshift,close,0.663,ab
+1125,423,Adobe Creative Cloud,Cloud Development,close,0.6,ab
+1126,1006,macOS Support,Printer Maintenance,far,0.155,ab
+1127,233,LAN/WAN,LAN/WAN design,close,0.836,ab
+1128,1173,RDBMS,Relational Database Management Systems,abbrev,0.578,ab
+1129,984,Test Documentation,Test Execution,overlap,0.585,ab
+1130,1020,Commissioning,Linux,far,0.093,ab
+1131,1179,Marketing Tech,MarTech,abbrev,0.205,ba
+1132,610,Problem Diagnosis,Troubleshooting,close,0.607,ab
+1133,819,User Access Control,Wireless Access Points,overlap,0.253,ab
+1134,1179,MarTech,Marketing Tech,abbrev,0.205,ab
+1135,99,Product Testing,Android testing,close,0.557,ba
+1136,1064,Server Administration,Windows Troubleshooting,far,0.225,ab
+1137,1180,DevEx,developer experience,abbrev,0.512,ab
+1138,745,Functional Specification,Cross-functional Leadership,overlap,0.316,ba
+1139,9,Windows Server,Windows OS,close,0.59,ba
+1140,268,Database Programming,Database Security,close,0.57,ab
+1141,329,End User Computing,End-User Support,close,0.748,ba
+1142,103,Performance Tuning,Performance troubleshooting,close,0.648,ba
+1143,519,Service Transition,Service Request Fulfillment,close,0.558,ba
+1144,809,Level 3 support,Service Level Management,overlap,0.395,ab
+1145,336,Test Case Management,Testing,close,0.599,ab
+1146,915,IT Administration,Backup Administration,overlap,0.447,ba
+1147,1,User Access Control,Access Management,close,0.761,ba
+1148,1002,gRPC API,Maven,far,-0.001,ab
+1149,974,Third-Party Risk Assessment,Risk-Based Testing,overlap,0.476,ba
+1150,883,ITIL Change Management,ITIL problem management,overlap,0.764,ab
+1151,8,Business Intelligence,Google Analytics,close,0.59,ab
+1152,296,Compliance Reporting,Security Compliance,close,0.717,ab
+1153,1160,extract transformation and load,ETL,abbrev,0.165,ba
+1154,257,Wireless Networking,Network Support,close,0.577,ba
+1155,187,SAP HANA,SAP FICO,close,0.563,ba
+1156,199,Team Mentoring,Team Collaboration,close,0.58,ba
+1157,429,Project Reporting,Project Delivery,close,0.628,ba
+1158,1146,Management Information System,MIS,abbrev,0.383,ba
+1159,315,Business Intelligence,Business Analysis,close,0.583,ab
+1160,566,Security Management,Security tool evaluation,close,0.618,ba
+1161,719,Project Management Software,Software Architecture,overlap,0.453,ab
+1162,1053,Microsoft Fabric,Server-side development,far,0.16,ab
+1163,766,Log Analysis,Market trend analysis,overlap,0.343,ab
+1164,681,Hardware Deployment,Model Deployment,overlap,0.523,ab
+1165,533,ServiceNow Administration,Web Services,close,0.58,ab
+1166,194,Governance Framework,IT Governance,close,0.637,ab
+1167,495,API Management,API Versioning,close,0.622,ab
+1168,150,Diagnostic Testing,Test Case Development,close,0.585,ab
+1169,483,Payment Integration,Wholesale Payments,close,0.559,ab
+1170,328,Contract Management,Contract Negotiation,close,0.668,ab
+1171,647,Test Framework Development,Web Application Testing,close,0.626,ab
+1172,1112,CRM,Customer Relationship Management,abbrev,0.503,ab
+1173,534,Process Standardization,Statistical Process Control,close,0.556,ab
+1174,13,Firebase,Firebase integration,close,0.789,ab
+1175,1064,Windows Troubleshooting,Server Administration,far,0.225,ba
+1176,486,Manual Testing,Application Testing,close,0.615,ba
+1177,333,iOS Deployment,iOS Testing,close,0.576,ab
+1178,1045,Network Automation,Agile Scrum,far,0.15,ba
+1179,682,Risk-Based Testing,Risk Mitigation,overlap,0.59,ab
+1180,758,Learning Agility,Self-Learning,overlap,0.442,ab
+1181,115,Issue Investigation,Incident Resolution,close,0.564,ba
+1182,878,CRISC Certification,CISM Certification,overlap,0.567,ba
+1183,159,Information Security Compliance,Security Incident Response,close,0.562,ab
+1184,318,Unix scripting,Linux/Unix scripting,close,0.939,ba
+1185,160,Automation Framework Design,Automation Anywhere,close,0.589,ba
+1186,72,Software Documentation,Knowledge Base Documentation,close,0.72,ba
+1187,421,System Administration,Operating Systems,close,0.635,ba
+1188,584,E-commerce Analytics,E‑commerce management,close,0.694,ab
+1189,14,AWS Redshift,Redshift,close,0.793,ab
+1190,686,Remote Desktop Troubleshooting,Remote Diagnosis,overlap,0.563,ab
+1191,104,WiFi Deployment,iOS Deployment,close,0.638,ba
+1192,634,Cloud Solutions,SAP Cloud,close,0.593,ab
+1193,860,OS Troubleshooting,macOS troubleshooting,overlap,0.727,ba
+1194,748,UAT Planning,Strategic Planning,overlap,0.476,ba
+1195,218,Risk Reporting,Compliance Reporting,close,0.596,ba
+1196,843,User Access Management,End User Computing,overlap,0.477,ba
+1197,7,Network Security,OT Security,close,0.569,ab
+1198,182,Data Structures,Vector databases,close,0.56,ab
+1199,734,Process transfer,Process Improvement,overlap,0.577,ba
+1200,941,SQL Optimization,SQL Database,overlap,0.575,ba
+1201,686,Remote Diagnosis,Remote Desktop Troubleshooting,overlap,0.563,ba
+1202,545,ServiceNow Administration,Service Reporting,close,0.583,ab
+1203,1140,Common Service Data Model,CSDM,abbrev,0.214,ba
+1204,607,Cisco Unified Communications,Cisco ACI,close,0.596,ba
+1205,327,WAN Design,LAN/WAN support,close,0.704,ba
+1206,707,Governance Framework,Data Governance,overlap,0.568,ba
+1207,960,Business Reporting,ALV Reporting,overlap,0.481,ba
+1208,668,Workflow Automation,GitOps Workflow,overlap,0.459,ba
+1209,612,Business Analysis,Market Analysis,close,0.73,ab
+1210,591,Strategic Consulting,Financial Consulting,close,0.705,ba
+1211,124,Functional Testing,Functional analysis,close,0.572,ba
+1212,1008,Technical Training,SOP Development,far,0.204,ba
+1213,803,Effective Communication,Multilingual Communication,overlap,0.544,ab
+1214,808,English Proficiency,Urdu Language Proficiency,overlap,0.593,ab
+1215,698,Fiber Optic Installation,Network installation,overlap,0.442,ab
+1216,1076,Backend Integration,Relational Modeling,far,0.129,ab
+1217,425,OpenAPI,Azure OpenAI,close,0.581,ba
+1218,550,Mobile Performance Optimization,Network performance optimization,close,0.605,ab
+1219,887,Remote Assistance,Remote Diagnosis,overlap,0.614,ab
+1220,180,SAP PI/PO,SAP Administration,close,0.665,ba
+1221,914,Linux/Unix scripting,JavaScript Scripting,overlap,0.507,ba
+1222,601,CISA,CIS Controls,close,0.645,ab
+1223,903,Unix scripting,Unix Administration,overlap,0.609,ba
+1224,75,Security Tool Configuration,Software security,close,0.555,ab
+1225,134,Marketing Analytics,Content Marketing,close,0.551,ba
+1226,1167,FinTech,financial technology,abbrev,0.666,ab
+1227,385,Workflow Configuration,SAP Workflow,close,0.576,ba
+1228,307,Process Documentation,Process Governance,close,0.552,ab
+1229,828,Technical Leadership,IT Technical Support,overlap,0.479,ba
+1230,90,Oracle Finance,Oracle E-Business Suite,close,0.587,ba
+1231,20,Robotics Engineering,Robotics Development,close,0.827,ba
+1232,1077,JBoss EAP,macOS Support,far,0.151,ab
+1233,251,SAP,SAP FICO,close,0.754,ab
+1234,397,AWS Cloud Services,AWS data services,close,0.855,ab
+1235,237,System Performance Optimization,Database Optimization,close,0.59,ba
+1236,1014,Cisco CUBE,Travel Coordination,far,0.16,ab
+1237,724,Email Communication,Interpersonal Communication,overlap,0.569,ab
+1238,55,Data Strategy,Data Architecture,close,0.639,ba
+1239,92,Cloud Infrastructure,Cloud Technologies,close,0.818,ab
+1240,553,Network Testing,Testing and debugging,close,0.561,ab
+1241,886,User Administration,User Experience Design,overlap,0.398,ab
+1242,218,Compliance Reporting,Risk Reporting,close,0.596,ab
+1243,862,End-User Training,User Account Management,overlap,0.384,ab
+1244,770,Cybersecurity Risk Assessment,NIST Cybersecurity Framework,overlap,0.529,ab
+1245,449,Test Execution,Test Management,close,0.68,ab
+1246,462,Cybersecurity Practices,Cybersecurity Risk Assessment,close,0.727,ab
+1247,62,Security Incident Management,IAM security,close,0.58,ba
+1248,321,Visual Studio,Developer Tools,close,0.569,ba
+1249,518,Cloud Networking,Cloud Architecture,close,0.721,ba
+1250,973,Node.js Backend,D3.js,overlap,0.388,ba
+1251,754,Tier 2 Support,Windows OS Support,overlap,0.378,ab
+1252,965,Security Tool Configuration,Security Consulting,overlap,0.533,ab
+1253,995,Black box testing,White Box Testing,overlap,0.775,ab
+1254,1032,LAN/WAN networking,Hypothesis Testing,far,0.007,ba
+1255,1078,Mac OS,Snowflake,far,0.146,ab
+1256,757,Server Backup,Database Backup,overlap,0.719,ba
+1257,756,IT Operations Support,Helpdesk Operations,overlap,0.346,ba
+1258,793,EDKII framework,Automation Framework Design,overlap,0.309,ba
+1259,484,Enterprise Systems,ERP Integration,close,0.626,ab
+1260,595,Containerization,Docker,close,0.577,ab
+1261,409,Unix Shell Scripting,Linux Shell Scripting,close,0.941,ba
+1262,1153,Active Directory,AD,abbrev,0.463,ba
+1263,1162,Team Foundation server,TFS,abbrev,0.453,ba
+1264,186,IPsec VPN,VPC networking,close,0.663,ab
+1265,1197,ML,machine learning,abbrev,0.373,ab
+1266,753,IT Operations Support,L1 Helpdesk Support,overlap,0.224,ab
+1267,970,Apache Web Server,SOAP Web Services,overlap,0.455,ab
+1268,529,Business Process Design,Process Design,close,0.853,ab
+1269,531,Data Modeling,Database Design,close,0.568,ba
+1270,734,Process Improvement,Process transfer,overlap,0.577,ab
+1271,1200,Human-Computer Interaction,HCI,abbrev,0.442,ba
+1272,387,Office 365 administration,Microsoft 365 Exchange,close,0.678,ba
+1273,973,D3.js,Node.js Backend,overlap,0.388,ab
+1274,250,Knowledge Base,Knowledge Base Documentation,close,0.772,ab
+1275,1093,Bloc,IAM security,far,0.23,ab
+1276,534,Statistical Process Control,Process Standardization,close,0.556,ba
+1277,323,Change Request Management,Change Management,close,0.605,ba
+1278,463,CRM Management,Contract Management,close,0.557,ba
+1279,288,ServiceNow Incident Management,Incident Response,close,0.586,ba
+1280,832,Server Maintenance,Server-side development,overlap,0.513,ab
+1281,512,Network Operations,Network Fundamentals,close,0.674,ba
+1282,1115,Project Management Body of Knowledge,PMBOK,abbrev,0.163,ba
+1283,627,Network Operations,LAN/WAN Management,close,0.576,ba
+1284,102,Data Integration,Market data integration,close,0.742,ab
+1285,792,Business Requirements Analysis,Failure Analysis,overlap,0.468,ab
+1286,238,Database Optimization,Database Administration,close,0.559,ba
+1287,145,Client Relationship,Client Training,close,0.631,ab
+1288,516,Business Documentation,Knowledge Base Documentation,close,0.656,ba
+1289,1131,IIS,Internet Information Services,abbrev,0.429,ab
+1290,890,Apache Flink,Apache,overlap,0.581,ba
+1291,538,SAP SD,SAP Integration,close,0.757,ba
+1292,500,IT Infrastructure Design,IT Asset Management,close,0.563,ba
+1293,420,Manufacturing ERP,Enterprise Systems,close,0.556,ba
+1294,858,Business Acumen,Business Requirements Documentation,overlap,0.359,ba
+1295,1051,Axure,Security tool evaluation,far,0.132,ab
+1296,1001,Travel Coordination,Looker,far,0.084,ba
+1297,281,Microsoft Word,WordPress,close,0.583,ab
+1298,350,Linux/Unix scripting,Python Scripting,close,0.612,ab
+1299,289,Cloud services,Cloud Architecture,close,0.761,ba
+1300,869,Client Presentation Skills,Client Consulting,overlap,0.552,ba
+1301,1101,BI,Business Intelligence,abbrev,0.254,ab
+1302,366,System Configuration,Functional Configuration,close,0.566,ba
+1303,238,Database Administration,Database Optimization,close,0.559,ab
+1304,1025,Customer Support,Huawei Networking,far,0.095,ab
+1305,848,Business Process Mapping,Business Process Automation,overlap,0.681,ba
+1306,394,Workflow Configuration,Workflow Customization,close,0.709,ab
+1307,991,Business Automation,Business Architecture,overlap,0.493,ba
+1308,254,Backend Development,Application Development,close,0.661,ba
+1309,804,PC installation,Installation Configuration,overlap,0.671,ba
+1310,648,Service Desk Operations,Service Transition,close,0.557,ab
+1311,654,App Store Deployment,App Store Publishing,overlap,0.738,ab
+1312,368,Security Patching,Software security,close,0.593,ab
+1313,469,ServiceNow ITOM,ServiceNow Ticketing,close,0.577,ab
+1314,1143,Governance Risk and Compliance Management,GRC,abbrev,0.052,ba
+1315,583,Security Audits,Security Consulting,close,0.559,ab
+1316,264,SAP Business One,SAP Cloud,close,0.765,ab
+1317,208,Security Risk Assessment,Security policy enforcement,close,0.611,ba
+1318,797,VMware vSAN,VMware Administration,overlap,0.671,ba
+1319,58,Infrastructure Management,Network Administration,close,0.565,ab
+1320,275,Business Process Documentation,Business Process Optimization,close,0.556,ab
+1321,580,Shift Scheduling,Shift Work,close,0.776,ab
+1322,123,Cloud Development,Azure Cloud,close,0.693,ba
+1323,559,System Documentation,Project Documentation,close,0.684,ba
+1324,1107,Project Management Institute,PMI,abbrev,0.391,ba
+1325,192,SAP Analytics Cloud,SAP Reporting,close,0.657,ab
+1326,562,Financial Systems,Financial Reconciliation,close,0.62,ba
+1327,37,Agile Collaboration,Agile Leadership,close,0.677,ab
+1328,90,Oracle E-Business Suite,Oracle Finance,close,0.587,ab
+1329,1087,Microsoft Certified Systems Engineer,IT Strategy,far,0.166,ba
+1330,653,Cross-Platform Development,Cross-functional Communication,overlap,0.289,ba
+1331,1184,ITAM,IT Asset Management,abbrev,0.397,ab
+1332,851,Cross-Browser Compatibility,Compatibility Testing,overlap,0.475,ba
+1333,789,JMeter Performance Testing,Mobile Testing,overlap,0.37,ab
+1334,148,OSPF routing,Routing,close,0.659,ab
+1335,1010,Level 3 support,Sales Strategy,far,0.111,ab
+1336,952,Data Visualization,LSMW Data Migration,overlap,0.176,ab
+1337,984,Test Execution,Test Documentation,overlap,0.585,ba
+1338,1192,Data Loss Prevention,DLP,abbrev,0.161,ba
+1339,386,Application Integration,ERP Integration,close,0.58,ab
+1340,742,User Experience Design,User Story Writing,overlap,0.393,ab
+1341,876,Proposal Writing,Proposal Development,overlap,0.79,ba
+1342,651,Network Switches,Network Segmentation,overlap,0.373,ba
+1343,1032,Hypothesis Testing,LAN/WAN networking,far,0.007,ab
+1344,185,Data Reporting,Risk Reporting,close,0.568,ab
+1345,705,C#,C# .NET,overlap,0.935,ab
+1346,730,Database Backup,CommVault Backup,overlap,0.505,ba
+1347,647,Web Application Testing,Test Framework Development,close,0.626,ba
+1348,661,Mobile Device Support,Device driver development,overlap,0.462,ba
+1349,495,API Versioning,API Management,close,0.622,ba
+1350,37,Agile Leadership,Agile Collaboration,close,0.677,ba
+1351,277,Product Operations,Operations Management,close,0.591,ba
+1352,1177,root cause analysis,RCA,abbrev,0.107,ba
+1353,1136,HRMS,Human Resource Management System,abbrev,0.634,ab
+1354,478,Cloud Migration,Google Cloud,close,0.572,ab
+1355,569,Test Plan Development,Test Documentation,close,0.556,ba
+1356,564,Team Collaboration,Team Coordination,close,0.79,ab
+1357,770,NIST Cybersecurity Framework,Cybersecurity Risk Assessment,overlap,0.529,ba
+1358,649,Microsoft Excel,Microsoft Office,close,0.57,ab
+1359,626,Red Hat Linux,Linux,close,0.732,ba
+1360,712,SQL Query Optimization,Web Performance Optimization,overlap,0.5,ab
+1361,1175,Content Management System,CMS,abbrev,0.526,ba
+1362,906,JMeter Performance Testing,Mobile Performance Optimization,overlap,0.357,ab
+1363,305,Process Modeling,Business Process Mapping,close,0.602,ba
+1364,438,Security Testing,iOS Testing,close,0.577,ba
+1365,111,Logistics management,Warehouse Management Systems,close,0.68,ab
+1366,1152,Search engine optimization,SEO,abbrev,0.603,ba
+1367,379,OS Installation,Installation Configuration,close,0.614,ba
+1368,654,App Store Publishing,App Store Deployment,overlap,0.738,ba
+1369,1107,PMI,Project Management Institute,abbrev,0.391,ab
+1370,9,Windows OS,Windows Server,close,0.59,ab
+1371,1094,SOC Operations,ELV Systems,far,0.334,ba
+1372,340,Cloud Networking,Network Fundamentals,close,0.552,ab
+1373,59,Azure Monitor,Azure Administration,close,0.607,ba
+1374,336,Testing,Test Case Management,close,0.599,ba
+1375,392,Application Troubleshooting,Issue Tracking,close,0.605,ab
+1376,26,Project Deployment,Android Deployment,close,0.598,ba
+1377,280,Identity Access Management,User Access Control,close,0.614,ab
+1378,83,Plant Maintenance,Electrical Maintenance,close,0.59,ba
+1379,514,Stakeholder Collaboration,Stakeholder Coordination,close,0.904,ab
+1380,1189,HA,high availability,abbrev,0.139,ab
+1381,473,Supply Chain Coordination,Vendor Coordination,close,0.727,ab
+1382,142,Security policy enforcement,IT Security Management,close,0.601,ba
+1383,852,End User Computing,Front-end debugging,overlap,0.336,ab
+1384,872,Mobile Security,IT Security Compliance,overlap,0.484,ba
+1385,482,Salesforce Integration,MES Integration,close,0.553,ba
+1386,1128,Automatic Storage Management,ASM,abbrev,0.112,ba
+1387,558,Manufacturing processes,Business Process Management,close,0.571,ba
+1388,949,Security Patch Management,Patch Management,overlap,0.886,ba
+1389,194,IT Governance,Governance Framework,close,0.637,ba
+1390,272,SAP Business One,SAP Support,close,0.762,ab
+1391,657,CRM systems,CRM Integration,overlap,0.732,ba
+1392,619,System Documentation,Documentation creation,close,0.605,ba
+1393,549,ITIL Foundation,ITIL certification,close,0.734,ba
+1394,493,Redshift,Red Hat OpenShift,close,0.663,ba
+1395,695,Data Warehouse Design,Warehouse Management,overlap,0.614,ab
+1396,1114,CD,continuous delivery,abbrev,0.24,ab
+1397,751,CCTV System Integration,CRM Integration,overlap,0.331,ab
+1398,1113,BCM,Business Continuity Management,abbrev,0.292,ab
+1399,475,Software Implementation,Object-Oriented Design,close,0.58,ba
+1400,467,Mobile-First Development,Mobile-First Design,close,0.844,ab
+1401,116,System Security,Security Frameworks,close,0.657,ba
+1402,1042,Mandarin Fluency,Control-M Scheduling,far,-0.009,ba
+1403,1129,Information Architecture,IA,abbrev,0.212,ba
+1404,473,Vendor Coordination,Supply Chain Coordination,close,0.727,ba
+1405,760,OWASP Security,Security Architecture,overlap,0.481,ab
+1406,94,Web Analytics,Big Data Analytics,close,0.616,ba
+1407,532,Oracle Database Administration,SQL Database Management,close,0.655,ab
+1408,168,Security Administration,Security Governance,close,0.684,ab
+1409,222,Hardware Configuration,Network Device Configuration,close,0.601,ab
+1410,752,Deployment Orchestration,Model Deployment,overlap,0.578,ab
+1411,905,Production Deployment,System Deployment,overlap,0.783,ab
+1412,1092,Hardware Replacement,Anomaly Detection,far,0.141,ba
+1413,520,Security Monitoring,Intrusion Detection,close,0.627,ba
+1414,426,Advanced Process Control,Business Process Management,close,0.59,ab
+1415,76,AV troubleshooting,Issue Troubleshooting,close,0.552,ab
+1416,918,AI Integration,Blockchain integration,overlap,0.428,ab
+1417,552,Python,NumPy,close,0.554,ba
+1418,1157,Geographic Information System,GIS,abbrev,0.522,ba
+1419,505,SAP Training,SAP BW,close,0.734,ba
+1420,1090,Travel Coordination,Hybrid Cloud Architecture,far,0.032,ba
+1421,48,IT security controls,Data Security,close,0.58,ba
+1422,307,Process Governance,Process Documentation,close,0.552,ba
+1423,383,SAP MM,SAP ByDesign,close,0.682,ba
+1424,177,Reporting Automation,Oracle Reports Development,close,0.603,ba
+1425,1047,Knowledge Base Documentation,Firebase,far,0.244,ab
+1426,560,Media Delivery,Service Delivery Management,close,0.56,ab
+1427,1070,IDS/IPS Management,ISTQB Certification,far,0.192,ab
+1428,913,UX Design,Mobile UI/UX Design,overlap,0.606,ba
+1429,1084,Process Modeling,Customer Relationship Management,far,0.283,ba
+1430,126,Unified Communications,Technical Communication,close,0.579,ba
+1431,1017,SLA Management,Azure Active Directory,far,0.182,ba
+1432,421,Operating Systems,System Administration,close,0.635,ab
+1433,181,Database Performance Tuning,Database Tuning,close,0.941,ab
+1434,563,Azure SQL,Azure ML,close,0.649,ba
+1435,980,Information Security Governance,Data Governance,overlap,0.603,ba
+1436,164,Information Security,Security Risk Assessment,close,0.61,ab
+1437,677,Server Installation,Server Virtualization,overlap,0.544,ab
+1438,88,Oracle SQL,SQL Database,close,0.683,ab
+1439,1082,IBM AS400,Git Version Control,far,-0.072,ba
+1440,967,Security Testing,SIT Testing,overlap,0.437,ab
+1441,557,Technical Design Documentation,Software Documentation,close,0.737,ba
+1442,151,Cybersecurity Management,Security Management,close,0.776,ab
+1443,418,Performance Profiling,Performance Management,close,0.599,ba
+1444,464,Process Documentation,Process Mapping,close,0.641,ab
+1445,593,PC Setup,OS configuration,close,0.573,ba
+1446,50,Cybersecurity Awareness,Cybersecurity Management,close,0.707,ab
+1447,266,Networking,Network Operations,close,0.74,ab
+1448,1108,ERD,Entity Relationship Diagram,abbrev,0.166,ab
+1449,1173,Relational Database Management Systems,RDBMS,abbrev,0.578,ba
+1450,850,Security Tool Configuration,Mantis Tool,overlap,0.295,ba
+1451,664,Business Intelligence Reporting,Dashboard Reporting,overlap,0.552,ab
+1452,1050,SIEM Integration,Workforce Management,far,0.126,ab
+1453,354,PC Setup,PC Assembly,close,0.63,ba
+1454,26,Android Deployment,Project Deployment,close,0.598,ab
+1455,1065,Korean language,Journey Mapping,far,0.103,ba
+1456,959,LAN design,LAN/WAN Management,overlap,0.711,ab
+1457,428,SOQL,SQL Query Optimization,close,0.564,ab
+1458,577,Software Installation,Software Support,close,0.597,ab
+1459,144,Database Design,Data Architecture,close,0.604,ba
+1460,641,Bilingual English Chinese,English Mandarin,close,0.749,ab
+1461,5,SQL Querying,Database Programming,close,0.578,ba
+1462,920,Microsoft Intune,Microsoft 365 Exchange,overlap,0.351,ab
+1463,497,Backend Security,Security Frameworks,close,0.587,ab
+1464,542,Agile Documentation,Agile Development,close,0.704,ba
+1465,573,Virtual machine migration,VM Virtualization,close,0.696,ab
+1466,426,Business Process Management,Advanced Process Control,close,0.59,ba
+1467,1164,Server-Side Rendering,SSR,abbrev,0.157,ba
+1468,57,Security Monitoring,Network Security,close,0.59,ba
+1469,53,SAP FICO,SAP Fiori,close,0.803,ab
+1470,504,SAP Workflow,Workflow Design,close,0.573,ab
+1471,271,Automation Scripting,GUI Automation,close,0.681,ab
+1472,322,IT Security Solutions,Cybersecurity,close,0.628,ba
+1473,363,Service Desk Support,Service Desk Operations,close,0.812,ba
+1474,881,UML,UML Diagramming,overlap,0.582,ab
+1475,530,ITIL Service Management,ITIL Processes,close,0.704,ba
+1476,103,Performance troubleshooting,Performance Tuning,close,0.648,ab
+1477,608,SIEM Monitoring,SIEM Integration,close,0.707,ba
+1478,727,Linux Shell Scripting,Red Hat Linux,overlap,0.344,ab
+1479,458,SAP Implementation,SAP ByDesign,close,0.726,ba
+1480,171,Cloud Computing,Hybrid Cloud Architecture,close,0.606,ab
+1481,167,Data Structures,Data Modeling,close,0.572,ba
+1482,1057,Oscilloscope operation,Wi-Fi Administration,far,0.243,ab
+1483,354,PC Assembly,PC Setup,close,0.63,ab
+1484,1121,Identity Access Management,IAM,abbrev,0.183,ba
+1485,625,Test Automation,Business Process Automation,close,0.574,ba
+1486,726,Test Planning,Production Planning,overlap,0.413,ba
+1487,655,Network Integration,Network Fundamentals,overlap,0.64,ba
+1488,228,SAP Administration,SAP HCM,close,0.687,ab
+1489,579,Logistics Coordination,Operations Management,close,0.556,ab
+1490,981,User Story Writing,Technical Writing,overlap,0.497,ba
+1491,970,SOAP Web Services,Apache Web Server,overlap,0.455,ba
+1492,1103,RHEL,Red Hat Enterprise Linux,abbrev,0.534,ab
+1493,79,AWS Cloud Architecture,Cloud cost optimization,close,0.57,ab
+1494,1087,IT Strategy,Microsoft Certified Systems Engineer,far,0.166,ab
+1495,412,Test Management,Manual Testing,close,0.571,ba
+1496,95,Account Management,Data Management,close,0.552,ab
+1497,938,ERP Support,Customer Support,overlap,0.511,ba
+1498,756,Helpdesk Operations,IT Operations Support,overlap,0.346,ab
+1499,133,Wireshark analysis,Network Packet Analysis,close,0.678,ba
+1500,227,Software Upgrades,Security Updates,close,0.589,ba
+1501,1110,SCADA,Supervisory Control and Data Acquisition,abbrev,0.39,ab
+1502,346,Incident Management,Incident Investigation,close,0.774,ab
+1503,286,IT Troubleshooting,Debugging,close,0.654,ba
+1504,442,Documentation,Documentation Management,close,0.749,ab
+1505,523,Service Desk Reporting,Service Desk Support,close,0.675,ab
+1506,123,Azure Cloud,Cloud Development,close,0.693,ab
+1507,185,Risk Reporting,Data Reporting,close,0.568,ba
+1508,1085,Business Blueprinting,Data Lakehouse,far,0.214,ab
+1509,922,Database Design,Database development,overlap,0.762,ab
+1510,61,Automation Scripting,Business Process Automation,close,0.615,ab
+1511,674,WiFi Router Configuration,Workflow Configuration,overlap,0.324,ab
+1512,713,BACnet protocol,Modbus protocol,overlap,0.411,ab
+1513,196,CRM implementation,CRM systems,close,0.833,ab
+1514,1076,Relational Modeling,Backend Integration,far,0.129,ba
+1515,717,Computer Vision,Computer System Validation,overlap,0.276,ba
+1516,795,Huawei Networking,AWS networking,overlap,0.36,ba
+1517,416,Engineering fundamentals,Mechanical Engineering,close,0.658,ab
+1518,474,Security Monitoring,Information Security,close,0.568,ba
+1519,1046,SLA Management,SAP ERP 6.0,far,0.203,ba
+1520,179,Backup Restore,Server Backup,close,0.672,ab
+1521,227,Security Updates,Software Upgrades,close,0.589,ab
+1522,613,SaaS Development,SLA Management,close,0.577,ab
+1523,1151,Material UI,MUI,abbrev,0.139,ba
+1524,371,Security Compliance,Information Security,close,0.642,ba
+1525,253,SAP PM,SAP Fiori,close,0.619,ba
+1526,1004,SAP Cloud,License Compliance,far,0.126,ba
+1527,30,SAP Solution Manager,SAP Cloud,close,0.704,ba
+1528,1199,NLP,natural language processing,abbrev,0.602,ab
+1529,877,Software Implementation,Software Documentation,overlap,0.581,ba
+1530,146,AWS EMR,AWS EKS,close,0.666,ba
+1531,866,Mobile Performance Optimization,Mobile Security,overlap,0.476,ab
+1532,289,Cloud Architecture,Cloud services,close,0.761,ab
+1533,924,Arabic language,Cantonese Language,overlap,0.463,ab
+1534,87,IT security controls,Security Operations Center,close,0.55,ab
+1535,317,GitHub,Git workflow,close,0.638,ab
+1536,1083,IDoc Integration,Message Queues,far,0.054,ab
+1537,466,Financial Reporting,Regulatory Reporting,close,0.614,ab
+1538,629,Proposal Management,Technical proposal writing,close,0.669,ab
+1539,40,macOS Administration,Linux Administration,close,0.649,ba
+1540,1117,NAS,Network Attached Storage,abbrev,0.439,ab
+1541,1013,EDKII framework,Workflow optimization,far,0.142,ab
+1542,403,SAP Data Services,SAP QM,close,0.588,ab
+1543,785,Test Case Management,Business Case Development,overlap,0.548,ba
+1544,714,Migration Planning,Roadmap Planning,overlap,0.416,ab
+1545,373,Adobe Creative Suite,Adobe Creative Cloud,close,0.813,ba
+1546,638,Technical Troubleshooting,Laptop troubleshooting,close,0.652,ba
+1547,337,Bash,Bash scripting,close,0.796,ab
+1548,280,User Access Control,Identity Access Management,close,0.614,ba
+1549,645,Compliance Management,IT Security Compliance,close,0.631,ab
+1550,265,Virtual Machines,Microsoft Hyper-V,close,0.589,ba
+1551,590,SAP Finance,SAP MDG,close,0.674,ab
+1552,1024,Karma,Endpoint Protection,far,0.085,ba
+1553,675,Project Delivery,Project Documentation,overlap,0.504,ab
+1554,1009,Logistics management,Routing protocols,far,0.225,ab
+1555,909,SQL Server Administration,PL/SQL,overlap,0.353,ab
+1556,1100,Software Training,ERP Support,far,0.206,ba
+1557,1018,Nuxt.js,Retail Domain Knowledge,far,0.131,ab
+1558,592,Security Compliance,Information Security Compliance,close,0.882,ba
+1559,758,Self-Learning,Learning Agility,overlap,0.442,ba
+1560,968,Payment switching,Routing and Switching,overlap,0.451,ab
+1561,374,Security Operations,Security Risk Assessment,close,0.55,ab
+1562,117,Agile Collaboration,Agile Documentation,close,0.608,ab
+1563,505,SAP BW,SAP Training,close,0.734,ab
+1564,279,Jira Software,Jira Ticketing,close,0.629,ab
+1565,916,Apache Web Server,Exchange Server,overlap,0.294,ab
+1566,792,Failure Analysis,Business Requirements Analysis,overlap,0.468,ba
+1567,31,IT Budget Management,Budget Management,close,0.788,ba
+1568,442,Documentation Management,Documentation,close,0.749,ba
+1569,580,Shift Work,Shift Scheduling,close,0.776,ba
+1570,632,Tableau Reporting,SQL Reporting,close,0.635,ba
+1571,215,Security Best Practices,Cybersecurity Practices,close,0.66,ba
+1572,825,ABAP OO,ABAP Development,overlap,0.664,ba
+1573,408,API Management,API Security,close,0.68,ab
+1574,228,SAP HCM,SAP Administration,close,0.687,ba
+1575,735,Web Testing,Testing and debugging,overlap,0.577,ba
+1576,208,Security policy enforcement,Security Risk Assessment,close,0.611,ab
+1577,691,Dell EMC Storage,Data Storage,overlap,0.529,ba
+1578,1175,CMS,Content Management System,abbrev,0.526,ab
+1579,607,Cisco ACI,Cisco Unified Communications,close,0.596,ab
+1580,542,Agile Development,Agile Documentation,close,0.704,ab
+1581,293,IT Compliance,IT security controls,close,0.58,ab
+1582,1002,Maven,gRPC API,far,-0.001,ba
+1583,108,Control Testing,Test case execution,close,0.56,ab
+1584,908,API Gateway,Payment Gateway Integration,overlap,0.501,ab
+1585,321,Developer Tools,Visual Studio,close,0.569,ab
+1586,1043,AutoCAD design,AML compliance,far,0.021,ba
+1587,840,CISSP Certification,CRISC Certification,overlap,0.615,ab
+1588,548,SAP BTP,SAP ERP,close,0.728,ab
+1589,599,Product Design,System Design,close,0.56,ab
+1590,602,SAP Fiori,SAP Support,close,0.565,ab
+1591,1074,Robotics Development,Unix/Linux,far,0.217,ba
+1592,400,SAP Integration,SAP PI/PO,close,0.602,ab
+1593,1122,DR,Disaster Recovery,abbrev,0.169,ab
+1594,683,Database troubleshooting,Database Schema Design,overlap,0.447,ba
+1595,331,System Security,Web Application Security,close,0.642,ab
+1596,364,Integration design,Manufacturing Integration,close,0.6,ab
+1597,319,Web Application Testing,Web Application Development,close,0.706,ba
+1598,139,VBA scripting,VBScript,close,0.773,ab
+1599,1126,Functional Specification Document,FSD,abbrev,0.287,ba
+1600,188,Network Engineering,Network Administration,close,0.655,ba
+1601,643,Software Configuration,Hardware Configuration,close,0.56,ba
+1602,477,Database Tuning,SQL Query Optimization,close,0.555,ab
+1603,273,Service Management,Network Management,close,0.571,ba
+1604,283,Risk-Based Testing,Test Case Development,close,0.572,ab
+1605,605,Application Testing,Test Automation,close,0.58,ab
+1606,725,SAP Project Systems,SAP SD,overlap,0.673,ab
+1607,292,Integration Architecture,EDI Integration,close,0.568,ba
+1608,999,Oracle,Oracle EBS,overlap,0.758,ab
+1609,152,SAP Finance,SAP SD,close,0.793,ab
+1610,444,System Analysis,Process analysis,close,0.62,ba
+1611,13,Firebase integration,Firebase,close,0.789,ba
+1612,445,Azure Cloud,Azure Synapse,close,0.596,ab
+1613,703,Cross-functional Collaboration,Cross-platform mobile,overlap,0.358,ab
+1614,223,IT Security,Security Governance,close,0.59,ab
+1615,883,ITIL problem management,ITIL Change Management,overlap,0.764,ba
+1616,1156,Business Analyst,BA,abbrev,0.439,ba
+1617,433,Retail Operations,Sales Support,close,0.578,ab
+1618,672,Client Support,End-User Support,overlap,0.598,ab
+1619,511,Budget tracking,Budget Forecasting,close,0.708,ba
+1620,434,Remote Collaboration,Remote Desktop,close,0.606,ab
+1621,193,Banking Applications,Financial Services,close,0.561,ab
+1622,429,Project Delivery,Project Reporting,close,0.628,ab
+1623,1123,SSIS,SQL Server Integration Services,abbrev,0.41,ab
+1624,764,System Support,Second Line Support,overlap,0.348,ba
+1625,332,SAP S/4HANA,SAP Customization,close,0.581,ba
+1626,1027,Application Lifecycle Management,Apache NiFi,far,0.052,ab
+1627,195,Coaching and Mentoring,Mentoring,close,0.868,ab
+1628,75,Software security,Security Tool Configuration,close,0.555,ba
+1629,648,Service Transition,Service Desk Operations,close,0.557,ba
+1630,366,Functional Configuration,System Configuration,close,0.566,ab
+1631,454,Performance Profiling,Web Performance,close,0.604,ab
+1632,585,Automation Framework Design,Business Process Automation,close,0.575,ab
+1633,932,PHP Laravel,Laravel,overlap,0.943,ba
+1634,481,Agile Leadership,Scrum Master,close,0.634,ab
+1635,338,Web Security,Cybersecurity,close,0.562,ba
+1636,825,ABAP Development,ABAP OO,overlap,0.664,ab
+1637,484,ERP Integration,Enterprise Systems,close,0.626,ba
+1638,1089,OBIEE,AWS Athena,far,0.17,ba
+1639,972,NIST Framework,NIST Cybersecurity Framework,overlap,0.76,ab
+1640,417,Preventive Maintenance,Software Maintenance,close,0.593,ab
+1641,468,Security Management,Security Operations,close,0.801,ab
+1642,818,Onsite Support,Office 365 Support,overlap,0.467,ba
+1643,663,Cisco CUBE,Cisco ISE,overlap,0.421,ab
+1644,318,Linux/Unix scripting,Unix scripting,close,0.939,ab
+1645,1101,Business Intelligence,BI,abbrev,0.254,ba
+1646,644,Mobile UI/UX,UI/UX Design,close,0.66,ab
+1647,619,Documentation creation,System Documentation,close,0.605,ab
+1648,1171,ALM,Application Lifecycle Management,abbrev,0.19,ab
+1649,1070,ISTQB Certification,IDS/IPS Management,far,0.192,ba
+1650,893,Test Planning,Test Documentation,overlap,0.524,ba
+1651,684,Git workflow,Git,overlap,0.762,ba
+1652,628,Software Architecture,Network Architecture,close,0.627,ba
+1653,799,Wireless Networking,MPLS networking,overlap,0.351,ba
+1654,576,Cloud Solutions,Salesforce Sales Cloud,close,0.603,ab
+1655,856,Network Security Architecture,MVP Architecture,overlap,0.31,ba
+1656,353,SAP WM Module,SAP ABAP,close,0.573,ba
+1657,1185,Endpoint Protection,EPP,abbrev,0.207,ba
+1658,450,Sales Strategy,Sales Operations,close,0.762,ba
+1659,764,Second Line Support,System Support,overlap,0.348,ab
+1660,937,Functional Consulting,Consulting Services,overlap,0.724,ba
+1661,259,SAP Workflow,SAP Solution Manager,close,0.725,ba
+1662,606,Business Process Analysis,Finance process knowledge,close,0.573,ab
+1663,407,Windows Services,IT Service Management,close,0.564,ba
+1664,115,Incident Resolution,Issue Investigation,close,0.564,ab
+1665,1159,request for proposal,RFP,abbrev,0.279,ba
+1666,969,Financial Services,Excel Services,overlap,0.387,ba
+1667,91,Security Governance,Cybersecurity Governance,close,0.786,ba
+1668,546,Virtual machine migration,Azure Virtual Machines,close,0.556,ba
+1669,562,Financial Reconciliation,Financial Systems,close,0.62,ab
+1670,213,CRM Management,Microsoft Dynamics CRM,close,0.664,ab
+1671,1099,VPN Management,Unity 3D,far,0.081,ba
+1672,192,SAP Reporting,SAP Analytics Cloud,close,0.657,ba
+1673,566,Security tool evaluation,Security Management,close,0.618,ab
+1674,807,Power Automate,Power Query,overlap,0.46,ab
+1675,376,IT Documentation,Documentation Preparation,close,0.608,ba
+1676,262,UI/UX Design,UI Layout,close,0.687,ba
+1677,229,Technical Reporting,Reporting Automation,close,0.661,ba
+1678,1194,SQL Server Reporting Services,SSRS,abbrev,0.611,ba
+1679,791,English Mandarin Communication,Interpersonal Communication,overlap,0.507,ab
+1680,593,OS configuration,PC Setup,close,0.573,ab
+1681,595,Docker,Containerization,close,0.577,ba
+1682,897,Mobile QA automation,Network Automation,overlap,0.478,ab
+1683,1123,SQL Server Integration Services,SSIS,abbrev,0.41,ba
+1684,212,System training,User Training,close,0.684,ab
+1685,225,LAN Administration,LAN/WAN support,close,0.611,ab
+1686,772,Network documentation,System Documentation,overlap,0.596,ab
+1687,881,UML Diagramming,UML,overlap,0.582,ba
+1688,861,Business Architecture,Business Requirements Documentation,overlap,0.425,ba
+1689,375,AWS Solutions Architect,AWS IAM,close,0.586,ba
+1690,565,Unix,Operating Systems,close,0.629,ba
+1691,716,Huawei Cloud,Google Cloud Platform,overlap,0.421,ba
+1692,308,Test Framework Development,Testing and Deployment,close,0.581,ab
+1693,945,Presentation Skills,Client Presentation Skills,overlap,0.826,ba
+1694,330,SAP ABAP,SAP Training,close,0.692,ab
+1695,616,Oracle PL/SQL,Oracle RAC,close,0.554,ab
+1696,816,Microsoft Teams Integration,Microsoft Outlook,overlap,0.311,ab
+1697,1000,LAN/WAN design,LAN design,overlap,0.854,ba
+1698,159,Security Incident Response,Information Security Compliance,close,0.562,ba
+1699,1007,Issue Tracking,SOAR playbook development,far,0.12,ab
+1700,253,SAP Fiori,SAP PM,close,0.619,ab
+1701,765,Edge Computing,Cloud Computing,overlap,0.537,ba
+1702,538,SAP Integration,SAP SD,close,0.757,ab
+1703,1048,Agile Scrum,Search relevance evaluation,far,0.024,ab
+1704,1082,Git Version Control,IBM AS400,far,-0.072,ab
+1705,1098,Windows Forms,PowerBI reporting,far,0.005,ba
+1706,488,Payment Processing,Retail Payments,close,0.66,ab
+1707,612,Market Analysis,Business Analysis,close,0.73,ba
+1708,831,Adobe InDesign,Adobe Photoshop,overlap,0.547,ab
+1709,291,Process analysis,Advanced Process Control,close,0.588,ba
+1710,781,Data Encryption,Data Cleansing,overlap,0.332,ba
+1711,827,API Testing,API Gateway,overlap,0.487,ba
+1712,443,SAP Project Systems,SAP Data Services,close,0.757,ba
+1713,1022,Advanced Process Control,IT Operations Support,far,0.394,ab
+1714,990,Sales Strategy,Technology Strategy,overlap,0.521,ab
+1715,78,Business Process Design,Process Mapping,close,0.574,ab
+1716,558,Business Process Management,Manufacturing processes,close,0.571,ab
+1717,636,Azure Synapse,Azure services,close,0.584,ba
+1718,549,ITIL certification,ITIL Foundation,close,0.734,ab
+1719,164,Security Risk Assessment,Information Security,close,0.61,ba
+1720,988,Pre-sales support,Production Support,overlap,0.542,ab
+1721,946,Salesforce Sales Cloud,Salesforce.com,overlap,0.559,ba
+1722,637,IP Address Management,IDS/IPS,close,0.581,ba
+1723,921,IT Project Coordination,IT Operations Management,overlap,0.576,ba
+1724,801,Backend Integration,Node.js Backend,overlap,0.592,ab
+1725,1097,Retail Domain Knowledge,SQL Query Optimization,far,0.14,ab
+1726,176,Infrastructure Design,IT Infrastructure Management,close,0.592,ab
+1727,515,IT infrastructure integration,IoT Integration,close,0.558,ba
+1728,1133,Microsoft Certified IT Professional,MCITP,abbrev,0.1,ba
+1729,822,Oracle Finance,Oracle EBS,overlap,0.643,ba
+1730,741,Financial Reconciliation,Financial Consulting,overlap,0.452,ba
+1731,106,Redis caching,Caching,close,0.682,ba
+1732,356,SAP Integration,SAP MDG,close,0.623,ab
+1733,302,App Store Deployment,Cloud Deployment,close,0.616,ab
+1734,871,Routing and Switching,OSPF routing,overlap,0.544,ba
+1735,732,Data Lake,Delta Lake,overlap,0.601,ab
+1736,874,IT fundamentals,IT infrastructure integration,overlap,0.424,ab
+1737,783,Veeam Backup,Backup Strategies,overlap,0.634,ba
+1738,971,Virtual Desktop Infrastructure,Citrix Virtual Apps,overlap,0.503,ba
+1739,345,ServiceNow ITOM,ServiceNow Incident Management,close,0.588,ba
+1740,53,SAP Fiori,SAP FICO,close,0.803,ba
+1741,35,AutoCAD,CAD Modeling,close,0.59,ab
+1742,295,Shift Support,Shift Operations,close,0.702,ba
+1743,436,Data Reporting,Report Generation,close,0.636,ab
+1744,860,macOS troubleshooting,OS Troubleshooting,overlap,0.727,ab
+1745,657,CRM Integration,CRM systems,overlap,0.732,ab
+1746,59,Azure Administration,Azure Monitor,close,0.607,ab
+1747,990,Technology Strategy,Sales Strategy,overlap,0.521,ba
+1748,299,BGP routing,Routing and Switching,close,0.593,ab
+1749,432,OS Installation,OS Troubleshooting,close,0.56,ab
+1750,938,Customer Support,ERP Support,overlap,0.511,ab
+1751,361,Sales Support,Solution Selling,close,0.579,ab
+1752,699,Firewall,Cisco Firewall,overlap,0.806,ba
+1753,525,Routing configuration,EIGRP routing,close,0.581,ba
+1754,390,SAP PS,SAP ByDesign,close,0.734,ba
+1755,478,Google Cloud,Cloud Migration,close,0.572,ba
+1756,64,Test Execution,Web Application Testing,close,0.609,ab
+1757,443,SAP Data Services,SAP Project Systems,close,0.757,ab
+1758,131,SAP Reporting,SAP Basis,close,0.627,ba
+1759,499,Performance Management,Performance troubleshooting,close,0.554,ab
+1760,1044,Windows Clustering,Prompt Engineering,far,0.057,ba
+1761,12,ServiceNow,Web Services,close,0.572,ab
+1762,112,Code documentation,Code maintenance,close,0.559,ab
+1763,1055,Virtual Tape Library,ELV Systems,far,0.199,ba
+1764,403,SAP QM,SAP Data Services,close,0.588,ba
+1765,1183,Entity Framework,EF,abbrev,0.526,ba
+1766,107,Pipeline Management,RAG Pipelines,close,0.61,ab
+1767,1085,Data Lakehouse,Business Blueprinting,far,0.214,ba
+1768,846,ITIL certification,ITIL Framework,overlap,0.695,ba
+1769,309,Testing and Deployment,System Deployment,close,0.686,ba
+1770,960,ALV Reporting,Business Reporting,overlap,0.481,ab
+1771,828,IT Technical Support,Technical Leadership,overlap,0.479,ab
+1772,485,Azure services,Azure Administration,close,0.745,ba
+1773,823,Cybersecurity Awareness,Cybersecurity Strategy,overlap,0.721,ab
+1774,946,Salesforce.com,Salesforce Sales Cloud,overlap,0.559,ab
+1775,717,Computer System Validation,Computer Vision,overlap,0.276,ab
+1776,113,Security Controls Design,Software security,close,0.558,ab
+1777,540,Model Deployment,Server Deployment,close,0.573,ab
+1778,702,Data Migration,Data Pipeline Design,overlap,0.445,ab
+1779,1015,Japanese (JLPT N3),Healthcare Domain Knowledge,far,-0.001,ba
+1780,97,Network Management,LAN/WAN Management,close,0.73,ba
+1781,991,Business Architecture,Business Automation,overlap,0.493,ab
+1782,235,Network Support,Networking,close,0.692,ba
+1783,980,Data Governance,Information Security Governance,overlap,0.603,ab
+1784,76,Issue Troubleshooting,AV troubleshooting,close,0.552,ba
+1785,224,Networking,Network documentation,close,0.559,ba
+1786,771,MES implementation,MES troubleshooting,overlap,0.582,ab
+1787,555,SQL Database Management,MySQL Database,close,0.562,ba
+1788,891,Network Packet Analysis,Process analysis,overlap,0.385,ab
+1789,658,Documentation Standards,Functional Documentation,overlap,0.539,ab
+1790,1030,Gap Analysis,Capacity Management,far,0.134,ba
+1791,704,SLA Compliance,Safety Compliance,overlap,0.543,ba
+1792,1155,Proof of Concept,POC,abbrev,0.177,ba
+1793,876,Proposal Development,Proposal Writing,overlap,0.79,ab
+1794,343,Test Reporting,Test Planning,close,0.613,ba
+1795,264,SAP Cloud,SAP Business One,close,0.765,ba
+1796,125,SQL Database Management,Database development,close,0.697,ba
+1797,396,Procurement Coordination,Vendor Negotiation,close,0.574,ab
+1798,964,Huawei switching,Huawei Cloud,overlap,0.721,ba
+1799,373,Adobe Creative Cloud,Adobe Creative Suite,close,0.813,ab
+1800,73,SOC2 Auditing,IT Audit,close,0.57,ba
+1801,1038,SIT Testing,Email Communication,far,0.006,ba
+1802,940,Cross-Platform Development,Digital Platform Management,overlap,0.541,ab
+1803,997,KPI Management,KPI Development,overlap,0.847,ba
+1804,718,Advanced Process Control,Access Control Management,overlap,0.465,ba
+1805,660,ITIL Framework,NIST Cybersecurity Framework,overlap,0.415,ab
+1806,263,Audit reporting,Business Intelligence Reporting,close,0.577,ab
+1807,631,Security Hardening,Security Frameworks,close,0.604,ba
+1808,302,Cloud Deployment,App Store Deployment,close,0.616,ba
+1809,969,Excel Services,Financial Services,overlap,0.387,ab
+1810,799,MPLS networking,Wireless Networking,overlap,0.351,ab
+1811,452,Technical Documentation,Documentation Preparation,close,0.716,ba
+1812,86,Code maintenance,Website Maintenance,close,0.64,ab
+1813,844,ERP Customization,Theme Customization,overlap,0.433,ab
+1814,1142,Static Site Generation,SSG,abbrev,0.136,ba
+1815,937,Consulting Services,Functional Consulting,overlap,0.724,ab
+1816,1069,Alteryx,Audit Management,far,0.182,ab
+1817,470,Business Blueprinting,Business Documentation,close,0.618,ab
+1818,763,Azure DevOps,Azure Data Factory,overlap,0.553,ba
+1819,377,IT Risk Management,IT Governance,close,0.624,ba
+1820,745,Cross-functional Leadership,Functional Specification,overlap,0.316,ab
+1821,609,Security Compliance,Security Patching,close,0.588,ab
+1822,1095,MES troubleshooting,MS Project,far,0.261,ab
+1823,325,Client Support,Client Interaction,close,0.659,ba
+1824,777,LAN/WAN support,Linux OS support,overlap,0.308,ab
+1825,748,Strategic Planning,UAT Planning,overlap,0.476,ab
+1826,1069,Audit Management,Alteryx,far,0.182,ba
+1827,472,Kubernetes AKS,Kubernetes,close,0.837,ba
+1828,94,Big Data Analytics,Web Analytics,close,0.616,ab
+1829,71,ERP Customization,SAP Customization,close,0.566,ab
+1830,410,Security Hardening,Security Patch Management,close,0.607,ab
+1831,320,QA Testing,Test Case Development,close,0.617,ab
+1832,1120,Certified in Risk and Information Systems Control,CRISC,abbrev,0.285,ba
+1833,295,Shift Operations,Shift Support,close,0.702,ab
+1834,830,Team Coordination,Test Coordination,overlap,0.558,ab
+1835,543,Incident Review,Incident Investigation,close,0.753,ba
+1836,234,Business Process Optimization,Workflow optimization,close,0.705,ab
+1837,877,Software Documentation,Software Implementation,overlap,0.581,ab
+1838,899,System Performance Monitoring,System Performance Optimization,overlap,0.696,ab
+1839,947,HP-UX Administration,UI/UX development,overlap,0.401,ab
+1840,1058,Backup Restore,Adobe InDesign,far,0.087,ba
+1841,165,Data Strategy,Data Structures,close,0.595,ab
+1842,144,Data Architecture,Database Design,close,0.604,ab
+1843,909,PL/SQL,SQL Server Administration,overlap,0.353,ba
+1844,775,Web Server Administration,Windows Server 2012,overlap,0.371,ab
+1845,1161,distributed control system,DCS,abbrev,0.286,ba
+1846,1088,VB6,Asset Tracking,far,0.088,ba
+1847,521,Windows,Windows 10/11,close,0.591,ab
+1848,979,Compliance Reporting,ALV Reporting,overlap,0.409,ba
+1849,413,Cisco ACI,Cisco networking,close,0.632,ab
+1850,433,Sales Support,Retail Operations,close,0.578,ba
+1851,402,MySQL Database,MySQL Administration,close,0.71,ba
+1852,189,Budget Control,IT Budget Management,close,0.69,ab
+1853,662,Issue Troubleshooting,IT Troubleshooting,overlap,0.76,ab
+1854,445,Azure Synapse,Azure Cloud,close,0.596,ba
+1855,89,ITIL Foundation,ITIL Incident Management,close,0.596,ab
+1856,642,AWS EKS,AWS EC2,close,0.71,ba
+1857,930,Healthcare IT,Healthcare Domain Knowledge,overlap,0.42,ba
+1858,690,Linux OS support,Linux Administration,overlap,0.578,ba
+1859,533,Web Services,ServiceNow Administration,close,0.58,ba
+1860,736,Financial Management,Financial Reconciliation,overlap,0.625,ab
+1861,982,Project Coordination,RMA Coordination,overlap,0.458,ab
+1862,842,DHCP Management,DHCP,overlap,0.851,ba
+1863,740,Predictive Analytics,Marketing Analytics,overlap,0.612,ba
+1864,964,Huawei Cloud,Huawei switching,overlap,0.721,ab
+1865,547,Data Verification,Data Integrity,close,0.651,ba
+1866,541,SAP ABAP,SAP Configuration,close,0.664,ab
+1867,471,Network Design,System Design,close,0.616,ab
+1868,125,Database development,SQL Database Management,close,0.697,ab
+1869,155,Security Best Practices,Information Security Policies,close,0.615,ba
+1870,667,KPI Reporting,PowerBI reporting,overlap,0.516,ab
+1871,121,Software Troubleshooting,Application debugging,close,0.671,ba
+1872,256,POS Management,POS Systems,close,0.83,ab
+1873,69,Production Deployment,Cloud Deployment,close,0.726,ba
+1874,393,SAP Fiori,SAP QM,close,0.563,ab
+1875,73,IT Audit,SOC2 Auditing,close,0.57,ab
+1876,1102,Representational State Transfer,REST,abbrev,0.097,ba
+1877,957,Microsoft 365 Exchange,Dynamics 365 Business Central,overlap,0.534,ab
+1878,38,SIEM Monitoring,SIEM implementation,close,0.789,ba
+1879,1144,J2EE,Java 2 Platform Enterprise Edition,abbrev,0.46,ab
+1880,338,Cybersecurity,Web Security,close,0.562,ab
+1881,767,Workshop Facilitation,Facilitation Skills,overlap,0.619,ba
+1882,517,Access Control,User Access Control,close,0.891,ab
+1883,677,Server Virtualization,Server Installation,overlap,0.544,ba
+1884,903,Unix Administration,Unix scripting,overlap,0.609,ab
+1885,455,End-User Training,IT Training Delivery,close,0.555,ab
+1886,600,Network Protocols,Cisco networking,close,0.552,ba
+1887,601,CIS Controls,CISA,close,0.645,ba
+1888,1,Access Management,User Access Control,close,0.761,ab
+1889,673,Software QA,Software prototyping,overlap,0.415,ba
+1890,508,Payroll Software,Payroll System Integration,close,0.759,ab
+1891,387,Microsoft 365 Exchange,Office 365 administration,close,0.678,ab
+1892,268,Database Security,Database Programming,close,0.57,ba
+1893,243,Business Requirements Documentation,Documentation Standards,close,0.635,ab
+1894,324,SAP PS,SAP BusinessObjects,close,0.668,ba
+1895,907,SWOT Analysis,User Feedback Analysis,overlap,0.305,ab
+1896,178,Hardware debugging,PC Troubleshooting,close,0.622,ab
+1897,557,Software Documentation,Technical Design Documentation,close,0.737,ab
+1898,490,System training,System Support,close,0.568,ba
+1899,556,Business Reporting,Report Customization,close,0.587,ab
+1900,1196,WANs,wide area networks,abbrev,0.351,ab
+1901,561,Data Visualization,Tableau Visualization,close,0.602,ab
+1902,712,Web Performance Optimization,SQL Query Optimization,overlap,0.5,ba
+1903,588,Network Maintenance,Network Fundamentals,close,0.572,ba
+1904,425,Azure OpenAI,OpenAPI,close,0.581,ab
+1905,687,24x7 Support,Customer Support,overlap,0.287,ab
+1906,166,Technical Design Documentation,Process Documentation,close,0.561,ba
+1907,297,Test Management,Testing and debugging,close,0.553,ba
+1908,32,JavaScript Scripting,Linux Scripting,close,0.589,ab
+1909,639,SAP Workflow,SAP Configuration,close,0.768,ba
+1910,530,ITIL Processes,ITIL Service Management,close,0.704,ab
+1911,1019,Remote monitoring,Printer Maintenance,far,0.207,ba
+1912,708,GitHub Version Control,Control-M Scheduling,overlap,0.09,ba
+1913,998,Microsoft Power Platform,Power Apps,overlap,0.695,ab
+1914,589,Security Hardening,Security Governance,close,0.59,ba
+1915,795,AWS networking,Huawei Networking,overlap,0.36,ab
+1916,130,Service Management,Cloud services,close,0.638,ba
+1917,669,Agile Testing,Agile Scrum,overlap,0.704,ba
+1918,12,Web Services,ServiceNow,close,0.572,ba
+1919,41,Agile Collaboration,Agile Development,close,0.771,ba
+1920,1005,Time Management,SCCM,far,0.184,ba
+1921,358,Network Architecture,Data Center Architecture,close,0.583,ba
+1922,156,Unix,Linux Scripting,close,0.582,ba
+1923,679,WebLogic Server,Server Troubleshooting,overlap,0.293,ba
+1924,40,Linux Administration,macOS Administration,close,0.649,ab
+1925,733,Aruba Wireless,Wireless LAN,overlap,0.484,ab
+1926,894,SD-WAN troubleshooting,Technical Troubleshooting,overlap,0.332,ab
+1927,679,Server Troubleshooting,WebLogic Server,overlap,0.293,ab
+1928,198,Test Case Development,Testing and debugging,close,0.636,ab
+1929,320,Test Case Development,QA Testing,close,0.617,ba
+1930,100,Incident Review,Incident Resolution,close,0.656,ba
+1931,220,Report Development,Metrics Reporting,close,0.552,ba
+1932,882,Windows 10/11,Windows Imaging,overlap,0.372,ab
+1933,1153,AD,Active Directory,abbrev,0.463,ab
+1934,543,Incident Investigation,Incident Review,close,0.753,ab
+1935,702,Data Pipeline Design,Data Migration,overlap,0.445,ba
+1936,696,Cloud Technologies,Google Cloud Platform,overlap,0.551,ab
+1937,11,Security Protocols,HTTP/HTTPS Protocols,close,0.621,ba
+1938,515,IoT Integration,IT infrastructure integration,close,0.558,ab
+1939,932,Laravel,PHP Laravel,overlap,0.943,ab
+1940,898,Account Planning,Account Reconciliation,overlap,0.658,ab
+1941,141,Network Switching,Network Management,close,0.654,ba
+1942,565,Operating Systems,Unix,close,0.629,ab
+1943,532,SQL Database Management,Oracle Database Administration,close,0.655,ba
+1944,137,Troubleshooting,Equipment Troubleshooting,close,0.72,ba
+1945,365,Windows Server,Server Virtualization,close,0.56,ba
+1946,1037,KPI Management,Axure,far,0.065,ba
+1947,709,Power BI Service,Service Delivery Management,overlap,0.355,ab
+1948,232,Vulnerability Management,Information Security Management,close,0.626,ba
+1949,1093,IAM security,Bloc,far,0.23,ba
+1950,441,Security Protocols,Mobile Security,close,0.551,ba
+1951,130,Cloud services,Service Management,close,0.638,ab
+1952,1073,Go-to-Market Strategy,Information Security Management,far,0.141,ab
+1953,936,Test Framework Development,UIKit framework,overlap,0.308,ab
+1954,1124,IT service management,ITSM,abbrev,0.482,ba
+1955,711,Android testing,A/B Testing,overlap,0.409,ba
+1956,108,Test case execution,Control Testing,close,0.56,ba
+1957,311,Cloud Development,Public Cloud,close,0.672,ab
+1958,627,LAN/WAN Management,Network Operations,close,0.576,ab
+1959,849,Process Mapping,Process Modeling,overlap,0.703,ab
+1960,572,IT Operations Management,Operations Management,close,0.79,ab
+1961,496,Automation Scripting,Office Automation,close,0.668,ab
+1962,587,Test Case Design,Test Coordination,close,0.572,ab
+1963,1198,Trusted Platform Modules,TPM,abbrev,0.221,ba
+1964,1127,Cisco Certified Network Associate,CCNA,abbrev,0.386,ba
+1965,265,Microsoft Hyper-V,Virtual Machines,close,0.589,ab
+1966,1039,Data Analytics,Uniapp,far,0.109,ab
+1967,604,System Administration,Web Server Administration,close,0.581,ab
+1968,524,IT Security Management,Information Security,close,0.711,ba
+1969,568,English Mandarin,Japanese Language,close,0.579,ab
+1970,678,Installation Configuration,Hardware Installation,overlap,0.579,ba
+1971,575,Hardware Deployment,Production Deployment,close,0.647,ab
+1972,659,IT Support,IT Troubleshooting,overlap,0.379,ab
+1973,190,Cybersecurity Practices,Security policy enforcement,close,0.582,ab
+1974,209,Virtual machine migration,System Migration,close,0.693,ba
+1975,813,ASP.NET,ASP.NET Core,overlap,0.712,ab
+1976,31,Budget Management,IT Budget Management,close,0.788,ab
+1977,406,SQL Querying,T-SQL,close,0.661,ab
+1978,806,GitLab CI/CD,Mobile CI/CD,overlap,0.537,ab
+1979,1109,multi-factor authentication,MFA,abbrev,0.428,ba
+1980,762,Test Scenario Design,Test Planning,overlap,0.706,ba
+1981,935,Client Communication,Client Engagement,overlap,0.63,ab
+1982,217,Security Monitoring,Web Security,close,0.606,ab
+1983,388,User Administration,Network Administration,close,0.646,ba
+1984,384,E-commerce Analytics,eCommerce catalogue management,close,0.6,ab
+1985,844,Theme Customization,ERP Customization,overlap,0.433,ba
+1986,698,Network installation,Fiber Optic Installation,overlap,0.442,ba
+1987,1060,Real-time OS,ASP.NET Web Forms,far,0.041,ba
+1988,304,SCADA Systems,SCADA Integration,close,0.826,ba
+1989,546,Azure Virtual Machines,Virtual machine migration,close,0.556,ab
+1990,589,Security Governance,Security Hardening,close,0.59,ab
+1991,92,Cloud Technologies,Cloud Infrastructure,close,0.818,ba
+1992,334,Software Troubleshooting,Incident Troubleshooting,close,0.596,ba
+1993,439,SAP MDG,SAP ERP,close,0.67,ba
+1994,317,Git workflow,GitHub,close,0.638,ba
+1995,773,Git Version Control,Source Control,overlap,0.433,ab
+1996,504,Workflow Design,SAP Workflow,close,0.573,ba
+1997,904,IT Service Management,Service Desk,overlap,0.54,ab
+1998,912,Non-functional Testing,Network Testing,overlap,0.414,ba
+1999,630,Electronics troubleshooting,Server Troubleshooting,close,0.6,ab
+2000,1097,SQL Query Optimization,Retail Domain Knowledge,far,0.14,ba
+2001,725,SAP SD,SAP Project Systems,overlap,0.673,ba
+2002,1125,BCP,Business Continuity Planning,abbrev,0.305,ab
+2003,879,Azure DevOps,DevOps CI/CD,overlap,0.618,ab
+2004,640,Monitoring and Logging,Network Monitoring,close,0.625,ab
+2005,99,Android testing,Product Testing,close,0.557,ab
+2006,603,Cloud Sales,Public Cloud,close,0.564,ab
+2007,554,Network Optimization,Network Engineering,close,0.648,ba
+2008,334,Incident Troubleshooting,Software Troubleshooting,close,0.596,ab
+2009,666,Process Modeling,CAD Modeling,overlap,0.436,ba
+2010,153,Network performance optimization,Network Management,close,0.63,ba
+2011,290,SoapUI,SOAP,close,0.782,ba
+2012,475,Object-Oriented Design,Software Implementation,close,0.58,ab
+2013,815,IT Technical Support,L2/L3 Support,overlap,0.189,ab
+2014,258,SAP CO,SAP ByDesign,close,0.756,ba
+2015,190,Security policy enforcement,Cybersecurity Practices,close,0.582,ba
+2016,267,Continuous Delivery,Service Delivery Management,close,0.589,ab
+2017,508,Payroll System Integration,Payroll Software,close,0.759,ba
+2018,594,Cloud Solutions,Spring Cloud,close,0.588,ab
+2019,241,Cost Reduction,Cost Analysis,close,0.675,ba
+2020,162,Compatibility Testing,System Integration Testing,close,0.58,ab
+2021,1167,financial technology,FinTech,abbrev,0.666,ba
+2022,510,Marketing Automation,Office Automation,close,0.594,ab
+2023,863,Distributed teams,Distributed Systems Design,overlap,0.568,ba
+2024,379,Installation Configuration,OS Installation,close,0.614,ab
+2025,1079,Caching mechanisms,Pre-sales Engineering,far,0.045,ab
+2026,270,IT Security,Mobile Security,close,0.617,ab
+2027,857,Client Support,ERP Support,overlap,0.498,ab
+2028,342,ISO 14001,ISO 8583,close,0.753,ab
+2029,1148,Object-Oriented Design,OOD,abbrev,0.301,ba
+2030,859,App Store Publishing,Mobile App Architecture,overlap,0.402,ab
+2031,749,IT infrastructure integration,IT infrastructure support,overlap,0.817,ab
+2032,782,WebSphere Application Server,Windows Server Administration,overlap,0.453,ab
+2033,945,Client Presentation Skills,Presentation Skills,overlap,0.826,ab
+2034,251,SAP FICO,SAP,close,0.754,ba
+2035,588,Network Fundamentals,Network Maintenance,close,0.572,ab
+2036,370,System Security,Information Security Management,close,0.579,ba
+2037,1169,intrusion detection systems,IDS,abbrev,0.41,ba
+2038,869,Client Consulting,Client Presentation Skills,overlap,0.552,ab
+2039,134,Content Marketing,Marketing Analytics,close,0.551,ab
+2040,820,Monitoring Automation,Monitoring & Alerting,overlap,0.664,ba
+2041,360,Cybersecurity,NIST Cybersecurity Framework,close,0.652,ab
+2042,467,Mobile-First Design,Mobile-First Development,close,0.844,ba
+2043,925,Windows 7,Windows 10/11,overlap,0.585,ba
+2044,428,SQL Query Optimization,SOQL,close,0.564,ba
+2045,105,Mobile App Architecture,Mobile-First Development,close,0.585,ab
+2046,1163,SOAP,Simple Object Access Protocol,abbrev,0.122,ab
+2047,147,IT security controls,Cybersecurity,close,0.599,ba
+2048,858,Business Requirements Documentation,Business Acumen,overlap,0.359,ab
+2049,556,Report Customization,Business Reporting,close,0.587,ba
+2050,810,Virtual Desktop Infrastructure,IT infrastructure maintenance,overlap,0.327,ba
+2051,348,IT infrastructure support,Windows Support,close,0.561,ab
+2052,962,System Support,UAT Support,overlap,0.419,ab
+2053,96,Test Case Design,Testing,close,0.613,ab
+2054,7,OT Security,Network Security,close,0.569,ba
+2055,700,Insurance Operations,Helpdesk Operations,overlap,0.324,ba
+2056,200,Security Management,Security Patch Management,close,0.575,ab
+2057,1042,Control-M Scheduling,Mandarin Fluency,far,-0.009,ab
+2058,5,Database Programming,SQL Querying,close,0.578,ab
+2059,224,Network documentation,Networking,close,0.559,ab
+2060,681,Model Deployment,Hardware Deployment,overlap,0.523,ba
+2061,42,AWS CloudWatch,AWS IAM,close,0.608,ab
+2062,891,Process analysis,Network Packet Analysis,overlap,0.385,ba
+2063,551,Automation Anywhere,Automation Projects,close,0.761,ab
+2064,34,Smart contracts,Contract Negotiation,close,0.551,ba
+2065,19,AWS Cloud Architecture,Azure Cloud Services,close,0.558,ab
+2066,1180,developer experience,DevEx,abbrev,0.512,ba
+2067,1049,PC hardware troubleshooting,Testing & Validation,far,0.18,ab
+2068,399,ASP.NET Core MVC,.NET Core,close,0.684,ab
+2069,79,Cloud cost optimization,AWS Cloud Architecture,close,0.57,ba
+2070,498,Information Security Management,Security Administration,close,0.733,ab
+2071,767,Facilitation Skills,Workshop Facilitation,overlap,0.619,ab
+2072,16,SAP BTP,SAP PS,close,0.703,ab
+2073,362,Unix/Linux administration,Windows Administration,close,0.565,ab
+2074,723,Staff Training,Training Development,overlap,0.701,ab
+2075,796,Technology Research,Qualitative research,overlap,0.511,ba
+2076,650,Data Reconciliation,Data Integration,close,0.616,ba
+2077,1090,Hybrid Cloud Architecture,Travel Coordination,far,0.032,ab
+2078,812,C programming,Database Programming,overlap,0.474,ab
+2079,352,Azure Storage,Azure services,close,0.692,ba
+2080,735,Testing and debugging,Web Testing,overlap,0.577,ab
+2081,460,Network Configuration,Network Programming,close,0.565,ab
+2082,935,Client Engagement,Client Communication,overlap,0.63,ba
+2083,48,Data Security,IT security controls,close,0.58,ab
+2084,1030,Capacity Management,Gap Analysis,far,0.134,ab
+2085,832,Server-side development,Server Maintenance,overlap,0.513,ba
+2086,842,DHCP,DHCP Management,overlap,0.851,ab
+2087,675,Project Documentation,Project Delivery,overlap,0.504,ba
+2088,60,Windows Forms,SmartForms,close,0.615,ba
+2089,1080,OAuth,Bug Tracking,far,0.084,ba
+2090,618,Documentation Preparation,Technical Design Documentation,close,0.623,ab
+2091,1126,FSD,Functional Specification Document,abbrev,0.287,ab
+2092,762,Test Planning,Test Scenario Design,overlap,0.706,ab
+2093,1021,Data Extraction,Data-driven Decision Making,far,0.348,ba
+2094,409,Linux Shell Scripting,Unix Shell Scripting,close,0.941,ab
+2095,277,Operations Management,Product Operations,close,0.591,ab
+2096,1035,IoT Architecture,Life Cycle Services,far,0.2,ab
+2097,814,Incident Response Planning,Incident Investigation,overlap,0.652,ba
+2098,223,Security Governance,IT Security,close,0.59,ba
+2099,419,Cross-platform mobile,Mobile Testing,close,0.571,ab
+2100,1046,SAP ERP 6.0,SLA Management,far,0.203,ab
+2101,1089,AWS Athena,OBIEE,far,0.17,ab
+2102,210,Performance Monitoring,Performance Optimization,close,0.623,ab
+2103,257,Network Support,Wireless Networking,close,0.577,ab
+2104,614,Database development,Website development,close,0.562,ab
+2105,427,Desktop Installation,Software Installation,close,0.554,ab
+2106,911,GUI Automation,Build automation,overlap,0.531,ba
+2107,114,SAP BW,SAP ERP 6.0,close,0.629,ab
+2108,996,Data Integration,Database Integration,overlap,0.766,ba
+2109,1127,CCNA,Cisco Certified Network Associate,abbrev,0.386,ab
+2110,856,MVP Architecture,Network Security Architecture,overlap,0.31,ab
+2111,407,IT Service Management,Windows Services,close,0.564,ab
+2112,694,AWS RDS,AWS VPC,overlap,0.55,ab
+2113,986,Project Reporting,Project Documentation,overlap,0.593,ba
+2114,306,Remote Support,Remote Troubleshooting,close,0.622,ab
+2115,1017,Azure Active Directory,SLA Management,far,0.182,ab
+2116,901,Vulkan API,Postman API,overlap,0.124,ba
+2117,890,Apache,Apache Flink,overlap,0.581,ab
+2118,80,SSRS Reporting,Test Reporting,close,0.611,ab
+2119,623,Mandarin Language,Mandarin Fluency,close,0.809,ab
+2120,434,Remote Desktop,Remote Collaboration,close,0.606,ba
+2121,369,IBM WebSphere MQ,WebSphere,close,0.687,ab
+2122,994,ISO 9001 Compliance,ISO Standards,overlap,0.722,ab
+2123,846,ITIL Framework,ITIL certification,overlap,0.695,ab
+2124,1171,Application Lifecycle Management,ALM,abbrev,0.19,ba
+2125,967,SIT Testing,Security Testing,overlap,0.437,ba
+2126,638,Laptop troubleshooting,Technical Troubleshooting,close,0.652,ab
+2127,1010,Sales Strategy,Level 3 support,far,0.111,ba
+2128,230,Security Reporting,Report Generation,close,0.554,ba
+2129,297,Testing and debugging,Test Management,close,0.553,ab
+2130,133,Network Packet Analysis,Wireshark analysis,close,0.678,ab
+2131,811,Server Monitoring,SNMP monitoring,overlap,0.501,ab
+2132,1197,machine learning,ML,abbrev,0.373,ba
+2133,787,OSPF routing,Routing configuration,overlap,0.634,ab
+2134,57,Network Security,Security Monitoring,close,0.59,ab
+2135,782,Windows Server Administration,WebSphere Application Server,overlap,0.453,ba
+2136,81,Security Architecture,Secure Coding,close,0.553,ba
+2137,837,CRM Integration,Firebase integration,overlap,0.37,ab
+2138,582,STLC Knowledge,STL,close,0.629,ba
+2139,416,Mechanical Engineering,Engineering fundamentals,close,0.658,ba
+2140,140,Remote Troubleshooting,Software Troubleshooting,close,0.574,ab
+2141,954,Web Analytics,SAP Analytics Cloud,overlap,0.526,ba
+2142,1075,Adobe Illustrator,Retail Payments,far,0.095,ab
+2143,118,Continuous Deployment,Deployment Automation,close,0.728,ab
+2144,107,RAG Pipelines,Pipeline Management,close,0.61,ba
+2145,506,Performance Metrics,Network performance monitoring,close,0.566,ba
+2146,128,Cloud Technologies,Cloud Computing,close,0.825,ba
+2147,684,Git,Git workflow,overlap,0.762,ab
+2148,614,Website development,Database development,close,0.562,ba
+2149,794,Unix Shell Scripting,Shell Scripting,overlap,0.942,ba
+2150,455,IT Training Delivery,End-User Training,close,0.555,ba
+2151,632,SQL Reporting,Tableau Reporting,close,0.635,ab
+2152,1035,Life Cycle Services,IoT Architecture,far,0.2,ba
+2153,145,Client Training,Client Relationship,close,0.631,ba
+2154,1113,Business Continuity Management,BCM,abbrev,0.292,ba
+2155,242,Electrical equipment,Electrical Engineering,close,0.69,ba
+2156,27,Advanced Excel,Advanced Analytics,close,0.604,ba
+2157,81,Secure Coding,Security Architecture,close,0.553,ab
+2158,739,IT Training Delivery,Client Training,overlap,0.46,ba
+2159,868,IDS/IPS configuration,Firewall Configuration,overlap,0.445,ba
+2160,274,Business Application Support,Application Support,close,0.766,ba
+2161,388,Network Administration,User Administration,close,0.646,ab
+2162,460,Network Programming,Network Configuration,close,0.565,ba
+2163,687,Customer Support,24x7 Support,overlap,0.287,ba
+2164,454,Web Performance,Performance Profiling,close,0.604,ba
+2165,465,Test Scenario Design,Application Testing,close,0.574,ba
+2166,674,Workflow Configuration,WiFi Router Configuration,overlap,0.324,ba
+2167,172,Client Consulting,Security Consulting,close,0.603,ab
+2168,21,Operating Systems,Windows Support,close,0.604,ab
+2169,466,Regulatory Reporting,Financial Reporting,close,0.614,ba
+2170,598,SAP Project Systems,SAP PS,close,0.694,ab
+2171,640,Network Monitoring,Monitoring and Logging,close,0.625,ba
+2172,802,Predictive Analytics,Google Analytics,overlap,0.621,ba
+2173,633,System Deployment,Configuration Management,close,0.556,ba
+2174,492,Business Reporting,Reporting Automation,close,0.683,ab
+2175,215,Cybersecurity Practices,Security Best Practices,close,0.66,ab
+2176,488,Retail Payments,Payment Processing,close,0.66,ba
+2177,1157,GIS,Geographic Information System,abbrev,0.522,ab
+2178,33,Backup Strategies,Backup Solutions,close,0.854,ba
+2179,923,Data Transformation,Data Security,overlap,0.381,ba
+2180,451,Unix scripting,Scripting,close,0.834,ba
+2181,273,Network Management,Service Management,close,0.571,ab
+2182,1137,TTXs,Table Top Exercises,abbrev,0.038,ab
+2183,461,Cloud services,Google Cloud,close,0.745,ab
+2184,156,Linux Scripting,Unix,close,0.582,ab
+2185,936,UIKit framework,Test Framework Development,overlap,0.308,ba
+2186,784,OWASP Security,Security Administration,overlap,0.481,ab
+2187,44,Desktop Installation,Installation Configuration,close,0.582,ab
+2188,713,Modbus protocol,BACnet protocol,overlap,0.411,ba
+2189,310,Network Security Architecture,System Security,close,0.607,ab
+2190,900,BRD Documentation,Agile Documentation,overlap,0.422,ba
+2191,700,Helpdesk Operations,Insurance Operations,overlap,0.324,ab
+2192,1086,Hardware Maintenance,Mobile UI/UX Design,far,0.104,ab
+2193,494,Training Facilitation,IT Training Delivery,close,0.559,ba
+2194,324,SAP BusinessObjects,SAP PS,close,0.668,ab
+2195,690,Linux Administration,Linux OS support,overlap,0.578,ab
+2196,167,Data Modeling,Data Structures,close,0.572,ab
+2197,720,AWS Glue,AWS IAM,overlap,0.455,ab
+2198,1158,RTO,Recovery Time Objective,abbrev,0.155,ab
+2199,573,VM Virtualization,Virtual machine migration,close,0.696,ba
+2200,704,Safety Compliance,SLA Compliance,overlap,0.543,ab
+2201,527,ETL pipelines,ETL Processes,close,0.735,ab
+2202,187,SAP FICO,SAP HANA,close,0.563,ab
+2203,414,ASP.NET Web Forms,Windows Forms,close,0.663,ab
+2204,446,Data Warehouse,Data Science,close,0.637,ba
+2205,480,Test Scenario Design,Testing & Validation,close,0.581,ba
+2206,328,Contract Negotiation,Contract Management,close,0.668,ba
+2207,1198,TPM,Trusted Platform Modules,abbrev,0.221,ab
+2208,798,Chatbot Integration,B2B Integration,overlap,0.254,ba
+2209,510,Office Automation,Marketing Automation,close,0.594,ba
+2210,503,Data Automation,Puppet Automation,close,0.556,ab
+2211,939,MVP Architecture,Lakehouse Architecture,overlap,0.323,ba
+2212,136,SQL Database,Google Cloud SQL,close,0.581,ba
+2213,586,OS configuration,Windows OS,close,0.677,ab
+2214,147,Cybersecurity,IT security controls,close,0.599,ab
+2215,401,Security Operations,Security Protocols,close,0.654,ab
+2216,1163,Simple Object Access Protocol,SOAP,abbrev,0.122,ba
+2217,840,CRISC Certification,CISSP Certification,overlap,0.615,ba
+2218,113,Software security,Security Controls Design,close,0.558,ba
+2219,968,Routing and Switching,Payment switching,overlap,0.451,ba
+2220,456,Data Integration,Data Architecture,close,0.607,ba
+2221,1124,ITSM,IT service management,abbrev,0.482,ab
+2222,20,Robotics Development,Robotics Engineering,close,0.827,ab
+2223,56,Microsoft O365,SharePoint Online,close,0.555,ab
+2224,1081,Service Transition,Network Testing,far,0.13,ba
+2225,304,SCADA Integration,SCADA Systems,close,0.826,ab
+2226,358,Data Center Architecture,Network Architecture,close,0.583,ab
+2227,173,JMS Messaging,RabbitMQ messaging,close,0.621,ab
+2228,1028,Microsoft Visio,Security Testing,far,0.088,ba
+2229,432,OS Troubleshooting,OS Installation,close,0.56,ba
+2230,418,Performance Management,Performance Profiling,close,0.599,ab
+2231,867,Microsoft Endpoint Manager,Microsoft Dynamics 365,overlap,0.352,ba
+2232,789,Mobile Testing,JMeter Performance Testing,overlap,0.37,ba
+2233,270,Mobile Security,IT Security,close,0.617,ba
+2234,568,Japanese Language,English Mandarin,close,0.579,ba
+2235,919,Azure Networking,Azure Security Center,overlap,0.625,ab
+2236,36,AWS Athena,AWS RDS,close,0.557,ab
+2237,457,OpenAPI,OpenAI API,close,0.678,ba
+2238,1147,Amazon Web Services,AWS,abbrev,0.661,ba
+2239,870,Microsoft 365 Exchange,Dynamics 365 Finance,overlap,0.477,ba
+2240,312,Apache NiFi,Apache,close,0.594,ba
+2241,528,Security Updates,Security Best Practices,close,0.619,ba
+2242,285,SAP Solution Manager,SAP BTP,close,0.648,ba
+2243,880,Advanced Analytics,Firebase Analytics,overlap,0.534,ab
+2244,786,SEO Optimization,Workflow optimization,overlap,0.427,ab
+2245,286,Debugging,IT Troubleshooting,close,0.654,ab
+2246,512,Network Fundamentals,Network Operations,close,0.674,ab
+2247,380,Microsoft SQL,PL/SQL,close,0.734,ab
+2248,895,Network Security,Physical Security Management,overlap,0.549,ab
+2249,596,MES Integration,MES Support,close,0.661,ab
+2250,656,Impact Analysis,Change Impact Evaluation,overlap,0.732,ba
+2251,501,Cloud Technologies,Cloud Networking,close,0.679,ba
+2252,810,IT infrastructure maintenance,Virtual Desktop Infrastructure,overlap,0.327,ab
+2253,1159,RFP,request for proposal,abbrev,0.279,ab
+2254,688,Business Architecture,Business Continuity,overlap,0.456,ab
+2255,33,Backup Solutions,Backup Strategies,close,0.854,ab
+2256,572,Operations Management,IT Operations Management,close,0.79,ba
+2257,459,IT Service Desk,IT Consulting,close,0.567,ba
+2258,497,Security Frameworks,Backend Security,close,0.587,ba
+2259,923,Data Security,Data Transformation,overlap,0.381,ab
+2260,263,Business Intelligence Reporting,Audit reporting,close,0.577,ba
+2261,1122,Disaster Recovery,DR,abbrev,0.169,ba
+2262,457,OpenAI API,OpenAPI,close,0.678,ab
+2263,196,CRM systems,CRM implementation,close,0.833,ba
+2264,605,Test Automation,Application Testing,close,0.58,ba
+2265,1001,Looker,Travel Coordination,far,0.084,ab
+2266,138,IT Operations Support,IT Operations Management,close,0.804,ba
+2267,496,Office Automation,Automation Scripting,close,0.668,ba
+2268,808,Urdu Language Proficiency,English Proficiency,overlap,0.593,ba
+2269,233,LAN/WAN design,LAN/WAN,close,0.836,ba
+2270,365,Server Virtualization,Windows Server,close,0.56,ab
+2271,347,Hardware debugging,Technical Troubleshooting,close,0.572,ab
+2272,951,Power Query,Power electronics,overlap,0.461,ba
+2273,291,Advanced Process Control,Process analysis,close,0.588,ab
+2274,47,Client Onboarding,Client Training,close,0.638,ab
+2275,349,System Integration Testing,Test Execution,close,0.565,ab
+2276,184,AWS networking,AWS cloud security,close,0.604,ba
+2277,143,Server-side development,Server Administration,close,0.607,ba
+2278,245,JMS,JMS Messaging,close,0.763,ab
+2279,439,SAP ERP,SAP MDG,close,0.67,ab
+2280,977,Service Desk Support,Shift Support,overlap,0.425,ab
+2281,168,Security Governance,Security Administration,close,0.684,ba
+2282,98,SAP SD,SAP,close,0.881,ba
+2283,524,Information Security,IT Security Management,close,0.711,ab
+2284,697,Software prototyping,Software License Management,overlap,0.271,ba
+2285,819,Wireless Access Points,User Access Control,overlap,0.253,ba
+2286,492,Reporting Automation,Business Reporting,close,0.683,ba
+2287,1005,SCCM,Time Management,far,0.184,ab
+2288,884,Performance Optimization,Performance Tuning,overlap,0.744,ab
+2289,398,IT Infrastructure Management,IT Management,close,0.77,ab
+2290,284,Issue Escalation,Escalation Management,close,0.781,ba
+2291,502,System Performance Optimization,System Analysis,close,0.591,ba
+2292,371,Information Security,Security Compliance,close,0.642,ab
+2293,487,Code Deployment,Project Deployment,close,0.747,ab
+2294,1161,DCS,distributed control system,abbrev,0.286,ab
+2295,124,Functional analysis,Functional Testing,close,0.572,ab
+2296,896,KPI Development,KPI Analysis,overlap,0.777,ab
+2297,668,GitOps Workflow,Workflow Automation,overlap,0.459,ab
+2298,126,Technical Communication,Unified Communications,close,0.579,ab
+2299,1104,CEH,Certified Ethical Hacker,abbrev,0.243,ab
+2300,193,Financial Services,Banking Applications,close,0.561,ba
+2301,202,Financial Systems,Financial Domain Knowledge,close,0.624,ba
+2302,827,API Gateway,API Testing,overlap,0.487,ab
+2303,344,GUI Automation,Automation Anywhere,close,0.555,ba
+2304,966,Product Testing,Security Testing,overlap,0.604,ab
+2305,165,Data Structures,Data Strategy,close,0.595,ba
+2306,10,Retail Operations,Supply Chain IT,close,0.577,ab
+2307,750,Reporting Automation,Python automation,overlap,0.493,ba
+2308,298,IT Security Compliance,IT Technical Support,close,0.566,ab
+2309,815,L2/L3 Support,IT Technical Support,overlap,0.189,ba
+2310,74,Workflow optimization,Performance Optimization,close,0.628,ba
+2311,934,Production Support,Post-sales support,overlap,0.579,ba
+2312,1182,WMS,Warehouse Management Systems,abbrev,0.304,ab
+2313,34,Contract Negotiation,Smart contracts,close,0.551,ab
+2314,812,Database Programming,C programming,overlap,0.474,ba
+2315,905,System Deployment,Production Deployment,overlap,0.783,ba
+2316,370,Information Security Management,System Security,close,0.579,ab
+2317,1104,Certified Ethical Hacker,CEH,abbrev,0.243,ba
+2318,501,Cloud Networking,Cloud Technologies,close,0.679,ab
+2319,917,Cloud Development,Cloud cost optimization,overlap,0.682,ba
+2320,355,Agile Project Management,Project Leadership,close,0.58,ab
+2321,771,MES troubleshooting,MES implementation,overlap,0.582,ba
+2322,275,Business Process Optimization,Business Process Documentation,close,0.556,ba
+2323,710,Google Cloud SQL,SAP Analytics Cloud,overlap,0.459,ab
+2324,458,SAP ByDesign,SAP Implementation,close,0.726,ab
+2325,1092,Anomaly Detection,Hardware Replacement,far,0.141,ab
+2326,44,Installation Configuration,Desktop Installation,close,0.582,ba
+2327,1072,Qlik,IT Service Desk,far,0.207,ba
+2328,1133,MCITP,Microsoft Certified IT Professional,abbrev,0.1,ab
+2329,976,Vulnerability Management,Vulnerability Assessment,overlap,0.79,ba
+2330,662,IT Troubleshooting,Issue Troubleshooting,overlap,0.76,ba
+2331,660,NIST Cybersecurity Framework,ITIL Framework,overlap,0.415,ba
+2332,491,Manual Testing,Test Documentation,close,0.672,ab
+2333,1185,EPP,Endpoint Protection,abbrev,0.207,ab
+2334,749,IT infrastructure support,IT infrastructure integration,overlap,0.817,ba
+2335,104,iOS Deployment,WiFi Deployment,close,0.638,ab
+2336,300,SD-WAN,LAN/WAN support,close,0.593,ba
+2337,322,Cybersecurity,IT Security Solutions,close,0.628,ab
+2338,10,Supply Chain IT,Retail Operations,close,0.577,ba
+2339,254,Application Development,Backend Development,close,0.661,ab
+2340,624,Maintenance Master Data,Master Data Management,close,0.718,ab
+2341,1199,natural language processing,NLP,abbrev,0.602,ba
+2342,285,SAP BTP,SAP Solution Manager,close,0.648,ab
+2343,583,Security Consulting,Security Audits,close,0.559,ba
+2344,1036,Requirements Engineering,Business Process Documentation,far,0.38,ba
+2345,191,Vulnerability Assessment,Vulnerability Scanning,close,0.808,ab
+2346,239,Agile Documentation,Technical Design Documentation,close,0.603,ab
+2347,676,Remote Desktop Support,SAP Support,overlap,0.356,ab
+2348,106,Caching,Redis caching,close,0.682,ab
+2349,256,POS Systems,POS Management,close,0.83,ba
+2350,49,IT Security Compliance,Compliance Monitoring,close,0.614,ba
+2351,1068,Pentaho ETL,2nd Level Support,far,0.094,ba
+2352,551,Automation Projects,Automation Anywhere,close,0.761,ba
+2353,776,Project Deployment,Testing and Deployment,overlap,0.656,ab
+2354,1132,WAF,Web Application Firewalls,abbrev,0.164,ab
+2355,975,Network documentation,Functional Documentation,overlap,0.432,ba
+2356,1077,macOS Support,JBoss EAP,far,0.151,ba
+2357,623,Mandarin Fluency,Mandarin Language,close,0.809,ba
+2358,448,Database maintenance,Server Maintenance,close,0.708,ab
+2359,781,Data Cleansing,Data Encryption,overlap,0.332,ab
+2360,243,Documentation Standards,Business Requirements Documentation,close,0.635,ba
+2361,293,IT security controls,IT Compliance,close,0.58,ba
+2362,715,SVN Version Control,Version Upgrade,overlap,0.39,ab
+2363,894,Technical Troubleshooting,SD-WAN troubleshooting,overlap,0.332,ba
+2364,836,Apache Tomcat,Apache Flink,overlap,0.404,ba
+2365,661,Device driver development,Mobile Device Support,overlap,0.462,ab
+2366,1061,AWS SageMaker,IT Risk Assessment,far,0.082,ab
+2367,67,IT Consulting,IT Asset Management,close,0.566,ba
+2368,1067,RPG,Webpack Bundler,far,0.046,ab
+2369,1095,MS Project,MES troubleshooting,far,0.261,ba
+2370,785,Business Case Development,Test Case Management,overlap,0.548,ab
+2371,743,Reporting,Reporting & Analytics,overlap,0.702,ab
+2372,953,Wireless Technologies,Wireless Access Point Setup,overlap,0.47,ba
+2373,415,Azure Security Center,Security Operations Center,close,0.665,ab
+2374,931,Server Administration,Server Configuration,overlap,0.645,ab
+2375,788,Cross-functional Collaboration,Cross-Platform Development,overlap,0.48,ab
+2376,1165,Security Information and Event Management,SIEM,abbrev,0.171,ba
+2377,961,Cybersecurity Risk Assessment,Vulnerability Assessment,overlap,0.616,ab
+2378,1050,Workforce Management,SIEM Integration,far,0.126,ba
+2379,845,SIEM Monitoring,Prometheus Monitoring,overlap,0.468,ba
+2380,750,Python automation,Reporting Automation,overlap,0.493,ab
+2381,1146,MIS,Management Information System,abbrev,0.383,ab
+2382,779,Business Analysis,Business Automation,overlap,0.442,ab
+2383,1062,VB.NET,Agile Testing,far,0.069,ba
+2384,949,Patch Management,Security Patch Management,overlap,0.886,ab
+2385,368,Software security,Security Patching,close,0.593,ba
+2386,1193,service level agreements,SLA,abbrev,0.276,ba
+2387,1114,continuous delivery,CD,abbrev,0.24,ba
+2388,204,Agile Development,Scrum Master,close,0.568,ab
+2389,481,Scrum Master,Agile Leadership,close,0.634,ba
+2390,823,Cybersecurity Strategy,Cybersecurity Awareness,overlap,0.721,ba
+2391,1137,Table Top Exercises,TTXs,abbrev,0.038,ba
+2392,955,GxP Compliance,HIPAA Compliance,overlap,0.344,ab
+2393,170,Bug Fixing,Software Patching,close,0.619,ab
+2394,711,A/B Testing,Android testing,overlap,0.409,ab
+2395,231,Reporting & Analytics,Project Reporting,close,0.623,ba
+2396,548,SAP ERP,SAP BTP,close,0.728,ba
+2397,259,SAP Solution Manager,SAP Workflow,close,0.725,ab
+2398,769,gRPC API,Postman API Testing,overlap,0.2,ab
+2399,671,Application Portfolio Management,Application Troubleshooting,overlap,0.296,ab
+2400,389,Database Tuning,Query Optimization,close,0.603,ab
