@@ -1,0 +1,21 @@
+short,long,author_check
+UML,Unified Modelling Language,agree
+SSIS,SQL Server Integration Services,agree
+IDS,intrusion detection systems,agree
+STLC,Software Testing Life Cycle,agree
+ITAM,IT Asset Management,agree
+RPA,Robotic Process Automation,agree
+DLP,Data Loss Prevention,agree
+BGP,Border Gateway Protocol,agree
+VB,Visual Basic,agree
+SEO,Search engine optimization,agree
+NIST,National Institute of Standards and Technology,agree
+CSDM,Common Service Data Model,agree
+MFA,multi-factor authentication,agree
+SbE,Specification by Example,disagree
+SaaS,Software as a Service,agree
+DR,Disaster Recovery,agree
+AD,Active Directory,agree
+RFP,request for proposal,agree
+AKS,Azure Kubernetes Service,agree
+CICS,Customer Information Control System,agree
