@@ -167,7 +167,10 @@ def run(judge: str, limit: int | None, ask=None, pairs_csv=PAIRS_CSV, out_dir=OU
         failures, waits = 0, 0
         new = batch[batch.id.isin(got)].assign(**{column: lambda d: d.id.map(got), "model": model_name(judge)})
         done = pd.concat([done, new], ignore_index=True)
-        done.to_csv(out, index=False, encoding="utf-8")          # saved after every batch
+        # saved after every batch: write a temporary file, then swap it in, so an interruption during the write
+        # leaves the previous complete file instead of a cut-off one (os.replace is a single step)
+        done.to_csv(out + ".tmp", index=False, encoding="utf-8")
+        os.replace(out + ".tmp", out)
         todo = todo[~todo.id.isin(done.id)]
         print(f"  labelled {len(done)} / {len(pairs)}")
         time.sleep(pause)                                        # stay under the per-minute limits

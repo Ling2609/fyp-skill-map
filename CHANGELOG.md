@@ -14,6 +14,8 @@ Planning, reasoning and research behind each decision are in the project roadmap
 - `merge_training_labels.py`: keeps a pair only if both judges give the same label in both orders and the orders
   mirror; BROADER → RELATED; output in the v1 format for the notebook. Labelling runs over several days (free Groq
   tier, 200k tokens per model per day; 678 / 2,400 rows by gpt-oss on day 1).
+- Safe save in `judge_reference_pairs.py` (temporary file, then swapped in), so an interruption can never leave a
+  cut-off label file. Qwen labels complete (2,400 / 2,400); gpt-oss 838 / 2,400.
   
 ## 2 Oct 2026 — Abbreviation dictionary (A8 add-on)
 
