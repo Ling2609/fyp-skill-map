@@ -3,94 +3,94 @@
  "pairs": "data/skill_relations/reference_pairs_v1.csv",
  "unanimous": {
   "cosine": {
-   "n": 204,
-   "macro_f1": 0.575,
-   "accuracy": 0.623,
-   "has_precision": 0.579,
+   "n": 230,
+   "macro_f1": 0.609,
+   "accuracy": 0.6,
+   "has_precision": 0.504,
    "has_recall": 0.785,
-   "false_has": 45
+   "false_has": 61
   },
   "model": {
-   "n": 204,
-   "macro_f1": 0.416,
-   "accuracy": 0.534,
-   "has_precision": 0.49,
+   "n": 230,
+   "macro_f1": 0.428,
+   "accuracy": 0.474,
+   "has_precision": 0.425,
    "has_recall": 0.962,
-   "false_has": 79
+   "false_has": 103
   },
   "weighted_accuracy": {
-   "cosine": 0.511,
-   "model": 0.432
+   "cosine": 0.512,
+   "model": 0.365
   },
   "per_band": {
    "0.85+": {
-    "n": 20,
-    "cosine": 0.85,
-    "model": 0.85
+    "n": 24,
+    "cosine": 0.708,
+    "model": 0.708
    },
    "0.75-0.85": {
-    "n": 55,
-    "cosine": 0.618,
-    "model": 0.6
+    "n": 63,
+    "cosine": 0.54,
+    "model": 0.524
    },
    "0.65-0.75": {
-    "n": 58,
-    "cosine": 0.345,
-    "model": 0.362
+    "n": 67,
+    "cosine": 0.448,
+    "model": 0.328
    },
    "0.55-0.65": {
-    "n": 33,
-    "cosine": 0.545,
-    "model": 0.424
+    "n": 40,
+    "cosine": 0.525,
+    "model": 0.35
    },
    "<0.55": {
-    "n": 38,
+    "n": 36,
     "cosine": 1.0,
-    "model": 0.632
+    "model": 0.639
    }
   }
  },
  "majority": {
   "cosine": {
-   "n": 374,
-   "macro_f1": 0.505,
-   "accuracy": 0.521,
-   "has_precision": 0.511,
+   "n": 392,
+   "macro_f1": 0.55,
+   "accuracy": 0.536,
+   "has_precision": 0.484,
    "has_recall": 0.681,
-   "false_has": 88
+   "false_has": 98
   },
   "model": {
-   "n": 374,
-   "macro_f1": 0.352,
-   "accuracy": 0.449,
-   "has_precision": 0.423,
+   "n": 392,
+   "macro_f1": 0.389,
+   "accuracy": 0.439,
+   "has_precision": 0.402,
    "has_recall": 0.956,
-   "false_has": 176
+   "false_has": 192
   },
   "weighted_accuracy": {
-   "cosine": 0.42,
-   "model": 0.363
+   "cosine": 0.443,
+   "model": 0.371
   },
   "per_band": {
    "0.85+": {
-    "n": 36,
-    "cosine": 0.694,
-    "model": 0.694
+    "n": 38,
+    "cosine": 0.658,
+    "model": 0.658
    },
    "0.75-0.85": {
-    "n": 93,
-    "cosine": 0.548,
-    "model": 0.538
+    "n": 100,
+    "cosine": 0.51,
+    "model": 0.5
    },
    "0.65-0.75": {
-    "n": 112,
-    "cosine": 0.357,
-    "model": 0.33
+    "n": 118,
+    "cosine": 0.449,
+    "model": 0.322
    },
    "0.55-0.65": {
-    "n": 93,
-    "cosine": 0.419,
-    "model": 0.344
+    "n": 96,
+    "cosine": 0.427,
+    "model": 0.365
    },
    "<0.55": {
     "n": 40,

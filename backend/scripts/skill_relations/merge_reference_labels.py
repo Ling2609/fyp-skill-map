@@ -3,7 +3,8 @@ Merge the three judges' labels into the reference set (Stage 2B) and measure how
 
 Reads data/skill_relations/reference_labels/label_<judge>.csv for claude, gpt_oss and qwen, and fills the judge
 columns of reference_pairs_v1.csv. Each 5-way label is also mapped to the model's 3 classes
-(SATISFIES = SAME + NARROWER, RELATED, NOT = BROADER + DIFFERENT), and two columns are added:
+(SATISFIES = SAME + NARROWER, RELATED = RELATED + BROADER, NOT = DIFFERENT; BROADER moved from NOT to RELATED on
+2 Oct, references.md "Where BROADER belongs", the same mapping as training set v2), and two columns are added:
   label3_unanimous  the class when all three judges agree on it (the high-confidence test set), else empty
   label3_majority   the class at least two judges give (a bigger, noisier test set), else empty
 Agreement is reported as Fleiss' kappa (3 judges) and Cohen's kappa per pair of judges: agreement beyond chance.
@@ -25,7 +26,7 @@ LABEL_DIR = "data/skill_relations/reference_labels"
 SPOT_CSV = "data/skill_relations/reference_spotcheck.csv"
 JUDGES = ["claude", "gpt_oss", "qwen"]
 TO_CLASS = {"SAME": "SATISFIES", "NARROWER": "SATISFIES", "RELATED": "RELATED",
-            "BROADER": "NOT", "DIFFERENT": "NOT"}
+            "BROADER": "RELATED", "DIFFERENT": "NOT"}
 SPOT_CHECK = 50
 SEED = 42
 
