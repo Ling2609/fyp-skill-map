@@ -1,0 +1,51 @@
+id,a,b,judges_say,author_check
+22,enterprise application architecture,Application Management,RELATED,agree
+29,assembly language basics,NFT integration,NOT,agree
+30,Terraform provisioning,Opencart Development,NOT,agree
+37,entity-relationship modelling,Relationship Management,NOT,agree
+38,middleware integration,Multi-Vendor Integration,RELATED,agree
+51,project scheduling,Project Implementation,RELATED,agree
+63,Responsive design,Responsive Web Design,SATISFIES,agree
+64,project management,Infrastructure Project Management,NOT,disagree
+86,team leadership,IT team leadership,NOT,diagree
+103,quantitative research,Epicor,NOT,unsure
+126,system-level programming,Linux system programming,NOT,diagree
+128,relational database design,Relational Databases,SATISFIES,agree
+137,enterprise application architecture,Enterprise Architecture Collaboration,RELATED,agree
+145,Collections framework,Competitor Analysis,NOT,agree
+149,cloud security,Azure cloud security,NOT,disagree
+150,Business model canvas,DMVPN,NOT,unsure
+153,software project planning,Software Project Management,SATISFIES,agree
+154,analytical thinking,Analytical Skills,SATISFIES,agree
+170,list manipulation,AV system configuration,NOT,agree
+172,Distributed application design,Cost Control,NOT,agree
+175,Searching techniques,Technical Review,NOT,agree
+183,scalable architecture design,Software Scalability,SATISFIES,agree
+185,Continuous integration,SharePoint Integration,NOT,unsure
+191,control flow,Control system integration,NOT,unsure
+206,System monitoring,IT Monitoring,SATISFIES,agree
+209,Stack usage,Full Stack,NOT,agree
+210,software design,System Programming,NOT,agree
+211,Factory pattern,Factory Automation Engineering,NOT,agree
+221,usability testing,UI Testing,RELATED,agree
+244,DevOps practices,DevOps Methodologies,SATISFIES,agree
+249,REST API integration,REST API Automation,RELATED,agree
+262,embedded computing,Embedded Analytics,NOT,unsure
+267,Unit testing,System testing,RELATED,agree
+268,Software project management,Project Management,SATISFIES,agree
+274,Business model development,Internal Audit Standards,NOT,agree
+278,Static analysis,Static Code Analysis,SATISFIES,agree
+285,full-stack development,Java Full-Stack,NOT,disagree
+288,thread safety assessment,Multithreading,SATISFIES,agree
+296,authentication implementation,Authorization Design,RELATED,agree
+298,file system administration,Salesforce Administration,NOT,agree
+307,Android development,Android native development,SATISFIES,agree
+326,Functional requirements definition,Requirements Specification,SATISFIES,agree
+328,control flow,Motion Control,NOT,agree
+335,Design pattern implementation,Design patterns,SATISFIES,agree
+349,authentication implementation,Authentication Solutions,SATISFIES,agree
+356,polymorphism,B2B SaaS Sales,NOT,agree
+361,Continuous quality improvement,Quality Management,SATISFIES,agree
+379,data flow diagrams,Workflow Diagramming,RELATED,agree
+392,Jakarta EE development,SAP Fiori Order Management,NOT,agree
+397,deadlock prevention,JSON Parsing,NOT,agree

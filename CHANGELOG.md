@@ -3,6 +3,22 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 2 Oct 2026 — Reference-set result: the v1 relationship model does not beat cosine on real pairs
+
+- (this commit) `merge_reference_labels.py`: three judges merged; Fleiss' κ 0.47; 204 unanimous pairs (79 SATISFIES,
+  30 RELATED, 95 NOT), 374 with a 2-of-3 majority. Author spot-check of 50 unanimous pairs: 40 agree, 5 disagree,
+  5 unsure (89% of decided); all 5 disagreements are general → specific pairs (e.g. project management → IT Project
+  Management) that the guide labels BROADER (= NOT) and the author sees as RELATED.
+- `evaluate_reference.py` on the 204 unanimous pairs: cosine macro-F1 0.575, "has it" precision 0.58 / recall 0.79,
+  45 false "has it"; **model (esco_onet, 10 epochs) macro-F1 0.416, precision 0.49 / recall 0.96, 79 false "has it"**,
+  and only 63% right on clearly unrelated pairs (< 0.55). The 374-pair set shows the same. The model is
+  overconfident on pairs that share words (Backlog management → Log management 0.99), so a confidence threshold
+  does not help (precision 0.52 at 0.9). Cause: trained on ESCO/O*NET phrasing with easy negatives (domain shift).
+  Not used in the app; next: training set v2 from SkillMap's own skill names with hard negatives.
+- Stage 1 v8 on 10 unseen live ads (seed 7, appended to `stage1_dryrun_evidence-v8.csv`): every sentence answered in
+  all 10 ads, 0 quotes rejected, about 31 skills per ad. Seen: duplicates within an ad (LLMs / Large Language Models)
+  and over-split lists (projector, speaker, microphone…) → to measure in E1.
+  
 ## 2 Oct 2026 — Reference set of real SkillMap pairs (Stage 2B), three judges
 
 - (this commit) `scripts/skill_relations/sample_reference_pairs.py`: 400 pairs "module skill → job skill" from the
