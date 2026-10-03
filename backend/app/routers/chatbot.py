@@ -125,9 +125,18 @@ def chat(req: ChatRequest, current_user: User = Depends(get_current_user)):
             model=MODEL,
             messages=groq_messages,
             temperature=0.7,
-            max_tokens=600,
+            # reasoning shares this budget (gpt-oss): 600 cut replies mid-sentence or left none at all (F21)
+            max_completion_tokens=3000,
+            reasoning_effort="low",
         )
-        reply = response.choices[0].message.content.strip()
+        choice = response.choices[0]
+        reply = (choice.message.content or "").strip()
+        if not reply:
+            raise HTTPException(status_code=502, detail="The assistant couldn't finish an answer. Please try again.")
+        if choice.finish_reason == "length":
+            reply += "\n\n(Answer cut short. Ask me to continue.)"
         return {"reply": reply, "mode": req.mode}
+    except HTTPException:
+        raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Groq API error: {str(e)}")

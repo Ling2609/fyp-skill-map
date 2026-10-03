@@ -11,9 +11,19 @@ import Chatbot from './pages/student/Chatbot';
 import Profile from './pages/student/Profile';
 
 function RoleRoute({ children, roles }) {
-  const { user, loading } = useAuth()
+  const { user, loading, serverDown } = useAuth()
   if (loading) return null
-  if (!user) return <Navigate to="/login" />
+  if (!user && serverDown) return (
+    <div className="min-h-screen flex items-center justify-center bg-slate-100 p-4">
+      <div className="bg-white rounded-xl shadow p-6 text-center max-w-sm">
+        <p className="font-semibold text-slate-800">Can't reach the server</p>
+        <p className="text-sm text-slate-500 mt-1">You're still signed in. Check that the backend is running, then retry.</p>
+        <button onClick={() => window.location.reload()}
+          className="mt-4 px-4 py-2 rounded-lg bg-blue-600 text-white text-sm font-medium hover:bg-blue-700">Retry</button>
+      </div>
+    </div>
+  )
+  if (!user) return <Navigate to="/login" replace />
   if (roles && !roles.includes(user.role)) return <Navigate to="/dashboard" />
   return children
 }

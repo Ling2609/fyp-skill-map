@@ -22,6 +22,9 @@ from app.services.skill_profile import build_skill_profile
 
 router = APIRouter(prefix="/profile", tags=["profile"])
 MODEL = "openai/gpt-oss-120b"
+# gpt-oss is a reasoning model: its hidden reasoning shares the output budget, so a small max_tokens (150/200 before)
+# can leave no room for the answer and the skills came back empty without any error (F20; same cause as Stage 1 v8)
+EXTRACT_LIMITS = {"max_completion_tokens": 2048, "reasoning_effort": "low"}
 
 
 def get_client() -> Groq:
@@ -98,10 +101,14 @@ Output the JSON array only:"""
             model=MODEL,
             messages=[{"role": "user", "content": prompt}],
             temperature=0.1,
-            max_tokens=200,
+            **EXTRACT_LIMITS,
         )
-        return _parse_json_array(resp.choices[0].message.content)[:15]
-    except Exception:
+        skills = _parse_json_array(resp.choices[0].message.content or "")[:15]
+        if not skills:
+            print(f"[project skills] empty answer (finish_reason={resp.choices[0].finish_reason})")
+        return skills
+    except Exception as e:
+        print(f"[project skills] extraction failed: {e}")   # still saved, just without skills
         return []
 
 
@@ -123,10 +130,14 @@ Output the JSON array only:"""
             model=MODEL,
             messages=[{"role": "user", "content": prompt}],
             temperature=0.1,
-            max_tokens=150,
+            **EXTRACT_LIMITS,
         )
-        return _parse_json_array(resp.choices[0].message.content)[:10]
-    except Exception:
+        skills = _parse_json_array(resp.choices[0].message.content or "")[:10]
+        if not skills:
+            print(f"[certification skills] empty answer (finish_reason={resp.choices[0].finish_reason})")
+        return skills
+    except Exception as e:
+        print(f"[certification skills] extraction failed: {e}")   # still saved, just without skills
         return []
 
 
@@ -262,6 +273,13 @@ def save_module_grades(
             )
 
     incoming_codes = {item.module_code for item in payload.grades}
+    if len(incoming_codes) != len(payload.grades):
+        # The same module twice used to crash the save (unique user + module, 500). Refuse it clearly instead of
+        # guessing which grade is meant (F13)
+        seen, dup = set(), set()
+        for item in payload.grades:
+            (dup if item.module_code in seen else seen).add(item.module_code)
+        raise HTTPException(status_code=422, detail=f"Each module can have only one grade: {', '.join(sorted(dup))}")
 
     # Delete modules that were removed (unticked electives, cleared grades)
     db.query(UserModule).filter(

@@ -58,7 +58,8 @@ export default function Login() {
       await login(res.data.access_token)
       navigate('/dashboard')
     } catch (err) {
-      setError(err.response?.data?.detail || 'Invalid email or password')
+      setError(err.response?.data?.detail
+        || (err.response ? 'Invalid email or password' : "Can't reach the server. Is the backend running?"))
     } finally {
       setLoading(false)
     }

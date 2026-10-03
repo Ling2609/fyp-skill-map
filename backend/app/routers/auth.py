@@ -2,6 +2,7 @@ import re
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError
+from sqlalchemy import func
 from sqlalchemy.orm import Session
 from app.database import get_db
 from app.models.user import User, UserRole
@@ -92,8 +93,10 @@ def register(payload: UserRegister, db: Session = Depends(get_db)):
     if len(payload.last_name.strip()) < 1:
         raise HTTPException(status_code=400, detail="Last name is required")
 
-    # Check uniqueness
-    if db.query(User).filter(User.email == payload.email).first():
+    # Check uniqueness. Emails are stored and compared in lower case: the email validator already lowercases the
+    # domain, so "Ann@Example.com" was stored as "Ann@example.com" and could not log in with what she typed (F13)
+    email = payload.email.strip().lower()
+    if db.query(User).filter(func.lower(User.email) == email).first():
         raise HTTPException(status_code=400, detail="Email already registered")
     if db.query(User).filter(User.username == payload.username.lower()).first():
         raise HTTPException(status_code=400, detail="Username already taken")
@@ -102,7 +105,7 @@ def register(payload: UserRegister, db: Session = Depends(get_db)):
         username=payload.username.lower(),  # store lowercase
         first_name=payload.first_name.strip(),
         last_name=payload.last_name.strip(),
-        email=payload.email,
+        email=email,
         hashed_password=hash_password(payload.password),
         role=UserRole(payload.role),
     )
@@ -114,10 +117,12 @@ def register(payload: UserRegister, db: Session = Depends(get_db)):
 
 @router.post("/login", response_model=Token)
 def login(payload: UserLogin, db: Session = Depends(get_db)):
-    # Try email first, then username
-    user = db.query(User).filter(User.email == payload.email).first()
+    # Try email first, then username; both case-insensitive (usernames are stored in lower case, emails compared
+    # with lower() so accounts saved before this fix still match)
+    ident = payload.email.strip().lower()
+    user = db.query(User).filter(func.lower(User.email) == ident).first()
     if not user:
-        user = db.query(User).filter(User.username == payload.email).first()
+        user = db.query(User).filter(User.username == ident).first()
     if not user or not verify_password(payload.password, user.hashed_password):
         raise HTTPException(status_code=401, detail="Invalid credentials")
     token = create_access_token({"sub": str(user.id), "role": user.role})
