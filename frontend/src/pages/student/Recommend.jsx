@@ -59,6 +59,7 @@ export default function Recommend() {
 
   const [skillCount, setSkillCount] = useState(null) // null = loading, 0 = empty profile, -1 = failed to load
   const [results, setResults] = useState(null)
+  const [shownQuery, setShownQuery] = useState('')   // the search the shown results are for
   const [sortBy, setSortBy] = useState('fit')   // 'fit' | 'skills'
   const [loading, setLoading] = useState(false)
   const [loadingStep, setLoadingStep] = useState(0)
@@ -102,6 +103,7 @@ export default function Recommend() {
       setTimeout(() => {
         if (searchId !== latestSearch.current) return
         setResults(res.data)
+        setShownQuery(searchRole.trim())
         sessionStorage.setItem('lastRoleFilter', searchRole)
         sessionStorage.setItem('lastActiveCategory', searchCategory)
         setLoading(false)
@@ -209,6 +211,7 @@ export default function Recommend() {
   const hasMore = results && visibleCount < sortedJobs.length
 
   const filtersOn = location !== 'all' || activeCategory !== 'all' || hideSenior
+  const matchCount = placeJobs.filter(job => titleOf(job) > 0).length
   const locationOptions = (
     <>
       <option value="all">All locations</option>
@@ -256,13 +259,13 @@ export default function Recommend() {
   )
   const sortSelect = (
     <label className="flex items-center gap-1.5 text-sm text-slate-500">
-      Sort
+      Sort by
       <span className="relative">
         <select value={sortBy} onChange={e => { setSortBy(e.target.value); setVisibleCount(10) }}
           title={sortBy === 'fit'
             ? 'Mixes skills matched, how close your overall profile is to the role, and entry-level roles first'
             : 'Jobs where you already have the most of the skills they ask for'}
-          className="appearance-none field-sizing-content bg-transparent text-slate-700 font-medium pr-6 cursor-pointer rounded
+          className="appearance-none [field-sizing-content] bg-transparent text-slate-700 font-medium pr-6 cursor-pointer rounded
             focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-200">
           <option value="fit">Best fit</option>
           <option value="skills">Most skills matched</option>
@@ -335,10 +338,16 @@ export default function Recommend() {
 
         {results && !loading && (
           <div className="space-y-1.5">
-            {allJobs.length > 0 && (
+            {/* Count line (3 Oct): a search only ranks (others stay below the divider), so with a search it counts the
+                jobs that match it, not the whole list; with nothing typed or set the header already gives the total */}
+            {allJobs.length > 0 && (shownQuery || filtersOn) && (
               <div className="pb-1 text-sm">
                 <p className="text-slate-500">
-                  {placeJobs.length} {placeJobs.length === 1 ? 'opening' : 'openings'}
+                  {shownQuery && matchCount === 0
+                    ? `No openings match “${shownQuery}”. Showing others that fit your profile.`
+                    : shownQuery
+                    ? `${matchCount} ${matchCount === 1 ? 'opening matches' : 'openings match'} “${shownQuery}”`
+                    : `${placeJobs.length} ${placeJobs.length === 1 ? 'opening' : 'openings'}`}
                   {filtersOn && (
                     <button onClick={clearFilters} className="ml-3 text-blue-600 hover:underline">Clear filters</button>
                   )}
