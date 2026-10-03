@@ -231,7 +231,7 @@ export default function Recommend() {
     : loc === 'MY' ? 'All Malaysia' : COUNTRY_NAMES[loc] || loc
   const categoryOptions = (
     <>
-      <option value="all">All categories</option>
+      <option value="all">All job categories</option>
       {subcategories.map(cat => <option key={cat} value={cat}>{cat}</option>)}
     </>
   )
@@ -320,7 +320,7 @@ export default function Recommend() {
           <div className="flex items-center gap-2 pb-4">
             <FilterButton label="Location" display={locationLabel(location)} active={location !== 'all'}
               value={location} onChange={handleLocation} onClear={() => handleLocation('all')}>{locationOptions}</FilterButton>
-            <FilterButton label="Category" display={activeCategory} active={activeCategory !== 'all'}
+            <FilterButton label="Job category" display={activeCategory} active={activeCategory !== 'all'}
               value={activeCategory} onChange={handleCategoryClick} onClear={() => handleCategoryClick('all')}>{categoryOptions}</FilterButton>
             <button type="button" aria-pressed={hideSenior} onClick={() => handleHideSenior(!hideSenior)}
               title="Hides jobs whose title says Senior, Lead or Manager"
