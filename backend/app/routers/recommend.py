@@ -8,7 +8,7 @@ from app.nlp.embedder import get_embedder
 from app.routers.auth import get_current_user
 from app.models.user import User
 from app.services.job_titles import SENIORITY_RANK, classify_seniority
-from app.services.job_search import TITLE, names_company_or_place, search_match
+from app.services.job_search import TITLE, names_company_or_place, search_match, title_boost
 from app.services.skill_names import canonical_key
 from app.services.job_requirements import BONUS_WEIGHT, job_skill_items, score_job, unit_name
 from app.services.skill_profile import (
@@ -185,14 +185,9 @@ def recommend_jobs(
             np.linalg.norm(profile_vec) * np.linalg.norm(job_vec) + 1e-8
         ))
 
-        # Title boost
+        # Title boost (whole words, same rule as the search tiers)
         if query:
-            title_lower = cached["job_title"].lower()
-            filter_lower = query.lower()
-            if filter_lower in title_lower:
-                score = min(score + 0.2, 1.0)
-            elif any(word in title_lower for word in filter_lower.split() if len(word) > 3):
-                score = min(score + 0.08, 1.0)
+            score = min(score + title_boost(query, cached["job_title"]), 1.0)
 
         sbert_scores.append((job_id, score))
 

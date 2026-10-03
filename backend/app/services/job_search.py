@@ -81,3 +81,18 @@ def names_company_or_place(query: str, company: str = "", location: str = "") ->
         return False
     phrase = f" {' '.join(q)} "
     return any(phrase in f" {' '.join(_words(f))} " for f in (company, location))
+
+
+def title_boost(query: str, title: str) -> float:
+    """Small fit bonus for a typed search: +0.2 if the query is a phrase in the title, +0.08 if one of its words
+    (4+ letters) is. Same whole-word rule as search_match, so "java" gives nothing to "JavaScript Developer"
+    (before 3 Oct a plain substring check did; external audit)."""
+    q = _words(query)
+    if not q:
+        return 0.0
+    title_words = _words(title)
+    if f" {' '.join(q)} " in f" {' '.join(title_words)} ":
+        return 0.2
+    if any(len(w) > 3 and w in title_words for w in q):
+        return 0.08
+    return 0.0
