@@ -183,7 +183,7 @@ export default function Recommend() {
               <input type="text" value={roleFilter}
                 onChange={e => setRoleFilter(e.target.value)}
                 onKeyDown={e => e.key === 'Enter' && handleFindJobs()}
-                placeholder="Search by role e.g. Software Engineer, Data Analyst..."
+                placeholder="Search by job title, skill, company or location, e.g. Data Analyst, Python, Penang"
                 className="flex-1 bg-transparent text-sm focus:outline-none text-slate-700 placeholder-slate-400" />
               {roleFilter && (
                 <button onClick={() => { setRoleFilter(''); setActiveCategory('all'); doSearch('', 0, 'all') }}
@@ -289,7 +289,10 @@ export default function Recommend() {
                           <span className="text-xs bg-slate-100 text-slate-500 px-2 py-0.5 rounded-md font-medium">{job.salary}</span>
                         )}
                         {job.top_job_skills?.slice(0, 3).map(skill => (
-                          <span key={skill} className="text-xs text-slate-400 px-2 py-0.5 rounded-md border border-slate-200">{skill}</span>
+                          // the skill the search matched comes first and is highlighted: it shows why the job is here
+                          <span key={skill} className={skill === job.search_skill
+                            ? 'text-xs text-blue-700 bg-blue-50 px-2 py-0.5 rounded-md border border-blue-200 font-medium'
+                            : 'text-xs text-slate-400 px-2 py-0.5 rounded-md border border-slate-200'}>{skill}</span>
                         ))}
                       </div>
                     </div>

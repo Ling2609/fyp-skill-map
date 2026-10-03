@@ -9,6 +9,7 @@ from app.routers.auth import get_current_user
 from app.models.user import User
 from app.services.job_titles import SENIORITY_RANK, classify_seniority
 from app.services.job_search import names_company_or_place, search_match
+from app.services.skill_names import canonical_key
 from app.services.job_requirements import BONUS_WEIGHT, job_skill_items, score_job, unit_name
 from app.services.skill_profile import (
     EMPTY_PROFILE_MESSAGE, build_skill_profile, count_modules, matched_mask, normalise_rows, profile_spellings,
@@ -23,9 +24,14 @@ PENALTY_PER_STEP = 0.12   # taken off the ranking score per level above entry le
 TO_LEARN_FROM_TOP = 20    # "skills to learn next" = skills missing most often in the student's top 20 matches
 
 
+UNSTATED_LEVEL_STEPS = 0.5   # a title that states no level is about as likely entry as mid level (3 Oct, was 1 step;
+                              # Indeed Hiring Lab 2026: 46% entry / 40% mid / 14% senior, and senior roles say so)
+
+
 def seniority_penalty(level: str) -> float:
-    """Graduates are entry level, so each level above that costs PENALTY_PER_STEP."""
-    return SENIORITY_RANK.get(level, 1) * PENALTY_PER_STEP
+    """Graduates are entry level, so each level above that costs PENALTY_PER_STEP; an unstated level half a step."""
+    steps = UNSTATED_LEVEL_STEPS if level == "unspecified" else SENIORITY_RANK.get(level, 1)
+    return steps * PENALTY_PER_STEP
 
 
 router = APIRouter(prefix="/recommend", tags=["recommend"])
@@ -156,6 +162,7 @@ def recommend_jobs(
     role_filter_stripped = payload.role_filter.strip()
     known_subcategories = {cached["subcategory"] for cached in list(_job_cache.values()) if cached.get("subcategory")}
     is_subcategory_filter = role_filter_stripped in known_subcategories
+    query_key = canonical_key(role_filter_stripped) if role_filter_stripped else ""   # "LLM" finds Large Language Models (A8)
 
     sbert_scores = []
     for job_id, cached in list(_job_cache.items()):
@@ -205,8 +212,9 @@ def recommend_jobs(
         hybrid_percent = round(hybrid * 100, 1)
         # Typed search: how well title / company / location match the query (3 = phrase ... 0 = none,
         # app/services/job_search.py); 0 for everyone without a typed query (category chip or plain list)
-        search_tier = search_match(role_filter_stripped, cached["job_title"], cached["company"], cached["location"]) \
-            if role_filter_stripped and not is_subcategory_filter else 0
+        search_tier, search_skill = search_match(
+            role_filter_stripped, cached["job_title"], cached["company"], cached["location"],
+            job_skills, cached["skill_keys"], query_key) if role_filter_stripped and not is_subcategory_filter else (0, "")
         results.append({
             "job_id": cached["job_id"],
             "job_title": cached["job_title"],
@@ -219,6 +227,7 @@ def recommend_jobs(
             "match_score": hybrid,
             "match_percent": hybrid_percent,      # ranking score (kept for sorting / debugging)
             "search_match": search_tier,           # typed search only: jobs matching the query come first
+            "search_skill": search_skill,          # the job skill the query matched (shown first on the card)
             "coverage_percent": coverage,          # shown to the student
             "level": level,                        # junior / unspecified / senior / lead / manager
             "skills_matched": matched,
@@ -226,7 +235,9 @@ def recommend_jobs(
             "coverage_basis": sc["basis"],                 # "required", or "preferred" when nothing is required
             "bonus_matched": sum(sc["bonus_met"]),
             "bonus_total": len(sc["bonus_units"]),
-            "top_job_skills": job_skills[:5],
+            # the searched skill first, so the card shows why the job matched (Hearst 2009: query-biased results)
+            "top_job_skills": ([search_skill] + [s for s in job_skills if s != search_skill])[:5] if search_skill
+                              else job_skills[:5],
             # Missing required skills (an either-or group is one, named "C# or Python")
             "_to_learn": [("|".join(sorted(items[i].key for i in u)), unit_name(items, u))
                           for u, ok in zip(sc["core_units"], sc["core_met"]) if not ok],
