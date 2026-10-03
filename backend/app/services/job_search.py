@@ -5,7 +5,7 @@ Search ranks by relevance first, then by fit: LinkedIn retrieves jobs that match
 them (references.md, "Search vs recommendation"). Before, a typed query only nudged the best-fit score, so the
 job searched for could come 9th. Students search by job title, company ("Celestica") or place ("Penang"), so all
 three fields count. Whole words only ("it" must not match "with", "java" must not match "javascript"); a plural s
-is ignored.
+and the endings -ing / -er / -ed are ignored ("test" finds Tester and Unit testing; see _base).
 
   4  the whole query appears as a phrase in the title
   3  ... in the company or the location, or the query is one of the job's skills ("python": the job requires Python;
@@ -26,9 +26,29 @@ import re
 TITLE, FIELD_OR_SKILL, ALL_WORDS, SOME_WORDS, NONE = 4, 3, 2, 1, 0
 
 
+# Word endings (3 Oct): "test" should find "Software Tester" and "Unit testing". A light rule, not a full stemmer:
+# Porter / Snowball merged wrong words in SkillMap's own 2,713 skill words ("intern" = "internal", "experience" =
+# "experiment", "communication" = "community"); stripping only -ing / -er / -ed with 4+ letters left gave 91 groups,
+# checked by hand (references.md "Search: word endings"). Words below stay as they are (custom ≠ customer,
+# engine ≠ engineer, Looker is a BI tool); "engineering" stops at "engineer".
+KEEP_WORDS = {"customer", "looker", "tender", "engineer"}
+
+
+def _base(word: str) -> str:
+    if len(word) > 3 and word.endswith("s") and not word.endswith("ss"):
+        word = word[:-1]                      # plural: developers -> developer
+    while word not in KEEP_WORDS:
+        for ending in ("ing", "er", "ed"):
+            if word.endswith(ending) and len(word) - len(ending) >= 4:
+                word = word[:-len(ending)]    # testing / tester -> test, filtering -> filter -> filt
+                break
+        else:
+            break
+    return word
+
+
 def _words(text: str) -> list[str]:
-    words = re.findall(r"[a-z0-9+#.]+", (text or "").lower())
-    return [w[:-1] if len(w) > 3 and w.endswith("s") and not w.endswith("ss") else w for w in words]
+    return [_base(w) for w in re.findall(r"[a-z0-9+#.]+", (text or "").lower())]
 
 
 def search_match(query: str, title: str, company: str = "", location: str = "",
