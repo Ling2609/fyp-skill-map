@@ -1,4 +1,5 @@
-// Job level read from the title by the backend (/recommend "level"). Shown, never used to hide a job.
+// Job level read from the title by the backend (/recommend "level"). Shown on the card; jobs are never hidden by
+// default (only if the student ticks "Hide senior roles" on Job Matches).
 // No tag when the title doesn't say a level ("unspecified"): most postings, and they're not assumed senior.
 const LEVELS = {
   junior:  { label: 'Entry level', className: 'bg-emerald-50 text-emerald-700' },

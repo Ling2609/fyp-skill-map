@@ -23,6 +23,10 @@ const stateOf = (place) => {
 }
 const inLocation = (job, loc) => loc === 'all'
   || (loc.includes(':') ? `${countryOf(job)}:${stateOf(job)}` === loc : countryOf(job) === loc)
+// "Hide senior roles" (3 Oct): only jobs whose TITLE says Senior / Lead / Manager (the amber tags). No "Entry level only"
+// filter: 130 of 214 titles state no level and about half of such postings are entry level (references.md), so it
+// would hide most suitable jobs. Off by default; the level penalty already ranks these lower.
+const SENIOR_LEVELS = ['senior', 'lead', 'manager']
 
 function NoSkillsState() {
   const navigate = useNavigate()
@@ -65,6 +69,7 @@ export default function Recommend() {
   const [activeCategory, setActiveCategory] = useState('all')
   const [locations, setLocations] = useState([])     // every (country, location) of current openings
   const [location, setLocation] = useState(sessionStorage.getItem('lastLocation') || 'all')
+  const [hideSenior, setHideSenior] = useState(sessionStorage.getItem('lastHideSenior') === '1')
   const [visibleCount, setVisibleCount] = useState(10)
   const latestSearch = useRef(0)   // only the newest search may update the page
 
@@ -160,8 +165,15 @@ export default function Recommend() {
     sessionStorage.setItem('lastLocation', loc)
   }
 
+  const handleHideSenior = (on) => {
+    setHideSenior(on)
+    setVisibleCount(10)
+    sessionStorage.setItem('lastHideSenior', on ? '1' : '0')
+  }
+
   const clearFilters = () => {
     handleLocation('all')
+    handleHideSenior(false)
     setActiveCategory('all')
     doSearch(roleFilter, 0, 'all')
   }
@@ -175,9 +187,12 @@ export default function Recommend() {
   // Job Matches shows only current openings (the backend no longer sends past 2024 postings;
   // those are used for Career Paths and market statistics instead)
   const allJobs = results?.recommendations || []
-  const placeJobs = allJobs.filter(job => inLocation(job, location))
-  // Options come from all current openings (stable list); counts follow the current search and chip
-  const countIn = (loc) => allJobs.filter(job => inLocation(job, loc)).length
+  const isSenior = (job) => SENIOR_LEVELS.includes(job.level)
+  const levelJobs = hideSenior ? allJobs.filter(job => !isSenior(job)) : allJobs
+  const placeJobs = levelJobs.filter(job => inLocation(job, location))
+  const seniorHere = allJobs.filter(job => inLocation(job, location) && isSenior(job)).length
+  // Options come from all current openings (stable list); counts follow the current search, chip and level switch
+  const countIn = (loc) => levelJobs.filter(job => inLocation(job, loc)).length
   const statesBy = {}
   for (const place of locations) {
     const c = countryOf(place), st = stateOf(place)
@@ -221,7 +236,7 @@ export default function Recommend() {
               <input type="text" value={roleFilter}
                 onChange={e => setRoleFilter(e.target.value)}
                 onKeyDown={e => e.key === 'Enter' && handleFindJobs()}
-                placeholder="Search by job title, skill, company or location, e.g. Data Analyst, Python, Penang"
+                placeholder="Search by job title, skill or company, e.g. Data Analyst, Python"
                 className="flex-1 bg-transparent text-sm focus:outline-none text-slate-700 placeholder-slate-400" />
               {roleFilter && (
                 <button onClick={() => { setRoleFilter(''); doSearch('', 0, activeCategory) }}
@@ -275,7 +290,7 @@ export default function Recommend() {
                 <div className="flex items-center gap-2">
                   <select value={location} onChange={e => handleLocation(e.target.value)} aria-label="Location"
                     className="text-xs text-slate-600 bg-white border border-slate-200 rounded-lg px-2 py-1.5 focus:outline-none focus:border-blue-300">
-                    <option value="all">All locations ({allJobs.length})</option>
+                    <option value="all">All locations ({levelJobs.length})</option>
                     {countries.map(c => (
                       <optgroup key={c} label={COUNTRY_NAMES[c] || c}>
                         <option value={c} disabled={countIn(c) === 0}>All {COUNTRY_NAMES[c] || c} ({countIn(c)})</option>
@@ -287,8 +302,14 @@ export default function Recommend() {
                       </optgroup>
                     ))}
                   </select>
-                  <span className="text-slate-400">{placeJobs.length} current {placeJobs.length === 1 ? 'opening' : 'openings'}</span>
-                  {(location !== 'all' || activeCategory !== 'all') && (
+                  <label className="flex items-center gap-1.5 text-slate-500 cursor-pointer select-none"
+                    title="Hides jobs whose title says Senior, Lead or Manager">
+                    <input type="checkbox" checked={hideSenior} onChange={e => handleHideSenior(e.target.checked)}
+                      className="accent-blue-600" />
+                    Hide senior roles ({seniorHere})
+                  </label>
+                  <span className="text-slate-400">· {placeJobs.length} current {placeJobs.length === 1 ? 'opening' : 'openings'}</span>
+                  {(location !== 'all' || activeCategory !== 'all' || hideSenior) && (
                     <button onClick={clearFilters} className="text-blue-600 hover:underline">Clear filters</button>
                   )}
                 </div>
