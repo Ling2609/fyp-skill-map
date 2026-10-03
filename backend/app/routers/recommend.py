@@ -8,7 +8,7 @@ from app.nlp.embedder import get_embedder
 from app.routers.auth import get_current_user
 from app.models.user import User
 from app.services.job_titles import SENIORITY_RANK, classify_seniority
-from app.services.job_search import names_company_or_place, search_match
+from app.services.job_search import TITLE, names_company_or_place, search_match
 from app.services.skill_names import canonical_key
 from app.services.job_requirements import BONUS_WEIGHT, job_skill_items, score_job, unit_name
 from app.services.skill_profile import (
@@ -111,7 +111,8 @@ def _sync_job_cache():
 
 class RecommendRequest(BaseModel):
     top_n: int = 10
-    role_filter: str = ""
+    role_filter: str = ""        # typed search (title, skill, company or location)
+    category: str = ""           # category chip; combines with the typed search (both apply)
     include_past: bool = False   # False = live jobs only (you can apply). Past 2024 postings are data
                                  # for Career Paths / market stats, not recommendations
 
@@ -141,14 +142,32 @@ def recommend_jobs(
     profile_text = " ".join(profile_skills)
     profile_vec = embedder.embed(profile_text)
 
-    # A company or place search ("Penang") only selects jobs (search_match below); mixing the word "Penang" into the
-    # profile vector would make the order inside that group noise. Job-title searches and category chips keep the mix.
+    # Older callers sent the category chip as role_filter; treat a role_filter that IS a category name as the chip
     query = payload.role_filter.strip()
-    names_place = bool(query) and any(
-        names_company_or_place(query, c["company"], c["location"]) for c in list(_job_cache.values())
-        if payload.include_past or c.get("source") == "live")
-    if query and not names_place:
-        role_vec = embedder.embed(query)
+    category = payload.category.strip()
+    known_subcategories = {cached["subcategory"] for cached in list(_job_cache.values()) if cached.get("subcategory")}
+    if query in known_subcategories and not category:
+        query, category = "", query
+    query_key = canonical_key(query) if query else ""   # "LLM" finds Large Language Models (A8)
+
+    # Search relevance of every eligible job, BEFORE any shortlist, so a job matching the query is never cut by
+    # top_n (external audit, 3 Oct). Tier 0 / "" for everyone without a typed query.
+    eligible = [(job_id, cached) for job_id, cached in list(_job_cache.items())
+                if (payload.include_past or cached.get("source") == "live")
+                and (not category or cached.get("subcategory") == category)]
+    search = {job_id: search_match(query, cached["job_title"], cached["company"], cached["location"],
+                                   cached["skills"], cached["skill_keys"], query_key) if query else (0, "")
+              for job_id, cached in eligible}
+
+    # A company or place search ("Penang") only selects jobs; mixing the word "Penang" into the profile vector would
+    # make the order inside that group noise. It counts as a company/place only if it is NOT also a job word: no job
+    # has it in its title or skills (else a company named "... Data ..." would turn "data" into a company search).
+    is_job_word = any(tier == TITLE or skill for tier, skill in search.values())
+    names_place = bool(query) and not is_job_word and any(
+        names_company_or_place(query, c["company"], c["location"]) for _, c in eligible)
+    mix_text = query if query and not names_place else category   # the chip keeps its old mix when nothing is typed
+    if mix_text:
+        role_vec = embedder.embed(mix_text)
         profile_vec = 0.6 * profile_vec + 0.4 * role_vec
         profile_vec = profile_vec / (np.linalg.norm(profile_vec) + 1e-8)
 
@@ -159,26 +178,17 @@ def recommend_jobs(
         grad_embeddings = np.array([])
 
     # ── SBERT ranking over all jobs ────────────────────────────────────────────
-    role_filter_stripped = payload.role_filter.strip()
-    known_subcategories = {cached["subcategory"] for cached in list(_job_cache.values()) if cached.get("subcategory")}
-    is_subcategory_filter = role_filter_stripped in known_subcategories
-    query_key = canonical_key(role_filter_stripped) if role_filter_stripped else ""   # "LLM" finds Large Language Models (A8)
-
     sbert_scores = []
-    for job_id, cached in list(_job_cache.items()):
-        if not payload.include_past and cached.get("source") != "live":
-            continue
-        if is_subcategory_filter and cached.get("subcategory") != role_filter_stripped:
-            continue
+    for job_id, cached in eligible:
         job_vec = cached["vec"]
         score = float(np.dot(profile_vec, job_vec) / (
             np.linalg.norm(profile_vec) * np.linalg.norm(job_vec) + 1e-8
         ))
 
         # Title boost
-        if role_filter_stripped and not is_subcategory_filter:
+        if query:
             title_lower = cached["job_title"].lower()
-            filter_lower = role_filter_stripped.lower()
+            filter_lower = query.lower()
             if filter_lower in title_lower:
                 score = min(score + 0.2, 1.0)
             elif any(word in title_lower for word in filter_lower.split() if len(word) > 3):
@@ -187,7 +197,8 @@ def recommend_jobs(
         sbert_scores.append((job_id, score))
 
     # Shortlist for coverage: the same level penalty, so a senior role doesn't take an entry-level role's place
-    sbert_scores.sort(key=lambda x: -(x[1] - seniority_penalty(_job_cache[x[0]]["level"])))
+    # Jobs matching the typed query first (relevance, then fit), as in the final order below
+    sbert_scores.sort(key=lambda x: (-search[x[0]][0], -(x[1] - seniority_penalty(_job_cache[x[0]]["level"]))))
     top_candidates = sbert_scores if payload.top_n <= 0 else sbert_scores[:payload.top_n]
 
     # ── Coverage on top candidates only — uses pre-computed + pre-normalised vecs ──
@@ -212,9 +223,7 @@ def recommend_jobs(
         hybrid_percent = round(hybrid * 100, 1)
         # Typed search: how well title / company / location match the query (3 = phrase ... 0 = none,
         # app/services/job_search.py); 0 for everyone without a typed query (category chip or plain list)
-        search_tier, search_skill = search_match(
-            role_filter_stripped, cached["job_title"], cached["company"], cached["location"],
-            job_skills, cached["skill_keys"], query_key) if role_filter_stripped and not is_subcategory_filter else (0, "")
+        search_tier, search_skill = search[job_id]
         results.append({
             "job_id": cached["job_id"],
             "job_title": cached["job_title"],

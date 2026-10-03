@@ -81,6 +81,15 @@ def get_subcategories(include_past: bool = False, db: Session = Depends(get_db))
     return sorted([s[0] for s in subcats if s[0]])
 
 
+@router.get("/locations")
+def get_locations(db: Session = Depends(get_db)):
+    """Location filter on Job Matches: every (country, location) of current openings. The page builds the
+    country -> state list from these once, so the options stay the same whatever the search; options with no
+    jobs are greyed out, not removed (NN/g dropdown guidelines, references.md "Location filter layout")."""
+    rows = db.query(Job.country, Job.location).filter(Job.source == "live").distinct().all()
+    return [{"country": country, "location": location} for country, location in rows]
+
+
 @router.get("/{job_id}/description")
 def get_job_description(
     job_id: str,

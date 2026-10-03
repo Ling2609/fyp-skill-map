@@ -12,6 +12,18 @@ const LOADING_STEPS = [
   'Almost done...',
 ]
 
+// Location filter (3 Oct): country, then state (references.md "Location filter layout"). Locations are stored as
+// "City, State" or just the country, so a Malaysian job without a city belongs to "All Malaysia" only.
+// Filter values: 'all', a country ('MY'), or country:state ('MY:Selangor').
+const COUNTRY_NAMES = { MY: 'Malaysia', SG: 'Singapore' }
+const countryOf = (place) => (place.country || 'MY').toUpperCase()
+const stateOf = (place) => {
+  const last = (place.location || '').split(',').pop().trim().replace(/^Federal Territory of /, '')
+  return Object.values(COUNTRY_NAMES).includes(last) ? '' : last
+}
+const inLocation = (job, loc) => loc === 'all'
+  || (loc.includes(':') ? `${countryOf(job)}:${stateOf(job)}` === loc : countryOf(job) === loc)
+
 function NoSkillsState() {
   const navigate = useNavigate()
   return (
@@ -51,6 +63,8 @@ export default function Recommend() {
   const [roleFilter, setRoleFilter] = useState('')
   const [subcategories, setSubcategories] = useState([])
   const [activeCategory, setActiveCategory] = useState('all')
+  const [locations, setLocations] = useState([])     // every (country, location) of current openings
+  const [location, setLocation] = useState(sessionStorage.getItem('lastLocation') || 'all')
   const [visibleCount, setVisibleCount] = useState(10)
   const latestSearch = useRef(0)   // only the newest search may update the page
 
@@ -75,6 +89,7 @@ export default function Recommend() {
       const res = await api.post('/recommend/', {
         top_n: searchCount,  // 0 = all
         role_filter: searchRole,
+        category: searchCategory === 'all' ? '' : searchCategory,   // chip and typed search both apply
       })
       clearInterval(stepInterval)
       if (searchId !== latestSearch.current) return   // a newer search has started, ignore this one
@@ -103,12 +118,16 @@ export default function Recommend() {
 
       api.get('/jobs/subcategories').catch(() => {})
         .then(res => res && setSubcategories(res.data))
+      api.get('/jobs/locations').catch(() => {})
+        .then(res => res && setLocations(res.data))
 
       // Keep the last search, but always fetch fresh results: saved results went stale after a
       // profile or matching change and showed different numbers from Job Detail (30 Sep)
       sessionStorage.removeItem('lastRecommendResults')   // left by older versions
-      const savedRole = sessionStorage.getItem('lastRoleFilter') || ''
       const savedCategory = sessionStorage.getItem('lastActiveCategory') || 'all'
+      // Before 3 Oct a chip also wrote its name into the search box; don't restore that as typed text
+      const savedRole = (sessionStorage.getItem('lastRoleFilter') || '') === savedCategory ? ''
+        : sessionStorage.getItem('lastRoleFilter') || ''
       setRoleFilter(savedRole)
       setActiveCategory(savedCategory)
       doSearch(savedRole, 0, savedCategory)
@@ -127,13 +146,22 @@ export default function Recommend() {
 
   if (skillCount === 0) return <NoSkillsState />
 
+  // Typed search, category chip and location combine (Baymard: different filter types use AND)
   const handleCategoryClick = (cat) => {
     setActiveCategory(cat)
-    if (cat === 'all') { setRoleFilter(''); doSearch('', 0, 'all') }
-    else { setRoleFilter(cat); doSearch(cat, 0, cat) }
+    doSearch(roleFilter, 0, cat)
   }
 
-  const handleFindJobs = () => {
+  const handleFindJobs = () => doSearch(roleFilter, 0, activeCategory)
+
+  const handleLocation = (loc) => {
+    setLocation(loc)
+    setVisibleCount(10)
+    sessionStorage.setItem('lastLocation', loc)
+  }
+
+  const clearFilters = () => {
+    handleLocation('all')
     setActiveCategory('all')
     doSearch(roleFilter, 0, 'all')
   }
@@ -147,12 +175,22 @@ export default function Recommend() {
   // Job Matches shows only current openings (the backend no longer sends past 2024 postings;
   // those are used for Career Paths and market statistics instead)
   const allJobs = results?.recommendations || []
+  const placeJobs = allJobs.filter(job => inLocation(job, location))
+  // Options come from all current openings (stable list); counts follow the current search and chip
+  const countIn = (loc) => allJobs.filter(job => inLocation(job, loc)).length
+  const statesBy = {}
+  for (const place of locations) {
+    const c = countryOf(place), st = stateOf(place)
+    statesBy[c] = statesBy[c] || new Set()
+    if (st) statesBy[c].add(st)
+  }
+  const countries = Object.keys(statesBy).sort((a, b) => (a === 'MY' ? -1 : b === 'MY' ? 1 : a.localeCompare(b)))
   // A typed search puts jobs matching it (title, company or location; search_match 3..0 from the backend) first;
   // the chosen sort only orders jobs within each group. Without a typed search every value is 0: nothing changes.
   const titleOf = (job) => job.search_match ?? 0
   const sortedJobs = sortBy === 'skills'
-    ? [...allJobs].sort((a, b) => titleOf(b) - titleOf(a) || coverageOf(b) - coverageOf(a) || b.match_score - a.match_score)
-    : allJobs
+    ? [...placeJobs].sort((a, b) => titleOf(b) - titleOf(a) || coverageOf(b) - coverageOf(a) || b.match_score - a.match_score)
+    : placeJobs
   const visibleJobs = sortedJobs.slice(0, visibleCount)
   const hasMore = results && visibleCount < sortedJobs.length
 
@@ -186,7 +224,7 @@ export default function Recommend() {
                 placeholder="Search by job title, skill, company or location, e.g. Data Analyst, Python, Penang"
                 className="flex-1 bg-transparent text-sm focus:outline-none text-slate-700 placeholder-slate-400" />
               {roleFilter && (
-                <button onClick={() => { setRoleFilter(''); setActiveCategory('all'); doSearch('', 0, 'all') }}
+                <button onClick={() => { setRoleFilter(''); doSearch('', 0, activeCategory) }}
                   className="text-slate-400 hover:text-slate-600 text-xs">✕</button>
               )}
             </div>
@@ -232,9 +270,28 @@ export default function Recommend() {
 
         {results && !loading && (
           <div className="space-y-1.5">
-            {results.recommendations?.length > 0 && (
+            {allJobs.length > 0 && (
               <div className="flex flex-wrap items-center justify-between gap-2 pb-1 text-xs">
-                <span className="text-slate-400">{allJobs.length} current openings</span>
+                <div className="flex items-center gap-2">
+                  <select value={location} onChange={e => handleLocation(e.target.value)} aria-label="Location"
+                    className="text-xs text-slate-600 bg-white border border-slate-200 rounded-lg px-2 py-1.5 focus:outline-none focus:border-blue-300">
+                    <option value="all">All locations ({allJobs.length})</option>
+                    {countries.map(c => (
+                      <optgroup key={c} label={COUNTRY_NAMES[c] || c}>
+                        <option value={c} disabled={countIn(c) === 0}>All {COUNTRY_NAMES[c] || c} ({countIn(c)})</option>
+                        {[...statesBy[c]].sort().map(st => (
+                          <option key={st} value={`${c}:${st}`} disabled={countIn(`${c}:${st}`) === 0}>
+                            {st} ({countIn(`${c}:${st}`)})
+                          </option>
+                        ))}
+                      </optgroup>
+                    ))}
+                  </select>
+                  <span className="text-slate-400">{placeJobs.length} current {placeJobs.length === 1 ? 'opening' : 'openings'}</span>
+                  {(location !== 'all' || activeCategory !== 'all') && (
+                    <button onClick={clearFilters} className="text-blue-600 hover:underline">Clear filters</button>
+                  )}
+                </div>
                 {/* Right: order */}
                 <Toggle
                   label="Sort by"
@@ -247,9 +304,9 @@ export default function Recommend() {
                 />
               </div>
             )}
-            {results.recommendations?.length === 0 ? (
+            {placeJobs.length === 0 ? (
               <div className="bg-white rounded-xl p-10 text-center border border-slate-200">
-                <p className="text-slate-400 text-sm">No current openings match this search. Try a broader search or another category.</p>
+                <p className="text-slate-400 text-sm">No current openings match this search. Try a broader search, another category or location.</p>
               </div>
             ) : (
               <>
@@ -306,7 +363,7 @@ export default function Recommend() {
                   </button>
                 )}
                 {!hasMore && sortedJobs.length > 0 && (
-                  <p className="text-center text-xs text-slate-400 py-3">All {sortedJobs.length} matches shown</p>
+                  <p className="text-center text-xs text-slate-400 py-3">{sortedJobs.length === 1 ? 'The only match shown' : `All ${sortedJobs.length} matches shown`}</p>
                 )}
               </>
             )}
