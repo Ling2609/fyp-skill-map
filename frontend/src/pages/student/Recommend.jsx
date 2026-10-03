@@ -264,22 +264,24 @@ export default function Recommend() {
       {loading ? 'Searching…' : 'Search'}
     </button>
   )
+  // Sort shows plain text with the browser's list invisibly on top (same as the filter buttons), so it is only as
+  // wide as "Best fit" in every browser
   const sortSelect = (
-    <label className="flex items-center gap-1.5 text-sm text-slate-500">
+    <span className="relative inline-flex items-center gap-1.5 text-sm text-slate-500 rounded focus-within:ring-2 focus-within:ring-blue-200">
       Sort by
-      <span className="relative">
-        <select value={sortBy} onChange={e => { setSortBy(e.target.value); setVisibleCount(10) }}
-          title={sortBy === 'fit'
-            ? 'Mixes skills matched, how close your overall profile is to the role, and entry-level roles first'
-            : 'Jobs where you already have the most of the skills they ask for'}
-          className="appearance-none [field-sizing:content] bg-transparent text-slate-700 font-medium pr-6 cursor-pointer rounded
-            focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-200">
-          <option value="fit">Best fit</option>
-          <option value="skills">Most skills matched</option>
-        </select>
-        <Chevron />
-      </span>
-    </label>
+      <span className="text-slate-700 font-medium">{sortBy === 'fit' ? 'Best fit' : 'Most skills matched'}</span>
+      <svg className="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+      </svg>
+      <select aria-label="Sort by" value={sortBy} onChange={e => { setSortBy(e.target.value); setVisibleCount(10) }}
+        title={sortBy === 'fit'
+          ? 'Mixes skills matched, how close your overall profile is to the role, and entry-level roles first'
+          : 'Jobs where you already have the most of the skills they ask for'}
+        className="absolute inset-0 w-full opacity-0 cursor-pointer">
+        <option value="fit">Best fit</option>
+        <option value="skills">Most skills matched</option>
+      </select>
+    </span>
   )
 
   return (
@@ -295,9 +297,15 @@ export default function Recommend() {
                 {results && ` · ${results.total_jobs_compared} current openings compared`}
               </p>
             </div>
+            {/* A visible button: matches come from the profile, so updating it is the main way to change them */}
             <button onClick={() => navigate('/profile')}
-              className="text-xs text-slate-400 hover:text-blue-600 transition mt-1">
-              ← Update profile
+              className="flex items-center gap-2 text-sm font-medium text-slate-700 bg-white border border-slate-200 rounded-lg px-3.5 py-2
+                hover:border-blue-300 hover:text-blue-700 transition shrink-0">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                  d="M15.232 5.232l3.536 3.536M9 13l6.232-6.232a2.5 2.5 0 113.536 3.536L12.536 16.536 8 18l1.464-4.536z" />
+              </svg>
+              Update profile
             </button>
           </div>
 
