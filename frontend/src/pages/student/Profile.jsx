@@ -58,9 +58,6 @@ function ProjectsTab({ projects, onRefresh }) {
       })
       setForm({ name: '', description: '', github_url: '' })
       onRefresh()
-      sessionStorage.removeItem('lastRecommendResults')
-      sessionStorage.removeItem('lastRoleFilter')
-      sessionStorage.removeItem('lastActiveCategory')
     } catch (err) {
       setError(err.response?.data?.detail || 'Failed to add project')
     } finally { setLoading(false) }
@@ -68,7 +65,6 @@ function ProjectsTab({ projects, onRefresh }) {
 
   const handleDelete = async (id) => {
     try { await api.delete(`/profile/projects/${id}`); onRefresh() 
-      sessionStorage.removeItem('lastRecommendResults')
     } catch { /* silent */ }
   }
 
@@ -181,9 +177,6 @@ function CertificationsTab({ certs, onRefresh }) {
       await api.post('/profile/certifications', { cert_name: form.cert_name.trim(), issuer: form.issuer.trim() })
       setForm({ cert_name: '', issuer: '' })
       onRefresh()
-      sessionStorage.removeItem('lastRecommendResults')
-      sessionStorage.removeItem('lastRoleFilter')
-      sessionStorage.removeItem('lastActiveCategory')
     } catch (err) {
       setError(err.response?.data?.detail || 'Failed to add certification')
     } finally { setLoading(false) }
@@ -191,7 +184,6 @@ function CertificationsTab({ certs, onRefresh }) {
 
   const handleDelete = async (id) => {
     try { await api.delete(`/profile/certifications/${id}`); onRefresh()
-      sessionStorage.removeItem('lastRecommendResults')
      } catch { /* silent */ }
   }
 
@@ -322,9 +314,6 @@ function ModulesTab({ onUnsavedChange, onSaved }) {
       setSavedSelections(gradedSelections(selections))
       setSaveStatus('saved')
       onSaved?.()  // refresh header stats
-      sessionStorage.removeItem('lastRecommendResults')
-      sessionStorage.removeItem('lastRoleFilter')
-      sessionStorage.removeItem('lastActiveCategory')
       setTimeout(() => setSaveStatus(''), 2500)
     } catch {
       setSaveStatus('error')
