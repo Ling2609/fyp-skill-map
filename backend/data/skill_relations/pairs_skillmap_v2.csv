@@ -1,0 +1,965 @@
+a,b,label5,source,split,label3
+Network Segmentation,Network Switches,RELATED,skillmap_overlap,train,RELATED
+Network Switches,Network Segmentation,RELATED,skillmap_overlap,train,RELATED
+Mandarin Language,Thai language,DIFFERENT,skillmap_close,train,NOT
+Thai language,Mandarin Language,DIFFERENT,skillmap_close,train,NOT
+IPsec VPN,VPN,NARROWER,skillmap_overlap,train,SATISFIES
+VPN,IPsec VPN,BROADER,skillmap_overlap,train,RELATED
+Inventory Control,Source Control,DIFFERENT,skillmap_overlap,train,NOT
+Source Control,Inventory Control,DIFFERENT,skillmap_overlap,train,NOT
+SSR,Server-Side Rendering,SAME,skillmap_abbrev,train,SATISFIES
+Server-Side Rendering,SSR,SAME,skillmap_abbrev,train,SATISFIES
+Endpoint Protection,Karma,DIFFERENT,skillmap_far,train,NOT
+Karma,Endpoint Protection,DIFFERENT,skillmap_far,train,NOT
+Security Frameworks,Security Automation,RELATED,skillmap_overlap,train,RELATED
+Security Automation,Security Frameworks,RELATED,skillmap_overlap,train,RELATED
+Risk-Based Testing,Testing,NARROWER,skillmap_close,train,SATISFIES
+Testing,Risk-Based Testing,BROADER,skillmap_close,train,RELATED
+Adobe InDesign,Backup Restore,DIFFERENT,skillmap_far,test,NOT
+Backup Restore,Adobe InDesign,DIFFERENT,skillmap_far,test,NOT
+SEO,Search engine optimization,SAME,skillmap_abbrev,train,SATISFIES
+Search engine optimization,SEO,SAME,skillmap_abbrev,train,SATISFIES
+Agile Scrum,Agile Testing,RELATED,skillmap_overlap,train,RELATED
+Agile Testing,Agile Scrum,RELATED,skillmap_overlap,train,RELATED
+Consulting Experience,Security Consulting,BROADER,skillmap_close,test,RELATED
+Security Consulting,Consulting Experience,NARROWER,skillmap_close,test,SATISFIES
+POC,Proof of Concept,SAME,skillmap_abbrev,test,SATISFIES
+Proof of Concept,POC,SAME,skillmap_abbrev,test,SATISFIES
+CL Programming,COBOL Programming,DIFFERENT,skillmap_overlap,train,NOT
+COBOL Programming,CL Programming,DIFFERENT,skillmap_overlap,train,NOT
+Budget Forecasting,Budget tracking,RELATED,skillmap_close,train,RELATED
+Budget tracking,Budget Forecasting,RELATED,skillmap_close,train,RELATED
+MFA,multi-factor authentication,SAME,skillmap_abbrev,val,SATISFIES
+multi-factor authentication,MFA,SAME,skillmap_abbrev,val,SATISFIES
+Google Cloud SQL,SQL Database,NARROWER,skillmap_close,train,SATISFIES
+SQL Database,Google Cloud SQL,BROADER,skillmap_close,train,RELATED
+Change Control,Control-M,DIFFERENT,skillmap_close,test,NOT
+Control-M,Change Control,DIFFERENT,skillmap_close,test,NOT
+Network Testing,Service Transition,DIFFERENT,skillmap_far,val,NOT
+Service Transition,Network Testing,DIFFERENT,skillmap_far,val,NOT
+CSDM,Common Service Data Model,SAME,skillmap_abbrev,train,SATISFIES
+Common Service Data Model,CSDM,SAME,skillmap_abbrev,train,SATISFIES
+ODI,Oracle Data Integrator,SAME,skillmap_abbrev,train,SATISFIES
+Oracle Data Integrator,ODI,SAME,skillmap_abbrev,train,SATISFIES
+ERP Configuration,Service Desk,DIFFERENT,skillmap_far,train,NOT
+Service Desk,ERP Configuration,DIFFERENT,skillmap_far,train,NOT
+TFS,Team Foundation server,SAME,skillmap_abbrev,train,SATISFIES
+Team Foundation server,TFS,SAME,skillmap_abbrev,train,SATISFIES
+Cloud Architecture,Network Architecture,RELATED,skillmap_close,train,RELATED
+Network Architecture,Cloud Architecture,RELATED,skillmap_close,train,RELATED
+Microsoft Dynamics 365,Microsoft Endpoint Manager,DIFFERENT,skillmap_overlap,train,NOT
+Microsoft Endpoint Manager,Microsoft Dynamics 365,DIFFERENT,skillmap_overlap,train,NOT
+Apache,Apache NiFi,BROADER,skillmap_close,test,RELATED
+Apache NiFi,Apache,NARROWER,skillmap_close,test,SATISFIES
+Microsoft Word,Microsoft Navision,DIFFERENT,skillmap_overlap,train,NOT
+Microsoft Navision,Microsoft Word,DIFFERENT,skillmap_overlap,train,NOT
+MCSE,Microsoft Certified System Engineer,SAME,skillmap_abbrev,test,SATISFIES
+Microsoft Certified System Engineer,MCSE,SAME,skillmap_abbrev,test,SATISFIES
+Cross-browser Testing,Cross-functional Leadership,DIFFERENT,skillmap_overlap,train,NOT
+Cross-functional Leadership,Cross-browser Testing,DIFFERENT,skillmap_overlap,train,NOT
+Equipment Troubleshooting,Troubleshooting,NARROWER,skillmap_close,train,SATISFIES
+Troubleshooting,Equipment Troubleshooting,BROADER,skillmap_close,train,RELATED
+UML,Unified Modelling Language,SAME,skillmap_abbrev,train,SATISFIES
+Unified Modelling Language,UML,SAME,skillmap_abbrev,train,SATISFIES
+R,Unity development,DIFFERENT,skillmap_far,train,NOT
+Unity development,R,DIFFERENT,skillmap_far,train,NOT
+AWS,AWS VPC,BROADER,skillmap_close,val,RELATED
+AWS VPC,AWS,NARROWER,skillmap_close,val,SATISFIES
+Email Communication,SIT Testing,DIFFERENT,skillmap_far,train,NOT
+SIT Testing,Email Communication,DIFFERENT,skillmap_far,train,NOT
+AML compliance,AutoCAD design,DIFFERENT,skillmap_far,train,NOT
+AutoCAD design,AML compliance,DIFFERENT,skillmap_far,train,NOT
+DLP,Data Loss Prevention,SAME,skillmap_abbrev,train,SATISFIES
+Data Loss Prevention,DLP,SAME,skillmap_abbrev,train,SATISFIES
+DNS,DNS Management,BROADER,skillmap_overlap,train,RELATED
+DNS Management,DNS,NARROWER,skillmap_overlap,train,SATISFIES
+Windows 10/11,Windows 7,RELATED,skillmap_overlap,train,RELATED
+Windows 7,Windows 10/11,RELATED,skillmap_overlap,train,RELATED
+Information Security,Security Monitoring,BROADER,skillmap_close,train,RELATED
+Security Monitoring,Information Security,NARROWER,skillmap_close,train,SATISFIES
+PC Setup,System Configuration,NARROWER,skillmap_close,test,SATISFIES
+System Configuration,PC Setup,BROADER,skillmap_close,test,RELATED
+CMDB,Configuration Management Database,SAME,skillmap_abbrev,train,SATISFIES
+Configuration Management Database,CMDB,SAME,skillmap_abbrev,train,SATISFIES
+Power electronics,Power Query,DIFFERENT,skillmap_overlap,test,NOT
+Power Query,Power electronics,DIFFERENT,skillmap_overlap,test,NOT
+Electrical Maintenance,Plant Maintenance,NARROWER,skillmap_close,train,SATISFIES
+Plant Maintenance,Electrical Maintenance,BROADER,skillmap_close,train,RELATED
+Data Reporting,Data Security,DIFFERENT,skillmap_overlap,train,NOT
+Data Security,Data Reporting,DIFFERENT,skillmap_overlap,train,NOT
+SIEM Integration,SIEM Monitoring,RELATED,skillmap_close,train,RELATED
+SIEM Monitoring,SIEM Integration,RELATED,skillmap_close,train,RELATED
+Azure Administration,Azure services,NARROWER,skillmap_close,train,SATISFIES
+Azure services,Azure Administration,BROADER,skillmap_close,train,RELATED
+Electrical Maintenance,Software Maintenance,DIFFERENT,skillmap_close,train,NOT
+Software Maintenance,Electrical Maintenance,DIFFERENT,skillmap_close,train,NOT
+Compliance Management,GDPR compliance,BROADER,skillmap_overlap,train,RELATED
+GDPR compliance,Compliance Management,NARROWER,skillmap_overlap,train,SATISFIES
+Incident Resolution,Incident Review,RELATED,skillmap_close,train,RELATED
+Incident Review,Incident Resolution,RELATED,skillmap_close,train,RELATED
+Cloud Computing,Cloud Technologies,SAME,skillmap_close,train,SATISFIES
+Cloud Technologies,Cloud Computing,SAME,skillmap_close,train,SATISFIES
+ARM,Azure Resource Manager,SAME,skillmap_abbrev,train,SATISFIES
+Azure Resource Manager,ARM,SAME,skillmap_abbrev,train,SATISFIES
+Production Planning,Test Planning,DIFFERENT,skillmap_overlap,train,NOT
+Test Planning,Production Planning,DIFFERENT,skillmap_overlap,train,NOT
+MUI,Material UI,SAME,skillmap_abbrev,train,SATISFIES
+Material UI,MUI,SAME,skillmap_abbrev,train,SATISFIES
+WPO,Web performance optimization,SAME,skillmap_abbrev,train,SATISFIES
+Web performance optimization,WPO,SAME,skillmap_abbrev,train,SATISFIES
+RBAC,role-based access control,SAME,skillmap_abbrev,train,SATISFIES
+role-based access control,RBAC,SAME,skillmap_abbrev,train,SATISFIES
+OpenShift,SIEM,DIFFERENT,skillmap_far,train,NOT
+SIEM,OpenShift,DIFFERENT,skillmap_far,train,NOT
+IT Asset Management,IT Consulting,DIFFERENT,skillmap_close,train,NOT
+IT Consulting,IT Asset Management,DIFFERENT,skillmap_close,train,NOT
+IT Service Desk,Qlik,DIFFERENT,skillmap_far,test,NOT
+Qlik,IT Service Desk,DIFFERENT,skillmap_far,test,NOT
+Compliance Testing,Manual Testing,RELATED,skillmap_close,train,RELATED
+Manual Testing,Compliance Testing,RELATED,skillmap_close,train,RELATED
+Sales Operations,Sales Strategy,RELATED,skillmap_close,train,RELATED
+Sales Strategy,Sales Operations,RELATED,skillmap_close,train,RELATED
+AWS EC2,AWS EKS,RELATED,skillmap_close,train,RELATED
+AWS EKS,AWS EC2,RELATED,skillmap_close,train,RELATED
+SmartForms,Windows Forms,DIFFERENT,skillmap_close,train,NOT
+Windows Forms,SmartForms,DIFFERENT,skillmap_close,train,NOT
+Reporting Automation,Technical Reporting,RELATED,skillmap_close,train,RELATED
+Technical Reporting,Reporting Automation,RELATED,skillmap_close,train,RELATED
+Firewall Configuration,IDS/IPS configuration,RELATED,skillmap_overlap,train,RELATED
+IDS/IPS configuration,Firewall Configuration,RELATED,skillmap_overlap,train,RELATED
+Golang,LAN Configuration,DIFFERENT,skillmap_far,test,NOT
+LAN Configuration,Golang,DIFFERENT,skillmap_far,test,NOT
+Azure ML,Azure SQL,DIFFERENT,skillmap_close,test,NOT
+Azure SQL,Azure ML,DIFFERENT,skillmap_close,test,NOT
+Distributed Systems Design,Distributed teams,DIFFERENT,skillmap_overlap,train,NOT
+Distributed teams,Distributed Systems Design,DIFFERENT,skillmap_overlap,train,NOT
+PC installation,PC Troubleshooting,RELATED,skillmap_overlap,train,RELATED
+PC Troubleshooting,PC installation,RELATED,skillmap_overlap,train,RELATED
+Asset Tracking,VB6,DIFFERENT,skillmap_far,test,NOT
+VB6,Asset Tracking,DIFFERENT,skillmap_far,test,NOT
+Project Delivery,Service Delivery,RELATED,skillmap_close,train,RELATED
+Service Delivery,Project Delivery,RELATED,skillmap_close,train,RELATED
+Non-functional Testing,On-page SEO,DIFFERENT,skillmap_far,train,NOT
+On-page SEO,Non-functional Testing,DIFFERENT,skillmap_far,train,NOT
+PMBOK,Project Management Body of Knowledge,SAME,skillmap_abbrev,train,SATISFIES
+Project Management Body of Knowledge,PMBOK,SAME,skillmap_abbrev,train,SATISFIES
+LANS,Local area networks,SAME,skillmap_abbrev,train,SATISFIES
+Local area networks,LANS,SAME,skillmap_abbrev,train,SATISFIES
+SPA,Single Page Applications,SAME,skillmap_abbrev,val,SATISFIES
+Single Page Applications,SPA,SAME,skillmap_abbrev,val,SATISFIES
+Unix/Linux,Robotics Development,DIFFERENT,skillmap_far,val,NOT
+Robotics Development,Unix/Linux,DIFFERENT,skillmap_far,val,NOT
+Email Administration,ERP Administration,DIFFERENT,skillmap_close,test,NOT
+ERP Administration,Email Administration,DIFFERENT,skillmap_close,test,NOT
+Database Tuning,Performance Tuning,NARROWER,skillmap_overlap,val,SATISFIES
+Performance Tuning,Database Tuning,BROADER,skillmap_overlap,val,RELATED
+ISO 27001,Postman,DIFFERENT,skillmap_far,train,NOT
+Postman,ISO 27001,DIFFERENT,skillmap_far,train,NOT
+GxP Compliance,Payroll Processing,DIFFERENT,skillmap_far,val,NOT
+Payroll Processing,GxP Compliance,DIFFERENT,skillmap_far,val,NOT
+Cross-functional Communication,Cross-Platform Development,DIFFERENT,skillmap_overlap,test,NOT
+Cross-Platform Development,Cross-functional Communication,DIFFERENT,skillmap_overlap,test,NOT
+Localization Testing,Mobile App Testing,RELATED,skillmap_overlap,train,RELATED
+Mobile App Testing,Localization Testing,RELATED,skillmap_overlap,train,RELATED
+Printer Maintenance,Remote monitoring,DIFFERENT,skillmap_far,train,NOT
+Remote monitoring,Printer Maintenance,DIFFERENT,skillmap_far,train,NOT
+Data Migration,React,DIFFERENT,skillmap_far,train,NOT
+React,Data Migration,DIFFERENT,skillmap_far,train,NOT
+Defect Management,Stakeholder Presentation,DIFFERENT,skillmap_far,train,NOT
+Stakeholder Presentation,Defect Management,DIFFERENT,skillmap_far,train,NOT
+Backup Administration,IT Administration,NARROWER,skillmap_overlap,train,SATISFIES
+IT Administration,Backup Administration,BROADER,skillmap_overlap,train,RELATED
+AWS EKS,AWS EMR,RELATED,skillmap_close,train,RELATED
+AWS EMR,AWS EKS,RELATED,skillmap_close,train,RELATED
+Axure,KPI Management,DIFFERENT,skillmap_far,val,NOT
+KPI Management,Axure,DIFFERENT,skillmap_far,val,NOT
+ASP.NET Web Forms,Real-time OS,DIFFERENT,skillmap_far,train,NOT
+Real-time OS,ASP.NET Web Forms,DIFFERENT,skillmap_far,train,NOT
+Network Engineering,Network Optimization,BROADER,skillmap_close,train,RELATED
+Network Optimization,Network Engineering,NARROWER,skillmap_close,train,SATISFIES
+Compatibility Testing,Cross-Browser Compatibility,BROADER,skillmap_overlap,train,RELATED
+Cross-Browser Compatibility,Compatibility Testing,NARROWER,skillmap_overlap,train,SATISFIES
+SSRS,SQL Server Reporting Services,SAME,skillmap_abbrev,train,SATISFIES
+SQL Server Reporting Services,SSRS,SAME,skillmap_abbrev,train,SATISFIES
+Unity 3D,VPN Management,DIFFERENT,skillmap_far,train,NOT
+VPN Management,Unity 3D,DIFFERENT,skillmap_far,train,NOT
+License Compliance,SAP Cloud,DIFFERENT,skillmap_far,train,NOT
+SAP Cloud,License Compliance,DIFFERENT,skillmap_far,train,NOT
+Networking Technologies,Network Programming,BROADER,skillmap_close,val,RELATED
+Network Programming,Networking Technologies,NARROWER,skillmap_close,val,SATISFIES
+IT Service Management,Python,DIFFERENT,skillmap_far,train,NOT
+Python,IT Service Management,DIFFERENT,skillmap_far,train,NOT
+Data Center Design,Data Cleansing,DIFFERENT,skillmap_overlap,train,NOT
+Data Cleansing,Data Center Design,DIFFERENT,skillmap_overlap,train,NOT
+ASM,Automatic Storage Management,SAME,skillmap_abbrev,train,SATISFIES
+Automatic Storage Management,ASM,SAME,skillmap_abbrev,train,SATISFIES
+Technical Communication,Telecom Engineering,DIFFERENT,skillmap_close,train,NOT
+Telecom Engineering,Technical Communication,DIFFERENT,skillmap_close,train,NOT
+PLC,programmable logic controller,SAME,skillmap_abbrev,train,SATISFIES
+programmable logic controller,PLC,SAME,skillmap_abbrev,train,SATISFIES
+Data Governance,Governance Framework,NARROWER,skillmap_overlap,train,SATISFIES
+Governance Framework,Data Governance,BROADER,skillmap_overlap,train,RELATED
+ELV Systems,SOC Operations,DIFFERENT,skillmap_far,train,NOT
+SOC Operations,ELV Systems,DIFFERENT,skillmap_far,train,NOT
+VB,Visual Basic,SAME,skillmap_abbrev,train,SATISFIES
+Visual Basic,VB,SAME,skillmap_abbrev,train,SATISFIES
+CISA,Certified Information Systems Auditor,SAME,skillmap_abbrev,train,SATISFIES
+Certified Information Systems Auditor,CISA,SAME,skillmap_abbrev,train,SATISFIES
+GCP,Google Cloud Platform,SAME,skillmap_abbrev,train,SATISFIES
+Google Cloud Platform,GCP,SAME,skillmap_abbrev,train,SATISFIES
+STP,straight-through processing,SAME,skillmap_abbrev,train,SATISFIES
+straight-through processing,STP,SAME,skillmap_abbrev,train,SATISFIES
+EF,Entity Framework,SAME,skillmap_abbrev,train,SATISFIES
+Entity Framework,EF,SAME,skillmap_abbrev,train,SATISFIES
+Cloud Infrastructure,IT infrastructure integration,RELATED,skillmap_close,train,RELATED
+IT infrastructure integration,Cloud Infrastructure,RELATED,skillmap_close,train,RELATED
+Agile Scrum,Network Automation,DIFFERENT,skillmap_far,train,NOT
+Network Automation,Agile Scrum,DIFFERENT,skillmap_far,train,NOT
+PMO,Project Management Office,SAME,skillmap_abbrev,val,SATISFIES
+Project Management Office,PMO,SAME,skillmap_abbrev,val,SATISFIES
+IDS/IPS,IP Address Management,DIFFERENT,skillmap_close,train,NOT
+IP Address Management,IDS/IPS,DIFFERENT,skillmap_close,train,NOT
+HCI,Human-Computer Interaction,SAME,skillmap_abbrev,train,SATISFIES
+Human-Computer Interaction,HCI,SAME,skillmap_abbrev,train,SATISFIES
+SharePoint,SharePoint Administration,BROADER,skillmap_overlap,train,RELATED
+SharePoint Administration,SharePoint,NARROWER,skillmap_overlap,train,SATISFIES
+MySQL Database,SQL Database Management,NARROWER,skillmap_close,test,SATISFIES
+SQL Database Management,MySQL Database,BROADER,skillmap_close,test,RELATED
+Postman API,Vulkan API,DIFFERENT,skillmap_overlap,train,NOT
+Vulkan API,Postman API,DIFFERENT,skillmap_overlap,train,NOT
+Windows OS,Windows OS Support,BROADER,skillmap_overlap,train,RELATED
+Windows OS Support,Windows OS,NARROWER,skillmap_overlap,train,SATISFIES
+Intrusion Detection,Security Monitoring,NARROWER,skillmap_close,train,SATISFIES
+Security Monitoring,Intrusion Detection,BROADER,skillmap_close,train,RELATED
+Network Switching,Switch Management,BROADER,skillmap_close,train,RELATED
+Switch Management,Network Switching,NARROWER,skillmap_close,train,SATISFIES
+Network Basics,Network Administration,BROADER,skillmap_overlap,train,RELATED
+Network Administration,Network Basics,NARROWER,skillmap_overlap,train,SATISFIES
+Big Data Architecture,Business Architecture,RELATED,skillmap_overlap,train,RELATED
+Business Architecture,Big Data Architecture,RELATED,skillmap_overlap,train,RELATED
+NIST,National Institute of Standards and Technology,SAME,skillmap_abbrev,train,SATISFIES
+National Institute of Standards and Technology,NIST,SAME,skillmap_abbrev,train,SATISFIES
+CISM Certification,CRISC Certification,DIFFERENT,skillmap_overlap,train,NOT
+CRISC Certification,CISM Certification,DIFFERENT,skillmap_overlap,train,NOT
+REST API Design,Vulkan API,DIFFERENT,skillmap_overlap,train,NOT
+Vulkan API,REST API Design,DIFFERENT,skillmap_overlap,train,NOT
+BGP,Border Gateway Protocol,SAME,skillmap_abbrev,train,SATISFIES
+Border Gateway Protocol,BGP,SAME,skillmap_abbrev,train,SATISFIES
+Software License Management,Software prototyping,DIFFERENT,skillmap_overlap,train,NOT
+Software prototyping,Software License Management,DIFFERENT,skillmap_overlap,train,NOT
+Network Engineering,WebLogic Server,DIFFERENT,skillmap_far,train,NOT
+WebLogic Server,Network Engineering,DIFFERENT,skillmap_far,train,NOT
+SAP Workflow,Workflow Configuration,NARROWER,skillmap_close,train,SATISFIES
+Workflow Configuration,SAP Workflow,BROADER,skillmap_close,train,RELATED
+Healthcare Domain Knowledge,Japanese (JLPT N3),DIFFERENT,skillmap_far,train,NOT
+Japanese (JLPT N3),Healthcare Domain Knowledge,DIFFERENT,skillmap_far,train,NOT
+E-commerce Analytics,E-commerce Platforms,RELATED,skillmap_close,train,RELATED
+E-commerce Platforms,E-commerce Analytics,RELATED,skillmap_close,train,RELATED
+Configuration Management,System Deployment,RELATED,skillmap_close,train,RELATED
+System Deployment,Configuration Management,RELATED,skillmap_close,train,RELATED
+System Integration,System Support,RELATED,skillmap_close,train,RELATED
+System Support,System Integration,RELATED,skillmap_close,train,RELATED
+Enterprise Architecture,macOS Administration,DIFFERENT,skillmap_far,val,NOT
+macOS Administration,Enterprise Architecture,DIFFERENT,skillmap_far,val,NOT
+ERP Support,Software Training,DIFFERENT,skillmap_far,train,NOT
+Software Training,ERP Support,DIFFERENT,skillmap_far,train,NOT
+PowerBI reporting,Windows Forms,DIFFERENT,skillmap_far,test,NOT
+Windows Forms,PowerBI reporting,DIFFERENT,skillmap_far,test,NOT
+Security Testing,Microsoft Visio,DIFFERENT,skillmap_far,train,NOT
+Microsoft Visio,Security Testing,DIFFERENT,skillmap_far,train,NOT
+SSG,Static Site Generation,SAME,skillmap_abbrev,train,SATISFIES
+Static Site Generation,SSG,SAME,skillmap_abbrev,train,SATISFIES
+Build automation,Infrastructure Automation,RELATED,skillmap_close,train,RELATED
+Infrastructure Automation,Build automation,RELATED,skillmap_close,train,RELATED
+ITIL Processes,Manufacturing processes,DIFFERENT,skillmap_overlap,test,NOT
+Manufacturing processes,ITIL Processes,DIFFERENT,skillmap_overlap,test,NOT
+SLA,service level agreements,SAME,skillmap_abbrev,train,SATISFIES
+service level agreements,SLA,SAME,skillmap_abbrev,train,SATISFIES
+Proactive Monitoring,PRTG monitoring,BROADER,skillmap_close,test,RELATED
+PRTG monitoring,Proactive Monitoring,NARROWER,skillmap_close,test,SATISFIES
+Project Documentation,System Documentation,RELATED,skillmap_close,val,RELATED
+System Documentation,Project Documentation,RELATED,skillmap_close,val,RELATED
+AAS,Azure Analysis Services,SAME,skillmap_abbrev,train,SATISFIES
+Azure Analysis Services,AAS,SAME,skillmap_abbrev,train,SATISFIES
+Progressive Web Apps,Web Applications,NARROWER,skillmap_close,train,SATISFIES
+Web Applications,Progressive Web Apps,BROADER,skillmap_close,train,RELATED
+LLMs,Large Language Models,SAME,skillmap_abbrev,train,SATISFIES
+Large Language Models,LLMs,SAME,skillmap_abbrev,train,SATISFIES
+NumPy,Python,NARROWER,skillmap_close,test,SATISFIES
+Python,NumPy,BROADER,skillmap_close,test,RELATED
+IA,Information Architecture,SAME,skillmap_abbrev,train,SATISFIES
+Information Architecture,IA,SAME,skillmap_abbrev,train,SATISFIES
+EIGRP routing,Routing configuration,NARROWER,skillmap_close,train,SATISFIES
+Routing configuration,EIGRP routing,BROADER,skillmap_close,train,RELATED
+PL/SQL,SQL Optimization,RELATED,skillmap_overlap,train,RELATED
+SQL Optimization,PL/SQL,RELATED,skillmap_overlap,train,RELATED
+Red Hat Linux,Unix/Linux administration,NARROWER,skillmap_close,train,SATISFIES
+Unix/Linux administration,Red Hat Linux,BROADER,skillmap_close,train,RELATED
+IT Infrastructure,IT Infrastructure Design,BROADER,skillmap_overlap,train,RELATED
+IT Infrastructure Design,IT Infrastructure,NARROWER,skillmap_overlap,train,SATISFIES
+IDS,intrusion detection systems,SAME,skillmap_abbrev,train,SATISFIES
+intrusion detection systems,IDS,SAME,skillmap_abbrev,train,SATISFIES
+Performance Monitoring,Prometheus Monitoring,BROADER,skillmap_overlap,test,RELATED
+Prometheus Monitoring,Performance Monitoring,NARROWER,skillmap_overlap,test,SATISFIES
+Mantis Tool,Security Tool Configuration,DIFFERENT,skillmap_overlap,train,NOT
+Security Tool Configuration,Mantis Tool,DIFFERENT,skillmap_overlap,train,NOT
+Incident Response Planning,Incident Ticket Management,RELATED,skillmap_close,train,RELATED
+Incident Ticket Management,Incident Response Planning,RELATED,skillmap_close,train,RELATED
+Lakehouse Architecture,MVP Architecture,DIFFERENT,skillmap_overlap,train,NOT
+MVP Architecture,Lakehouse Architecture,DIFFERENT,skillmap_overlap,train,NOT
+Knowledge Base Documentation,Business Documentation,NARROWER,skillmap_close,train,SATISFIES
+Business Documentation,Knowledge Base Documentation,BROADER,skillmap_close,train,RELATED
+ELV Systems,Virtual Tape Library,DIFFERENT,skillmap_far,train,NOT
+Virtual Tape Library,ELV Systems,DIFFERENT,skillmap_far,train,NOT
+Office 365 administration,Printer Administration,DIFFERENT,skillmap_overlap,train,NOT
+Printer Administration,Office 365 administration,DIFFERENT,skillmap_overlap,train,NOT
+AR,augmented reality,SAME,skillmap_abbrev,train,SATISFIES
+augmented reality,AR,SAME,skillmap_abbrev,train,SATISFIES
+Scripting,Unix scripting,BROADER,skillmap_close,train,RELATED
+Unix scripting,Scripting,NARROWER,skillmap_close,train,SATISFIES
+UC,Unified Communications,SAME,skillmap_abbrev,train,SATISFIES
+Unified Communications,UC,SAME,skillmap_abbrev,train,SATISFIES
+Azure Data Factory,Azure services,NARROWER,skillmap_close,train,SATISFIES
+Azure services,Azure Data Factory,BROADER,skillmap_close,train,RELATED
+Espresso Testing,Functional Testing,NARROWER,skillmap_overlap,train,SATISFIES
+Functional Testing,Espresso Testing,BROADER,skillmap_overlap,train,RELATED
+POS System Integration,POS System Support,RELATED,skillmap_close,train,RELATED
+POS System Support,POS System Integration,RELATED,skillmap_close,train,RELATED
+Microsoft Hyper-V,Virtualization,NARROWER,skillmap_close,train,SATISFIES
+Virtualization,Microsoft Hyper-V,BROADER,skillmap_close,train,RELATED
+IAM,Identity Access Management,SAME,skillmap_abbrev,train,SATISFIES
+Identity Access Management,IAM,SAME,skillmap_abbrev,train,SATISFIES
+Agile Testing,VB.NET,DIFFERENT,skillmap_far,train,NOT
+VB.NET,Agile Testing,DIFFERENT,skillmap_far,train,NOT
+Automation Anywhere,GUI Automation,NARROWER,skillmap_close,test,SATISFIES
+GUI Automation,Automation Anywhere,BROADER,skillmap_close,test,RELATED
+PAM,Privileged Access Management,SAME,skillmap_abbrev,train,SATISFIES
+Privileged Access Management,PAM,SAME,skillmap_abbrev,train,SATISFIES
+Electrical Engineering,Mechanical Engineering,DIFFERENT,skillmap_close,test,NOT
+Mechanical Engineering,Electrical Engineering,DIFFERENT,skillmap_close,test,NOT
+CAD Modeling,Process Modeling,DIFFERENT,skillmap_overlap,train,NOT
+Process Modeling,CAD Modeling,DIFFERENT,skillmap_overlap,train,NOT
+UFT,Unified Functional Testing,SAME,skillmap_abbrev,train,SATISFIES
+Unified Functional Testing,UFT,SAME,skillmap_abbrev,train,SATISFIES
+LAN,local area networks,SAME,skillmap_abbrev,train,SATISFIES
+local area networks,LAN,SAME,skillmap_abbrev,train,SATISFIES
+GRC,Governance Risk and Compliance Management,SAME,skillmap_abbrev,train,SATISFIES
+Governance Risk and Compliance Management,GRC,SAME,skillmap_abbrev,train,SATISFIES
+IT Service Management,Power BI Service,DIFFERENT,skillmap_overlap,train,NOT
+Power BI Service,IT Service Management,DIFFERENT,skillmap_overlap,train,NOT
+OOD,Object-Oriented Design,SAME,skillmap_abbrev,train,SATISFIES
+Object-Oriented Design,OOD,SAME,skillmap_abbrev,train,SATISFIES
+Data Reconciliation,Data Reporting,RELATED,skillmap_overlap,train,RELATED
+Data Reporting,Data Reconciliation,RELATED,skillmap_overlap,train,RELATED
+IT Risk Assessment,IT Security Solutions,RELATED,skillmap_close,val,RELATED
+IT Security Solutions,IT Risk Assessment,RELATED,skillmap_close,val,RELATED
+Process Documentation,Process Improvement,RELATED,skillmap_close,train,RELATED
+Process Improvement,Process Documentation,RELATED,skillmap_close,train,RELATED
+CRISC,Certified in Risk and Information Systems Control,SAME,skillmap_abbrev,test,SATISFIES
+Certified in Risk and Information Systems Control,CRISC,SAME,skillmap_abbrev,test,SATISFIES
+Cisco Firewall,Firewall,NARROWER,skillmap_overlap,train,SATISFIES
+Firewall,Cisco Firewall,BROADER,skillmap_overlap,train,RELATED
+RDBMS,UFT,DIFFERENT,skillmap_far,train,NOT
+UFT,RDBMS,DIFFERENT,skillmap_far,train,NOT
+OCR,optical character recognition software,SAME,skillmap_abbrev,train,SATISFIES
+optical character recognition software,OCR,SAME,skillmap_abbrev,train,SATISFIES
+Networking Technologies,VPC networking,BROADER,skillmap_overlap,val,RELATED
+VPC networking,Networking Technologies,NARROWER,skillmap_overlap,val,SATISFIES
+BA,Business Analyst,SAME,skillmap_abbrev,train,SATISFIES
+Business Analyst,BA,SAME,skillmap_abbrev,train,SATISFIES
+Google Cloud Platform,Huawei Cloud,RELATED,skillmap_overlap,train,RELATED
+Huawei Cloud,Google Cloud Platform,RELATED,skillmap_overlap,train,RELATED
+SOAP,SoapUI,BROADER,skillmap_close,train,RELATED
+SoapUI,SOAP,NARROWER,skillmap_close,train,SATISFIES
+Scripting,SQL Scripting,BROADER,skillmap_close,train,RELATED
+SQL Scripting,Scripting,NARROWER,skillmap_close,train,SATISFIES
+Data Storage,Dell EMC Storage,BROADER,skillmap_overlap,train,RELATED
+Dell EMC Storage,Data Storage,NARROWER,skillmap_overlap,train,SATISFIES
+Test Plan Development,vSphere Administration,DIFFERENT,skillmap_far,train,NOT
+vSphere Administration,Test Plan Development,DIFFERENT,skillmap_far,train,NOT
+Application Troubleshooting,Server Troubleshooting,RELATED,skillmap_close,train,RELATED
+Server Troubleshooting,Application Troubleshooting,RELATED,skillmap_close,train,RELATED
+Control-M Scheduling,GitHub Version Control,DIFFERENT,skillmap_overlap,train,NOT
+GitHub Version Control,Control-M Scheduling,DIFFERENT,skillmap_overlap,train,NOT
+Security Audits,Security policy enforcement,RELATED,skillmap_close,train,RELATED
+Security policy enforcement,Security Audits,RELATED,skillmap_close,train,RELATED
+Journey Mapping,Korean language,DIFFERENT,skillmap_far,train,NOT
+Korean language,Journey Mapping,DIFFERENT,skillmap_far,train,NOT
+BPM,Business Process Management,SAME,skillmap_abbrev,train,SATISFIES
+Business Process Management,BPM,SAME,skillmap_abbrev,train,SATISFIES
+Dynamics 365 Finance,Microsoft 365 Exchange,DIFFERENT,skillmap_overlap,train,NOT
+Microsoft 365 Exchange,Dynamics 365 Finance,DIFFERENT,skillmap_overlap,train,NOT
+CodeIgniter,PHP,NARROWER,skillmap_close,train,SATISFIES
+PHP,CodeIgniter,BROADER,skillmap_close,train,RELATED
+SDN,Software Defined Networking,SAME,skillmap_abbrev,train,SATISFIES
+Software Defined Networking,SDN,SAME,skillmap_abbrev,train,SATISFIES
+PMO Reporting,VMware Administration,DIFFERENT,skillmap_far,train,NOT
+VMware Administration,PMO Reporting,DIFFERENT,skillmap_far,train,NOT
+JavaScript Scripting,Remote Desktop Support,DIFFERENT,skillmap_far,train,NOT
+Remote Desktop Support,JavaScript Scripting,DIFFERENT,skillmap_far,train,NOT
+System Migration,Virtual machine migration,BROADER,skillmap_close,val,RELATED
+Virtual machine migration,System Migration,NARROWER,skillmap_close,val,SATISFIES
+Physics Simulation,Simulation software,NARROWER,skillmap_close,train,SATISFIES
+Simulation software,Physics Simulation,BROADER,skillmap_close,train,RELATED
+SIT,System Integration Testing,SAME,skillmap_abbrev,train,SATISFIES
+System Integration Testing,SIT,SAME,skillmap_abbrev,train,SATISFIES
+REST,Representational State Transfer,SAME,skillmap_abbrev,train,SATISFIES
+Representational State Transfer,REST,SAME,skillmap_abbrev,train,SATISFIES
+Bug Tracking,OAuth,DIFFERENT,skillmap_far,train,NOT
+OAuth,Bug Tracking,DIFFERENT,skillmap_far,train,NOT
+Wireless Access Point Setup,Wireless Technologies,NARROWER,skillmap_overlap,train,SATISFIES
+Wireless Technologies,Wireless Access Point Setup,BROADER,skillmap_overlap,train,RELATED
+Contract Management,CRM Management,DIFFERENT,skillmap_close,train,NOT
+CRM Management,Contract Management,DIFFERENT,skillmap_close,train,NOT
+Budget tracking,Issue Tracking,DIFFERENT,skillmap_overlap,train,NOT
+Issue Tracking,Budget tracking,DIFFERENT,skillmap_overlap,train,NOT
+Mobile UI Design,UI/UX Design,NARROWER,skillmap_close,train,SATISFIES
+UI/UX Design,Mobile UI Design,BROADER,skillmap_close,train,RELATED
+Marketing Analytics,Predictive Analytics,RELATED,skillmap_overlap,train,RELATED
+Predictive Analytics,Marketing Analytics,RELATED,skillmap_overlap,train,RELATED
+Build automation,Service Improvement,DIFFERENT,skillmap_far,train,NOT
+Service Improvement,Build automation,DIFFERENT,skillmap_far,train,NOT
+Cloud Computing,Hybrid Cloud,BROADER,skillmap_close,train,RELATED
+Hybrid Cloud,Cloud Computing,NARROWER,skillmap_close,train,SATISFIES
+LAN/WAN,Wireless LAN,BROADER,skillmap_close,train,RELATED
+Wireless LAN,LAN/WAN,NARROWER,skillmap_close,train,SATISFIES
+2nd Level Support,Pentaho ETL,DIFFERENT,skillmap_far,train,NOT
+Pentaho ETL,2nd Level Support,DIFFERENT,skillmap_far,train,NOT
+MES,Manufacturing Execution System,SAME,skillmap_abbrev,train,SATISFIES
+Manufacturing Execution System,MES,SAME,skillmap_abbrev,train,SATISFIES
+SIEM,Security Information and Event Management,SAME,skillmap_abbrev,val,SATISFIES
+Security Information and Event Management,SIEM,SAME,skillmap_abbrev,val,SATISFIES
+Access Control Management,Advanced Process Control,DIFFERENT,skillmap_overlap,train,NOT
+Advanced Process Control,Access Control Management,DIFFERENT,skillmap_overlap,train,NOT
+Cloudera Hadoop,Hadoop ecosystem,NARROWER,skillmap_close,train,SATISFIES
+Hadoop ecosystem,Cloudera Hadoop,BROADER,skillmap_close,train,RELATED
+Prompt Engineering,Windows Clustering,DIFFERENT,skillmap_far,train,NOT
+Windows Clustering,Prompt Engineering,DIFFERENT,skillmap_far,train,NOT
+Mobile UI/UX Design,UX Design,NARROWER,skillmap_overlap,test,SATISFIES
+UX Design,Mobile UI/UX Design,BROADER,skillmap_overlap,test,RELATED
+STL,STLC Knowledge,DIFFERENT,skillmap_close,train,NOT
+STLC Knowledge,STL,DIFFERENT,skillmap_close,train,NOT
+Operating Systems,OS configuration,BROADER,skillmap_close,train,RELATED
+OS configuration,Operating Systems,NARROWER,skillmap_close,train,SATISFIES
+Audio Post-Production,SIEM Monitoring,DIFFERENT,skillmap_far,train,NOT
+SIEM Monitoring,Audio Post-Production,DIFFERENT,skillmap_far,train,NOT
+ETL,extract transformation and load,SAME,skillmap_abbrev,train,SATISFIES
+extract transformation and load,ETL,SAME,skillmap_abbrev,train,SATISFIES
+AWS,Amazon Web Services,SAME,skillmap_abbrev,val,SATISFIES
+Amazon Web Services,AWS,SAME,skillmap_abbrev,val,SATISFIES
+Requirements Engineering,Software Engineering,NARROWER,skillmap_close,train,SATISFIES
+Software Engineering,Requirements Engineering,BROADER,skillmap_close,train,RELATED
+Monitoring & Alerting,Monitoring Automation,BROADER,skillmap_overlap,train,RELATED
+Monitoring Automation,Monitoring & Alerting,NARROWER,skillmap_overlap,train,SATISFIES
+SAP,SAP Administration,BROADER,skillmap_close,val,RELATED
+SAP Administration,SAP,NARROWER,skillmap_close,val,SATISFIES
+DNS,Domain Name System,SAME,skillmap_abbrev,train,SATISFIES
+Domain Name System,DNS,SAME,skillmap_abbrev,train,SATISFIES
+RCA,root cause analysis,SAME,skillmap_abbrev,train,SATISFIES
+root cause analysis,RCA,SAME,skillmap_abbrev,train,SATISFIES
+Red Hat OpenShift,Redshift,DIFFERENT,skillmap_close,train,NOT
+Redshift,Red Hat OpenShift,DIFFERENT,skillmap_close,train,NOT
+Adobe Creative Cloud,Cloud Development,DIFFERENT,skillmap_close,train,NOT
+Cloud Development,Adobe Creative Cloud,DIFFERENT,skillmap_close,train,NOT
+macOS Support,Printer Maintenance,DIFFERENT,skillmap_far,train,NOT
+Printer Maintenance,macOS Support,DIFFERENT,skillmap_far,train,NOT
+LAN/WAN,LAN/WAN design,BROADER,skillmap_close,train,RELATED
+LAN/WAN design,LAN/WAN,NARROWER,skillmap_close,train,SATISFIES
+RDBMS,Relational Database Management Systems,SAME,skillmap_abbrev,train,SATISFIES
+Relational Database Management Systems,RDBMS,SAME,skillmap_abbrev,train,SATISFIES
+Test Documentation,Test Execution,RELATED,skillmap_overlap,train,RELATED
+Test Execution,Test Documentation,RELATED,skillmap_overlap,train,RELATED
+Commissioning,Linux,DIFFERENT,skillmap_far,train,NOT
+Linux,Commissioning,DIFFERENT,skillmap_far,train,NOT
+User Access Control,Wireless Access Points,DIFFERENT,skillmap_overlap,val,NOT
+Wireless Access Points,User Access Control,DIFFERENT,skillmap_overlap,val,NOT
+MarTech,Marketing Tech,SAME,skillmap_abbrev,train,SATISFIES
+Marketing Tech,MarTech,SAME,skillmap_abbrev,train,SATISFIES
+DevEx,developer experience,SAME,skillmap_abbrev,train,SATISFIES
+developer experience,DevEx,SAME,skillmap_abbrev,train,SATISFIES
+Test Case Management,Testing,NARROWER,skillmap_close,train,SATISFIES
+Testing,Test Case Management,BROADER,skillmap_close,train,RELATED
+gRPC API,Maven,DIFFERENT,skillmap_far,train,NOT
+Maven,gRPC API,DIFFERENT,skillmap_far,train,NOT
+ITIL Change Management,ITIL problem management,RELATED,skillmap_overlap,train,RELATED
+ITIL problem management,ITIL Change Management,RELATED,skillmap_overlap,train,RELATED
+Project Management Software,Software Architecture,DIFFERENT,skillmap_overlap,train,NOT
+Software Architecture,Project Management Software,DIFFERENT,skillmap_overlap,train,NOT
+Hardware Deployment,Model Deployment,DIFFERENT,skillmap_overlap,train,NOT
+Model Deployment,Hardware Deployment,DIFFERENT,skillmap_overlap,train,NOT
+CRM,Customer Relationship Management,SAME,skillmap_abbrev,train,SATISFIES
+Customer Relationship Management,CRM,SAME,skillmap_abbrev,train,SATISFIES
+AWS Redshift,Redshift,SAME,skillmap_close,train,SATISFIES
+Redshift,AWS Redshift,SAME,skillmap_close,train,SATISFIES
+Effective Communication,Multilingual Communication,BROADER,skillmap_overlap,train,RELATED
+Multilingual Communication,Effective Communication,NARROWER,skillmap_overlap,train,SATISFIES
+English Proficiency,Urdu Language Proficiency,DIFFERENT,skillmap_overlap,test,NOT
+Urdu Language Proficiency,English Proficiency,DIFFERENT,skillmap_overlap,test,NOT
+Backend Integration,Relational Modeling,DIFFERENT,skillmap_far,train,NOT
+Relational Modeling,Backend Integration,DIFFERENT,skillmap_far,train,NOT
+FinTech,financial technology,SAME,skillmap_abbrev,test,SATISFIES
+financial technology,FinTech,SAME,skillmap_abbrev,test,SATISFIES
+JBoss EAP,macOS Support,DIFFERENT,skillmap_far,train,NOT
+macOS Support,JBoss EAP,DIFFERENT,skillmap_far,train,NOT
+Cisco CUBE,Travel Coordination,DIFFERENT,skillmap_far,train,NOT
+Travel Coordination,Cisco CUBE,DIFFERENT,skillmap_far,train,NOT
+Network Testing,Testing and debugging,NARROWER,skillmap_close,val,SATISFIES
+Testing and debugging,Network Testing,BROADER,skillmap_close,val,RELATED
+User Administration,User Experience Design,DIFFERENT,skillmap_overlap,train,NOT
+User Experience Design,User Administration,DIFFERENT,skillmap_overlap,train,NOT
+End-User Training,User Account Management,DIFFERENT,skillmap_overlap,train,NOT
+User Account Management,End-User Training,DIFFERENT,skillmap_overlap,train,NOT
+Black box testing,White Box Testing,RELATED,skillmap_overlap,train,RELATED
+White Box Testing,Black box testing,RELATED,skillmap_overlap,train,RELATED
+Mac OS,Snowflake,DIFFERENT,skillmap_far,train,NOT
+Snowflake,Mac OS,DIFFERENT,skillmap_far,train,NOT
+Containerization,Docker,BROADER,skillmap_close,train,RELATED
+Docker,Containerization,NARROWER,skillmap_close,train,SATISFIES
+ML,machine learning,SAME,skillmap_abbrev,train,SATISFIES
+machine learning,ML,SAME,skillmap_abbrev,train,SATISFIES
+D3.js,Node.js Backend,DIFFERENT,skillmap_overlap,train,NOT
+Node.js Backend,D3.js,DIFFERENT,skillmap_overlap,train,NOT
+Bloc,IAM security,DIFFERENT,skillmap_far,train,NOT
+IAM security,Bloc,DIFFERENT,skillmap_far,train,NOT
+Data Integration,Market data integration,BROADER,skillmap_close,train,RELATED
+Market data integration,Data Integration,NARROWER,skillmap_close,train,SATISFIES
+Business Requirements Analysis,Failure Analysis,DIFFERENT,skillmap_overlap,test,NOT
+Failure Analysis,Business Requirements Analysis,DIFFERENT,skillmap_overlap,test,NOT
+IIS,Internet Information Services,SAME,skillmap_abbrev,train,SATISFIES
+Internet Information Services,IIS,SAME,skillmap_abbrev,train,SATISFIES
+Axure,Security tool evaluation,DIFFERENT,skillmap_far,val,NOT
+Security tool evaluation,Axure,DIFFERENT,skillmap_far,val,NOT
+Microsoft Word,WordPress,DIFFERENT,skillmap_close,train,NOT
+WordPress,Microsoft Word,DIFFERENT,skillmap_close,train,NOT
+Linux/Unix scripting,Python Scripting,RELATED,skillmap_close,train,RELATED
+Python Scripting,Linux/Unix scripting,RELATED,skillmap_close,train,RELATED
+BI,Business Intelligence,SAME,skillmap_abbrev,train,SATISFIES
+Business Intelligence,BI,SAME,skillmap_abbrev,train,SATISFIES
+Customer Support,Huawei Networking,DIFFERENT,skillmap_far,train,NOT
+Huawei Networking,Customer Support,DIFFERENT,skillmap_far,train,NOT
+App Store Deployment,App Store Publishing,SAME,skillmap_overlap,train,SATISFIES
+App Store Publishing,App Store Deployment,SAME,skillmap_overlap,train,SATISFIES
+Business Process Documentation,Business Process Optimization,RELATED,skillmap_close,train,RELATED
+Business Process Optimization,Business Process Documentation,RELATED,skillmap_close,train,RELATED
+ITAM,IT Asset Management,SAME,skillmap_abbrev,train,SATISFIES
+IT Asset Management,ITAM,SAME,skillmap_abbrev,train,SATISFIES
+Level 3 support,Sales Strategy,DIFFERENT,skillmap_far,train,NOT
+Sales Strategy,Level 3 support,DIFFERENT,skillmap_far,train,NOT
+Data Visualization,LSMW Data Migration,DIFFERENT,skillmap_overlap,train,NOT
+LSMW Data Migration,Data Visualization,DIFFERENT,skillmap_overlap,train,NOT
+User Experience Design,User Story Writing,RELATED,skillmap_overlap,train,RELATED
+User Story Writing,User Experience Design,RELATED,skillmap_overlap,train,RELATED
+Hypothesis Testing,LAN/WAN networking,DIFFERENT,skillmap_far,train,NOT
+LAN/WAN networking,Hypothesis Testing,DIFFERENT,skillmap_far,train,NOT
+HRMS,Human Resource Management System,SAME,skillmap_abbrev,train,SATISFIES
+Human Resource Management System,HRMS,SAME,skillmap_abbrev,train,SATISFIES
+Team Collaboration,Team Coordination,SAME,skillmap_close,train,SATISFIES
+Team Coordination,Team Collaboration,SAME,skillmap_close,train,SATISFIES
+Microsoft Excel,Microsoft Office,NARROWER,skillmap_close,train,SATISFIES
+Microsoft Office,Microsoft Excel,BROADER,skillmap_close,train,RELATED
+PMI,Project Management Institute,SAME,skillmap_abbrev,train,SATISFIES
+Project Management Institute,PMI,SAME,skillmap_abbrev,train,SATISFIES
+Application Troubleshooting,Issue Tracking,RELATED,skillmap_close,train,RELATED
+Issue Tracking,Application Troubleshooting,RELATED,skillmap_close,train,RELATED
+Stakeholder Collaboration,Stakeholder Coordination,SAME,skillmap_close,train,SATISFIES
+Stakeholder Coordination,Stakeholder Collaboration,SAME,skillmap_close,train,SATISFIES
+HA,high availability,SAME,skillmap_abbrev,train,SATISFIES
+high availability,HA,SAME,skillmap_abbrev,train,SATISFIES
+End User Computing,Front-end debugging,DIFFERENT,skillmap_overlap,train,NOT
+Front-end debugging,End User Computing,DIFFERENT,skillmap_overlap,train,NOT
+Data Warehouse Design,Warehouse Management,DIFFERENT,skillmap_overlap,train,NOT
+Warehouse Management,Data Warehouse Design,DIFFERENT,skillmap_overlap,train,NOT
+CD,continuous delivery,SAME,skillmap_abbrev,train,SATISFIES
+continuous delivery,CD,SAME,skillmap_abbrev,train,SATISFIES
+CCTV System Integration,CRM Integration,DIFFERENT,skillmap_overlap,train,NOT
+CRM Integration,CCTV System Integration,DIFFERENT,skillmap_overlap,train,NOT
+BCM,Business Continuity Management,SAME,skillmap_abbrev,train,SATISFIES
+Business Continuity Management,BCM,SAME,skillmap_abbrev,train,SATISFIES
+AV troubleshooting,Issue Troubleshooting,NARROWER,skillmap_close,train,SATISFIES
+Issue Troubleshooting,AV troubleshooting,BROADER,skillmap_close,train,RELATED
+AI Integration,Blockchain integration,DIFFERENT,skillmap_overlap,train,NOT
+Blockchain integration,AI Integration,DIFFERENT,skillmap_overlap,train,NOT
+Knowledge Base Documentation,Firebase,DIFFERENT,skillmap_far,train,NOT
+Firebase,Knowledge Base Documentation,DIFFERENT,skillmap_far,train,NOT
+IDS/IPS Management,ISTQB Certification,DIFFERENT,skillmap_far,train,NOT
+ISTQB Certification,IDS/IPS Management,DIFFERENT,skillmap_far,train,NOT
+Information Security,Security Risk Assessment,BROADER,skillmap_close,train,RELATED
+Security Risk Assessment,Information Security,NARROWER,skillmap_close,train,SATISFIES
+Oracle SQL,SQL Database,NARROWER,skillmap_close,test,SATISFIES
+SQL Database,Oracle SQL,BROADER,skillmap_close,test,RELATED
+Networking,Network Operations,BROADER,skillmap_close,train,RELATED
+Network Operations,Networking,NARROWER,skillmap_close,train,SATISFIES
+ERD,Entity Relationship Diagram,SAME,skillmap_abbrev,train,SATISFIES
+Entity Relationship Diagram,ERD,SAME,skillmap_abbrev,train,SATISFIES
+SIEM Integration,Workforce Management,DIFFERENT,skillmap_far,train,NOT
+Workforce Management,SIEM Integration,DIFFERENT,skillmap_far,train,NOT
+Android Deployment,Project Deployment,NARROWER,skillmap_close,test,SATISFIES
+Project Deployment,Android Deployment,BROADER,skillmap_close,test,RELATED
+Microsoft Intune,Microsoft 365 Exchange,DIFFERENT,skillmap_overlap,val,NOT
+Microsoft 365 Exchange,Microsoft Intune,DIFFERENT,skillmap_overlap,val,NOT
+SAP FICO,SAP Fiori,DIFFERENT,skillmap_close,train,NOT
+SAP Fiori,SAP FICO,DIFFERENT,skillmap_close,train,NOT
+Cloud Computing,Hybrid Cloud Architecture,BROADER,skillmap_close,train,RELATED
+Hybrid Cloud Architecture,Cloud Computing,NARROWER,skillmap_close,train,SATISFIES
+Oscilloscope operation,Wi-Fi Administration,DIFFERENT,skillmap_far,train,NOT
+Wi-Fi Administration,Oscilloscope operation,DIFFERENT,skillmap_far,train,NOT
+RHEL,Red Hat Enterprise Linux,SAME,skillmap_abbrev,train,SATISFIES
+Red Hat Enterprise Linux,RHEL,SAME,skillmap_abbrev,train,SATISFIES
+AWS Cloud Architecture,Cloud cost optimization,RELATED,skillmap_close,train,RELATED
+Cloud cost optimization,AWS Cloud Architecture,RELATED,skillmap_close,train,RELATED
+IT Strategy,Microsoft Certified Systems Engineer,DIFFERENT,skillmap_far,train,NOT
+Microsoft Certified Systems Engineer,IT Strategy,DIFFERENT,skillmap_far,train,NOT
+Account Management,Data Management,DIFFERENT,skillmap_close,train,NOT
+Data Management,Account Management,DIFFERENT,skillmap_close,train,NOT
+SCADA,Supervisory Control and Data Acquisition,SAME,skillmap_abbrev,train,SATISFIES
+Supervisory Control and Data Acquisition,SCADA,SAME,skillmap_abbrev,train,SATISFIES
+Business Blueprinting,Data Lakehouse,DIFFERENT,skillmap_far,train,NOT
+Data Lakehouse,Business Blueprinting,DIFFERENT,skillmap_far,train,NOT
+WiFi Router Configuration,Workflow Configuration,DIFFERENT,skillmap_overlap,train,NOT
+Workflow Configuration,WiFi Router Configuration,DIFFERENT,skillmap_overlap,train,NOT
+CRM implementation,CRM systems,NARROWER,skillmap_close,train,SATISFIES
+CRM systems,CRM implementation,BROADER,skillmap_close,train,RELATED
+Engineering fundamentals,Mechanical Engineering,BROADER,skillmap_close,train,RELATED
+Mechanical Engineering,Engineering fundamentals,NARROWER,skillmap_close,train,SATISFIES
+NLP,natural language processing,SAME,skillmap_abbrev,train,SATISFIES
+natural language processing,NLP,SAME,skillmap_abbrev,train,SATISFIES
+Mobile Performance Optimization,Mobile Security,DIFFERENT,skillmap_overlap,train,NOT
+Mobile Security,Mobile Performance Optimization,DIFFERENT,skillmap_overlap,train,NOT
+Arabic language,Cantonese Language,DIFFERENT,skillmap_overlap,test,NOT
+Cantonese Language,Arabic language,DIFFERENT,skillmap_overlap,test,NOT
+NAS,Network Attached Storage,SAME,skillmap_abbrev,train,SATISFIES
+Network Attached Storage,NAS,SAME,skillmap_abbrev,train,SATISFIES
+EDKII framework,Workflow optimization,DIFFERENT,skillmap_far,test,NOT
+Workflow optimization,EDKII framework,DIFFERENT,skillmap_far,test,NOT
+Compliance Management,IT Security Compliance,BROADER,skillmap_close,train,RELATED
+IT Security Compliance,Compliance Management,NARROWER,skillmap_close,train,SATISFIES
+SAP Finance,SAP MDG,DIFFERENT,skillmap_close,train,NOT
+SAP MDG,SAP Finance,DIFFERENT,skillmap_close,train,NOT
+Logistics management,Routing protocols,DIFFERENT,skillmap_far,val,NOT
+Routing protocols,Logistics management,DIFFERENT,skillmap_far,val,NOT
+SQL Server Administration,PL/SQL,DIFFERENT,skillmap_overlap,train,NOT
+PL/SQL,SQL Server Administration,DIFFERENT,skillmap_overlap,train,NOT
+Nuxt.js,Retail Domain Knowledge,DIFFERENT,skillmap_far,train,NOT
+Retail Domain Knowledge,Nuxt.js,DIFFERENT,skillmap_far,train,NOT
+Payment switching,Routing and Switching,DIFFERENT,skillmap_overlap,test,NOT
+Routing and Switching,Payment switching,DIFFERENT,skillmap_overlap,test,NOT
+Agile Collaboration,Agile Documentation,RELATED,skillmap_close,val,RELATED
+Agile Documentation,Agile Collaboration,RELATED,skillmap_close,val,RELATED
+Apache Web Server,Exchange Server,DIFFERENT,skillmap_overlap,train,NOT
+Exchange Server,Apache Web Server,DIFFERENT,skillmap_overlap,train,NOT
+Security policy enforcement,Security Risk Assessment,RELATED,skillmap_close,train,RELATED
+Security Risk Assessment,Security policy enforcement,RELATED,skillmap_close,train,RELATED
+CMS,Content Management System,SAME,skillmap_abbrev,train,SATISFIES
+Content Management System,CMS,SAME,skillmap_abbrev,train,SATISFIES
+Cisco ACI,Cisco Unified Communications,DIFFERENT,skillmap_close,train,NOT
+Cisco Unified Communications,Cisco ACI,DIFFERENT,skillmap_close,train,NOT
+Developer Tools,Visual Studio,BROADER,skillmap_close,train,RELATED
+Visual Studio,Developer Tools,NARROWER,skillmap_close,train,SATISFIES
+SAP Integration,SAP PI/PO,BROADER,skillmap_close,train,RELATED
+SAP PI/PO,SAP Integration,NARROWER,skillmap_close,train,SATISFIES
+DR,Disaster Recovery,SAME,skillmap_abbrev,train,SATISFIES
+Disaster Recovery,DR,SAME,skillmap_abbrev,train,SATISFIES
+SAP Finance,SAP SD,DIFFERENT,skillmap_close,train,NOT
+SAP SD,SAP Finance,DIFFERENT,skillmap_close,train,NOT
+Azure Cloud,Azure Synapse,BROADER,skillmap_close,train,RELATED
+Azure Synapse,Azure Cloud,NARROWER,skillmap_close,train,SATISFIES
+Cross-functional Collaboration,Cross-platform mobile,DIFFERENT,skillmap_overlap,train,NOT
+Cross-platform mobile,Cross-functional Collaboration,DIFFERENT,skillmap_overlap,train,NOT
+Client Support,End-User Support,SAME,skillmap_overlap,train,SATISFIES
+End-User Support,Client Support,SAME,skillmap_overlap,train,SATISFIES
+SSIS,SQL Server Integration Services,SAME,skillmap_abbrev,test,SATISFIES
+SQL Server Integration Services,SSIS,SAME,skillmap_abbrev,test,SATISFIES
+ALM,Application Lifecycle Management,SAME,skillmap_abbrev,train,SATISFIES
+Application Lifecycle Management,ALM,SAME,skillmap_abbrev,train,SATISFIES
+Cloud Solutions,Salesforce Sales Cloud,BROADER,skillmap_close,train,RELATED
+Salesforce Sales Cloud,Cloud Solutions,NARROWER,skillmap_close,train,SATISFIES
+CRM Management,Microsoft Dynamics CRM,BROADER,skillmap_close,train,RELATED
+Microsoft Dynamics CRM,CRM Management,NARROWER,skillmap_close,train,SATISFIES
+Mobile QA automation,Network Automation,DIFFERENT,skillmap_overlap,train,NOT
+Network Automation,Mobile QA automation,DIFFERENT,skillmap_overlap,train,NOT
+Network documentation,System Documentation,NARROWER,skillmap_overlap,train,SATISFIES
+System Documentation,Network documentation,BROADER,skillmap_overlap,train,RELATED
+Oracle PL/SQL,Oracle RAC,DIFFERENT,skillmap_close,train,NOT
+Oracle RAC,Oracle PL/SQL,DIFFERENT,skillmap_close,train,NOT
+Issue Tracking,SOAR playbook development,DIFFERENT,skillmap_far,train,NOT
+SOAR playbook development,Issue Tracking,DIFFERENT,skillmap_far,train,NOT
+SAP Fiori,SAP PM,DIFFERENT,skillmap_close,train,NOT
+SAP PM,SAP Fiori,DIFFERENT,skillmap_close,train,NOT
+Agile Scrum,Search relevance evaluation,DIFFERENT,skillmap_far,train,NOT
+Search relevance evaluation,Agile Scrum,DIFFERENT,skillmap_far,train,NOT
+Git Version Control,IBM AS400,DIFFERENT,skillmap_far,train,NOT
+IBM AS400,Git Version Control,DIFFERENT,skillmap_far,train,NOT
+Advanced Process Control,IT Operations Support,DIFFERENT,skillmap_far,train,NOT
+IT Operations Support,Advanced Process Control,DIFFERENT,skillmap_far,train,NOT
+Sales Strategy,Technology Strategy,DIFFERENT,skillmap_overlap,train,NOT
+Technology Strategy,Sales Strategy,DIFFERENT,skillmap_overlap,train,NOT
+ITIL certification,ITIL Foundation,BROADER,skillmap_close,train,RELATED
+ITIL Foundation,ITIL certification,NARROWER,skillmap_close,train,SATISFIES
+Retail Domain Knowledge,SQL Query Optimization,DIFFERENT,skillmap_far,test,NOT
+SQL Query Optimization,Retail Domain Knowledge,DIFFERENT,skillmap_far,test,NOT
+Data Lake,Delta Lake,BROADER,skillmap_overlap,train,RELATED
+Delta Lake,Data Lake,NARROWER,skillmap_overlap,train,SATISFIES
+AutoCAD,CAD Modeling,NARROWER,skillmap_close,train,SATISFIES
+CAD Modeling,AutoCAD,BROADER,skillmap_close,train,RELATED
+CRM Integration,CRM systems,NARROWER,skillmap_overlap,train,SATISFIES
+CRM systems,CRM Integration,BROADER,skillmap_overlap,train,RELATED
+BGP routing,Routing and Switching,NARROWER,skillmap_close,train,SATISFIES
+Routing and Switching,BGP routing,BROADER,skillmap_close,train,RELATED
+Sales Support,Solution Selling,RELATED,skillmap_close,train,RELATED
+Solution Selling,Sales Support,RELATED,skillmap_close,train,RELATED
+Test Execution,Web Application Testing,BROADER,skillmap_close,train,RELATED
+Web Application Testing,Test Execution,NARROWER,skillmap_close,train,SATISFIES
+ALV Reporting,Business Reporting,NARROWER,skillmap_overlap,train,SATISFIES
+Business Reporting,ALV Reporting,BROADER,skillmap_overlap,train,RELATED
+Salesforce.com,Salesforce Sales Cloud,BROADER,skillmap_overlap,val,RELATED
+Salesforce Sales Cloud,Salesforce.com,NARROWER,skillmap_overlap,val,SATISFIES
+Computer System Validation,Computer Vision,DIFFERENT,skillmap_overlap,train,NOT
+Computer Vision,Computer System Validation,DIFFERENT,skillmap_overlap,train,NOT
+Security Controls Design,Software security,NARROWER,skillmap_close,train,SATISFIES
+Software security,Security Controls Design,BROADER,skillmap_close,train,RELATED
+Adobe Creative Cloud,Adobe Creative Suite,SAME,skillmap_close,train,SATISFIES
+Adobe Creative Suite,Adobe Creative Cloud,SAME,skillmap_close,train,SATISFIES
+Excel Services,Financial Services,DIFFERENT,skillmap_overlap,train,NOT
+Financial Services,Excel Services,DIFFERENT,skillmap_overlap,train,NOT
+Cross-functional Leadership,Functional Specification,DIFFERENT,skillmap_overlap,train,NOT
+Functional Specification,Cross-functional Leadership,DIFFERENT,skillmap_overlap,train,NOT
+MES troubleshooting,MS Project,DIFFERENT,skillmap_far,train,NOT
+MS Project,MES troubleshooting,DIFFERENT,skillmap_far,train,NOT
+HP-UX Administration,UI/UX development,DIFFERENT,skillmap_overlap,train,NOT
+UI/UX development,HP-UX Administration,DIFFERENT,skillmap_overlap,train,NOT
+Data Strategy,Data Structures,DIFFERENT,skillmap_close,val,NOT
+Data Structures,Data Strategy,DIFFERENT,skillmap_close,val,NOT
+Web Server Administration,Windows Server 2012,RELATED,skillmap_overlap,train,RELATED
+Windows Server 2012,Web Server Administration,RELATED,skillmap_overlap,train,RELATED
+Windows,Windows 10/11,BROADER,skillmap_close,train,RELATED
+Windows 10/11,Windows,NARROWER,skillmap_close,train,SATISFIES
+ITIL Foundation,ITIL Incident Management,BROADER,skillmap_close,train,RELATED
+ITIL Incident Management,ITIL Foundation,NARROWER,skillmap_close,train,SATISFIES
+Huawei Cloud,Huawei switching,DIFFERENT,skillmap_overlap,val,NOT
+Huawei switching,Huawei Cloud,DIFFERENT,skillmap_overlap,val,NOT
+Database development,SQL Database Management,RELATED,skillmap_close,train,RELATED
+SQL Database Management,Database development,RELATED,skillmap_close,train,RELATED
+IT Audit,SOC2 Auditing,BROADER,skillmap_close,val,RELATED
+SOC2 Auditing,IT Audit,NARROWER,skillmap_close,val,SATISFIES
+Microsoft 365 Exchange,Dynamics 365 Business Central,DIFFERENT,skillmap_overlap,val,NOT
+Dynamics 365 Business Central,Microsoft 365 Exchange,DIFFERENT,skillmap_overlap,val,NOT
+J2EE,Java 2 Platform Enterprise Edition,SAME,skillmap_abbrev,train,SATISFIES
+Java 2 Platform Enterprise Edition,J2EE,SAME,skillmap_abbrev,train,SATISFIES
+WANs,wide area networks,SAME,skillmap_abbrev,train,SATISFIES
+wide area networks,WANs,SAME,skillmap_abbrev,train,SATISFIES
+Data Visualization,Tableau Visualization,BROADER,skillmap_close,train,RELATED
+Tableau Visualization,Data Visualization,NARROWER,skillmap_close,train,SATISFIES
+Azure OpenAI,OpenAPI,DIFFERENT,skillmap_close,train,NOT
+OpenAPI,Azure OpenAI,DIFFERENT,skillmap_close,train,NOT
+24x7 Support,Customer Support,NARROWER,skillmap_overlap,train,SATISFIES
+Customer Support,24x7 Support,BROADER,skillmap_overlap,train,RELATED
+AWS networking,Huawei Networking,RELATED,skillmap_overlap,train,RELATED
+Huawei Networking,AWS networking,RELATED,skillmap_overlap,train,RELATED
+Aruba Wireless,Wireless LAN,NARROWER,skillmap_overlap,train,SATISFIES
+Wireless LAN,Aruba Wireless,BROADER,skillmap_overlap,train,RELATED
+SD-WAN troubleshooting,Technical Troubleshooting,NARROWER,skillmap_overlap,train,SATISFIES
+Technical Troubleshooting,SD-WAN troubleshooting,BROADER,skillmap_overlap,train,RELATED
+AD,Active Directory,SAME,skillmap_abbrev,val,SATISFIES
+Active Directory,AD,SAME,skillmap_abbrev,val,SATISFIES
+Cloud Technologies,Google Cloud Platform,BROADER,skillmap_overlap,train,RELATED
+Google Cloud Platform,Cloud Technologies,NARROWER,skillmap_overlap,train,SATISFIES
+Operating Systems,Unix,BROADER,skillmap_close,val,RELATED
+Unix,Operating Systems,NARROWER,skillmap_close,val,SATISFIES
+Power BI Service,Service Delivery Management,DIFFERENT,skillmap_overlap,train,NOT
+Service Delivery Management,Power BI Service,DIFFERENT,skillmap_overlap,train,NOT
+Go-to-Market Strategy,Information Security Management,DIFFERENT,skillmap_far,train,NOT
+Information Security Management,Go-to-Market Strategy,DIFFERENT,skillmap_far,train,NOT
+Test Framework Development,UIKit framework,DIFFERENT,skillmap_overlap,train,NOT
+UIKit framework,Test Framework Development,DIFFERENT,skillmap_overlap,train,NOT
+IT Operations Management,Operations Management,NARROWER,skillmap_close,train,SATISFIES
+Operations Management,IT Operations Management,BROADER,skillmap_close,train,RELATED
+Microsoft Hyper-V,Virtual Machines,NARROWER,skillmap_close,train,SATISFIES
+Virtual Machines,Microsoft Hyper-V,BROADER,skillmap_close,train,RELATED
+Data Analytics,Uniapp,DIFFERENT,skillmap_far,train,NOT
+Uniapp,Data Analytics,DIFFERENT,skillmap_far,train,NOT
+English Mandarin,Japanese Language,DIFFERENT,skillmap_close,train,NOT
+Japanese Language,English Mandarin,DIFFERENT,skillmap_close,train,NOT
+SQL Querying,T-SQL,BROADER,skillmap_close,test,RELATED
+T-SQL,SQL Querying,NARROWER,skillmap_close,test,SATISFIES
+GitLab CI/CD,Mobile CI/CD,RELATED,skillmap_overlap,train,RELATED
+Mobile CI/CD,GitLab CI/CD,RELATED,skillmap_overlap,train,RELATED
+Security Monitoring,Web Security,RELATED,skillmap_close,train,RELATED
+Web Security,Security Monitoring,RELATED,skillmap_close,train,RELATED
+Git Version Control,Source Control,NARROWER,skillmap_overlap,train,SATISFIES
+Source Control,Git Version Control,BROADER,skillmap_overlap,train,RELATED
+BCP,Business Continuity Planning,SAME,skillmap_abbrev,val,SATISFIES
+Business Continuity Planning,BCP,SAME,skillmap_abbrev,val,SATISFIES
+Android testing,Product Testing,NARROWER,skillmap_close,test,SATISFIES
+Product Testing,Android testing,BROADER,skillmap_close,test,RELATED
+Cloud Sales,Public Cloud,DIFFERENT,skillmap_close,train,NOT
+Public Cloud,Cloud Sales,DIFFERENT,skillmap_close,train,NOT
+IT Technical Support,L2/L3 Support,BROADER,skillmap_overlap,train,RELATED
+L2/L3 Support,IT Technical Support,NARROWER,skillmap_overlap,train,SATISFIES
+Cloud Solutions,Spring Cloud,BROADER,skillmap_close,train,RELATED
+Spring Cloud,Cloud Solutions,NARROWER,skillmap_close,train,SATISFIES
+Caching mechanisms,Pre-sales Engineering,DIFFERENT,skillmap_far,train,NOT
+Pre-sales Engineering,Caching mechanisms,DIFFERENT,skillmap_far,train,NOT
+Client Support,ERP Support,BROADER,skillmap_overlap,train,RELATED
+ERP Support,Client Support,NARROWER,skillmap_overlap,train,SATISFIES
+ISO 14001,ISO 8583,DIFFERENT,skillmap_close,val,NOT
+ISO 8583,ISO 14001,DIFFERENT,skillmap_close,val,NOT
+WebSphere Application Server,Windows Server Administration,DIFFERENT,skillmap_overlap,train,NOT
+Windows Server Administration,WebSphere Application Server,DIFFERENT,skillmap_overlap,train,NOT
+Content Marketing,Marketing Analytics,RELATED,skillmap_close,train,RELATED
+Marketing Analytics,Content Marketing,RELATED,skillmap_close,train,RELATED
+Cybersecurity,NIST Cybersecurity Framework,BROADER,skillmap_close,train,RELATED
+NIST Cybersecurity Framework,Cybersecurity,NARROWER,skillmap_close,train,SATISFIES
+Mobile App Architecture,Mobile-First Development,RELATED,skillmap_close,train,RELATED
+Mobile-First Development,Mobile App Architecture,RELATED,skillmap_close,train,RELATED
+SOAP,Simple Object Access Protocol,SAME,skillmap_abbrev,train,SATISFIES
+Simple Object Access Protocol,SOAP,SAME,skillmap_abbrev,train,SATISFIES
+IT infrastructure support,Windows Support,BROADER,skillmap_close,test,RELATED
+Windows Support,IT infrastructure support,NARROWER,skillmap_close,test,SATISFIES
+System Support,UAT Support,BROADER,skillmap_overlap,test,RELATED
+UAT Support,System Support,NARROWER,skillmap_overlap,test,SATISFIES
+Test Case Design,Testing,NARROWER,skillmap_close,train,SATISFIES
+Testing,Test Case Design,BROADER,skillmap_close,train,RELATED
+Control-M Scheduling,Mandarin Fluency,DIFFERENT,skillmap_far,train,NOT
+Mandarin Fluency,Control-M Scheduling,DIFFERENT,skillmap_far,train,NOT
+Automation Anywhere,Automation Projects,NARROWER,skillmap_close,test,SATISFIES
+Automation Projects,Automation Anywhere,BROADER,skillmap_close,test,RELATED
+AWS Cloud Architecture,Azure Cloud Services,RELATED,skillmap_close,train,RELATED
+Azure Cloud Services,AWS Cloud Architecture,RELATED,skillmap_close,train,RELATED
+Staff Training,Training Development,RELATED,skillmap_overlap,train,RELATED
+Training Development,Staff Training,RELATED,skillmap_overlap,train,RELATED
+Hybrid Cloud Architecture,Travel Coordination,DIFFERENT,skillmap_far,train,NOT
+Travel Coordination,Hybrid Cloud Architecture,DIFFERENT,skillmap_far,train,NOT
+C programming,Database Programming,DIFFERENT,skillmap_overlap,train,NOT
+Database Programming,C programming,DIFFERENT,skillmap_overlap,train,NOT
+Testing and debugging,Web Testing,BROADER,skillmap_overlap,val,RELATED
+Web Testing,Testing and debugging,NARROWER,skillmap_overlap,val,SATISFIES
+Data Security,IT security controls,NARROWER,skillmap_close,train,SATISFIES
+IT security controls,Data Security,BROADER,skillmap_close,train,RELATED
+FSD,Functional Specification Document,SAME,skillmap_abbrev,train,SATISFIES
+Functional Specification Document,FSD,SAME,skillmap_abbrev,train,SATISFIES
+Operations Management,Product Operations,BROADER,skillmap_close,train,RELATED
+Product Operations,Operations Management,NARROWER,skillmap_close,train,SATISFIES
+Cross-platform mobile,Mobile Testing,RELATED,skillmap_close,train,RELATED
+Mobile Testing,Cross-platform mobile,RELATED,skillmap_close,train,RELATED
+SAP ERP 6.0,SLA Management,DIFFERENT,skillmap_far,train,NOT
+SLA Management,SAP ERP 6.0,DIFFERENT,skillmap_far,train,NOT
+CCNA,Cisco Certified Network Associate,SAME,skillmap_abbrev,train,SATISFIES
+Cisco Certified Network Associate,CCNA,SAME,skillmap_abbrev,train,SATISFIES
+MVP Architecture,Network Security Architecture,DIFFERENT,skillmap_overlap,test,NOT
+Network Security Architecture,MVP Architecture,DIFFERENT,skillmap_overlap,test,NOT
+IT Service Management,Windows Services,DIFFERENT,skillmap_close,train,NOT
+Windows Services,IT Service Management,DIFFERENT,skillmap_close,train,NOT
+Azure Active Directory,SLA Management,DIFFERENT,skillmap_far,train,NOT
+SLA Management,Azure Active Directory,DIFFERENT,skillmap_far,train,NOT
+ISO 9001 Compliance,ISO Standards,NARROWER,skillmap_overlap,train,SATISFIES
+ISO Standards,ISO 9001 Compliance,BROADER,skillmap_overlap,train,RELATED
+Laptop troubleshooting,Technical Troubleshooting,NARROWER,skillmap_close,train,SATISFIES
+Technical Troubleshooting,Laptop troubleshooting,BROADER,skillmap_close,train,RELATED
+OSPF routing,Routing configuration,NARROWER,skillmap_overlap,train,SATISFIES
+Routing configuration,OSPF routing,BROADER,skillmap_overlap,train,RELATED
+Adobe Illustrator,Retail Payments,DIFFERENT,skillmap_far,train,NOT
+Retail Payments,Adobe Illustrator,DIFFERENT,skillmap_far,train,NOT
+Continuous Deployment,Deployment Automation,NARROWER,skillmap_close,test,SATISFIES
+Deployment Automation,Continuous Deployment,BROADER,skillmap_close,test,RELATED
+Client Consulting,Security Consulting,BROADER,skillmap_close,test,RELATED
+Security Consulting,Client Consulting,NARROWER,skillmap_close,test,SATISFIES
+SAP Project Systems,SAP PS,SAME,skillmap_close,train,SATISFIES
+SAP PS,SAP Project Systems,SAME,skillmap_close,train,SATISFIES
+GIS,Geographic Information System,SAME,skillmap_abbrev,train,SATISFIES
+Geographic Information System,GIS,SAME,skillmap_abbrev,train,SATISFIES
+TTXs,Table Top Exercises,SAME,skillmap_abbrev,train,SATISFIES
+Table Top Exercises,TTXs,SAME,skillmap_abbrev,train,SATISFIES
+Cloud services,Google Cloud,BROADER,skillmap_close,train,RELATED
+Google Cloud,Cloud services,NARROWER,skillmap_close,train,SATISFIES
+Linux Scripting,Unix,NARROWER,skillmap_close,train,SATISFIES
+Unix,Linux Scripting,BROADER,skillmap_close,train,RELATED
+Network Security Architecture,System Security,NARROWER,skillmap_close,train,SATISFIES
+System Security,Network Security Architecture,BROADER,skillmap_close,train,RELATED
+Helpdesk Operations,Insurance Operations,DIFFERENT,skillmap_overlap,train,NOT
+Insurance Operations,Helpdesk Operations,DIFFERENT,skillmap_overlap,train,NOT
+Hardware Maintenance,Mobile UI/UX Design,DIFFERENT,skillmap_far,train,NOT
+Mobile UI/UX Design,Hardware Maintenance,DIFFERENT,skillmap_far,train,NOT
+RTO,Recovery Time Objective,SAME,skillmap_abbrev,val,SATISFIES
+Recovery Time Objective,RTO,SAME,skillmap_abbrev,val,SATISFIES
+TPM,Trusted Platform Modules,SAME,skillmap_abbrev,train,SATISFIES
+Trusted Platform Modules,TPM,SAME,skillmap_abbrev,train,SATISFIES
+Cybersecurity,IT security controls,BROADER,skillmap_close,train,RELATED
+IT security controls,Cybersecurity,NARROWER,skillmap_close,train,SATISFIES
+ITSM,IT service management,SAME,skillmap_abbrev,train,SATISFIES
+IT service management,ITSM,SAME,skillmap_abbrev,train,SATISFIES
+Microsoft O365,SharePoint Online,BROADER,skillmap_close,train,RELATED
+SharePoint Online,Microsoft O365,NARROWER,skillmap_close,train,SATISFIES
+Network Security,Physical Security Management,DIFFERENT,skillmap_overlap,train,NOT
+Physical Security Management,Network Security,DIFFERENT,skillmap_overlap,train,NOT
+IT infrastructure maintenance,Virtual Desktop Infrastructure,BROADER,skillmap_overlap,train,RELATED
+Virtual Desktop Infrastructure,IT infrastructure maintenance,NARROWER,skillmap_overlap,train,SATISFIES
+RFP,request for proposal,SAME,skillmap_abbrev,train,SATISFIES
+request for proposal,RFP,SAME,skillmap_abbrev,train,SATISFIES
+Business Architecture,Business Continuity,DIFFERENT,skillmap_overlap,train,NOT
+Business Continuity,Business Architecture,DIFFERENT,skillmap_overlap,train,NOT
+Data Security,Data Transformation,DIFFERENT,skillmap_overlap,train,NOT
+Data Transformation,Data Security,DIFFERENT,skillmap_overlap,train,NOT
+Looker,Travel Coordination,DIFFERENT,skillmap_far,test,NOT
+Travel Coordination,Looker,DIFFERENT,skillmap_far,test,NOT
+System Integration Testing,Test Execution,NARROWER,skillmap_close,train,SATISFIES
+Test Execution,System Integration Testing,BROADER,skillmap_close,train,RELATED
+JMS,JMS Messaging,SAME,skillmap_close,train,SATISFIES
+JMS Messaging,JMS,SAME,skillmap_close,train,SATISFIES
+SCCM,Time Management,DIFFERENT,skillmap_far,val,NOT
+Time Management,SCCM,DIFFERENT,skillmap_far,val,NOT
+IT Infrastructure Management,IT Management,NARROWER,skillmap_close,test,SATISFIES
+IT Management,IT Infrastructure Management,BROADER,skillmap_close,test,RELATED
+Information Security,Security Compliance,BROADER,skillmap_close,train,RELATED
+Security Compliance,Information Security,NARROWER,skillmap_close,train,SATISFIES
+DCS,distributed control system,SAME,skillmap_abbrev,train,SATISFIES
+distributed control system,DCS,SAME,skillmap_abbrev,train,SATISFIES
+KPI Development,KPI Analysis,RELATED,skillmap_overlap,train,RELATED
+KPI Analysis,KPI Development,RELATED,skillmap_overlap,train,RELATED
+GitOps Workflow,Workflow Automation,NARROWER,skillmap_overlap,train,SATISFIES
+Workflow Automation,GitOps Workflow,BROADER,skillmap_overlap,train,RELATED
+Technical Communication,Unified Communications,DIFFERENT,skillmap_close,train,NOT
+Unified Communications,Technical Communication,DIFFERENT,skillmap_close,train,NOT
+CEH,Certified Ethical Hacker,SAME,skillmap_abbrev,train,SATISFIES
+Certified Ethical Hacker,CEH,SAME,skillmap_abbrev,train,SATISFIES
+Product Testing,Security Testing,BROADER,skillmap_overlap,train,RELATED
+Security Testing,Product Testing,NARROWER,skillmap_overlap,train,SATISFIES
+IT Security Compliance,IT Technical Support,DIFFERENT,skillmap_close,train,NOT
+IT Technical Support,IT Security Compliance,DIFFERENT,skillmap_close,train,NOT
+WMS,Warehouse Management Systems,SAME,skillmap_abbrev,val,SATISFIES
+Warehouse Management Systems,WMS,SAME,skillmap_abbrev,val,SATISFIES
+Information Security Management,System Security,BROADER,skillmap_close,train,RELATED
+System Security,Information Security Management,NARROWER,skillmap_close,train,SATISFIES
+Cloud Networking,Cloud Technologies,NARROWER,skillmap_close,train,SATISFIES
+Cloud Technologies,Cloud Networking,BROADER,skillmap_close,train,RELATED
+Anomaly Detection,Hardware Replacement,DIFFERENT,skillmap_far,train,NOT
+Hardware Replacement,Anomaly Detection,DIFFERENT,skillmap_far,train,NOT
+MCITP,Microsoft Certified IT Professional,SAME,skillmap_abbrev,train,SATISFIES
+Microsoft Certified IT Professional,MCITP,SAME,skillmap_abbrev,train,SATISFIES
+Manual Testing,Test Documentation,RELATED,skillmap_close,train,RELATED
+Test Documentation,Manual Testing,RELATED,skillmap_close,train,RELATED
+EPP,Endpoint Protection,SAME,skillmap_abbrev,test,SATISFIES
+Endpoint Protection,EPP,SAME,skillmap_abbrev,test,SATISFIES
+iOS Deployment,WiFi Deployment,DIFFERENT,skillmap_close,train,NOT
+WiFi Deployment,iOS Deployment,DIFFERENT,skillmap_close,train,NOT
+Maintenance Master Data,Master Data Management,NARROWER,skillmap_close,train,SATISFIES
+Master Data Management,Maintenance Master Data,BROADER,skillmap_close,train,RELATED
+Caching,Redis caching,BROADER,skillmap_close,train,RELATED
+Redis caching,Caching,NARROWER,skillmap_close,train,SATISFIES
+WAF,Web Application Firewalls,SAME,skillmap_abbrev,train,SATISFIES
+Web Application Firewalls,WAF,SAME,skillmap_abbrev,train,SATISFIES
+Database maintenance,Server Maintenance,RELATED,skillmap_close,train,RELATED
+Server Maintenance,Database maintenance,RELATED,skillmap_close,train,RELATED
+Data Cleansing,Data Encryption,DIFFERENT,skillmap_overlap,val,NOT
+Data Encryption,Data Cleansing,DIFFERENT,skillmap_overlap,val,NOT
+AWS SageMaker,IT Risk Assessment,DIFFERENT,skillmap_far,train,NOT
+IT Risk Assessment,AWS SageMaker,DIFFERENT,skillmap_far,train,NOT
+RPG,Webpack Bundler,DIFFERENT,skillmap_far,train,NOT
+Webpack Bundler,RPG,DIFFERENT,skillmap_far,train,NOT
+Business Case Development,Test Case Management,DIFFERENT,skillmap_overlap,train,NOT
+Test Case Management,Business Case Development,DIFFERENT,skillmap_overlap,train,NOT
+Cross-functional Collaboration,Cross-Platform Development,DIFFERENT,skillmap_overlap,test,NOT
+Cross-Platform Development,Cross-functional Collaboration,DIFFERENT,skillmap_overlap,test,NOT
+MIS,Management Information System,SAME,skillmap_abbrev,val,SATISFIES
+Management Information System,MIS,SAME,skillmap_abbrev,val,SATISFIES
+Application Portfolio Management,Application Troubleshooting,DIFFERENT,skillmap_overlap,train,NOT
+Application Troubleshooting,Application Portfolio Management,DIFFERENT,skillmap_overlap,train,NOT

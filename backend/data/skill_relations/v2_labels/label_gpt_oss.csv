@@ -2395,3 +2395,7 @@ id,a,b,label_gpt_oss,model
 2394,A/B Testing,Android testing,DIFFERENT,openai/gpt-oss-120b
 2395,Reporting & Analytics,Project Reporting,NARROWER,openai/gpt-oss-120b
 2396,SAP ERP,SAP BTP,RELATED,openai/gpt-oss-120b
+2397,SAP Solution Manager,SAP Workflow,RELATED,openai/gpt-oss-120b
+2398,gRPC API,Postman API Testing,DIFFERENT,openai/gpt-oss-120b
+2399,Application Portfolio Management,Application Troubleshooting,DIFFERENT,openai/gpt-oss-120b
+2400,Database Tuning,Query Optimization,BROADER,openai/gpt-oss-120b
