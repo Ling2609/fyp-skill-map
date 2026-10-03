@@ -522,9 +522,9 @@ export default function Profile() {
         {/* Title + stats row */}
         <div className="flex items-start justify-between mb-4 pt-1">
           <div>
-            <p className="text-[11px] font-semibold text-blue-600 uppercase tracking-widest mb-2">My Profile</p>
-            <h1 className="text-2xl font-semibold tracking-tight text-slate-900">Skill Profile</h1>
-            <p className="text-sm text-slate-500 mt-1">Build your profile from modules, projects, and certifications</p>
+            <p className="text-[11px] font-semibold text-blue-600 uppercase tracking-widest mb-2">Skill Profile</p>
+            <h1 className="text-2xl font-semibold tracking-tight text-slate-900">Build Your Skill Profile</h1>
+            <p className="text-sm text-slate-500 mt-1">Your modules, projects and certifications become the skills your job matches use</p>
           </div>
 
           {/* Stats */}

@@ -6,7 +6,7 @@ from sqlalchemy import func
 from sqlalchemy.orm import Session
 from app.database import get_db
 from app.models.user import User, UserRole
-from app.schemas.user import UserRegister, UserLogin, UserOut, Token
+from app.schemas.user import EmailChange, NameUpdate, PasswordChange, Token, UserLogin, UserOut, UserRegister
 from app.auth.utils import hash_password, verify_password, create_access_token, decode_token
 
 router = APIRouter(prefix="/auth", tags=["auth"])
@@ -57,6 +57,49 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
 @router.get("/me", response_model=UserOut)
 def get_me(current_user: User = Depends(get_current_user)):
     return current_user
+
+
+# ── Account settings (4 Oct) ──────────────────────────────────────────────────
+# A wrong current password is a 400, not a 401: the frontend logs the user out on any 401 (api.js).
+# Username is not changeable (it is the login name). Email changes need the current password; a real product would
+# also send a confirmation email, which SkillMap has no mail service for (stated as a limitation in the report).
+
+def _check_current_password(user: User, password: str):
+    if not verify_password(password, user.hashed_password):
+        raise HTTPException(status_code=400, detail="Current password is incorrect")
+
+
+@router.patch("/me", response_model=UserOut)
+def update_name(payload: NameUpdate, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    current_user.first_name = payload.first_name
+    current_user.last_name = payload.last_name
+    db.commit()
+    db.refresh(current_user)
+    return current_user
+
+
+@router.put("/me/email", response_model=UserOut)
+def change_email(payload: EmailChange, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    _check_current_password(current_user, payload.current_password)
+    email = payload.new_email.strip().lower()   # stored in lower case, as at register (F13)
+    if email == (current_user.email or "").lower():
+        raise HTTPException(status_code=400, detail="This is already your email")
+    taken = db.query(User).filter(func.lower(User.email) == email, User.id != current_user.id).first()
+    if taken:
+        raise HTTPException(status_code=400, detail="Email already registered")
+    current_user.email = email
+    db.commit()
+    db.refresh(current_user)
+    return current_user
+
+
+@router.put("/me/password", status_code=204)
+def change_password(payload: PasswordChange, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    _check_current_password(current_user, payload.current_password)
+    if verify_password(payload.new_password, current_user.hashed_password):
+        raise HTTPException(status_code=400, detail="New password must be different from the current one")
+    current_user.hashed_password = hash_password(payload.new_password)
+    db.commit()
 
 
 @router.get("/check-username/{username}")

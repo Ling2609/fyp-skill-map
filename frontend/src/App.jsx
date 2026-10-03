@@ -9,6 +9,7 @@ import Recommend from './pages/student/Recommend';
 import JobDetail from './pages/student/JobDetail';
 import Chatbot from './pages/student/Chatbot';
 import Profile from './pages/student/Profile';
+import AccountSettings from './pages/AccountSettings'
 
 function RoleRoute({ children, roles }) {
   const { user, loading, serverDown } = useAuth()
@@ -55,6 +56,7 @@ function AppRoutes() {
       <Route path="/jobs/:jobId" element={<RoleRoute><Layout><JobDetail /></Layout></RoleRoute>} />
       <Route path="/chatbot" element={<RoleRoute><Layout><Chatbot /></Layout></RoleRoute>} />
       <Route path="/profile" element={<RoleRoute><Layout><Profile /></Layout></RoleRoute>} />
+      <Route path="/account" element={<RoleRoute><Layout><AccountSettings /></Layout></RoleRoute>} />
     </Routes>
   )
 }

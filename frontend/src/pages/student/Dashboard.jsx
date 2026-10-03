@@ -186,7 +186,7 @@ export default function Dashboard() {
         <div className="grid grid-cols-2 gap-4">
           {[
             {
-              label: 'My Profile',
+              label: 'Skill Profile',
               desc: 'Manage your modules, projects, and certifications to build your skill profile',
               cta: 'View profile',
               path: '/profile',
