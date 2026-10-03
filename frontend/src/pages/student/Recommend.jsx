@@ -147,8 +147,11 @@ export default function Recommend() {
   // Job Matches shows only current openings (the backend no longer sends past 2024 postings;
   // those are used for Career Paths and market statistics instead)
   const allJobs = results?.recommendations || []
+  // A typed search puts jobs whose title matches it first (title_match 3..0 from the backend); the chosen sort
+  // only orders jobs within each group. Without a typed search every title_match is 0, so nothing changes.
+  const titleOf = (job) => job.title_match ?? 0
   const sortedJobs = sortBy === 'skills'
-    ? [...allJobs].sort((a, b) => coverageOf(b) - coverageOf(a) || b.match_score - a.match_score)
+    ? [...allJobs].sort((a, b) => titleOf(b) - titleOf(a) || coverageOf(b) - coverageOf(a) || b.match_score - a.match_score)
     : allJobs
   const visibleJobs = sortedJobs.slice(0, visibleCount)
   const hasMore = results && visibleCount < sortedJobs.length
@@ -252,6 +255,9 @@ export default function Recommend() {
               <>
                 {visibleJobs.map((job, idx) => (
                   <Fragment key={job.job_id}>
+                  {idx > 0 && titleOf(job) === 0 && titleOf(visibleJobs[idx - 1]) > 0 && (
+                    <p className="text-xs text-slate-400 pt-3 pb-1 px-1">Other openings that fit your profile</p>
+                  )}
                   <div onClick={() => navigate(`/jobs/${encodeURIComponent(job.job_id)}`)}
                     className="bg-white rounded-xl border border-slate-200 cursor-pointer hover:border-blue-200 hover:shadow-sm transition group overflow-hidden flex">
                     {/* Left accent bar */}
