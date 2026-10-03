@@ -115,7 +115,7 @@ export default function AccountSettings() {
         </div>
       </PageHeader>
 
-      <div className="px-8 py-6 max-w-3xl space-y-5">
+      <div className="px-8 py-6 space-y-5">
         {done && (
           <p role="status" className="text-sm text-emerald-700 bg-emerald-50 border border-emerald-100 rounded-lg px-4 py-2.5">{done}</p>
         )}
