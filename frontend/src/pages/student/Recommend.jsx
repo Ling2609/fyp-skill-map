@@ -241,8 +241,15 @@ export default function Recommend() {
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
       </svg>
       <input type="text" value={roleFilter} aria-label="Search jobs"
-        onChange={e => setRoleFilter(e.target.value)}
-        onKeyDown={e => e.key === 'Enter' && handleFindJobs()}
+        onChange={e => {
+          setRoleFilter(e.target.value)
+          // Emptied by hand: show the full list again (as the ✕ does), instead of keeping the old search's results
+          if (!e.target.value.trim() && shownQuery) doSearch('', 0, activeCategory)
+        }}
+        onKeyDown={e => {
+          if (e.key === 'Enter') handleFindJobs()
+          if (e.key === 'Escape' && roleFilter) { setRoleFilter(''); doSearch('', 0, activeCategory) }
+        }}
         placeholder="Job title, skill or company"
         className="flex-1 min-w-0 bg-transparent text-sm focus:outline-none text-slate-700 placeholder-slate-400" />
       {roleFilter && (
@@ -265,7 +272,7 @@ export default function Recommend() {
           title={sortBy === 'fit'
             ? 'Mixes skills matched, how close your overall profile is to the role, and entry-level roles first'
             : 'Jobs where you already have the most of the skills they ask for'}
-          className="appearance-none [field-sizing-content] bg-transparent text-slate-700 font-medium pr-6 cursor-pointer rounded
+          className="appearance-none [field-sizing:content] bg-transparent text-slate-700 font-medium pr-6 cursor-pointer rounded
             focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-200">
           <option value="fit">Best fit</option>
           <option value="skills">Most skills matched</option>
