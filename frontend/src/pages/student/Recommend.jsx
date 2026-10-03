@@ -190,7 +190,6 @@ export default function Recommend() {
   const isSenior = (job) => SENIOR_LEVELS.includes(job.level)
   const levelJobs = hideSenior ? allJobs.filter(job => !isSenior(job)) : allJobs
   const placeJobs = levelJobs.filter(job => inLocation(job, location))
-  const seniorHere = allJobs.filter(job => inLocation(job, location) && isSenior(job)).length
   // Options come from all current openings (stable list); counts follow the current search, chip and level switch
   const countIn = (loc) => levelJobs.filter(job => inLocation(job, loc)).length
   const statesBy = {}
@@ -208,6 +207,70 @@ export default function Recommend() {
     : placeJobs
   const visibleJobs = sortedJobs.slice(0, visibleCount)
   const hasMore = results && visibleCount < sortedJobs.length
+
+  const filtersOn = location !== 'all' || activeCategory !== 'all' || hideSenior
+  const locationOptions = (
+    <>
+      <option value="all">All locations</option>
+      {countries.map(c => (
+        <optgroup key={c} label={COUNTRY_NAMES[c] || c}>
+          <option value={c} disabled={countIn(c) === 0}>All {COUNTRY_NAMES[c] || c} ({countIn(c)})</option>
+          {[...statesBy[c]].sort().map(st => (
+            <option key={st} value={`${c}:${st}`} disabled={countIn(`${c}:${st}`) === 0}>{st} ({countIn(`${c}:${st}`)})</option>
+          ))}
+        </optgroup>
+      ))}
+    </>
+  )
+  // The button shows the choice without a count ("Selangor", not "Selangor (45)"): a number on a filter button can
+  // read as results, filters or places. Counts stay inside the open list, where they help to choose.
+  const locationLabel = (loc) => loc.includes(':') ? loc.split(':')[1]
+    : loc === 'MY' ? 'All Malaysia' : COUNTRY_NAMES[loc] || loc
+  const categoryOptions = (
+    <>
+      <option value="all">All categories</option>
+      {subcategories.map(cat => <option key={cat} value={cat}>{cat}</option>)}
+    </>
+  )
+  const searchInput = (pad) => (
+    <div className={`flex-1 flex items-center gap-2 ${pad} pr-3 py-2.5 min-w-0`}>
+      <svg className="w-4 h-4 text-slate-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+      </svg>
+      <input type="text" value={roleFilter} aria-label="Search jobs"
+        onChange={e => setRoleFilter(e.target.value)}
+        onKeyDown={e => e.key === 'Enter' && handleFindJobs()}
+        placeholder="Job title, skill or company"
+        className="flex-1 min-w-0 bg-transparent text-sm focus:outline-none text-slate-700 placeholder-slate-400" />
+      {roleFilter && (
+        <button onClick={() => { setRoleFilter(''); doSearch('', 0, activeCategory) }} aria-label="Clear search"
+          className="text-slate-400 hover:text-slate-600 text-xs">✕</button>
+      )}
+    </div>
+  )
+  const searchButton = (
+    <button onClick={handleFindJobs} disabled={loading}
+      className="bg-blue-600 text-white px-5 rounded-lg text-sm font-medium hover:bg-blue-700 transition disabled:opacity-50">
+      {loading ? 'Searching…' : 'Search'}
+    </button>
+  )
+  const sortSelect = (
+    <label className="flex items-center gap-1.5 text-sm text-slate-500">
+      Sort
+      <span className="relative">
+        <select value={sortBy} onChange={e => { setSortBy(e.target.value); setVisibleCount(10) }}
+          title={sortBy === 'fit'
+            ? 'Mixes skills matched, how close your overall profile is to the role, and entry-level roles first'
+            : 'Jobs where you already have the most of the skills they ask for'}
+          className="appearance-none field-sizing-content bg-transparent text-slate-700 font-medium pr-6 cursor-pointer rounded
+            focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-200">
+          <option value="fit">Best fit</option>
+          <option value="skills">Most skills matched</option>
+        </select>
+        <Chevron />
+      </span>
+    </label>
+  )
 
   return (
     <div className="h-screen bg-slate-50 flex flex-col">
@@ -229,37 +292,24 @@ export default function Recommend() {
           </div>
 
           <div className="flex gap-2 mb-3">
-            <div className="flex-1 flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-lg px-3.5 py-2.5">
-              <svg className="w-4 h-4 text-slate-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
-              <input type="text" value={roleFilter}
-                onChange={e => setRoleFilter(e.target.value)}
-                onKeyDown={e => e.key === 'Enter' && handleFindJobs()}
-                placeholder="Search by job title, skill or company, e.g. Data Analyst, Python"
-                className="flex-1 bg-transparent text-sm focus:outline-none text-slate-700 placeholder-slate-400" />
-              {roleFilter && (
-                <button onClick={() => { setRoleFilter(''); doSearch('', 0, activeCategory) }}
-                  className="text-slate-400 hover:text-slate-600 text-xs">✕</button>
-              )}
+            <div className="flex-1 flex items-center bg-white border border-slate-200 rounded-lg focus-within:border-blue-300 transition">
+              {searchInput('pl-3.5')}
             </div>
-            <button onClick={handleFindJobs} disabled={loading}
-              className="bg-blue-600 text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-blue-700 transition disabled:opacity-50">
-              {loading ? 'Searching…' : 'Search'}
-            </button>
+            {searchButton}
           </div>
-
-          <div className="flex gap-1.5 overflow-x-auto pb-3 scrollbar-hide">
-            {['all', ...subcategories].map(cat => (
-              <button key={cat} onClick={() => handleCategoryClick(cat)} disabled={loading}
-                className={`text-xs px-3 py-1.5 rounded-full border transition shrink-0 whitespace-nowrap font-medium disabled:opacity-50 ${
-                  activeCategory === cat
-                    ? 'bg-blue-600 text-white border-blue-600'
-                    : 'bg-white text-slate-500 border-slate-200 hover:border-blue-300 hover:text-blue-600'
-                }`}>
-                {cat === 'all' ? 'All categories' : cat}
-              </button>
-            ))}
+          {/* Filters (3 Oct): one row of identical buttons, sort on the right (Indeed-style top bar, references.md
+              "How job sites lay out search + filters"). A button shows its value when set and clears with ✕. */}
+          <div className="flex items-center gap-2 pb-4">
+            <FilterButton label="Location" display={locationLabel(location)} active={location !== 'all'}
+              value={location} onChange={handleLocation} onClear={() => handleLocation('all')}>{locationOptions}</FilterButton>
+            <FilterButton label="Category" display={activeCategory} active={activeCategory !== 'all'}
+              value={activeCategory} onChange={handleCategoryClick} onClear={() => handleCategoryClick('all')}>{categoryOptions}</FilterButton>
+            <button type="button" aria-pressed={hideSenior} onClick={() => handleHideSenior(!hideSenior)}
+              title="Hides jobs whose title says Senior, Lead or Manager"
+              className={`${PILL} px-3.5 py-1.5 ${hideSenior ? PILL_ON : PILL_OFF}`}>
+              Hide senior roles{hideSenior && <span aria-hidden="true" className="ml-2">✕</span>}
+            </button>
+            <div className="ml-auto">{sortSelect}</div>
           </div>
         </div>
       </PageHeader>
@@ -286,43 +336,13 @@ export default function Recommend() {
         {results && !loading && (
           <div className="space-y-1.5">
             {allJobs.length > 0 && (
-              <div className="flex flex-wrap items-center justify-between gap-2 pb-1 text-xs">
-                <div className="flex items-center gap-2">
-                  <select value={location} onChange={e => handleLocation(e.target.value)} aria-label="Location"
-                    className="text-xs text-slate-600 bg-white border border-slate-200 rounded-lg px-2 py-1.5 focus:outline-none focus:border-blue-300">
-                    <option value="all">All locations ({levelJobs.length})</option>
-                    {countries.map(c => (
-                      <optgroup key={c} label={COUNTRY_NAMES[c] || c}>
-                        <option value={c} disabled={countIn(c) === 0}>All {COUNTRY_NAMES[c] || c} ({countIn(c)})</option>
-                        {[...statesBy[c]].sort().map(st => (
-                          <option key={st} value={`${c}:${st}`} disabled={countIn(`${c}:${st}`) === 0}>
-                            {st} ({countIn(`${c}:${st}`)})
-                          </option>
-                        ))}
-                      </optgroup>
-                    ))}
-                  </select>
-                  <label className="flex items-center gap-1.5 text-slate-500 cursor-pointer select-none"
-                    title="Hides jobs whose title says Senior, Lead or Manager">
-                    <input type="checkbox" checked={hideSenior} onChange={e => handleHideSenior(e.target.checked)}
-                      className="accent-blue-600" />
-                    Hide senior roles ({seniorHere})
-                  </label>
-                  <span className="text-slate-400">· {placeJobs.length} current {placeJobs.length === 1 ? 'opening' : 'openings'}</span>
-                  {(location !== 'all' || activeCategory !== 'all' || hideSenior) && (
-                    <button onClick={clearFilters} className="text-blue-600 hover:underline">Clear filters</button>
+              <div className="pb-1 text-sm">
+                <p className="text-slate-500">
+                  {placeJobs.length} {placeJobs.length === 1 ? 'opening' : 'openings'}
+                  {filtersOn && (
+                    <button onClick={clearFilters} className="ml-3 text-blue-600 hover:underline">Clear filters</button>
                   )}
-                </div>
-                {/* Right: order */}
-                <Toggle
-                  label="Sort by"
-                  value={sortBy}
-                  onChange={v => { setSortBy(v); setVisibleCount(10) }}
-                  options={[
-                    { key: 'fit', label: 'Best fit', hint: 'Mixes skills matched, how close your overall profile is to the role, and entry-level roles first' },
-                    { key: 'skills', label: 'Most skills matched', hint: 'Jobs where you already have the most of the skills they ask for' },
-                  ]}
-                />
+                </p>
               </div>
             )}
             {placeJobs.length === 0 ? (
@@ -359,9 +379,6 @@ export default function Recommend() {
                       </div>
                       <div className="flex gap-1.5 mt-2.5 flex-wrap">
                         <LevelTag level={job.level} />
-                        {job.country && job.country !== 'MY' && (
-                          <span className="text-xs bg-slate-100 text-slate-500 px-2 py-0.5 rounded-md font-medium">{job.country === 'SG' ? 'Singapore' : job.country}</span>
-                        )}
                         <span className="text-xs bg-slate-100 text-slate-500 px-2 py-0.5 rounded-md font-medium">{job.subcategory}</span>
                         {job.salary && job.salary !== 'nan' && (
                           <span className="text-xs bg-slate-100 text-slate-500 px-2 py-0.5 rounded-md font-medium">{job.salary}</span>
@@ -395,23 +412,34 @@ export default function Recommend() {
   )
 }
 
-// "Sort by  Best fit | Most skills matched" style text toggle
-function Toggle({ label, value, onChange, options }) {
+const Chevron = () => (
+  <svg className="w-3.5 h-3.5 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400"
+    fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+  </svg>
+)
+
+const PILL = 'inline-flex items-center text-sm rounded-full border transition'
+const PILL_ON = 'border-blue-300 bg-blue-50 text-blue-700'
+const PILL_OFF = 'border-slate-200 bg-white text-slate-600 hover:border-slate-300'
+
+// Filter button: shows "Location ⌄" or the chosen value with ✕. The browser's own list sits invisibly on top of the
+// label, so opening, keyboard use and screen readers work as with a normal dropdown.
+function FilterButton({ label, display, active, value, onChange, onClear, children }) {
   return (
-    <div className="flex items-center gap-1.5">
-      <span className="text-slate-400">{label}</span>
-      {options.map((opt, i) => (
-        <span key={opt.key} className="flex items-center gap-1.5">
-          {i > 0 && <span className="text-slate-300">|</span>}
-          <button
-            title={opt.hint}
-            onClick={() => onChange(opt.key)}
-            className={`transition ${value === opt.key ? 'text-blue-700 font-semibold' : 'text-slate-500 hover:text-slate-700'}`}
-          >
-            {opt.label}
-          </button>
-        </span>
-      ))}
-    </div>
+    <span className={`${PILL} focus-within:ring-2 focus-within:ring-blue-200 ${active ? PILL_ON : PILL_OFF}`}>
+      <span className={`relative py-1.5 pl-3.5 ${active ? 'pr-1.5' : 'pr-8'}`}>
+        {active ? display : label}
+        {!active && <Chevron />}
+        <select aria-label={label} value={value} onChange={e => onChange(e.target.value)}
+          className="absolute inset-0 w-full opacity-0 cursor-pointer">
+          {children}
+        </select>
+      </span>
+      {active && (
+        <button type="button" onClick={onClear} aria-label={`Clear ${label.toLowerCase()}`}
+          className="pr-3 pl-1 py-1.5 text-blue-500 hover:text-blue-800">✕</button>
+      )}
+    </span>
   )
 }
