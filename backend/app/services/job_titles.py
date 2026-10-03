@@ -69,31 +69,3 @@ def is_ict_title(title: str) -> bool:
         return False
     return bool(ICT_TITLE_WORDS.search(title) or ICT_TITLE_ACRONYMS.search(title)
                 or ICT_TITLE_PRODUCTS.search(title))
-
-
-# ── Typed search: how well a job title matches the query (3 Oct) ───────────────
-# Search ranks by relevance first, then by fit (LinkedIn: retrieve by the query, re-rank the matches;
-# references.md "Search vs recommendation"). Before, the query only nudged the best-fit score, so the exact job
-# searched for could come 9th. Whole words only ("it" must not match "with"); a plural s is ignored.
-TITLE_EXACT, TITLE_ALL_WORDS, TITLE_SOME_WORDS, TITLE_NONE = 3, 2, 1, 0
-
-
-def _title_words(text: str) -> list[str]:
-    words = re.findall(r"[a-z0-9+#.]+", text.lower())
-    return [w[:-1] if len(w) > 3 and w.endswith("s") and not w.endswith("ss") else w for w in words]
-
-
-def title_match(title: str, query: str) -> int:
-    """3 = the query appears as a phrase in the title, 2 = every query word is in the title,
-    1 = some query word (3+ letters) is in the title, 0 = none."""
-    q, t = _title_words(query), _title_words(title)
-    if not q:
-        return TITLE_NONE
-    if f" {' '.join(q)} " in f" {' '.join(t)} ":        # padded: "java" must not match "javascript"
-        return TITLE_EXACT
-    tw = set(t)
-    if all(w in tw for w in q):
-        return TITLE_ALL_WORDS
-    if any(w in tw for w in q if len(w) >= 3):
-        return TITLE_SOME_WORDS
-    return TITLE_NONE

@@ -8,7 +8,7 @@ from app.nlp.embedder import get_embedder
 from app.routers.auth import get_current_user
 from app.models.user import User
 from app.services.job_titles import SENIORITY_RANK, classify_seniority
-from app.services.job_search import search_match
+from app.services.job_search import names_company_or_place, search_match
 from app.services.job_requirements import BONUS_WEIGHT, job_skill_items, score_job, unit_name
 from app.services.skill_profile import (
     EMPTY_PROFILE_MESSAGE, build_skill_profile, count_modules, matched_mask, normalise_rows, profile_spellings,
@@ -135,8 +135,14 @@ def recommend_jobs(
     profile_text = " ".join(profile_skills)
     profile_vec = embedder.embed(profile_text)
 
-    if payload.role_filter.strip():
-        role_vec = embedder.embed(payload.role_filter.strip())
+    # A company or place search ("Penang") only selects jobs (search_match below); mixing the word "Penang" into the
+    # profile vector would make the order inside that group noise. Job-title searches and category chips keep the mix.
+    query = payload.role_filter.strip()
+    names_place = bool(query) and any(
+        names_company_or_place(query, c["company"], c["location"]) for c in list(_job_cache.values())
+        if payload.include_past or c.get("source") == "live")
+    if query and not names_place:
+        role_vec = embedder.embed(query)
         profile_vec = 0.6 * profile_vec + 0.4 * role_vec
         profile_vec = profile_vec / (np.linalg.norm(profile_vec) + 1e-8)
 

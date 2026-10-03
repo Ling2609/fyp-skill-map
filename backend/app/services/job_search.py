@@ -11,6 +11,11 @@ is ignored.
   2  every query word appears somewhere in title + company + location ("software engineer penang")
   1  some query word (3+ letters) appears in them
   0  none
+
+A query that names a company or a place ("Celestica", "Penang") only SELECTS jobs; it should not change how they
+are ranked. A job-title query also SHAPES the ranking (its meaning is mixed into the profile vector, so related
+roles rise). LinkedIn's query understanding makes the same split: location is used for filtering, title as a
+ranking feature (references.md, "Search vs recommendation").
 """
 import re
 
@@ -36,3 +41,12 @@ def search_match(query: str, title: str, company: str = "", location: str = "") 
     if any(w in found for w in q if len(w) >= 3):
         return SOME_WORDS
     return NONE
+
+
+def names_company_or_place(query: str, company: str = "", location: str = "") -> bool:
+    """True if the whole query appears as a phrase in this job's company or location."""
+    q = _words(query)
+    if not q:
+        return False
+    phrase = f" {' '.join(q)} "
+    return any(phrase in f" {' '.join(_words(f))} " for f in (company, location))
