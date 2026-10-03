@@ -7,7 +7,8 @@ from app.models.job import Job, JobSkill
 from app.nlp.embedder import get_embedder
 from app.routers.auth import get_current_user
 from app.models.user import User
-from app.services.job_titles import SENIORITY_RANK, classify_seniority, title_match
+from app.services.job_titles import SENIORITY_RANK, classify_seniority
+from app.services.job_search import search_match
 from app.services.job_requirements import BONUS_WEIGHT, job_skill_items, score_job, unit_name
 from app.services.skill_profile import (
     EMPTY_PROFILE_MESSAGE, build_skill_profile, count_modules, matched_mask, normalise_rows, profile_spellings,
@@ -196,9 +197,9 @@ def recommend_jobs(
         hybrid = max(0.0, 0.5 * sbert_score + 0.5 * (coverage / 100) + BONUS_WEIGHT * sc["bonus_ratio"]
                      - seniority_penalty(level))
         hybrid_percent = round(hybrid * 100, 1)
-        # Typed search: how well the title matches the query (3 = phrase ... 0 = none); 0 for everyone when there
-        # is no typed query (a category chip or the plain list), so that order is unchanged
-        title_tier = title_match(cached["job_title"], role_filter_stripped) \
+        # Typed search: how well title / company / location match the query (3 = phrase ... 0 = none,
+        # app/services/job_search.py); 0 for everyone without a typed query (category chip or plain list)
+        search_tier = search_match(role_filter_stripped, cached["job_title"], cached["company"], cached["location"]) \
             if role_filter_stripped and not is_subcategory_filter else 0
         results.append({
             "job_id": cached["job_id"],
@@ -211,7 +212,7 @@ def recommend_jobs(
             "country": cached["country"],
             "match_score": hybrid,
             "match_percent": hybrid_percent,      # ranking score (kept for sorting / debugging)
-            "title_match": title_tier,             # typed search only: jobs whose title matches come first
+            "search_match": search_tier,           # typed search only: jobs matching the query come first
             "coverage_percent": coverage,          # shown to the student
             "level": level,                        # junior / unspecified / senior / lead / manager
             "skills_matched": matched,
@@ -225,8 +226,8 @@ def recommend_jobs(
                           for u, ok in zip(sc["core_units"], sc["core_met"]) if not ok],
         })
 
-    # Relevance first, then fit: with a typed query, title matches come first and best fit orders each group
-    results.sort(key=lambda x: (-x["title_match"], -x["match_percent"]))
+    # Relevance first, then fit: with a typed query, matching jobs come first and best fit orders each group
+    results.sort(key=lambda x: (-x["search_match"], -x["match_percent"]))
 
     # Skills to learn next: the skills the student lacks, counted over their top matches (Dashboard card)
     to_learn, names = Counter(), {}

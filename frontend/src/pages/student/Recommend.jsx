@@ -147,9 +147,9 @@ export default function Recommend() {
   // Job Matches shows only current openings (the backend no longer sends past 2024 postings;
   // those are used for Career Paths and market statistics instead)
   const allJobs = results?.recommendations || []
-  // A typed search puts jobs whose title matches it first (title_match 3..0 from the backend); the chosen sort
-  // only orders jobs within each group. Without a typed search every title_match is 0, so nothing changes.
-  const titleOf = (job) => job.title_match ?? 0
+  // A typed search puts jobs matching it (title, company or location; search_match 3..0 from the backend) first;
+  // the chosen sort only orders jobs within each group. Without a typed search every value is 0: nothing changes.
+  const titleOf = (job) => job.search_match ?? 0
   const sortedJobs = sortBy === 'skills'
     ? [...allJobs].sort((a, b) => titleOf(b) - titleOf(a) || coverageOf(b) - coverageOf(a) || b.match_score - a.match_score)
     : allJobs
