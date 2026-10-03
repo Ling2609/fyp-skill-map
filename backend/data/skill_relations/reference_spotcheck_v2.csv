@@ -1,0 +1,31 @@
+id,a,b,judges_say,author_check
+1,software development,Software integration,RELATED,agree
+6,algorithmic analysis,Algorithms design,RELATED,agree
+7,Design pattern application,Design patterns,SATISFIES,agree
+16,Communication,System design patterns,NOT,agree
+17,Communication,Communication Planning,RELATED,agree
+18,Requirements specification,Business Requirements Gathering,RELATED,agree
+20,logical reasoning,Logic Design,NOT,agree
+28,large-scale software design,High-performance Design,RELATED,agree
+33,Lifecycle management,Full Life Cycle Implementation,RELATED,agree
+46,Factory pattern,AMAT FactoryWorks,NOT,agree
+51,Sorting techniques,MVVM Architecture,NOT,agree
+54,Network troubleshooting,Connectivity Troubleshooting,SATISFIES,agree
+55,Front-end development,Front-end Performance,RELATED,agree
+57,software design,Software integration,RELATED,agree
+60,project management,Software Project Management,RELATED,agree
+70,Distributed database design,Relational Database Management,RELATED,agree
+71,big data storage,Offline storage,RELATED,agree
+90,literature review,Networking Events,NOT,agree
+93,software design,Project Design,RELATED,agree
+103,transaction management,Cross-linking,NOT,agree
+105,CNN modeling,Deep Learning,SATISFIES,agree
+107,Subnetting,IP Subnetting,SATISFIES,agree
+110,Requirements specification,Customer requirement analysis,RELATED,agree
+111,Business planning,ERP development,NOT,agree
+120,Product idea development,IoT Product Development,RELATED,agree
+127,embedded computing,Embedded Linux,RELATED,agree
+135,project management,Project Leadership,RELATED,agree
+136,AI problem solving,AI Project Support,RELATED,agree
+145,Responsive design,NetSuite SuiteScript,NOT,agree
+146,REST API integration,RestAssured API,RELATED,agree

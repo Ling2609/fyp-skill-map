@@ -13,8 +13,10 @@ It also draws the author's spot-check: SPOT_CHECK unanimous pairs at random (fix
 reference_spotcheck.csv with an empty column to fill in: agree / disagree / unsure. Existing answers are kept.
 
 Usage (from backend/, venv active):
-  python scripts/skill_relations/merge_reference_labels.py
+  python scripts/skill_relations/merge_reference_labels.py              # first test set (reference_pairs_v1)
+  python scripts/skill_relations/merge_reference_labels.py --set v2     # fresh test set (reference_pairs_v2)
 """
+import argparse
 import os
 
 import numpy as np
@@ -28,6 +30,9 @@ JUDGES = ["claude", "gpt_oss", "qwen"]
 TO_CLASS = {"SAME": "SATISFIES", "NARROWER": "SATISFIES", "RELATED": "RELATED",
             "BROADER": "RELATED", "DIFFERENT": "NOT"}
 SPOT_CHECK = 50
+SETS = {"v1": (PAIRS_CSV, LABEL_DIR, SPOT_CSV, 50),
+        "v2": ("data/skill_relations/reference_pairs_v2.csv", "data/skill_relations/reference_labels_v2",
+               "data/skill_relations/reference_spotcheck_v2.csv", 30)}
 SEED = 42
 
 
@@ -48,6 +53,10 @@ def majority(row) -> str:
 
 
 def main():
+    global PAIRS_CSV, LABEL_DIR, SPOT_CSV, SPOT_CHECK
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--set", choices=sorted(SETS), default="v1")
+    PAIRS_CSV, LABEL_DIR, SPOT_CSV, SPOT_CHECK = SETS[ap.parse_args().set]
     pairs = pd.read_csv(PAIRS_CSV)
     # the spot-check lives in its own small file; the old empty column here would only confuse
     pairs = pairs.drop(columns=["author_check", "label3_unanimous", "label3_majority"], errors="ignore")

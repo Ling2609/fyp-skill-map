@@ -1,0 +1,151 @@
+id,a,b,label_claude
+1,software development,Software integration,RELATED
+2,CSS styling,CSS/LESS,BROADER
+3,relational database design,Database Design,NARROWER
+4,big data storage,T-SQL Stored Procedures,DIFFERENT
+5,Web accessibility,Virtual Private Cloud,DIFFERENT
+6,algorithmic analysis,Algorithms design,RELATED
+7,Design pattern application,Design patterns,SAME
+8,academic writing,Technical Writing,RELATED
+9,full-stack development,Full Stack,SAME
+10,cloud security,Cloud Fundamentals,RELATED
+11,AI problem solving,AI solutions,RELATED
+12,function implementation,Implementation,RELATED
+13,Front-end development,Server-side development,RELATED
+14,software design,Software Infrastructure Implementation,RELATED
+15,Network troubleshooting,Network Connectivity Diagnostics,NARROWER
+16,Communication,System design patterns,DIFFERENT
+17,Communication,Communication Planning,BROADER
+18,Requirements specification,Business Requirements Gathering,RELATED
+19,serverless computing,Serverless Functions,NARROWER
+20,logical reasoning,Logic Design,DIFFERENT
+21,software evaluation,EA Tool Evaluation,RELATED
+22,software evaluation,Software Auditing,RELATED
+23,Searching techniques,Search algorithms,SAME
+24,usability testing,Windows Testing,RELATED
+25,process management,Process Governance,RELATED
+26,intelligent agents,AI solutions,RELATED
+27,microservices architecture,Java microservices,BROADER
+28,large-scale software design,High-performance Design,RELATED
+29,Requirements elicitation,Requirements Documentation,RELATED
+30,embedded computing,Client Communication,DIFFERENT
+31,enterprise application architecture,Enterprise Systems,RELATED
+32,Design pattern implementation,Design Pattern Documentation,RELATED
+33,Lifecycle management,Full Life Cycle Implementation,RELATED
+34,Data cleaning,Data cleanup,SAME
+35,Lifecycle management,Testing Lifecycle,RELATED
+36,memory management,Hardware Management,DIFFERENT
+37,computer architecture,Server Hardware Administration,RELATED
+38,NoSQL databases,Basic Database Support,RELATED
+39,Advanced Java programming,Java 11,NARROWER
+40,system-level programming,System Implementation,RELATED
+41,cloud security,Cloud Security Solutions,SAME
+42,Design patterns,System design patterns,RELATED
+43,UI design,Web UI Design,BROADER
+44,research design,Technical Research,RELATED
+45,Use case modeling,Application modeling,RELATED
+46,Factory pattern,AMAT FactoryWorks,DIFFERENT
+47,process management,Process Design,RELATED
+48,full-stack development,Front-end Development,NARROWER
+49,project scheduling,Scheduling Coordination,RELATED
+50,Quality assurance,Quality Management,RELATED
+51,Sorting techniques,MVVM Architecture,DIFFERENT
+52,System monitoring,System Performance Monitoring,BROADER
+53,Performance testing,Performance troubleshooting,RELATED
+54,Network troubleshooting,Connectivity Troubleshooting,NARROWER
+55,Front-end development,Front-end Performance,BROADER
+56,team leadership,TeamCity,DIFFERENT
+57,software design,Software integration,RELATED
+58,Performance testing,.NET Performance Testing,BROADER
+59,Requirements analysis,Requirements Management,RELATED
+60,project management,Software Project Management,BROADER
+61,database normalisation,Data Normalization,RELATED
+62,microservices deployment,DevOps Deployment,RELATED
+63,Requirements elicitation,Business Requirements Elicitation,BROADER
+64,software project planning,Software development process,RELATED
+65,team leadership,Team Mentoring,RELATED
+66,UI design,UI Layout,NARROWER
+67,Docker containers,Docker Compose,BROADER
+68,Exception handling,Error Handling,SAME
+69,cloud security,Cloud-first Development,RELATED
+70,Distributed database design,Relational Database Management,RELATED
+71,big data storage,Offline storage,RELATED
+72,state management,SAP SuccessFactors,DIFFERENT
+73,Multithreading,Thread management,SAME
+74,object-oriented programming,Programming Development,NARROWER
+75,enterprise application architecture,Enterprise Application Support,RELATED
+76,relational database implementation,Database modeling,RELATED
+77,Performance testing,Performance evaluation,RELATED
+78,ERP systems,ERP Financial Management,BROADER
+79,memory management,Capacity Management,DIFFERENT
+80,Docker containers,Docker Containerization,SAME
+81,Observer pattern,SAML,DIFFERENT
+82,Requirements analysis,Native JavaScript,DIFFERENT
+83,Non-functional requirements definition,Rhino 3D,DIFFERENT
+84,Tree traversal,ERP Financial Management,DIFFERENT
+85,ERP systems,ERP Service Management,BROADER
+86,Teamwork,Team Supervision,RELATED
+87,System testing,Software Diagnostics,RELATED
+88,requirements gathering,Functional Requirement Management,RELATED
+89,relational database design,Database schema design,NARROWER
+90,literature review,Networking Events,DIFFERENT
+91,software project planning,IT Project Management,RELATED
+92,entity-relationship modelling,Multidimensional Modeling,RELATED
+93,software design,Project Design,RELATED
+94,Requirements elicitation,Requirements Gathering,SAME
+95,System testing,User Testing,RELATED
+96,Acceptance testing,Testing & Acceptance,NARROWER
+97,Unit testing,Performance Testing,RELATED
+98,REST API integration,RESTful Integration,SAME
+99,Functional requirements definition,Functional Design Specification,RELATED
+100,creative problem solving,Problem solving,NARROWER
+101,state management,Linux Shell Scripting,DIFFERENT
+102,Business model development,Business Modeling,RELATED
+103,transaction management,Cross-linking,DIFFERENT
+104,Software project management,Software Development,RELATED
+105,CNN modeling,Deep Learning,NARROWER
+106,scalable architecture design,Hardware Infrastructure,RELATED
+107,Subnetting,IP Subnetting,SAME
+108,cloud-native architecture,Distributed Application Architecture,RELATED
+109,Software project management,Project Delivery Management,RELATED
+110,Requirements specification,Customer requirement analysis,RELATED
+111,Business planning,ERP development,DIFFERENT
+112,DevOps practices,DevOps Culture,RELATED
+113,enterprise application architecture,Multi-process Architecture,RELATED
+114,software project planning,Digital Project Management,RELATED
+115,Entrepreneurial skills,Organizational Skills,RELATED
+116,Software project management,System Lifecycle Management,RELATED
+117,DevOps practices,Azure DevOps,BROADER
+118,CSS styling,HTML/CSS,BROADER
+119,CI/CD pipelines,Console build pipelines,RELATED
+120,Product idea development,IoT Product Development,RELATED
+121,process management,Process analysis,RELATED
+122,Microservices implementation,Microservices Design,RELATED
+123,Network troubleshooting,LAN troubleshooting,BROADER
+124,Microservices implementation,Microservices,NARROWER
+125,Continuous quality improvement,Quality Assurance,RELATED
+126,System testing,Test hardware design,DIFFERENT
+127,embedded computing,Embedded Linux,BROADER
+128,Acceptance testing,Testing Support,RELATED
+129,UI design,Application Design,RELATED
+130,System monitoring,Data Monitoring,RELATED
+131,Requirements specification,Requirements analysis,RELATED
+132,basic object-oriented programming,Programming Fundamentals,NARROWER
+133,software development,Software Development Basics,NARROWER
+134,System monitoring,SOC Monitoring,BROADER
+135,project management,Project Leadership,RELATED
+136,AI problem solving,AI Project Support,RELATED
+137,hardware-software integration,PC Hardware,RELATED
+138,requirements gathering,Requirements analysis,RELATED
+139,relational database implementation,Relational Database Management,RELATED
+140,authentication implementation,Authorization,RELATED
+141,design thinking,Design Review,DIFFERENT
+142,project management,Project Management Methodology,NARROWER
+143,Lean startup,Lean Practices,RELATED
+144,Front-end development,Backend Development,RELATED
+145,Responsive design,NetSuite SuiteScript,DIFFERENT
+146,REST API integration,RestAssured API,RELATED
+147,authentication implementation,Authentication,SAME
+148,usability testing,Testing & Evaluation,RELATED
+149,Quality assurance,Project Quality Assurance,BROADER
+150,REST API integration,RESTCONF API,RELATED

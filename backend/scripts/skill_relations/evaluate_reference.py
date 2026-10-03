@@ -20,6 +20,7 @@ Caveat: within a band the unanimous pairs are the easier ones, so the weighted f
 Usage (from backend/, venv active):
   python scripts/skill_relations/evaluate_reference.py                                             # v1 model
   python scripts/skill_relations/evaluate_reference.py --model data/relation_model_skillmap_v2     # another model
+  python scripts/skill_relations/evaluate_reference.py --model data/relation_model_X --set v2      # fresh test set
 A model other than the default writes its own files, named after its folder (e.g. reference_eval_skillmap_v2.json),
 so results of different models never overwrite each other. Cosine is the same in every file.
 """
@@ -78,21 +79,32 @@ def weighted_accuracy(df: pd.DataFrame, truth: str, pred: str) -> float:
     return round(total / weight, 3) if weight else float("nan")
 
 
-def output_paths(model_dir: str) -> tuple[str, str]:
-    """The default (v1) model keeps the original file names; any other model gets its folder name as a suffix."""
-    if os.path.normpath(model_dir) == os.path.normpath(MODEL_DIR):
-        return PRED_CSV, OUT_JSON
-    tag = os.path.basename(os.path.normpath(model_dir)).replace("relation_model_", "")
-    return PRED_CSV.replace(".csv", f"_{tag}.csv"), OUT_JSON.replace(".json", f"_{tag}.json")
+SETS = {"v1": "data/skill_relations/reference_pairs_v1.csv", "v2": "data/skill_relations/reference_pairs_v2.csv"}
+
+
+def output_paths(model_dir: str, test_set: str = "v1") -> tuple[str, str]:
+    """The default (v1) model keeps the original file names; any other model gets its folder name as a suffix.
+    The fresh test set (v2) adds "_set2", so its results never overwrite the first set's."""
+    pred, out = PRED_CSV, OUT_JSON
+    if os.path.normpath(model_dir) != os.path.normpath(MODEL_DIR):
+        tag = os.path.basename(os.path.normpath(model_dir)).replace("relation_model_", "")
+        pred, out = pred.replace(".csv", f"_{tag}.csv"), out.replace(".json", f"_{tag}.json")
+    if test_set != "v1":
+        pred, out = pred.replace(".csv", "_set2.csv"), out.replace(".json", "_set2.json")
+    return pred, out
 
 
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--model", default=MODEL_DIR, help="folder of the trained model (unzipped from Colab)")
-    model_dir = ap.parse_args().model
+    ap.add_argument("--set", choices=sorted(SETS), default="v1", help="v1 = first test set, v2 = fresh blind set")
+    args = ap.parse_args()
+    model_dir = args.model
+    global PAIRS_CSV
+    PAIRS_CSV = SETS[args.set]
     if not os.path.isdir(model_dir):
         raise SystemExit(f"No model folder {model_dir}: unzip the Colab download into backend/data/ first")
-    pred_csv, out_json = output_paths(model_dir)
+    pred_csv, out_json = output_paths(model_dir, args.set)
     print(f"Model: {model_dir}")
     df = pd.read_csv(PAIRS_CSV)
     if "label3_unanimous" not in df:

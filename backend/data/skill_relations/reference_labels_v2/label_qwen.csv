@@ -1,0 +1,151 @@
+id,a,b,label_qwen,model
+1,software development,Software integration,BROADER,qwen/qwen3.8-27b
+2,CSS styling,CSS/LESS,NARROWER,qwen/qwen3.8-27b
+3,relational database design,Database Design,NARROWER,qwen/qwen3.8-27b
+4,big data storage,T-SQL Stored Procedures,DIFFERENT,qwen/qwen3.8-27b
+5,Web accessibility,Virtual Private Cloud,DIFFERENT,qwen/qwen3.8-27b
+6,algorithmic analysis,Algorithms design,RELATED,qwen/qwen3.8-27b
+7,Design pattern application,Design patterns,SAME,qwen/qwen3.8-27b
+8,academic writing,Technical Writing,RELATED,qwen/qwen3.8-27b
+9,full-stack development,Full Stack,SAME,qwen/qwen3.8-27b
+10,cloud security,Cloud Fundamentals,BROADER,qwen/qwen3.8-27b
+11,AI problem solving,AI solutions,SAME,qwen/qwen3.8-27b
+12,function implementation,Implementation,NARROWER,qwen/qwen3.8-27b
+13,Front-end development,Server-side development,DIFFERENT,qwen/qwen3.8-27b
+14,software design,Software Infrastructure Implementation,DIFFERENT,qwen/qwen3.8-27b
+15,Network troubleshooting,Network Connectivity Diagnostics,SAME,qwen/qwen3.8-27b
+16,Communication,System design patterns,DIFFERENT,qwen/qwen3.8-27b
+17,Communication,Communication Planning,BROADER,qwen/qwen3.8-27b
+18,Requirements specification,Business Requirements Gathering,RELATED,qwen/qwen3.8-27b
+19,serverless computing,Serverless Functions,BROADER,qwen/qwen3.8-27b
+20,logical reasoning,Logic Design,DIFFERENT,qwen/qwen3.8-27b
+21,software evaluation,EA Tool Evaluation,BROADER,qwen/qwen3.8-27b
+22,software evaluation,Software Auditing,BROADER,qwen/qwen3.8-27b
+23,Searching techniques,Search algorithms,BROADER,qwen/qwen3.8-27b
+24,usability testing,Windows Testing,BROADER,qwen/qwen3.8-27b
+25,process management,Process Governance,BROADER,qwen/qwen3.8-27b
+26,intelligent agents,AI solutions,BROADER,qwen/qwen3.8-27b
+27,microservices architecture,Java microservices,BROADER,qwen/qwen3.8-27b
+28,large-scale software design,High-performance Design,BROADER,qwen/qwen3.8-27b
+29,Requirements elicitation,Requirements Documentation,RELATED,qwen/qwen3.8-27b
+30,embedded computing,Client Communication,DIFFERENT,qwen/qwen3.8-27b
+31,enterprise application architecture,Enterprise Systems,BROADER,qwen/qwen3.8-27b
+32,Design pattern implementation,Design Pattern Documentation,BROADER,qwen/qwen3.8-27b
+33,Lifecycle management,Full Life Cycle Implementation,BROADER,qwen/qwen3.8-27b
+34,Data cleaning,Data cleanup,SAME,qwen/qwen3.8-27b
+35,Lifecycle management,Testing Lifecycle,BROADER,qwen/qwen3.8-27b
+36,memory management,Hardware Management,BROADER,qwen/qwen3.8-27b
+37,computer architecture,Server Hardware Administration,BROADER,qwen/qwen3.8-27b
+38,NoSQL databases,Basic Database Support,BROADER,qwen/qwen3.8-27b
+39,Advanced Java programming,Java 11,BROADER,qwen/qwen3.8-27b
+40,system-level programming,System Implementation,BROADER,qwen/qwen3.8-27b
+41,cloud security,Cloud Security Solutions,SAME,qwen/qwen3.8-27b
+42,Design patterns,System design patterns,SAME,qwen/qwen3.8-27b
+43,UI design,Web UI Design,NARROWER,qwen/qwen3.8-27b
+44,research design,Technical Research,NARROWER,qwen/qwen3.8-27b
+45,Use case modeling,Application modeling,NARROWER,qwen/qwen3.8-27b
+46,Factory pattern,AMAT FactoryWorks,DIFFERENT,qwen/qwen3.8-27b
+47,process management,Process Design,RELATED,qwen/qwen3.8-27b
+48,full-stack development,Front-end Development,BROADER,qwen/qwen3.8-27b
+49,project scheduling,Scheduling Coordination,SAME,qwen/qwen3.8-27b
+50,Quality assurance,Quality Management,NARROWER,qwen/qwen3.8-27b
+51,Sorting techniques,MVVM Architecture,DIFFERENT,qwen/qwen3.8-27b
+52,System monitoring,System Performance Monitoring,NARROWER,qwen/qwen3.8-27b
+53,Performance testing,Performance troubleshooting,RELATED,qwen/qwen3.8-27b
+54,Network troubleshooting,Connectivity Troubleshooting,NARROWER,qwen/qwen3.8-27b
+55,Front-end development,Front-end Performance,BROADER,qwen/qwen3.8-27b
+56,team leadership,TeamCity,DIFFERENT,qwen/qwen3.8-27b
+57,software design,Software integration,RELATED,qwen/qwen3.8-27b
+58,Performance testing,.NET Performance Testing,BROADER,qwen/qwen3.8-27b
+59,Requirements analysis,Requirements Management,NARROWER,qwen/qwen3.8-27b
+60,project management,Software Project Management,BROADER,qwen/qwen3.8-27b
+61,database normalisation,Data Normalization,SAME,qwen/qwen3.8-27b
+62,microservices deployment,DevOps Deployment,NARROWER,qwen/qwen3.8-27b
+63,Requirements elicitation,Business Requirements Elicitation,NARROWER,qwen/qwen3.8-27b
+64,software project planning,Software development process,NARROWER,qwen/qwen3.8-27b
+65,team leadership,Team Mentoring,RELATED,qwen/qwen3.8-27b
+66,UI design,UI Layout,NARROWER,qwen/qwen3.8-27b
+67,Docker containers,Docker Compose,NARROWER,qwen/qwen3.8-27b
+68,Exception handling,Error Handling,SAME,qwen/qwen3.8-27b
+69,cloud security,Cloud-first Development,RELATED,qwen/qwen3.8-27b
+70,Distributed database design,Relational Database Management,RELATED,qwen/qwen3.8-27b
+71,big data storage,Offline storage,RELATED,qwen/qwen3.8-27b
+72,state management,SAP SuccessFactors,DIFFERENT,qwen/qwen3.8-27b
+73,Multithreading,Thread management,SAME,qwen/qwen3.8-27b
+74,object-oriented programming,Programming Development,NARROWER,qwen/qwen3.8-27b
+75,enterprise application architecture,Enterprise Application Support,RELATED,qwen/qwen3.8-27b
+76,relational database implementation,Database modeling,RELATED,qwen/qwen3.8-27b
+77,Performance testing,Performance evaluation,NARROWER,qwen/qwen3.8-27b
+78,ERP systems,ERP Financial Management,NARROWER,qwen/qwen3.8-27b
+79,memory management,Capacity Management,DIFFERENT,qwen/qwen3.8-27b
+80,Docker containers,Docker Containerization,NARROWER,qwen/qwen3.8-27b
+81,Observer pattern,SAML,DIFFERENT,qwen/qwen3.8-27b
+82,Requirements analysis,Native JavaScript,DIFFERENT,qwen/qwen3.8-27b
+83,Non-functional requirements definition,Rhino 3D,DIFFERENT,qwen/qwen3.8-27b
+84,Tree traversal,ERP Financial Management,DIFFERENT,qwen/qwen3.8-27b
+85,ERP systems,ERP Service Management,RELATED,qwen/qwen3.8-27b
+86,Teamwork,Team Supervision,BROADER,qwen/qwen3.8-27b
+87,System testing,Software Diagnostics,RELATED,qwen/qwen3.8-27b
+88,requirements gathering,Functional Requirement Management,NARROWER,qwen/qwen3.8-27b
+89,relational database design,Database schema design,SAME,qwen/qwen3.8-27b
+90,literature review,Networking Events,DIFFERENT,qwen/qwen3.8-27b
+91,software project planning,IT Project Management,NARROWER,qwen/qwen3.8-27b
+92,entity-relationship modelling,Multidimensional Modeling,RELATED,qwen/qwen3.8-27b
+93,software design,Project Design,RELATED,qwen/qwen3.8-27b
+94,Requirements elicitation,Requirements Gathering,SAME,qwen/qwen3.8-27b
+95,System testing,User Testing,RELATED,qwen/qwen3.8-27b
+96,Acceptance testing,Testing & Acceptance,NARROWER,qwen/qwen3.8-27b
+97,Unit testing,Performance Testing,RELATED,qwen/qwen3.8-27b
+98,REST API integration,RESTful Integration,SAME,qwen/qwen3.8-27b
+99,Functional requirements definition,Functional Design Specification,RELATED,qwen/qwen3.8-27b
+100,creative problem solving,Problem solving,SAME,qwen/qwen3.8-27b
+101,state management,Linux Shell Scripting,DIFFERENT,qwen/qwen3.8-27b
+102,Business model development,Business Modeling,SAME,qwen/qwen3.8-27b
+103,transaction management,Cross-linking,DIFFERENT,qwen/qwen3.8-27b
+104,Software project management,Software Development,RELATED,qwen/qwen3.8-27b
+105,CNN modeling,Deep Learning,NARROWER,qwen/qwen3.8-27b
+106,scalable architecture design,Hardware Infrastructure,DIFFERENT,qwen/qwen3.8-27b
+107,Subnetting,IP Subnetting,SAME,qwen/qwen3.8-27b
+108,cloud-native architecture,Distributed Application Architecture,RELATED,qwen/qwen3.8-27b
+109,Software project management,Project Delivery Management,RELATED,qwen/qwen3.8-27b
+110,Requirements specification,Customer requirement analysis,RELATED,qwen/qwen3.8-27b
+111,Business planning,ERP development,DIFFERENT,qwen/qwen3.8-27b
+112,DevOps practices,DevOps Culture,SAME,qwen/qwen3.8-27b
+113,enterprise application architecture,Multi-process Architecture,DIFFERENT,qwen/qwen3.8-27b
+114,software project planning,Digital Project Management,RELATED,qwen/qwen3.8-27b
+115,Entrepreneurial skills,Organizational Skills,DIFFERENT,qwen/qwen3.8-27b
+116,Software project management,System Lifecycle Management,RELATED,qwen/qwen3.8-27b
+117,DevOps practices,Azure DevOps,BROADER,qwen/qwen3.8-27b
+118,CSS styling,HTML/CSS,NARROWER,qwen/qwen3.8-27b
+119,CI/CD pipelines,Console build pipelines,RELATED,qwen/qwen3.8-27b
+120,Product idea development,IoT Product Development,RELATED,qwen/qwen3.8-27b
+121,process management,Process analysis,RELATED,qwen/qwen3.8-27b
+122,Microservices implementation,Microservices Design,RELATED,qwen/qwen3.8-27b
+123,Network troubleshooting,LAN troubleshooting,BROADER,qwen/qwen3.8-27b
+124,Microservices implementation,Microservices,NARROWER,qwen/qwen3.8-27b
+125,Continuous quality improvement,Quality Assurance,RELATED,qwen/qwen3.8-27b
+126,System testing,Test hardware design,DIFFERENT,qwen/qwen3.8-27b
+127,embedded computing,Embedded Linux,BROADER,qwen/qwen3.8-27b
+128,Acceptance testing,Testing Support,RELATED,qwen/qwen3.8-27b
+129,UI design,Application Design,NARROWER,qwen/qwen3.8-27b
+130,System monitoring,Data Monitoring,RELATED,qwen/qwen3.8-27b
+131,Requirements specification,Requirements analysis,RELATED,qwen/qwen3.8-27b
+132,basic object-oriented programming,Programming Fundamentals,NARROWER,qwen/qwen3.8-27b
+133,software development,Software Development Basics,BROADER,qwen/qwen3.8-27b
+134,System monitoring,SOC Monitoring,RELATED,qwen/qwen3.8-27b
+135,project management,Project Leadership,RELATED,qwen/qwen3.8-27b
+136,AI problem solving,AI Project Support,RELATED,qwen/qwen3.8-27b
+137,hardware-software integration,PC Hardware,RELATED,qwen/qwen3.8-27b
+138,requirements gathering,Requirements analysis,RELATED,qwen/qwen3.8-27b
+139,relational database implementation,Relational Database Management,RELATED,qwen/qwen3.8-27b
+140,authentication implementation,Authorization,DIFFERENT,qwen/qwen3.8-27b
+141,design thinking,Design Review,RELATED,qwen/qwen3.8-27b
+142,project management,Project Management Methodology,SAME,qwen/qwen3.8-27b
+143,Lean startup,Lean Practices,NARROWER,qwen/qwen3.8-27b
+144,Front-end development,Backend Development,DIFFERENT,qwen/qwen3.8-27b
+145,Responsive design,NetSuite SuiteScript,DIFFERENT,qwen/qwen3.8-27b
+146,REST API integration,RestAssured API,RELATED,qwen/qwen3.8-27b
+147,authentication implementation,Authentication,SAME,qwen/qwen3.8-27b
+148,usability testing,Testing & Evaluation,NARROWER,qwen/qwen3.8-27b
+149,Quality assurance,Project Quality Assurance,SAME,qwen/qwen3.8-27b
+150,REST API integration,RESTCONF API,RELATED,qwen/qwen3.8-27b

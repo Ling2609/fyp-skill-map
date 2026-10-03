@@ -17,6 +17,11 @@ How pairs are picked (references.md, "Reference set of real SkillMap pairs"):
 
 Usage (from backend/, venv active):
   python scripts/skill_relations/sample_reference_pairs.py      # writes data/skill_relations/reference_pairs_v1.csv
+
+Second, fresh blind test set (3 Oct): the model settings were chosen after studying errors on reference_pairs_v1,
+so a confirmation needs NEW pairs. Its skills may repeat test-set skills (the model never trained on those), but
+skills of every training CSV and every pair already in reference_pairs_v1 are left out:
+  python scripts/skill_relations/sample_reference_pairs.py --set v2
 """
 import argparse
 import os
@@ -44,14 +49,27 @@ BANDS = [
 JUDGE_COLUMNS = ["label_claude", "label_gpt_oss", "label_qwen", "author_check"]
 
 
-def sample_pairs(mod_names, mod_keys, job_names, job_keys, sims, seed=SEED):
+# Second test set: about 150 pairs, the same bands (the 0.85+ band has few candidates left)
+BANDS_V2 = [("0.85+", 0.85, 1.01, 15), ("0.75-0.85", 0.75, 0.85, 35), ("0.65-0.75", 0.65, 0.75, 45),
+            ("0.55-0.65", 0.55, 0.65, 40), ("<0.55", -1.0, 0.55, 15)]
+SETS = {"v1": dict(train=[TRAIN_CSV], bands=BANDS, seed=SEED, out=OUT, skip_pairs_of=None),
+        "v2": dict(train=[TRAIN_CSV, "data/skill_relations/pairs_skillmap_v2.csv"], bands=BANDS_V2, seed=7,
+                   out="data/skill_relations/reference_pairs_v2.csv", skip_pairs_of=OUT)}
+
+
+def sample_pairs(mod_names, mod_keys, job_names, job_keys, sims, seed=SEED, bands=BANDS, skip=frozenset()):
     """Pick pairs per band from a cosine matrix (rows = module skills, cols = job skills).
-    Returns (rows, band_population). Kept separate from the database part so it can be tested on its own."""
+    Returns (rows, band_population). Kept separate from the database part so it can be tested on its own.
+    skip: (module key, job key) pairs that must not be picked (pairs of an earlier test set)."""
     rng = random.Random(seed)
     valid = np.array(mod_keys)[:, None] != np.array(job_keys)[None, :]      # same A8 skill: A8 decides, skip
+    row_of, col_of = {k: i for i, k in enumerate(mod_keys)}, {k: j for j, k in enumerate(job_keys)}
+    for mk, jk in skip:
+        if mk in row_of and jk in col_of:
+            valid[row_of[mk], col_of[jk]] = False
     used = Counter()
     rows, population = [], {}
-    for band, lo, hi, want in BANDS:
+    for band, lo, hi, want in bands:
         in_band = valid & (sims >= lo) & (sims < hi)
         population[band] = int(in_band.sum())
         cells = np.argwhere(in_band)                                       # (row, col), in a fixed order
@@ -73,8 +91,11 @@ def sample_pairs(mod_names, mod_keys, job_names, job_keys, sims, seed=SEED):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--out", default=OUT)
+    ap.add_argument("--set", choices=sorted(SETS), default="v1", help="v1 = the first test set, v2 = the fresh one")
+    ap.add_argument("--out", help="output CSV (default depends on --set)")
     args = ap.parse_args()
+    cfg = SETS[args.set]
+    out = args.out or cfg["out"]
 
     from app.database import SessionLocal
     from app.models.job import Job, JobSkill
@@ -84,8 +105,12 @@ def main():
     from app.services.skill_profile import normalise_rows
 
     # Skills the model has seen in training, as A8 keys ("Python programming" and "Python" are one)
-    train = pd.read_csv(TRAIN_CSV)
+    train = pd.concat([pd.read_csv(f) for f in cfg["train"]])
     seen = {canonical_key(n) for n in pd.concat([train.a, train.b]).astype(str)}
+    skip = set()
+    if cfg["skip_pairs_of"]:                     # pairs of the first test set are never picked again
+        old = pd.read_csv(cfg["skip_pairs_of"])
+        skip = {(canonical_key(a), canonical_key(b)) for a, b in zip(old.a.astype(str), old.b.astype(str))}
 
     db = SessionLocal()
     try:
@@ -115,7 +140,8 @@ def main():
     j = normalise_rows(embedder.embed_cached(job_names)).astype(np.float32)
     sims = m @ j.T
 
-    rows, population = sample_pairs(mod_names, mod_keys, job_names, job_keys, sims)
+    rows, population = sample_pairs(mod_names, mod_keys, job_names, job_keys, sims, seed=cfg["seed"],
+                                    bands=cfg["bands"], skip=frozenset(skip))
     key_of_job = dict(zip(job_names, job_keys))
     for r in rows:
         r["band_population"] = population[r["band"]]
@@ -124,15 +150,17 @@ def main():
             r[c] = ""
     df = pd.DataFrame(rows)
     df.insert(0, "id", range(1, len(df) + 1))
-    os.makedirs(os.path.dirname(args.out), exist_ok=True)
-    df.to_csv(args.out, index=False, encoding="utf-8")
+    if os.path.exists(out):
+        raise SystemExit(f"{out} already exists: delete it first if you really want a new sample (labels may refer to it)")
+    os.makedirs(os.path.dirname(out), exist_ok=True)
+    df.to_csv(out, index=False, encoding="utf-8")
 
-    print(f"\nWrote {len(df)} pairs to {args.out}")
+    print(f"\nWrote {len(df)} pairs to {out}" + (f" ({len(skip)} pairs of the first test set left out)" if skip else ""))
     print(f"{'band':<10} {'picked':>7} {'wanted':>7} {'population':>11}")
-    for band, _, _, want in BANDS:
+    for band, _, _, want in cfg["bands"]:
         print(f"{band:<10} {int((df.band == band).sum()):>7} {want:>7} {population[band]:>11,}")
     print("\nExamples:")
-    for band, *_ in BANDS:
+    for band, *_ in cfg["bands"]:
         ex = df[df.band == band].head(3)
         print(f"  {band:<10} " + " | ".join(f"{a} -> {b}" for a, b in zip(ex.a, ex.b)))
 
