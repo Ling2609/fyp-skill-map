@@ -1,0 +1,48 @@
+{
+ "run": "skillmap_v2",
+ "pairs_csv": [
+  "pairs_skillmap_v2.csv"
+ ],
+ "mapping": {
+  "SAME": "SATISFIES",
+  "NARROWER": "SATISFIES",
+  "RELATED": "RELATED",
+  "BROADER": "RELATED",
+  "DIFFERENT": "NOT"
+ },
+ "model": "sentence-transformers/all-MiniLM-L6-v2",
+ "seeds": [
+  13,
+  42,
+  77
+ ],
+ "epochs": 10,
+ "baseline_macro_f1": 0.38898228371912585,
+ "test_macro_f1": [
+  0.5838483506184629,
+  0.5658100331927353,
+  0.528095601322146
+ ],
+ "direction_model": 0.6052631578947368,
+ "direction_cosine": 0.5,
+ "runs": [
+  {
+   "seed": 13,
+   "val_f1": 0.6245702608486597,
+   "test_f1": 0.5838483506184629,
+   "minutes": 0.2
+  },
+  {
+   "seed": 42,
+   "val_f1": 0.6266339869281046,
+   "test_f1": 0.5658100331927353,
+   "minutes": 0.3
+  },
+  {
+   "seed": 77,
+   "val_f1": 0.585437564856451,
+   "test_f1": 0.528095601322146,
+   "minutes": 0.3
+  }
+ ]
+}

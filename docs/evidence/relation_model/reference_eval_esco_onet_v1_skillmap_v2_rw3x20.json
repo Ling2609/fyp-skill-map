@@ -1,0 +1,102 @@
+{
+ "model": "data/relation_model_esco_onet_v1_skillmap_v2_rw3x20",
+ "pairs": "data/skill_relations/reference_pairs_v1.csv",
+ "unanimous": {
+  "cosine": {
+   "n": 230,
+   "macro_f1": 0.609,
+   "accuracy": 0.6,
+   "has_precision": 0.504,
+   "has_recall": 0.785,
+   "false_has": 61
+  },
+  "model": {
+   "n": 230,
+   "macro_f1": 0.619,
+   "accuracy": 0.63,
+   "has_precision": 0.587,
+   "has_recall": 0.557,
+   "false_has": 31
+  },
+  "weighted_accuracy": {
+   "cosine": 0.512,
+   "model": 0.558
+  },
+  "per_band": {
+   "0.85+": {
+    "n": 24,
+    "cosine": 0.708,
+    "model": 0.625
+   },
+   "0.75-0.85": {
+    "n": 63,
+    "cosine": 0.54,
+    "model": 0.714
+   },
+   "0.65-0.75": {
+    "n": 67,
+    "cosine": 0.448,
+    "model": 0.597
+   },
+   "0.55-0.65": {
+    "n": 40,
+    "cosine": 0.525,
+    "model": 0.525
+   },
+   "<0.55": {
+    "n": 36,
+    "cosine": 1.0,
+    "model": 0.667
+   }
+  }
+ },
+ "majority": {
+  "cosine": {
+   "n": 392,
+   "macro_f1": 0.55,
+   "accuracy": 0.536,
+   "has_precision": 0.484,
+   "has_recall": 0.681,
+   "false_has": 98
+  },
+  "model": {
+   "n": 392,
+   "macro_f1": 0.569,
+   "accuracy": 0.594,
+   "has_precision": 0.561,
+   "has_recall": 0.548,
+   "false_has": 58
+  },
+  "weighted_accuracy": {
+   "cosine": 0.443,
+   "model": 0.556
+  },
+  "per_band": {
+   "0.85+": {
+    "n": 38,
+    "cosine": 0.658,
+    "model": 0.632
+   },
+   "0.75-0.85": {
+    "n": 100,
+    "cosine": 0.51,
+    "model": 0.67
+   },
+   "0.65-0.75": {
+    "n": 118,
+    "cosine": 0.449,
+    "model": 0.525
+   },
+   "0.55-0.65": {
+    "n": 96,
+    "cosine": 0.427,
+    "model": 0.552
+   },
+   "<0.55": {
+    "n": 40,
+    "cosine": 1.0,
+    "model": 0.675
+   }
+  }
+ }
+}
