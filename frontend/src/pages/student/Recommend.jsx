@@ -299,8 +299,8 @@ export default function Recommend() {
             </div>
             {/* A visible button: matches come from the profile, so updating it is the main way to change them */}
             <button onClick={() => navigate('/profile')}
-              className="flex items-center gap-2 text-sm font-medium text-slate-700 bg-white border border-slate-200 rounded-lg px-3.5 py-2
-                hover:border-blue-300 hover:text-blue-700 transition shrink-0">
+              className="flex items-center gap-2 text-sm font-medium text-blue-700 bg-blue-50 border border-blue-200 rounded-lg px-3.5 py-2
+                hover:bg-blue-100 hover:border-blue-300 transition shrink-0">
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                   d="M15.232 5.232l3.536 3.536M9 13l6.232-6.232a2.5 2.5 0 113.536 3.536L12.536 16.536 8 18l1.464-4.536z" />
@@ -358,7 +358,9 @@ export default function Recommend() {
             {allJobs.length > 0 && (shownQuery || filtersOn) && (
               <div className="pb-1 text-sm">
                 <p className="text-slate-500">
-                  {shownQuery && matchCount === 0
+                  {shownQuery && matchCount === 0 && filtersOn
+                    ? `No openings match “${shownQuery}” with these filters. Showing the ${placeJobs.length} ${placeJobs.length === 1 ? 'opening' : 'openings'} in these filters instead.`
+                    : shownQuery && matchCount === 0
                     ? `No openings match “${shownQuery}”. Showing others that fit your profile.`
                     : shownQuery
                     ? `${matchCount} ${matchCount === 1 ? 'opening matches' : 'openings match'} “${shownQuery}”`
@@ -425,7 +427,7 @@ export default function Recommend() {
                   </button>
                 )}
                 {!hasMore && sortedJobs.length > 0 && (
-                  <p className="text-center text-xs text-slate-400 py-3">{sortedJobs.length === 1 ? 'The only match shown' : `All ${sortedJobs.length} matches shown`}</p>
+                  <p className="text-center text-xs text-slate-400 py-3">{sortedJobs.length === 1 ? 'End of list' : `End of list · all ${sortedJobs.length} shown`}</p>
                 )}
               </>
             )}
