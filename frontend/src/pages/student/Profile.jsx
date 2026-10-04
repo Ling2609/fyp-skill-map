@@ -96,14 +96,22 @@ function Modal({ title, onClose, dirty = false, children }) {
 }
 
 // "Delete X?" before a project or certificate goes (5 Oct: the card's ✕ sits near the chips' ×)
+// onDelete must throw if the delete failed: the question then stays open and says so (5 Oct audit: a failed delete
+// used to close it silently, so the student couldn't tell whether anything was deleted)
 function ConfirmDelete({ name, onCancel, onDelete }) {
   const [busy, setBusy] = useState(false)
+  const [failed, setFailed] = useState(false)
+  const del = async () => {
+    setBusy(true); setFailed(false)
+    try { await onDelete() } catch { setFailed(true); setBusy(false) }
+  }
   return (
     <Modal title="Delete?" onClose={onCancel}>
       <p className="text-sm text-gray-600">Delete <span className="font-medium text-gray-800">“{name}”</span>? Its skills will leave your profile.</p>
+      {failed && <p className="text-xs text-red-500 bg-red-50 rounded-lg px-3 py-2 mt-3">Couldn't delete it. Please try again.</p>}
       <div className="flex justify-end gap-2 pt-5">
         <button type="button" onClick={onCancel} autoFocus className="px-4 py-2 text-sm text-gray-500 hover:text-gray-800">Cancel</button>
-        <button type="button" disabled={busy} onClick={async () => { setBusy(true); await onDelete() }}
+        <button type="button" disabled={busy} onClick={del}
           className="bg-red-600 text-white text-sm font-medium px-4 py-2 rounded-xl hover:bg-red-700 disabled:opacity-40">Delete</button>
       </div>
     </Modal>
@@ -254,10 +262,13 @@ function ProjectsTab({ projects, onRefresh }) {
   const [editing, setEditing] = useState(null)   // null = closed, 'new', or a project
   const [note, setNote] = useState('')            // e.g. the GitHub repo couldn't be read
 
-  const run = async (call) => { try { await call(); onRefresh() } catch { /* silent */ } }
+  // small actions (remove a skill, confirm): a failure is said, not swallowed (5 Oct audit)
+  const run = async (call) => {
+    try { await call(); onRefresh() } catch { setNote("Couldn't save that change. Please try again.") }
+  }
   const [deleting, setDeleting] = useState(null)   // the project waiting for "Delete?"
   const [dirty, setDirty] = useState(false)
-  const handleDelete = async (id) => { await run(() => api.delete(`/profile/projects/${id}`)); setDeleting(null) }
+  const handleDelete = async (id) => { await api.delete(`/profile/projects/${id}`); setDeleting(null); onRefresh() }
   const removeSkill = (id, skill) => run(() => api.post(`/profile/projects/${id}/remove-skill`, { skill }))
   const addSkill = async (id, skill) => { await api.post(`/profile/projects/${id}/add-skill`, { skill }); onRefresh() }
   const done = (saved) => {
@@ -444,11 +455,15 @@ function CertForm({ cert, onDone, onCancel, onDirty }) {
 
 function CertificationsTab({ certs, onRefresh }) {
   const [editing, setEditing] = useState(null)
+  const [note, setNote] = useState('')
 
-  const run = async (call) => { try { await call(); onRefresh() } catch { /* silent */ } }
+  // small actions (remove a skill, confirm): a failure is said, not swallowed (5 Oct audit)
+  const run = async (call) => {
+    try { await call(); onRefresh() } catch { setNote("Couldn't save that change. Please try again.") }
+  }
   const [deleting, setDeleting] = useState(null)
   const [dirty, setDirty] = useState(false)
-  const handleDelete = async (id) => { await run(() => api.delete(`/profile/certifications/${id}`)); setDeleting(null) }
+  const handleDelete = async (id) => { await api.delete(`/profile/certifications/${id}`); setDeleting(null); onRefresh() }
   const removeSkill = (id, skill) => run(() => api.post(`/profile/certifications/${id}/remove-skill`, { skill }))
   const confirm = (id) => run(() => api.post(`/profile/certifications/${id}/confirm`))
   const addSkill = async (id, skill) => { await api.post(`/profile/certifications/${id}/add-skill`, { skill }); onRefresh() }
@@ -463,6 +478,11 @@ function CertificationsTab({ certs, onRefresh }) {
       </div>
       <div tabIndex={0} aria-label="Your certifications"
         className="lg:flex-1 lg:min-h-0 lg:overflow-y-auto -mx-1 px-1 pb-1 rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-300">
+      {note && (
+        <p role="status" className="text-xs text-amber-700 bg-amber-50 rounded-lg px-3 py-2 mb-3 flex justify-between gap-3">
+          <span>{note}</span><button type="button" onClick={() => setNote('')} aria-label="Dismiss" className="text-amber-500 hover:text-amber-800">x</button>
+        </p>
+      )}
       {certs.length === 0 ? (
         <div className="bg-white rounded-2xl border border-gray-200 p-8">
           <EmptyState icon="🎓" title="No certifications yet" subtitle="Add a certificate to show the skills it covers" />
