@@ -3,8 +3,9 @@ import { useNavigate, Link, useLocation } from 'react-router-dom'
 import api from '../../api'
 import { useAuth } from '../../context/useAuth'
 
-// Toast component
-const Toast = ({ onClose }) => {
+// Toast: shows the message the previous page passed ("Account created…", "Password changed…"); it used to be
+// hard-coded to "Account created!" (4 Oct)
+const Toast = ({ message, onClose }) => {
   useEffect(() => {
     const timer = setTimeout(onClose, 8000)
     return () => clearTimeout(timer)
@@ -18,8 +19,7 @@ const Toast = ({ onClose }) => {
         </svg>
       </div>
       <div className="min-w-0">
-        <p className="text-sm font-medium text-gray-800">Account created!</p>
-        <p className="text-xs text-gray-500">Please sign in to continue.</p>
+        <p className="text-sm font-medium text-gray-800">{message}</p>
       </div>
       <button
         onClick={onClose}
@@ -106,7 +106,10 @@ export default function Login() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
+            <div className="flex items-baseline justify-between mb-1">
+              <label className="block text-sm font-medium text-gray-700">Password</label>
+              <Link to="/forgot-password" className="text-xs text-blue-700 hover:underline">Forgot password?</Link>
+            </div>
             <div className="relative">
               <input
                 type={showPassword ? 'text' : 'password'}

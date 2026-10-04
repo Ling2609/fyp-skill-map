@@ -1,13 +1,22 @@
+import hashlib
+import hmac
 import re
-from fastapi import APIRouter, Depends, HTTPException
+import secrets
+from datetime import datetime, timedelta, timezone
+
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError
 from sqlalchemy import func
 from sqlalchemy.orm import Session
 from app.database import get_db
+from app.models.password_reset import PasswordResetOTP
 from app.models.user import User, UserRole
-from app.schemas.user import EmailChange, NameUpdate, PasswordChange, Token, UserLogin, UserOut, UserRegister
+from app.schemas.user import (EmailChange, ForgotPasswordIn, NameUpdate, PasswordChange, ResetPasswordIn, Token,
+                              UserLogin, UserOut, UserRegister)
 from app.auth.utils import hash_password, verify_password, create_access_token, decode_token
+from app.config import settings
+from app.services.mailer import send_email
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
@@ -170,3 +179,78 @@ def login(payload: UserLogin, db: Session = Depends(get_db)):
         raise HTTPException(status_code=401, detail="Invalid credentials")
     token = create_access_token({"sub": str(user.id), "role": user.role})
     return {"access_token": token, "token_type": "bearer"}
+
+
+# ── Forgot password (4 Oct; OWASP Forgot Password Cheat Sheet, references.md) ──────────────────────────────────
+# A 6-digit code is emailed to the account's address. Same reply whether or not the account exists (no user
+# enumeration); the email is sent in the background so both cases take the same time. Code: from `secrets`,
+# stored only as an HMAC (keyed with SECRET_KEY, so a leaked table can't be brute-forced offline), valid 15 min,
+# single use, 5 wrong tries max, at most one new code a minute per account. Known limit: logins already open on
+# other devices stay valid until their token expires (JWTs are not stored server-side).
+RESET_CODE_MINUTES = 15
+RESET_MAX_ATTEMPTS = 5
+RESET_RESEND_SECONDS = 60
+FORGOT_REPLY = {"message": "If an account exists, a 6-digit code has been sent to its email address."}
+INVALID_CODE = "That code is wrong or has expired. Request a new one if needed."
+
+
+def _code_hash(user_id: int, code: str) -> str:
+    return hmac.new(settings.secret_key.encode(), f"{user_id}:{code}".encode(), hashlib.sha256).hexdigest()
+
+
+def _find_user(identifier: str, db: Session) -> User | None:
+    ident = identifier.strip().lower()   # username or email, any case (as at login)
+    return (db.query(User).filter(func.lower(User.email) == ident).first()
+            or db.query(User).filter(User.username == ident).first())
+
+
+@router.post("/forgot-password")
+def forgot_password(payload: ForgotPasswordIn, background: BackgroundTasks, db: Session = Depends(get_db)):
+    user = _find_user(payload.identifier, db)
+    if not user:
+        return FORGOT_REPLY
+    now = datetime.now(timezone.utc)
+    latest = (db.query(PasswordResetOTP).filter(PasswordResetOTP.user_id == user.id)
+              .order_by(PasswordResetOTP.created_at.desc()).first())
+    if latest and latest.created_at and now - latest.created_at < timedelta(seconds=RESET_RESEND_SECONDS):
+        return FORGOT_REPLY   # asked again within a minute: no new email (stops inbox flooding)
+    db.query(PasswordResetOTP).filter(PasswordResetOTP.user_id == user.id, PasswordResetOTP.used.is_(False)) \
+        .update({PasswordResetOTP.used: True})   # only the newest code works
+    code = f"{secrets.randbelow(1_000_000):06d}"
+    db.add(PasswordResetOTP(user_id=user.id, otp_hash=_code_hash(user.id, code),
+                            expires_at=now + timedelta(minutes=RESET_CODE_MINUTES)))
+    db.commit()
+    background.add_task(
+        send_email, user.email, "Your SkillMap password reset code",
+        f"Hi {user.first_name},\n\nYour code to reset your SkillMap password is: {code}\n\n"
+        f"It expires in {RESET_CODE_MINUTES} minutes and works once. If you didn't ask for this, ignore this email: "
+        "your password stays the same.\n\nSkillMap")
+    return FORGOT_REPLY
+
+
+@router.post("/reset-password", status_code=204)
+def reset_password(payload: ResetPasswordIn, background: BackgroundTasks, db: Session = Depends(get_db)):
+    user = _find_user(payload.identifier, db)
+    if not user:
+        raise HTTPException(status_code=400, detail=INVALID_CODE)
+    otp = (db.query(PasswordResetOTP)
+           .filter(PasswordResetOTP.user_id == user.id, PasswordResetOTP.used.is_(False),
+                   PasswordResetOTP.expires_at > datetime.now(timezone.utc))
+           .order_by(PasswordResetOTP.created_at.desc()).first())
+    if not otp:
+        raise HTTPException(status_code=400, detail=INVALID_CODE)
+    if otp.attempt_count >= RESET_MAX_ATTEMPTS:
+        otp.used = True
+        db.commit()
+        raise HTTPException(status_code=400, detail="Too many wrong tries. Request a new code.")
+    if not hmac.compare_digest(otp.otp_hash, _code_hash(user.id, payload.code.strip())):
+        otp.attempt_count += 1
+        db.commit()
+        raise HTTPException(status_code=400, detail=INVALID_CODE)
+    user.hashed_password = hash_password(payload.new_password)
+    otp.used = True
+    db.commit()
+    background.add_task(
+        send_email, user.email, "Your SkillMap password was changed",
+        f"Hi {user.first_name},\n\nYour SkillMap password was just changed. If this wasn't you, reset it again "
+        "straight away with \"Forgot password?\" on the login page.\n\nSkillMap")

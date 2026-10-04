@@ -21,7 +21,7 @@ api.interceptors.response.use(
     const isLoginCall = error.config?.url?.includes('/auth/login')
     // On public pages (e.g. an old token while opening Register) just drop the token;
     // AuthContext handles that case, no need to reload the page to /login
-    const onPublicPage = ['/', '/login', '/register'].includes(window.location.pathname)
+    const onPublicPage = ['/', '/login', '/register', '/forgot-password'].includes(window.location.pathname)
     if (error.response?.status === 401 && !isLoginCall && !onPublicPage && localStorage.getItem('token')) {
       localStorage.removeItem('token')
       sessionStorage.clear()

@@ -4,6 +4,7 @@ import { useAuth } from './context/useAuth'
 import Sidebar from './components/Sidebar'
 import Register from './pages/auth/Register';
 import Login from './pages/auth/Login';
+import ForgotPassword from './pages/auth/ForgotPassword'
 import Dashboard from './pages/student/Dashboard';
 import Recommend from './pages/student/Recommend';
 import JobDetail from './pages/student/JobDetail';
@@ -50,6 +51,7 @@ function AppRoutes() {
       <Route path="/" element={<Navigate to="/login" />} />
       <Route path="/register" element={<Register />} />
       <Route path="/login" element={<Login />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/dashboard" element={<RoleRoute><Layout><Dashboard /></Layout></RoleRoute>} />
       <Route path="/modules" element={<Navigate to="/profile?tab=modules" replace />} />
       <Route path="/recommend" element={<RoleRoute roles={['student']}><Layout><Recommend /></Layout></RoleRoute>} />

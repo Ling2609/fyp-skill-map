@@ -84,3 +84,20 @@ class PasswordChange(BaseModel):
     @classmethod
     def valid_password(cls, v: str) -> str:
         return check_password(v)
+
+
+# ── Forgot password (4 Oct) ───────────────────────────────────────────────────
+
+class ForgotPasswordIn(BaseModel):
+    identifier: str            # username or email, as on the login page
+
+
+class ResetPasswordIn(BaseModel):
+    identifier: str
+    code: str
+    new_password: str
+
+    @field_validator("new_password")
+    @classmethod
+    def valid_password(cls, v: str) -> str:
+        return check_password(v)

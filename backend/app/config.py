@@ -8,6 +8,12 @@ class Settings(BaseSettings):
     gemini_api_key: str = ""
     groq_api_key: str = ""
     jsearch_key: str = ""   # RapidAPI key for JSearch (live jobs)
+    # Email for "Forgot password" (Gmail SMTP + app password; see references.md "OTP, email verification and
+    # forgot password"). Empty = not set up: the code is printed in the backend console instead (development only)
+    smtp_host: str = "smtp.gmail.com"
+    smtp_port: int = 587
+    smtp_user: str = ""
+    smtp_password: str = ""
 
     class Config:
         env_file = ".env"
