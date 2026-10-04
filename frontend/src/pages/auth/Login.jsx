@@ -38,8 +38,11 @@ export default function Login() {
   const location = useLocation()
   const { login } = useAuth()
   const [form, setForm] = useState({ email: '', password: '' })
-  const sessionExpired = new URLSearchParams(location.search).get('expired') === '1'
-  const [error, setError] = useState(sessionExpired ? 'Your session has expired. Please sign in again.' : '')
+  const expiredReason = new URLSearchParams(location.search).get('expired')
+  const sessionExpired = !!expiredReason
+  const [error, setError] = useState(!sessionExpired ? ''
+    : expiredReason === 'password' ? 'Your password was changed, so you were signed out. Please sign in again.'
+    : 'Your session has expired. Please sign in again.')
   const [loading, setLoading] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const [showToast, setShowToast] = useState(!!location.state?.message)

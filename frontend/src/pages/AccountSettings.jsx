@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import api from '../api'
 import PageHeader from '../components/PageHeader'
 import PasswordStrength from '../components/PasswordStrength'
@@ -6,8 +6,11 @@ import { useAuth } from '../context/useAuth'
 
 // Account settings (4 Oct): login and account details, separate from the Skill Profile (references.md
 // "Personal details page"). Two sections, Account information and Security; each row opens its own small form.
-// Changing the email or password needs the current password. A real product would also send a confirmation
-// email before an email change; SkillMap has no mail service (stated as a limitation in the report).
+// Changing the email or password needs the current password. A new email only counts once the 6-digit code sent to
+// it is entered (the old address is told afterwards). Changing the password signs out other devices; this one gets
+// a new token (4 Oct, references.md "Account security fixes").
+
+const RESEND_SECONDS = 60
 
 const errorText = (err) => {
   const detail = err.response?.data?.detail
@@ -65,14 +68,26 @@ export default function AccountSettings() {
   const [error, setError] = useState('')
   const [saving, setSaving] = useState(false)
   const [done, setDone] = useState('')           // short confirmation after a save
+  const [emailStep, setEmailStep] = useState('form')   // 'form' | 'code'
+  const [resendAt, setResendAt] = useState(0)
+  const [now, setNow] = useState(() => Date.now())
+
+  // Resend countdown from a fixed end time (same as Forgot password)
+  useEffect(() => {
+    if (resendAt <= Date.now()) return
+    const timer = setInterval(() => setNow(Date.now()), 500)
+    return () => clearInterval(timer)
+  }, [resendAt])
+  const wait = Math.max(0, Math.ceil((resendAt - now) / 1000))
 
   const start = (what) => {
     setOpen(what)
     setError('')
     setDone('')
+    setEmailStep('form')
     setForm(what === 'name' ? { first_name: user?.first_name || '', last_name: user?.last_name || '' } : {})
   }
-  const cancel = () => { setOpen(''); setError('') }
+  const cancel = () => { setOpen(''); setError(''); setEmailStep('form') }
   const set = (key) => (e) => setForm(f => ({ ...f, [key]: e.target.value }))
 
   const save = async (e, request, message) => {
@@ -81,8 +96,10 @@ export default function AccountSettings() {
     setError('')
     try {
       const res = await request()
-      if (res.data) setUser(res.data)
+      if (res.data?.access_token) localStorage.setItem('token', res.data.access_token)   // password change
+      else if (res.data) setUser(res.data)
       setOpen('')
+      setEmailStep('form')
       setDone(message)
     } catch (err) {
       setError(errorText(err))
@@ -92,16 +109,36 @@ export default function AccountSettings() {
   }
 
   const saveName = (e) => save(e, () => api.patch('/auth/me', form), 'Name saved')
-  const saveEmail = (e) => save(e, () => api.put('/auth/me/email', form), 'Email changed')
+  // Email, step 1: password + new address -> code sent to the new address (nothing changes yet)
+  const sendEmailCode = async (e) => {
+    e?.preventDefault()
+    setSaving(true)
+    setError('')
+    try {
+      await api.put('/auth/me/email', { new_email: form.new_email, current_password: form.current_password })
+      setForm(f => ({ ...f, code: '' }))
+      setEmailStep('code')
+      setResendAt(Date.now() + RESEND_SECONDS * 1000)
+      setNow(Date.now())
+    } catch (err) {
+      setError(errorText(err))
+    } finally {
+      setSaving(false)
+    }
+  }
+  // Email, step 2: the code from the new inbox
+  const verifyEmail = (e) => save(e, () => api.post('/auth/me/email/verify', { code: form.code }),
+    'Email changed. We let your old address know.')
+  const countdown = `${Math.floor(wait / 60)}:${String(wait % 60).padStart(2, '0')}`
   const savePassword = (e) => {
     if (form.new_password !== form.confirm_password) {
       e.preventDefault()
-      setError('The new passwords do not match')
+      setError("The new passwords don't match")
       return
     }
     return save(e, () => api.put('/auth/me/password', {
       current_password: form.current_password, new_password: form.new_password,
-    }), 'Password changed')
+    }), 'Password changed. Other devices were signed out.')
   }
 
   const errorBox = error && <p className="text-sm text-rose-600 bg-rose-50 border border-rose-100 rounded-lg px-3 py-2">{error}</p>
@@ -139,12 +176,44 @@ export default function AccountSettings() {
           <Row label="Username" value={user?.username} note="Can't be changed: you log in with it" />
 
           <Row label="Email" value={user?.email} action="Change" onAction={() => start('email')} open={open === 'email'}>
-            <form onSubmit={saveEmail} className="space-y-3">
-              <Field label="New email"><input type="email" className={inputClass} value={form.new_email || ''} onChange={set('new_email')} autoFocus /></Field>
-              <Field label="Current password"><input type="password" className={inputClass} value={form.current_password || ''} onChange={set('current_password')} autoComplete="current-password" /></Field>
-              {errorBox}
-              <FormButtons saving={saving} onCancel={cancel} label="Change email" />
-            </form>
+            {emailStep === 'form' ? (
+              <form onSubmit={sendEmailCode} className="space-y-3">
+                <Field label="New email"><input type="email" className={inputClass} value={form.new_email || ''} onChange={set('new_email')} autoFocus /></Field>
+                <Field label="Current password"><input type="password" className={inputClass} value={form.current_password || ''} onChange={set('current_password')} autoComplete="current-password" /></Field>
+                {errorBox}
+                <FormButtons saving={saving} onCancel={cancel} label="Send code" />
+              </form>
+            ) : (
+              <form onSubmit={verifyEmail} className="space-y-3">
+                <p className="text-sm text-slate-500">
+                  Code sent to <span className="font-medium text-slate-800">{form.new_email.trim().toLowerCase()}</span>.{' '}
+                  <button type="button" onClick={() => { setEmailStep('form'); setError('') }}
+                    className="text-blue-600 font-medium hover:text-blue-800">Change</button>
+                </p>
+                <div>
+                  <div className="flex items-baseline justify-between mb-1">
+                    <span className="text-xs font-medium text-slate-500">Code</span>
+                    <span className="text-xs text-slate-400">Expires in 15 minutes</span>
+                  </div>
+                  <input type="text" inputMode="numeric" autoComplete="one-time-code" maxLength={6} value={form.code || ''}
+                    onChange={e => setForm(f => ({ ...f, code: e.target.value.replace(/\D/g, '') }))}
+                    className={`${inputClass} tracking-[0.4em] font-medium`} placeholder="000000" aria-label="Code" autoFocus />
+                </div>
+                {errorBox}
+                <div className="flex items-center gap-2 pt-1">
+                  <button type="submit" disabled={saving || (form.code || '').length !== 6}
+                    className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition disabled:opacity-50">
+                    {saving ? 'Checking…' : 'Verify'}
+                  </button>
+                  <button type="button" onClick={cancel} className="px-3 py-2 text-sm text-slate-500 hover:text-slate-800">Cancel</button>
+                  <span className="ml-auto text-sm">
+                    {wait > 0
+                      ? <span className="text-slate-400">Resend code in {countdown}</span>
+                      : <button type="button" onClick={sendEmailCode} disabled={saving} className="text-blue-600 font-medium hover:text-blue-800">Resend code</button>}
+                  </span>
+                </div>
+              </form>
+            )}
           </Row>
         </section>
 
@@ -156,7 +225,7 @@ export default function AccountSettings() {
               <Field label="Current password"><input type="password" className={inputClass} value={form.current_password || ''} onChange={set('current_password')} autoComplete="current-password" autoFocus /></Field>
               <div>
                 <Field label="New password"><input type="password" className={inputClass} value={form.new_password || ''} onChange={set('new_password')} autoComplete="new-password" placeholder="At least 8 characters" /></Field>
-                <PasswordStrength password={form.new_password} />
+                <PasswordStrength password={form.new_password} username={user?.username} email={user?.email} />
               </div>
               <Field label="Confirm new password"><input type="password" className={inputClass} value={form.confirm_password || ''} onChange={set('confirm_password')} autoComplete="new-password" /></Field>
               {errorBox}

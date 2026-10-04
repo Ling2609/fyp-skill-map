@@ -26,18 +26,22 @@ def _common() -> frozenset[str]:
         return frozenset()
 
 
+def common_passwords() -> frozenset[str]:
+    return _common()
+
+
 def password_problem(password: str, username: str = "", email: str = "") -> str | None:
     """None if the password is acceptable, else a short message for the student."""
     if len(password) < MIN_LENGTH:
-        return f"Password must be at least {MIN_LENGTH} characters"
+        return f"Use at least {MIN_LENGTH} characters"
     if len(password.encode("utf-8")) > MAX_BYTES:
-        return "Password is too long (max 72 bytes, e.g. 72 English letters)"
+        return "Please use a shorter password (up to 72 characters)"
     low = password.lower()
     base = re.sub(r"[\d\W_]+$", "", low)            # "password123!" -> "password"
     common = _common()
     if low in common or (len(base) >= 4 and base in common):
-        return "This password is too common. Try a longer phrase only you would think of"
+        return "Choose a password that's harder to guess, e.g. a few random words"
     personal = {"skillmap", (username or "").lower(), (email or "").lower().split("@")[0]}
     if any(len(p) >= 3 and p in low for p in personal):
-        return "Password can't contain SkillMap, your username or your email name"
+        return "Choose a password that doesn't include your username, email name or SkillMap"
     return None

@@ -281,11 +281,11 @@ export default function Register() {
               </button>
             </div>
 
-            <PasswordStrength password={form.password} />
+            <PasswordStrength password={form.password} username={form.username} email={form.email} />
 
             {/* Error messages on submit */}
             {attemptedSubmit && form.password.length < 8 && (
-              <p className="text-xs text-red-500 mt-1">Password must be at least 8 characters</p>
+              <p className="text-xs text-red-500 mt-1">Use at least 8 characters</p>
             )}
 
           </div>
@@ -314,7 +314,7 @@ export default function Register() {
               </button>
             </div>
             {form.confirm_password && form.password !== form.confirm_password && (
-              <p className="text-xs text-red-500 mt-1">Passwords do not match</p>
+              <p className="text-xs text-red-500 mt-1">The passwords don't match</p>
             )}
             {form.confirm_password && form.password === form.confirm_password && (
               <p className="text-xs text-green-600 mt-1">Passwords match</p>

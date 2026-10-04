@@ -22,3 +22,6 @@ class User(Base):
     is_visible_to_employers = Column(Boolean, default=False, nullable=False)
     is_active               = Column(Boolean, default=True, nullable=False)
     notification_prefs      = Column(JSON, nullable=False, server_default='{}')
+    # Set when the password is changed or reset; sign-in tokens issued under an older password are refused
+    # (4 Oct, migrations/migrate_account_security.py)
+    password_changed_at     = Column(DateTime(timezone=True), nullable=True)

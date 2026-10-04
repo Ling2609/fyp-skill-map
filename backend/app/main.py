@@ -9,6 +9,9 @@ from app.models import profile as profile_model  # noqa: F401 — registers tabl
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    from app.routers.auth import check_account_schema, delete_old_codes
+    check_account_schema()   # stops with a clear message if migrate_account_security.py hasn't been run
+    delete_old_codes()
     from app.routers.recommend import build_job_cache
     build_job_cache()
     yield

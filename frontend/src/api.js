@@ -25,7 +25,9 @@ api.interceptors.response.use(
     if (error.response?.status === 401 && !isLoginCall && !onPublicPage && localStorage.getItem('token')) {
       localStorage.removeItem('token')
       sessionStorage.clear()
-      window.location.href = '/login?expired=1'
+      // Password changed on another device (4 Oct): say so, instead of "session expired"
+      const reason = error.response.data?.detail?.startsWith('Your password was changed') ? 'password' : '1'
+      window.location.href = `/login?expired=${reason}`
     }
     return Promise.reject(error)
   }

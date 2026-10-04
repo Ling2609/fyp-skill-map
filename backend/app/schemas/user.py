@@ -8,9 +8,9 @@ NAME_PATTERN = re.compile(r"^[a-zA-Z\s\-']+$")   # same rule as the Register pag
 
 def check_password(v: str) -> str:
     if len(v) < 8:
-        raise ValueError("Password must be at least 8 characters")
+        raise ValueError("Use at least 8 characters")
     if len(v.encode("utf-8")) > 72:  # bcrypt only accepts up to 72 bytes
-        raise ValueError("Password is too long (max 72 bytes, e.g. 72 English letters)")
+        raise ValueError("Please use a shorter password (up to 72 characters)")
     return v
 
 
@@ -74,6 +74,10 @@ class NameUpdate(BaseModel):
 class EmailChange(BaseModel):
     new_email: EmailStr
     current_password: str
+
+
+class EmailCodeIn(BaseModel):
+    code: str                  # the 6-digit code sent to the new address
 
 
 class PasswordChange(BaseModel):

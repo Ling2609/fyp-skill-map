@@ -76,7 +76,7 @@ export default function ForgotPassword() {
   const resetPassword = async (e) => {
     e.preventDefault()
     setError('')
-    if (form.new_password !== form.confirm) { setError('Passwords do not match.'); return }
+    if (form.new_password !== form.confirm) { setError("The passwords don't match."); return }
     setLoading(true)
     try {
       await api.post('/auth/reset-password', { reset_token: resetToken, new_password: form.new_password })
@@ -160,7 +160,8 @@ export default function ForgotPassword() {
                 <label className="block text-sm font-medium text-gray-700 mb-1">New password</label>
                 <input type="password" autoComplete="new-password" value={form.new_password} onChange={set('new_password')}
                   className={inputClass} placeholder="At least 8 characters" required autoFocus />
-                <PasswordStrength password={form.new_password} />
+                <PasswordStrength password={form.new_password}
+                  {...(EMAIL_SHAPE.test(form.identifier.trim()) ? { email: form.identifier.trim() } : { username: form.identifier.trim() })} />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Confirm password</label>

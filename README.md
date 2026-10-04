@@ -154,6 +154,7 @@ Groq's free tier allows about 200,000 tokens a day (≈ 100 jobs). Don't run two
 | `migrate_add_live_job_columns.py` | 27 Sep 2026 | live-job columns on `jobs` |
 | `migrate_drop_user_skills_cache.py` | 29 Sep 2026 | drops the unused `user_skills_cache` |
 | `migrate_add_job_skill_evidence.py` | 1 Oct 2026 | adds `evidence_quote`, `level`, `skill_type`, `match_score`, `alternative_group` to `job_skills` (fix plan Stage 1) and an index on `job_skills.job_id` |
+| `migrate_account_security.py` | 4 Oct 2026 | adds `users.password_changed_at` and `purpose`, `new_email` to `password_reset_otps`; drops `login_throttle` (replaced by `login_attempts`); deletes used/expired codes. The API refuses to start until this has run |
 
 A **new, empty** database doesn't need them: the tables are created from `app/models/` when the API starts. To apply one: `python migrations/<file>.py` from `backend/`. A new database change gets a new `migrate_<what_it_does>.py` and a row in this table.
 
