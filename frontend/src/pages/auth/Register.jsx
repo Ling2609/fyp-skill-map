@@ -1,26 +1,8 @@
 import { useState, useEffect, useRef } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import api from '../../api'
+import PasswordStrength from '../../components/PasswordStrength'
 
-const getPasswordStrength = (password) => {
-  if (!password) return { score: 0, label: '', color: '' }
-
-  // Below minimum length = always Weak regardless of complexity
-  if (password.length < 8) return { score: 1, label: 'Weak', color: 'bg-red-400' }
-
-  let score = 1 // base score for meeting minimum length
-  if (password.length >= 12) score++ // bonus for longer
-  if (password.length >= 16) score++ // bonus for even longer
-  if (/[A-Z]/.test(password)) score++ // uppercase letter
-  if (/[0-9]/.test(password)) score++ // number
-  if (/[^a-zA-Z0-9]/.test(password)) score++ // symbol
-
-  score = Math.min(score, 5) // cap at 5
-
-  if (score <= 2) return { score, label: 'Weak', color: 'bg-red-400' }
-  if (score <= 4) return { score, label: 'Medium', color: 'bg-yellow-400' }
-  return { score, label: 'Strong', color: 'bg-green-500' }
-}
 
 const validateName = (name) => {
   if (!name || name.trim().length < 1) return 'This field is required'
@@ -100,7 +82,6 @@ export default function Register() {
     return () => { if (debounceRef.current) clearTimeout(debounceRef.current) }
   }, [form.username])
 
-  const passwordStrength = getPasswordStrength(form.password)
 
   const getUsernameIcon = () => {
     if (usernameStatus === 'checking') return (
@@ -125,8 +106,7 @@ export default function Register() {
       !validateName(form.last_name) &&
       form.email.length > 0 &&
       form.password.length >= 8 &&
-      form.password === form.confirm_password &&
-      passwordStrength.score >= 3
+      form.password === form.confirm_password
   }
 
   const handleBlur = (field) => {
@@ -288,7 +268,7 @@ export default function Register() {
                 onFocus={() => setFocused('password')}
                 onBlur={() => setFocused('')}
                 className={`w-full border rounded-lg px-3 py-2 text-sm pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                  attemptedSubmit && (form.password.length < 8 || passwordStrength.score < 3)
+                  attemptedSubmit && form.password.length < 8
                     ? 'border-red-400' : 'border-gray-300'
                 }`}
                 placeholder="••••••••"
@@ -301,44 +281,13 @@ export default function Register() {
               </button>
             </div>
 
-            {/* Strength bar — shows when typing */}
-            {form.password && (
-              <div className="mt-2">
-                <div className="flex gap-1 mb-1">
-                  {[1, 2, 3, 4, 5].map(i => (
-                    <div
-                      key={i}
-                      className={`h-1 flex-1 rounded-full transition-all ${
-                        i <= passwordStrength.score ? passwordStrength.color : 'bg-gray-200'
-                      }`}
-                    />
-                  ))}
-                </div>
-                <p className={`text-xs ${
-                  passwordStrength.score <= 2 ? 'text-red-500' :
-                  passwordStrength.score <= 4 ? 'text-yellow-600' : 'text-green-600'
-                }`}>
-                  {passwordStrength.label} password
-                </p>
-              </div>
-            )}
+            <PasswordStrength password={form.password} />
 
             {/* Error messages on submit */}
             {attemptedSubmit && form.password.length < 8 && (
               <p className="text-xs text-red-500 mt-1">Password must be at least 8 characters</p>
             )}
-            {attemptedSubmit && form.password.length >= 8 && passwordStrength.score < 3 && (
-              <p className="text-xs text-red-500 mt-1">Password is too weak — Medium strength required</p>
-            )}
 
-            {/* Hint — only when focused */}
-            {focused === 'password' && (
-              <p className="text-xs text-gray-400 mt-1">
-                Min 8 characters with uppercase, numbers and symbols.
-                <br />
-                At least <span className="text-yellow-600 font-medium">Medium</span> strength required.
-              </p>
-            )}
           </div>
 
           {/* Confirm Password */}

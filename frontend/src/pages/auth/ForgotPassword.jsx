@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import api from '../../api'
+import PasswordStrength from '../../components/PasswordStrength'
 
 // Forgot password (4 Oct; OWASP Forgot Password Cheat Sheet + OTP screen patterns, references.md).
 // Step 1: username or email -> a 6-digit code is emailed. Step 2: the code is checked. Step 3: new password.
@@ -154,6 +155,7 @@ export default function ForgotPassword() {
                 <label className="block text-sm font-medium text-gray-700 mb-1">New password</label>
                 <input type="password" autoComplete="new-password" value={form.new_password} onChange={set('new_password')}
                   className={inputClass} placeholder="At least 8 characters" required autoFocus />
+                <PasswordStrength password={form.new_password} />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Confirm password</label>

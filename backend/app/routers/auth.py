@@ -10,6 +10,7 @@ from jose import JWTError, jwt
 from sqlalchemy import func
 from sqlalchemy.orm import Session
 from app.database import get_db
+from app.models.login_throttle import LoginThrottle
 from app.models.password_reset import PasswordResetOTP
 from app.models.user import User, UserRole
 from app.schemas.user import (EmailChange, ForgotPasswordIn, NameUpdate, PasswordChange, ResetPasswordIn, Token,
@@ -17,6 +18,7 @@ from app.schemas.user import (EmailChange, ForgotPasswordIn, NameUpdate, Passwor
 from app.auth.utils import hash_password, verify_password, create_access_token, decode_token
 from app.config import settings
 from app.services.mailer import send_email
+from app.services.password_policy import password_problem
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
@@ -73,6 +75,13 @@ def get_me(current_user: User = Depends(get_current_user)):
 # Username is not changeable (it is the login name). Email changes need the current password; a real product would
 # also send a confirmation email, which SkillMap has no mail service for (stated as a limitation in the report).
 
+def _check_new_password(password: str, username: str, email: str):
+    """One rule for Register, Account settings and Forgot password (app/services/password_policy.py)."""
+    problem = password_problem(password, username, email)
+    if problem:
+        raise HTTPException(status_code=400, detail=problem)
+
+
 def _check_current_password(user: User, password: str):
     if not verify_password(password, user.hashed_password):
         raise HTTPException(status_code=400, detail="Current password is incorrect")
@@ -107,6 +116,7 @@ def change_password(payload: PasswordChange, db: Session = Depends(get_db), curr
     _check_current_password(current_user, payload.current_password)
     if verify_password(payload.new_password, current_user.hashed_password):
         raise HTTPException(status_code=400, detail="New password must be different from the current one")
+    _check_new_password(payload.new_password, current_user.username, current_user.email)
     current_user.hashed_password = hash_password(payload.new_password)
     db.commit()
 
@@ -152,6 +162,7 @@ def register(payload: UserRegister, db: Session = Depends(get_db)):
         raise HTTPException(status_code=400, detail="Email already registered")
     if db.query(User).filter(User.username == payload.username.lower()).first():
         raise HTTPException(status_code=400, detail="Username already taken")
+    _check_new_password(payload.password, payload.username, email)
 
     user = User(
         username=payload.username.lower(),  # store lowercase
@@ -167,6 +178,13 @@ def register(payload: UserRegister, db: Session = Depends(get_db)):
     return user
 
 
+# Failed sign-ins (4 Oct; NIST SP 800-63B: limit failed attempts): 10 wrong passwords for one account -> sign-in
+# paused for 15 minutes, even with the right password; a password reset lifts the pause. Unknown accounts are
+# not counted (nothing to protect), so a pause does reveal that an account exists; accepted, as Register already does.
+MAX_FAILED_LOGINS = 10
+LOCK_MINUTES = 15
+
+
 @router.post("/login", response_model=Token)
 def login(payload: UserLogin, db: Session = Depends(get_db)):
     # Try email first, then username; both case-insensitive (usernames are stored in lower case, emails compared
@@ -175,8 +193,25 @@ def login(payload: UserLogin, db: Session = Depends(get_db)):
     user = db.query(User).filter(func.lower(User.email) == ident).first()
     if not user:
         user = db.query(User).filter(User.username == ident).first()
+    now = datetime.now(timezone.utc)
+    throttle = db.get(LoginThrottle, user.id) if user else None
+    if throttle and throttle.locked_until and throttle.locked_until > now:
+        minutes = max(1, -(-int((throttle.locked_until - now).total_seconds()) // 60))
+        raise HTTPException(status_code=429, detail=f"Too many failed sign-ins. Try again in {minutes} "
+                            f"minute{'s' if minutes != 1 else ''}, or reset your password.")
     if not user or not verify_password(payload.password, user.hashed_password):
+        if user:
+            throttle = throttle or LoginThrottle(user_id=user.id, failed_count=0)
+            throttle.failed_count = (throttle.failed_count or 0) + 1
+            if throttle.failed_count >= MAX_FAILED_LOGINS:
+                throttle.failed_count = 0
+                throttle.locked_until = now + timedelta(minutes=LOCK_MINUTES)
+            db.add(throttle)
+            db.commit()
         raise HTTPException(status_code=401, detail="Invalid credentials")
+    if throttle:
+        db.delete(throttle)   # a successful sign-in clears the count
+        db.commit()
     token = create_access_token({"sub": str(user.id), "role": user.role})
     return {"access_token": token, "token_type": "bearer"}
 
@@ -272,8 +307,10 @@ def reset_password(payload: ResetPasswordIn, background: BackgroundTasks, db: Se
     user = db.query(User).filter(User.id == user_id).first()
     if not otp or not user or otp.user_id != user.id or otp.used:   # used = already reset, or a newer code was sent
         raise HTTPException(status_code=400, detail=EXPIRED_PASS)
+    _check_new_password(payload.new_password, user.username, user.email)
     user.hashed_password = hash_password(payload.new_password)
     otp.used = True
+    db.query(LoginThrottle).filter(LoginThrottle.user_id == user.id).delete()   # owner proved access: unlock sign-in
     db.commit()
     background.add_task(
         send_email, user.email, "Your SkillMap password was changed",

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import api from '../api'
 import PageHeader from '../components/PageHeader'
+import PasswordStrength from '../components/PasswordStrength'
 import { useAuth } from '../context/useAuth'
 
 // Account settings (4 Oct): login and account details, separate from the Skill Profile (references.md
@@ -153,7 +154,10 @@ export default function AccountSettings() {
           <Row label="Password" value="••••••••••" action="Change password" onAction={() => start('password')} open={open === 'password'}>
             <form onSubmit={savePassword} className="space-y-3">
               <Field label="Current password"><input type="password" className={inputClass} value={form.current_password || ''} onChange={set('current_password')} autoComplete="current-password" autoFocus /></Field>
-              <Field label="New password (at least 8 characters)"><input type="password" className={inputClass} value={form.new_password || ''} onChange={set('new_password')} autoComplete="new-password" /></Field>
+              <div>
+                <Field label="New password"><input type="password" className={inputClass} value={form.new_password || ''} onChange={set('new_password')} autoComplete="new-password" placeholder="At least 8 characters" /></Field>
+                <PasswordStrength password={form.new_password} />
+              </div>
               <Field label="Confirm new password"><input type="password" className={inputClass} value={form.confirm_password || ''} onChange={set('confirm_password')} autoComplete="new-password" /></Field>
               {errorBox}
               <FormButtons saving={saving} onCancel={cancel} label="Change password" />
