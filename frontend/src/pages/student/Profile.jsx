@@ -106,6 +106,21 @@ function FormButtons({ loading, busyText, label, onCancel, disabled }) {
   )
 }
 
+// "You already have one called X. Are you sure…?" (her wording, 5 Oct): shown in the pop-up in place of the buttons;
+// "Yes, add it" sends the form again with allow_duplicate. Changing the name hides it.
+function DuplicateAsk({ message, yesLabel, onYes, onBack, busy }) {
+  return (
+    <div role="alertdialog" aria-label="Same name" className="bg-amber-50 border border-amber-200 rounded-xl px-4 py-3">
+      <p className="text-sm text-amber-800">{message}</p>
+      <div className="flex justify-end gap-2 mt-3">
+        <button type="button" onClick={onBack} className="px-4 py-2 text-sm text-gray-600 hover:text-gray-900">Go back</button>
+        <button type="button" onClick={onYes} disabled={busy} autoFocus
+          className="bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-xl hover:bg-blue-800 disabled:opacity-40">{yesLabel}</button>
+      </div>
+    </div>
+  )
+}
+
 function IconButton({ label, onClick, children, danger }) {
   return (
     <button type="button" onClick={onClick} title={label} aria-label={label}
@@ -166,35 +181,41 @@ function ProjectForm({ project, onDone, onCancel }) {
   })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
-  const submit = async (e) => {
-    e.preventDefault()
+  const [dupe, setDupe] = useState('')   // "you already have one called ..." question
+  const save = async (allowDuplicate = false) => {
     setLoading(true); setError('')
-    const body = { name: form.name.trim(), description: form.description.trim(), github_url: form.github_url.trim() || null }
+    const body = { name: form.name.trim(), description: form.description.trim(), github_url: form.github_url.trim() || null,
+                   allow_duplicate: allowDuplicate }
     try {
       const res = editing ? await api.put(`/profile/projects/${project.id}`, body) : await api.post('/profile/projects', body)
       onDone(res.data)
     } catch (err) {
-      setError(errText(err, editing ? "Couldn't save the project" : "Couldn't add the project"))
+      if (err.response?.status === 409) setDupe(err.response.data.detail)
+      else setError(errText(err, editing ? "Couldn't save the project" : "Couldn't add the project"))
     } finally { setLoading(false) }
   }
+  const submit = (e) => { e.preventDefault(); save() }
   return (
     <form onSubmit={submit} className="space-y-4">
       <Field label="Project name">
-        <input type="text" value={form.name} onChange={e => setForm(p => ({ ...p, name: e.target.value }))}
-          placeholder="e.g. Inventory Management System" className={inputCls} required autoFocus />
+        <input type="text" value={form.name} onChange={e => { setForm(p => ({ ...p, name: e.target.value })); setDupe('') }}
+          placeholder="e.g. Inventory Management System" className={inputCls} maxLength={100} required autoFocus />
       </Field>
       <Field label="Description">
         <textarea value={form.description} onChange={e => setForm(p => ({ ...p, description: e.target.value }))}
-          placeholder="What you built and the tools you used..." rows={5} className={`${inputCls} resize-none`} required />
+          placeholder="What you built and the tools you used..." rows={5} className={`${inputCls} resize-none`} maxLength={3000} required />
       </Field>
       <Field label="GitHub URL" optional hint="SkillMap reads the languages used in public repositories only.">
         <input type="url" value={form.github_url} onChange={e => setForm(p => ({ ...p, github_url: e.target.value }))}
-          placeholder="https://github.com/username/repo" className={inputCls} />
+          placeholder="https://github.com/username/repo" className={inputCls} maxLength={500} />
       </Field>
       {editing && <p className="text-xs text-gray-400">If you change the text, SkillMap finds the skills again and keeps the ones you added</p>}
       {error && <p className="text-xs text-red-500 bg-red-50 rounded-lg px-3 py-2">{error}</p>}
-      <FormButtons loading={loading} busyText="Finding skills…" label={editing ? 'Save' : 'Add project'} onCancel={onCancel}
-        disabled={!form.name.trim() || !form.description.trim()} />
+      {dupe
+        ? <DuplicateAsk message={dupe} yesLabel={editing ? 'Yes, save it' : 'Yes, add it'} busy={loading}
+            onYes={() => save(true)} onBack={() => setDupe('')} />
+        : <FormButtons loading={loading} busyText="Finding skills…" label={editing ? 'Save' : 'Add project'} onCancel={onCancel}
+            disabled={!form.name.trim() || !form.description.trim()} />}
     </form>
   )
 }
@@ -309,30 +330,31 @@ function CertForm({ cert, onDone, onCancel }) {
   }
 
   const needsSuggest = !skills.length && !draft.trim() && !triedSuggest
-  const submit = async (e) => {
-    e.preventDefault()
-    if (needsSuggest) { suggest(); return }
+  const [dupe, setDupe] = useState('')
+  const submit = (e) => { e.preventDefault(); if (needsSuggest) suggest(); else save() }
+  const save = async (allowDuplicate = false) => {
     const finalSkills = draft.trim() ? [...skills, ...splitSkills(draft).filter(n => !skills.some(s => s.toLowerCase() === n.toLowerCase()))] : skills
     setBusy('save'); setError('')
     const body = { cert_name: form.cert_name.trim(), issuer: form.issuer.trim(), credly_url: form.credly_url.trim() || null,
-                   skills: finalSkills, suggested }
+                   skills: finalSkills, suggested, allow_duplicate: allowDuplicate }
     try {
       const res = editing ? await api.put(`/profile/certifications/${cert.id}`, body) : await api.post('/profile/certifications', body)
       onDone(res.data)
     } catch (err) {
-      setError(errText(err, editing ? "Couldn't save the certificate" : "Couldn't add the certificate"))
+      if (err.response?.status === 409) setDupe(err.response.data.detail)
+      else setError(errText(err, editing ? "Couldn't save the certificate" : "Couldn't add the certificate"))
     } finally { setBusy('') }
   }
 
   return (
     <form onSubmit={submit} className="space-y-4">
       <Field label="Certificate name">
-        <input type="text" value={form.cert_name} onChange={e => setForm(c => ({ ...c, cert_name: e.target.value }))}
-          placeholder="e.g. AWS Certified Cloud Practitioner" className={inputCls} required autoFocus />
+        <input type="text" value={form.cert_name} onChange={e => { setForm(c => ({ ...c, cert_name: e.target.value })); setDupe('') }}
+          placeholder="e.g. AWS Certified Cloud Practitioner" className={inputCls} maxLength={150} required autoFocus />
       </Field>
       <Field label="Issuer">
-        <input type="text" value={form.issuer} onChange={e => setForm(c => ({ ...c, issuer: e.target.value }))}
-          placeholder="e.g. Amazon Web Services" className={inputCls} required />
+        <input type="text" value={form.issuer} onChange={e => { setForm(c => ({ ...c, issuer: e.target.value })); setDupe('') }}
+          placeholder="e.g. Amazon Web Services" className={inputCls} maxLength={100} required />
       </Field>
       <div>
         <div className="flex items-baseline justify-between mb-1.5">
@@ -363,11 +385,14 @@ function CertForm({ cert, onDone, onCancel }) {
       </div>
       <Field label="Credly badge link" optional hint="Adds a link to the badge on your certificate card.">
         <input type="url" value={form.credly_url} onChange={e => setForm(c => ({ ...c, credly_url: e.target.value }))}
-          placeholder="https://www.credly.com/badges/..." className={inputCls} />
+          placeholder="https://www.credly.com/badges/..." className={inputCls} maxLength={500} />
       </Field>
       {error && <p className="text-xs text-red-500 bg-red-50 rounded-lg px-3 py-2">{error}</p>}
-      <FormButtons loading={busy !== ''} busyText={busy === 'suggest' ? 'Finding skills…' : 'Saving…'}
-        label={needsSuggest ? 'Suggest skills' : editing ? 'Save' : 'Add certificate'} onCancel={onCancel} disabled={!canSuggest} />
+      {dupe
+        ? <DuplicateAsk message={dupe} yesLabel={editing ? 'Yes, save it' : 'Yes, add it'} busy={busy !== ''}
+            onYes={() => save(true)} onBack={() => setDupe('')} />
+        : <FormButtons loading={busy !== ''} busyText={busy === 'suggest' ? 'Finding skills…' : 'Saving…'}
+            label={needsSuggest ? 'Suggest skills' : editing ? 'Save' : 'Add certificate'} onCancel={onCancel} disabled={!canSuggest} />}
     </form>
   )
 }

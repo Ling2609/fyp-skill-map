@@ -46,6 +46,7 @@ class ProjectIn(BaseModel):
     name: str
     description: str
     github_url: str | None = None
+    allow_duplicate: bool = False   # the student saw "you already have one called ..." and chose to add it anyway
 
 
 class CertIn(BaseModel):
@@ -57,6 +58,7 @@ class CertIn(BaseModel):
     # skills = the final chips; suggested = some of them came from "Suggest skills" (saved as "confirmed", else "listed")
     skills: list[str] | None = None
     suggested: bool = False
+    allow_duplicate: bool = False
 
 
 class CertSuggestIn(BaseModel):
@@ -262,6 +264,60 @@ def _own_cert(cert_id: int, user: User, db: Session) -> UserCertification:
     return cert
 
 
+# Same name twice (5 Oct, her choice B + C): an exact copy of a project (same name and description) is refused; a
+# same-name project or certificate is asked about. 409 = "you already have one called X, sure?"; the pop-up then sends
+# allow_duplicate. The skill profile counts each skill once, so a duplicate only adds clutter.
+# Field limits (5 Oct): a longer value used to reach the database and fail with a 500 (columns are String(200/300/500)).
+# Checked by hand, not with pydantic max_length, so the student gets one plain sentence instead of a 422 list.
+LIMITS = {"Project name": 100, "Description": 3000, "GitHub link": 500,
+          "Certificate name": 150, "Issuer": 100, "Credly link": 500}
+
+
+def _check_length(label: str, value: str | None):
+    if value and len(value.strip()) > LIMITS[label]:
+        raise HTTPException(status_code=400, detail=f"{label} can be up to {LIMITS[label]} characters")
+
+
+def _same(a: str, b: str) -> bool:
+    return " ".join((a or "").split()).lower() == " ".join((b or "").split()).lower()
+
+
+def _check_project(data: ProjectIn, user: User, db: Session, current: UserProject | None = None):
+    """Lengths, then the same name twice (case and spaces ignored), before any AI call is made. On edit, only asked
+    when the name was changed (otherwise every save of an already-confirmed duplicate would ask again)."""
+    project_id = current.id if current else None
+    for label, value in (("Project name", data.name), ("Description", data.description), ("GitHub link", data.github_url)):
+        _check_length(label, value)
+    # Option C (her choice "b+c"): the same name AND the same description is an accidental second add, never asked
+    # about, always refused (even with allow_duplicate)
+    for other in db.query(UserProject).filter(UserProject.user_id == user.id, UserProject.id != (project_id or 0)):
+        if _same(other.name, data.name) and _same(other.description, data.description):
+            raise HTTPException(status_code=400, detail=f"You've already added “{other.name}” with this description.")
+    if data.allow_duplicate or (current and _same(current.name, data.name)):
+        return
+    name = " ".join(data.name.split()).lower()
+    for other in db.query(UserProject).filter(UserProject.user_id == user.id, UserProject.id != (project_id or 0)):
+        if " ".join(other.name.split()).lower() == name:
+            ask = "use this name for this one too" if current else f"add another “{other.name}”"
+            raise HTTPException(status_code=409, detail=f"You already have a project called “{other.name}”. "
+                                                        f"Are you sure you want to {ask}?")
+
+
+def _check_cert(data: CertIn, user: User, db: Session, current: UserCertification | None = None):
+    cert_id = current.id if current else None
+    for label, value in (("Certificate name", data.cert_name), ("Issuer", data.issuer), ("Credly link", data.credly_url)):
+        _check_length(label, value)
+    if data.allow_duplicate or (current and _same(current.cert_name, data.cert_name) and _same(current.issuer, data.issuer)):
+        return
+    key = (" ".join(data.cert_name.split()).lower(), " ".join(data.issuer.split()).lower())
+    for other in db.query(UserCertification).filter(UserCertification.user_id == user.id,
+                                                    UserCertification.id != (cert_id or 0)):
+        if (" ".join(other.cert_name.split()).lower(), " ".join(other.issuer.split()).lower()) == key:
+            ask = "use this name for this one too" if current else f"add another “{other.cert_name}”"
+            raise HTTPException(status_code=409, detail=f"You already have “{other.cert_name}” from {other.issuer}. "
+                                                        f"Are you sure you want to {ask}?")
+
+
 def _project_skills(data: ProjectIn, keep: dict[str, str]) -> tuple[dict[str, str], str | None]:
     """{skill: evidence} from the text + GitHub, plus the student's own additions in `keep`; and the GitHub note."""
     if not data.name.strip() or not data.description.strip():
@@ -299,6 +355,7 @@ def _clean_skill(name: str) -> str:
 
 @router.post("/projects", response_model=ProjectOut, status_code=201)
 def add_project(data: ProjectIn, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    _check_project(data, current_user, db)
     quotes, github_note = _project_skills(data, {})
     project = UserProject(user_id=current_user.id, name=data.name.strip(), description=data.description.strip(),
                           github_url=(data.github_url or "").strip() or None,
@@ -316,6 +373,7 @@ def edit_project(project_id: int, data: ProjectIn, current_user: User = Depends(
                  db: Session = Depends(get_db)):
     """Edit: skills are worked out again only if the name, description or GitHub link changed."""
     project = _own_project(project_id, current_user, db)
+    _check_project(data, current_user, db, project)
     github = (data.github_url or "").strip() or None
     github_note = None
     if (data.name.strip(), data.description.strip(), github) != (project.name, project.description, project.github_url):
@@ -407,6 +465,7 @@ def suggest_cert_skills(data: CertSuggestIn, current_user: User = Depends(get_cu
 
 @router.post("/certifications", response_model=CertOut, status_code=201)
 def add_certification(data: CertIn, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    _check_cert(data, current_user, db)
     credly = _check_credly(data.credly_url)
     skills, source = _cert_skills(data, [])
     cert = UserCertification(user_id=current_user.id, cert_name=data.cert_name.strip(), issuer=data.issuer.strip(),
@@ -423,6 +482,7 @@ def edit_certification(cert_id: int, data: CertIn, current_user: User = Depends(
     """Edit: typed skills replace the list; with the box empty, the AI estimates again only if the name or issuer
     changed (or the list was typed before and has now been cleared). The Credly link is just saved."""
     cert = _own_cert(cert_id, current_user, db)
+    _check_cert(data, current_user, db, cert)
     cert.credly_url = _check_credly(data.credly_url)
     renamed = (data.cert_name.strip(), data.issuer.strip()) != (cert.cert_name, cert.issuer)
     if data.skills is not None:   # the pop-up's checked chips replace the list
