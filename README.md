@@ -92,7 +92,13 @@ JSEARCH_KEY=<RapidAPI key>
 # optional
 GEMINI_MODEL=gemini-3.1-flash-lite
 ACCESS_TOKEN_EXPIRE_MINUTES=480
+# optional: emails for Forgot password (Gmail needs 2-Step Verification and an app password)
+SMTP_USER=<gmail address>
+SMTP_PASSWORD=<16-character app password>
+SMTP_HOST=smtp.gmail.com            # default
+SMTP_PORT=587                       # default, STARTTLS
 ```
+Without `SMTP_USER` and `SMTP_PASSWORD`, no email is sent: the reset code is printed in the backend console instead, so Forgot password still works on a local machine.
 Start the API: `uvicorn app.main:app --reload` (http://localhost:8000, docs at /docs). On an empty database the tables are created automatically at start-up.
 
 **Frontend:**
