@@ -27,7 +27,9 @@ const loadCommon = () => {
 function problemWith(password, common, username, email) {
   if (new TextEncoder().encode(password).length > 72) return 'Please use a shorter password (up to 72 characters)'
   const low = password.toLowerCase()
-  const base = low.replace(/[^\p{L}\p{M}]+$/u, '')   // "password123!" -> "password"
+  // "password123!" -> "password". Same characters as the server's [\d\W_]+$ (Python keeps letters and non-digit
+  // numbers such as "²"; it drops digits, marks, symbols, "_"): checked on every Unicode character both know (4 Oct)
+  const base = low.replace(/[^\p{L}\p{Nl}\p{No}]+$/u, '')
   if (common && (common.has(low) || (base.length >= 4 && common.has(base))))
     return "Choose a password that's harder to guess, e.g. a few random words"
   const personal = ['skillmap', username.toLowerCase(), email.toLowerCase().split('@')[0]]

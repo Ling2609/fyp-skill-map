@@ -1,11 +1,16 @@
 """
 Profile router — user's personal skill profile built from:
-  - Projects: name + description + optional GitHub → Groq extracts skills
-  - Certifications: cert name + issuer → Groq maps to skills
+  - Projects: name + description + optional GitHub → Groq lists the skills USED, each with the student's own words
+    as evidence; a skill whose words aren't in the description is dropped (same check as job skills, evidence.py)
+  - Certifications: the skills listed on the certificate if the student types them ("listed"); otherwise Groq
+    estimates them from the name and issuer ("estimated"), or returns none if it doesn't know the certificate
+  - The student can remove any single skill (✕ on the chip); adding skills by hand is not offered (no evidence)
+4 Oct, references.md "Project and certificate skill extraction".
 
 GET /profile/skills returns the shared Graduate Skill Profile (app/services/skill_profile.py).
 """
 import json
+import re
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
@@ -18,6 +23,8 @@ from app.models.user import User
 from app.config import settings
 
 from app.models.user_module import UserModule
+from app.services.evidence import check_quote, normalise_text
+from app.services.skill_names import canonical_key
 from app.services.skill_profile import build_skill_profile
 
 router = APIRouter(prefix="/profile", tags=["profile"])
@@ -42,6 +49,11 @@ class ProjectIn(BaseModel):
 class CertIn(BaseModel):
     cert_name: str
     issuer: str
+    listed_skills: str = ""      # optional: the skills printed on the certificate / badge, comma separated
+
+
+class SkillRemove(BaseModel):
+    skill: str
 
 
 class ProjectOut(BaseModel):
@@ -50,6 +62,7 @@ class ProjectOut(BaseModel):
     description: str
     github_url: str | None
     extracted_skills: list[str]
+    skill_quotes: dict[str, str] | None = None
 
     class Config:
         from_attributes = True
@@ -60,6 +73,7 @@ class CertOut(BaseModel):
     cert_name: str
     issuer: str
     mapped_skills: list[str]
+    skills_source: str | None = None
 
     class Config:
         from_attributes = True
@@ -67,78 +81,131 @@ class CertOut(BaseModel):
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
 
-def _parse_json_array(raw: str) -> list[str]:
-    """Strip markdown fences and parse a JSON array from Groq output."""
-    raw = raw.strip()
-    if raw.startswith("```"):
-        parts = raw.split("```")
-        raw = parts[1] if len(parts) > 1 else raw
-        if raw.startswith("json"):
-            raw = raw[4:]
-    result = json.loads(raw.strip())
-    if isinstance(result, list):
-        return [str(s).strip() for s in result if s]
-    return []
+MAX_PROJECT_SKILLS = 15
+MAX_CERT_SKILLS = 10
+# Plans and wishes don't show a skill was used ("we will add Docker", "future work: Kubernetes"). A bare "will" is NOT
+# enough: students describe features that way ("The app will notify users with Firebase") for things they built.
+_PLANNED = re.compile(r"\b(plan(ning|s)? to|planned|future (work|improvements?|enhancements?|plans?)|would like to|hope to"
+                      r"|intend(s|ing)? to|next step|to be added|not yet|still in progress|want(s|ed)? to"
+                      r"|will (add|be adding|try|explore|learn|look into|integrate|migrate|move to)|later on|eventually)\b")
 
 
-def extract_skills_from_project(name: str, description: str) -> list[str]:
-    prompt = f"""Extract technical skills from this software project. Return ONLY a JSON array of skill strings, nothing else.
+def _ask_json(prompt: str, label: str):
+    """Groq call that must answer with JSON; None if it failed (the item is still saved, just without skills)."""
+    try:
+        resp = get_client().chat.completions.create(
+            model=MODEL, messages=[{"role": "user", "content": prompt}], temperature=0.1, **EXTRACT_LIMITS)
+        raw = (resp.choices[0].message.content or "").strip()
+        if raw.startswith("```"):
+            raw = raw.strip("`").removeprefix("json").strip()
+        if not raw:
+            print(f"[{label}] empty answer (finish_reason={resp.choices[0].finish_reason})")
+            return None
+        return json.loads(raw)
+    except Exception as e:
+        print(f"[{label}] extraction failed: {e}")
+        return None
 
-Project: {name}
+
+def _sentence_of(quote: str, text: str) -> str:
+    """The sentence (or line) of `text` that holds the quote; the quote itself if not found."""
+    q = normalise_text(quote)
+    for part in re.split(r"(?<=[.!?;])\s+|\n+", text):
+        if q and q in normalise_text(part):
+            return part
+    return quote
+
+
+def verify_project_skills(items, text: str) -> tuple[dict[str, str], list[dict]]:
+    """Keep a skill only if its quote is in the student's text (fuzzy, evidence.check_quote) and the sentence is not a
+    plan. Returns ({skill: quote} in order, rejected items with a reason); duplicates by canonical key are merged."""
+    kept, rejected, seen = {}, [], set()
+    for item in items if isinstance(items, list) else []:
+        if not isinstance(item, dict):
+            continue
+        skill, quote = str(item.get("skill") or "").strip(), str(item.get("quote") or "").strip()
+        key = canonical_key(skill)
+        if not skill or not key:
+            continue
+        if not quote or not check_quote(quote, text)[0]:
+            rejected.append({"skill": skill, "quote": quote, "reason": "not in the description"})
+        elif _PLANNED.search(normalise_text(_sentence_of(quote, text))):
+            rejected.append({"skill": skill, "quote": quote, "reason": "planned, not used"})
+        elif key not in seen and len(kept) < MAX_PROJECT_SKILLS:
+            seen.add(key)
+            kept[skill] = quote
+    return kept, rejected
+
+
+def project_prompt(name: str, description: str) -> str:
+    # No real skill names as examples: models copy example answers (Zhao et al. 2021, references.md)
+    return f"""Read this student project and list the technical skills the student USED in it.
+
+Project name: {name}
 Description: {description}
 
 Rules:
-- Include programming languages, frameworks, libraries, tools, platforms, databases, APIs
-- Be specific: "React" not "frontend", "PostgreSQL" not "database"
-- No soft skills, no generic terms like "problem solving"
-- Max 15 skills
-- Example output: ["Python", "FastAPI", "PostgreSQL", "Docker", "REST API"]
+- Only skills the text says were used or built with. Skip plans and wishes ("will add", "plan to", "future work").
+- Technical skills only: programming languages, frameworks, libraries, tools, platforms, databases and technical
+  methods. No soft skills and no vague words such as "coding" or "website".
+- Give each skill its usual name.
+- For each skill, "quote" = the words from the name or description that show it, copied exactly, 2 to 12 words.
+- At most {MAX_PROJECT_SKILLS} skills. If there are none, return [].
 
-Output the JSON array only:"""
-
-    try:
-        resp = get_client().chat.completions.create(
-            model=MODEL,
-            messages=[{"role": "user", "content": prompt}],
-            temperature=0.1,
-            **EXTRACT_LIMITS,
-        )
-        skills = _parse_json_array(resp.choices[0].message.content or "")[:15]
-        if not skills:
-            print(f"[project skills] empty answer (finish_reason={resp.choices[0].finish_reason})")
-        return skills
-    except Exception as e:
-        print(f"[project skills] extraction failed: {e}")   # still saved, just without skills
-        return []
+Return ONLY a JSON array of objects with the keys "skill" and "quote"."""
 
 
-def map_cert_to_skills(cert_name: str, issuer: str) -> list[str]:
-    prompt = f"""List the technical skills validated by this certification. Return ONLY a JSON array of skill strings.
+def extract_skills_from_project(name: str, description: str) -> dict[str, str]:
+    """{skill: quote} for the skills the student's own words support."""
+    answer = _ask_json(project_prompt(name, description), "project skills")
+    kept, rejected = verify_project_skills(answer, f"{name}\n{description}")
+    for r in rejected:
+        print(f"[project skills] dropped {r['skill']!r}: {r['reason']} ({r['quote']!r})")
+    return kept
+
+
+def parse_listed_skills(text: str) -> list[str]:
+    """'Python, SQL; data analysis' -> ['Python', 'SQL', 'data analysis'] (dedupe by canonical key, 1-60 chars)."""
+    out, seen = [], set()
+    for part in re.split(r"[,;\n•]+", text or ""):
+        name = " ".join(part.split()).strip(" .-")
+        key = canonical_key(name)
+        if name and key and len(name) <= 60 and key not in seen:
+            seen.add(key)
+            out.append(name)
+    return out[:MAX_CERT_SKILLS * 2]
+
+
+def cert_prompt(cert_name: str, issuer: str) -> str:
+    return f"""Which technical skills does this certification cover?
 
 Certification: {cert_name}
 Issuer: {issuer}
 
 Rules:
-- List the specific technologies, tools, platforms, or methodologies the cert covers
-- Max 10 skills
-- Example for "AWS Certified Solutions Architect": ["AWS", "Cloud Architecture", "EC2", "S3", "VPC", "IAM", "RDS", "CloudFormation"]
+- Only if you know this exact certification and its syllabus. If you don't, or you are unsure, return [].
+- Technical skills only (technologies, tools, platforms, methods), as in the official exam or course outline.
+- At most {MAX_CERT_SKILLS} skills.
 
-Output the JSON array only:"""
+Return ONLY a JSON array of skill names."""
 
-    try:
-        resp = get_client().chat.completions.create(
-            model=MODEL,
-            messages=[{"role": "user", "content": prompt}],
-            temperature=0.1,
-            **EXTRACT_LIMITS,
-        )
-        skills = _parse_json_array(resp.choices[0].message.content or "")[:10]
-        if not skills:
-            print(f"[certification skills] empty answer (finish_reason={resp.choices[0].finish_reason})")
-        return skills
-    except Exception as e:
-        print(f"[certification skills] extraction failed: {e}")   # still saved, just without skills
+
+def map_cert_to_skills(cert_name: str, issuer: str) -> list[str]:
+    answer = _ask_json(cert_prompt(cert_name, issuer), "certification skills")
+    if not isinstance(answer, list):
         return []
+    return parse_listed_skills(", ".join(str(s) for s in answer if s and not isinstance(s, (dict, list))))[:MAX_CERT_SKILLS]
+
+
+def check_profile_schema():
+    """Start-up check: the 4 Oct columns must exist (migrations/migrate_profile_skill_evidence.py)."""
+    from sqlalchemy import inspect
+    from app.database import engine
+    projects = {c["name"] for c in inspect(engine).get_columns("user_projects")}
+    certs = {c["name"] for c in inspect(engine).get_columns("user_certifications")}
+    if "skill_quotes" not in projects or "skills_source" not in certs:
+        raise RuntimeError("Database not updated: run  python migrations/migrate_profile_skill_evidence.py  "
+                           "from the backend folder, then start the backend again.")
 
 
 # ── Endpoints ─────────────────────────────────────────────────────────────────
@@ -151,13 +218,14 @@ def add_project(
 ):
     if not data.name.strip() or not data.description.strip():
         raise HTTPException(status_code=400, detail="Project name and description are required")
-    skills = extract_skills_from_project(data.name.strip(), data.description.strip())
+    quotes = extract_skills_from_project(data.name.strip(), data.description.strip())
     project = UserProject(
         user_id=current_user.id,
         name=data.name.strip(),
         description=data.description.strip(),
         github_url=data.github_url,
-        extracted_skills=skills,
+        extracted_skills=list(quotes),
+        skill_quotes=quotes,
     )
     db.add(project)
     db.commit()
@@ -197,17 +265,33 @@ def add_certification(
 ):
     if not data.cert_name.strip() or not data.issuer.strip():
         raise HTTPException(status_code=400, detail="Cert name and issuer are required")
-    skills = map_cert_to_skills(data.cert_name.strip(), data.issuer.strip())
+    listed = parse_listed_skills(data.listed_skills)
+    skills = listed or map_cert_to_skills(data.cert_name.strip(), data.issuer.strip())
     cert = UserCertification(
         user_id=current_user.id,
         cert_name=data.cert_name.strip(),
         issuer=data.issuer.strip(),
         mapped_skills=skills,
+        skills_source="listed" if listed else "estimated",
     )
     db.add(cert)
     db.commit()
     db.refresh(cert)
     return cert
+
+
+@router.post("/projects/{project_id}/remove-skill", response_model=ProjectOut)
+def remove_project_skill(project_id: int, data: SkillRemove, current_user: User = Depends(get_current_user),
+                         db: Session = Depends(get_db)):
+    """The student says a skill is wrong: it leaves this project (and the profile, unless other evidence has it)."""
+    project = db.query(UserProject).filter(UserProject.id == project_id, UserProject.user_id == current_user.id).first()
+    if not project:
+        raise HTTPException(status_code=404, detail="Project not found")
+    project.extracted_skills = [s for s in project.extracted_skills if s != data.skill]
+    project.skill_quotes = {k: v for k, v in (project.skill_quotes or {}).items() if k != data.skill}
+    db.commit()
+    db.refresh(project)
+    return project
 
 
 @router.get("/certifications", response_model=list[CertOut])
@@ -232,6 +316,19 @@ def delete_certification(
         raise HTTPException(status_code=404, detail="Certification not found")
     db.delete(cert)
     db.commit()
+
+
+@router.post("/certifications/{cert_id}/remove-skill", response_model=CertOut)
+def remove_cert_skill(cert_id: int, data: SkillRemove, current_user: User = Depends(get_current_user),
+                      db: Session = Depends(get_db)):
+    cert = db.query(UserCertification).filter(UserCertification.id == cert_id,
+                                              UserCertification.user_id == current_user.id).first()
+    if not cert:
+        raise HTTPException(status_code=404, detail="Certification not found")
+    cert.mapped_skills = [s for s in cert.mapped_skills if s != data.skill]
+    db.commit()
+    db.refresh(cert)
+    return cert
 
 
 @router.get("/skills")

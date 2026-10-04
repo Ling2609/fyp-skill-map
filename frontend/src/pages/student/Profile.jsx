@@ -5,10 +5,20 @@ import api from '../../api'
 
 // ── Shared ────────────────────────────────────────────────────────────────────
 
-function SkillChip({ skill }) {
+// One skill. title = hover text (the student's own words for a project skill); onRemove adds an ✕ (4 Oct: the student
+// can take out a wrong skill, Nielsen "user control and freedom"); estimated = AI guess, drawn with a dashed border.
+function SkillChip({ skill, title, onRemove, estimated = false }) {
   return (
-    <span className="inline-flex items-center text-xs bg-blue-50 text-blue-700 border border-blue-100 px-2.5 py-1 rounded-full font-medium">
+    <span title={title}
+      className={`group/chip inline-flex items-center gap-1 text-xs px-2.5 py-1 rounded-full font-medium border ${
+        estimated ? 'bg-white text-blue-700 border-blue-200 border-dashed' : 'bg-blue-50 text-blue-700 border-blue-100'}`}>
       {skill}
+      {onRemove && (
+        <button type="button" onClick={onRemove} aria-label={`Remove ${skill}`}
+          className="-mr-1 ml-0.5 w-4 h-4 inline-flex items-center justify-center rounded-full text-blue-300 hover:text-red-500 hover:bg-red-50 opacity-60 group-hover/chip:opacity-100 focus:opacity-100">
+          ×
+        </button>
+      )}
     </span>
   )
 }
@@ -68,13 +78,18 @@ function ProjectsTab({ projects, onRefresh }) {
     } catch { /* silent */ }
   }
 
+  const removeSkill = async (id, skill) => {
+    try { await api.post(`/profile/projects/${id}/remove-skill`, { skill }); onRefresh()
+    } catch { /* silent */ }
+  }
+
   return (
     <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
 
       {/* Form — narrower */}
       <div className="lg:col-span-2 bg-white rounded-2xl border border-gray-200 p-6 self-start">
         <h3 className="text-sm font-semibold text-gray-800 mb-0.5">Add a Project</h3>
-        <p className="text-xs text-gray-400 mb-5">AI will extract technical skills from your description.</p>
+        <p className="text-xs text-gray-400 mb-5">AI lists the skills your description shows you used.</p>
         <form onSubmit={handleAdd} className="space-y-4">
           <div>
             <label className="block text-xs font-medium text-gray-600 mb-1.5">Project Name <span className="text-red-400">*</span></label>
@@ -91,7 +106,7 @@ function ProjectsTab({ projects, onRefresh }) {
             <textarea
               value={form.description}
               onChange={e => setForm(p => ({ ...p, description: e.target.value }))}
-              placeholder="What you built, tech stack, key features..."
+              placeholder="What you built and the tools you used..."
               rows={5}
               className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
               required
@@ -142,7 +157,7 @@ function ProjectsTab({ projects, onRefresh }) {
                     </div>
                     <p className="text-xs text-gray-500 mt-1 line-clamp-2 leading-relaxed">{p.description}</p>
                   </div>
-                  <button onClick={() => handleDelete(p.id)}
+                  <button onClick={() => handleDelete(p.id)} title="Delete project" aria-label="Delete project"
                     className="text-gray-300 hover:text-red-400 transition shrink-0 p-1 rounded-lg hover:bg-red-50">
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -151,7 +166,10 @@ function ProjectsTab({ projects, onRefresh }) {
                 </div>
                 {p.extracted_skills?.length > 0 && (
                   <div className="flex flex-wrap gap-1.5 mt-3 pt-3 border-t border-gray-100">
-                    {p.extracted_skills.map((s, i) => <SkillChip key={i} skill={s} />)}
+                    {p.extracted_skills.map((s, i) => (
+                      <SkillChip key={i} skill={s} title={p.skill_quotes?.[s] ? `“${p.skill_quotes[s]}”` : undefined}
+                        onRemove={() => removeSkill(p.id, s)} />
+                    ))}
                   </div>
                 )}
               </div>
@@ -166,7 +184,7 @@ function ProjectsTab({ projects, onRefresh }) {
 // ── Certifications tab ────────────────────────────────────────────────────────
 
 function CertificationsTab({ certs, onRefresh }) {
-  const [form, setForm] = useState({ cert_name: '', issuer: '' })
+  const [form, setForm] = useState({ cert_name: '', issuer: '', listed_skills: '' })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
@@ -174,8 +192,10 @@ function CertificationsTab({ certs, onRefresh }) {
     e.preventDefault()
     setLoading(true); setError('')
     try {
-      await api.post('/profile/certifications', { cert_name: form.cert_name.trim(), issuer: form.issuer.trim() })
-      setForm({ cert_name: '', issuer: '' })
+      await api.post('/profile/certifications', {
+        cert_name: form.cert_name.trim(), issuer: form.issuer.trim(), listed_skills: form.listed_skills.trim(),
+      })
+      setForm({ cert_name: '', issuer: '', listed_skills: '' })
       onRefresh()
     } catch (err) {
       setError(err.response?.data?.detail || 'Failed to add certification')
@@ -187,13 +207,18 @@ function CertificationsTab({ certs, onRefresh }) {
      } catch { /* silent */ }
   }
 
+  const removeSkill = async (id, skill) => {
+    try { await api.post(`/profile/certifications/${id}/remove-skill`, { skill }); onRefresh()
+    } catch { /* silent */ }
+  }
+
   return (
     <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
 
       {/* Form */}
       <div className="lg:col-span-2 bg-white rounded-2xl border border-gray-200 p-6 self-start">
         <h3 className="text-sm font-semibold text-gray-800 mb-0.5">Add a Certification</h3>
-        <p className="text-xs text-gray-400 mb-5">AI will map it to the skills it validates.</p>
+        <p className="text-xs text-gray-400 mb-5">Add the skills listed on it, or AI will estimate them from the name.</p>
         <form onSubmit={handleAdd} className="space-y-4">
           <div>
             <label className="block text-xs font-medium text-gray-600 mb-1.5">Certification Name <span className="text-red-400">*</span></label>
@@ -215,13 +240,23 @@ function CertificationsTab({ certs, onRefresh }) {
               required
             />
           </div>
+          <div>
+            <label className="block text-xs font-medium text-gray-600 mb-1.5">Skills on the certificate <span className="text-gray-300 font-normal">(optional)</span></label>
+            <textarea
+              value={form.listed_skills}
+              onChange={e => setForm(c => ({ ...c, listed_skills: e.target.value }))}
+              placeholder="From the certificate or its badge, separated by commas"
+              rows={2}
+              className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+            />
+          </div>
           {error && <p className="text-xs text-red-500 bg-red-50 rounded-lg px-3 py-2">{error}</p>}
           <button
             type="submit"
             disabled={loading || !form.cert_name.trim() || !form.issuer.trim()}
             className="w-full bg-blue-700 text-white text-sm font-medium py-2.5 rounded-xl hover:bg-blue-800 disabled:opacity-40 transition flex items-center justify-center gap-2"
           >
-            {loading ? (<><Spinner size="sm" />Mapping skills…</>) : 'Add Certification'}
+            {loading ? (<><Spinner size="sm" />{form.listed_skills.trim() ? 'Saving…' : 'Estimating skills…'}</>) : 'Add Certification'}
           </button>
         </form>
       </div>
@@ -245,17 +280,24 @@ function CertificationsTab({ certs, onRefresh }) {
                     <p className="text-sm font-semibold text-gray-800">{c.cert_name}</p>
                     <p className="text-xs text-gray-500 mt-0.5">{c.issuer}</p>
                   </div>
-                  <button onClick={() => handleDelete(c.id)}
+                  <button onClick={() => handleDelete(c.id)} title="Delete certification" aria-label="Delete certification"
                     className="text-gray-300 hover:text-red-400 transition shrink-0 p-1 rounded-lg hover:bg-red-50">
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                     </svg>
                   </button>
                 </div>
-                {c.mapped_skills?.length > 0 && (
-                  <div className="flex flex-wrap gap-1.5 mt-3 pt-3 border-t border-gray-100">
-                    {c.mapped_skills.map((s, i) => <SkillChip key={i} skill={s} />)}
+                {c.mapped_skills?.length > 0 ? (
+                  <div className="flex flex-wrap items-center gap-1.5 mt-3 pt-3 border-t border-gray-100">
+                    {c.mapped_skills.map((s, i) => (
+                      <SkillChip key={i} skill={s} estimated={c.skills_source !== 'listed'}
+                        title={c.skills_source !== 'listed' ? 'Estimated by AI from the certificate name' : undefined}
+                        onRemove={() => removeSkill(c.id, s)} />
+                    ))}
+                    {c.skills_source !== 'listed' && <span className="text-[11px] text-gray-400 ml-1">Estimated</span>}
                   </div>
+                ) : (
+                  <p className="text-xs text-gray-400 mt-3 pt-3 border-t border-gray-100">No skills found for this certificate</p>
                 )}
               </div>
             ))}

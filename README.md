@@ -132,6 +132,7 @@ Run every script from `backend/` with the venv active, e.g. `python scripts/tool
 | `pipeline/decide_skill_merges.py` | A8 layer 2: asks the LLM whether close skill names (SBERT ≥ 0.85, after the layer-1 rules) are the same skill; answers saved in `data/skill_merges.json`, resumable, stops at Groq's daily limit. `--dry-run`, `--limit N`, `--verify` (second, stricter check; merge only if both say same) | Groq |
 | `live_jobs/generate_live_queries.py` | Builds the search queries from the most common ICT roles per subcategory in the 2024 JobStreet data; writes `data/live_job_queries.json`. Preview by default, `--save`, `--my N --sg N` | – |
 | `live_jobs/fetch_live_jobs.py` | Fetches live jobs for those queries (non-ICT titles skipped) and extracts their skills. `--dry-run`, `--use-cache`, `--new-only` | JSearch, Groq |
+| `tools/compare_profile_extraction.py` | Before/after check for project and certificate skills: old prompts vs the new quote-checked extraction on 6 sample projects (hand-written gold lists) and 4 certificates; precision, recall, unsupported skills → `docs/evidence/profile_extraction_before_after.csv` | Groq |
 | `tools/check_skill_profile.py` | Read-only: a student's skill count, sources and near-duplicates. `--no-sbert` | – |
 | `tools/compare_scoring.py` | Read-only (step 2): a student's coverage under different rules for which matched skills count, sensitivity table, and a random sample of related pairs for labelling (`docs/evidence/`) | – |
 | `tools/compare_match_pages.py` | Read-only debug (A8): for one job, each job skill's best matching student skill (and spelling) and its score, as Job Matches and Job Detail compute it. `<user> "<job title>"` | – |
@@ -155,6 +156,7 @@ Groq's free tier allows about 200,000 tokens a day (≈ 100 jobs). Don't run two
 | `migrate_drop_user_skills_cache.py` | 29 Sep 2026 | drops the unused `user_skills_cache` |
 | `migrate_add_job_skill_evidence.py` | 1 Oct 2026 | adds `evidence_quote`, `level`, `skill_type`, `match_score`, `alternative_group` to `job_skills` (fix plan Stage 1) and an index on `job_skills.job_id` |
 | `migrate_account_security.py` | 4 Oct 2026 | adds `users.password_changed_at` and `purpose`, `new_email` to `password_reset_otps`; drops `login_throttle` (replaced by `login_attempts`); deletes used/expired codes. The API refuses to start until this has run |
+| `migrate_profile_skill_evidence.py` | 4 Oct 2026 | adds `user_projects.skill_quotes` (the student's words behind each project skill) and `user_certifications.skills_source` (listed / estimated). The API refuses to start until this has run |
 
 A **new, empty** database doesn't need them: the tables are created from `app/models/` when the API starts. To apply one: `python migrations/<file>.py` from `backend/`. A new database change gets a new `migrate_<what_it_does>.py` and a row in this table.
 
