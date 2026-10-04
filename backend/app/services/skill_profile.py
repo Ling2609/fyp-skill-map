@@ -14,7 +14,7 @@ import numpy as np
 from sqlalchemy.orm import Session
 
 from app.models.module import Module, ModuleSkill
-from app.models.profile import UserCertification, UserProject
+from app.models.profile import ADDED_BY_YOU, UserCertification, UserProject
 from app.models.user_module import UserModule
 from app.services.skill_names import canonical_key
 
@@ -96,10 +96,19 @@ def build_skill_profile(user_id: int, db: Session) -> dict[str, SkillEvidence]:
             if key and key not in profile:
                 profile[key] = SkillEvidence(name.strip(), SELF_DECLARED_WEIGHT, source, source_name)
 
+    # The source name says how sure it is (shown in Skill Gap as "via ..."): the student's own addition or an AI
+    # estimate she hasn't confirmed are labelled; quoted, GitHub, listed and confirmed skills are not (4 Oct)
     for p in db.query(UserProject).filter(UserProject.user_id == user_id).order_by(UserProject.id):
-        add_self_declared(p.extracted_skills, "project", f"Project: {p.name}")
+        quotes = p.skill_quotes or {}
+        for name in p.extracted_skills or []:
+            note = " (added by you)" if quotes.get(name) == ADDED_BY_YOU else ""
+            add_self_declared([name], "project", f"Project: {p.name}{note}")
     for c in db.query(UserCertification).filter(UserCertification.user_id == user_id).order_by(UserCertification.id):
-        add_self_declared(c.mapped_skills, "cert", f"Certification: {c.cert_name}")
+        added = set(c.added_skills or [])
+        estimated = c.skills_source in (None, "estimated")
+        for name in c.mapped_skills or []:
+            note = " (added by you)" if name in added else " (suggested by AI)" if estimated else ""
+            add_self_declared([name], "cert", f"Certification: {c.cert_name}{note}")
 
     for key, ev in profile.items():     # the shown name first, then the other spellings
         ev.spellings = [ev.name] + [s for low, s in spellings[key].items() if low != ev.name.lower()]

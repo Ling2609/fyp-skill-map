@@ -105,8 +105,8 @@ def in_gold(skill, gold):
     """Same skill as a gold one: same canonical key, or one name inside the other ("Java DB" / "Java DB database")."""
     k, low = canonical_key(skill), skill.lower()
 
-    def inside(a, b):   # whole words only: "java" is not inside "javascript"
-        return re.search(rf"(?<!\w){re.escape(a)}(?!\w)", b) is not None
+    def inside(a, b):   # whole words only ("java" is not inside "javascript"); a plural s is allowed: "ACLs" = ACL
+        return re.search(rf"(?<!\w){re.escape(a)}s?(?!\w)", b) is not None
     return any(k == canonical_key(g) or inside(g.lower(), low) or inside(low, g.lower()) for g in gold)
 
 

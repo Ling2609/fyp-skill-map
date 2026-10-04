@@ -18,7 +18,7 @@ from pydantic import BaseModel
 from groq import Groq
 
 from app.database import get_db
-from app.models.profile import UserProject, UserCertification
+from app.models.profile import ADDED_BY_YOU, UserProject, UserCertification
 from app.routers.auth import get_current_user
 from app.models.user import User
 from app.config import settings
@@ -52,9 +52,14 @@ class CertIn(BaseModel):
     cert_name: str
     issuer: str
     listed_skills: str = ""      # optional: the skills printed on the certificate / badge, comma separated
+    credly_url: str | None = None
 
 
 class SkillRemove(BaseModel):
+    skill: str
+
+
+class SkillAdd(BaseModel):
     skill: str
 
 
@@ -77,6 +82,8 @@ class CertOut(BaseModel):
     issuer: str
     mapped_skills: list[str]
     skills_source: str | None = None
+    added_skills: list[str] | None = None
+    credly_url: str | None = None
 
     class Config:
         from_attributes = True
@@ -188,6 +195,7 @@ Issuer: {issuer}
 Rules:
 - Only if you know this exact certification and its syllabus. If you don't, or you are unsure, return [].
 - Technical skills only (technologies, tools, platforms, methods), as in the official exam or course outline.
+- One skill per item, each a short name (1-4 words). No groups, lists or brackets inside an item.
 - At most {MAX_CERT_SKILLS} skills.
 
 Return ONLY a JSON array of skill names."""
@@ -197,7 +205,16 @@ def map_cert_to_skills(cert_name: str, issuer: str) -> list[str]:
     answer = _ask_json(cert_prompt(cert_name, issuer), "certification skills")
     if not isinstance(answer, list):
         return []
-    return parse_listed_skills(", ".join(str(s) for s in answer if s and not isinstance(s, (dict, list))))[:MAX_CERT_SKILLS]
+    # The model's items are kept whole (never split at commas: "Routing Protocols (OSPF, EIGRP)" broke into pieces
+    # in the 4 Oct comparison run); a grouped item is still dropped rather than cut up
+    out, seen = [], set()
+    for item in answer:
+        name = " ".join(str(item).split()).strip() if isinstance(item, (str, int, float)) else ""
+        key = canonical_key(name)
+        if name and key and key not in seen and len(name) <= MAX_SKILL_CHARS and "," not in name:
+            seen.add(key)
+            out.append(name)
+    return out[:MAX_CERT_SKILLS]
 
 
 def check_profile_schema():
@@ -206,19 +223,38 @@ def check_profile_schema():
     from app.database import engine
     projects = {c["name"] for c in inspect(engine).get_columns("user_projects")}
     certs = {c["name"] for c in inspect(engine).get_columns("user_certifications")}
-    if "skill_quotes" not in projects or "skills_source" not in certs:
+    if "skill_quotes" not in projects or not {"skills_source", "added_skills", "credly_url"} <= certs:
         raise RuntimeError("Database not updated: run  python migrations/migrate_profile_skill_evidence.py  "
                            "from the backend folder, then start the backend again.")
 
 
 # ── Endpoints ─────────────────────────────────────────────────────────────────
+# Add and edit share one rule each (4 Oct): a project's skills come from its text (quotes) + public GitHub languages;
+# a certificate's from the skills typed from it, else an AI estimate. Skills the student added by hand are kept on
+# edit; skills she removed may come back if the new text still supports them (the page says so).
 
-@router.post("/projects", response_model=ProjectOut, status_code=201)
-def add_project(
-    data: ProjectIn,
-    current_user: User = Depends(get_current_user),
-    db: Session = Depends(get_db),
-):
+MAX_SKILL_CHARS = 60
+MAX_SKILLS_PER_ITEM = 30
+CREDLY_URL = re.compile(r"^https://(www\.)?credly\.com/\S+$", re.I)
+
+
+def _own_project(project_id: int, user: User, db: Session) -> UserProject:
+    project = db.query(UserProject).filter(UserProject.id == project_id, UserProject.user_id == user.id).first()
+    if not project:
+        raise HTTPException(status_code=404, detail="Project not found")
+    return project
+
+
+def _own_cert(cert_id: int, user: User, db: Session) -> UserCertification:
+    cert = db.query(UserCertification).filter(UserCertification.id == cert_id,
+                                              UserCertification.user_id == user.id).first()
+    if not cert:
+        raise HTTPException(status_code=404, detail="Certification not found")
+    return cert
+
+
+def _project_skills(data: ProjectIn, keep: dict[str, str]) -> tuple[dict[str, str], str | None]:
+    """{skill: evidence} from the text + GitHub, plus the student's own additions in `keep`; and the GitHub note."""
     if not data.name.strip() or not data.description.strip():
         raise HTTPException(status_code=400, detail="Project name and description are required")
     quotes = extract_skills_from_project(data.name.strip(), data.description.strip())
@@ -229,14 +265,35 @@ def add_project(
         for lang, pct in languages.items():   # evidence from the code itself; the description's quote wins if both
             if canonical_key(lang) not in have and len(quotes) < MAX_PROJECT_SKILLS + 5:
                 quotes[lang] = f"GitHub: {pct}% of the code"
-    project = UserProject(
-        user_id=current_user.id,
-        name=data.name.strip(),
-        description=data.description.strip(),
-        github_url=data.github_url,
-        extracted_skills=list(quotes),
-        skill_quotes=quotes,
-    )
+    have = {canonical_key(s) for s in quotes}
+    for skill in keep:
+        if canonical_key(skill) not in have:
+            quotes[skill] = ADDED_BY_YOU
+    return quotes, github_note
+
+
+def _check_credly(url: str | None) -> str | None:
+    url = (url or "").strip()
+    if url and not CREDLY_URL.match(url):
+        raise HTTPException(status_code=400, detail="Use a credly.com badge link, or leave it empty")
+    return url or None
+
+
+def _clean_skill(name: str) -> str:
+    name = " ".join((name or "").split()).strip(" ,;.")
+    if not name or not canonical_key(name):
+        raise HTTPException(status_code=400, detail="Type a skill name")
+    if len(name) > MAX_SKILL_CHARS:
+        raise HTTPException(status_code=400, detail=f"Keep a skill under {MAX_SKILL_CHARS} characters")
+    return name
+
+
+@router.post("/projects", response_model=ProjectOut, status_code=201)
+def add_project(data: ProjectIn, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    quotes, github_note = _project_skills(data, {})
+    project = UserProject(user_id=current_user.id, name=data.name.strip(), description=data.description.strip(),
+                          github_url=(data.github_url or "").strip() or None,
+                          extracted_skills=list(quotes), skill_quotes=quotes)
     db.add(project)
     db.commit()
     db.refresh(project)
@@ -245,60 +302,41 @@ def add_project(
     return out
 
 
+@router.put("/projects/{project_id}", response_model=ProjectOut)
+def edit_project(project_id: int, data: ProjectIn, current_user: User = Depends(get_current_user),
+                 db: Session = Depends(get_db)):
+    """Edit: skills are worked out again only if the name, description or GitHub link changed."""
+    project = _own_project(project_id, current_user, db)
+    github = (data.github_url or "").strip() or None
+    github_note = None
+    if (data.name.strip(), data.description.strip(), github) != (project.name, project.description, project.github_url):
+        added = {k: v for k, v in (project.skill_quotes or {}).items() if v == ADDED_BY_YOU}
+        quotes, github_note = _project_skills(data, added)
+        project.name, project.description, project.github_url = data.name.strip(), data.description.strip(), github
+        project.extracted_skills, project.skill_quotes = list(quotes), quotes
+        db.commit()
+        db.refresh(project)
+    out = ProjectOut.model_validate(project)
+    out.github_note = github_note
+    return out
+
+
 @router.get("/projects", response_model=list[ProjectOut])
-def list_projects(
-    current_user: User = Depends(get_current_user),
-    db: Session = Depends(get_db),
-):
-    return db.query(UserProject).filter(UserProject.user_id == current_user.id).all()
+def list_projects(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    return db.query(UserProject).filter(UserProject.user_id == current_user.id).order_by(UserProject.id).all()
 
 
 @router.delete("/projects/{project_id}", status_code=204)
-def delete_project(
-    project_id: int,
-    current_user: User = Depends(get_current_user),
-    db: Session = Depends(get_db),
-):
-    project = db.query(UserProject).filter(
-        UserProject.id == project_id,
-        UserProject.user_id == current_user.id,
-    ).first()
-    if not project:
-        raise HTTPException(status_code=404, detail="Project not found")
-    db.delete(project)
+def delete_project(project_id: int, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    db.delete(_own_project(project_id, current_user, db))
     db.commit()
-
-
-@router.post("/certifications", response_model=CertOut, status_code=201)
-def add_certification(
-    data: CertIn,
-    current_user: User = Depends(get_current_user),
-    db: Session = Depends(get_db),
-):
-    if not data.cert_name.strip() or not data.issuer.strip():
-        raise HTTPException(status_code=400, detail="Cert name and issuer are required")
-    listed = parse_listed_skills(data.listed_skills)
-    skills = listed or map_cert_to_skills(data.cert_name.strip(), data.issuer.strip())
-    cert = UserCertification(
-        user_id=current_user.id,
-        cert_name=data.cert_name.strip(),
-        issuer=data.issuer.strip(),
-        mapped_skills=skills,
-        skills_source="listed" if listed else "estimated",
-    )
-    db.add(cert)
-    db.commit()
-    db.refresh(cert)
-    return cert
 
 
 @router.post("/projects/{project_id}/remove-skill", response_model=ProjectOut)
 def remove_project_skill(project_id: int, data: SkillRemove, current_user: User = Depends(get_current_user),
                          db: Session = Depends(get_db)):
     """The student says a skill is wrong: it leaves this project (and the profile, unless other evidence has it)."""
-    project = db.query(UserProject).filter(UserProject.id == project_id, UserProject.user_id == current_user.id).first()
-    if not project:
-        raise HTTPException(status_code=404, detail="Project not found")
+    project = _own_project(project_id, current_user, db)
     project.extracted_skills = [s for s in project.extracted_skills if s != data.skill]
     project.skill_quotes = {k: v for k, v in (project.skill_quotes or {}).items() if k != data.skill}
     db.commit()
@@ -306,40 +344,110 @@ def remove_project_skill(project_id: int, data: SkillRemove, current_user: User 
     return project
 
 
+@router.post("/projects/{project_id}/add-skill", response_model=ProjectOut)
+def add_project_skill(project_id: int, data: SkillAdd, current_user: User = Depends(get_current_user),
+                      db: Session = Depends(get_db)):
+    """A skill the student says she used; labelled "Added by you" everywhere it is shown."""
+    project = _own_project(project_id, current_user, db)
+    name = _clean_skill(data.skill)
+    if canonical_key(name) in {canonical_key(s) for s in project.extracted_skills}:
+        raise HTTPException(status_code=400, detail="This project already has that skill")
+    if len(project.extracted_skills) >= MAX_SKILLS_PER_ITEM:
+        raise HTTPException(status_code=400, detail=f"A project can have up to {MAX_SKILLS_PER_ITEM} skills")
+    project.extracted_skills = [*project.extracted_skills, name]
+    project.skill_quotes = {**(project.skill_quotes or {}), name: ADDED_BY_YOU}
+    db.commit()
+    db.refresh(project)
+    return project
+
+
+def _cert_skills(data: CertIn, added: list[str]) -> tuple[list[str], str]:
+    """(skills, source): typed from the certificate = "listed", else the AI estimate; the student's own additions kept."""
+    if not data.cert_name.strip() or not data.issuer.strip():
+        raise HTTPException(status_code=400, detail="Certificate name and issuer are required")
+    listed = parse_listed_skills(data.listed_skills)
+    skills = listed or map_cert_to_skills(data.cert_name.strip(), data.issuer.strip())
+    have = {canonical_key(s) for s in skills}
+    return skills + [s for s in added if canonical_key(s) not in have], "listed" if listed else "estimated"
+
+
+@router.post("/certifications", response_model=CertOut, status_code=201)
+def add_certification(data: CertIn, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    credly = _check_credly(data.credly_url)
+    skills, source = _cert_skills(data, [])
+    cert = UserCertification(user_id=current_user.id, cert_name=data.cert_name.strip(), issuer=data.issuer.strip(),
+                             mapped_skills=skills, skills_source=source, added_skills=[], credly_url=credly)
+    db.add(cert)
+    db.commit()
+    db.refresh(cert)
+    return cert
+
+
+@router.put("/certifications/{cert_id}", response_model=CertOut)
+def edit_certification(cert_id: int, data: CertIn, current_user: User = Depends(get_current_user),
+                       db: Session = Depends(get_db)):
+    """Edit: typed skills replace the list; with the box empty, the AI estimates again only if the name or issuer
+    changed (or the list was typed before and has now been cleared). The Credly link is just saved."""
+    cert = _own_cert(cert_id, current_user, db)
+    cert.credly_url = _check_credly(data.credly_url)
+    renamed = (data.cert_name.strip(), data.issuer.strip()) != (cert.cert_name, cert.issuer)
+    if data.listed_skills.strip() or renamed or cert.skills_source == "listed":
+        added = list(cert.added_skills or [])
+        cert.mapped_skills, cert.skills_source = _cert_skills(data, added)
+        cert.added_skills = [s for s in added if s in cert.mapped_skills]
+    cert.cert_name, cert.issuer = data.cert_name.strip(), data.issuer.strip()
+    db.commit()
+    db.refresh(cert)
+    return cert
+
+
 @router.get("/certifications", response_model=list[CertOut])
-def list_certifications(
-    current_user: User = Depends(get_current_user),
-    db: Session = Depends(get_db),
-):
-    return db.query(UserCertification).filter(UserCertification.user_id == current_user.id).all()
+def list_certifications(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    return db.query(UserCertification).filter(UserCertification.user_id == current_user.id) \
+        .order_by(UserCertification.id).all()
 
 
 @router.delete("/certifications/{cert_id}", status_code=204)
-def delete_certification(
-    cert_id: int,
-    current_user: User = Depends(get_current_user),
-    db: Session = Depends(get_db),
-):
-    cert = db.query(UserCertification).filter(
-        UserCertification.id == cert_id,
-        UserCertification.user_id == current_user.id,
-    ).first()
-    if not cert:
-        raise HTTPException(status_code=404, detail="Certification not found")
-    db.delete(cert)
+def delete_certification(cert_id: int, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    db.delete(_own_cert(cert_id, current_user, db))
     db.commit()
 
 
 @router.post("/certifications/{cert_id}/remove-skill", response_model=CertOut)
 def remove_cert_skill(cert_id: int, data: SkillRemove, current_user: User = Depends(get_current_user),
                       db: Session = Depends(get_db)):
-    cert = db.query(UserCertification).filter(UserCertification.id == cert_id,
-                                              UserCertification.user_id == current_user.id).first()
-    if not cert:
-        raise HTTPException(status_code=404, detail="Certification not found")
+    cert = _own_cert(cert_id, current_user, db)
     cert.mapped_skills = [s for s in cert.mapped_skills if s != data.skill]
+    cert.added_skills = [s for s in (cert.added_skills or []) if s != data.skill]
     db.commit()
     db.refresh(cert)
+    return cert
+
+
+@router.post("/certifications/{cert_id}/add-skill", response_model=CertOut)
+def add_cert_skill(cert_id: int, data: SkillAdd, current_user: User = Depends(get_current_user),
+                   db: Session = Depends(get_db)):
+    cert = _own_cert(cert_id, current_user, db)
+    name = _clean_skill(data.skill)
+    if canonical_key(name) in {canonical_key(s) for s in cert.mapped_skills}:
+        raise HTTPException(status_code=400, detail="This certificate already has that skill")
+    if len(cert.mapped_skills) >= MAX_SKILLS_PER_ITEM:
+        raise HTTPException(status_code=400, detail=f"A certificate can have up to {MAX_SKILLS_PER_ITEM} skills")
+    cert.mapped_skills = [*cert.mapped_skills, name]
+    cert.added_skills = [*(cert.added_skills or []), name]
+    db.commit()
+    db.refresh(cert)
+    return cert
+
+
+@router.post("/certifications/{cert_id}/confirm", response_model=CertOut)
+def confirm_cert_skills(cert_id: int, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    """The student has checked the AI's estimate: the "Estimated" label goes; Skill Gap no longer says "estimated"."""
+    cert = _own_cert(cert_id, current_user, db)
+    if cert.skills_source in (None, "estimated"):
+        cert.skills_source = "confirmed"
+        db.commit()
+        db.refresh(cert)
     return cert
 
 

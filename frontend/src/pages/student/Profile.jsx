@@ -5,17 +5,19 @@ import api from '../../api'
 
 // ── Shared ────────────────────────────────────────────────────────────────────
 
-// One skill. title = hover text (the student's own words for a project skill); onRemove adds an ✕ (4 Oct: the student
-// can take out a wrong skill, Nielsen "user control and freedom"); estimated = AI guess, drawn with a dashed border.
-function SkillChip({ skill, title, onRemove, estimated = false }) {
+// One skill. title = hover text (the student's own words, "GitHub: …", "Added by you", "Suggested by AI"); onRemove adds
+// an ✕ (4 Oct: the student can take out a wrong skill, Nielsen "user control and freedom"). Looks: AI estimate = dashed
+// border; added by the student = grey; everything with evidence = blue.
+function SkillChip({ skill, title, onRemove, estimated = false, added = false }) {
+  const look = added ? 'bg-gray-100 text-gray-700 border-gray-200'
+    : estimated ? 'bg-white text-blue-700 border-blue-200 border-dashed'
+    : 'bg-blue-50 text-blue-700 border-blue-100'
   return (
-    <span title={title}
-      className={`group/chip inline-flex items-center gap-1 text-xs px-2.5 py-1 rounded-full font-medium border ${
-        estimated ? 'bg-white text-blue-700 border-blue-200 border-dashed' : 'bg-blue-50 text-blue-700 border-blue-100'}`}>
+    <span title={title} className={`group/chip inline-flex items-center gap-1 text-xs px-2.5 py-1 rounded-full font-medium border ${look}`}>
       {skill}
       {onRemove && (
         <button type="button" onClick={onRemove} aria-label={`Remove ${skill}`}
-          className="-mr-1 ml-0.5 w-4 h-4 inline-flex items-center justify-center rounded-full text-blue-300 hover:text-red-500 hover:bg-red-50 opacity-60 group-hover/chip:opacity-100 focus:opacity-100">
+          className="-mr-1 ml-0.5 w-4 h-4 inline-flex items-center justify-center rounded-full text-current opacity-40 hover:text-red-500 hover:bg-red-50 group-hover/chip:opacity-100 focus:opacity-100">
           ×
         </button>
       )}
@@ -50,265 +52,339 @@ const GRADE_OPTIONS = [
   { label: 'C (2.0)', value: 2.0 },
 ]
 
+// ── Projects and certificates (4 Oct, her review) ─────────────────────────────
+// Layout C: the list uses the full width; "+ Add" and each card's Edit open the same form in a pop-up (one form for
+// both, as LinkedIn's "Add licence or certification"). One page scrollbar, no nested scroll areas (references.md).
+
+const inputCls = 'w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500'
+const ADDED_BY_YOU = 'Added by you'
+const errText = (err, fallback) => err.response?.data?.detail || fallback
+
+function Modal({ title, onClose, children }) {
+  useEffect(() => {
+    const onKey = (e) => { if (e.key === 'Escape') onClose() }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [onClose])
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/30" onMouseDown={onClose}>
+      <div role="dialog" aria-modal="true" aria-label={title} onMouseDown={e => e.stopPropagation()}
+        className="bg-white rounded-2xl shadow-xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
+        <div className="flex items-center justify-between px-6 pt-5 pb-1">
+          <h3 className="text-base font-semibold text-gray-800">{title}</h3>
+          <button type="button" onClick={onClose} aria-label="Close" className="text-gray-400 hover:text-gray-700 p-1 rounded-lg hover:bg-gray-100">
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+          </button>
+        </div>
+        <div className="px-6 pb-6 pt-3">{children}</div>
+      </div>
+    </div>
+  )
+}
+
+function Field({ label, optional, hint, children }) {
+  return (
+    <div>
+      <label className="block text-xs font-medium text-gray-600 mb-1.5">
+        {label} {optional ? <span className="text-gray-300 font-normal">(optional)</span> : <span className="text-red-400">*</span>}
+      </label>
+      {children}
+      {hint && <p className="text-xs text-gray-400 mt-1.5">{hint}</p>}
+    </div>
+  )
+}
+
+function FormButtons({ loading, busyText, label, onCancel, disabled }) {
+  return (
+    <div className="flex items-center justify-end gap-2 pt-2">
+      <button type="button" onClick={onCancel} className="px-4 py-2.5 text-sm text-gray-500 hover:text-gray-800">Cancel</button>
+      <button type="submit" disabled={loading || disabled}
+        className="bg-blue-700 text-white text-sm font-medium px-5 py-2.5 rounded-xl hover:bg-blue-800 disabled:opacity-40 transition flex items-center gap-2">
+        {loading ? <><Spinner size="sm" />{busyText}</> : label}
+      </button>
+    </div>
+  )
+}
+
+function IconButton({ label, onClick, children, danger }) {
+  return (
+    <button type="button" onClick={onClick} title={label} aria-label={label}
+      className={`text-gray-300 transition shrink-0 p-1 rounded-lg ${danger ? 'hover:text-red-400 hover:bg-red-50' : 'hover:text-blue-600 hover:bg-blue-50'}`}>
+      {children}
+    </button>
+  )
+}
+const PencilIcon = () => <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536M9 13l6.536-6.536a2.5 2.5 0 113.536 3.536L12.536 16.536 8 17l.464-4.536z" /></svg>
+const CrossIcon = () => <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+
+// "+ Add skill": a chip that turns into a small box; Enter adds, Esc cancels
+function AddSkillChip({ onAdd }) {
+  const [open, setOpen] = useState(false)
+  const [value, setValue] = useState('')
+  const [error, setError] = useState('')
+  const [busy, setBusy] = useState(false)
+  const close = () => { setOpen(false); setValue(''); setError('') }
+  const submit = async () => {
+    if (!value.trim()) { close(); return }
+    setBusy(true); setError('')
+    try { await onAdd(value.trim()); close() }
+    catch (err) { setError(errText(err, "Couldn't add the skill")) }
+    finally { setBusy(false) }
+  }
+  if (!open) return (
+    <button type="button" onClick={() => setOpen(true)}
+      className="text-xs px-2.5 py-1 rounded-full font-medium border border-dashed border-gray-300 text-gray-500 hover:border-blue-400 hover:text-blue-700">
+      + Add skill
+    </button>
+  )
+  return (
+    <span className="inline-flex flex-col">
+      <input autoFocus value={value} disabled={busy} maxLength={60} placeholder="Skill, then Enter"
+        onChange={e => setValue(e.target.value)} onBlur={() => !value.trim() && close()}
+        onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); submit() } if (e.key === 'Escape') close() }}
+        className="text-xs px-2.5 py-1 rounded-full border border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-200 w-40" />
+      {error && <span className="text-[11px] text-red-500 mt-1">{error}</span>}
+    </span>
+  )
+}
+
+function SkillsRow({ children, empty, emptyText }) {
+  return (
+    <div className="mt-3 pt-3 border-t border-gray-100">
+      {empty && <p className="text-xs text-gray-500 mb-2">{emptyText}</p>}
+      <div className="flex flex-wrap items-center gap-1.5">{children}</div>
+    </div>
+  )
+}
+
 // ── Projects tab ──────────────────────────────────────────────────────────────
 
-function ProjectsTab({ projects, onRefresh }) {
-  const [form, setForm] = useState({ name: '', description: '', github_url: '' })
+function ProjectForm({ project, onDone, onCancel }) {
+  const editing = !!project
+  const [form, setForm] = useState({
+    name: project?.name || '', description: project?.description || '', github_url: project?.github_url || '',
+  })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
-  const [note, setNote] = useState('')   // e.g. the GitHub repo couldn't be read (private)
-
-  const handleAdd = async (e) => {
+  const submit = async (e) => {
     e.preventDefault()
-    setLoading(true); setError(''); setNote('')
+    setLoading(true); setError('')
+    const body = { name: form.name.trim(), description: form.description.trim(), github_url: form.github_url.trim() || null }
     try {
-      const res = await api.post('/profile/projects', {
-        name: form.name.trim(),
-        description: form.description.trim(),
-        github_url: form.github_url.trim() || null,
-      })
-      setForm({ name: '', description: '', github_url: '' })
-      setNote(res.data.github_note || '')
-      onRefresh()
+      const res = editing ? await api.put(`/profile/projects/${project.id}`, body) : await api.post('/profile/projects', body)
+      onDone(res.data)
     } catch (err) {
-      setError(err.response?.data?.detail || 'Failed to add project')
+      setError(errText(err, editing ? "Couldn't save the project" : "Couldn't add the project"))
     } finally { setLoading(false) }
   }
+  return (
+    <form onSubmit={submit} className="space-y-4">
+      {/* Wording (4 Oct, researched: references.md "Form hint text"): one short sentence per hint, outside the field,
+          only where it helps; "you", active voice, no repeating what is already on screen */}
+      <p className="text-xs text-gray-400 -mt-1">SkillMap uses AI to find the skills in your description</p>
+      <Field label="Project name">
+        <input type="text" value={form.name} onChange={e => setForm(p => ({ ...p, name: e.target.value }))}
+          placeholder="e.g. Inventory Management System" className={inputCls} required autoFocus />
+      </Field>
+      <Field label="Description">
+        <textarea value={form.description} onChange={e => setForm(p => ({ ...p, description: e.target.value }))}
+          placeholder="What you built and the tools you used..." rows={5} className={`${inputCls} resize-none`} required />
+      </Field>
+      <Field label="GitHub URL" optional hint="SkillMap adds the main languages from public repositories">
+        <input type="url" value={form.github_url} onChange={e => setForm(p => ({ ...p, github_url: e.target.value }))}
+          placeholder="https://github.com/username/repo" className={inputCls} />
+      </Field>
+      {editing && <p className="text-xs text-gray-400">If you change the text, SkillMap finds the skills again and keeps the ones you added</p>}
+      {error && <p className="text-xs text-red-500 bg-red-50 rounded-lg px-3 py-2">{error}</p>}
+      <FormButtons loading={loading} busyText="Finding skills…" label={editing ? 'Save' : 'Add project'} onCancel={onCancel}
+        disabled={!form.name.trim() || !form.description.trim()} />
+    </form>
+  )
+}
 
-  const handleDelete = async (id) => {
-    try { await api.delete(`/profile/projects/${id}`); onRefresh() 
-    } catch { /* silent */ }
-  }
+function ProjectsTab({ projects, onRefresh }) {
+  const [editing, setEditing] = useState(null)   // null = closed, 'new', or a project
+  const [note, setNote] = useState('')            // e.g. the GitHub repo couldn't be read
 
-  const removeSkill = async (id, skill) => {
-    try { await api.post(`/profile/projects/${id}/remove-skill`, { skill }); onRefresh()
-    } catch { /* silent */ }
-  }
+  const run = async (call) => { try { await call(); onRefresh() } catch { /* silent */ } }
+  const handleDelete = (id) => run(() => api.delete(`/profile/projects/${id}`))
+  const removeSkill = (id, skill) => run(() => api.post(`/profile/projects/${id}/remove-skill`, { skill }))
+  const addSkill = async (id, skill) => { await api.post(`/profile/projects/${id}/add-skill`, { skill }); onRefresh() }
+  const done = (saved) => { setEditing(null); setNote(saved.github_note ? `${saved.name}: ${saved.github_note}` : ''); onRefresh() }
+
+  const tooltip = (q) => !q ? undefined : q === ADDED_BY_YOU || q.startsWith('GitHub:') ? q : `“${q}”`
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
-
-      {/* Form — narrower */}
-      <div className="lg:col-span-2 bg-white rounded-2xl border border-gray-200 p-6 self-start">
-        <h3 className="text-sm font-semibold text-gray-800 mb-0.5">Add a Project</h3>
-        <p className="text-xs text-gray-400 mb-5">AI lists the skills your description shows you used.</p>
-        <form onSubmit={handleAdd} className="space-y-4">
-          <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1.5">Project Name <span className="text-red-400">*</span></label>
-            <input
-              type="text" value={form.name}
-              onChange={e => setForm(p => ({ ...p, name: e.target.value }))}
-              placeholder="e.g. Inventory Management System"
-              className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
-            />
-          </div>
-          <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1.5">Description <span className="text-red-400">*</span></label>
-            <textarea
-              value={form.description}
-              onChange={e => setForm(p => ({ ...p, description: e.target.value }))}
-              placeholder="What you built and the tools you used..."
-              rows={5}
-              className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
-              required
-            />
-          </div>
-          <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1.5">GitHub URL <span className="text-gray-300 font-normal">(optional)</span></label>
-            <input
-              type="url" value={form.github_url}
-              onChange={e => setForm(p => ({ ...p, github_url: e.target.value }))}
-              placeholder="https://github.com/username/repo"
-              className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-            <p className="text-xs text-gray-400 mt-1.5">Make sure the repo is public so SkillMap can read its languages.</p>
-          </div>
-          {error && <p className="text-xs text-red-500 bg-red-50 rounded-lg px-3 py-2">{error}</p>}
-          {note && <p role="status" className="text-xs text-amber-700 bg-amber-50 rounded-lg px-3 py-2">Project added. {note}</p>}
-          <button
-            type="submit"
-            disabled={loading || !form.name.trim() || !form.description.trim()}
-            className="w-full bg-blue-700 text-white text-sm font-medium py-2.5 rounded-xl hover:bg-blue-800 disabled:opacity-40 transition flex items-center justify-center gap-2"
-          >
-            {loading ? (<><Spinner size="sm" />Extracting skills…</>) : 'Add Project'}
-          </button>
-        </form>
+    <div>
+      <div className="flex items-center justify-between mb-4">
+        <h3 className="text-sm font-semibold text-gray-800">Your Projects</h3>
+        <button type="button" onClick={() => setEditing('new')}
+          className="bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-xl hover:bg-blue-800 transition">+ Add project</button>
       </div>
-
-      {/* List — wider */}
-      <div className="lg:col-span-3">
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-sm font-semibold text-gray-800">Your Projects</h3>
-          <span className="text-xs text-gray-600 bg-gray-100 px-2.5 py-1 rounded-full">{projects.length} total</span>
+      {note && (
+        <p role="status" className="text-xs text-amber-700 bg-amber-50 rounded-lg px-3 py-2 mb-3 flex justify-between gap-3">
+          <span>{note}</span><button type="button" onClick={() => setNote('')} aria-label="Dismiss" className="text-amber-500 hover:text-amber-800">×</button>
+        </p>
+      )}
+      {projects.length === 0 ? (
+        <div className="bg-white rounded-2xl border border-gray-200 p-8">
+          <EmptyState icon="🗂️" title="No projects yet" subtitle="Add a project to show the skills you used" />
         </div>
-        {projects.length === 0 ? (
-          <div className="bg-white rounded-2xl border border-gray-200 p-8">
-            <EmptyState icon="🗂️" title="No projects yet" subtitle="Add your first project on the left" />
-          </div>
-        ) : (
-          <div className="space-y-3">
-            {projects.map(p => (
-              <div key={p.id} className="bg-white rounded-2xl border border-gray-200 p-5 hover:border-blue-200 transition group">
-                <div className="flex items-start justify-between gap-3">
-                  <div className="min-w-0 flex-1">
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <span className="text-sm font-semibold text-gray-800">{p.name}</span>
-                      {p.github_url && (
-                        <a href={p.github_url} target="_blank" rel="noopener noreferrer"
-                          className="text-xs text-blue-500 hover:underline">GitHub ↗</a>
-                      )}
-                    </div>
-                    <p className="text-xs text-gray-500 mt-1 line-clamp-2 leading-relaxed">{p.description}</p>
+      ) : (
+        <div className="space-y-3">
+          {projects.map(p => (
+            <div key={p.id} className="bg-white rounded-2xl border border-gray-200 p-5 hover:border-blue-200 transition">
+              <div className="flex items-start justify-between gap-3">
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="text-sm font-semibold text-gray-800">{p.name}</span>
+                    {p.github_url && <a href={p.github_url} target="_blank" rel="noopener noreferrer" className="text-xs text-blue-500 hover:underline">GitHub ↗</a>}
                   </div>
-                  <button onClick={() => handleDelete(p.id)} title="Delete project" aria-label="Delete project"
-                    className="text-gray-300 hover:text-red-400 transition shrink-0 p-1 rounded-lg hover:bg-red-50">
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                  </button>
+                  <p className="text-xs text-gray-500 mt-1 line-clamp-2 leading-relaxed">{p.description}</p>
                 </div>
-                {p.extracted_skills?.length > 0 && (
-                  <div className="flex flex-wrap gap-1.5 mt-3 pt-3 border-t border-gray-100">
-                    {p.extracted_skills.map((s, i) => (
-                      <SkillChip key={i} skill={s} title={!p.skill_quotes?.[s] ? undefined
-                        : p.skill_quotes[s].startsWith('GitHub:') ? p.skill_quotes[s] : `“${p.skill_quotes[s]}”`}
-                        onRemove={() => removeSkill(p.id, s)} />
-                    ))}
-                  </div>
-                )}
+                <div className="flex items-center gap-0.5">
+                  <IconButton label="Edit project" onClick={() => setEditing(p)}><PencilIcon /></IconButton>
+                  <IconButton label="Delete project" danger onClick={() => handleDelete(p.id)}><CrossIcon /></IconButton>
+                </div>
               </div>
-            ))}
-          </div>
-        )}
-      </div>
+              <SkillsRow empty={!p.extracted_skills?.length} emptyText="No skills yet. Add the skills you used.">
+                {(p.extracted_skills || []).map((s, i) => (
+                  <SkillChip key={i} skill={s} title={tooltip(p.skill_quotes?.[s])} added={p.skill_quotes?.[s] === ADDED_BY_YOU}
+                    onRemove={() => removeSkill(p.id, s)} />
+                ))}
+                <AddSkillChip onAdd={(skill) => addSkill(p.id, skill)} />
+              </SkillsRow>
+            </div>
+          ))}
+        </div>
+      )}
+      {editing && (
+        <Modal title={editing === 'new' ? 'Add a project' : 'Edit project'} onClose={() => setEditing(null)}>
+          <ProjectForm project={editing === 'new' ? null : editing} onDone={done} onCancel={() => setEditing(null)} />
+        </Modal>
+      )}
     </div>
   )
 }
 
 // ── Certifications tab ────────────────────────────────────────────────────────
 
-function CertificationsTab({ certs, onRefresh }) {
-  const [form, setForm] = useState({ cert_name: '', issuer: '', listed_skills: '' })
+function CertForm({ cert, onDone, onCancel }) {
+  const editing = !!cert
+  const [form, setForm] = useState({
+    cert_name: cert?.cert_name || '', issuer: cert?.issuer || '', credly_url: cert?.credly_url || '',
+    // only skills typed from the certificate go back in the box; an estimate stays as it is unless replaced
+    listed_skills: cert?.skills_source === 'listed'
+      ? cert.mapped_skills.filter(s => !(cert.added_skills || []).includes(s)).join(', ') : '',
+  })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
-
-  const handleAdd = async (e) => {
+  const submit = async (e) => {
     e.preventDefault()
     setLoading(true); setError('')
+    const body = { cert_name: form.cert_name.trim(), issuer: form.issuer.trim(), listed_skills: form.listed_skills.trim(),
+                   credly_url: form.credly_url.trim() || null }
     try {
-      await api.post('/profile/certifications', {
-        cert_name: form.cert_name.trim(), issuer: form.issuer.trim(), listed_skills: form.listed_skills.trim(),
-      })
-      setForm({ cert_name: '', issuer: '', listed_skills: '' })
-      onRefresh()
+      const res = editing ? await api.put(`/profile/certifications/${cert.id}`, body) : await api.post('/profile/certifications', body)
+      onDone(res.data)
     } catch (err) {
-      setError(err.response?.data?.detail || 'Failed to add certification')
+      setError(errText(err, editing ? "Couldn't save the certificate" : "Couldn't add the certificate"))
     } finally { setLoading(false) }
   }
+  return (
+    <form onSubmit={submit} className="space-y-4">
+      <Field label="Certificate name">
+        <input type="text" value={form.cert_name} onChange={e => setForm(c => ({ ...c, cert_name: e.target.value }))}
+          placeholder="e.g. AWS Certified Cloud Practitioner" className={inputCls} required autoFocus />
+      </Field>
+      <Field label="Issuer">
+        <input type="text" value={form.issuer} onChange={e => setForm(c => ({ ...c, issuer: e.target.value }))}
+          placeholder="e.g. Amazon Web Services" className={inputCls} required />
+      </Field>
+      <Field label="Skills listed on the certificate" optional hint="Leave blank and SkillMap will suggest skills based on the name">
+        <textarea value={form.listed_skills} onChange={e => setForm(c => ({ ...c, listed_skills: e.target.value }))}
+          placeholder="e.g. Data Analytics, Data Lakes, Data Warehousing" rows={2} className={`${inputCls} resize-none`} />
+      </Field>
+      <Field label="Credly badge link" optional hint="Lets others verify your certificate">
+        <input type="url" value={form.credly_url} onChange={e => setForm(c => ({ ...c, credly_url: e.target.value }))}
+          placeholder="https://www.credly.com/badges/..." className={inputCls} />
+      </Field>
+      {error && <p className="text-xs text-red-500 bg-red-50 rounded-lg px-3 py-2">{error}</p>}
+      <FormButtons loading={loading} busyText={form.listed_skills.trim() ? 'Saving…' : 'Finding skills…'}
+        label={editing ? 'Save' : 'Add certificate'} onCancel={onCancel} disabled={!form.cert_name.trim() || !form.issuer.trim()} />
+    </form>
+  )
+}
 
-  const handleDelete = async (id) => {
-    try { await api.delete(`/profile/certifications/${id}`); onRefresh()
-     } catch { /* silent */ }
-  }
+function CertificationsTab({ certs, onRefresh }) {
+  const [editing, setEditing] = useState(null)
 
-  const removeSkill = async (id, skill) => {
-    try { await api.post(`/profile/certifications/${id}/remove-skill`, { skill }); onRefresh()
-    } catch { /* silent */ }
-  }
+  const run = async (call) => { try { await call(); onRefresh() } catch { /* silent */ } }
+  const handleDelete = (id) => run(() => api.delete(`/profile/certifications/${id}`))
+  const removeSkill = (id, skill) => run(() => api.post(`/profile/certifications/${id}/remove-skill`, { skill }))
+  const confirm = (id) => run(() => api.post(`/profile/certifications/${id}/confirm`))
+  const addSkill = async (id, skill) => { await api.post(`/profile/certifications/${id}/add-skill`, { skill }); onRefresh() }
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
-
-      {/* Form */}
-      <div className="lg:col-span-2 bg-white rounded-2xl border border-gray-200 p-6 self-start">
-        <h3 className="text-sm font-semibold text-gray-800 mb-0.5">Add a Certification</h3>
-        <p className="text-xs text-gray-400 mb-5">Add the skills listed on it, or AI will estimate them from the name.</p>
-        <form onSubmit={handleAdd} className="space-y-4">
-          <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1.5">Certification Name <span className="text-red-400">*</span></label>
-            <input
-              type="text" value={form.cert_name}
-              onChange={e => setForm(c => ({ ...c, cert_name: e.target.value }))}
-              placeholder="e.g. AWS Certified Solutions Architect"
-              className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
-            />
-          </div>
-          <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1.5">Issuer <span className="text-red-400">*</span></label>
-            <input
-              type="text" value={form.issuer}
-              onChange={e => setForm(c => ({ ...c, issuer: e.target.value }))}
-              placeholder="e.g. Amazon Web Services"
-              className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
-            />
-          </div>
-          <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1.5">Skills on the certificate <span className="text-gray-300 font-normal">(optional)</span></label>
-            <textarea
-              value={form.listed_skills}
-              onChange={e => setForm(c => ({ ...c, listed_skills: e.target.value }))}
-              placeholder="From the certificate or its badge, separated by commas"
-              rows={2}
-              className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
-            />
-          </div>
-          {error && <p className="text-xs text-red-500 bg-red-50 rounded-lg px-3 py-2">{error}</p>}
-          <button
-            type="submit"
-            disabled={loading || !form.cert_name.trim() || !form.issuer.trim()}
-            className="w-full bg-blue-700 text-white text-sm font-medium py-2.5 rounded-xl hover:bg-blue-800 disabled:opacity-40 transition flex items-center justify-center gap-2"
-          >
-            {loading ? (<><Spinner size="sm" />{form.listed_skills.trim() ? 'Saving…' : 'Estimating skills…'}</>) : 'Add Certification'}
-          </button>
-        </form>
+    <div>
+      <div className="flex items-center justify-between mb-4">
+        <h3 className="text-sm font-semibold text-gray-800">Your Certifications</h3>
+        <button type="button" onClick={() => setEditing('new')}
+          className="bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-xl hover:bg-blue-800 transition">+ Add certificate</button>
       </div>
-
-      {/* List */}
-      <div className="lg:col-span-3">
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-sm font-semibold text-gray-800">Your Certifications</h3>
-          <span className="text-xs text-gray-600 bg-gray-100 px-2.5 py-1 rounded-full">{certs.length} total</span>
+      {certs.length === 0 ? (
+        <div className="bg-white rounded-2xl border border-gray-200 p-8">
+          <EmptyState icon="🎓" title="No certifications yet" subtitle="Add a certificate to show the skills it covers" />
         </div>
-        {certs.length === 0 ? (
-          <div className="bg-white rounded-2xl border border-gray-200 p-8">
-            <EmptyState icon="🎓" title="No certifications yet" subtitle="Add your first certification on the left" />
-          </div>
-        ) : (
-          <div className="space-y-3">
-            {certs.map(c => (
+      ) : (
+        <div className="space-y-3">
+          {certs.map(c => {
+            const added = c.added_skills || []
+            const estimated = (c.skills_source == null || c.skills_source === 'estimated')
+            const aiSkills = c.mapped_skills.filter(s => !added.includes(s))
+            return (
               <div key={c.id} className="bg-white rounded-2xl border border-gray-200 p-5 hover:border-blue-200 transition">
                 <div className="flex items-start justify-between gap-3">
-                  <div>
-                    <p className="text-sm font-semibold text-gray-800">{c.cert_name}</p>
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <p className="text-sm font-semibold text-gray-800">{c.cert_name}</p>
+                      {c.credly_url && <a href={c.credly_url} target="_blank" rel="noopener noreferrer" className="text-xs text-blue-500 hover:underline">Credly ↗</a>}
+                    </div>
                     <p className="text-xs text-gray-500 mt-0.5">{c.issuer}</p>
                   </div>
-                  <button onClick={() => handleDelete(c.id)} title="Delete certification" aria-label="Delete certification"
-                    className="text-gray-300 hover:text-red-400 transition shrink-0 p-1 rounded-lg hover:bg-red-50">
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                  </button>
+                  <div className="flex items-center gap-0.5">
+                    <IconButton label="Edit certificate" onClick={() => setEditing(c)}><PencilIcon /></IconButton>
+                    <IconButton label="Delete certificate" danger onClick={() => handleDelete(c.id)}><CrossIcon /></IconButton>
+                  </div>
                 </div>
-                {c.mapped_skills?.length > 0 ? (
-                  <div className="flex flex-wrap items-center gap-1.5 mt-3 pt-3 border-t border-gray-100">
+                {/* An AI estimate says so first, with one click to confirm it after checking (her choice, option B) */}
+                {estimated && aiSkills.length > 0 && (
+                  <div className="mt-3 pt-3 border-t border-gray-100 flex items-center gap-2 text-xs text-gray-500">
+                    <span>Suggested by AI from the certificate name. Remove any that don't apply.</span>
+                    <button type="button" onClick={() => confirm(c.id)}
+                      className="font-medium text-blue-700 border border-blue-200 rounded-full px-2.5 py-0.5 hover:bg-blue-50">Confirm skills</button>
+                  </div>
+                )}
+                <div className={estimated && aiSkills.length > 0 ? 'mt-2' : ''}>
+                  <SkillsRow empty={!c.mapped_skills.length} emptyText="No skills yet. Add the skills listed on your certificate.">
                     {c.mapped_skills.map((s, i) => (
-                      <SkillChip key={i} skill={s} estimated={c.skills_source !== 'listed'}
-                        title={c.skills_source !== 'listed' ? 'Estimated by AI from the certificate name' : undefined}
+                      <SkillChip key={i} skill={s} added={added.includes(s)} estimated={estimated && !added.includes(s)}
+                        title={added.includes(s) ? ADDED_BY_YOU : estimated ? 'Suggested by AI' : undefined}
                         onRemove={() => removeSkill(c.id, s)} />
                     ))}
-                    {c.skills_source !== 'listed' && <span className="text-[11px] text-gray-400 ml-1">Estimated</span>}
-                  </div>
-                ) : (
-                  <p className="text-xs text-gray-400 mt-3 pt-3 border-t border-gray-100">No skills found for this certificate</p>
-                )}
+                    <AddSkillChip onAdd={(skill) => addSkill(c.id, skill)} />
+                  </SkillsRow>
+                </div>
               </div>
-            ))}
-          </div>
-        )}
-      </div>
+            )
+          })}
+        </div>
+      )}
+      {editing && (
+        <Modal title={editing === 'new' ? 'Add a certificate' : 'Edit certificate'} onClose={() => setEditing(null)}>
+          <CertForm cert={editing === 'new' ? null : editing} onDone={() => { setEditing(null); onRefresh() }} onCancel={() => setEditing(null)} />
+        </Modal>
+      )}
     </div>
   )
 }
@@ -385,10 +461,14 @@ function ModulesTab({ onUnsavedChange, onSaved }) {
   )
 
   return (
-    <div className="space-y-5">
+    // Her layout (4 Oct 23:31): on a wide screen the tab fills the window; the year row and each card's title stay put
+    // and only the module lists scroll, each in its own panel. The panels can take keyboard focus (tabIndex) so they
+    // can be scrolled without a mouse (the accessibility risk of separate scroll areas, references.md). Below the lg
+    // breakpoint the cards stack and the page scrolls as normal.
+    <div className="lg:h-full flex flex-col gap-5">
 
-      {/* Year tabs + save status inline */}
-      <div className="flex items-center justify-between gap-3">
+      {/* Year tabs + save status */}
+      <div className="shrink-0 flex items-center justify-between gap-3">
         <div className="flex gap-2">
           {[1, 2, 3].map(year => (
             <button key={year} onClick={() => setSelectedYear(year)}
@@ -436,13 +516,14 @@ function ModulesTab({ onUnsavedChange, onSaved }) {
       </div>
 
       {/* Split panels */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
-        <div className="lg:col-span-2 bg-white rounded-2xl border border-gray-200">
-          <div className="px-6 py-4 border-b border-gray-100">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 lg:flex-1 lg:min-h-0">
+        <div className="lg:col-span-2 bg-white rounded-2xl border border-gray-200 flex flex-col lg:min-h-0 overflow-hidden">
+          <div className="shrink-0 px-6 py-4 border-b border-gray-100">
             <p className="text-sm font-semibold text-gray-800">Compulsory Modules</p>
             <p className="text-xs text-gray-400 mt-0.5">{compulsory.length} modules · all required</p>
           </div>
-          <div className="px-6 py-2 divide-y divide-gray-50">
+          <div tabIndex={0} aria-label="Compulsory modules"
+            className="px-6 py-2 divide-y divide-gray-50 lg:flex-1 lg:overflow-y-auto focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-300">
             {compulsory.map(mod => (
               <div key={mod.code} className="flex items-center justify-between py-3">
                 <div className="flex items-center gap-3 min-w-0 flex-1">
@@ -465,12 +546,13 @@ function ModulesTab({ onUnsavedChange, onSaved }) {
           </div>
         </div>
 
-        <div className="bg-white rounded-2xl border border-gray-200">
-          <div className="px-6 py-4 border-b border-gray-100">
+        <div className="bg-white rounded-2xl border border-gray-200 flex flex-col lg:min-h-0 overflow-hidden">
+          <div className="shrink-0 px-6 py-4 border-b border-gray-100">
             <p className="text-sm font-semibold text-gray-800">Elective Modules</p>
             <p className="text-xs text-gray-400 mt-0.5">Tick the ones you took</p>
           </div>
-          <div className="px-6 py-3 divide-y divide-gray-50">
+          <div tabIndex={0} aria-label="Elective modules"
+            className="px-6 py-3 divide-y divide-gray-50 lg:flex-1 lg:overflow-y-auto focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-300">
             {electives.length === 0 ? (
               <p className="text-sm text-gray-400 py-6 text-center">No electives for Year {selectedYear}</p>
             ) : electives.map(mod => (
@@ -624,8 +706,8 @@ export default function Profile() {
       </PageHeader>
 
       {/* ── Scrollable content ── */}
-      <div className="flex-1 overflow-auto">
-        <div className="px-8 py-6">
+      <div className={`flex-1 min-h-0 overflow-auto ${activeTab === 'modules' ? 'lg:overflow-hidden' : ''}`}>
+        <div className={`px-8 py-6 ${activeTab === 'modules' ? 'lg:h-full' : ''}`}>
           {activeTab === 'modules'   && <ModulesTab onUnsavedChange={setModulesHasUnsaved} onSaved={fetchAll} />}
           {activeTab === 'projects'  && <ProjectsTab  projects={projects} onRefresh={fetchAll} />}
           {activeTab === 'certs'     && <CertificationsTab certs={certs}  onRefresh={fetchAll} />}
