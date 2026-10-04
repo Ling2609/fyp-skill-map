@@ -18,6 +18,7 @@ from app.schemas.user import (EmailChange, EmailCodeIn, ForgotPasswordIn, NameUp
                               Token, UserLogin, UserOut, UserRegister, VerifyCodeIn)
 from app.auth.utils import hash_password, verify_password, create_access_token, decode_token
 from app.config import settings
+from app.services import account_emails
 from app.services.mailer import send_email
 from app.services.password_policy import common_passwords, password_problem
 
@@ -162,11 +163,8 @@ def change_email(payload: EmailChange, background: BackgroundTasks, db: Session 
     code = _issue_code(current_user, "email", db, new_email=email)
     if code is None:   # signed in, so saying why is safe
         raise HTTPException(status_code=429, detail="A code was just sent. Wait a minute before asking for another.")
-    background.add_task(
-        send_email, email, "Confirm your new SkillMap email",
-        f"Hi {current_user.first_name},\n\nYour code to confirm this address for SkillMap is: {code}\n\n"
-        f"It expires in {RESET_CODE_MINUTES} minutes and works once. If you didn't ask for this, ignore this email.\n\n"
-        "SkillMap")
+    background.add_task(send_email, email, *account_emails.email_code(
+        current_user.first_name, current_user.username, code, RESET_CODE_MINUTES))
     return {"message": "Code sent", "new_email": email}
 
 
@@ -184,16 +182,14 @@ def verify_email_change(payload: EmailCodeIn, background: BackgroundTasks, db: S
     otp.used = True
     db.commit()
     db.refresh(current_user)
-    background.add_task(
-        send_email, old_email, "Your SkillMap email was changed",
-        f"Hi {current_user.first_name},\n\nThe email for your SkillMap account was changed to {current_user.email}. "
-        "If this wasn't you, reset your password straight away with \"Forgot password?\" on the login page.\n\n"
-        "SkillMap")
+    background.add_task(send_email, old_email, *account_emails.email_changed(
+        current_user.first_name, current_user.username, current_user.email))
     return current_user
 
 
 @router.put("/me/password", response_model=Token)
-def change_password(payload: PasswordChange, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+def change_password(payload: PasswordChange, background: BackgroundTasks, db: Session = Depends(get_db),
+                    current_user: User = Depends(get_current_user)):
     """Signs out every other device (their tokens carry the old stamp); this one gets a new token."""
     _check_current_password(current_user, payload.current_password)
     if verify_password(payload.new_password, current_user.hashed_password):
@@ -203,6 +199,8 @@ def change_password(payload: PasswordChange, db: Session = Depends(get_db), curr
     _password_changed(current_user)
     db.commit()
     db.refresh(current_user)
+    background.add_task(send_email, current_user.email, *account_emails.password_changed(
+        current_user.first_name, current_user.username))
     return {"access_token": _login_token(current_user), "token_type": "bearer"}
 
 
@@ -397,11 +395,8 @@ def forgot_password(payload: ForgotPasswordIn, background: BackgroundTasks, db: 
     code = _issue_code(user, "reset", db)
     if code is None:
         return FORGOT_REPLY   # asked again within a minute: no new email (stops inbox flooding)
-    background.add_task(
-        send_email, user.email, "Your SkillMap password reset code",
-        f"Hi {user.first_name},\n\nYour code to reset your SkillMap password is: {code}\n\n"
-        f"It expires in {RESET_CODE_MINUTES} minutes and works once. If you didn't ask for this, ignore this email: "
-        "your password stays the same.\n\nSkillMap")
+    background.add_task(send_email, user.email, *account_emails.reset_code(
+        user.first_name, user.username, code, RESET_CODE_MINUTES))
     return FORGOT_REPLY
 
 
@@ -436,7 +431,4 @@ def reset_password(payload: ResetPasswordIn, background: BackgroundTasks, db: Se
     # owner proved access: lift sign-in pauses on her account, from any IP
     db.query(LoginThrottle).filter(LoginThrottle.identifier == user.username).delete(synchronize_session=False)
     db.commit()
-    background.add_task(
-        send_email, user.email, "Your SkillMap password was changed",
-        f"Hi {user.first_name},\n\nYour SkillMap password was just changed. If this wasn't you, reset it again "
-        "straight away with \"Forgot password?\" on the login page.\n\nSkillMap")
+    background.add_task(send_email, user.email, *account_emails.password_changed(user.first_name, user.username))

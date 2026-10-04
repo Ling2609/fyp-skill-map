@@ -159,7 +159,7 @@ export default function ForgotPassword() {
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">New password</label>
                 <input type="password" autoComplete="new-password" value={form.new_password} onChange={set('new_password')}
-                  className={inputClass} placeholder="At least 8 characters" required autoFocus />
+                  className={inputClass} required autoFocus />
                 <PasswordStrength password={form.new_password}
                   {...(EMAIL_SHAPE.test(form.identifier.trim()) ? { email: form.identifier.trim() } : { username: form.identifier.trim() })} />
               </div>

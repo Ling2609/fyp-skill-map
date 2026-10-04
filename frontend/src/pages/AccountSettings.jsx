@@ -224,7 +224,7 @@ export default function AccountSettings() {
             <form onSubmit={savePassword} className="space-y-3">
               <Field label="Current password"><input type="password" className={inputClass} value={form.current_password || ''} onChange={set('current_password')} autoComplete="current-password" autoFocus /></Field>
               <div>
-                <Field label="New password"><input type="password" className={inputClass} value={form.new_password || ''} onChange={set('new_password')} autoComplete="new-password" placeholder="At least 8 characters" /></Field>
+                <Field label="New password"><input type="password" className={inputClass} value={form.new_password || ''} onChange={set('new_password')} autoComplete="new-password" /></Field>
                 <PasswordStrength password={form.new_password} username={user?.username} email={user?.email} />
               </div>
               <Field label="Confirm new password"><input type="password" className={inputClass} value={form.confirm_password || ''} onChange={set('confirm_password')} autoComplete="new-password" /></Field>
