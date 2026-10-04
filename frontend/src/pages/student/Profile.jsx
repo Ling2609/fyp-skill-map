@@ -187,7 +187,7 @@ function ProjectForm({ project, onDone, onCancel }) {
         <textarea value={form.description} onChange={e => setForm(p => ({ ...p, description: e.target.value }))}
           placeholder="What you built and the tools you used..." rows={5} className={`${inputCls} resize-none`} required />
       </Field>
-      <Field label="GitHub URL" optional hint="Make sure the repo is public so SkillMap can read its languages.">
+      <Field label="GitHub URL" optional hint="SkillMap reads the languages used in public repositories only.">
         <input type="url" value={form.github_url} onChange={e => setForm(p => ({ ...p, github_url: e.target.value }))}
           placeholder="https://github.com/username/repo" className={inputCls} />
       </Field>
@@ -212,12 +212,15 @@ function ProjectsTab({ projects, onRefresh }) {
   const tooltip = (q) => !q ? undefined : q === ADDED_BY_YOU || q.startsWith('GitHub:') ? q : `“${q}”`
 
   return (
-    <div>
-      <div className="flex items-center justify-between mb-4">
+    // Title row fixed; only the cards scroll (her request 5 Oct, same as Modules). Panel is keyboard-focusable.
+    <div className="lg:h-full flex flex-col">
+      <div className="shrink-0 flex items-center justify-between mb-4">
         <h3 className="text-sm font-semibold text-gray-800">Your Projects</h3>
         <button type="button" onClick={() => setEditing('new')}
           className="bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-xl hover:bg-blue-800 transition">+ Add project</button>
       </div>
+      <div tabIndex={0} aria-label="Your projects"
+        className="lg:flex-1 lg:min-h-0 lg:overflow-y-auto -mx-1 px-1 pb-1 rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-300">
       {note && (
         <p role="status" className="text-xs text-amber-700 bg-amber-50 rounded-lg px-3 py-2 mb-3 flex justify-between gap-3">
           <span>{note}</span><button type="button" onClick={() => setNote('')} aria-label="Dismiss" className="text-amber-500 hover:text-amber-800">×</button>
@@ -255,6 +258,7 @@ function ProjectsTab({ projects, onRefresh }) {
           ))}
         </div>
       )}
+      </div>
       {editing && (
         <Modal title={editing === 'new' ? 'Add a project' : 'Edit project'} onClose={() => setEditing(null)}>
           <ProjectForm project={editing === 'new' ? null : editing} onDone={done} onCancel={() => setEditing(null)} />
@@ -354,10 +358,10 @@ function CertForm({ cert, onDone, onCancel }) {
             placeholder={skills.length ? 'Add another' : 'e.g. Data Analytics, Data Lakes, Data Warehousing'}
             className="flex-1 min-w-40 text-sm py-0.5 placeholder-gray-300 focus:outline-none" />
         </div>
-        <p className="text-xs text-gray-400 mt-1.5">Copy them from the certificate or its Credly badge, separated by commas.</p>
+        <p className="text-xs text-gray-400 mt-1.5">Press Enter after each skill, or paste a list separated by commas.</p>
         {note && <p className="text-xs text-amber-700 bg-amber-50 rounded-lg px-3 py-2 mt-2">{note}</p>}
       </div>
-      <Field label="Credly badge link" optional hint="Shown on the card so others can check the badge.">
+      <Field label="Credly badge link" optional hint="Adds a link to the badge on your certificate card.">
         <input type="url" value={form.credly_url} onChange={e => setForm(c => ({ ...c, credly_url: e.target.value }))}
           placeholder="https://www.credly.com/badges/..." className={inputCls} />
       </Field>
@@ -378,12 +382,15 @@ function CertificationsTab({ certs, onRefresh }) {
   const addSkill = async (id, skill) => { await api.post(`/profile/certifications/${id}/add-skill`, { skill }); onRefresh() }
 
   return (
-    <div>
-      <div className="flex items-center justify-between mb-4">
+    // Title row fixed; only the cards scroll (her request 5 Oct, same as Modules). Panel is keyboard-focusable.
+    <div className="lg:h-full flex flex-col">
+      <div className="shrink-0 flex items-center justify-between mb-4">
         <h3 className="text-sm font-semibold text-gray-800">Your Certifications</h3>
         <button type="button" onClick={() => setEditing('new')}
           className="bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-xl hover:bg-blue-800 transition">+ Add certificate</button>
       </div>
+      <div tabIndex={0} aria-label="Your certifications"
+        className="lg:flex-1 lg:min-h-0 lg:overflow-y-auto -mx-1 px-1 pb-1 rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-300">
       {certs.length === 0 ? (
         <div className="bg-white rounded-2xl border border-gray-200 p-8">
           <EmptyState icon="🎓" title="No certifications yet" subtitle="Add a certificate to show the skills it covers" />
@@ -432,6 +439,7 @@ function CertificationsTab({ certs, onRefresh }) {
           })}
         </div>
       )}
+      </div>
       {editing && (
         <Modal title={editing === 'new' ? 'Add a certificate' : 'Edit certificate'} onClose={() => setEditing(null)}>
           <CertForm cert={editing === 'new' ? null : editing} onDone={() => { setEditing(null); onRefresh() }} onCancel={() => setEditing(null)} />
@@ -762,8 +770,9 @@ export default function Profile() {
       </PageHeader>
 
       {/* ── Scrollable content ── */}
-      <div className={`flex-1 min-h-0 overflow-auto ${activeTab === 'modules' ? 'lg:overflow-hidden' : ''}`}>
-        <div className={`px-8 py-6 ${activeTab === 'modules' ? 'lg:h-full' : ''}`}>
+      {/* Wide screens: each tab fills the window and scrolls inside its own panels; narrow: the page scrolls */}
+      <div className="flex-1 min-h-0 overflow-auto lg:overflow-hidden">
+        <div className="px-8 py-6 lg:h-full">
           {activeTab === 'modules'   && <ModulesTab onUnsavedChange={setModulesHasUnsaved} onSaved={fetchAll} />}
           {activeTab === 'projects'  && <ProjectsTab  projects={projects} onRefresh={fetchAll} />}
           {activeTab === 'certs'     && <CertificationsTab certs={certs}  onRefresh={fetchAll} />}
