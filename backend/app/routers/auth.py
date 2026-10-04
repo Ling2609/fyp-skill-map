@@ -32,6 +32,7 @@ RESERVED_USERNAMES = {
 }
 
 USERNAME_REGEX = re.compile(r'^[a-zA-Z0-9][a-zA-Z0-9._]{1,28}[a-zA-Z0-9]$')
+EMAIL_SHAPE = re.compile(r'^[^\s@]+@[^\s@]+\.[^\s@]+$')   # something@something.something
 
 
 def validate_username_format(username: str) -> tuple[bool, str]:
@@ -249,7 +250,11 @@ def _find_user(identifier: str, db: Session) -> User | None:
 
 @router.post("/forgot-password")
 def forgot_password(payload: ForgotPasswordIn, background: BackgroundTasks, db: Session = Depends(get_db)):
-    user = _find_user(payload.identifier, db)
+    # Format only (4 Oct): reveals nothing about which accounts exist, but stops typos like "qwertyjkl;"
+    ident = payload.identifier.strip()
+    if not (EMAIL_SHAPE.match(ident) or USERNAME_REGEX.match(ident)):
+        raise HTTPException(status_code=400, detail="Enter a valid username or email")
+    user = _find_user(ident, db)
     if not user:
         return FORGOT_REPLY
     now = datetime.now(timezone.utc)

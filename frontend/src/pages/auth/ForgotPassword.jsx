@@ -9,6 +9,8 @@ import PasswordStrength from '../../components/PasswordStrength'
 // Resend: a 60-second countdown that turns into a "Resend code" button (the backend allows one code a minute).
 
 const RESEND_SECONDS = 60
+const EMAIL_SHAPE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/                        // something@something.something
+const USERNAME_SHAPE = /^[a-zA-Z0-9][a-zA-Z0-9._]{1,28}[a-zA-Z0-9]$/      // Register's username rule
 const inputClass = 'w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500'
 
 const errorText = (err) => {
@@ -39,6 +41,9 @@ export default function ForgotPassword() {
   const sendCode = async (e) => {
     e?.preventDefault()
     setError('')
+    // Format only, same rules as Register: says nothing about whether the account exists
+    const ident = form.identifier.trim()
+    if (!(EMAIL_SHAPE.test(ident) || USERNAME_SHAPE.test(ident))) { setError('Enter a valid username or email.'); return }
     setLoading(true)
     try {
       await api.post('/auth/forgot-password', { identifier: form.identifier.trim() })
