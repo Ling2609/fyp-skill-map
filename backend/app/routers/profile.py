@@ -82,6 +82,7 @@ class ProjectOut(BaseModel):
     extracted_skills: list[str]
     skill_quotes: dict[str, str] | None = None
     github_note: str | None = None      # only in the reply to "add": why the repo's languages couldn't be read
+    skills_note: str | None = None      # only in the reply to "add"/"edit": the AI call failed (limit, network)
 
     class Config:
         from_attributes = True
@@ -176,13 +177,21 @@ Rules:
 Return ONLY a JSON array of objects with the keys "skill" and "quote"."""
 
 
-def extract_skills_from_project(name: str, description: str) -> dict[str, str]:
-    """{skill: quote} for the skills the student's own words support."""
+SKILLS_NOT_READ = "Skills couldn't be read right now. Add them yourself, or edit the project later to try again."
+
+
+def _extract_project(name: str, description: str) -> tuple[dict[str, str], bool]:
+    """({skill: quote} the student's own words support, True if the AI call failed: limit reached, network...)."""
     answer = _ask_json(project_prompt(name, description), "project skills")
     kept, rejected = verify_project_skills(answer, f"{name}\n{description}")
     for r in rejected:
         print(f"[project skills] dropped {r['skill']!r}: {r['reason']} ({r['quote']!r})")
-    return kept
+    return kept, answer is None
+
+
+def extract_skills_from_project(name: str, description: str) -> dict[str, str]:
+    """{skill: quote} for the skills the student's own words support."""
+    return _extract_project(name, description)[0]
 
 
 def parse_listed_skills(text: str) -> list[str]:
@@ -213,7 +222,14 @@ Return ONLY a JSON array of skill names."""
 
 
 def map_cert_to_skills(cert_name: str, issuer: str) -> list[str]:
+    return _estimate_cert(cert_name, issuer) or []
+
+
+def _estimate_cert(cert_name: str, issuer: str) -> list[str] | None:
+    """Suggested skills; [] if the AI doesn't know the certificate; None if the call failed."""
     answer = _ask_json(cert_prompt(cert_name, issuer), "certification skills")
+    if answer is None:
+        return None
     if not isinstance(answer, list):
         return []
     # The model's items are kept whole (never split at commas: "Routing Protocols (OSPF, EIGRP)" broke into pieces
@@ -318,11 +334,11 @@ def _check_cert(data: CertIn, user: User, db: Session, current: UserCertificatio
                                                         f"Are you sure you want to {ask}?")
 
 
-def _project_skills(data: ProjectIn, keep: dict[str, str]) -> tuple[dict[str, str], str | None]:
+def _project_skills(data: ProjectIn, keep: dict[str, str]) -> tuple[dict[str, str], str | None, str | None]:
     """{skill: evidence} from the text + GitHub, plus the student's own additions in `keep`; and the GitHub note."""
     if not data.name.strip() or not data.description.strip():
         raise HTTPException(status_code=400, detail="Project name and description are required")
-    quotes = extract_skills_from_project(data.name.strip(), data.description.strip())
+    quotes, failed = _extract_project(data.name.strip(), data.description.strip())
     github_note = None
     if (data.github_url or "").strip():
         languages, github_note = repo_languages(data.github_url)
@@ -334,7 +350,7 @@ def _project_skills(data: ProjectIn, keep: dict[str, str]) -> tuple[dict[str, st
     for skill in keep:
         if canonical_key(skill) not in have:
             quotes[skill] = ADDED_BY_YOU
-    return quotes, github_note
+    return quotes, github_note, SKILLS_NOT_READ if failed else None
 
 
 def _check_credly(url: str | None) -> str | None:
@@ -356,7 +372,7 @@ def _clean_skill(name: str) -> str:
 @router.post("/projects", response_model=ProjectOut, status_code=201)
 def add_project(data: ProjectIn, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     _check_project(data, current_user, db)
-    quotes, github_note = _project_skills(data, {})
+    quotes, github_note, skills_note = _project_skills(data, {})
     project = UserProject(user_id=current_user.id, name=data.name.strip(), description=data.description.strip(),
                           github_url=(data.github_url or "").strip() or None,
                           extracted_skills=list(quotes), skill_quotes=quotes)
@@ -365,26 +381,31 @@ def add_project(data: ProjectIn, current_user: User = Depends(get_current_user),
     db.refresh(project)
     out = ProjectOut.model_validate(project)
     out.github_note = github_note
+    out.skills_note = skills_note
     return out
 
 
 @router.put("/projects/{project_id}", response_model=ProjectOut)
 def edit_project(project_id: int, data: ProjectIn, current_user: User = Depends(get_current_user),
                  db: Session = Depends(get_db)):
-    """Edit: skills are worked out again only if the name, description or GitHub link changed."""
+    """Edit: skills are worked out again if the name, description or GitHub link changed, or none were read before."""
     project = _own_project(project_id, current_user, db)
     _check_project(data, current_user, db, project)
     github = (data.github_url or "").strip() or None
-    github_note = None
-    if (data.name.strip(), data.description.strip(), github) != (project.name, project.description, project.github_url):
+    github_note = skills_note = None
+    changed = (data.name.strip(), data.description.strip(), github) != (project.name, project.description, project.github_url)
+    # also when it has no skills from its text yet (e.g. the AI call failed last time): "edit later to try again"
+    nothing_read = not any(v != ADDED_BY_YOU for v in (project.skill_quotes or {}).values())
+    if changed or nothing_read:
         added = {k: v for k, v in (project.skill_quotes or {}).items() if v == ADDED_BY_YOU}
-        quotes, github_note = _project_skills(data, added)
+        quotes, github_note, skills_note = _project_skills(data, added)
         project.name, project.description, project.github_url = data.name.strip(), data.description.strip(), github
         project.extracted_skills, project.skill_quotes = list(quotes), quotes
         db.commit()
         db.refresh(project)
     out = ProjectOut.model_validate(project)
     out.github_note = github_note
+    out.skills_note = skills_note
     return out
 
 
@@ -460,7 +481,8 @@ def suggest_cert_skills(data: CertSuggestIn, current_user: User = Depends(get_cu
     """Skills for the pop-up to show before saving (nothing is stored); [] if the AI doesn't know the certificate."""
     if not data.cert_name.strip() or not data.issuer.strip():
         raise HTTPException(status_code=400, detail="Certificate name and issuer are required")
-    return {"skills": map_cert_to_skills(data.cert_name.strip(), data.issuer.strip())}
+    found = _estimate_cert(data.cert_name.strip(), data.issuer.strip())
+    return {"skills": found or [], "failed": found is None}   # failed: limit reached / network, not "unknown"
 
 
 @router.post("/certifications", response_model=CertOut, status_code=201)

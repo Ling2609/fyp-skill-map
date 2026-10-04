@@ -60,25 +60,53 @@ const inputCls = 'w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm p
 const ADDED_BY_YOU = 'Added by you'
 const errText = (err, fallback) => err.response?.data?.detail || fallback
 
-function Modal({ title, onClose, children }) {
+// dirty = something has been typed: clicking outside, Esc or the corner ✕ then asks before throwing it away
+// (5 Oct: a stray click outside lost a long description). The form's own Cancel closes straight away.
+function Modal({ title, onClose, dirty = false, children }) {
+  const [asking, setAsking] = useState(false)
+  const tryClose = useCallback(() => { if (dirty) setAsking(true); else onClose() }, [dirty, onClose])
   useEffect(() => {
-    const onKey = (e) => { if (e.key === 'Escape') onClose() }
+    const onKey = (e) => { if (e.key === 'Escape') tryClose() }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [onClose])
+  }, [tryClose])
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/30" onMouseDown={onClose}>
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/30" onMouseDown={tryClose}>
       <div role="dialog" aria-modal="true" aria-label={title} onMouseDown={e => e.stopPropagation()}
         className="bg-white rounded-2xl shadow-xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between px-6 pt-5 pb-1">
           <h3 className="text-base font-semibold text-gray-800">{title}</h3>
-          <button type="button" onClick={onClose} aria-label="Close" className="text-gray-400 hover:text-gray-700 p-1 rounded-lg hover:bg-gray-100">
+          <button type="button" onClick={tryClose} aria-label="Close" className="text-gray-400 hover:text-gray-700 p-1 rounded-lg hover:bg-gray-100">
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
           </button>
         </div>
+        {asking && (
+          <div role="alertdialog" aria-label="Discard changes" className="mx-6 mt-2 bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 flex items-center justify-between gap-3">
+            <p className="text-sm text-amber-800">Discard your changes?</p>
+            <div className="flex gap-2 shrink-0">
+              <button type="button" onClick={() => setAsking(false)} autoFocus className="px-3 py-1.5 text-sm text-gray-600 hover:text-gray-900">Keep editing</button>
+              <button type="button" onClick={onClose} className="px-3 py-1.5 text-sm font-medium text-red-600 hover:bg-red-50 rounded-lg">Discard</button>
+            </div>
+          </div>
+        )}
         <div className="px-6 pb-6 pt-3">{children}</div>
       </div>
     </div>
+  )
+}
+
+// "Delete X?" before a project or certificate goes (5 Oct: the card's ✕ sits near the chips' ×)
+function ConfirmDelete({ name, onCancel, onDelete }) {
+  const [busy, setBusy] = useState(false)
+  return (
+    <Modal title="Delete?" onClose={onCancel}>
+      <p className="text-sm text-gray-600">Delete <span className="font-medium text-gray-800">“{name}”</span>? Its skills will leave your profile.</p>
+      <div className="flex justify-end gap-2 pt-5">
+        <button type="button" onClick={onCancel} autoFocus className="px-4 py-2 text-sm text-gray-500 hover:text-gray-800">Cancel</button>
+        <button type="button" disabled={busy} onClick={async () => { setBusy(true); await onDelete() }}
+          className="bg-red-600 text-white text-sm font-medium px-4 py-2 rounded-xl hover:bg-red-700 disabled:opacity-40">Delete</button>
+      </div>
+    </Modal>
   )
 }
 
@@ -174,11 +202,13 @@ function SkillsRow({ children, empty, emptyText }) {
 
 // ── Projects tab ──────────────────────────────────────────────────────────────
 
-function ProjectForm({ project, onDone, onCancel }) {
+function ProjectForm({ project, onDone, onCancel, onDirty }) {
   const editing = !!project
-  const [form, setForm] = useState({
+  const [initial] = useState(() => ({
     name: project?.name || '', description: project?.description || '', github_url: project?.github_url || '',
-  })
+  }))
+  const [form, setForm] = useState(initial)
+  useEffect(() => { onDirty?.(JSON.stringify(form) !== JSON.stringify(initial)) }, [form, initial, onDirty])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [dupe, setDupe] = useState('')   // "you already have one called ..." question
@@ -225,10 +255,17 @@ function ProjectsTab({ projects, onRefresh }) {
   const [note, setNote] = useState('')            // e.g. the GitHub repo couldn't be read
 
   const run = async (call) => { try { await call(); onRefresh() } catch { /* silent */ } }
-  const handleDelete = (id) => run(() => api.delete(`/profile/projects/${id}`))
+  const [deleting, setDeleting] = useState(null)   // the project waiting for "Delete?"
+  const [dirty, setDirty] = useState(false)
+  const handleDelete = async (id) => { await run(() => api.delete(`/profile/projects/${id}`)); setDeleting(null) }
   const removeSkill = (id, skill) => run(() => api.post(`/profile/projects/${id}/remove-skill`, { skill }))
   const addSkill = async (id, skill) => { await api.post(`/profile/projects/${id}/add-skill`, { skill }); onRefresh() }
-  const done = (saved) => { setEditing(null); setNote(saved.github_note ? `${saved.name}: ${saved.github_note}` : ''); onRefresh() }
+  const done = (saved) => {
+    setEditing(null); setDirty(false)
+    const notes = [saved.skills_note, saved.github_note].filter(Boolean)
+    setNote(notes.length ? `${saved.name}: ${notes.join(' ')}` : '')
+    onRefresh()
+  }
 
   const tooltip = (q) => !q ? undefined : q === ADDED_BY_YOU || q.startsWith('GitHub:') ? q : `“${q}”`
 
@@ -265,7 +302,7 @@ function ProjectsTab({ projects, onRefresh }) {
                 </div>
                 <div className="flex items-center gap-0.5">
                   <IconButton label="Edit project" onClick={() => setEditing(p)}><PencilIcon /></IconButton>
-                  <IconButton label="Delete project" danger onClick={() => handleDelete(p.id)}><CrossIcon /></IconButton>
+                  <IconButton label="Delete project" danger onClick={() => setDeleting(p)}><CrossIcon /></IconButton>
                 </div>
               </div>
               <SkillsRow empty={!p.extracted_skills?.length} emptyText="No skills yet. Add the skills you used.">
@@ -280,9 +317,11 @@ function ProjectsTab({ projects, onRefresh }) {
         </div>
       )}
       </div>
+      {deleting && <ConfirmDelete name={deleting.name} onCancel={() => setDeleting(null)} onDelete={() => handleDelete(deleting.id)} />}
       {editing && (
-        <Modal title={editing === 'new' ? 'Add a project' : 'Edit project'} onClose={() => setEditing(null)}>
-          <ProjectForm project={editing === 'new' ? null : editing} onDone={done} onCancel={() => setEditing(null)} />
+        <Modal title={editing === 'new' ? 'Add a project' : 'Edit project'} dirty={dirty} onClose={() => { setEditing(null); setDirty(false) }}>
+          <ProjectForm project={editing === 'new' ? null : editing} onDone={done} onDirty={setDirty}
+            onCancel={() => { setEditing(null); setDirty(false) }} />
         </Modal>
       )}
     </div>
@@ -297,9 +336,10 @@ function ProjectsTab({ projects, onRefresh }) {
 // With no skills yet, the main button suggests first, so a certificate is never saved with skills nobody looked at.
 const splitSkills = (text) => text.split(/[,;\n•]+/).map(t => t.replace(/\s+/g, ' ').trim()).filter(Boolean)
 
-function CertForm({ cert, onDone, onCancel }) {
+function CertForm({ cert, onDone, onCancel, onDirty }) {
   const editing = !!cert
-  const [form, setForm] = useState({ cert_name: cert?.cert_name || '', issuer: cert?.issuer || '', credly_url: cert?.credly_url || '' })
+  const [initial] = useState(() => ({ cert_name: cert?.cert_name || '', issuer: cert?.issuer || '', credly_url: cert?.credly_url || '' }))
+  const [form, setForm] = useState(initial)
   const [skills, setSkills] = useState(cert?.mapped_skills || [])
   const [suggested, setSuggested] = useState(false)   // some chips came from "Suggest skills"
   const [triedSuggest, setTriedSuggest] = useState(editing)
@@ -321,6 +361,7 @@ function CertForm({ cert, onDone, onCancel }) {
       const res = await api.post('/profile/certifications/suggest', { cert_name: form.cert_name.trim(), issuer: form.issuer.trim() })
       const found = res.data.skills || []
       if (found.length) { addChips(found); setSuggested(true) }
+      else if (res.data.failed) setNote("Couldn't suggest skills right now. You can add them yourself, or try again later.")
       else setNote("SkillMap couldn't suggest skills for this certificate. Please add the ones listed on it.")
       setTriedSuggest(true)
     } catch (err) {
@@ -330,6 +371,10 @@ function CertForm({ cert, onDone, onCancel }) {
   }
 
   const needsSuggest = !skills.length && !draft.trim() && !triedSuggest
+  useEffect(() => {
+    onDirty?.(JSON.stringify(form) !== JSON.stringify(initial) || draft.trim() !== ''
+      || JSON.stringify(skills) !== JSON.stringify(cert?.mapped_skills || []))
+  }, [form, initial, draft, skills, cert, onDirty])
   const [dupe, setDupe] = useState('')
   const submit = (e) => { e.preventDefault(); if (needsSuggest) suggest(); else save() }
   const save = async (allowDuplicate = false) => {
@@ -401,7 +446,9 @@ function CertificationsTab({ certs, onRefresh }) {
   const [editing, setEditing] = useState(null)
 
   const run = async (call) => { try { await call(); onRefresh() } catch { /* silent */ } }
-  const handleDelete = (id) => run(() => api.delete(`/profile/certifications/${id}`))
+  const [deleting, setDeleting] = useState(null)
+  const [dirty, setDirty] = useState(false)
+  const handleDelete = async (id) => { await run(() => api.delete(`/profile/certifications/${id}`)); setDeleting(null) }
   const removeSkill = (id, skill) => run(() => api.post(`/profile/certifications/${id}/remove-skill`, { skill }))
   const confirm = (id) => run(() => api.post(`/profile/certifications/${id}/confirm`))
   const addSkill = async (id, skill) => { await api.post(`/profile/certifications/${id}/add-skill`, { skill }); onRefresh() }
@@ -438,7 +485,7 @@ function CertificationsTab({ certs, onRefresh }) {
                   </div>
                   <div className="flex items-center gap-0.5">
                     <IconButton label="Edit certificate" onClick={() => setEditing(c)}><PencilIcon /></IconButton>
-                    <IconButton label="Delete certificate" danger onClick={() => handleDelete(c.id)}><CrossIcon /></IconButton>
+                    <IconButton label="Delete certificate" danger onClick={() => setDeleting(c)}><CrossIcon /></IconButton>
                   </div>
                 </div>
                 {/* An AI estimate says so first, with one click to confirm it after checking (her choice, option B) */}
@@ -465,9 +512,11 @@ function CertificationsTab({ certs, onRefresh }) {
         </div>
       )}
       </div>
+      {deleting && <ConfirmDelete name={deleting.cert_name} onCancel={() => setDeleting(null)} onDelete={() => handleDelete(deleting.id)} />}
       {editing && (
-        <Modal title={editing === 'new' ? 'Add a certificate' : 'Edit certificate'} onClose={() => setEditing(null)}>
-          <CertForm cert={editing === 'new' ? null : editing} onDone={() => { setEditing(null); onRefresh() }} onCancel={() => setEditing(null)} />
+        <Modal title={editing === 'new' ? 'Add a certificate' : 'Edit certificate'} dirty={dirty} onClose={() => { setEditing(null); setDirty(false) }}>
+          <CertForm cert={editing === 'new' ? null : editing} onDirty={setDirty}
+            onDone={() => { setEditing(null); setDirty(false); onRefresh() }} onCancel={() => { setEditing(null); setDirty(false) }} />
         </Modal>
       )}
     </div>
