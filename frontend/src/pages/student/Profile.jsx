@@ -179,9 +179,6 @@ function ProjectForm({ project, onDone, onCancel }) {
   }
   return (
     <form onSubmit={submit} className="space-y-4">
-      {/* Wording (4 Oct, researched: references.md "Form hint text"): one short sentence per hint, outside the field,
-          only where it helps; "you", active voice, no repeating what is already on screen */}
-      <p className="text-xs text-gray-400 -mt-1">SkillMap uses AI to find the skills in your description</p>
       <Field label="Project name">
         <input type="text" value={form.name} onChange={e => setForm(p => ({ ...p, name: e.target.value }))}
           placeholder="e.g. Inventory Management System" className={inputCls} required autoFocus />
@@ -190,7 +187,7 @@ function ProjectForm({ project, onDone, onCancel }) {
         <textarea value={form.description} onChange={e => setForm(p => ({ ...p, description: e.target.value }))}
           placeholder="What you built and the tools you used..." rows={5} className={`${inputCls} resize-none`} required />
       </Field>
-      <Field label="GitHub URL" optional hint="SkillMap adds the main languages from public repositories">
+      <Field label="GitHub URL" optional hint="Make sure the repo is public so SkillMap can read its languages.">
         <input type="url" value={form.github_url} onChange={e => setForm(p => ({ ...p, github_url: e.target.value }))}
           placeholder="https://github.com/username/repo" className={inputCls} />
       </Field>
@@ -269,28 +266,60 @@ function ProjectsTab({ projects, onRefresh }) {
 
 // ── Certifications tab ────────────────────────────────────────────────────────
 
+// Certificate pop-up (4 Oct, her flow): the skills are shown as chips BEFORE saving, so everything saved has been seen
+// and checked (Amershi et al. 2019: support efficient correction; references.md "Reviewing AI-suggested skills").
+// Type or paste the skills listed on the certificate, or "Suggest skills" from the name; × removes a chip.
+// With no skills yet, the main button suggests first, so a certificate is never saved with skills nobody looked at.
+const splitSkills = (text) => text.split(/[,;\n•]+/).map(t => t.replace(/\s+/g, ' ').trim()).filter(Boolean)
+
 function CertForm({ cert, onDone, onCancel }) {
   const editing = !!cert
-  const [form, setForm] = useState({
-    cert_name: cert?.cert_name || '', issuer: cert?.issuer || '', credly_url: cert?.credly_url || '',
-    // only skills typed from the certificate go back in the box; an estimate stays as it is unless replaced
-    listed_skills: cert?.skills_source === 'listed'
-      ? cert.mapped_skills.filter(s => !(cert.added_skills || []).includes(s)).join(', ') : '',
-  })
-  const [loading, setLoading] = useState(false)
+  const [form, setForm] = useState({ cert_name: cert?.cert_name || '', issuer: cert?.issuer || '', credly_url: cert?.credly_url || '' })
+  const [skills, setSkills] = useState(cert?.mapped_skills || [])
+  const [suggested, setSuggested] = useState(false)   // some chips came from "Suggest skills"
+  const [triedSuggest, setTriedSuggest] = useState(editing)
+  const [draft, setDraft] = useState('')
+  const [busy, setBusy] = useState('')                 // '' | 'suggest' | 'save'
+  const [note, setNote] = useState('')
   const [error, setError] = useState('')
+
+  const addChips = (names) => setSkills(prev => {
+    const have = new Set(prev.map(s => s.toLowerCase()))
+    return [...prev, ...names.filter(n => n.length <= 60 && !have.has(n.toLowerCase()) && have.add(n.toLowerCase()))]
+  })
+  const takeDraft = () => { if (draft.trim()) { addChips(splitSkills(draft)); setDraft('') } }
+  const canSuggest = form.cert_name.trim() && form.issuer.trim()
+
+  const suggest = async () => {
+    setBusy('suggest'); setError(''); setNote('')
+    try {
+      const res = await api.post('/profile/certifications/suggest', { cert_name: form.cert_name.trim(), issuer: form.issuer.trim() })
+      const found = res.data.skills || []
+      if (found.length) { addChips(found); setSuggested(true) }
+      else setNote("SkillMap couldn't suggest skills for this certificate. Please add the ones listed on it.")
+      setTriedSuggest(true)
+    } catch (err) {
+      setError(errText(err, "Couldn't suggest skills right now. You can add them yourself."))
+      setTriedSuggest(true)
+    } finally { setBusy('') }
+  }
+
+  const needsSuggest = !skills.length && !draft.trim() && !triedSuggest
   const submit = async (e) => {
     e.preventDefault()
-    setLoading(true); setError('')
-    const body = { cert_name: form.cert_name.trim(), issuer: form.issuer.trim(), listed_skills: form.listed_skills.trim(),
-                   credly_url: form.credly_url.trim() || null }
+    if (needsSuggest) { suggest(); return }
+    const finalSkills = draft.trim() ? [...skills, ...splitSkills(draft).filter(n => !skills.some(s => s.toLowerCase() === n.toLowerCase()))] : skills
+    setBusy('save'); setError('')
+    const body = { cert_name: form.cert_name.trim(), issuer: form.issuer.trim(), credly_url: form.credly_url.trim() || null,
+                   skills: finalSkills, suggested }
     try {
       const res = editing ? await api.put(`/profile/certifications/${cert.id}`, body) : await api.post('/profile/certifications', body)
       onDone(res.data)
     } catch (err) {
       setError(errText(err, editing ? "Couldn't save the certificate" : "Couldn't add the certificate"))
-    } finally { setLoading(false) }
+    } finally { setBusy('') }
   }
+
   return (
     <form onSubmit={submit} className="space-y-4">
       <Field label="Certificate name">
@@ -301,17 +330,40 @@ function CertForm({ cert, onDone, onCancel }) {
         <input type="text" value={form.issuer} onChange={e => setForm(c => ({ ...c, issuer: e.target.value }))}
           placeholder="e.g. Amazon Web Services" className={inputCls} required />
       </Field>
-      <Field label="Skills listed on the certificate" optional hint="Leave blank and SkillMap will suggest skills based on the name">
-        <textarea value={form.listed_skills} onChange={e => setForm(c => ({ ...c, listed_skills: e.target.value }))}
-          placeholder="e.g. Data Analytics, Data Lakes, Data Warehousing" rows={2} className={`${inputCls} resize-none`} />
-      </Field>
-      <Field label="Credly badge link" optional hint="Lets others verify your certificate">
+      <div>
+        <div className="flex items-baseline justify-between mb-1.5">
+          <label htmlFor="cert-skill-input" className="block text-xs font-medium text-gray-600">Skills listed on the certificate</label>
+          {/* While the main button is "Suggest skills" this link would repeat it, so it shows only afterwards */}
+          {!needsSuggest && (
+            <button type="button" onClick={suggest} disabled={!canSuggest || busy !== ''}
+              className="text-xs font-medium text-blue-700 hover:underline disabled:text-gray-300 disabled:no-underline">
+              {busy === 'suggest' ? 'Finding skills…' : suggested ? 'Suggest more' : 'Suggest skills'}
+            </button>
+          )}
+        </div>
+        <div className="w-full border border-gray-200 rounded-xl px-3 py-2.5 flex flex-wrap items-center gap-1.5 focus-within:ring-2 focus-within:ring-blue-500">
+          {skills.map(s => (
+            <SkillChip key={s} skill={s} onRemove={() => setSkills(prev => prev.filter(x => x !== s))} />
+          ))}
+          <input id="cert-skill-input" value={draft} onChange={e => setDraft(e.target.value)} onBlur={takeDraft}
+            onKeyDown={e => {
+              if (e.key === 'Enter' || e.key === ',') { e.preventDefault(); takeDraft() }
+              if (e.key === 'Backspace' && !draft && skills.length) setSkills(prev => prev.slice(0, -1))
+            }}
+            onPaste={e => { const t = e.clipboardData.getData('text'); if (/[,;\n]/.test(t)) { e.preventDefault(); addChips(splitSkills(t)) } }}
+            placeholder={skills.length ? 'Add another' : 'e.g. Data Analytics, Data Lakes, Data Warehousing'}
+            className="flex-1 min-w-40 text-sm py-0.5 placeholder-gray-300 focus:outline-none" />
+        </div>
+        <p className="text-xs text-gray-400 mt-1.5">Copy them from the certificate or its Credly badge, separated by commas.</p>
+        {note && <p className="text-xs text-amber-700 bg-amber-50 rounded-lg px-3 py-2 mt-2">{note}</p>}
+      </div>
+      <Field label="Credly badge link" optional hint="Shown on the card so others can check the badge.">
         <input type="url" value={form.credly_url} onChange={e => setForm(c => ({ ...c, credly_url: e.target.value }))}
           placeholder="https://www.credly.com/badges/..." className={inputCls} />
       </Field>
       {error && <p className="text-xs text-red-500 bg-red-50 rounded-lg px-3 py-2">{error}</p>}
-      <FormButtons loading={loading} busyText={form.listed_skills.trim() ? 'Saving…' : 'Finding skills…'}
-        label={editing ? 'Save' : 'Add certificate'} onCancel={onCancel} disabled={!form.cert_name.trim() || !form.issuer.trim()} />
+      <FormButtons loading={busy !== ''} busyText={busy === 'suggest' ? 'Finding skills…' : 'Saving…'}
+        label={needsSuggest ? 'Suggest skills' : editing ? 'Save' : 'Add certificate'} onCancel={onCancel} disabled={!canSuggest} />
     </form>
   )
 }
@@ -522,7 +574,8 @@ function ModulesTab({ onUnsavedChange, onSaved }) {
             <p className="text-sm font-semibold text-gray-800">Compulsory Modules</p>
             <p className="text-xs text-gray-400 mt-0.5">{compulsory.length} modules · all required</p>
           </div>
-          <div tabIndex={0} aria-label="Compulsory modules"
+          {/* key = year: a new year opens at the top of its list, not where the last year was scrolled to */}
+          <div key={`c${selectedYear}`} tabIndex={0} aria-label="Compulsory modules"
             className="px-6 py-2 divide-y divide-gray-50 lg:flex-1 lg:overflow-y-auto focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-300">
             {compulsory.map(mod => (
               <div key={mod.code} className="flex items-center justify-between py-3">
@@ -551,7 +604,7 @@ function ModulesTab({ onUnsavedChange, onSaved }) {
             <p className="text-sm font-semibold text-gray-800">Elective Modules</p>
             <p className="text-xs text-gray-400 mt-0.5">Tick the ones you took</p>
           </div>
-          <div tabIndex={0} aria-label="Elective modules"
+          <div key={`e${selectedYear}`} tabIndex={0} aria-label="Elective modules"
             className="px-6 py-3 divide-y divide-gray-50 lg:flex-1 lg:overflow-y-auto focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-300">
             {electives.length === 0 ? (
               <p className="text-sm text-gray-400 py-6 text-center">No electives for Year {selectedYear}</p>
@@ -617,13 +670,16 @@ export default function Profile() {
     return () => window.removeEventListener('beforeunload', handler)
   }, [modulesHasUnsaved])
 
+  // Ask only when leaving Modules with unsaved grades. Leaving discards them (the tab's state goes), so the flag is
+  // cleared: moving between Projects and Certifications afterwards doesn't ask again (her report 4 Oct)
   const handleTabChange = useCallback((key) => {
-    if (key !== 'modules' && modulesHasUnsaved) {
+    if (activeTab === 'modules' && key !== 'modules' && modulesHasUnsaved) {
       const ok = window.confirm('You have unsaved grade changes. Leave without saving?')
       if (!ok) return
+      setModulesHasUnsaved(false)
     }
     setActiveTab(key)
-  }, [modulesHasUnsaved])
+  }, [activeTab, modulesHasUnsaved])
 
   const fetchAll = () => {
     setProfileLoading(true)

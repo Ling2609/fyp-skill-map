@@ -53,6 +53,15 @@ class CertIn(BaseModel):
     issuer: str
     listed_skills: str = ""      # optional: the skills printed on the certificate / badge, comma separated
     credly_url: str | None = None
+    # 4 Oct (her flow): the pop-up shows the skills before saving, so what is sent here has been seen and checked.
+    # skills = the final chips; suggested = some of them came from "Suggest skills" (saved as "confirmed", else "listed")
+    skills: list[str] | None = None
+    suggested: bool = False
+
+
+class CertSuggestIn(BaseModel):
+    cert_name: str
+    issuer: str
 
 
 class SkillRemove(BaseModel):
@@ -361,14 +370,39 @@ def add_project_skill(project_id: int, data: SkillAdd, current_user: User = Depe
     return project
 
 
+def _checked_skills(names: list[str]) -> list[str]:
+    """The chips from the pop-up: tidied, duplicates (same canonical key) and empty ones dropped."""
+    out, seen = [], set()
+    for raw in names:
+        name = " ".join(str(raw or "").split()).strip(" ,;.")
+        key = canonical_key(name)
+        if name and key and key not in seen and len(name) <= MAX_SKILL_CHARS:
+            seen.add(key)
+            out.append(name)
+    if len(out) > MAX_SKILLS_PER_ITEM:
+        raise HTTPException(status_code=400, detail=f"A certificate can have up to {MAX_SKILLS_PER_ITEM} skills")
+    return out
+
+
 def _cert_skills(data: CertIn, added: list[str]) -> tuple[list[str], str]:
-    """(skills, source): typed from the certificate = "listed", else the AI estimate; the student's own additions kept."""
+    """(skills, source): checked chips from the pop-up = "confirmed" / "listed"; otherwise (older callers) typed from
+    the certificate = "listed", else the AI estimate; the student's own additions kept."""
     if not data.cert_name.strip() or not data.issuer.strip():
         raise HTTPException(status_code=400, detail="Certificate name and issuer are required")
+    if data.skills is not None:
+        return _checked_skills(data.skills), "confirmed" if data.suggested else "listed"
     listed = parse_listed_skills(data.listed_skills)
     skills = listed or map_cert_to_skills(data.cert_name.strip(), data.issuer.strip())
     have = {canonical_key(s) for s in skills}
     return skills + [s for s in added if canonical_key(s) not in have], "listed" if listed else "estimated"
+
+
+@router.post("/certifications/suggest")
+def suggest_cert_skills(data: CertSuggestIn, current_user: User = Depends(get_current_user)):
+    """Skills for the pop-up to show before saving (nothing is stored); [] if the AI doesn't know the certificate."""
+    if not data.cert_name.strip() or not data.issuer.strip():
+        raise HTTPException(status_code=400, detail="Certificate name and issuer are required")
+    return {"skills": map_cert_to_skills(data.cert_name.strip(), data.issuer.strip())}
 
 
 @router.post("/certifications", response_model=CertOut, status_code=201)
@@ -391,7 +425,10 @@ def edit_certification(cert_id: int, data: CertIn, current_user: User = Depends(
     cert = _own_cert(cert_id, current_user, db)
     cert.credly_url = _check_credly(data.credly_url)
     renamed = (data.cert_name.strip(), data.issuer.strip()) != (cert.cert_name, cert.issuer)
-    if data.listed_skills.strip() or renamed or cert.skills_source == "listed":
+    if data.skills is not None:   # the pop-up's checked chips replace the list
+        cert.mapped_skills, cert.skills_source = _cert_skills(data, [])
+        cert.added_skills = []
+    elif data.listed_skills.strip() or renamed or cert.skills_source == "listed":
         added = list(cert.added_skills or [])
         cert.mapped_skills, cert.skills_source = _cert_skills(data, added)
         cert.added_skills = [s for s in added if s in cert.mapped_skills]
