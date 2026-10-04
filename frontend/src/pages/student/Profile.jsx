@@ -56,17 +56,19 @@ function ProjectsTab({ projects, onRefresh }) {
   const [form, setForm] = useState({ name: '', description: '', github_url: '' })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [note, setNote] = useState('')   // e.g. the GitHub repo couldn't be read (private)
 
   const handleAdd = async (e) => {
     e.preventDefault()
-    setLoading(true); setError('')
+    setLoading(true); setError(''); setNote('')
     try {
-      await api.post('/profile/projects', {
+      const res = await api.post('/profile/projects', {
         name: form.name.trim(),
         description: form.description.trim(),
         github_url: form.github_url.trim() || null,
       })
       setForm({ name: '', description: '', github_url: '' })
+      setNote(res.data.github_note || '')
       onRefresh()
     } catch (err) {
       setError(err.response?.data?.detail || 'Failed to add project')
@@ -120,8 +122,10 @@ function ProjectsTab({ projects, onRefresh }) {
               placeholder="https://github.com/username/repo"
               className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
+            <p className="text-xs text-gray-400 mt-1.5">Make sure the repo is public so SkillMap can read its languages.</p>
           </div>
           {error && <p className="text-xs text-red-500 bg-red-50 rounded-lg px-3 py-2">{error}</p>}
+          {note && <p role="status" className="text-xs text-amber-700 bg-amber-50 rounded-lg px-3 py-2">Project added. {note}</p>}
           <button
             type="submit"
             disabled={loading || !form.name.trim() || !form.description.trim()}
@@ -167,7 +171,8 @@ function ProjectsTab({ projects, onRefresh }) {
                 {p.extracted_skills?.length > 0 && (
                   <div className="flex flex-wrap gap-1.5 mt-3 pt-3 border-t border-gray-100">
                     {p.extracted_skills.map((s, i) => (
-                      <SkillChip key={i} skill={s} title={p.skill_quotes?.[s] ? `“${p.skill_quotes[s]}”` : undefined}
+                      <SkillChip key={i} skill={s} title={!p.skill_quotes?.[s] ? undefined
+                        : p.skill_quotes[s].startsWith('GitHub:') ? p.skill_quotes[s] : `“${p.skill_quotes[s]}”`}
                         onRemove={() => removeSkill(p.id, s)} />
                     ))}
                   </div>

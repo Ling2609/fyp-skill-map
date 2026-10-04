@@ -1,7 +1,8 @@
 """
 Profile router — user's personal skill profile built from:
   - Projects: name + description + optional GitHub → Groq lists the skills USED, each with the student's own words
-    as evidence; a skill whose words aren't in the description is dropped (same check as job skills, evidence.py)
+    as evidence; a skill whose words aren't in the description is dropped (same check as job skills, evidence.py).
+    A public GitHub link adds the repo's main languages (≥ 10% of the code, services/github_repo.py)
   - Certifications: the skills listed on the certificate if the student types them ("listed"); otherwise Groq
     estimates them from the name and issuer ("estimated"), or returns none if it doesn't know the certificate
   - The student can remove any single skill (✕ on the chip); adding skills by hand is not offered (no evidence)
@@ -24,6 +25,7 @@ from app.config import settings
 
 from app.models.user_module import UserModule
 from app.services.evidence import check_quote, normalise_text
+from app.services.github_repo import repo_languages
 from app.services.skill_names import canonical_key
 from app.services.skill_profile import build_skill_profile
 
@@ -63,6 +65,7 @@ class ProjectOut(BaseModel):
     github_url: str | None
     extracted_skills: list[str]
     skill_quotes: dict[str, str] | None = None
+    github_note: str | None = None      # only in the reply to "add": why the repo's languages couldn't be read
 
     class Config:
         from_attributes = True
@@ -219,6 +222,13 @@ def add_project(
     if not data.name.strip() or not data.description.strip():
         raise HTTPException(status_code=400, detail="Project name and description are required")
     quotes = extract_skills_from_project(data.name.strip(), data.description.strip())
+    github_note = None
+    if (data.github_url or "").strip():
+        languages, github_note = repo_languages(data.github_url)
+        have = {canonical_key(s) for s in quotes}
+        for lang, pct in languages.items():   # evidence from the code itself; the description's quote wins if both
+            if canonical_key(lang) not in have and len(quotes) < MAX_PROJECT_SKILLS + 5:
+                quotes[lang] = f"GitHub: {pct}% of the code"
     project = UserProject(
         user_id=current_user.id,
         name=data.name.strip(),
@@ -230,7 +240,9 @@ def add_project(
     db.add(project)
     db.commit()
     db.refresh(project)
-    return project
+    out = ProjectOut.model_validate(project)
+    out.github_note = github_note
+    return out
 
 
 @router.get("/projects", response_model=list[ProjectOut])
