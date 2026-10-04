@@ -92,9 +92,13 @@ class ForgotPasswordIn(BaseModel):
     identifier: str            # username or email, as on the login page
 
 
-class ResetPasswordIn(BaseModel):
+class VerifyCodeIn(BaseModel):
     identifier: str
     code: str
+
+
+class ResetPasswordIn(BaseModel):
+    reset_token: str           # from /auth/verify-reset-code: proves the code was checked
     new_password: str
 
     @field_validator("new_password")

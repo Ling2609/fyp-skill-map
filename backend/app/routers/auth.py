@@ -6,14 +6,14 @@ from datetime import datetime, timedelta, timezone
 
 from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer
-from jose import JWTError
+from jose import JWTError, jwt
 from sqlalchemy import func
 from sqlalchemy.orm import Session
 from app.database import get_db
 from app.models.password_reset import PasswordResetOTP
 from app.models.user import User, UserRole
 from app.schemas.user import (EmailChange, ForgotPasswordIn, NameUpdate, PasswordChange, ResetPasswordIn, Token,
-                              UserLogin, UserOut, UserRegister)
+                              UserLogin, UserOut, UserRegister, VerifyCodeIn)
 from app.auth.utils import hash_password, verify_password, create_access_token, decode_token
 from app.config import settings
 from app.services.mailer import send_email
@@ -185,13 +185,21 @@ def login(payload: UserLogin, db: Session = Depends(get_db)):
 # A 6-digit code is emailed to the account's address. Same reply whether or not the account exists (no user
 # enumeration); the email is sent in the background so both cases take the same time. Code: from `secrets`,
 # stored only as an HMAC (keyed with SECRET_KEY, so a leaked table can't be brute-forced offline), valid 15 min,
-# single use, 5 wrong tries max, at most one new code a minute per account. Known limit: logins already open on
-# other devices stay valid until their token expires (JWTs are not stored server-side).
+# single use, 5 wrong tries max, at most one new code a minute per account. Three steps (her request, 4 Oct): the code
+# is checked first (/verify-reset-code) and returns a 10-minute reset pass; only then is the new password set.
+# The pass is a JWT signed with a DIFFERENT key from login tokens, so it can never be used to log in, and it dies
+# when its code is used. Known limit: logins already open on other devices stay valid until their token expires.
 RESET_CODE_MINUTES = 15
 RESET_MAX_ATTEMPTS = 5
 RESET_RESEND_SECONDS = 60
 FORGOT_REPLY = {"message": "If an account exists, a 6-digit code has been sent to its email address."}
-INVALID_CODE = "That code is wrong or has expired. Request a new one if needed."
+INVALID_CODE = "Wrong or expired code."
+RESET_PASS_MINUTES = 10
+EXPIRED_PASS = "This reset has expired. Please start again."
+
+
+def _reset_key() -> str:
+    return settings.secret_key + "|password-reset"   # not the login-token key
 
 
 def _code_hash(user_id: int, code: str) -> str:
@@ -228,8 +236,8 @@ def forgot_password(payload: ForgotPasswordIn, background: BackgroundTasks, db: 
     return FORGOT_REPLY
 
 
-@router.post("/reset-password", status_code=204)
-def reset_password(payload: ResetPasswordIn, background: BackgroundTasks, db: Session = Depends(get_db)):
+@router.post("/verify-reset-code")
+def verify_reset_code(payload: VerifyCodeIn, db: Session = Depends(get_db)):
     user = _find_user(payload.identifier, db)
     if not user:
         raise HTTPException(status_code=400, detail=INVALID_CODE)
@@ -242,11 +250,28 @@ def reset_password(payload: ResetPasswordIn, background: BackgroundTasks, db: Se
     if otp.attempt_count >= RESET_MAX_ATTEMPTS:
         otp.used = True
         db.commit()
-        raise HTTPException(status_code=400, detail="Too many wrong tries. Request a new code.")
+        raise HTTPException(status_code=400, detail="Too many wrong tries. Resend a new code.")
     if not hmac.compare_digest(otp.otp_hash, _code_hash(user.id, payload.code.strip())):
         otp.attempt_count += 1
         db.commit()
         raise HTTPException(status_code=400, detail=INVALID_CODE)
+    reset_pass = jwt.encode({"sub": str(user.id), "otp": otp.id,
+                             "exp": datetime.now(timezone.utc) + timedelta(minutes=RESET_PASS_MINUTES)},
+                            _reset_key(), algorithm=settings.algorithm)
+    return {"reset_token": reset_pass}
+
+
+@router.post("/reset-password", status_code=204)
+def reset_password(payload: ResetPasswordIn, background: BackgroundTasks, db: Session = Depends(get_db)):
+    try:
+        claims = jwt.decode(payload.reset_token, _reset_key(), algorithms=[settings.algorithm])
+        user_id, otp_id = int(claims["sub"]), int(claims["otp"])
+    except (JWTError, KeyError, TypeError, ValueError):
+        raise HTTPException(status_code=400, detail=EXPIRED_PASS)
+    otp = db.query(PasswordResetOTP).filter(PasswordResetOTP.id == otp_id).first()
+    user = db.query(User).filter(User.id == user_id).first()
+    if not otp or not user or otp.user_id != user.id or otp.used:   # used = already reset, or a newer code was sent
+        raise HTTPException(status_code=400, detail=EXPIRED_PASS)
     user.hashed_password = hash_password(payload.new_password)
     otp.used = True
     db.commit()
