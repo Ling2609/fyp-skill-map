@@ -3648,3 +3648,127 @@
 2026-10-05,live_bb2864fd09818ef3,live,"Mid-Level Full-Stack Developer (React, Node.js)",GCP,keep,hard,preferred,preferred,1.0,,"Familiarity with cloud services (AWS, Azure, GCP)"
 2026-10-05,live_bb2864fd09818ef3,live,"Mid-Level Full-Stack Developer (React, Node.js)",Japanese language,keep,hard,preferred,preferred,1.0,,Basic Japanese language skills (N4 or willing to learn)
 2026-10-05,live_bb2864fd09818ef3,live,"Mid-Level Full-Stack Developer (React, Node.js)",CI/CD pipelines,keep,hard,preferred,preferred,1.0,,Understanding of CI/CD pipelines
+2026-10-06,live_d086cbb30631234b,live,Senior Full Stack Developer (React/Node.js),React,keep,hard,required,,1.0,,Senior Developer (React/Node.js)
+2026-10-06,live_d086cbb30631234b,live,Senior Full Stack Developer (React/Node.js),Node.js,keep,hard,required,,1.0,,Senior Developer (React/Node.js)
+2026-10-06,live_d086cbb30631234b,live,Senior Full Stack Developer (React/Node.js),SAP,keep,hard,unspecified,,1.0,,including SAP
+2026-10-06,live_d086cbb30631234b,live,Senior Full Stack Developer (React/Node.js),.NET,keep,hard,required,,1.0,,deep understanding of backend technologies such as Node.js and .NET combined with strong frontend capabilities using React
+2026-10-06,live_d086cbb30631234b,live,Senior Full Stack Developer (React/Node.js),Collaboration,keep,soft,required,,1.0,,interpersonal skills that foster collaboration among cross-functional teams
+2026-10-06,live_d086cbb30631234b,live,Senior Full Stack Developer (React/Node.js),Business analysis,keep,hard,required,required,1.0,,analyse business requirements critically
+2026-10-06,live_d086cbb30631234b,live,Senior Full Stack Developer (React/Node.js),Modular architecture,keep,hard,required,,1.0,,modular architecture principles ensures maintainable codebases
+2026-10-06,live_d086cbb30631234b,live,Senior Full Stack Developer (React/Node.js),PostgreSQL,keep,hard,required,,1.0,,knowledge of database management (Postgres) supports reliable data operations
+2026-10-06,live_d086cbb30631234b,live,Senior Full Stack Developer (React/Node.js),Git,keep,hard,required,,1.0,,Experience with Git-based version control guarantees smooth project workflows
+2026-10-06,live_d086cbb30631234b,live,Senior Full Stack Developer (React/Node.js),Docker,keep,hard,required,,1.0,,your exposure to Docker containerisation prepares you for modern deployment strategies
+2026-10-06,live_d086cbb30631234b,live,Senior Full Stack Developer (React/Node.js),Analytical skills,keep,soft,required,,1.0,,Strong analytical skills allow you to understand complex business processes
+2026-10-06,live_d086cbb30631234b,live,Senior Full Stack Developer (React/Node.js),Learning agility,keep,soft,required,,1.0,,Ability to learn new domains quickly ensures adaptability
+2026-10-06,live_d086cbb30631234b,live,Senior Full Stack Developer (React/Node.js),Requirements gathering,keep,hard,required,required,1.0,,Experience gathering requirements from stakeholders translates into scalable technical designs
+2026-10-06,live_d086cbb30631234b,live,Senior Full Stack Developer (React/Node.js),Software development lifecycle,keep,hard,required,,1.0,,delivering enterprise web applications across the full software-development lifecycle
+2026-10-06,live_d086cbb30631234b,live,Senior Full Stack Developer (React/Node.js),Independent work,keep,soft,required,,1.0,,Capacity to work independently while managing day-to-day responsibilities
+2026-10-06,live_d086cbb30631234b,live,Senior Full Stack Developer (React/Node.js),Communication,keep,soft,required,,1.0,,Excellent communication skills facilitate clear interactions with technical teams
+2026-10-06,live_95bcb0bf755717a3,live,Junior AI Engineer Generative & Agentic AI,AI agents,keep,hard,unspecified,,1.0,,"supporting the development of practical enterprise AI solutions, including AI agents"
+2026-10-06,live_95bcb0bf755717a3,live,Junior AI Engineer Generative & Agentic AI,multi-agent workflows,keep,hard,unspecified,,1.0,,"including AI agents, multi-agent workflows, Retrieval-Augmented Generation"
+2026-10-06,live_95bcb0bf755717a3,live,Junior AI Engineer Generative & Agentic AI,Retrieval-Augmented Generation,keep,hard,unspecified,,1.0,,Retrieval-Augmented Generation (RAG) solutions
+2026-10-06,live_95bcb0bf755717a3,live,Junior AI Engineer Generative & Agentic AI,APIs,keep,hard,unspecified,,1.0,,APIs and AI-powered applications
+2026-10-06,live_95bcb0bf755717a3,live,Junior AI Engineer Generative & Agentic AI,Python,keep,hard,required,,1.0,,"use technologies such as Python, SQL, LangChain, LangGraph and FastAPI"
+2026-10-06,live_95bcb0bf755717a3,live,Junior AI Engineer Generative & Agentic AI,SQL,keep,hard,required,,1.0,,"use technologies such as Python, SQL, LangChain, LangGraph and FastAPI"
+2026-10-06,live_95bcb0bf755717a3,live,Junior AI Engineer Generative & Agentic AI,LangChain,keep,hard,required,,1.0,,"use technologies such as Python, SQL, LangChain, LangGraph and FastAPI"
+2026-10-06,live_95bcb0bf755717a3,live,Junior AI Engineer Generative & Agentic AI,LangGraph,keep,hard,required,,1.0,,"use technologies such as Python, SQL, LangChain, LangGraph and FastAPI"
+2026-10-06,live_95bcb0bf755717a3,live,Junior AI Engineer Generative & Agentic AI,FastAPI,keep,hard,required,,1.0,,"use technologies such as Python, SQL, LangChain, LangGraph and FastAPI"
+2026-10-06,live_95bcb0bf755717a3,live,Junior AI Engineer Generative & Agentic AI,Programming fundamentals,keep,hard,required,,1.0,,Strong programming fundamentals
+2026-10-06,live_95bcb0bf755717a3,live,Junior AI Engineer Generative & Agentic AI,Generative AI,keep,hard,required,,1.0,,understanding of modern Generative AI concepts
+2026-10-06,live_95bcb0bf755717a3,live,Junior AI Engineer Generative & Agentic AI,Large Language Models,keep,hard,required,,1.0,,including LLMs
+2026-10-06,live_95bcb0bf755717a3,live,Junior AI Engineer Generative & Agentic AI,AI evaluation,keep,hard,unspecified,,1.0,,Support the development of AI evaluation frameworks covering accuracy
+2026-10-06,live_95bcb0bf755717a3,live,Junior AI Engineer Generative & Agentic AI,Azure,keep,hard,unspecified,,1.0,,Support the containerization and deployment of AI applications on Azure
+2026-10-06,live_95bcb0bf755717a3,live,Junior AI Engineer Generative & Agentic AI,Git,keep,hard,required,,1.0,,Familiarity with Git and modern software-development practices
+2026-10-06,live_95bcb0bf755717a3,live,Junior AI Engineer Generative & Agentic AI,testing,keep,hard,unspecified,,1.0,,"including Git/version control, testing and documentation"
+2026-10-06,live_95bcb0bf755717a3,live,Junior AI Engineer Generative & Agentic AI,documentation,keep,hard,unspecified,,1.0,,"including Git/version control, testing and documentation"
+2026-10-06,live_95bcb0bf755717a3,live,Junior AI Engineer Generative & Agentic AI,embeddings,keep,hard,required,,1.0,,including ... embeddings
+2026-10-06,live_95bcb0bf755717a3,live,Junior AI Engineer Generative & Agentic AI,prompt engineering,keep,hard,required,,1.0,,including ... prompt engineering
+2026-10-06,live_95bcb0bf755717a3,live,Junior AI Engineer Generative & Agentic AI,analytical skills,keep,soft,required,,1.0,,Strong analytical and problem-solving skills
+2026-10-06,live_95bcb0bf755717a3,live,Junior AI Engineer Generative & Agentic AI,problem-solving,keep,soft,required,,1.0,,Strong analytical and problem-solving skills
+2026-10-06,live_95bcb0bf755717a3,live,Junior AI Engineer Generative & Agentic AI,communication,keep,soft,required,,1.0,,Good communication and teamwork skills
+2026-10-06,live_95bcb0bf755717a3,live,Junior AI Engineer Generative & Agentic AI,teamwork,keep,soft,required,,1.0,,Good communication and teamwork skills
+2026-10-06,live_3118cbbea4cc286f,live,AI Engineer,Artificial intelligence,keep,hard,unspecified,,1.0,,investing in artificial intelligence to revolutionize internal operations
+2026-10-06,live_3118cbbea4cc286f,live,AI Engineer,Generative AI,keep,hard,required,required,1.0,,"hands-on experience in Data Science, Machine Learning, or production Generative AI initiatives"
+2026-10-06,live_3118cbbea4cc286f,live,AI Engineer,Machine Learning,keep,hard,required,required,1.0,,"hands-on experience in Data Science, Machine Learning, or production Generative AI initiatives"
+2026-10-06,live_3118cbbea4cc286f,live,AI Engineer,Large Language Models,keep,hard,unspecified,,1.0,,architecting end-to-end LLM applications
+2026-10-06,live_3118cbbea4cc286f,live,AI Engineer,RAG,keep,hard,required,required,1.0,,"building RAG knowledge bases, semantic search"
+2026-10-06,live_3118cbbea4cc286f,live,AI Engineer,Semantic search,keep,hard,required,required,1.0,,"building RAG knowledge bases, semantic search (intent similarity detection)"
+2026-10-06,live_3118cbbea4cc286f,live,AI Engineer,Voice AI,keep,hard,required,required,1.0,,"Knowledge or research experience in Voice AI (Speech Recognition, Text-to-Speech, and conversational architecture)"
+2026-10-06,live_3118cbbea4cc286f,live,AI Engineer,RAG platforms,keep,hard,unspecified,,1.0,,build cutting-edge GenAI and RAG platforms
+2026-10-06,live_3118cbbea4cc286f,live,AI Engineer,Intent generation,keep,hard,unspecified,,1.0,,automated intent generation engines
+2026-10-06,live_3118cbbea4cc286f,live,AI Engineer,Semantic similarity,keep,hard,unspecified,,1.0,,semantic similarity pipelines
+2026-10-06,live_3118cbbea4cc286f,live,AI Engineer,Data Science,keep,hard,required,required,1.0,,"hands-on experience in Data Science, Machine Learning, or production Generative AI initiatives"
+2026-10-06,live_3118cbbea4cc286f,live,AI Engineer,Python,keep,hard,required,required,1.0,,Deep proficiency in Python alongside frameworks like LangChain and LangGraph
+2026-10-06,live_3118cbbea4cc286f,live,AI Engineer,LangChain,keep,hard,required,required,1.0,,Deep proficiency in Python alongside frameworks like LangChain and LangGraph
+2026-10-06,live_3118cbbea4cc286f,live,AI Engineer,LangGraph,keep,hard,required,required,1.0,,Deep proficiency in Python alongside frameworks like LangChain and LangGraph
+2026-10-06,live_3118cbbea4cc286f,live,AI Engineer,TensorFlow,keep,hard,required,required,1.0,one of: TensorFlow / PyTorch,Strong practical experience with TensorFlow or PyTorch
+2026-10-06,live_3118cbbea4cc286f,live,AI Engineer,PyTorch,keep,hard,required,required,1.0,one of: TensorFlow / PyTorch,Strong practical experience with TensorFlow or PyTorch
+2026-10-06,live_3118cbbea4cc286f,live,AI Engineer,AWS,keep,hard,required,required,1.0,one of: AWS / Azure / GCP,"cloud infrastructure (AWS, Azure, or GCP)"
+2026-10-06,live_3118cbbea4cc286f,live,AI Engineer,Azure,keep,hard,required,required,1.0,one of: AWS / Azure / GCP,"cloud infrastructure (AWS, Azure, or GCP)"
+2026-10-06,live_3118cbbea4cc286f,live,AI Engineer,GCP,keep,hard,required,required,1.0,one of: AWS / Azure / GCP,"cloud infrastructure (AWS, Azure, or GCP)"
+2026-10-06,live_3118cbbea4cc286f,live,AI Engineer,Docker,keep,hard,required,required,1.0,,containerization and orchestration using Docker and Kubernetes
+2026-10-06,live_3118cbbea4cc286f,live,AI Engineer,Kubernetes,keep,hard,required,required,1.0,,containerization and orchestration using Docker and Kubernetes
+2026-10-06,live_3118cbbea4cc286f,live,AI Engineer,Prompt engineering,keep,hard,required,required,1.0,,prompt/intent generation from PRDs
+2026-10-06,live_3118cbbea4cc286f,live,AI Engineer,Speech Recognition,keep,hard,required,required,1.0,,"Voice AI (Speech Recognition, Text-to-Speech, and conversational architecture)"
+2026-10-06,live_3118cbbea4cc286f,live,AI Engineer,Text-to-Speech,keep,hard,required,required,1.0,,"Voice AI (Speech Recognition, Text-to-Speech, and conversational architecture)"
+2026-10-06,live_3118cbbea4cc286f,live,AI Engineer,Conversational architecture,keep,hard,required,required,1.0,,"Voice AI (Speech Recognition, Text-to-Speech, and conversational architecture)"
+2026-10-06,live_3118cbbea4cc286f,live,AI Engineer,Mandarin,keep,hard,preferred,preferred,1.0,,Mandarin fluency (written and spoken) is strongly preferred
+2026-10-06,live_3118cbbea4cc286f,live,AI Engineer,AI Engineering,keep,hard,unspecified,,1.0,,"AI Engineering, Agentic AI, Python, LangChain, LangGraph"
+2026-10-06,live_3118cbbea4cc286f,live,AI Engineer,Agentic AI,keep,hard,unspecified,,1.0,,"AI Engineering, Agentic AI, Python, LangChain, LangGraph"
+2026-10-06,live_3118cbbea4cc286f,live,AI Engineer,Time management,keep,soft,required,,1.0,,Excellent time management skills and fast learner
+2026-10-06,live_2ea7c3f21a77d6d9,live,"AI/ML, GenAI Intern",Artificial Intelligence,keep,hard,unspecified,,1.0,,"apply Artificial Intelligence, Machine Learning, and Generative AI"
+2026-10-06,live_2ea7c3f21a77d6d9,live,"AI/ML, GenAI Intern",Machine Learning,keep,hard,unspecified,,1.0,,"apply Artificial Intelligence, Machine Learning, and Generative AI"
+2026-10-06,live_2ea7c3f21a77d6d9,live,"AI/ML, GenAI Intern",Generative AI,keep,hard,unspecified,,1.0,,"apply Artificial Intelligence, Machine Learning, and Generative AI"
+2026-10-06,live_2ea7c3f21a77d6d9,live,"AI/ML, GenAI Intern",IoT,keep,hard,unspecified,,1.0,,"including real-time control, IoT, Big Data and Analytics"
+2026-10-06,live_2ea7c3f21a77d6d9,live,"AI/ML, GenAI Intern",Big Data,keep,hard,unspecified,,1.0,,"including real-time control, IoT, Big Data and Analytics"
+2026-10-06,live_2ea7c3f21a77d6d9,live,"AI/ML, GenAI Intern",Analytics,keep,hard,unspecified,,1.0,,"including real-time control, IoT, Big Data and Analytics"
+2026-10-06,live_2ea7c3f21a77d6d9,live,"AI/ML, GenAI Intern",Automation,keep,hard,unspecified,,1.0,,"including real-time control, IoT, Big Data and Analytics, automation"
+2026-10-06,live_2ea7c3f21a77d6d9,live,"AI/ML, GenAI Intern",AI agents,keep,hard,unspecified,,1.0,,"Design, develop, and deploy AI agents capable of reasoning"
+2026-10-06,live_2ea7c3f21a77d6d9,live,"AI/ML, GenAI Intern",Retrieval-Augmented Generation,keep,hard,unspecified,,1.0,,Build Retrieval-Augmented Generation (RAG) applications
+2026-10-06,live_2ea7c3f21a77d6d9,live,"AI/ML, GenAI Intern",Vector databases,keep,hard,unspecified,,1.0,,using ... vector databases
+2026-10-06,live_2ea7c3f21a77d6d9,live,"AI/ML, GenAI Intern",Prompt engineering,keep,hard,unspecified,,1.0,,"Create prompt workflows, prompt templates, and evaluation frameworks for Large Language Models"
+2026-10-06,live_2ea7c3f21a77d6d9,live,"AI/ML, GenAI Intern",Large Language Models,keep,hard,unspecified,,1.0,,evaluation frameworks for Large Language Models (LLMs)
+2026-10-06,live_2ea7c3f21a77d6d9,live,"AI/ML, GenAI Intern",Data collection,keep,hard,unspecified,,1.0,,"Undertake data collection, preprocessing, feature engineering"
+2026-10-06,live_2ea7c3f21a77d6d9,live,"AI/ML, GenAI Intern",Data preprocessing,keep,hard,unspecified,,1.0,,"Undertake data collection, preprocessing, feature engineering"
+2026-10-06,live_2ea7c3f21a77d6d9,live,"AI/ML, GenAI Intern",Feature engineering,keep,hard,unspecified,,1.0,,"Undertake data collection, preprocessing, feature engineering"
+2026-10-06,live_2ea7c3f21a77d6d9,live,"AI/ML, GenAI Intern",Data analysis,keep,hard,unspecified,,1.0,,and analysis of structured and unstructured data
+2026-10-06,live_2ea7c3f21a77d6d9,live,"AI/ML, GenAI Intern",APIs,keep,hard,unspecified,trained,1.0,,"integrate LLMs, APIs, enterprise systems"
+2026-10-06,live_2ea7c3f21a77d6d9,live,"AI/ML, GenAI Intern",Predictive modeling,keep,hard,unspecified,,1.0,,"Build predictive models, intelligent recommendation systems"
+2026-10-06,live_2ea7c3f21a77d6d9,live,"AI/ML, GenAI Intern",Recommendation systems,keep,hard,unspecified,,1.0,,intelligent recommendation systems
+2026-10-06,live_2ea7c3f21a77d6d9,live,"AI/ML, GenAI Intern",Autonomous monitoring,keep,hard,unspecified,,1.0,,autonomous monitoring solutions
+2026-10-06,live_2ea7c3f21a77d6d9,live,"AI/ML, GenAI Intern",Model evaluation,keep,hard,unspecified,,1.0,,"Evaluate GenAI solutions for accuracy, relevance, hallucination risk"
+2026-10-06,live_2ea7c3f21a77d6d9,live,"AI/ML, GenAI Intern",Data visualization,keep,hard,unspecified,,1.0,,using modern data visualization and AI storytelling techniques
+2026-10-06,live_2ea7c3f21a77d6d9,live,"AI/ML, GenAI Intern",AI storytelling,keep,hard,unspecified,,1.0,,using modern data visualization and AI storytelling techniques
+2026-10-06,live_2ea7c3f21a77d6d9,live,"AI/ML, GenAI Intern",AI product development,keep,hard,unspecified,,1.0,,Interested in building AI products rather than only training traditional machine learning models
+2026-10-06,live_2ea7c3f21a77d6d9,live,"AI/ML, GenAI Intern",Analytical thinking,keep,soft,unspecified,,1.0,,Strong analytical and problem-solving mindset
+2026-10-06,live_2ea7c3f21a77d6d9,live,"AI/ML, GenAI Intern",Problem solving,keep,soft,unspecified,,1.0,,Strong analytical and problem-solving mindset
+2026-10-06,live_2ea7c3f21a77d6d9,live,"AI/ML, GenAI Intern",Rapid prototyping,keep,soft,unspecified,,1.0,,comfortable ... rapid prototyping
+2026-10-06,live_2ea7c3f21a77d6d9,live,"AI/ML, GenAI Intern",Communication,keep,soft,unspecified,,1.0,,Able to communicate technical concepts to both technical and non-technical audiences
+2026-10-06,live_2ea7c3f21a77d6d9,live,"AI/ML, GenAI Intern",Responsible AI,keep,hard,unspecified,,1.0,,and Responsible AI
+2026-10-06,live_2ea7c3f21a77d6d9,live,"AI/ML, GenAI Intern",Machine learning algorithms,keep,hard,unspecified,,1.0,,"Knowledge of machine learning algorithms, deep learning"
+2026-10-06,live_2ea7c3f21a77d6d9,live,"AI/ML, GenAI Intern",Deep learning,keep,hard,unspecified,,1.0,,"Knowledge of machine learning algorithms, deep learning"
+2026-10-06,live_2ea7c3f21a77d6d9,live,"AI/ML, GenAI Intern",Python,keep,hard,required,,1.0,,"Experience with Python, SQL, and software development practices"
+2026-10-06,live_2ea7c3f21a77d6d9,live,"AI/ML, GenAI Intern",SQL,keep,hard,required,,1.0,,"Experience with Python, SQL, and software development practices"
+2026-10-06,live_2ea7c3f21a77d6d9,live,"AI/ML, GenAI Intern",Software development,keep,hard,required,,1.0,,software development practices
+2026-10-06,live_2ea7c3f21a77d6d9,live,"AI/ML, GenAI Intern",JSON,keep,hard,unspecified,,1.0,,"Familiarity with APIs, JSON, and modern application architectures"
+2026-10-06,live_2ea7c3f21a77d6d9,live,"AI/ML, GenAI Intern",Application architecture,keep,hard,unspecified,,1.0,,modern application architectures
+2026-10-06,live_2ea7c3f21a77d6d9,live,"AI/ML, GenAI Intern",OpenAI,keep,hard,unspecified,,1.0,GenAI platform,"such as OpenAI, Azure OpenAI, LangChain"
+2026-10-06,live_2ea7c3f21a77d6d9,live,"AI/ML, GenAI Intern",Azure OpenAI,keep,hard,unspecified,,1.0,GenAI platform,"such as OpenAI, Azure OpenAI, LangChain"
+2026-10-06,live_2ea7c3f21a77d6d9,live,"AI/ML, GenAI Intern",LangChain,keep,hard,unspecified,,1.0,GenAI platform,"such as OpenAI, Azure OpenAI, LangChain"
+2026-10-06,live_2ea7c3f21a77d6d9,live,"AI/ML, GenAI Intern",Function calling,keep,hard,unspecified,,1.0,one of: Function calling / Tool calling,function or tool calling
+2026-10-06,live_2ea7c3f21a77d6d9,live,"AI/ML, GenAI Intern",Tool calling,keep,hard,unspecified,,1.0,one of: Function calling / Tool calling,function or tool calling
+2026-10-06,live_2ea7c3f21a77d6d9,live,"AI/ML, GenAI Intern",AI agent design patterns,keep,hard,unspecified,,1.0,,AI agent design patterns
+2026-10-06,live_2ea7c3f21a77d6d9,live,"AI/ML, GenAI Intern",Vector search,keep,hard,unspecified,,1.0,,vector search and embeddings
+2026-10-06,live_2ea7c3f21a77d6d9,live,"AI/ML, GenAI Intern",Embeddings,keep,hard,unspecified,,1.0,,vector search and embeddings
+2026-10-06,live_2ea7c3f21a77d6d9,live,"AI/ML, GenAI Intern",LLM evaluation,keep,hard,unspecified,,1.0,,LLM evaluation techniques
+2026-10-06,live_2ea7c3f21a77d6d9,live,"AI/ML, GenAI Intern",AI assistants,keep,hard,required,,1.0,,"Experience developing AI assistants, chatbots, copilots"
+2026-10-06,live_2ea7c3f21a77d6d9,live,"AI/ML, GenAI Intern",Chatbots,keep,hard,required,,1.0,,"AI assistants, chatbots, copilots"
+2026-10-06,live_2ea7c3f21a77d6d9,live,"AI/ML, GenAI Intern",Copilots,keep,hard,required,,1.0,,"AI assistants, chatbots, copilots"
+2026-10-06,live_2ea7c3f21a77d6d9,live,"AI/ML, GenAI Intern",Workflow automation,keep,hard,required,,1.0,,intelligent workflow automation solutions
+2026-10-06,live_2ea7c3f21a77d6d9,live,"AI/ML, GenAI Intern",Data pipelines,keep,hard,unspecified,,1.0,,"including data pipelines, ETL, and knowledge management"
+2026-10-06,live_2ea7c3f21a77d6d9,live,"AI/ML, GenAI Intern",ETL,keep,hard,unspecified,,1.0,,"including data pipelines, ETL, and knowledge management"
+2026-10-06,live_2ea7c3f21a77d6d9,live,"AI/ML, GenAI Intern",Knowledge management,keep,hard,unspecified,,1.0,,and knowledge management
+2026-10-06,live_2ea7c3f21a77d6d9,live,"AI/ML, GenAI Intern",Fine-tuning,keep,hard,required,,1.0,,"Experience developing, fine-tuning, or deploying GenAI solutions"
+2026-10-06,live_2ea7c3f21a77d6d9,live,"AI/ML, GenAI Intern",GenAI deployment,keep,hard,required,,1.0,,or deploying GenAI solutions
+2026-10-06,live_2ea7c3f21a77d6d9,live,"AI/ML, GenAI Intern",Open-source AI platforms,keep,hard,required,,1.0,one of: Open-source AI platforms / Cloud AI platforms,using open-source or cloud-based AI platforms
+2026-10-06,live_2ea7c3f21a77d6d9,live,"AI/ML, GenAI Intern",Cloud AI platforms,keep,hard,required,,1.0,one of: Open-source AI platforms / Cloud AI platforms,using open-source or cloud-based AI platforms

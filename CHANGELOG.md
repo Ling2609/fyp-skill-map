@@ -3,6 +3,13 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 6 Oct 2026 — Modules tab follows the IR: completed modules only, "Not graded yet"
+
+- (this commit) Checked against the IR: users are final-year students and recent graduates ("the main user group",
+  §3.2.2) and they "confirm completed modules and enter grades" (§1.6.1). Compulsory card subtitle:
+  "9 modules · leave blank if not completed yet". The grade list starts with "Not graded yet" (was a disabled
+  "Select grade"), so a grade picked by mistake can be cleared; ungraded modules are not saved, as before.
+
 ## 5 Oct 2026 — Her review, part 2: inline-label duties, skill-poor ads, nice-to-have chips, formatting
 
 - (this commit) Duty rule reads inline labels: Motorola "Web Development: Assist in developing robust frontend

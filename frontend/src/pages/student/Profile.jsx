@@ -606,7 +606,8 @@ function ModulesTab({ onUnsavedChange, onSaved }) {
     return { ...prev, [code]: '' }
   })
 
-  const setGrade = (code, grade) => setSelections(prev => ({ ...prev, [code]: parseFloat(grade) }))
+  // "Not graded yet" ('') clears a grade picked by mistake; only graded modules are saved (IR §1.6.1: completed modules)
+  const setGrade = (code, grade) => setSelections(prev => ({ ...prev, [code]: grade === '' ? '' : parseFloat(grade) }))
 
   if (loading) return (
     <div className="flex items-center justify-center py-24 gap-3 text-gray-400">
@@ -674,9 +675,9 @@ function ModulesTab({ onUnsavedChange, onSaved }) {
         <div className="lg:col-span-2 bg-white rounded-2xl border border-gray-200 flex flex-col lg:min-h-0 overflow-hidden">
           <div className="shrink-0 px-6 py-4 border-b border-gray-100">
             <p className="text-sm font-semibold text-gray-800">Compulsory Modules</p>
-            {/* Hint next to the grades it explains (her review 5 Oct; DWP / NN/g hint placement, references.md). Grades are
-                entered by the student, completed modules only (option B); no honesty checkbox (Kristal et al. 2020) */}
-            <p className="text-xs text-gray-400 mt-0.5">{compulsory.length} modules · add a grade once you have it</p>
+            {/* Users are final-year students and recent graduates (IR §3.2.2); only completed modules count (IR §1.6.1),
+                so a final-year student leaves current modules blank. No honesty checkbox (Kristal et al. 2020) */}
+            <p className="text-xs text-gray-400 mt-0.5">{compulsory.length} modules · leave blank if not completed yet</p>
           </div>
           {/* key = year: a new year opens at the top of its list, not where the last year was scrolled to */}
           <div key={`c${selectedYear}`} tabIndex={0} aria-label="Compulsory modules"
@@ -695,7 +696,7 @@ function ModulesTab({ onUnsavedChange, onSaved }) {
                   onChange={e => setGrade(mod.code, e.target.value)}
                   className="ml-4 border border-gray-200 rounded-lg px-2 py-1 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 shrink-0"
                 >
-                  <option value="" disabled>Select grade</option>
+                  <option value="">Not graded yet</option>
                   {GRADE_OPTIONS.map(g => <option key={g.value} value={g.value}>{g.label}</option>)}
                 </select>
               </div>
@@ -724,7 +725,7 @@ function ModulesTab({ onUnsavedChange, onSaved }) {
                     {selections[mod.code] !== undefined && (
                       <select value={selections[mod.code] ?? ''} onChange={e => setGrade(mod.code, e.target.value)}
                         className="mt-2 border border-gray-200 rounded-lg px-2 py-1 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full">
-                        <option value="" disabled>Select grade</option>
+                        <option value="">Not graded yet</option>
                         {GRADE_OPTIONS.map(g => <option key={g.value} value={g.value}>{g.label}</option>)}
                       </select>
                     )}
