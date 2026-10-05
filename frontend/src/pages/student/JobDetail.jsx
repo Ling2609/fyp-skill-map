@@ -2,11 +2,10 @@ import { useState, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import api from '../../api'
 
-const GRADE_LABELS = {
-  1.0: 'A', 0.9: 'A-', 0.8: 'B+', 0.7: 'B', 0.6: 'B-', 0.5: 'C+',
-}
+// The grade itself, not its weight: the weight is the same for C+ and C, so a C showed as "C+" (5 Oct)
+const GRADE_LETTERS = { '4.0': 'A', '3.7': 'A-', '3.3': 'B+', '3.0': 'B', '2.7': 'B-', '2.3': 'C+', '2.0': 'C' }
 
-const gradeLabel = (weight) => GRADE_LABELS[weight] || ''
+const gradeLabel = (grade) => (grade == null ? '' : GRADE_LETTERS[Number(grade).toFixed(1)] || '')
 
 // "today", "3 days ago", "2 weeks ago"
 const postedAgo = (iso) => {
@@ -101,7 +100,7 @@ export default function JobDetail() {
         acc[key] = {
           // Module names like "Project in Software Engineering" read like a project, so say what it is
           label: m.evidence_source === 'module' && key !== 'Other' ? `Module: ${key}` : key,
-          grade: m.evidence_source === 'module' ? gradeLabel(m.grade_weight) : '',
+          grade: m.evidence_source === 'module' ? gradeLabel(m.grade) : '',
           items: [],
         }
       }

@@ -3,6 +3,18 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 5 Oct 2026 — Real module grade on Job Detail; transcript hint on the Modules tab
+
+- (this commit) Job Detail "Show where these come from" showed the grade from its weight, and C+ and C share a
+  weight, so a C showed as "C+". `/skillgap/` now returns the grade itself (`grade`) and the page maps it to a letter.
+- Modules tab: one grey line "Add a module once you have its grade. Use the grade on your transcript." Decided
+  5 Oct: users are final-year students and graduates; grades are entered by the student, completed modules only
+  (option B: in-progress modules are not evidence yet, precision first). No honesty checkbox: the study behind
+  signing a pledge first was retracted and a large replication found no effect (Kristal et al. 2020); self-reported
+  grades are mostly accurate, r ≈ .85 (Sticca et al. 2017); and a grade only sets the evidence strength, never a
+  match.
+- Tested: endpoint returns the grade (3.7 → "A-"), letter mapping for every grade option, lint, production build.
+
 ## 5 Oct 2026 — Job Matches card chips show what the job asks for
 
 - (this commit) The skill chips on each Job Matches card were the job's first skills in stored order, so a card could

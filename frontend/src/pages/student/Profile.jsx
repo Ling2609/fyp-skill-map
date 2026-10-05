@@ -634,6 +634,11 @@ function ModulesTab({ onUnsavedChange, onSaved }) {
               Year {year}
             </button>
           ))}
+          {/* Grades are entered by the student (5 Oct, option B): only completed modules, from the transcript. No
+              pledge or checkbox: honesty pledges showed no effect (Kristal et al. 2020); references.md */}
+          <p className="hidden md:block self-center ml-2 text-xs text-gray-400">
+            Add a module once you have its grade. Use the grade on your transcript.
+          </p>
         </div>
 
         {/* Right side: status text + always-visible Save Grades button */}

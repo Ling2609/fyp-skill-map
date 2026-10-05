@@ -35,6 +35,7 @@ def analyse_skill_gap(
     graduate_skills = {ev.name: ev.weight for ev in profile.values()}       # skill_name -> weight
     skill_module_map = {ev.name: ev.source_name for ev in profile.values()} # skill_name -> where it came from
     skill_source_type = {ev.name: ev.source for ev in profile.values()}     # "module" / "project" / "cert"
+    skill_grade = {ev.name: ev.grade for ev in profile.values()}            # the module grade itself (B4)
 
     # Get job
     job = db.query(Job).filter(Job.job_id == payload.job_id).first()
@@ -76,6 +77,7 @@ def analyse_skill_gap(
             "matched_via_module": skill_module_map.get(best_match, ""),
             "similarity": round(float(best_scores[j_idx]), 3),
             "grade_weight": graduate_skills.get(best_match, 0),
+            "grade": skill_grade.get(best_match),              # e.g. 3.7; shown as "A-" (weights merge C+ and C)
             "evidence_source": skill_source_type.get(best_match, "module"),  # module / project / cert
             "evidence": "direct",
         }
