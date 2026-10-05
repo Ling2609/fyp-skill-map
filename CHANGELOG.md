@@ -3,6 +3,29 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 5 Oct 2026 — Tidy rules for job skills (found in the first bulk run)
+
+- (this commit) New `app/services/job_skill_tidy.py`, run by `job_skill_store.check_job_skills()` (so the bulk run
+  and the live-job fetcher both use it). Four rules, all from the quote, level and ad text, no Groq:
+  1. a hard skill whose quote does not name it is rejected (Harumio "Redis" quoting the tag line);
+  2. "required" from a duty becomes "unspecified" (under "Responsibilities" / "What you'll do", or an unheaded task
+     sentence, unless it has requirement words);
+  3. skills listed as options in one quote ("A, B or C", "e.g. A, B", "such as A, B") become one either-or group;
+     "and" lists and partly extracted lists are left alone;
+  4. one skill named with and without describing words at the end ("CI/CD" + "CI/CD pipelines") is merged under
+     the plain name, keeping the strongest mention.
+  Options dropped because another required skill already meets the choice (F25) are now printed, never silent.
+- New `scripts/pipeline/tidy_saved_job_skills.py`: the same rules over jobs already saved (dry run, `--save`,
+  `--undo`); running it twice changes nothing.
+- `extract_job_skills_v2.py`: shows each tidy change on the job's lines and a tidy total; the summary now divides
+  by the ads actually processed (it divided by all 214 when the run stopped at the daily limit).
+- `evidence.locate()` factored out of `cue_level()` (same behaviour).
+- Tested on 52 real ads with full text (1,537 skills): 4 rejected, 89 duty levels changed, 33 skills grouped,
+  11 names merged; every change read by hand. An independent review found 5 bugs (e.g. "What you'll do" headings
+  not recognised, siblings merged through a shared base, "Java" accepted for "JavaScript"); all fixed, 46
+  test cases pass, second pass changes nothing on all 61 job runs; bulk script and backfill run end to end on a
+  test database with a stand-in model.
+
 ## 5 Oct 2026 — F25: strongest level per skill; live-job fetcher on the evidence extractor
 
 - (this commit) F25: the evidence extractor kept only the first mention of each skill, so a skill named in the

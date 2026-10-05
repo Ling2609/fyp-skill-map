@@ -155,7 +155,8 @@ def main():
         from app.nlp.skill_extractor import SkillExtractor
         extractor = SkillExtractor()
         out = OUT.format(version=JOB_EVIDENCE_VERSION.split(":")[-1])
-        totals = {"mentions": 0, "rejected_mentions": 0, "kept": 0, "rejected": 0, "conflict": 0, "old": 0, "grouped": 0, "units": 0, "pass2": 0, "saved": 0, "kept_old": 0}
+        totals = {"mentions": 0, "rejected_mentions": 0, "kept": 0, "rejected": 0, "conflict": 0, "old": 0, "grouped": 0, "units": 0, "pass2": 0, "saved": 0, "kept_old": 0,
+                  "unnamed": 0, "duty": 0, "tidy_grouped": 0, "merged": 0, "covered": 0, "ads": 0}
         new_file = not os.path.exists(out)
         with open(out, "a", newline="", encoding="utf-8-sig") as f:
             w = csv.writer(f)
@@ -180,19 +181,29 @@ def main():
                         break
                     raise
                 checked = check_job_skills(items, text)      # one entry per skill, strongest level (F25)
+                totals["ads"] += 1                            # extractions done (the run may stop at the daily limit)
                 kept, rejected = checked.kept, checked.rejected
                 totals["mentions"] += checked.mentions
                 totals["rejected_mentions"] += checked.rejected_mentions
+                for t in ("unnamed", "duty"):
+                    totals[t] += checked.tidy.get(t, 0)
+                totals["tidy_grouped"] += checked.tidy.get("grouped", 0)
+                totals["merged"] += len(checked.tidy.get("merged", []))
+                totals["covered"] += len(checked.tidy.get("covered", []))
+                for name, group in checked.tidy.get("covered", []):
+                    print(f"  DROPPED {name}: only an option in [{group}], which another required skill already meets")
                 done, n_sent = getattr(extractor, "last_coverage", (0, 0))
                 calls = getattr(extractor, "last_calls", [])
                 print(f"  sentences answered: {done}/{n_sent}" + ("" if done == n_sent else "  <- some skipped twice")
                       + f"; calls: {', '.join(f'{f}/{t}' for f, t in calls) or '-'} (finish reason / output tokens)")
                 for k in kept:
-                    flag = f"  <- cue says {k['level_cue']}" if k["level_conflict"] else ""
+                    flag = f"  <- cue says {k['level_cue']}" if k.get("level_conflict") else ""
                     if k.get("pass") == 2:
                         flag += "  (2nd pass)"
                     if k["alternative_group"]:
                         flag += f"  [either: {k['alternative_group']}]"
+                    if k.get("tidy"):
+                        flag += f"  ({k['tidy']})"
                     print(f"  KEEP   {k['skill'][:30]:<30} {k['type']:<5} {k['level']:<11}{flag}")
                     print(f"         \"{k['evidence_quote'][:90]}\"")
                 for rj in rejected:
@@ -207,7 +218,7 @@ def main():
                 print(f"  new extraction only: {', '.join(v for k, v in new_keys.items() if k not in old_keys) or '-'}")
                 totals["kept"] += len(kept)
                 totals["rejected"] += len(rejected)
-                totals["conflict"] += sum(k["level_conflict"] for k in kept)
+                totals["conflict"] += sum(bool(k.get("level_conflict")) for k in kept)
                 totals["pass2"] += sum(1 for k in kept if k.get("pass") == 2)
                 totals["old"] += len(old) if r == 0 else 0
                 groups = {k["alternative_group"].lower() for k in kept if k["alternative_group"]}
@@ -242,13 +253,17 @@ def main():
                 print(f"    all hard skills:                {stability(runs.get(job.id, []))}")
                 print(f"    required + unspecified (the %): {stability(core_runs.get(job.id, []))}")
         n = totals["kept"] + totals["rejected"]
-        print(f"\n{len(jobs)} ads: {totals['mentions']} mentions returned ({totals['rejected_mentions']} with a quote not in the ad); "
+        done_ads = max(totals["ads"], 1)
+        print(f"\n{totals['ads']} ads: {totals['mentions']} mentions returned ({totals['rejected_mentions']} unsupported: quote not in the ad, or not naming the skill); "
               f"one per skill: {n} skills, {totals['kept']} kept, {totals['rejected']} rejected "
-              f"({round(100 * totals['rejected'] / max(n, 1))}%), {round(totals['kept'] / (len(jobs) * args.repeat), 1)} kept per ad, "
-              f"{round(totals['units'] / (len(jobs) * args.repeat), 1)} hard-skill requirements per ad (either-or group = 1; "
+              f"({round(100 * totals['rejected'] / max(n, 1))}%), {round(totals['kept'] / done_ads, 1)} kept per ad, "
+              f"{round(totals['units'] / done_ads, 1)} hard skills per ad, any level (either-or group = 1; "
               f"{totals['grouped']} skills in groups), {totals['pass2']} kept skills found only by the 2nd pass, "
               f"level cue disagrees on {totals['conflict']}; "
               f"old extraction had {totals['old']} skills. Details in {out}")
+        print(f"Tidy rules (app/services/job_skill_tidy.py): {totals['unnamed']} quotes not naming their skill rejected, "
+              f"{totals['duty']} duties changed from required to unspecified, {totals['tidy_grouped']} listed options grouped, "
+              f"{totals['merged']} names merged into the same skill, {totals['covered']} options dropped (choice already met)")
         if args.save:
             print(f"Saved: {totals['saved']} jobs; kept old skills: {totals['kept_old']}. Restart uvicorn to see them.")
     finally:

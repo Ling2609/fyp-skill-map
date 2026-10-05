@@ -105,14 +105,20 @@ def _segments(ad_text: str, include_headings: bool = False) -> list[tuple[str, s
     return out
 
 
-def cue_level(ad_text: str, quote: str) -> str | None:
-    """Level suggested by cue words in the quote's sentence and its heading, or None when there is no cue."""
+def locate(ad_text: str, quote: str) -> tuple[str, str] | None:
+    """(section heading, sentence) the quote comes from, or None when no sentence holds it."""
     quote = max(quote_parts(quote), key=len)        # the longest part of a "..." quote locates the sentence
     best = max(((check_quote(quote, sentence)[1], heading, sentence) for heading, sentence in _segments(ad_text)),
                default=(0, "", ""))
-    if best[0] < QUOTE_MATCH:
+    return (best[1], best[2]) if best[0] >= QUOTE_MATCH else None
+
+
+def cue_level(ad_text: str, quote: str) -> str | None:
+    """Level suggested by cue words in the quote's sentence and its heading, or None when there is no cue."""
+    where = locate(ad_text, quote)
+    if where is None:
         return None
-    window = normalise_text(best[1] + " " + best[2])
+    window = normalise_text(where[0] + " " + where[1])
     for level, pattern in (("trained", _TRAINED), ("preferred", _PREFERRED), ("required", _REQUIRED)):
         if pattern.search(window):
             return level
