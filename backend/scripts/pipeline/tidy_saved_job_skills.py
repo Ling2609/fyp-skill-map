@@ -79,7 +79,8 @@ def main():
         full = full_text_live()
         print(f"Jobs saved with {JOB_EVIDENCE_VERSION}: {len(jobs)}; full ad text from the live cache: "
               f"{'yes' if full else 'NO (using the stored first 6,000 characters)'}")
-        totals = {"jobs": 0, "changed": 0, "unnamed": 0, "duty": 0, "grouped": 0, "merged": 0, "covered": 0, "skills": 0}
+        totals = {"jobs": 0, "changed": 0, "unnamed": 0, "duty": 0, "cue": 0, "grouped": 0, "merged": 0, "covered": 0,
+                  "skills": 0}
         for job in jobs:
             ad = full.get(job.job_id) or job.description or ""
             rows = db.query(JobSkill).filter(JobSkill.job_id == job.id).order_by(JobSkill.id).all()
@@ -88,7 +89,7 @@ def main():
             lines = describe(before, after, unnamed, changes)
             totals["jobs"] += 1
             totals["skills"] += len(before)
-            for k in ("unnamed", "duty", "grouped"):
+            for k in ("unnamed", "duty", "cue", "grouped"):
                 totals[k] += changes[k]
             totals["merged"] += len(changes["merged"])
             totals["covered"] += len(changes["covered"])
@@ -109,6 +110,7 @@ def main():
                 print(f"  SAVED {len(after)} skills (was {len(before)})")
         print(f"\n{totals['jobs']} jobs, {totals['skills']} skills checked; {totals['changed']} jobs change: "
               f"{totals['unnamed']} quotes not naming their skill, {totals['duty']} duties required -> unspecified, "
+              f"{totals['cue']} levels taken from the heading, "
               f"{totals['grouped']} listed options grouped, {totals['merged']} names merged, "
               f"{totals['covered']} options dropped (choice already asked for on its own).")
         if not args.save and totals["changed"]:

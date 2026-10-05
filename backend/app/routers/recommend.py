@@ -7,14 +7,16 @@ from app.models.job import Job, JobSkill
 from app.nlp.embedder import get_embedder
 from app.routers.auth import get_current_user
 from app.models.user import User
-from app.services.job_titles import SENIORITY_RANK, classify_seniority
+from app.services.job_titles import SENIORITY_RANK, job_level
 from app.services.job_search import TITLE, names_company_or_place, search_match, title_boost
 from app.services.skill_names import canonical_key
 from app.services.job_requirements import BONUS_WEIGHT, job_skill_items, score_job, unit_name
 from app.services.skill_profile import (
     EMPTY_PROFILE_MESSAGE, build_skill_profile, count_modules, matched_mask, normalise_rows, profile_spellings,
 )
+import math
 import threading
+from datetime import datetime, timezone
 from collections import Counter
 
 import numpy as np
@@ -41,6 +43,29 @@ def card_skills(items, sc: dict, search_skill: str = "", n: int = 5) -> list[str
         if name not in out:
             out.append(name)
     return out[:n]
+
+
+MAX_AGE_DAYS = 45       # live jobs posted longer ago are not recommended (F8): most postings stay up ~30 days
+                         # (Indeed) and may stay up after the role is filled; 45 gives a margin. references.md
+WILSON_Z = 1.96          # 95%: ranking uses the lower bound of the coverage, not the raw % (Evan Miller)
+
+
+def coverage_confidence(matched: int, total: int) -> float:
+    """Lower bound of the Wilson score interval for matched / total (Evan Miller, "How Not To Sort By Average
+    Rating"). 1 of 1 = 0.21, 5 of 5 = 0.57, 9 of 10 = 0.60: a job that asks for one skill no longer ranks above
+    one where you have 9 of 10 (5 Oct: Meta, 1 of 1 required, was first). Ranking only; the card shows "1/1"."""
+    if total <= 0:
+        return 0.0
+    p, z = matched / total, WILSON_Z
+    return (p + z * z / (2 * total) - z * math.sqrt((p * (1 - p) + z * z / (4 * total)) / total)) / (1 + z * z / total)
+
+
+def age_days(listing_date) -> int | None:
+    if not listing_date:
+        return None
+    if listing_date.tzinfo is None:
+        listing_date = listing_date.replace(tzinfo=timezone.utc)
+    return (datetime.now(timezone.utc) - listing_date).days
 
 
 def seniority_penalty(level: str) -> float:
@@ -113,7 +138,8 @@ def _sync_job_cache():
                 "salary": job.salary,
                 "source": job.source,
                 "country": job.country,
-                "level": classify_seniority(job.job_title),
+                "level": job_level(job.job_title, job.description or ""),   # title, else years asked for
+                "listing_date": job.listing_date,
                 "skills": skill_names,
                 "items": items_by_job[job.id],
                 "skill_keys": [it.key for it in items_by_job[job.id]],
@@ -169,6 +195,7 @@ def recommend_jobs(
     # top_n (external audit, 3 Oct). Tier 0 / "" for everyone without a typed query.
     eligible = [(job_id, cached) for job_id, cached in list(_job_cache.items())
                 if (payload.include_past or cached.get("source") == "live")
+                and not (cached.get("source") == "live" and (age_days(cached.get("listing_date")) or 0) > MAX_AGE_DAYS)
                 and (not category or cached.get("subcategory") == category)]
     search = {job_id: search_match(query, cached["job_title"], cached["company"], cached["location"],
                                    cached["skills"], cached["skill_keys"], query_key) if query else (0, "")
@@ -227,7 +254,8 @@ def recommend_jobs(
         # bonus for nice-to-have skills, minus the level penalty. Used for ORDER only. What the student SEES
         # is skill coverage (X of N required), the same number Job Detail shows, plus the job's level as a tag.
         level = cached["level"]
-        hybrid = max(0.0, 0.5 * sbert_score + 0.5 * (coverage / 100) + BONUS_WEIGHT * sc["bonus_ratio"]
+        confidence = coverage_confidence(matched, total)
+        hybrid = max(0.0, 0.5 * sbert_score + 0.5 * confidence + BONUS_WEIGHT * sc["bonus_ratio"]
                      - seniority_penalty(level))
         hybrid_percent = round(hybrid * 100, 1)
         # Typed search: how well title / company / location match the query (3 = phrase ... 0 = none,
@@ -247,6 +275,8 @@ def recommend_jobs(
             "search_match": search_tier,           # typed search only: jobs matching the query come first
             "search_skill": search_skill,          # the job skill the query matched (shown first on the card)
             "coverage_percent": coverage,          # shown to the student
+            "coverage_confidence": round(confidence, 3),   # ranking only ("Most skills matched" sorts by it)
+            "posted_days_ago": age_days(cached.get("listing_date")),
             "level": level,                        # junior / unspecified / senior / lead / manager
             "skills_matched": matched,
             "skills_total": total,
@@ -285,7 +315,8 @@ def recommend_jobs(
         "skills_to_learn": [{"skill": names[k], "jobs": n, "of_top": min(TO_LEARN_FROM_TOP, len(results))}
                             for k, n in to_learn.most_common(5)],
         "total_jobs_compared": sum(
-            1 for c in list(_job_cache.values()) if payload.include_past or c.get("source") == "live"
+            1 for c in list(_job_cache.values()) if (payload.include_past or c.get("source") == "live")
+            and not (c.get("source") == "live" and (age_days(c.get("listing_date")) or 0) > MAX_AGE_DAYS)
         ),
     }
 

@@ -3,6 +3,30 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 5 Oct 2026 — Her review of two re-extracted jobs: display, ranking, job age, level from years
+
+- (this commit) Checked Meta "Software Engineer, Machine Learning" and Hytech "Software QA Engineer" against the
+  original ads: the saved skills were right (Meta's "Minimum Qualifications" name one skill, the rest are under
+  "Preferred Qualifications"; Hytech's Python / Java are under "Additional Good to Have"). The Job Description tab
+  merged those sections into "Requirements", because the formatting prompt allowed only four headings. It now has
+  "## Nice to have" and must keep preferred items there. Clear the cached text once:
+  `UPDATE jobs SET formatted_description = NULL WHERE source = 'live';`
+- Tidy rule 2b (`cue_levels`): an "unspecified" skill under a "Good to Have" / "Preferred" / "What you'll learn"
+  heading takes that level. Heading only: on the saved jobs the sentence cue was wrong on mixed sentences
+  ("Comfortable with writing database queries ... with an added advantage of ..."); the heading version changed
+  6 skills on 83 jobs, all correct.
+- Ranking: Best fit and "Most skills matched" use the lower bound of the Wilson score interval of the coverage
+  (Evan Miller, "How Not To Sort By Average Rating"), so 1 of 1 (0.21) no longer ranks above 9 of 10 (0.60). The
+  card still shows "1/1 skills". Of 83 saved jobs, 7 require only 1–3 skills.
+- Job level: when the title names no level, "N+ years ... experience" in the ad decides (5 or more = Senior, from
+  LinkedIn's Mid-Senior "5-10+ years"). On 807 live ICT titles: 47 of 464 unstated titles become Senior; 15
+  spot-checked, all right. Meta (8+ years) is now Senior and ranked lower.
+- Job age (F8): live jobs posted more than 45 days ago are not recommended (most postings stay up about 30 days,
+  Indeed); cards show "12 days ago"; Job Detail says "Posted over a month ago · it may have closed" after 30 days.
+- Modules tab hint moved next to the grades: Compulsory card subtitle "10 modules · add a grade once you have it".
+- Tested: test database (60-day job hidden, 8+ years → Senior, confidence and age returned), 46 earlier test cases,
+  every heading-cue change on 83 saved jobs read by hand, lint, production build.
+
 ## 5 Oct 2026 — Real module grade on Job Detail; transcript hint on the Modules tab
 
 - (this commit) Job Detail "Show where these come from" showed the grade from its weight, and C+ and C share a

@@ -8,6 +8,8 @@ const GRADE_LETTERS = { '4.0': 'A', '3.7': 'A-', '3.3': 'B+', '3.0': 'B', '2.7':
 const gradeLabel = (grade) => (grade == null ? '' : GRADE_LETTERS[Number(grade).toFixed(1)] || '')
 
 // "today", "3 days ago", "2 weeks ago"
+const daysSince = (iso) => (iso ? Math.floor((Date.now() - new Date(iso).getTime()) / 86400000) : 0)
+
 const postedAgo = (iso) => {
   if (!iso) return ''
   const days = Math.floor((Date.now() - new Date(iso).getTime()) / 86400000)
@@ -149,6 +151,7 @@ export default function JobDetail() {
               </p>
             </div>
             {gap?.job?.source === 'live' && gap.job.source_url && (
+              <div className="shrink-0 flex flex-col items-end gap-1">
               <a
                 href={gap.job.source_url}
                 target="_blank"
@@ -157,6 +160,11 @@ export default function JobDetail() {
               >
                 Apply on {gap.job.publisher || 'employer site'} ↗
               </a>
+              {/* F8: most postings close within about a month (references.md); SkillMap can't check without credits */}
+              {daysSince(gap.job.listing_date) > 30 && (
+                <p className="text-xs text-amber-600">Posted over a month ago · it may have closed</p>
+              )}
+              </div>
             )}
           </div>
 

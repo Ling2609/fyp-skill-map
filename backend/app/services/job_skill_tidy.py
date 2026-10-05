@@ -36,7 +36,7 @@ All four work from the quote, level and ad text alone, so they also run over job
 """
 import re
 
-from app.services.evidence import LEVEL_RANK, locate, normalise_text
+from app.services.evidence import _PREFERRED, _TRAINED, LEVEL_RANK, locate, normalise_text
 from app.services.skill_names import FILLER, GENERIC, _singular
 
 STOP = {"and", "or", "of", "the", "in", "for", "with", "to", "a", "an", "on", "&"}
@@ -206,6 +206,38 @@ def duty_levels(items: list[dict], ad_text: str) -> int:
             it["level"] = "unspecified"
             it["level_conflict"] = bool(it.get("level_cue") and it["level_cue"] != "unspecified")
             it["tidy"] = "required -> unspecified (a duty)"
+            changed += 1
+    return changed
+
+
+def heading_level(ad_text: str, quote: str) -> str | None:
+    """"preferred" / "trained" when the section heading above the quote says so ("Good to Have", "Preferred
+    Qualifications", "What you'll learn"), else None. The heading only, not the sentence: a sentence can mix both
+    ("Comfortable with writing database queries ... with an added advantage of ... AWS storage solutions")."""
+    where = locate(ad_text, quote)
+    heading = normalise_text(where[0]) if where else ""
+    if not heading:
+        return None
+    if _TRAINED.search(heading):
+        return "trained"
+    if _PREFERRED.search(heading) or re.search(r"\b(good to have|nice to have|plus|bonus|advantage)", heading):
+        return "preferred"
+    return None
+
+
+def cue_levels(items: list[dict], ad_text: str) -> int:
+    """Rule 2b (5 Oct): "unspecified" means the LLM found no clue; when the section heading says nice to have or
+    "you will learn", use that. Hytech: "Python and/or Java" under "Additional Good to Have" was saved as a duty.
+    Heading only (sentence cues were wrong on mixed sentences: 6 of 28 on the saved jobs); never for "required"."""
+    changed = 0
+    for it in items:
+        if it.get("level") != "unspecified":
+            continue
+        level = heading_level(ad_text, it.get("evidence_quote", ""))
+        if level:
+            it["level"] = level
+            it["level_conflict"] = False
+            it["tidy"] = f"unspecified -> {level} (the heading says so)"
             changed += 1
     return changed
 

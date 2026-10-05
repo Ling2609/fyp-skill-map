@@ -30,6 +30,30 @@ def classify_seniority(title: str) -> str:
     return "unspecified"
 
 
+# "8+ years of programming experience", "Minimum 2 years of experience", "3-5 yrs relevant experience"
+_YEARS = re.compile(r"(\d{1,2})\s*\+?\s*(?:(?:-|–|to)\s*\d{1,2}\s*)?(?:years?|yrs?)\b(?:\W+\w+){0,5}?\W+experience",
+                    re.I)
+SENIOR_YEARS = 5     # LinkedIn's "Mid-Senior level" is 5-10+ years (references.md "Years of experience")
+
+
+def years_required(description: str) -> int | None:
+    """The first "N years ... experience" in the ad (the main requirement; later ones are often alternatives,
+    e.g. Meta "8+ years ... OR 4+ years with a PhD"). None when the ad names no years."""
+    m = _YEARS.search(description or "")
+    return int(m.group(1)) if m else None
+
+
+def job_level(title: str, description: str = "") -> str:
+    """Level from the title; when the title doesn't say, from the years of experience the ad asks for (5 Oct:
+    Meta "Software Engineer, Machine Learning" asks 8+ years but its title names no level, so it ranked first)."""
+    level = classify_seniority(title)
+    if level == "unspecified":
+        years = years_required(description)
+        if years is not None and years >= SENIOR_YEARS:
+            return "senior"
+    return level
+
+
 # A job is kept only if its title names an ICT role. Broad queries ("IT intern", "fresh graduate IT")
 # also return electrical, finance or HR jobs; they'd be stored under the query's ICT subcategory
 # and cost Groq tokens. Plain "engineer" isn't enough on its own ("Electrical Engineer"),

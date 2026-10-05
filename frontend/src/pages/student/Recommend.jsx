@@ -54,6 +54,15 @@ function NoSkillsState() {
   )
 }
 
+// "12 days ago" on each card (F8, 5 Oct): most postings close within about a month, so the age helps decide
+const daysAgo = (days) => {
+  if (days == null || days < 0) return ''
+  if (days === 0) return 'today'
+  if (days === 1) return 'yesterday'
+  if (days < 14) return `${days} days ago`
+  return `${Math.floor(days / 7)} weeks ago`
+}
+
 export default function Recommend() {
   const navigate = useNavigate()
 
@@ -205,7 +214,10 @@ export default function Recommend() {
   // the chosen sort only orders jobs within each group. Without a typed search every value is 0: nothing changes.
   const titleOf = (job) => job.search_match ?? 0
   const sortedJobs = sortBy === 'skills'
-    ? [...placeJobs].sort((a, b) => titleOf(b) - titleOf(a) || coverageOf(b) - coverageOf(a) || b.match_score - a.match_score)
+    // by how sure the coverage is (Wilson lower bound from the backend), so 1 of 1 doesn't beat 9 of 10 (5 Oct)
+    ? [...placeJobs].sort((a, b) => titleOf(b) - titleOf(a)
+        || (b.coverage_confidence ?? 0) - (a.coverage_confidence ?? 0) || coverageOf(b) - coverageOf(a)
+        || b.match_score - a.match_score)
     : placeJobs
   const visibleJobs = sortedJobs.slice(0, visibleCount)
   const hasMore = results && visibleCount < sortedJobs.length
@@ -392,7 +404,9 @@ export default function Recommend() {
                           <span className="text-xs text-slate-300 font-medium tabular-nums shrink-0 w-4">{idx + 1}</span>
                           <div className="min-w-0">
                             <p className="font-semibold text-slate-800 text-sm truncate group-hover:text-blue-700 transition leading-snug">{job.job_title}</p>
-                            <p className="text-xs text-slate-400 mt-0.5 truncate">{job.company} · {job.location}</p>
+                            <p className="text-xs text-slate-400 mt-0.5 truncate">
+                              {job.company} · {job.location}{daysAgo(job.posted_days_ago) && ` · ${daysAgo(job.posted_days_ago)}`}
+                            </p>
                           </div>
                         </div>
                         {/* Match % pill */}

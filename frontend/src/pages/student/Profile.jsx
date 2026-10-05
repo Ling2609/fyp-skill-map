@@ -634,11 +634,6 @@ function ModulesTab({ onUnsavedChange, onSaved }) {
               Year {year}
             </button>
           ))}
-          {/* Grades are entered by the student (5 Oct, option B): only completed modules, from the transcript. No
-              pledge or checkbox: honesty pledges showed no effect (Kristal et al. 2020); references.md */}
-          <p className="hidden md:block self-center ml-2 text-xs text-gray-400">
-            Add a module once you have its grade. Use the grade on your transcript.
-          </p>
         </div>
 
         {/* Right side: status text + always-visible Save Grades button */}
@@ -679,7 +674,9 @@ function ModulesTab({ onUnsavedChange, onSaved }) {
         <div className="lg:col-span-2 bg-white rounded-2xl border border-gray-200 flex flex-col lg:min-h-0 overflow-hidden">
           <div className="shrink-0 px-6 py-4 border-b border-gray-100">
             <p className="text-sm font-semibold text-gray-800">Compulsory Modules</p>
-            <p className="text-xs text-gray-400 mt-0.5">{compulsory.length} modules · all required</p>
+            {/* Hint next to the grades it explains (her review 5 Oct; DWP / NN/g hint placement, references.md). Grades are
+                entered by the student, completed modules only (option B); no honesty checkbox (Kristal et al. 2020) */}
+            <p className="text-xs text-gray-400 mt-0.5">{compulsory.length} modules · add a grade once you have it</p>
           </div>
           {/* key = year: a new year opens at the top of its list, not where the last year was scrolled to */}
           <div key={`c${selectedYear}`} tabIndex={0} aria-label="Compulsory modules"

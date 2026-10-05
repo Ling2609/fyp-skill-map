@@ -14,8 +14,8 @@ from dataclasses import dataclass, field
 
 from app.models.job import JobSkill
 from app.services.evidence import merge_mentions, verify_skills
-from app.services.job_skill_tidy import (choice_groups, drop_unnamed, duty_levels, merge_descriptor_names,
-                                           names_skill)
+from app.services.job_skill_tidy import (choice_groups, cue_levels, drop_unnamed, duty_levels,
+                                           merge_descriptor_names, names_skill)
 from app.services.skill_names import canonical_key
 
 MIN_HARD = 3      # fewer hard skills = the extraction failed or the ad says almost nothing: don't save
@@ -42,7 +42,8 @@ def tidy_skills(items: list[dict], ad_text: str) -> tuple[list[dict], list[dict]
     """Tidy rules 1-4 on checked mentions (or on a job's saved rows): (kept, rejected, what changed)."""
     items = [dict(it) for it in items]
     items, unnamed = drop_unnamed(items)
-    changes = {"unnamed": len(unnamed), "duty": duty_levels(items, ad_text), "grouped": choice_groups(items)}
+    changes = {"unnamed": len(unnamed), "duty": duty_levels(items, ad_text), "cue": cue_levels(items, ad_text),
+               "grouped": choice_groups(items)}
     one_each = merge_mentions(items, key=skill_key)
     # merge_mentions drops a group when one member is also asked for on its own ("Java" + "e.g. Python, Java, C#"
     # = Java). The other members were only alternatives, so they go too: reported here, never silent.

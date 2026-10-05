@@ -216,10 +216,15 @@ RULES:
 3. Keep ALL the original information and meaning — nothing important should be lost
 4. Organise into sections with ## headers:
    - ## Responsibilities
-   - ## Requirements  
+   - ## Requirements
+   - ## Nice to have
    - ## Benefits
    - ## Work Conditions
-   Only include sections that exist in the original.
+   Only include sections that exist in the original. Keep what the advert requires apart from what it only
+   prefers: items under headings such as "Preferred Qualifications", "Good to Have", "Bonus", "Advantage", or
+   items the advert calls "a plus" or "an advantage", go under ## Nice to have, never under ## Requirements.
+   (5 Oct: Meta's "Preferred Qualifications" were merged into Requirements, so the page and SkillMap's skill
+   gap looked as if they disagreed.)
 5. Each bullet is one clear, complete sentence
 6. Remove company promotional text and duplicate points
 7. Do NOT add dashes or bullet characters before items — just write the text

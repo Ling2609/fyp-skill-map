@@ -156,7 +156,7 @@ def main():
         extractor = SkillExtractor()
         out = OUT.format(version=JOB_EVIDENCE_VERSION.split(":")[-1])
         totals = {"mentions": 0, "rejected_mentions": 0, "kept": 0, "rejected": 0, "conflict": 0, "old": 0, "grouped": 0, "units": 0, "pass2": 0, "saved": 0, "kept_old": 0,
-                  "unnamed": 0, "duty": 0, "tidy_grouped": 0, "merged": 0, "covered": 0, "ads": 0}
+                  "unnamed": 0, "duty": 0, "cue": 0, "tidy_grouped": 0, "merged": 0, "covered": 0, "ads": 0}
         new_file = not os.path.exists(out)
         with open(out, "a", newline="", encoding="utf-8-sig") as f:
             w = csv.writer(f)
@@ -185,7 +185,7 @@ def main():
                 kept, rejected = checked.kept, checked.rejected
                 totals["mentions"] += checked.mentions
                 totals["rejected_mentions"] += checked.rejected_mentions
-                for t in ("unnamed", "duty"):
+                for t in ("unnamed", "duty", "cue"):
                     totals[t] += checked.tidy.get(t, 0)
                 totals["tidy_grouped"] += checked.tidy.get("grouped", 0)
                 totals["merged"] += len(checked.tidy.get("merged", []))
@@ -262,7 +262,8 @@ def main():
               f"level cue disagrees on {totals['conflict']}; "
               f"old extraction had {totals['old']} skills. Details in {out}")
         print(f"Tidy rules (app/services/job_skill_tidy.py): {totals['unnamed']} quotes not naming their skill rejected, "
-              f"{totals['duty']} duties changed from required to unspecified, {totals['tidy_grouped']} listed options grouped, "
+              f"{totals['duty']} duties changed from required to unspecified, {totals['cue']} levels taken from the heading, "
+              f"{totals['tidy_grouped']} listed options grouped, "
               f"{totals['merged']} names merged into the same skill, {totals['covered']} options dropped (choice already asked for on its own)")
         if args.save:
             print(f"Saved: {totals['saved']} jobs; kept old skills: {totals['kept_old']}. Restart uvicorn to see them.")
