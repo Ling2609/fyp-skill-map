@@ -3,6 +3,17 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 5 Oct 2026 — Job Matches card chips show what the job asks for
+
+- (this commit) The skill chips on each Job Matches card were the job's first skills in stored order, so a card could
+  show a duty ("Printers") or a soft skill. Now: the searched skill first (as before), then the skills the % counts
+  (required, or the fallback basis), then nice-to-have, then other hard skills; never soft skills
+  (`recommend.card_skills()`). Jobs extracted before Stage 1 have no levels and keep their stored order.
+- Cards stay general on purpose (no have / missing marks): a list entry gives just enough to decide whether to
+  click (NN/g, list entries and information scent), and LinkedIn also keeps "How you match" on the job page; the
+  explanation is on Job Detail.
+- Tested on a test database: a duty stored first moves to the end; Job Matches responds as before.
+
 ## 5 Oct 2026 — A duty mention no longer drops a nice-to-have group
 
 - (this commit) `evidence.merge_mentions()` rule 1: a skill named only in the duties ("unspecified") no longer

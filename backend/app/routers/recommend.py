@@ -28,6 +28,21 @@ UNSTATED_LEVEL_STEPS = 0.5   # a title that states no level is about as likely e
                               # Indeed Hiring Lab 2026: 46% entry / 40% mid / 14% senior, and senior roles say so)
 
 
+def card_skills(items, sc: dict, search_skill: str = "", n: int = 5) -> list[str]:
+    """Skill chips on a Job Matches card (5 Oct). A list entry should help predict what the job is about
+    (NN/g, "The Anatomy of a List Entry"; "Information Scent"), so: the searched skill, then the skills the
+    % counts (required, or the fallback basis), then nice-to-have, then other hard skills; never soft skills.
+    Which ones the student has is explained on Job Detail, not on the card (as LinkedIn's "How you match")."""
+    order = [items[i].name for u in sc["core_units"] for i in u] + \
+            [items[i].name for u in sc["bonus_units"] for i in u] + \
+            [it.name for it in items if it.tier not in ("soft",)]
+    out = [search_skill] if search_skill else []
+    for name in order:
+        if name not in out:
+            out.append(name)
+    return out[:n]
+
+
 def seniority_penalty(level: str) -> float:
     """Graduates are entry level, so each level above that costs PENALTY_PER_STEP; an unstated level half a step."""
     steps = UNSTATED_LEVEL_STEPS if level == "unspecified" else SENIORITY_RANK.get(level, 1)
@@ -202,7 +217,6 @@ def recommend_jobs(
         cached = _job_cache.get(job_id)
         if cached is None:   # removed by a cache update from another request meanwhile
             continue
-        job_skills = cached["skills"]
         items = cached["items"]
         has = matched_mask(grad_embeddings, cached["skill_vecs"], spelling_keys, owner, cached["skill_keys"])
         # Stage 3A: coverage = required skills held (either-or group = 1); preferred = small ranking bonus
@@ -239,9 +253,9 @@ def recommend_jobs(
             "coverage_basis": sc["basis"],                 # "required", or "preferred" when nothing is required
             "bonus_matched": sum(sc["bonus_met"]),
             "bonus_total": len(sc["bonus_units"]),
-            # the searched skill first, so the card shows why the job matched (Hearst 2009: query-biased results)
-            "top_job_skills": ([search_skill] + [s for s in job_skills if s != search_skill])[:5] if search_skill
-                              else job_skills[:5],
+            # the searched skill first, so the card shows why the job matched (Hearst 2009: query-biased results);
+            # then what the job asks for, not the stored order (which could start with a duty or a soft skill)
+            "top_job_skills": card_skills(items, sc, search_skill),
             # Missing required skills (an either-or group is one, named "C# or Python")
             "_to_learn": [("|".join(sorted(items[i].key for i in u)), unit_name(items, u))
                           for u, ok in zip(sc["core_units"], sc["core_met"]) if not ok],

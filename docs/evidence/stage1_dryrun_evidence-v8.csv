@@ -2954,3 +2954,49 @@
 2026-10-05,live_15798f1a2e97d6bd,live,"Software Engineer(React, Node.js, and PostgreSQL)",Contact management,keep,hard,preferred,preferred,1.0,one of: CRM / Contact management / Customer data platforms,"Background in CRM, contact management, or customer data platforms is a plus"
 2026-10-05,live_15798f1a2e97d6bd,live,"Software Engineer(React, Node.js, and PostgreSQL)",Customer data platforms,keep,hard,preferred,preferred,1.0,one of: CRM / Contact management / Customer data platforms,"Background in CRM, contact management, or customer data platforms is a plus"
 2026-10-05,live_15798f1a2e97d6bd,live,"Software Engineer(React, Node.js, and PostgreSQL)",Kotlin,keep,hard,preferred,preferred,1.0,,Experience with Kotlin is a plus (to support legacy codebases)
+2026-10-05,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,SECS/GEM,keep,hard,required,,1.0,,practical SECS/GEM experience
+2026-10-05,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,MES,keep,hard,unspecified,,1.0,,"MES, EAP and other manufacturing applications"
+2026-10-05,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,EAP,keep,hard,unspecified,,1.0,,"MES, EAP and other manufacturing applications"
+2026-10-05,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,APIs,keep,hard,unspecified,,1.0,,"real-time equipment communication, system integration, APIs"
+2026-10-05,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,system integration,keep,hard,required,required,1.0,,"Comfortable working with asynchronous communication, networking and system integration"
+2026-10-05,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,real-time communication,keep,hard,unspecified,,1.0,,"real-time equipment communication, system integration, APIs"
+2026-10-05,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,C#,keep,hard,required,required,1.0,,Strong C# / .NET development skills
+2026-10-05,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,.NET,keep,hard,required,required,1.0,,Strong C# / .NET development skills
+2026-10-05,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,REST,keep,hard,required,required,1.0,,Experience developing and consuming REST / Web APIs
+2026-10-05,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,Web APIs,keep,hard,required,required,1.0,,Experience developing and consuming REST / Web APIs
+2026-10-05,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,Claude Code,keep,hard,required,required,1.0,AI coding tool,"Claude Code, Codex, or similar development assistants"
+2026-10-05,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,Codex,keep,hard,required,required,1.0,AI coding tool,"Claude Code, Codex, or similar development assistants"
+2026-10-05,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,object-oriented design,keep,hard,required,required,1.0,,Good understanding of object-oriented design and software architecture
+2026-10-05,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,software architecture,keep,hard,required,required,1.0,,Good understanding of object-oriented design and software architecture
+2026-10-05,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,debugging,keep,hard,required,required,1.0,,Strong debugging and problem-solving skills
+2026-10-05,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,problem-solving,keep,soft,required,required,1.0,,Strong debugging and problem-solving skills
+2026-10-05,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,asynchronous communication,keep,hard,required,required,1.0,,"Comfortable working with asynchronous communication, networking and system integration"
+2026-10-05,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,networking,keep,hard,required,required,1.0,,"Comfortable working with asynchronous communication, networking and system integration"
+2026-10-05,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,communication protocols,keep,hard,unspecified,,1.0,,Develop SECS/GEM equipment interfaces and communication protocols
+2026-10-05,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,databases,keep,hard,unspecified,,1.0,,"Connect semiconductor equipment with MES, EAP, databases"
+2026-10-05,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,backend services,keep,hard,unspecified,,1.0,,Develop backend services and Web APIs using C#/.NET
+2026-10-05,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,SDKs,keep,hard,unspecified,,1.0,,"Build reusable SDKs, libraries and communication components"
+2026-10-05,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,libraries,keep,hard,unspecified,,1.0,,"Build reusable SDKs, libraries and communication components"
+2026-10-05,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,simulators,keep,hard,unspecified,,1.0,,"Develop simulators, diagnostic tools and engineering utilities"
+2026-10-05,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,diagnostic tools,keep,hard,unspecified,,1.0,,"Develop simulators, diagnostic tools and engineering utilities"
+2026-10-05,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,engineering utilities,keep,hard,unspecified,,1.0,,"Develop simulators, diagnostic tools and engineering utilities"
+2026-10-05,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,communication,keep,soft,unspecified,,1.0,,Work directly with customers and engineers to understand equipment behaviour
+2026-10-05,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,GEM300,keep,hard,preferred,preferred,1.0,,GEM300
+2026-10-05,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,semiconductor equipment,keep,hard,preferred,preferred,1.0,one of: semiconductor equipment / factory automation,Semiconductor equipment or factory automation
+2026-10-05,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,factory automation,keep,hard,preferred,preferred,1.0,one of: semiconductor equipment / factory automation,Semiconductor equipment or factory automation
+2026-10-05,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,WPF,keep,hard,preferred,preferred,1.0,,WPF / MVVM
+2026-10-05,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,MVVM,keep,hard,preferred,preferred,1.0,,WPF / MVVM
+2026-10-05,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,OPC UA,keep,hard,preferred,preferred,1.0,,OPC UA
+2026-10-05,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,PLC communication,keep,hard,preferred,preferred,1.0,,PLC communication
+2026-10-05,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,TCP/IP,keep,hard,preferred,preferred,1.0,protocol,"TCP/IP, WebSockets or gRPC"
+2026-10-05,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,WebSockets,keep,hard,preferred,preferred,1.0,protocol,"TCP/IP, WebSockets or gRPC"
+2026-10-05,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,gRPC,keep,hard,preferred,preferred,1.0,protocol,"TCP/IP, WebSockets or gRPC"
+2026-10-05,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,SCADA,keep,hard,preferred,preferred,1.0,one of: MES / EAP / SCADA / SPC / RMS,"MES, EAP, SCADA, SPC or RMS systems"
+2026-10-05,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,SPC,keep,hard,preferred,preferred,1.0,one of: MES / EAP / SCADA / SPC / RMS,"MES, EAP, SCADA, SPC or RMS systems"
+2026-10-05,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,RMS,keep,hard,preferred,preferred,1.0,one of: MES / EAP / SCADA / SPC / RMS,"MES, EAP, SCADA, SPC or RMS systems"
+2026-10-05,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,Mitsubishi PLC,keep,hard,preferred,preferred,1.0,one of: Mitsubishi PLC / Omron PLC / Siemens PLC / Beckhoff PLC,"Mitsubishi, Omron, Siemens or Beckhoff PLCs"
+2026-10-05,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,Omron PLC,keep,hard,preferred,preferred,1.0,one of: Mitsubishi PLC / Omron PLC / Siemens PLC / Beckhoff PLC,"Mitsubishi, Omron, Siemens or Beckhoff PLCs"
+2026-10-05,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,Siemens PLC,keep,hard,preferred,preferred,1.0,one of: Mitsubishi PLC / Omron PLC / Siemens PLC / Beckhoff PLC,"Mitsubishi, Omron, Siemens or Beckhoff PLCs"
+2026-10-05,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,Beckhoff PLC,keep,hard,preferred,preferred,1.0,one of: Mitsubishi PLC / Omron PLC / Siemens PLC / Beckhoff PLC,"Mitsubishi, Omron, Siemens or Beckhoff PLCs"
+2026-10-05,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,coding,keep,hard,unspecified,,1.0,,"enjoys coding, understands SECS/GEM, and likes solving equipment connectivity problems"
+2026-10-05,live_0ad866c395cdd80e,live,Software Engineer – SECS/GEM & Factory Automation,equipment connectivity,keep,hard,unspecified,,1.0,,"enjoys coding, understands SECS/GEM, and likes solving equipment connectivity problems"
