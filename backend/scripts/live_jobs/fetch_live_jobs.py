@@ -3,7 +3,13 @@ Live Job Fetcher (JSearch API)
 ==============================
 Fetches current ICT job postings (mainly Malaysia, some Singapore) from the
 JSearch API, keeps only good-quality ones, stores them in the jobs table and
-extracts their skills with the same Groq extractor used for the 2024 dataset.
+extracts their skills with the Stage 1 evidence extractor (gpt-oss-120b via Groq):
+each skill comes with a quote from the ad (checked), a type (hard / soft), a level
+(required / preferred / trained / unspecified) and either-or groups, exactly as
+scripts/pipeline/extract_job_skills_v2.py saves them (app/services/job_skill_store.py).
+A job is saved only with at least 3 checked hard skills. The free Groq tier (200k tokens/day)
+covered about 45 ads a day in the 1 Oct dry runs; at Groq's daily limit the run stops cleanly
+and --use-cache carries on the next day.
 
 Quality rules (see references.md → Data Limitations):
   1. Trusted publishers only (allowlist) → no spam/scam job sites
@@ -44,14 +50,15 @@ from app.config import settings
 from app.database import SessionLocal
 from app.models.job import Job, JobSkill
 from app.services.job_keys import job_key
+from app.services.job_skill_store import MIN_HARD, check_job_skills, job_skill_rows
 from app.services.job_titles import is_ict_title
-from app.nlp.skill_extractor import SkillExtractor
+from app.nlp.skill_extractor import JOB_EVIDENCE_VERSION, SkillExtractor
 
 API_URL = "https://jsearch.p.rapidapi.com/search-v2"
 API_HOST = "jsearch.p.rapidapi.com"
 
 MIN_DESCRIPTION_CHARS = 800
-MIN_SKILLS = 3                     # fewer than this = extraction failed or incomplete → redo / drop
+MIN_SKILLS = 3                     # a saved job with fewer skill rows = left half-done by an old run → redo
 PAGES = {"my": 2, "sg": 1}        # pages per query (10 jobs per page, 1 credit per page)
 CACHE_FILE = "data/live_jobs_cache.json"
 
@@ -190,7 +197,9 @@ def run(dry_run: bool, use_cache: bool, new_only: bool):
 
     extractor = None if dry_run else SkillExtractor()
     db = SessionLocal()
-    stats = {"fetched": 0, "not_ict": 0, "untrusted": 0, "short": 0, "duplicate": 0, "saved": 0, "no_skills": 0}
+    stats = {"fetched": 0, "not_ict": 0, "untrusted": 0, "short": 0, "duplicate": 0, "saved": 0, "no_skills": 0,
+             "rejected": 0}
+    groq_limit = False
     seen = set()           # job_ref already handled this run
     seen_titles = set()    # job_key (title, company, location): the same posting can come back with different ids
     # Live jobs already in the database, by job_key → job_ref. A posting fetched again on a
@@ -201,6 +210,8 @@ def run(dry_run: bool, use_cache: bool, new_only: bool):
 
     try:
         for query, country, subcategory in queries:
+            if groq_limit:
+                break
             print(f"\n=== {query} ({country.upper()}) ===")
             if use_cache or (new_only and query in cache):
                 results = cache.get(query, [])
@@ -262,6 +273,23 @@ def run(dry_run: bool, use_cache: bool, new_only: bool):
                     stats["saved"] += 1
                     continue
 
+                # Skills first, then the job: an interrupted run never leaves a job without skills
+                try:
+                    mentions = extractor.extract_job_skills_with_evidence(title, desc)
+                except Exception as e:
+                    if "tokens per day" in str(e).lower() or "tpd" in str(e).lower():
+                        print("\nGroq daily limit reached: stopping. Run the same command with --use-cache "
+                              "tomorrow (0 credits); saved jobs are skipped.")
+                        groq_limit = True
+                        break
+                    raise
+                checked = check_job_skills(mentions, desc)
+                stats["rejected"] += len(checked.rejected)
+                if checked.hard < MIN_HARD:
+                    print(f"    only {checked.hard} checked hard skills, not saved (will retry next run)")
+                    stats["no_skills"] += 1
+                    continue
+
                 db_job = Job(
                     job_id=job_ref,
                     job_title=title,
@@ -278,22 +306,14 @@ def run(dry_run: bool, use_cache: bool, new_only: bool):
                     country=country.upper(),
                 )
                 db.add(db_job)
-                db.commit()
-                db.refresh(db_job)
-
-                skills = extractor.extract_from_job({"job_title": title, "descriptions": desc})["extracted_skills"]
-                if len(skills) < MIN_SKILLS:
-                    print(f"    only {len(skills)} skills extracted, removing job (will retry next run)")
-                    db.delete(db_job)
-                    db.commit()
-                    stats["no_skills"] += 1
-                    continue
-                for name in dict.fromkeys(skills):   # same skill twice in one job counts once
-                    db.add(JobSkill(job_id=db_job.id, job_ref=job_ref, skill_name=name))
-                db.commit()
+                db.flush()                                    # gives db_job.id
+                db.add_all(job_skill_rows(db_job, checked.kept, JOB_EVIDENCE_VERSION))
+                db.commit()                                   # job and skills together
                 saved_keys[title_key] = job_ref
                 stats["saved"] += 1
-                print(f"    {len(skills)} skills: {skills[:5]}")
+                required = [k["skill"] for k in checked.kept if k.get("type") == "hard" and k.get("level") == "required"]
+                print(f"    {len(checked.kept)} skills ({checked.hard} hard, {len(required)} required"
+                      f"{f', {len(checked.rejected)} unsupported dropped' if checked.rejected else ''}): {required[:5]}")
                 time.sleep(2)  # Groq rate limit
     finally:
         db.close()
@@ -311,7 +331,10 @@ def run(dry_run: bool, use_cache: bool, new_only: bool):
     print(f"  Dropped, short description:{stats['short']:>4}")
     print(f"  Dropped, duplicate:        {stats['duplicate']}")
     if not dry_run:
-        print(f"  Dropped, no skills found:  {stats['no_skills']}")
+        print(f"  Dropped, < {MIN_HARD} hard skills:  {stats['no_skills']}")
+        print(f"  Unsupported skills dropped:{stats['rejected']:>4}  (quote not in the ad)")
+        if groq_limit:
+            print("  Stopped early: Groq daily limit")
     print(f"  {'Would save' if dry_run else 'Saved'}:                {stats['saved']}")
     print(f"  API credits used:          {credits}")
 

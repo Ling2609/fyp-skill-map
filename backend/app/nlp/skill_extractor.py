@@ -351,8 +351,8 @@ class SkillExtractor:
 
     def extract_job_skills_with_evidence(self, title: str, description: str, retries: int = 3,
                                          glean: bool = True) -> list[dict]:
-        """Skills with evidence quotes, type, level and alternative_group (unchecked: run
-        app.services.evidence.verify_skills next). The ad goes in as numbered sentences with their section
+        """Skill mentions with evidence quotes, type, level and alternative_group, unchecked and not yet one
+        per skill: run app.services.job_skill_store.check_job_skills next. The ad goes in as numbered sentences with their section
         headings; the model must answer for every sentence. glean: re-ask once for any sentence numbers the
         answer skipped (each item records "pass": 1 or 2 and its "sentence_id")."""
         from app.services.evidence import _segments
@@ -374,14 +374,10 @@ class SkillExtractor:
                 items += [{**sk, "pass": 2, "sentence_id": sid} for sid, sks in got.items() if sid in batch for sk in sks]
                 answered |= set(got) & set(batch)
         self.last_coverage = (len(answered), len(ids))     # sentences answered / sentences in the ad
-        # one entry per skill name (the same skill can appear in several sentences); first mention wins
-        seen, out = set(), []
-        for it in items:
-            k = it["skill"].strip().lower()
-            if k not in seen:
-                seen.add(k)
-                out.append(it)
-        return out
+        # Every mention is returned (the same skill can appear in several sentences, e.g. duties AND
+        # requirements). One entry per skill is chosen only after the quote and group checks
+        # (app.services.job_skill_store.check_job_skills), so the strongest level wins (F25).
+        return items
 
     def _ask_sentences(self, title: str, numbered: list[str], retries: int) -> dict[int, list[dict]]:
         """One schema-checked call for a batch of numbered sentences -> {sentence id: skills}. Empty on failure.

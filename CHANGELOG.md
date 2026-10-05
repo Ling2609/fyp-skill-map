@@ -3,6 +3,26 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 5 Oct 2026 — F25: strongest level per skill; live-job fetcher on the evidence extractor
+
+- (this commit) F25: the evidence extractor kept only the first mention of each skill, so a skill named in the
+  duties before the requirements was saved as "unspecified" instead of "required", an either-or group could lose a
+  member (the rest became separate requirements = false gaps), and a skill whose first quote failed the check was
+  lost even if a later mention was real. Now every mention is quote-checked on its own, groups are checked with all
+  mentions present (a group = label + quote), and `evidence.merge_mentions()` keeps one entry per skill: strongest
+  level, a group dropped when one of its skills is also asked for on its own. Groups that share a skill are NOT
+  joined ("any of Python, Java, C#" would count a Java-only student as meeting both = false "has it"); the shared
+  skill stays in its first group, so a false gap is the accepted error (precision first).
+- `scripts/tools/count_shared_groups.py` (read-only, no Groq): upper bound on how many ads offer one skill in two
+  either-or choices, to report that limitation with a number.
+- New `app/services/job_skill_store.py`: check + merge + save, shared by `fetch_live_jobs.py` and
+  `extract_job_skills_v2.py`, so both save identical skills.
+- `fetch_live_jobs.py` uses the evidence extractor (quotes, type, level, either-or groups; `extracted_by` =
+  the prompt version, so `--all-live` skips these jobs), extracts before writing the job, saves job + skills in one
+  commit, needs ≥ 3 checked hard skills, and stops cleanly at Groq's daily limit (`--use-cache` resumes).
+- Tested without Groq (stand-in model): 8 merge cases (case 5: Java-only student no longer counted as meeting both choices) × 20 shuffled orders; fetcher on a test database (limit hit
+  on day 1, resume on day 2, no job without skills); bulk script dry run, `--save`, resume, `--undo`.
+
 ## 2 Oct 2026 — Training set v2: candidates and label merge (labelling in progress)
 
 - (this commit) `build_pairs_skillmap.py`: 1,200 candidate pairs from 2,348 SkillMap job skills (close 650, word-overlap

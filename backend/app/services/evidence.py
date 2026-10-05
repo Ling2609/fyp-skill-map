@@ -126,21 +126,82 @@ _CHOICE = re.compile(r"\b(or|such as|e\.g\.?|eg|similar|equivalent|either|any of
 
 
 def check_groups(kept: list[dict]) -> int:
-    """Validate alternative_group labels in place; returns how many labels were dropped."""
-    groups: dict[str, list[dict]] = {}
+    """Validate alternative_group labels in place; returns how many labels were dropped.
+    A group = one label + one quote: every mention of the ad arrives here (F25), so the LLM may reuse a
+    label ("BI tool") for choices in two different sentences; those stay two groups, with their own labels."""
+    groups: dict[tuple[str, str], list[dict]] = {}
     for item in kept:
         label = (item.get("alternative_group") or "").strip()
         item["alternative_group"] = label
         if label:
-            groups.setdefault(label.lower(), []).append(item)
-    dropped = 0
-    for members in groups.values():
-        quotes = {normalise_text(m.get("evidence_quote", "")) for m in members}
-        if len(members) < 2 or len(quotes) != 1 or not _CHOICE.search(next(iter(quotes))):
+            groups.setdefault((label.lower(), normalise_text(item.get("evidence_quote", ""))), []).append(item)
+    dropped, used = 0, {}
+    for (label, quote), members in groups.items():
+        names = {m["skill"].strip().lower() for m in members}
+        if len(names) < 2 or not _CHOICE.search(quote):
             for m in members:
                 m["alternative_group"] = ""
             dropped += len(members)
+            continue
+        used[label] = used.get(label, 0) + 1
+        if used[label] > 1:                       # same label, different sentence: a separate group
+            for m in members:
+                m["alternative_group"] = f"{m['alternative_group']} ({used[label]})"
     return dropped
+
+
+# Strongest first. Required beats unspecified (a skill named in the duties AND the requirements is required).
+LEVEL_RANK = {"required": 0, "unspecified": 1, "preferred": 2, "trained": 3}
+
+
+def merge_mentions(kept: list[dict], key=None) -> list[dict]:
+    """One entry per skill from every checked mention (F25). key(name) -> skill identity (A8 canonical key).
+
+    1. A group is dropped when one of its skills is also asked for on its own at the same or a stronger level:
+       "Python" + "Python or Java" means Python. Skills that were ONLY an alternative there (Java) go too,
+       unless they have another mention, so they never become a requirement of their own (a false gap).
+    2. Each skill keeps its strongest mention; at the same level a stand-alone mention beats a grouped one.
+       A skill in two groups ("Python or Java" ... "Python or C#") stays in the first only: a row holds one
+       group label. The other group loses it, so a Python-only student may get a false gap on "C#".
+       Groups are never joined: "any of Python, Java, C#" would count a Java-only student as meeting both
+       (a false "has it"); precision first, so the false gap is the accepted error (rare: count_shared_groups.py).
+    3. A group left with one skill loses its label (the skill counts on its own, the stricter reading)."""
+    key = key or (lambda name: name.strip().lower())
+
+    def k(it):
+        return key(it["skill"]) or it["skill"].strip().lower()
+
+    def rank(it):
+        return LEVEL_RANK.get(it.get("level"), 1)
+
+    items = [{**it, "alternative_group": (it.get("alternative_group") or "").strip()} for it in kept]
+
+    # 1. redundant groups
+    alone = {}                                      # skill -> strongest stand-alone rank
+    for it in items:
+        if not it["alternative_group"]:
+            alone[k(it)] = min(alone.get(k(it), 99), rank(it))
+    redundant = {it["alternative_group"].lower() for it in items
+                 if it["alternative_group"] and alone.get(k(it), 99) <= rank(it)}
+    items = [it for it in items if it["alternative_group"].lower() not in redundant]
+
+    # 2. strongest mention per skill (stable: earlier mention wins a full tie)
+    best: dict[str, dict] = {}
+    for it in items:
+        cur = best.get(k(it))
+        if cur is None or (rank(it), bool(it["alternative_group"])) < (rank(cur), bool(cur["alternative_group"])):
+            best[k(it)] = it
+    out = list(best.values())
+
+    # 3. one-skill groups count on their own
+    sizes: dict[str, int] = {}
+    for it in out:
+        if it["alternative_group"]:
+            sizes[it["alternative_group"].lower()] = sizes.get(it["alternative_group"].lower(), 0) + 1
+    for it in out:
+        if it["alternative_group"] and sizes[it["alternative_group"].lower()] < 2:
+            it["alternative_group"] = ""
+    return out
 
 
 def verify_skills(items: list[dict], ad_text: str) -> tuple[list[dict], list[dict]]:

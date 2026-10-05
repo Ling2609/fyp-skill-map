@@ -11,7 +11,8 @@ re-read skills of jobs it already holds).
 
 For each ad it prints every skill the LLM returned: KEEP (quote found in the ad) or REJECT (quote not
 there = unsupported), with type (hard/soft), level (required/preferred/trained/unspecified) and whether
-the cue words around the quote agree with that level. Then: skills only the old extraction had, and only
+the cue words around the quote agree with that level. A skill named in several sentences is listed once, with
+its strongest level (F25, app/services/job_skill_store.py); REJECT = no mention of it is in the ad. Then: skills only the old extraction had, and only
 the new one has. Results are appended to ../docs/evidence/stage1_dryrun_<prompt version>.csv.
 
 Descriptions are stored cut (2024 ads at 2,000 characters, live ads at 6,000), so the full text is read
@@ -42,15 +43,13 @@ from sqlalchemy import text as sql
 
 from app.database import SessionLocal
 from app.models.job import Job, JobSkill
-from app.services.evidence import verify_skills
+from app.services.job_skill_store import MIN_HARD, check_job_skills, replace_job_skills
 from app.services.skill_names import canonical_key
 
 OUT = "../docs/evidence/stage1_dryrun_{version}.csv"     # one file per prompt version
 CSV_2024 = "data/jobstreet_clean.csv"
 LIVE_CACHE = "data/live_jobs_cache.json"
 BACKUP = "job_skills_pre_stage1"
-MIN_HARD = 3
-LEVEL_RANK = {"required": 0, "unspecified": 1, "preferred": 2, "trained": 3}   # strongest first
 
 
 def save_skills(db, job, kept: list[dict], version: str) -> int:
@@ -58,17 +57,9 @@ def save_skills(db, job, kept: list[dict], version: str) -> int:
     db.execute(sql(f"CREATE TABLE IF NOT EXISTS {BACKUP} AS TABLE job_skills WITH NO DATA"))
     db.execute(sql(f"INSERT INTO {BACKUP} SELECT * FROM job_skills WHERE job_id = :j "
                    f"AND NOT EXISTS (SELECT 1 FROM {BACKUP} WHERE job_id = :j)"), {"j": job.id})
-    # One row per skill (A8 canonical key); if a skill appears twice, keep its strongest level
-    best = {}
-    for k in sorted(kept, key=lambda k: LEVEL_RANK.get(k.get("level"), 1)):
-        best.setdefault(canonical_key(k["skill"]) or k["skill"].lower(), k)
-    db.query(JobSkill).filter(JobSkill.job_id == job.id).delete()
-    for k in best.values():
-        db.add(JobSkill(job_id=job.id, job_ref=job.job_id, skill_name=k["skill"].strip(), extracted_by=version,
-                        evidence_quote=k.get("evidence_quote"), level=k.get("level"), skill_type=k.get("type"),
-                        match_score=k.get("match_score"), alternative_group=k.get("alternative_group") or None))
+    n = replace_job_skills(db, job, kept, version)     # kept is already one per skill (strongest level, F25)
     db.commit()
-    return len(best)
+    return n
 
 
 def undo(db):
@@ -164,7 +155,7 @@ def main():
         from app.nlp.skill_extractor import SkillExtractor
         extractor = SkillExtractor()
         out = OUT.format(version=JOB_EVIDENCE_VERSION.split(":")[-1])
-        totals = {"kept": 0, "rejected": 0, "conflict": 0, "old": 0, "grouped": 0, "units": 0, "pass2": 0, "saved": 0, "kept_old": 0}
+        totals = {"mentions": 0, "rejected_mentions": 0, "kept": 0, "rejected": 0, "conflict": 0, "old": 0, "grouped": 0, "units": 0, "pass2": 0, "saved": 0, "kept_old": 0}
         new_file = not os.path.exists(out)
         with open(out, "a", newline="", encoding="utf-8-sig") as f:
             w = csv.writer(f)
@@ -188,7 +179,10 @@ def main():
                               f"command again tomorrow, it carries on where it stopped.")
                         break
                     raise
-                kept, rejected = verify_skills(items, text)
+                checked = check_job_skills(items, text)      # one entry per skill, strongest level (F25)
+                kept, rejected = checked.kept, checked.rejected
+                totals["mentions"] += checked.mentions
+                totals["rejected_mentions"] += checked.rejected_mentions
                 done, n_sent = getattr(extractor, "last_coverage", (0, 0))
                 calls = getattr(extractor, "last_calls", [])
                 print(f"  sentences answered: {done}/{n_sent}" + ("" if done == n_sent else "  <- some skipped twice")
@@ -223,7 +217,7 @@ def main():
                 if groups:
                     print(f"  either-or groups: {', '.join(sorted(groups))}")
                 if args.save:
-                    hard = sum(1 for k in kept if k["type"] == "hard")
+                    hard = checked.hard
                     if hard < MIN_HARD:
                         totals["kept_old"] += 1
                         print(f"  NOT SAVED: only {hard} hard skills; old skills kept")
@@ -248,7 +242,8 @@ def main():
                 print(f"    all hard skills:                {stability(runs.get(job.id, []))}")
                 print(f"    required + unspecified (the %): {stability(core_runs.get(job.id, []))}")
         n = totals["kept"] + totals["rejected"]
-        print(f"\n{len(jobs)} ads: {n} skills returned, {totals['kept']} kept, {totals['rejected']} rejected "
+        print(f"\n{len(jobs)} ads: {totals['mentions']} mentions returned ({totals['rejected_mentions']} with a quote not in the ad); "
+              f"one per skill: {n} skills, {totals['kept']} kept, {totals['rejected']} rejected "
               f"({round(100 * totals['rejected'] / max(n, 1))}%), {round(totals['kept'] / (len(jobs) * args.repeat), 1)} kept per ad, "
               f"{round(totals['units'] / (len(jobs) * args.repeat), 1)} hard-skill requirements per ad (either-or group = 1; "
               f"{totals['grouped']} skills in groups), {totals['pass2']} kept skills found only by the 2nd pass, "
