@@ -266,11 +266,20 @@ export default function JobDetail() {
                 <ul className="divide-y divide-gray-50">
                   {gapRows.map((item, idx) => {
                     return (
-                      <li key={idx} className="flex items-center gap-3 px-5 py-2.5">
-                        <span className="w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0 bg-red-100 text-red-600">
+                      <li key={idx} className="flex items-start gap-3 px-5 py-2.5">
+                        <span className="w-5 h-5 mt-0.5 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0 bg-red-100 text-red-600">
                           ✕
                         </span>
-                        <span className="flex-1 min-w-0 text-xs font-medium text-gray-800">{item.job_skill}</span>
+                        {/* Why it's a requirement, in the ad's own words (Stage 1 evidence quote; none for older jobs).
+                            Always shown, wrapped to 2 lines: objective 3 is an explained gap, so no click needed */}
+                        <span className="flex-1 min-w-0">
+                          <span className="block text-xs font-medium text-gray-800">{item.job_skill}</span>
+                          {item.ad_quote && (
+                            <span className="block mt-0.5 text-[11px] text-gray-500 line-clamp-2" title={item.ad_quote}>
+                              From the ad: <i>“{item.ad_quote}”</i>
+                            </span>
+                          )}
+                        </span>
                         <button
                           onClick={() => navigate(`/chatbot?skill=${encodeURIComponent(item.job_skill)}&job=${encodeURIComponent(gap?.job?.job_title || '')}&reason=${encodeURIComponent(item.gap_reason || '')}`)}
                           className="text-xs text-blue-600 bg-blue-50 hover:bg-blue-100 px-2.5 py-1 rounded-full transition font-medium shrink-0"
@@ -305,7 +314,8 @@ export default function JobDetail() {
               ) : !showSources ? (
                 <div className="flex flex-wrap gap-1.5 px-5 py-4">
                   {matchedRows.map((item, idx) => (
-                    <span key={idx} className="inline-flex items-center gap-1.5 text-xs text-gray-700 bg-slate-50 border border-gray-200 px-2.5 py-1 rounded-lg">
+                    <span key={idx} title={item.ad_quote ? `From the ad: “${item.ad_quote}”` : undefined}
+                      className="inline-flex items-center gap-1.5 text-xs text-gray-700 bg-slate-50 border border-gray-200 px-2.5 py-1 rounded-lg">
                       <span className="text-green-600 font-bold">✓</span>
                       {item.job_skill}
                     </span>
@@ -323,7 +333,8 @@ export default function JobDetail() {
                       </div>
                       <div className="flex flex-wrap gap-1.5">
                         {group.items.map((item, idx) => (
-                          <span key={idx} className="inline-flex items-center gap-1.5 text-xs text-gray-700 bg-slate-50 border border-gray-200 px-2.5 py-1 rounded-lg">
+                          <span key={idx} title={item.ad_quote ? `From the ad: “${item.ad_quote}”` : undefined}
+                            className="inline-flex items-center gap-1.5 text-xs text-gray-700 bg-slate-50 border border-gray-200 px-2.5 py-1 rounded-lg">
                             <span className="text-green-600 font-bold">✓</span>
                             {item.job_skill}
                             {item.matched_graduate_skill && item.matched_graduate_skill.toLowerCase() !== item.job_skill.toLowerCase() && (
@@ -349,7 +360,8 @@ export default function JobDetail() {
                 </div>
                 <div className="flex flex-wrap gap-1.5 px-5 py-4">
                   {niceToHave.map((item, idx) => (
-                    <span key={idx} className="inline-flex items-center gap-1.5 text-xs text-gray-700 bg-slate-50 border border-gray-200 px-2.5 py-1 rounded-lg">
+                    <span key={idx} title={item.ad_quote ? `From the ad: “${item.ad_quote}”` : undefined}
+                      className="inline-flex items-center gap-1.5 text-xs text-gray-700 bg-slate-50 border border-gray-200 px-2.5 py-1 rounded-lg">
                       {item.has && <span className="text-green-600 font-bold">✓</span>}
                       {item.job_skill}
                     </span>

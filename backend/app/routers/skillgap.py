@@ -6,7 +6,7 @@ from app.models.job import Job, JobSkill
 from app.routers.auth import get_current_user
 from app.models.user import User
 from app.nlp.embedder import get_embedder
-from app.services.job_requirements import job_skill_items, score_job, unit_name
+from app.services.job_requirements import job_skill_items, score_job, unit_name, unit_quote
 from app.services.skill_profile import (
     EMPTY_PROFILE_MESSAGE, MATCH_THRESHOLD,
     build_skill_profile, normalise_rows, profile_spellings, similarity_matrix,
@@ -86,7 +86,7 @@ def analyse_skill_gap(
         name = unit_name(items, unit)
         if ok:
             j_idx = next(i for i in unit if has[i])
-            matched.append({"job_skill": name, **evidence(j_idx)})
+            matched.append({"job_skill": name, "ad_quote": unit_quote(items, unit), **evidence(j_idx)})
         else:
             # A gap. No "partly covered" / "builds on" reason: below 0.7 SBERT closeness is not reliable
             # evidence (step 2: 9 of 60 related pairs were the same skill), and a plausible but weak
@@ -94,6 +94,7 @@ def analyse_skill_gap(
             j_idx = max(unit, key=lambda i: best_scores[i])
             missing.append({
                 "job_skill": name,
+                "ad_quote": unit_quote(items, unit),     # why it is a requirement, in the ad's own words
                 "closest_graduate_skill": grad_skill_names[int(best_indices[j_idx])],
                 "similarity": round(float(best_scores[j_idx]), 3),
                 "status": "missing",
@@ -101,7 +102,8 @@ def analyse_skill_gap(
             })
 
     # Nice to have (preferred): shown apart, never in the %; empty until a job is re-extracted (Stage 1)
-    nice_to_have = [{"job_skill": unit_name(items, u), "has": ok} for u, ok in zip(sc["bonus_units"], sc["bonus_met"])]
+    nice_to_have = [{"job_skill": unit_name(items, u), "has": ok, "ad_quote": unit_quote(items, u)}
+                    for u, ok in zip(sc["bonus_units"], sc["bonus_met"])]
 
     gap_score = sc["coverage"]
 
@@ -129,7 +131,7 @@ def analyse_skill_gap(
         },
         "matched_skills": matched,
         "missing_skills": missing,
-        "nice_to_have": nice_to_have,           # [{job_skill, has}]
+        "nice_to_have": nice_to_have,           # [{job_skill, has, ad_quote}]
         "learn_on_job": sc["learn"],            # skills the role will teach: never a gap
         "soft_skills": sc["soft"],              # listed apart, not in the %
     }

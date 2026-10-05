@@ -3,6 +3,17 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 5 Oct 2026 — Job Detail shows why each skill is asked for (the ad's own words)
+
+- (this commit) Skill Gap Analysis: each missing skill shows the ad's quote under it ("From the ad: "Good
+  programming skills in Android Native language Java and Kotlin""), wrapped to 2 lines; skills you have and
+  nice-to-have skills show it on hover. Objective 3 (explainable gap): the quotes were saved since Stage 1 but never
+  shown. Jobs extracted before Stage 1 have no quote and look as before.
+- `/skillgap/` returns `ad_quote` on matched, missing and nice-to-have rows (`job_requirements.unit_quote()`: an
+  either-or group shares one quote). Chosen from two layouts side by side (always shown vs a "Why?" toggle): always
+  shown, so the reason needs no click.
+- Tested: endpoint on a test database (quotes returned, Job Matches unchanged), lint, production build.
+
 ## 5 Oct 2026 — Tidy rules for job skills (found in the first bulk run)
 
 - (this commit) New `app/services/job_skill_tidy.py`, run by `job_skill_store.check_job_skills()` (so the bulk run

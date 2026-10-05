@@ -38,6 +38,7 @@ class JobSkillItem:
     level: str | None = None
     skill_type: str | None = None
     group: str | None = None
+    quote: str | None = None     # the ad's own words for this skill (Stage 1 evidence quote), shown as "why"
 
     @property
     def tier(self) -> str:
@@ -63,7 +64,8 @@ def job_skill_items(rows) -> list[JobSkillItem]:
             continue
         seen.add(key)
         items.append(JobSkillItem(name, key, getattr(r, "level", None), getattr(r, "skill_type", None),
-                                  (getattr(r, "alternative_group", None) or "").strip() or None))
+                                  (getattr(r, "alternative_group", None) or "").strip() or None,
+                                  (getattr(r, "evidence_quote", None) or "").strip() or None))
     return items
 
 
@@ -88,6 +90,11 @@ def unit_name(items: list[JobSkillItem], unit: list[int]) -> str:
     """"Python" or, for a group, "C# or Python"."""
     names = [items[i].name for i in unit]
     return names[0] if len(names) == 1 else ", ".join(names[:-1]) + " or " + names[-1]
+
+
+def unit_quote(items: list[JobSkillItem], unit: list[int]) -> str | None:
+    """The ad's words for a requirement (an either-or group shares one quote): the first member that has one."""
+    return next((items[i].quote for i in unit if items[i].quote), None)
 
 
 def score_job(items: list[JobSkillItem], has) -> dict:
