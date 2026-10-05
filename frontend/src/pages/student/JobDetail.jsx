@@ -365,13 +365,22 @@ export default function JobDetail() {
                     <span className="ml-2 font-normal text-xs text-gray-400">bonus · not counted in the %</span>
                   </h2>
                 </div>
+                {/* Her review 5 Oct: the ones you have first, then the ones to learn; those open the AI Assistant like
+                    "Learn →" on the missing required skills */}
                 <div className="flex flex-wrap gap-1.5 px-5 py-4">
-                  {niceToHave.map((item, idx) => (
+                  {[...niceToHave].sort((x, y) => Number(y.has) - Number(x.has)).map((item, idx) => item.has ? (
                     <span key={idx} title={item.ad_quote ? `From the ad: “${item.ad_quote}”` : undefined}
                       className="inline-flex items-center gap-1.5 text-xs text-gray-700 bg-slate-50 border border-gray-200 px-2.5 py-1 rounded-lg">
-                      {item.has && <span className="text-green-600 font-bold">✓</span>}
+                      <span className="text-green-600 font-bold">✓</span>
                       {item.job_skill}
                     </span>
+                  ) : (
+                    <button key={idx} type="button"
+                      title={item.ad_quote ? `From the ad: “${item.ad_quote}” · Learn more` : 'Learn more'}
+                      onClick={() => navigate(`/chatbot?skill=${encodeURIComponent(item.job_skill)}&job=${encodeURIComponent(gap?.job?.job_title || '')}&reason=${encodeURIComponent('Nice to have for this job')}`)}
+                      className="inline-flex items-center gap-1 text-xs text-blue-700 bg-white border border-blue-200 hover:bg-blue-50 px-2.5 py-1 rounded-lg transition">
+                      {item.job_skill} <span aria-hidden="true">→</span>
+                    </button>
                   ))}
                 </div>
               </div>

@@ -3,6 +3,24 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 5 Oct 2026 — Her review, part 2: inline-label duties, skill-poor ads, nice-to-have chips, formatting
+
+- (this commit) Duty rule reads inline labels: Motorola "Web Development: Assist in developing robust frontend
+  interfaces" (no heading, label then verb) was saved as required; the label is now read like a heading, the verb
+  after it is the first word, and "This includes ..." takes the previous sentence's answer. Under a generic heading
+  ("Job Description", "Detailed Description") the label decides. On 83 saved jobs: 98 duty changes (was 81); every
+  new one read by hand (Motorola fresh graduate: frontend / backend development, AI integration, LLMs, RAG, cloud
+  operations... no longer required; Oracle DBA, Software Quality Engineer duties).
+- Ads that name almost no skills: a job was kept with its old name-only skills when the new extraction found fewer
+  than 3 hard skills, even when every sentence was read (AFED "Petroleum Data Analyst Trainee": degree and CGPA
+  only, but showed Python, SQL, Statistical modelling). Now the new result is saved when every sentence was read;
+  a job with nothing to score is left out of Job Matches. Old skills are kept only when sentences were skipped.
+- Nice-to-have chips: the ones you have first; the others are buttons that open the AI Assistant (like "Learn →").
+- Job Description formatting keeps every item in the advert's own section (Motorola's "Understanding of vector
+  databases" had been moved to Nice to have); ## Nice to have only for a section the advert itself heads so.
+  Clear the cached text again: `UPDATE jobs SET formatted_description = NULL WHERE source = 'live';`
+- Tested: duty rule on 83 saved jobs and a heading/label test ad, 46 earlier test cases, lint, production build.
+
 ## 5 Oct 2026 — Her review of two re-extracted jobs: display, ranking, job age, level from years
 
 - (this commit) Checked Meta "Software Engineer, Machine Learning" and Hytech "Software QA Engineer" against the

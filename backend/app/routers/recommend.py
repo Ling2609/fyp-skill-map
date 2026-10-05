@@ -249,6 +249,8 @@ def recommend_jobs(
         # Stage 3A: coverage = required skills held (either-or group = 1); preferred = small ranking bonus
         sc = score_job(items, has)
         matched, total, coverage = sc["matched"], sc["total"], sc["coverage"]
+        if total == 0:
+            continue    # the ad names no skill SkillMap can compare (e.g. degree and CGPA only): nothing to explain
 
         # Ranking score ("best fit"): skill coverage + whole-profile similarity (+ title boost) + a small
         # bonus for nice-to-have skills, minus the level penalty. Used for ORDER only. What the student SEES

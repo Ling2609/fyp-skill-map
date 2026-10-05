@@ -220,11 +220,12 @@ RULES:
    - ## Nice to have
    - ## Benefits
    - ## Work Conditions
-   Only include sections that exist in the original. Keep what the advert requires apart from what it only
-   prefers: items under headings such as "Preferred Qualifications", "Good to Have", "Bonus", "Advantage", or
-   items the advert calls "a plus" or "an advantage", go under ## Nice to have, never under ## Requirements.
-   (5 Oct: Meta's "Preferred Qualifications" were merged into Requirements, so the page and SkillMap's skill
-   gap looked as if they disagreed.)
+   Only include sections that exist in the original. Keep every item in the section the advert puts it in, in
+   the same order; only the heading wording may change. Use ## Nice to have only for a section the advert itself
+   heads "Preferred Qualifications", "Good to Have", "Bonus", "Advantage" or similar, never under ## Requirements.
+   Do not move a single item out of its section because it mentions "a plus" or "valued".
+   (5 Oct: Meta's "Preferred Qualifications" were merged into Requirements; then Motorola's "Understanding of
+   vector databases" was moved out of its Requirements, so the page and the skill gap seemed to disagree.)
 5. Each bullet is one clear, complete sentence
 6. Remove company promotional text and duplicate points
 7. Do NOT add dashes or bullet characters before items — just write the text

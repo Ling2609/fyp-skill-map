@@ -184,12 +184,33 @@ def drop_unnamed(items: list[dict]) -> tuple[list[dict], list[dict]]:
 
 
 # ── rule 2 ────────────────────────────────────────────────────────────────────────────────────────
-def is_duty(ad_text: str, quote: str) -> bool:
-    """The quote's sentence is a duty, not a qualification."""
+_LABEL = re.compile(r"^([^:]{1,40}):\s*(.+)$")          # "Web Development: Assist in developing ..."
+_CONTINUES = re.compile(r"^(this|these|it)\s+(includes?|involves?|covers?)\b|^including\b", re.I)
+
+
+def is_duty(ad_text: str, quote: str, _depth: int = 0) -> bool:
+    """The quote's sentence is a duty, not a qualification.
+    Ads written as one paragraph have no headings, only inline labels ("Web Development: Assist in developing
+    robust frontend interfaces"; Motorola, 5 Oct): the label is read like a heading and the verb after it is the
+    first word. A sentence that only continues the previous one ("This includes connecting applications to LLMs")
+    takes the previous sentence's answer."""
+    from app.services.evidence import _segments
     where = locate(ad_text, quote)
     if where is None:
         return False
-    heading, sentence = normalise_text(where[0]), normalise_text(where[1])
+    heading, sentence = normalise_text(where[0]), where[1].strip()
+    m = _LABEL.match(sentence)
+    if m and len(m.group(1).split()) <= 5:
+        label, sentence = normalise_text(m.group(1)), m.group(2)
+        if _REQ_HEADING.search(label):
+            return False
+        # the label decides, unless the section above is a requirements one ("Job Description" says nothing)
+        heading = label if _DUTY_HEADING.search(label) else (heading if _REQ_HEADING.search(heading) else "")
+    if _CONTINUES.search(sentence) and _depth == 0:
+        segs = [s for _, s in _segments(ad_text)]
+        if where[1] in segs and segs.index(where[1]) > 0:
+            return is_duty(ad_text, segs[segs.index(where[1]) - 1], _depth + 1)
+    sentence = normalise_text(sentence)
     if _REQ_WORDS.search(sentence) or _REQ_HEADING.search(heading):
         return False
     if heading:

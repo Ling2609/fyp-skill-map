@@ -229,10 +229,16 @@ def main():
                     print(f"  either-or groups: {', '.join(sorted(groups))}")
                 if args.save:
                     hard = checked.hard
-                    if hard < MIN_HARD:
+                    # Few hard skills is only a failure sign when sentences were skipped. When every sentence was
+                    # read, the ad itself names few skills (AFED "Petroleum Data Analyst Trainee": degree and CGPA
+                    # only), and keeping the old name-only skills (Python, SQL... not in the ad) was worse (5 Oct).
+                    # Such a job is saved; with nothing to score it is left out of Job Matches (recommend.py).
+                    if hard < MIN_HARD and not (n_sent and done == n_sent):
                         totals["kept_old"] += 1
-                        print(f"  NOT SAVED: only {hard} hard skills; old skills kept")
+                        print(f"  NOT SAVED: only {hard} hard skills and {n_sent - done} sentences unread; old skills kept")
                     else:
+                        if hard < MIN_HARD:
+                            print(f"  Every sentence read; the ad names only {hard} hard skills")
                         n_saved = save_skills(db, job, kept, JOB_EVIDENCE_VERSION)
                         totals["saved"] += 1
                         print(f"  SAVED {n_saved} skills (old ones backed up in {BACKUP})")
