@@ -157,7 +157,7 @@ export default function Dashboard() {
               {topJobs.map((job, idx) => (
                 <div
                   key={job.job_id}
-                  onClick={() => navigate(`/jobs/${encodeURIComponent(job.job_id)}`)}
+                  onClick={() => navigate(`/jobs/${encodeURIComponent(job.job_id)}`, { state: { from: 'Dashboard' } })}
                   className="flex items-center justify-between gap-3 px-5 py-3 cursor-pointer hover:bg-slate-50 transition"
                 >
                   <div className="flex items-center gap-3 min-w-0">

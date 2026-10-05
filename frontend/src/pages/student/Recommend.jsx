@@ -1,6 +1,6 @@
 import { Fragment, useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
-import api from '../../api'
+import api, { MATCHES_CACHE } from '../../api'
 import PageHeader from '../../components/PageHeader'
 import LevelTag from '../../components/LevelTag'
 
@@ -63,6 +63,17 @@ const daysAgo = (days) => {
   return `${Math.floor(days / 7)} weeks ago`
 }
 
+// Results are kept this long (minutes) when going back from a job; after that, or after any profile change
+// (api.js), they are fetched again, so they never drift far from Job Detail's numbers (the 30 Sep problem)
+const CACHE_MINUTES = 15
+
+const readCache = () => {
+  try { return JSON.parse(sessionStorage.getItem(MATCHES_CACHE)) } catch { return null }
+}
+const writeCache = (value) => {
+  try { sessionStorage.setItem(MATCHES_CACHE, JSON.stringify(value)) } catch { /* full or blocked: just refetch next time */ }
+}
+
 export default function Recommend() {
   const navigate = useNavigate()
 
@@ -82,6 +93,8 @@ export default function Recommend() {
   const [hideSenior, setHideSenior] = useState(sessionStorage.getItem('lastHideSenior') === '1')
   const [visibleCount, setVisibleCount] = useState(10)
   const latestSearch = useRef(0)   // only the newest search may update the page
+  const restoreScroll = useRef(null)   // scroll position to go back to once cached results are shown
+  const listRef = useRef(null)         // the results list scrolls, not the window
 
   const doSearch = async (role, count, category) => {
     const searchId = ++latestSearch.current
@@ -113,6 +126,7 @@ export default function Recommend() {
         if (searchId !== latestSearch.current) return
         setResults(res.data)
         setShownQuery(searchRole.trim())
+        writeCache({ role: searchRole, category: searchCategory, data: res.data, savedAt: Date.now() })
         sessionStorage.setItem('lastRoleFilter', searchRole)
         sessionStorage.setItem('lastActiveCategory', searchCategory)
         setLoading(false)
@@ -146,13 +160,39 @@ export default function Recommend() {
         : sessionStorage.getItem('lastRoleFilter') || ''
       setRoleFilter(savedRole)
       setActiveCategory(savedCategory)
-      doSearch(savedRole, 0, savedCategory)
+      // Back from a job: show the same results at the same place instead of searching again
+      const cached = readCache()
+      if (cached?.data && cached.role === savedRole && cached.category === savedCategory
+          && Date.now() - cached.savedAt < CACHE_MINUTES * 60000) {
+        setResults(cached.data)
+        setShownQuery(savedRole.trim())
+        setSortBy(cached.sortBy || 'fit')
+        setVisibleCount(cached.visible || 10)
+        restoreScroll.current = cached.scrollY || 0
+      } else {
+        doSearch(savedRole, 0, savedCategory)
+      }
     }).catch(() => {
       // Not "empty profile": the request failed (e.g. server down). Show the error instead.
       setError('Could not load your skill profile. Please check the server is running and refresh.')
       setSkillCount(-1)
     })
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    if (results && restoreScroll.current !== null) {
+      const y = restoreScroll.current
+      restoreScroll.current = null
+      requestAnimationFrame(() => { if (listRef.current) listRef.current.scrollTop = y })
+    }
+  }, [results])
+
+  // Remember where the student was (sort, how many shown, scroll) before opening a job
+  const openJob = (jobId) => {
+    const cached = readCache()
+    if (cached) writeCache({ ...cached, sortBy, visible: visibleCount, scrollY: listRef.current?.scrollTop || 0 })
+    navigate(`/jobs/${encodeURIComponent(jobId)}`, { state: { from: 'Job Matches' } })
+  }
 
   if (skillCount === null) return (
     <div className="h-screen bg-slate-50 flex items-center justify-center">
@@ -344,7 +384,7 @@ export default function Recommend() {
         </div>
       </PageHeader>
 
-      <div className="flex-1 overflow-auto px-8 py-4">
+      <div ref={listRef} className="flex-1 overflow-auto px-8 py-4">
         {loading && (
           <div className="flex flex-col items-center justify-center py-20 gap-4">
             <div className="w-full max-w-xs">
@@ -394,7 +434,7 @@ export default function Recommend() {
                   {idx > 0 && titleOf(job) === 0 && titleOf(visibleJobs[idx - 1]) > 0 && (
                     <p className="text-xs text-slate-400 pt-3 pb-1 px-1">Other openings that fit your profile</p>
                   )}
-                  <div onClick={() => navigate(`/jobs/${encodeURIComponent(job.job_id)}`)}
+                  <div onClick={() => openJob(job.job_id)}
                     className="bg-white rounded-xl border border-slate-200 cursor-pointer hover:border-blue-200 hover:shadow-sm transition group overflow-hidden flex">
                     {/* Left accent bar */}
                     <div className={`w-1 shrink-0 ${getAccentColor(coverageOf(job))}`} />

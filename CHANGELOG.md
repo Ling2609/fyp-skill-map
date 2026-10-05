@@ -3,9 +3,25 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 6 Oct 2026 — Chat replies render properly; back links; Job Matches keeps its place
+
+- (this commit) Chat replies are rendered as Markdown with react-markdown + remark-gfm (GitHub-flavoured: tables,
+  task lists, nested lists, code). The old line-by-line renderer showed tables as "| a | b |", "---" lines, and
+  "**FREE**" inside a heading as raw symbols. Raw HTML in a reply is ignored; links open in a new tab.
+- Skill Development prompt: no made-up URLs (a reply linked a YouTube playlist ID that cannot be checked); name the
+  resource instead, link only official documentation home pages. One small table at most, no emoji numbering,
+  under ~350 words. Career Counsellor: no made-up URLs, salaries or company facts.
+- Send button: Heroicons v2 paper-airplane, pointing right (v1's pointed up and looked like an arrow).
+- "Learn →" on a job opens the chatbot with "← Back to <job>", which returns to the same job on the same tab.
+- Job Detail: "Back to Job Matches" / "Back to Dashboard" (where it was opened from), on the same left edge as other
+  page headings. A job opened in a new tab goes back to Job Matches.
+- Job Matches no longer searches again when going back from a job: results, sort, "show more" and scroll position
+  are kept for 15 minutes, and dropped at once after any profile change (grades, projects, certificates).
+- Setup: `cd frontend` then `npm install react-markdown remark-gfm`.
+
 ## 6 Oct 2026 — Modules tab follows the IR: completed modules only, "Not graded yet"
 
-- (this commit) Checked against the IR: users are final-year students and recent graduates ("the main user group",
+- (030ded0) Checked against the IR: users are final-year students and recent graduates ("the main user group",
   §3.2.2) and they "confirm completed modules and enter grades" (§1.6.1). Compulsory card subtitle:
   "9 modules · leave blank if not completed yet". The grade list starts with "Not graded yet" (was a disabled
   "Select grade"), so a grade picked by mistake can be cleared; ungraded modules are not saved, as before.

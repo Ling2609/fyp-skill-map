@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import api from '../../api'
 
 // The grade itself, not its weight: the weight is the same for C+ and C, so a C showed as "C+" (5 Oct)
@@ -23,11 +23,22 @@ const postedAgo = (iso) => {
 
 export default function JobDetail() {
   const navigate = useNavigate()
+  const location = useLocation()
   const { jobId } = useParams()
+  // Back to the page the job was opened from (Job Matches or Dashboard). history.back() keeps that page's
+  // place; a job opened in a new tab has nothing to go back to, so it goes to Job Matches
+  const backLabel = location.state?.from || 'Job Matches'
+  const goBack = () => (window.history.state?.idx > 0 ? navigate(-1) : navigate('/recommend'))
+  // The chatbot's "Back to <job>" returns here on the same tab: remember it in this history entry first
+  const openChat = (skill, reason) => {
+    navigate(location.pathname, { replace: true, state: { ...location.state, tab: activeTab } })
+    navigate(`/chatbot?skill=${encodeURIComponent(skill)}&job=${encodeURIComponent(gap?.job?.job_title || '')}`
+      + `&reason=${encodeURIComponent(reason)}`, { state: { fromJob: gap?.job?.job_title } })
+  }
   const [gap, setGap] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
-  const [activeTab, setActiveTab] = useState('description')
+  const [activeTab, setActiveTab] = useState(location.state?.tab || 'description')
   const [bullets, setBullets] = useState(null)
   const [bulletsLoading, setBulletsLoading] = useState(false)
   const [showSources, setShowSources] = useState(false)
@@ -71,7 +82,7 @@ export default function JobDetail() {
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <p className="text-red-500 text-sm mb-4">{error}</p>
-          <button onClick={() => navigate(-1)} className="text-blue-700 text-sm hover:underline">← Go back</button>
+          <button onClick={goBack} className="text-blue-700 text-sm hover:underline">← Go back</button>
         </div>
       </div>
     )
@@ -124,13 +135,12 @@ export default function JobDetail() {
     <div className="min-h-screen">
 
       {/* Top nav */}
-      <div className="bg-white border-b border-gray-100 px-6 py-3">
-        <div className="max-w-4xl mx-auto">
-          <button onClick={() => navigate(-1)} className="flex items-center gap-1 text-xs text-gray-500 hover:text-blue-600 transition">
-            <span>←</span>
-            <span>Back to Results</span>
-          </button>
-        </div>
+      {/* Same left edge as the other pages' headings (PageHeader: px-8) */}
+      <div className="bg-white border-b border-slate-200 px-8 py-3">
+        <button onClick={goBack} className="flex items-center gap-1 text-xs text-slate-500 hover:text-blue-600 transition">
+          <span>←</span>
+          <span>Back to {backLabel}</span>
+        </button>
       </div>
 
       <div className="px-6 py-5 max-w-4xl mx-auto space-y-4">
@@ -288,7 +298,7 @@ export default function JobDetail() {
                           )}
                         </span>
                         <button
-                          onClick={() => navigate(`/chatbot?skill=${encodeURIComponent(item.job_skill)}&job=${encodeURIComponent(gap?.job?.job_title || '')}&reason=${encodeURIComponent(item.gap_reason || '')}`)}
+                          onClick={() => openChat(item.job_skill, item.gap_reason || '')}
                           className="text-xs text-blue-600 bg-blue-50 hover:bg-blue-100 px-2.5 py-1 rounded-full transition font-medium shrink-0"
                         >
                           Learn →
@@ -377,7 +387,7 @@ export default function JobDetail() {
                   ) : (
                     <button key={idx} type="button"
                       title={item.ad_quote ? `From the ad: “${item.ad_quote}” · Learn more` : 'Learn more'}
-                      onClick={() => navigate(`/chatbot?skill=${encodeURIComponent(item.job_skill)}&job=${encodeURIComponent(gap?.job?.job_title || '')}&reason=${encodeURIComponent('Nice to have for this job')}`)}
+                      onClick={() => openChat(item.job_skill, 'Nice to have for this job')}
                       className="inline-flex items-center gap-1 text-xs text-blue-700 bg-white border border-blue-200 hover:bg-blue-50 px-2.5 py-1 rounded-lg transition">
                       {item.job_skill} <span aria-hidden="true">→</span>
                     </button>

@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
+import Markdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
 import api from '../../api'
 import PageHeader from '../../components/PageHeader'
 
@@ -52,44 +54,40 @@ function TypingIndicator() {
   )
 }
 
+// Replies are Markdown (GitHub-flavoured: tables, task lists). The old line-by-line renderer showed tables, "---"
+// and bold inside headings as raw symbols (6 Oct). react-markdown builds React elements and ignores raw HTML,
+// so a reply cannot inject markup into the page.
+const MD = {
+  h1: ({ children }) => <p className="text-sm font-semibold text-slate-900 mt-4 mb-1 first:mt-0">{children}</p>,
+  h2: ({ children }) => <p className="text-sm font-semibold text-slate-900 mt-4 mb-1 first:mt-0">{children}</p>,
+  h3: ({ children }) => <p className="text-sm font-semibold text-slate-800 mt-3 mb-1 first:mt-0">{children}</p>,
+  h4: ({ children }) => <p className="text-sm font-medium text-slate-800 mt-3 mb-1 first:mt-0">{children}</p>,
+  p: ({ children }) => <p className="text-sm text-slate-600 leading-relaxed my-1.5">{children}</p>,
+  strong: ({ children }) => <strong className="font-semibold text-slate-900">{children}</strong>,
+  a: ({ href, children }) => (
+    <a href={href} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline break-words">{children}</a>
+  ),
+  ul: ({ children, className }) => (
+    <ul className={`text-sm text-slate-600 leading-relaxed my-1.5 space-y-1 ${className?.includes('contains-task-list') ? 'list-none pl-1' : 'list-disc pl-5 marker:text-blue-400'}`}>{children}</ul>
+  ),
+  ol: ({ children }) => <ol className="text-sm text-slate-600 leading-relaxed my-1.5 space-y-1 list-decimal pl-5 marker:text-slate-400">{children}</ol>,
+  li: ({ children }) => <li className="[&>p]:my-0">{children}</li>,
+  input: ({ checked }) => <input type="checkbox" checked={!!checked} readOnly className="mr-1.5 align-middle accent-blue-600" />,
+  hr: () => <hr className="my-3 border-slate-100" />,
+  code: ({ children }) => <code className="text-[13px] bg-slate-100 text-slate-800 rounded px-1 py-0.5">{children}</code>,
+  pre: ({ children }) => <pre className="my-2 bg-slate-50 border border-slate-200 rounded-lg p-3 overflow-x-auto [&>code]:bg-transparent [&>code]:p-0">{children}</pre>,
+  table: ({ children }) => (
+    <div className="my-2 overflow-x-auto rounded-lg border border-slate-200">
+      <table className="w-full text-xs text-left">{children}</table>
+    </div>
+  ),
+  thead: ({ children }) => <thead className="bg-slate-50 text-slate-500">{children}</thead>,
+  th: ({ children }) => <th className="px-3 py-2 font-medium whitespace-nowrap">{children}</th>,
+  td: ({ children }) => <td className="px-3 py-2 align-top text-slate-600 border-t border-slate-100">{children}</td>,
+}
+
 function MessageBubble({ msg }) {
   const isUser = msg.role === 'user'
-
-  const renderContent = (text) => {
-    const lines = text.split('\n').filter(l => l.trim() !== '')
-    return lines.map((line, i) => {
-      const isBullet = /^[-•*]\s/.test(line.trim()) || /^\d+\.\s/.test(line.trim())
-      const isHeader = /^\*\*[^*]+\*\*$/.test(line.trim()) || /^#{1,3}\s/.test(line.trim())
-
-      const formatBold = (str) => {
-        const parts = str.split(/\*\*(.*?)\*\*/g)
-        return parts.map((part, pi) =>
-          pi % 2 === 1 ? <strong key={pi} className="font-semibold text-slate-900">{part}</strong> : part
-        )
-      }
-
-      if (isHeader) {
-        const clean = line.replace(/^#{1,3}\s/, '').replace(/^\*\*|\*\*$/g, '').trim()
-        return (
-          <p key={i} className="text-sm font-semibold text-slate-800 mt-3 mb-1 first:mt-0">{clean}</p>
-        )
-      }
-
-      if (isBullet) {
-        const clean = line.trim().replace(/^[-•*]\s/, '').replace(/^\d+\.\s/, '')
-        return (
-          <div key={i} className="flex items-start gap-2 text-sm text-slate-600 leading-relaxed">
-            <span className="text-blue-400 shrink-0 mt-0.5">•</span>
-            <span>{formatBold(clean)}</span>
-          </div>
-        )
-      }
-
-      return (
-        <p key={i} className="text-sm text-slate-600 leading-relaxed">{formatBold(line)}</p>
-      )
-    })
-  }
 
   return (
     <div className={`flex items-end gap-2.5 ${isUser ? 'justify-end' : 'justify-start'}`}>
@@ -102,7 +100,7 @@ function MessageBubble({ msg }) {
         </div>
       )}
       <div
-        className={`max-w-[75%] px-4 py-3 rounded-2xl space-y-1 ${
+        className={`max-w-[75%] min-w-0 px-4 py-3 rounded-2xl ${
           isUser
             ? 'bg-blue-600 text-white rounded-br-sm'
             : 'bg-white border border-slate-200 rounded-bl-sm shadow-sm'
@@ -110,7 +108,7 @@ function MessageBubble({ msg }) {
       >
         {isUser
           ? <p className="text-sm text-white leading-relaxed">{msg.content}</p>
-          : renderContent(msg.content)
+          : <Markdown remarkPlugins={[remarkGfm]} components={MD}>{msg.content}</Markdown>
         }
       </div>
     </div>
@@ -119,6 +117,8 @@ function MessageBubble({ msg }) {
 
 export default function Chatbot() {
   const location = useLocation()
+  const navigate = useNavigate()
+  const fromJob = location.state?.fromJob   // opened from a job's skill gap: offer the way back to it
   const params = new URLSearchParams(location.search)
   const preloadSkill = params.get('skill')
   const preloadJob = params.get('job')
@@ -248,6 +248,13 @@ export default function Chatbot() {
     <div className="flex flex-col h-screen">
 
       <PageHeader>
+        {fromJob && (
+          <button onClick={() => navigate(-1)}
+            className="flex items-center gap-1 text-xs text-slate-500 hover:text-blue-600 transition mb-3 max-w-full">
+            <span>←</span>
+            <span className="truncate">Back to {fromJob}</span>
+          </button>
+        )}
         <div className="flex items-start justify-between pb-4 pt-1">
           <div>
             <p className="text-[11px] font-semibold text-blue-600 uppercase tracking-widest mb-2">AI Assistant</p>
@@ -317,8 +324,10 @@ export default function Chatbot() {
             aria-label="Send message"
             className="w-11 h-11 bg-blue-600 text-white rounded-xl flex items-center justify-center hover:bg-blue-700 disabled:opacity-40 disabled:cursor-not-allowed transition shrink-0 self-end"
           >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+            {/* Heroicons v2 paper-airplane: points right, the way the message goes (v1's pointed up) */}
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75}
+                d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" />
             </svg>
           </button>
         </div>

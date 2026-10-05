@@ -3772,3 +3772,166 @@
 2026-10-06,live_2ea7c3f21a77d6d9,live,"AI/ML, GenAI Intern",GenAI deployment,keep,hard,required,,1.0,,or deploying GenAI solutions
 2026-10-06,live_2ea7c3f21a77d6d9,live,"AI/ML, GenAI Intern",Open-source AI platforms,keep,hard,required,,1.0,one of: Open-source AI platforms / Cloud AI platforms,using open-source or cloud-based AI platforms
 2026-10-06,live_2ea7c3f21a77d6d9,live,"AI/ML, GenAI Intern",Cloud AI platforms,keep,hard,required,,1.0,one of: Open-source AI platforms / Cloud AI platforms,using open-source or cloud-based AI platforms
+2026-10-06,live_fb246a73e8cd1989,live,Petroleum Data Analyst Trainee,Digitalization,keep,hard,unspecified,,1.0,,Gain practical experience in Digitalization Industry
+2026-10-06,live_9069201c6f3fded5,live,Software Engineer (AI Training),debugging,keep,hard,unspecified,,1.0,,"debug, and optimize code"
+2026-10-06,live_9069201c6f3fded5,live,Software Engineer (AI Training),code optimization,keep,hard,unspecified,,1.0,,"debug, and optimize code"
+2026-10-06,live_9069201c6f3fded5,live,Software Engineer (AI Training),code review,keep,hard,unspecified,,1.0,,Review and evaluate AI-generated code
+2026-10-06,live_9069201c6f3fded5,live,Software Engineer (AI Training),security analysis,keep,hard,unspecified,,1.0,,"Identify bugs, logic errors, security issues"
+2026-10-06,live_9069201c6f3fded5,live,Software Engineer (AI Training),prompt engineering,keep,hard,unspecified,,1.0,,Design challenging coding prompts and edge-case scenarios
+2026-10-06,live_9069201c6f3fded5,live,Software Engineer (AI Training),Python,keep,hard,required,,1.0,programming language,"Proficient in one or more programming languages (Python, JavaScript, Java, C++, Go, TypeScript, or similar)"
+2026-10-06,live_9069201c6f3fded5,live,Software Engineer (AI Training),JavaScript,keep,hard,required,,1.0,programming language,"Proficient in one or more programming languages (Python, JavaScript, Java, C++, Go, TypeScript, or similar)"
+2026-10-06,live_9069201c6f3fded5,live,Software Engineer (AI Training),Java,keep,hard,required,,1.0,programming language,"Proficient in one or more programming languages (Python, JavaScript, Java, C++, Go, TypeScript, or similar)"
+2026-10-06,live_9069201c6f3fded5,live,Software Engineer (AI Training),C++,keep,hard,required,,1.0,programming language,"Proficient in one or more programming languages (Python, JavaScript, Java, C++, Go, TypeScript, or similar)"
+2026-10-06,live_9069201c6f3fded5,live,Software Engineer (AI Training),Go,keep,hard,required,,1.0,programming language,"Proficient in one or more programming languages (Python, JavaScript, Java, C++, Go, TypeScript, or similar)"
+2026-10-06,live_9069201c6f3fded5,live,Software Engineer (AI Training),TypeScript,keep,hard,required,,1.0,programming language,"Proficient in one or more programming languages (Python, JavaScript, Java, C++, Go, TypeScript, or similar)"
+2026-10-06,live_9069201c6f3fded5,live,Software Engineer (AI Training),data structures,keep,hard,required,,1.0,,"Solid understanding of data structures, algorithms, and software design principles"
+2026-10-06,live_9069201c6f3fded5,live,Software Engineer (AI Training),algorithms,keep,hard,required,,1.0,,"Solid understanding of data structures, algorithms, and software design principles"
+2026-10-06,live_9069201c6f3fded5,live,Software Engineer (AI Training),software design,keep,hard,required,,1.0,,"Solid understanding of data structures, algorithms, and software design principles"
+2026-10-06,live_9069201c6f3fded5,live,Software Engineer (AI Training),problem solving,keep,soft,required,,1.0,,Strong problem-solving instincts
+2026-10-06,live_9069201c6f3fded5,live,Software Engineer (AI Training),communication,keep,soft,required,,1.0,,Clear written communicator
+2026-10-06,live_9069201c6f3fded5,live,Software Engineer (AI Training),full-stack development,keep,hard,preferred,preferred,1.0,,"Experience across multiple languages or tech stacks (full-stack, backend, systems, data engineering)"
+2026-10-06,live_9069201c6f3fded5,live,Software Engineer (AI Training),backend development,keep,hard,preferred,preferred,1.0,,"Experience across multiple languages or tech stacks (full-stack, backend, systems, data engineering)"
+2026-10-06,live_9069201c6f3fded5,live,Software Engineer (AI Training),systems engineering,keep,hard,preferred,preferred,1.0,,"Experience across multiple languages or tech stacks (full-stack, backend, systems, data engineering)"
+2026-10-06,live_9069201c6f3fded5,live,Software Engineer (AI Training),data engineering,keep,hard,preferred,preferred,1.0,,"Experience across multiple languages or tech stacks (full-stack, backend, systems, data engineering)"
+2026-10-06,live_9069201c6f3fded5,live,Software Engineer (AI Training),AI/ML concepts,keep,hard,preferred,preferred,1.0,one of: AI/ML concepts / LLMs / prompt engineering,"Familiarity with AI/ML concepts, LLMs, or prompt engineering"
+2026-10-06,live_9069201c6f3fded5,live,Software Engineer (AI Training),LLMs,keep,hard,preferred,preferred,1.0,one of: AI/ML concepts / LLMs / prompt engineering,"Familiarity with AI/ML concepts, LLMs, or prompt engineering"
+2026-10-06,live_9069201c6f3fded5,live,Software Engineer (AI Training),technical writing,keep,hard,preferred,preferred,1.0,,"Background in code review, technical writing, or mentoring junior developers"
+2026-10-06,live_9069201c6f3fded5,live,Software Engineer (AI Training),mentoring,keep,soft,preferred,preferred,1.0,,"Background in code review, technical writing, or mentoring junior developers"
+2026-10-06,live_9069201c6f3fded5,live,Software Engineer (AI Training),cloud platforms,keep,hard,preferred,preferred,1.0,one of: cloud platforms / DevOps / distributed systems,"Experience with cloud platforms, DevOps, or distributed systems"
+2026-10-06,live_9069201c6f3fded5,live,Software Engineer (AI Training),DevOps,keep,hard,preferred,preferred,1.0,one of: cloud platforms / DevOps / distributed systems,"Experience with cloud platforms, DevOps, or distributed systems"
+2026-10-06,live_9069201c6f3fded5,live,Software Engineer (AI Training),distributed systems,keep,hard,preferred,preferred,1.0,one of: cloud platforms / DevOps / distributed systems,"Experience with cloud platforms, DevOps, or distributed systems"
+2026-10-06,live_9069201c6f3fded5,live,Software Engineer (AI Training),competitive programming,keep,hard,preferred,preferred,1.0,,"Competitive programming, open-source contributions, or side projects"
+2026-10-06,live_9069201c6f3fded5,live,Software Engineer (AI Training),open-source contributions,keep,hard,preferred,preferred,1.0,,"Competitive programming, open-source contributions, or side projects"
+2026-10-06,live_6337a9a520399994,live,"Principal AI Engineer, Solutions",LLM integration,keep,hard,unspecified,,1.0,,"Architect and review end-to-end AI systems, including LLM integration"
+2026-10-06,live_6337a9a520399994,live,"Principal AI Engineer, Solutions",Prompt engineering,keep,hard,unspecified,,1.0,,prompting strategies
+2026-10-06,live_6337a9a520399994,live,"Principal AI Engineer, Solutions",RAG pipelines,keep,hard,unspecified,,1.0,,RAG pipelines
+2026-10-06,live_6337a9a520399994,live,"Principal AI Engineer, Solutions",Vector search,keep,hard,unspecified,,1.0,,vector search
+2026-10-06,live_6337a9a520399994,live,"Principal AI Engineer, Solutions",Agent workflows,keep,hard,unspecified,,1.0,,agent workflows
+2026-10-06,live_6337a9a520399994,live,"Principal AI Engineer, Solutions",Observability,keep,hard,required,,1.0,,observability
+2026-10-06,live_6337a9a520399994,live,"Principal AI Engineer, Solutions",Security,keep,hard,unspecified,,1.0,,security
+2026-10-06,live_6337a9a520399994,live,"Principal AI Engineer, Solutions",Data governance,keep,hard,unspecified,,1.0,,data governance
+2026-10-06,live_6337a9a520399994,live,"Principal AI Engineer, Solutions",Compliance,keep,hard,unspecified,,1.0,,compliance-by-design
+2026-10-06,live_6337a9a520399994,live,"Principal AI Engineer, Solutions",Communication,keep,soft,unspecified,,1.0,,Communicate technical risks and trade-offs clearly
+2026-10-06,live_6337a9a520399994,live,"Principal AI Engineer, Solutions",High-availability systems,keep,hard,required,,1.0,,high-availability enterprise environments
+2026-10-06,live_6337a9a520399994,live,"Principal AI Engineer, Solutions",Python,keep,hard,required,,1.0,programming language,"Hands-on experience with Python, Node.js, or similar languages"
+2026-10-06,live_6337a9a520399994,live,"Principal AI Engineer, Solutions",Node.js,keep,hard,required,,1.0,programming language,"Hands-on experience with Python, Node.js, or similar languages"
+2026-10-06,live_6337a9a520399994,live,"Principal AI Engineer, Solutions",OpenAI API,keep,hard,required,,1.0,,OpenAI
+2026-10-06,live_6337a9a520399994,live,"Principal AI Engineer, Solutions",Claude API,keep,hard,required,,1.0,,Claude
+2026-10-06,live_6337a9a520399994,live,"Principal AI Engineer, Solutions",Ilmu API,keep,hard,required,,1.0,,Ilmu
+2026-10-06,live_6337a9a520399994,live,"Principal AI Engineer, Solutions",AI infrastructure,keep,hard,required,,1.0,,AI infrastructure
+2026-10-06,live_6337a9a520399994,live,"Principal AI Engineer, Solutions",MLOps,keep,hard,required,,1.0,,MLOps practices
+2026-10-06,live_6337a9a520399994,live,"Principal AI Engineer, Solutions",Teamwork,keep,soft,required,,1.0,,cross-functional delivery teams
+2026-10-06,live_143b3f50af14b124,live,Software Engineering & AI Internships,AI tools,keep,hard,required,,1.0,,modern AI tools
+2026-10-06,live_143b3f50af14b124,live,Software Engineering & AI Internships,Software engineering,keep,hard,required,required,1.0,,solid understanding of software engineering
+2026-10-06,live_143b3f50af14b124,live,Software Engineering & AI Internships,Computer Science,keep,hard,preferred,preferred,1.0,,foundation in Computer Science
+2026-10-06,live_71aec87b7e538369,live,Senior AI Data Scientist,ML/DL,keep,hard,required,,1.0,,expert in ML/DL and proficient in vibe coding
+2026-10-06,live_71aec87b7e538369,live,Senior AI Data Scientist,vibe coding,keep,hard,required,,1.0,,expert in ML/DL and proficient in vibe coding
+2026-10-06,live_71aec87b7e538369,live,Senior AI Data Scientist,LLMs,keep,hard,required,,1.0,,"new AI/ML approaches (LLMs, new architectures, emerging techniques)"
+2026-10-06,live_71aec87b7e538369,live,Senior AI Data Scientist,GitHub Copilot,keep,hard,required,,1.0,,"generative AI tools (GitHub Copilot, Cursor, Claude, ChatGPT)"
+2026-10-06,live_71aec87b7e538369,live,Senior AI Data Scientist,Cursor,keep,hard,required,,1.0,,"generative AI tools (GitHub Copilot, Cursor, Claude, ChatGPT)"
+2026-10-06,live_71aec87b7e538369,live,Senior AI Data Scientist,Claude,keep,hard,required,,1.0,,"generative AI tools (GitHub Copilot, Cursor, Claude, ChatGPT)"
+2026-10-06,live_71aec87b7e538369,live,Senior AI Data Scientist,ChatGPT,keep,hard,required,,1.0,,"generative AI tools (GitHub Copilot, Cursor, Claude, ChatGPT)"
+2026-10-06,live_71aec87b7e538369,live,Senior AI Data Scientist,Agile,keep,hard,required,,1.0,,You will work in an agile mode
+2026-10-06,live_71aec87b7e538369,live,Senior AI Data Scientist,Data Science,keep,hard,required,required,1.0,,At least 7 years of experience in Data Science / Machine Learning
+2026-10-06,live_71aec87b7e538369,live,Senior AI Data Scientist,Machine Learning,keep,hard,required,required,1.0,,At least 7 years of experience in Data Science / Machine Learning
+2026-10-06,live_71aec87b7e538369,live,Senior AI Data Scientist,Supervised learning,keep,hard,required,,1.0,,"Expertise in ML/DL: supervised learning, unsupervised learning, deep learning, NLP, time series"
+2026-10-06,live_71aec87b7e538369,live,Senior AI Data Scientist,Unsupervised learning,keep,hard,required,,1.0,,"Expertise in ML/DL: supervised learning, unsupervised learning, deep learning, NLP, time series"
+2026-10-06,live_71aec87b7e538369,live,Senior AI Data Scientist,Deep learning,keep,hard,required,,1.0,,"Expertise in ML/DL: supervised learning, unsupervised learning, deep learning, NLP, time series"
+2026-10-06,live_71aec87b7e538369,live,Senior AI Data Scientist,NLP,keep,hard,required,,1.0,,"Expertise in ML/DL: supervised learning, unsupervised learning, deep learning, NLP, time series"
+2026-10-06,live_71aec87b7e538369,live,Senior AI Data Scientist,Time series,keep,hard,required,,1.0,,"Expertise in ML/DL: supervised learning, unsupervised learning, deep learning, NLP, time series"
+2026-10-06,live_71aec87b7e538369,live,Senior AI Data Scientist,scikit-learn,keep,hard,required,,1.0,,"Proficiency in Python frameworks: scikit-learn, TensorFlow, PyTorch, XGBoost, LightGBM"
+2026-10-06,live_71aec87b7e538369,live,Senior AI Data Scientist,TensorFlow,keep,hard,required,,1.0,,"Proficiency in Python frameworks: scikit-learn, TensorFlow, PyTorch, XGBoost, LightGBM"
+2026-10-06,live_71aec87b7e538369,live,Senior AI Data Scientist,PyTorch,keep,hard,required,,1.0,,"Proficiency in Python frameworks: scikit-learn, TensorFlow, PyTorch, XGBoost, LightGBM"
+2026-10-06,live_71aec87b7e538369,live,Senior AI Data Scientist,XGBoost,keep,hard,required,,1.0,,"Proficiency in Python frameworks: scikit-learn, TensorFlow, PyTorch, XGBoost, LightGBM"
+2026-10-06,live_71aec87b7e538369,live,Senior AI Data Scientist,LightGBM,keep,hard,required,,1.0,,"Proficiency in Python frameworks: scikit-learn, TensorFlow, PyTorch, XGBoost, LightGBM"
+2026-10-06,live_71aec87b7e538369,live,Senior AI Data Scientist,Fine-tuning,keep,hard,required,,1.0,,"In-depth knowledge of LLMs and modern techniques (fine-tuning, RAG, prompt engineering, agents)"
+2026-10-06,live_71aec87b7e538369,live,Senior AI Data Scientist,RAG,keep,hard,required,,1.0,,"In-depth knowledge of LLMs and modern techniques (fine-tuning, RAG, prompt engineering, agents)"
+2026-10-06,live_71aec87b7e538369,live,Senior AI Data Scientist,Prompt engineering,keep,hard,required,,1.0,,"In-depth knowledge of LLMs and modern techniques (fine-tuning, RAG, prompt engineering, agents)"
+2026-10-06,live_71aec87b7e538369,live,Senior AI Data Scientist,Agents,keep,hard,required,,1.0,,"In-depth knowledge of LLMs and modern techniques (fine-tuning, RAG, prompt engineering, agents)"
+2026-10-06,live_71aec87b7e538369,live,Senior AI Data Scientist,Feature engineering,keep,hard,required,,1.0,,Expertise in feature engineering and variable selection
+2026-10-06,live_71aec87b7e538369,live,Senior AI Data Scientist,Variable selection,keep,hard,required,,1.0,,Expertise in feature engineering and variable selection
+2026-10-06,live_71aec87b7e538369,live,Senior AI Data Scientist,Exploratory data analysis,keep,hard,required,,1.0,,Strong skills in exploratory data analysis and statistics
+2026-10-06,live_71aec87b7e538369,live,Senior AI Data Scientist,Statistics,keep,hard,required,,1.0,,Strong skills in exploratory data analysis and statistics
+2026-10-06,live_71aec87b7e538369,live,Senior AI Data Scientist,Model evaluation,keep,hard,required,,1.0,,"Experience in model evaluation and optimisation (hyperparameter tuning, cross-validation)"
+2026-10-06,live_71aec87b7e538369,live,Senior AI Data Scientist,Optimisation,keep,hard,required,,1.0,,"Experience in model evaluation and optimisation (hyperparameter tuning, cross-validation)"
+2026-10-06,live_71aec87b7e538369,live,Senior AI Data Scientist,Hyperparameter tuning,keep,hard,required,,1.0,,"Experience in model evaluation and optimisation (hyperparameter tuning, cross-validation)"
+2026-10-06,live_71aec87b7e538369,live,Senior AI Data Scientist,Cross-validation,keep,hard,required,,1.0,,"Experience in model evaluation and optimisation (hyperparameter tuning, cross-validation)"
+2026-10-06,live_71aec87b7e538369,live,Senior AI Data Scientist,AWS SageMaker,keep,hard,required,,1.0,,"Knowledge of Cloud ML platforms (AWS SageMaker, Azure ML, GCP Vertex AI)"
+2026-10-06,live_71aec87b7e538369,live,Senior AI Data Scientist,Azure ML,keep,hard,required,,1.0,,"Knowledge of Cloud ML platforms (AWS SageMaker, Azure ML, GCP Vertex AI)"
+2026-10-06,live_71aec87b7e538369,live,Senior AI Data Scientist,GCP Vertex AI,keep,hard,required,,1.0,,"Knowledge of Cloud ML platforms (AWS SageMaker, Azure ML, GCP Vertex AI)"
+2026-10-06,live_71aec87b7e538369,live,Senior AI Data Scientist,SQL,keep,hard,required,,1.0,,Proficiency in SQL and handling large-scale datasets
+2026-10-06,live_71aec87b7e538369,live,Senior AI Data Scientist,Git,keep,hard,required,,1.0,,"Knowledge of version control tools (Git) and notebooks (Jupyter, Databricks)"
+2026-10-06,live_71aec87b7e538369,live,Senior AI Data Scientist,Jupyter,keep,hard,required,,1.0,,"Knowledge of version control tools (Git) and notebooks (Jupyter, Databricks)"
+2026-10-06,live_71aec87b7e538369,live,Senior AI Data Scientist,Databricks,keep,hard,required,,1.0,,"Knowledge of version control tools (Git) and notebooks (Jupyter, Databricks)"
+2026-10-06,live_71aec87b7e538369,live,Senior AI Data Scientist,Computer Vision,keep,hard,preferred,preferred,1.0,ML subfield,"Nice to have: Experience in Computer Vision, Reinforcement Learning or Graph ML"
+2026-10-06,live_71aec87b7e538369,live,Senior AI Data Scientist,Reinforcement Learning,keep,hard,preferred,preferred,1.0,ML subfield,"Nice to have: Experience in Computer Vision, Reinforcement Learning or Graph ML"
+2026-10-06,live_71aec87b7e538369,live,Senior AI Data Scientist,Graph ML,keep,hard,preferred,preferred,1.0,ML subfield,"Nice to have: Experience in Computer Vision, Reinforcement Learning or Graph ML"
+2026-10-06,live_71aec87b7e538369,live,Senior AI Data Scientist,Communication,keep,soft,required,,1.0,,"Excellent communication, both technical and business-oriented"
+2026-10-06,live_71aec87b7e538369,live,Senior AI Data Scientist,Mentoring,keep,soft,required,,1.0,,Pedagogy and mentoring (support to the junior Data Scientist)
+2026-10-06,live_71aec87b7e538369,live,Senior AI Data Scientist,Algorithms,keep,hard,unspecified,,1.0,,choice of algorithms
+2026-10-06,live_71aec87b7e538369,live,Senior AI Data Scientist,Model optimisation,keep,hard,unspecified,,1.0,,model optimisation
+2026-10-06,live_71aec87b7e538369,live,Senior AI Data Scientist,Model validation,keep,hard,unspecified,,1.0,,validation of models
+2026-10-06,live_71aec87b7e538369,live,Senior AI Data Scientist,Technical documentation,keep,hard,unspecified,,1.0,,technical documentation
+2026-10-06,live_71aec87b7e538369,live,Senior AI Data Scientist,Model industrialisation,keep,hard,unspecified,,1.0,,industrialisation
+2026-10-06,live_71aec87b7e538369,live,Senior AI Data Scientist,Pair programming,keep,hard,unspecified,,1.0,,pair programming
+2026-10-06,live_71aec87b7e538369,live,Senior AI Data Scientist,Code reviews,keep,hard,unspecified,,1.0,,code reviews
+2026-10-06,live_71aec87b7e538369,live,Senior AI Data Scientist,Facilitation,keep,soft,unspecified,,1.0,,Facilitation of technical workshops
+2026-10-06,live_4ccf05f640eb47eb,live,Senior Data Engineer [up to RM 20k],Data governance,keep,hard,unspecified,,1.0,,define company-wide data governance standards
+2026-10-06,live_4ccf05f640eb47eb,live,Senior Data Engineer [up to RM 20k],Apache Kafka,keep,hard,required,,1.0,,Proven production experience with Apache Kafka (including ecosystem tools)
+2026-10-06,live_4ccf05f640eb47eb,live,Senior Data Engineer [up to RM 20k],Apache Flink,keep,hard,required,,1.0,,and Apache Flink for real-time processing
+2026-10-06,live_4ccf05f640eb47eb,live,Senior Data Engineer [up to RM 20k],Cloud Data Warehouse,keep,hard,unspecified,,1.0,,centralized Cloud Data Warehouse while optimizing query performance
+2026-10-06,live_4ccf05f640eb47eb,live,Senior Data Engineer [up to RM 20k],Python,keep,hard,required,,1.0,,Expert-level proficiency in Python for data processing and automation
+2026-10-06,live_4ccf05f640eb47eb,live,Senior Data Engineer [up to RM 20k],Mentorship,keep,soft,unspecified,,1.0,,Provide technical mentorship to junior engineers
+2026-10-06,live_4ccf05f640eb47eb,live,Senior Data Engineer [up to RM 20k],Snowflake,keep,hard,required,,1.0,cloud data warehouse,"e.g., Snowflake, BigQuery, Redshift"
+2026-10-06,live_4ccf05f640eb47eb,live,Senior Data Engineer [up to RM 20k],BigQuery,keep,hard,required,,1.0,cloud data warehouse,"e.g., Snowflake, BigQuery, Redshift"
+2026-10-06,live_4ccf05f640eb47eb,live,Senior Data Engineer [up to RM 20k],Redshift,keep,hard,required,,1.0,cloud data warehouse,"e.g., Snowflake, BigQuery, Redshift"
+2026-10-06,live_4ccf05f640eb47eb,live,Senior Data Engineer [up to RM 20k],Distributed systems architecture,keep,hard,required,,1.0,,Strong grasp of distributed systems architecture
+2026-10-06,live_4ccf05f640eb47eb,live,Senior Data Engineer [up to RM 20k],Microservices,keep,hard,required,,1.0,,microservices
+2026-10-06,live_4ccf05f640eb47eb,live,Senior Data Engineer [up to RM 20k],Iceberg,keep,hard,required,,1.0,data lakehouse format,"e.g., Iceberg, Delta"
+2026-10-06,live_4ccf05f640eb47eb,live,Senior Data Engineer [up to RM 20k],Delta,keep,hard,required,,1.0,data lakehouse format,"e.g., Iceberg, Delta"
+2026-10-06,live_4ccf05f640eb47eb,live,Senior Data Engineer [up to RM 20k],Airflow,keep,hard,required,,1.0,,"orchestration (e.g., Airflow)"
+2026-10-06,live_4ccf05f640eb47eb,live,Senior Data Engineer [up to RM 20k],Docker,keep,hard,required,,1.0,,"containerization (Docker, Kubernetes)"
+2026-10-06,live_4ccf05f640eb47eb,live,Senior Data Engineer [up to RM 20k],Kubernetes,keep,hard,required,,1.0,,"containerization (Docker, Kubernetes)"
+2026-10-06,live_4ccf05f640eb47eb,live,Senior Data Engineer [up to RM 20k],CI/CD pipelines,keep,hard,required,,1.0,,CI/CD pipelines
+2026-10-06,live_4ccf05f640eb47eb,live,Senior Data Engineer [up to RM 20k],SQL,keep,hard,unspecified,,1.0,,"Kafka, Flink, Python, Airflow, Python, SQL, ETL"
+2026-10-06,live_4ccf05f640eb47eb,live,Senior Data Engineer [up to RM 20k],ETL,keep,hard,unspecified,,1.0,,"Kafka, Flink, Python, Airflow, Python, SQL, ETL"
+2026-10-06,live_1c597db96fc39fdb,live,Data Engineer (Talend ETL),Talend,keep,hard,required,required,1.0,,building and maintaining Talend ETL/Data Pipelines
+2026-10-06,live_1c597db96fc39fdb,live,Data Engineer (Talend ETL),MySQL,keep,hard,required,required,1.0,,Strong knowledge of MySQL
+2026-10-06,live_1c597db96fc39fdb,live,Data Engineer (Talend ETL),Tableau,keep,hard,unspecified,,1.0,,BI/reporting platforms such as Tableau Server
+2026-10-06,live_1c597db96fc39fdb,live,Data Engineer (Talend ETL),WordPress,keep,hard,required,required,1.0,,Basic to intermediate knowledge of PHP and WordPress
+2026-10-06,live_1c597db96fc39fdb,live,Data Engineer (Talend ETL),PHP,keep,hard,required,required,1.0,,Basic to intermediate knowledge of PHP and WordPress
+2026-10-06,live_1c597db96fc39fdb,live,Data Engineer (Talend ETL),Troubleshooting,keep,soft,required,required,1.0,,Strong analytical and troubleshooting skills
+2026-10-06,live_1c597db96fc39fdb,live,Data Engineer (Talend ETL),Linux,keep,hard,preferred,preferred,1.0,,Knowledge of Linux environments (Ubuntu/Nginx)
+2026-10-06,live_1c597db96fc39fdb,live,Data Engineer (Talend ETL),SSL,keep,hard,preferred,preferred,1.0,,"Exposure to SSL, certificates"
+2026-10-06,live_1c597db96fc39fdb,live,Data Engineer (Talend ETL),REST APIs,keep,hard,preferred,preferred,1.0,,"Experience with REST APIs, Web Services, or custom PHP plugin integrations"
+2026-10-06,live_1c597db96fc39fdb,live,Data Engineer (Talend ETL),Web Services,keep,hard,preferred,preferred,1.0,,"Experience with REST APIs, Web Services, or custom PHP plugin integrations"
+2026-10-06,live_df4d98c61ed1d142,live,Senior Data Engineer - Databricks,Databricks,keep,hard,required,,1.0,,Strong experience with Databricks
+2026-10-06,live_df4d98c61ed1d142,live,Senior Data Engineer - Databricks,Databricks Lakehouse Platform,keep,hard,unspecified,,1.0,,using the Databricks Lakehouse Platform
+2026-10-06,live_df4d98c61ed1d142,live,Senior Data Engineer - Databricks,Apache Spark,keep,hard,unspecified,,1.0,,technologies such as Apache Spark
+2026-10-06,live_df4d98c61ed1d142,live,Senior Data Engineer - Databricks,Delta Lake,keep,hard,unspecified,,1.0,,and Delta Lake
+2026-10-06,live_df4d98c61ed1d142,live,Senior Data Engineer - Databricks,data quality,keep,hard,unspecified,,1.0,,best practices for data quality
+2026-10-06,live_df4d98c61ed1d142,live,Senior Data Engineer - Databricks,data security,keep,hard,unspecified,,0.875,,best practices for data security
+2026-10-06,live_df4d98c61ed1d142,live,Senior Data Engineer - Databricks,PySpark,keep,hard,required,,1.0,one of: PySpark / SQL / Scala,"Apache Spark (PySpark, SQL or Scala)"
+2026-10-06,live_df4d98c61ed1d142,live,Senior Data Engineer - Databricks,SQL,keep,hard,required,,1.0,one of: PySpark / SQL / Scala,"Apache Spark (PySpark, SQL or Scala)"
+2026-10-06,live_df4d98c61ed1d142,live,Senior Data Engineer - Databricks,Scala,keep,hard,required,,1.0,one of: PySpark / SQL / Scala,"Apache Spark (PySpark, SQL or Scala)"
+2026-10-06,live_df4d98c61ed1d142,live,Senior Data Engineer - Databricks,AWS,keep,hard,required,,1.0,cloud provider,"cloud providers (AWS, Azure, or GCP)"
+2026-10-06,live_df4d98c61ed1d142,live,Senior Data Engineer - Databricks,Azure,keep,hard,required,,1.0,cloud provider,"cloud providers (AWS, Azure, or GCP)"
+2026-10-06,live_df4d98c61ed1d142,live,Senior Data Engineer - Databricks,GCP,keep,hard,required,,1.0,cloud provider,"cloud providers (AWS, Azure, or GCP)"
+2026-10-06,live_df4d98c61ed1d142,live,Senior Data Engineer - Databricks,distributed data processing,keep,hard,required,,1.0,,Solid understanding of distributed data processing
+2026-10-06,live_df4d98c61ed1d142,live,Senior Data Engineer - Databricks,data modelling,keep,hard,required,,1.0,,"distributed data processing, data modelling"
+2026-10-06,live_df4d98c61ed1d142,live,Senior Data Engineer - Databricks,performance optimisation,keep,hard,required,,1.0,,and performance optimisation
+2026-10-06,live_df4d98c61ed1d142,live,Senior Data Engineer - Databricks,CI/CD pipelines,keep,hard,required,,1.0,,Experience with CI/CD pipelines
+2026-10-06,live_df4d98c61ed1d142,live,Senior Data Engineer - Databricks,Git,keep,hard,required,,1.0,,version control tools such as Git
+2026-10-06,live_df4d98c61ed1d142,live,Senior Data Engineer - Databricks,Airflow,keep,hard,required,,1.0,,orchestration frameworks such as Airflow
+2026-10-06,live_df4d98c61ed1d142,live,Senior Data Engineer - Databricks,Databricks Workflows,keep,hard,required,,1.0,,or Databricks Workflows
+2026-10-06,live_df4d98c61ed1d142,live,Senior Data Engineer - Databricks,communication,keep,soft,required,,1.0,,Strong communication skills in English
+2026-10-06,live_df4d98c61ed1d142,live,Senior Data Engineer - Databricks,Big Data,keep,hard,unspecified,,1.0,,specializing in Big Data
+2026-10-06,live_df4d98c61ed1d142,live,Senior Data Engineer - Databricks,Cloud,keep,hard,unspecified,,1.0,,specializing in ... Cloud
+2026-10-06,live_df4d98c61ed1d142,live,Senior Data Engineer - Databricks,Streaming,keep,hard,unspecified,,1.0,,specializing in ... Streaming
+2026-10-06,live_df4d98c61ed1d142,live,Senior Data Engineer - Databricks,IIoT,keep,hard,unspecified,,1.0,,specializing in ... IIoT
+2026-10-06,live_df4d98c61ed1d142,live,Senior Data Engineer - Databricks,Microservices,keep,hard,unspecified,,1.0,,specializing in ... Microservices
+2026-10-06,live_df4d98c61ed1d142,live,Senior Data Engineer - Databricks,Apache Kafka,keep,hard,unspecified,,1.0,,projects such as Apache Kafka
+2026-10-06,live_df4d98c61ed1d142,live,Senior Data Engineer - Databricks,Apache NiFi,keep,hard,unspecified,,1.0,,projects such as ... Apache NiFi
+2026-10-06,live_df4d98c61ed1d142,live,Senior Data Engineer - Databricks,Terraform,keep,hard,unspecified,,1.0,,projects such as ... Terraform
+2026-10-06,live_df4d98c61ed1d142,live,Senior Data Engineer - Databricks,Ansible,keep,hard,unspecified,,1.0,,projects such as ... Ansible
+2026-10-06,live_df4d98c61ed1d142,live,Senior Data Engineer - Databricks,data governance,reject: quote not in ad,hard,unspecified,,0.765,,best practices for data governance

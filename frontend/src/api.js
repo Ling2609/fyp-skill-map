@@ -15,8 +15,16 @@ api.interceptors.request.use((config) => {
 // Token expired or invalid → clear it and send the user back to login,
 // instead of each page showing a confusing error (e.g. "profile is empty").
 // A wrong password on /auth/login is also a 401, so that one is left alone.
+// Job Matches keeps its last results for a short while, so going back from a job does not reload them (6 Oct).
+// Any change to the profile (grades, projects, certificates) makes them out of date: drop them straight away.
+export const MATCHES_CACHE = 'jobMatchesCache'
+
 api.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    const method = (response.config?.method || 'get').toLowerCase()
+    if (method !== 'get' && response.config?.url?.startsWith('/profile')) sessionStorage.removeItem(MATCHES_CACHE)
+    return response
+  },
   (error) => {
     const isLoginCall = error.config?.url?.includes('/auth/login')
     // On public pages (e.g. an old token while opening Register) just drop the token;
