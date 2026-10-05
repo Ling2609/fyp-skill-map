@@ -163,7 +163,8 @@ LEVEL_RANK = {"required": 0, "unspecified": 1, "preferred": 2, "trained": 3}
 def merge_mentions(kept: list[dict], key=None) -> list[dict]:
     """One entry per skill from every checked mention (F25). key(name) -> skill identity (A8 canonical key).
 
-    1. A group is dropped when one of its skills is also asked for on its own at the same or a stronger level:
+    1. A group is dropped when one of its skills is also asked for on its own at the same or a stronger level
+       (a duty mention never covers a nice-to-have group: duties are not asked for):
        "Python" + "Python or Java" means Python. Skills that were ONLY an alternative there (Java) go too,
        unless they have another mention, so they never become a requirement of their own (a false gap).
     2. Each skill keeps its strongest mention; at the same level a stand-alone mention beats a grouped one.
@@ -187,8 +188,15 @@ def merge_mentions(kept: list[dict], key=None) -> list[dict]:
     for it in items:
         if not it["alternative_group"]:
             alone[k(it)] = min(alone.get(k(it), 99), rank(it))
+    def covers(alone_rank, group_rank):
+        # A duty mention ("unspecified") is not something the ad asks for, so it never makes a nice-to-have
+        # group redundant: INSPHERE "Connect equipment with MES, EAP" (duty) + "MES, EAP, SCADA, SPC or RMS
+        # systems" (a plus) dropped SCADA / SPC / RMS before (5 Oct)
+        return alone_rank <= group_rank and not (alone_rank == LEVEL_RANK["unspecified"]
+                                                 and group_rank > LEVEL_RANK["unspecified"])
+
     redundant = {it["alternative_group"].lower() for it in items
-                 if it["alternative_group"] and alone.get(k(it), 99) <= rank(it)}
+                 if it["alternative_group"] and covers(alone.get(k(it), 99), rank(it))}
     items = [it for it in items if it["alternative_group"].lower() not in redundant]
 
     # 2. strongest mention per skill (stable: earlier mention wins a full tie)

@@ -48,7 +48,14 @@ def tidy_skills(items: list[dict], ad_text: str) -> tuple[list[dict], list[dict]
     # = Java). The other members were only alternatives, so they go too: reported here, never silent.
     left = {skill_key(k["skill"]) for k in one_each}
     gone = {skill_key(it["skill"]): it for it in items if skill_key(it["skill"]) not in left}
-    changes["covered"] = [(it["skill"], it.get("alternative_group", "")) for it in gone.values()]
+    by_group = {}                                   # group label -> its members still kept (on their own)
+    for it in items:
+        g = (it.get("alternative_group") or "").lower()
+        if g and skill_key(it["skill"]) in left:
+            by_group.setdefault(g, []).append(it["skill"])
+    changes["covered"] = [(it["skill"], it.get("alternative_group", ""),
+                           ", ".join(dict.fromkeys(by_group.get((it.get("alternative_group") or "").lower(), []))))
+                          for it in gone.values()]
     kept, merged = merge_descriptor_names(one_each)
     changes["merged"] = merged
     return kept, unnamed, changes

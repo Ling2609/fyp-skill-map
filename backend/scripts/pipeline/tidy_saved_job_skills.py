@@ -46,8 +46,8 @@ def describe(before: list[dict], after: list[dict], unnamed: list[dict], changes
         if (a.get("alternative_group") or "") != (b.get("alternative_group") or ""):
             lines.append(f"  GROUP  {a['skill']} [{a['alternative_group']}]")
     lines += [f"  MERGE  {gone} -> {kept}" for gone, kept in changes["merged"]]
-    lines += [f"  DROP   {name}: only an option in [{group}], which another required skill already meets"
-              for name, group in changes["covered"]]
+    lines += [f"  DROP   {name}: only an option in [{group}]; {by or 'another option'} is asked for on its own"
+              for name, group, by in changes["covered"]]
     return lines
 
 
@@ -110,7 +110,7 @@ def main():
         print(f"\n{totals['jobs']} jobs, {totals['skills']} skills checked; {totals['changed']} jobs change: "
               f"{totals['unnamed']} quotes not naming their skill, {totals['duty']} duties required -> unspecified, "
               f"{totals['grouped']} listed options grouped, {totals['merged']} names merged, "
-              f"{totals['covered']} options dropped (choice already met by a required skill).")
+              f"{totals['covered']} options dropped (choice already asked for on its own).")
         if not args.save and totals["changed"]:
             print("Dry run: nothing written. Add --save to write it.")
         elif args.save:

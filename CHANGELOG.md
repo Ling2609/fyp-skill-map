@@ -3,6 +3,17 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 5 Oct 2026 — A duty mention no longer drops a nice-to-have group
+
+- (this commit) `evidence.merge_mentions()` rule 1: a skill named only in the duties ("unspecified") no longer
+  makes a preferred either-or group redundant. Found in bulk run day 2: INSPHERE "Connect semiconductor equipment
+  with MES, EAP" (duty) + "MES, EAP, SCADA, SPC or RMS systems" (a plus) dropped SCADA, SPC and RMS, so a student
+  with SCADA got no nice-to-have credit. Now SCADA / SPC / RMS stay as one nice-to-have group. A required mention
+  still covers a group ("Python" required + "Python or Java" = Python), as before.
+- The DROPPED line now names the skill that covers the choice ("MES, EAP is asked for on its own") instead of
+  saying "another required skill", which was wrong when that skill was not required.
+- Tested: the INSPHERE ad, the F25 edge cases, all earlier tidy test suites (46 cases).
+
 ## 5 Oct 2026 — Job Detail shows why each skill is asked for (the ad's own words)
 
 - (this commit) Skill Gap Analysis: each missing skill shows the ad's quote under it ("From the ad: "Good

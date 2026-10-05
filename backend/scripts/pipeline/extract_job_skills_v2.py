@@ -190,8 +190,8 @@ def main():
                 totals["tidy_grouped"] += checked.tidy.get("grouped", 0)
                 totals["merged"] += len(checked.tidy.get("merged", []))
                 totals["covered"] += len(checked.tidy.get("covered", []))
-                for name, group in checked.tidy.get("covered", []):
-                    print(f"  DROPPED {name}: only an option in [{group}], which another required skill already meets")
+                for name, group, by in checked.tidy.get("covered", []):
+                    print(f"  DROPPED {name}: only an option in [{group}]; {by or 'another option'} is asked for on its own")
                 done, n_sent = getattr(extractor, "last_coverage", (0, 0))
                 calls = getattr(extractor, "last_calls", [])
                 print(f"  sentences answered: {done}/{n_sent}" + ("" if done == n_sent else "  <- some skipped twice")
@@ -263,7 +263,7 @@ def main():
               f"old extraction had {totals['old']} skills. Details in {out}")
         print(f"Tidy rules (app/services/job_skill_tidy.py): {totals['unnamed']} quotes not naming their skill rejected, "
               f"{totals['duty']} duties changed from required to unspecified, {totals['tidy_grouped']} listed options grouped, "
-              f"{totals['merged']} names merged into the same skill, {totals['covered']} options dropped (choice already met)")
+              f"{totals['merged']} names merged into the same skill, {totals['covered']} options dropped (choice already asked for on its own)")
         if args.save:
             print(f"Saved: {totals['saved']} jobs; kept old skills: {totals['kept_old']}. Restart uvicorn to see them.")
     finally:
