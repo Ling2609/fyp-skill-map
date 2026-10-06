@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { cached, peek } from '../../pageCache'
+import { skillName } from '../../skillName'
 
 // The grade itself, not its weight: the weight is the same for C+ and C, so a C showed as "C+" (5 Oct)
 const GRADE_LETTERS = { '4.0': 'A', '3.7': 'A-', '3.3': 'B+', '3.0': 'B', '2.7': 'B-', '2.3': 'C+', '2.0': 'C' }
@@ -291,7 +292,7 @@ export default function JobDetail() {
                         {/* Why it's a requirement, in the ad's own words (Stage 1 evidence quote; none for older jobs).
                             Always shown, wrapped to 2 lines: objective 3 is an explained gap, so no click needed */}
                         <span className="flex-1 min-w-0">
-                          <span className="block text-xs font-medium text-gray-800">{item.job_skill}</span>
+                          <span className="block text-xs font-medium text-gray-800">{skillName(item.job_skill)}</span>
                           {item.ad_quote && (
                             <span className="block mt-0.5 text-[11px] text-gray-500 line-clamp-2" title={item.ad_quote}>
                               From the ad: <i>“{item.ad_quote}”</i>
@@ -335,7 +336,7 @@ export default function JobDetail() {
                     <span key={idx} title={item.ad_quote ? `From the ad: “${item.ad_quote}”` : undefined}
                       className="inline-flex items-center gap-1.5 text-xs text-gray-700 bg-slate-50 border border-gray-200 px-2.5 py-1 rounded-lg">
                       <span className="text-green-600 font-bold">✓</span>
-                      {item.job_skill}
+                      {skillName(item.job_skill)}
                     </span>
                   ))}
                 </div>
@@ -354,9 +355,9 @@ export default function JobDetail() {
                           <span key={idx} title={item.ad_quote ? `From the ad: “${item.ad_quote}”` : undefined}
                             className="inline-flex items-center gap-1.5 text-xs text-gray-700 bg-slate-50 border border-gray-200 px-2.5 py-1 rounded-lg">
                             <span className="text-green-600 font-bold">✓</span>
-                            {item.job_skill}
+                            {skillName(item.job_skill)}
                             {item.matched_graduate_skill && item.matched_graduate_skill.toLowerCase() !== item.job_skill.toLowerCase() && (
-                              <span className="text-[10px] text-gray-400">via {item.matched_graduate_skill}</span>
+                              <span className="text-[10px] text-gray-400">via {skillName(item.matched_graduate_skill)}</span>
                             )}
                           </span>
                         ))}
@@ -383,14 +384,14 @@ export default function JobDetail() {
                     <span key={idx} title={item.ad_quote ? `From the ad: “${item.ad_quote}”` : undefined}
                       className="inline-flex items-center gap-1.5 text-xs text-gray-700 bg-slate-50 border border-gray-200 px-2.5 py-1 rounded-lg">
                       <span className="text-green-600 font-bold">✓</span>
-                      {item.job_skill}
+                      {skillName(item.job_skill)}
                     </span>
                   ) : (
                     <button key={idx} type="button"
                       title={item.ad_quote ? `From the ad: “${item.ad_quote}” · Learn more` : 'Learn more'}
                       onClick={() => openChat(item.job_skill, 'Nice to have for this job')}
                       className="inline-flex items-center gap-1 text-xs text-blue-700 bg-white border border-blue-200 hover:bg-blue-50 px-2.5 py-1 rounded-lg transition">
-                      {item.job_skill} <span aria-hidden="true">→</span>
+                      {skillName(item.job_skill)} <span aria-hidden="true">→</span>
                     </button>
                   ))}
                 </div>

@@ -3,9 +3,17 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 6 Oct 2026 — Skill names in Title Case on every page
+
+- (this commit) One helper, `frontend/src/skillName.js`, shows skill names the same way everywhere: Dashboard, Job
+  Detail (missing skills, skills you have, "via …", nice-to-have chips), Job Matches card chips and Skill Profile
+  chips. Display only: saved names, matching and quotes from the ad are unchanged ("From the ad: …" stays word for
+  word). Brands written in lower case on purpose are kept ("dbt", "shadcn/ui": the only 2 among 2,611 live job
+  skill names).
+
 ## 6 Oct 2026 — Dashboard skill names in Title Case, no clipped letters
 
-- (this commit) Skill names on the Dashboard in Title Case ("Business Process Analysis", her choice): all-lower-case
+- (78836a3) Skill names on the Dashboard in Title Case ("Business Process Analysis", her choice): all-lower-case
   words get a capital, small joining words stay lower ("Version Control with Git"), words with capitals already are
   kept ("UI/UX Design", "iOS Development", "ISTQB"). The "Skill to learn next" card clipped the tails of p / y
   (`truncate` hides overflow and `leading-none` left no room below the line): line height is now `leading-snug`.

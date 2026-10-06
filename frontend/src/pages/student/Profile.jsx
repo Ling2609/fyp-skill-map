@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react'
 import PageHeader from '../../components/PageHeader'
 import { useSearchParams } from 'react-router-dom'
 import api from '../../api'
+import { skillName } from '../../skillName'
 
 // ── Shared ────────────────────────────────────────────────────────────────────
 
@@ -14,7 +15,7 @@ function SkillChip({ skill, title, onRemove, estimated = false, added = false })
     : 'bg-blue-50 text-blue-700 border-blue-100'
   return (
     <span title={title} className={`group/chip inline-flex items-center gap-1 text-xs px-2.5 py-1 rounded-full font-medium border ${look}`}>
-      {skill}
+      {skillName(skill)}
       {onRemove && (
         <button type="button" onClick={onRemove} aria-label={`Remove ${skill}`}
           className="-mr-1 ml-0.5 w-4 h-4 inline-flex items-center justify-center rounded-full text-current opacity-40 hover:text-red-500 hover:bg-red-50 group-hover/chip:opacity-100 focus:opacity-100">

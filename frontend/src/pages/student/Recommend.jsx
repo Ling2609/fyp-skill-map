@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { cached, peek } from '../../pageCache'
 import PageHeader from '../../components/PageHeader'
 import LevelTag from '../../components/LevelTag'
+import { skillName } from '../../skillName'
 
 const LOADING_STEPS = [
   'Building your skill profile...',
@@ -470,7 +471,7 @@ export default function Recommend() {
                           // the skill the search matched comes first and is highlighted: it shows why the job is here
                           <span key={skill} className={skill === job.search_skill
                             ? 'text-xs text-blue-700 bg-blue-50 px-2 py-0.5 rounded-md border border-blue-200 font-medium'
-                            : 'text-xs text-slate-400 px-2 py-0.5 rounded-md border border-slate-200'}>{skill}</span>
+                            : 'text-xs text-slate-400 px-2 py-0.5 rounded-md border border-slate-200'}>{skillName(skill)}</span>
                         ))}
                       </div>
                     </div>
