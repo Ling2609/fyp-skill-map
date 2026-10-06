@@ -1,0 +1,801 @@
+id,a,b,label_qwen,model
+1,AWS Cloud Architecture,AWS cloud security,RELATED,qwen/qwen3.8-27b
+2,Oracle Database,Oracle Database Administration,NARROWER,qwen/qwen3.8-27b
+3,Hardware Installation,Hardware Deployment,SAME,qwen/qwen3.8-27b
+4,Test Automation,Test Planning,RELATED,qwen/qwen3.8-27b
+5,Hardware Maintenance,Hardware debugging,RELATED,qwen/qwen3.8-27b
+6,Software validation,Software Documentation,DIFFERENT,qwen/qwen3.8-27b
+7,Kubernetes,Kubernetes Orchestration,SAME,qwen/qwen3.8-27b
+8,Hardware Testing,Hardware Configuration,RELATED,qwen/qwen3.8-27b
+9,Database monitoring,Database Programming,RELATED,qwen/qwen3.8-27b
+10,Risk Analysis,Risk Development,DIFFERENT,qwen/qwen3.8-27b
+11,Application Support,Application integration,RELATED,qwen/qwen3.8-27b
+12,Hardware Configuration,Hardware Troubleshooting,RELATED,qwen/qwen3.8-27b
+13,Application debugging,Application Security,DIFFERENT,qwen/qwen3.8-27b
+14,Power BI Report Server,Power BI,NARROWER,qwen/qwen3.8-27b
+15,Microsoft Dynamics,Microsoft Dynamics 365FO,NARROWER,qwen/qwen3.8-27b
+16,SLA Monitoring,SLA Management,NARROWER,qwen/qwen3.8-27b
+17,Cisco Routing,Routing,NARROWER,qwen/qwen3.8-27b
+18,Web Services,SOAP Web Services,NARROWER,qwen/qwen3.8-27b
+19,Redis,Redis caching,NARROWER,qwen/qwen3.8-27b
+20,Database Performance Tuning,Performance Tuning,NARROWER,qwen/qwen3.8-27b
+21,Switching,L2/L3 switching,BROADER,qwen/qwen3.8-27b
+22,Playwright,Playwright Automation,SAME,qwen/qwen3.8-27b
+23,KPI Reporting,KPI Analysis,RELATED,qwen/qwen3.8-27b
+24,Infrastructure monitoring,Infrastructure Management,NARROWER,qwen/qwen3.8-27b
+25,Fine-tuning,Model fine-tuning,SAME,qwen/qwen3.8-27b
+26,Model fine-tuning,Fine-tuning,SAME,qwen/qwen3.8-27b
+27,LAN Configuration,LAN Administration,SAME,qwen/qwen3.8-27b
+28,Security Policy Development,Policy Development,NARROWER,qwen/qwen3.8-27b
+29,Network Switching,Switching,SAME,qwen/qwen3.8-27b
+30,.NET,C# .NET,BROADER,qwen/qwen3.8-27b
+31,Version Control,SVN Version Control,BROADER,qwen/qwen3.8-27b
+32,Test Case Design,Test Case Management,RELATED,qwen/qwen3.8-27b
+33,Database monitoring,Database Optimization,RELATED,qwen/qwen3.8-27b
+34,Linux Administration,Linux,NARROWER,qwen/qwen3.8-27b
+35,Business Automation,Business Reporting,DIFFERENT,qwen/qwen3.8-27b
+36,Business Process Analysis,Business Process Optimization,RELATED,qwen/qwen3.8-27b
+37,IT Operations,IT Support,RELATED,qwen/qwen3.8-27b
+38,Version Control,Git Version Control,BROADER,qwen/qwen3.8-27b
+39,Server Maintenance,Server Installation,RELATED,qwen/qwen3.8-27b
+40,VPN Management,VPN Configuration,SAME,qwen/qwen3.8-27b
+41,Prometheus Monitoring,Prometheus,NARROWER,qwen/qwen3.8-27b
+42,Performance Management,Performance Optimization,RELATED,qwen/qwen3.8-27b
+43,Data Reporting,Data Integration,DIFFERENT,qwen/qwen3.8-27b
+44,Database Optimization,Database monitoring,RELATED,qwen/qwen3.8-27b
+45,IDS/IPS configuration,IPS,NARROWER,qwen/qwen3.8-27b
+46,SSRS,SSRS Reporting,SAME,qwen/qwen3.8-27b
+47,Hardware Troubleshooting,Server Hardware Troubleshooting,BROADER,qwen/qwen3.8-27b
+48,IDS/IPS configuration,IDS,NARROWER,qwen/qwen3.8-27b
+49,MES Support,MES implementation,RELATED,qwen/qwen3.8-27b
+50,Shell,Unix Shell Scripting,SAME,qwen/qwen3.8-27b
+51,Backup,Backup Restore,BROADER,qwen/qwen3.8-27b
+52,Networking,Computer Networking,SAME,qwen/qwen3.8-27b
+53,API Security,API Testing,RELATED,qwen/qwen3.8-27b
+54,Network Capacity Planning,Capacity Planning,NARROWER,qwen/qwen3.8-27b
+55,Threat Analysis,Threat Modeling,RELATED,qwen/qwen3.8-27b
+56,Help Desk Support,Help Desk,SAME,qwen/qwen3.8-27b
+57,Business Analysis,Business Reporting,RELATED,qwen/qwen3.8-27b
+58,Data Analytics,Data Governance,DIFFERENT,qwen/qwen3.8-27b
+59,AWS networking,Networking,NARROWER,qwen/qwen3.8-27b
+60,Agile,Agile Project Management,NARROWER,qwen/qwen3.8-27b
+61,Server Deployment,Server Troubleshooting,RELATED,qwen/qwen3.8-27b
+62,SQL,SQL Scripting,NARROWER,qwen/qwen3.8-27b
+63,Network installation,Network Operations,RELATED,qwen/qwen3.8-27b
+64,Service Desk Operations,Service Desk,SAME,qwen/qwen3.8-27b
+65,Linux,Linux Server,NARROWER,qwen/qwen3.8-27b
+66,Wireless,Wireless Technologies,SAME,qwen/qwen3.8-27b
+67,Google Cloud,Google Cloud Platform,SAME,qwen/qwen3.8-27b
+68,Help Desk Ticketing,Help Desk,NARROWER,qwen/qwen3.8-27b
+69,Jenkins CI/CD,CI/CD,NARROWER,qwen/qwen3.8-27b
+70,Azure SQL,Azure SQL Database,SAME,qwen/qwen3.8-27b
+71,Patch Management,Patch Deployment,SAME,qwen/qwen3.8-27b
+72,Encryption,Encryption Technologies,SAME,qwen/qwen3.8-27b
+73,Test Case Development,Test Case Management,NARROWER,qwen/qwen3.8-27b
+74,LAN/WAN,WAN,BROADER,qwen/qwen3.8-27b
+75,Technical Design,Technical Documentation,RELATED,qwen/qwen3.8-27b
+76,Windows,Windows Server 2012,BROADER,qwen/qwen3.8-27b
+77,Remote Desktop Troubleshooting,Remote Desktop Support,SAME,qwen/qwen3.8-27b
+78,Server Troubleshooting,Server Deployment,RELATED,qwen/qwen3.8-27b
+79,SD-WAN implementation,SD-WAN troubleshooting,RELATED,qwen/qwen3.8-27b
+80,Database Programming,Database monitoring,RELATED,qwen/qwen3.8-27b
+81,Kali Linux,Linux,NARROWER,qwen/qwen3.8-27b
+82,On-page SEO,SEO,NARROWER,qwen/qwen3.8-27b
+83,Kubernetes Orchestration,Kubernetes,NARROWER,qwen/qwen3.8-27b
+84,IT Support,IT Strategy,DIFFERENT,qwen/qwen3.8-27b
+85,ServiceNow,ServiceNow incident handling,BROADER,qwen/qwen3.8-27b
+86,Database configuration,Database monitoring,RELATED,qwen/qwen3.8-27b
+87,Linux Administration,Unix/Linux administration,SAME,qwen/qwen3.8-27b
+88,Data Architecture,Data Visualization,DIFFERENT,qwen/qwen3.8-27b
+89,Data Engineering,Data Reporting,DIFFERENT,qwen/qwen3.8-27b
+90,CI/CD,Jenkins CI/CD,BROADER,qwen/qwen3.8-27b
+91,Network Configuration,Network Architecture,RELATED,qwen/qwen3.8-27b
+92,Software Training,Software Installation,DIFFERENT,qwen/qwen3.8-27b
+93,Computer Networking,Networking,SAME,qwen/qwen3.8-27b
+94,ERP Implementation,ERP Support,DIFFERENT,qwen/qwen3.8-27b
+95,User Training,User Administration,DIFFERENT,qwen/qwen3.8-27b
+96,Webpack Bundler,Webpack,NARROWER,qwen/qwen3.8-27b
+97,Help Desk,Help Desk Ticketing,BROADER,qwen/qwen3.8-27b
+98,Microsoft 365,Microsoft 365 Exchange,BROADER,qwen/qwen3.8-27b
+99,Mentoring,Mentoring Juniors,BROADER,qwen/qwen3.8-27b
+100,Risk Reporting,Risk Analytics,RELATED,qwen/qwen3.8-27b
+101,Hardware debugging,Hardware Maintenance,RELATED,qwen/qwen3.8-27b
+102,Rapid Prototyping,Prototyping,NARROWER,qwen/qwen3.8-27b
+103,Application integration,Application Support,RELATED,qwen/qwen3.8-27b
+104,Data Reporting,Data Management,RELATED,qwen/qwen3.8-27b
+105,Solaris Administration,Solaris,NARROWER,qwen/qwen3.8-27b
+106,Selenium,Selenium Automation,SAME,qwen/qwen3.8-27b
+107,IT Troubleshooting,IT Operations,NARROWER,qwen/qwen3.8-27b
+108,CISM Certification,CISM,SAME,qwen/qwen3.8-27b
+109,Database installation,Database Security,RELATED,qwen/qwen3.8-27b
+110,SEO,On-page SEO,BROADER,qwen/qwen3.8-27b
+111,Network Operations,Network Monitoring,BROADER,qwen/qwen3.8-27b
+112,Linux Server,Linux,NARROWER,qwen/qwen3.8-27b
+113,Windows OS Installation,Windows OS Support,RELATED,qwen/qwen3.8-27b
+114,Infrastructure monitoring,Infrastructure Automation,RELATED,qwen/qwen3.8-27b
+115,Software validation,Software Implementation,RELATED,qwen/qwen3.8-27b
+116,Unix/Linux,Unix/Linux administration,BROADER,qwen/qwen3.8-27b
+117,Network Maintenance,Network Testing,RELATED,qwen/qwen3.8-27b
+118,Apache,Apache Iceberg,DIFFERENT,qwen/qwen3.8-27b
+119,SQL Scripting,SQL Optimization,RELATED,qwen/qwen3.8-27b
+120,Data Integration,Data Engineering,NARROWER,qwen/qwen3.8-27b
+121,Risk Development,Risk Analysis,NARROWER,qwen/qwen3.8-27b
+122,Cisco Unified Communications,Unified Communications,NARROWER,qwen/qwen3.8-27b
+123,SAP Implementation,SAP Administration,RELATED,qwen/qwen3.8-27b
+124,Security Compliance,Compliance,NARROWER,qwen/qwen3.8-27b
+125,Data Management,Data Reporting,RELATED,qwen/qwen3.8-27b
+126,Collaboration,QA collaboration,BROADER,qwen/qwen3.8-27b
+127,Network Switches,switches,SAME,qwen/qwen3.8-27b
+128,Mobile Testing,Appium Mobile Testing,BROADER,qwen/qwen3.8-27b
+129,Sales Operations,Sales Engineering,RELATED,qwen/qwen3.8-27b
+130,Network Monitoring,Network Maintenance,RELATED,qwen/qwen3.8-27b
+131,Data Visualization,Data Modeling,RELATED,qwen/qwen3.8-27b
+132,Code maintenance,Code Review,RELATED,qwen/qwen3.8-27b
+133,Software Documentation,Software Architecture,RELATED,qwen/qwen3.8-27b
+134,Policy Enforcement,Password policy enforcement,BROADER,qwen/qwen3.8-27b
+135,SEO,SEO Optimization,SAME,qwen/qwen3.8-27b
+136,IT Administration,IT Security,RELATED,qwen/qwen3.8-27b
+137,Unix/Linux administration,Unix/Linux,BROADER,qwen/qwen3.8-27b
+138,Azure,Azure Monitor,BROADER,qwen/qwen3.8-27b
+139,SQL Optimization,SQL Scripting,RELATED,qwen/qwen3.8-27b
+140,Software security,Software validation,RELATED,qwen/qwen3.8-27b
+141,Software Implementation,Software Training,DIFFERENT,qwen/qwen3.8-27b
+142,KPI Reporting,KPI Monitoring,SAME,qwen/qwen3.8-27b
+143,Functional Specification,Functional configuration,DIFFERENT,qwen/qwen3.8-27b
+144,Data Modeling,Data Visualization,DIFFERENT,qwen/qwen3.8-27b
+145,SIEM Integration,SIEM,NARROWER,qwen/qwen3.8-27b
+146,Database Optimization,Database Tuning,SAME,qwen/qwen3.8-27b
+147,Cloud Optimization,Cloud,NARROWER,qwen/qwen3.8-27b
+148,Network Security,Network Support,DIFFERENT,qwen/qwen3.8-27b
+149,ASP.NET Core MVC,ASP.NET,NARROWER,qwen/qwen3.8-27b
+150,Software validation,Software security,DIFFERENT,qwen/qwen3.8-27b
+151,Server Monitoring,Server Installation,DIFFERENT,qwen/qwen3.8-27b
+152,Performance Tuning,Performance Reporting,DIFFERENT,qwen/qwen3.8-27b
+153,Network Implementation,Network Optimization,DIFFERENT,qwen/qwen3.8-27b
+154,Predictive Analytics,Predictive Modeling,SAME,qwen/qwen3.8-27b
+155,F5 Load Balancer,Load balancer,NARROWER,qwen/qwen3.8-27b
+156,OAuth 2.0,OAuth,NARROWER,qwen/qwen3.8-27b
+157,Azure Monitor,Azure,NARROWER,qwen/qwen3.8-27b
+158,Functional Testing,Functional Specification,DIFFERENT,qwen/qwen3.8-27b
+159,Incident Response,Incident Response Planning,NARROWER,qwen/qwen3.8-27b
+160,Windows,Windows Imaging,NARROWER,qwen/qwen3.8-27b
+161,API Testing,API Integration,RELATED,qwen/qwen3.8-27b
+162,ERP Administration,ERP Support,RELATED,qwen/qwen3.8-27b
+163,Remote Desktop Troubleshooting,Remote Desktop,NARROWER,qwen/qwen3.8-27b
+164,ABAP debugging,ABAP Development,NARROWER,qwen/qwen3.8-27b
+165,Red Hat,Red Hat Linux,BROADER,qwen/qwen3.8-27b
+166,Network Architecture,Network Design,SAME,qwen/qwen3.8-27b
+167,Test Case Management,Test Case Development,RELATED,qwen/qwen3.8-27b
+168,switches,Network Switches,SAME,qwen/qwen3.8-27b
+169,IT Security,IT Support,DIFFERENT,qwen/qwen3.8-27b
+170,Information Security Policies,Information Security,NARROWER,qwen/qwen3.8-27b
+171,Git Version Control,Version Control,NARROWER,qwen/qwen3.8-27b
+172,Mentoring,Mentoring Engineers,NARROWER,qwen/qwen3.8-27b
+173,Test case execution,Execution,NARROWER,qwen/qwen3.8-27b
+174,End-User Support,User Support,SAME,qwen/qwen3.8-27b
+175,Database Programming,Database development,SAME,qwen/qwen3.8-27b
+176,AWS,AWS EC2,BROADER,qwen/qwen3.8-27b
+177,SQL Scripting,SQL Reporting,RELATED,qwen/qwen3.8-27b
+178,Red Hat Linux,Red Hat,NARROWER,qwen/qwen3.8-27b
+179,Application debugging,Application Monitoring,RELATED,qwen/qwen3.8-27b
+180,VPN Configuration,VPN Management,NARROWER,qwen/qwen3.8-27b
+181,Data Architecture,Data validation,BROADER,qwen/qwen3.8-27b
+182,Network Security,Network Maintenance,RELATED,qwen/qwen3.8-27b
+183,Web Design,Web Security,DIFFERENT,qwen/qwen3.8-27b
+184,IDS/IPS,IDS/IPS configuration,BROADER,qwen/qwen3.8-27b
+185,Network Maintenance,Network Monitoring,RELATED,qwen/qwen3.8-27b
+186,User Training,User Support,RELATED,qwen/qwen3.8-27b
+187,Office 365,Office 365 Support,BROADER,qwen/qwen3.8-27b
+188,Cost Management,Cost Optimization,SAME,qwen/qwen3.8-27b
+189,Network Architecture,Network Configuration,BROADER,qwen/qwen3.8-27b
+190,Data Modeling,Data Automation,RELATED,qwen/qwen3.8-27b
+191,Data Engineering,Data Integration,BROADER,qwen/qwen3.8-27b
+192,MongoDB Administration,MongoDB,BROADER,qwen/qwen3.8-27b
+193,Mandarin Communication,English Mandarin Communication,SAME,qwen/qwen3.8-27b
+194,SD-WAN troubleshooting,SD-WAN implementation,RELATED,qwen/qwen3.8-27b
+195,IDS,IDS/IPS configuration,BROADER,qwen/qwen3.8-27b
+196,Oracle,Oracle PL/SQL,BROADER,qwen/qwen3.8-27b
+197,Salesforce Sales Cloud,Salesforce,NARROWER,qwen/qwen3.8-27b
+198,Splunk,Splunk SIEM,SAME,qwen/qwen3.8-27b
+199,Oracle Database Administration,Oracle Database,BROADER,qwen/qwen3.8-27b
+200,Remote Collaboration,Collaboration,SAME,qwen/qwen3.8-27b
+201,Service Desk,Service Desk Operations,NARROWER,qwen/qwen3.8-27b
+202,Wireless LAN,LAN,NARROWER,qwen/qwen3.8-27b
+203,Database Security,Database installation,RELATED,qwen/qwen3.8-27b
+204,Cloud Sales,Cloud,NARROWER,qwen/qwen3.8-27b
+205,Application architecture,Application debugging,RELATED,qwen/qwen3.8-27b
+206,Cybersecurity,Cybersecurity Governance,BROADER,qwen/qwen3.8-27b
+207,Hardware Installation,Hardware debugging,RELATED,qwen/qwen3.8-27b
+208,Power BI gateways,Power BI,NARROWER,qwen/qwen3.8-27b
+209,Remote Desktop,Remote Desktop Support,NARROWER,qwen/qwen3.8-27b
+210,Workflow Configuration,Workflow Automation,RELATED,qwen/qwen3.8-27b
+211,Remote Desktop Troubleshooting,Desktop troubleshooting,NARROWER,qwen/qwen3.8-27b
+212,SIEM Integration,SIEM Management,NARROWER,qwen/qwen3.8-27b
+213,Application Troubleshooting,Application Testing,RELATED,qwen/qwen3.8-27b
+214,WAN/LAN Configuration,LAN Configuration,NARROWER,qwen/qwen3.8-27b
+215,Recovery,Data Recovery,BROADER,qwen/qwen3.8-27b
+216,MongoDB,MongoDB Administration,NARROWER,qwen/qwen3.8-27b
+217,Network Engineering,Network Programming,RELATED,qwen/qwen3.8-27b
+218,Remote Desktop,Remote Desktop Troubleshooting,BROADER,qwen/qwen3.8-27b
+219,SAP,SAP ERP 6.0,BROADER,qwen/qwen3.8-27b
+220,Application Troubleshooting,Application Security,RELATED,qwen/qwen3.8-27b
+221,API Testing,API Security,RELATED,qwen/qwen3.8-27b
+222,Wireless networking,Wireless,NARROWER,qwen/qwen3.8-27b
+223,ServiceNow,ServiceNow Integration,BROADER,qwen/qwen3.8-27b
+224,Cost Management,Cost Analysis,SAME,qwen/qwen3.8-27b
+225,Appium Mobile Testing,Mobile Testing,NARROWER,qwen/qwen3.8-27b
+226,Network Configuration,Network Engineering,NARROWER,qwen/qwen3.8-27b
+227,MVP,MVP Architecture,BROADER,qwen/qwen3.8-27b
+228,Database Integration,Database installation,RELATED,qwen/qwen3.8-27b
+229,Cloud,Cloud Sales,BROADER,qwen/qwen3.8-27b
+230,Website Maintenance,Website development,RELATED,qwen/qwen3.8-27b
+231,Camstar MES,MES,NARROWER,qwen/qwen3.8-27b
+232,SIEM,SIEM Integration,BROADER,qwen/qwen3.8-27b
+233,Cloud Deployment,Cloud Migration,RELATED,qwen/qwen3.8-27b
+234,Hardware Configuration,Hardware Testing,RELATED,qwen/qwen3.8-27b
+235,Technical Pre-sales,Pre-sales,NARROWER,qwen/qwen3.8-27b
+236,Software Architecture,Software Documentation,RELATED,qwen/qwen3.8-27b
+237,Network Optimization,Network Design,RELATED,qwen/qwen3.8-27b
+238,User Access Management,User Access Review,RELATED,qwen/qwen3.8-27b
+239,IT Operations,IT Governance,RELATED,qwen/qwen3.8-27b
+240,Software Support,Software Implementation,RELATED,qwen/qwen3.8-27b
+241,Database configuration,Database,NARROWER,qwen/qwen3.8-27b
+242,Business Intelligence Reporting,Business Intelligence,NARROWER,qwen/qwen3.8-27b
+243,Incident Review,Incident Management,NARROWER,qwen/qwen3.8-27b
+244,Selenium Automation,Selenium Testing,SAME,qwen/qwen3.8-27b
+245,UML,UML Modeling,SAME,qwen/qwen3.8-27b
+246,Functional configuration,Functional Specification,RELATED,qwen/qwen3.8-27b
+247,C# .NET,.NET,NARROWER,qwen/qwen3.8-27b
+248,LAN/WAN design,LAN/WAN Management,RELATED,qwen/qwen3.8-27b
+249,User Administration,User Training,DIFFERENT,qwen/qwen3.8-27b
+250,LAN/WAN Management,WAN,NARROWER,qwen/qwen3.8-27b
+251,Microsoft 365 Exchange,Microsoft 365,NARROWER,qwen/qwen3.8-27b
+252,Software Architecture,Software programming,RELATED,qwen/qwen3.8-27b
+253,Sales Engineering,Sales Strategy,RELATED,qwen/qwen3.8-27b
+254,Compliance Reporting,Compliance Testing,RELATED,qwen/qwen3.8-27b
+255,Software security,Software programming,RELATED,qwen/qwen3.8-27b
+256,Unix Administration,Unix,NARROWER,qwen/qwen3.8-27b
+257,VMware vSphere,VMware,NARROWER,qwen/qwen3.8-27b
+258,Incident Management,Incident Review,BROADER,qwen/qwen3.8-27b
+259,LAN Administration,LAN Configuration,RELATED,qwen/qwen3.8-27b
+260,MES implementation,MES Support,RELATED,qwen/qwen3.8-27b
+261,Software Patching,Patching,NARROWER,qwen/qwen3.8-27b
+262,Server Troubleshooting,Server Maintenance,NARROWER,qwen/qwen3.8-27b
+263,SEO Optimization,SEO,NARROWER,qwen/qwen3.8-27b
+264,AKS,Azure AKS,SAME,qwen/qwen3.8-27b
+265,Infrastructure Management,Infrastructure Automation,RELATED,qwen/qwen3.8-27b
+266,Mentoring Engineers,Mentoring,NARROWER,qwen/qwen3.8-27b
+267,Financial Reporting,Financial Modeling,RELATED,qwen/qwen3.8-27b
+268,Groovy,Groovy scripting,SAME,qwen/qwen3.8-27b
+269,Data Automation,Data validation,RELATED,qwen/qwen3.8-27b
+270,IT Security,IT Administration,DIFFERENT,qwen/qwen3.8-27b
+271,Wi-Fi,Wi-Fi Administration,BROADER,qwen/qwen3.8-27b
+272,CCIE,CCIE certification,SAME,qwen/qwen3.8-27b
+273,Remote Desktop Support,Remote Desktop,NARROWER,qwen/qwen3.8-27b
+274,Android Deployment,Android testing,RELATED,qwen/qwen3.8-27b
+275,Azure SQL,SQL,NARROWER,qwen/qwen3.8-27b
+276,Software Installation,Software Training,DIFFERENT,qwen/qwen3.8-27b
+277,LAN/WAN Management,LAN,BROADER,qwen/qwen3.8-27b
+278,Network Configuration,Network Testing,RELATED,qwen/qwen3.8-27b
+279,Financial Analysis,Financial Management,BROADER,qwen/qwen3.8-27b
+280,Predictive Modeling,Predictive Analytics,SAME,qwen/qwen3.8-27b
+281,Procurement Compliance,Procurement,NARROWER,qwen/qwen3.8-27b
+282,SAP Integration,SAP Reporting,RELATED,qwen/qwen3.8-27b
+283,Functional configuration,Functional analysis,RELATED,qwen/qwen3.8-27b
+284,Agile Project Management,Agile,NARROWER,qwen/qwen3.8-27b
+285,Data Management,Data Engineering,RELATED,qwen/qwen3.8-27b
+286,Interface development,Interface Design,RELATED,qwen/qwen3.8-27b
+287,Agile Delivery,Agile,NARROWER,qwen/qwen3.8-27b
+288,ServiceNow Administration,ServiceNow Integration,RELATED,qwen/qwen3.8-27b
+289,Financial Modeling,Financial Reporting,RELATED,qwen/qwen3.8-27b
+290,Software Architecture,Software Installation,DIFFERENT,qwen/qwen3.8-27b
+291,Database maintenance,Database,NARROWER,qwen/qwen3.8-27b
+292,SAP Training,SAP Configuration,RELATED,qwen/qwen3.8-27b
+293,ServiceNow incident handling,ServiceNow,NARROWER,qwen/qwen3.8-27b
+294,GraphQL API,GraphQL,NARROWER,qwen/qwen3.8-27b
+295,SQL Database,Azure SQL Database,BROADER,qwen/qwen3.8-27b
+296,ASP.NET,ASP.NET Core MVC,BROADER,qwen/qwen3.8-27b
+297,Incident Review,Incident Reporting,RELATED,qwen/qwen3.8-27b
+298,Roadmap Development,Roadmap Planning,SAME,qwen/qwen3.8-27b
+299,Virtualization,VM Virtualization,BROADER,qwen/qwen3.8-27b
+300,Database Integration,Database Administration,RELATED,qwen/qwen3.8-27b
+301,IDS/IPS,IDS/IPS monitoring,NARROWER,qwen/qwen3.8-27b
+302,Prototyping,Rapid Prototyping,SAME,qwen/qwen3.8-27b
+303,Nexus,Cisco Nexus,NARROWER,qwen/qwen3.8-27b
+304,Control-M Scheduling,Scheduling,NARROWER,qwen/qwen3.8-27b
+305,CCIE certification,CCIE,SAME,qwen/qwen3.8-27b
+306,Apache Spark,Apache,NARROWER,qwen/qwen3.8-27b
+307,Network Security,Network automation,RELATED,qwen/qwen3.8-27b
+308,PHP Laravel,PHP,NARROWER,qwen/qwen3.8-27b
+309,API Development,API Security,RELATED,qwen/qwen3.8-27b
+310,Software Implementation,Software Support,RELATED,qwen/qwen3.8-27b
+311,Routing,Cisco Routing,NARROWER,qwen/qwen3.8-27b
+312,Functional Testing,Functional Design,RELATED,qwen/qwen3.8-27b
+313,Cost Analysis,Cost Management,NARROWER,qwen/qwen3.8-27b
+314,Release Planning,Release Management,NARROWER,qwen/qwen3.8-27b
+315,Data Integration,Data Automation,RELATED,qwen/qwen3.8-27b
+316,Web Development,Web Design,RELATED,qwen/qwen3.8-27b
+317,Site Reliability Engineering,Reliability Engineering,NARROWER,qwen/qwen3.8-27b
+318,Kanban,Kanban methodology,SAME,qwen/qwen3.8-27b
+319,IT Support,IT Security,RELATED,qwen/qwen3.8-27b
+320,Network Support,Network documentation,RELATED,qwen/qwen3.8-27b
+321,SIEM,SIEM implementation,BROADER,qwen/qwen3.8-27b
+322,Service Desk Operations,Service Desk Management,SAME,qwen/qwen3.8-27b
+323,CCTV Management,CCTV maintenance,RELATED,qwen/qwen3.8-27b
+324,Release Management,Release Planning,RELATED,qwen/qwen3.8-27b
+325,Software Documentation,Software validation,DIFFERENT,qwen/qwen3.8-27b
+326,Network Optimization,Network Monitoring,RELATED,qwen/qwen3.8-27b
+327,IPS,IDS/IPS configuration,NARROWER,qwen/qwen3.8-27b
+328,IT Governance,IT Operations,DIFFERENT,qwen/qwen3.8-27b
+329,Software Engineering,Software Training,DIFFERENT,qwen/qwen3.8-27b
+330,Data validation,Data Automation,DIFFERENT,qwen/qwen3.8-27b
+331,Red Hat,Red Hat Enterprise Linux,BROADER,qwen/qwen3.8-27b
+332,Apache,Apache Tomcat,BROADER,qwen/qwen3.8-27b
+333,Network Operations,Network automation,BROADER,qwen/qwen3.8-27b
+334,Business Process Automation,Business Process Documentation,DIFFERENT,qwen/qwen3.8-27b
+335,Storage,Storage solutions,BROADER,qwen/qwen3.8-27b
+336,Server Installation,Server Maintenance,RELATED,qwen/qwen3.8-27b
+337,ServiceNow Ticketing,ServiceNow,NARROWER,qwen/qwen3.8-27b
+338,Cost Analysis,Cost Estimation,RELATED,qwen/qwen3.8-27b
+339,macOS,macOS Administration,BROADER,qwen/qwen3.8-27b
+340,SQL Server Administration,SQL Server,NARROWER,qwen/qwen3.8-27b
+341,Load balancer,F5 Load Balancer,BROADER,qwen/qwen3.8-27b
+342,Business Process Documentation,Business Process Automation,RELATED,qwen/qwen3.8-27b
+343,Azure Active Directory,Active Directory,NARROWER,qwen/qwen3.8-27b
+344,Project Governance,Project Deployment,RELATED,qwen/qwen3.8-27b
+345,Data Migration,Data Modeling,RELATED,qwen/qwen3.8-27b
+346,Cloud,Cloud Optimization,BROADER,qwen/qwen3.8-27b
+347,Desktop Support,Desktop Installation,BROADER,qwen/qwen3.8-27b
+348,Printer configuration,Printer Maintenance,RELATED,qwen/qwen3.8-27b
+349,Functional Testing,Non-functional Testing,RELATED,qwen/qwen3.8-27b
+350,Business Reporting,Business Analysis,RELATED,qwen/qwen3.8-27b
+351,.NET Core,.NET,NARROWER,qwen/qwen3.8-27b
+352,WAN,LAN/WAN,NARROWER,qwen/qwen3.8-27b
+353,Non-functional Testing,Functional Testing,RELATED,qwen/qwen3.8-27b
+354,.NET,.NET Core,BROADER,qwen/qwen3.8-27b
+355,Data Privacy Compliance,Compliance,NARROWER,qwen/qwen3.8-27b
+356,Azure Resource Manager,Azure,NARROWER,qwen/qwen3.8-27b
+357,Database Tuning,Database Optimization,SAME,qwen/qwen3.8-27b
+358,Web Analytics,Web Testing,RELATED,qwen/qwen3.8-27b
+359,Agile,Agile Delivery,SAME,qwen/qwen3.8-27b
+360,Oracle,Oracle R12,BROADER,qwen/qwen3.8-27b
+361,Wireless Technologies,Wireless,NARROWER,qwen/qwen3.8-27b
+362,Database,Database troubleshooting,BROADER,qwen/qwen3.8-27b
+363,Backend Security,Backend Architecture,RELATED,qwen/qwen3.8-27b
+364,API Automation,API Security,RELATED,qwen/qwen3.8-27b
+365,Windows OS,Windows,SAME,qwen/qwen3.8-27b
+366,Network Implementation,Network automation,RELATED,qwen/qwen3.8-27b
+367,Application Performance Monitoring,Performance Monitoring,NARROWER,qwen/qwen3.8-27b
+368,Mobile App Development,Mobile App Architecture,RELATED,qwen/qwen3.8-27b
+369,RPGLE,AS400 RPGLE,SAME,qwen/qwen3.8-27b
+370,ITIL problem management,Problem Management,SAME,qwen/qwen3.8-27b
+371,IT Operations,IT Troubleshooting,BROADER,qwen/qwen3.8-27b
+372,Performance Reporting,Performance Tuning,RELATED,qwen/qwen3.8-27b
+373,Application debugging,Application architecture,RELATED,qwen/qwen3.8-27b
+374,Encryption Technologies,Encryption,SAME,qwen/qwen3.8-27b
+375,Process Optimization,Process Modeling,RELATED,qwen/qwen3.8-27b
+376,Network Monitoring,Network Optimization,RELATED,qwen/qwen3.8-27b
+377,Technical Design,Technical Specification,RELATED,qwen/qwen3.8-27b
+378,J2EE,Java J2EE,SAME,qwen/qwen3.8-27b
+379,Microsoft Teams Integration,Microsoft Teams,NARROWER,qwen/qwen3.8-27b
+380,AWS,AWS data services,BROADER,qwen/qwen3.8-27b
+381,EIGRP routing,EIGRP,NARROWER,qwen/qwen3.8-27b
+382,Information Security,Information Security Policies,BROADER,qwen/qwen3.8-27b
+383,Network documentation,Network Management,RELATED,qwen/qwen3.8-27b
+384,Database installation,Database Programming,RELATED,qwen/qwen3.8-27b
+385,Oracle R12,Oracle,NARROWER,qwen/qwen3.8-27b
+386,IT Infrastructure Design,IT infrastructure integration,RELATED,qwen/qwen3.8-27b
+387,MES implementation,MES,NARROWER,qwen/qwen3.8-27b
+388,Access Management,User Access Management,SAME,qwen/qwen3.8-27b
+389,Desktop troubleshooting,Remote Desktop Troubleshooting,BROADER,qwen/qwen3.8-27b
+390,Software security,Software Maintenance,RELATED,qwen/qwen3.8-27b
+391,Compliance,Data Privacy Compliance,BROADER,qwen/qwen3.8-27b
+392,Agile,Agile Coaching,BROADER,qwen/qwen3.8-27b
+393,GraphQL,GraphQL API,SAME,qwen/qwen3.8-27b
+394,SAP,SAP Integration,BROADER,qwen/qwen3.8-27b
+395,Infrastructure Automation,Infrastructure Management,RELATED,qwen/qwen3.8-27b
+396,ASP.NET Core MVC,ASP.NET Core,NARROWER,qwen/qwen3.8-27b
+397,Compliance,Security Compliance,BROADER,qwen/qwen3.8-27b
+398,Workflow optimization,Workflow Configuration,RELATED,qwen/qwen3.8-27b
+399,Business Requirements Documentation,Business Requirements Analysis,RELATED,qwen/qwen3.8-27b
+400,Network automation,Network Operations,RELATED,qwen/qwen3.8-27b
+401,SQL Performance Tuning,Performance Tuning,NARROWER,qwen/qwen3.8-27b
+402,SD-WAN,SD-WAN troubleshooting,NARROWER,qwen/qwen3.8-27b
+403,Hardware debugging,Hardware Installation,RELATED,qwen/qwen3.8-27b
+404,Interface Design,Interface development,RELATED,qwen/qwen3.8-27b
+405,Cloud,Salesforce Sales Cloud,BROADER,qwen/qwen3.8-27b
+406,Web Testing,Web Analytics,RELATED,qwen/qwen3.8-27b
+407,Solaris,Solaris Administration,BROADER,qwen/qwen3.8-27b
+408,Kanban methodology,Kanban,SAME,qwen/qwen3.8-27b
+409,Android testing,Android Deployment,RELATED,qwen/qwen3.8-27b
+410,API Integration,API Development,RELATED,qwen/qwen3.8-27b
+411,Data Governance,Data Analytics,RELATED,qwen/qwen3.8-27b
+412,UML Modeling,UML,NARROWER,qwen/qwen3.8-27b
+413,IDS/IPS monitoring,IDS/IPS,NARROWER,qwen/qwen3.8-27b
+414,Database Administration,Oracle Database Administration,BROADER,qwen/qwen3.8-27b
+415,AWS EC2,AWS,NARROWER,qwen/qwen3.8-27b
+416,Backup Restore,Backup,SAME,qwen/qwen3.8-27b
+417,Software Installation,Software Architecture,DIFFERENT,qwen/qwen3.8-27b
+418,Execution,Test case execution,BROADER,qwen/qwen3.8-27b
+419,macOS,macOS troubleshooting,BROADER,qwen/qwen3.8-27b
+420,Application Security,Application Troubleshooting,RELATED,qwen/qwen3.8-27b
+421,Technical Documentation,Technical Design,DIFFERENT,qwen/qwen3.8-27b
+422,Compliance,SDLC Compliance,BROADER,qwen/qwen3.8-27b
+423,Database troubleshooting,Database,NARROWER,qwen/qwen3.8-27b
+424,SOAP API,SOAP,NARROWER,qwen/qwen3.8-27b
+425,API Development,API Integration,RELATED,qwen/qwen3.8-27b
+426,User Access Management,Access Management,SAME,qwen/qwen3.8-27b
+427,Network documentation,Network Support,DIFFERENT,qwen/qwen3.8-27b
+428,Redis caching,Redis,NARROWER,qwen/qwen3.8-27b
+429,Hardware debugging,Hardware Troubleshooting,SAME,qwen/qwen3.8-27b
+430,Network Maintenance,Network Security,DIFFERENT,qwen/qwen3.8-27b
+431,WAN,LAN/WAN Management,NARROWER,qwen/qwen3.8-27b
+432,Workflow Design,Workflow Configuration,RELATED,qwen/qwen3.8-27b
+433,MVP Architecture,MVP,NARROWER,qwen/qwen3.8-27b
+434,SQL,Azure SQL,BROADER,qwen/qwen3.8-27b
+435,MES,MES implementation,BROADER,qwen/qwen3.8-27b
+436,Microsoft Teams,Microsoft Teams Integration,BROADER,qwen/qwen3.8-27b
+437,Backend Architecture,Backend Security,DIFFERENT,qwen/qwen3.8-27b
+438,SAP Administration,SAP Configuration,RELATED,qwen/qwen3.8-27b
+439,IT infrastructure integration,IT infrastructure maintenance,RELATED,qwen/qwen3.8-27b
+440,Oracle Database Administration,Database Administration,NARROWER,qwen/qwen3.8-27b
+441,IDS/IPS configuration,IDS/IPS,NARROWER,qwen/qwen3.8-27b
+442,Office 365 Support,Office 365,NARROWER,qwen/qwen3.8-27b
+443,SAP Support,SAP Reporting,RELATED,qwen/qwen3.8-27b
+444,ServiceNow,ServiceNow Ticketing,BROADER,qwen/qwen3.8-27b
+445,Database maintenance,Database Security,RELATED,qwen/qwen3.8-27b
+446,ERP Support,ERP Implementation,RELATED,qwen/qwen3.8-27b
+447,Salesforce Sales Cloud,Cloud,NARROWER,qwen/qwen3.8-27b
+448,Azure Security Center,Azure,NARROWER,qwen/qwen3.8-27b
+449,Maven Build,Maven,NARROWER,qwen/qwen3.8-27b
+450,IDS/IPS monitoring,IDS/IPS Management,RELATED,qwen/qwen3.8-27b
+451,Incident Reporting,Incident Review,RELATED,qwen/qwen3.8-27b
+452,ORM,Eloquent ORM,BROADER,qwen/qwen3.8-27b
+453,Trend Analysis,Market trend analysis,BROADER,qwen/qwen3.8-27b
+454,Functional configuration,Functional Design,RELATED,qwen/qwen3.8-27b
+455,OAuth,OAuth 2.0,BROADER,qwen/qwen3.8-27b
+456,SQL Scripting,SQL,NARROWER,qwen/qwen3.8-27b
+457,CISM,CISM Certification,SAME,qwen/qwen3.8-27b
+458,Antivirus Management,Antivirus deployment,RELATED,qwen/qwen3.8-27b
+459,Application Monitoring,Application debugging,RELATED,qwen/qwen3.8-27b
+460,Cybersecurity Governance,Cybersecurity,NARROWER,qwen/qwen3.8-27b
+461,Shell,Shell Scripting,SAME,qwen/qwen3.8-27b
+462,IDS/IPS,IDS,BROADER,qwen/qwen3.8-27b
+463,Application Security,Application debugging,DIFFERENT,qwen/qwen3.8-27b
+464,Ticket Management,Incident Ticket Management,BROADER,qwen/qwen3.8-27b
+465,SAP Configuration,SAP Training,DIFFERENT,qwen/qwen3.8-27b
+466,branding,Personal Branding,BROADER,qwen/qwen3.8-27b
+467,Production Support,Production Planning,DIFFERENT,qwen/qwen3.8-27b
+468,JavaScript,JavaScript ES6,BROADER,qwen/qwen3.8-27b
+469,IDS,IDS/IPS,NARROWER,qwen/qwen3.8-27b
+470,Functional Documentation,Functional analysis,DIFFERENT,qwen/qwen3.8-27b
+471,SAP ERP 6.0,SAP,NARROWER,qwen/qwen3.8-27b
+472,Database Integration,Database Tuning,DIFFERENT,qwen/qwen3.8-27b
+473,VM Virtualization,Virtualization,NARROWER,qwen/qwen3.8-27b
+474,Eloquent ORM,ORM,NARROWER,qwen/qwen3.8-27b
+475,Big Data,Big Data Analytics,BROADER,qwen/qwen3.8-27b
+476,Power BI,Power BI Report Server,NARROWER,qwen/qwen3.8-27b
+477,Software programming,Software Architecture,DIFFERENT,qwen/qwen3.8-27b
+478,VPN implementation,VPN Troubleshooting,DIFFERENT,qwen/qwen3.8-27b
+479,Unix Shell Scripting,Shell,NARROWER,qwen/qwen3.8-27b
+480,Scheduling,Delivery scheduling,NARROWER,qwen/qwen3.8-27b
+481,Database Security,Database maintenance,RELATED,qwen/qwen3.8-27b
+482,Data Modeling,Data Migration,RELATED,qwen/qwen3.8-27b
+483,OSPF,OSPF Protocol,SAME,qwen/qwen3.8-27b
+484,Data Recovery,Recovery,NARROWER,qwen/qwen3.8-27b
+485,Hardware Troubleshooting,Hardware debugging,SAME,qwen/qwen3.8-27b
+486,User Support,User Training,RELATED,qwen/qwen3.8-27b
+487,ITIL Change Management,Change Management,NARROWER,qwen/qwen3.8-27b
+488,LAN,LAN/WAN Management,NARROWER,qwen/qwen3.8-27b
+489,Azure,Azure Resource Manager,BROADER,qwen/qwen3.8-27b
+490,Functional Specification,Functional Testing,RELATED,qwen/qwen3.8-27b
+491,Software Testing Methodologies,Testing Methodologies,NARROWER,qwen/qwen3.8-27b
+492,Office 365,Office 365 administration,BROADER,qwen/qwen3.8-27b
+493,IoT,IoT Solutions,BROADER,qwen/qwen3.8-27b
+494,Office 365 administration,Office 365,NARROWER,qwen/qwen3.8-27b
+495,API Integration,API Testing,RELATED,qwen/qwen3.8-27b
+496,Data Reporting,Data Engineering,RELATED,qwen/qwen3.8-27b
+497,Oracle PL/SQL,Oracle,NARROWER,qwen/qwen3.8-27b
+498,PHP,PHP Laravel,BROADER,qwen/qwen3.8-27b
+499,Test Planning,Test Automation,RELATED,qwen/qwen3.8-27b
+500,Production Planning,Production Support,RELATED,qwen/qwen3.8-27b
+501,Database Administration,Database Integration,RELATED,qwen/qwen3.8-27b
+502,Workflow Configuration,Workflow optimization,RELATED,qwen/qwen3.8-27b
+503,SAP Administration,SAP Implementation,RELATED,qwen/qwen3.8-27b
+504,Risk Analytics,Risk Reporting,RELATED,qwen/qwen3.8-27b
+505,Software Implementation,Software validation,RELATED,qwen/qwen3.8-27b
+506,Incident Management,Security Incident Management,BROADER,qwen/qwen3.8-27b
+507,Big Data Analytics,Big Data,BROADER,qwen/qwen3.8-27b
+508,SIT Testing,SIT Support,RELATED,qwen/qwen3.8-27b
+509,Mentoring Juniors,Mentoring,NARROWER,qwen/qwen3.8-27b
+510,SQL,Microsoft SQL,BROADER,qwen/qwen3.8-27b
+511,Roadmap Planning,Roadmap Development,SAME,qwen/qwen3.8-27b
+512,Technical Troubleshooting,Technical Support,NARROWER,qwen/qwen3.8-27b
+513,Network Engineering,Network Configuration,BROADER,qwen/qwen3.8-27b
+514,MySQL,MySQL Administration,BROADER,qwen/qwen3.8-27b
+515,Server Hardware Troubleshooting,Hardware Troubleshooting,NARROWER,qwen/qwen3.8-27b
+516,Network Testing,Network installation,RELATED,qwen/qwen3.8-27b
+517,Red Hat,Red Hat OpenShift,BROADER,qwen/qwen3.8-27b
+518,Data Integration,Data Reporting,RELATED,qwen/qwen3.8-27b
+519,Desktop Installation,Desktop Support,NARROWER,qwen/qwen3.8-27b
+520,User Support,End-User Support,SAME,qwen/qwen3.8-27b
+521,Database Migration,Database configuration,RELATED,qwen/qwen3.8-27b
+522,Performance Monitoring,Performance Reporting,RELATED,qwen/qwen3.8-27b
+523,L2/L3 switching,Switching,NARROWER,qwen/qwen3.8-27b
+524,SOAP,SOAP Web Services,NARROWER,qwen/qwen3.8-27b
+525,Agile Documentation,Agile Testing,RELATED,qwen/qwen3.8-27b
+526,Jenkins,Jenkins pipelines,NARROWER,qwen/qwen3.8-27b
+527,KPI Analysis,KPI Reporting,RELATED,qwen/qwen3.8-27b
+528,SQL Reporting,SQL Scripting,RELATED,qwen/qwen3.8-27b
+529,S/4HANA,SAP S/4HANA,SAME,qwen/qwen3.8-27b
+530,SAP Reporting,SAP Support,RELATED,qwen/qwen3.8-27b
+531,Application Security,Application Development,RELATED,qwen/qwen3.8-27b
+532,Network Management,Network Support,RELATED,qwen/qwen3.8-27b
+533,Patching,Software Patching,SAME,qwen/qwen3.8-27b
+534,Virtual Machines,Azure Virtual Machines,BROADER,qwen/qwen3.8-27b
+535,API Security,API Development,RELATED,qwen/qwen3.8-27b
+536,SIEM implementation,SIEM,NARROWER,qwen/qwen3.8-27b
+537,Azure SQL Database,Azure SQL,SAME,qwen/qwen3.8-27b
+538,Project Deployment,Project Governance,RELATED,qwen/qwen3.8-27b
+539,Cost Optimization,Cost Management,NARROWER,qwen/qwen3.8-27b
+540,AWS data services,AWS,NARROWER,qwen/qwen3.8-27b
+541,End-User Training,User Training,SAME,qwen/qwen3.8-27b
+542,Agile Testing,Agile Documentation,DIFFERENT,qwen/qwen3.8-27b
+543,Hardware Deployment,Hardware Installation,SAME,qwen/qwen3.8-27b
+544,AS400 RPGLE,RPGLE,SAME,qwen/qwen3.8-27b
+545,Data Automation,Data Modeling,DIFFERENT,qwen/qwen3.8-27b
+546,SAP HANA,SAP,NARROWER,qwen/qwen3.8-27b
+547,Performance Reporting,Performance Monitoring,RELATED,qwen/qwen3.8-27b
+548,Database Security,Database Optimization,DIFFERENT,qwen/qwen3.8-27b
+549,Test Case Management,Test Case Design,RELATED,qwen/qwen3.8-27b
+550,User Training,End-User Training,SAME,qwen/qwen3.8-27b
+551,QA collaboration,Collaboration,NARROWER,qwen/qwen3.8-27b
+552,IT Project Coordination,Project Coordination,NARROWER,qwen/qwen3.8-27b
+553,Workflow Configuration,Workflow Design,RELATED,qwen/qwen3.8-27b
+554,Database,Database maintenance,BROADER,qwen/qwen3.8-27b
+555,Unix,Unix Administration,BROADER,qwen/qwen3.8-27b
+556,macOS troubleshooting,macOS,NARROWER,qwen/qwen3.8-27b
+557,Data Governance,Data Management,NARROWER,qwen/qwen3.8-27b
+558,Infrastructure Management,Infrastructure monitoring,BROADER,qwen/qwen3.8-27b
+559,Business Requirements Analysis,Business Requirements Documentation,NARROWER,qwen/qwen3.8-27b
+560,.NET,ASP.NET Web Forms,BROADER,qwen/qwen3.8-27b
+561,Technical Specification,Technical Design,RELATED,qwen/qwen3.8-27b
+562,Hardware Configuration,Hardware Deployment,RELATED,qwen/qwen3.8-27b
+563,Scheduling,Control-M Scheduling,BROADER,qwen/qwen3.8-27b
+564,Active Directory,Azure Active Directory,RELATED,qwen/qwen3.8-27b
+565,Server Installation,Server Monitoring,RELATED,qwen/qwen3.8-27b
+566,Cost Estimation,Cost Analysis,RELATED,qwen/qwen3.8-27b
+567,LAN,Wireless LAN,BROADER,qwen/qwen3.8-27b
+568,Network Design,Network Optimization,RELATED,qwen/qwen3.8-27b
+569,Agile Coaching,Agile,NARROWER,qwen/qwen3.8-27b
+570,Software Documentation,Software Configuration,RELATED,qwen/qwen3.8-27b
+571,SAP S/4HANA,S/4HANA,SAME,qwen/qwen3.8-27b
+572,VPN implementation,VPN Configuration,RELATED,qwen/qwen3.8-27b
+573,Wireless LAN,Wireless,NARROWER,qwen/qwen3.8-27b
+574,Azure Virtual Machines,Virtual Machines,NARROWER,qwen/qwen3.8-27b
+575,Database development,Database Programming,SAME,qwen/qwen3.8-27b
+576,Client Training,Client Support,RELATED,qwen/qwen3.8-27b
+577,SOAP,SOAP API,BROADER,qwen/qwen3.8-27b
+578,Pre-sales Engineering,Pre-sales support,SAME,qwen/qwen3.8-27b
+579,SDLC Compliance,Compliance,NARROWER,qwen/qwen3.8-27b
+580,Pre-sales support,Pre-sales Engineering,SAME,qwen/qwen3.8-27b
+581,Change Management,ITIL Change Management,BROADER,qwen/qwen3.8-27b
+582,Service Management,ITIL Service Management,BROADER,qwen/qwen3.8-27b
+583,DNS Configuration,DNS,NARROWER,qwen/qwen3.8-27b
+584,Remote Desktop Support,Remote Desktop Troubleshooting,SAME,qwen/qwen3.8-27b
+585,Routing protocols,Routing,NARROWER,qwen/qwen3.8-27b
+586,Network installation,Network documentation,DIFFERENT,qwen/qwen3.8-27b
+587,Delivery scheduling,Scheduling,NARROWER,qwen/qwen3.8-27b
+588,Project Coordination,IT Project Coordination,BROADER,qwen/qwen3.8-27b
+589,Web Design,Web Development,RELATED,qwen/qwen3.8-27b
+590,Policy Development,Security Policy Development,BROADER,qwen/qwen3.8-27b
+591,AWS CloudFormation,AWS,NARROWER,qwen/qwen3.8-27b
+592,Personal Branding,branding,NARROWER,qwen/qwen3.8-27b
+593,Patch Deployment,Patch Management,NARROWER,qwen/qwen3.8-27b
+594,IT infrastructure integration,IT Infrastructure Design,RELATED,qwen/qwen3.8-27b
+595,Software programming,Software security,DIFFERENT,qwen/qwen3.8-27b
+596,Database monitoring,Database configuration,RELATED,qwen/qwen3.8-27b
+597,Network automation,Network Security,DIFFERENT,qwen/qwen3.8-27b
+598,Market trend analysis,Trend Analysis,NARROWER,qwen/qwen3.8-27b
+599,Red Hat Enterprise Linux,Red Hat,NARROWER,qwen/qwen3.8-27b
+600,Network Testing,Network Maintenance,RELATED,qwen/qwen3.8-27b
+601,Data Governance,Data Architecture,RELATED,qwen/qwen3.8-27b
+602,Network Implementation,Network Design,RELATED,qwen/qwen3.8-27b
+603,Server Deployment,Server Migration,RELATED,qwen/qwen3.8-27b
+604,Software Training,Software Engineering,DIFFERENT,qwen/qwen3.8-27b
+605,Jenkins pipelines,Jenkins,NARROWER,qwen/qwen3.8-27b
+606,Database Optimization,Database Security,RELATED,qwen/qwen3.8-27b
+607,Data Engineering,Data Management,NARROWER,qwen/qwen3.8-27b
+608,Cisco Nexus,Nexus,NARROWER,qwen/qwen3.8-27b
+609,Collaboration,Remote Collaboration,BROADER,qwen/qwen3.8-27b
+610,Business Reporting,Business Automation,RELATED,qwen/qwen3.8-27b
+611,Encryption,SSL/TLS Encryption,BROADER,qwen/qwen3.8-27b
+612,VPN Troubleshooting,VPN implementation,RELATED,qwen/qwen3.8-27b
+613,Azure AKS,AKS,NARROWER,qwen/qwen3.8-27b
+614,Process Modeling,Process Optimization,RELATED,qwen/qwen3.8-27b
+615,Data Architecture,Data Governance,RELATED,qwen/qwen3.8-27b
+616,Webpack,Webpack Bundler,SAME,qwen/qwen3.8-27b
+617,Apache Iceberg,Apache,NARROWER,qwen/qwen3.8-27b
+618,Security Incident Management,Incident Management,NARROWER,qwen/qwen3.8-27b
+619,Power BI,Power BI gateways,BROADER,qwen/qwen3.8-27b
+620,Postman API Testing,API Testing,NARROWER,qwen/qwen3.8-27b
+621,Hardware Troubleshooting,Hardware Configuration,RELATED,qwen/qwen3.8-27b
+622,Java J2EE,J2EE,NARROWER,qwen/qwen3.8-27b
+623,Database installation,Database Integration,RELATED,qwen/qwen3.8-27b
+624,Shell Scripting,Shell,NARROWER,qwen/qwen3.8-27b
+625,Business Process Optimization,Business Process Analysis,RELATED,qwen/qwen3.8-27b
+626,ASP.NET Core,ASP.NET Core MVC,BROADER,qwen/qwen3.8-27b
+627,Cloud Migration,Cloud Deployment,RELATED,qwen/qwen3.8-27b
+628,Technical Support,Technical Troubleshooting,BROADER,qwen/qwen3.8-27b
+629,Wi-Fi Administration,Wi-Fi,BROADER,qwen/qwen3.8-27b
+630,Capacity Planning,Network Capacity Planning,BROADER,qwen/qwen3.8-27b
+631,Data validation,Data Architecture,RELATED,qwen/qwen3.8-27b
+632,Server Monitoring,Server Troubleshooting,RELATED,qwen/qwen3.8-27b
+633,Sales Strategy,Sales Engineering,RELATED,qwen/qwen3.8-27b
+634,Infrastructure Automation,Infrastructure monitoring,RELATED,qwen/qwen3.8-27b
+635,IoT Solutions,IoT,BROADER,qwen/qwen3.8-27b
+636,Azure,Azure Security Center,BROADER,qwen/qwen3.8-27b
+637,Network Testing,Network Configuration,RELATED,qwen/qwen3.8-27b
+638,Performance Monitoring,Application Performance Monitoring,BROADER,qwen/qwen3.8-27b
+639,Functional Design,Functional Testing,RELATED,qwen/qwen3.8-27b
+640,Network performance monitoring,Network performance optimization,RELATED,qwen/qwen3.8-27b
+641,SOAP Web Services,SOAP,NARROWER,qwen/qwen3.8-27b
+642,Network Programming,Network Management,RELATED,qwen/qwen3.8-27b
+643,Microsoft SQL,SQL,NARROWER,qwen/qwen3.8-27b
+644,Performance Optimization,Performance Management,RELATED,qwen/qwen3.8-27b
+645,IDS/IPS Management,IDS/IPS monitoring,SAME,qwen/qwen3.8-27b
+646,Mobile App Architecture,Mobile App Development,NARROWER,qwen/qwen3.8-27b
+647,Business Architecture,Business Documentation,RELATED,qwen/qwen3.8-27b
+648,IT Infrastructure Management,IT Infrastructure Design,RELATED,qwen/qwen3.8-27b
+649,API Security,API Automation,RELATED,qwen/qwen3.8-27b
+650,Storage solutions,Storage,SAME,qwen/qwen3.8-27b
+651,Selenium Automation,Selenium,NARROWER,qwen/qwen3.8-27b
+652,Network documentation,Network installation,RELATED,qwen/qwen3.8-27b
+653,English Mandarin Communication,Mandarin Communication,NARROWER,qwen/qwen3.8-27b
+654,Server Migration,Server Deployment,RELATED,qwen/qwen3.8-27b
+655,Data Management,Data Governance,RELATED,qwen/qwen3.8-27b
+656,Server Migration,Server Configuration,RELATED,qwen/qwen3.8-27b
+657,Help Desk,Help Desk Support,SAME,qwen/qwen3.8-27b
+658,MES,Camstar MES,BROADER,qwen/qwen3.8-27b
+659,SVN Version Control,Version Control,NARROWER,qwen/qwen3.8-27b
+660,VPN Configuration,VPN implementation,SAME,qwen/qwen3.8-27b
+661,Business Documentation,Business Architecture,DIFFERENT,qwen/qwen3.8-27b
+662,Network Programming,Network Engineering,RELATED,qwen/qwen3.8-27b
+663,CRM implementation,CRM Integration,RELATED,qwen/qwen3.8-27b
+664,Problem Management,ITIL problem management,SAME,qwen/qwen3.8-27b
+665,SQL Server,SQL Server Administration,BROADER,qwen/qwen3.8-27b
+666,Database,Database configuration,BROADER,qwen/qwen3.8-27b
+667,Google Cloud Platform,Google Cloud,SAME,qwen/qwen3.8-27b
+668,Network Support,Network Security,RELATED,qwen/qwen3.8-27b
+669,Network Optimization,Network Implementation,RELATED,qwen/qwen3.8-27b
+670,Splunk SIEM,Splunk,NARROWER,qwen/qwen3.8-27b
+671,KPI Monitoring,KPI Reporting,RELATED,qwen/qwen3.8-27b
+672,Threat Modeling,Threat Analysis,RELATED,qwen/qwen3.8-27b
+673,ABAP Development,ABAP debugging,BROADER,qwen/qwen3.8-27b
+674,Network Design,Network Architecture,SAME,qwen/qwen3.8-27b
+675,Server Maintenance,Server Troubleshooting,RELATED,qwen/qwen3.8-27b
+676,Software Configuration,Software Documentation,DIFFERENT,qwen/qwen3.8-27b
+677,Groovy scripting,Groovy,SAME,qwen/qwen3.8-27b
+678,Software Training,Software Implementation,DIFFERENT,qwen/qwen3.8-27b
+679,Server Troubleshooting,Server Monitoring,RELATED,qwen/qwen3.8-27b
+680,AWS,AWS CloudFormation,BROADER,qwen/qwen3.8-27b
+681,Website development,Website Maintenance,RELATED,qwen/qwen3.8-27b
+682,Global Collaboration,Collaboration,NARROWER,qwen/qwen3.8-27b
+683,Business Intelligence,Business Intelligence Reporting,BROADER,qwen/qwen3.8-27b
+684,Printer Maintenance,Printer configuration,RELATED,qwen/qwen3.8-27b
+685,Server Configuration,Server Migration,RELATED,qwen/qwen3.8-27b
+686,Windows OS Support,Windows OS Installation,RELATED,qwen/qwen3.8-27b
+687,IT Support,IT Operations,RELATED,qwen/qwen3.8-27b
+688,SAP Configuration,SAP Administration,RELATED,qwen/qwen3.8-27b
+689,Control-M Scheduling,Control-M,NARROWER,qwen/qwen3.8-27b
+690,Networking,Wireless networking,BROADER,qwen/qwen3.8-27b
+691,Client Support,Client Training,RELATED,qwen/qwen3.8-27b
+692,Control-M,Control-M Scheduling,BROADER,qwen/qwen3.8-27b
+693,SAP Integration,SAP,NARROWER,qwen/qwen3.8-27b
+694,Maven,Maven Build,BROADER,qwen/qwen3.8-27b
+695,Network automation,Network Implementation,RELATED,qwen/qwen3.8-27b
+696,Wireless networking,Networking,NARROWER,qwen/qwen3.8-27b
+697,Data Visualization,Data Architecture,RELATED,qwen/qwen3.8-27b
+698,Routing,Routing protocols,BROADER,qwen/qwen3.8-27b
+699,ServiceNow Integration,ServiceNow,NARROWER,qwen/qwen3.8-27b
+700,Salesforce,Salesforce Sales Cloud,BROADER,qwen/qwen3.8-27b
+701,Procurement,Procurement Coordination,BROADER,qwen/qwen3.8-27b
+702,Application Development,Application Security,DIFFERENT,qwen/qwen3.8-27b
+703,Business Documentation,Business Analysis,RELATED,qwen/qwen3.8-27b
+704,Linux,Kali Linux,BROADER,qwen/qwen3.8-27b
+705,XML,XML Publisher,BROADER,qwen/qwen3.8-27b
+706,Selenium Testing,Selenium Automation,SAME,qwen/qwen3.8-27b
+707,Data-driven Decision Making,Decision Making,NARROWER,qwen/qwen3.8-27b
+708,User Access Review,User Access Management,NARROWER,qwen/qwen3.8-27b
+709,Network installation,Network Testing,RELATED,qwen/qwen3.8-27b
+710,Windows Server 2012,Windows,NARROWER,qwen/qwen3.8-27b
+711,Network Management,Network Programming,RELATED,qwen/qwen3.8-27b
+712,IT infrastructure maintenance,IT infrastructure integration,RELATED,qwen/qwen3.8-27b
+713,ITIL Service Management,Service Management,NARROWER,qwen/qwen3.8-27b
+714,Database Tuning,Database Integration,RELATED,qwen/qwen3.8-27b
+715,Network Management,Network documentation,RELATED,qwen/qwen3.8-27b
+716,Incident Response Planning,Incident Response,NARROWER,qwen/qwen3.8-27b
+717,Sales Engineering,Sales Operations,RELATED,qwen/qwen3.8-27b
+718,Procurement,Procurement Compliance,BROADER,qwen/qwen3.8-27b
+719,ASP.NET Web Forms,.NET,NARROWER,qwen/qwen3.8-27b
+720,SOAP Web Services,Web Services,NARROWER,qwen/qwen3.8-27b
+721,Decision Making,Data-driven Decision Making,BROADER,qwen/qwen3.8-27b
+722,Azure SQL Database,SQL Database,SAME,qwen/qwen3.8-27b
+723,Workflow Automation,Workflow Configuration,RELATED,qwen/qwen3.8-27b
+724,Database configuration,Database Migration,RELATED,qwen/qwen3.8-27b
+725,SIT Support,SIT Testing,RELATED,qwen/qwen3.8-27b
+726,Hardware Deployment,Hardware Configuration,RELATED,qwen/qwen3.8-27b
+727,macOS Administration,macOS,NARROWER,qwen/qwen3.8-27b
+728,SIEM Management,SIEM Integration,RELATED,qwen/qwen3.8-27b
+729,LAN/WAN networking,WAN,BROADER,qwen/qwen3.8-27b
+730,Reliability Engineering,Site Reliability Engineering,NARROWER,qwen/qwen3.8-27b
+731,Unix/Linux administration,Linux Administration,NARROWER,qwen/qwen3.8-27b
+732,Network performance optimization,Network performance monitoring,RELATED,qwen/qwen3.8-27b
+733,Performance Tuning,SQL Performance Tuning,BROADER,qwen/qwen3.8-27b
+734,SSL/TLS Encryption,Encryption,NARROWER,qwen/qwen3.8-27b
+735,ERP Support,ERP Administration,RELATED,qwen/qwen3.8-27b
+736,Apache,Apache Spark,DIFFERENT,qwen/qwen3.8-27b
+737,Code Review,Code maintenance,RELATED,qwen/qwen3.8-27b
+738,API Testing,Postman API Testing,BROADER,qwen/qwen3.8-27b
+739,SAP Reporting,SAP Integration,RELATED,qwen/qwen3.8-27b
+740,CRM Integration,CRM implementation,RELATED,qwen/qwen3.8-27b
+741,Networking,AWS networking,BROADER,qwen/qwen3.8-27b
+742,Network Support,Network Management,RELATED,qwen/qwen3.8-27b
+743,WAN,LAN/WAN networking,NARROWER,qwen/qwen3.8-27b
+744,Windows Imaging,Windows,NARROWER,qwen/qwen3.8-27b
+745,OSPF Protocol,OSPF,SAME,qwen/qwen3.8-27b
+746,LAN/WAN Management,LAN/WAN design,RELATED,qwen/qwen3.8-27b
+747,Antivirus deployment,Antivirus Management,NARROWER,qwen/qwen3.8-27b
+748,Wireless,Wireless networking,BROADER,qwen/qwen3.8-27b
+749,Collaboration,Global Collaboration,BROADER,qwen/qwen3.8-27b
+750,Functional analysis,Functional configuration,RELATED,qwen/qwen3.8-27b
+751,EIGRP,EIGRP routing,SAME,qwen/qwen3.8-27b
+752,JavaScript ES6,JavaScript,NARROWER,qwen/qwen3.8-27b
+753,Apache Tomcat,Apache,NARROWER,qwen/qwen3.8-27b
+754,XML Publisher,XML,NARROWER,qwen/qwen3.8-27b
+755,Scheduling,Shift Scheduling,BROADER,qwen/qwen3.8-27b
+756,SLA Management,SLA Monitoring,BROADER,qwen/qwen3.8-27b
+757,Testing Methodologies,Software Testing Methodologies,BROADER,qwen/qwen3.8-27b
+758,Prometheus,Prometheus Monitoring,BROADER,qwen/qwen3.8-27b
+759,Red Hat OpenShift,Red Hat,NARROWER,qwen/qwen3.8-27b
+760,Compliance Testing,Compliance Reporting,RELATED,qwen/qwen3.8-27b
+761,Windows,Windows OS,SAME,qwen/qwen3.8-27b
+762,Service Desk Management,Service Desk Operations,SAME,qwen/qwen3.8-27b
+763,IT Infrastructure Design,IT Infrastructure Management,RELATED,qwen/qwen3.8-27b
+764,Password policy enforcement,Policy Enforcement,NARROWER,qwen/qwen3.8-27b
+765,DNS,DNS Configuration,BROADER,qwen/qwen3.8-27b
+766,Wireless,Wireless LAN,BROADER,qwen/qwen3.8-27b
+767,Network Operations,Network installation,RELATED,qwen/qwen3.8-27b
+768,Functional Design,Functional configuration,RELATED,qwen/qwen3.8-27b
+769,Procurement Coordination,Procurement,NARROWER,qwen/qwen3.8-27b
+770,Database Programming,Database installation,RELATED,qwen/qwen3.8-27b
+771,Financial Management,Financial Analysis,RELATED,qwen/qwen3.8-27b
+772,Software Maintenance,Software security,RELATED,qwen/qwen3.8-27b
+773,Web Security,Web Design,DIFFERENT,qwen/qwen3.8-27b
+774,AWS cloud security,AWS Cloud Architecture,RELATED,qwen/qwen3.8-27b
+775,Incident Ticket Management,Ticket Management,NARROWER,qwen/qwen3.8-27b
+776,IT Strategy,IT Support,DIFFERENT,qwen/qwen3.8-27b
+777,SD-WAN troubleshooting,SD-WAN,NARROWER,qwen/qwen3.8-27b
+778,Application Testing,Application Troubleshooting,RELATED,qwen/qwen3.8-27b
+779,ServiceNow Integration,ServiceNow Administration,RELATED,qwen/qwen3.8-27b
+780,Switching,Network Switching,SAME,qwen/qwen3.8-27b
+781,MySQL Administration,MySQL,NARROWER,qwen/qwen3.8-27b
+782,Shift Scheduling,Scheduling,NARROWER,qwen/qwen3.8-27b
+783,LAN Configuration,WAN/LAN Configuration,NARROWER,qwen/qwen3.8-27b
+784,Unified Communications,Cisco Unified Communications,BROADER,qwen/qwen3.8-27b
+785,Network Design,Network Implementation,RELATED,qwen/qwen3.8-27b
+786,Network Monitoring,Network Operations,NARROWER,qwen/qwen3.8-27b
+787,Playwright Automation,Playwright,NARROWER,qwen/qwen3.8-27b
+788,Data Automation,Data Integration,RELATED,qwen/qwen3.8-27b
+789,UAT Support,UAT Testing,RELATED,qwen/qwen3.8-27b
+790,CCTV maintenance,CCTV Management,RELATED,qwen/qwen3.8-27b
+791,Performance Tuning,Database Performance Tuning,BROADER,qwen/qwen3.8-27b
+792,Functional analysis,Functional Documentation,RELATED,qwen/qwen3.8-27b
+793,SAP,SAP HANA,BROADER,qwen/qwen3.8-27b
+794,Linux,Linux Administration,BROADER,qwen/qwen3.8-27b
+795,Pre-sales,Technical Pre-sales,BROADER,qwen/qwen3.8-27b
+796,SSRS Reporting,SSRS,NARROWER,qwen/qwen3.8-27b
+797,UAT Testing,UAT Support,RELATED,qwen/qwen3.8-27b
+798,Microsoft Dynamics 365FO,Microsoft Dynamics,NARROWER,qwen/qwen3.8-27b
+799,VMware,VMware vSphere,BROADER,qwen/qwen3.8-27b
+800,Business Analysis,Business Documentation,RELATED,qwen/qwen3.8-27b

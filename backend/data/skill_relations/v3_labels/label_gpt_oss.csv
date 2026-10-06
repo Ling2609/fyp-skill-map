@@ -1,0 +1,21 @@
+id,a,b,label_gpt_oss,model
+1,AWS Cloud Architecture,AWS cloud security,RELATED,openai/gpt-oss-120b
+2,Oracle Database,Oracle Database Administration,BROADER,openai/gpt-oss-120b
+3,Hardware Installation,Hardware Deployment,BROADER,openai/gpt-oss-120b
+4,Test Automation,Test Planning,RELATED,openai/gpt-oss-120b
+5,Hardware Maintenance,Hardware debugging,RELATED,openai/gpt-oss-120b
+6,Software validation,Software Documentation,RELATED,openai/gpt-oss-120b
+7,Kubernetes,Kubernetes Orchestration,SAME,openai/gpt-oss-120b
+8,Hardware Testing,Hardware Configuration,RELATED,openai/gpt-oss-120b
+9,Database monitoring,Database Programming,RELATED,openai/gpt-oss-120b
+10,Risk Analysis,Risk Development,RELATED,openai/gpt-oss-120b
+11,Application Support,Application integration,RELATED,openai/gpt-oss-120b
+12,Hardware Configuration,Hardware Troubleshooting,BROADER,openai/gpt-oss-120b
+13,Application debugging,Application Security,DIFFERENT,openai/gpt-oss-120b
+14,Power BI Report Server,Power BI,NARROWER,openai/gpt-oss-120b
+15,Microsoft Dynamics,Microsoft Dynamics 365FO,BROADER,openai/gpt-oss-120b
+16,SLA Monitoring,SLA Management,BROADER,openai/gpt-oss-120b
+17,Cisco Routing,Routing,NARROWER,openai/gpt-oss-120b
+18,Web Services,SOAP Web Services,BROADER,openai/gpt-oss-120b
+19,Redis,Redis caching,SAME,openai/gpt-oss-120b
+20,Database Performance Tuning,Performance Tuning,NARROWER,openai/gpt-oss-120b

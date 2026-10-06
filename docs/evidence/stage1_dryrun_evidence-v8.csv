@@ -5255,3 +5255,374 @@
 2026-10-06,live_70a54b1e46a44098,live,"Senior Sales Engineer, IT Infrastructure Solutions",Communication,keep,soft,required,required,1.0,,"Excellent communication, negotiation, interpersonal, and stakeholder management skills"
 2026-10-06,live_70a54b1e46a44098,live,"Senior Sales Engineer, IT Infrastructure Solutions",Interpersonal,keep,soft,required,required,1.0,,"Excellent communication, negotiation, interpersonal, and stakeholder management skills"
 2026-10-06,live_70a54b1e46a44098,live,"Senior Sales Engineer, IT Infrastructure Solutions",Stakeholder management,keep,soft,required,required,1.0,,"Excellent communication, negotiation, interpersonal, and stakeholder management skills"
+2026-10-06,live_985b536a910cb4b2,live,Lead Backend Engineer (Product/System/SaaS/PaaS),Java,keep,hard,required,required,1.0,,Strong Java and Spring Boot experience
+2026-10-06,live_985b536a910cb4b2,live,Lead Backend Engineer (Product/System/SaaS/PaaS),Spring Boot,keep,hard,required,required,1.0,,Strong Java and Spring Boot experience
+2026-10-06,live_985b536a910cb4b2,live,Lead Backend Engineer (Product/System/SaaS/PaaS),PostgreSQL,keep,hard,required,required,1.0,,PostgreSQL or other relational database experience
+2026-10-06,live_985b536a910cb4b2,live,Lead Backend Engineer (Product/System/SaaS/PaaS),Docker,keep,hard,required,required,1.0,,Good understanding of containerized environments (Docker/Kubernetes)
+2026-10-06,live_985b536a910cb4b2,live,Lead Backend Engineer (Product/System/SaaS/PaaS),Kubernetes,keep,hard,required,required,1.0,,Good understanding of containerized environments (Docker/Kubernetes)
+2026-10-06,live_985b536a910cb4b2,live,Lead Backend Engineer (Product/System/SaaS/PaaS),Collaboration,keep,soft,unspecified,required,1.0,,"Work collaboratively with stakeholders to analyze requirements, propose solutions, and ensure alignment with business goals."
+2026-10-06,live_985b536a910cb4b2,live,Lead Backend Engineer (Product/System/SaaS/PaaS),Unit testing,keep,hard,unspecified,,1.0,,"Develop comprehensive testing strategies, including unit and integration testing, to ensure reliable and secure applications."
+2026-10-06,live_985b536a910cb4b2,live,Lead Backend Engineer (Product/System/SaaS/PaaS),Integration testing,keep,hard,unspecified,,1.0,,"Develop comprehensive testing strategies, including unit and integration testing, to ensure reliable and secure applications."
+2026-10-06,live_985b536a910cb4b2,live,Lead Backend Engineer (Product/System/SaaS/PaaS),Code review,keep,hard,unspecified,,1.0,,Ensure code quality and maintainability by following best practices and conducting regular code reviews.
+2026-10-06,live_985b536a910cb4b2,live,Lead Backend Engineer (Product/System/SaaS/PaaS),Software architecture,keep,hard,required,required,1.0,,Strong software architecture understanding
+2026-10-06,live_985b536a910cb4b2,live,Lead Backend Engineer (Product/System/SaaS/PaaS),Distributed systems,keep,hard,required,required,1.0,,Experience with distributed systems / microservice architectures
+2026-10-06,live_985b536a910cb4b2,live,Lead Backend Engineer (Product/System/SaaS/PaaS),Microservices,keep,hard,required,required,1.0,,Experience with distributed systems / microservice architectures
+2026-10-06,live_985b536a910cb4b2,live,Lead Backend Engineer (Product/System/SaaS/PaaS),API design,keep,hard,required,required,1.0,,Experience designing scalable backend systems and APIs
+2026-10-06,live_985b536a910cb4b2,live,Lead Backend Engineer (Product/System/SaaS/PaaS),SaaS,keep,hard,required,required,1.0,,Experience building SaaS/PaaS products.
+2026-10-06,live_985b536a910cb4b2,live,Lead Backend Engineer (Product/System/SaaS/PaaS),PaaS,keep,hard,required,required,1.0,,Experience building SaaS/PaaS products.
+2026-10-06,live_985b536a910cb4b2,live,Lead Backend Engineer (Product/System/SaaS/PaaS),AI,keep,hard,preferred,preferred,1.0,,Familiarity with AI/LLM-related technologies is a plus
+2026-10-06,live_985b536a910cb4b2,live,Lead Backend Engineer (Product/System/SaaS/PaaS),DevOps,keep,hard,preferred,preferred,1.0,one of: DevOps / Cloud environments / CI/CD pipelines / Platform engineering,"Experience with DevOps, cloud environments, CI/CD pipelines, or platform engineering is a strong advantage"
+2026-10-06,live_985b536a910cb4b2,live,Lead Backend Engineer (Product/System/SaaS/PaaS),Cloud environments,keep,hard,preferred,preferred,1.0,one of: DevOps / Cloud environments / CI/CD pipelines / Platform engineering,"Experience with DevOps, cloud environments, CI/CD pipelines, or platform engineering is a strong advantage"
+2026-10-06,live_985b536a910cb4b2,live,Lead Backend Engineer (Product/System/SaaS/PaaS),CI/CD pipelines,keep,hard,preferred,preferred,1.0,one of: DevOps / Cloud environments / CI/CD pipelines / Platform engineering,"Experience with DevOps, cloud environments, CI/CD pipelines, or platform engineering is a strong advantage"
+2026-10-06,live_985b536a910cb4b2,live,Lead Backend Engineer (Product/System/SaaS/PaaS),Platform engineering,keep,hard,preferred,preferred,1.0,one of: DevOps / Cloud environments / CI/CD pipelines / Platform engineering,"Experience with DevOps, cloud environments, CI/CD pipelines, or platform engineering is a strong advantage"
+2026-10-06,live_985b536a910cb4b2,live,Lead Backend Engineer (Product/System/SaaS/PaaS),Mentoring,keep,soft,unspecified,,1.0,,Mentoring or technical leadership experience
+2026-10-06,live_985b536a910cb4b2,live,Lead Backend Engineer (Product/System/SaaS/PaaS),Technical leadership,keep,soft,unspecified,,1.0,,Mentoring or technical leadership experience
+2026-10-06,live_985b536a910cb4b2,live,Lead Backend Engineer (Product/System/SaaS/PaaS),Communication,keep,soft,required,,1.0,,Excellent communication skills in English (spoken & written)
+2026-10-06,live_40daf7d72c9a4d7f,live,Senior IT Cloud Engineer,AWS,keep,hard,required,,1.0,,"AWS, Microsoft Azure, and Google Cloud Platform"
+2026-10-06,live_40daf7d72c9a4d7f,live,Senior IT Cloud Engineer,Microsoft Azure,keep,hard,required,,1.0,,"AWS, Microsoft Azure, and Google Cloud Platform"
+2026-10-06,live_40daf7d72c9a4d7f,live,Senior IT Cloud Engineer,Google Cloud Platform,keep,hard,required,,1.0,,"AWS, Microsoft Azure, and Google Cloud Platform"
+2026-10-06,live_40daf7d72c9a4d7f,live,Senior IT Cloud Engineer,API integration,keep,hard,required,,1.0,,"design, deploy, and maintain API integrations"
+2026-10-06,live_40daf7d72c9a4d7f,live,Senior IT Cloud Engineer,Webhooks,keep,hard,required,,1.0,,"webhooks, and workflow automations"
+2026-10-06,live_40daf7d72c9a4d7f,live,Senior IT Cloud Engineer,Workflow automation,keep,hard,required,,1.0,,"webhooks, and workflow automations"
+2026-10-06,live_40daf7d72c9a4d7f,live,Senior IT Cloud Engineer,Terraform,keep,hard,required,,1.0,,tools such as Terraform and Ansible etc
+2026-10-06,live_40daf7d72c9a4d7f,live,Senior IT Cloud Engineer,Ansible,keep,hard,required,,1.0,,tools such as Terraform and Ansible etc
+2026-10-06,live_40daf7d72c9a4d7f,live,Senior IT Cloud Engineer,Python,keep,hard,required,trained,1.0,one of: Python / PowerShell / Bash / Go / JavaScript,"languages such as Python, PowerShell, Bash, Go, or JavaScript"
+2026-10-06,live_40daf7d72c9a4d7f,live,Senior IT Cloud Engineer,PowerShell,keep,hard,required,trained,1.0,one of: Python / PowerShell / Bash / Go / JavaScript,"languages such as Python, PowerShell, Bash, Go, or JavaScript"
+2026-10-06,live_40daf7d72c9a4d7f,live,Senior IT Cloud Engineer,Bash,keep,hard,required,trained,1.0,one of: Python / PowerShell / Bash / Go / JavaScript,"languages such as Python, PowerShell, Bash, Go, or JavaScript"
+2026-10-06,live_40daf7d72c9a4d7f,live,Senior IT Cloud Engineer,Go,keep,hard,required,trained,1.0,one of: Python / PowerShell / Bash / Go / JavaScript,"languages such as Python, PowerShell, Bash, Go, or JavaScript"
+2026-10-06,live_40daf7d72c9a4d7f,live,Senior IT Cloud Engineer,JavaScript,keep,hard,required,trained,1.0,one of: Python / PowerShell / Bash / Go / JavaScript,"languages such as Python, PowerShell, Bash, Go, or JavaScript"
+2026-10-06,live_40daf7d72c9a4d7f,live,Senior IT Cloud Engineer,CI/CD pipelines,keep,hard,required,,1.0,,build and maintain CI/CD pipelines and automated operational workflows
+2026-10-06,live_40daf7d72c9a4d7f,live,Senior IT Cloud Engineer,Disaster recovery,keep,hard,required,,1.0,,"Design and implement disaster recovery, backup, multi-region failover"
+2026-10-06,live_40daf7d72c9a4d7f,live,Senior IT Cloud Engineer,Backup,keep,hard,required,,1.0,,"Design and implement disaster recovery, backup, multi-region failover"
+2026-10-06,live_40daf7d72c9a4d7f,live,Senior IT Cloud Engineer,Business continuity,keep,hard,required,,1.0,,and business continuity strategies
+2026-10-06,live_40daf7d72c9a4d7f,live,Senior IT Cloud Engineer,Security-by-design,keep,hard,required,,1.0,,Apply security-by-design principles across the enterprise cloud infrastructure
+2026-10-06,live_40daf7d72c9a4d7f,live,Senior IT Cloud Engineer,Zabbix,keep,hard,required,required,1.0,one of: Zabbix / Grafana / Datadog,"Zabbix, Grafana, Datadog, or similar"
+2026-10-06,live_40daf7d72c9a4d7f,live,Senior IT Cloud Engineer,Grafana,keep,hard,required,required,1.0,one of: Zabbix / Grafana / Datadog,"Zabbix, Grafana, Datadog, or similar"
+2026-10-06,live_40daf7d72c9a4d7f,live,Senior IT Cloud Engineer,Datadog,keep,hard,required,required,1.0,one of: Zabbix / Grafana / Datadog,"Zabbix, Grafana, Datadog, or similar"
+2026-10-06,live_40daf7d72c9a4d7f,live,Senior IT Cloud Engineer,AWS Lambda,keep,hard,required,required,1.0,one of: AWS Lambda / n8n,"AWS Lambda, n8n, or comparable serverless"
+2026-10-06,live_40daf7d72c9a4d7f,live,Senior IT Cloud Engineer,n8n,keep,hard,required,required,1.0,one of: AWS Lambda / n8n,"AWS Lambda, n8n, or comparable serverless"
+2026-10-06,live_40daf7d72c9a4d7f,live,Senior IT Cloud Engineer,DNS,keep,hard,required,required,1.0,,Experience managing enterprise DNS services
+2026-10-06,live_40daf7d72c9a4d7f,live,Senior IT Cloud Engineer,SSL/TLS,keep,hard,required,required,1.0,,SSL/TLS certificate lifecycles
+2026-10-06,live_40daf7d72c9a4d7f,live,Senior IT Cloud Engineer,Certificate management,keep,hard,required,required,1.0,,centralized certificate-management platforms
+2026-10-06,live_40daf7d72c9a4d7f,live,Senior IT Cloud Engineer,DHCP,keep,hard,required,required,1.0,,"enterprise networking components (DNS, DHCP, VPN, VPC/VNet peering"
+2026-10-06,live_40daf7d72c9a4d7f,live,Senior IT Cloud Engineer,VPN,keep,hard,required,required,1.0,,"enterprise networking components (DNS, DHCP, VPN, VPC/VNet peering"
+2026-10-06,live_40daf7d72c9a4d7f,live,Senior IT Cloud Engineer,VPC/VNet peering,keep,hard,required,required,1.0,,"enterprise networking components (DNS, DHCP, VPN, VPC/VNet peering"
+2026-10-06,live_40daf7d72c9a4d7f,live,Senior IT Cloud Engineer,Firewalls,keep,hard,required,required,1.0,,"firewalls, routing, load balancing, zero-trust security"
+2026-10-06,live_40daf7d72c9a4d7f,live,Senior IT Cloud Engineer,Routing,keep,hard,required,required,1.0,,"firewalls, routing, load balancing, zero-trust security"
+2026-10-06,live_40daf7d72c9a4d7f,live,Senior IT Cloud Engineer,Load balancing,keep,hard,required,required,1.0,,"firewalls, routing, load balancing, zero-trust security"
+2026-10-06,live_40daf7d72c9a4d7f,live,Senior IT Cloud Engineer,Zero-trust security,keep,hard,required,required,1.0,,"firewalls, routing, load balancing, zero-trust security"
+2026-10-06,live_40daf7d72c9a4d7f,live,Senior IT Cloud Engineer,Windows,keep,hard,required,required,1.0,,"Strong troubleshooting experience across Windows, macOS, and Linux environments"
+2026-10-06,live_40daf7d72c9a4d7f,live,Senior IT Cloud Engineer,macOS,keep,hard,required,required,1.0,,"Strong troubleshooting experience across Windows, macOS, and Linux environments"
+2026-10-06,live_40daf7d72c9a4d7f,live,Senior IT Cloud Engineer,Linux,keep,hard,required,required,1.0,,"Strong troubleshooting experience across Windows, macOS, and Linux environments"
+2026-10-06,live_40daf7d72c9a4d7f,live,Senior IT Cloud Engineer,Containers,keep,hard,required,required,1.0,,strong knowledge of containerized environment
+2026-10-06,live_36d72f8889d5df76,live,Software Test Engineer (Network & Servers),Debugging,keep,hard,unspecified,,1.0,,"develops, debugs, tests, deploys and supports code"
+2026-10-06,live_36d72f8889d5df76,live,Software Test Engineer (Network & Servers),Testing,keep,hard,unspecified,,1.0,,"develops, debugs, tests, deploys and supports code"
+2026-10-06,live_36d72f8889d5df76,live,Software Test Engineer (Network & Servers),Deployment,keep,hard,unspecified,,1.0,,"develops, debugs, tests, deploys and supports code"
+2026-10-06,live_36d72f8889d5df76,live,Software Test Engineer (Network & Servers),Software testing,keep,hard,unspecified,,1.0,,"write, debug, maintain, and test software"
+2026-10-06,live_36d72f8889d5df76,live,Software Test Engineer (Network & Servers),Software development,keep,hard,unspecified,,1.0,,"write, debug, maintain, and test software"
+2026-10-06,live_36d72f8889d5df76,live,Software Test Engineer (Network & Servers),Agile,keep,hard,unspecified,,1.0,,"Agile, Scrum, etc."
+2026-10-06,live_36d72f8889d5df76,live,Software Test Engineer (Network & Servers),Scrum,keep,hard,unspecified,,1.0,,"Agile, Scrum, etc."
+2026-10-06,live_36d72f8889d5df76,live,Software Test Engineer (Network & Servers),Test automation,keep,hard,unspecified,,1.0,,"Analyze, design and develop tests and test-automation suites"
+2026-10-06,live_36d72f8889d5df76,live,Software Test Engineer (Network & Servers),Configuration management,keep,hard,unspecified,,1.0,,Design and develop a processing platform using various configuration management technologies
+2026-10-06,live_36d72f8889d5df76,live,Software Test Engineer (Network & Servers),Software development methodology,keep,hard,unspecified,,1.0,,Test software development methodology (may be done in agile environment)
+2026-10-06,live_36d72f8889d5df76,live,Software Test Engineer (Network & Servers),Project management,keep,soft,unspecified,,1.0,,Project Management - Ability to manage a single line engineering project
+2026-10-06,live_36d72f8889d5df76,live,Software Test Engineer (Network & Servers),Change management,keep,soft,unspecified,,1.0,,Create a project/change management plan
+2026-10-06,live_36d72f8889d5df76,live,Software Test Engineer (Network & Servers),Leadership,keep,soft,unspecified,,1.0,,"Leadership - Demonstrate ""Individual Leadership Behaviors"""
+2026-10-06,live_36d72f8889d5df76,live,Software Test Engineer (Network & Servers),Financial acumen,keep,soft,unspecified,,1.0,,Financial Acumen / Business Planning -Solid understanding of Celestica’s budgeting
+2026-10-06,live_36d72f8889d5df76,live,Software Test Engineer (Network & Servers),Coaching,keep,soft,unspecified,required,1.0,,Coaching/Mentoring
+2026-10-06,live_36d72f8889d5df76,live,Software Test Engineer (Network & Servers),Mentoring,keep,soft,unspecified,required,1.0,,Coaching/Mentoring
+2026-10-06,live_36d72f8889d5df76,live,Software Test Engineer (Network & Servers),Communication,keep,soft,unspecified,required,1.0,,Communication/Negotiation/Presentation
+2026-10-06,live_36d72f8889d5df76,live,Software Test Engineer (Network & Servers),Negotiation,keep,soft,unspecified,required,1.0,,Communication/Negotiation/Presentation
+2026-10-06,live_36d72f8889d5df76,live,Software Test Engineer (Network & Servers),Presentation,keep,soft,unspecified,required,1.0,,Communication/Negotiation/Presentation
+2026-10-06,live_36d72f8889d5df76,live,Software Test Engineer (Network & Servers),Creative problem solving,keep,soft,unspecified,required,1.0,,Creative Problem Solving
+2026-10-06,live_36d72f8889d5df76,live,Software Test Engineer (Network & Servers),Customer interaction,keep,soft,unspecified,required,1.0,,Customer Interaction/Stakeholder Management
+2026-10-06,live_36d72f8889d5df76,live,Software Test Engineer (Network & Servers),Stakeholder management,keep,soft,unspecified,required,1.0,,Customer Interaction/Stakeholder Management
+2026-10-06,live_36d72f8889d5df76,live,Software Test Engineer (Network & Servers),Quality & Lean,keep,soft,unspecified,required,1.0,,Quality & Lean
+2026-10-06,live_36d72f8889d5df76,live,Software Test Engineer (Network & Servers),Collaboration,keep,soft,unspecified,required,1.0,,Working Effectively with Others
+2026-10-06,live_36d72f8889d5df76,live,Software Test Engineer (Network & Servers),D/PFMEA,keep,hard,unspecified,required,1.0,,D/PFMEA
+2026-10-06,live_36d72f8889d5df76,live,Software Test Engineer (Network & Servers),8D,keep,hard,unspecified,required,1.0,,8D/Corrective Action
+2026-10-06,live_36d72f8889d5df76,live,Software Test Engineer (Network & Servers),Corrective action,keep,hard,unspecified,required,1.0,,8D/Corrective Action
+2026-10-06,live_36d72f8889d5df76,live,Software Test Engineer (Network & Servers),Equipment safety,keep,hard,unspecified,required,1.0,,Equipment Safety
+2026-10-06,live_36d72f8889d5df76,live,Software Test Engineer (Network & Servers),Design of Experiments,keep,hard,unspecified,required,1.0,,Design of Experiments (DOE)
+2026-10-06,live_7fdb8e26f07560f7,live,Senior Android Platform Engineer,Kotlin,keep,hard,required,required,1.0,,Advanced proficiency in Kotlin
+2026-10-06,live_7fdb8e26f07560f7,live,Senior Android Platform Engineer,Android Studio,keep,hard,unspecified,,1.0,,optimise Android Studio configurations
+2026-10-06,live_7fdb8e26f07560f7,live,Senior Android Platform Engineer,CI/CD pipelines,keep,hard,required,required,1.0,,mobile CI/CD pipelines
+2026-10-06,live_7fdb8e26f07560f7,live,Senior Android Platform Engineer,Android,keep,hard,required,required,1.0,,Deep Android Expertise
+2026-10-06,live_7fdb8e26f07560f7,live,Senior Android Platform Engineer,Jetpack Compose,keep,hard,required,required,1.0,,Advanced proficiency in ... Jetpack Compose
+2026-10-06,live_7fdb8e26f07560f7,live,Senior Android Platform Engineer,Android SDK,keep,hard,required,required,1.0,,strong understanding of the Android SDK
+2026-10-06,live_7fdb8e26f07560f7,live,Senior Android Platform Engineer,XML layouts,keep,hard,required,required,1.0,,legacy XML layouts
+2026-10-06,live_7fdb8e26f07560f7,live,Senior Android Platform Engineer,Shared libraries,keep,hard,required,required,1.0,,shared libraries and dependency management
+2026-10-06,live_7fdb8e26f07560f7,live,Senior Android Platform Engineer,Dependency management,keep,hard,required,required,1.0,,shared libraries and dependency management
+2026-10-06,live_7fdb8e26f07560f7,live,Senior Android Platform Engineer,Modularisation,keep,hard,required,required,1.0,,"designing and scaling Android application architecture, modularisation"
+2026-10-06,live_7fdb8e26f07560f7,live,Senior Android Platform Engineer,Automated software delivery,keep,hard,required,required,1.0,,automated software delivery practices
+2026-10-06,live_7fdb8e26f07560f7,live,Senior Android Platform Engineer,Leadership,keep,soft,required,required,1.0,,Leadership Without Authority
+2026-10-06,live_7fdb8e26f07560f7,live,Senior Android Platform Engineer,Mobile Platform Engineering,keep,hard,preferred,preferred,1.0,,Experiences working in a dedicated Mobile Platform Engineering environment
+2026-10-06,live_7fdb8e26f07560f7,live,Senior Android Platform Engineer,Mobile architecture modernisation,keep,hard,preferred,preferred,1.0,,driving mobile architecture modernisation
+2026-10-06,live_7fdb8e26f07560f7,live,Senior Android Platform Engineer,Performance optimisation,keep,hard,preferred,,1.0,,performance optimisation
+2026-10-06,live_c0f9b7e200048ae1,live,Product Technical Engineer (IT),Installation,keep,hard,unspecified,required,1.0,,"Perform product installation, configuration, testing, commissioning, and deployment"
+2026-10-06,live_c0f9b7e200048ae1,live,Product Technical Engineer (IT),Configuration,keep,hard,unspecified,required,1.0,,"Perform product installation, configuration, testing, commissioning, and deployment"
+2026-10-06,live_c0f9b7e200048ae1,live,Product Technical Engineer (IT),Testing,keep,hard,unspecified,required,1.0,,"Perform product installation, configuration, testing, commissioning, and deployment"
+2026-10-06,live_c0f9b7e200048ae1,live,Product Technical Engineer (IT),Commissioning,keep,hard,unspecified,required,1.0,,"Perform product installation, configuration, testing, commissioning, and deployment"
+2026-10-06,live_c0f9b7e200048ae1,live,Product Technical Engineer (IT),Deployment,keep,hard,unspecified,required,1.0,,"Perform product installation, configuration, testing, commissioning, and deployment"
+2026-10-06,live_c0f9b7e200048ae1,live,Product Technical Engineer (IT),System integration,keep,hard,unspecified,required,1.0,,Support the integration of retail technology solutions with existing customer infrastructure and systems
+2026-10-06,live_c0f9b7e200048ae1,live,Product Technical Engineer (IT),System testing,keep,hard,unspecified,required,1.0,,Conduct system testing and troubleshooting to ensure solutions operate according to technical specifications
+2026-10-06,live_c0f9b7e200048ae1,live,Product Technical Engineer (IT),Troubleshooting,keep,hard,unspecified,required,1.0,,Conduct system testing and troubleshooting to ensure solutions operate according to technical specifications
+2026-10-06,live_c0f9b7e200048ae1,live,Product Technical Engineer (IT),Proof of Concept,keep,hard,unspecified,required,1.0,,"Participate in Proof of Concept (PoC), pilot projects, and product deployment activities"
+2026-10-06,live_c0f9b7e200048ae1,live,Product Technical Engineer (IT),Pilot projects,keep,hard,unspecified,required,1.0,,"Participate in Proof of Concept (PoC), pilot projects, and product deployment activities"
+2026-10-06,live_c0f9b7e200048ae1,live,Product Technical Engineer (IT),Product demonstrations,keep,hard,unspecified,required,1.0,,"Conduct product demonstrations, technical presentations, site assessments, and customer briefings"
+2026-10-06,live_c0f9b7e200048ae1,live,Product Technical Engineer (IT),Technical presentations,keep,hard,unspecified,required,1.0,,"Conduct product demonstrations, technical presentations, site assessments, and customer briefings"
+2026-10-06,live_c0f9b7e200048ae1,live,Product Technical Engineer (IT),Site assessments,keep,hard,unspecified,required,1.0,,"Conduct product demonstrations, technical presentations, site assessments, and customer briefings"
+2026-10-06,live_c0f9b7e200048ae1,live,Product Technical Engineer (IT),Customer briefings,keep,hard,unspecified,required,1.0,,"Conduct product demonstrations, technical presentations, site assessments, and customer briefings"
+2026-10-06,live_c0f9b7e200048ae1,live,Product Technical Engineer (IT),Hardware troubleshooting,keep,hard,unspecified,required,1.0,,"Diagnose and resolve hardware, software, networking, connectivity, and system-related issues"
+2026-10-06,live_c0f9b7e200048ae1,live,Product Technical Engineer (IT),Software troubleshooting,keep,hard,unspecified,required,1.0,,"Diagnose and resolve hardware, software, networking, connectivity, and system-related issues"
+2026-10-06,live_c0f9b7e200048ae1,live,Product Technical Engineer (IT),Networking troubleshooting,keep,hard,unspecified,required,1.0,,"Diagnose and resolve hardware, software, networking, connectivity, and system-related issues"
+2026-10-06,live_c0f9b7e200048ae1,live,Product Technical Engineer (IT),Connectivity troubleshooting,keep,hard,unspecified,required,1.0,,"Diagnose and resolve hardware, software, networking, connectivity, and system-related issues"
+2026-10-06,live_c0f9b7e200048ae1,live,Product Technical Engineer (IT),On-site technical visits,keep,hard,unspecified,required,1.0,,"Conduct on-site technical visits, installation, troubleshooting, and maintenance when required"
+2026-10-06,live_c0f9b7e200048ae1,live,Product Technical Engineer (IT),Maintenance,keep,hard,unspecified,required,1.0,,"Conduct on-site technical visits, installation, troubleshooting, and maintenance when required"
+2026-10-06,live_c0f9b7e200048ae1,live,Product Technical Engineer (IT),Emerging technologies monitoring,keep,hard,unspecified,required,1.0,,Monitor emerging technologies and developments within the retail technology and digital transformation sector
+2026-10-06,live_c0f9b7e200048ae1,live,Product Technical Engineer (IT),Digital transformation,keep,hard,unspecified,required,1.0,,Monitor emerging technologies and developments within the retail technology and digital transformation sector
+2026-10-06,live_c0f9b7e200048ae1,live,Product Technical Engineer (IT),IT infrastructure,keep,hard,required,preferred,1.0,,"Strong understanding of IT infrastructure, networking, hardware, software, and system troubleshooting"
+2026-10-06,live_c0f9b7e200048ae1,live,Product Technical Engineer (IT),Networking,keep,hard,required,preferred,1.0,,"Strong understanding of IT infrastructure, networking, hardware, software, and system troubleshooting"
+2026-10-06,live_c0f9b7e200048ae1,live,Product Technical Engineer (IT),Hardware,keep,hard,required,preferred,1.0,,"Strong understanding of IT infrastructure, networking, hardware, software, and system troubleshooting"
+2026-10-06,live_c0f9b7e200048ae1,live,Product Technical Engineer (IT),Software,keep,hard,required,preferred,1.0,,"Strong understanding of IT infrastructure, networking, hardware, software, and system troubleshooting"
+2026-10-06,live_c0f9b7e200048ae1,live,Product Technical Engineer (IT),System troubleshooting,keep,hard,required,preferred,1.0,,"Strong understanding of IT infrastructure, networking, hardware, software, and system troubleshooting"
+2026-10-06,live_c0f9b7e200048ae1,live,Product Technical Engineer (IT),TCP/IP,keep,hard,preferred,preferred,1.0,,"Knowledge of TCP/IP, LAN/WAN, DNS, DHCP, Windows/Linux, databases, APIs, and system integration is advantageous"
+2026-10-06,live_c0f9b7e200048ae1,live,Product Technical Engineer (IT),LAN/WAN,keep,hard,preferred,preferred,1.0,,"Knowledge of TCP/IP, LAN/WAN, DNS, DHCP, Windows/Linux, databases, APIs, and system integration is advantageous"
+2026-10-06,live_c0f9b7e200048ae1,live,Product Technical Engineer (IT),DNS,keep,hard,preferred,preferred,1.0,,"Knowledge of TCP/IP, LAN/WAN, DNS, DHCP, Windows/Linux, databases, APIs, and system integration is advantageous"
+2026-10-06,live_c0f9b7e200048ae1,live,Product Technical Engineer (IT),DHCP,keep,hard,preferred,preferred,1.0,,"Knowledge of TCP/IP, LAN/WAN, DNS, DHCP, Windows/Linux, databases, APIs, and system integration is advantageous"
+2026-10-06,live_c0f9b7e200048ae1,live,Product Technical Engineer (IT),Windows/Linux,keep,hard,preferred,preferred,1.0,,"Knowledge of TCP/IP, LAN/WAN, DNS, DHCP, Windows/Linux, databases, APIs, and system integration is advantageous"
+2026-10-06,live_c0f9b7e200048ae1,live,Product Technical Engineer (IT),Databases,keep,hard,preferred,preferred,1.0,,"Knowledge of TCP/IP, LAN/WAN, DNS, DHCP, Windows/Linux, databases, APIs, and system integration is advantageous"
+2026-10-06,live_c0f9b7e200048ae1,live,Product Technical Engineer (IT),APIs,keep,hard,preferred,preferred,1.0,,"Knowledge of TCP/IP, LAN/WAN, DNS, DHCP, Windows/Linux, databases, APIs, and system integration is advantageous"
+2026-10-06,live_c0f9b7e200048ae1,live,Product Technical Engineer (IT),Retail technology,keep,hard,preferred,preferred,1.0,,"Experience with retail technology, POS systems, Electronic Shelf Labels (ESL), IoT, digital signage, weighing systems, or retail management systems will be an added advantage"
+2026-10-06,live_c0f9b7e200048ae1,live,Product Technical Engineer (IT),POS systems,keep,hard,preferred,preferred,1.0,,"Experience with retail technology, POS systems, Electronic Shelf Labels (ESL), IoT, digital signage, weighing systems, or retail management systems will be an added advantage"
+2026-10-06,live_c0f9b7e200048ae1,live,Product Technical Engineer (IT),Electronic Shelf Labels,keep,hard,preferred,preferred,1.0,,"Experience with retail technology, POS systems, Electronic Shelf Labels (ESL), IoT, digital signage, weighing systems, or retail management systems will be an added advantage"
+2026-10-06,live_c0f9b7e200048ae1,live,Product Technical Engineer (IT),IoT,keep,hard,preferred,preferred,1.0,,"Experience with retail technology, POS systems, Electronic Shelf Labels (ESL), IoT, digital signage, weighing systems, or retail management systems will be an added advantage"
+2026-10-06,live_c0f9b7e200048ae1,live,Product Technical Engineer (IT),Digital signage,keep,hard,preferred,preferred,1.0,,"Experience with retail technology, POS systems, Electronic Shelf Labels (ESL), IoT, digital signage, weighing systems, or retail management systems will be an added advantage"
+2026-10-06,live_c0f9b7e200048ae1,live,Product Technical Engineer (IT),Weighing systems,keep,hard,preferred,preferred,1.0,,"Experience with retail technology, POS systems, Electronic Shelf Labels (ESL), IoT, digital signage, weighing systems, or retail management systems will be an added advantage"
+2026-10-06,live_c0f9b7e200048ae1,live,Product Technical Engineer (IT),Retail management systems,keep,hard,preferred,preferred,1.0,,"Experience with retail technology, POS systems, Electronic Shelf Labels (ESL), IoT, digital signage, weighing systems, or retail management systems will be an added advantage"
+2026-10-06,live_91efd359f1689d0b,live,Network Security Engineer,Network security,keep,hard,unspecified,,1.0,,development and implementation of secure network solutions
+2026-10-06,live_91efd359f1689d0b,live,Network Security Engineer,SASE,keep,hard,unspecified,,1.0,,latest technologies based on SASE architecture
+2026-10-06,live_91efd359f1689d0b,live,Network Security Engineer,Cloud security,keep,hard,unspecified,,1.0,,accelerated transition to cloud-based enterprise security
+2026-10-06,live_91efd359f1689d0b,live,Network Security Engineer,OT network security,keep,hard,unspecified,,1.0,,OT network security
+2026-10-06,live_91efd359f1689d0b,live,Network Security Engineer,Architecture documentation,keep,hard,unspecified,,1.0,,Development of architectural documentation
+2026-10-06,live_91efd359f1689d0b,live,Network Security Engineer,Automation,keep,hard,unspecified,,1.0,,utilization of automation is another aspect of our day-to-day work
+2026-10-06,live_91efd359f1689d0b,live,Network Security Engineer,Data analysis,keep,hard,required,,1.0,,Strong passion and interest in a combination of data analysis & networking field
+2026-10-06,live_91efd359f1689d0b,live,Network Security Engineer,Networking,keep,hard,required,,1.0,,Strong passion and interest in a combination of data analysis & networking field
+2026-10-06,live_91efd359f1689d0b,live,Network Security Engineer,Problem-solving,keep,soft,required,,1.0,,Strong learning agility and good problem-solving skills
+2026-10-06,live_91efd359f1689d0b,live,Network Security Engineer,Interpersonal skills,keep,soft,required,,1.0,,Strong interpersonal skills to successfully perform in a global matrix environment
+2026-10-06,live_91efd359f1689d0b,live,Network Security Engineer,Communication,keep,soft,required,,1.0,,Fluent in English and strong communication skills
+2026-10-06,live_91efd359f1689d0b,live,Network Security Engineer,Scripting,keep,hard,preferred,,1.0,,Proficiency in scripting (eg.
+2026-10-06,live_91efd359f1689d0b,live,Network Security Engineer,Python,keep,hard,preferred,preferred,1.0,,"Python, Powershell) is an added advantage"
+2026-10-06,live_91efd359f1689d0b,live,Network Security Engineer,PowerShell,keep,hard,preferred,preferred,1.0,,"Python, Powershell) is an added advantage"
+2026-10-06,live_4aef39a395a09b3c,live,Back End Developer,Backend engineering,keep,hard,required,,1.0,,backend engineers
+2026-10-06,live_4aef39a395a09b3c,live,Back End Developer,APIs,keep,hard,required,,1.0,,reliable APIs
+2026-10-06,live_4aef39a395a09b3c,live,Back End Developer,Workflows,keep,hard,required,,1.0,,workflows
+2026-10-06,live_4aef39a395a09b3c,live,Back End Developer,Onboarding,keep,hard,required,,1.0,,onboarding
+2026-10-06,live_4aef39a395a09b3c,live,Back End Developer,Accounts,keep,hard,required,,1.0,,accounts
+2026-10-06,live_4aef39a395a09b3c,live,Back End Developer,Payments,keep,hard,required,required,1.0,,payments
+2026-10-06,live_4aef39a395a09b3c,live,Back End Developer,Cards,keep,hard,required,,1.0,,cards
+2026-10-06,live_4aef39a395a09b3c,live,Back End Developer,Transfers,keep,hard,required,,1.0,,transfers
+2026-10-06,live_4aef39a395a09b3c,live,Back End Developer,Rewards,keep,hard,required,,1.0,,rewards
+2026-10-06,live_4aef39a395a09b3c,live,Back End Developer,Travel,keep,hard,required,,1.0,,travel
+2026-10-06,live_4aef39a395a09b3c,live,Back End Developer,KYC,keep,hard,required,required,1.0,,KYC
+2026-10-06,live_4aef39a395a09b3c,live,Back End Developer,Risk flows,keep,hard,required,,1.0,,risk flows
+2026-10-06,live_4aef39a395a09b3c,live,Back End Developer,System design,keep,hard,required,,1.0,,Design reliable systems
+2026-10-06,live_4aef39a395a09b3c,live,Back End Developer,Integration,keep,hard,required,,1.0,,Integrate with internal systems
+2026-10-06,live_4aef39a395a09b3c,live,Back End Developer,AI services,keep,hard,required,,1.0,,AI services
+2026-10-06,live_4aef39a395a09b3c,live,Back End Developer,Reliability,keep,hard,required,,1.0,,reliability
+2026-10-06,live_4aef39a395a09b3c,live,Back End Developer,Security,keep,hard,required,,1.0,,security
+2026-10-06,live_4aef39a395a09b3c,live,Back End Developer,Latency,keep,hard,required,,1.0,,latency
+2026-10-06,live_4aef39a395a09b3c,live,Back End Developer,Observability,keep,hard,required,,1.0,,observability
+2026-10-06,live_4aef39a395a09b3c,live,Back End Developer,Data integrity,keep,hard,required,,1.0,,data integrity
+2026-10-06,live_4aef39a395a09b3c,live,Back End Developer,Incident handling,keep,hard,required,,1.0,,incident handling
+2026-10-06,live_4aef39a395a09b3c,live,Back End Developer,Collaboration,keep,soft,required,,1.0,,"Work with product, frontend, mobile and AI teams"
+2026-10-06,live_4aef39a395a09b3c,live,Back End Developer,Automation,keep,hard,required,,1.0,,automating repeatable processes
+2026-10-06,live_4aef39a395a09b3c,live,Back End Developer,Production systems,keep,hard,required,,1.0,,production systems
+2026-10-06,live_4aef39a395a09b3c,live,Back End Developer,Databases,keep,hard,required,,1.0,,databases
+2026-10-06,live_4aef39a395a09b3c,live,Back End Developer,Authentication,keep,hard,required,,1.0,,authentication
+2026-10-06,live_4aef39a395a09b3c,live,Back End Developer,Authorization,keep,hard,required,,1.0,,authorization
+2026-10-06,live_4aef39a395a09b3c,live,Back End Developer,Queues,keep,hard,required,,1.0,,queues
+2026-10-06,live_4aef39a395a09b3c,live,Back End Developer,Jobs,keep,hard,required,,1.0,,jobs
+2026-10-06,live_4aef39a395a09b3c,live,Back End Developer,Events,keep,hard,required,,1.0,,events
+2026-10-06,live_4aef39a395a09b3c,live,Back End Developer,Debugging,keep,hard,required,,1.0,,Strong debugging
+2026-10-06,live_4aef39a395a09b3c,live,Back End Developer,Data quality,keep,hard,required,,1.0,,data quality
+2026-10-06,live_4aef39a395a09b3c,live,Back End Developer,Speed,keep,hard,required,,1.0,,speed
+2026-10-06,live_4aef39a395a09b3c,live,Back End Developer,Correctness,keep,hard,required,,1.0,,correctness
+2026-10-06,live_4aef39a395a09b3c,live,Back End Developer,Scalability,keep,hard,required,,1.0,,scalability
+2026-10-06,live_4aef39a395a09b3c,live,Back End Developer,Maintainability,keep,hard,required,,1.0,,maintainability
+2026-10-06,live_4aef39a395a09b3c,live,Back End Developer,Fintech,keep,hard,preferred,required,1.0,,Fintech
+2026-10-06,live_4aef39a395a09b3c,live,Back End Developer,Banking,keep,hard,preferred,required,1.0,,banking
+2026-10-06,live_4aef39a395a09b3c,live,Back End Developer,Wallet,keep,hard,preferred,required,1.0,,wallet
+2026-10-06,live_4aef39a395a09b3c,live,Back End Developer,Fraud,keep,hard,preferred,required,1.0,,fraud
+2026-10-06,live_4aef39a395a09b3c,live,Back End Developer,Risk,keep,hard,preferred,required,1.0,,risk
+2026-10-06,live_4aef39a395a09b3c,live,Back End Developer,English,keep,hard,required,,1.0,,English is our main working language across global teams
+2026-10-06,live_4aef39a395a09b3c,live,Back End Developer,English communication,keep,soft,required,required,1.0,,Strong English communication is required
+2026-10-06,live_4aef39a395a09b3c,live,Back End Developer,FX,reject: quote not in ad,hard,required,,0.0,,FX
+2026-10-06,live_ec766b482296c8dd,live,Backend Developer,Back-end software engineering,keep,hard,required,required,1.0,,Minimum 5 years of back-end software engineering experience
+2026-10-06,live_ec766b482296c8dd,live,Backend Developer,Spring Boot,keep,hard,required,required,1.0,,Deep knowledge and hands-on experience with Spring Boot
+2026-10-06,live_ec766b482296c8dd,live,Backend Developer,Java,keep,hard,required,required,1.0,,Deep knowledge and hands-on experience with Spring Boot and Java microservices development
+2026-10-06,live_ec766b482296c8dd,live,Backend Developer,Microservices,keep,hard,required,required,1.0,,Java microservices development
+2026-10-06,live_ec766b482296c8dd,live,Backend Developer,Kubernetes,keep,hard,required,required,1.0,,"Experience with Kubernetes, Helm, Terraform, and Istio"
+2026-10-06,live_ec766b482296c8dd,live,Backend Developer,Helm,keep,hard,required,required,1.0,,"Experience with Kubernetes, Helm, Terraform, and Istio"
+2026-10-06,live_ec766b482296c8dd,live,Backend Developer,Terraform,keep,hard,required,required,1.0,,"Experience with Kubernetes, Helm, Terraform, and Istio"
+2026-10-06,live_ec766b482296c8dd,live,Backend Developer,Istio,keep,hard,required,required,1.0,,"Experience with Kubernetes, Helm, Terraform, and Istio"
+2026-10-06,live_ec766b482296c8dd,live,Backend Developer,OpenAPI,keep,hard,required,required,1.0,,"creating integrations between dissimilar platforms using OpenAPI, REST, SOAP, ISO8583"
+2026-10-06,live_ec766b482296c8dd,live,Backend Developer,REST,keep,hard,required,required,1.0,,"creating integrations between dissimilar platforms using OpenAPI, REST, SOAP, ISO8583"
+2026-10-06,live_ec766b482296c8dd,live,Backend Developer,SOAP,keep,hard,required,required,1.0,,"creating integrations between dissimilar platforms using OpenAPI, REST, SOAP, ISO8583"
+2026-10-06,live_ec766b482296c8dd,live,Backend Developer,ISO8583,keep,hard,required,required,1.0,,"creating integrations between dissimilar platforms using OpenAPI, REST, SOAP, ISO8583"
+2026-10-06,live_ec766b482296c8dd,live,Backend Developer,Kafka,keep,hard,preferred,required,1.0,,"Familiarity with Kafka, Apache Camel, and ActiveMQ (highly desired)"
+2026-10-06,live_ec766b482296c8dd,live,Backend Developer,Apache Camel,keep,hard,preferred,required,1.0,,"Familiarity with Kafka, Apache Camel, and ActiveMQ (highly desired)"
+2026-10-06,live_ec766b482296c8dd,live,Backend Developer,ActiveMQ,keep,hard,preferred,required,1.0,,"Familiarity with Kafka, Apache Camel, and ActiveMQ (highly desired)"
+2026-10-06,live_ec766b482296c8dd,live,Backend Developer,CI/CD pipelines,keep,hard,required,required,1.0,,"Strong understanding of CI/CD pipelines, automated testing, and DevOps practices"
+2026-10-06,live_ec766b482296c8dd,live,Backend Developer,Automated testing,keep,hard,required,required,1.0,,"Strong understanding of CI/CD pipelines, automated testing, and DevOps practices"
+2026-10-06,live_ec766b482296c8dd,live,Backend Developer,DevOps,keep,hard,required,required,1.0,,"Strong understanding of CI/CD pipelines, automated testing, and DevOps practices"
+2026-10-06,live_ec766b482296c8dd,live,Backend Developer,OWASP,keep,hard,required,required,1.0,,"Knowledge of common security threats and mitigation techniques (OWASP, secure coding standards)"
+2026-10-06,live_ec766b482296c8dd,live,Backend Developer,Secure coding,keep,hard,required,required,1.0,,"Knowledge of common security threats and mitigation techniques (OWASP, secure coding standards)"
+2026-10-06,live_ec766b482296c8dd,live,Backend Developer,English communication,keep,soft,required,required,1.0,,Excellent written and spoken English
+2026-10-06,live_e01ead5ec2843792,live,Website Operations & Backend Developer,Website backend,keep,hard,unspecified,,1.0,,"Manage website backends, hosting"
+2026-10-06,live_e01ead5ec2843792,live,Website Operations & Backend Developer,Hosting,keep,hard,required,,1.0,,hosting and domain management
+2026-10-06,live_e01ead5ec2843792,live,Website Operations & Backend Developer,DNS,keep,hard,unspecified,,1.0,,"domains, DNS and SSL certificates"
+2026-10-06,live_e01ead5ec2843792,live,Website Operations & Backend Developer,SSL certificates,keep,hard,unspecified,,1.0,,"domains, DNS and SSL certificates"
+2026-10-06,live_e01ead5ec2843792,live,Website Operations & Backend Developer,Payment gateways,keep,hard,unspecified,,1.0,,Set up and maintain payment gateways
+2026-10-06,live_e01ead5ec2843792,live,Website Operations & Backend Developer,Checkout flows,keep,hard,unspecified,,1.0,,checkout flows and payment-related integrations
+2026-10-06,live_e01ead5ec2843792,live,Website Operations & Backend Developer,Third-party platform integration,keep,hard,unspecified,,1.0,,Connect websites with third-party platforms
+2026-10-06,live_e01ead5ec2843792,live,Website Operations & Backend Developer,APIs,keep,hard,required,,1.0,,"Understanding of APIs, webhooks, databases"
+2026-10-06,live_e01ead5ec2843792,live,Website Operations & Backend Developer,Webhooks,keep,hard,required,,1.0,,"Understanding of APIs, webhooks, databases"
+2026-10-06,live_e01ead5ec2843792,live,Website Operations & Backend Developer,URL redirects,keep,hard,unspecified,,1.0,,"Manage redirects, URL structures"
+2026-10-06,live_e01ead5ec2843792,live,Website Operations & Backend Developer,Migrations,keep,hard,unspecified,,1.0,,migrations and international domains
+2026-10-06,live_e01ead5ec2843792,live,Website Operations & Backend Developer,International domains,keep,hard,unspecified,,1.0,,migrations and international domains
+2026-10-06,live_e01ead5ec2843792,live,Website Operations & Backend Developer,Tracking pixels,keep,hard,required,,1.0,,"Experience with analytics, tracking pixels"
+2026-10-06,live_e01ead5ec2843792,live,Website Operations & Backend Developer,Google Tag Manager,keep,hard,required,,1.0,,and Google Tag Manager
+2026-10-06,live_e01ead5ec2843792,live,Website Operations & Backend Developer,Analytics,keep,hard,required,,1.0,,"Experience with analytics, tracking pixels"
+2026-10-06,live_e01ead5ec2843792,live,Website Operations & Backend Developer,Website uptime monitoring,keep,hard,unspecified,,1.0,,"Monitor website uptime, speed, security"
+2026-10-06,live_e01ead5ec2843792,live,Website Operations & Backend Developer,Website performance,keep,hard,unspecified,,1.0,,"Monitor website uptime, speed, security"
+2026-10-06,live_e01ead5ec2843792,live,Website Operations & Backend Developer,Bug troubleshooting,keep,hard,unspecified,,1.0,,"Troubleshoot bugs, failed payments, broken"
+2026-10-06,live_e01ead5ec2843792,live,Website Operations & Backend Developer,Payment troubleshooting,keep,hard,unspecified,,1.0,,"Troubleshoot bugs, failed payments, broken"
+2026-10-06,live_e01ead5ec2843792,live,Website Operations & Backend Developer,Integrations,keep,hard,unspecified,,1.0,,integrations and tracking issues
+2026-10-06,live_e01ead5ec2843792,live,Website Operations & Backend Developer,Tracking issue resolution,keep,hard,unspecified,,1.0,,integrations and tracking issues
+2026-10-06,live_e01ead5ec2843792,live,Website Operations & Backend Developer,Deployments,keep,hard,unspecified,,1.0,,"Manage deployments, staging environments"
+2026-10-06,live_e01ead5ec2843792,live,Website Operations & Backend Developer,Staging environments,keep,hard,unspecified,,1.0,,"Manage deployments, staging environments"
+2026-10-06,live_e01ead5ec2843792,live,Website Operations & Backend Developer,Backups,keep,hard,unspecified,,1.0,,backups and version control
+2026-10-06,live_e01ead5ec2843792,live,Website Operations & Backend Developer,Version control,keep,hard,unspecified,,1.0,,backups and version control
+2026-10-06,live_e01ead5ec2843792,live,Website Operations & Backend Developer,CMS platforms,keep,hard,unspecified,,1.0,,"Maintain CMS platforms, databases, forms"
+2026-10-06,live_e01ead5ec2843792,live,Website Operations & Backend Developer,Databases,keep,hard,required,,1.0,,"Understanding of APIs, webhooks, databases"
+2026-10-06,live_e01ead5ec2843792,live,Website Operations & Backend Developer,Web forms,keep,hard,unspecified,,1.0,,"Maintain CMS platforms, databases, forms"
+2026-10-06,live_e01ead5ec2843792,live,Website Operations & Backend Developer,Website workflow automation,keep,hard,unspecified,required,1.0,,and automated website workflows
+2026-10-06,live_e01ead5ec2843792,live,Website Operations & Backend Developer,Internationalization,keep,hard,unspecified,required,1.0,,Support international requirements
+2026-10-06,live_e01ead5ec2843792,live,Website Operations & Backend Developer,Multi-currency support,keep,hard,unspecified,,1.0,,"including multiple currencies, languages and regional payment methods"
+2026-10-06,live_e01ead5ec2843792,live,Website Operations & Backend Developer,Multilingual support,keep,hard,unspecified,,1.0,,"including multiple currencies, languages and regional payment methods"
+2026-10-06,live_e01ead5ec2843792,live,Website Operations & Backend Developer,Regional payment methods,keep,hard,unspecified,,1.0,,"including multiple currencies, languages and regional payment methods"
+2026-10-06,live_e01ead5ec2843792,live,Website Operations & Backend Developer,Landing page development,keep,hard,unspecified,,1.0,,launch landing pages and conversion improvements
+2026-10-06,live_e01ead5ec2843792,live,Website Operations & Backend Developer,Conversion optimization,keep,hard,unspecified,,1.0,,launch landing pages and conversion improvements
+2026-10-06,live_e01ead5ec2843792,live,Website Operations & Backend Developer,Technical documentation,keep,hard,unspecified,,1.0,,Maintain clear technical documentation for
+2026-10-06,live_e01ead5ec2843792,live,Website Operations & Backend Developer,Coding,keep,hard,required,preferred,1.0,,"Strong general coding knowledge, ideally"
+2026-10-06,live_e01ead5ec2843792,live,Website Operations & Backend Developer,HTML,keep,hard,required,,1.0,,"including HTML, CSS, JavaScript and a backend language"
+2026-10-06,live_e01ead5ec2843792,live,Website Operations & Backend Developer,CSS,keep,hard,required,,1.0,,"including HTML, CSS, JavaScript and a backend language"
+2026-10-06,live_e01ead5ec2843792,live,Website Operations & Backend Developer,JavaScript,keep,hard,required,,1.0,,"including HTML, CSS, JavaScript and a backend language"
+2026-10-06,live_e01ead5ec2843792,live,Website Operations & Backend Developer,Backend programming,keep,hard,required,,1.0,,"including HTML, CSS, JavaScript and a backend language"
+2026-10-06,live_e01ead5ec2843792,live,Website Operations & Backend Developer,Stripe,keep,hard,required,,1.0,one of: Stripe / PayPal,"Experience with payment gateways such as Stripe, PayPal or similar"
+2026-10-06,live_e01ead5ec2843792,live,Website Operations & Backend Developer,PayPal,keep,hard,required,,1.0,one of: Stripe / PayPal,"Experience with payment gateways such as Stripe, PayPal or similar"
+2026-10-06,live_e01ead5ec2843792,live,Website Operations & Backend Developer,Domain management,keep,hard,required,,1.0,,hosting and domain management
+2026-10-06,live_e01ead5ec2843792,live,Website Operations & Backend Developer,Website security,keep,hard,required,,1.0,,Strong knowledge of website security
+2026-10-06,live_e01ead5ec2843792,live,Website Operations & Backend Developer,Data protection,keep,hard,required,,1.0,,backups and data protection
+2026-10-06,live_e01ead5ec2843792,live,Website Operations & Backend Developer,International website management,keep,hard,preferred,,1.0,,Experience managing international or high-traffic websites
+2026-10-06,live_e01ead5ec2843792,live,Website Operations & Backend Developer,High-traffic website management,keep,hard,preferred,,1.0,,Experience managing international or high-traffic websites
+2026-10-06,live_e01ead5ec2843792,live,Website Operations & Backend Developer,Technical ownership,keep,hard,unspecified,,1.0,,take full technical ownership of a global website portfolio
+2026-10-06,live_e01ead5ec2843792,live,Website Operations & Backend Developer,Website reliability,keep,hard,unspecified,,1.0,,"secure, reliable, accurately tracked and commercially operational"
+2026-10-06,live_e01ead5ec2843792,live,Website Operations & Backend Developer,Website tracking,keep,hard,unspecified,,1.0,,"secure, reliable, accurately tracked and commercially operational"
+2026-10-06,live_49e906bcf70a7f67,live,IT Admin Cum Coordinator,Microsoft Office,keep,hard,required,,1.0,,"Good knowledge of Microsoft Office, particularly Excel, Word and Outlook"
+2026-10-06,live_49e906bcf70a7f67,live,IT Admin Cum Coordinator,Excel,keep,hard,required,,1.0,,"Good knowledge of Microsoft Office, particularly Excel, Word and Outlook"
+2026-10-06,live_49e906bcf70a7f67,live,IT Admin Cum Coordinator,Word,keep,hard,required,,1.0,,"Good knowledge of Microsoft Office, particularly Excel, Word and Outlook"
+2026-10-06,live_49e906bcf70a7f67,live,IT Admin Cum Coordinator,Outlook,keep,hard,required,,1.0,,"Good knowledge of Microsoft Office, particularly Excel, Word and Outlook"
+2026-10-06,live_49e906bcf70a7f67,live,IT Admin Cum Coordinator,Communication,keep,soft,required,,1.0,,"Good communication, coordination and follow-up skills"
+2026-10-06,live_49e906bcf70a7f67,live,IT Admin Cum Coordinator,Coordination,keep,soft,required,,1.0,,"Good communication, coordination and follow-up skills"
+2026-10-06,live_49e906bcf70a7f67,live,IT Admin Cum Coordinator,Follow-up,keep,soft,required,,1.0,,"Good communication, coordination and follow-up skills"
+2026-10-06,live_49e906bcf70a7f67,live,IT Admin Cum Coordinator,Task management,keep,soft,required,,1.0,,Able to manage multiple tasks and work within deadlines
+2026-10-06,live_49e906bcf70a7f67,live,IT Admin Cum Coordinator,Time management,keep,soft,required,,1.0,,Able to manage multiple tasks and work within deadlines
+2026-10-06,live_49e906bcf70a7f67,live,IT Admin Cum Coordinator,Teamwork,keep,soft,required,,1.0,,Able to work independently as well as within a team
+2026-10-06,live_49e906bcf70a7f67,live,IT Admin Cum Coordinator,Independent work,keep,soft,required,,1.0,,Able to work independently as well as within a team
+2026-10-06,live_49e906bcf70a7f67,live,IT Admin Cum Coordinator,English,keep,hard,required,,1.0,,"Good command of English and Bahasa Malaysia, both written and spoken"
+2026-10-06,live_49e906bcf70a7f67,live,IT Admin Cum Coordinator,Bahasa Malaysia,keep,hard,required,,1.0,,"Good command of English and Bahasa Malaysia, both written and spoken"
+2026-10-06,live_cca9b650e291539c,live,"Vice President, GT-TBS, GCDB Application Delivery Non-Digital, Cardlink MY (Senior Application Support)",Information Security,keep,hard,required,required,1.0,,Information Security
+2026-10-06,live_cca9b650e291539c,live,"Vice President, GT-TBS, GCDB Application Delivery Non-Digital, Cardlink MY (Senior Application Support)",Disaster Recovery,keep,hard,required,required,1.0,,Disaster Recovery/Business Continuity Planning
+2026-10-06,live_cca9b650e291539c,live,"Vice President, GT-TBS, GCDB Application Delivery Non-Digital, Cardlink MY (Senior Application Support)",Incident management,keep,hard,required,,1.0,,incident management operations
+2026-10-06,live_cca9b650e291539c,live,"Vice President, GT-TBS, GCDB Application Delivery Non-Digital, Cardlink MY (Senior Application Support)",Application performance monitoring,keep,hard,required,,1.0,,monitoring of application system performance
+2026-10-06,live_cca9b650e291539c,live,"Vice President, GT-TBS, GCDB Application Delivery Non-Digital, Cardlink MY (Senior Application Support)",Monitoring tools,keep,hard,required,,1.0,,monitoring tools
+2026-10-06,live_cca9b650e291539c,live,"Vice President, GT-TBS, GCDB Application Delivery Non-Digital, Cardlink MY (Senior Application Support)",Business continuity,keep,hard,required,,1.0,,business/ systems continuity strategy
+2026-10-06,live_cca9b650e291539c,live,"Vice President, GT-TBS, GCDB Application Delivery Non-Digital, Cardlink MY (Senior Application Support)",Troubleshooting,keep,hard,required,,1.0,,incident/ problem troubleshooting/resolution
+2026-10-06,live_cca9b650e291539c,live,"Vice President, GT-TBS, GCDB Application Delivery Non-Digital, Cardlink MY (Senior Application Support)",Root cause analysis,keep,hard,required,,1.0,,root cause analyses
+2026-10-06,live_cca9b650e291539c,live,"Vice President, GT-TBS, GCDB Application Delivery Non-Digital, Cardlink MY (Senior Application Support)",Change management,keep,hard,required,,1.0,,change management process
+2026-10-06,live_cca9b650e291539c,live,"Vice President, GT-TBS, GCDB Application Delivery Non-Digital, Cardlink MY (Senior Application Support)",Incident diagnosis,keep,hard,unspecified,,1.0,,incident/ problem diagnosis and analysis
+2026-10-06,live_cca9b650e291539c,live,"Vice President, GT-TBS, GCDB Application Delivery Non-Digital, Cardlink MY (Senior Application Support)",Incident tracking,keep,hard,unspecified,,1.0,,Track closure of all reported incidents
+2026-10-06,live_cca9b650e291539c,live,"Vice President, GT-TBS, GCDB Application Delivery Non-Digital, Cardlink MY (Senior Application Support)",Trend analysis,keep,hard,required,,1.0,,analyse incidents trend
+2026-10-06,live_cca9b650e291539c,live,"Vice President, GT-TBS, GCDB Application Delivery Non-Digital, Cardlink MY (Senior Application Support)",Incident monitoring,keep,hard,required,,1.0,,Pro-actively monitor and analyse incidents
+2026-10-06,live_cca9b650e291539c,live,"Vice President, GT-TBS, GCDB Application Delivery Non-Digital, Cardlink MY (Senior Application Support)",System maintenance,keep,hard,unspecified,,1.0,,managing system maintenance activities
+2026-10-06,live_cca9b650e291539c,live,"Vice President, GT-TBS, GCDB Application Delivery Non-Digital, Cardlink MY (Senior Application Support)",SIT/UAT testing,keep,hard,unspecified,,1.0,,SIT/UAT/regression testing
+2026-10-06,live_cca9b650e291539c,live,"Vice President, GT-TBS, GCDB Application Delivery Non-Digital, Cardlink MY (Senior Application Support)",Regression testing,keep,hard,unspecified,,1.0,,SIT/UAT/regression testing
+2026-10-06,live_cca9b650e291539c,live,"Vice President, GT-TBS, GCDB Application Delivery Non-Digital, Cardlink MY (Senior Application Support)",SLA management,keep,hard,unspecified,,1.0,,enforce adherence to SLA
+2026-10-06,live_cca9b650e291539c,live,"Vice President, GT-TBS, GCDB Application Delivery Non-Digital, Cardlink MY (Senior Application Support)",Stakeholder communication,keep,soft,unspecified,,1.0,,central point of contact with key users and vendors
+2026-10-06,live_cca9b650e291539c,live,"Vice President, GT-TBS, GCDB Application Delivery Non-Digital, Cardlink MY (Senior Application Support)",Reporting,keep,hard,required,required,1.0,,Provide accurate and timely operational and management reports
+2026-10-06,live_cca9b650e291539c,live,"Vice President, GT-TBS, GCDB Application Delivery Non-Digital, Cardlink MY (Senior Application Support)",Collaboration,keep,soft,required,,1.0,,Facilitate collaboration with other pillars
+2026-10-06,live_cca9b650e291539c,live,"Vice President, GT-TBS, GCDB Application Delivery Non-Digital, Cardlink MY (Senior Application Support)",Coaching,keep,soft,required,,1.0,,Coach and manage the performance deliverables
+2026-10-06,live_cca9b650e291539c,live,"Vice President, GT-TBS, GCDB Application Delivery Non-Digital, Cardlink MY (Senior Application Support)",IIS,keep,hard,required,,1.0,,"Application Servers: IIS, Tomcat, IBM Websphere"
+2026-10-06,live_cca9b650e291539c,live,"Vice President, GT-TBS, GCDB Application Delivery Non-Digital, Cardlink MY (Senior Application Support)",Tomcat,keep,hard,required,,1.0,,"Application Servers: IIS, Tomcat, IBM Websphere"
+2026-10-06,live_cca9b650e291539c,live,"Vice President, GT-TBS, GCDB Application Delivery Non-Digital, Cardlink MY (Senior Application Support)",IBM WebSphere,keep,hard,required,,1.0,,"Application Servers: IIS, Tomcat, IBM Websphere"
+2026-10-06,live_cca9b650e291539c,live,"Vice President, GT-TBS, GCDB Application Delivery Non-Digital, Cardlink MY (Senior Application Support)",Object-oriented programming,keep,hard,required,,1.0,,Object Oriented Approaches and Methodology
+2026-10-06,live_cca9b650e291539c,live,"Vice President, GT-TBS, GCDB Application Delivery Non-Digital, Cardlink MY (Senior Application Support)",IBM Mainframe,keep,hard,required,,1.0,,IBM Mainframe
+2026-10-06,live_cca9b650e291539c,live,"Vice President, GT-TBS, GCDB Application Delivery Non-Digital, Cardlink MY (Senior Application Support)",Microsoft FrontPage,keep,hard,required,,1.0,,Microsoft FrontPages
+2026-10-06,live_cca9b650e291539c,live,"Vice President, GT-TBS, GCDB Application Delivery Non-Digital, Cardlink MY (Senior Application Support)",JavaScript,keep,hard,required,,1.0,,JavaScript
+2026-10-06,live_cca9b650e291539c,live,"Vice President, GT-TBS, GCDB Application Delivery Non-Digital, Cardlink MY (Senior Application Support)",HTML,keep,hard,required,,1.0,,HTML
+2026-10-06,live_cca9b650e291539c,live,"Vice President, GT-TBS, GCDB Application Delivery Non-Digital, Cardlink MY (Senior Application Support)",CSS,keep,hard,required,,1.0,,CSS
+2026-10-06,live_cca9b650e291539c,live,"Vice President, GT-TBS, GCDB Application Delivery Non-Digital, Cardlink MY (Senior Application Support)",Windows NT,keep,hard,required,,1.0,,Window NT
+2026-10-06,live_cca9b650e291539c,live,"Vice President, GT-TBS, GCDB Application Delivery Non-Digital, Cardlink MY (Senior Application Support)",Windows 2000,keep,hard,required,,1.0,,Window 2000
+2026-10-06,live_cca9b650e291539c,live,"Vice President, GT-TBS, GCDB Application Delivery Non-Digital, Cardlink MY (Senior Application Support)",Unix,keep,hard,required,,1.0,,Unix
+2026-10-06,live_cca9b650e291539c,live,"Vice President, GT-TBS, GCDB Application Delivery Non-Digital, Cardlink MY (Senior Application Support)",TCP/IP,keep,hard,required,,1.0,,TCP/IP
+2026-10-06,live_cca9b650e291539c,live,"Vice President, GT-TBS, GCDB Application Delivery Non-Digital, Cardlink MY (Senior Application Support)",LAN,keep,hard,required,,1.0,,LAN
+2026-10-06,live_cca9b650e291539c,live,"Vice President, GT-TBS, GCDB Application Delivery Non-Digital, Cardlink MY (Senior Application Support)",WAN,keep,hard,required,,1.0,,WAN
+2026-10-06,live_cca9b650e291539c,live,"Vice President, GT-TBS, GCDB Application Delivery Non-Digital, Cardlink MY (Senior Application Support)",Cobol,keep,hard,required,,1.0,,Cobol
+2026-10-06,live_cca9b650e291539c,live,"Vice President, GT-TBS, GCDB Application Delivery Non-Digital, Cardlink MY (Senior Application Support)",Java,keep,hard,required,,1.0,,Java
+2026-10-06,live_cca9b650e291539c,live,"Vice President, GT-TBS, GCDB Application Delivery Non-Digital, Cardlink MY (Senior Application Support)",MySQL,keep,hard,required,,1.0,,mySQL
+2026-10-06,live_cca9b650e291539c,live,"Vice President, GT-TBS, GCDB Application Delivery Non-Digital, Cardlink MY (Senior Application Support)",Microsoft Access,keep,hard,required,,1.0,,Microsoft Access
+2026-10-06,live_cca9b650e291539c,live,"Vice President, GT-TBS, GCDB Application Delivery Non-Digital, Cardlink MY (Senior Application Support)",Oracle,keep,hard,required,,1.0,,Oracle
+2026-10-06,live_cca9b650e291539c,live,"Vice President, GT-TBS, GCDB Application Delivery Non-Digital, Cardlink MY (Senior Application Support)",DB2,keep,hard,required,,1.0,,db2
+2026-10-06,live_cca9b650e291539c,live,"Vice President, GT-TBS, GCDB Application Delivery Non-Digital, Cardlink MY (Senior Application Support)",MSSQL,keep,hard,required,,1.0,,MSSQL
+2026-10-06,live_cca9b650e291539c,live,"Vice President, GT-TBS, GCDB Application Delivery Non-Digital, Cardlink MY (Senior Application Support)",Problem management,keep,hard,required,,1.0,,"Incident, Problem and Change Management Practices"
+2026-10-06,live_cca9b650e291539c,live,"Vice President, GT-TBS, GCDB Application Delivery Non-Digital, Cardlink MY (Senior Application Support)",ITIL,keep,hard,unspecified,,1.0,,ITIL Framework
+2026-10-06,live_cca9b650e291539c,live,"Vice President, GT-TBS, GCDB Application Delivery Non-Digital, Cardlink MY (Senior Application Support)",SDLC,keep,hard,unspecified,,1.0,,Software Development Life Cycle (SDLC) Framework and Practices
+2026-10-06,live_cca9b650e291539c,live,"Vice President, GT-TBS, GCDB Application Delivery Non-Digital, Cardlink MY (Senior Application Support)",IT Monitoring Tools,keep,hard,unspecified,,1.0,,IT Monitoring Tools and Automation Processes
+2026-10-06,live_cca9b650e291539c,live,"Vice President, GT-TBS, GCDB Application Delivery Non-Digital, Cardlink MY (Senior Application Support)",Automation Processes,keep,hard,unspecified,,1.0,,IT Monitoring Tools and Automation Processes
+2026-10-06,live_cca9b650e291539c,live,"Vice President, GT-TBS, GCDB Application Delivery Non-Digital, Cardlink MY (Senior Application Support)",Banking Functions,keep,hard,unspecified,,1.0,,Banking Functions and Operating Environment
+2026-10-06,live_cca9b650e291539c,live,"Vice President, GT-TBS, GCDB Application Delivery Non-Digital, Cardlink MY (Senior Application Support)",Operating Environment,keep,hard,unspecified,,1.0,,Banking Functions and Operating Environment
+2026-10-06,live_cca9b650e291539c,live,"Vice President, GT-TBS, GCDB Application Delivery Non-Digital, Cardlink MY (Senior Application Support)",Regulatory Requirements,keep,hard,unspecified,required,1.0,,Local and International Regulatory Requirements and Guidelines
+2026-10-06,live_cca9b650e291539c,live,"Vice President, GT-TBS, GCDB Application Delivery Non-Digital, Cardlink MY (Senior Application Support)",Regulatory Guidelines,keep,hard,unspecified,required,1.0,,Local and International Regulatory Requirements and Guidelines
+2026-10-06,live_cca9b650e291539c,live,"Vice President, GT-TBS, GCDB Application Delivery Non-Digital, Cardlink MY (Senior Application Support)",Technology Risk,keep,hard,unspecified,,1.0,,Technology Risk Drivers
+2026-10-06,live_cca9b650e291539c,live,"Vice President, GT-TBS, GCDB Application Delivery Non-Digital, Cardlink MY (Senior Application Support)",Business Awareness,keep,hard,unspecified,,1.0,,Business Awareness
+2026-10-06,live_cca9b650e291539c,live,"Vice President, GT-TBS, GCDB Application Delivery Non-Digital, Cardlink MY (Senior Application Support)",Analytical,keep,soft,unspecified,,1.0,,Analytical
+2026-10-06,live_cca9b650e291539c,live,"Vice President, GT-TBS, GCDB Application Delivery Non-Digital, Cardlink MY (Senior Application Support)",Problem-Solving,keep,soft,unspecified,,1.0,,Problem-Solving
+2026-10-06,live_cca9b650e291539c,live,"Vice President, GT-TBS, GCDB Application Delivery Non-Digital, Cardlink MY (Senior Application Support)",Non-Technical Skills,keep,soft,unspecified,,1.0,,Non-Technical Skills
+2026-10-06,live_cca9b650e291539c,live,"Vice President, GT-TBS, GCDB Application Delivery Non-Digital, Cardlink MY (Senior Application Support)",Team Leading,keep,soft,unspecified,,1.0,,Team Leading
+2026-10-06,live_cca9b650e291539c,live,"Vice President, GT-TBS, GCDB Application Delivery Non-Digital, Cardlink MY (Senior Application Support)",Customer Service,keep,soft,unspecified,,1.0,,Customer and Service Oriented
+2026-10-06,live_cca9b650e291539c,live,"Vice President, GT-TBS, GCDB Application Delivery Non-Digital, Cardlink MY (Senior Application Support)",Stakeholder Management,keep,soft,unspecified,,1.0,,Stakeholder Management
+2026-10-06,live_cca9b650e291539c,live,"Vice President, GT-TBS, GCDB Application Delivery Non-Digital, Cardlink MY (Senior Application Support)",Investigation,keep,soft,unspecified,,1.0,,"Troubleshooting, Investigation and Diagnostic"
+2026-10-06,live_cca9b650e291539c,live,"Vice President, GT-TBS, GCDB Application Delivery Non-Digital, Cardlink MY (Senior Application Support)",Diagnostic,keep,soft,unspecified,,1.0,,"Troubleshooting, Investigation and Diagnostic"
+2026-10-06,live_cca9b650e291539c,live,"Vice President, GT-TBS, GCDB Application Delivery Non-Digital, Cardlink MY (Senior Application Support)",Communication,keep,soft,unspecified,,1.0,,Communication
+2026-10-06,live_3caf1fa0d0adf521,live,"Manager, IT SAP Support",SAP production support,keep,hard,unspecified,,1.0,,"Lead the intake, prioritization, and resolution of SAP production support tickets"
+2026-10-06,live_3caf1fa0d0adf521,live,"Manager, IT SAP Support",S/4HANA,keep,hard,required,required,1.0,,"including S/4HANA, ECC, Sales & Distribution (SD), FI/CO, Materials Management (MM), Warehouse Management (WM), and EDI"
+2026-10-06,live_3caf1fa0d0adf521,live,"Manager, IT SAP Support",Leadership,keep,soft,unspecified,,1.0,,Lead and develop a team of employees and contractors
+2026-10-06,live_3caf1fa0d0adf521,live,"Manager, IT SAP Support",Change management,keep,hard,unspecified,,1.0,,Review and approve change requests
+2026-10-06,live_3caf1fa0d0adf521,live,"Manager, IT SAP Support",Risk assessment,keep,hard,unspecified,,1.0,,risk assessments
+2026-10-06,live_3caf1fa0d0adf521,live,"Manager, IT SAP Support",IT governance,keep,hard,unspecified,required,1.0,,ensure compliance with IT governance
+2026-10-06,live_3caf1fa0d0adf521,live,"Manager, IT SAP Support",GxP,keep,hard,unspecified,required,1.0,,including FDA and GxP standards
+2026-10-06,live_3caf1fa0d0adf521,live,"Manager, IT SAP Support",ECC,keep,hard,required,required,1.0,,"including S/4HANA, ECC, Sales & Distribution (SD), FI/CO, Materials Management (MM), Warehouse Management (WM), and EDI"
+2026-10-06,live_3caf1fa0d0adf521,live,"Manager, IT SAP Support",Sales & Distribution,keep,hard,required,required,1.0,,"including S/4HANA, ECC, Sales & Distribution (SD), FI/CO, Materials Management (MM), Warehouse Management (WM), and EDI"
+2026-10-06,live_3caf1fa0d0adf521,live,"Manager, IT SAP Support",FI/CO,keep,hard,required,required,1.0,,"including S/4HANA, ECC, Sales & Distribution (SD), FI/CO, Materials Management (MM), Warehouse Management (WM), and EDI"
+2026-10-06,live_3caf1fa0d0adf521,live,"Manager, IT SAP Support",Materials Management,keep,hard,required,required,1.0,,"including S/4HANA, ECC, Sales & Distribution (SD), FI/CO, Materials Management (MM), Warehouse Management (WM), and EDI"
+2026-10-06,live_3caf1fa0d0adf521,live,"Manager, IT SAP Support",Warehouse Management,keep,hard,required,required,1.0,,"including S/4HANA, ECC, Sales & Distribution (SD), FI/CO, Materials Management (MM), Warehouse Management (WM), and EDI"
+2026-10-06,live_3caf1fa0d0adf521,live,"Manager, IT SAP Support",EDI,keep,hard,required,required,1.0,,"including S/4HANA, ECC, Sales & Distribution (SD), FI/CO, Materials Management (MM), Warehouse Management (WM), and EDI"
+2026-10-06,live_3caf1fa0d0adf521,live,"Manager, IT SAP Support",Stakeholder management,keep,soft,required,required,1.0,,Strong stakeholder management and communication skills
+2026-10-06,live_3caf1fa0d0adf521,live,"Manager, IT SAP Support",Communication,keep,soft,required,required,1.0,,Strong stakeholder management and communication skills
+2026-10-06,live_3caf1fa0d0adf521,live,"Manager, IT SAP Support",Healthcare industry knowledge,keep,hard,preferred,preferred,1.0,,"Prior experience in the healthcare, pharmaceutical, medical device, or life sciences industry"
+2026-10-06,live_3caf1fa0d0adf521,live,"Manager, IT SAP Support",Leadership of dispersed teams,keep,soft,preferred,preferred,1.0,,Experience leading geographically dispersed teams in a global organization
+2026-10-06,live_3caf1fa0d0adf521,live,"Manager, IT SAP Support",Coaching,keep,soft,preferred,preferred,1.0,,"Strong leadership, coaching, and people development capabilities"
+2026-10-06,live_3caf1fa0d0adf521,live,"Manager, IT SAP Support",People development,keep,soft,preferred,preferred,1.0,,"Strong leadership, coaching, and people development capabilities"
+2026-10-06,live_3caf1fa0d0adf521,live,"Manager, IT SAP Support",GxP validation,keep,hard,preferred,preferred,1.0,,Experience with GxP validation and regulated environments
