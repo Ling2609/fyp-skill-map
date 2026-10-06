@@ -124,7 +124,8 @@ def p_satisfies(pairs: list[tuple[str, str]]) -> np.ndarray:
         if not _load():
             raise RuntimeError("relationship model is off: check enabled() first")
         _load_cache()
-        todo = sorted({(a, b) for a, b in pairs if _key(a, b) not in _cache})
+        todo = sorted({_key(a, b): (a, b) for a, b in pairs if _key(a, b) not in _cache}.values())  # once per pair,
+        # whatever the capitals ("Python -> SQL" and "python -> sql" are one pair)
         if todo:
             probs = _score([a for a, _ in todo], [b for _, b in todo])
             for (a, b), p in zip(todo, probs):

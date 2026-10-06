@@ -3,9 +3,20 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 6 Oct 2026 — Pass rule in the evaluation script; each skill pair scored once
+
+- (this commit) `evaluate_reference.py`: "has it" judged as the app decides it (model p_satisfies >= `--cutoff`,
+  default 0.8; cosine >= 0.7), population-weighted precision / recall / F1 (each band scaled to its real number of
+  candidate pairs; checked against the hand calculation: v1 model 0.63 / 0.44 vs cosine 0.42 / 0.29). `--set v3`
+  and `--baseline <run-4 folder>` print both models side by side and the run-5 pass rule verdict (fixed in
+  references.md before blind set v3 existed: beat cosine on precision AND recall, beat run 4 on F1).
+  `merge_reference_labels.py --set v3`.
+- `skill_relation.py`: a pair is scored once whatever its capitals (the run-4 warm-up scored 7,228 pairs for 5,471
+  distinct ones).
+
 ## 6 Oct 2026 — Relationship model can decide "has it" (off until switched on)
 
-- (this commit) The trained skill relationship model can now replace the cosine >= 0.7 rule in matching
+- (9554796) The trained skill relationship model can now replace the cosine >= 0.7 rule in matching
   (`app/services/skill_relation.py`, `skill_profile.match_matrix`). Same skill (A8) is still "has it" first; for
   other pairs SBERT picks the candidates (cosine >= 0.55: no real match on either blind set was below 0.551) and the
   model decides "student skill -> job skill" (p_satisfies >= 0.8, the cut-off chosen on blind set v1). Job Matches

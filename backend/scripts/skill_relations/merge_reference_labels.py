@@ -15,6 +15,7 @@ reference_spotcheck.csv with an empty column to fill in: agree / disagree / unsu
 Usage (from backend/, venv active):
   python scripts/skill_relations/merge_reference_labels.py              # first test set (reference_pairs_v1)
   python scripts/skill_relations/merge_reference_labels.py --set v2     # fresh test set (reference_pairs_v2)
+  python scripts/skill_relations/merge_reference_labels.py --set v3     # run-5 test set (reference_pairs_v3)
 """
 import argparse
 import os
@@ -32,7 +33,9 @@ TO_CLASS = {"SAME": "SATISFIES", "NARROWER": "SATISFIES", "RELATED": "RELATED",
 SPOT_CHECK = 50
 SETS = {"v1": (PAIRS_CSV, LABEL_DIR, SPOT_CSV, 50),
         "v2": ("data/skill_relations/reference_pairs_v2.csv", "data/skill_relations/reference_labels_v2",
-               "data/skill_relations/reference_spotcheck_v2.csv", 30)}
+               "data/skill_relations/reference_spotcheck_v2.csv", 30),
+        "v3": ("data/skill_relations/reference_pairs_v3.csv", "data/skill_relations/reference_labels_v3",
+               "data/skill_relations/reference_spotcheck_v3.csv", 30)}
 SEED = 42
 
 
