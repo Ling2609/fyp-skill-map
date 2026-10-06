@@ -3,9 +3,25 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 6 Oct 2026 — Pages load only when something changed; "Back to job" in the context bar
+
+- (this commit) One short-lived cache for the slow read-only requests (`frontend/src/pageCache.js`): scoring every
+  job (Dashboard, Job Matches and the chatbot all ask for the same default list), one job's skill gap, a job's
+  formatted ad, the skill profile, categories and locations. Kept 15 minutes in sessionStorage; dropped at once by
+  api.js after any profile change (grades, projects, certificates), so the 30 Sep stale-numbers problem cannot
+  come back. The same request asked twice at once runs once. Click-through test with a mocked backend: Dashboard,
+  Job Matches, a job, the chatbot, back to the job, back to Job Matches, Dashboard again = 1 scoring request
+  (was 6); after a profile save the next page scores again, once. Dashboard takes the name from the signed-in user
+  instead of asking /auth/me again.
+- Chatbot opened from a job: the context bar reads "Learning ISTQB for Software QA Engineer" with "← Back to job" at
+  its right end (her choice of three mock-ups); the top-left link is gone.
+- Skill Development prompt: only name courses, providers and universities it is sure exist (else the words to
+  search for); never say what a named company requires unless the ad says so ("Hytech requires ISTQB" was made up);
+  no made-up statistics.
+
 ## 6 Oct 2026 — Chat replies render properly; back links; Job Matches keeps its place
 
-- (this commit) Chat replies are rendered as Markdown with react-markdown + remark-gfm (GitHub-flavoured: tables,
+- (19a84cb) Chat replies are rendered as Markdown with react-markdown + remark-gfm (GitHub-flavoured: tables,
   task lists, nested lists, code). The old line-by-line renderer showed tables as "| a | b |", "---" lines, and
   "**FREE**" inside a heading as raw symbols. Raw HTML in a reply is ignored; links open in a new tab.
 - Skill Development prompt: no made-up URLs (a reply linked a YouTube playlist ID that cannot be checked); name the

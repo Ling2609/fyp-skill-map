@@ -3935,3 +3935,736 @@
 2026-10-06,live_df4d98c61ed1d142,live,Senior Data Engineer - Databricks,Terraform,keep,hard,unspecified,,1.0,,projects such as ... Terraform
 2026-10-06,live_df4d98c61ed1d142,live,Senior Data Engineer - Databricks,Ansible,keep,hard,unspecified,,1.0,,projects such as ... Ansible
 2026-10-06,live_df4d98c61ed1d142,live,Senior Data Engineer - Databricks,data governance,reject: quote not in ad,hard,unspecified,,0.765,,best practices for data governance
+2026-10-06,live_b27191ac10946580,live,Big Data Platform Engineer,Python,keep,hard,required,,1.0,,"strong expertise in Python, Apache Spark, SQL, and experience working in Linux-based environments with exposure to DevOps practices"
+2026-10-06,live_b27191ac10946580,live,Big Data Platform Engineer,Apache Spark,keep,hard,required,,1.0,,"strong expertise in Python, Apache Spark, SQL, and experience working in Linux-based environments with exposure to DevOps practices"
+2026-10-06,live_b27191ac10946580,live,Big Data Platform Engineer,SQL,keep,hard,required,,1.0,,"strong expertise in Python, Apache Spark, SQL, and experience working in Linux-based environments with exposure to DevOps practices"
+2026-10-06,live_b27191ac10946580,live,Big Data Platform Engineer,Linux,keep,hard,required,,1.0,,"strong expertise in Python, Apache Spark, SQL, and experience working in Linux-based environments with exposure to DevOps practices"
+2026-10-06,live_b27191ac10946580,live,Big Data Platform Engineer,ETL/ELT,keep,hard,required,,1.0,,Implement efficient ETL/ELT processes for large-scale structured and unstructured datasets
+2026-10-06,live_b27191ac10946580,live,Big Data Platform Engineer,Data modelling,keep,hard,required,,1.0,,"Develop and optimize complex SQL queries, data models, and transformations"
+2026-10-06,live_b27191ac10946580,live,Big Data Platform Engineer,Data quality,keep,hard,required,,1.0,,"Ensure data quality, integrity, and reliability across the platform"
+2026-10-06,live_b27191ac10946580,live,Big Data Platform Engineer,Shell scripting,keep,hard,required,,1.0,,Develop and maintain shell scripts for automation and operational tasks
+2026-10-06,live_b27191ac10946580,live,Big Data Platform Engineer,CI/CD pipelines,keep,hard,required,,1.0,,Implement CI/CD pipelines and deployment automation
+2026-10-06,live_b27191ac10946580,live,Big Data Platform Engineer,Infrastructure provisioning,keep,hard,required,,1.0,,"Participate in infrastructure provisioning, monitoring, and release management activities"
+2026-10-06,live_b27191ac10946580,live,Big Data Platform Engineer,DevOps,keep,hard,required,,1.0,,Collaborate with DevOps teams to improve platform reliability and operational efficiency
+2026-10-06,live_b27191ac10946580,live,Big Data Platform Engineer,Code reviews,keep,hard,required,,1.0,,Participate in code reviews and ensure adherence to engineering best practices
+2026-10-06,live_b27191ac10946580,live,Big Data Platform Engineer,Technical documentation,keep,hard,required,,1.0,,Create and maintain technical documentation and operational runbooks
+2026-10-06,live_b27191ac10946580,live,Big Data Platform Engineer,PySpark,keep,hard,preferred,preferred,1.0,,Hands-on expertise with Apache Spark (PySpark preferred)
+2026-10-06,live_b27191ac10946580,live,Big Data Platform Engineer,Apache Airflow,keep,hard,required,,1.0,,Apache Airflow for workflow orchestration and scheduling
+2026-10-06,live_b27191ac10946580,live,Big Data Platform Engineer,Kubernetes,keep,hard,required,,1.0,,Kubernetes (AKS/SKE) for container orchestration and deployment
+2026-10-06,live_b27191ac10946580,live,Big Data Platform Engineer,AKS,keep,hard,required,,1.0,Kubernetes service,AKS/EKS/GKE also fine
+2026-10-06,live_b27191ac10946580,live,Big Data Platform Engineer,EKS,keep,hard,required,,1.0,Kubernetes service,AKS/EKS/GKE also fine
+2026-10-06,live_b27191ac10946580,live,Big Data Platform Engineer,GKE,keep,hard,required,,1.0,Kubernetes service,AKS/EKS/GKE also fine
+2026-10-06,live_b27191ac10946580,live,Big Data Platform Engineer,S3,keep,hard,required,,1.0,,MinIO / S3 Compatible Object Storage like AWS S3 or other S3-compatible object storage experience
+2026-10-06,live_b27191ac10946580,live,Big Data Platform Engineer,Apache Iceberg,keep,hard,required,,1.0,,Apache Iceberg/Delta Lake / Apache Hudi
+2026-10-06,live_b27191ac10946580,live,Big Data Platform Engineer,Delta Lake,keep,hard,required,,1.0,,Apache Iceberg/Delta Lake / Apache Hudi
+2026-10-06,live_b27191ac10946580,live,Big Data Platform Engineer,Apache Hudi,keep,hard,required,,1.0,,Apache Iceberg/Delta Lake / Apache Hudi
+2026-10-06,live_b27191ac10946580,live,Big Data Platform Engineer,Data pipeline development,keep,hard,required,,1.0,,Data Pipeline Development
+2026-10-06,live_b27191ac10946580,live,Big Data Platform Engineer,Performance tuning,keep,hard,required,,1.0,,Performance Tuning
+2026-10-06,live_b27191ac10946580,live,Big Data Platform Engineer,Git,keep,hard,required,,1.0,,Version Control (Git)
+2026-10-06,live_b27191ac10946580,live,Big Data Platform Engineer,Agile/Scrum,keep,hard,required,,1.0,,Agile/Scrum Delivery Model
+2026-10-06,live_b27191ac10946580,live,Big Data Platform Engineer,Linux administration,keep,hard,preferred,preferred,1.0,,Basic Linux Administration
+2026-10-06,live_b27191ac10946580,live,Big Data Platform Engineer,Docker,keep,hard,preferred,preferred,1.0,,Docker and Containerization Concepts
+2026-10-06,live_b27191ac10946580,live,Big Data Platform Engineer,Azure,keep,hard,preferred,preferred,1.0,Cloud platform,Cloud Platform Experience (Azure/AWS)
+2026-10-06,live_b27191ac10946580,live,Big Data Platform Engineer,AWS,keep,hard,preferred,preferred,1.0,Cloud platform,Cloud Platform Experience (Azure/AWS)
+2026-10-06,live_b27191ac10946580,live,Big Data Platform Engineer,Monitoring,keep,hard,preferred,preferred,1.0,,Monitoring & Logging Tools
+2026-10-06,live_b27191ac10946580,live,Big Data Platform Engineer,Logging,keep,hard,preferred,preferred,1.0,,Monitoring & Logging Tools
+2026-10-06,live_b27191ac10946580,live,Big Data Platform Engineer,Data Engineering,keep,hard,required,,1.0,one of: Data Engineering / Big Data Platform Development,Data Engineering or Big Data Platform Development
+2026-10-06,live_b27191ac10946580,live,Big Data Platform Engineer,Big Data Platform Development,keep,hard,required,,1.0,one of: Data Engineering / Big Data Platform Development,Data Engineering or Big Data Platform Development
+2026-10-06,live_b27191ac10946580,live,Big Data Platform Engineer,Data platforms,keep,hard,required,,1.0,,enterprise-scale data platforms
+2026-10-06,live_b27191ac10946580,live,Big Data Platform Engineer,Distributed computing,keep,hard,required,,1.0,,distributed computing environments
+2026-10-06,live_b27191ac10946580,live,Big Data Platform Engineer,Analytical skills,keep,soft,required,,1.0,,Strong analytical and problem-solving skills
+2026-10-06,live_b27191ac10946580,live,Big Data Platform Engineer,Problem-solving,keep,soft,required,,1.0,,Strong analytical and problem-solving skills
+2026-10-06,live_45d6f1291825ab09,live,Data Engineer (FMCG),Data pipelines,keep,hard,required,,1.0,,"Hands-on experience building and maintaining data pipelines, data feeds, and transformation processes"
+2026-10-06,live_45d6f1291825ab09,live,Data Engineer (FMCG),Data integrations,keep,hard,unspecified,,1.0,,"Design, build, and maintain robust data pipelines and data integrations"
+2026-10-06,live_45d6f1291825ab09,live,Data Engineer (FMCG),Data standards,keep,hard,unspecified,required,1.0,,"Ensure data solutions align with established data standards, best practices, and compliance requirements"
+2026-10-06,live_45d6f1291825ab09,live,Data Engineer (FMCG),Performance monitoring,keep,hard,unspecified,,1.0,,"Monitor and optimize system performance, data feeds, and production processes"
+2026-10-06,live_45d6f1291825ab09,live,Data Engineer (FMCG),Data feeds,keep,hard,required,,1.0,,"Hands-on experience building and maintaining data pipelines, data feeds, and transformation processes"
+2026-10-06,live_45d6f1291825ab09,live,Data Engineer (FMCG),Technical documentation,keep,hard,unspecified,,1.0,,Develop and maintain technical documentation
+2026-10-06,live_45d6f1291825ab09,live,Data Engineer (FMCG),Release management,keep,hard,unspecified,,1.0,,Partner with Operations and Development teams to support releases and change management processes
+2026-10-06,live_45d6f1291825ab09,live,Data Engineer (FMCG),Change management,keep,hard,unspecified,,1.0,,Partner with Operations and Development teams to support releases and change management processes
+2026-10-06,live_45d6f1291825ab09,live,Data Engineer (FMCG),SQL,keep,hard,required,,1.0,,Over 4 years of experience working with SQL/ T-SQL and data engineering solutions
+2026-10-06,live_45d6f1291825ab09,live,Data Engineer (FMCG),T-SQL,keep,hard,required,,1.0,,Over 4 years of experience working with SQL/ T-SQL and data engineering solutions
+2026-10-06,live_45d6f1291825ab09,live,Data Engineer (FMCG),Data transformation,keep,hard,required,,1.0,,"Hands-on experience building and maintaining data pipelines, data feeds, and transformation processes"
+2026-10-06,live_45d6f1291825ab09,live,Data Engineer (FMCG),Data modelling,keep,hard,required,,1.0,,Strong understanding of data modelling and Data Warehouse concepts
+2026-10-06,live_45d6f1291825ab09,live,Data Engineer (FMCG),Data Warehouse,keep,hard,required,,1.0,,Strong understanding of data modelling and Data Warehouse concepts
+2026-10-06,live_45d6f1291825ab09,live,Data Engineer (FMCG),Power BI,keep,hard,required,,1.0,,Experience with Power BI and turning data into meaningful business insights
+2026-10-06,live_45d6f1291825ab09,live,Data Engineer (FMCG),Snowflake,keep,hard,required,preferred,1.0,,"Exposure to cloud-based data platforms, ideally including Snowflake and Azure Data Factory"
+2026-10-06,live_45d6f1291825ab09,live,Data Engineer (FMCG),Azure Data Factory,keep,hard,required,preferred,1.0,,"Exposure to cloud-based data platforms, ideally including Snowflake and Azure Data Factory"
+2026-10-06,live_45d6f1291825ab09,live,Data Engineer (FMCG),Problem-solving,keep,soft,required,,1.0,,Strong problem-solving skills with the ability to troubleshoot complex data challenges
+2026-10-06,live_45d6f1291825ab09,live,Data Engineer (FMCG),Communication,keep,soft,required,,1.0,,Excellent communication skills and the confidence to collaborate with both technical and non-technical stakeholders
+2026-10-06,live_80d6f269f676b931,live,Data Engineer,Data warehousing,keep,hard,required,required,1.0,,Minimum of 3 years solid in Data Warehousing
+2026-10-06,live_80d6f269f676b931,live,Data Engineer,Kimball methodology,keep,hard,required,required,1.0,,Solid understanding of Ralph Kimball methodologies
+2026-10-06,live_80d6f269f676b931,live,Data Engineer,Data integration,keep,hard,required,required,1.0,,"experience with SQL, Data Integration, Implementing Data Quality Checks and Data Modelling"
+2026-10-06,live_80d6f269f676b931,live,Data Engineer,ETL development,keep,hard,required,required,1.0,,"Experience with ETL development, Data Integration, and Data Warehousing"
+2026-10-06,live_80d6f269f676b931,live,Data Engineer,Data modeling,keep,hard,required,required,1.0,,Data Modelling
+2026-10-06,live_80d6f269f676b931,live,Data Engineer,Data quality,keep,hard,unspecified,,1.0,,Ensuring data accuracy and consistency
+2026-10-06,live_80d6f269f676b931,live,Data Engineer,Performance tuning,keep,hard,unspecified,,1.0,,Ensuring data systems perform efficiently
+2026-10-06,live_80d6f269f676b931,live,Data Engineer,Query performance monitoring,keep,hard,unspecified,,1.0,,Monitoring query performance
+2026-10-06,live_80d6f269f676b931,live,Data Engineer,Data retrieval optimization,keep,hard,unspecified,,1.0,,Fine-tuning data retrieval processes
+2026-10-06,live_80d6f269f676b931,live,Data Engineer,Data governance,keep,hard,unspecified,,1.0,,Implementing data governance policies and ensuring data security
+2026-10-06,live_80d6f269f676b931,live,Data Engineer,Data security,keep,hard,unspecified,,1.0,,Implementing data governance policies and ensuring data security
+2026-10-06,live_80d6f269f676b931,live,Data Engineer,Access control,keep,hard,unspecified,,1.0,,Implementing access controls
+2026-10-06,live_80d6f269f676b931,live,Data Engineer,Data lineage,keep,hard,unspecified,,1.0,,Managing data lineage and compliance
+2026-10-06,live_80d6f269f676b931,live,Data Engineer,Compliance,keep,hard,unspecified,,1.0,,Managing data lineage and compliance
+2026-10-06,live_80d6f269f676b931,live,Data Engineer,Dashboard development,keep,hard,unspecified,,1.0,,"create interactive dashboards, reports, and visualizations"
+2026-10-06,live_80d6f269f676b931,live,Data Engineer,Reporting,keep,hard,unspecified,,1.0,,"create interactive dashboards, reports, and visualizations"
+2026-10-06,live_80d6f269f676b931,live,Data Engineer,Data visualization,keep,hard,unspecified,,1.0,,"create interactive dashboards, reports, and visualizations"
+2026-10-06,live_80d6f269f676b931,live,Data Engineer,Self-service reporting,keep,hard,unspecified,,1.0,,Empowering business users with self-service reporting
+2026-10-06,live_80d6f269f676b931,live,Data Engineer,SQL,keep,hard,required,required,1.0,,"experience with SQL, Data Integration, Implementing Data Quality Checks and Data Modelling"
+2026-10-06,live_80d6f269f676b931,live,Data Engineer,Data quality checks,keep,hard,required,required,1.0,,Implementing Data Quality Checks
+2026-10-06,live_80d6f269f676b931,live,Data Engineer,MS SSIS,keep,hard,required,required,1.0,,"Proficiency in MS SSIS, Azure Data Factory, SQL, MS SQL Database, Azure DevOps, and Data Integration Tools"
+2026-10-06,live_80d6f269f676b931,live,Data Engineer,Azure Data Factory,keep,hard,required,required,1.0,,"Proficiency in MS SSIS, Azure Data Factory, SQL, MS SQL Database, Azure DevOps, and Data Integration Tools"
+2026-10-06,live_80d6f269f676b931,live,Data Engineer,MS SQL Database,keep,hard,required,required,1.0,,"Proficiency in MS SSIS, Azure Data Factory, SQL, MS SQL Database, Azure DevOps, and Data Integration Tools"
+2026-10-06,live_80d6f269f676b931,live,Data Engineer,Azure DevOps,keep,hard,required,required,1.0,,"Proficiency in MS SSIS, Azure Data Factory, SQL, MS SQL Database, Azure DevOps, and Data Integration Tools"
+2026-10-06,live_80d6f269f676b931,live,Data Engineer,ServiceNow,keep,hard,preferred,required,1.0,,"Experience with Power BI, ServiceNow, Qlik, Tableau, C, C++, C#, Python, or R"
+2026-10-06,live_80d6f269f676b931,live,Data Engineer,C,keep,hard,preferred,required,1.0,,"Experience with Power BI, ServiceNow, Qlik, Tableau, C, C++, C#, Python, or R"
+2026-10-06,live_80d6f269f676b931,live,Data Engineer,C++,keep,hard,preferred,required,1.0,,"Experience with Power BI, ServiceNow, Qlik, Tableau, C, C++, C#, Python, or R"
+2026-10-06,live_80d6f269f676b931,live,Data Engineer,C#,keep,hard,preferred,required,1.0,,"Experience with Power BI, ServiceNow, Qlik, Tableau, C, C++, C#, Python, or R"
+2026-10-06,live_80d6f269f676b931,live,Data Engineer,Python,keep,hard,preferred,required,1.0,,"Experience with Power BI, ServiceNow, Qlik, Tableau, C, C++, C#, Python, or R"
+2026-10-06,live_80d6f269f676b931,live,Data Engineer,R,keep,hard,preferred,required,1.0,,"Experience with Power BI, ServiceNow, Qlik, Tableau, C, C++, C#, Python, or R"
+2026-10-06,live_80d6f269f676b931,live,Data Engineer,Data analysis,keep,hard,required,required,1.0,,"Ability to analyse complex, large data sets, data models, data mining, and segmentation techniques"
+2026-10-06,live_80d6f269f676b931,live,Data Engineer,Data mining,keep,hard,required,required,1.0,,"data mining, and segmentation techniques"
+2026-10-06,live_80d6f269f676b931,live,Data Engineer,Segmentation techniques,keep,hard,required,required,1.0,,segmentation techniques for a global organization
+2026-10-06,live_80d6f269f676b931,live,Data Engineer,Azure Data Platform,keep,hard,preferred,preferred,1.0,,"Certificates from Microsoft ... Azure Data Platform, Azure Data Factory, Power BI, Database, ETL Tools, and SQL Server/Cloud Services"
+2026-10-06,live_80d6f269f676b931,live,Data Engineer,Power BI,keep,hard,preferred,preferred,1.0,,"Certificates from Microsoft ... Azure Data Platform, Azure Data Factory, Power BI, Database, ETL Tools, and SQL Server/Cloud Services"
+2026-10-06,live_80d6f269f676b931,live,Data Engineer,Database,keep,hard,preferred,preferred,1.0,,"Certificates from Microsoft ... Azure Data Platform, Azure Data Factory, Power BI, Database, ETL Tools, and SQL Server/Cloud Services"
+2026-10-06,live_80d6f269f676b931,live,Data Engineer,SQL Server/Cloud Services,keep,hard,preferred,preferred,1.0,,"Certificates from Microsoft ... Azure Data Platform, Azure Data Factory, Power BI, Database, ETL Tools, and SQL Server/Cloud Services"
+2026-10-06,live_80d6f269f676b931,live,Data Engineer,Agile,keep,hard,preferred,preferred,1.0,,Experience working in an Agile/Scrum environment
+2026-10-06,live_80d6f269f676b931,live,Data Engineer,Scrum,keep,hard,preferred,preferred,1.0,,Experience working in an Agile/Scrum environment
+2026-10-06,live_80d6f269f676b931,live,Data Engineer,Medical domain knowledge,keep,hard,preferred,preferred,1.0,,Knowledge of Medical industries or Medical Manufacturing business domains
+2026-10-06,live_80d6f269f676b931,live,Data Engineer,Data engineering,reject: quote not in ad,hard,required,,0.841,,Minimum of 3 years solid in Data Engineering
+2026-10-06,live_80d6f269f676b931,live,Data Engineer,Business intelligence development,reject: quote not in ad,hard,required,,0.672,,Minimum of 3 years solid in Business Intelligence Development
+2026-10-06,live_c767d1842ad40818,live,Sales Data Engineer,Snowflake,keep,hard,required,,1.0,,Snowflake/SQL server data architectures
+2026-10-06,live_c767d1842ad40818,live,Sales Data Engineer,SQL Server,keep,hard,required,,1.0,,Snowflake/SQL server data architectures
+2026-10-06,live_c767d1842ad40818,live,Sales Data Engineer,ETL,keep,hard,required,,1.0,,ETL/ELT processes using modern data engineering practices
+2026-10-06,live_c767d1842ad40818,live,Sales Data Engineer,ELT,keep,hard,required,,1.0,,ETL/ELT processes using modern data engineering practices
+2026-10-06,live_c767d1842ad40818,live,Sales Data Engineer,DBT,keep,hard,required,,1.0,,Build and maintain robust data models using DBT
+2026-10-06,live_c767d1842ad40818,live,Sales Data Engineer,SQL,keep,hard,required,required,1.0,,"Develop high-quality, reusable, and efficient SQL code"
+2026-10-06,live_c767d1842ad40818,live,Sales Data Engineer,GitLab,keep,hard,required,,1.0,,"Utilize GitLab for source control, code management"
+2026-10-06,live_c767d1842ad40818,live,Sales Data Engineer,Automation,keep,hard,unspecified,,1.0,,Proactively identify opportunities for automation
+2026-10-06,live_c767d1842ad40818,live,Sales Data Engineer,Problem-solving,keep,soft,unspecified,,1.0,,Strong analytical and problem-solving skills
+2026-10-06,live_c767d1842ad40818,live,Sales Data Engineer,Troubleshooting,keep,soft,unspecified,,1.0,,Excellent troubleshooting and diagnostic capabilities
+2026-10-06,live_c767d1842ad40818,live,Sales Data Engineer,Continuous improvement,keep,soft,unspecified,,1.0,,Proactive mindset with a focus on continuous improvement
+2026-10-06,live_c767d1842ad40818,live,Sales Data Engineer,Communication,keep,soft,unspecified,,1.0,,Strong communication and stakeholder management skills
+2026-10-06,live_c767d1842ad40818,live,Sales Data Engineer,Stakeholder management,keep,soft,unspecified,,1.0,,Strong communication and stakeholder management skills
+2026-10-06,live_94383f47e31bbf09,live,Full-Stack Engineer,React,keep,hard,required,required,1.0,,React frontend
+2026-10-06,live_94383f47e31bbf09,live,Full-Stack Engineer,Node.js,keep,hard,required,required,1.0,,Node.js/TypeScript backend
+2026-10-06,live_94383f47e31bbf09,live,Full-Stack Engineer,TypeScript,keep,hard,required,required,1.0,,Node.js/TypeScript backend
+2026-10-06,live_94383f47e31bbf09,live,Full-Stack Engineer,GraphQL,keep,hard,required,required,1.0,,work in our GraphQL data layer
+2026-10-06,live_94383f47e31bbf09,live,Full-Stack Engineer,PostgreSQL,keep,hard,required,required,1.0,,PostgreSQL/TimescaleDB
+2026-10-06,live_94383f47e31bbf09,live,Full-Stack Engineer,TimescaleDB,keep,hard,required,required,1.0,,PostgreSQL/TimescaleDB
+2026-10-06,live_94383f47e31bbf09,live,Full-Stack Engineer,MongoDB,keep,hard,required,required,1.0,,MongoDB
+2026-10-06,live_94383f47e31bbf09,live,Full-Stack Engineer,Amazon SP API,keep,hard,required,required,1.0,,Amazon SP API
+2026-10-06,live_94383f47e31bbf09,live,Full-Stack Engineer,Data Kiosk,keep,hard,required,required,1.0,,Data Kiosk
+2026-10-06,live_94383f47e31bbf09,live,Full-Stack Engineer,AWS,keep,hard,required,required,1.0,,services on AWS
+2026-10-06,live_94383f47e31bbf09,live,Full-Stack Engineer,CloudWatch,keep,hard,required,required,1.0,,using CloudWatch to diagnose issues
+2026-10-06,live_94383f47e31bbf09,live,Full-Stack Engineer,Collaboration,keep,soft,required,required,1.0,,"Collaborate with product, QA, and fellow engineers"
+2026-10-06,live_94383f47e31bbf09,live,Full-Stack Engineer,SQL,keep,hard,required,required,1.0,,Proficient in SQL
+2026-10-06,live_94383f47e31bbf09,live,Full-Stack Engineer,REST APIs,keep,hard,required,required,1.0,,building and consuming REST APIs
+2026-10-06,live_94383f47e31bbf09,live,Full-Stack Engineer,Problem-solving,keep,soft,required,required,1.0,,Strong problem-solving skills
+2026-10-06,live_94383f47e31bbf09,live,Full-Stack Engineer,Communication,keep,soft,required,required,1.0,,Excellent written and verbal communication
+2026-10-06,live_94383f47e31bbf09,live,Full-Stack Engineer,Cursor,keep,hard,required,required,1.0,one of: Cursor / Claude,"AI coding assistants (e.g., Cursor, Claude)"
+2026-10-06,live_94383f47e31bbf09,live,Full-Stack Engineer,Claude,keep,hard,required,required,1.0,one of: Cursor / Claude,"AI coding assistants (e.g., Cursor, Claude)"
+2026-10-06,live_94383f47e31bbf09,live,Full-Stack Engineer,Python,keep,hard,preferred,preferred,1.0,,Working knowledge of Python
+2026-10-06,live_94383f47e31bbf09,live,Full-Stack Engineer,Amazon,keep,hard,preferred,preferred,1.0,,"e-commerce or marketplace platforms (e.g., Amazon"
+2026-10-06,live_94383f47e31bbf09,live,Full-Stack Engineer,Shopify,keep,hard,preferred,preferred,1.0,,Shopify
+2026-10-06,live_94383f47e31bbf09,live,Full-Stack Engineer,WooCommerce,keep,hard,preferred,preferred,1.0,,WooCommerce
+2026-10-06,live_94383f47e31bbf09,live,Full-Stack Engineer,Analytics,keep,hard,preferred,preferred,1.0,,Experience with analytics
+2026-10-06,live_94383f47e31bbf09,live,Full-Stack Engineer,Reporting,keep,hard,preferred,required,1.0,,reporting
+2026-10-06,live_94383f47e31bbf09,live,Full-Stack Engineer,Cloudflare,keep,hard,preferred,preferred,1.0,,Familiarity with Cloudflare
+2026-10-06,live_94383f47e31bbf09,live,Full-Stack Engineer,MCP servers,keep,hard,preferred,preferred,1.0,,Experience with MCP servers
+2026-10-06,live_94383f47e31bbf09,live,Full-Stack Engineer,AI-powered developer tooling,keep,hard,preferred,preferred,1.0,,building AI-powered developer tooling
+2026-10-06,live_ad730103a35257d4,live,Data Engineering & Integration Operations Manager,SQL,keep,hard,required,,1.0,,hands-on experience working directly with SQL/Python
+2026-10-06,live_ad730103a35257d4,live,Data Engineering & Integration Operations Manager,Python,keep,hard,required,,1.0,,hands-on experience working directly with SQL/Python
+2026-10-06,live_ad730103a35257d4,live,Data Engineering & Integration Operations Manager,API,keep,hard,unspecified,,1.0,,"integrating data across various platforms—APIs, files, warehouses"
+2026-10-06,live_ad730103a35257d4,live,Data Engineering & Integration Operations Manager,Agile,keep,hard,unspecified,,1.0,,facilitate Agile planning sessions
+2026-10-06,live_ad730103a35257d4,live,Data Engineering & Integration Operations Manager,Automation tools,keep,hard,required,,1.0,,exposure to automation tools
+2026-10-06,live_ad730103a35257d4,live,Data Engineering & Integration Operations Manager,Snowflake,keep,hard,required,,1.0,,Hands-on familiarity with modern cloud platforms such as Snowflake
+2026-10-06,live_ad730103a35257d4,live,Data Engineering & Integration Operations Manager,Google BigQuery,keep,hard,required,,1.0,,modern cloud platforms such as ... Google BigQuery
+2026-10-06,live_ad730103a35257d4,live,Data Engineering & Integration Operations Manager,Databricks,keep,hard,required,,1.0,,modern cloud platforms such as ... Databricks
+2026-10-06,live_ad730103a35257d4,live,Data Engineering & Integration Operations Manager,API integration,keep,hard,required,,1.0,,troubleshooting intricate issues across APIs
+2026-10-06,live_ad730103a35257d4,live,Data Engineering & Integration Operations Manager,Data warehousing,keep,hard,required,,1.0,,large-scale data warehousing
+2026-10-06,live_ad730103a35257d4,live,Data Engineering & Integration Operations Manager,Data integration,keep,hard,required,,1.0,,integration projects
+2026-10-06,live_ad730103a35257d4,live,Data Engineering & Integration Operations Manager,File-based integration,keep,hard,required,,1.0,,troubleshooting intricate issues across ... file-based integrations
+2026-10-06,live_ad730103a35257d4,live,Data Engineering & Integration Operations Manager,ETL,keep,hard,required,required,1.0,,understanding of architectural principles behind ETL/ELT processes
+2026-10-06,live_ad730103a35257d4,live,Data Engineering & Integration Operations Manager,ELT,keep,hard,required,required,1.0,,understanding of architectural principles behind ETL/ELT processes
+2026-10-06,live_ad730103a35257d4,live,Data Engineering & Integration Operations Manager,Communication,keep,soft,required,,1.0,,possess strong communication skills
+2026-10-06,live_ad730103a35257d4,live,Data Engineering & Integration Operations Manager,Scripting,keep,hard,required,preferred,1.0,,exposure to ... scripting
+2026-10-06,live_ad730103a35257d4,live,Data Engineering & Integration Operations Manager,Mentoring,keep,soft,required,,1.0,,Whether mentoring junior engineers
+2026-10-06,live_ad730103a35257d4,live,Data Engineering & Integration Operations Manager,Collaboration,keep,soft,required,,1.0,,collaborating across departments during Agile planning sessions
+2026-10-06,live_ad730103a35257d4,live,Data Engineering & Integration Operations Manager,Data warehouse architecture,keep,hard,required,,1.0,,Comprehensive understanding of data warehouse architecture
+2026-10-06,live_ad730103a35257d4,live,Data Engineering & Integration Operations Manager,JSON,keep,hard,required,,1.0,,practical knowledge of JSON
+2026-10-06,live_ad730103a35257d4,live,Data Engineering & Integration Operations Manager,XML,keep,hard,required,,1.0,,practical knowledge of ... XML
+2026-10-06,live_ad730103a35257d4,live,Data Engineering & Integration Operations Manager,Technical troubleshooting,keep,hard,required,,1.0,,Exceptional technical troubleshooting skills
+2026-10-06,live_ad730103a35257d4,live,Data Engineering & Integration Operations Manager,Debugging,keep,hard,required,,1.0,,including debugging capabilities for production environments
+2026-10-06,live_ad730103a35257d4,live,Data Engineering & Integration Operations Manager,Migration,keep,hard,required,,1.0,,Experience leading migration projects
+2026-10-06,live_ad730103a35257d4,live,Data Engineering & Integration Operations Manager,Java,keep,hard,preferred,preferred,1.0,,Experience with Java or other programming languages
+2026-10-06,live_ad730103a35257d4,live,Data Engineering & Integration Operations Manager,Azure DevOps,keep,hard,preferred,preferred,1.0,,exposure to Azure DevOps
+2026-10-06,live_ad730103a35257d4,live,Data Engineering & Integration Operations Manager,Splunk,keep,hard,preferred,preferred,1.0,,exposure to ... Splunk
+2026-10-06,live_ad730103a35257d4,live,Data Engineering & Integration Operations Manager,Salesforce,keep,hard,preferred,preferred,1.0,,exposure to ... Salesforce
+2026-10-06,live_ad730103a35257d4,live,Data Engineering & Integration Operations Manager,Power BI,keep,hard,preferred,preferred,1.0,,exposure to ... Power BI
+2026-10-06,live_ad730103a35257d4,live,Data Engineering & Integration Operations Manager,Operational monitoring tools,keep,hard,preferred,preferred,1.0,,operational monitoring tools
+2026-10-06,live_ad730103a35257d4,live,Data Engineering & Integration Operations Manager,Cloud technologies,keep,hard,preferred,preferred,1.0,,understanding of cloud technologies
+2026-10-06,live_ad730103a35257d4,live,Data Engineering & Integration Operations Manager,Large-scale distribution platforms,keep,hard,preferred,preferred,1.0,,experience with large-scale distribution platforms
+2026-10-06,live_ad730103a35257d4,live,Data Engineering & Integration Operations Manager,Microsoft Excel,reject: quote not in ad,hard,preferred,,0.667,Spreadsheet,exposure to Microsoft Excel
+2026-10-06,live_33a7ab5a7bbb2984,live,"Senior Digital Designer (Web, UX & Social Design Focus)",visual design,keep,hard,unspecified,,1.0,,strong visual design skills
+2026-10-06,live_33a7ab5a7bbb2984,live,"Senior Digital Designer (Web, UX & Social Design Focus)",website design,keep,hard,unspecified,,1.0,,"Create high-quality digital designs across websites, landing pages, social media, and marketing campaigns"
+2026-10-06,live_33a7ab5a7bbb2984,live,"Senior Digital Designer (Web, UX & Social Design Focus)",landing page design,keep,hard,unspecified,,1.0,,"Create high-quality digital designs across websites, landing pages, social media, and marketing campaigns"
+2026-10-06,live_33a7ab5a7bbb2984,live,"Senior Digital Designer (Web, UX & Social Design Focus)",social media design,keep,hard,unspecified,,1.0,,"Create high-quality digital designs across websites, landing pages, social media, and marketing campaigns"
+2026-10-06,live_33a7ab5a7bbb2984,live,"Senior Digital Designer (Web, UX & Social Design Focus)",marketing campaign design,keep,hard,unspecified,,1.0,,"Create high-quality digital designs across websites, landing pages, social media, and marketing campaigns"
+2026-10-06,live_33a7ab5a7bbb2984,live,"Senior Digital Designer (Web, UX & Social Design Focus)",responsive design,keep,hard,required,required,1.0,,"Strong understanding of UX principles, responsive design, and digital best practices"
+2026-10-06,live_33a7ab5a7bbb2984,live,"Senior Digital Designer (Web, UX & Social Design Focus)",visual storytelling,keep,hard,required,required,1.0,,Strong visual storytelling skills and attention to detail
+2026-10-06,live_33a7ab5a7bbb2984,live,"Senior Digital Designer (Web, UX & Social Design Focus)",presentation design,keep,hard,unspecified,,1.0,,"Develop presentations, mood boards, and creative concepts for client discussions"
+2026-10-06,live_33a7ab5a7bbb2984,live,"Senior Digital Designer (Web, UX & Social Design Focus)",typography,keep,hard,unspecified,,1.0,,"Apply a strong understanding of typography, layout, branding, and visual hierarchy"
+2026-10-06,live_33a7ab5a7bbb2984,live,"Senior Digital Designer (Web, UX & Social Design Focus)",layout,keep,hard,unspecified,,1.0,,"Apply a strong understanding of typography, layout, branding, and visual hierarchy"
+2026-10-06,live_33a7ab5a7bbb2984,live,"Senior Digital Designer (Web, UX & Social Design Focus)",branding,keep,hard,unspecified,,1.0,,"Apply a strong understanding of typography, layout, branding, and visual hierarchy"
+2026-10-06,live_33a7ab5a7bbb2984,live,"Senior Digital Designer (Web, UX & Social Design Focus)",visual hierarchy,keep,hard,unspecified,,1.0,,"Apply a strong understanding of typography, layout, branding, and visual hierarchy"
+2026-10-06,live_33a7ab5a7bbb2984,live,"Senior Digital Designer (Web, UX & Social Design Focus)",UI/UX design,keep,hard,unspecified,,1.0,,"Support UI/UX design projects, including user flows, wireframes, prototypes, and interface designs"
+2026-10-06,live_33a7ab5a7bbb2984,live,"Senior Digital Designer (Web, UX & Social Design Focus)",user flows,keep,hard,unspecified,,1.0,,"Support UI/UX design projects, including user flows, wireframes, prototypes, and interface designs"
+2026-10-06,live_33a7ab5a7bbb2984,live,"Senior Digital Designer (Web, UX & Social Design Focus)",wireframes,keep,hard,unspecified,,1.0,,"Support UI/UX design projects, including user flows, wireframes, prototypes, and interface designs"
+2026-10-06,live_33a7ab5a7bbb2984,live,"Senior Digital Designer (Web, UX & Social Design Focus)",prototypes,keep,hard,unspecified,,1.0,,"Support UI/UX design projects, including user flows, wireframes, prototypes, and interface designs"
+2026-10-06,live_33a7ab5a7bbb2984,live,"Senior Digital Designer (Web, UX & Social Design Focus)",interface design,keep,hard,unspecified,,1.0,,"Support UI/UX design projects, including user flows, wireframes, prototypes, and interface designs"
+2026-10-06,live_33a7ab5a7bbb2984,live,"Senior Digital Designer (Web, UX & Social Design Focus)",motion design,keep,hard,unspecified,,1.0,,"Create visual storytelling concepts for digital campaigns, video content, or motion projects"
+2026-10-06,live_33a7ab5a7bbb2984,live,"Senior Digital Designer (Web, UX & Social Design Focus)",mobile design,keep,hard,unspecified,required,1.0,,"Experience creating designs for digital platforms, including websites, mobile, social media, and marketing channels"
+2026-10-06,live_33a7ab5a7bbb2984,live,"Senior Digital Designer (Web, UX & Social Design Focus)",Figma,keep,hard,required,required,1.0,,Strong proficiency in Figma and Adobe Creative Suite or equivalent design tools
+2026-10-06,live_33a7ab5a7bbb2984,live,"Senior Digital Designer (Web, UX & Social Design Focus)",Adobe Creative Suite,keep,hard,required,required,1.0,,Strong proficiency in Figma and Adobe Creative Suite or equivalent design tools
+2026-10-06,live_33a7ab5a7bbb2984,live,"Senior Digital Designer (Web, UX & Social Design Focus)",UX principles,keep,hard,required,required,1.0,,"Strong understanding of UX principles, responsive design, and digital best practices"
+2026-10-06,live_33a7ab5a7bbb2984,live,"Senior Digital Designer (Web, UX & Social Design Focus)",digital best practices,keep,hard,required,required,1.0,,"Strong understanding of UX principles, responsive design, and digital best practices"
+2026-10-06,live_33a7ab5a7bbb2984,live,"Senior Digital Designer (Web, UX & Social Design Focus)",communication,keep,soft,required,required,1.0,,Ability to communicate design rationale clearly with clients and internal teams
+2026-10-06,live_33a7ab5a7bbb2984,live,"Senior Digital Designer (Web, UX & Social Design Focus)",digital product design,keep,hard,unspecified,,1.0,,"Website design, landing pages, and digital product experiences"
+2026-10-06,live_33a7ab5a7bbb2984,live,"Senior Digital Designer (Web, UX & Social Design Focus)",social media campaign design,keep,hard,unspecified,,1.0,,Social media campaigns and branded content
+2026-10-06,live_33a7ab5a7bbb2984,live,"Senior Digital Designer (Web, UX & Social Design Focus)",client presentation,keep,soft,unspecified,,1.0,,Client-facing creative presentations and design reviews
+2026-10-06,live_e62712dd30350df3,live,Senior UI/UX Design Expert,UX research,keep,hard,required,,1.0,,Lead complex end-to-end UX research initiatives and strategies
+2026-10-06,live_e62712dd30350df3,live,Senior UI/UX Design Expert,UX/UI design,keep,hard,required,,1.0,,drive strong UX/UI design across information architecture
+2026-10-06,live_e62712dd30350df3,live,Senior UI/UX Design Expert,Information architecture,keep,hard,required,,1.0,,drive strong UX/UI design across information architecture
+2026-10-06,live_e62712dd30350df3,live,Senior UI/UX Design Expert,Cross-platform flows,keep,hard,required,,1.0,,"cross-platform flows, layout, typography and visual hierarchy"
+2026-10-06,live_e62712dd30350df3,live,Senior UI/UX Design Expert,Layout,keep,hard,required,,1.0,,"cross-platform flows, layout, typography and visual hierarchy"
+2026-10-06,live_e62712dd30350df3,live,Senior UI/UX Design Expert,Typography,keep,hard,required,,1.0,,"cross-platform flows, layout, typography and visual hierarchy"
+2026-10-06,live_e62712dd30350df3,live,Senior UI/UX Design Expert,Visual hierarchy,keep,hard,required,,1.0,,"cross-platform flows, layout, typography and visual hierarchy"
+2026-10-06,live_e62712dd30350df3,live,Senior UI/UX Design Expert,Design systems,keep,hard,required,,1.0,,Experience maintaining and advocating for design systems
+2026-10-06,live_e62712dd30350df3,live,Senior UI/UX Design Expert,Design processes,keep,hard,unspecified,,1.0,,advocate for design systems and design processes
+2026-10-06,live_e62712dd30350df3,live,Senior UI/UX Design Expert,Mentoring,keep,soft,required,,1.0,,Mentor and coach junior designers through complex problems
+2026-10-06,live_e62712dd30350df3,live,Senior UI/UX Design Expert,Coaching,keep,soft,required,,1.0,,Mentor and coach junior designers through complex problems
+2026-10-06,live_e62712dd30350df3,live,Senior UI/UX Design Expert,Feedback,keep,soft,required,,1.0,,"providing regular, direct and empathetic feedback"
+2026-10-06,live_e62712dd30350df3,live,Senior UI/UX Design Expert,Claude Design,keep,hard,required,required,1.0,,Claude Design
+2026-10-06,live_e62712dd30350df3,live,Senior UI/UX Design Expert,Figma AI,keep,hard,required,required,1.0,,Figma AI/Make
+2026-10-06,live_e62712dd30350df3,live,Senior UI/UX Design Expert,AI tool judgement,keep,soft,required,,1.0,,Possesses sound judgement of when and when not to use AI tools
+2026-10-06,live_e62712dd30350df3,live,Senior UI/UX Design Expert,Visual design fundamentals,keep,hard,required,,1.0,,articulate and teach ... visual design fundamentals
+2026-10-06,live_e62712dd30350df3,live,Senior UI/UX Design Expert,Design tools,keep,hard,required,,1.0,,using a broad set of design tools and knowing which to apply
+2026-10-06,live_e62712dd30350df3,live,Senior UI/UX Design Expert,Design thinking,keep,hard,required,,1.0,,Strong design thinking and product thinking
+2026-10-06,live_e62712dd30350df3,live,Senior UI/UX Design Expert,Product thinking,keep,hard,required,,1.0,,Strong design thinking and product thinking
+2026-10-06,live_e62712dd30350df3,live,Senior UI/UX Design Expert,Verbal communication,keep,soft,required,,1.0,,Excellent verbal and written communication skills in English
+2026-10-06,live_e62712dd30350df3,live,Senior UI/UX Design Expert,Written communication,keep,soft,required,,1.0,,Excellent verbal and written communication skills in English
+2026-10-06,live_e62712dd30350df3,live,Senior UI/UX Design Expert,Workshop facilitation,keep,soft,required,,1.0,,able to lead workshops and stakeholder conversations
+2026-10-06,live_e62712dd30350df3,live,Senior UI/UX Design Expert,Stakeholder conversation,keep,soft,required,,1.0,,able to lead workshops and stakeholder conversations
+2026-10-06,live_319eb8479a356b7d,live,UI/UX Analyst,UI/UX design,keep,hard,unspecified,,1.0,,Provide end-to-end UI/UX design services
+2026-10-06,live_319eb8479a356b7d,live,UI/UX Analyst,UX research,keep,hard,unspecified,,1.0,,User Experience (UX) Discovery & Research
+2026-10-06,live_319eb8479a356b7d,live,UI/UX Analyst,Stakeholder interviewing,keep,soft,unspecified,required,1.0,,"Conduct stakeholder interviews, workshops, and requirement gathering sessions"
+2026-10-06,live_319eb8479a356b7d,live,UI/UX Analyst,Workshop facilitation,keep,soft,unspecified,required,1.0,,"Conduct stakeholder interviews, workshops, and requirement gathering sessions"
+2026-10-06,live_319eb8479a356b7d,live,UI/UX Analyst,Business process analysis,keep,hard,unspecified,,1.0,,Analyze business processes and user journeys
+2026-10-06,live_319eb8479a356b7d,live,UI/UX Analyst,User journey analysis,keep,hard,unspecified,,1.0,,Analyze business processes and user journeys
+2026-10-06,live_319eb8479a356b7d,live,UI/UX Analyst,UX assessment,keep,hard,unspecified,,1.0,,Perform UX assessments on existing applications and platforms
+2026-10-06,live_319eb8479a356b7d,live,UI/UX Analyst,Usability evaluation,keep,hard,unspecified,,1.0,,"Identify usability gaps, pain points, and experience improvement opportunities"
+2026-10-06,live_319eb8479a356b7d,live,UI/UX Analyst,User personas,keep,hard,unspecified,,1.0,,"Develop user personas, empathy maps, and customer journey maps"
+2026-10-06,live_319eb8479a356b7d,live,UI/UX Analyst,Empathy maps,keep,hard,unspecified,,1.0,,"Develop user personas, empathy maps, and customer journey maps"
+2026-10-06,live_319eb8479a356b7d,live,UI/UX Analyst,Customer journey mapping,keep,hard,unspecified,,1.0,,"Develop user personas, empathy maps, and customer journey maps"
+2026-10-06,live_319eb8479a356b7d,live,UI/UX Analyst,Information architecture,keep,hard,unspecified,,1.0,,Define application navigation structures and information hierarchy
+2026-10-06,live_319eb8479a356b7d,live,UI/UX Analyst,User flow design,keep,hard,unspecified,,1.0,,Create user flows and interaction models
+2026-10-06,live_319eb8479a356b7d,live,UI/UX Analyst,Interaction modeling,keep,hard,unspecified,,1.0,,Create user flows and interaction models
+2026-10-06,live_319eb8479a356b7d,live,UI/UX Analyst,Wireframing,keep,hard,unspecified,,1.0,,Develop wireframes and low-fidelity prototypes
+2026-10-06,live_319eb8479a356b7d,live,UI/UX Analyst,Low-fidelity prototyping,keep,hard,unspecified,,1.0,,Develop wireframes and low-fidelity prototypes
+2026-10-06,live_319eb8479a356b7d,live,UI/UX Analyst,Usability standards,keep,hard,unspecified,required,1.0,,Ensure alignment with enterprise usability standards and accessibility requirements
+2026-10-06,live_319eb8479a356b7d,live,UI/UX Analyst,Accessibility,keep,hard,unspecified,required,1.0,,Ensure alignment with enterprise usability standards and accessibility requirements
+2026-10-06,live_319eb8479a356b7d,live,UI/UX Analyst,Responsive design,keep,hard,unspecified,,1.0,,Design responsive and modern user interfaces for web and mobile applications
+2026-10-06,live_319eb8479a356b7d,live,UI/UX Analyst,Mobile UI design,keep,hard,unspecified,,1.0,,Design responsive and modern user interfaces for web and mobile applications
+2026-10-06,live_319eb8479a356b7d,live,UI/UX Analyst,High-fidelity mockups,keep,hard,unspecified,,1.0,,Create high-fidelity mock-ups and visual designs
+2026-10-06,live_319eb8479a356b7d,live,UI/UX Analyst,Visual design,keep,hard,unspecified,,1.0,,Create high-fidelity mock-ups and visual designs
+2026-10-06,live_319eb8479a356b7d,live,UI/UX Analyst,Design systems,keep,hard,unspecified,,1.0,,"Define design systems, component libraries, and style guides"
+2026-10-06,live_319eb8479a356b7d,live,UI/UX Analyst,Component libraries,keep,hard,unspecified,,1.0,,"Define design systems, component libraries, and style guides"
+2026-10-06,live_319eb8479a356b7d,live,UI/UX Analyst,Style guides,keep,hard,unspecified,,1.0,,"Define design systems, component libraries, and style guides"
+2026-10-06,live_319eb8479a356b7d,live,UI/UX Analyst,Interactive prototyping,keep,hard,unspecified,,1.0,,Build interactive prototypes for stakeholder demonstrations and usability testing
+2026-10-06,live_319eb8479a356b7d,live,UI/UX Analyst,User testing,keep,hard,unspecified,,1.0,,Validate design concepts through user feedback sessions
+2026-10-06,live_319eb8479a356b7d,live,UI/UX Analyst,Design iteration,keep,hard,unspecified,required,1.0,,Refine designs based on usability findings and business requirements
+2026-10-06,live_319eb8479a356b7d,live,UI/UX Analyst,Design consulting,keep,hard,unspecified,,1.0,,Provide design recommendations to improve user adoption and satisfaction
+2026-10-06,live_319eb8479a356b7d,live,UI/UX Analyst,Collaboration,keep,soft,unspecified,,1.0,,"Collaborate with Product Managers, Solution Architects, Business Analysts, and Engineering teams"
+2026-10-06,live_319eb8479a356b7d,live,UI/UX Analyst,Agile methodology,keep,soft,unspecified,,1.0,,"Support Agile ceremonies including sprint planning, backlog grooming, and design reviews"
+2026-10-06,live_319eb8479a356b7d,live,UI/UX Analyst,Design specification documentation,keep,hard,unspecified,,1.0,,Produce developer-ready design specifications and assets
+2026-10-06,live_319eb8479a356b7d,live,UI/UX Analyst,User acceptance testing,keep,hard,unspecified,,1.0,,Participate in UAT reviews to validate delivered user experience
+2026-10-06,live_319eb8479a356b7d,live,UI/UX Analyst,Design principles,keep,hard,unspecified,,1.0,,"Ensure adherence to design principles, branding, and experience standards"
+2026-10-06,live_319eb8479a356b7d,live,UI/UX Analyst,Branding,keep,hard,unspecified,,1.0,,"Ensure adherence to design principles, branding, and experience standards"
+2026-10-06,live_319eb8479a356b7d,live,UI/UX Analyst,Design review,keep,hard,unspecified,,1.0,,Review developed solutions against approved designs
+2026-10-06,live_319eb8479a356b7d,live,UI/UX Analyst,UX research reporting,keep,hard,unspecified,,1.0,,"UX Research Findings Assessment reports, pain points, insights, recommendations"
+2026-10-06,live_319eb8479a356b7d,live,UI/UX Analyst,User persona creation,keep,hard,unspecified,,1.0,,User Personas User profiles and behavioural analysis
+2026-10-06,live_319eb8479a356b7d,live,UI/UX Analyst,User flow creation,keep,hard,unspecified,,1.0,,User Flows Process and interaction workflows
+2026-10-06,live_319eb8479a356b7d,live,UI/UX Analyst,UI mockups,keep,hard,unspecified,,1.0,,UI Mockups High-fidelity visual designs
+2026-10-06,live_319eb8479a356b7d,live,UI/UX Analyst,Design system assets,keep,hard,unspecified,,1.0,,Design System Assets Reusable design components and guidelines
+2026-10-06,live_319eb8479a356b7d,live,UI/UX Analyst,Usability testing,keep,hard,unspecified,,1.0,,Usability Test
+2026-10-06,live_319eb8479a356b7d,live,UI/UX Analyst,Design handoff,keep,hard,unspecified,,1.0,,Developer Handoff Package
+2026-10-06,live_319eb8479a356b7d,live,UI/UX Analyst,Reusable design assets,keep,hard,unspecified,,1.0,,reusable design assets
+2026-10-06,live_64cc0da8382a536d,live,Lead/Senior Game Visual UI Designer,Figma,keep,hard,required,required,1.0,one of: Figma / Adobe Creative Cloud / After Effects,"Mastery of modern design and motion tools (such as Figma, Adobe Creative Cloud, After Effects)"
+2026-10-06,live_64cc0da8382a536d,live,Lead/Senior Game Visual UI Designer,Adobe Creative Cloud,keep,hard,required,required,1.0,one of: Figma / Adobe Creative Cloud / After Effects,"Mastery of modern design and motion tools (such as Figma, Adobe Creative Cloud, After Effects)"
+2026-10-06,live_64cc0da8382a536d,live,Lead/Senior Game Visual UI Designer,After Effects,keep,hard,required,required,1.0,one of: Figma / Adobe Creative Cloud / After Effects,"Mastery of modern design and motion tools (such as Figma, Adobe Creative Cloud, After Effects)"
+2026-10-06,live_64cc0da8382a536d,live,Lead/Senior Game Visual UI Designer,Unreal,keep,hard,required,required,1.0,one of: Unreal / Unity,familiarity in real-time engine rendering pipelines (Unreal or Unity)
+2026-10-06,live_64cc0da8382a536d,live,Lead/Senior Game Visual UI Designer,Unity,keep,hard,required,required,1.0,one of: Unreal / Unity,familiarity in real-time engine rendering pipelines (Unreal or Unity)
+2026-10-06,live_a17f7f18ac7353a2,live,SAP Project System Functional Consultant,SAP PS,keep,hard,unspecified,,1.0,,maintain SAP PS
+2026-10-06,live_a17f7f18ac7353a2,live,SAP Project System Functional Consultant,Requirement gathering,keep,soft,unspecified,required,1.0,,business requirement gathering
+2026-10-06,live_a17f7f18ac7353a2,live,SAP Project System Functional Consultant,Functional configuration,keep,hard,unspecified,required,1.0,,hands-on functional configuration
+2026-10-06,live_a17f7f18ac7353a2,live,SAP Project System Functional Consultant,SAP tables,keep,hard,unspecified,required,1.0,,SAP table and data structure
+2026-10-06,live_a17f7f18ac7353a2,live,SAP Project System Functional Consultant,UAT,keep,hard,unspecified,required,1.0,,UAT
+2026-10-06,live_a17f7f18ac7353a2,live,SAP Project System Functional Consultant,Relationship management,keep,soft,unspecified,,1.0,,maintain a good relationship with the business users
+2026-10-06,live_a17f7f18ac7353a2,live,SAP Project System Functional Consultant,Event Management,keep,hard,unspecified,,1.0,,execute daily Event Management
+2026-10-06,live_a17f7f18ac7353a2,live,SAP Project System Functional Consultant,Incident Management,keep,hard,unspecified,,1.0,,Incident Management
+2026-10-06,live_a17f7f18ac7353a2,live,SAP Project System Functional Consultant,Change Request,keep,hard,unspecified,,1.0,,Change Request when necessary
+2026-10-06,live_a17f7f18ac7353a2,live,SAP Project System Functional Consultant,Troubleshooting,keep,hard,unspecified,,1.0,,troubleshoot and resolve complex technical issues
+2026-10-06,live_a17f7f18ac7353a2,live,SAP Project System Functional Consultant,SAP implementation,keep,hard,preferred,required,1.0,,full cycle end-to-end implementation projects
+2026-10-06,live_a17f7f18ac7353a2,live,SAP Project System Functional Consultant,WBS,keep,hard,preferred,preferred,1.0,,WBS
+2026-10-06,live_a17f7f18ac7353a2,live,SAP Project System Functional Consultant,Network Activities,keep,hard,preferred,preferred,1.0,,Network Activities
+2026-10-06,live_a17f7f18ac7353a2,live,SAP Project System Functional Consultant,Project Builder,keep,hard,preferred,preferred,1.0,,Project Builder
+2026-10-06,live_a17f7f18ac7353a2,live,SAP Project System Functional Consultant,SAP SD,keep,hard,preferred,preferred,1.0,,SAP SD integration
+2026-10-06,live_a17f7f18ac7353a2,live,SAP Project System Functional Consultant,Sales Order types,keep,hard,preferred,preferred,1.0,,Sales Order types
+2026-10-06,live_a17f7f18ac7353a2,live,SAP Project System Functional Consultant,Item Categories,keep,hard,preferred,preferred,1.0,,Item Categories
+2026-10-06,live_a17f7f18ac7353a2,live,SAP Project System Functional Consultant,Schedule Lines,keep,hard,preferred,preferred,1.0,,Schedule Lines
+2026-10-06,live_a17f7f18ac7353a2,live,SAP Project System Functional Consultant,SAP MM,keep,hard,preferred,preferred,1.0,,SAP MM integration
+2026-10-06,live_a17f7f18ac7353a2,live,SAP Project System Functional Consultant,S/4 HANA,keep,hard,preferred,preferred,1.0,,S4 HANA
+2026-10-06,live_a17f7f18ac7353a2,live,SAP Project System Functional Consultant,Embedded Analytics,keep,hard,preferred,preferred,1.0,,Embedded Analytic
+2026-10-06,live_a17f7f18ac7353a2,live,SAP Project System Functional Consultant,Fiori,keep,hard,preferred,preferred,1.0,,Fiori project management apps
+2026-10-06,live_a17f7f18ac7353a2,live,SAP Project System Functional Consultant,Real-time Revenue Recognition,keep,hard,preferred,preferred,1.0,,Real-time Revenue Recognition
+2026-10-06,live_a17f7f18ac7353a2,live,SAP Project System Functional Consultant,SAP FICO,keep,hard,preferred,preferred,1.0,,SAP FICO integration
+2026-10-06,live_a17f7f18ac7353a2,live,SAP Project System Functional Consultant,Budget Control,keep,hard,preferred,preferred,1.0,,Budget Control
+2026-10-06,live_a17f7f18ac7353a2,live,SAP Project System Functional Consultant,Budget Check,keep,hard,preferred,preferred,1.0,,Budget Check
+2026-10-06,live_a17f7f18ac7353a2,live,SAP Project System Functional Consultant,Result Analysis,keep,hard,preferred,preferred,1.0,,Result Analysis
+2026-10-06,live_a17f7f18ac7353a2,live,SAP Project System Functional Consultant,Settlement Rules,keep,hard,preferred,preferred,1.0,,Settlement Rules
+2026-10-06,live_a17f7f18ac7353a2,live,SAP Project System Functional Consultant,Project-based Accounting,keep,hard,preferred,preferred,1.0,,Project-based Accounting
+2026-10-06,live_a17f7f18ac7353a2,live,SAP Project System Functional Consultant,Project-to-Cash,keep,hard,preferred,preferred,1.0,,Project-to-Cash
+2026-10-06,live_a17f7f18ac7353a2,live,SAP Project System Functional Consultant,Engineer-to-Order,keep,hard,preferred,preferred,1.0,,Engineer-to-Order (ETO)
+2026-10-06,live_a17f7f18ac7353a2,live,SAP Project System Functional Consultant,Professional Services automation,keep,hard,preferred,preferred,1.0,,Professional Services automation
+2026-10-06,live_a17f7f18ac7353a2,live,SAP Project System Functional Consultant,ABAP,keep,hard,preferred,preferred,1.0,,ABAP programming
+2026-10-06,live_a17f7f18ac7353a2,live,SAP Project System Functional Consultant,IDocs,keep,hard,preferred,preferred,1.0,,IDocs
+2026-10-06,live_a17f7f18ac7353a2,live,SAP Project System Functional Consultant,BAPIs,keep,hard,preferred,preferred,1.0,,BAPIs for integration
+2026-10-06,live_a17f7f18ac7353a2,live,SAP Project System Functional Consultant,Fiori tiles,keep,hard,preferred,preferred,1.0,,Fiori tiles
+2026-10-06,live_a17f7f18ac7353a2,live,SAP Project System Functional Consultant,Data centre industry knowledge,keep,hard,preferred,preferred,1.0,,data centre ... industry experience
+2026-10-06,live_a17f7f18ac7353a2,live,SAP Project System Functional Consultant,Construction industry knowledge,keep,hard,preferred,preferred,1.0,,construction industry experience
+2026-10-06,live_a17f7f18ac7353a2,live,SAP Project System Functional Consultant,Procure-to-Pay,reject: quote does not name the skill,hard,preferred,preferred,1.0,,P2P
+2026-10-06,live_bcc0de4d2d69a8e6,live,SAP Basis Consultant,SAP ERP,keep,hard,unspecified,,1.0,,"SAP environments (ERP, S/4HANA, BW, etc.)"
+2026-10-06,live_bcc0de4d2d69a8e6,live,SAP Basis Consultant,SAP S/4HANA,keep,hard,unspecified,,1.0,,"SAP environments (ERP, S/4HANA, BW, etc.)"
+2026-10-06,live_bcc0de4d2d69a8e6,live,SAP Basis Consultant,SAP BW,keep,hard,unspecified,,1.0,,"SAP environments (ERP, S/4HANA, BW, etc.)"
+2026-10-06,live_bcc0de4d2d69a8e6,live,SAP Basis Consultant,SAP system administration,keep,hard,unspecified,,1.0,,"Install, configure, and maintain SAP systems and landscapes"
+2026-10-06,live_bcc0de4d2d69a8e6,live,SAP Basis Consultant,SAP patches,keep,hard,unspecified,,1.0,,"Apply patches, upgrades, and perform system copies"
+2026-10-06,live_bcc0de4d2d69a8e6,live,SAP Basis Consultant,SAP upgrades,keep,hard,unspecified,,1.0,,"Apply patches, upgrades, and perform system copies"
+2026-10-06,live_bcc0de4d2d69a8e6,live,SAP Basis Consultant,System copies,keep,hard,unspecified,,1.0,,"Apply patches, upgrades, and perform system copies"
+2026-10-06,live_bcc0de4d2d69a8e6,live,SAP Basis Consultant,System performance monitoring,keep,hard,unspecified,,1.0,,"Monitor system performance, availability, and capacity"
+2026-10-06,live_bcc0de4d2d69a8e6,live,SAP Basis Consultant,SAP user management,keep,hard,unspecified,,1.0,,"Manage SAP users, authorizations, and profiles"
+2026-10-06,live_bcc0de4d2d69a8e6,live,SAP Basis Consultant,SAP authorizations,keep,hard,unspecified,,1.0,,"Manage SAP users, authorizations, and profiles"
+2026-10-06,live_bcc0de4d2d69a8e6,live,SAP Basis Consultant,IT security compliance,keep,hard,unspecified,,1.0,,Ensure compliance with IT security policies and data integrity
+2026-10-06,live_bcc0de4d2d69a8e6,live,SAP Basis Consultant,Data integrity,keep,hard,unspecified,,1.0,,Ensure compliance with IT security policies and data integrity
+2026-10-06,live_bcc0de4d2d69a8e6,live,SAP Basis Consultant,Disaster recovery,keep,hard,unspecified,,1.0,,Implement disaster recovery and backup strategies
+2026-10-06,live_bcc0de4d2d69a8e6,live,SAP Basis Consultant,Backup strategies,keep,hard,unspecified,,1.0,,Implement disaster recovery and backup strategies
+2026-10-06,live_bcc0de4d2d69a8e6,live,SAP Basis Consultant,System troubleshooting,keep,hard,unspecified,,1.0,,Diagnose and resolve system issues
+2026-10-06,live_bcc0de4d2d69a8e6,live,SAP Basis Consultant,Technical support,keep,hard,unspecified,,1.0,,Provide technical support to SAP functional consultants and end-users
+2026-10-06,live_bcc0de4d2d69a8e6,live,SAP Basis Consultant,System integration,keep,hard,unspecified,,1.0,,Collaborate with IT teams for integration with other enterprise systems
+2026-10-06,live_eca66a59c8bcc78f,live,SAP PP / PS Functional Consultant,SAP ECC,keep,hard,unspecified,,1.0,,ECC versions
+2026-10-06,live_eca66a59c8bcc78f,live,SAP PP / PS Functional Consultant,SAP PP,keep,hard,unspecified,,1.0,,maintain SAP PP / PS
+2026-10-06,live_eca66a59c8bcc78f,live,SAP PP / PS Functional Consultant,SAP PS,keep,hard,unspecified,,1.0,,maintain SAP PP / PS
+2026-10-06,live_eca66a59c8bcc78f,live,SAP PP / PS Functional Consultant,Functional configuration,keep,hard,unspecified,required,0.982,,hands‑on functional configuration based on requirements
+2026-10-06,live_eca66a59c8bcc78f,live,SAP PP / PS Functional Consultant,SAP tables,keep,hard,unspecified,required,1.0,,SAP table and data structure
+2026-10-06,live_eca66a59c8bcc78f,live,SAP PP / PS Functional Consultant,SAP PP configuration,keep,hard,unspecified,required,1.0,,design and configure of SAP PP / PS modules
+2026-10-06,live_eca66a59c8bcc78f,live,SAP PP / PS Functional Consultant,SAP PS configuration,keep,hard,unspecified,required,1.0,,design and configure of SAP PP / PS modules
+2026-10-06,live_eca66a59c8bcc78f,live,SAP PP / PS Functional Consultant,Stakeholder communication,keep,soft,unspecified,,1.0,,maintain a good relationship with the business users
+2026-10-06,live_eca66a59c8bcc78f,live,SAP PP / PS Functional Consultant,Event Management,keep,hard,unspecified,,1.0,,execute daily Event Management
+2026-10-06,live_eca66a59c8bcc78f,live,SAP PP / PS Functional Consultant,Incident Management,keep,hard,unspecified,,1.0,,Incident Management
+2026-10-06,live_eca66a59c8bcc78f,live,SAP PP / PS Functional Consultant,Change Management,keep,hard,unspecified,,1.0,,Change Request when necessary
+2026-10-06,live_eca66a59c8bcc78f,live,SAP PP / PS Functional Consultant,Global template,keep,hard,preferred,preferred,1.0,,creating and maintaining global template
+2026-10-06,live_eca66a59c8bcc78f,live,SAP PP / PS Functional Consultant,SAP PPDS,keep,hard,preferred,preferred,1.0,,SAP PS / SAP PPDS
+2026-10-06,live_eca66a59c8bcc78f,live,SAP PP / PS Functional Consultant,Third‑party integration,keep,hard,preferred,preferred,1.0,,exposure in any 3rd party integration
+2026-10-06,live_eca66a59c8bcc78f,live,SAP PP / PS Functional Consultant,Leadership,keep,soft,preferred,preferred,1.0,,Someone with at leadership experience
+2026-10-06,live_eca66a59c8bcc78f,live,SAP PP / PS Functional Consultant,SAP S/4HANA,reject: quote does not name the skill,hard,unspecified,,1.0,,S4 HANA projects
+2026-10-06,live_c851e032db2be1d6,live,Senior SAP Project Manager_ 1149,SAP,keep,hard,required,,1.0,,Senior SAP Project Manager
+2026-10-06,live_c851e032db2be1d6,live,Senior SAP Project Manager_ 1149,SAP transformation,keep,hard,required,required,1.0,,Minimum 5 years leading SAP implementation or transformation projects
+2026-10-06,live_c851e032db2be1d6,live,Senior SAP Project Manager_ 1149,Programme governance,keep,hard,required,,1.0,,Programme governance frameworks
+2026-10-06,live_c851e032db2be1d6,live,Senior SAP Project Manager_ 1149,scope management,keep,hard,unspecified,,1.0,,"Ensure delivery aligns with scope, budget, schedule, and quality objectives"
+2026-10-06,live_c851e032db2be1d6,live,Senior SAP Project Manager_ 1149,budget management,keep,hard,unspecified,,1.0,,"Ensure delivery aligns with scope, budget, schedule, and quality objectives"
+2026-10-06,live_c851e032db2be1d6,live,Senior SAP Project Manager_ 1149,schedule management,keep,hard,unspecified,,1.0,,"Ensure delivery aligns with scope, budget, schedule, and quality objectives"
+2026-10-06,live_c851e032db2be1d6,live,Senior SAP Project Manager_ 1149,Quality management,keep,hard,required,,1.0,,Risk and quality management practices
+2026-10-06,live_c851e032db2be1d6,live,Senior SAP Project Manager_ 1149,leadership,keep,soft,unspecified,,1.0,,Provide leadership to multi-disciplinary delivery teams
+2026-10-06,live_c851e032db2be1d6,live,Senior SAP Project Manager_ 1149,project planning,keep,hard,unspecified,,1.0,,Develop and maintain integrated project plans
+2026-10-06,live_c851e032db2be1d6,live,Senior SAP Project Manager_ 1149,milestone management,keep,hard,unspecified,,1.0,,"Manage programme milestones, deliverables, dependencies, and critical paths"
+2026-10-06,live_c851e032db2be1d6,live,Senior SAP Project Manager_ 1149,performance monitoring,keep,hard,unspecified,required,1.0,,Monitor project performance and initiate corrective actions where required
+2026-10-06,live_c851e032db2be1d6,live,Senior SAP Project Manager_ 1149,methodology adherence,keep,hard,unspecified,,1.0,,Drive adherence to agreed delivery methodology and governance standards
+2026-10-06,live_c851e032db2be1d6,live,Senior SAP Project Manager_ 1149,stakeholder relationship building,keep,soft,unspecified,,1.0,,Build trusted relationships with client executives and business leaders
+2026-10-06,live_c851e032db2be1d6,live,Senior SAP Project Manager_ 1149,facilitation,keep,soft,unspecified,,1.0,,Facilitate Steering Committee and governance meetings
+2026-10-06,live_c851e032db2be1d6,live,Senior SAP Project Manager_ 1149,communication,keep,soft,unspecified,,1.0,,Manage communications across all stakeholder groups
+2026-10-06,live_c851e032db2be1d6,live,Senior SAP Project Manager_ 1149,decision-making,keep,soft,unspecified,,1.0,,Ensure timely decision-making and escalation management
+2026-10-06,live_c851e032db2be1d6,live,Senior SAP Project Manager_ 1149,resource utilisation monitoring,keep,hard,unspecified,,1.0,,Monitor resource utilisation and project financial performance
+2026-10-06,live_c851e032db2be1d6,live,Senior SAP Project Manager_ 1149,contract management,keep,hard,unspecified,,1.0,,Manage contractual obligations and change requests
+2026-10-06,live_c851e032db2be1d6,live,Senior SAP Project Manager_ 1149,commercial viability assessment,keep,hard,unspecified,,1.0,,Ensure delivery remains commercially viable and aligned with contractual commitments
+2026-10-06,live_c851e032db2be1d6,live,Senior SAP Project Manager_ 1149,risk register maintenance,keep,hard,unspecified,,1.0,,Maintain project risk and issue registers
+2026-10-06,live_c851e032db2be1d6,live,Senior SAP Project Manager_ 1149,mitigation planning,keep,hard,unspecified,,1.0,,Lead mitigation planning and resolution activities
+2026-10-06,live_c851e032db2be1d6,live,Senior SAP Project Manager_ 1149,risk escalation,keep,hard,unspecified,,1.0,,Escalate major risks and issues appropriately
+2026-10-06,live_c851e032db2be1d6,live,Senior SAP Project Manager_ 1149,dependency management,keep,hard,unspecified,,1.0,,Ensure dependencies across workstreams are managed effectively
+2026-10-06,live_c851e032db2be1d6,live,Senior SAP Project Manager_ 1149,resource coordination,keep,hard,unspecified,,1.0,,Coordinate project resources across business and technical teams
+2026-10-06,live_c851e032db2be1d6,live,Senior SAP Project Manager_ 1149,vendor management,keep,hard,unspecified,,1.0,,Manage third-party suppliers and implementation partners
+2026-10-06,live_c851e032db2be1d6,live,Senior SAP Project Manager_ 1149,collaboration,keep,soft,unspecified,,1.0,,Ensure effective collaboration across all participating organisations
+2026-10-06,live_c851e032db2be1d6,live,Senior SAP Project Manager_ 1149,project health checks,keep,hard,unspecified,,1.0,,Conduct project health checks and readiness assessments
+2026-10-06,live_c851e032db2be1d6,live,Senior SAP Project Manager_ 1149,testing governance,keep,hard,unspecified,,1.0,,"Oversee testing, deployment, and cutover governance activities"
+2026-10-06,live_c851e032db2be1d6,live,Senior SAP Project Manager_ 1149,continuous improvement,keep,soft,unspecified,,1.0,,Promote continuous improvement throughout the programme lifecycle
+2026-10-06,live_c851e032db2be1d6,live,Senior SAP Project Manager_ 1149,Change management,keep,hard,required,required,1.0,,Change management and training activities
+2026-10-06,live_c851e032db2be1d6,live,Senior SAP Project Manager_ 1149,business readiness planning,keep,hard,unspecified,,1.0,,Ensure business readiness plans are developed and executed
+2026-10-06,live_c851e032db2be1d6,live,Senior SAP Project Manager_ 1149,training delivery,keep,soft,unspecified,,1.0,,"Drive stakeholder engagement, training, and adoption activities"
+2026-10-06,live_c851e032db2be1d6,live,Senior SAP Project Manager_ 1149,transition management,keep,hard,unspecified,,1.0,,Facilitate successful transition into business-as-usual operations
+2026-10-06,live_c851e032db2be1d6,live,Senior SAP Project Manager_ 1149,SAP programme delivery,keep,hard,required,,1.0,,SAP Programme Delivery Experience
+2026-10-06,live_c851e032db2be1d6,live,Senior SAP Project Manager_ 1149,Project management,keep,hard,required,required,1.0,one of: Project management / Programme management,Minimum 10 years of project or programme management experience
+2026-10-06,live_c851e032db2be1d6,live,Senior SAP Project Manager_ 1149,Programme management,keep,hard,required,required,1.0,one of: Project management / Programme management,Minimum 10 years of project or programme management experience
+2026-10-06,live_c851e032db2be1d6,live,Senior SAP Project Manager_ 1149,SAP programme lifecycle,keep,hard,required,required,1.0,,Experience delivering at least two full lifecycle SAP programmes
+2026-10-06,live_c851e032db2be1d6,live,Senior SAP Project Manager_ 1149,Stakeholder management,keep,soft,required,,1.0,,Experience managing executive-level stakeholders and governance forums
+2026-10-06,live_c851e032db2be1d6,live,Senior SAP Project Manager_ 1149,SAP S/4HANA,keep,hard,required,,1.0,,SAP S/4HANA implementations
+2026-10-06,live_c851e032db2be1d6,live,Senior SAP Project Manager_ 1149,SAP ECC to S/4HANA migration,keep,hard,required,,1.0,,SAP ECC to S/4HANA migrations
+2026-10-06,live_c851e032db2be1d6,live,Senior SAP Project Manager_ 1149,Greenfield ERP,keep,hard,required,,1.0,,Greenfield ERP programmes
+2026-10-06,live_c851e032db2be1d6,live,Senior SAP Project Manager_ 1149,Brownfield transformation,keep,hard,required,,1.0,,Brownfield transformation projects
+2026-10-06,live_c851e032db2be1d6,live,Senior SAP Project Manager_ 1149,Multi-country SAP roll-out,keep,hard,required,,1.0,,Multi-country SAP roll-outs
+2026-10-06,live_c851e032db2be1d6,live,Senior SAP Project Manager_ 1149,Shared services,keep,hard,required,,1.0,,Shared services and business transformation initiatives
+2026-10-06,live_c851e032db2be1d6,live,Senior SAP Project Manager_ 1149,Business transformation,keep,hard,required,,1.0,,Shared services and business transformation initiatives
+2026-10-06,live_c851e032db2be1d6,live,Senior SAP Project Manager_ 1149,Application managed services,keep,hard,required,,1.0,,Application managed services transition programmes
+2026-10-06,live_c851e032db2be1d6,live,Senior SAP Project Manager_ 1149,Delivery methodology,keep,hard,required,,1.0,,Delivery Methodology Experience
+2026-10-06,live_c851e032db2be1d6,live,Senior SAP Project Manager_ 1149,SAP Activate,keep,hard,required,,1.0,,SAP Activate methodology
+2026-10-06,live_c851e032db2be1d6,live,Senior SAP Project Manager_ 1149,Agile,keep,hard,required,,1.0,,Agile and hybrid delivery approaches
+2026-10-06,live_c851e032db2be1d6,live,Senior SAP Project Manager_ 1149,Hybrid delivery,keep,hard,required,,1.0,,Agile and hybrid delivery approaches
+2026-10-06,live_c851e032db2be1d6,live,Senior SAP Project Manager_ 1149,Risk management,keep,hard,required,,1.0,,Risk and quality management practices
+2026-10-06,live_c851e032db2be1d6,live,Senior SAP Project Manager_ 1149,Cutover planning,keep,hard,required,,1.0,,Cutover and deployment planning
+2026-10-06,live_c851e032db2be1d6,live,Senior SAP Project Manager_ 1149,Deployment planning,keep,hard,required,,1.0,,Cutover and deployment planning
+2026-10-06,live_c851e032db2be1d6,live,Senior SAP Project Manager_ 1149,Support transition,keep,hard,required,,1.0,,Transition to support and hypercare management
+2026-10-06,live_c851e032db2be1d6,live,Senior SAP Project Manager_ 1149,Hypercare management,keep,hard,required,,1.0,,Transition to support and hypercare management
+2026-10-06,live_c851e032db2be1d6,live,Senior SAP Project Manager_ 1149,SAP S/4HANA lifecycle,keep,hard,required,required,1.0,,SAP S/4HANA programme lifecycle
+2026-10-06,live_c851e032db2be1d6,live,Senior SAP Project Manager_ 1149,Data migration,keep,hard,required,required,1.0,,Data migration concepts
+2026-10-06,live_c851e032db2be1d6,live,Senior SAP Project Manager_ 1149,Testing lifecycle,keep,hard,required,required,1.0,,Testing lifecycle and defect management
+2026-10-06,live_c851e032db2be1d6,live,Senior SAP Project Manager_ 1149,Defect management,keep,hard,required,required,1.0,,Testing lifecycle and defect management
+2026-10-06,live_c851e032db2be1d6,live,Senior SAP Project Manager_ 1149,Security governance,keep,hard,required,required,1.0,,Security and access governance principles
+2026-10-06,live_c851e032db2be1d6,live,Senior SAP Project Manager_ 1149,Access governance,keep,hard,required,required,1.0,,Security and access governance principles
+2026-10-06,live_c851e032db2be1d6,live,Senior SAP Project Manager_ 1149,Integration management,keep,hard,required,required,1.0,,Integration management
+2026-10-06,live_c851e032db2be1d6,live,Senior SAP Project Manager_ 1149,Training,keep,hard,required,required,1.0,,Change management and training activities
+2026-10-06,live_c851e032db2be1d6,live,Senior SAP Project Manager_ 1149,Release planning,keep,hard,required,required,1.0,,Environment and release planning
+2026-10-06,live_c851e032db2be1d6,live,Senior SAP Project Manager_ 1149,Environment planning,keep,hard,required,required,1.0,,Environment and release planning
+2026-10-06,live_c851e032db2be1d6,live,Senior SAP Project Manager_ 1149,PMP,keep,hard,required,required,1.0,,PMP (Project Management Professional) or
+2026-10-06,live_c851e032db2be1d6,live,Senior SAP Project Manager_ 1149,PRINCE2 Practitioner,keep,hard,required,required,1.0,,PRINCE2 Practitioner
+2026-10-06,live_c851e032db2be1d6,live,Senior SAP Project Manager_ 1149,SAP Certified Associate – Project Manager – SAP Activate,keep,hard,preferred,preferred,1.0,,SAP Certified Associate – Project Manager – SAP Activate.
+2026-10-06,live_c851e032db2be1d6,live,Senior SAP Project Manager_ 1149,SAP Certified Specialist – Project Manager – SAP Activate,keep,hard,preferred,preferred,1.0,,SAP Certified Specialist – Project Manager – SAP Activate for Agile Implementation Management.
+2026-10-06,live_c851e032db2be1d6,live,Senior SAP Project Manager_ 1149,PMI-ACP,keep,hard,preferred,preferred,1.0,,PMI-ACP
+2026-10-06,live_c851e032db2be1d6,live,Senior SAP Project Manager_ 1149,SAFe Agilist,keep,hard,preferred,preferred,1.0,,SAFe Agilist
+2026-10-06,live_c851e032db2be1d6,live,Senior SAP Project Manager_ 1149,Prosci Change Management,keep,hard,preferred,preferred,1.0,,Prosci Change Management
+2026-10-06,live_c851e032db2be1d6,live,Senior SAP Project Manager_ 1149,ITIL Foundation,keep,hard,preferred,preferred,1.0,,ITIL Foundation
+2026-10-06,live_c851e032db2be1d6,live,Senior SAP Project Manager_ 1149,executive presence,keep,soft,unspecified,,1.0,,Strong leadership and executive presence
+2026-10-06,live_c851e032db2be1d6,live,Senior SAP Project Manager_ 1149,commercial awareness,keep,soft,unspecified,,1.0,,Strong commercial and financial awareness
+2026-10-06,live_c851e032db2be1d6,live,Senior SAP Project Manager_ 1149,financial awareness,keep,soft,unspecified,,1.0,,Strong commercial and financial awareness
+2026-10-06,live_c851e032db2be1d6,live,Senior SAP Project Manager_ 1149,presentation,keep,soft,unspecified,,1.0,,Excellent communication and presentation skills
+2026-10-06,live_c851e032db2be1d6,live,Senior SAP Project Manager_ 1149,judgement,keep,soft,unspecified,,1.0,,Sound judgement and decision-making ability
+2026-10-06,live_c851e032db2be1d6,live,Senior SAP Project Manager_ 1149,negotiation,keep,soft,unspecified,,1.0,,Strong negotiation and conflict resolution skills
+2026-10-06,live_c851e032db2be1d6,live,Senior SAP Project Manager_ 1149,conflict resolution,keep,soft,unspecified,,1.0,,Strong negotiation and conflict resolution skills
+2026-10-06,live_c851e032db2be1d6,live,Senior SAP Project Manager_ 1149,team leadership,keep,soft,unspecified,,1.0,,Ability to lead diverse teams in complex transformation environments
+2026-10-06,live_c851e032db2be1d6,live,Senior SAP Project Manager_ 1149,results orientation,keep,soft,unspecified,,1.0,,Results-oriented and accountable for delivery outcomes
+2026-10-06,live_c851e032db2be1d6,live,Senior SAP Project Manager_ 1149,accountability,keep,soft,unspecified,,1.0,,Results-oriented and accountable for delivery outcomes
+2026-10-06,live_c851e032db2be1d6,live,Senior SAP Project Manager_ 1149,artificial intelligence tools,keep,hard,unspecified,,1.0,,We may use artificial intelligence (AI) tools to support parts of the hiring process
+2026-10-06,live_c851e032db2be1d6,live,Senior SAP Project Manager_ 1149,quality assurance,reject: quote does not name the skill,hard,unspecified,,1.0,,Ensure project deliverables meet agreed standards
+2026-10-06,live_a3f1ad0df4156bd7,live,SAP Implementation Consultant/Lead (KUL),SAP,keep,hard,required,,1.0,,supporting or implementing SAP solutions for our clients
+2026-10-06,live_a3f1ad0df4156bd7,live,SAP Implementation Consultant/Lead (KUL),SAP certification,keep,hard,preferred,,1.0,,SAP Certification
+2026-10-06,live_a3f1ad0df4156bd7,live,SAP Implementation Consultant/Lead (KUL),SAP MM,keep,hard,required,,1.0,,SAP MM
+2026-10-06,live_a3f1ad0df4156bd7,live,SAP Implementation Consultant/Lead (KUL),SAP FICO,keep,hard,required,,1.0,,FICO
+2026-10-06,live_a3f1ad0df4156bd7,live,SAP Implementation Consultant/Lead (KUL),SuccessFactors,keep,hard,required,,1.0,,SuccessFactors
+2026-10-06,live_a3f1ad0df4156bd7,live,SAP Implementation Consultant/Lead (KUL),PP/QM,keep,hard,required,,1.0,,PP/QM
+2026-10-06,live_a3f1ad0df4156bd7,live,SAP Implementation Consultant/Lead (KUL),SAP Basis,keep,hard,required,,1.0,,Basis
+2026-10-06,live_a3f1ad0df4156bd7,live,SAP Implementation Consultant/Lead (KUL),EWM/WM,keep,hard,required,,1.0,,EWM/WM
+2026-10-06,live_a3f1ad0df4156bd7,live,SAP Implementation Consultant/Lead (KUL),Ariba,keep,hard,required,,1.0,,Ariba
+2026-10-06,live_a3f1ad0df4156bd7,live,SAP Implementation Consultant/Lead (KUL),PaPM,keep,hard,required,,1.0,,PaPM
+2026-10-06,live_a3f1ad0df4156bd7,live,SAP Implementation Consultant/Lead (KUL),Stakeholder management,keep,soft,required,required,1.0,,Work with the key stakeholders to understand their needs
+2026-10-06,live_a3f1ad0df4156bd7,live,SAP Implementation Consultant/Lead (KUL),Blueprint workshop,keep,hard,unspecified,,1.0,,Prepare and conduct blueprint workshop
+2026-10-06,live_a3f1ad0df4156bd7,live,SAP Implementation Consultant/Lead (KUL),Data migration,keep,hard,unspecified,,1.0,,Perform data migration tasks
+2026-10-06,live_a3f1ad0df4156bd7,live,SAP Implementation Consultant/Lead (KUL),Functional specification development,keep,hard,unspecified,,1.0,,Develop Functional Specifications for FRICEW development
+2026-10-06,live_a3f1ad0df4156bd7,live,SAP Implementation Consultant/Lead (KUL),Authorization design,keep,hard,unspecified,,1.0,,Develop authorization design and matrix with business process owner
+2026-10-06,live_a3f1ad0df4156bd7,live,SAP Implementation Consultant/Lead (KUL),User Acceptance Testing,keep,hard,required,,1.0,,"Define test scenarios, test scripts & conduct UAT"
+2026-10-06,live_a3f1ad0df4156bd7,live,SAP Implementation Consultant/Lead (KUL),User training,keep,hard,required,,1.0,,Responsible for Key User Training
+2026-10-06,live_a3f1ad0df4156bd7,live,SAP Implementation Consultant/Lead (KUL),System cutover,keep,hard,unspecified,,1.0,,Conduct final system cutover and data migration
+2026-10-06,live_a3f1ad0df4156bd7,live,SAP Implementation Consultant/Lead (KUL),Post‑implementation support,keep,hard,unspecified,,1.0,,Provide post implementation support
+2026-10-06,live_a3f1ad0df4156bd7,live,SAP Implementation Consultant/Lead (KUL),End‑to‑end implementation,keep,hard,required,,1.0,,Strong end to end implementation skills
+2026-10-06,live_a3f1ad0df4156bd7,live,SAP Implementation Consultant/Lead (KUL),Solution configuration,keep,hard,required,,1.0,,solution configuration
+2026-10-06,live_a3f1ad0df4156bd7,live,SAP Implementation Consultant/Lead (KUL),Project leadership,keep,soft,required,,1.0,,project leadership
+2026-10-06,live_a3f1ad0df4156bd7,live,SAP Implementation Consultant/Lead (KUL),Transformation program delivery,keep,hard,required,,1.0,,transformation program delivery
+2026-10-06,live_a3f1ad0df4156bd7,live,SAP Implementation Consultant/Lead (KUL),Problem solving,keep,soft,required,,1.0,,Strong analytical and problem-solving skills
+2026-10-06,live_a3f1ad0df4156bd7,live,SAP Implementation Consultant/Lead (KUL),Communication,keep,soft,required,,1.0,,Advanced written and verbal communication skills
+2026-10-06,live_a3f1ad0df4156bd7,live,SAP Implementation Consultant/Lead (KUL),Teamwork,keep,soft,required,,1.0,,team-oriented work environment
+2026-10-06,live_a3f1ad0df4156bd7,live,SAP Implementation Consultant/Lead (KUL),Program delivery,keep,hard,required,,1.0,,overseeing workstream or program delivery
+2026-10-06,live_a3f1ad0df4156bd7,live,SAP Implementation Consultant/Lead (KUL),Full lifecycle implementation,keep,hard,required,required,1.0,,Minimum two full lifecycle implementation
+2026-10-06,live_a3f1ad0df4156bd7,live,SAP Implementation Consultant/Lead (KUL),Prioritization,keep,soft,unspecified,,1.0,,ability to prioritize shifting workloads
+2026-10-06,live_a3f1ad0df4156bd7,live,SAP Implementation Consultant/Lead (KUL),People management,keep,soft,unspecified,,1.0,,strong people management skills
+2026-10-06,live_a3f1ad0df4156bd7,live,SAP Implementation Consultant/Lead (KUL),SAP SD,reject: quote not in ad,hard,required,,0.0,,SD
+2026-10-06,live_ce9f8e895942f10e,live,Senior Associate : SAP SD,Sales Order Management,keep,hard,unspecified,,1.0,,"Configure SAP SD components: Sales Order Management, Pricing, Delivery Processing, Billing, and Credit Management"
+2026-10-06,live_ce9f8e895942f10e,live,Senior Associate : SAP SD,Pricing,keep,hard,unspecified,,1.0,,"Configure SAP SD components: Sales Order Management, Pricing, Delivery Processing, Billing, and Credit Management"
+2026-10-06,live_ce9f8e895942f10e,live,Senior Associate : SAP SD,Delivery Processing,keep,hard,unspecified,,1.0,,"Configure SAP SD components: Sales Order Management, Pricing, Delivery Processing, Billing, and Credit Management"
+2026-10-06,live_ce9f8e895942f10e,live,Senior Associate : SAP SD,Billing,keep,hard,unspecified,,1.0,,"Configure SAP SD components: Sales Order Management, Pricing, Delivery Processing, Billing, and Credit Management"
+2026-10-06,live_ce9f8e895942f10e,live,Senior Associate : SAP SD,Credit Management,keep,hard,unspecified,,1.0,,"Configure SAP SD components: Sales Order Management, Pricing, Delivery Processing, Billing, and Credit Management"
+2026-10-06,live_ce9f8e895942f10e,live,Senior Associate : SAP SD,Order-to-cash,keep,hard,unspecified,,1.0,,Design and implement order-to-cash business processes aligned to SAP S/4HANA best practices
+2026-10-06,live_ce9f8e895942f10e,live,Senior Associate : SAP SD,SAP S/4HANA,keep,hard,unspecified,,1.0,,Design and implement order-to-cash business processes aligned to SAP S/4HANA best practices
+2026-10-06,live_ce9f8e895942f10e,live,Senior Associate : SAP SD,Customer master data,keep,hard,unspecified,,1.0,,"Configure customer master data, partner functions, output management, and sales document types"
+2026-10-06,live_ce9f8e895942f10e,live,Senior Associate : SAP SD,Partner functions,keep,hard,unspecified,,1.0,,"Configure customer master data, partner functions, output management, and sales document types"
+2026-10-06,live_ce9f8e895942f10e,live,Senior Associate : SAP SD,Output management,keep,hard,unspecified,,1.0,,"Configure customer master data, partner functions, output management, and sales document types"
+2026-10-06,live_ce9f8e895942f10e,live,Senior Associate : SAP SD,Sales document types,keep,hard,unspecified,,1.0,,"Configure customer master data, partner functions, output management, and sales document types"
+2026-10-06,live_ce9f8e895942f10e,live,Senior Associate : SAP SD,Functional design,keep,hard,unspecified,,1.0,,Participate in business blueprint workshops and produce functional design specifications
+2026-10-06,live_ce9f8e895942f10e,live,Senior Associate : SAP SD,Business blueprinting,keep,hard,unspecified,,1.0,,Participate in business blueprint workshops and produce functional design specifications
+2026-10-06,live_ce9f8e895942f10e,live,Senior Associate : SAP SD,Shipping,keep,hard,unspecified,,1.0,,"Configure shipping, transportation route determination, and delivery scheduling scenarios"
+2026-10-06,live_ce9f8e895942f10e,live,Senior Associate : SAP SD,Transportation route determination,keep,hard,unspecified,,1.0,,"Configure shipping, transportation route determination, and delivery scheduling scenarios"
+2026-10-06,live_ce9f8e895942f10e,live,Senior Associate : SAP SD,Delivery scheduling,keep,hard,unspecified,,1.0,,"Configure shipping, transportation route determination, and delivery scheduling scenarios"
+2026-10-06,live_ce9f8e895942f10e,live,Senior Associate : SAP SD,Test case development,keep,hard,unspecified,,1.0,,"Develop and execute test cases and provide support during SIT, UAT, and go-live activities"
+2026-10-06,live_ce9f8e895942f10e,live,Senior Associate : SAP SD,System Integration Testing (SIT),keep,hard,unspecified,,1.0,,"Develop and execute test cases and provide support during SIT, UAT, and go-live activities"
+2026-10-06,live_ce9f8e895942f10e,live,Senior Associate : SAP SD,User Acceptance Testing (UAT),keep,hard,unspecified,,1.0,,"Develop and execute test cases and provide support during SIT, UAT, and go-live activities"
+2026-10-06,live_ce9f8e895942f10e,live,Senior Associate : SAP SD,Go-live,keep,hard,unspecified,,1.0,,"Develop and execute test cases and provide support during SIT, UAT, and go-live activities"
+2026-10-06,live_ce9f8e895942f10e,live,Senior Associate : SAP SD,AMS support,keep,hard,required,required,1.0,,Experience in both implementation and AMS support engagements
+2026-10-06,live_ce9f8e895942f10e,live,Senior Associate : SAP SD,Issue resolution,keep,hard,unspecified,,1.0,,"Provide AMS support: issue resolution, enhancement delivery, and change request management"
+2026-10-06,live_ce9f8e895942f10e,live,Senior Associate : SAP SD,Enhancement delivery,keep,hard,unspecified,,1.0,,"Provide AMS support: issue resolution, enhancement delivery, and change request management"
+2026-10-06,live_ce9f8e895942f10e,live,Senior Associate : SAP SD,Change request management,keep,hard,unspecified,,1.0,,"Provide AMS support: issue resolution, enhancement delivery, and change request management"
+2026-10-06,live_ce9f8e895942f10e,live,Senior Associate : SAP SD,End-user training,keep,hard,unspecified,,1.0,,Deliver end-user training and prepare training documentation for order management teams
+2026-10-06,live_ce9f8e895942f10e,live,Senior Associate : SAP SD,Training documentation,keep,hard,unspecified,,1.0,,Deliver end-user training and prepare training documentation for order management teams
+2026-10-06,live_ce9f8e895942f10e,live,Senior Associate : SAP SD,SAP SD configuration,keep,hard,required,required,1.0,,Solid SAP SD configuration experience including full OTC process design
+2026-10-06,live_ce9f8e895942f10e,live,Senior Associate : SAP SD,OTC process design,keep,hard,required,required,1.0,,Solid SAP SD configuration experience including full OTC process design
+2026-10-06,live_ce9f8e895942f10e,live,Senior Associate : SAP SD,Pricing procedures,keep,hard,required,required,1.0,,"Strong knowledge of pricing procedures, condition types, and pricing routines"
+2026-10-06,live_ce9f8e895942f10e,live,Senior Associate : SAP SD,Condition types,keep,hard,required,required,1.0,,"Strong knowledge of pricing procedures, condition types, and pricing routines"
+2026-10-06,live_ce9f8e895942f10e,live,Senior Associate : SAP SD,Pricing routines,keep,hard,required,required,1.0,,"Strong knowledge of pricing procedures, condition types, and pricing routines"
+2026-10-06,live_ce9f8e895942f10e,live,Senior Associate : SAP SD,SAP S/4HANA SD simplifications,keep,hard,required,required,1.0,,Familiarity with SAP S/4HANA SD simplifications and SAP Fiori order management apps
+2026-10-06,live_ce9f8e895942f10e,live,Senior Associate : SAP SD,SAP Fiori order management apps,keep,hard,required,required,1.0,,Familiarity with SAP S/4HANA SD simplifications and SAP Fiori order management apps
+2026-10-06,live_ce9f8e895942f10e,live,Senior Associate : SAP SD,SD-FICO integration,keep,hard,required,required,1.0,,"Understanding of integration between SD and FICO, MM, and Logistics Execution (LE)"
+2026-10-06,live_ce9f8e895942f10e,live,Senior Associate : SAP SD,SD-MM integration,keep,hard,required,required,1.0,,"Understanding of integration between SD and FICO, MM, and Logistics Execution (LE)"
+2026-10-06,live_ce9f8e895942f10e,live,Senior Associate : SAP SD,SD-Logistics Execution integration,keep,hard,required,required,1.0,,"Understanding of integration between SD and FICO, MM, and Logistics Execution (LE)"
+2026-10-06,live_ce9f8e895942f10e,live,Senior Associate : SAP SD,Implementation,keep,hard,required,required,1.0,,Experience in both implementation and AMS support engagements
+2026-10-06,live_ce9f8e895942f10e,live,Senior Associate : SAP SD,Analytical skills,keep,soft,required,required,1.0,,Good analytical skills and ability to resolve complex SD configuration challenges
+2026-10-06,live_ce9f8e895942f10e,live,Senior Associate : SAP SD,Communication,keep,soft,required,required,1.0,,"Strong communication skills for engaging with sales, commercial, and order management teams"
+2026-10-06,live_f0fe518947800fbc,live,Business AI Architect,AI,keep,hard,required,,1.0,,AI-driven solutions within our SAP ecosystem
+2026-10-06,live_f0fe518947800fbc,live,Business AI Architect,SAP technologies,keep,hard,required,,1.0,,deep expertise in SAP technologies
+2026-10-06,live_f0fe518947800fbc,live,Business AI Architect,SAP Business Technology Platform,keep,hard,required,,1.0,,SAP Business Technology Platform (BTP)
+2026-10-06,live_f0fe518947800fbc,live,Business AI Architect,Business process design,keep,hard,required,required,0.92,,working with end-to‑to‑end business process design
+2026-10-06,live_f0fe518947800fbc,live,Business AI Architect,SAP Business Suite,keep,hard,required,preferred,1.0,,across SAP Business Suite solutions
+2026-10-06,live_f0fe518947800fbc,live,Business AI Architect,SAP systems,keep,hard,unspecified,,1.0,,AI solutions within SAP systems
+2026-10-06,live_f0fe518947800fbc,live,Business AI Architect,SAP Generative AI Hub,keep,hard,unspecified,,1.0,,SAP Generative AI Hub
+2026-10-06,live_f0fe518947800fbc,live,Business AI Architect,SAP AI Core,keep,hard,required,required,1.0,,SAP AI Core
+2026-10-06,live_f0fe518947800fbc,live,Business AI Architect,SAP AI Business Services,keep,hard,required,required,1.0,,SAP AI Business Services
+2026-10-06,live_f0fe518947800fbc,live,Business AI Architect,SAP Integration Suite,keep,hard,required,required,1.0,,SAP Integration Suite
+2026-10-06,live_f0fe518947800fbc,live,Business AI Architect,APIs,keep,hard,unspecified,,1.0,,Develop and manage APIs and microservices
+2026-10-06,live_f0fe518947800fbc,live,Business AI Architect,Microservices,keep,hard,unspecified,,1.0,,Develop and manage ... microservices
+2026-10-06,live_f0fe518947800fbc,live,Business AI Architect,Data orchestration,keep,hard,unspecified,,1.0,,Leverage SAP BTP capabilities for data orchestration
+2026-10-06,live_f0fe518947800fbc,live,Business AI Architect,Analytics,keep,hard,unspecified,,1.0,,Leverage SAP BTP capabilities for ... analytics
+2026-10-06,live_f0fe518947800fbc,live,Business AI Architect,Machine learning model deployment,keep,hard,unspecified,,1.0,,machine learning model deployment
+2026-10-06,live_f0fe518947800fbc,live,Business AI Architect,AI-driven analytics,keep,hard,unspecified,,1.0,,Optimize SAP systems for AI-driven analytics
+2026-10-06,live_f0fe518947800fbc,live,Business AI Architect,Predictive insights,keep,hard,unspecified,,1.0,,predictive insights
+2026-10-06,live_f0fe518947800fbc,live,Business AI Architect,Real-time decision-making,keep,hard,unspecified,,0.92,,real‑time decision‑making
+2026-10-06,live_f0fe518947800fbc,live,Business AI Architect,Data governance,keep,hard,required,required,1.0,,Knowledge of data governance
+2026-10-06,live_f0fe518947800fbc,live,Business AI Architect,Security standards,keep,hard,unspecified,,1.0,,security standards
+2026-10-06,live_f0fe518947800fbc,live,Business AI Architect,Leadership,keep,soft,required,required,1.0,,leadership skills
+2026-10-06,live_f0fe518947800fbc,live,Business AI Architect,Mentorship,keep,soft,unspecified,,1.0,,Provide technical leadership and mentorship
+2026-10-06,live_f0fe518947800fbc,live,Business AI Architect,SAP Architect,keep,hard,required,required,1.0,,Proven experience as an SAP Architect
+2026-10-06,live_f0fe518947800fbc,live,Business AI Architect,SAP Extension Suite,keep,hard,required,required,1.0,,SAP Extension Suite
+2026-10-06,live_f0fe518947800fbc,live,Business AI Architect,TensorFlow,keep,hard,required,required,1.0,,TensorFlow
+2026-10-06,live_f0fe518947800fbc,live,Business AI Architect,PyTorch,keep,hard,required,required,1.0,,PyTorch
+2026-10-06,live_f0fe518947800fbc,live,Business AI Architect,Python,keep,hard,required,required,1.0,,Python
+2026-10-06,live_f0fe518947800fbc,live,Business AI Architect,Java,keep,hard,required,required,1.0,,Java
+2026-10-06,live_f0fe518947800fbc,live,Business AI Architect,SAP HANA Cloud,keep,hard,required,required,1.0,,SAP HANA Cloud
+2026-10-06,live_f0fe518947800fbc,live,Business AI Architect,SAP Data Intelligence,keep,hard,required,required,1.0,,SAP Data Intelligence
+2026-10-06,live_f0fe518947800fbc,live,Business AI Architect,SAP Analytics Cloud,keep,hard,required,required,1.0,,SAP Analytics Cloud
+2026-10-06,live_f0fe518947800fbc,live,Business AI Architect,Vector Engines,keep,hard,required,required,1.0,,Vector Engines
+2026-10-06,live_f0fe518947800fbc,live,Business AI Architect,Knowledge Graphs,keep,hard,required,required,1.0,,Knowledge Graphs
+2026-10-06,live_f0fe518947800fbc,live,Business AI Architect,A2A,keep,hard,required,required,1.0,,A2A
+2026-10-06,live_f0fe518947800fbc,live,Business AI Architect,MCP technologies,keep,hard,required,required,1.0,,MCP technologies
+2026-10-06,live_f0fe518947800fbc,live,Business AI Architect,Problem-solving,keep,soft,required,required,1.0,,Excellent problem-solving
+2026-10-06,live_f0fe518947800fbc,live,Business AI Architect,Communication,keep,soft,required,required,1.0,,communication
+2026-10-06,live_f0fe518947800fbc,live,Business AI Architect,JavaScript,keep,hard,preferred,preferred,1.0,,Javascript
+2026-10-06,live_f0fe518947800fbc,live,Business AI Architect,HTML,keep,hard,preferred,preferred,1.0,,HTML
+2026-10-06,live_f0fe518947800fbc,live,Business AI Architect,SAP Fiori Web components,keep,hard,preferred,preferred,1.0,,Fiori Web components
+2026-10-06,live_f0fe518947800fbc,live,Business AI Architect,Security best practices,keep,hard,required,required,1.0,,security best practices
+2026-10-06,live_f0fe518947800fbc,live,Business AI Architect,SAP Fiori application development,keep,hard,required,required,1.0,,SAP Fiori application development
+2026-10-06,live_f0fe518947800fbc,live,Business AI Architect,Generative AI,keep,hard,required,required,1.0,,Deep understanding of Generative AI
+2026-10-06,live_f0fe518947800fbc,live,Business AI Architect,Prompt Engineering,keep,hard,required,required,1.0,,Prompt Engineering
+2026-10-06,live_f0fe518947800fbc,live,Business AI Architect,Business process acumen,keep,soft,required,required,1.0,,Strong business process acumen
+2026-10-06,live_f0fe518947800fbc,live,Business AI Architect,SAP BTP certification,keep,hard,preferred,preferred,1.0,,SAP certification in SAP BTP
+2026-10-06,live_f0fe518947800fbc,live,Business AI Architect,SAP S/4HANA integration,keep,hard,preferred,preferred,1.0,,Experience with SAP S/4HANA integration
+2026-10-06,live_f0fe518947800fbc,live,Business AI Architect,SAP BTP extensions,keep,hard,preferred,preferred,1.0,,extensions using SAP BTP
+2026-10-06,live_f0fe518947800fbc,live,Business AI Architect,Industry domain knowledge,keep,soft,preferred,preferred,1.0,,Experience in at least one industry domain
+2026-10-06,live_f0fe518947800fbc,live,Business AI Architect,Stakeholder engagement,keep,soft,preferred,preferred,1.0,,Ability to engage with industry and business stakeholders
+2026-10-06,live_148f68aed0d22576,live,Network Engineer Graduate Program,Network fundamentals,keep,hard,unspecified,,1.0,,"network fundamentals, automation, cloud, AI/ML, IP technologies, security, and software development"
+2026-10-06,live_148f68aed0d22576,live,Network Engineer Graduate Program,Automation,keep,hard,unspecified,,1.0,,"network fundamentals, automation, cloud, AI/ML, IP technologies, security, and software development"
+2026-10-06,live_148f68aed0d22576,live,Network Engineer Graduate Program,Cloud,keep,hard,unspecified,,1.0,,"network fundamentals, automation, cloud, AI/ML, IP technologies, security, and software development"
+2026-10-06,live_148f68aed0d22576,live,Network Engineer Graduate Program,AI/ML,keep,hard,unspecified,,1.0,,"network fundamentals, automation, cloud, AI/ML, IP technologies, security, and software development"
+2026-10-06,live_148f68aed0d22576,live,Network Engineer Graduate Program,IP technologies,keep,hard,unspecified,,1.0,,"network fundamentals, automation, cloud, AI/ML, IP technologies, security, and software development"
+2026-10-06,live_148f68aed0d22576,live,Network Engineer Graduate Program,Security,keep,hard,unspecified,,1.0,,"network fundamentals, automation, cloud, AI/ML, IP technologies, security, and software development"
+2026-10-06,live_148f68aed0d22576,live,Network Engineer Graduate Program,Software development,keep,hard,unspecified,,1.0,,"network fundamentals, automation, cloud, AI/ML, IP technologies, security, and software development"
+2026-10-06,live_148f68aed0d22576,live,Network Engineer Graduate Program,Network design,keep,hard,unspecified,,1.0,,"network design/troubleshooting, automation projects with Agentic AI"
+2026-10-06,live_148f68aed0d22576,live,Network Engineer Graduate Program,Troubleshooting,keep,hard,unspecified,,1.0,,"network design/troubleshooting, automation projects with Agentic AI"
+2026-10-06,live_148f68aed0d22576,live,Network Engineer Graduate Program,Agentic AI,keep,hard,unspecified,,1.0,,automation projects with Agentic AI
+2026-10-06,live_148f68aed0d22576,live,Network Engineer Graduate Program,Network automation,keep,hard,unspecified,,1.0,,"network automation, cloud, AI/ML, and internet technologies"
+2026-10-06,live_148f68aed0d22576,live,Network Engineer Graduate Program,Internet technologies,keep,hard,unspecified,,1.0,,"network automation, cloud, AI/ML, and internet technologies"
+2026-10-06,live_148f68aed0d22576,live,Network Engineer Graduate Program,Python,keep,hard,preferred,preferred,1.0,one of: Computer networking / Python / Cloud technologies / Automation / APIs /,"exposure to computer networking, Python, cloud technologies, automation, APIs, data analytics, or AI/ML"
+2026-10-06,live_148f68aed0d22576,live,Network Engineer Graduate Program,REST APIs,keep,hard,trained,,1.0,,"programming fundamentals (Python, REST APIs, JSON)"
+2026-10-06,live_148f68aed0d22576,live,Network Engineer Graduate Program,JSON,keep,hard,trained,,1.0,,"programming fundamentals (Python, REST APIs, JSON)"
+2026-10-06,live_148f68aed0d22576,live,Network Engineer Graduate Program,Performance monitoring,keep,hard,trained,,1.0,,learn security and performance monitoring
+2026-10-06,live_148f68aed0d22576,live,Network Engineer Graduate Program,Communication,keep,soft,required,,1.0,,"Strong problem-solving, communication (English), and teamwork skills"
+2026-10-06,live_148f68aed0d22576,live,Network Engineer Graduate Program,Presentation,keep,soft,trained,,1.0,,strengthen communication and presentation skills
+2026-10-06,live_148f68aed0d22576,live,Network Engineer Graduate Program,Problem-solving,keep,soft,required,,1.0,,"Strong problem-solving, communication (English), and teamwork skills"
+2026-10-06,live_148f68aed0d22576,live,Network Engineer Graduate Program,Teamwork,keep,soft,required,,1.0,,"Strong problem-solving, communication (English), and teamwork skills"
+2026-10-06,live_148f68aed0d22576,live,Network Engineer Graduate Program,Computer networking,keep,hard,preferred,preferred,1.0,one of: Computer networking / Python / Cloud technologies / Automation / APIs /,"exposure to computer networking, Python, cloud technologies, automation, APIs, data analytics, or AI/ML"
+2026-10-06,live_148f68aed0d22576,live,Network Engineer Graduate Program,Cloud technologies,keep,hard,preferred,preferred,1.0,one of: Computer networking / Python / Cloud technologies / Automation / APIs /,"exposure to computer networking, Python, cloud technologies, automation, APIs, data analytics, or AI/ML"
+2026-10-06,live_148f68aed0d22576,live,Network Engineer Graduate Program,APIs,keep,hard,preferred,preferred,1.0,one of: Computer networking / Python / Cloud technologies / Automation / APIs /,"exposure to computer networking, Python, cloud technologies, automation, APIs, data analytics, or AI/ML"
+2026-10-06,live_148f68aed0d22576,live,Network Engineer Graduate Program,Data analytics,keep,hard,preferred,preferred,1.0,one of: Computer networking / Python / Cloud technologies / Automation / APIs /,"exposure to computer networking, Python, cloud technologies, automation, APIs, data analytics, or AI/ML"
+2026-10-06,live_c57121f283dfc634,live,AI Engineering Graduate Talent Trainee,Bare-metal provisioning,keep,hard,unspecified,,1.0,,"engineer the complete software layer, spanning bare-metal provisioning"
+2026-10-06,live_c57121f283dfc634,live,AI Engineering Graduate Talent Trainee,Kubernetes,keep,hard,unspecified,,1.0,,"engineer the complete software layer, spanning ... managed Kubernetes"
+2026-10-06,live_c57121f283dfc634,live,AI Engineering Graduate Talent Trainee,Distributed training,keep,hard,unspecified,,1.0,,"engineer the complete software layer, spanning ... distributed training pipelines"
+2026-10-06,live_c57121f283dfc634,live,AI Engineering Graduate Talent Trainee,AI Inference,keep,hard,unspecified,,1.0,,"engineer the complete software layer, spanning ... high-throughput AI Inference engines"
+2026-10-06,live_c57121f283dfc634,live,AI Engineering Graduate Talent Trainee,Model-as-a-Service,keep,hard,unspecified,,1.0,,"engineer the complete software layer, spanning ... Model-as-a-Service (MaaS)"
+2026-10-06,live_c57121f283dfc634,live,AI Engineering Graduate Talent Trainee,Serverless APIs,keep,hard,unspecified,,1.0,,"engineer the complete software layer, spanning ... with serverless APIs"
+2026-10-06,live_c57121f283dfc634,live,AI Engineering Graduate Talent Trainee,GPU virtual machines,keep,hard,unspecified,,1.0,,"large-scale, highly available AI cloud services, including GPU virtual machines"
+2026-10-06,live_c57121f283dfc634,live,AI Engineering Graduate Talent Trainee,Bare-metal services,keep,hard,unspecified,,1.0,,including ... bare-metal services
+2026-10-06,live_c57121f283dfc634,live,AI Engineering Graduate Talent Trainee,Container services,keep,hard,unspecified,,1.0,,including ... container services
+2026-10-06,live_c57121f283dfc634,live,AI Engineering Graduate Talent Trainee,Cloud networking,keep,hard,unspecified,,1.0,,including ... cloud networking
+2026-10-06,live_c57121f283dfc634,live,AI Engineering Graduate Talent Trainee,Storage,keep,hard,unspecified,,1.0,,including ... storage
+2026-10-06,live_c57121f283dfc634,live,AI Engineering Graduate Talent Trainee,Billing,keep,hard,unspecified,,1.0,,including ... billing
+2026-10-06,live_c57121f283dfc634,live,AI Engineering Graduate Talent Trainee,Monitoring,keep,hard,unspecified,,1.0,,including ... monitoring
+2026-10-06,live_c57121f283dfc634,live,AI Engineering Graduate Talent Trainee,Security,keep,hard,unspecified,,1.0,,including ... security
+2026-10-06,live_c57121f283dfc634,live,AI Engineering Graduate Talent Trainee,Multi-region resource management,keep,hard,unspecified,,1.0,,including ... multi-region resource management
+2026-10-06,live_c57121f283dfc634,live,AI Engineering Graduate Talent Trainee,Managed Kubernetes,keep,hard,unspecified,,1.0,,managed Kubernetes services with GPU-native orchestration
+2026-10-06,live_c57121f283dfc634,live,AI Engineering Graduate Talent Trainee,GPU-native orchestration,keep,hard,unspecified,,1.0,,managed Kubernetes services with GPU-native orchestration
+2026-10-06,live_c57121f283dfc634,live,AI Engineering Graduate Talent Trainee,Intelligent scheduling,keep,hard,unspecified,,1.0,,intelligent scheduling
+2026-10-06,live_c57121f283dfc634,live,AI Engineering Graduate Talent Trainee,Distributed workload management,keep,hard,unspecified,,1.0,,distributed workload management
+2026-10-06,live_c57121f283dfc634,live,AI Engineering Graduate Talent Trainee,Cluster lifecycle management,keep,hard,unspecified,,1.0,,cluster lifecycle management
+2026-10-06,live_c57121f283dfc634,live,AI Engineering Graduate Talent Trainee,Observability,keep,hard,unspecified,,1.0,,observability
+2026-10-06,live_c57121f283dfc634,live,AI Engineering Graduate Talent Trainee,Resource isolation,keep,hard,unspecified,,1.0,,resource isolation
+2026-10-06,live_c57121f283dfc634,live,AI Engineering Graduate Talent Trainee,AI training workloads,keep,hard,unspecified,,1.0,,support for large-scale AI training and inference workloads
+2026-10-06,live_c57121f283dfc634,live,AI Engineering Graduate Talent Trainee,AI inference workloads,keep,hard,unspecified,,1.0,,support for large-scale AI training and inference workloads
+2026-10-06,live_c57121f283dfc634,live,AI Engineering Graduate Talent Trainee,Model fine-tuning,keep,hard,unspecified,,1.0,,model fine-tuning
+2026-10-06,live_c57121f283dfc634,live,AI Engineering Graduate Talent Trainee,Model deployment,keep,hard,unspecified,,1.0,,model deployment
+2026-10-06,live_c57121f283dfc634,live,AI Engineering Graduate Talent Trainee,Inference acceleration,keep,hard,unspecified,,1.0,,inference acceleration
+2026-10-06,live_c57121f283dfc634,live,AI Engineering Graduate Talent Trainee,Serverless inference,keep,hard,unspecified,,1.0,,serverless inference
+2026-10-06,live_c57121f283dfc634,live,AI Engineering Graduate Talent Trainee,Model APIs,keep,hard,unspecified,,1.0,,model APIs
+2026-10-06,live_c57121f283dfc634,live,AI Engineering Graduate Talent Trainee,Model evaluation,keep,hard,unspecified,,1.0,,model evaluation
+2026-10-06,live_c57121f283dfc634,live,AI Engineering Graduate Talent Trainee,LLM,keep,hard,unspecified,,1.0,,production-grade LLM
+2026-10-06,live_c57121f283dfc634,live,AI Engineering Graduate Talent Trainee,Multimodal model serving,keep,hard,unspecified,,1.0,,multimodal model-serving capabilities
+2026-10-06,live_c57121f283dfc634,live,AI Engineering Graduate Talent Trainee,AI Agent platforms,keep,hard,unspecified,,1.0,,enterprise AI Agent platforms
+2026-10-06,live_c57121f283dfc634,live,AI Engineering Graduate Talent Trainee,Agent building,keep,hard,unspecified,,1.0,,Agent building
+2026-10-06,live_c57121f283dfc634,live,AI Engineering Graduate Talent Trainee,Workflow orchestration,keep,hard,unspecified,,1.0,,workflow orchestration
+2026-10-06,live_c57121f283dfc634,live,AI Engineering Graduate Talent Trainee,Tool integration,keep,hard,unspecified,,1.0,,tool integration
+2026-10-06,live_c57121f283dfc634,live,AI Engineering Graduate Talent Trainee,Retrieval-augmented generation,keep,hard,unspecified,,1.0,,retrieval-augmented generation
+2026-10-06,live_c57121f283dfc634,live,AI Engineering Graduate Talent Trainee,Memory systems,keep,hard,unspecified,,1.0,,memory systems
+2026-10-06,live_c57121f283dfc634,live,AI Engineering Graduate Talent Trainee,Sandbox execution,keep,hard,unspecified,,1.0,,sandbox execution
+2026-10-06,live_c57121f283dfc634,live,AI Engineering Graduate Talent Trainee,Multi-Agent collaboration,keep,hard,unspecified,,1.0,,multi-Agent collaboration
+2026-10-06,live_c57121f283dfc634,live,AI Engineering Graduate Talent Trainee,Evaluation,keep,hard,unspecified,,1.0,,evaluation
+2026-10-06,live_c57121f283dfc634,live,AI Engineering Graduate Talent Trainee,Agent runtime infrastructure,keep,hard,unspecified,,1.0,,large-scale Agent runtime infrastructure
+2026-10-06,live_c57121f283dfc634,live,AI Engineering Graduate Talent Trainee,GPU resource scheduling,keep,hard,unspecified,,1.0,,GPU resource scheduling
+2026-10-06,live_c57121f283dfc634,live,AI Engineering Graduate Talent Trainee,Distributed systems,keep,hard,unspecified,,1.0,,distributed systems
+2026-10-06,live_c57121f283dfc634,live,AI Engineering Graduate Talent Trainee,High-performance networking,keep,hard,unspecified,,1.0,,high-performance networking
+2026-10-06,live_c57121f283dfc634,live,AI Engineering Graduate Talent Trainee,Cloud-native infrastructure,keep,hard,unspecified,,1.0,,cloud-native infrastructure
+2026-10-06,live_c57121f283dfc634,live,AI Engineering Graduate Talent Trainee,MLOps,keep,hard,unspecified,,1.0,,MLOps and LLMOps platforms
+2026-10-06,live_c57121f283dfc634,live,AI Engineering Graduate Talent Trainee,LLMOps,keep,hard,unspecified,,1.0,,MLOps and LLMOps platforms
+2026-10-06,live_c57121f283dfc634,live,AI Engineering Graduate Talent Trainee,AI application marketplaces,keep,hard,unspecified,,1.0,,AI application marketplaces
+2026-10-06,live_c57121f283dfc634,live,AI Engineering Graduate Talent Trainee,Automated operation systems,keep,hard,unspecified,,1.0,,automated operation systems for large-scale AI infrastructure
+2026-10-06,live_c57121f283dfc634,live,AI Engineering Graduate Talent Trainee,Go,keep,hard,required,,1.0,,"including Go, Python, C++, Java, Rust"
+2026-10-06,live_c57121f283dfc634,live,AI Engineering Graduate Talent Trainee,Python,keep,hard,required,,1.0,,"including Go, Python, C++, Java, Rust"
+2026-10-06,live_c57121f283dfc634,live,AI Engineering Graduate Talent Trainee,C++,keep,hard,required,,1.0,,"including Go, Python, C++, Java, Rust"
+2026-10-06,live_c57121f283dfc634,live,AI Engineering Graduate Talent Trainee,Java,keep,hard,required,,1.0,,"including Go, Python, C++, Java, Rust"
+2026-10-06,live_c57121f283dfc634,live,AI Engineering Graduate Talent Trainee,Rust,keep,hard,required,,1.0,,"including Go, Python, C++, Java, Rust"
+2026-10-06,live_c57121f283dfc634,live,AI Engineering Graduate Talent Trainee,Docker,keep,hard,preferred,preferred,1.0,,"Experience with Kubernetes, Docker, Helm, Terraform, OpenStack, Prometheus, Grafana, Argo, Istio, PostgreSQL, Redis, message queues, distributed storage"
+2026-10-06,live_c57121f283dfc634,live,AI Engineering Graduate Talent Trainee,Helm,keep,hard,preferred,preferred,1.0,,"Experience with Kubernetes, Docker, Helm, Terraform, OpenStack, Prometheus, Grafana, Argo, Istio, PostgreSQL, Redis, message queues, distributed storage"
+2026-10-06,live_c57121f283dfc634,live,AI Engineering Graduate Talent Trainee,Terraform,keep,hard,preferred,preferred,1.0,,"Experience with Kubernetes, Docker, Helm, Terraform, OpenStack, Prometheus, Grafana, Argo, Istio, PostgreSQL, Redis, message queues, distributed storage"
+2026-10-06,live_c57121f283dfc634,live,AI Engineering Graduate Talent Trainee,OpenStack,keep,hard,preferred,preferred,1.0,,"Experience with Kubernetes, Docker, Helm, Terraform, OpenStack, Prometheus, Grafana, Argo, Istio, PostgreSQL, Redis, message queues, distributed storage"
+2026-10-06,live_c57121f283dfc634,live,AI Engineering Graduate Talent Trainee,Prometheus,keep,hard,preferred,preferred,1.0,,"Experience with Kubernetes, Docker, Helm, Terraform, OpenStack, Prometheus, Grafana, Argo, Istio, PostgreSQL, Redis, message queues, distributed storage"
+2026-10-06,live_c57121f283dfc634,live,AI Engineering Graduate Talent Trainee,Grafana,keep,hard,preferred,preferred,1.0,,"Experience with Kubernetes, Docker, Helm, Terraform, OpenStack, Prometheus, Grafana, Argo, Istio, PostgreSQL, Redis, message queues, distributed storage"
+2026-10-06,live_c57121f283dfc634,live,AI Engineering Graduate Talent Trainee,Argo,keep,hard,preferred,preferred,1.0,,"Experience with Kubernetes, Docker, Helm, Terraform, OpenStack, Prometheus, Grafana, Argo, Istio, PostgreSQL, Redis, message queues, distributed storage"
+2026-10-06,live_c57121f283dfc634,live,AI Engineering Graduate Talent Trainee,Istio,keep,hard,preferred,preferred,1.0,,"Experience with Kubernetes, Docker, Helm, Terraform, OpenStack, Prometheus, Grafana, Argo, Istio, PostgreSQL, Redis, message queues, distributed storage"
+2026-10-06,live_c57121f283dfc634,live,AI Engineering Graduate Talent Trainee,PostgreSQL,keep,hard,preferred,preferred,1.0,,"Experience with Kubernetes, Docker, Helm, Terraform, OpenStack, Prometheus, Grafana, Argo, Istio, PostgreSQL, Redis, message queues, distributed storage"
+2026-10-06,live_c57121f283dfc634,live,AI Engineering Graduate Talent Trainee,Redis,keep,hard,preferred,preferred,1.0,,"Experience with Kubernetes, Docker, Helm, Terraform, OpenStack, Prometheus, Grafana, Argo, Istio, PostgreSQL, Redis, message queues, distributed storage"
+2026-10-06,live_c57121f283dfc634,live,AI Engineering Graduate Talent Trainee,Message queues,keep,hard,preferred,preferred,1.0,,"Experience with Kubernetes, Docker, Helm, Terraform, OpenStack, Prometheus, Grafana, Argo, Istio, PostgreSQL, Redis, message queues, distributed storage"
+2026-10-06,live_c57121f283dfc634,live,AI Engineering Graduate Talent Trainee,Distributed storage,keep,hard,preferred,preferred,1.0,,"Experience with Kubernetes, Docker, Helm, Terraform, OpenStack, Prometheus, Grafana, Argo, Istio, PostgreSQL, Redis, message queues, distributed storage"
+2026-10-06,live_c57121f283dfc634,live,AI Engineering Graduate Talent Trainee,Large-scale cloud platforms,keep,hard,preferred,preferred,1.0,,developing or operating large-scale cloud platforms
+2026-10-06,live_c57121f283dfc634,live,AI Engineering Graduate Talent Trainee,Kubernetes platforms,keep,hard,preferred,preferred,1.0,,Kubernetes platforms
+2026-10-06,live_c57121f283dfc634,live,AI Engineering Graduate Talent Trainee,AI training platforms,keep,hard,preferred,preferred,1.0,,AI training platforms
+2026-10-06,live_c57121f283dfc634,live,AI Engineering Graduate Talent Trainee,Inference platforms,keep,hard,preferred,preferred,1.0,,inference platforms
+2026-10-06,live_c57121f283dfc634,live,AI Engineering Graduate Talent Trainee,Agent platforms,keep,hard,preferred,preferred,1.0,,Agent platforms
+2026-10-06,live_b08291292a0b935e,live,Manager - IT (Project Management Office - Digital),Project management,keep,hard,unspecified,,1.0,,Effectively manage IT projects in alignment with established procedures and governance frameworks
+2026-10-06,live_b08291292a0b935e,live,Manager - IT (Project Management Office - Digital),Project planning,keep,hard,unspecified,required,1.0,,"Develop and maintain the project management plan, resource management plan and all other related plans"
+2026-10-06,live_b08291292a0b935e,live,Manager - IT (Project Management Office - Digital),Resource management,keep,hard,unspecified,required,1.0,,"Develop and maintain the project management plan, resource management plan"
+2026-10-06,live_b08291292a0b935e,live,Manager - IT (Project Management Office - Digital),Documentation,keep,hard,unspecified,required,1.0,,"Well preparation of project documentations, reports, presentation, communication"
+2026-10-06,live_b08291292a0b935e,live,Manager - IT (Project Management Office - Digital),Reporting,keep,hard,unspecified,required,1.0,,"Well preparation of project documentations, reports, presentation, communication"
+2026-10-06,live_b08291292a0b935e,live,Manager - IT (Project Management Office - Digital),Presentation,keep,hard,unspecified,required,1.0,,"Well preparation of project documentations, reports, presentation, communication"
+2026-10-06,live_b08291292a0b935e,live,Manager - IT (Project Management Office - Digital),Communication,keep,soft,required,,1.0,,"Communication – Clear and timely communication with stakeholders, team members, and management"
+2026-10-06,live_b08291292a0b935e,live,Manager - IT (Project Management Office - Digital),Risk management,keep,hard,unspecified,required,1.0,,Effective project risk and issue management
+2026-10-06,live_b08291292a0b935e,live,Manager - IT (Project Management Office - Digital),Communication planning,keep,hard,unspecified,required,1.0,,"Develops, organised and lead the communication plan to ensure stakeholders collaborate"
+2026-10-06,live_b08291292a0b935e,live,Manager - IT (Project Management Office - Digital),Change Management,keep,hard,unspecified,required,1.0,,Ensure project change must comply with the Change Management process and procedures
+2026-10-06,live_b08291292a0b935e,live,Manager - IT (Project Management Office - Digital),Financial management,keep,hard,unspecified,required,1.0,,"Verifies project financial, budget and payment are within the agreed contractual terms"
+2026-10-06,live_b08291292a0b935e,live,Manager - IT (Project Management Office - Digital),Governance,keep,hard,unspecified,required,1.0,,"Oversees adherence and compliances towards MAHB policies, governance, rules, and regulations"
+2026-10-06,live_b08291292a0b935e,live,Manager - IT (Project Management Office - Digital),PMO processes,keep,hard,unspecified,required,1.0,,Ensure that all PMO process and standards documents are updated and follows process
+2026-10-06,live_b08291292a0b935e,live,Manager - IT (Project Management Office - Digital),Cost control,keep,hard,unspecified,required,1.0,,Identify projects which are potential to be delayed or at risk of having a cost over-run
+2026-10-06,live_b08291292a0b935e,live,Manager - IT (Project Management Office - Digital),Leadership,keep,soft,required,,1.0,,"Leadership – Ability to guide, motivate, and manage cross-functional teams towards project goals"
+2026-10-06,live_b08291292a0b935e,live,Manager - IT (Project Management Office - Digital),Stakeholder alignment,keep,soft,unspecified,required,1.0,,Establish robust pre-initiation frameworks and stakeholder alignment processes early on
+2026-10-06,live_b08291292a0b935e,live,Manager - IT (Project Management Office - Digital),PMBOK,keep,hard,unspecified,,1.0,,embedding PMBOK best practices to uplift PMO governance standards and capability
+2026-10-06,live_b08291292a0b935e,live,Manager - IT (Project Management Office - Digital),Dependency management,keep,hard,unspecified,,1.0,,Manage critical inter-departmental dependencies across a high-volume IT portfolio
+2026-10-06,live_b08291292a0b935e,live,Manager - IT (Project Management Office - Digital),Organizational skills,keep,soft,required,,1.0,,"Organizational Skills – Strong ability to manage multiple tasks, timelines, and priorities efficiently"
+2026-10-06,live_b08291292a0b935e,live,Manager - IT (Project Management Office - Digital),Problem solving,keep,soft,required,,1.0,,Problem-Solving – Capable of identifying issues early and resolving them with effective solutions
+2026-10-06,live_b08291292a0b935e,live,Manager - IT (Project Management Office - Digital),Decision making,keep,soft,required,,1.0,,"Decision-Making – Makes informed, timely decisions that balance risks and benefits"
+2026-10-06,live_b08291292a0b935e,live,Manager - IT (Project Management Office - Digital),Adaptability,keep,soft,required,required,1.0,,Adaptability – Flexible in responding to changing project requirements or constraints
+2026-10-06,live_b08291292a0b935e,live,Manager - IT (Project Management Office - Digital),Attention to detail,keep,soft,required,,1.0,,Detail-Oriented – Ensures all aspects of the project meet defined quality and compliance standards
+2026-10-06,live_b08291292a0b935e,live,Manager - IT (Project Management Office - Digital),Stakeholder management,keep,soft,required,,1.0,,Stakeholder Management – Skilled at managing expectations and fostering collaboration
+2026-10-06,live_b08291292a0b935e,live,Manager - IT (Project Management Office - Digital),Time management,keep,soft,required,,1.0,,Time Management – Keeps projects on schedule through proactive planning and execution
+2026-10-06,live_b08291292a0b935e,live,Manager - IT (Project Management Office - Digital),Project management certification,keep,hard,unspecified,,1.0,,Project related trainings and certifications are an added key advantage
+2026-10-06,live_b08291292a0b935e,live,Manager - IT (Project Management Office - Digital),Airport systems,keep,hard,required,required,1.0,,Sound knowledge in Airport systems
+2026-10-06,live_b08291292a0b935e,live,Manager - IT (Project Management Office - Digital),Airport Operations,keep,hard,required,required,1.0,,brief knowledge in Airport Operations
+2026-10-06,live_2dfd1835617b539e,live,Software Project Manager,Warehouse Management Systems,keep,hard,required,,1.0,,strong background in Warehouse Management Systems (WMS)
+2026-10-06,live_2dfd1835617b539e,live,Software Project Manager,Intralogistics automation,keep,hard,required,,1.0,,extensive experience in intralogistics automation
+2026-10-06,live_2dfd1835617b539e,live,Software Project Manager,Collaboration,keep,soft,required,,1.0,,requires excellent collaboration skills
+2026-10-06,live_2dfd1835617b539e,live,Software Project Manager,Kardex WES,keep,hard,required,,1.0,,define the Kardex WES functionality
+2026-10-06,live_2dfd1835617b539e,live,Software Project Manager,Workshop facilitation,keep,soft,required,required,1.0,,Lead customer workshops to gather requirements
+2026-10-06,live_2dfd1835617b539e,live,Software Project Manager,Technical leadership,keep,soft,unspecified,,1.0,,Provide technical leadership and guidance
+2026-10-06,live_2dfd1835617b539e,live,Software Project Manager,Problem solving,keep,soft,required,,1.0,,Problem Solving: Address software-related issues
+2026-10-06,live_2dfd1835617b539e,live,Software Project Manager,Testing,keep,hard,unspecified,,1.0,,"including testing, deployment, and post-implementation support"
+2026-10-06,live_2dfd1835617b539e,live,Software Project Manager,Deployment,keep,hard,unspecified,,1.0,,"including testing, deployment, and post-implementation support"
+2026-10-06,live_2dfd1835617b539e,live,Software Project Manager,Post-implementation support,keep,hard,unspecified,,1.0,,"including testing, deployment, and post-implementation support"
+2026-10-06,live_2dfd1835617b539e,live,Software Project Manager,Documentation,keep,hard,unspecified,,1.0,,Ensure comprehensive documentation of software configurations
+2026-10-06,live_2dfd1835617b539e,live,Software Project Manager,AutoStore,keep,hard,preferred,required,1.0,,AutoStore experience will a definite plus
+2026-10-06,live_2dfd1835617b539e,live,Software Project Manager,SDLC,keep,hard,required,required,1.0,,Strong understanding of software development lifecycle (SDLC)
+2026-10-06,live_2dfd1835617b539e,live,Software Project Manager,Agile methodologies,keep,hard,required,required,1.0,,"agile methodologies, and project management principles"
+2026-10-06,live_2dfd1835617b539e,live,Software Project Manager,Project management,keep,hard,required,required,1.0,,"agile methodologies, and project management principles"
+2026-10-06,live_2dfd1835617b539e,live,Software Project Manager,Communication,keep,soft,required,required,1.0,,Excellent communication and interpersonal skills
+2026-10-06,live_2dfd1835617b539e,live,Software Project Manager,Interpersonal skills,keep,soft,required,required,1.0,,Excellent communication and interpersonal skills
+2026-10-06,live_2dfd1835617b539e,live,Software Project Manager,Leadership,keep,soft,required,required,1.0,,Demonstrated leadership abilities
+2026-10-06,live_2dfd1835617b539e,live,Software Project Manager,Mentoring,keep,soft,required,required,1.0,,mentor team members
+2026-10-06,live_2dfd1835617b539e,live,Software Project Manager,PMP,keep,hard,preferred,preferred,1.0,Project management certification,"Certification in relevant technologies (e.g., PMP, Agile Scrum Master, etc.)"
+2026-10-06,live_2dfd1835617b539e,live,Software Project Manager,Agile Scrum Master,keep,hard,preferred,preferred,1.0,Project management certification,"Certification in relevant technologies (e.g., PMP, Agile Scrum Master, etc.)"
+2026-10-06,live_4e4a4feb118f8558,live,AI Engineer / data analyst/ software engineer,data analytics,keep,hard,required,required,1.0,,"developing and deploying AI solutions, including data analytics, machine learning, and deep learning, OpenCV"
+2026-10-06,live_4e4a4feb118f8558,live,AI Engineer / data analyst/ software engineer,machine learning,keep,hard,required,required,1.0,,"developing and deploying AI solutions, including data analytics, machine learning, and deep learning, OpenCV"
+2026-10-06,live_4e4a4feb118f8558,live,AI Engineer / data analyst/ software engineer,deep learning,keep,hard,required,required,1.0,,"developing and deploying AI solutions, including data analytics, machine learning, and deep learning, OpenCV"
+2026-10-06,live_4e4a4feb118f8558,live,AI Engineer / data analyst/ software engineer,OpenCV,keep,hard,required,required,1.0,,"developing and deploying AI solutions, including data analytics, machine learning, and deep learning, OpenCV"
+2026-10-06,live_4e4a4feb118f8558,live,AI Engineer / data analyst/ software engineer,computer vision,keep,hard,required,required,1.0,,"Strong experience in machine learning, computer vision, and other AI-related technologies"
+2026-10-06,live_4e4a4feb118f8558,live,AI Engineer / data analyst/ software engineer,reinforcement learning,keep,hard,unspecified,,1.0,,"Work on developing computer vision algorithms, deep learning, and reinforcement learning algorithms"
+2026-10-06,live_4e4a4feb118f8558,live,AI Engineer / data analyst/ software engineer,Python,keep,hard,required,required,1.0,programming language,"Proficiency in programming languages like Python, Java, or C++"
+2026-10-06,live_4e4a4feb118f8558,live,AI Engineer / data analyst/ software engineer,Java,keep,hard,required,required,1.0,programming language,"Proficiency in programming languages like Python, Java, or C++"
+2026-10-06,live_4e4a4feb118f8558,live,AI Engineer / data analyst/ software engineer,C++,keep,hard,required,required,1.0,programming language,"Proficiency in programming languages like Python, Java, or C++"
+2026-10-06,live_4e4a4feb118f8558,live,AI Engineer / data analyst/ software engineer,TensorFlow,keep,hard,required,required,1.0,deep learning framework,"Experience with deep learning frameworks such as TensorFlow, PyTorch, or Keras"
+2026-10-06,live_4e4a4feb118f8558,live,AI Engineer / data analyst/ software engineer,PyTorch,keep,hard,required,required,1.0,deep learning framework,"Experience with deep learning frameworks such as TensorFlow, PyTorch, or Keras"
+2026-10-06,live_4e4a4feb118f8558,live,AI Engineer / data analyst/ software engineer,Keras,keep,hard,required,required,1.0,deep learning framework,"Experience with deep learning frameworks such as TensorFlow, PyTorch, or Keras"
+2026-10-06,live_4e4a4feb118f8558,live,AI Engineer / data analyst/ software engineer,version control,keep,hard,required,required,1.0,,"Good understanding of software engineering practices, including version control, code review, testing, and deployment"
+2026-10-06,live_4e4a4feb118f8558,live,AI Engineer / data analyst/ software engineer,code review,keep,hard,required,required,1.0,,"Good understanding of software engineering practices, including version control, code review, testing, and deployment"
+2026-10-06,live_4e4a4feb118f8558,live,AI Engineer / data analyst/ software engineer,testing,keep,hard,required,required,1.0,,"Good understanding of software engineering practices, including version control, code review, testing, and deployment"
+2026-10-06,live_4e4a4feb118f8558,live,AI Engineer / data analyst/ software engineer,deployment,keep,hard,required,required,1.0,,"Good understanding of software engineering practices, including version control, code review, testing, and deployment"
+2026-10-06,live_4e4a4feb118f8558,live,AI Engineer / data analyst/ software engineer,communication,keep,soft,required,required,1.0,,Excellent communication skills and ability to explain complex AI concepts to non-technical stakeholders
+2026-10-06,live_64c8c310a608d5e7,live,Software Engineer - Core Banking,Java,keep,hard,required,,1.0,,"extensive experience in Java, SpringBoot, MySQL, Kafka and microservices architecture"
+2026-10-06,live_64c8c310a608d5e7,live,Software Engineer - Core Banking,SpringBoot,keep,hard,required,,1.0,,"extensive experience in Java, SpringBoot, MySQL, Kafka and microservices architecture"
+2026-10-06,live_64c8c310a608d5e7,live,Software Engineer - Core Banking,MySQL,keep,hard,required,,1.0,,"extensive experience in Java, SpringBoot, MySQL, Kafka and microservices architecture"
+2026-10-06,live_64c8c310a608d5e7,live,Software Engineer - Core Banking,Kafka,keep,hard,required,,1.0,,"extensive experience in Java, SpringBoot, MySQL, Kafka and microservices architecture"
+2026-10-06,live_64c8c310a608d5e7,live,Software Engineer - Core Banking,microservices architecture,keep,hard,required,,1.0,,"extensive experience in Java, SpringBoot, MySQL, Kafka and microservices architecture"
+2026-10-06,live_64c8c310a608d5e7,live,Software Engineer - Core Banking,APIs,keep,hard,unspecified,,1.0,,Develop scalable APIs powering our digital banking platform
+2026-10-06,live_64c8c310a608d5e7,live,Software Engineer - Core Banking,microservices,keep,hard,required,required,1.0,,"focus on Java, SpringBoot, Kafka, microservices, and MySQL"
+2026-10-06,live_64c8c310a608d5e7,live,Software Engineer - Core Banking,code reviews,keep,hard,unspecified,,1.0,,Participate in code reviews and provide constructive feedback to team members
+2026-10-06,live_64c8c310a608d5e7,live,Software Engineer - Core Banking,technical documentation,keep,hard,unspecified,,1.0,,Write and maintain technical documentation
+2026-10-06,live_64c8c310a608d5e7,live,Software Engineer - Core Banking,RESTful API,keep,hard,required,required,1.0,,Experience with RESTful API development and integration
+2026-10-06,live_64c8c310a608d5e7,live,Software Engineer - Core Banking,Git,keep,hard,required,required,1.0,,Familiarity with version control systems (e.g. Git)
+2026-10-06,live_64c8c310a608d5e7,live,Software Engineer - Core Banking,Agile development,keep,hard,required,required,1.0,,Knowledge of agile development methodologies
+2026-10-06,live_64c8c310a608d5e7,live,Software Engineer - Core Banking,problem-solving,keep,soft,required,required,1.0,,Excellent problem-solving skills and attention to details
+2026-10-06,live_64c8c310a608d5e7,live,Software Engineer - Core Banking,communication,keep,soft,required,required,1.0,,Strong communication and teamwork skills
+2026-10-06,live_64c8c310a608d5e7,live,Software Engineer - Core Banking,teamwork,keep,soft,required,required,1.0,,Strong communication and teamwork skills
+2026-10-06,live_64c8c310a608d5e7,live,Software Engineer - Core Banking,security principles,keep,hard,required,required,1.0,,Understanding of security principles and how they apply to banking systems
+2026-10-06,live_64c8c310a608d5e7,live,Software Engineer - Core Banking,Mambu,keep,hard,preferred,preferred,1.0,,Experience with Mambu is a plus
+2026-10-06,live_64c8c310a608d5e7,live,Software Engineer - Core Banking,AWS,keep,hard,required,required,1.0,cloud platform,Cloud (AWS / Azure / GCP)Java
+2026-10-06,live_64c8c310a608d5e7,live,Software Engineer - Core Banking,Splunk,keep,hard,preferred,preferred,1.0,,Bonus: Mambu • Splunk • Cursor • Claude Code
+2026-10-06,live_64c8c310a608d5e7,live,Software Engineer - Core Banking,Cursor,keep,hard,preferred,preferred,1.0,,Bonus: Mambu • Splunk • Cursor • Claude Code
+2026-10-06,live_64c8c310a608d5e7,live,Software Engineer - Core Banking,Claude Code,keep,hard,preferred,preferred,1.0,,Bonus: Mambu • Splunk • Cursor • Claude Code
+2026-10-06,live_64c8c310a608d5e7,live,Software Engineer - Core Banking,Azure,keep,hard,required,required,1.0,cloud platform,Cloud (AWS / Azure / GCP)Java
+2026-10-06,live_64c8c310a608d5e7,live,Software Engineer - Core Banking,GCP,keep,hard,required,required,1.0,cloud platform,Cloud (AWS / Azure / GCP)Java

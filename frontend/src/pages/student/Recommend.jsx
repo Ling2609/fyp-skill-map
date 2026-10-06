@@ -1,6 +1,6 @@
 import { Fragment, useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
-import api, { MATCHES_CACHE } from '../../api'
+import { cached, peek } from '../../pageCache'
 import PageHeader from '../../components/PageHeader'
 import LevelTag from '../../components/LevelTag'
 
@@ -63,21 +63,23 @@ const daysAgo = (days) => {
   return `${Math.floor(days / 7)} weeks ago`
 }
 
-// Results are kept this long (minutes) when going back from a job; after that, or after any profile change
-// (api.js), they are fetched again, so they never drift far from Job Detail's numbers (the 30 Sep problem)
-const CACHE_MINUTES = 15
+// Where the student was (sort, how many shown, scroll) when opening a job, to put them back there (6 Oct).
+// The results themselves are kept by pageCache.js.
+const VIEW = 'jobMatchesView'
+const readView = () => {
+  try { return JSON.parse(sessionStorage.getItem(VIEW)) || {} } catch { return {} }
+}
 
-const readCache = () => {
-  try { return JSON.parse(sessionStorage.getItem(MATCHES_CACHE)) } catch { return null }
-}
-const writeCache = (value) => {
-  try { sessionStorage.setItem(MATCHES_CACHE, JSON.stringify(value)) } catch { /* full or blocked: just refetch next time */ }
-}
+const searchBody = (role, category) => ({
+  top_n: 0,  // 0 = all
+  role_filter: role,
+  category: category === 'all' ? '' : category,   // chip and typed search both apply
+})
 
 export default function Recommend() {
   const navigate = useNavigate()
 
-  const [skillCount, setSkillCount] = useState(null) // null = loading, 0 = empty profile, -1 = failed to load
+  const [skillCount, setSkillCount] = useState(() => peek('/profile/skills')?.total ?? null) // null = loading, 0 = empty profile, -1 = failed
   const [results, setResults] = useState(null)
   const [shownQuery, setShownQuery] = useState('')   // the search the shown results are for
   const [sortBy, setSortBy] = useState('fit')   // 'fit' | 'skills'
@@ -96,15 +98,27 @@ export default function Recommend() {
   const restoreScroll = useRef(null)   // scroll position to go back to once cached results are shown
   const listRef = useRef(null)         // the results list scrolls, not the window
 
-  const doSearch = async (role, count, category) => {
+  const doSearch = async (role, category) => {
     const searchId = ++latestSearch.current
     const searchRole = role !== undefined ? role : roleFilter
-    const searchCount = count || 0  // 0 = return all results
     const searchCategory = category !== undefined ? category : activeCategory
-    setLoading(true)
+    const body = searchBody(searchRole, searchCategory)
+    const show = (data) => {
+      setResults(data)
+      setShownQuery(searchRole.trim())
+      sessionStorage.setItem('lastRoleFilter', searchRole)
+      sessionStorage.setItem('lastActiveCategory', searchCategory)
+      setLoading(false)
+    }
     setError('')
-    setResults(null)
     setVisibleCount(10)
+    const saved = peek('/recommend/', body)
+    if (saved) {          // asked for in the last few minutes and nothing changed since: no loading screen
+      show(saved)
+      return
+    }
+    setLoading(true)
+    setResults(null)
     setLoadingStep(0)
     setLoadingProgress(0)
 
@@ -114,22 +128,13 @@ export default function Recommend() {
     }, 800)
 
     try {
-      const res = await api.post('/recommend/', {
-        top_n: searchCount,  // 0 = all
-        role_filter: searchRole,
-        category: searchCategory === 'all' ? '' : searchCategory,   // chip and typed search both apply
-      })
+      const data = await cached('/recommend/', body)
       clearInterval(stepInterval)
       if (searchId !== latestSearch.current) return   // a newer search has started, ignore this one
       setLoadingProgress(100)
       setTimeout(() => {
         if (searchId !== latestSearch.current) return
-        setResults(res.data)
-        setShownQuery(searchRole.trim())
-        writeCache({ role: searchRole, category: searchCategory, data: res.data, savedAt: Date.now() })
-        sessionStorage.setItem('lastRoleFilter', searchRole)
-        sessionStorage.setItem('lastActiveCategory', searchCategory)
-        setLoading(false)
+        show(data)
       }, 300)
     } catch (err) {
       clearInterval(stepInterval)
@@ -141,36 +146,32 @@ export default function Recommend() {
 
   useEffect(() => {
     // Check total skills across ALL sources (modules + projects + certs)
-    api.get('/profile/skills').then(res => {
-      const count = res.data.total ?? 0
+    cached('/profile/skills').then(data => {
+      const count = data.total ?? 0
       setSkillCount(count)
       if (count === 0) return
 
-      api.get('/jobs/subcategories').catch(() => {})
-        .then(res => res && setSubcategories(res.data))
-      api.get('/jobs/locations').catch(() => {})
-        .then(res => res && setLocations(res.data))
+      cached('/jobs/subcategories').then(setSubcategories).catch(() => {})
+      cached('/jobs/locations').then(setLocations).catch(() => {})
 
-      // Keep the last search, but always fetch fresh results: saved results went stale after a
-      // profile or matching change and showed different numbers from Job Detail (30 Sep)
+      // Keep the last search. Its results come from pageCache (dropped after any profile change, so they never
+      // show different numbers from Job Detail: the 30 Sep problem)
       sessionStorage.removeItem('lastRecommendResults')   // left by older versions
+      sessionStorage.removeItem('jobMatchesCache')        // left by 19a84cb
       const savedCategory = sessionStorage.getItem('lastActiveCategory') || 'all'
       // Before 3 Oct a chip also wrote its name into the search box; don't restore that as typed text
       const savedRole = (sessionStorage.getItem('lastRoleFilter') || '') === savedCategory ? ''
         : sessionStorage.getItem('lastRoleFilter') || ''
       setRoleFilter(savedRole)
       setActiveCategory(savedCategory)
-      // Back from a job: show the same results at the same place instead of searching again
-      const cached = readCache()
-      if (cached?.data && cached.role === savedRole && cached.category === savedCategory
-          && Date.now() - cached.savedAt < CACHE_MINUTES * 60000) {
-        setResults(cached.data)
-        setShownQuery(savedRole.trim())
-        setSortBy(cached.sortBy || 'fit')
-        setVisibleCount(cached.visible || 10)
-        restoreScroll.current = cached.scrollY || 0
-      } else {
-        doSearch(savedRole, 0, savedCategory)
+      // Back from a job: the same results, at the same place
+      const view = readView()
+      const resume = view.role === savedRole && view.category === savedCategory && peek('/recommend/', searchBody(savedRole, savedCategory))
+      doSearch(savedRole, savedCategory)
+      if (resume) {
+        setSortBy(view.sortBy || 'fit')
+        setVisibleCount(view.visible || 10)
+        restoreScroll.current = view.scrollY || 0
       }
     }).catch(() => {
       // Not "empty profile": the request failed (e.g. server down). Show the error instead.
@@ -189,8 +190,10 @@ export default function Recommend() {
 
   // Remember where the student was (sort, how many shown, scroll) before opening a job
   const openJob = (jobId) => {
-    const cached = readCache()
-    if (cached) writeCache({ ...cached, sortBy, visible: visibleCount, scrollY: listRef.current?.scrollTop || 0 })
+    try {
+      sessionStorage.setItem(VIEW, JSON.stringify({ role: sessionStorage.getItem('lastRoleFilter') || '', category: activeCategory, sortBy,
+                                                    visible: visibleCount, scrollY: listRef.current?.scrollTop || 0 }))
+    } catch { /* storage blocked: start at the top */ }
     navigate(`/jobs/${encodeURIComponent(jobId)}`, { state: { from: 'Job Matches' } })
   }
 
@@ -205,10 +208,10 @@ export default function Recommend() {
   // Typed search, category chip and location combine (Baymard: different filter types use AND)
   const handleCategoryClick = (cat) => {
     setActiveCategory(cat)
-    doSearch(roleFilter, 0, cat)
+    doSearch(roleFilter, cat)
   }
 
-  const handleFindJobs = () => doSearch(roleFilter, 0, activeCategory)
+  const handleFindJobs = () => doSearch(roleFilter, activeCategory)
 
   const handleLocation = (loc) => {
     setLocation(loc)
@@ -226,7 +229,7 @@ export default function Recommend() {
     handleLocation('all')
     handleHideSenior(false)
     setActiveCategory('all')
-    doSearch(roleFilter, 0, 'all')
+    doSearch(roleFilter, 'all')
   }
 
   const getMatchBgColor = (pct) => pct >= 70 ? 'bg-emerald-50 text-emerald-700' : pct >= 40 ? 'bg-amber-50 text-amber-700' : 'bg-rose-50 text-rose-600'
@@ -296,16 +299,16 @@ export default function Recommend() {
         onChange={e => {
           setRoleFilter(e.target.value)
           // Emptied by hand: show the full list again (as the ✕ does), instead of keeping the old search's results
-          if (!e.target.value.trim() && shownQuery) doSearch('', 0, activeCategory)
+          if (!e.target.value.trim() && shownQuery) doSearch('', activeCategory)
         }}
         onKeyDown={e => {
           if (e.key === 'Enter') handleFindJobs()
-          if (e.key === 'Escape' && roleFilter) { setRoleFilter(''); doSearch('', 0, activeCategory) }
+          if (e.key === 'Escape' && roleFilter) { setRoleFilter(''); doSearch('', activeCategory) }
         }}
         placeholder="Job title, skill or company"
         className="flex-1 min-w-0 bg-transparent text-sm focus:outline-none text-slate-700 placeholder-slate-400" />
       {roleFilter && (
-        <button onClick={() => { setRoleFilter(''); doSearch('', 0, activeCategory) }} aria-label="Clear search"
+        <button onClick={() => { setRoleFilter(''); doSearch('', activeCategory) }} aria-label="Clear search"
           className="text-slate-400 hover:text-slate-600 text-xs">✕</button>
       )}
     </div>

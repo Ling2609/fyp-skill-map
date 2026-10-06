@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import Markdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import api from '../../api'
+import { cached, ALL_MATCHES } from '../../pageCache'
 import PageHeader from '../../components/PageHeader'
 
 const MODES = [
@@ -141,8 +142,8 @@ export default function Chatbot() {
     // The student's real skill profile (works even if Job Matches wasn't opened yet)
     if (userSkills.current === null) {
       try {
-        const res = await api.get('/profile/skills')
-        userSkills.current = res.data.skills || []
+        const data = await cached('/profile/skills')
+        userSkills.current = data.skills || []
       } catch {
         // leave it as null so the next message tries again
       }
@@ -150,8 +151,8 @@ export default function Chatbot() {
     ctx.user_skills = userSkills.current ?? []
     if (topJobs.current === null) {
       try {
-        const res = await api.post('/recommend/', { top_n: 0, role_filter: '' })
-        topJobs.current = res.data.recommendations?.slice(0, 3).map(j => ({
+        const data = await cached('/recommend/', ALL_MATCHES)   // usually already loaded by Dashboard / Job Matches
+        topJobs.current = data.recommendations?.slice(0, 3).map(j => ({
           job_title: j.job_title,
           company: j.company,
           match_percent: j.coverage_percent ?? j.match_percent,   // % of required skills the student has
@@ -248,13 +249,6 @@ export default function Chatbot() {
     <div className="flex flex-col h-screen">
 
       <PageHeader>
-        {fromJob && (
-          <button onClick={() => navigate(-1)}
-            className="flex items-center gap-1 text-xs text-slate-500 hover:text-blue-600 transition mb-3 max-w-full">
-            <span>←</span>
-            <span className="truncate">Back to {fromJob}</span>
-          </button>
-        )}
         <div className="flex items-start justify-between pb-4 pt-1">
           <div>
             <p className="text-[11px] font-semibold text-blue-600 uppercase tracking-widest mb-2">AI Assistant</p>
@@ -282,14 +276,23 @@ export default function Chatbot() {
         </div>
 
         <div className="pb-3">
-          <p className="text-xs text-slate-500 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2">
-            {currentMode.description}
-            {preloadSkill && mode === 'skill_development' && (
-              <span className="ml-1 font-medium text-blue-600">
-                · Learning: {preloadSkill}
-              </span>
+          {/* Opened from a job (6 Oct, her choice B): say which job the plan is for, with the way back beside it */}
+          <div className="flex items-center justify-between gap-3 text-xs text-slate-500 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2">
+            {preloadSkill && mode === 'skill_development' ? (
+              <p className="min-w-0 truncate">
+                Learning <span className="font-medium text-blue-600">{preloadSkill}</span>
+                {preloadJob && <> for <span className="font-medium text-slate-700">{preloadJob}</span></>}
+              </p>
+            ) : (
+              <p className="min-w-0">{currentMode.description}</p>
             )}
-          </p>
+            {fromJob && (
+              <button onClick={() => navigate(-1)} title={`Back to ${fromJob}`}
+                className="shrink-0 font-medium text-blue-600 hover:text-blue-700 hover:underline">
+                ← Back to job
+              </button>
+            )}
+          </div>
         </div>
       </PageHeader>
 

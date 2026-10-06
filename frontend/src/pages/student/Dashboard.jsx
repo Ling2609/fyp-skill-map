@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import api from '../../api'
+import { cached, peek, ALL_MATCHES } from '../../pageCache'
+import { useAuth } from '../../context/useAuth'
 import PageHeader from '../../components/PageHeader'
 import LevelTag from '../../components/LevelTag'
 
@@ -13,18 +14,16 @@ const getGreeting = () => {
 
 export default function Dashboard() {
   const navigate = useNavigate()
-  const [user, setUser] = useState(null)
-  // Summary comes from the backend on every visit, so it's never stale and works
-  // before Job Matches has been opened. Same request as Job Matches' default view
-  // (all live jobs, Best fit order), so the top 3 here are the top 3 there.
-  const [summary, setSummary] = useState(null)   // null = loading
+  const { user } = useAuth()   // already loaded at sign-in; kept up to date by Account Settings
+  // Same request as Job Matches' default view (all live jobs, Best fit order), so the top 3 here are the top 3
+  // there. Kept by pageCache for a few minutes and dropped after any profile change (6 Oct): no reload per visit.
+  const [summary, setSummary] = useState(() => peek('/recommend/', ALL_MATCHES))   // null = loading
   const [emptyProfile, setEmptyProfile] = useState(false)
   const [loadError, setLoadError] = useState('')
 
   useEffect(() => {
-    api.get('/auth/me').then(res => setUser(res.data)).catch(() => {})
-    api.post('/recommend/', { top_n: 0, role_filter: '' })
-      .then(res => setSummary(res.data))
+    cached('/recommend/', ALL_MATCHES)
+      .then(setSummary)
       .catch(err => {
         if (err.response?.status === 400) setEmptyProfile(true)   // no modules, projects or certs yet
         else setLoadError('Could not load your summary. Please check the server is running and refresh.')

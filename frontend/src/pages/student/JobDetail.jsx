@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
-import api from '../../api'
+import { cached, peek } from '../../pageCache'
 
 // The grade itself, not its weight: the weight is the same for C+ and C, so a C showed as "C+" (5 Oct)
 const GRADE_LETTERS = { '4.0': 'A', '3.7': 'A-', '3.3': 'B+', '3.0': 'B', '2.7': 'B-', '2.3': 'C+', '2.0': 'C' }
@@ -35,18 +35,19 @@ export default function JobDetail() {
     navigate(`/chatbot?skill=${encodeURIComponent(skill)}&job=${encodeURIComponent(gap?.job?.job_title || '')}`
       + `&reason=${encodeURIComponent(reason)}`, { state: { fromJob: gap?.job?.job_title } })
   }
-  const [gap, setGap] = useState(null)
-  const [loading, setLoading] = useState(true)
+  const [gap, setGap] = useState(() => peek('/skillgap/', { job_id: decodeURIComponent(jobId) }))
+  const [loading, setLoading] = useState(() => !gap)
   const [error, setError] = useState('')
   const [activeTab, setActiveTab] = useState(location.state?.tab || 'description')
-  const [bullets, setBullets] = useState(null)
+  const [bullets, setBullets] = useState(() => peek(`/jobs/${encodeURIComponent(jobId)}/description`)?.bullets ?? null)
   const [bulletsLoading, setBulletsLoading] = useState(false)
   const [showSources, setShowSources] = useState(false)
 
   useEffect(() => {
     // The backend builds the profile from the logged-in user's saved record
-    api.post('/skillgap/', { job_id: decodeURIComponent(jobId) })
-      .then(res => { setGap(res.data); setLoading(false) })
+    // Kept by pageCache: back from the chatbot or Job Matches shows it at once (dropped after a profile change)
+    cached('/skillgap/', { job_id: decodeURIComponent(jobId) })
+      .then(data => { setGap(data); setLoading(false) })
       .catch(err => {
         setError(err.response?.data?.detail || 'Failed to load skill gap analysis')
         setLoading(false)
@@ -59,8 +60,8 @@ export default function JobDetail() {
     setTimeout(() => {
       if (!cancelled) setBulletsLoading(true)
     }, 0)
-    api.get(`/jobs/${encodeURIComponent(jobId)}/description`)
-      .then(res => { if (!cancelled) setBullets(res.data.bullets || []) })
+    cached(`/jobs/${encodeURIComponent(jobId)}/description`)
+      .then(data => { if (!cancelled) setBullets(data.bullets || []) })
       .catch(() => { if (!cancelled) setBullets([]) })
       .finally(() => { if (!cancelled) setBulletsLoading(false) })
     return () => { cancelled = true }
