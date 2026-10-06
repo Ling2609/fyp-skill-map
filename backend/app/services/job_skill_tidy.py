@@ -67,6 +67,8 @@ _TASK_VERBS = {
     "optimise", "optimize", "upgrade", "integrate", "communicate", "help", "be", "act", "attend", "track",
 }
 _EXPLICIT_CHOICE = re.compile(r"\b(e\.?g\.?|eg|such as|for example|one or more|at least one|any of|one of|either)$")
+# Says "any one will do" even with words between it and the list: "one or more languages, including Go, Python"
+_COUNT_CHOICE = re.compile(r"\b(one or more|at least one|any one of|any of|one of|either)\b")
 
 
 # ── word helpers ──────────────────────────────────────────────────────────────────────────────────
@@ -264,8 +266,11 @@ def cue_levels(items: list[dict], ad_text: str) -> int:
 
 
 # ── rule 3 ────────────────────────────────────────────────────────────────────────────────────────
-def choice_groups(items: list[dict]) -> int:
-    """Group skills listed as options/examples in one quote (in place). Returns how many skills were grouped."""
+def choice_groups(items: list[dict], ad_text: str = "") -> int:
+    """Group skills listed as options/examples in one quote (in place). Returns how many skills were grouped.
+    The list is read in the quote's whole sentence when the ad is given: the LLM often quotes only the list
+    ("including Go, Python, C++, Java, Rust") and leaves out the words that make it a choice (Bitdeer, 6 Oct: "one
+    or more languages, including Go, Python, C++, Java, Rust, or related technologies" became 5 requirements)."""
     by_quote: dict[tuple, list[dict]] = {}
     for it in items:
         if not (it.get("alternative_group") or "").strip() and it.get("type") == "hard":
@@ -273,7 +278,8 @@ def choice_groups(items: list[dict]) -> int:
     used = {(it.get("alternative_group") or "").lower() for it in items}
     grouped = 0
     for quote, members in by_quote.items():
-        words = _list_words(members[0].get("evidence_quote", ""))
+        where = locate(ad_text, members[0].get("evidence_quote", "")) if ad_text else None
+        words = _list_words(where[1] if where else members[0].get("evidence_quote", ""))
         spans = {}
         for m in members:
             pos = _positions(m["skill"], words)
@@ -352,6 +358,8 @@ def _is_choice(words: list[str], run: list[tuple], starts: set[int] = frozenset(
         return False                                    # "Jira and Confluence": all wanted
     before = words[max(0, run[0][0] - 5):run[0][0]]
     cue = bool(_EXPLICIT_CHOICE.search(" ".join(w for w in before if w != ",")))
+    if not cue and before[-1:] == ["including"]:         # "one or more languages, including Go, Python"
+        cue = bool(_COUNT_CHOICE.search(" ".join(words[max(0, run[0][0] - 9):run[0][0]])))
     after = " ".join(w for w in words[run[-1][1] + 1:run[-1][1] + 4] if w != ",")
     open_end = after.startswith(_OPEN_END)
     if before[-1:] == [","] and not cue:

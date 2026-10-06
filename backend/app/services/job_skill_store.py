@@ -43,7 +43,7 @@ def tidy_skills(items: list[dict], ad_text: str) -> tuple[list[dict], list[dict]
     items = [dict(it) for it in items]
     items, unnamed = drop_unnamed(items)
     changes = {"unnamed": len(unnamed), "duty": duty_levels(items, ad_text), "cue": cue_levels(items, ad_text),
-               "grouped": choice_groups(items)}
+               "grouped": choice_groups(items, ad_text)}
     one_each = merge_mentions(items, key=skill_key)
     # merge_mentions drops a group when one member is also asked for on its own ("Java" + "e.g. Python, Java, C#"
     # = Java). The other members were only alternatives, so they go too: reported here, never silent.

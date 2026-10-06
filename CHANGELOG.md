@@ -3,9 +3,21 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 6 Oct 2026 — Either-or lists read in the whole sentence
+
+- (this commit) The either-or rule now reads the quote's whole sentence in the ad, not just the quote: Bitdeer
+  "Strong programming ability in one or more languages, including Go, Python, C++, Java, Rust, or related
+  technologies" was quoted as "including Go, Python, C++, Java, Rust", lost its "one or more" and "or related",
+  and became 5 requirements (a Java-only student got Go, Rust, C++ as gaps). "one or more / at least one / any of
+  / either ... including A, B, C" is now a choice; "including A, B, C" alone stays all-wanted. Replayed on the 132
+  jobs in the evidence CSV with their ads: 2 jobs change (Bitdeer; and Network Engineer LAN/WAN, where "Huawei
+  equipment" and "Huawei network devices", both quoted as "Huawei", now count once).
+- Level cue: "an added key advantage" (Malaysia Airports) is read as preferred (was only "an added advantage").
+- Apply to saved jobs: `python scripts/pipeline/tidy_saved_job_skills.py` (dry run), then `--save`.
+
 ## 6 Oct 2026 — Pages load only when something changed; "Back to job" in the context bar
 
-- (this commit) One short-lived cache for the slow read-only requests (`frontend/src/pageCache.js`): scoring every
+- (5ef303c) One short-lived cache for the slow read-only requests (`frontend/src/pageCache.js`): scoring every
   job (Dashboard, Job Matches and the chatbot all ask for the same default list), one job's skill gap, a job's
   formatted ad, the skill profile, categories and locations. Kept 15 minutes in sessionStorage; dropped at once by
   api.js after any profile change (grades, projects, certificates), so the 30 Sep stale-numbers problem cannot
@@ -44,7 +56,7 @@ Planning, reasoning and research behind each decision are in the project roadmap
 
 ## 5 Oct 2026 — Her review, part 2: inline-label duties, skill-poor ads, nice-to-have chips, formatting
 
-- (this commit) Duty rule reads inline labels: Motorola "Web Development: Assist in developing robust frontend
+- (73c955c) Duty rule reads inline labels: Motorola "Web Development: Assist in developing robust frontend
   interfaces" (no heading, label then verb) was saved as required; the label is now read like a heading, the verb
   after it is the first word, and "This includes ..." takes the previous sentence's answer. Under a generic heading
   ("Job Description", "Detailed Description") the label decides. On 83 saved jobs: 98 duty changes (was 81); every

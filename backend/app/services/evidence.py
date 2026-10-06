@@ -65,7 +65,7 @@ def _check_one(quote: str, ad_text: str) -> tuple[bool, float, int]:
 _TRAINED = re.compile(r"\b(you will (learn|be trained|gain|develop)|will be (trained|taught)|training (will be )?provided"
                       r"|on[- ]the[- ]job training|learning (and development )?(phase|programme|program|pathway)"
                       r"|we will (teach|train)|opportunity to learn|what you( wi| )?ll learn)\b")
-_PREFERRED = re.compile(r"\b(preferred|preferably|nice[- ]to[- ]have|good[- ]to[- ]have|an? (added )?advantage|advantageous"
+_PREFERRED = re.compile(r"\b(preferred|preferably|nice[- ]to[- ]have|good[- ]to[- ]have|an? (\w+ ){0,2}advantage|advantageous"
                         r"|is a (plus|bonus)|desirable|ideally|bonus)\b")
 _REQUIRED = re.compile(r"\b(must|required|requirements?|essential|mandatory|minimum|at least|qualifications?)\b")
 _HEADING_MAX = 60        # a short line on its own (or ending in ":") is treated as a section heading
