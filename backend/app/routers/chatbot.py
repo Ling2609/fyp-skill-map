@@ -4,12 +4,20 @@ Chatbot router — two modes:
   - skill_development: per missing skill, suggests specific resources (Coursera, YouTube, docs)
 
 Context-aware: receives user skill profile, target job, and exact skill gaps.
+
+Conversations are saved in MongoDB (app/mongo.py, 6 Oct): each reply is added to the student's chat session, and
+the page lists past chats to continue. If MongoDB is off, the chat still works; it is just not saved.
 """
-from fastapi import APIRouter, Depends, HTTPException
+import uuid
+from datetime import datetime, timezone
+
+from fastapi import APIRouter, Depends, HTTPException, Response
 from pydantic import BaseModel, Field
+from pymongo.errors import PyMongoError
 from groq import Groq
 from app.config import settings
 from app.models.user import User
+from app.mongo import chat_sessions, history_ok
 from app.routers.auth import get_current_user
 
 router = APIRouter(prefix="/chatbot", tags=["chatbot"])
@@ -81,6 +89,7 @@ class ChatRequest(BaseModel):
     matched_jobs: list[dict] | None = None
     target_skill: str | None = None
     job_title: str | None = None
+    session_id: str | None = Field(default=None, max_length=64)   # continue a saved chat; None = start a new one
 
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
@@ -105,6 +114,83 @@ def build_context_block(req: ChatRequest) -> str:
 
 
 # ── Endpoint ──────────────────────────────────────────────────────────────────
+
+MAX_SAVED_MESSAGES = 200      # per chat; older ones drop off (the model only ever sees the last 20)
+TITLE_CHARS = 60
+HISTORY_OFF = "Chat history isn't available right now (MongoDB is not running). Your chats are not being saved."
+
+
+def _now():
+    return datetime.now(timezone.utc)
+
+
+def _own_session(session_id: str, user: User) -> dict:
+    """The user's own chat, or 404 (also for someone else's chat: never reveal that it exists)."""
+    try:
+        doc = chat_sessions().find_one({"_id": session_id, "user_id": user.id})
+    except PyMongoError:
+        raise HTTPException(status_code=503, detail=HISTORY_OFF)
+    if not doc:
+        raise HTTPException(status_code=404, detail="Chat not found.")
+    return doc
+
+
+def save_exchange(req: ChatRequest, user: User, reply: str) -> str | None:
+    """Add the student's last message and the reply to their chat (a new chat if none). Returns the chat id, or
+    None when MongoDB is off: the reply is still shown, only not saved."""
+    question = next((m.content for m in reversed(req.messages) if m.role == "user"), "")
+    now = _now()
+    turn = [{"role": "user", "content": question, "at": now}, {"role": "assistant", "content": reply, "at": now}]
+    try:
+        col = chat_sessions()
+        if req.session_id:
+            done = col.update_one({"_id": req.session_id, "user_id": user.id, "mode": req.mode},
+                                  {"$push": {"messages": {"$each": turn, "$slice": -MAX_SAVED_MESSAGES}},
+                                   "$set": {"updated_at": now}})
+            if done.matched_count:
+                return req.session_id
+        # New chat (or the given one is gone / not this user's / another mode: start a new one, never write to it)
+        session_id = str(uuid.uuid4())
+        title = " ".join(question.split())
+        col.insert_one({"_id": session_id, "user_id": user.id, "mode": req.mode,
+                        "title": title[:TITLE_CHARS] + ("…" if len(title) > TITLE_CHARS else ""),
+                        "context": {"target_skill": req.target_skill, "job_title": req.job_title},
+                        "created_at": now, "updated_at": now, "messages": turn})
+        return session_id
+    except PyMongoError as e:
+        print(f"[chatbot] chat not saved (MongoDB): {type(e).__name__}")
+        return None
+
+
+@router.get("/sessions")
+def list_sessions(current_user: User = Depends(get_current_user)):
+    """The student's past chats, newest first (no messages: the list only needs titles)."""
+    if not history_ok():
+        raise HTTPException(status_code=503, detail=HISTORY_OFF)
+    docs = chat_sessions().aggregate([
+        {"$match": {"user_id": current_user.id}}, {"$sort": {"updated_at": -1}}, {"$limit": 50},
+        {"$project": {"mode": 1, "title": 1, "context": 1, "updated_at": 1, "count": {"$size": "$messages"}}}])
+    return [{"id": d["_id"], "mode": d["mode"], "title": d.get("title") or "Chat", "context": d.get("context") or {},
+             "updated_at": d["updated_at"], "message_count": d.get("count", 0)} for d in docs]
+
+
+@router.get("/sessions/{session_id}")
+def get_session(session_id: str, current_user: User = Depends(get_current_user)):
+    doc = _own_session(session_id, current_user)
+    return {"id": doc["_id"], "mode": doc["mode"], "title": doc.get("title") or "Chat",
+            "context": doc.get("context") or {},
+            "messages": [{"role": m["role"], "content": m["content"]} for m in doc.get("messages", [])]}
+
+
+@router.delete("/sessions/{session_id}", status_code=204)
+def delete_session(session_id: str, current_user: User = Depends(get_current_user)):
+    _own_session(session_id, current_user)
+    try:
+        chat_sessions().delete_one({"_id": session_id, "user_id": current_user.id})
+    except PyMongoError:
+        raise HTTPException(status_code=503, detail=HISTORY_OFF)
+    return Response(status_code=204)
+
 
 @router.post("/")
 def chat(req: ChatRequest, current_user: User = Depends(get_current_user)):
@@ -147,8 +233,11 @@ def chat(req: ChatRequest, current_user: User = Depends(get_current_user)):
             raise HTTPException(status_code=502, detail="The assistant couldn't finish an answer. Please try again.")
         if choice.finish_reason == "length":
             reply += "\n\n(Answer cut short. Ask me to continue.)"
-        return {"reply": reply, "mode": req.mode}
     except HTTPException:
         raise
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Groq API error: {str(e)}")
+        # The real error stays in the server log; the student gets a plain message (external audit, 6 Oct)
+        print(f"[chatbot] Groq call failed: {type(e).__name__}: {e}")
+        raise HTTPException(status_code=502, detail="The assistant isn't available right now. Please try again.")
+    session_id = save_exchange(req, current_user, reply)
+    return {"reply": reply, "mode": req.mode, "session_id": session_id, "saved": session_id is not None}

@@ -132,10 +132,51 @@ export default function Chatbot() {
   const bottomRef = useRef(null)
   const hasAutoSent = useRef(false)
 
+  // Saved chats (MongoDB, 6 Oct). sessionId = the chat being shown; null = a new chat, saved on its first reply
+  const [sessionId, setSessionId] = useState(null)
+  const sessionRef = useRef(null)
+  const [sessions, setSessions] = useState([])
+  const [historyNote, setHistoryNote] = useState('')    // why the list can't be shown (MongoDB off)
+  const [confirmDelete, setConfirmDelete] = useState(null)
+  // The list can be folded away for more room (her request, 6 Oct); remembered on this browser
+  const [listOpen, setListOpen] = useState(() => {
+    try { return localStorage.getItem('chatListOpen') !== '0' } catch { return true }
+  })
+  const toggleList = () => setListOpen(open => {
+    try { localStorage.setItem('chatListOpen', open ? '0' : '1') } catch { /* not saved: fine */ }
+    return !open
+  })
+  const [chatKey, setChatKey] = useState(0)            // bumped to start or open a chat
+  const pendingChat = useRef(null)                     // messages of a chat being opened
+  // What the chat is about: from "Learn →" on a job, or from the saved chat being continued
+  const [chatCtx, setChatCtx] = useState({ target_skill: preloadSkill, job_title: preloadJob })
+
   const currentMode = MODES.find(m => m.key === mode)
 
   const userSkills = useRef(null)   // loaded once from /profile/skills
   const topJobs = useRef(null)      // loaded once from /recommend/ (same list as Job Matches' default view)
+
+  const loadSessions = useCallback(async () => {
+    try {
+      const res = await api.get('/chatbot/sessions')
+      setSessions(res.data)
+      setHistoryNote('')
+    } catch (err) {
+      setHistoryNote(err.response?.status === 503 ? 'Chat history is off: MongoDB is not running, so chats are not saved.'
+        : "Couldn't load your past chats.")
+    }
+  }, [])
+
+  useEffect(() => {
+    let cancelled = false
+    api.get('/chatbot/sessions')
+      .then(res => { if (!cancelled) setSessions(res.data) })
+      .catch(err => {
+        if (!cancelled) setHistoryNote(err.response?.status === 503
+          ? 'Chat history is off: MongoDB is not running, so chats are not saved.' : "Couldn't load your past chats.")
+      })
+    return () => { cancelled = true }
+  }, [])
 
   const getContext = useCallback(async () => {
     const ctx = {}
@@ -163,10 +204,10 @@ export default function Chatbot() {
       }
     }
     if (topJobs.current?.length) ctx.matched_jobs = topJobs.current
-    if (preloadJob) ctx.job_title = preloadJob
-    if (preloadSkill) ctx.target_skill = preloadSkill
+    if (chatCtx.job_title) ctx.job_title = chatCtx.job_title
+    if (chatCtx.target_skill) ctx.target_skill = chatCtx.target_skill
     return ctx
-  }, [preloadJob, preloadSkill])
+  }, [chatCtx])
 
   const sendMessages = useCallback(async (msgs) => {
     setLoading(true)
@@ -177,8 +218,14 @@ export default function Chatbot() {
         // Only the last 20 messages: keeps each request small (backend limit is 40)
         messages: msgs.filter(m => !m.failed).slice(-20).map(m => ({ role: m.role, content: m.content })),
         ...ctx,
+        session_id: sessionRef.current,
       })
       setMessages(prev => [...prev, { role: 'assistant', content: res.data.reply }])
+      if (res.data.session_id) {
+        sessionRef.current = res.data.session_id
+        setSessionId(res.data.session_id)
+        loadSessions()                              // the new or updated chat moves to the top of the list
+      }
     } catch {
       // Mark the message that failed so it isn't re-sent with every later message
       // (otherwise one bad message, e.g. too long, would break the whole chat)
@@ -191,22 +238,20 @@ export default function Chatbot() {
     } finally {
       setLoading(false)
     }
-  }, [mode, getContext])
+  }, [mode, getContext, loadSessions])
 
+  // Start (or open) the chat each time chatKey changes: greeting first, then a saved chat's messages, or the
+  // "I want to learn X" question when the page was opened from "Learn →" on a job
   useEffect(() => {
-    const greeting = currentMode.greeting
-    const initMessages = [{ role: 'assistant', content: greeting }]
+    const initMessages = [{ role: 'assistant', content: currentMode.greeting }]
     let shouldAutoSend = false
-
-    if (preloadSkill && mode === 'skill_development' && !hasAutoSent.current) {
-      const userMsg = {
-        role: 'user',
-        content: `I want to learn ${preloadSkill}. Can you give me a learning plan?`,
-      }
-      initMessages.push(userMsg)
+    if (pendingChat.current) {
+      initMessages.push(...pendingChat.current)
+      pendingChat.current = null
+    } else if (chatCtx.target_skill && mode === 'skill_development' && !hasAutoSent.current) {
+      initMessages.push({ role: 'user', content: `I want to learn ${chatCtx.target_skill}. Can you give me a learning plan?` })
       shouldAutoSend = true
     }
-
     const timer = setTimeout(() => {
       setMessages(initMessages)
       setInput('')
@@ -215,9 +260,8 @@ export default function Chatbot() {
         sendMessages(initMessages)
       }
     }, 0)
-
     return () => clearTimeout(timer)
-  }, [mode, preloadSkill, currentMode, sendMessages])
+  }, [chatKey]) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
@@ -239,11 +283,57 @@ export default function Chatbot() {
     }
   }
 
+  // A new, empty chat in the given mode (not about a job any more)
+  const newChat = (newMode = mode) => {
+    if (loading) return
+    hasAutoSent.current = true          // never re-send "I want to learn X" in a new chat
+    sessionRef.current = null
+    setSessionId(null)
+    setChatCtx({ target_skill: null, job_title: null })
+    setMode(newMode)
+    setChatKey(k => k + 1)
+  }
+
   const switchMode = (newMode) => {
     if (newMode === mode || loading) return   // don't switch while a reply is on its way
-    hasAutoSent.current = false
-    setMode(newMode)
+    newChat(newMode)                          // a chat keeps one mode, so another mode is another chat
   }
+
+  const openSession = async (id) => {
+    if (loading || id === sessionId) return
+    try {
+      const res = await api.get(`/chatbot/sessions/${id}`)
+      pendingChat.current = res.data.messages
+      hasAutoSent.current = true
+      sessionRef.current = id
+      setSessionId(id)
+      setChatCtx({ target_skill: res.data.context?.target_skill || null, job_title: res.data.context?.job_title || null })
+      setMode(res.data.mode)
+      setChatKey(k => k + 1)
+    } catch {
+      setHistoryNote("Couldn't open that chat. Please try again.")
+    }
+  }
+
+  const deleteSession = async (id) => {
+    setConfirmDelete(null)
+    try {
+      await api.delete(`/chatbot/sessions/${id}`)
+      if (id === sessionId) newChat()
+      loadSessions()
+    } catch {
+      setHistoryNote("Couldn't delete that chat. Please try again.")
+    }
+  }
+
+  // "Learn ISTQB · Software QA Engineer" for chats started from a job, else the first question
+  const chatLabel = (s) => s.context?.target_skill
+    ? `Learn ${s.context.target_skill}${s.context.job_title ? ` · ${s.context.job_title}` : ''}` : s.title
+  const today = new Date().toDateString()
+  const groups = [
+    ['Today', sessions.filter(s => new Date(s.updated_at).toDateString() === today)],
+    ['Earlier', sessions.filter(s => new Date(s.updated_at).toDateString() !== today)],
+  ].filter(([, list]) => list.length)
 
   return (
     <div className="flex flex-col h-screen">
@@ -278,10 +368,10 @@ export default function Chatbot() {
         <div className="pb-3">
           {/* Opened from a job (6 Oct, her choice B): say which job the plan is for, with the way back beside it */}
           <div className="flex items-center justify-between gap-3 text-xs text-slate-500 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2">
-            {preloadSkill && mode === 'skill_development' ? (
+            {chatCtx.target_skill && mode === 'skill_development' ? (
               <p className="min-w-0 truncate">
-                Learning <span className="font-medium text-blue-600">{preloadSkill}</span>
-                {preloadJob && <> for <span className="font-medium text-slate-700">{preloadJob}</span></>}
+                Learning <span className="font-medium text-blue-600">{chatCtx.target_skill}</span>
+                {chatCtx.job_title && <> for <span className="font-medium text-slate-700">{chatCtx.job_title}</span></>}
               </p>
             ) : (
               <p className="min-w-0">{currentMode.description}</p>
@@ -296,45 +386,113 @@ export default function Chatbot() {
         </div>
       </PageHeader>
 
-      {/* Messages */}
-      <div className="flex-1 overflow-y-auto px-6 py-5 bg-slate-50">
-        <div className="space-y-4">
-          {messages.map((msg, idx) => (
-            <MessageBubble key={idx} msg={msg} />
-          ))}
-          {loading && <TypingIndicator />}
-          <div ref={bottomRef} />
-        </div>
-      </div>
+      <div className="flex flex-1 min-h-0">
+        {/* Past chats (her choice A, 6 Oct): always visible on the left, like ChatGPT / Claude / Gemini */}
+        {!listOpen ? (
+          <aside className="w-12 shrink-0 bg-white border-r border-slate-200 flex flex-col items-center gap-2 py-3">
+            <button onClick={toggleList} title="Show past chats" aria-label="Show past chats"
+              className="p-1.5 rounded-md hover:bg-slate-100 text-slate-400 hover:text-slate-600 transition">
+              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 5l7 7-7 7M5 5l7 7-7 7" />
+              </svg>
+            </button>
+            <button onClick={() => newChat()} disabled={loading} title="New chat" aria-label="New chat"
+              className="w-8 h-8 rounded-lg bg-blue-600 text-white text-base leading-none hover:bg-blue-700 disabled:opacity-40 disabled:cursor-not-allowed transition">
+              +
+            </button>
+          </aside>
+        ) : (
+        <aside className="w-56 shrink-0 bg-white border-r border-slate-200 flex flex-col min-h-0">
+          <div className="p-3 flex items-center gap-2">
+            <button onClick={() => newChat()} disabled={loading}
+              className="flex-1 flex items-center justify-center gap-1.5 bg-blue-600 text-white text-xs font-medium rounded-lg py-2 hover:bg-blue-700 disabled:opacity-40 disabled:cursor-not-allowed transition">
+              <span className="text-sm leading-none">+</span> New chat
+            </button>
+            <button onClick={toggleList} title="Hide past chats" aria-label="Hide past chats"
+              className="p-1.5 rounded-md hover:bg-slate-100 text-slate-400 hover:text-slate-600 transition shrink-0">
+              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
+              </svg>
+            </button>
+          </div>
+          <nav className="flex-1 overflow-y-auto px-2 pb-3" aria-label="Past chats">
+            {historyNote && <p className="text-[11px] text-amber-700 bg-amber-50 rounded-md px-2 py-1.5 mx-1 mb-2">{historyNote}</p>}
+            {!historyNote && !sessions.length && (
+              <p className="text-[11px] text-slate-400 px-2">Your chats will be saved here.</p>
+            )}
+            {groups.map(([label, list]) => (
+              <div key={label} className="mb-2">
+                <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider px-2 mt-2 mb-1">{label}</p>
+                {list.map(s => (
+                  <div key={s.id} className={`group flex items-center rounded-md ${s.id === sessionId ? 'bg-blue-50' : 'hover:bg-slate-50'}`}>
+                    {confirmDelete === s.id ? (
+                      <div className="flex items-center justify-between w-full px-2 py-1.5 text-[11px]">
+                        <span className="text-slate-600">Delete this chat?</span>
+                        <span className="flex gap-2">
+                          <button onClick={() => deleteSession(s.id)} className="font-medium text-rose-600 hover:underline">Delete</button>
+                          <button onClick={() => setConfirmDelete(null)} className="text-slate-500 hover:underline">Cancel</button>
+                        </span>
+                      </div>
+                    ) : (
+                      <>
+                        <button onClick={() => openSession(s.id)} title={chatLabel(s)}
+                          className={`flex-1 min-w-0 text-left px-2 py-1.5 text-xs truncate ${s.id === sessionId ? 'text-blue-700 font-medium' : 'text-slate-600'}`}>
+                          {chatLabel(s)}
+                        </button>
+                        <button onClick={() => setConfirmDelete(s.id)} aria-label="Delete chat"
+                          className="shrink-0 px-2 text-slate-300 hover:text-rose-500 opacity-0 group-hover:opacity-100 focus:opacity-100 transition">×</button>
+                      </>
+                    )}
+                  </div>
+                ))}
+              </div>
+            ))}
+          </nav>
+        </aside>
+        )}
 
-      {/* Input */}
-      <div className="bg-white border-t border-slate-200 px-6 py-4 shrink-0">
-        <div className="flex gap-3">
-          <textarea
-            value={input}
-            onChange={e => setInput(e.target.value)}
-            onKeyDown={handleKeyDown}
-            placeholder={currentMode.placeholder}
-            maxLength={4000}
-            rows={1}
-            className="flex-1 resize-none rounded-xl border border-slate-200 px-4 py-3 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition leading-relaxed"
-            style={{ maxHeight: '120px', overflowY: 'auto' }}
-            disabled={loading}
-          />
-          <button
-            onClick={handleSend}
-            disabled={!input.trim() || loading}
-            aria-label="Send message"
-            className="w-11 h-11 bg-blue-600 text-white rounded-xl flex items-center justify-center hover:bg-blue-700 disabled:opacity-40 disabled:cursor-not-allowed transition shrink-0 self-end"
-          >
-            {/* Heroicons v2 paper-airplane: points right, the way the message goes (v1's pointed up) */}
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75}
-                d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" />
-            </svg>
-          </button>
+        <div className="flex-1 flex flex-col min-w-0">
+        {/* Messages */}
+        <div className="flex-1 overflow-y-auto px-6 py-5 bg-slate-50">
+          <div className="space-y-4">
+            {messages.map((msg, idx) => (
+              <MessageBubble key={idx} msg={msg} />
+            ))}
+            {loading && <TypingIndicator />}
+            <div ref={bottomRef} />
+          </div>
         </div>
-        <p className="text-center text-xs text-slate-300 mt-2">Enter to send · Shift+Enter for new line</p>
+
+        {/* Input */}
+        <div className="bg-white border-t border-slate-200 px-6 py-4 shrink-0">
+          <div className="flex gap-3">
+            <textarea
+              value={input}
+              onChange={e => setInput(e.target.value)}
+              onKeyDown={handleKeyDown}
+              placeholder={currentMode.placeholder}
+              maxLength={4000}
+              rows={1}
+              className="flex-1 resize-none rounded-xl border border-slate-200 px-4 py-3 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition leading-relaxed"
+              style={{ maxHeight: '120px', overflowY: 'auto' }}
+              disabled={loading}
+            />
+            <button
+              onClick={handleSend}
+              disabled={!input.trim() || loading}
+              aria-label="Send message"
+              className="w-11 h-11 bg-blue-600 text-white rounded-xl flex items-center justify-center hover:bg-blue-700 disabled:opacity-40 disabled:cursor-not-allowed transition shrink-0 self-end"
+            >
+              {/* Heroicons v2 paper-airplane: points right, the way the message goes (v1's pointed up) */}
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75}
+                  d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" />
+              </svg>
+            </button>
+          </div>
+          <p className="text-center text-xs text-slate-300 mt-2">Enter to send · Shift+Enter for new line</p>
+        </div>
+        </div>
       </div>
     </div>
   )

@@ -16,6 +16,9 @@ async def lifespan(app: FastAPI):
     from app.routers.jobs import check_jobs_schema
     check_jobs_schema()      # the same for migrate_add_job_gone_at.py
     delete_old_codes()
+    from app.mongo import history_ok
+    if not history_ok():     # a warning, not a stop: the chatbot works without MongoDB, chats are just not saved
+        print("WARNING: MongoDB is not running, so chat history won't be saved. Start the MongoDB service.")
     from app.routers.recommend import build_job_cache
     build_job_cache()
     yield

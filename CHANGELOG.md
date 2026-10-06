@@ -3,9 +3,25 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 6 Oct 2026 — Chat history in MongoDB (hybrid database, IR §2.3.5)
+
+- (this commit) MongoDB joins PostgreSQL: `app/mongo.py` (pymongo), collection `chat_sessions`, one document per
+  conversation (user, mode, title, the job/skill it is about, messages). Settings `MONGODB_URL` / `MONGODB_DB`
+  (defaults: local install, database `skillmap`). Each reply is saved to the student's chat; a chat keeps one mode.
+  New endpoints: `GET /chatbot/sessions` (list, newest first), `GET /chatbot/sessions/{id}`, `DELETE ...`. A student
+  only ever sees, continues or deletes their own chats (someone else's id -> 404, never written to).
+- MongoDB off never breaks the chatbot: the reply still comes back, unsaved; the list says history is off; the
+  backend prints a warning at start-up instead of stopping.
+- AI Assistant page: past chats on the left (her choice A of three mock-ups), grouped Today / Earlier, "+ New chat",
+  delete with an inline confirm; « folds the list to a thin strip (» and + stay), remembered on the browser. Opening a chat restores its mode and what it was about ("Learning ISTQB for
+  Software QA Engineer"), so the answers stay personalised; it never re-sends the "I want to learn X" question.
+- Groq errors no longer show the raw error to the student (external audit): logged on the server, plain message.
+- Tests: 21 backend checks with an in-memory MongoDB (mongomock) and a fake Groq; 14 browser checks with a fake
+  backend. Setup: `pip install pymongo==4.18.2` in the backend venv.
+
 ## 6 Oct 2026 — Clearer messages when GitHub or the certificate AI can't help
 
-- (this commit) GitHub languages: the note now says why they weren't read. GitHub's hourly limit for calls without
+- (782becb) GitHub languages: the note now says why they weren't read. GitHub's hourly limit for calls without
   a key (60 an hour; 403/429 with no calls left) gets its own message; no internet / slow answer another. Saving a
   project again now retries GitHub when it has a link but no languages yet (before, only a changed project or one
   with no skills at all was read again, so "try again later" did not work for a project with skills from its text).
