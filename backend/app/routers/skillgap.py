@@ -1,3 +1,4 @@
+import numpy as np
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
@@ -8,8 +9,7 @@ from app.models.user import User
 from app.nlp.embedder import get_embedder
 from app.services.job_requirements import job_skill_items, score_job, unit_name, unit_quote
 from app.services.skill_profile import (
-    EMPTY_PROFILE_MESSAGE, MATCH_THRESHOLD,
-    build_skill_profile, normalise_rows, profile_spellings, similarity_matrix,
+    EMPTY_PROFILE_MESSAGE, build_skill_profile, match_matrix, normalise_rows, profile_spellings,
 )
 
 router = APIRouter(prefix="/skillgap", tags=["skill-gap"])
@@ -58,15 +58,17 @@ def analyse_skill_gap(
     spelling_embeddings = normalise_rows(embeddings[:len(spellings)])
     job_embeddings = normalise_rows(embeddings[len(spellings):])
 
-    # sim_matrix[j, g] = best cosine similarity between job skill j and any spelling of grad skill g;
-    # the same canonical skill ("MS SQL Server" / "SQL Server") counts as 1.0 (direct)
-    sim_matrix = similarity_matrix(job_embeddings, spelling_embeddings,
-                                   [it.key for it in items], spelling_keys, owner)  # (J, G)
+    # sim_matrix[j, g] = best cosine similarity between job skill j and any spelling of grad skill g (same
+    # canonical skill = 1.0); has_matrix[j, g] = grad skill g covers job skill j (same skill, or the relationship
+    # model when it is on, else SBERT >= 0.7): app/services/skill_profile.py match_matrix
+    sim_matrix, has_matrix = match_matrix(job_embeddings, spelling_embeddings, job_skills,
+                                          [it.key for it in items], spellings, spelling_keys, owner)  # (J, G)
 
-    best_scores  = sim_matrix.max(axis=1)            # best grad match score per job skill
-    best_indices = sim_matrix.argmax(axis=1)         # which grad skill matched best
-
-    has = best_scores >= MATCH_THRESHOLD     # the student has job skill j: same skill (A8) or SBERT >= 0.7
+    has = has_matrix.any(axis=1)
+    # which grad skill to show: the closest one that covers the skill, else (a gap) the closest one
+    best_indices = np.where(has_matrix, sim_matrix, -2.0).argmax(axis=1)
+    best_indices = np.where(has, best_indices, sim_matrix.argmax(axis=1))
+    best_scores  = sim_matrix[np.arange(len(job_skills)), best_indices]
     sc = score_job(items, has)
 
     def evidence(j_idx):
@@ -90,7 +92,7 @@ def analyse_skill_gap(
             j_idx = next(i for i in unit if has[i])
             matched.append({"job_skill": name, "ad_quote": unit_quote(items, unit), **evidence(j_idx)})
         else:
-            # A gap. No "partly covered" / "builds on" reason: below 0.7 SBERT closeness is not reliable
+            # A gap. No "partly covered" / "builds on" reason: closeness alone is not reliable
             # evidence (step 2: 9 of 60 related pairs were the same skill), and a plausible but weak
             # explanation misleads (Papenmeier et al. 2019). Closest skill kept for research only.
             j_idx = max(unit, key=lambda i: best_scores[i])

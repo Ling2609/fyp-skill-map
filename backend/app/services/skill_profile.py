@@ -16,6 +16,7 @@ from sqlalchemy.orm import Session
 from app.models.module import Module, ModuleSkill
 from app.models.profile import ADDED_BY_YOU, UserCertification, UserProject
 from app.models.user_module import UserModule
+from app.services import skill_relation
 from app.services.skill_names import canonical_key
 
 # ── Matching thresholds (SBERT cosine similarity) ─────────────────────────────
@@ -153,11 +154,45 @@ def similarity_matrix(job_vecs_normed: np.ndarray, spelling_vecs_normed: np.ndar
     return sims
 
 
+def match_matrix(job_vecs_normed: np.ndarray, spelling_vecs_normed: np.ndarray, job_names: list[str],
+                 job_keys: list[str], spellings: list[str], spelling_keys: list[str],
+                 owner: list[int]) -> tuple[np.ndarray, np.ndarray]:
+    """(sims, has), both (job skills x graduate skills). sims = best cosine over g's spellings (same skill = 1.0),
+    used to order and to name the closest skill. has[j, g] = graduate skill g covers job skill j:
+      - same canonical skill (A8), or
+      - relationship model on (app/services/skill_relation.py): cosine >= 0.55 and p_satisfies(spelling -> job
+        skill) >= the cut-off, for any spelling of g
+      - model off: cosine >= MATCH_THRESHOLD (the rule before 6 Oct)"""
+    n_grad = (max(owner) + 1) if len(owner) else 0
+    if not len(job_vecs_normed) or not len(spelling_vecs_normed):
+        shape = (len(job_vecs_normed), n_grad)
+        return np.full(shape, -1.0), np.zeros(shape, dtype=bool)
+    rows = job_vecs_normed @ spelling_vecs_normed.T                          # (job skills, spellings)
+    same = np.asarray(job_keys, dtype=object)[:, None] == np.asarray(spelling_keys, dtype=object)[None, :]
+    rows[same] = 1.0
+    if skill_relation.enabled():
+        js, ss = np.nonzero((rows >= skill_relation.CANDIDATE_FLOOR) & ~same)
+        p = skill_relation.p_satisfies([(spellings[s], job_names[j]) for j, s in zip(js, ss)])
+        has_rows = same.copy()
+        ok = p >= skill_relation.cutoff()
+        has_rows[js[ok], ss[ok]] = True
+    else:
+        has_rows = rows >= MATCH_THRESHOLD
+    owner = np.asarray(owner)
+    sims = np.full((rows.shape[0], n_grad), -1.0)
+    has = np.zeros((rows.shape[0], n_grad), dtype=bool)
+    for g in range(n_grad):
+        cols = owner == g
+        sims[:, g] = rows[:, cols].max(axis=1)
+        has[:, g] = has_rows[:, cols].any(axis=1)
+    return sims, has
+
+
 def matched_mask(spelling_vecs_normed: np.ndarray, job_skill_vecs_normed: np.ndarray,
-                 spelling_keys: list[str], owner: list[int], job_keys: list[str]) -> np.ndarray:
-    """For each job skill: does the student have it (best similarity >= MATCH_THRESHOLD)?
-    The same rule Skill Gap uses, so Job Matches and Job Detail always agree."""
-    if not len(job_skill_vecs_normed) or not len(spelling_vecs_normed):
-        return np.zeros(len(job_skill_vecs_normed), dtype=bool)
-    best = similarity_matrix(job_skill_vecs_normed, spelling_vecs_normed, job_keys, spelling_keys, owner).max(axis=1)
-    return best >= MATCH_THRESHOLD
+                 spelling_keys: list[str], owner: list[int], job_keys: list[str],
+                 spellings: list[str], job_names: list[str]) -> np.ndarray:
+    """For each job skill: does the student have it? The same rule Skill Gap uses (match_matrix), so Job Matches
+    and Job Detail always agree."""
+    _, has = match_matrix(job_skill_vecs_normed, spelling_vecs_normed, job_names, job_keys, spellings,
+                          spelling_keys, owner)
+    return has.any(axis=1) if has.size else np.zeros(len(job_skill_vecs_normed), dtype=bool)

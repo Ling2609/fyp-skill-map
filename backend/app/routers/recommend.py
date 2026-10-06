@@ -248,7 +248,8 @@ def recommend_jobs(
         if cached is None:   # removed by a cache update from another request meanwhile
             continue
         items = cached["items"]
-        has = matched_mask(grad_embeddings, cached["skill_vecs"], spelling_keys, owner, cached["skill_keys"])
+        has = matched_mask(grad_embeddings, cached["skill_vecs"], spelling_keys, owner, cached["skill_keys"],
+                           spellings, cached["skills"])
         # Stage 3A: coverage = required skills held (either-or group = 1); preferred = small ranking bonus
         sc = score_job(items, has)
         matched, total, coverage = sc["matched"], sc["total"], sc["coverage"]

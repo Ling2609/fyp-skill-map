@@ -3,9 +3,21 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 6 Oct 2026 — Relationship model can decide "has it" (off until switched on)
+
+- (this commit) The trained skill relationship model can now replace the cosine >= 0.7 rule in matching
+  (`app/services/skill_relation.py`, `skill_profile.match_matrix`). Same skill (A8) is still "has it" first; for
+  other pairs SBERT picks the candidates (cosine >= 0.55: no real match on either blind set was below 0.551) and the
+  model decides "student skill -> job skill" (p_satisfies >= 0.8, the cut-off chosen on blind set v1). Job Matches
+  and Skill Gap use the same function, so they still agree on every job (checked).
+- Off by default: only on when `RELATION_MODEL_DIR` is set in `backend/.env`. Off, or the folder missing, = the
+  old rule exactly (checked on 200 random cases). Every scored pair is saved in `data/relation_cache.json`
+  (not in git), shared by all students and tied to the model folder; `warm_relation_cache.py` fills it before a
+  demo so no page waits.
+
 ## 6 Oct 2026 — Run 5 prep: targeted training pairs (v3) and blind set v3
 
-- (this commit) Scripts only, nothing in the app changes. Run 4's errors on both blind sets were of two kinds, so
+- (f8fc5e1) Scripts only, nothing in the app changes. Run 4's errors on both blind sets were of two kinds, so
   `build_pairs_skillmap.py --targeted` picks ~400 SkillMap pairs aimed at them: "extend" (one name plus 1–3
   words, e.g. "ETL" / "ETL pipelines": the model missed these) and "sibling" (same topic, different activity word,
   e.g. "Server Administration" / "Server Migration": the model wrongly said "has it"). Picked by words, not cosine;

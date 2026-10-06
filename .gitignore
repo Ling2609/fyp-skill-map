@@ -22,3 +22,6 @@ backend/data/live_jobs_cache.json
 # SBERT vector cache (rebuilt automatically, ~20 MB)
 backend/data/embedding_cache.npz
 backend/data/embedding_cache.tmp.npz
+# Relationship model scores per skill pair (rebuilt automatically, tied to the model folder)
+backend/data/relation_cache.json
+backend/data/relation_cache.json.tmp
