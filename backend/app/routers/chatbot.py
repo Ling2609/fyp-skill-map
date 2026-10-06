@@ -8,6 +8,7 @@ Context-aware: receives user skill profile, target job, and exact skill gaps.
 Conversations are saved in MongoDB (app/mongo.py, 6 Oct): each reply is added to the student's chat session, and
 the page lists past chats to continue. If MongoDB is off, the chat still works; it is just not saved.
 """
+import re
 import uuid
 from datetime import datetime, timezone
 
@@ -23,6 +24,13 @@ from app.routers.auth import get_current_user
 router = APIRouter(prefix="/chatbot", tags=["chatbot"])
 
 MODEL = "openai/gpt-oss-120b"
+# Groq's free daily token limit is per model, and the job-ad extraction runs use the 120b one too. When it is used
+# up, the chat carries on with the smaller model of the same family, which has its own daily limit (6 Oct, her choice)
+FALLBACK_MODEL = "openai/gpt-oss-20b"
+
+
+def _is_rate_limit(e: Exception) -> bool:
+    return "rate limit" in str(e).lower() or "429" in str(e)
 
 
 def get_client() -> Groq:
@@ -118,6 +126,19 @@ def build_context_block(req: ChatRequest) -> str:
 MAX_SAVED_MESSAGES = 200      # per chat; older ones drop off (the model only ever sees the last 20)
 TITLE_CHARS = 60
 HISTORY_OFF = "Chat history isn't available right now (MongoDB is not running). Your chats are not being saved."
+
+
+def _minutes(groq_wait: str) -> str:
+    """Groq's "4m18.336s" / "1h2m" / "35.2s" -> "5 minutes" / "2 hours" / "1 minute" (rounded up)."""
+    h = re.search(r"(\d+)h", groq_wait)
+    m = re.search(r"(\d+)m", groq_wait)
+    s = re.search(r"([\d.]+)s", groq_wait)
+    total = (int(h.group(1)) * 3600 if h else 0) + (int(m.group(1)) * 60 if m else 0) + (float(s.group(1)) if s else 0)
+    mins = max(1, -(-int(total) // 60))
+    if mins >= 60:
+        hours = -(-mins // 60)
+        return f"{hours} hour{'s' if hours > 1 else ''}"
+    return f"{mins} minute{'s' if mins > 1 else ''}"
 
 
 def _now():
@@ -218,26 +239,37 @@ def chat(req: ChatRequest, current_user: User = Depends(get_current_user)):
             continue
         groq_messages.append({"role": msg.role, "content": msg.content})
 
-    try:
-        response = get_client().chat.completions.create(
-            model=MODEL,
-            messages=groq_messages,
-            temperature=0.7,
-            # reasoning shares this budget (gpt-oss): 600 cut replies mid-sentence or left none at all (F21)
-            max_completion_tokens=3000,
-            reasoning_effort="low",
-        )
+    reply, last_error = None, None
+    for model in (MODEL, FALLBACK_MODEL):
+        try:
+            response = get_client().chat.completions.create(
+                model=model,
+                messages=groq_messages,
+                temperature=0.7,
+                # reasoning shares this budget (gpt-oss): 600 cut replies mid-sentence or left none at all (F21)
+                max_completion_tokens=3000,
+                reasoning_effort="low",
+            )
+        except Exception as e:
+            # The real error stays in the server log; the student gets a plain message (external audit, 6 Oct)
+            print(f"[chatbot] Groq call failed ({model}): {type(e).__name__}: {e}")
+            last_error = e
+            if _is_rate_limit(e):
+                continue                     # this model's daily limit is used up: try the next one
+            raise HTTPException(status_code=502, detail="The assistant isn't available right now. Please try again.")
         choice = response.choices[0]
         reply = (choice.message.content or "").strip()
         if not reply:
             raise HTTPException(status_code=502, detail="The assistant couldn't finish an answer. Please try again.")
         if choice.finish_reason == "length":
             reply += "\n\n(Answer cut short. Ask me to continue.)"
-    except HTTPException:
-        raise
-    except Exception as e:
-        # The real error stays in the server log; the student gets a plain message (external audit, 6 Oct)
-        print(f"[chatbot] Groq call failed: {type(e).__name__}: {e}")
-        raise HTTPException(status_code=502, detail="The assistant isn't available right now. Please try again.")
+        if model != MODEL:
+            print(f"[chatbot] answered with {model} ({MODEL} is at its daily limit)")
+        break
+    if reply is None:
+        # Both models at their daily limit: say when to try again, not "something went wrong"
+        wait = re.search(r"try again in ([\d.hms]+)", str(last_error))
+        when = f" in about {_minutes(wait.group(1))}" if wait else " later"
+        raise HTTPException(status_code=429, detail=f"The assistant has reached its daily usage limit. Please try again{when}.")
     session_id = save_exchange(req, current_user, reply)
     return {"reply": reply, "mode": req.mode, "session_id": session_id, "saved": session_id is not None}

@@ -226,14 +226,17 @@ export default function Chatbot() {
         setSessionId(res.data.session_id)
         loadSessions()                              // the new or updated chat moves to the top of the list
       }
-    } catch {
+    } catch (err) {
       // Mark the message that failed so it isn't re-sent with every later message
       // (otherwise one bad message, e.g. too long, would break the whole chat)
+      // The daily-limit message says when to try again (429); other failures stay general
+      const text = err.response?.status === 429 && err.response.data?.detail
+        ? err.response.data.detail : 'Something went wrong. Please try again.'
       setMessages(prev => {
         const next = [...prev]
         const last = next.length - 1
         if (last >= 0 && next[last].role === 'user') next[last] = { ...next[last], failed: true }
-        return [...next, { role: 'assistant', content: 'Something went wrong. Please try again.', failed: true }]
+        return [...next, { role: 'assistant', content: text, failed: true }]
       })
     } finally {
       setLoading(false)
@@ -314,6 +317,14 @@ export default function Chatbot() {
       setHistoryNote("Couldn't open that chat. Please try again.")
     }
   }
+
+  // Opened from the Dashboard's "Continue a chat": open that chat straight away
+  const startSession = location.state?.openSession
+  useEffect(() => {
+    if (!startSession) return
+    const timer = setTimeout(() => openSession(startSession), 0)
+    return () => clearTimeout(timer)
+  }, [startSession]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const deleteSession = async (id) => {
     setConfirmDelete(null)

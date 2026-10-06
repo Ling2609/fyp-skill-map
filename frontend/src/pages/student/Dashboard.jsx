@@ -1,9 +1,24 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import api from '../../api'
 import { cached, peek, ALL_MATCHES } from '../../pageCache'
 import { useAuth } from '../../context/useAuth'
 import PageHeader from '../../components/PageHeader'
 import LevelTag from '../../components/LevelTag'
+
+// Skill names are saved as the ad wrote them, often all lower case ("business process analysis")
+const sentenceCase = (text) => (text ? text.charAt(0).toUpperCase() + text.slice(1) : text)
+
+// "today" / "6 Oct" next to a saved chat
+const chatDay = (iso) => {
+  const d = new Date(iso)
+  return d.toDateString() === new Date().toDateString() ? 'today'
+    : d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })
+}
+
+const readBasedOn = () => {
+  try { return localStorage.getItem('learnBasedOn') || '' } catch { return '' }
+}
 
 const getGreeting = () => {
   const hour = new Date().getHours()
@@ -21,6 +36,41 @@ export default function Dashboard() {
   const [emptyProfile, setEmptyProfile] = useState(false)
   const [loadError, setLoadError] = useState('')
 
+  // "Skills to learn next", counted over the matches the student chooses (6 Oct, her idea; Harper et al. 2015:
+  // users rate recommendations they can steer "much more positively"). '' = all matches, else one job category
+  const [basedOn, setBasedOn] = useState(readBasedOn)
+  const [categories, setCategories] = useState([])
+  const [learnFor, setLearnFor] = useState(() => peek('/recommend/', { ...ALL_MATCHES, category: readBasedOn() }))
+  const [chats, setChats] = useState(null)        // null = loading
+  const [chatNote, setChatNote] = useState('')
+
+  useEffect(() => {
+    cached('/jobs/subcategories').then(setCategories).catch(() => {})
+    api.get('/chatbot/sessions')
+      .then(res => setChats(res.data.slice(0, 3)))
+      .catch(err => {
+        setChats([])
+        setChatNote(err.response?.status === 503 ? 'Chat history is off (MongoDB is not running).' : '')
+      })
+  }, [])
+
+  useEffect(() => {
+    let cancelled = false
+    cached('/recommend/', { ...ALL_MATCHES, category: basedOn })
+      .then(data => { if (!cancelled) setLearnFor(data) })
+      .catch(() => { if (!cancelled) setLearnFor({ skills_to_learn: [] }) })
+    return () => { cancelled = true }
+  }, [basedOn])
+
+  const chooseBasedOn = (value) => {
+    setLearnFor(peek('/recommend/', { ...ALL_MATCHES, category: value }))   // null shows "Loading…" until it arrives
+    setBasedOn(value)
+    try { localStorage.setItem('learnBasedOn', value) } catch { /* not remembered: fine */ }
+  }
+
+  const learn = (skill) => navigate(`/chatbot?skill=${encodeURIComponent(skill)}`
+    + (basedOn ? `&job=${encodeURIComponent(basedOn)}` : ''))
+
   useEffect(() => {
     cached('/recommend/', ALL_MATCHES)
       .then(setSummary)
@@ -37,7 +87,7 @@ export default function Dashboard() {
     // The skill missing most often in the student's top matches: an action, not a vanity count.
     // Replaced "Openings you align with" (step 2, 30 Sep): with only skills you have counting,
     // that count fell to a handful and no longer led anywhere (see references.md, "Dashboard metric")
-    nextSkill: nextSkill?.skill || null,
+    nextSkill: sentenceCase(nextSkill?.skill) || null,
     nextSkillSub: nextSkill ? `missing in ${nextSkill.jobs} of your top ${nextSkill.of_top} matches`
       : topJobs.length ? 'you have every skill your top matches list' : 'no current openings yet',
     modules: profile.modules_count,
@@ -181,70 +231,76 @@ export default function Dashboard() {
           </div>
         )}
 
-        {/* Feature grid */}
-        <div className="grid grid-cols-2 gap-4">
-          {[
-            {
-              label: 'Skill Profile',
-              desc: 'Manage your modules, projects, and certifications to build your skill profile',
-              cta: 'View profile',
-              path: '/profile',
-              icon: (
-                <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                </svg>
-              ),
-            },
-            {
-              label: 'Job Recommendations',
-              desc: 'Find jobs that match your skills from the Malaysian job market',
-              cta: 'Explore jobs',
-              path: '/recommend',
-              icon: (
-                <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                </svg>
-              ),
-            },
-            {
-              label: 'AI Career Assistant',
-              desc: 'Get personalised guidance on your career and skill development',
-              cta: 'Chat now',
-              path: '/chatbot',
-              icon: (
-                <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
-                </svg>
-              ),
-            },
-          ].map(({ label, desc, cta, path, icon }) => (
-            <div
-              key={label}
-              onClick={() => navigate(path)}
-              className="bg-white rounded-xl p-5 border border-slate-200 cursor-pointer hover:border-blue-200 hover:shadow-sm transition group"
-            >
-              <div className="w-9 h-9 bg-blue-50 rounded-lg flex items-center justify-center mb-4 group-hover:bg-blue-100 transition">
-                {icon}
+        {/* Next steps (her choice A, 6 Oct): replaces four shortcut cards that repeated the sidebar */}
+        {!emptyProfile && (
+          <div className="grid grid-cols-2 gap-4">
+            <div className="bg-white rounded-xl border border-slate-200">
+              <div className="flex items-center justify-between gap-3 px-5 pt-4 pb-3 border-b border-slate-100">
+                <h2 className="text-sm font-semibold text-slate-700">Skills to learn next</h2>
+                <label className="flex items-center gap-1.5 text-xs text-slate-400 min-w-0">
+                  Based on
+                  <select value={basedOn} onChange={e => chooseBasedOn(e.target.value)}
+                    className="text-xs text-slate-700 bg-slate-50 border border-slate-200 rounded-md px-1.5 py-1 max-w-[11rem] truncate focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="">All my matches</option>
+                    {categories.map(c => <option key={c} value={c}>{c}</option>)}
+                  </select>
+                </label>
               </div>
-              <h2 className="text-sm font-semibold text-slate-800">{label}</h2>
-              <p className="text-sm text-slate-500 mt-1 leading-relaxed">{desc}</p>
-              <span className="inline-block mt-3 text-sm text-blue-600 font-medium">{cta} →</span>
+              {!learnFor ? (
+                <p className="px-5 py-4 text-xs text-slate-400">Loading…</p>
+              ) : !(learnFor.skills_to_learn || []).length ? (
+                <p className="px-5 py-4 text-sm text-slate-500">You have every required skill your top matches here ask for.</p>
+              ) : (
+                <ul className="divide-y divide-slate-50">
+                  {learnFor.skills_to_learn.map(s => (
+                    <li key={s.skill} className="flex items-center justify-between gap-3 px-5 py-2.5">
+                      <div className="min-w-0">
+                        <p className="text-sm text-slate-800 truncate">{sentenceCase(s.skill)}</p>
+                        <p className="text-xs text-slate-400">missing in {s.jobs} of your top {s.of_top} matches</p>
+                      </div>
+                      <button onClick={() => learn(s.skill)}
+                        className="text-xs text-blue-600 bg-blue-50 hover:bg-blue-100 px-2.5 py-1 rounded-full transition font-medium shrink-0">
+                        Learn →
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
-          ))}
 
-          {/* Disabled card */}
-          <div className="bg-white rounded-xl p-5 border border-slate-200 opacity-40">
-            <div className="w-9 h-9 bg-slate-100 rounded-lg flex items-center justify-center mb-4">
-              <svg className="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-              </svg>
+            <div className="bg-white rounded-xl border border-slate-200">
+              <div className="flex items-center justify-between px-5 pt-4 pb-3 border-b border-slate-100">
+                <h2 className="text-sm font-semibold text-slate-700">Continue a chat</h2>
+                <button onClick={() => navigate('/chatbot')} className="text-xs text-blue-600 font-medium hover:text-blue-700">
+                  + New chat
+                </button>
+              </div>
+              {chats === null ? (
+                <p className="px-5 py-4 text-xs text-slate-400">Loading…</p>
+              ) : !chats.length ? (
+                <p className="px-5 py-4 text-sm text-slate-500">
+                  {chatNote || 'No chats yet. Ask the AI Assistant about a skill or a career path.'}
+                </p>
+              ) : (
+                <ul className="divide-y divide-slate-50">
+                  {chats.map(c => (
+                    <li key={c.id}>
+                      <button onClick={() => navigate('/chatbot', { state: { openSession: c.id } })}
+                        className="w-full flex items-center justify-between gap-3 px-5 py-3 text-left hover:bg-slate-50 transition">
+                        <span className="text-sm text-slate-700 truncate">
+                          {c.context?.target_skill
+                            ? `Learn ${c.context.target_skill}${c.context.job_title ? ` · ${c.context.job_title}` : ''}`
+                            : c.title}
+                        </span>
+                        <span className="text-xs text-slate-400 shrink-0">{chatDay(c.updated_at)}</span>
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
-            <h2 className="text-sm font-semibold text-slate-700">Skill Gap Analysis</h2>
-            <p className="text-sm text-slate-400 mt-1 leading-relaxed">See exactly which skills you need for your target role</p>
-            <span className="inline-block mt-3 text-sm text-slate-400 font-medium">Select a job first →</span>
           </div>
-        </div>
-
+        )}
       </div>
     </div>
   )

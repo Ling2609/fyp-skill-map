@@ -3,9 +3,26 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 6 Oct 2026 — Chat never blocked by the daily limit; Dashboard "Next steps"
+
+- (this commit) Chatbot: Groq's free daily token limit is per model, and the job-ad extraction runs use
+  gpt-oss-120b too, so a big extraction day left no tokens for chatting. The chat now tries gpt-oss-120b, then
+  gpt-oss-20b (same family, its own daily limit) when 120b's limit is reached (her choice). Only when both are used
+  up does the student see "The assistant has reached its daily usage limit. Please try again in about N minutes"
+  (time read from Groq's message), not "Something went wrong". Other errors are not retried on the second model.
+  Extraction stays on 120b only (the evaluated model).
+- Dashboard: the four shortcut cards that repeated the sidebar (one greyed out) are replaced by "Next steps" (her
+  choice A of three mock-ups): "Skills to learn next" (the required skills missing most often in your top matches,
+  each with "missing in N of your top M matches" and Learn →), counted over the matches the student chooses
+  ("Based on: All my matches / a job category", remembered on the browser; Harper et al. 2015: users rate
+  recommendations they can steer much more positively), and "Continue a chat" (3 latest chats from MongoDB, opens
+  the chat). Skill names start with a capital ("Business process analysis").
+- Tests: 24 backend checks (fallback, both models limited, other errors not retried, chat history); 6 browser checks
+  on the Dashboard (category choice, remembered, Learn link, opening a chat).
+
 ## 6 Oct 2026 — Chat history in MongoDB (hybrid database, IR §2.3.5)
 
-- (this commit) MongoDB joins PostgreSQL: `app/mongo.py` (pymongo), collection `chat_sessions`, one document per
+- (b1cff24) MongoDB joins PostgreSQL: `app/mongo.py` (pymongo), collection `chat_sessions`, one document per
   conversation (user, mode, title, the job/skill it is about, messages). Settings `MONGODB_URL` / `MONGODB_DB`
   (defaults: local install, database `skillmap`). Each reply is saved to the student's chat; a chat keeps one mode.
   New endpoints: `GET /chatbot/sessions` (list, newest first), `GET /chatbot/sessions/{id}`, `DELETE ...`. A student
