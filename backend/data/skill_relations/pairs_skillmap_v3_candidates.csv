@@ -1,0 +1,801 @@
+id,pair,a,b,kind,cosine,order
+1,367,AWS Cloud Architecture,AWS cloud security,sibling,0.729,ab
+2,188,Oracle Database,Oracle Database Administration,extend,0.855,ab
+3,287,Hardware Installation,Hardware Deployment,sibling,0.642,ba
+4,246,Test Automation,Test Planning,sibling,0.613,ab
+5,324,Hardware Maintenance,Hardware debugging,sibling,0.536,ba
+6,266,Software validation,Software Documentation,sibling,0.444,ba
+7,180,Kubernetes,Kubernetes Orchestration,extend,0.797,ab
+8,325,Hardware Testing,Hardware Configuration,sibling,0.529,ba
+9,226,Database monitoring,Database Programming,sibling,0.638,ab
+10,387,Risk Analysis,Risk Development,sibling,0.769,ba
+11,248,Application Support,Application integration,sibling,0.684,ba
+12,323,Hardware Configuration,Hardware Troubleshooting,sibling,0.545,ab
+13,395,Application debugging,Application Security,sibling,0.423,ab
+14,169,Power BI Report Server,Power BI,extend,0.645,ba
+15,13,Microsoft Dynamics,Microsoft Dynamics 365FO,extend,0.814,ab
+16,396,SLA Monitoring,SLA Management,sibling,0.734,ba
+17,89,Cisco Routing,Routing,extend,0.825,ba
+18,190,Web Services,SOAP Web Services,extend,0.791,ab
+19,171,Redis,Redis caching,extend,0.673,ab
+20,53,Database Performance Tuning,Performance Tuning,extend,0.773,ba
+21,200,Switching,L2/L3 switching,extend,0.54,ab
+22,45,Playwright,Playwright Automation,extend,0.705,ab
+23,308,KPI Reporting,KPI Analysis,sibling,0.709,ba
+24,211,Infrastructure monitoring,Infrastructure Management,sibling,0.699,ba
+25,101,Fine-tuning,Model fine-tuning,extend,0.772,ab
+26,101,Model fine-tuning,Fine-tuning,extend,0.772,ba
+27,245,LAN Configuration,LAN Administration,sibling,0.713,ba
+28,116,Security Policy Development,Policy Development,extend,0.691,ba
+29,120,Network Switching,Switching,extend,0.671,ba
+30,189,.NET,C# .NET,extend,0.742,ab
+31,33,Version Control,SVN Version Control,extend,0.759,ab
+32,368,Test Case Design,Test Case Management,sibling,0.813,ab
+33,366,Database monitoring,Database Optimization,sibling,0.543,ab
+34,115,Linux Administration,Linux,extend,0.775,ba
+35,273,Business Automation,Business Reporting,sibling,0.398,ab
+36,307,Business Process Analysis,Business Process Optimization,sibling,0.747,ab
+37,256,IT Operations,IT Support,sibling,0.328,ab
+38,119,Version Control,Git Version Control,extend,0.729,ab
+39,316,Server Maintenance,Server Installation,sibling,0.467,ba
+40,340,VPN Management,VPN Configuration,sibling,0.803,ba
+41,111,Prometheus Monitoring,Prometheus,extend,0.794,ba
+42,223,Performance Management,Performance Optimization,sibling,0.647,ab
+43,250,Data Reporting,Data Integration,sibling,0.564,ba
+44,366,Database Optimization,Database monitoring,sibling,0.543,ba
+45,165,IDS/IPS configuration,IPS,extend,0.617,ba
+46,141,SSRS,SSRS Reporting,extend,0.83,ab
+47,152,Hardware Troubleshooting,Server Hardware Troubleshooting,extend,0.875,ab
+48,96,IDS/IPS configuration,IDS,extend,0.541,ba
+49,201,MES Support,MES implementation,sibling,0.736,ba
+50,159,Shell,Unix Shell Scripting,extend,0.575,ab
+51,40,Backup,Backup Restore,extend,0.765,ab
+52,107,Networking,Computer Networking,extend,0.902,ab
+53,338,API Security,API Testing,sibling,0.587,ab
+54,192,Network Capacity Planning,Capacity Planning,extend,0.786,ba
+55,369,Threat Analysis,Threat Modeling,sibling,0.869,ab
+56,196,Help Desk Support,Help Desk,extend,0.862,ba
+57,329,Business Analysis,Business Reporting,sibling,0.613,ab
+58,376,Data Analytics,Data Governance,sibling,0.385,ab
+59,151,AWS networking,Networking,extend,0.592,ba
+60,76,Agile,Agile Project Management,extend,0.774,ab
+61,270,Server Deployment,Server Troubleshooting,sibling,0.371,ab
+62,19,SQL,SQL Scripting,extend,0.721,ab
+63,302,Network installation,Network Operations,sibling,0.488,ab
+64,93,Service Desk Operations,Service Desk,extend,0.862,ba
+65,87,Linux,Linux Server,extend,0.754,ab
+66,91,Wireless,Wireless Technologies,extend,0.816,ab
+67,47,Google Cloud,Google Cloud Platform,extend,0.892,ab
+68,5,Help Desk Ticketing,Help Desk,extend,0.593,ba
+69,179,Jenkins CI/CD,CI/CD,extend,0.572,ba
+70,26,Azure SQL,Azure SQL Database,extend,0.941,ab
+71,232,Patch Management,Patch Deployment,sibling,0.805,ba
+72,38,Encryption,Encryption Technologies,extend,0.872,ab
+73,334,Test Case Development,Test Case Management,sibling,0.84,ab
+74,7,LAN/WAN,WAN,extend,0.761,ba
+75,370,Technical Design,Technical Documentation,sibling,0.558,ab
+76,88,Windows,Windows Server 2012,extend,0.426,ab
+77,385,Remote Desktop Troubleshooting,Remote Desktop Support,sibling,0.685,ba
+78,270,Server Troubleshooting,Server Deployment,sibling,0.371,ba
+79,202,SD-WAN implementation,SD-WAN troubleshooting,sibling,0.733,ab
+80,226,Database Programming,Database monitoring,sibling,0.638,ba
+81,139,Kali Linux,Linux,extend,0.579,ba
+82,133,On-page SEO,SEO,extend,0.713,ba
+83,180,Kubernetes Orchestration,Kubernetes,extend,0.797,ba
+84,288,IT Support,IT Strategy,sibling,0.377,ba
+85,161,ServiceNow,ServiceNow incident handling,extend,0.639,ab
+86,315,Database configuration,Database monitoring,sibling,0.549,ab
+87,117,Linux Administration,Unix/Linux administration,extend,0.913,ab
+88,392,Data Architecture,Data Visualization,sibling,0.412,ab
+89,218,Data Engineering,Data Reporting,sibling,0.547,ab
+90,179,CI/CD,Jenkins CI/CD,extend,0.572,ab
+91,352,Network Configuration,Network Architecture,sibling,0.695,ba
+92,254,Software Training,Software Installation,sibling,0.487,ba
+93,107,Computer Networking,Networking,extend,0.902,ba
+94,321,ERP Implementation,ERP Support,sibling,0.787,ab
+95,345,User Training,User Administration,sibling,0.546,ba
+96,124,Webpack Bundler,Webpack,extend,0.845,ba
+97,5,Help Desk,Help Desk Ticketing,extend,0.593,ab
+98,178,Microsoft 365,Microsoft 365 Exchange,extend,0.8,ab
+99,15,Mentoring,Mentoring Juniors,extend,0.836,ab
+100,374,Risk Reporting,Risk Analytics,sibling,0.746,ba
+101,324,Hardware debugging,Hardware Maintenance,sibling,0.536,ab
+102,199,Rapid Prototyping,Prototyping,extend,0.895,ba
+103,248,Application integration,Application Support,sibling,0.684,ab
+104,262,Data Reporting,Data Management,sibling,0.639,ba
+105,163,Solaris Administration,Solaris,extend,0.843,ba
+106,6,Selenium,Selenium Automation,extend,0.727,ab
+107,294,IT Troubleshooting,IT Operations,sibling,0.316,ba
+108,193,CISM Certification,CISM,extend,0.79,ba
+109,212,Database installation,Database Security,sibling,0.517,ab
+110,133,SEO,On-page SEO,extend,0.713,ab
+111,303,Network Operations,Network Monitoring,sibling,0.556,ba
+112,87,Linux Server,Linux,extend,0.754,ba
+113,203,Windows OS Installation,Windows OS Support,sibling,0.735,ab
+114,319,Infrastructure monitoring,Infrastructure Automation,sibling,0.679,ba
+115,327,Software validation,Software Implementation,sibling,0.521,ba
+116,132,Unix/Linux,Unix/Linux administration,extend,0.856,ab
+117,314,Network Maintenance,Network Testing,sibling,0.486,ab
+118,30,Apache,Apache Iceberg,extend,0.462,ab
+119,292,SQL Scripting,SQL Optimization,sibling,0.533,ba
+120,239,Data Integration,Data Engineering,sibling,0.685,ba
+121,387,Risk Development,Risk Analysis,sibling,0.769,ab
+122,17,Cisco Unified Communications,Unified Communications,extend,0.809,ba
+123,219,SAP Implementation,SAP Administration,sibling,0.803,ba
+124,12,Security Compliance,Compliance,extend,0.81,ba
+125,262,Data Management,Data Reporting,sibling,0.639,ab
+126,56,Collaboration,QA collaboration,extend,0.669,ab
+127,9,Network Switches,switches,extend,0.828,ba
+128,100,Mobile Testing,Appium Mobile Testing,extend,0.734,ab
+129,344,Sales Operations,Sales Engineering,sibling,0.757,ba
+130,304,Network Monitoring,Network Maintenance,sibling,0.628,ba
+131,241,Data Visualization,Data Modeling,sibling,0.552,ba
+132,296,Code maintenance,Code Review,sibling,0.587,ab
+133,289,Software Documentation,Software Architecture,sibling,0.398,ba
+134,82,Policy Enforcement,Password policy enforcement,extend,0.591,ab
+135,22,SEO,SEO Optimization,extend,0.818,ab
+136,364,IT Administration,IT Security,sibling,0.569,ab
+137,132,Unix/Linux administration,Unix/Linux,extend,0.856,ba
+138,75,Azure,Azure Monitor,extend,0.683,ab
+139,292,SQL Optimization,SQL Scripting,sibling,0.533,ab
+140,363,Software security,Software validation,sibling,0.559,ab
+141,276,Software Implementation,Software Training,sibling,0.566,ab
+142,351,KPI Reporting,KPI Monitoring,sibling,0.717,ba
+143,216,Functional Specification,Functional configuration,sibling,0.715,ba
+144,241,Data Modeling,Data Visualization,sibling,0.552,ab
+145,156,SIEM Integration,SIEM,extend,0.74,ba
+146,208,Database Optimization,Database Tuning,sibling,0.819,ab
+147,69,Cloud Optimization,Cloud,extend,0.682,ba
+148,253,Network Security,Network Support,sibling,0.558,ab
+149,185,ASP.NET Core MVC,ASP.NET,extend,0.596,ba
+150,363,Software validation,Software security,sibling,0.559,ba
+151,209,Server Monitoring,Server Installation,sibling,0.393,ba
+152,295,Performance Tuning,Performance Reporting,sibling,0.568,ba
+153,261,Network Implementation,Network Optimization,sibling,0.624,ab
+154,258,Predictive Analytics,Predictive Modeling,sibling,0.714,ab
+155,121,F5 Load Balancer,Load balancer,extend,0.789,ba
+156,3,OAuth 2.0,OAuth,extend,0.816,ba
+157,75,Azure Monitor,Azure,extend,0.683,ba
+158,281,Functional Testing,Functional Specification,sibling,0.65,ba
+159,137,Incident Response,Incident Response Planning,extend,0.766,ab
+160,194,Windows,Windows Imaging,extend,0.512,ab
+161,268,API Testing,API Integration,sibling,0.566,ba
+162,361,ERP Administration,ERP Support,sibling,0.754,ab
+163,60,Remote Desktop Troubleshooting,Remote Desktop,extend,0.746,ba
+164,205,ABAP debugging,ABAP Development,sibling,0.742,ba
+165,43,Red Hat,Red Hat Linux,extend,0.677,ab
+166,299,Network Architecture,Network Design,sibling,0.804,ab
+167,334,Test Case Management,Test Case Development,sibling,0.84,ba
+168,9,switches,Network Switches,extend,0.828,ab
+169,252,IT Security,IT Support,sibling,0.368,ab
+170,20,Information Security Policies,Information Security,extend,0.829,ba
+171,119,Git Version Control,Version Control,extend,0.729,ba
+172,154,Mentoring,Mentoring Engineers,extend,0.813,ab
+173,191,Test case execution,Execution,extend,0.569,ba
+174,147,End-User Support,User Support,extend,0.764,ba
+175,264,Database Programming,Database development,sibling,0.839,ba
+176,70,AWS,AWS EC2,extend,0.819,ab
+177,348,SQL Scripting,SQL Reporting,sibling,0.523,ba
+178,43,Red Hat Linux,Red Hat,extend,0.677,ba
+179,290,Application debugging,Application Monitoring,sibling,0.542,ab
+180,340,VPN Configuration,VPN Management,sibling,0.803,ab
+181,357,Data Architecture,Data validation,sibling,0.396,ab
+182,375,Network Security,Network Maintenance,sibling,0.498,ba
+183,333,Web Design,Web Security,sibling,0.58,ab
+184,95,IDS/IPS,IDS/IPS configuration,extend,0.89,ab
+185,304,Network Maintenance,Network Monitoring,sibling,0.628,ab
+186,242,User Training,User Support,sibling,0.506,ba
+187,63,Office 365,Office 365 Support,extend,0.838,ab
+188,227,Cost Management,Cost Optimization,sibling,0.66,ab
+189,352,Network Architecture,Network Configuration,sibling,0.695,ab
+190,331,Data Modeling,Data Automation,sibling,0.514,ba
+191,239,Data Engineering,Data Integration,sibling,0.685,ab
+192,197,MongoDB Administration,MongoDB,extend,0.869,ba
+193,129,Mandarin Communication,English Mandarin Communication,extend,0.948,ab
+194,202,SD-WAN troubleshooting,SD-WAN implementation,sibling,0.733,ba
+195,96,IDS,IDS/IPS configuration,extend,0.541,ab
+196,21,Oracle,Oracle PL/SQL,extend,0.79,ab
+197,167,Salesforce Sales Cloud,Salesforce,extend,0.622,ba
+198,71,Splunk,Splunk SIEM,extend,0.875,ab
+199,188,Oracle Database Administration,Oracle Database,extend,0.855,ba
+200,65,Remote Collaboration,Collaboration,extend,0.741,ba
+201,93,Service Desk,Service Desk Operations,extend,0.862,ab
+202,125,Wireless LAN,LAN,extend,0.69,ba
+203,212,Database Security,Database installation,sibling,0.517,ba
+204,97,Cloud Sales,Cloud,extend,0.627,ba
+205,379,Application architecture,Application debugging,sibling,0.357,ab
+206,77,Cybersecurity,Cybersecurity Governance,extend,0.725,ab
+207,305,Hardware Installation,Hardware debugging,sibling,0.433,ba
+208,158,Power BI gateways,Power BI,extend,0.551,ba
+209,183,Remote Desktop,Remote Desktop Support,extend,0.873,ab
+210,326,Workflow Configuration,Workflow Automation,sibling,0.624,ba
+211,114,Remote Desktop Troubleshooting,Desktop troubleshooting,extend,0.632,ba
+212,390,SIEM Integration,SIEM Management,sibling,0.74,ab
+213,309,Application Troubleshooting,Application Testing,sibling,0.591,ba
+214,16,WAN/LAN Configuration,LAN Configuration,extend,0.811,ba
+215,146,Recovery,Data Recovery,extend,0.517,ab
+216,197,MongoDB,MongoDB Administration,extend,0.869,ab
+217,382,Network Engineering,Network Programming,sibling,0.759,ab
+218,60,Remote Desktop,Remote Desktop Troubleshooting,extend,0.746,ab
+219,67,SAP,SAP ERP 6.0,extend,0.683,ab
+220,320,Application Troubleshooting,Application Security,sibling,0.413,ba
+221,338,API Testing,API Security,sibling,0.587,ba
+222,23,Wireless networking,Wireless,extend,0.799,ba
+223,29,ServiceNow,ServiceNow Integration,extend,0.8,ab
+224,318,Cost Management,Cost Analysis,sibling,0.741,ba
+225,100,Appium Mobile Testing,Mobile Testing,extend,0.734,ba
+226,389,Network Configuration,Network Engineering,sibling,0.561,ab
+227,157,MVP,MVP Architecture,extend,0.557,ab
+228,251,Database Integration,Database installation,sibling,0.622,ba
+229,97,Cloud,Cloud Sales,extend,0.627,ab
+230,397,Website Maintenance,Website development,sibling,0.578,ba
+231,198,Camstar MES,MES,extend,0.563,ba
+232,156,SIEM,SIEM Integration,extend,0.74,ab
+233,272,Cloud Deployment,Cloud Migration,sibling,0.725,ab
+234,325,Hardware Configuration,Hardware Testing,sibling,0.529,ab
+235,126,Technical Pre-sales,Pre-sales,extend,0.861,ba
+236,289,Software Architecture,Software Documentation,sibling,0.398,ab
+237,243,Network Optimization,Network Design,sibling,0.734,ba
+238,398,User Access Management,User Access Review,sibling,0.679,ba
+239,222,IT Operations,IT Governance,sibling,0.597,ba
+240,234,Software Support,Software Implementation,sibling,0.661,ba
+241,25,Database configuration,Database,extend,0.738,ba
+242,74,Business Intelligence Reporting,Business Intelligence,extend,0.82,ba
+243,229,Incident Review,Incident Management,sibling,0.689,ba
+244,237,Selenium Automation,Selenium Testing,sibling,0.723,ab
+245,54,UML,UML Modeling,extend,0.64,ab
+246,216,Functional configuration,Functional Specification,sibling,0.715,ab
+247,189,C# .NET,.NET,extend,0.742,ba
+248,275,LAN/WAN design,LAN/WAN Management,sibling,0.817,ab
+249,345,User Administration,User Training,sibling,0.546,ab
+250,168,LAN/WAN Management,WAN,extend,0.631,ba
+251,178,Microsoft 365 Exchange,Microsoft 365,extend,0.8,ba
+252,359,Software Architecture,Software programming,sibling,0.567,ab
+253,356,Sales Engineering,Sales Strategy,sibling,0.69,ab
+254,383,Compliance Reporting,Compliance Testing,sibling,0.744,ab
+255,225,Software security,Software programming,sibling,0.602,ba
+256,51,Unix Administration,Unix,extend,0.802,ba
+257,58,VMware vSphere,VMware,extend,0.847,ba
+258,229,Incident Management,Incident Review,sibling,0.689,ab
+259,245,LAN Administration,LAN Configuration,sibling,0.713,ab
+260,201,MES implementation,MES Support,sibling,0.736,ab
+261,86,Software Patching,Patching,extend,0.848,ba
+262,220,Server Troubleshooting,Server Maintenance,sibling,0.538,ba
+263,22,SEO Optimization,SEO,extend,0.818,ba
+264,44,AKS,Azure AKS,extend,0.737,ab
+265,267,Infrastructure Management,Infrastructure Automation,sibling,0.692,ba
+266,154,Mentoring Engineers,Mentoring,extend,0.813,ba
+267,224,Financial Reporting,Financial Modeling,sibling,0.58,ba
+268,135,Groovy,Groovy scripting,extend,0.709,ab
+269,263,Data Automation,Data validation,sibling,0.489,ab
+270,364,IT Security,IT Administration,sibling,0.569,ba
+271,83,Wi-Fi,Wi-Fi Administration,extend,0.697,ab
+272,148,CCIE,CCIE certification,extend,0.78,ab
+273,183,Remote Desktop Support,Remote Desktop,extend,0.873,ba
+274,342,Android Deployment,Android testing,sibling,0.505,ab
+275,78,Azure SQL,SQL,extend,0.599,ba
+276,254,Software Installation,Software Training,sibling,0.487,ab
+277,104,LAN/WAN Management,LAN,extend,0.637,ba
+278,260,Network Configuration,Network Testing,sibling,0.487,ab
+279,394,Financial Analysis,Financial Management,sibling,0.715,ab
+280,258,Predictive Modeling,Predictive Analytics,sibling,0.714,ba
+281,108,Procurement Compliance,Procurement,extend,0.795,ba
+282,317,SAP Integration,SAP Reporting,sibling,0.687,ab
+283,310,Functional configuration,Functional analysis,sibling,0.549,ba
+284,76,Agile Project Management,Agile,extend,0.774,ba
+285,244,Data Management,Data Engineering,sibling,0.689,ba
+286,354,Interface development,Interface Design,sibling,0.812,ab
+287,105,Agile Delivery,Agile,extend,0.792,ba
+288,259,ServiceNow Administration,ServiceNow Integration,sibling,0.755,ab
+289,224,Financial Modeling,Financial Reporting,sibling,0.58,ab
+290,213,Software Architecture,Software Installation,sibling,0.441,ab
+291,32,Database maintenance,Database,extend,0.661,ba
+292,285,SAP Training,SAP Configuration,sibling,0.705,ba
+293,161,ServiceNow incident handling,ServiceNow,extend,0.639,ba
+294,164,GraphQL API,GraphQL,extend,0.841,ba
+295,187,SQL Database,Azure SQL Database,extend,0.606,ab
+296,185,ASP.NET,ASP.NET Core MVC,extend,0.596,ab
+297,269,Incident Review,Incident Reporting,sibling,0.743,ba
+298,298,Roadmap Development,Roadmap Planning,sibling,0.879,ab
+299,134,Virtualization,VM Virtualization,extend,0.904,ab
+300,313,Database Integration,Database Administration,sibling,0.717,ba
+301,155,IDS/IPS,IDS/IPS monitoring,extend,0.811,ab
+302,199,Prototyping,Rapid Prototyping,extend,0.895,ab
+303,66,Nexus,Cisco Nexus,extend,0.821,ab
+304,49,Control-M Scheduling,Scheduling,extend,0.757,ba
+305,148,CCIE certification,CCIE,extend,0.78,ba
+306,99,Apache Spark,Apache,extend,0.44,ba
+307,337,Network Security,Network automation,sibling,0.47,ba
+308,131,PHP Laravel,PHP,extend,0.656,ba
+309,391,API Development,API Security,sibling,0.694,ab
+310,234,Software Implementation,Software Support,sibling,0.661,ab
+311,89,Routing,Cisco Routing,extend,0.825,ab
+312,257,Functional Testing,Functional Design,sibling,0.615,ba
+313,318,Cost Analysis,Cost Management,sibling,0.741,ab
+314,231,Release Planning,Release Management,sibling,0.851,ba
+315,280,Data Integration,Data Automation,sibling,0.642,ba
+316,343,Web Development,Web Design,sibling,0.758,ba
+317,149,Site Reliability Engineering,Reliability Engineering,extend,0.842,ba
+318,176,Kanban,Kanban methodology,extend,0.775,ab
+319,252,IT Support,IT Security,sibling,0.368,ba
+320,210,Network Support,Network documentation,sibling,0.566,ba
+321,8,SIEM,SIEM implementation,extend,0.757,ab
+322,393,Service Desk Operations,Service Desk Management,sibling,0.921,ba
+323,347,CCTV Management,CCTV maintenance,sibling,0.824,ba
+324,231,Release Management,Release Planning,sibling,0.851,ab
+325,266,Software Documentation,Software validation,sibling,0.444,ab
+326,238,Network Optimization,Network Monitoring,sibling,0.433,ba
+327,165,IPS,IDS/IPS configuration,extend,0.617,ab
+328,222,IT Governance,IT Operations,sibling,0.597,ab
+329,341,Software Engineering,Software Training,sibling,0.69,ab
+330,263,Data validation,Data Automation,sibling,0.489,ba
+331,103,Red Hat,Red Hat Enterprise Linux,extend,0.619,ab
+332,50,Apache,Apache Tomcat,extend,0.598,ab
+333,204,Network Operations,Network automation,sibling,0.571,ba
+334,311,Business Process Automation,Business Process Documentation,sibling,0.654,ab
+335,59,Storage,Storage solutions,extend,0.827,ab
+336,316,Server Installation,Server Maintenance,sibling,0.467,ab
+337,90,ServiceNow Ticketing,ServiceNow,extend,0.655,ba
+338,293,Cost Analysis,Cost Estimation,sibling,0.834,ab
+339,52,macOS,macOS Administration,extend,0.764,ab
+340,57,SQL Server Administration,SQL Server,extend,0.819,ba
+341,121,Load balancer,F5 Load Balancer,extend,0.789,ab
+342,311,Business Process Documentation,Business Process Automation,sibling,0.654,ba
+343,98,Azure Active Directory,Active Directory,extend,0.7,ba
+344,278,Project Governance,Project Deployment,sibling,0.512,ba
+345,365,Data Migration,Data Modeling,sibling,0.423,ab
+346,69,Cloud,Cloud Optimization,extend,0.682,ab
+347,386,Desktop Support,Desktop Installation,sibling,0.625,ba
+348,235,Printer configuration,Printer Maintenance,sibling,0.663,ab
+349,106,Functional Testing,Non-functional Testing,extend,0.846,ab
+350,329,Business Reporting,Business Analysis,sibling,0.613,ba
+351,46,.NET Core,.NET,extend,0.651,ba
+352,7,WAN,LAN/WAN,extend,0.761,ab
+353,106,Non-functional Testing,Functional Testing,extend,0.846,ba
+354,46,.NET,.NET Core,extend,0.651,ab
+355,42,Data Privacy Compliance,Compliance,extend,0.588,ba
+356,61,Azure Resource Manager,Azure,extend,0.671,ba
+357,208,Database Tuning,Database Optimization,sibling,0.819,ba
+358,279,Web Analytics,Web Testing,sibling,0.453,ab
+359,105,Agile,Agile Delivery,extend,0.792,ab
+360,144,Oracle,Oracle R12,extend,0.774,ab
+361,91,Wireless Technologies,Wireless,extend,0.816,ba
+362,27,Database,Database troubleshooting,extend,0.665,ab
+363,214,Backend Security,Backend Architecture,sibling,0.664,ba
+364,373,API Automation,API Security,sibling,0.576,ab
+365,175,Windows OS,Windows,extend,0.833,ba
+366,206,Network Implementation,Network automation,sibling,0.521,ba
+367,92,Application Performance Monitoring,Performance Monitoring,extend,0.863,ba
+368,400,Mobile App Development,Mobile App Architecture,sibling,0.764,ba
+369,94,RPGLE,AS400 RPGLE,extend,0.631,ab
+370,79,ITIL problem management,Problem Management,extend,0.606,ba
+371,294,IT Operations,IT Troubleshooting,sibling,0.316,ab
+372,295,Performance Reporting,Performance Tuning,sibling,0.568,ab
+373,379,Application debugging,Application architecture,sibling,0.357,ba
+374,38,Encryption Technologies,Encryption,extend,0.872,ba
+375,372,Process Optimization,Process Modeling,sibling,0.69,ba
+376,238,Network Monitoring,Network Optimization,sibling,0.433,ab
+377,221,Technical Design,Technical Specification,sibling,0.743,ab
+378,10,J2EE,Java J2EE,extend,0.822,ab
+379,140,Microsoft Teams Integration,Microsoft Teams,extend,0.862,ba
+380,39,AWS,AWS data services,extend,0.662,ab
+381,177,EIGRP routing,EIGRP,extend,0.73,ba
+382,20,Information Security,Information Security Policies,extend,0.829,ab
+383,350,Network documentation,Network Management,sibling,0.587,ab
+384,215,Database installation,Database Programming,sibling,0.542,ab
+385,144,Oracle R12,Oracle,extend,0.774,ba
+386,265,IT Infrastructure Design,IT infrastructure integration,sibling,0.785,ab
+387,181,MES implementation,MES,extend,0.643,ba
+388,142,Access Management,User Access Management,extend,0.882,ab
+389,114,Desktop troubleshooting,Remote Desktop Troubleshooting,extend,0.632,ab
+390,360,Software security,Software Maintenance,sibling,0.529,ba
+391,42,Compliance,Data Privacy Compliance,extend,0.588,ab
+392,68,Agile,Agile Coaching,extend,0.754,ab
+393,164,GraphQL,GraphQL API,extend,0.841,ab
+394,34,SAP,SAP Integration,extend,0.789,ab
+395,267,Infrastructure Automation,Infrastructure Management,sibling,0.692,ab
+396,1,ASP.NET Core MVC,ASP.NET Core,extend,0.866,ba
+397,12,Compliance,Security Compliance,extend,0.81,ab
+398,335,Workflow optimization,Workflow Configuration,sibling,0.674,ba
+399,301,Business Requirements Documentation,Business Requirements Analysis,sibling,0.769,ab
+400,204,Network automation,Network Operations,sibling,0.571,ab
+401,24,SQL Performance Tuning,Performance Tuning,extend,0.755,ba
+402,14,SD-WAN,SD-WAN troubleshooting,extend,0.769,ab
+403,305,Hardware debugging,Hardware Installation,sibling,0.433,ab
+404,354,Interface Design,Interface development,sibling,0.812,ba
+405,130,Cloud,Salesforce Sales Cloud,extend,0.59,ab
+406,279,Web Testing,Web Analytics,sibling,0.453,ba
+407,163,Solaris,Solaris Administration,extend,0.843,ab
+408,176,Kanban methodology,Kanban,extend,0.775,ba
+409,342,Android testing,Android Deployment,sibling,0.505,ba
+410,355,API Integration,API Development,sibling,0.739,ba
+411,376,Data Governance,Data Analytics,sibling,0.385,ba
+412,54,UML Modeling,UML,extend,0.64,ba
+413,155,IDS/IPS monitoring,IDS/IPS,extend,0.811,ba
+414,73,Database Administration,Oracle Database Administration,extend,0.774,ab
+415,70,AWS EC2,AWS,extend,0.819,ba
+416,40,Backup Restore,Backup,extend,0.765,ba
+417,213,Software Installation,Software Architecture,sibling,0.441,ba
+418,191,Execution,Test case execution,extend,0.569,ab
+419,28,macOS,macOS troubleshooting,extend,0.617,ab
+420,320,Application Security,Application Troubleshooting,sibling,0.413,ab
+421,370,Technical Documentation,Technical Design,sibling,0.558,ba
+422,35,Compliance,SDLC Compliance,extend,0.579,ab
+423,27,Database troubleshooting,Database,extend,0.665,ba
+424,170,SOAP API,SOAP,extend,0.704,ba
+425,355,API Development,API Integration,sibling,0.739,ab
+426,142,User Access Management,Access Management,extend,0.882,ba
+427,210,Network documentation,Network Support,sibling,0.566,ab
+428,171,Redis caching,Redis,extend,0.673,ba
+429,228,Hardware debugging,Hardware Troubleshooting,sibling,0.793,ab
+430,375,Network Maintenance,Network Security,sibling,0.498,ab
+431,168,WAN,LAN/WAN Management,extend,0.631,ab
+432,207,Workflow Design,Workflow Configuration,sibling,0.735,ba
+433,157,MVP Architecture,MVP,extend,0.557,ba
+434,78,SQL,Azure SQL,extend,0.599,ab
+435,181,MES,MES implementation,extend,0.643,ab
+436,140,Microsoft Teams,Microsoft Teams Integration,extend,0.862,ab
+437,214,Backend Architecture,Backend Security,sibling,0.664,ab
+438,336,SAP Administration,SAP Configuration,sibling,0.779,ab
+439,312,IT infrastructure integration,IT infrastructure maintenance,sibling,0.734,ab
+440,73,Oracle Database Administration,Database Administration,extend,0.774,ba
+441,95,IDS/IPS configuration,IDS/IPS,extend,0.89,ba
+442,63,Office 365 Support,Office 365,extend,0.838,ba
+443,247,SAP Support,SAP Reporting,sibling,0.708,ba
+444,90,ServiceNow,ServiceNow Ticketing,extend,0.655,ab
+445,297,Database maintenance,Database Security,sibling,0.562,ab
+446,321,ERP Support,ERP Implementation,sibling,0.787,ba
+447,130,Salesforce Sales Cloud,Cloud,extend,0.59,ba
+448,55,Azure Security Center,Azure,extend,0.68,ba
+449,138,Maven Build,Maven,extend,0.84,ba
+450,371,IDS/IPS monitoring,IDS/IPS Management,sibling,0.816,ba
+451,269,Incident Reporting,Incident Review,sibling,0.743,ab
+452,145,ORM,Eloquent ORM,extend,0.647,ab
+453,160,Trend Analysis,Market trend analysis,extend,0.867,ab
+454,230,Functional configuration,Functional Design,sibling,0.715,ab
+455,3,OAuth,OAuth 2.0,extend,0.816,ab
+456,19,SQL Scripting,SQL,extend,0.721,ba
+457,193,CISM,CISM Certification,extend,0.79,ab
+458,236,Antivirus Management,Antivirus deployment,sibling,0.778,ba
+459,290,Application Monitoring,Application debugging,sibling,0.542,ba
+460,77,Cybersecurity Governance,Cybersecurity,extend,0.725,ba
+461,166,Shell,Shell Scripting,extend,0.629,ab
+462,172,IDS/IPS,IDS,extend,0.659,ba
+463,395,Application Security,Application debugging,sibling,0.423,ba
+464,102,Ticket Management,Incident Ticket Management,extend,0.825,ab
+465,285,SAP Configuration,SAP Training,sibling,0.705,ab
+466,62,branding,Personal Branding,extend,0.87,ab
+467,255,Production Support,Production Planning,sibling,0.598,ba
+468,184,JavaScript,JavaScript ES6,extend,0.655,ab
+469,172,IDS,IDS/IPS,extend,0.659,ab
+470,378,Functional Documentation,Functional analysis,sibling,0.485,ba
+471,67,SAP ERP 6.0,SAP,extend,0.683,ba
+472,332,Database Integration,Database Tuning,sibling,0.453,ab
+473,134,VM Virtualization,Virtualization,extend,0.904,ba
+474,145,Eloquent ORM,ORM,extend,0.647,ba
+475,150,Big Data,Big Data Analytics,extend,0.816,ab
+476,169,Power BI,Power BI Report Server,extend,0.645,ab
+477,359,Software programming,Software Architecture,sibling,0.567,ba
+478,249,VPN implementation,VPN Troubleshooting,sibling,0.6,ab
+479,159,Unix Shell Scripting,Shell,extend,0.575,ba
+480,11,Scheduling,Delivery scheduling,extend,0.699,ab
+481,297,Database Security,Database maintenance,sibling,0.562,ba
+482,365,Data Modeling,Data Migration,sibling,0.423,ba
+483,64,OSPF,OSPF Protocol,extend,0.812,ab
+484,146,Data Recovery,Recovery,extend,0.517,ba
+485,228,Hardware Troubleshooting,Hardware debugging,sibling,0.793,ba
+486,242,User Support,User Training,sibling,0.506,ab
+487,31,ITIL Change Management,Change Management,extend,0.658,ba
+488,104,LAN,LAN/WAN Management,extend,0.637,ab
+489,61,Azure,Azure Resource Manager,extend,0.671,ab
+490,281,Functional Specification,Functional Testing,sibling,0.65,ab
+491,173,Software Testing Methodologies,Testing Methodologies,extend,0.891,ba
+492,18,Office 365,Office 365 administration,extend,0.853,ab
+493,153,IoT,IoT Solutions,extend,0.879,ab
+494,18,Office 365 administration,Office 365,extend,0.853,ba
+495,268,API Integration,API Testing,sibling,0.566,ab
+496,218,Data Reporting,Data Engineering,sibling,0.547,ba
+497,21,Oracle PL/SQL,Oracle,extend,0.79,ba
+498,131,PHP,PHP Laravel,extend,0.656,ab
+499,246,Test Planning,Test Automation,sibling,0.613,ba
+500,255,Production Planning,Production Support,sibling,0.598,ab
+501,313,Database Administration,Database Integration,sibling,0.717,ab
+502,335,Workflow Configuration,Workflow optimization,sibling,0.674,ab
+503,219,SAP Administration,SAP Implementation,sibling,0.803,ab
+504,374,Risk Analytics,Risk Reporting,sibling,0.746,ab
+505,327,Software Implementation,Software validation,sibling,0.521,ab
+506,123,Incident Management,Security Incident Management,extend,0.763,ab
+507,150,Big Data Analytics,Big Data,extend,0.816,ba
+508,399,SIT Testing,SIT Support,sibling,0.648,ba
+509,15,Mentoring Juniors,Mentoring,extend,0.836,ba
+510,81,SQL,Microsoft SQL,extend,0.934,ab
+511,298,Roadmap Planning,Roadmap Development,sibling,0.879,ba
+512,277,Technical Troubleshooting,Technical Support,sibling,0.549,ba
+513,389,Network Engineering,Network Configuration,sibling,0.561,ba
+514,112,MySQL,MySQL Administration,extend,0.73,ab
+515,152,Server Hardware Troubleshooting,Hardware Troubleshooting,extend,0.875,ba
+516,274,Network Testing,Network installation,sibling,0.44,ba
+517,80,Red Hat,Red Hat OpenShift,extend,0.573,ab
+518,250,Data Integration,Data Reporting,sibling,0.564,ab
+519,386,Desktop Installation,Desktop Support,sibling,0.625,ab
+520,147,User Support,End-User Support,extend,0.764,ab
+521,233,Database Migration,Database configuration,sibling,0.6,ba
+522,384,Performance Monitoring,Performance Reporting,sibling,0.796,ab
+523,200,L2/L3 switching,Switching,extend,0.54,ba
+524,2,SOAP,SOAP Web Services,extend,0.719,ab
+525,353,Agile Documentation,Agile Testing,sibling,0.603,ab
+526,85,Jenkins,Jenkins pipelines,extend,0.702,ab
+527,308,KPI Analysis,KPI Reporting,sibling,0.709,ab
+528,348,SQL Reporting,SQL Scripting,sibling,0.523,ab
+529,110,S/4HANA,SAP S/4HANA,extend,0.633,ab
+530,247,SAP Reporting,SAP Support,sibling,0.708,ab
+531,286,Application Security,Application Development,sibling,0.603,ba
+532,283,Network Management,Network Support,sibling,0.633,ab
+533,86,Patching,Software Patching,extend,0.848,ab
+534,122,Virtual Machines,Azure Virtual Machines,extend,0.704,ab
+535,391,API Security,API Development,sibling,0.694,ba
+536,8,SIEM implementation,SIEM,extend,0.757,ba
+537,26,Azure SQL Database,Azure SQL,extend,0.941,ba
+538,278,Project Deployment,Project Governance,sibling,0.512,ab
+539,227,Cost Optimization,Cost Management,sibling,0.66,ba
+540,39,AWS data services,AWS,extend,0.662,ba
+541,128,End-User Training,User Training,extend,0.805,ba
+542,353,Agile Testing,Agile Documentation,sibling,0.603,ba
+543,287,Hardware Deployment,Hardware Installation,sibling,0.642,ab
+544,94,AS400 RPGLE,RPGLE,extend,0.631,ba
+545,331,Data Automation,Data Modeling,sibling,0.514,ab
+546,72,SAP HANA,SAP,extend,0.751,ba
+547,384,Performance Reporting,Performance Monitoring,sibling,0.796,ba
+548,282,Database Security,Database Optimization,sibling,0.501,ba
+549,368,Test Case Management,Test Case Design,sibling,0.813,ba
+550,128,User Training,End-User Training,extend,0.805,ab
+551,56,QA collaboration,Collaboration,extend,0.669,ba
+552,174,IT Project Coordination,Project Coordination,extend,0.874,ba
+553,207,Workflow Configuration,Workflow Design,sibling,0.735,ab
+554,32,Database,Database maintenance,extend,0.661,ab
+555,51,Unix,Unix Administration,extend,0.802,ab
+556,28,macOS troubleshooting,macOS,extend,0.617,ba
+557,240,Data Governance,Data Management,sibling,0.623,ab
+558,211,Infrastructure Management,Infrastructure monitoring,sibling,0.699,ab
+559,301,Business Requirements Analysis,Business Requirements Documentation,sibling,0.769,ba
+560,182,.NET,ASP.NET Web Forms,extend,0.407,ab
+561,221,Technical Specification,Technical Design,sibling,0.743,ba
+562,377,Hardware Configuration,Hardware Deployment,sibling,0.672,ab
+563,49,Scheduling,Control-M Scheduling,extend,0.757,ab
+564,98,Active Directory,Azure Active Directory,extend,0.7,ab
+565,209,Server Installation,Server Monitoring,sibling,0.393,ab
+566,293,Cost Estimation,Cost Analysis,sibling,0.834,ba
+567,125,LAN,Wireless LAN,extend,0.69,ab
+568,243,Network Design,Network Optimization,sibling,0.734,ab
+569,68,Agile Coaching,Agile,extend,0.754,ba
+570,300,Software Documentation,Software Configuration,sibling,0.506,ba
+571,110,SAP S/4HANA,S/4HANA,extend,0.633,ba
+572,306,VPN implementation,VPN Configuration,sibling,0.807,ba
+573,143,Wireless LAN,Wireless,extend,0.736,ba
+574,122,Azure Virtual Machines,Virtual Machines,extend,0.704,ba
+575,264,Database development,Database Programming,sibling,0.839,ab
+576,291,Client Training,Client Support,sibling,0.668,ba
+577,170,SOAP,SOAP API,extend,0.704,ab
+578,349,Pre-sales Engineering,Pre-sales support,sibling,0.747,ab
+579,35,SDLC Compliance,Compliance,extend,0.579,ba
+580,349,Pre-sales support,Pre-sales Engineering,sibling,0.747,ba
+581,31,Change Management,ITIL Change Management,extend,0.658,ab
+582,37,Service Management,ITIL Service Management,extend,0.683,ab
+583,4,DNS Configuration,DNS,extend,0.83,ba
+584,385,Remote Desktop Support,Remote Desktop Troubleshooting,sibling,0.685,ab
+585,118,Routing protocols,Routing,extend,0.781,ba
+586,284,Network installation,Network documentation,sibling,0.481,ba
+587,11,Delivery scheduling,Scheduling,extend,0.699,ba
+588,174,Project Coordination,IT Project Coordination,extend,0.874,ab
+589,343,Web Design,Web Development,sibling,0.758,ab
+590,116,Policy Development,Security Policy Development,extend,0.691,ab
+591,127,AWS CloudFormation,AWS,extend,0.565,ba
+592,62,Personal Branding,branding,extend,0.87,ba
+593,232,Patch Deployment,Patch Management,sibling,0.805,ab
+594,265,IT infrastructure integration,IT Infrastructure Design,sibling,0.785,ba
+595,225,Software programming,Software security,sibling,0.602,ab
+596,315,Database monitoring,Database configuration,sibling,0.549,ba
+597,337,Network automation,Network Security,sibling,0.47,ab
+598,160,Market trend analysis,Trend Analysis,extend,0.867,ba
+599,103,Red Hat Enterprise Linux,Red Hat,extend,0.619,ba
+600,314,Network Testing,Network Maintenance,sibling,0.486,ba
+601,346,Data Governance,Data Architecture,sibling,0.496,ba
+602,217,Network Implementation,Network Design,sibling,0.762,ba
+603,271,Server Deployment,Server Migration,sibling,0.641,ab
+604,341,Software Training,Software Engineering,sibling,0.69,ba
+605,85,Jenkins pipelines,Jenkins,extend,0.702,ba
+606,282,Database Optimization,Database Security,sibling,0.501,ab
+607,244,Data Engineering,Data Management,sibling,0.689,ab
+608,66,Cisco Nexus,Nexus,extend,0.821,ba
+609,65,Collaboration,Remote Collaboration,extend,0.741,ab
+610,273,Business Reporting,Business Automation,sibling,0.398,ba
+611,36,Encryption,SSL/TLS Encryption,extend,0.627,ab
+612,249,VPN Troubleshooting,VPN implementation,sibling,0.6,ba
+613,44,Azure AKS,AKS,extend,0.737,ba
+614,372,Process Modeling,Process Optimization,sibling,0.69,ab
+615,346,Data Architecture,Data Governance,sibling,0.496,ab
+616,124,Webpack,Webpack Bundler,extend,0.845,ab
+617,30,Apache Iceberg,Apache,extend,0.462,ba
+618,123,Security Incident Management,Incident Management,extend,0.763,ba
+619,158,Power BI,Power BI gateways,extend,0.551,ab
+620,186,Postman API Testing,API Testing,extend,0.65,ba
+621,323,Hardware Troubleshooting,Hardware Configuration,sibling,0.545,ba
+622,10,Java J2EE,J2EE,extend,0.822,ba
+623,251,Database installation,Database Integration,sibling,0.622,ab
+624,166,Shell Scripting,Shell,extend,0.629,ba
+625,307,Business Process Optimization,Business Process Analysis,sibling,0.747,ba
+626,1,ASP.NET Core,ASP.NET Core MVC,extend,0.866,ab
+627,272,Cloud Migration,Cloud Deployment,sibling,0.725,ba
+628,277,Technical Support,Technical Troubleshooting,sibling,0.549,ab
+629,83,Wi-Fi Administration,Wi-Fi,extend,0.697,ba
+630,192,Capacity Planning,Network Capacity Planning,extend,0.786,ab
+631,357,Data validation,Data Architecture,sibling,0.396,ba
+632,388,Server Monitoring,Server Troubleshooting,sibling,0.564,ab
+633,356,Sales Strategy,Sales Engineering,sibling,0.69,ba
+634,319,Infrastructure Automation,Infrastructure monitoring,sibling,0.679,ab
+635,153,IoT Solutions,IoT,extend,0.879,ba
+636,55,Azure,Azure Security Center,extend,0.68,ab
+637,260,Network Testing,Network Configuration,sibling,0.487,ba
+638,92,Performance Monitoring,Application Performance Monitoring,extend,0.863,ab
+639,257,Functional Design,Functional Testing,sibling,0.615,ab
+640,339,Network performance monitoring,Network performance optimization,sibling,0.696,ab
+641,2,SOAP Web Services,SOAP,extend,0.719,ba
+642,362,Network Programming,Network Management,sibling,0.718,ba
+643,81,Microsoft SQL,SQL,extend,0.934,ba
+644,223,Performance Optimization,Performance Management,sibling,0.647,ba
+645,371,IDS/IPS Management,IDS/IPS monitoring,sibling,0.816,ab
+646,400,Mobile App Architecture,Mobile App Development,sibling,0.764,ab
+647,381,Business Architecture,Business Documentation,sibling,0.452,ab
+648,358,IT Infrastructure Management,IT Infrastructure Design,sibling,0.824,ba
+649,373,API Security,API Automation,sibling,0.576,ba
+650,59,Storage solutions,Storage,extend,0.827,ba
+651,6,Selenium Automation,Selenium,extend,0.727,ba
+652,284,Network documentation,Network installation,sibling,0.481,ab
+653,129,English Mandarin Communication,Mandarin Communication,extend,0.948,ba
+654,271,Server Migration,Server Deployment,sibling,0.641,ba
+655,240,Data Management,Data Governance,sibling,0.623,ba
+656,330,Server Migration,Server Configuration,sibling,0.537,ba
+657,196,Help Desk,Help Desk Support,extend,0.862,ab
+658,198,MES,Camstar MES,extend,0.563,ab
+659,33,SVN Version Control,Version Control,extend,0.759,ba
+660,306,VPN Configuration,VPN implementation,sibling,0.807,ab
+661,381,Business Documentation,Business Architecture,sibling,0.452,ba
+662,382,Network Programming,Network Engineering,sibling,0.759,ba
+663,322,CRM implementation,CRM Integration,sibling,0.765,ab
+664,79,Problem Management,ITIL problem management,extend,0.606,ab
+665,57,SQL Server,SQL Server Administration,extend,0.819,ab
+666,25,Database,Database configuration,extend,0.738,ab
+667,47,Google Cloud Platform,Google Cloud,extend,0.892,ba
+668,253,Network Support,Network Security,sibling,0.558,ba
+669,261,Network Optimization,Network Implementation,sibling,0.624,ba
+670,71,Splunk SIEM,Splunk,extend,0.875,ba
+671,351,KPI Monitoring,KPI Reporting,sibling,0.717,ab
+672,369,Threat Modeling,Threat Analysis,sibling,0.869,ba
+673,205,ABAP Development,ABAP debugging,sibling,0.742,ab
+674,299,Network Design,Network Architecture,sibling,0.804,ba
+675,220,Server Maintenance,Server Troubleshooting,sibling,0.538,ab
+676,300,Software Configuration,Software Documentation,sibling,0.506,ab
+677,135,Groovy scripting,Groovy,extend,0.709,ba
+678,276,Software Training,Software Implementation,sibling,0.566,ba
+679,388,Server Troubleshooting,Server Monitoring,sibling,0.564,ba
+680,127,AWS,AWS CloudFormation,extend,0.565,ab
+681,397,Website development,Website Maintenance,sibling,0.578,ab
+682,136,Global Collaboration,Collaboration,extend,0.791,ba
+683,74,Business Intelligence,Business Intelligence Reporting,extend,0.82,ab
+684,235,Printer Maintenance,Printer configuration,sibling,0.663,ba
+685,330,Server Configuration,Server Migration,sibling,0.537,ab
+686,203,Windows OS Support,Windows OS Installation,sibling,0.735,ba
+687,256,IT Support,IT Operations,sibling,0.328,ba
+688,336,SAP Configuration,SAP Administration,sibling,0.779,ba
+689,109,Control-M Scheduling,Control-M,extend,0.514,ba
+690,162,Networking,Wireless networking,extend,0.728,ab
+691,291,Client Support,Client Training,sibling,0.668,ab
+692,109,Control-M,Control-M Scheduling,extend,0.514,ab
+693,34,SAP Integration,SAP,extend,0.789,ba
+694,138,Maven,Maven Build,extend,0.84,ab
+695,206,Network automation,Network Implementation,sibling,0.521,ab
+696,162,Wireless networking,Networking,extend,0.728,ba
+697,392,Data Visualization,Data Architecture,sibling,0.412,ba
+698,118,Routing,Routing protocols,extend,0.781,ab
+699,29,ServiceNow Integration,ServiceNow,extend,0.8,ba
+700,167,Salesforce,Salesforce Sales Cloud,extend,0.622,ab
+701,113,Procurement,Procurement Coordination,extend,0.855,ab
+702,286,Application Development,Application Security,sibling,0.603,ab
+703,328,Business Documentation,Business Analysis,sibling,0.513,ba
+704,139,Linux,Kali Linux,extend,0.579,ab
+705,195,XML,XML Publisher,extend,0.705,ab
+706,237,Selenium Testing,Selenium Automation,sibling,0.723,ba
+707,84,Data-driven Decision Making,Decision Making,extend,0.605,ba
+708,398,User Access Review,User Access Management,sibling,0.679,ab
+709,274,Network installation,Network Testing,sibling,0.44,ab
+710,88,Windows Server 2012,Windows,extend,0.426,ba
+711,362,Network Management,Network Programming,sibling,0.718,ab
+712,312,IT infrastructure maintenance,IT infrastructure integration,sibling,0.734,ba
+713,37,ITIL Service Management,Service Management,extend,0.683,ba
+714,332,Database Tuning,Database Integration,sibling,0.453,ba
+715,350,Network Management,Network documentation,sibling,0.587,ba
+716,137,Incident Response Planning,Incident Response,extend,0.766,ba
+717,344,Sales Engineering,Sales Operations,sibling,0.757,ab
+718,108,Procurement,Procurement Compliance,extend,0.795,ab
+719,182,ASP.NET Web Forms,.NET,extend,0.407,ba
+720,190,SOAP Web Services,Web Services,extend,0.791,ba
+721,84,Decision Making,Data-driven Decision Making,extend,0.605,ab
+722,187,Azure SQL Database,SQL Database,extend,0.606,ba
+723,326,Workflow Automation,Workflow Configuration,sibling,0.624,ab
+724,233,Database configuration,Database Migration,sibling,0.6,ab
+725,399,SIT Support,SIT Testing,sibling,0.648,ab
+726,377,Hardware Deployment,Hardware Configuration,sibling,0.672,ba
+727,52,macOS Administration,macOS,extend,0.764,ba
+728,390,SIEM Management,SIEM Integration,sibling,0.74,ba
+729,41,LAN/WAN networking,WAN,extend,0.638,ba
+730,149,Reliability Engineering,Site Reliability Engineering,extend,0.842,ab
+731,117,Unix/Linux administration,Linux Administration,extend,0.913,ba
+732,339,Network performance optimization,Network performance monitoring,sibling,0.696,ba
+733,24,Performance Tuning,SQL Performance Tuning,extend,0.755,ab
+734,36,SSL/TLS Encryption,Encryption,extend,0.627,ba
+735,361,ERP Support,ERP Administration,sibling,0.754,ba
+736,99,Apache,Apache Spark,extend,0.44,ab
+737,296,Code Review,Code maintenance,sibling,0.587,ba
+738,186,API Testing,Postman API Testing,extend,0.65,ab
+739,317,SAP Reporting,SAP Integration,sibling,0.687,ba
+740,322,CRM Integration,CRM implementation,sibling,0.765,ba
+741,151,Networking,AWS networking,extend,0.592,ab
+742,283,Network Support,Network Management,sibling,0.633,ba
+743,41,WAN,LAN/WAN networking,extend,0.638,ab
+744,194,Windows Imaging,Windows,extend,0.512,ba
+745,64,OSPF Protocol,OSPF,extend,0.812,ba
+746,275,LAN/WAN Management,LAN/WAN design,sibling,0.817,ba
+747,236,Antivirus deployment,Antivirus Management,sibling,0.778,ab
+748,23,Wireless,Wireless networking,extend,0.799,ab
+749,136,Collaboration,Global Collaboration,extend,0.791,ab
+750,310,Functional analysis,Functional configuration,sibling,0.549,ab
+751,177,EIGRP,EIGRP routing,extend,0.73,ab
+752,184,JavaScript ES6,JavaScript,extend,0.655,ba
+753,50,Apache Tomcat,Apache,extend,0.598,ba
+754,195,XML Publisher,XML,extend,0.705,ba
+755,48,Scheduling,Shift Scheduling,extend,0.736,ab
+756,396,SLA Management,SLA Monitoring,sibling,0.734,ab
+757,173,Testing Methodologies,Software Testing Methodologies,extend,0.891,ab
+758,111,Prometheus,Prometheus Monitoring,extend,0.794,ab
+759,80,Red Hat OpenShift,Red Hat,extend,0.573,ba
+760,383,Compliance Testing,Compliance Reporting,sibling,0.744,ba
+761,175,Windows,Windows OS,extend,0.833,ab
+762,393,Service Desk Management,Service Desk Operations,sibling,0.921,ab
+763,358,IT Infrastructure Design,IT Infrastructure Management,sibling,0.824,ab
+764,82,Password policy enforcement,Policy Enforcement,extend,0.591,ba
+765,4,DNS,DNS Configuration,extend,0.83,ab
+766,143,Wireless,Wireless LAN,extend,0.736,ab
+767,302,Network Operations,Network installation,sibling,0.488,ba
+768,230,Functional Design,Functional configuration,sibling,0.715,ba
+769,113,Procurement Coordination,Procurement,extend,0.855,ba
+770,215,Database Programming,Database installation,sibling,0.542,ba
+771,394,Financial Management,Financial Analysis,sibling,0.715,ba
+772,360,Software Maintenance,Software security,sibling,0.529,ab
+773,333,Web Security,Web Design,sibling,0.58,ba
+774,367,AWS cloud security,AWS Cloud Architecture,sibling,0.729,ba
+775,102,Incident Ticket Management,Ticket Management,extend,0.825,ba
+776,288,IT Strategy,IT Support,sibling,0.377,ab
+777,14,SD-WAN troubleshooting,SD-WAN,extend,0.769,ba
+778,309,Application Testing,Application Troubleshooting,sibling,0.591,ab
+779,259,ServiceNow Integration,ServiceNow Administration,sibling,0.755,ba
+780,120,Switching,Network Switching,extend,0.671,ab
+781,112,MySQL Administration,MySQL,extend,0.73,ba
+782,48,Shift Scheduling,Scheduling,extend,0.736,ba
+783,16,LAN Configuration,WAN/LAN Configuration,extend,0.811,ab
+784,17,Unified Communications,Cisco Unified Communications,extend,0.809,ab
+785,217,Network Design,Network Implementation,sibling,0.762,ab
+786,303,Network Monitoring,Network Operations,sibling,0.556,ab
+787,45,Playwright Automation,Playwright,extend,0.705,ba
+788,280,Data Automation,Data Integration,sibling,0.642,ab
+789,380,UAT Support,UAT Testing,sibling,0.752,ab
+790,347,CCTV maintenance,CCTV Management,sibling,0.824,ab
+791,53,Performance Tuning,Database Performance Tuning,extend,0.773,ab
+792,378,Functional analysis,Functional Documentation,sibling,0.485,ab
+793,72,SAP,SAP HANA,extend,0.751,ab
+794,115,Linux,Linux Administration,extend,0.775,ab
+795,126,Pre-sales,Technical Pre-sales,extend,0.861,ab
+796,141,SSRS Reporting,SSRS,extend,0.83,ba
+797,380,UAT Testing,UAT Support,sibling,0.752,ba
+798,13,Microsoft Dynamics 365FO,Microsoft Dynamics,extend,0.814,ba
+799,58,VMware,VMware vSphere,extend,0.847,ab
+800,328,Business Analysis,Business Documentation,sibling,0.513,ab

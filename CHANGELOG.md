@@ -3,9 +3,23 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 6 Oct 2026 — Run 5 prep: targeted training pairs (v3) and blind set v3
+
+- (this commit) Scripts only, nothing in the app changes. Run 4's errors on both blind sets were of two kinds, so
+  `build_pairs_skillmap.py --targeted` picks ~400 SkillMap pairs aimed at them: "extend" (one name plus 1–3
+  words, e.g. "ETL" / "ETL pipelines": the model missed these) and "sibling" (same topic, different activity word,
+  e.g. "Server Administration" / "Server Migration": the model wrongly said "has it"). Picked by words, not cosine;
+  a vague short side ("Systems", "Reporting") is skipped; at most 3 pairs per skill. Skills of both blind sets
+  (v1, v2) and pairs already in the v2 candidates are left out. Output: `pairs_skillmap_v3_candidates.csv`
+  (800 rows to label, both orders).
+- `merge_training_labels.py --set v3` (v3_labels → `pairs_skillmap_v3.csv`); the leak check now covers both blind
+  sets. `--set v2` (default) gives the same file as before (checked).
+- `sample_reference_pairs.py --set v3`: a third blind set, same bands as v2, leaving out skills of all three
+  training files and pairs of v1 and v2. Notebook note: the run-5 file list.
+
 ## 6 Oct 2026 — Skill names in Title Case on every page
 
-- (this commit) One helper, `frontend/src/skillName.js`, shows skill names the same way everywhere: Dashboard, Job
+- (5b2442f) One helper, `frontend/src/skillName.js`, shows skill names the same way everywhere: Dashboard, Job
   Detail (missing skills, skills you have, "via …", nice-to-have chips), Job Matches card chips and Skill Profile
   chips. Display only: saved names, matching and quotes from the ad are unchanged ("From the ad: …" stays word for
   word). Brands written in lower case on purpose are kept ("dbt", "shadcn/ui": the only 2 among 2,611 live job

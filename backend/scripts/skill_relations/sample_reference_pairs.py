@@ -22,6 +22,10 @@ Second, fresh blind test set (3 Oct): the model settings were chosen after study
 so a confirmation needs NEW pairs. Its skills may repeat test-set skills (the model never trained on those), but
 skills of every training CSV and every pair already in reference_pairs_v1 are left out:
   python scripts/skill_relations/sample_reference_pairs.py --set v2
+
+Third blind set (run 5, 6 Oct): the p_satisfies cut-off is now chosen on v1 + v2, so the run-5 model is confirmed
+on new pairs again. Same bands as v2; skills of all three training CSVs and pairs of v1 and v2 are left out:
+  python scripts/skill_relations/sample_reference_pairs.py --set v3
 """
 import argparse
 import os
@@ -52,9 +56,13 @@ JUDGE_COLUMNS = ["label_claude", "label_gpt_oss", "label_qwen", "author_check"]
 # Second test set: about 150 pairs, the same bands (the 0.85+ band has few candidates left)
 BANDS_V2 = [("0.85+", 0.85, 1.01, 15), ("0.75-0.85", 0.75, 0.85, 35), ("0.65-0.75", 0.65, 0.75, 45),
             ("0.55-0.65", 0.55, 0.65, 40), ("<0.55", -1.0, 0.55, 15)]
-SETS = {"v1": dict(train=[TRAIN_CSV], bands=BANDS, seed=SEED, out=OUT, skip_pairs_of=None),
+V2_OUT = "data/skill_relations/reference_pairs_v2.csv"
+SETS = {"v1": dict(train=[TRAIN_CSV], bands=BANDS, seed=SEED, out=OUT, skip_pairs_of=[]),
         "v2": dict(train=[TRAIN_CSV, "data/skill_relations/pairs_skillmap_v2.csv"], bands=BANDS_V2, seed=7,
-                   out="data/skill_relations/reference_pairs_v2.csv", skip_pairs_of=OUT)}
+                   out=V2_OUT, skip_pairs_of=[OUT]),
+        "v3": dict(train=[TRAIN_CSV, "data/skill_relations/pairs_skillmap_v2.csv",
+                          "data/skill_relations/pairs_skillmap_v3.csv"], bands=BANDS_V2, seed=11,
+                   out="data/skill_relations/reference_pairs_v3.csv", skip_pairs_of=[OUT, V2_OUT])}
 
 
 def sample_pairs(mod_names, mod_keys, job_names, job_keys, sims, seed=SEED, bands=BANDS, skip=frozenset()):
@@ -91,7 +99,7 @@ def sample_pairs(mod_names, mod_keys, job_names, job_keys, sims, seed=SEED, band
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--set", choices=sorted(SETS), default="v1", help="v1 = the first test set, v2 = the fresh one")
+    ap.add_argument("--set", choices=sorted(SETS), default="v1", help="v1 = the first test set, v2 and v3 = fresh ones")
     ap.add_argument("--out", help="output CSV (default depends on --set)")
     args = ap.parse_args()
     cfg = SETS[args.set]
@@ -108,9 +116,9 @@ def main():
     train = pd.concat([pd.read_csv(f) for f in cfg["train"]])
     seen = {canonical_key(n) for n in pd.concat([train.a, train.b]).astype(str)}
     skip = set()
-    if cfg["skip_pairs_of"]:                     # pairs of the first test set are never picked again
-        old = pd.read_csv(cfg["skip_pairs_of"])
-        skip = {(canonical_key(a), canonical_key(b)) for a, b in zip(old.a.astype(str), old.b.astype(str))}
+    for path in cfg["skip_pairs_of"]:            # pairs of earlier test sets are never picked again
+        old = pd.read_csv(path)
+        skip |= {(canonical_key(a), canonical_key(b)) for a, b in zip(old.a.astype(str), old.b.astype(str))}
 
     db = SessionLocal()
     try:
@@ -155,7 +163,7 @@ def main():
     os.makedirs(os.path.dirname(out), exist_ok=True)
     df.to_csv(out, index=False, encoding="utf-8")
 
-    print(f"\nWrote {len(df)} pairs to {out}" + (f" ({len(skip)} pairs of the first test set left out)" if skip else ""))
+    print(f"\nWrote {len(df)} pairs to {out}" + (f" ({len(skip)} pairs of earlier test sets left out)" if skip else ""))
     print(f"{'band':<10} {'picked':>7} {'wanted':>7} {'population':>11}")
     for band, _, _, want in cfg["bands"]:
         print(f"{band:<10} {int((df.band == band).sum()):>7} {want:>7} {population[band]:>11,}")

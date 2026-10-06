@@ -14,12 +14,16 @@ like v1 (Levy et al. 2015), following one fixed side. The final test is the refe
 Works on partial labels too (only rows both judges have answered), so it can be tried before labelling ends.
 
 Two checks stop the script with an error instead of writing a bad file: a label file with duplicate or unknown ids,
-and any training pair that contains a skill of the 400 reference pairs (the test set must stay unseen; the
+and any training pair that contains a skill of the blind test sets (the test set must stay unseen; the
 candidates were built without them, this checks it again on the final output).
 
 Usage (from backend/, venv active):
   python scripts/skill_relations/merge_training_labels.py      # -> data/skill_relations/pairs_skillmap_v2.csv
+  python scripts/skill_relations/merge_training_labels.py --set v3   # run 5: v3_labels -> pairs_skillmap_v3.csv
+
+The leakage check covers the skills of BOTH blind sets (reference_pairs_v1 and _v2) for every set.
 """
+import argparse
 import hashlib
 import os
 import sys
@@ -28,10 +32,12 @@ import pandas as pd
 
 sys.path.append(".")
 
-CANDIDATES = "data/skill_relations/pairs_skillmap_v2_candidates.csv"
-REFERENCE_CSV = "data/skill_relations/reference_pairs_v1.csv"
-LABEL_DIR = "data/skill_relations/v2_labels"
-OUT = "data/skill_relations/pairs_skillmap_v2.csv"
+D = "data/skill_relations/"
+SETS = {"v2": dict(candidates=D + "pairs_skillmap_v2_candidates.csv", labels=D + "v2_labels",
+                   out=D + "pairs_skillmap_v2.csv"),
+        "v3": dict(candidates=D + "pairs_skillmap_v3_candidates.csv", labels=D + "v3_labels",
+                   out=D + "pairs_skillmap_v3.csv")}
+REFERENCE_CSVS = [D + "reference_pairs_v1.csv", D + "reference_pairs_v2.csv"]
 JUDGES = ["gpt_oss", "qwen"]
 MIRROR = {"SAME": "SAME", "NARROWER": "BROADER", "BROADER": "NARROWER", "RELATED": "RELATED",
           "DIFFERENT": "DIFFERENT"}
@@ -45,9 +51,12 @@ def split_of(key: str) -> str:
 
 
 def main():
-    cand = pd.read_csv(CANDIDATES)
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--set", choices=sorted(SETS), default="v2", help="which training set's labels to merge")
+    cfg = SETS[ap.parse_args().set]
+    cand = pd.read_csv(cfg["candidates"])
     for j in JUDGES:
-        lab = pd.read_csv(os.path.join(LABEL_DIR, f"label_{j}.csv"))[["id", f"label_{j}"]]
+        lab = pd.read_csv(os.path.join(cfg["labels"], f"label_{j}.csv"))[["id", f"label_{j}"]]
         if lab.id.duplicated().any():
             raise SystemExit(f"label_{j}.csv has duplicate ids: {sorted(lab.id[lab.id.duplicated()].unique())[:10]}")
         unknown = set(lab.id) - set(cand.id)
@@ -77,15 +86,15 @@ def main():
     df["label3"] = df.label5.map(TO_CLASS)
 
     from app.services.skill_names import canonical_key
-    ref = pd.read_csv(REFERENCE_CSV)
+    ref = pd.concat([pd.read_csv(f) for f in REFERENCE_CSVS])
     test_keys = {canonical_key(n) for n in pd.concat([ref.a, ref.b]).astype(str)}
     leaked = sorted({n for n in pd.concat([df.a, df.b]).astype(str) if canonical_key(n) in test_keys})
     if leaked:
         raise SystemExit(f"{len(leaked)} training skills are in the reference (test) set, e.g. {leaked[:10]}: "
                          "nothing written. Rebuild the candidates with build_pairs_skillmap.py")
-    df.to_csv(OUT, index=False, encoding="utf-8")
+    df.to_csv(cfg["out"], index=False, encoding="utf-8")
     print(f"\nChecks passed: no duplicate ids, no reference-set skill in training ({len(test_keys)} keys checked)")
-    print(f"Wrote {len(df)} rows ({len(df) // 2} pairs, both orders) to {OUT}")
+    print(f"Wrote {len(df)} rows ({len(df) // 2} pairs, both orders) to {cfg['out']}")
     if len(df):
         print(pd.crosstab(df.label5, df.split, margins=True).to_string())
         print("\n3 classes:", df.label3.value_counts().to_dict())

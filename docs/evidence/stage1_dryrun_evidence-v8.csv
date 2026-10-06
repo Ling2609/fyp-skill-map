@@ -4987,3 +4987,271 @@
 2026-10-06,live_a3bfa0dd5782663f,live,Angular Developer,Jira,keep,hard,preferred,preferred,1.0,,"Experience with Jira, Confluence, and Bitbucket"
 2026-10-06,live_a3bfa0dd5782663f,live,Angular Developer,Confluence,keep,hard,preferred,preferred,1.0,,"Experience with Jira, Confluence, and Bitbucket"
 2026-10-06,live_a3bfa0dd5782663f,live,Angular Developer,Bitbucket,keep,hard,preferred,preferred,1.0,,"Experience with Jira, Confluence, and Bitbucket"
+2026-10-06,live_050af1c8591bfa5e,live,Backend Developer,Problem solving,keep,soft,required,,1.0,,strong problem-solver who can contribute
+2026-10-06,live_050af1c8591bfa5e,live,Backend Developer,C# .NET,keep,hard,required,required,1.0,,Proficiency in C# .NET (including .NET Core)
+2026-10-06,live_050af1c8591bfa5e,live,Backend Developer,Node.js,keep,hard,required,required,1.0,,Strong command of Node.js for developing high-performance
+2026-10-06,live_050af1c8591bfa5e,live,Backend Developer,Collaboration,keep,soft,unspecified,required,1.0,,"Collaborate with front-end developers, product managers"
+2026-10-06,live_050af1c8591bfa5e,live,Backend Developer,SQL,keep,hard,unspecified,,1.0,,write optimized SQL queries for both SQL Server and PostgreSQL
+2026-10-06,live_050af1c8591bfa5e,live,Backend Developer,SQL Server,keep,hard,required,required,1.0,,SQL Server and PostgreSQL
+2026-10-06,live_050af1c8591bfa5e,live,Backend Developer,PostgreSQL,keep,hard,required,required,1.0,,SQL Server and PostgreSQL
+2026-10-06,live_050af1c8591bfa5e,live,Backend Developer,Database design,keep,hard,unspecified,,1.0,,Develop and maintain robust database schemas
+2026-10-06,live_050af1c8591bfa5e,live,Backend Developer,Docker,keep,hard,required,required,1.0,,Hands-on experience with Docker for containerizing applications
+2026-10-06,live_050af1c8591bfa5e,live,Backend Developer,AWS EC2,keep,hard,required,required,1.0,,"Compute: EC2, Lambda"
+2026-10-06,live_050af1c8591bfa5e,live,Backend Developer,AWS Lambda,keep,hard,required,required,1.0,,"Compute: EC2, Lambda"
+2026-10-06,live_050af1c8591bfa5e,live,Backend Developer,AWS S3,keep,hard,required,required,1.0,,"Storage: S3, RDS (for SQL Server/PostgreSQL)"
+2026-10-06,live_050af1c8591bfa5e,live,Backend Developer,AWS RDS,keep,hard,required,required,1.0,,"Storage: S3, RDS (for SQL Server/PostgreSQL)"
+2026-10-06,live_050af1c8591bfa5e,live,Backend Developer,AWS API Gateway,keep,hard,required,required,1.0,,"Networking: VPC, API Gateway"
+2026-10-06,live_050af1c8591bfa5e,live,Backend Developer,AWS SQS,keep,hard,required,required,1.0,,"Messaging: SQS, SNS"
+2026-10-06,live_050af1c8591bfa5e,live,Backend Developer,AWS SNS,keep,hard,required,required,1.0,,"Messaging: SQS, SNS"
+2026-10-06,live_050af1c8591bfa5e,live,Backend Developer,Code review,keep,hard,unspecified,,1.0,,"Participate in code reviews, ensuring code quality"
+2026-10-06,live_050af1c8591bfa5e,live,Backend Developer,Debugging,keep,soft,unspecified,,1.0,,debug and resolve technical issues
+2026-10-06,live_050af1c8591bfa5e,live,Backend Developer,Database optimization,keep,hard,required,required,1.0,,"database design, optimization, stored procedures"
+2026-10-06,live_050af1c8591bfa5e,live,Backend Developer,Stored procedures,keep,hard,required,required,1.0,,"stored procedures, and complex SQL queries"
+2026-10-06,live_050af1c8591bfa5e,live,Backend Developer,AWS VPC,keep,hard,required,required,1.0,,"Networking: VPC, API Gateway"
+2026-10-06,live_050af1c8591bfa5e,live,Backend Developer,AWS CloudWatch,keep,hard,required,required,1.0,,Monitoring: CloudWatch
+2026-10-06,live_050af1c8591bfa5e,live,Backend Developer,RESTful APIs,keep,hard,required,required,1.0,,Experience with RESTful API design and development
+2026-10-06,live_050af1c8591bfa5e,live,Backend Developer,Git,keep,hard,required,required,1.0,,"Familiarity with version control systems, particularly Git"
+2026-10-06,live_050af1c8591bfa5e,live,Backend Developer,Communication,keep,soft,required,required,1.0,,Excellent communication and teamwork skills
+2026-10-06,live_050af1c8591bfa5e,live,Backend Developer,Teamwork,keep,soft,required,required,1.0,,Excellent communication and teamwork skills
+2026-10-06,live_050af1c8591bfa5e,live,Backend Developer,Azure,keep,hard,preferred,preferred,1.0,,"Experience with other cloud platforms (Azure, Google Cloud)"
+2026-10-06,live_050af1c8591bfa5e,live,Backend Developer,Google Cloud,keep,hard,preferred,preferred,1.0,,"Experience with other cloud platforms (Azure, Google Cloud)"
+2026-10-06,live_050af1c8591bfa5e,live,Backend Developer,Jenkins,keep,hard,preferred,preferred,1.0,CI/CD tool,"tools like Jenkins, GitLab CI, or AWS Code Pipeline is a plus"
+2026-10-06,live_050af1c8591bfa5e,live,Backend Developer,GitLab CI,keep,hard,preferred,preferred,1.0,CI/CD tool,"tools like Jenkins, GitLab CI, or AWS Code Pipeline is a plus"
+2026-10-06,live_050af1c8591bfa5e,live,Backend Developer,AWS CodePipeline,keep,hard,preferred,preferred,1.0,CI/CD tool,"tools like Jenkins, GitLab CI, or AWS Code Pipeline is a plus"
+2026-10-06,live_050af1c8591bfa5e,live,Backend Developer,Microservices architecture,keep,hard,preferred,preferred,1.0,,Familiarity with microservices architecture patterns
+2026-10-06,live_050af1c8591bfa5e,live,Backend Developer,Unit testing,keep,hard,preferred,preferred,1.0,,"Experience with unit testing, integration testing, and mocking frameworks"
+2026-10-06,live_050af1c8591bfa5e,live,Backend Developer,Integration testing,keep,hard,preferred,preferred,1.0,,"Experience with unit testing, integration testing, and mocking frameworks"
+2026-10-06,live_050af1c8591bfa5e,live,Backend Developer,Mocking frameworks,keep,hard,preferred,preferred,1.0,,"Experience with unit testing, integration testing, and mocking frameworks"
+2026-10-06,live_050af1c8591bfa5e,live,Backend Developer,Web security,keep,hard,preferred,preferred,1.0,,Understanding of security best practices in web development
+2026-10-06,live_050af1c8591bfa5e,live,Backend Developer,Agile Scrum,keep,soft,preferred,preferred,1.0,,Experience working in an Agile/Scrum development environment
+2026-10-06,live_050af1c8591bfa5e,live,Backend Developer,Terraform,keep,hard,preferred,preferred,1.0,,Familiarity with Terraform for infrastructure as code (IaC)
+2026-10-06,live_eee570af4493121d,live,IT Capacity Developer (Java or Python),BIRT,keep,hard,unspecified,,1.0,,"Create and maintain capacity management reports and applications using BIRT, Java, Python, and SQL"
+2026-10-06,live_eee570af4493121d,live,IT Capacity Developer (Java or Python),Java,keep,hard,required,,1.0,,"ETL, RestfulAPI, Java, Python"
+2026-10-06,live_eee570af4493121d,live,IT Capacity Developer (Java or Python),Python,keep,hard,required,,1.0,,"ETL, RestfulAPI, Java, Python"
+2026-10-06,live_eee570af4493121d,live,IT Capacity Developer (Java or Python),SQL,keep,hard,unspecified,,1.0,,"Create and maintain capacity management reports and applications using BIRT, Java, Python, and SQL"
+2026-10-06,live_eee570af4493121d,live,IT Capacity Developer (Java or Python),Collaboration,keep,soft,required,,1.0,,"Agile-oriented with strong collaboration, goal-focused, and customer-service skills"
+2026-10-06,live_eee570af4493121d,live,IT Capacity Developer (Java or Python),Customer-service,keep,soft,required,,1.0,,"Agile-oriented with strong collaboration, goal-focused, and customer-service skills"
+2026-10-06,live_eee570af4493121d,live,IT Capacity Developer (Java or Python),ETL,keep,hard,required,,1.0,,"ETL, RestfulAPI, Java, Python"
+2026-10-06,live_eee570af4493121d,live,IT Capacity Developer (Java or Python),RestfulAPI,keep,hard,required,,1.0,,"ETL, RestfulAPI, Java, Python"
+2026-10-06,live_80cd84ff053029b8,live,Java developer,Java,keep,hard,required,,1.0,,Junior Java Developer
+2026-10-06,live_80cd84ff053029b8,live,Java developer,Web applications,keep,hard,unspecified,,1.0,,"Develop, maintain, and support Java-based web applications"
+2026-10-06,live_80cd84ff053029b8,live,Java developer,Troubleshooting,keep,soft,required,required,1.0,,Good troubleshooting and problem-solving skills
+2026-10-06,live_80cd84ff053029b8,live,Java developer,Web technologies,keep,hard,unspecified,,1.0,,Work with Java frameworks and web technologies to support existing applications
+2026-10-06,live_80cd84ff053029b8,live,Java developer,Web services,keep,hard,unspecified,,1.0,,Perform integration and support activities involving web services and APIs
+2026-10-06,live_80cd84ff053029b8,live,Java developer,APIs,keep,hard,unspecified,,1.0,,Perform integration and support activities involving web services and APIs
+2026-10-06,live_80cd84ff053029b8,live,Java developer,Testing,keep,hard,unspecified,,1.0,,Conduct testing and troubleshooting to ensure applications function properly
+2026-10-06,live_80cd84ff053029b8,live,Java developer,Collaboration,keep,soft,unspecified,,1.0,,Collaborate with the team to investigate and resolve technical issues
+2026-10-06,live_80cd84ff053029b8,live,Java developer,Technical documentation,keep,hard,unspecified,required,1.0,,Prepare and maintain technical documentation where required
+2026-10-06,live_80cd84ff053029b8,live,Java developer,Java 8,keep,hard,required,required,1.0,,Hands-on experience with Java 8
+2026-10-06,live_80cd84ff053029b8,live,Java developer,Spring MVC,keep,hard,required,required,1.0,,Experience with Spring MVC and Hibernate
+2026-10-06,live_80cd84ff053029b8,live,Java developer,Hibernate,keep,hard,required,required,1.0,,Experience with Spring MVC and Hibernate
+2026-10-06,live_80cd84ff053029b8,live,Java developer,JSP,keep,hard,required,required,1.0,,Experience with JSP and JQuery / jQuery
+2026-10-06,live_80cd84ff053029b8,live,Java developer,jQuery,keep,hard,required,required,1.0,,Experience with JSP and JQuery / jQuery
+2026-10-06,live_80cd84ff053029b8,live,Java developer,JasperReports,keep,hard,required,required,1.0,,Experience with JasperReport / JasperReports
+2026-10-06,live_80cd84ff053029b8,live,Java developer,Apache Tomcat,keep,hard,required,required,1.0,,Familiarity with Apache Tomcat and Apache WildFly
+2026-10-06,live_80cd84ff053029b8,live,Java developer,Apache WildFly,keep,hard,required,required,1.0,,Familiarity with Apache Tomcat and Apache WildFly
+2026-10-06,live_80cd84ff053029b8,live,Java developer,Apache SVN,keep,hard,required,required,1.0,,Experience with Apache SVN
+2026-10-06,live_80cd84ff053029b8,live,Java developer,SOAP,keep,hard,required,required,1.0,,Knowledge of SOAP and JSON
+2026-10-06,live_80cd84ff053029b8,live,Java developer,JSON,keep,hard,required,required,1.0,,Knowledge of SOAP and JSON
+2026-10-06,live_80cd84ff053029b8,live,Java developer,WebSphere,keep,hard,required,required,1.0,,Familiarity with Web Application / WebSphere environments
+2026-10-06,live_80cd84ff053029b8,live,Java developer,Problem-solving,keep,soft,required,required,1.0,,Good troubleshooting and problem-solving skills
+2026-10-06,live_0acbe17e0e53e6af,live,Java developer,Java,keep,hard,required,,1.0,,skilled Java Developer
+2026-10-06,live_0acbe17e0e53e6af,live,Java developer,Collaboration,keep,soft,required,required,1.0,,Strong communication and collaboration skills
+2026-10-06,live_0acbe17e0e53e6af,live,Java developer,Debugging,keep,hard,unspecified,,1.0,,debug applications to optimize performance
+2026-10-06,live_0acbe17e0e53e6af,live,Java developer,Code review,keep,hard,unspecified,,1.0,,Participate in code reviews
+2026-10-06,live_0acbe17e0e53e6af,live,Java developer,Spring,keep,hard,required,required,1.0,,"Java frameworks (Spring, Hibernate)"
+2026-10-06,live_0acbe17e0e53e6af,live,Java developer,Hibernate,keep,hard,required,required,1.0,,"Java frameworks (Spring, Hibernate)"
+2026-10-06,live_0acbe17e0e53e6af,live,Java developer,RESTful APIs,keep,hard,required,required,1.0,,Experience with RESTful APIs and web services
+2026-10-06,live_0acbe17e0e53e6af,live,Java developer,Web services,keep,hard,required,required,1.0,,Experience with RESTful APIs and web services
+2026-10-06,live_0acbe17e0e53e6af,live,Java developer,SQL,keep,hard,required,required,1.0,,"Knowledge of database systems (SQL, MySQL, PostgreSQL)"
+2026-10-06,live_0acbe17e0e53e6af,live,Java developer,MySQL,keep,hard,required,required,1.0,,"Knowledge of database systems (SQL, MySQL, PostgreSQL)"
+2026-10-06,live_0acbe17e0e53e6af,live,Java developer,PostgreSQL,keep,hard,required,required,1.0,,"Knowledge of database systems (SQL, MySQL, PostgreSQL)"
+2026-10-06,live_0acbe17e0e53e6af,live,Java developer,Git,keep,hard,required,required,1.0,,Familiarity with version control systems (Git)
+2026-10-06,live_0acbe17e0e53e6af,live,Java developer,Agile methodologies,keep,hard,required,required,1.0,,Understanding of Agile methodologies
+2026-10-06,live_0acbe17e0e53e6af,live,Java developer,Problem-solving,keep,soft,required,required,1.0,,Good problem-solving skills
+2026-10-06,live_0acbe17e0e53e6af,live,Java developer,Attention to detail,keep,soft,required,required,1.0,,attention to detail
+2026-10-06,live_0acbe17e0e53e6af,live,Java developer,Communication,keep,soft,required,required,1.0,,Strong communication and collaboration skills
+2026-10-06,live_95525eb4278aa871,live,Lead Backend Engineer (JAVA),microservices,keep,hard,unspecified,,1.0,,Designing scalable microservices and event-driven architectures
+2026-10-06,live_95525eb4278aa871,live,Lead Backend Engineer (JAVA),event-driven architectures,keep,hard,unspecified,,1.0,,Designing scalable microservices and event-driven architectures
+2026-10-06,live_95525eb4278aa871,live,Lead Backend Engineer (JAVA),backend architecture,keep,hard,unspecified,,1.0,,"Defining and evolving backend architecture standards, patterns, and best practices"
+2026-10-06,live_95525eb4278aa871,live,Lead Backend Engineer (JAVA),technical design,keep,hard,unspecified,,1.0,,Leading technical design discussions and architectural trade-offs across domains
+2026-10-06,live_95525eb4278aa871,live,Lead Backend Engineer (JAVA),system reliability,keep,hard,unspecified,,1.0,,"Guiding teams to build reliable, secure, and high-performance systems in production"
+2026-10-06,live_95525eb4278aa871,live,Lead Backend Engineer (JAVA),security,keep,hard,unspecified,,1.0,,"Guiding teams to build reliable, secure, and high-performance systems in production"
+2026-10-06,live_95525eb4278aa871,live,Lead Backend Engineer (JAVA),performance optimization,keep,hard,unspecified,,1.0,,"Guiding teams to build reliable, secure, and high-performance systems in production"
+2026-10-06,live_95525eb4278aa871,live,Lead Backend Engineer (JAVA),system design,keep,hard,unspecified,,1.0,,"Driving evolutionary design, improving existing systems while delivering new capabilities"
+2026-10-06,live_95525eb4278aa871,live,Lead Backend Engineer (JAVA),Mentoring,keep,soft,unspecified,,1.0,,"Mentoring engineers, reviewing designs, and elevating technical craftsmanship across the team"
+2026-10-06,live_95525eb4278aa871,live,Lead Backend Engineer (JAVA),design review,keep,hard,unspecified,,1.0,,"Mentoring engineers, reviewing designs, and elevating technical craftsmanship across the team"
+2026-10-06,live_95525eb4278aa871,live,Lead Backend Engineer (JAVA),Java,keep,hard,required,required,1.0,,Strong proficiency in Java or other object-oriented programming (OOP) languages
+2026-10-06,live_95525eb4278aa871,live,Lead Backend Engineer (JAVA),Kafka,keep,hard,required,required,1.0,,Strong understanding of messaging systems such as Kafka or equivalent
+2026-10-06,live_95525eb4278aa871,live,Lead Backend Engineer (JAVA),PostgreSQL,keep,hard,required,required,1.0,,"Experience with both relational (e.g., PostgreSQL) and non-relational databases"
+2026-10-06,live_95525eb4278aa871,live,Lead Backend Engineer (JAVA),Web APIs,keep,hard,required,required,1.0,,Familiarity with designing and consuming web APIs of reasonable complexity
+2026-10-06,live_95525eb4278aa871,live,Lead Backend Engineer (JAVA),Docker,keep,hard,required,required,1.0,,Hands-on experience with containerized applications using Docker and Kubernetes
+2026-10-06,live_95525eb4278aa871,live,Lead Backend Engineer (JAVA),Kubernetes,keep,hard,required,required,1.0,,Hands-on experience with containerized applications using Docker and Kubernetes
+2026-10-06,live_95525eb4278aa871,live,Lead Backend Engineer (JAVA),Spring Boot,keep,hard,required,,1.0,,"Languages & Frameworks: Java, Spring Boot"
+2026-10-06,live_f579345f937dd273,live,Senior Risk Systems Analyst,Murex,keep,hard,required,required,1.0,,Strong hands-on experience with Murex Market Risk and Credit Risk modules
+2026-10-06,live_f579345f937dd273,live,Senior Risk Systems Analyst,Risk analysis,keep,hard,required,required,1.0,,lead risk system analysis
+2026-10-06,live_f579345f937dd273,live,Senior Risk Systems Analyst,Value at Risk,keep,hard,required,required,1.0,,Expertise in Value at Risk (VaR)
+2026-10-06,live_f579345f937dd273,live,Senior Risk Systems Analyst,System analysis,keep,hard,unspecified,,1.0,,Perform system analysis
+2026-10-06,live_f579345f937dd273,live,Senior Risk Systems Analyst,Collaboration,keep,soft,unspecified,required,1.0,,Collaborate with stakeholders
+2026-10-06,live_f579345f937dd273,live,Senior Risk Systems Analyst,SQL Server 2012,keep,hard,required,required,1.0,,Proficiency in SQL Server 2012 for data management and reporting
+2026-10-06,live_f579345f937dd273,live,Senior Risk Systems Analyst,System upgrades,keep,hard,unspecified,,1.0,,system upgrades
+2026-10-06,live_f579345f937dd273,live,Senior Risk Systems Analyst,Reporting,keep,hard,unspecified,,1.0,,risk-related reports and dashboards
+2026-10-06,live_f579345f937dd273,live,Senior Risk Systems Analyst,Windows Server 2012,keep,hard,required,required,1.0,,Solid understanding of Windows Server 2012 environment
+2026-10-06,live_f579345f937dd273,live,Senior Risk Systems Analyst,Leadership,keep,soft,required,required,1.0,,Ability to lead risk system analysis
+2026-10-06,live_6e74c345fdb44620,live,Senior/Lead System Analyst,Solution design,keep,hard,unspecified,required,1.0,,Drive end-to-end solution design activities
+2026-10-06,live_6e74c345fdb44620,live,Senior/Lead System Analyst,Requirements gathering,keep,hard,unspecified,required,1.0,,primary point of contact for business requirements gathering
+2026-10-06,live_6e74c345fdb44620,live,Senior/Lead System Analyst,System design,keep,hard,unspecified,,1.0,,develop effective and scalable system designs
+2026-10-06,live_6e74c345fdb44620,live,Senior/Lead System Analyst,Application architecture,keep,hard,unspecified,,1.0,,recommendations on application architecture
+2026-10-06,live_6e74c345fdb44620,live,Senior/Lead System Analyst,System integration,keep,hard,unspecified,,1.0,,recommendations on ... integrations
+2026-10-06,live_6e74c345fdb44620,live,Senior/Lead System Analyst,Technical consulting,keep,hard,unspecified,,1.0,,Provide technical consultancy and guidance
+2026-10-06,live_6e74c345fdb44620,live,Senior/Lead System Analyst,Platform configuration,keep,hard,unspecified,,1.0,,translating them into platform configurations
+2026-10-06,live_6e74c345fdb44620,live,Senior/Lead System Analyst,System enhancement,keep,hard,unspecified,,1.0,,system enhancements
+2026-10-06,live_6e74c345fdb44620,live,Senior/Lead System Analyst,Product implementation,keep,hard,unspecified,,1.0,,new product implementations
+2026-10-06,live_6e74c345fdb44620,live,Senior/Lead System Analyst,Technical strategy,keep,hard,unspecified,,1.0,,define technical strategies that improve business effectiveness
+2026-10-06,live_6e74c345fdb44620,live,Senior/Lead System Analyst,System implementation,keep,hard,unspecified,,1.0,,system implementation projects within telecom environments
+2026-10-06,live_6e74c345fdb44620,live,Senior/Lead System Analyst,Mobile networks,keep,hard,unspecified,,1.0,,Mobile and Broadband Networks
+2026-10-06,live_6e74c345fdb44620,live,Senior/Lead System Analyst,Broadband networks,keep,hard,unspecified,,1.0,,Mobile and Broadband Networks
+2026-10-06,live_6e74c345fdb44620,live,Senior/Lead System Analyst,CRM platforms,keep,hard,unspecified,,1.0,,CRM platforms (e.g.
+2026-10-06,live_6e74c345fdb44620,live,Senior/Lead System Analyst,Compax,keep,hard,unspecified,,1.0,,Compax
+2026-10-06,live_6e74c345fdb44620,live,Senior/Lead System Analyst,Billing systems,keep,hard,unspecified,,1.0,,Billing Systems
+2026-10-06,live_6e74c345fdb44620,live,Senior/Lead System Analyst,Provisioning systems,keep,hard,unspecified,,1.0,,Provisioning Systems
+2026-10-06,live_6e74c345fdb44620,live,Senior/Lead System Analyst,Inventory management,keep,hard,unspecified,,1.0,,Inventory Management
+2026-10-06,live_6e74c345fdb44620,live,Senior/Lead System Analyst,Order management,keep,hard,unspecified,,1.0,,Order Management and Delivery Systems
+2026-10-06,live_6e74c345fdb44620,live,Senior/Lead System Analyst,Delivery systems,keep,hard,unspecified,,1.0,,Order Management and Delivery Systems
+2026-10-06,live_6e74c345fdb44620,live,Senior/Lead System Analyst,API,keep,hard,unspecified,,1.0,,API and System Integrations
+2026-10-06,live_68ee3cbe734b121d,live,IT Systems Engineer,Windows,keep,hard,required,preferred,1.0,,"Provide onsite support for Windows, Linux, Microsoft 365, printers & end-user devices"
+2026-10-06,live_68ee3cbe734b121d,live,IT Systems Engineer,Linux,keep,hard,required,preferred,1.0,,"Provide onsite support for Windows, Linux, Microsoft 365, printers & end-user devices"
+2026-10-06,live_68ee3cbe734b121d,live,IT Systems Engineer,Microsoft 365,keep,hard,required,preferred,1.0,,"Provide onsite support for Windows, Linux, Microsoft 365, printers & end-user devices"
+2026-10-06,live_68ee3cbe734b121d,live,IT Systems Engineer,printers,keep,hard,required,preferred,1.0,,"Provide onsite support for Windows, Linux, Microsoft 365, printers & end-user devices"
+2026-10-06,live_68ee3cbe734b121d,live,IT Systems Engineer,end-user devices,keep,hard,required,preferred,1.0,,"Provide onsite support for Windows, Linux, Microsoft 365, printers & end-user devices"
+2026-10-06,live_68ee3cbe734b121d,live,IT Systems Engineer,IT asset lifecycle,keep,hard,required,preferred,1.0,,"Handle IT asset lifecycle / IMAC – onboarding, transfers & offboarding"
+2026-10-06,live_68ee3cbe734b121d,live,IT Systems Engineer,LAN,keep,hard,required,preferred,1.0,,"Support LAN/WAN/WLAN, switches, routers and firewall operations"
+2026-10-06,live_68ee3cbe734b121d,live,IT Systems Engineer,WAN,keep,hard,required,preferred,1.0,,"Support LAN/WAN/WLAN, switches, routers and firewall operations"
+2026-10-06,live_68ee3cbe734b121d,live,IT Systems Engineer,WLAN,keep,hard,required,preferred,1.0,,"Support LAN/WAN/WLAN, switches, routers and firewall operations"
+2026-10-06,live_68ee3cbe734b121d,live,IT Systems Engineer,switches,keep,hard,required,preferred,1.0,,"Support LAN/WAN/WLAN, switches, routers and firewall operations"
+2026-10-06,live_68ee3cbe734b121d,live,IT Systems Engineer,routers,keep,hard,required,preferred,1.0,,"Support LAN/WAN/WLAN, switches, routers and firewall operations"
+2026-10-06,live_68ee3cbe734b121d,live,IT Systems Engineer,firewall,keep,hard,required,preferred,1.0,,"Support LAN/WAN/WLAN, switches, routers and firewall operations"
+2026-10-06,live_68ee3cbe734b121d,live,IT Systems Engineer,Windows servers,keep,hard,required,preferred,1.0,,"Manage Windows & Linux servers, patching, monitoring and troubleshooting"
+2026-10-06,live_68ee3cbe734b121d,live,IT Systems Engineer,Linux servers,keep,hard,required,preferred,1.0,,"Manage Windows & Linux servers, patching, monitoring and troubleshooting"
+2026-10-06,live_68ee3cbe734b121d,live,IT Systems Engineer,VMware,keep,hard,required,preferred,1.0,,"Handle VMware, backup, storage and recovery operations"
+2026-10-06,live_68ee3cbe734b121d,live,IT Systems Engineer,backup,keep,hard,required,preferred,1.0,,"Handle VMware, backup, storage and recovery operations"
+2026-10-06,live_68ee3cbe734b121d,live,IT Systems Engineer,storage,keep,hard,required,preferred,1.0,,"Handle VMware, backup, storage and recovery operations"
+2026-10-06,live_68ee3cbe734b121d,live,IT Systems Engineer,recovery,keep,hard,required,preferred,1.0,,"Handle VMware, backup, storage and recovery operations"
+2026-10-06,live_68ee3cbe734b121d,live,IT Systems Engineer,vendor coordination,keep,soft,required,preferred,1.0,,"Coordinate with ISPs, vendors and facility teams for infrastructure issues"
+2026-10-06,live_68ee3cbe734b121d,live,IT Systems Engineer,troubleshooting,keep,soft,required,preferred,1.0,,Strong troubleshooting and vendor coordination skills
+2026-10-06,live_68ee3cbe734b121d,live,IT Systems Engineer,VPN,keep,hard,required,preferred,1.0,,"Good knowledge of LAN/WAN, Firewall, VPN & networking"
+2026-10-06,live_68ee3cbe734b121d,live,IT Systems Engineer,networking,keep,hard,required,preferred,1.0,,"Good knowledge of LAN/WAN, Firewall, VPN & networking"
+2026-10-06,live_a7842418e8147dd2,live,Senior Systems Engineer (Mobile Device Management),Mobile device management,keep,hard,required,,1.0,,background in mobile device management
+2026-10-06,live_a7842418e8147dd2,live,Senior Systems Engineer (Mobile Device Management),Patch management,keep,hard,required,required,1.0,,background in ... patch management
+2026-10-06,live_a7842418e8147dd2,live,Senior Systems Engineer (Mobile Device Management),Operating system,keep,hard,required,,1.0,,background in ... operating system
+2026-10-06,live_a7842418e8147dd2,live,Senior Systems Engineer (Mobile Device Management),Application lifecycle management,keep,hard,required,,1.0,,background in ... application lifecycle management
+2026-10-06,live_a7842418e8147dd2,live,Senior Systems Engineer (Mobile Device Management),Scripting,keep,hard,required,,1.0,,scripting skills
+2026-10-06,live_a7842418e8147dd2,live,Senior Systems Engineer (Mobile Device Management),Collaboration,keep,soft,required,required,1.0,,collaborate excellently
+2026-10-06,live_a7842418e8147dd2,live,Senior Systems Engineer (Mobile Device Management),Communication,keep,soft,required,required,1.0,,communicate updates and resolutions
+2026-10-06,live_a7842418e8147dd2,live,Senior Systems Engineer (Mobile Device Management),Jamf,keep,hard,required,,1.0,,SaaS based systems like Jamf
+2026-10-06,live_a7842418e8147dd2,live,Senior Systems Engineer (Mobile Device Management),Workspace One,keep,hard,required,,1.0,,SaaS based systems like ... Workspace One
+2026-10-06,live_a7842418e8147dd2,live,Senior Systems Engineer (Mobile Device Management),Digicert,keep,hard,required,,1.0,,SaaS based systems like ... Digicert
+2026-10-06,live_a7842418e8147dd2,live,Senior Systems Engineer (Mobile Device Management),JumpCloud,keep,hard,required,,1.0,,SaaS based systems like ... JumpCloud
+2026-10-06,live_a7842418e8147dd2,live,Senior Systems Engineer (Mobile Device Management),OS patch management,keep,hard,required,,1.0,,Responsible for OS patch management
+2026-10-06,live_a7842418e8147dd2,live,Senior Systems Engineer (Mobile Device Management),Automation,keep,hard,required,,1.0,,Automate tasks to maintain operational efficiency
+2026-10-06,live_a7842418e8147dd2,live,Senior Systems Engineer (Mobile Device Management),IT operational support,keep,hard,required,,1.0,,Provide Level 2 & 3 IT operational support
+2026-10-06,live_a7842418e8147dd2,live,Senior Systems Engineer (Mobile Device Management),Troubleshooting,keep,hard,required,,1.0,,Troubleshoot complex technical issues
+2026-10-06,live_a7842418e8147dd2,live,Senior Systems Engineer (Mobile Device Management),Project management,keep,soft,unspecified,,1.0,,Technical Project Execution: Lead the end-to-end implementation
+2026-10-06,live_a7842418e8147dd2,live,Senior Systems Engineer (Mobile Device Management),Windows,keep,hard,required,required,1.0,,"Windows, MacOS, Linux, iOS, and Android endpoints"
+2026-10-06,live_a7842418e8147dd2,live,Senior Systems Engineer (Mobile Device Management),macOS,keep,hard,required,required,1.0,,"Windows, MacOS, Linux, iOS, and Android endpoints"
+2026-10-06,live_a7842418e8147dd2,live,Senior Systems Engineer (Mobile Device Management),Linux,keep,hard,required,required,1.0,,"Windows, MacOS, Linux, iOS, and Android endpoints"
+2026-10-06,live_a7842418e8147dd2,live,Senior Systems Engineer (Mobile Device Management),iOS,keep,hard,required,required,1.0,,"Windows, MacOS, Linux, iOS, and Android endpoints"
+2026-10-06,live_a7842418e8147dd2,live,Senior Systems Engineer (Mobile Device Management),Android,keep,hard,required,required,1.0,,"Windows, MacOS, Linux, iOS, and Android endpoints"
+2026-10-06,live_a7842418e8147dd2,live,Senior Systems Engineer (Mobile Device Management),Windows image deployment,keep,hard,required,required,1.0,,including Windows image deployment
+2026-10-06,live_a7842418e8147dd2,live,Senior Systems Engineer (Mobile Device Management),Intune,keep,hard,required,required,1.0,,hands-on experience with ... Intune
+2026-10-06,live_a7842418e8147dd2,live,Senior Systems Engineer (Mobile Device Management),Google MDM,keep,hard,required,required,1.0,,hands-on experience with ... Google MDM
+2026-10-06,live_a7842418e8147dd2,live,Senior Systems Engineer (Mobile Device Management),Microsoft Endpoint Manager,keep,hard,required,required,1.0,,Experience of Microsoft Endpoint Manager (MECM/Intune)
+2026-10-06,live_a7842418e8147dd2,live,Senior Systems Engineer (Mobile Device Management),Windows Autopilot,keep,hard,required,required,1.0,,and Windows Autopilot
+2026-10-06,live_a7842418e8147dd2,live,Senior Systems Engineer (Mobile Device Management),Application patch management,keep,hard,required,required,1.0,,with skills in OS and application patch management
+2026-10-06,live_a7842418e8147dd2,live,Senior Systems Engineer (Mobile Device Management),Mobile Application Management,keep,hard,required,required,1.0,,along with Mobile Application Management (MAM)
+2026-10-06,live_a7842418e8147dd2,live,Senior Systems Engineer (Mobile Device Management),Endpoint security,keep,hard,required,required,1.0,,Experience implementing endpoint security configurations
+2026-10-06,live_a7842418e8147dd2,live,Senior Systems Engineer (Mobile Device Management),PKI,keep,hard,required,required,1.0,,familiarity with PKI concepts
+2026-10-06,live_a7842418e8147dd2,live,Senior Systems Engineer (Mobile Device Management),SSO,keep,hard,required,required,1.0,,knowledge of SSO and related protocols
+2026-10-06,live_a7842418e8147dd2,live,Senior Systems Engineer (Mobile Device Management),Bash,keep,hard,required,required,1.0,,"e.g., Bash, Shell, PowerShell, Python"
+2026-10-06,live_a7842418e8147dd2,live,Senior Systems Engineer (Mobile Device Management),Shell,keep,hard,required,required,1.0,,"e.g., Bash, Shell, PowerShell, Python"
+2026-10-06,live_a7842418e8147dd2,live,Senior Systems Engineer (Mobile Device Management),PowerShell,keep,hard,required,required,1.0,,"e.g., Bash, Shell, PowerShell, Python"
+2026-10-06,live_a7842418e8147dd2,live,Senior Systems Engineer (Mobile Device Management),Python,keep,hard,required,required,1.0,,"e.g., Bash, Shell, PowerShell, Python"
+2026-10-06,live_a7842418e8147dd2,live,Senior Systems Engineer (Mobile Device Management),AI tools,keep,hard,required,required,1.0,,experience using AI tools to enhance coding efficiency
+2026-10-06,live_a7842418e8147dd2,live,Senior Systems Engineer (Mobile Device Management),Advanced troubleshooting,keep,hard,required,required,1.0,,Experience in advanced troubleshooting
+2026-10-06,live_a7842418e8147dd2,live,Senior Systems Engineer (Mobile Device Management),Change management,keep,hard,required,required,1.0,,change management
+2026-10-06,live_a7842418e8147dd2,live,Senior Systems Engineer (Mobile Device Management),Incident management,keep,hard,required,required,1.0,,incident management
+2026-10-06,live_a7842418e8147dd2,live,Senior Systems Engineer (Mobile Device Management),ITIL,keep,hard,required,required,1.0,,understanding of Information Technology Infrastructure Library processes
+2026-10-06,live_a7842418e8147dd2,live,Senior Systems Engineer (Mobile Device Management),Jenkins,keep,hard,preferred,required,1.0,CI/CD tool,"Proficiency in CI/CD tools (Jenkins, GitLab, etc.)"
+2026-10-06,live_a7842418e8147dd2,live,Senior Systems Engineer (Mobile Device Management),GitLab,keep,hard,preferred,required,1.0,CI/CD tool,"Proficiency in CI/CD tools (Jenkins, GitLab, etc.)"
+2026-10-06,live_a7842418e8147dd2,live,Senior Systems Engineer (Mobile Device Management),CI/CD tools,keep,hard,preferred,required,1.0,CI/CD tool,"Proficiency in CI/CD tools (Jenkins, GitLab, etc.)"
+2026-10-06,live_54e8df0e544ea63b,live,Automation System Engineer,Control systems,keep,hard,required,required,1.0,,"design, configure, and implement control systems"
+2026-10-06,live_54e8df0e544ea63b,live,Automation System Engineer,Software programming,keep,hard,required,required,1.0,,"design, configure, and implement ... software programs"
+2026-10-06,live_54e8df0e544ea63b,live,Automation System Engineer,Electronic circuitry,keep,hard,required,required,1.0,,"design, configure, and implement ... electronic circuitry"
+2026-10-06,live_54e8df0e544ea63b,live,Automation System Engineer,Electrical panels,keep,hard,required,,1.0,,Design Electrical panels
+2026-10-06,live_54e8df0e544ea63b,live,Automation System Engineer,Control Architecture,keep,hard,required,,1.0,,Design ... Control Architecture
+2026-10-06,live_54e8df0e544ea63b,live,Automation System Engineer,Wiring drawings,keep,hard,required,,1.0,,Design ... wiring drawings
+2026-10-06,live_54e8df0e544ea63b,live,Automation System Engineer,P&ID,keep,hard,required,,1.0,,Development of P&ID documentation
+2026-10-06,live_54e8df0e544ea63b,live,Automation System Engineer,PLC,keep,hard,required,,1.0,,programmable logic controller (PLC)
+2026-10-06,live_54e8df0e544ea63b,live,Automation System Engineer,Ladder design,keep,hard,required,,1.0,,Ladder design
+2026-10-06,live_54e8df0e544ea63b,live,Automation System Engineer,DCS,keep,hard,required,,1.0,,distributed control system (DCS)
+2026-10-06,live_54e8df0e544ea63b,live,Automation System Engineer,Commissioning,keep,hard,required,,1.0,,on-site commissioning of control systems
+2026-10-06,live_54e8df0e544ea63b,live,Automation System Engineer,Process control,keep,hard,required,,1.0,,Support of process control clients
+2026-10-06,live_54e8df0e544ea63b,live,Automation System Engineer,Electrical design,keep,hard,required,,1.0,,Electrical design and Process Control fundamentals
+2026-10-06,live_54e8df0e544ea63b,live,Automation System Engineer,DDC,keep,hard,required,,1.0,,"Controllers, such as ... DDC"
+2026-10-06,live_54e8df0e544ea63b,live,Automation System Engineer,PC-based control,keep,hard,required,,1.0,,"Controllers, such as ... PC based control"
+2026-10-06,live_54e8df0e544ea63b,live,Automation System Engineer,Control Theory,keep,hard,preferred,required,1.0,,Exposure to Control Theory and some process understanding is helpful but not required
+2026-10-06,live_54e8df0e544ea63b,live,Automation System Engineer,Rockwell Automation,keep,hard,required,,1.0,,"Platform knowledge in Rockwell Automation, Siemens, Emerson DeltaV, etc."
+2026-10-06,live_54e8df0e544ea63b,live,Automation System Engineer,Siemens,keep,hard,required,,1.0,,"Platform knowledge in Rockwell Automation, Siemens, Emerson DeltaV, etc."
+2026-10-06,live_54e8df0e544ea63b,live,Automation System Engineer,Emerson DeltaV,keep,hard,required,,1.0,,"Platform knowledge in Rockwell Automation, Siemens, Emerson DeltaV, etc."
+2026-10-06,live_54e8df0e544ea63b,live,Automation System Engineer,C#,keep,hard,required,,1.0,one of: C# / Python / C++,"Knowledge in programming language such as but not limited to C#, Python or C++"
+2026-10-06,live_54e8df0e544ea63b,live,Automation System Engineer,Python,keep,hard,required,,1.0,one of: C# / Python / C++,"Knowledge in programming language such as but not limited to C#, Python or C++"
+2026-10-06,live_54e8df0e544ea63b,live,Automation System Engineer,C++,keep,hard,required,,1.0,one of: C# / Python / C++,"Knowledge in programming language such as but not limited to C#, Python or C++"
+2026-10-06,live_54e8df0e544ea63b,live,Automation System Engineer,Microsoft Office,keep,hard,required,,1.0,,Knowledge in MS offices
+2026-10-06,live_54e8df0e544ea63b,live,Automation System Engineer,Batch process control,keep,hard,required,,1.0,,Process understanding of batch or continuous process control
+2026-10-06,live_54e8df0e544ea63b,live,Automation System Engineer,Continuous process control,keep,hard,required,,1.0,,Process understanding of batch or continuous process control
+2026-10-06,live_54e8df0e544ea63b,live,Automation System Engineer,Combustion control,keep,hard,required,,1.0,,combustion control etc.
+2026-10-06,live_54e8df0e544ea63b,live,Automation System Engineer,Process safety,keep,hard,required,,1.0,,"Awareness of process safety, validation, and good documentation practices"
+2026-10-06,live_54e8df0e544ea63b,live,Automation System Engineer,Validation,keep,hard,required,,1.0,,"Awareness of process safety, validation, and good documentation practices"
+2026-10-06,live_54e8df0e544ea63b,live,Automation System Engineer,Documentation practices,keep,hard,required,,1.0,,"Awareness of process safety, validation, and good documentation practices"
+2026-10-06,live_54e8df0e544ea63b,live,Automation System Engineer,PLC ladder Logic,keep,hard,required,,1.0,,"Programming languages: PLC ladder Logic, Function Block, SFC VB"
+2026-10-06,live_54e8df0e544ea63b,live,Automation System Engineer,Function Block,keep,hard,required,,1.0,,"Programming languages: PLC ladder Logic, Function Block, SFC VB"
+2026-10-06,live_54e8df0e544ea63b,live,Automation System Engineer,SFC VB,keep,hard,required,,1.0,,"Programming languages: PLC ladder Logic, Function Block, SFC VB"
+2026-10-06,live_54e8df0e544ea63b,live,Automation System Engineer,Intellution,keep,hard,required,,1.0,,"Intellution, WonderWare, OSIsoft, etc."
+2026-10-06,live_54e8df0e544ea63b,live,Automation System Engineer,WonderWare,keep,hard,required,,1.0,,"Intellution, WonderWare, OSIsoft, etc."
+2026-10-06,live_54e8df0e544ea63b,live,Automation System Engineer,OSIsoft,keep,hard,required,,1.0,,"Intellution, WonderWare, OSIsoft, etc."
+2026-10-06,live_54e8df0e544ea63b,live,Automation System Engineer,Network design,keep,hard,required,,1.0,,Others: network design/administration
+2026-10-06,live_54e8df0e544ea63b,live,Automation System Engineer,Communication,keep,soft,required,required,1.0,,excellent communication skills
+2026-10-06,live_70a54b1e46a44098,live,"Senior Sales Engineer, IT Infrastructure Solutions",Negotiation,keep,soft,required,required,1.0,,"Excellent communication, negotiation, interpersonal, and stakeholder management skills"
+2026-10-06,live_70a54b1e46a44098,live,"Senior Sales Engineer, IT Infrastructure Solutions",Prospecting,keep,soft,unspecified,,1.0,,"Manage the full sales cycle, from prospecting and technical consultation to proposal submission, negotiation, and order closure"
+2026-10-06,live_70a54b1e46a44098,live,"Senior Sales Engineer, IT Infrastructure Solutions",Technical consultation,keep,hard,required,required,1.0,,"Strong technical consultation, presentation, proposal preparation, and solution-selling capabilities"
+2026-10-06,live_70a54b1e46a44098,live,"Senior Sales Engineer, IT Infrastructure Solutions",Relationship building,keep,soft,required,,1.0,,"Build and maintain strong relationships with end users, consultants, contractors, system integrators, data centre operators, and channel partners"
+2026-10-06,live_70a54b1e46a44098,live,"Senior Sales Engineer, IT Infrastructure Solutions",IT racks,keep,hard,required,required,1.0,,"recommend suitable solutions covering IT racks, power distribution, cooling, monitoring, and related infrastructure technologies"
+2026-10-06,live_70a54b1e46a44098,live,"Senior Sales Engineer, IT Infrastructure Solutions",Power distribution,keep,hard,required,required,1.0,,"recommend suitable solutions covering IT racks, power distribution, cooling, monitoring, and related infrastructure technologies"
+2026-10-06,live_70a54b1e46a44098,live,"Senior Sales Engineer, IT Infrastructure Solutions",Cooling,keep,hard,required,required,1.0,,"recommend suitable solutions covering IT racks, power distribution, cooling, monitoring, and related infrastructure technologies"
+2026-10-06,live_70a54b1e46a44098,live,"Senior Sales Engineer, IT Infrastructure Solutions",Monitoring,keep,hard,required,required,1.0,,"recommend suitable solutions covering IT racks, power distribution, cooling, monitoring, and related infrastructure technologies"
+2026-10-06,live_70a54b1e46a44098,live,"Senior Sales Engineer, IT Infrastructure Solutions",Product presentation,keep,soft,unspecified,,1.0,,"Conduct customer meetings, product presentations, site assessments, and technical discussions"
+2026-10-06,live_70a54b1e46a44098,live,"Senior Sales Engineer, IT Infrastructure Solutions",Site assessment,keep,hard,unspecified,,1.0,,"Conduct customer meetings, product presentations, site assessments, and technical discussions"
+2026-10-06,live_70a54b1e46a44098,live,"Senior Sales Engineer, IT Infrastructure Solutions",Technical discussion,keep,soft,unspecified,,1.0,,"Conduct customer meetings, product presentations, site assessments, and technical discussions"
+2026-10-06,live_70a54b1e46a44098,live,"Senior Sales Engineer, IT Infrastructure Solutions",System configuration,keep,hard,required,required,1.0,,"Prepare technical proposals, quotations, system configurations, and commercial submissions based on project requirements"
+2026-10-06,live_70a54b1e46a44098,live,"Senior Sales Engineer, IT Infrastructure Solutions",Technical proposal,keep,hard,required,required,1.0,,"Prepare technical proposals, quotations, system configurations, and commercial submissions based on project requirements"
+2026-10-06,live_70a54b1e46a44098,live,"Senior Sales Engineer, IT Infrastructure Solutions",Technical specifications,keep,hard,unspecified,,1.0,,"Review tender documents, technical specifications, drawings, and bills of quantities to develop accurate solution proposals"
+2026-10-06,live_70a54b1e46a44098,live,"Senior Sales Engineer, IT Infrastructure Solutions",Product specification,keep,hard,unspecified,,1.0,,"Drive product specification activities to secure inclusion in project designs, consultant specifications, and tender documents"
+2026-10-06,live_70a54b1e46a44098,live,"Senior Sales Engineer, IT Infrastructure Solutions",Collaboration,keep,soft,unspecified,,1.0,,"Collaborate with internal engineering, product, operations, and project teams to ensure effective solution delivery and customer support"
+2026-10-06,live_70a54b1e46a44098,live,"Senior Sales Engineer, IT Infrastructure Solutions",CRM,keep,hard,unspecified,,1.0,,update CRM records
+2026-10-06,live_70a54b1e46a44098,live,"Senior Sales Engineer, IT Infrastructure Solutions",Sales forecasting,keep,hard,unspecified,,1.0,,prepare sales forecasts
+2026-10-06,live_70a54b1e46a44098,live,"Senior Sales Engineer, IT Infrastructure Solutions",Sales pipeline management,keep,soft,required,required,1.0,,"Proven ability to develop customer accounts, manage sales pipelines, and achieve commercial targets"
+2026-10-06,live_70a54b1e46a44098,live,"Senior Sales Engineer, IT Infrastructure Solutions",Technical sales,keep,hard,required,required,1.0,,"Relevant experience in technical sales, solution selling, project sales, business development, or sales engineering"
+2026-10-06,live_70a54b1e46a44098,live,"Senior Sales Engineer, IT Infrastructure Solutions",Solution selling,keep,hard,required,required,1.0,,"Relevant experience in technical sales, solution selling, project sales, business development, or sales engineering"
+2026-10-06,live_70a54b1e46a44098,live,"Senior Sales Engineer, IT Infrastructure Solutions",Project sales,keep,hard,required,required,1.0,,"Relevant experience in technical sales, solution selling, project sales, business development, or sales engineering"
+2026-10-06,live_70a54b1e46a44098,live,"Senior Sales Engineer, IT Infrastructure Solutions",Business development,keep,hard,required,required,1.0,,"Relevant experience in technical sales, solution selling, project sales, business development, or sales engineering"
+2026-10-06,live_70a54b1e46a44098,live,"Senior Sales Engineer, IT Infrastructure Solutions",Sales engineering,keep,hard,required,required,1.0,,"Relevant experience in technical sales, solution selling, project sales, business development, or sales engineering"
+2026-10-06,live_70a54b1e46a44098,live,"Senior Sales Engineer, IT Infrastructure Solutions",Thermal management,keep,hard,required,required,1.0,,"Good understanding of IT infrastructure environments, power requirements, thermal management, and equipment deployment"
+2026-10-06,live_70a54b1e46a44098,live,"Senior Sales Engineer, IT Infrastructure Solutions",Equipment deployment,keep,hard,required,required,1.0,,"Good understanding of IT infrastructure environments, power requirements, thermal management, and equipment deployment"
+2026-10-06,live_70a54b1e46a44098,live,"Senior Sales Engineer, IT Infrastructure Solutions",Project-based sales,keep,soft,required,required,1.0,,"Familiarity with project-based sales, tenders, technical specifications, and bills of quantities"
+2026-10-06,live_70a54b1e46a44098,live,"Senior Sales Engineer, IT Infrastructure Solutions",Tender documents,keep,hard,required,required,1.0,,"Familiarity with project-based sales, tenders, technical specifications, and bills of quantities"
+2026-10-06,live_70a54b1e46a44098,live,"Senior Sales Engineer, IT Infrastructure Solutions",Presentation,keep,soft,required,required,1.0,,"Strong technical consultation, presentation, proposal preparation, and solution-selling capabilities"
+2026-10-06,live_70a54b1e46a44098,live,"Senior Sales Engineer, IT Infrastructure Solutions",Proposal preparation,keep,hard,required,required,1.0,,"Strong technical consultation, presentation, proposal preparation, and solution-selling capabilities"
+2026-10-06,live_70a54b1e46a44098,live,"Senior Sales Engineer, IT Infrastructure Solutions",Customer account development,keep,soft,required,required,1.0,,"Proven ability to develop customer accounts, manage sales pipelines, and achieve commercial targets"
+2026-10-06,live_70a54b1e46a44098,live,"Senior Sales Engineer, IT Infrastructure Solutions",Communication,keep,soft,required,required,1.0,,"Excellent communication, negotiation, interpersonal, and stakeholder management skills"
+2026-10-06,live_70a54b1e46a44098,live,"Senior Sales Engineer, IT Infrastructure Solutions",Interpersonal,keep,soft,required,required,1.0,,"Excellent communication, negotiation, interpersonal, and stakeholder management skills"
+2026-10-06,live_70a54b1e46a44098,live,"Senior Sales Engineer, IT Infrastructure Solutions",Stakeholder management,keep,soft,required,required,1.0,,"Excellent communication, negotiation, interpersonal, and stakeholder management skills"
