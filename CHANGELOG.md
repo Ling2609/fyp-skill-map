@@ -3,9 +3,20 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 6 Oct 2026 — Clearer messages when GitHub or the certificate AI can't help
+
+- (this commit) GitHub languages: the note now says why they weren't read. GitHub's hourly limit for calls without
+  a key (60 an hour; 403/429 with no calls left) gets its own message; no internet / slow answer another. Saving a
+  project again now retries GitHub when it has a link but no languages yet (before, only a changed project or one
+  with no skills at all was read again, so "try again later" did not work for a project with skills from its text).
+- Certificate: "SkillMap couldn't suggest skills for this certificate. Please add the ones listed on it." →
+  "SkillMap doesn't know this certificate well enough to suggest skills. Type the skills shown on your certificate
+  (or its Credly badge) in the box above." The AI returns nothing for a certificate it doesn't know, on purpose
+  (no guessed skills).
+
 ## 6 Oct 2026 — Job Matches shows only the latest search results; company apply links
 
-- (this commit) New column `jobs.gone_at` (run `migrations/migrate_add_job_gone_at.py`; the backend stops with a
+- (ac1a5e8) New column `jobs.gone_at` (run `migrations/migrate_add_job_gone_at.py`; the backend stops with a
   clear message until it is run). `fetch_live_jobs.py` now syncs saved live jobs with the cache (the latest search
   results) at the end of every saving run, or alone with `--sync-only` (0 credits, no Groq; add `--dry-run` to
   preview): a job the results no longer return is hidden (kept for the report), shown again if a later refresh

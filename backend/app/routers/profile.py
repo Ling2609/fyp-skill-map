@@ -396,7 +396,10 @@ def edit_project(project_id: int, data: ProjectIn, current_user: User = Depends(
     changed = (data.name.strip(), data.description.strip(), github) != (project.name, project.description, project.github_url)
     # also when it has no skills from its text yet (e.g. the AI call failed last time): "edit later to try again"
     nothing_read = not any(v != ADDED_BY_YOU for v in (project.skill_quotes or {}).values())
-    if changed or nothing_read:
+    # also when it has a GitHub link but no languages from it yet (GitHub unreachable or its hourly limit last time:
+    # the note says "edit and save the project later to try again", 6 Oct)
+    no_languages = bool(github) and not any(str(v).startswith("GitHub:") for v in (project.skill_quotes or {}).values())
+    if changed or nothing_read or no_languages:
         added = {k: v for k, v in (project.skill_quotes or {}).items() if v == ADDED_BY_YOU}
         quotes, github_note, skills_note = _project_skills(data, added)
         project.name, project.description, project.github_url = data.name.strip(), data.description.strip(), github

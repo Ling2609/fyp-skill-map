@@ -21,7 +21,8 @@ _REPO_URL = re.compile(r"^(?:https?://)?(?:www\.)?github\.com/([\w.-]+)/([\w.-]+
 
 NOT_GITHUB = "Only github.com links can be read for languages."
 NOT_PUBLIC = "Couldn't read the GitHub repo, so its languages weren't added. Make sure the repo is public."
-UNREACHABLE = "GitHub didn't answer, so languages weren't read this time."
+UNREACHABLE = "Couldn't reach GitHub (no internet, or GitHub was slow), so languages weren't added. Edit and save the project later to try again."
+RATE_LIMITED = "GitHub's limit of 60 repo reads an hour was reached, so languages weren't added. Edit and save the project in an hour to try again."
 
 
 def parse_repo(url: str) -> tuple[str, str] | None:
@@ -43,7 +44,10 @@ def repo_languages(url: str) -> tuple[dict[str, int], str | None]:
     if resp.status_code == 404:
         return {}, NOT_PUBLIC
     if resp.status_code != 200:
-        print(f"[github] {url}: HTTP {resp.status_code}")   # 403 = hourly limit reached
+        print(f"[github] {url}: HTTP {resp.status_code}")
+        # 403 / 429 with no calls left = the hourly limit for calls without a key (GitHub REST rate-limit docs)
+        if resp.status_code in (403, 429) and resp.headers.get("x-ratelimit-remaining") == "0":
+            return {}, RATE_LIMITED
         return {}, UNREACHABLE
     data = resp.json()
     data = data if isinstance(data, dict) else {}

@@ -373,7 +373,7 @@ function CertForm({ cert, onDone, onCancel, onDirty }) {
       const found = res.data.skills || []
       if (found.length) { addChips(found); setSuggested(true) }
       else if (res.data.failed) setNote("Couldn't suggest skills right now. You can add them yourself, or try again later.")
-      else setNote("SkillMap couldn't suggest skills for this certificate. Please add the ones listed on it.")
+      else setNote("SkillMap doesn't know this certificate well enough to suggest skills. Type the skills shown on your certificate (or its Credly badge) in the box above.")
       setTriedSuggest(true)
     } catch (err) {
       setError(errText(err, "Couldn't suggest skills right now. You can add them yourself."))

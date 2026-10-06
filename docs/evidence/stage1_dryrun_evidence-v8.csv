@@ -4668,3 +4668,36 @@
 2026-10-06,live_64c8c310a608d5e7,live,Software Engineer - Core Banking,Claude Code,keep,hard,preferred,preferred,1.0,,Bonus: Mambu • Splunk • Cursor • Claude Code
 2026-10-06,live_64c8c310a608d5e7,live,Software Engineer - Core Banking,Azure,keep,hard,required,required,1.0,cloud platform,Cloud (AWS / Azure / GCP)Java
 2026-10-06,live_64c8c310a608d5e7,live,Software Engineer - Core Banking,GCP,keep,hard,required,required,1.0,cloud platform,Cloud (AWS / Azure / GCP)Java
+2026-10-06,live_b3240f3a375de5c9,live,Software Engineer – Java / React,Java,keep,hard,required,,1.0,,"strong hands-on experience with Java, Spring Boot, React, and REST APIs"
+2026-10-06,live_b3240f3a375de5c9,live,Software Engineer – Java / React,Spring Boot,keep,hard,required,,1.0,,"strong hands-on experience with Java, Spring Boot, React, and REST APIs"
+2026-10-06,live_b3240f3a375de5c9,live,Software Engineer – Java / React,React,keep,hard,required,,1.0,,"strong hands-on experience with Java, Spring Boot, React, and REST APIs"
+2026-10-06,live_b3240f3a375de5c9,live,Software Engineer – Java / React,REST APIs,keep,hard,required,,1.0,,"strong hands-on experience with Java, Spring Boot, React, and REST APIs"
+2026-10-06,live_b3240f3a375de5c9,live,Software Engineer – Java / React,cloud-native development,keep,hard,required,,1.0,,exposure to cloud-native application development
+2026-10-06,live_b3240f3a375de5c9,live,Software Engineer – Java / React,debugging,keep,hard,unspecified,,1.0,,"Participate in code reviews, debugging, troubleshooting, and performance improvements"
+2026-10-06,live_b3240f3a375de5c9,live,Software Engineer – Java / React,performance optimization,keep,hard,unspecified,,1.0,,"Participate in code reviews, debugging, troubleshooting, and performance improvements"
+2026-10-06,live_b3240f3a375de5c9,live,Software Engineer – Java / React,secure software development,keep,hard,unspecified,,1.0,,Follow secure software development and coding best practices
+2026-10-06,live_b3240f3a375de5c9,live,Software Engineer – Java / React,CI/CD,keep,hard,unspecified,,1.0,,Support CI/CD and automated software delivery practices
+2026-10-06,live_b3240f3a375de5c9,live,Software Engineer – Java / React,Generative AI,keep,hard,unspecified,,1.0,,"Stay updated with emerging technologies, including Generative AI, Agentic AI, and AI-assisted software development"
+2026-10-06,live_b3240f3a375de5c9,live,Software Engineer – Java / React,Agentic AI,keep,hard,unspecified,,1.0,,"Stay updated with emerging technologies, including Generative AI, Agentic AI, and AI-assisted software development"
+2026-10-06,live_b3240f3a375de5c9,live,Software Engineer – Java / React,AI-assisted software development,keep,hard,unspecified,,1.0,,"Stay updated with emerging technologies, including Generative AI, Agentic AI, and AI-assisted software development"
+2026-10-06,live_67164d777b05d7a8,live,Senior PHP Software Engineer,unit testing,keep,hard,unspecified,,1.0,,run your code through unit test procedures
+2026-10-06,live_67164d777b05d7a8,live,Senior PHP Software Engineer,design patterns,keep,hard,unspecified,,1.0,,Apply best-practice development and design patterns
+2026-10-06,live_67164d777b05d7a8,live,Senior PHP Software Engineer,debugging,keep,hard,unspecified,,1.0,,"Self-test your code, diagnose problems, and debug effectively"
+2026-10-06,live_67164d777b05d7a8,live,Senior PHP Software Engineer,Stakeholder communication,keep,soft,unspecified,,1.0,,"Work comfortably with all stakeholders, technical and non-technical"
+2026-10-06,live_67164d777b05d7a8,live,Senior PHP Software Engineer,object-oriented programming,keep,hard,required,required,1.0,,Solid understanding of object-oriented programming concept
+2026-10-06,live_67164d777b05d7a8,live,Senior PHP Software Engineer,relational databases,keep,hard,required,required,1.0,,Solid understanding of relational database design and querying concepts
+2026-10-06,live_67164d777b05d7a8,live,Senior PHP Software Engineer,version control,keep,hard,required,required,1.0,,Familiarity with version control concepts
+2026-10-06,live_67164d777b05d7a8,live,Senior PHP Software Engineer,PHP,keep,hard,required,required,1.0,,Strong knowledge of PHP; experience with the Laravel framework is a strong plus
+2026-10-06,live_67164d777b05d7a8,live,Senior PHP Software Engineer,Laravel,keep,hard,preferred,required,1.0,,Strong knowledge of PHP; experience with the Laravel framework is a strong plus
+2026-10-06,live_67164d777b05d7a8,live,Senior PHP Software Engineer,Linux,keep,hard,required,preferred,1.0,,Experience with Linux environments and setting up Apache/PHP web applications (CentOS or Redhat preferred)
+2026-10-06,live_67164d777b05d7a8,live,Senior PHP Software Engineer,Apache,keep,hard,required,preferred,1.0,,Experience with Linux environments and setting up Apache/PHP web applications (CentOS or Redhat preferred)
+2026-10-06,live_67164d777b05d7a8,live,Senior PHP Software Engineer,CentOS,keep,hard,preferred,preferred,1.0,Linux distro,CentOS or Redhat preferred
+2026-10-06,live_67164d777b05d7a8,live,Senior PHP Software Engineer,Red Hat,keep,hard,preferred,preferred,1.0,Linux distro,CentOS or Redhat preferred
+2026-10-06,live_67164d777b05d7a8,live,Senior PHP Software Engineer,jQuery,keep,hard,required,required,1.0,,Knowledge of jQuery and Vue.js
+2026-10-06,live_67164d777b05d7a8,live,Senior PHP Software Engineer,Vue.js,keep,hard,required,required,1.0,,Knowledge of jQuery and Vue.js
+2026-10-06,live_67164d777b05d7a8,live,Senior PHP Software Engineer,HTML5,keep,hard,required,required,1.0,,"Exposure to web development using HTML5, CSS, and JavaScript"
+2026-10-06,live_67164d777b05d7a8,live,Senior PHP Software Engineer,CSS,keep,hard,required,required,1.0,,"Exposure to web development using HTML5, CSS, and JavaScript"
+2026-10-06,live_67164d777b05d7a8,live,Senior PHP Software Engineer,JavaScript,keep,hard,required,required,1.0,,"Exposure to web development using HTML5, CSS, and JavaScript"
+2026-10-06,live_67164d777b05d7a8,live,Senior PHP Software Engineer,software architecture,keep,hard,unspecified,required,1.0,,"Exposure to enterprise-level software development — architecture, build-up, and ongoing support"
+2026-10-06,live_67164d777b05d7a8,live,Senior PHP Software Engineer,client-server development,keep,hard,unspecified,required,1.0,,Knowledge of client/server application development
+2026-10-06,live_67164d777b05d7a8,live,Senior PHP Software Engineer,SQL,reject: quote does not name the skill,hard,required,required,1.0,,"Ability to write efficient database scripts, with solid understanding of relational database design and querying"
