@@ -3,9 +3,16 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 6 Oct 2026 — Dashboard skill names in Title Case, no clipped letters
+
+- (this commit) Skill names on the Dashboard in Title Case ("Business Process Analysis", her choice): all-lower-case
+  words get a capital, small joining words stay lower ("Version Control with Git"), words with capitals already are
+  kept ("UI/UX Design", "iOS Development", "ISTQB"). The "Skill to learn next" card clipped the tails of p / y
+  (`truncate` hides overflow and `leading-none` left no room below the line): line height is now `leading-snug`.
+
 ## 6 Oct 2026 — Chat never blocked by the daily limit; Dashboard "Next steps"
 
-- (this commit) Chatbot: Groq's free daily token limit is per model, and the job-ad extraction runs use
+- (d9c884f) Chatbot: Groq's free daily token limit is per model, and the job-ad extraction runs use
   gpt-oss-120b too, so a big extraction day left no tokens for chatting. The chat now tries gpt-oss-120b, then
   gpt-oss-20b (same family, its own daily limit) when 120b's limit is reached (her choice). Only when both are used
   up does the student see "The assistant has reached its daily usage limit. Please try again in about N minutes"

@@ -6,8 +6,13 @@ import { useAuth } from '../../context/useAuth'
 import PageHeader from '../../components/PageHeader'
 import LevelTag from '../../components/LevelTag'
 
-// Skill names are saved as the ad wrote them, often all lower case ("business process analysis")
-const sentenceCase = (text) => (text ? text.charAt(0).toUpperCase() + text.slice(1) : text)
+// Skill names are saved as the ad wrote them, often all lower case ("business process analysis"). Shown in Title
+// Case (her choice, 6 Oct): each all-lower-case word gets a capital, small joining words stay lower unless first,
+// and words that already have capitals keep them ("UI/UX design" -> "UI/UX Design", "iOS" stays "iOS")
+const SMALL_WORDS = new Set(['a', 'an', 'and', 'as', 'at', 'by', 'for', 'in', 'of', 'on', 'or', 'the', 'to', 'with'])
+const titleCase = (text) => (text ? text.split(' ').map((word, i) =>
+  word !== word.toLowerCase() || (i > 0 && SMALL_WORDS.has(word)) ? word : word.charAt(0).toUpperCase() + word.slice(1)
+).join(' ') : text)
 
 // "today" / "6 Oct" next to a saved chat
 const chatDay = (iso) => {
@@ -87,7 +92,7 @@ export default function Dashboard() {
     // The skill missing most often in the student's top matches: an action, not a vanity count.
     // Replaced "Openings you align with" (step 2, 30 Sep): with only skills you have counting,
     // that count fell to a handful and no longer led anywhere (see references.md, "Dashboard metric")
-    nextSkill: sentenceCase(nextSkill?.skill) || null,
+    nextSkill: titleCase(nextSkill?.skill) || null,
     nextSkillSub: nextSkill ? `missing in ${nextSkill.jobs} of your top ${nextSkill.of_top} matches`
       : topJobs.length ? 'you have every skill your top matches list' : 'no current openings yet',
     modules: profile.modules_count,
@@ -177,7 +182,7 @@ export default function Dashboard() {
             ].map(({ label, value, sub, dim, matchPct, text }) => (
               <div key={label} className="bg-white rounded-xl p-5 border border-slate-200">
                 <p className="text-xs font-medium text-slate-400 uppercase tracking-wider mb-3">{label}</p>
-                <p title={text ? String(value) : undefined} className={`${text ? 'text-xl truncate' : 'text-3xl'} font-semibold tracking-tight leading-none ${
+                <p title={text ? String(value) : undefined} className={`${text ? 'text-xl truncate leading-snug' : 'text-3xl leading-none'} font-semibold tracking-tight ${
                   dim ? 'text-slate-200' :
                   matchPct != null ? getMatchColor(matchPct) :
                   'text-slate-900'
@@ -255,7 +260,7 @@ export default function Dashboard() {
                   {learnFor.skills_to_learn.map(s => (
                     <li key={s.skill} className="flex items-center justify-between gap-3 px-5 py-2.5">
                       <div className="min-w-0">
-                        <p className="text-sm text-slate-800 truncate">{sentenceCase(s.skill)}</p>
+                        <p className="text-sm text-slate-800 truncate">{titleCase(s.skill)}</p>
                         <p className="text-xs text-slate-400">missing in {s.jobs} of your top {s.of_top} matches</p>
                       </div>
                       <button onClick={() => learn(s.skill)}
