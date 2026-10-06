@@ -23,6 +23,15 @@ SECTION_KEYWORDS = [
 
 _extractor = None
 
+def check_jobs_schema():
+    """Start-up check: jobs.gone_at (6 Oct) must exist (migrations/migrate_add_job_gone_at.py)."""
+    from sqlalchemy import inspect
+    from app.database import engine
+    if "gone_at" not in {c["name"] for c in inspect(engine).get_columns("jobs")}:
+        raise RuntimeError("Database not updated: run  python migrations/migrate_add_job_gone_at.py  "
+                           "from the backend folder, then start the backend again.")
+
+
 def get_extractor():
     global _extractor
     if _extractor is None:
@@ -76,7 +85,7 @@ def get_subcategories(include_past: bool = False, db: Session = Depends(get_db))
     so no chip leads to an empty list."""
     q = db.query(distinct(Job.subcategory)).filter(Job.subcategory != None)
     if not include_past:
-        q = q.filter(Job.source == "live")
+        q = q.filter(Job.source == "live", Job.gone_at.is_(None))
     subcats = q.all()
     return sorted([s[0] for s in subcats if s[0]])
 
@@ -86,7 +95,7 @@ def get_locations(db: Session = Depends(get_db)):
     """Location filter on Job Matches: every (country, location) of current openings. The page builds the
     country -> state list from these once, so the options stay the same whatever the search; options with no
     jobs are greyed out, not removed (NN/g dropdown guidelines, references.md "Location filter layout")."""
-    rows = db.query(Job.country, Job.location).filter(Job.source == "live").distinct().all()
+    rows = db.query(Job.country, Job.location).filter(Job.source == "live", Job.gone_at.is_(None)).distinct().all()
     return [{"country": country, "location": location} for country, location in rows]
 
 

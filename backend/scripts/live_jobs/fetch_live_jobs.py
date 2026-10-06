@@ -24,6 +24,14 @@ Usage (from the backend folder):
   python scripts/live_jobs/fetch_live_jobs.py --dry-run --new-only    # fetch ONLY queries not in the cache yet, preview
   python scripts/live_jobs/fetch_live_jobs.py --use-cache             # save + extract skills from the cache (0 credits)
   python scripts/live_jobs/fetch_live_jobs.py --dry-run               # refresh: re-fetch every query (e.g. before the demo)
+  python scripts/live_jobs/fetch_live_jobs.py --sync-only --dry-run   # what the sync below would change (0 credits, no Groq)
+  python scripts/live_jobs/fetch_live_jobs.py --sync-only             # do it
+
+Sync (6 Oct, every run that is not a dry run, or --sync-only): the cache holds the latest search results, so
+  - a saved live job the latest results no longer return is hidden (jobs.gone_at set; kept for the report), and
+    shown again if a later refresh returns it: Job Matches shows only the latest ads, like a fresh snapshot.
+    Skipped when a query has no results in the cache (a failed search must not hide its jobs);
+  - a saved job's apply link moves to the company's own careers site when the results have one (pick_apply_link).
 
 Queries: data/live_job_queries.json, generated from the 2024 JobStreet data by
 generate_live_queries.py (the most common ICT roles per subcategory). Regenerate it to change them.
@@ -39,7 +47,7 @@ import json
 import re
 import sys
 import time
-from datetime import datetime
+from datetime import datetime, timezone
 from urllib.parse import urlparse
 
 import requests
@@ -111,15 +119,58 @@ def is_trusted(publisher: str, url: str, employer: str = "") -> bool:
     return len(first_word) >= 3 and first_word in pub
 
 
+# The company's own posting (6 Oct): its careers site, or the hiring system it runs. It is the original ad, taken
+# down first when the job closes, while board copies (LinkedIn, Indeed...) can stay up for days (references.md,
+# "Closed jobs"). In the 5 Oct cache 81 of 918 jobs had one; JSearch's own "is_direct" flag was false for all.
+ATS_DOMAINS = ["myworkdayjobs.com", "greenhouse.io", "lever.co", "smartrecruiters.com", "successfactors.",
+               "oraclecloud.com", "taleo.net", "eightfold.ai"]
+JOB_BOARD_DOMAINS = ["linkedin.", "jobstreet.", "indeed.", "glassdoor.", "hiredly.", "maukerja.", "mycareersfuture.",
+                     "careers.gov.sg", "foundit.", "jobsdb.", "grabjobs.", "jobstore.", "accaglobal.", "jobleads.",
+                     "jooble.", "trabajo.", "bebee.", "jobrapido.", "jobsora.", "recruit.net", "expertini."]
+GENERIC_WORDS = {"malaysia", "singapore", "global", "international", "group", "holdings", "berhad", "sdn", "bhd",
+                 "pte", "ltd", "limited", "technologies", "technology", "solutions", "services", "systems", "digital",
+                 "consulting", "asia", "pacific", "company", "corporation", "inc", "the", "and", "labs", "plc"}
+
+
+def is_company_own(url: str, employer: str) -> bool:
+    """The link is on the employer's own site: an ATS, or a web address holding the company's name
+    ("careers.malaysiaairports.com.my" for Malaysia Airports, "careers.nttdata.com" for NTT DATA)."""
+    host = urlparse(url or "").netloc.lower()
+    if not host or any(b in host for b in JOB_BOARD_DOMAINS + BLOCKED_DOMAINS):
+        return False
+    if any(a in host for a in ATS_DOMAINS):
+        return True
+    name = clean_company(employer).lower()
+    compact = re.sub(r"[^a-z0-9]", "", name)
+    words = [w for w in re.findall(r"[a-z0-9]+", name) if len(w) >= 4 and w not in GENERIC_WORDS]
+    return (len(compact) >= 4 and compact in host.replace(".", "").replace("-", "")) or any(w in host for w in words)
+
+
 def pick_apply_link(job: dict) -> tuple[str | None, str | None]:
-    """Return (url, publisher) of the first trusted apply option, else (None, None)."""
+    """Return (url, publisher) of the apply option to show, else (None, None): the company's own site when the
+    results have one, otherwise the first trusted option (as before)."""
     employer = job.get("employer_name") or ""
     options = [(job.get("job_apply_link"), job.get("job_publisher"))]
     options += [(o.get("apply_link"), o.get("publisher")) for o in (job.get("apply_options") or [])]
     for url, publisher in options:
+        if url and is_company_own(url, employer):
+            host = urlparse(url).netloc.lower()
+            # "Apply on Workday" says nothing to a student: name the company for a hiring system
+            return url, (f"{clean_company(employer)} careers" if any(a in host for a in ATS_DOMAINS) else publisher)
+    for url, publisher in options:
         if url and is_trusted(publisher, url, employer):
             return url, publisher
     return None, None
+
+
+def job_location(job: dict, country: str) -> str:
+    return ", ".join(x for x in [job.get("job_city"), job.get("job_state")] if x) \
+        or ("Malaysia" if country == "my" else "Singapore")
+
+
+def job_ref_of(job: dict, url: str | None = None) -> str:
+    """Stable, URL-safe id (JSearch ids contain / + =)."""
+    return "live_" + hashlib.sha1((job.get("job_id") or url or "").encode()).hexdigest()[:16]
 
 
 def format_salary(job: dict) -> str | None:
@@ -181,7 +232,62 @@ def load_cache() -> dict:
         return {}
 
 
-def run(dry_run: bool, use_cache: bool, new_only: bool):
+def sync_saved_jobs(db, cache: dict, queries: list[tuple[str, str, str]], dry_run: bool):
+    """Saved live jobs vs the latest search results (the cache): hide the ones no longer returned, show again the
+    ones returned again, and move apply links to the company's own site. Prints every change."""
+    missing = [q for q, _, _ in queries if q not in cache]   # never fetched (failed calls are not cached)
+    country_of = {q: c for q, c, _ in queries}
+    seen, links = set(), {}
+    # Every search in the cache counts, also ones no longer in the query list (the 27 Sep set): a job is hidden
+    # because the latest results no longer return it, never because the query list changed. A full refresh
+    # drops searches that are not in the list any more (run), so their jobs are judged by the new searches.
+    for query, results in cache.items():
+        country = country_of.get(query) or ("sg" if "singapore" in query.lower() else "my")
+        for j in results or []:
+            url, publisher = pick_apply_link(j)
+            ids = {job_ref_of(j, url), job_key(j.get("job_title") or "", clean_company(j.get("employer_name")),
+                                               job_location(j, country))}
+            seen |= ids
+            if url:
+                for i in ids:
+                    links.setdefault(i, (url, publisher))
+    now = datetime.now(timezone.utc)
+    hidden, back, relinked = [], [], []
+    for job in db.query(Job).filter(Job.source == "live").order_by(Job.id):
+        ids = {job.job_id, job_key(job.job_title, job.company, job.location)}
+        found = bool(ids & seen)
+        if not found and job.gone_at is None and not missing:
+            hidden.append(job)
+            if not dry_run:
+                job.gone_at = now
+        elif found and job.gone_at is not None:
+            back.append(job)
+            if not dry_run:
+                job.gone_at = None
+        link = next((links[i] for i in ids if i in links), None)
+        if found and link and (link[0], link[1]) != (job.source_url, job.publisher) and is_company_own(link[0], job.company):
+            relinked.append((job, job.publisher, link[1]))
+            if not dry_run:
+                job.source_url, job.publisher = link
+    if not dry_run:
+        db.commit()
+    print("\n" + "=" * 60)
+    print(f"SYNC with the latest search results{' (dry run: nothing saved)' if dry_run else ''}")
+    print("=" * 60)
+    if missing:
+        print(f"  Not hiding anything: {len(missing)} queries are not in the cache "
+              f"(e.g. '{missing[0]}'); a failed search must not hide its jobs")
+    for job in hidden:
+        print(f"  HIDE   {job.job_title[:55]} | {job.company} (not in the latest results)")
+    for job in back:
+        print(f"  SHOW   {job.job_title[:55]} | {job.company} (returned again)")
+    for job, old, new in relinked:
+        print(f"  LINK   {job.job_title[:55]} | {job.company}: {old} -> {new}")
+    print(f"  {'Would hide' if dry_run else 'Hidden'}: {len(hidden)}   {'would show again' if dry_run else 'shown again'}: "
+          f"{len(back)}   apply link -> company site: {len(relinked)}")
+
+
+def run(dry_run: bool, use_cache: bool, new_only: bool, sync_only: bool = False):
     queries = load_queries()
     # Always load the old cache, so a failed query in a full refresh keeps its previous results
     cache = load_cache()
@@ -191,9 +297,25 @@ def run(dry_run: bool, use_cache: bool, new_only: bool):
         print(f"Using cached API results from {CACHE_FILE} (0 credits)")
     elif not settings.jsearch_key:
         sys.exit("JSEARCH_KEY is missing. Add JSEARCH_KEY=your-key to backend/.env first.")
-    elif new_only:
+    elif not new_only:
+        # Full refresh: searches no longer in the query list are dropped, so they cannot keep old jobs visible
+        old = [q for q in cache if q not in {q for q, _, _ in queries}]
+        if old:
+            print(f"Full refresh: {len(old)} searches no longer in the query list are dropped from the cache")
+            cache = {q: r for q, r in cache.items() if q not in old}
+    if new_only and not use_cache:
         missing = [q for q, _, _ in queries if q not in cache]
         print(f"--new-only: {len(missing)} new queries to fetch, {len(queries) - len(missing)} reused from cache")
+
+    if sync_only:
+        if not cache:
+            sys.exit(f"No cache found at {CACHE_FILE}. Run with --dry-run first.")
+        db = SessionLocal()
+        try:
+            sync_saved_jobs(db, cache, queries, dry_run)
+        finally:
+            db.close()
+        return
 
     extractor = None if dry_run else SkillExtractor()
     db = SessionLocal()
@@ -240,11 +362,9 @@ def run(dry_run: bool, use_cache: bool, new_only: bool):
                     stats["short"] += 1
                     continue
 
-                # Stable, URL-safe id (JSearch ids contain / + =)
                 company = clean_company(j.get("employer_name"))
-                job_ref = "live_" + hashlib.sha1((j.get("job_id") or url).encode()).hexdigest()[:16]
-                location = ", ".join(x for x in [j.get("job_city"), j.get("job_state")] if x) \
-                    or ("Malaysia" if country == "my" else "Singapore")
+                job_ref = job_ref_of(j, url)
+                location = job_location(j, country)
                 title_key = job_key(title, company, location)
                 if job_ref in seen or title_key in seen_titles:
                     stats["duplicate"] += 1
@@ -315,6 +435,7 @@ def run(dry_run: bool, use_cache: bool, new_only: bool):
                 print(f"    {len(checked.kept)} skills ({checked.hard} hard, {len(required)} required"
                       f"{f', {len(checked.rejected)} unsupported dropped' if checked.rejected else ''}): {required[:5]}")
                 time.sleep(2)  # Groq rate limit
+        sync_saved_jobs(db, cache, queries, dry_run)
     finally:
         db.close()
         if not use_cache and credits and cache:
@@ -344,5 +465,7 @@ if __name__ == "__main__":
     parser.add_argument("--dry-run", action="store_true", help="preview only, nothing saved to the database")
     parser.add_argument("--use-cache", action="store_true", help="reuse the last API results (0 credits)")
     parser.add_argument("--new-only", action="store_true", help="only call the API for queries not in the cache yet")
+    parser.add_argument("--sync-only", action="store_true",
+                        help="only sync saved jobs with the cache: hide jobs no longer listed, company apply links")
     args = parser.parse_args()
-    run(args.dry_run, args.use_cache, args.new_only)
+    run(args.dry_run, args.use_cache or args.sync_only, args.new_only, args.sync_only)   # sync reads the cache only

@@ -96,6 +96,9 @@ def _sync_job_cache():
     try:
         # Jobs that have skills (a job's skills are committed together, so this is safe mid-fetch)
         db_ids = {row[0] for row in db.query(JobSkill.job_id).distinct()}
+        # Live jobs the latest search results no longer return are left out (fetch_live_jobs.py sync); checked on
+        # every request, so a sync shows without restarting uvicorn
+        db_ids -= {row[0] for row in db.query(Job.id).filter(Job.gone_at.isnot(None))}
         for gone in set(_job_cache) - db_ids:
             del _job_cache[gone]
         new_ids = db_ids - set(_job_cache)

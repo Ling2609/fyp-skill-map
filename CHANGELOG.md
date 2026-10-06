@@ -3,9 +3,27 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 6 Oct 2026 — Job Matches shows only the latest search results; company apply links
+
+- (this commit) New column `jobs.gone_at` (run `migrations/migrate_add_job_gone_at.py`; the backend stops with a
+  clear message until it is run). `fetch_live_jobs.py` now syncs saved live jobs with the cache (the latest search
+  results) at the end of every saving run, or alone with `--sync-only` (0 credits, no Groq; add `--dry-run` to
+  preview): a job the results no longer return is hidden (kept for the report), shown again if a later refresh
+  returns it. Every search in the cache counts, also the 26 from 27 Sep that are no longer in the query list, so
+  no job is hidden just because the query list changed; a full refresh drops those retired searches first. Nothing
+  is hidden while a current query is missing from the cache (a failed search must not hide its jobs). Job Matches,
+  categories and locations leave hidden jobs out on the next request, no uvicorn restart.
+- Apply link: the company's own site (its careers site or the hiring system it runs: Workday, Greenhouse, Lever,
+  SmartRecruiters, SuccessFactors, Eightfold...) is preferred over job boards. Checked on the 918 cached jobs:
+  JSearch already lists the company's link first, so the old rule already picked it in all 99 cases; what changes
+  is the label ("Apply on Workday" / "Eightfold AI" -> "<company> careers") and 1 more job kept (Ørsted's own
+  careers page, not on the trusted list before). The sync updates saved jobs' labels too.
+- Tested on a copy of the test database: 7 jobs not in the results hidden, 1 hidden job returned again shown, 1
+  label fixed; a second run changes nothing; hidden jobs leave the job cache, locations and categories at once.
+
 ## 6 Oct 2026 — Either-or lists read in the whole sentence
 
-- (this commit) The either-or rule now reads the quote's whole sentence in the ad, not just the quote: Bitdeer
+- (448b66b) The either-or rule now reads the quote's whole sentence in the ad, not just the quote: Bitdeer
   "Strong programming ability in one or more languages, including Go, Python, C++, Java, Rust, or related
   technologies" was quoted as "including Go, Python, C++, Java, Rust", lost its "one or more" and "or related",
   and became 5 requirements (a Java-only student got Go, Rust, C++ as gaps). "one or more / at least one / any of

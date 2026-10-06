@@ -22,6 +22,9 @@ class Job(Base):
     publisher = Column(String, nullable=True)        # e.g. LinkedIn, Hiredly (live jobs only)
     listing_date = Column(DateTime(timezone=True), nullable=True)
     country = Column(String(2), nullable=False, default="MY", server_default="MY")  # ISO code; stats use MY only
+    # Live jobs: set when the latest search results no longer return the job (fetch_live_jobs.py sync, 6 Oct).
+    # Hidden from Job Matches, kept for the report; cleared if a later refresh returns it again.
+    gone_at = Column(DateTime(timezone=True), nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
 
