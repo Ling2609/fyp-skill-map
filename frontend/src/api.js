@@ -34,7 +34,9 @@ api.interceptors.response.use(
       localStorage.removeItem('token')
       sessionStorage.clear()
       // Password changed on another device (4 Oct): say so, instead of "session expired"
-      const reason = error.response.data?.detail?.startsWith('Your password was changed') ? 'password' : '1'
+      const detail = error.response.data?.detail || ''
+      const reason = detail.startsWith('Your password was changed') ? 'password'
+        : detail.startsWith('This account has been deactivated') ? 'deactivated' : '1'
       window.location.href = `/login?expired=${reason}`
     }
     return Promise.reject(error)

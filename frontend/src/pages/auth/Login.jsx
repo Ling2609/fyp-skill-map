@@ -42,6 +42,7 @@ export default function Login() {
   const sessionExpired = !!expiredReason
   const [error, setError] = useState(!sessionExpired ? ''
     : expiredReason === 'password' ? 'Your password was changed, so you were signed out. Please sign in again.'
+    : expiredReason === 'deactivated' ? 'This account has been deactivated. Please contact the career office.'
     : 'Your session has expired. Please sign in again.')
   const [loading, setLoading] = useState(false)
   const [showPassword, setShowPassword] = useState(false)

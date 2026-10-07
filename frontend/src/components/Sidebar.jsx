@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
-import { NavLink, useNavigate } from 'react-router-dom'
+import { NavLink, useLocation, useNavigate } from 'react-router-dom'
+import api from '../api'
 import { useSidebar } from './SidebarContext'
 import { useAuth } from '../context/useAuth'
 
@@ -42,6 +43,23 @@ const NAV_ITEMS = [
   },
 ]
 
+export const ADMIN_COUNTS_CHANGED = 'admin-counts-changed'
+
+// Admin = the career office (7 Oct, layout D): Users carries a badge for employers waiting for approval
+const ADMIN_ITEMS = [
+  NAV_ITEMS[0],
+  {
+    to: '/admin/users',
+    label: 'Users',
+    badge: 'pending_employers',
+    icon: (
+      <svg className="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+      </svg>
+    ),
+  },
+]
+
 const ROLE_LABEL = { student: 'For Graduates', employer: 'For Employers', admin: 'Admin Panel' }
 const ROLE_NAME = { student: 'Student', employer: 'Employer', admin: 'Admin' }
 
@@ -49,6 +67,25 @@ export default function Sidebar() {
   const navigate = useNavigate()
   const { collapsed, setCollapsed } = useSidebar()
   const { user, logout: authLogout } = useAuth()
+  const location = useLocation()
+  const isAdmin = user?.role === 'admin'
+  const items = isAdmin ? ADMIN_ITEMS : NAV_ITEMS
+
+  // Admin badges, asked again on every page change (two small counts), so an approval shows straight away
+  // and when an admin page says something changed (an approval on the dashboard doesn't change the page)
+  const [counts, setCounts] = useState({})
+  const [countsTick, setCountsTick] = useState(0)
+  useEffect(() => {
+    const bump = () => setCountsTick(t => t + 1)
+    window.addEventListener(ADMIN_COUNTS_CHANGED, bump)
+    return () => window.removeEventListener(ADMIN_COUNTS_CHANGED, bump)
+  }, [])
+  useEffect(() => {
+    if (!isAdmin) return
+    let cancelled = false
+    api.get('/admin/counts').then(res => { if (!cancelled) setCounts(res.data) }).catch(() => {})
+    return () => { cancelled = true }
+  }, [isAdmin, location.pathname, location.search, countsTick])
 
   const logout = () => {
     sessionStorage.clear()
@@ -114,13 +151,13 @@ export default function Sidebar() {
 
       {/* Nav */}
       <nav className="flex-1 px-2 py-3 space-y-0.5">
-        {NAV_ITEMS.map(item => (
+        {items.map(item => (
           <NavLink
             key={item.to}
             to={item.to}
             title={collapsed ? item.label : ''}
             className={({ isActive }) =>
-              `flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-sm font-medium transition-all ${
+              `relative flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-sm font-medium transition-all ${
                 collapsed ? 'justify-center' : ''
               } ${
                 isActive
@@ -134,7 +171,14 @@ export default function Sidebar() {
                 <span className={`shrink-0 w-4.5 h-4.5 flex items-center justify-center ${isActive ? 'text-blue-600' : 'text-slate-400'}`}>
                   {item.icon}
                 </span>
-                {!collapsed && <span className="truncate">{item.label}</span>}
+                {!collapsed && <span className="truncate flex-1">{item.label}</span>}
+                {item.badge && counts[item.badge] > 0 && (
+                  <span aria-label={`${counts[item.badge]} waiting`}
+                    className={`text-[11px] font-semibold bg-amber-100 text-amber-800 rounded-full px-1.5 min-w-5 text-center ${
+                      collapsed ? 'absolute ml-5 -mt-4' : ''}`}>
+                    {counts[item.badge]}
+                  </span>
+                )}
               </>
             )}
           </NavLink>

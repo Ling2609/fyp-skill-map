@@ -3,9 +3,27 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 7 Oct 2026 — Admin pages: dashboard (layout D) and Users
+
+- (this commit) Admins now get their own screens (her pick: layout D, references.md "Admin layout"). Sidebar for
+  Admin: Dashboard and Users, with a badge counting employers waiting for approval (refreshed on every page and
+  right after an approval). `/dashboard` shows each role its own home.
+- Dashboard: "Needs your action" first (waiting employers with Approve / Reject; modules whose skills nobody has
+  reviewed), then counts (students and employers open a filtered user list), then "Most common skill gaps" and
+  "Student profiles". The skill-gap panel is its own call (`/admin/skill-gaps`), so the page opens at once and the
+  panel fills in; `/admin/counts` feeds the badge.
+- Users: search, role and status filters (kept in the address, so a link opens the same list), Approve / Reject for
+  employers, Deactivate (asks "Deactivate? Yes / No" first) and Reactivate. Admins can't be deactivated, nor change
+  their own account here.
+- A deactivated user who is signed in is sent to the login page with "This account has been deactivated. Please
+  contact the career office." Skill Profile and AI Assistant are student-only pages now (an admin is sent home).
+- Checked in a browser on a database copy (11 checks: badge, approve, filters, search, deactivate + its message,
+  reactivate, students keep the student app and can't open Admin pages). The app's layout is desktop-only on every
+  page (the sidebar takes 224 px of a phone screen): not changed here.
+
 ## 7 Oct 2026 — Admin, batch 1: academic structure tables, user management, dashboard data
 
-- (this commit) Backend only (pages come in a later batch). Run `python migrations/migrate_admin_structure.py`
+- (d63aae2) Backend only (pages come in a later batch). Run `python migrations/migrate_admin_structure.py`
   once (safe to rerun): new tables programmes, intakes, programme_modules; module descriptions moved into the
   database from data/modules.json; users get programme / intake (students) and company name / approval status
   (employers); jobs get "posted by" and "hidden by admin". The prototype's one programme (BSc (Hons) Software

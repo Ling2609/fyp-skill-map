@@ -11,6 +11,8 @@ import JobDetail from './pages/student/JobDetail';
 import Chatbot from './pages/student/Chatbot';
 import Profile from './pages/student/Profile';
 import AccountSettings from './pages/AccountSettings'
+import AdminDashboard from './pages/admin/AdminDashboard'
+import AdminUsers from './pages/admin/AdminUsers'
 
 function RoleRoute({ children, roles }) {
   const { user, loading, serverDown } = useAuth()
@@ -28,6 +30,12 @@ function RoleRoute({ children, roles }) {
   if (!user) return <Navigate to="/login" replace />
   if (roles && !roles.includes(user.role)) return <Navigate to="/dashboard" />
   return children
+}
+
+// One /dashboard address for everyone (Login goes there); each role sees its own home (7 Oct)
+function Home() {
+  const { user } = useAuth()
+  return user?.role === 'admin' ? <AdminDashboard /> : <Dashboard />
 }
 
 function Layout({ children }) {
@@ -52,12 +60,13 @@ function AppRoutes() {
       <Route path="/register" element={<Register />} />
       <Route path="/login" element={<Login />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
-      <Route path="/dashboard" element={<RoleRoute><Layout><Dashboard /></Layout></RoleRoute>} />
+      <Route path="/dashboard" element={<RoleRoute><Layout><Home /></Layout></RoleRoute>} />
+      <Route path="/admin/users" element={<RoleRoute roles={['admin']}><Layout><AdminUsers /></Layout></RoleRoute>} />
       <Route path="/modules" element={<Navigate to="/profile?tab=modules" replace />} />
       <Route path="/recommend" element={<RoleRoute roles={['student']}><Layout><Recommend /></Layout></RoleRoute>} />
       <Route path="/jobs/:jobId" element={<RoleRoute><Layout><JobDetail /></Layout></RoleRoute>} />
-      <Route path="/chatbot" element={<RoleRoute><Layout><Chatbot /></Layout></RoleRoute>} />
-      <Route path="/profile" element={<RoleRoute><Layout><Profile /></Layout></RoleRoute>} />
+      <Route path="/chatbot" element={<RoleRoute roles={['student']}><Layout><Chatbot /></Layout></RoleRoute>} />
+      <Route path="/profile" element={<RoleRoute roles={['student']}><Layout><Profile /></Layout></RoleRoute>} />
       <Route path="/account" element={<RoleRoute><Layout><AccountSettings /></Layout></RoleRoute>} />
     </Routes>
   )

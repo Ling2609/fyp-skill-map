@@ -4,7 +4,7 @@ dashboard (layout D: to-do first, then counts and two panels) and user managemen
 
 Dashboard panels (references.md, "Admin layout"): only totals, never one student's data.
   - to-do: employers waiting for approval, modules whose extracted skills nobody has reviewed yet
-  - most common skill gaps: for each student with a profile, their own "skills to learn next" (the same
+  - most common skill gaps (/admin/skill-gaps, its own call): for each student with a profile, their own "skills to learn next" (the same
     recommend_jobs call the Dashboard uses), counted over students. Cached for a few minutes: it runs the
     matching once per student
   - student profiles: grades entered, a project or certificate added, visible to employers
@@ -109,8 +109,21 @@ def dashboard(db: Session = Depends(get_db), admin: User = Depends(require_admin
                      "visible_to_employers": db.query(User).filter(User.role == UserRole.student,
                                                                    User.is_active.is_(True),
                                                                    User.is_visible_to_employers.is_(True)).count()},
-        "skill_gaps": common_skill_gaps(db),
     }
+
+
+@router.get("/skill-gaps")
+def skill_gaps(db: Session = Depends(get_db), admin: User = Depends(require_admin)):
+    """Its own call: it runs the matching for every student, so the dashboard opens first and this panel fills in."""
+    return common_skill_gaps(db)
+
+
+@router.get("/counts")
+def counts(db: Session = Depends(get_db), admin: User = Depends(require_admin)):
+    """The sidebar's badges: two small counts, cheap enough to ask on every page."""
+    return {"pending_employers": db.query(User).filter(User.role == UserRole.employer,
+                                                       User.employer_status == "pending").count(),
+            "modules_to_review": db.query(Module).filter(Module.skills_reviewed_at.is_(None)).count()}
 
 
 @router.get("/users")
