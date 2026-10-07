@@ -35,7 +35,7 @@ def password_problem(password: str, username: str = "", email: str = "") -> str 
     if len(password) < MIN_LENGTH:
         return f"Use at least {MIN_LENGTH} characters"
     if len(password.encode("utf-8")) > MAX_BYTES:
-        return "Please use a shorter password (up to 72 characters)"
+        return f"Please use a shorter password (up to {MAX_BYTES} characters)"
     low = password.lower()
     base = re.sub(r"[\d\W_]+$", "", low)            # "password123!" -> "password"
     common = _common()

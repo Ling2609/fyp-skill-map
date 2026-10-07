@@ -2,15 +2,18 @@ import re
 from typing import Literal
 from pydantic import BaseModel, EmailStr, Field, field_validator
 from app.models.user import UserRole
+from app.services.password_policy import MAX_BYTES, MIN_LENGTH
 
 NAME_PATTERN = re.compile(r"^[a-zA-Z\s\-']+$")   # same rule as the Register page
 
 
 def check_password(v: str) -> str:
-    if len(v) < 8:
-        raise ValueError("Use at least 8 characters")
-    if len(v.encode("utf-8")) > 72:  # bcrypt only accepts up to 72 bytes
-        raise ValueError("Please use a shorter password (up to 72 characters)")
+    """Length only, so a bad request is refused before the router runs. The numbers come from
+    app/services/password_policy.py, the one place the password rule lives (the router adds the common-password check)."""
+    if len(v) < MIN_LENGTH:
+        raise ValueError(f"Use at least {MIN_LENGTH} characters")
+    if len(v.encode("utf-8")) > MAX_BYTES:  # bcrypt only accepts up to 72 bytes
+        raise ValueError(f"Please use a shorter password (up to {MAX_BYTES} characters)")
     return v
 
 
