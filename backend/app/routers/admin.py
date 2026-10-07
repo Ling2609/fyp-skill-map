@@ -49,6 +49,9 @@ def check_admin_schema():
     if not {"programmes", "intakes", "programme_modules"} <= tables or "employer_status" not in columns:
         raise RuntimeError("Database not updated: run  python migrations/migrate_admin_structure.py  "
                            "from the backend folder, then start the backend again.")
+    if "last_login_at" not in columns:
+        raise RuntimeError("Database not updated: run  python migrations/migrate_last_sign_in.py  "
+                           "from the backend folder, then start the backend again.")
     if "admin_actions" not in tables:
         raise RuntimeError("Database not updated: run  python migrations/migrate_admin_actions.py  "
                            "from the backend folder, then start the backend again.")
@@ -72,7 +75,8 @@ def _last_actions(db: Session, user_ids: list[int]) -> dict[int, dict]:
 def _user_row(u: User, last: dict | None = None) -> dict:
     return {"last_action": last, "id": u.id, "username": u.username, "name": f"{u.first_name} {u.last_name}".strip(), "email": u.email,
             "role": u.role.value if hasattr(u.role, "value") else u.role, "is_active": u.is_active,
-            "company_name": u.company_name, "employer_status": u.employer_status, "created_at": u.created_at}
+            "company_name": u.company_name, "employer_status": u.employer_status, "created_at": u.created_at,
+            "last_login_at": u.last_login_at}
 
 
 def common_skill_gaps(db: Session) -> list[dict]:

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import api from '../../api'
 import PageHeader from '../../components/PageHeader'
@@ -21,11 +21,15 @@ const ROLE = { student: 'Student', employer: 'Employer', admin: 'Admin' }
 // The latest decision, shown under the status: "Deactivated 7 Oct by Career Office · Graduated"
 const DONE = { approve: 'Approved', reject: 'Rejected', deactivate: 'Deactivated', reactivate: 'Reactivated' }
 // The column titles sit in their own strip above the scrolling list, so the scroll bar starts at the first account.
-// Both tables share these widths; the strip keeps a scroll-bar gutter so the columns line up. Status takes what is
-// left (it also holds the latest decision and its reason); Actions is just wide enough for its three buttons and
-// starts right after Status, so there's no wide gap between a row's status and its buttons.
-const COLS = [['Name', '28%'], ['Role', '11%'], ['Joined', '13%'], ['Status', null], ['Actions', '17.5rem']]
-const colgroup = <colgroup>{COLS.map(([n, w]) => <col key={n} style={w ? { width: w } : undefined} />)}</colgroup>
+// Both tables share these widths; the strip keeps a scroll-bar gutter so the columns line up. Actions is measured
+// from the buttons actually on screen (7 Oct, her review: no space kept for buttons a list doesn't have), so a list
+// of students gets one button's width and a list with waiting employers gets three. Name takes what is left.
+const COLS = [['Name', null], ['Role', '13%'], ['Joined', '15%'], ['Status', '24%'], ['Actions', 'measured']]
+const colgroupFor = (actionsPx) => (
+  <colgroup>
+    {COLS.map(([n, w]) => <col key={n} style={w === 'measured' ? { width: actionsPx } : w ? { width: w } : undefined} />)}
+  </colgroup>
+)
 const short = (iso) => new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })
 const day = (iso) => new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
 
@@ -41,6 +45,14 @@ export default function AdminUsers() {
   const [asking, setAsking] = useState(null)   // { user, action }: the decision whose reason pop-up is open
   const [askError, setAskError] = useState('')
   const strip = useRef(null)                     // the column titles follow the list when it scrolls sideways
+  const body = useRef(null)
+  const [actionsPx, setActionsPx] = useState(0)  // widest row of buttons + the cell's padding
+
+  // Measure the widest row of buttons after each change, so the Actions column is exactly as wide as it needs to be
+  useLayoutEffect(() => {
+    const widths = [...(body.current?.querySelectorAll('[data-actions]') || [])].map(e => e.scrollWidth)
+    setActionsPx(widths.length ? Math.max(...widths) + 32 : 0)
+  }, [users])
 
   const setFilter = (key, value) => {
     const next = new URLSearchParams(params)
@@ -124,7 +136,7 @@ export default function AdminUsers() {
         <div className="flex-1 min-h-0 flex flex-col bg-white rounded-xl border border-slate-200 overflow-hidden">
           <div ref={strip} aria-hidden="true" className="overflow-hidden [scrollbar-gutter:stable] bg-blue-100 border-b border-blue-200">
             <table className="w-full min-w-190 table-fixed text-xs">
-              {colgroup}
+              {colgroupFor(actionsPx)}
               <thead>
                 <tr className="text-left text-blue-900">
                   {COLS.map(([n]) => <th key={n} className="font-semibold uppercase tracking-wide px-4 py-2.5">{n === 'Actions' ? '' : n}</th>)}
@@ -135,14 +147,14 @@ export default function AdminUsers() {
           <div className="flex-1 min-h-0 overflow-auto [scrollbar-gutter:stable]"
             onScroll={e => { if (strip.current) strip.current.scrollLeft = e.currentTarget.scrollLeft }}>
           <table className="w-full text-sm min-w-190 table-fixed">
-            {colgroup}
+            {colgroupFor(actionsPx)}
             {/* real column titles for screen readers; the visible ones are the strip above */}
             <thead>
               <tr>{COLS.map(([n]) => <th key={n} scope="col" className="p-0 h-0"><span className="sr-only">{n}</span></th>)}</tr>
             </thead>
-            <tbody className="divide-y divide-slate-100">
-              {users === null && <tr><td colSpan={5} className="px-4 py-6 text-slate-500">Loading…</td></tr>}
-              {users?.length === 0 && <tr><td colSpan={5} className="px-4 py-6 text-slate-500">No accounts match.</td></tr>}
+            <tbody ref={body} className="divide-y divide-slate-100">
+              {users === null && <tr><td colSpan={COLS.length} className="px-4 py-6 text-slate-500">Loading…</td></tr>}
+              {users?.length === 0 && <tr><td colSpan={COLS.length} className="px-4 py-6 text-slate-500">No accounts match.</td></tr>}
               {users?.map(u => {
                 const s = STATUS[u.employer_status]
                 const self = u.id === me?.id
@@ -169,8 +181,9 @@ export default function AdminUsers() {
                         </p>
                       )}
                     </td>
-                    <td className="px-4 py-3">
-                      <div className="flex gap-2">
+                    {/* right-aligned, so in a mixed list every Deactivate lines up under the others */}
+                    <td className="px-4 py-3 text-right">
+                      <div data-actions className="inline-flex gap-2">
                         {u.role === 'employer' && u.employer_status !== 'approved' && (
                           <button className={`${btn} bg-blue-600 text-white hover:bg-blue-700`} disabled={busy === u.id}
                             onClick={() => act(u.id, 'approve')}>Approve</button>

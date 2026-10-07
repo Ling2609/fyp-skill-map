@@ -3,9 +3,20 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 7 Oct 2026 — Admin Users: Actions column only as wide as its buttons
+
+- (this commit) Her review: the Actions column kept room for three buttons (Approve, Reject, Deactivate) even when
+  the list had only Deactivate. Its width is now measured from the buttons on screen: one button's width for a
+  list of students, three when waiting employers are listed. Name takes the spare width; buttons are right-aligned
+  so every Deactivate lines up in a mixed list. (A "Last sign-in" column was tried and dropped: not needed for
+  the objectives.)
+- `ReasonForm.jsx` removed (replaced by `ReasonDialog.jsx` in cee02d7; unzipping had left it in the repo).
+- Checked in a browser at 1333×680: students only → Actions 115 px; all accounts → 259 px; titles line up with
+  the columns; pop-up checks still pass.
+
 ## 7 Oct 2026 — Admin dashboard fills its space; Users table and decision pop-up
 
-- (this commit) Dashboard (her review): the two bottom panels spread their rows over the space they have instead of
+- (cee02d7) Dashboard (her review): the two bottom panels spread their rows over the space they have instead of
   leaving a blank foot; when the to-do list is long they shrink back and the page scrolls. "Needs your action"
   shows 3 waiting employers at most, then "and N more employers waiting →" (opens the filtered Users list), so it
   can't push everything else off the screen. Every count card has a second line now: students joined in the last
