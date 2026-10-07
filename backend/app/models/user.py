@@ -30,8 +30,6 @@ class User(Base):
     intake_id       = Column(Integer, ForeignKey("intakes.id", ondelete="SET NULL"), nullable=True)     # students
     company_name    = Column(String(120), nullable=True)                                                 # employers
     employer_status = Column(String(10), nullable=True)   # employers: pending / approved / rejected (by Admin)
-    # Last successful sign-in, shown to Admin to spot unused accounts (7 Oct, migrations/migrate_last_sign_in.py)
-    last_login_at   = Column(DateTime(timezone=True), nullable=True)
 
 # Load the tables users point at (programmes, intakes), so any script that saves a User works on its own (7 Oct)
 from app.models import programme  # noqa: E402,F401

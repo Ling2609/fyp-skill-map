@@ -319,8 +319,6 @@ def login(payload: UserLogin, request: Request, db: Session = Depends(get_db)):
         db.commit()
     if not user.is_active:   # told only after the right password, so it reveals nothing to a guesser
         raise HTTPException(status_code=403, detail=DEACTIVATED)
-    user.last_login_at = now   # shown on Admin > Users
-    db.commit()
     return {"access_token": _login_token(user), "token_type": "bearer"}
 
 

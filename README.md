@@ -160,7 +160,6 @@ Groq's free tier allows about 200,000 tokens a day (≈ 100 jobs). Don't run two
 | `migrate_add_job_gone_at.py` | 6 Oct 2026 | adds `jobs.gone_at` (live jobs missing from the latest search are hidden). The API refuses to start until this has run |
 | `migrate_admin_structure.py` | 7 Oct 2026 | new tables `programmes`, `intakes`, `programme_modules`; `modules.description` (filled from `data/modules.json`) and `skills_reviewed_at`; `users.programme_id`, `intake_id`, `company_name`, `employer_status`; `jobs.posted_by_user_id`, `hidden_by_admin_at`; creates the SE programme with its modules; marks existing employers approved. The API refuses to start until this has run |
 | `migrate_admin_actions.py` | 7 Oct 2026 | new table `admin_actions` (who, when, what, why) for every approve / reject / deactivate / reactivate. The API refuses to start until this has run |
-| `migrate_last_sign_in.py` | 7 Oct 2026 | `users.last_login_at`, set at every successful sign-in and shown on Admin > Users. The API refuses to start until this has run |
 
 A **new, empty** database doesn't need them: the tables are created from `app/models/` when the API starts. To apply one: `python migrations/<file>.py` from `backend/`. A new database change gets a new `migrate_<what_it_does>.py` and a row in this table.
 
