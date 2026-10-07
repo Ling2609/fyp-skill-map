@@ -66,7 +66,7 @@ const MD = {
   p: ({ children }) => <p className="text-sm text-slate-600 leading-relaxed my-1.5">{children}</p>,
   strong: ({ children }) => <strong className="font-semibold text-slate-900">{children}</strong>,
   a: ({ href, children }) => (
-    <a href={href} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline break-words">{children}</a>
+    <a href={href} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline wrap-break-word">{children}</a>
   ),
   ul: ({ children, className }) => (
     <ul className={`text-sm text-slate-600 leading-relaxed my-1.5 space-y-1 ${className?.includes('contains-task-list') ? 'list-none pl-1' : 'list-disc pl-5 marker:text-blue-400'}`}>{children}</ul>
