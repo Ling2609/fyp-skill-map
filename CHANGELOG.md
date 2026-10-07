@@ -3,9 +3,31 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 7 Oct 2026 — Admin Users: filter buttons, one ⋯ menu per row, decision history
+
+- (this commit) Her review of an external audit and four mock-ups (her pick: B; references.md "Admin Users table"):
+  - Filter buttons with counts replace the Role and Status dropdowns: All · Students · Employers · Waiting ·
+    Deactivated (one click; the number says what is there). New `GET /admin/users/counts?q=` (counts for the
+    current search). Dashboard links (`?role=student`, `?role=employer`) still open the matching filter.
+  - One "⋯" menu per row instead of up to three buttons: waiting employer → Approve, Reject…, View history,
+    Deactivate account…; deactivated → Reactivate account…, View history; others → View history, Deactivate
+    account…. Keyboard: arrow keys, Esc; opens upwards near the bottom of the screen. One-click Approve / Reject
+    stays on the dashboard's "Needs your action".
+  - View history: a pop-up listing every decision on the account (approved / rejected / deactivated / reactivated),
+    when, by whom and why, from `admin_actions`. The reason line left the rows, so every row is one line high.
+  - Full width with the spare space shared between Name, Role, Joined and Status and only the ⋯ column narrow
+    (measured at 1333 px: gaps 221 / 157 / 158 / 175 px, was one 400+ px gap). "Active" in green; waiting rows
+    tinted amber; status chip "Waiting" (short). "Showing the newest 500 accounts" when the server cap is reached.
+  - Example reasons changed: "Graduated and left the university" contradicted the scope (graduates are users) →
+    "Duplicate account"; reactivate → "Student asked to keep this account".
+  - Removed: the measured Actions column and `Select.jsx` (no dropdowns left).
+- Checked in a browser at 1333×680 (18 checks): counts, Waiting filter, menu items per state, approve and reject
+  from the menu (counts update), deactivate with the new example, reason not in the row, history pop-up, Esc and
+  click-outside, last row's menu stays on screen, dashboard link, titles aligned, no page errors.
+
 ## 7 Oct 2026 — Admin Users: Actions column only as wide as its buttons
 
-- (this commit) Her review: the Actions column kept room for three buttons (Approve, Reject, Deactivate) even when
+- (6e1b233) Her review: the Actions column kept room for three buttons (Approve, Reject, Deactivate) even when
   the list had only Deactivate. Its width is now measured from the buttons on screen: one button's width for a
   list of students, three when waiting employers are listed. Name takes the spare width; buttons are right-aligned
   so every Deactivate lines up in a mixed list. (A "Last sign-in" column was tried and dropped: not needed for

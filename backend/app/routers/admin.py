@@ -151,6 +151,27 @@ def counts(db: Session = Depends(get_db), admin: User = Depends(require_admin)):
             "modules_to_review": db.query(Module).filter(Module.skills_reviewed_at.is_(None)).count()}
 
 
+def _search(query, q: str):
+    """Part of a name, username, email or company."""
+    if not q.strip():
+        return query
+    like = f"%{q.strip().lower()}%"
+    return query.filter(or_(func.lower(User.username).like(like), func.lower(User.email).like(like),
+                            func.lower(User.first_name + " " + User.last_name).like(like),
+                            func.lower(func.coalesce(User.company_name, "")).like(like)))
+
+
+@router.get("/users/counts")
+def user_counts(q: str = "", db: Session = Depends(get_db), admin: User = Depends(require_admin)):
+    """The numbers on the Users filter buttons (7 Oct), for the current search text."""
+    base = _search(db.query(User), q)
+    return {"all": base.count(),
+            "students": base.filter(User.role == UserRole.student).count(),
+            "employers": base.filter(User.role == UserRole.employer).count(),
+            "waiting": base.filter(User.role == UserRole.employer, User.employer_status == "pending").count(),
+            "deactivated": base.filter(User.is_active.is_(False)).count()}
+
+
 @router.get("/users")
 def list_users(role: str = "", status: str = "", q: str = "", db: Session = Depends(get_db),
                admin: User = Depends(require_admin)):
@@ -165,12 +186,7 @@ def list_users(role: str = "", status: str = "", q: str = "", db: Session = Depe
         query = query.filter(User.is_active.is_(False))
     elif status:
         query = query.filter(User.employer_status == status)
-    if q.strip():
-        like = f"%{q.strip().lower()}%"
-        query = query.filter(or_(func.lower(User.username).like(like), func.lower(User.email).like(like),
-                                 func.lower(User.first_name + " " + User.last_name).like(like),
-                                 func.lower(func.coalesce(User.company_name, "")).like(like)))
-    users = query.order_by(User.created_at.desc()).limit(500).all()
+    users = _search(query, q).order_by(User.created_at.desc()).limit(500).all()
     latest = _last_actions(db, [u.id for u in users])
     return [_user_row(u, latest.get(u.id)) for u in users]
 

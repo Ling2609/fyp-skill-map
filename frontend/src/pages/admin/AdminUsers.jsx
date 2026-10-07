@@ -1,37 +1,48 @@
-import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import api from '../../api'
 import PageHeader from '../../components/PageHeader'
 import { useAuth } from '../../context/useAuth'
 import { ADMIN_COUNTS_CHANGED } from '../../components/Sidebar'
 import ReasonDialog from './ReasonDialog'
-import Select from './Select'
+import HistoryDialog from './HistoryDialog'
+import RowMenu from './RowMenu'
 import { DECISIONS } from './decisions'
 
-// Admin > Users (7 Oct): every account, filtered by role / status / search (kept in the URL, so the dashboard's
-// count cards open a filtered list). Employers are approved or rejected here; any account but an admin can be
-// deactivated (signed out at once, can't sign in; nothing is deleted) and reactivated.
+// Admin > Users (7 Oct, her pick B after mock-ups; references.md "Admin Users table"). Every account, with:
+//  - filter buttons with counts (All / Students / Employers / Waiting / Deactivated) instead of two dropdowns:
+//    one click, and the number says what is there (Hearst, query previews); kept in the URL, so the dashboard's
+//    cards still open a filtered list
+//  - one "⋯" menu per row (Approve / Reject / Deactivate / Reactivate / View history), so no column keeps room for
+//    buttons a row doesn't have; the reasons live in View history, so every row is one line high
+//  - full width, with the spare space shared between Name, Role, Joined and Status and only the ⋯ column narrow,
+//    so no single gap stands out (option B)
+// Employers are approved here or from the dashboard's "Needs your action" (one click there).
 
-const STATUS = {
-  pending: { label: 'Waiting', cls: 'bg-amber-100 text-amber-800' },
-  approved: { label: 'Approved', cls: 'bg-emerald-50 text-emerald-700' },
-  rejected: { label: 'Rejected', cls: 'bg-slate-100 text-slate-600' },
-}
 const ROLE = { student: 'Student', employer: 'Employer', admin: 'Admin' }
-// The latest decision, shown under the status: "Deactivated 7 Oct by Career Office · Graduated"
-const DONE = { approve: 'Approved', reject: 'Rejected', deactivate: 'Deactivated', reactivate: 'Reactivated' }
-// The column titles sit in their own strip above the scrolling list, so the scroll bar starts at the first account.
-// Both tables share these widths; the strip keeps a scroll-bar gutter so the columns line up. Actions is measured
-// from the buttons actually on screen (7 Oct, her review: no space kept for buttons a list doesn't have), so a list
-// of students gets one button's width and a list with waiting employers gets three. Name takes what is left.
-const COLS = [['Name', null], ['Role', '13%'], ['Joined', '15%'], ['Status', '24%'], ['Actions', 'measured']]
-const colgroupFor = (actionsPx) => (
-  <colgroup>
-    {COLS.map(([n, w]) => <col key={n} style={w === 'measured' ? { width: actionsPx } : w ? { width: w } : undefined} />)}
-  </colgroup>
-)
-const short = (iso) => new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })
+// The column titles sit in their own strip above the scrolling list, so the scroll bar starts at the first account;
+// both tables share these widths, and the strip keeps a scroll-bar gutter so the columns line up
+const COLS = [['Name', '31%'], ['Role', '20%'], ['Joined', '22%'], ['Status', '20%'], ['Actions', '7%']]
+const colgroup = <colgroup>{COLS.map(([n, w]) => <col key={n} style={{ width: w }} />)}</colgroup>
 const day = (iso) => new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
+const LIMIT = 500   // the server returns at most this many accounts
+
+// Filter buttons: each sets role / status in the URL
+const FILTERS = [
+  { key: 'all', label: 'All', role: '', status: '' },
+  { key: 'students', label: 'Students', role: 'student', status: '' },
+  { key: 'employers', label: 'Employers', role: 'employer', status: '' },
+  { key: 'waiting', label: 'Waiting', role: 'employer', status: 'pending', warn: true },
+  { key: 'deactivated', label: 'Deactivated', role: '', status: 'inactive' },
+]
+
+function Status({ u }) {
+  if (!u.is_active) return <span className="text-xs font-medium rounded-full px-2 py-0.5 bg-rose-50 text-rose-700">Deactivated</span>
+  if (u.employer_status === 'pending') return <span className="text-xs font-medium rounded-full px-2 py-0.5 bg-amber-100 text-amber-800">Waiting</span>
+  if (u.employer_status === 'approved') return <span className="text-xs font-medium rounded-full px-2 py-0.5 bg-emerald-50 text-emerald-700">Approved</span>
+  if (u.employer_status === 'rejected') return <span className="text-xs font-medium rounded-full px-2 py-0.5 bg-slate-100 text-slate-600">Rejected</span>
+  return <span className="text-sm font-medium text-emerald-700">Active</span>
+}
 
 export default function AdminUsers() {
   const { user: me } = useAuth()
@@ -40,23 +51,22 @@ export default function AdminUsers() {
   const status = params.get('status') || ''
   const [q, setQ] = useState(params.get('q') || '')
   const [users, setUsers] = useState(null)
+  const [counts, setCounts] = useState(null)
   const [error, setError] = useState('')
   const [busy, setBusy] = useState(null)
-  const [asking, setAsking] = useState(null)   // { user, action }: the decision whose reason pop-up is open
+  const [asking, setAsking] = useState(null)     // { user, action }: the decision whose reason pop-up is open
   const [askError, setAskError] = useState('')
+  const [history, setHistory] = useState(null)   // the user whose history pop-up is open
   const strip = useRef(null)                     // the column titles follow the list when it scrolls sideways
-  const body = useRef(null)
-  const [actionsPx, setActionsPx] = useState(0)  // widest row of buttons + the cell's padding
-
-  // Measure the widest row of buttons after each change, so the Actions column is exactly as wide as it needs to be
-  useLayoutEffect(() => {
-    const widths = [...(body.current?.querySelectorAll('[data-actions]') || [])].map(e => e.scrollWidth)
-    setActionsPx(widths.length ? Math.max(...widths) + 32 : 0)
-  }, [users])
 
   const setFilter = (key, value) => {
     const next = new URLSearchParams(params)
     if (value) next.set(key, value); else next.delete(key)
+    setParams(next, { replace: true })
+  }
+  const pick = (f) => {
+    const next = new URLSearchParams(params)
+    for (const [k, v] of [['role', f.role], ['status', f.status]]) { if (v) next.set(k, v); else next.delete(k) }
     setParams(next, { replace: true })
   }
 
@@ -67,6 +77,12 @@ export default function AdminUsers() {
   }, [q])   // eslint-disable-line react-hooks/exhaustive-deps
 
   const query = params.toString()
+  const search = params.get('q') || ''
+  const loadCounts = useCallback(() => {
+    api.get(`/admin/users/counts${search ? `?q=${encodeURIComponent(search)}` : ''}`)
+      .then(res => setCounts(res.data)).catch(() => setCounts(null))
+  }, [search])
+  useEffect(() => { loadCounts() }, [loadCounts])
   useEffect(() => {
     let cancelled = false
     api.get(`/admin/users${query ? `?${query}` : ''}`)
@@ -81,6 +97,7 @@ export default function AdminUsers() {
       .then(res => {
         setUsers(list => list.map(u => (u.id === id ? res.data : u)))
         setAsking(null)
+        loadCounts()
         window.dispatchEvent(new Event(ADMIN_COUNTS_CHANGED))
       })
       .catch(err => {
@@ -90,10 +107,21 @@ export default function AdminUsers() {
       .finally(() => setBusy(null))
   }
 
-  const btn = 'px-3 py-1.5 text-xs font-medium rounded-lg disabled:opacity-50 whitespace-nowrap'
-  const quiet = `${btn} border border-slate-200 text-slate-700 hover:bg-slate-50`
   const ask = (user, action) => { setAskError(''); setAsking({ user, action }) }
   const display = (u) => (u.role === 'employer' && u.company_name ? u.company_name : u.name)
+  const active = FILTERS.find(f => f.role === role && f.status === status)?.key
+
+  // What each row's ⋯ menu offers: approve / reject while waiting, reactivate when deactivated, history always
+  const menuFor = (u) => {
+    const self = u.id === me?.id
+    const items = []
+    if (u.is_active && u.role === 'employer' && u.employer_status !== 'approved') items.push({ label: 'Approve', onSelect: () => act(u.id, 'approve') })
+    if (u.is_active && u.role === 'employer' && u.employer_status === 'pending') items.push({ label: 'Reject…', onSelect: () => ask(u, 'reject') })
+    if (!self && !u.is_active) items.push({ label: 'Reactivate account…', onSelect: () => ask(u, 'reactivate') })
+    items.push({ label: 'View history', onSelect: () => setHistory(u) })
+    if (!self && u.role !== 'admin' && u.is_active) items.push({ label: 'Deactivate account…', danger: true, onSelect: () => ask(u, 'deactivate') })
+    return items
+  }
 
   return (
     <div className="h-screen flex flex-col">
@@ -106,29 +134,26 @@ export default function AdminUsers() {
       </PageHeader>
 
       <div className="flex-1 min-h-0 flex flex-col gap-4 px-8 py-6">
-        <div className="flex flex-wrap items-center gap-3">
+        <div className="flex flex-wrap items-center gap-2.5">
           <label className="sr-only" htmlFor="user-search">Search users</label>
           <input id="user-search" value={q} onChange={e => setQ(e.target.value)} placeholder="Search name, email or company"
-            className="flex-1 min-w-56 max-w-xl px-3 py-2 text-sm bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
-          <Select id="role-filter" label="Role" value={role} onChange={e => setFilter('role', e.target.value)}>
-            <option value="">All roles</option>
-            <option value="student">Students</option>
-            <option value="employer">Employers</option>
-            <option value="admin">Admins</option>
-          </Select>
-          <Select id="status-filter" label="Status" value={status} onChange={e => setFilter('status', e.target.value)}>
-            <option value="">Any status</option>
-            <option value="pending">Waiting for approval</option>
-            <option value="approved">Approved</option>
-            <option value="rejected">Rejected</option>
-            <option value="inactive">Deactivated</option>
-          </Select>
-          {/* PatternFly: with no pagination, the item count is the toolbar's last element */}
-          {users && (
-            <span className="ml-auto text-sm text-slate-600 whitespace-nowrap tabular-nums" aria-live="polite">
-              <span className="font-semibold text-slate-900">{users.length}</span> account{users.length === 1 ? '' : 's'}
-            </span>
-          )}
+            className="w-80 max-w-full mr-1 px-3 py-2 text-sm bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+          <div role="group" aria-label="Show" className="flex flex-wrap gap-2">
+            {FILTERS.map(f => {
+              const on = active === f.key
+              const n = counts?.[f.key]
+              return (
+                <button key={f.key} type="button" aria-pressed={on} onClick={() => pick(f)}
+                  className={`px-3 py-1.5 text-sm rounded-full border transition ${on
+                    ? 'bg-blue-700 border-blue-700 text-white'
+                    : f.warn && n ? 'bg-amber-50 border-amber-300 text-amber-800 hover:bg-amber-100'
+                      : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'}`}>
+                  {f.label}
+                  {n !== undefined && <span className={`ml-1.5 font-semibold tabular-nums ${on ? 'text-blue-100' : 'opacity-70'}`}>{n}</span>}
+                </button>
+              )
+            })}
+          </div>
         </div>
 
         {error && <p className="text-sm text-rose-600">{error}</p>}
@@ -136,7 +161,7 @@ export default function AdminUsers() {
         <div className="flex-1 min-h-0 flex flex-col bg-white rounded-xl border border-slate-200 overflow-hidden">
           <div ref={strip} aria-hidden="true" className="overflow-hidden [scrollbar-gutter:stable] bg-blue-100 border-b border-blue-200">
             <table className="w-full min-w-190 table-fixed text-xs">
-              {colgroupFor(actionsPx)}
+              {colgroup}
               <thead>
                 <tr className="text-left text-blue-900">
                   {COLS.map(([n]) => <th key={n} className="font-semibold uppercase tracking-wide px-4 py-2.5">{n === 'Actions' ? '' : n}</th>)}
@@ -146,72 +171,45 @@ export default function AdminUsers() {
           </div>
           <div className="flex-1 min-h-0 overflow-auto [scrollbar-gutter:stable]"
             onScroll={e => { if (strip.current) strip.current.scrollLeft = e.currentTarget.scrollLeft }}>
-          <table className="w-full text-sm min-w-190 table-fixed">
-            {colgroupFor(actionsPx)}
-            {/* real column titles for screen readers; the visible ones are the strip above */}
-            <thead>
-              <tr>{COLS.map(([n]) => <th key={n} scope="col" className="p-0 h-0"><span className="sr-only">{n}</span></th>)}</tr>
-            </thead>
-            <tbody ref={body} className="divide-y divide-slate-100">
-              {users === null && <tr><td colSpan={COLS.length} className="px-4 py-6 text-slate-500">Loading…</td></tr>}
-              {users?.length === 0 && <tr><td colSpan={COLS.length} className="px-4 py-6 text-slate-500">No accounts match.</td></tr>}
-              {users?.map(u => {
-                const s = STATUS[u.employer_status]
-                const self = u.id === me?.id
-                return (
-                  <tr key={u.id} className={u.is_active ? '' : 'bg-slate-50'}>
+            <table className="w-full text-sm min-w-190 table-fixed">
+              {colgroup}
+              {/* real column titles for screen readers; the visible ones are the strip above */}
+              <thead>
+                <tr>{COLS.map(([n]) => <th key={n} scope="col" className="p-0 h-0"><span className="sr-only">{n}</span></th>)}</tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100">
+                {users === null && <tr><td colSpan={COLS.length} className="px-4 py-6 text-slate-500">Loading…</td></tr>}
+                {users?.length === 0 && <tr><td colSpan={COLS.length} className="px-4 py-6 text-slate-500">No accounts match.</td></tr>}
+                {users?.map(u => (
+                  <tr key={u.id} className={u.is_active && u.employer_status === 'pending' ? 'bg-amber-50/70' : ''}>
                     <td className="px-4 py-3">
                       <p className="font-medium text-slate-800 truncate">{display(u)}</p>
                       <p className="text-xs text-slate-500 mt-0.5 truncate">
                         {u.role === 'employer' && u.company_name ? `${u.name} · ` : ''}{u.email}
                       </p>
                     </td>
-                    <td className="px-4 py-3 text-slate-600">{ROLE[u.role] || u.role}</td>
-                    <td className="px-4 py-3 text-slate-600 whitespace-nowrap">{day(u.created_at)}</td>
-                    <td className="px-4 py-3">
-                      <div className="flex flex-wrap gap-1.5">
-                        {!u.is_active && <span className="text-xs font-medium rounded-full px-2 py-0.5 bg-rose-50 text-rose-700">Deactivated</span>}
-                        {u.is_active && s && <span className={`text-xs font-medium rounded-full px-2 py-0.5 ${s.cls}`}>{s.label}</span>}
-                        {u.is_active && !s && <span className="text-xs text-slate-500">Active</span>}
-                      </div>
-                      {u.last_action && (
-                        <p className="text-xs text-slate-500 mt-1">
-                          {DONE[u.last_action.action]} {short(u.last_action.at)} by {u.last_action.by}
-                          {u.last_action.reason && <span className="text-slate-600"> · {u.last_action.reason}</span>}
-                        </p>
-                      )}
-                    </td>
-                    {/* right-aligned, so in a mixed list every Deactivate lines up under the others */}
+                    <td className="px-4 py-3 text-slate-700">{ROLE[u.role] || u.role}</td>
+                    <td className="px-4 py-3 text-slate-700 whitespace-nowrap">{day(u.created_at)}</td>
+                    <td className="px-4 py-3"><Status u={u} /></td>
                     <td className="px-4 py-3 text-right">
-                      <div data-actions className="inline-flex gap-2">
-                        {u.role === 'employer' && u.employer_status !== 'approved' && (
-                          <button className={`${btn} bg-blue-600 text-white hover:bg-blue-700`} disabled={busy === u.id}
-                            onClick={() => act(u.id, 'approve')}>Approve</button>
-                        )}
-                        {u.role === 'employer' && u.employer_status === 'pending' && (
-                          <button className={quiet} disabled={busy === u.id} onClick={() => ask(u, 'reject')}>Reject</button>
-                        )}
-                        {!self && u.role !== 'admin' && u.is_active && (
-                          <button className={quiet} disabled={busy === u.id} onClick={() => ask(u, 'deactivate')}>Deactivate</button>
-                        )}
-                        {!self && !u.is_active && (
-                          <button className={quiet} disabled={busy === u.id} onClick={() => ask(u, 'reactivate')}>Reactivate</button>
-                        )}
-                      </div>
+                      <RowMenu label={`Actions for ${display(u)}`} items={menuFor(u)} disabled={busy === u.id} />
                     </td>
                   </tr>
-                )
-              })}
-            </tbody>
-          </table>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
+        {users?.length >= LIMIT && (
+          <p className="text-xs text-slate-500 -mt-2">Showing the newest {LIMIT} accounts. Search to find others.</p>
+        )}
       </div>
 
       {asking && (
         <ReasonDialog decision={DECISIONS[asking.action]} name={display(asking.user)} busy={busy === asking.user.id}
           error={askError} onConfirm={reason => act(asking.user.id, asking.action, reason)} onCancel={() => setAsking(null)} />
       )}
+      {history && <HistoryDialog user={history} name={display(history)} onClose={() => setHistory(null)} />}
     </div>
   )
 }

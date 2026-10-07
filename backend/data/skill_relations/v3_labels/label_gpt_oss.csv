@@ -259,3 +259,63 @@ id,a,b,label_gpt_oss,model
 258,Incident Management,Incident Review,NARROWER,openai/gpt-oss-120b
 259,LAN Administration,LAN Configuration,NARROWER,openai/gpt-oss-120b
 260,MES implementation,MES Support,NARROWER,openai/gpt-oss-120b
+261,Software Patching,Patching,NARROWER,openai/gpt-oss-120b
+262,Server Troubleshooting,Server Maintenance,RELATED,openai/gpt-oss-120b
+263,SEO Optimization,SEO,NARROWER,openai/gpt-oss-120b
+264,AKS,Azure AKS,SAME,openai/gpt-oss-120b
+265,Infrastructure Management,Infrastructure Automation,RELATED,openai/gpt-oss-120b
+266,Mentoring Engineers,Mentoring,NARROWER,openai/gpt-oss-120b
+267,Financial Reporting,Financial Modeling,RELATED,openai/gpt-oss-120b
+268,Groovy,Groovy scripting,BROADER,openai/gpt-oss-120b
+269,Data Automation,Data validation,RELATED,openai/gpt-oss-120b
+270,IT Security,IT Administration,RELATED,openai/gpt-oss-120b
+271,Wi-Fi,Wi-Fi Administration,BROADER,openai/gpt-oss-120b
+272,CCIE,CCIE certification,SAME,openai/gpt-oss-120b
+273,Remote Desktop Support,Remote Desktop,NARROWER,openai/gpt-oss-120b
+274,Android Deployment,Android testing,RELATED,openai/gpt-oss-120b
+275,Azure SQL,SQL,NARROWER,openai/gpt-oss-120b
+276,Software Installation,Software Training,RELATED,openai/gpt-oss-120b
+277,LAN/WAN Management,LAN,NARROWER,openai/gpt-oss-120b
+278,Network Configuration,Network Testing,RELATED,openai/gpt-oss-120b
+279,Financial Analysis,Financial Management,BROADER,openai/gpt-oss-120b
+280,Predictive Modeling,Predictive Analytics,NARROWER,openai/gpt-oss-120b
+281,Procurement Compliance,Procurement,NARROWER,openai/gpt-oss-120b
+282,SAP Integration,SAP Reporting,RELATED,openai/gpt-oss-120b
+283,Functional configuration,Functional analysis,NARROWER,openai/gpt-oss-120b
+284,Agile Project Management,Agile,NARROWER,openai/gpt-oss-120b
+285,Data Management,Data Engineering,BROADER,openai/gpt-oss-120b
+286,Interface development,Interface Design,NARROWER,openai/gpt-oss-120b
+287,Agile Delivery,Agile,NARROWER,openai/gpt-oss-120b
+288,ServiceNow Administration,ServiceNow Integration,RELATED,openai/gpt-oss-120b
+289,Financial Modeling,Financial Reporting,RELATED,openai/gpt-oss-120b
+290,Software Architecture,Software Installation,DIFFERENT,openai/gpt-oss-120b
+291,Database maintenance,Database,NARROWER,openai/gpt-oss-120b
+292,SAP Training,SAP Configuration,RELATED,openai/gpt-oss-120b
+293,ServiceNow incident handling,ServiceNow,NARROWER,openai/gpt-oss-120b
+294,GraphQL API,GraphQL,NARROWER,openai/gpt-oss-120b
+295,SQL Database,Azure SQL Database,BROADER,openai/gpt-oss-120b
+296,ASP.NET,ASP.NET Core MVC,BROADER,openai/gpt-oss-120b
+297,Incident Review,Incident Reporting,RELATED,openai/gpt-oss-120b
+298,Roadmap Development,Roadmap Planning,SAME,openai/gpt-oss-120b
+299,Virtualization,VM Virtualization,BROADER,openai/gpt-oss-120b
+300,Database Integration,Database Administration,RELATED,openai/gpt-oss-120b
+301,IDS/IPS,IDS/IPS monitoring,BROADER,openai/gpt-oss-120b
+302,Prototyping,Rapid Prototyping,BROADER,openai/gpt-oss-120b
+303,Nexus,Cisco Nexus,BROADER,openai/gpt-oss-120b
+304,Control-M Scheduling,Scheduling,NARROWER,openai/gpt-oss-120b
+305,CCIE certification,CCIE,SAME,openai/gpt-oss-120b
+306,Apache Spark,Apache,RELATED,openai/gpt-oss-120b
+307,Network Security,Network automation,DIFFERENT,openai/gpt-oss-120b
+308,PHP Laravel,PHP,NARROWER,openai/gpt-oss-120b
+309,API Development,API Security,RELATED,openai/gpt-oss-120b
+310,Software Implementation,Software Support,RELATED,openai/gpt-oss-120b
+311,Routing,Cisco Routing,BROADER,openai/gpt-oss-120b
+312,Functional Testing,Functional Design,RELATED,openai/gpt-oss-120b
+313,Cost Analysis,Cost Management,BROADER,openai/gpt-oss-120b
+314,Release Planning,Release Management,BROADER,openai/gpt-oss-120b
+315,Data Integration,Data Automation,RELATED,openai/gpt-oss-120b
+316,Web Development,Web Design,RELATED,openai/gpt-oss-120b
+317,Site Reliability Engineering,Reliability Engineering,NARROWER,openai/gpt-oss-120b
+318,Kanban,Kanban methodology,SAME,openai/gpt-oss-120b
+319,IT Support,IT Security,DIFFERENT,openai/gpt-oss-120b
+320,Network Support,Network documentation,RELATED,openai/gpt-oss-120b

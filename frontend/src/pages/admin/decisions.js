@@ -3,13 +3,13 @@ export const DECISIONS = {
   deactivate: {
     title: name => `Deactivate ${name}?`,
     message: "They are signed out at once and can't sign in. Nothing is deleted, and you can reactivate the account later.",
-    example: 'Graduated and left the university',
+    example: 'Duplicate account',
     action: 'Deactivate account', required: true, danger: true,
   },
   reactivate: {
     title: name => `Reactivate ${name}?`,
     message: 'They can sign in again with their existing password.',
-    example: 'Returned for a Masters programme',
+    example: 'Student asked to keep this account',
     action: 'Reactivate account', required: true, danger: false,
   },
   reject: {
