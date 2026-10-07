@@ -1,0 +1,143 @@
+{
+ "model": "data/relation_model_esco_onet_v1_skillmap_v2_skillmap_v3_nli_rw3x20",
+ "baseline": "data/relation_model_esco_onet_v1_skillmap_v2_nli_rw3x20",
+ "cutoff": 0.8,
+ "pairs": "data/skill_relations/reference_pairs_v3.csv",
+ "unanimous": {
+  "cosine": {
+   "n": 92,
+   "macro_f1": 0.559,
+   "accuracy": 0.543,
+   "has_precision": 0.476,
+   "has_recall": 0.69,
+   "false_has": 22
+  },
+  "model": {
+   "n": 92,
+   "macro_f1": 0.724,
+   "accuracy": 0.717,
+   "has_precision": 0.64,
+   "has_recall": 0.552,
+   "false_has": 9
+  },
+  "weighted_accuracy": {
+   "cosine": 0.399,
+   "model": 0.717
+  },
+  "per_band": {
+   "0.85+": {
+    "n": 9,
+    "cosine": 0.667,
+    "model": 0.444
+   },
+   "0.75-0.85": {
+    "n": 22,
+    "cosine": 0.455,
+    "model": 0.818
+   },
+   "0.65-0.75": {
+    "n": 24,
+    "cosine": 0.5,
+    "model": 0.667
+   },
+   "0.55-0.65": {
+    "n": 22,
+    "cosine": 0.364,
+    "model": 0.727
+   },
+   "<0.55": {
+    "n": 15,
+    "cosine": 0.933,
+    "model": 0.8
+   }
+  },
+  "weighted_has": {
+   "cosine >= 0.7": {
+    "precision": 0.401,
+    "recall": 0.232,
+    "f1": 0.294
+   },
+   "model p >= 0.8": {
+    "precision": 0.584,
+    "recall": 0.419,
+    "f1": 0.488
+   },
+   "baseline p >= 0.8": {
+    "precision": 0.652,
+    "recall": 0.624,
+    "f1": 0.638
+   }
+  }
+ },
+ "majority": {
+  "cosine": {
+   "n": 147,
+   "macro_f1": 0.544,
+   "accuracy": 0.537,
+   "has_precision": 0.515,
+   "has_recall": 0.667,
+   "false_has": 32
+  },
+  "model": {
+   "n": 147,
+   "macro_f1": 0.637,
+   "accuracy": 0.639,
+   "has_precision": 0.591,
+   "has_recall": 0.51,
+   "false_has": 18
+  },
+  "weighted_accuracy": {
+   "cosine": 0.418,
+   "model": 0.619
+  },
+  "per_band": {
+   "0.85+": {
+    "n": 14,
+    "cosine": 0.714,
+    "model": 0.429
+   },
+   "0.75-0.85": {
+    "n": 35,
+    "cosine": 0.514,
+    "model": 0.714
+   },
+   "0.65-0.75": {
+    "n": 44,
+    "cosine": 0.5,
+    "model": 0.614
+   },
+   "0.55-0.65": {
+    "n": 39,
+    "cosine": 0.385,
+    "model": 0.615
+   },
+   "<0.55": {
+    "n": 15,
+    "cosine": 0.933,
+    "model": 0.8
+   }
+  },
+  "weighted_has": {
+   "cosine >= 0.7": {
+    "precision": 0.421,
+    "recall": 0.229,
+    "f1": 0.296
+   },
+   "model p >= 0.8": {
+    "precision": 0.455,
+    "recall": 0.313,
+    "f1": 0.371
+   },
+   "baseline p >= 0.8": {
+    "precision": 0.57,
+    "recall": 0.445,
+    "f1": 0.5
+   }
+  }
+ },
+ "pass_rule": {
+  "beats_cosine": true,
+  "beats_baseline_f1": false,
+  "verdict": "keep the baseline (no gain over it)"
+ }
+}

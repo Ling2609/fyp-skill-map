@@ -1,0 +1,150 @@
+id,a,b,cosine,band,band_population,job_source,label_claude,label_gpt_oss,label_qwen,label3_unanimous,label3_majority
+1,Lifecycle management,Asset Lifecycle Management,0.767,0.75-0.85,146,2024,BROADER,BROADER,BROADER,RELATED,RELATED
+2,software design,software knowledge,0.668,0.65-0.75,673,live,NARROWER,NARROWER,NARROWER,SATISFIES,SATISFIES
+3,Advanced Java programming,Java EE,0.684,0.65-0.75,673,2024,RELATED,BROADER,RELATED,RELATED,RELATED
+4,CNN modeling,Jest testing,0.056,<0.55,1580853,2024,DIFFERENT,DIFFERENT,DIFFERENT,NOT,NOT
+5,ERP systems,IDPS Management,0.551,0.55-0.65,2238,2024,DIFFERENT,DIFFERENT,DIFFERENT,NOT,NOT
+6,research design,Experimentation Design,0.642,0.55-0.65,2238,2024,RELATED,BROADER,SAME,,RELATED
+7,serverless computing,Server Architecture,0.552,0.55-0.65,2238,2024,RELATED,NARROWER,NARROWER,,SATISFIES
+8,team leadership,Leadership of dispersed teams,0.753,0.75-0.85,146,live,BROADER,BROADER,BROADER,RELATED,RELATED
+9,project management,Project Design,0.754,0.75-0.85,146,2024,RELATED,NARROWER,RELATED,,RELATED
+10,Java programming,Programming Logic,0.601,0.55-0.65,2238,2024,NARROWER,NARROWER,BROADER,,SATISFIES
+11,UI design,UI/UX Implementation,0.686,0.65-0.75,673,2024+live,RELATED,RELATED,RELATED,RELATED,RELATED
+12,memory management,Memory allocation analysis,0.76,0.75-0.85,146,live,RELATED,BROADER,BROADER,RELATED,RELATED
+13,Network troubleshooting,Network connectivity troubleshooting,0.925,0.85+,14,live,SAME,BROADER,SAME,,SATISFIES
+14,software development,Software platform development,0.781,0.75-0.85,146,live,BROADER,BROADER,BROADER,RELATED,RELATED
+15,TCP/IP protocol basics,Least privilege access,0.083,<0.55,1580853,live,DIFFERENT,DIFFERENT,DIFFERENT,NOT,NOT
+16,Software project management,Project management certification,0.695,0.65-0.75,673,live,RELATED,RELATED,RELATED,RELATED,RELATED
+17,software project planning,Project scheduling,0.651,0.65-0.75,673,2024+live,NARROWER,NARROWER,BROADER,,SATISFIES
+18,Market validation,Business validation,0.75,0.75-0.85,146,live,RELATED,NARROWER,NARROWER,,SATISFIES
+19,Non-functional requirements definition,ITIL Framework,0.108,<0.55,1580853,2024+live,DIFFERENT,DIFFERENT,DIFFERENT,NOT,NOT
+20,Technology product validation,Process FMEA,0.141,<0.55,1580853,2024,DIFFERENT,DIFFERENT,DIFFERENT,NOT,NOT
+21,Distributed application design,Distributed systems,0.656,0.65-0.75,673,2024+live,NARROWER,NARROWER,NARROWER,SATISFIES,SATISFIES
+22,Software architecture design,Software Implementation,0.582,0.55-0.65,2238,2024,RELATED,RELATED,RELATED,RELATED,RELATED
+23,database normalisation,Database schemas,0.554,0.55-0.65,2238,live,NARROWER,NARROWER,NARROWER,SATISFIES,SATISFIES
+24,cloud security,Cloud controller management,0.559,0.55-0.65,2238,2024,RELATED,DIFFERENT,DIFFERENT,,NOT
+25,process management,Process Control,0.832,0.75-0.85,146,2024+live,DIFFERENT,DIFFERENT,RELATED,,NOT
+26,Docker containers,Containers,0.749,0.65-0.75,673,live,NARROWER,NARROWER,NARROWER,SATISFIES,SATISFIES
+27,intelligent agents,Electrical Distribution,0.114,<0.55,1580853,2024,DIFFERENT,DIFFERENT,DIFFERENT,NOT,NOT
+28,risk management,IT Risk Management,0.769,0.75-0.85,146,2024,BROADER,BROADER,BROADER,RELATED,RELATED
+29,AI problem solving,Independent problem solving,0.611,0.55-0.65,2238,2024,DIFFERENT,NARROWER,BROADER,,
+30,Acceptance testing,Software Testing,0.633,0.55-0.65,2238,2024+live,NARROWER,NARROWER,NARROWER,SATISFIES,SATISFIES
+31,Front-end development,Software Development,0.598,0.55-0.65,2238,2024+live,NARROWER,NARROWER,NARROWER,SATISFIES,SATISFIES
+32,requirements gathering,Requirements validation,0.655,0.65-0.75,673,live,RELATED,RELATED,RELATED,RELATED,RELATED
+33,Business planning,business readiness planning,0.741,0.65-0.75,673,live,BROADER,BROADER,RELATED,RELATED,RELATED
+34,layered architecture,N-tier Architecture,0.669,0.65-0.75,673,2024,SAME,BROADER,SAME,,SATISFIES
+35,UML system design,UMTS Protocols,0.613,0.55-0.65,2238,2024,DIFFERENT,DIFFERENT,DIFFERENT,NOT,NOT
+36,file system administration,OS Administration,0.671,0.65-0.75,673,2024,RELATED,NARROWER,NARROWER,,SATISFIES
+37,Docker containerisation,Containerisation,0.762,0.75-0.85,146,live,NARROWER,NARROWER,NARROWER,SATISFIES,SATISFIES
+38,System testing,Testing Strategies,0.678,0.65-0.75,673,2024,RELATED,NARROWER,NARROWER,,SATISFIES
+39,Unit testing,Testing Methodologies,0.724,0.65-0.75,673,2024+live,RELATED,NARROWER,NARROWER,,SATISFIES
+40,Software architecture design,Salesforce Architecture,0.733,0.65-0.75,673,2024,BROADER,BROADER,BROADER,RELATED,RELATED
+41,System testing,Game Testing,0.672,0.65-0.75,673,2024,RELATED,BROADER,BROADER,RELATED,RELATED
+42,Lifecycle management,Trade Lifecycle Management,0.725,0.65-0.75,673,2024,BROADER,BROADER,BROADER,RELATED,RELATED
+43,basic machine learning,Classification,0.653,0.65-0.75,673,live,NARROWER,BROADER,BROADER,,RELATED
+44,scalable architecture design,Scalable Architecture,0.945,0.85+,14,2024,SAME,SAME,SAME,SATISFIES,SATISFIES
+45,intelligent agents,AI assistants,0.618,0.55-0.65,2238,live,RELATED,BROADER,BROADER,RELATED,RELATED
+46,Software project management,ELV Project Management,0.628,0.55-0.65,2238,2024,RELATED,BROADER,BROADER,RELATED,RELATED
+47,authentication implementation,Password management,0.563,0.55-0.65,2238,2024,RELATED,NARROWER,BROADER,,RELATED
+48,risk management,Key Risk Indicators,0.668,0.65-0.75,673,2024,RELATED,NARROWER,BROADER,,RELATED
+49,Acceptance testing,acceptance criteria,0.758,0.75-0.85,146,live,RELATED,NARROWER,BROADER,,RELATED
+50,analytical thinking,Analytical Troubleshooting,0.561,0.55-0.65,2238,2024,RELATED,SAME,BROADER,,RELATED
+51,Network topology identification,Network connectivity,0.576,0.55-0.65,2238,2024+live,RELATED,RELATED,RELATED,RELATED,RELATED
+52,data flow diagrams,Data flow mapping,0.787,0.75-0.85,146,live,NARROWER,SAME,SAME,SATISFIES,SATISFIES
+53,Network topology identification,Network topology analysis,0.868,0.85+,14,2024,RELATED,BROADER,BROADER,RELATED,RELATED
+54,maintainable architecture design,Model architecture,0.593,0.55-0.65,2238,live,DIFFERENT,DIFFERENT,RELATED,,NOT
+55,Requirements analysis,Requirements Elicitation,0.732,0.65-0.75,673,2024+live,RELATED,RELATED,BROADER,RELATED,RELATED
+56,hardware-software integration,Hardware control,0.626,0.55-0.65,2238,2024,RELATED,RELATED,RELATED,RELATED,RELATED
+57,Searching techniques,Job Search Strategies,0.565,0.55-0.65,2238,2024,DIFFERENT,RELATED,BROADER,,RELATED
+58,Acceptance testing,User Acceptance Testing (UAT),0.715,0.65-0.75,673,live,SAME,SAME,BROADER,,SATISFIES
+59,big data storage,Azure Storage,0.569,0.55-0.65,2238,2024+live,BROADER,BROADER,BROADER,RELATED,RELATED
+60,synchronisation,Synchronization Planning,0.748,0.65-0.75,673,2024,DIFFERENT,RELATED,BROADER,,RELATED
+61,Unit testing,Automated UI Testing,0.558,0.55-0.65,2238,2024,RELATED,RELATED,RELATED,RELATED,RELATED
+62,Unit testing,Test coverage,0.679,0.65-0.75,673,live,RELATED,RELATED,RELATED,RELATED,RELATED
+63,usability testing,Usability,0.835,0.75-0.85,146,live,NARROWER,NARROWER,NARROWER,SATISFIES,SATISFIES
+64,System monitoring,Monitoring solutions,0.791,0.75-0.85,146,2024,NARROWER,BROADER,NARROWER,,SATISFIES
+65,DevOps practices,DevOps Deployment,0.802,0.75-0.85,146,2024,NARROWER,NARROWER,NARROWER,SATISFIES,SATISFIES
+66,research design,Project Design,0.644,0.55-0.65,2238,2024,RELATED,RELATED,RELATED,RELATED,RELATED
+67,cloud security,Cloud Monitoring,0.641,0.55-0.65,2238,2024,RELATED,RELATED,RELATED,RELATED,RELATED
+68,software development,Software development process,0.869,0.85+,14,2024,NARROWER,NARROWER,NARROWER,SATISFIES,SATISFIES
+69,Software architecture design,Software Design,0.752,0.75-0.85,146,2024+live,NARROWER,NARROWER,NARROWER,SATISFIES,SATISFIES
+70,computer architecture,System Architecture,0.827,0.75-0.85,146,2024,RELATED,NARROWER,RELATED,,RELATED
+71,Quality assurance,Quality Assurance Processes,0.876,0.85+,14,2024,SAME,NARROWER,NARROWER,SATISFIES,SATISFIES
+72,ERP systems,ERP Implementation,0.805,0.75-0.85,146,2024+live,BROADER,BROADER,RELATED,RELATED,RELATED
+73,DevOps practices,DevOps Automation,0.756,0.75-0.85,146,live,NARROWER,NARROWER,NARROWER,SATISFIES,SATISFIES
+74,Requirements analysis,Cyber risk reduction,0.161,<0.55,1580853,live,DIFFERENT,DIFFERENT,DIFFERENT,NOT,NOT
+75,object-oriented programming,OOP Design Patterns,0.655,0.65-0.75,673,2024,BROADER,BROADER,NARROWER,,RELATED
+76,System testing,System Test Strategy,0.863,0.85+,14,2024,RELATED,NARROWER,NARROWER,,SATISFIES
+77,System monitoring,SCADA Monitoring,0.685,0.65-0.75,673,2024,BROADER,BROADER,NARROWER,,RELATED
+78,Quality assurance,Quality inspection,0.701,0.65-0.75,673,2024,RELATED,NARROWER,RELATED,,RELATED
+79,cloud-native architecture,Scalable Back-End,0.454,<0.55,1580853,2024,RELATED,RELATED,RELATED,RELATED,RELATED
+80,UML system design,UML Diagramming,0.727,0.65-0.75,673,2024,NARROWER,NARROWER,NARROWER,SATISFIES,SATISFIES
+81,mathematical optimisation,Optimisation,0.885,0.85+,14,live,NARROWER,NARROWER,NARROWER,SATISFIES,SATISFIES
+82,System monitoring,Monitoring processes,0.783,0.75-0.85,146,2024,RELATED,NARROWER,NARROWER,,SATISFIES
+83,Docker containers,Containerization platforms,0.764,0.75-0.85,146,2024,NARROWER,NARROWER,NARROWER,SATISFIES,SATISFIES
+84,enterprise application architecture,ICT solution architecture,0.589,0.55-0.65,2238,2024,RELATED,NARROWER,NARROWER,,SATISFIES
+85,Microservices implementation,Microservices Architecture,0.908,0.85+,14,2024+live,RELATED,NARROWER,NARROWER,,SATISFIES
+86,relational database implementation,Database knowledge,0.677,0.65-0.75,673,live,NARROWER,NARROWER,NARROWER,SATISFIES,SATISFIES
+87,project estimation,Project Builder,0.652,0.65-0.75,673,live,DIFFERENT,DIFFERENT,DIFFERENT,NOT,NOT
+88,project management,SharePoint Management,0.575,0.55-0.65,2238,2024,DIFFERENT,DIFFERENT,DIFFERENT,NOT,NOT
+89,REST API integration,Backend API Development,0.568,0.55-0.65,2238,2024,RELATED,RELATED,NARROWER,,RELATED
+90,UI design,Android UI Design,0.726,0.65-0.75,673,2024,BROADER,NARROWER,BROADER,,RELATED
+91,cloud-native architecture,Cloud-native infrastructure,0.904,0.85+,14,live,RELATED,RELATED,RELATED,RELATED,RELATED
+92,scalable architecture design,N-tier Architecture,0.653,0.65-0.75,673,2024,RELATED,NARROWER,RELATED,,RELATED
+93,Lifecycle management,Product lifecycle management,0.857,0.85+,14,live,BROADER,BROADER,NARROWER,,RELATED
+94,Exploratory data analysis,C/AL,0.009,<0.55,1580853,2024,DIFFERENT,DIFFERENT,DIFFERENT,NOT,NOT
+95,probability fundamentals,Workload planning,0.175,<0.55,1580853,live,DIFFERENT,DIFFERENT,DIFFERENT,NOT,NOT
+96,file system administration,Storage System Management,0.685,0.65-0.75,673,2024,RELATED,NARROWER,NARROWER,,SATISFIES
+97,data collection,Data retrieval optimization,0.553,0.55-0.65,2238,live,RELATED,RELATED,DIFFERENT,,RELATED
+98,Distributed database design,EMV integration,0.068,<0.55,1580853,2024,DIFFERENT,DIFFERENT,DIFFERENT,NOT,NOT
+99,file handling,File Management,0.804,0.75-0.85,146,2024,RELATED,NARROWER,SAME,,SATISFIES
+100,Software project management,Project Engineering,0.719,0.65-0.75,673,2024,RELATED,DIFFERENT,NARROWER,,
+101,entity-relationship modelling,Model architecture,0.595,0.55-0.65,2238,live,DIFFERENT,RELATED,RELATED,,RELATED
+102,CI/CD pipelines,DevOps CI/CD,0.661,0.65-0.75,673,2024,SAME,SAME,SAME,SATISFIES,SATISFIES
+103,UX research,Content Research,0.657,0.65-0.75,673,2024,RELATED,RELATED,RELATED,RELATED,RELATED
+104,Communication,Interpersonal Communication,0.797,0.75-0.85,146,2024+live,BROADER,BROADER,BROADER,RELATED,RELATED
+105,control flow,Flow,0.726,0.65-0.75,673,live,DIFFERENT,NARROWER,DIFFERENT,,NOT
+106,software design,Software Development Optimization,0.68,0.65-0.75,673,2024,RELATED,RELATED,RELATED,RELATED,RELATED
+107,AI problem solving,Agent algorithms research,0.561,0.55-0.65,2238,live,RELATED,BROADER,RELATED,RELATED,RELATED
+108,event-driven architecture,Complex Event Processing,0.703,0.65-0.75,673,2024,RELATED,RELATED,RELATED,RELATED,RELATED
+109,Design patterns,Architectural Design Patterns,0.868,0.85+,14,2024,RELATED,BROADER,BROADER,RELATED,RELATED
+110,Business planning,Job Planning,0.651,0.65-0.75,673,2024,DIFFERENT,RELATED,DIFFERENT,,NOT
+111,relational database implementation,SQL Relational Databases,0.82,0.75-0.85,146,2024,NARROWER,NARROWER,NARROWER,SATISFIES,SATISFIES
+112,relational database design,Database modeling,0.715,0.65-0.75,673,2024,NARROWER,NARROWER,SAME,SATISFIES,SATISFIES
+113,relational database design,Relational SQL,0.798,0.75-0.85,146,2024,RELATED,RELATED,RELATED,RELATED,RELATED
+114,project management,Project management certification,0.74,0.65-0.75,673,live,RELATED,BROADER,BROADER,RELATED,RELATED
+115,team leadership,Technical Team Leadership,0.791,0.75-0.85,146,2024,BROADER,BROADER,BROADER,RELATED,RELATED
+116,Quality assurance,Supplier Quality,0.595,0.55-0.65,2238,2024,RELATED,BROADER,RELATED,RELATED,RELATED
+117,scalable architecture design,computer architecture,0.693,0.65-0.75,673,live,DIFFERENT,RELATED,RELATED,,RELATED
+118,process management,Monitoring processes,0.689,0.65-0.75,673,2024,RELATED,NARROWER,RELATED,,RELATED
+119,Requirements specification,Requirements Gathering,0.76,0.75-0.85,146,2024+live,RELATED,RELATED,RELATED,RELATED,RELATED
+120,enterprise application architecture,Web Application Architecture,0.716,0.65-0.75,673,2024,RELATED,RELATED,RELATED,RELATED,RELATED
+121,Test-driven development,Test Strategy Planning,0.6,0.55-0.65,2238,2024,RELATED,RELATED,NARROWER,,RELATED
+122,large-scale software design,Back-end software engineering,0.551,0.55-0.65,2238,live,RELATED,RELATED,RELATED,RELATED,RELATED
+123,Docker containers,Containerisation,0.706,0.65-0.75,673,live,NARROWER,NARROWER,NARROWER,SATISFIES,SATISFIES
+124,Leadership skills,Organizational Skills,0.759,0.75-0.85,146,2024+live,RELATED,NARROWER,BROADER,,RELATED
+125,REST API integration,RESTful Services,0.641,0.55-0.65,2238,2024,RELATED,RELATED,SAME,,RELATED
+126,CPU organization,SSAS Development,0.158,<0.55,1580853,2024+live,DIFFERENT,DIFFERENT,DIFFERENT,NOT,NOT
+127,cloud security,Cloud Infrastructure Security,0.871,0.85+,14,2024,NARROWER,BROADER,SAME,,SATISFIES
+128,team leadership,Team Leading,0.825,0.75-0.85,146,live,SAME,SAME,SAME,SATISFIES,SATISFIES
+129,Functional requirements definition,Functional Requirement Documents,0.804,0.75-0.85,146,live,RELATED,NARROWER,NARROWER,,SATISFIES
+130,Network troubleshooting,Networking troubleshooting,0.951,0.85+,14,live,SAME,SAME,SAME,SATISFIES,SATISFIES
+131,software development,Software Development Optimization,0.783,0.75-0.85,146,2024,BROADER,BROADER,BROADER,RELATED,RELATED
+132,software development lifecycle,Blue Prism,0.101,<0.55,1580853,2024,DIFFERENT,DIFFERENT,DIFFERENT,NOT,NOT
+133,design thinking,Design system development,0.628,0.55-0.65,2238,2024+live,DIFFERENT,RELATED,DIFFERENT,,NOT
+134,Design patterns,Software Design Patterns,0.881,0.85+,14,2024,SAME,SAME,SAME,SATISFIES,SATISFIES
+135,process management,Service Management Processes,0.761,0.75-0.85,146,2024,RELATED,BROADER,BROADER,RELATED,RELATED
+136,Docker containerisation,Containerized deployment,0.764,0.75-0.85,146,live,NARROWER,NARROWER,SAME,SATISFIES,SATISFIES
+137,Requirements validation,Software validation,0.697,0.65-0.75,673,2024+live,RELATED,RELATED,NARROWER,,RELATED
+138,Front-end development,development,0.591,0.55-0.65,2238,live,NARROWER,NARROWER,NARROWER,SATISFIES,SATISFIES
+139,intelligent agents,Agentic AI,0.781,0.75-0.85,146,live,RELATED,SAME,SAME,,SATISFIES
+140,microservices deployment,Equipment commissioning,0.32,<0.55,1580853,2024,DIFFERENT,DIFFERENT,DIFFERENT,NOT,NOT
+141,Design sprint facilitation,Scrum Methodology,0.605,0.55-0.65,2238,2024,RELATED,RELATED,DIFFERENT,,RELATED
+142,Requirements specification,Requirement Tracking,0.64,0.55-0.65,2238,2024,RELATED,RELATED,RELATED,RELATED,RELATED
+143,Consensus mechanism understanding,Consensus Algorithms,0.769,0.75-0.85,146,2024,SAME,BROADER,SAME,,SATISFIES
+144,Design pattern implementation,System design patterns,0.779,0.75-0.85,146,2024,RELATED,NARROWER,SAME,,SATISFIES
+145,AI problem solving,AI output evaluation,0.562,0.55-0.65,2238,live,RELATED,RELATED,RELATED,RELATED,RELATED
+146,MVC architecture,Communication Planning,0.175,<0.55,1580853,2024+live,DIFFERENT,DIFFERENT,DIFFERENT,NOT,NOT
+147,Advanced Java programming,Java for ABAP,0.629,0.55-0.65,2238,2024,RELATED,RELATED,DIFFERENT,,RELATED
+148,File I/O,Quality metrics analysis,0.07,<0.55,1580853,live,DIFFERENT,DIFFERENT,DIFFERENT,NOT,NOT
+149,cloud-native architecture,Cloud Platform Knowledge,0.615,0.55-0.65,2238,2024+live,NARROWER,NARROWER,NARROWER,SATISFIES,SATISFIES

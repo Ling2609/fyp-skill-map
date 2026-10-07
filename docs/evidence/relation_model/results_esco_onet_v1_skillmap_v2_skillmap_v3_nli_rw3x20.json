@@ -1,0 +1,50 @@
+{
+ "run": "esco_onet_v1_skillmap_v2_skillmap_v3_nli_rw3x20",
+ "pairs_csv": [
+  "pairs_esco_onet_v1.csv",
+  "pairs_skillmap_v2.csv",
+  "pairs_skillmap_v3.csv"
+ ],
+ "mapping": {
+  "SAME": "SATISFIES",
+  "NARROWER": "SATISFIES",
+  "RELATED": "RELATED",
+  "BROADER": "RELATED",
+  "DIFFERENT": "NOT"
+ },
+ "model": "cross-encoder/nli-MiniLM2-L6-H768",
+ "seeds": [
+  13,
+  42,
+  77
+ ],
+ "epochs": 10,
+ "baseline_macro_f1": 0.4480677586927195,
+ "test_macro_f1": [
+  0.7924074356729824,
+  0.7633143885792979,
+  0.7540215678999832
+ ],
+ "direction_model": 0.8159509202453987,
+ "direction_cosine": 0.5,
+ "runs": [
+  {
+   "seed": 13,
+   "val_f1": 0.8074748661832044,
+   "test_f1": 0.7924074356729824,
+   "minutes": 2.8
+  },
+  {
+   "seed": 42,
+   "val_f1": 0.8183261808276602,
+   "test_f1": 0.7633143885792979,
+   "minutes": 2.8
+  },
+  {
+   "seed": 77,
+   "val_f1": 0.8068347049400161,
+   "test_f1": 0.7540215678999832,
+   "minutes": 2.7
+  }
+ ]
+}

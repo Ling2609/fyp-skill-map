@@ -1,0 +1,31 @@
+id,a,b,judges_say,author_check
+1,Lifecycle management,Asset Lifecycle Management,RELATED,agree
+5,ERP systems,IDPS Management,NOT,agree
+16,Software project management,Project management certification,RELATED,agree
+19,Non-functional requirements definition,ITIL Framework,NOT,agree
+20,Technology product validation,Process FMEA,NOT,agree
+23,database normalisation,Database schemas,SATISFIES,agree
+28,risk management,IT Risk Management,RELATED,agree
+33,Business planning,business readiness planning,RELATED,agree
+41,System testing,Game Testing,RELATED,agree
+44,scalable architecture design,Scalable Architecture,SATISFIES,agree
+46,Software project management,ELV Project Management,RELATED,unsure
+51,Network topology identification,Network connectivity,RELATED,agree
+53,Network topology identification,Network topology analysis,RELATED,agree
+56,hardware-software integration,Hardware control,RELATED,agree
+63,usability testing,Usability,SATISFIES,agree
+65,DevOps practices,DevOps Deployment,SATISFIES,agree
+69,Software architecture design,Software Design,SATISFIES,agree
+79,cloud-native architecture,Scalable Back-End,RELATED,agree
+88,project management,SharePoint Management,NOT,agree
+104,Communication,Interpersonal Communication,RELATED,agree
+108,event-driven architecture,Complex Event Processing,RELATED,agree
+109,Design patterns,Architectural Design Patterns,RELATED,agree
+111,relational database implementation,SQL Relational Databases,SATISFIES,agree
+112,relational database design,Database modeling,SATISFIES,agree
+113,relational database design,Relational SQL,RELATED,agree
+116,Quality assurance,Supplier Quality,RELATED,agree
+126,CPU organization,SSAS Development,NOT,agree
+128,team leadership,Team Leading,SATISFIES,agree
+135,process management,Service Management Processes,RELATED,agree
+146,MVC architecture,Communication Planning,NOT,agree
