@@ -3,7 +3,7 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
-## 7 Oct 2026 — Admin dashboard fills its space; Users column titles in their own strip
+## 7 Oct 2026 — Admin dashboard fills its space; Users table and decision pop-up
 
 - (this commit) Dashboard (her review): the two bottom panels spread their rows over the space they have instead of
   leaving a blank foot; when the to-do list is long they shrink back and the page scrolls. "Needs your action"
@@ -11,11 +11,19 @@ Planning, reasoning and research behind each decision are in the project roadmap
   can't push everything else off the screen. Every count card has a second line now: students joined in the last
   30 days, employers waiting for approval, newest live job, modules whose skills were reviewed. Skill gaps show up
   to 8 skills.
-- Users: column titles sit in a grey strip above the list, so the scroll bar starts at the first account (the
-  strip follows when the list scrolls sideways; screen readers still get real column headings). Long names and
-  emails are cut with "…" instead of widening the table.
-- Checked in a browser at 1333×680 and 1440×900: columns line up with the titles, the list scrolls under the strip,
-  the sidebar stays in place when the dashboard scrolls.
+- Users (her review; references.md "Admin Users table and decision pop-up"): column titles in a blue strip above
+  the list, so they stand out from the page and the scroll bar starts at the first account (the strip follows
+  sideways scrolling; screen readers still get real column headings). Status takes the spare width and Actions is
+  just wide enough for its buttons, so there's no wide gap between them. Long names and emails are cut with "…".
+  The count sits at the end of the filter row, in line with the table (PatternFly). Dropdowns have their own arrow,
+  set in from the edge.
+- Deactivate, Reactivate and Reject (here and on the dashboard) open a pop-up instead of the cramped in-row box:
+  "Deactivate <name>?", one line on what happens, a Reason box (required to deactivate / reactivate, optional to
+  reject), Cancel and "Deactivate account" (Carbon danger modal, Primer). Enter confirms, Esc or a click outside
+  cancels; a failed save shows its error inside the pop-up. `ReasonForm.jsx` replaced by `ReasonDialog.jsx`.
+- Checked in a browser at 1333×680 and 1440×900 (13 checks): columns line up with the titles, the list scrolls
+  under the strip, header colour differs from the page, arrow 14 px in, count in line with the table, pop-ups for
+  all three decisions (reason rules, Enter, Esc, click outside), sidebar stays put when the dashboard scrolls.
 
 ## 7 Oct 2026 — Admin decisions kept with a reason; greeting; full-height dashboard
 

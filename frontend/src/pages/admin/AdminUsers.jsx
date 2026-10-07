@@ -4,7 +4,9 @@ import api from '../../api'
 import PageHeader from '../../components/PageHeader'
 import { useAuth } from '../../context/useAuth'
 import { ADMIN_COUNTS_CHANGED } from '../../components/Sidebar'
-import ReasonForm from './ReasonForm'
+import ReasonDialog from './ReasonDialog'
+import Select from './Select'
+import { DECISIONS } from './decisions'
 
 // Admin > Users (7 Oct): every account, filtered by role / status / search (kept in the URL, so the dashboard's
 // count cards open a filtered list). Employers are approved or rejected here; any account but an admin can be
@@ -19,9 +21,11 @@ const ROLE = { student: 'Student', employer: 'Employer', admin: 'Admin' }
 // The latest decision, shown under the status: "Deactivated 7 Oct by Career Office · Graduated"
 const DONE = { approve: 'Approved', reject: 'Rejected', deactivate: 'Deactivated', reactivate: 'Reactivated' }
 // The column titles sit in their own strip above the scrolling list, so the scroll bar starts at the first account.
-// Both tables share these widths; the strip keeps a scroll-bar gutter so the columns line up.
-const COLS = [['Name', '30%'], ['Role', '11%'], ['Joined', '13%'], ['Status', '25%'], ['Actions', '21%']]
-const colgroup = <colgroup>{COLS.map(([n, w]) => <col key={n} style={{ width: w }} />)}</colgroup>
+// Both tables share these widths; the strip keeps a scroll-bar gutter so the columns line up. Status takes what is
+// left (it also holds the latest decision and its reason); Actions is just wide enough for its three buttons and
+// starts right after Status, so there's no wide gap between a row's status and its buttons.
+const COLS = [['Name', '28%'], ['Role', '11%'], ['Joined', '13%'], ['Status', null], ['Actions', '17.5rem']]
+const colgroup = <colgroup>{COLS.map(([n, w]) => <col key={n} style={w ? { width: w } : undefined} />)}</colgroup>
 const short = (iso) => new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })
 const day = (iso) => new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
 
@@ -34,7 +38,8 @@ export default function AdminUsers() {
   const [users, setUsers] = useState(null)
   const [error, setError] = useState('')
   const [busy, setBusy] = useState(null)
-  const [asking, setAsking] = useState(null)   // { id, action }: the row showing the reason box
+  const [asking, setAsking] = useState(null)   // { user, action }: the decision whose reason pop-up is open
+  const [askError, setAskError] = useState('')
   const strip = useRef(null)                     // the column titles follow the list when it scrolls sideways
 
   const setFilter = (key, value) => {
@@ -66,12 +71,17 @@ export default function AdminUsers() {
         setAsking(null)
         window.dispatchEvent(new Event(ADMIN_COUNTS_CHANGED))
       })
-      .catch(err => setError(err.response?.data?.detail || "Couldn't save that. Try again."))
+      .catch(err => {
+        const msg = err.response?.data?.detail || "Couldn't save that. Try again."
+        if (reason === undefined) setError(msg); else setAskError(msg)   // a pop-up shows its own error
+      })
       .finally(() => setBusy(null))
   }
 
   const btn = 'px-3 py-1.5 text-xs font-medium rounded-lg disabled:opacity-50 whitespace-nowrap'
   const quiet = `${btn} border border-slate-200 text-slate-700 hover:bg-slate-50`
+  const ask = (user, action) => { setAskError(''); setAsking({ user, action }) }
+  const display = (u) => (u.role === 'employer' && u.company_name ? u.company_name : u.name)
 
   return (
     <div className="h-screen flex flex-col">
@@ -87,37 +97,36 @@ export default function AdminUsers() {
         <div className="flex flex-wrap items-center gap-3">
           <label className="sr-only" htmlFor="user-search">Search users</label>
           <input id="user-search" value={q} onChange={e => setQ(e.target.value)} placeholder="Search name, email or company"
-            className="flex-1 min-w-56 px-3 py-2 text-sm bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
-          <label className="sr-only" htmlFor="role-filter">Role</label>
-          <select id="role-filter" value={role} onChange={e => setFilter('role', e.target.value)}
-            className="px-3 py-2 text-sm bg-white border border-slate-200 rounded-lg">
+            className="flex-1 min-w-56 max-w-xl px-3 py-2 text-sm bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+          <Select id="role-filter" label="Role" value={role} onChange={e => setFilter('role', e.target.value)}>
             <option value="">All roles</option>
             <option value="student">Students</option>
             <option value="employer">Employers</option>
             <option value="admin">Admins</option>
-          </select>
-          <label className="sr-only" htmlFor="status-filter">Status</label>
-          <select id="status-filter" value={status} onChange={e => setFilter('status', e.target.value)}
-            className="px-3 py-2 text-sm bg-white border border-slate-200 rounded-lg">
+          </Select>
+          <Select id="status-filter" label="Status" value={status} onChange={e => setFilter('status', e.target.value)}>
             <option value="">Any status</option>
             <option value="pending">Waiting for approval</option>
             <option value="approved">Approved</option>
             <option value="rejected">Rejected</option>
             <option value="inactive">Deactivated</option>
-          </select>
-          {users?.length > 0 && (
-            <span className="text-xs text-slate-500 whitespace-nowrap">{users.length} account{users.length > 1 ? 's' : ''}</span>
+          </Select>
+          {/* PatternFly: with no pagination, the item count is the toolbar's last element */}
+          {users && (
+            <span className="ml-auto text-sm text-slate-600 whitespace-nowrap tabular-nums" aria-live="polite">
+              <span className="font-semibold text-slate-900">{users.length}</span> account{users.length === 1 ? '' : 's'}
+            </span>
           )}
         </div>
 
         {error && <p className="text-sm text-rose-600">{error}</p>}
 
         <div className="flex-1 min-h-0 flex flex-col bg-white rounded-xl border border-slate-200 overflow-hidden">
-          <div ref={strip} aria-hidden="true" className="overflow-hidden [scrollbar-gutter:stable] bg-slate-100 border-b border-slate-200">
+          <div ref={strip} aria-hidden="true" className="overflow-hidden [scrollbar-gutter:stable] bg-blue-100 border-b border-blue-200">
             <table className="w-full min-w-190 table-fixed text-xs">
               {colgroup}
               <thead>
-                <tr className="text-left text-slate-600">
+                <tr className="text-left text-blue-900">
                   {COLS.map(([n]) => <th key={n} className="font-semibold uppercase tracking-wide px-4 py-2.5">{n === 'Actions' ? '' : n}</th>)}
                 </tr>
               </thead>
@@ -140,7 +149,7 @@ export default function AdminUsers() {
                 return (
                   <tr key={u.id} className={u.is_active ? '' : 'bg-slate-50'}>
                     <td className="px-4 py-3">
-                      <p className="font-medium text-slate-800 truncate">{u.role === 'employer' && u.company_name ? u.company_name : u.name}</p>
+                      <p className="font-medium text-slate-800 truncate">{display(u)}</p>
                       <p className="text-xs text-slate-500 mt-0.5 truncate">
                         {u.role === 'employer' && u.company_name ? `${u.name} · ` : ''}{u.email}
                       </p>
@@ -161,30 +170,21 @@ export default function AdminUsers() {
                       )}
                     </td>
                     <td className="px-4 py-3">
-                      {asking?.id === u.id ? (
-                        <ReasonForm action={asking.label} required={asking.action !== 'reject'}
-                          danger={asking.action === 'deactivate'} busy={busy === u.id}
-                          onConfirm={reason => act(u.id, asking.action, reason)} onCancel={() => setAsking(null)} />
-                      ) : (
-                        <div className="flex justify-end gap-2">
-                          {u.role === 'employer' && u.employer_status !== 'approved' && (
-                            <button className={`${btn} bg-blue-600 text-white hover:bg-blue-700`} disabled={busy === u.id}
-                              onClick={() => act(u.id, 'approve')}>Approve</button>
-                          )}
-                          {u.role === 'employer' && u.employer_status === 'pending' && (
-                            <button className={quiet} disabled={busy === u.id}
-                              onClick={() => setAsking({ id: u.id, action: 'reject', label: 'Reject' })}>Reject</button>
-                          )}
-                          {!self && u.role !== 'admin' && u.is_active && (
-                            <button className={quiet} disabled={busy === u.id}
-                              onClick={() => setAsking({ id: u.id, action: 'deactivate', label: 'Deactivate' })}>Deactivate</button>
-                          )}
-                          {!self && !u.is_active && (
-                            <button className={quiet} disabled={busy === u.id}
-                              onClick={() => setAsking({ id: u.id, action: 'reactivate', label: 'Reactivate' })}>Reactivate</button>
-                          )}
-                        </div>
-                      )}
+                      <div className="flex gap-2">
+                        {u.role === 'employer' && u.employer_status !== 'approved' && (
+                          <button className={`${btn} bg-blue-600 text-white hover:bg-blue-700`} disabled={busy === u.id}
+                            onClick={() => act(u.id, 'approve')}>Approve</button>
+                        )}
+                        {u.role === 'employer' && u.employer_status === 'pending' && (
+                          <button className={quiet} disabled={busy === u.id} onClick={() => ask(u, 'reject')}>Reject</button>
+                        )}
+                        {!self && u.role !== 'admin' && u.is_active && (
+                          <button className={quiet} disabled={busy === u.id} onClick={() => ask(u, 'deactivate')}>Deactivate</button>
+                        )}
+                        {!self && !u.is_active && (
+                          <button className={quiet} disabled={busy === u.id} onClick={() => ask(u, 'reactivate')}>Reactivate</button>
+                        )}
+                      </div>
                     </td>
                   </tr>
                 )
@@ -194,6 +194,11 @@ export default function AdminUsers() {
           </div>
         </div>
       </div>
+
+      {asking && (
+        <ReasonDialog decision={DECISIONS[asking.action]} name={display(asking.user)} busy={busy === asking.user.id}
+          error={askError} onConfirm={reason => act(asking.user.id, asking.action, reason)} onCancel={() => setAsking(null)} />
+      )}
     </div>
   )
 }

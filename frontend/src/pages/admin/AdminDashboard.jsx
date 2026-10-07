@@ -5,7 +5,8 @@ import PageHeader from '../../components/PageHeader'
 import { skillName } from '../../skillName'
 import { ADMIN_COUNTS_CHANGED } from '../../components/Sidebar'
 import { useAuth } from '../../context/useAuth'
-import ReasonForm from './ReasonForm'
+import ReasonDialog from './ReasonDialog'
+import { DECISIONS } from './decisions'
 
 // Admin home, layout D (7 Oct, her pick; references.md "Admin layout"): what needs action first and most visible
 // (NN/g: "make important information visually salient"), then glanceable counts, then two panels the career office
@@ -36,7 +37,8 @@ function Bar({ value, max }) {
 
 export default function AdminDashboard() {
   const { user } = useAuth()
-  const [rejecting, setRejecting] = useState(null)   // employer id showing the optional reason box
+  const [rejecting, setRejecting] = useState(null)   // the employer whose reject pop-up is open
+  const [askError, setAskError] = useState('')
   const [data, setData] = useState(null)
   const [gaps, setGaps] = useState(null)      // null = loading (it runs the matching for every student)
   const [error, setError] = useState('')
@@ -56,7 +58,10 @@ export default function AdminDashboard() {
     setBusy(id)
     api.post(`/admin/users/${id}/${action}`, reason === undefined ? undefined : { reason })
       .then(() => { setRejecting(null); window.dispatchEvent(new Event(ADMIN_COUNTS_CHANGED)); return load() })
-      .catch(err => setError(err.response?.data?.detail || "Couldn't save that. Try again."))
+      .catch(err => {
+        const msg = err.response?.data?.detail || "Couldn't save that. Try again."
+        if (reason === undefined) setError(msg); else setAskError(msg)
+      })
       .finally(() => setBusy(null))
   }
 
@@ -97,21 +102,14 @@ export default function AdminDashboard() {
                     <p className="text-sm font-medium text-slate-800">{u.company_name || u.name}</p>
                     <p className="text-xs text-slate-500 mt-0.5">Employer · {u.email} · registered {ago(u.created_at)}</p>
                   </div>
-                  {rejecting === u.id ? (
-                    <ReasonForm action="Reject" required={false} busy={busy === u.id}
-                      onConfirm={reason => decide(u.id, 'reject', reason)} onCancel={() => setRejecting(null)} />
-                  ) : (
-                    <>
-                      <button onClick={() => setRejecting(u.id)} disabled={busy === u.id}
-                        className="px-3.5 py-2 text-sm font-medium rounded-lg border border-slate-200 text-slate-700 hover:bg-slate-50 disabled:opacity-50">
-                        Reject
-                      </button>
-                      <button onClick={() => decide(u.id, 'approve')} disabled={busy === u.id}
-                        className="px-3.5 py-2 text-sm font-medium rounded-lg bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50">
-                        Approve
-                      </button>
-                    </>
-                  )}
+                  <button onClick={() => { setAskError(''); setRejecting(u) }} disabled={busy === u.id}
+                    className="px-3.5 py-2 text-sm font-medium rounded-lg border border-slate-200 text-slate-700 hover:bg-slate-50 disabled:opacity-50">
+                    Reject
+                  </button>
+                  <button onClick={() => decide(u.id, 'approve')} disabled={busy === u.id}
+                    className="px-3.5 py-2 text-sm font-medium rounded-lg bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50">
+                    Approve
+                  </button>
                 </li>
               ))}
               {waiting > SHOW_WAITING && (
@@ -209,6 +207,10 @@ export default function AdminDashboard() {
           </div>
         )}
       </div>
+      {rejecting && (
+        <ReasonDialog decision={DECISIONS.reject} name={rejecting.company_name || rejecting.name} busy={busy === rejecting.id}
+          error={askError} onConfirm={reason => decide(rejecting.id, 'reject', reason)} onCancel={() => setRejecting(null)} />
+      )}
     </div>
   )
 }
