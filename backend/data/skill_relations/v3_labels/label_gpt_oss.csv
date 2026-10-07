@@ -19,3 +19,43 @@ id,a,b,label_gpt_oss,model
 18,Web Services,SOAP Web Services,BROADER,openai/gpt-oss-120b
 19,Redis,Redis caching,SAME,openai/gpt-oss-120b
 20,Database Performance Tuning,Performance Tuning,NARROWER,openai/gpt-oss-120b
+21,Switching,L2/L3 switching,BROADER,openai/gpt-oss-120b
+22,Playwright,Playwright Automation,SAME,openai/gpt-oss-120b
+23,KPI Reporting,KPI Analysis,BROADER,openai/gpt-oss-120b
+24,Infrastructure monitoring,Infrastructure Management,BROADER,openai/gpt-oss-120b
+25,Fine-tuning,Model fine-tuning,BROADER,openai/gpt-oss-120b
+26,Model fine-tuning,Fine-tuning,NARROWER,openai/gpt-oss-120b
+27,LAN Configuration,LAN Administration,BROADER,openai/gpt-oss-120b
+28,Security Policy Development,Policy Development,NARROWER,openai/gpt-oss-120b
+29,Network Switching,Switching,NARROWER,openai/gpt-oss-120b
+30,.NET,C# .NET,BROADER,openai/gpt-oss-120b
+31,Version Control,SVN Version Control,BROADER,openai/gpt-oss-120b
+32,Test Case Design,Test Case Management,BROADER,openai/gpt-oss-120b
+33,Database monitoring,Database Optimization,RELATED,openai/gpt-oss-120b
+34,Linux Administration,Linux,NARROWER,openai/gpt-oss-120b
+35,Business Automation,Business Reporting,RELATED,openai/gpt-oss-120b
+36,Business Process Analysis,Business Process Optimization,BROADER,openai/gpt-oss-120b
+37,IT Operations,IT Support,NARROWER,openai/gpt-oss-120b
+38,Version Control,Git Version Control,BROADER,openai/gpt-oss-120b
+39,Server Maintenance,Server Installation,RELATED,openai/gpt-oss-120b
+40,VPN Management,VPN Configuration,NARROWER,openai/gpt-oss-120b
+41,Prometheus Monitoring,Prometheus,SAME,openai/gpt-oss-120b
+42,Performance Management,Performance Optimization,NARROWER,openai/gpt-oss-120b
+43,Data Reporting,Data Integration,RELATED,openai/gpt-oss-120b
+44,Database Optimization,Database monitoring,RELATED,openai/gpt-oss-120b
+45,IDS/IPS configuration,IPS,NARROWER,openai/gpt-oss-120b
+46,SSRS,SSRS Reporting,SAME,openai/gpt-oss-120b
+47,Hardware Troubleshooting,Server Hardware Troubleshooting,BROADER,openai/gpt-oss-120b
+48,IDS/IPS configuration,IDS,NARROWER,openai/gpt-oss-120b
+49,MES Support,MES implementation,BROADER,openai/gpt-oss-120b
+50,Shell,Unix Shell Scripting,BROADER,openai/gpt-oss-120b
+51,Backup,Backup Restore,BROADER,openai/gpt-oss-120b
+52,Networking,Computer Networking,SAME,openai/gpt-oss-120b
+53,API Security,API Testing,RELATED,openai/gpt-oss-120b
+54,Network Capacity Planning,Capacity Planning,NARROWER,openai/gpt-oss-120b
+55,Threat Analysis,Threat Modeling,BROADER,openai/gpt-oss-120b
+56,Help Desk Support,Help Desk,SAME,openai/gpt-oss-120b
+57,Business Analysis,Business Reporting,RELATED,openai/gpt-oss-120b
+58,Data Analytics,Data Governance,RELATED,openai/gpt-oss-120b
+59,AWS networking,Networking,NARROWER,openai/gpt-oss-120b
+60,Agile,Agile Project Management,BROADER,openai/gpt-oss-120b
