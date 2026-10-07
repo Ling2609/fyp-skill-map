@@ -76,6 +76,106 @@ def academic(db: Session = Depends(get_db), admin: User = Depends(require_admin)
             "intakes": _intakes(db, prog)}
 
 
+class ModuleFields(BaseModel):
+    name: str = Field(max_length=120)
+    year: int = Field(ge=1, le=4)
+    type: str
+
+
+class NewModule(ModuleFields):
+    code: str = Field(max_length=20)
+    description: str = Field(max_length=4000)
+
+
+def _check_fields(body: ModuleFields) -> str:
+    name = " ".join(body.name.split())
+    if len(name) < 3:
+        raise HTTPException(status_code=400, detail="Please type the module name.")
+    if body.type not in TYPES:
+        raise HTTPException(status_code=400, detail="Type must be common, specialised or elective.")
+    return name
+
+
+def _extract_into(db: Session, mod: Module) -> bool:
+    """Skills from the description (one Groq call); admin-added skills kept. False if the AI gave nothing."""
+    from app.nlp.skill_extractor import MODULE_EXTRACTED_BY, SkillExtractor
+    found = SkillExtractor().extract_from_module(
+        {"code": mod.code, "name": mod.name, "level": mod.level, "type": mod.type, "description": mod.description})
+    seen, skills = set(), []
+    for s in found["extracted_skills"]:
+        s = " ".join(s.split())
+        if s and s.lower() not in seen:
+            seen.add(s.lower())
+            skills.append(s)
+    if not skills:
+        return False
+    kept = {s["name"].lower() for s in _skills(db, mod) if s["added_by_admin"]}
+    db.query(ModuleSkill).filter(ModuleSkill.module_id == mod.id,
+                                 ModuleSkill.extracted_by != ADDED_BY_ADMIN).delete(synchronize_session=False)
+    for name in skills:
+        if name.lower() not in kept:
+            db.add(ModuleSkill(module_id=mod.id, module_code=mod.code, skill_name=name, extracted_by=MODULE_EXTRACTED_BY))
+    return True
+
+
+AI_DOWN = ("The AI service didn't answer (often its daily limit). The skills were left as they were; "
+           "use Find skills again later.")
+
+
+@router.post("/modules")
+def add_module(body: NewModule, db: Session = Depends(get_db), admin: User = Depends(require_admin)):
+    """A new module in the programme: saved, then its skills are found in the description (it starts "To review").
+    If the AI doesn't answer, the module is still saved, with no skills, and the reply says so."""
+    prog = _programme(db)
+    name = _check_fields(body)
+    code = "".join(body.code.split()).upper()
+    if len(code) < 3:
+        raise HTTPException(status_code=400, detail="Please type the module code, e.g. SE-L2-014.")
+    if db.query(Module).filter(func.upper(Module.code) == code).first():
+        raise HTTPException(status_code=400, detail=f"A module with code {code} already exists.")
+    text = " ".join(body.description.split())
+    if len(text) < 20:
+        raise HTTPException(status_code=400, detail="Please write at least a sentence: skills are found in this text.")
+    mod = Module(code=code, name=name, level=body.year, type=body.type, description=text,
+                 institution="Representative SE Programme")
+    db.add(mod)
+    db.flush()
+    db.add(ProgrammeModule(programme_id=prog.id, module_id=mod.id, year=body.year))
+    db.commit()
+    found = _extract_into(db, mod)
+    _changed(db, mod, unreview=True)
+    return {**_detail(db, mod), "warning": None if found else (
+        "The module is saved, but the AI service didn't answer (often its daily limit), so it has no skills yet. "
+        "Use Find skills again later.")}
+
+
+@router.put("/modules/{module_id}")
+def edit_module(module_id: int, body: ModuleFields, db: Session = Depends(get_db), admin: User = Depends(require_admin)):
+    """Name, year and type (the code stays: students' grades are stored under it)."""
+    mod = _module(db, module_id)
+    mod.name, mod.level, mod.type = _check_fields(body), body.year, body.type
+    db.query(ProgrammeModule).filter(ProgrammeModule.module_id == mod.id).update({"year": body.year})
+    _changed(db, mod)
+    return _detail(db, mod)
+
+
+@router.delete("/modules/{module_id}")
+def remove_module(module_id: int, db: Session = Depends(get_db), admin: User = Depends(require_admin)):
+    """Removes a module the programme no longer teaches. Refused once a student has entered a grade for it, so no
+    student's profile loses skills they have evidence for."""
+    mod = _module(db, module_id)
+    students = db.query(func.count(func.distinct(UserModule.user_id))).filter(UserModule.module_code == mod.code).scalar()
+    if students:
+        raise HTTPException(status_code=400, detail=f"{students} student{'s have' if students > 1 else ' has'} entered "
+                                                    "a grade for this module, so it can't be removed.")
+    db.query(ModuleSkill).filter(ModuleSkill.module_id == mod.id).delete(synchronize_session=False)
+    db.query(ProgrammeModule).filter(ProgrammeModule.module_id == mod.id).delete(synchronize_session=False)
+    db.delete(mod)
+    db.commit()
+    _gaps_cache["value"] = None
+    return {"removed": mod.code}
+
+
 @router.get("/modules/{module_id}")
 def module_detail(module_id: int, db: Session = Depends(get_db), admin: User = Depends(require_admin)):
     return _detail(db, _module(db, module_id))
@@ -137,27 +237,11 @@ def remove_skill(module_id: int, body: SkillName, db: Session = Depends(get_db),
 def extract_again(module_id: int, db: Session = Depends(get_db), admin: User = Depends(require_admin)):
     """Find the skills again from the saved description (one Groq call). Skills an admin added are kept; the module
     goes back to "to review"."""
-    from app.nlp.skill_extractor import MODULE_EXTRACTED_BY, SkillExtractor
     mod = _module(db, module_id)
     if not (mod.description or "").strip():
         raise HTTPException(status_code=400, detail="Add a description first: skills are found in it.")
-    found = SkillExtractor().extract_from_module(
-        {"code": mod.code, "name": mod.name, "level": mod.level, "type": mod.type, "description": mod.description})
-    seen, skills = set(), []
-    for s in found["extracted_skills"]:
-        s = " ".join(s.split())
-        if s and s.lower() not in seen:
-            seen.add(s.lower())
-            skills.append(s)
-    if not skills:
-        raise HTTPException(status_code=503, detail="The AI service didn't answer (often its daily limit). "
-                                                    "The skills were left as they were; try again later.")
-    kept = {s["name"].lower() for s in _skills(db, mod) if s["added_by_admin"]}
-    db.query(ModuleSkill).filter(ModuleSkill.module_id == mod.id,
-                                 ModuleSkill.extracted_by != ADDED_BY_ADMIN).delete(synchronize_session=False)
-    for name in skills:
-        if name.lower() not in kept:
-            db.add(ModuleSkill(module_id=mod.id, module_code=mod.code, skill_name=name, extracted_by=MODULE_EXTRACTED_BY))
+    if not _extract_into(db, mod):
+        raise HTTPException(status_code=503, detail=AI_DOWN)
     _changed(db, mod, unreview=True)
     return _detail(db, mod)
 

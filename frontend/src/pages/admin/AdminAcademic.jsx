@@ -3,6 +3,8 @@ import { useSearchParams } from 'react-router-dom'
 import api from '../../api'
 import PageHeader from '../../components/PageHeader'
 import { ADMIN_COUNTS_CHANGED } from '../../components/Sidebar'
+import ModuleForm from './ModuleForm'
+import RowMenu from './RowMenu'
 
 // Admin > Academic structure (7 Oct, her pick A; references.md "Admin Academic structure layout"). Modules: a list on
 // the left (by year, "To review" / "Reviewed") and the chosen module on the right, so the career office can work
@@ -33,7 +35,7 @@ const Chip = ({ reviewed }) => reviewed
   : <span className="shrink-0 text-xs font-medium rounded-full px-2 py-0.5 bg-amber-100 text-amber-800">To review</span>
 
 // ── The chosen module ──────────────────────────────────────────────────────────────────────────────────────────────
-function ModuleDetails({ id, onChanged, onReviewed }) {
+function ModuleDetails({ id, onChanged, onReviewed, onEdit, onRemove }) {
   const [mod, setMod] = useState(null)
   const [draft, setDraft] = useState('')
   const [newSkill, setNewSkill] = useState('')
@@ -73,7 +75,13 @@ function ModuleDetails({ id, onChanged, onReviewed }) {
           <h2 className="text-lg font-semibold text-slate-900">{mod.name}</h2>
           <p className="text-sm text-slate-500 mt-0.5">{mod.code} · Year {mod.year} · {mod.type}</p>
         </div>
-        <Chip reviewed={reviewed} />
+        <div className="flex items-center gap-2 shrink-0">
+          <Chip reviewed={reviewed} />
+          <RowMenu label={`More for ${mod.name}`} items={[
+            { label: 'Edit details', onSelect: () => onEdit(mod) },
+            { label: 'Remove module…', danger: true, onSelect: () => onRemove(mod) },
+          ]} />
+        </div>
       </div>
 
       <div>
@@ -245,6 +253,12 @@ export default function AdminAcademic() {
   const [data, setData] = useState(null)
   const [error, setError] = useState('')
   const [q, setQ] = useState('')
+  const [form, setForm] = useState(null)        // null, { mode: 'add' } or { mode: 'edit', module }
+  const [formBusy, setFormBusy] = useState(false)
+  const [formError, setFormError] = useState('')
+  const [removing, setRemoving] = useState(null) // the module whose "Remove?" pop-up is open
+  const [notice, setNotice] = useState('')      // e.g. the AI didn't answer when a module was added
+  const [tick, setTick] = useState(0)           // reloads the details after an edit
 
   const set = useCallback((changes) => {
     const next = new URLSearchParams(params)
@@ -252,10 +266,33 @@ export default function AdminAcademic() {
     setParams(next, { replace: true })
   }, [params, setParams])
 
-  useEffect(() => {
-    api.get('/admin/academic').then(res => setData(res.data))
-      .catch(err => setError(errText(err, "Couldn't load the academic structure. Is the backend running?")))
-  }, [])
+  const reload = useCallback(() => api.get('/admin/academic').then(res => { setData(res.data); return res.data })
+    .catch(err => setError(errText(err, "Couldn't load the academic structure. Is the backend running?"))), [])
+  useEffect(() => { reload() }, [reload])
+
+  const openForm = (f) => { setFormError(''); setForm(f) }
+  const saveForm = (fields) => {
+    setFormBusy(true); setFormError('')
+    const req = form.mode === 'add' ? api.post('/admin/modules', fields) : api.put(`/admin/modules/${form.module.id}`, fields)
+    req.then(res => reload().then(() => {
+      setForm(null); setNotice(res.data.warning || '')
+      setTick(t => t + 1)
+      set({ m: String(res.data.id), show: '' })
+      window.dispatchEvent(new Event(ADMIN_COUNTS_CHANGED))
+    }))
+      .catch(err => setFormError(errText(err, "Couldn't save the module.")))
+      .finally(() => setFormBusy(false))
+  }
+  const confirmRemove = () => {
+    setFormBusy(true); setFormError('')
+    api.delete(`/admin/modules/${removing.id}`)
+      .then(() => reload().then(() => {
+        setRemoving(null); setNotice(''); set({ m: '' })
+        window.dispatchEvent(new Event(ADMIN_COUNTS_CHANGED))
+      }))
+      .catch(err => setFormError(errText(err, "Couldn't remove the module.")))
+      .finally(() => setFormBusy(false))
+  }
 
   const modules = useMemo(() => data?.modules || [], [data])
   const toReview = modules.filter(m => !m.reviewed).length
@@ -313,24 +350,26 @@ export default function AdminAcademic() {
         {data && tab === 'modules' && (
           <div className="flex-1 min-h-0 flex gap-4">
             <section aria-label="Modules" className="w-88 shrink-0 bg-white border border-slate-200 rounded-xl flex flex-col overflow-hidden">
-              <div className="p-3 flex gap-2 border-b border-slate-100">
-                <SearchBox value={q} onChange={setQ} label="Search modules" placeholder="Search modules" />
+              <div className="p-3 flex flex-wrap gap-2 border-b border-slate-100">
+                <div className="basis-full flex"><SearchBox value={q} onChange={setQ} label="Search modules" placeholder="Search modules" /></div>
                 <button type="button" aria-pressed={onlyToReview} onClick={() => set({ show: onlyToReview ? '' : 'todo' })}
                   className={`shrink-0 px-3 py-1.5 text-sm rounded-full border ${onlyToReview
                     ? 'bg-blue-700 border-blue-700 text-white'
                     : toReview ? 'bg-amber-50 border-amber-300 text-amber-800 hover:bg-amber-100' : 'bg-white border-slate-200 text-slate-700'}`}>
                   To review <span className="font-semibold tabular-nums">{toReview}</span>
                 </button>
+                <button type="button" onClick={() => openForm({ mode: 'add' })}
+                  className="ml-auto shrink-0 px-3 py-1.5 text-sm font-medium rounded-lg bg-blue-600 text-white hover:bg-blue-700">+ Add module</button>
               </div>
               <div className="flex-1 overflow-y-auto">
                 {shown.length === 0 && <p className="p-4 text-sm text-slate-500">{onlyToReview && !q ? 'All modules are reviewed.' : 'No modules match.'}</p>}
                 {years.map(y => (
                   <div key={y}>
-                    <p className="sticky top-0 z-10 px-4 py-1.5 text-[11px] font-semibold tracking-widest text-slate-500 bg-slate-50 border-y border-slate-100">YEAR {y}</p>
+                    <p className="sticky top-0 z-10 px-4 py-2 text-xs font-semibold tracking-widest text-white bg-slate-600">YEAR {y}</p>
                     <ul>
                       {shown.filter(m => m.year === y).map(m => (
                         <li key={m.id}>
-                          <button type="button" aria-current={m.id === selected ? 'true' : undefined} onClick={() => set({ m: String(m.id) })}
+                          <button type="button" aria-current={m.id === selected ? 'true' : undefined} onClick={() => { setNotice(''); set({ m: String(m.id) }) }}
                             className={`w-full text-left flex items-center justify-between gap-3 px-4 py-2.5 border-b border-slate-50 ${m.id === selected
                               ? 'bg-blue-50 shadow-[inset_3px_0_0_#2563eb]' : 'hover:bg-slate-50'}`}>
                             <span className="min-w-0">
@@ -347,12 +386,44 @@ export default function AdminAcademic() {
               </div>
             </section>
             <section aria-label="Module details" className="flex-1 min-w-0 self-start max-h-full overflow-y-auto bg-white border border-slate-200 rounded-xl">
-              {selected ? <ModuleDetails key={selected} id={selected} onChanged={onChanged} onReviewed={onReviewed} />
+              {notice && <p role="status" className="mx-6 mt-5 -mb-1 text-sm text-amber-800 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2">{notice}</p>}
+              {selected ? <ModuleDetails key={`${selected}-${tick}`} id={selected} onChanged={onChanged} onReviewed={onReviewed}
+                  onEdit={mod => openForm({ mode: 'edit', module: mod })} onRemove={mod => { setFormError(''); setRemoving(mod) }} />
                 : <p className="p-6 text-sm text-slate-500">Choose a module on the left.</p>}
             </section>
           </div>
         )}
       </div>
+
+      {form && <ModuleForm module={form.module} busy={formBusy} error={formError} onSave={saveForm} onCancel={() => setForm(null)} />}
+      {removing && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/30" onMouseDown={() => { if (!formBusy) setRemoving(null) }}>
+          <div role="alertdialog" aria-modal="true" aria-labelledby="remove-title" onMouseDown={e => e.stopPropagation()}
+            onKeyDown={e => { if (e.key === 'Escape' && !formBusy) setRemoving(null) }}
+            className="bg-white rounded-2xl shadow-xl w-full max-w-md">
+            <div className="px-6 pt-5">
+              <h2 id="remove-title" className="text-base font-semibold text-slate-900">Remove {removing.name}?</h2>
+              <p className="text-sm text-slate-600 mt-1.5">
+                {removing.code} and its skills are taken out of the programme. Only possible while no student has entered a grade for it.
+              </p>
+              {removing.students > 0 && (
+                <p className="text-sm text-amber-800 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2 mt-3">
+                  {removing.students} student{removing.students > 1 ? 's have' : ' has'} entered a grade for this module, so it stays.
+                </p>
+              )}
+              {formError && <p role="alert" className="text-sm text-rose-600 mt-3">{formError}</p>}
+            </div>
+            <div className="flex justify-end gap-2 px-6 py-4 mt-5 bg-slate-50 border-t border-slate-100 rounded-b-2xl">
+              <button type="button" autoFocus onClick={() => setRemoving(null)} disabled={formBusy}
+                className="px-4 py-2 text-sm font-medium rounded-lg border border-slate-200 bg-white text-slate-700 hover:bg-slate-50">Cancel</button>
+              <button type="button" onClick={confirmRemove} disabled={formBusy || removing.students > 0}
+                className="px-4 py-2 text-sm font-medium rounded-lg bg-rose-600 text-white hover:bg-rose-700 disabled:opacity-40">
+                {formBusy ? 'Removing…' : 'Remove module'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

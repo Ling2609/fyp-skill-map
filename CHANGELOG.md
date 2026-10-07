@@ -3,9 +3,24 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 7 Oct 2026 — Academic structure: add, edit and remove modules; darker year headers
+
+- (this commit) Her review: modules were only pre-filled by the migration (from `data/modules.json`), with no way to
+  add one. Now (one programme, her decision: no "add programme"):
+  - **+ Add module** (code, name, year, type, description): saved into the programme, then its skills are found in
+    the description straight away (IR Objective 1) and it starts "To review". If the AI doesn't answer, the module is
+    still saved with no skills and a note says to use Find skills again later. Duplicate codes refused.
+  - **⋯ → Edit details** (name, year, type; the code stays, students' grades are stored under it).
+  - **⋯ → Remove module…** (asks first); refused once a student has entered a grade for it, so no profile loses
+    skills it has evidence for.
+  - Year headers in the list are dark (white on slate) so Year 1 / 2 / 3 stand out; search on its own row.
+  - Endpoints: `POST /admin/modules`, `PUT /admin/modules/{id}`, `DELETE /admin/modules/{id}`.
+- Checked in a browser at 1333×680 (12 checks, AI extraction replaced by a stand-in): add with skills, list and badge
+  update, duplicate code, AI down, edit, remove, removal blocked with students; earlier 17 checks re-run.
+
 ## 7 Oct 2026 — Admin, batch 2: Academic structure (module skills review, intakes)
 
-- (this commit) New admin page **Academic structure** (sidebar, badge = modules still to review; her pick A of two
+- (c601701) New admin page **Academic structure** (sidebar, badge = modules still to review; her pick A of two
   mock-ups: list and details side by side, Microsoft list/details pattern, references.md "Admin Academic structure
   layout"). No migration: the tables came with `migrate_admin_structure.py`.
   - **Modules:** list by year with "To review" / "Reviewed" (search, "To review" filter); the chosen module on the
