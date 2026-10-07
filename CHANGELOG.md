@@ -3,9 +3,14 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 7 Oct 2026 — Admin pages full width; only the user list scrolls
+
+- (this commit) Admin pages use the full width like the student pages (her review). On Users the page itself no
+  longer scrolls: only the list does, and its column titles stay on top (checked in a browser with 49 accounts).
+
 ## 7 Oct 2026 — Admin pages: dashboard (layout D) and Users
 
-- (this commit) Admins now get their own screens (her pick: layout D, references.md "Admin layout"). Sidebar for
+- (7074cf4) Admins now get their own screens (her pick: layout D, references.md "Admin layout"). Sidebar for
   Admin: Dashboard and Users, with a badge counting employers waiting for approval (refreshed on every page and
   right after an approval). `/dashboard` shows each role its own home.
 - Dashboard: "Needs your action" first (waiting employers with Approve / Reject; modules whose skills nobody has

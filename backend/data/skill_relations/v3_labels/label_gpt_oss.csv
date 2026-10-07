@@ -99,3 +99,23 @@ id,a,b,label_gpt_oss,model
 98,Microsoft 365,Microsoft 365 Exchange,NARROWER,openai/gpt-oss-120b
 99,Mentoring,Mentoring Juniors,NARROWER,openai/gpt-oss-120b
 100,Risk Reporting,Risk Analytics,RELATED,openai/gpt-oss-120b
+101,Hardware debugging,Hardware Maintenance,NARROWER,openai/gpt-oss-120b
+102,Rapid Prototyping,Prototyping,NARROWER,openai/gpt-oss-120b
+103,Application integration,Application Support,DIFFERENT,openai/gpt-oss-120b
+104,Data Reporting,Data Management,NARROWER,openai/gpt-oss-120b
+105,Solaris Administration,Solaris,NARROWER,openai/gpt-oss-120b
+106,Selenium,Selenium Automation,SAME,openai/gpt-oss-120b
+107,IT Troubleshooting,IT Operations,NARROWER,openai/gpt-oss-120b
+108,CISM Certification,CISM,SAME,openai/gpt-oss-120b
+109,Database installation,Database Security,DIFFERENT,openai/gpt-oss-120b
+110,SEO,On-page SEO,BROADER,openai/gpt-oss-120b
+111,Network Operations,Network Monitoring,BROADER,openai/gpt-oss-120b
+112,Linux Server,Linux,NARROWER,openai/gpt-oss-120b
+113,Windows OS Installation,Windows OS Support,NARROWER,openai/gpt-oss-120b
+114,Infrastructure monitoring,Infrastructure Automation,RELATED,openai/gpt-oss-120b
+115,Software validation,Software Implementation,DIFFERENT,openai/gpt-oss-120b
+116,Unix/Linux,Unix/Linux administration,BROADER,openai/gpt-oss-120b
+117,Network Maintenance,Network Testing,RELATED,openai/gpt-oss-120b
+118,Apache,Apache Iceberg,DIFFERENT,openai/gpt-oss-120b
+119,SQL Scripting,SQL Optimization,RELATED,openai/gpt-oss-120b
+120,Data Integration,Data Engineering,NARROWER,openai/gpt-oss-120b

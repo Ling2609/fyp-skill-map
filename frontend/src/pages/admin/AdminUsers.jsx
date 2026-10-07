@@ -65,7 +65,7 @@ export default function AdminUsers() {
   const quiet = `${btn} border border-slate-200 text-slate-700 hover:bg-slate-50`
 
   return (
-    <div>
+    <div className="h-screen flex flex-col">
       <PageHeader>
         <div className="pb-5">
           <p className="text-[11px] font-semibold text-blue-600 uppercase tracking-widest mb-2">Admin</p>
@@ -74,7 +74,7 @@ export default function AdminUsers() {
         </div>
       </PageHeader>
 
-      <div className="px-8 py-6 space-y-4 max-w-6xl">
+      <div className="flex-1 min-h-0 flex flex-col gap-4 px-8 py-6">
         <div className="flex flex-wrap items-center gap-3">
           <label className="sr-only" htmlFor="user-search">Search users</label>
           <input id="user-search" value={q} onChange={e => setQ(e.target.value)} placeholder="Search name, email or company"
@@ -100,15 +100,15 @@ export default function AdminUsers() {
 
         {error && <p className="text-sm text-rose-600">{error}</p>}
 
-        <div className="bg-white rounded-xl border border-slate-200 overflow-x-auto">
+        <div className="flex-1 min-h-0 overflow-auto bg-white rounded-xl border border-slate-200">
           <table className="w-full text-sm min-w-190">
             <thead>
-              <tr className="text-left text-xs text-slate-500 border-b border-slate-100">
-                <th scope="col" className="font-medium px-4 py-3">Name</th>
-                <th scope="col" className="font-medium px-4 py-3">Role</th>
-                <th scope="col" className="font-medium px-4 py-3">Joined</th>
-                <th scope="col" className="font-medium px-4 py-3">Status</th>
-                <th scope="col" className="px-4 py-3"><span className="sr-only">Actions</span></th>
+              <tr className="text-left text-xs text-slate-500 shadow-[inset_0_-1px_0_#f1f5f9]">
+                <th scope="col" className="sticky top-0 z-10 bg-white font-medium px-4 py-3">Name</th>
+                <th scope="col" className="sticky top-0 z-10 bg-white font-medium px-4 py-3">Role</th>
+                <th scope="col" className="sticky top-0 z-10 bg-white font-medium px-4 py-3">Joined</th>
+                <th scope="col" className="sticky top-0 z-10 bg-white font-medium px-4 py-3">Status</th>
+                <th scope="col" className="sticky top-0 z-10 bg-white px-4 py-3"><span className="sr-only">Actions</span></th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
@@ -164,7 +164,7 @@ export default function AdminUsers() {
             </tbody>
           </table>
         </div>
-        {users?.length > 0 && <p className="text-xs text-slate-500">{users.length} account{users.length > 1 ? 's' : ''}</p>}
+        {users?.length > 0 && <p className="shrink-0 text-xs text-slate-500">{users.length} account{users.length > 1 ? 's' : ''}</p>}
       </div>
     </div>
   )

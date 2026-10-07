@@ -66,7 +66,7 @@ export default function AdminDashboard() {
         </div>
       </PageHeader>
 
-      <div className="px-8 py-6 space-y-5 max-w-5xl">
+      <div className="px-8 py-6 space-y-5">
         {error && <p className="text-sm text-rose-600">{error}</p>}
 
         {data && actions > 0 && (
