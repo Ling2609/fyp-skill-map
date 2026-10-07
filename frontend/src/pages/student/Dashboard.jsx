@@ -238,7 +238,7 @@ export default function Dashboard() {
                 <label className="flex items-center gap-1.5 text-xs text-slate-400 min-w-0">
                   Based on
                   <select value={basedOn} onChange={e => chooseBasedOn(e.target.value)}
-                    className="text-xs text-slate-700 bg-slate-50 border border-slate-200 rounded-md px-1.5 py-1 max-w-[11rem] truncate focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    className="text-xs text-slate-700 bg-slate-50 border border-slate-200 rounded-md px-1.5 py-1 max-w-44 truncate focus:outline-none focus:ring-2 focus:ring-blue-500">
                     <option value="">All my matches</option>
                     {categories.map(c => <option key={c} value={c}>{c}</option>)}
                   </select>
