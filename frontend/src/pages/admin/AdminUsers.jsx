@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import api from '../../api'
 import PageHeader from '../../components/PageHeader'
@@ -18,6 +18,10 @@ const STATUS = {
 const ROLE = { student: 'Student', employer: 'Employer', admin: 'Admin' }
 // The latest decision, shown under the status: "Deactivated 7 Oct by Career Office · Graduated"
 const DONE = { approve: 'Approved', reject: 'Rejected', deactivate: 'Deactivated', reactivate: 'Reactivated' }
+// The column titles sit in their own strip above the scrolling list, so the scroll bar starts at the first account.
+// Both tables share these widths; the strip keeps a scroll-bar gutter so the columns line up.
+const COLS = [['Name', '30%'], ['Role', '11%'], ['Joined', '13%'], ['Status', '25%'], ['Actions', '21%']]
+const colgroup = <colgroup>{COLS.map(([n, w]) => <col key={n} style={{ width: w }} />)}</colgroup>
 const short = (iso) => new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })
 const day = (iso) => new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
 
@@ -31,6 +35,7 @@ export default function AdminUsers() {
   const [error, setError] = useState('')
   const [busy, setBusy] = useState(null)
   const [asking, setAsking] = useState(null)   // { id, action }: the row showing the reason box
+  const strip = useRef(null)                     // the column titles follow the list when it scrolls sideways
 
   const setFilter = (key, value) => {
     const next = new URLSearchParams(params)
@@ -107,16 +112,24 @@ export default function AdminUsers() {
 
         {error && <p className="text-sm text-rose-600">{error}</p>}
 
-        <div className="flex-1 min-h-0 overflow-auto bg-white rounded-xl border border-slate-200">
-          <table className="w-full text-sm min-w-190">
+        <div className="flex-1 min-h-0 flex flex-col bg-white rounded-xl border border-slate-200 overflow-hidden">
+          <div ref={strip} aria-hidden="true" className="overflow-hidden [scrollbar-gutter:stable] bg-slate-100 border-b border-slate-200">
+            <table className="w-full min-w-190 table-fixed text-xs">
+              {colgroup}
+              <thead>
+                <tr className="text-left text-slate-600">
+                  {COLS.map(([n]) => <th key={n} className="font-semibold uppercase tracking-wide px-4 py-2.5">{n === 'Actions' ? '' : n}</th>)}
+                </tr>
+              </thead>
+            </table>
+          </div>
+          <div className="flex-1 min-h-0 overflow-auto [scrollbar-gutter:stable]"
+            onScroll={e => { if (strip.current) strip.current.scrollLeft = e.currentTarget.scrollLeft }}>
+          <table className="w-full text-sm min-w-190 table-fixed">
+            {colgroup}
+            {/* real column titles for screen readers; the visible ones are the strip above */}
             <thead>
-              <tr className="text-left text-xs text-slate-500 shadow-[inset_0_-1px_0_#f1f5f9]">
-                <th scope="col" className="sticky top-0 z-10 bg-white font-medium px-4 py-3">Name</th>
-                <th scope="col" className="sticky top-0 z-10 bg-white font-medium px-4 py-3">Role</th>
-                <th scope="col" className="sticky top-0 z-10 bg-white font-medium px-4 py-3">Joined</th>
-                <th scope="col" className="sticky top-0 z-10 bg-white font-medium px-4 py-3">Status</th>
-                <th scope="col" className="sticky top-0 z-10 bg-white px-4 py-3"><span className="sr-only">Actions</span></th>
-              </tr>
+              <tr>{COLS.map(([n]) => <th key={n} scope="col" className="p-0 h-0"><span className="sr-only">{n}</span></th>)}</tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
               {users === null && <tr><td colSpan={5} className="px-4 py-6 text-slate-500">Loading…</td></tr>}
@@ -127,8 +140,8 @@ export default function AdminUsers() {
                 return (
                   <tr key={u.id} className={u.is_active ? '' : 'bg-slate-50'}>
                     <td className="px-4 py-3">
-                      <p className="font-medium text-slate-800">{u.role === 'employer' && u.company_name ? u.company_name : u.name}</p>
-                      <p className="text-xs text-slate-500 mt-0.5">
+                      <p className="font-medium text-slate-800 truncate">{u.role === 'employer' && u.company_name ? u.company_name : u.name}</p>
+                      <p className="text-xs text-slate-500 mt-0.5 truncate">
                         {u.role === 'employer' && u.company_name ? `${u.name} · ` : ''}{u.email}
                       </p>
                     </td>
@@ -141,7 +154,7 @@ export default function AdminUsers() {
                         {u.is_active && !s && <span className="text-xs text-slate-500">Active</span>}
                       </div>
                       {u.last_action && (
-                        <p className="text-xs text-slate-500 mt-1 max-w-72">
+                        <p className="text-xs text-slate-500 mt-1">
                           {DONE[u.last_action.action]} {short(u.last_action.at)} by {u.last_action.by}
                           {u.last_action.reason && <span className="text-slate-600"> · {u.last_action.reason}</span>}
                         </p>
@@ -178,6 +191,7 @@ export default function AdminUsers() {
               })}
             </tbody>
           </table>
+          </div>
         </div>
       </div>
     </div>

@@ -13,7 +13,7 @@ Admin accounts are made with scripts/tools/create_admin.py (admin can't be chose
 """
 import time
 from collections import Counter
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, Field
@@ -32,7 +32,7 @@ from app.routers.auth import get_current_user
 router = APIRouter(prefix="/admin", tags=["admin"])
 
 GAPS_CACHE_SECONDS = 300
-GAPS_TOP = 5
+GAPS_TOP = 8
 _gaps_cache = {"at": 0.0, "value": None}
 
 
@@ -76,7 +76,7 @@ def _user_row(u: User, last: dict | None = None) -> dict:
 
 
 def common_skill_gaps(db: Session) -> list[dict]:
-    """Skills most often in students' own "skills to learn next" (top 5 each), most students first."""
+    """Skills most often in students' own "skills to learn next", counted over students (top 8 shown), most students first."""
     from app.routers.recommend import RecommendRequest, recommend_jobs
     now = time.time()
     if _gaps_cache["value"] is not None and now - _gaps_cache["at"] < GAPS_CACHE_SECONDS:
@@ -111,6 +111,7 @@ def dashboard(db: Session = Depends(get_db), admin: User = Depends(require_admin
                      | {uid for (uid,) in db.query(UserCertification.user_id)
                         .filter(UserCertification.user_id.in_(student_ids))})
     students = student_ids.count()
+    month_ago = datetime.now(timezone.utc) - timedelta(days=30)
     return {
         "todo": {
             "pending_employers": [_user_row(u) for u in pending],
@@ -122,7 +123,11 @@ def dashboard(db: Session = Depends(get_db), admin: User = Depends(require_admin
             "employers": db.query(User).filter(User.role == UserRole.employer,
                                                User.employer_status == "approved").count(),
             "live_jobs": live.count(),
+            "students_new_30d": db.query(User).filter(User.role == UserRole.student, User.is_active.is_(True),
+                                                      User.created_at >= month_ago).count(),
+            "employers_pending": len(pending),
             "modules": db.query(Module).count(),
+            "modules_reviewed": db.query(Module).filter(Module.skills_reviewed_at.isnot(None)).count(),
             "newest_live_job_at": db.query(func.max(Job.created_at)).filter(Job.source == "live").scalar(),
         },
         "profiles": {"students": students, "with_grades": with_grades, "with_project_or_cert": with_extra,

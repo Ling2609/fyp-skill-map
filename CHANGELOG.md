@@ -3,9 +3,23 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 7 Oct 2026 — Admin dashboard fills its space; Users column titles in their own strip
+
+- (this commit) Dashboard (her review): the two bottom panels spread their rows over the space they have instead of
+  leaving a blank foot; when the to-do list is long they shrink back and the page scrolls. "Needs your action"
+  shows 3 waiting employers at most, then "and N more employers waiting →" (opens the filtered Users list), so it
+  can't push everything else off the screen. Every count card has a second line now: students joined in the last
+  30 days, employers waiting for approval, newest live job, modules whose skills were reviewed. Skill gaps show up
+  to 8 skills.
+- Users: column titles sit in a grey strip above the list, so the scroll bar starts at the first account (the
+  strip follows when the list scrolls sideways; screen readers still get real column headings). Long names and
+  emails are cut with "…" instead of widening the table.
+- Checked in a browser at 1333×680 and 1440×900: columns line up with the titles, the list scrolls under the strip,
+  the sidebar stays in place when the dashboard scrolls.
+
 ## 7 Oct 2026 — Admin decisions kept with a reason; greeting; full-height dashboard
 
-- (this commit) Run `python migrations/migrate_admin_actions.py` once (safe to rerun): new table `admin_actions`.
+- (33b2d93) Run `python migrations/migrate_admin_actions.py` once (safe to rerun): new table `admin_actions`.
   Every approve / reject / deactivate / reactivate is recorded with who, when and why (references.md
   "Deactivating and reactivating accounts": OWASP logging, NIST AC-2, GitHub asks for a reason). A reason is
   required to deactivate and to reactivate, optional to reject (to be shown to the employer later), not asked to

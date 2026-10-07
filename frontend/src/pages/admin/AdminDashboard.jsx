@@ -11,6 +11,9 @@ import ReasonForm from './ReasonForm'
 // (NN/g: "make important information visually salient"), then glanceable counts, then two panels the career office
 // can act on. Totals only, never one student's data.
 
+const SHOW_WAITING = 3        // more than this: "and N more" opens the Users list, so the page never gets packed
+const plural = (n, word) => `${n} ${word}${n === 1 ? '' : 's'}`
+
 const fmtDay = (iso) => iso ? new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }) : '—'
 const ago = (iso) => {
   const days = Math.floor((Date.now() - new Date(iso)) / 864e5)
@@ -77,7 +80,8 @@ export default function AdminDashboard() {
         </div>
       </PageHeader>
 
-      {/* fills the screen: the two panels at the bottom stretch to its foot */}
+      {/* fills the screen: the two panels stretch to its foot and spread their rows out; with a long to-do list they
+          shrink back to their rows and the page scrolls instead */}
       <div className="flex-1 flex flex-col gap-5 px-8 py-6">
         {error && <p className="text-sm text-rose-600">{error}</p>}
 
@@ -87,7 +91,7 @@ export default function AdminDashboard() {
               Needs your action
             </h2>
             <ul className="divide-y divide-slate-100">
-              {todo.pending_employers.map(u => (
+              {todo.pending_employers.slice(0, SHOW_WAITING).map(u => (
                 <li key={u.id} className="flex flex-wrap items-center gap-3 px-5 py-3">
                   <div className="flex-1 min-w-60">
                     <p className="text-sm font-medium text-slate-800">{u.company_name || u.name}</p>
@@ -110,6 +114,13 @@ export default function AdminDashboard() {
                   )}
                 </li>
               ))}
+              {waiting > SHOW_WAITING && (
+                <li className="px-5 py-2.5">
+                  <Link to="/admin/users?role=employer&status=pending" className="text-sm font-medium text-blue-600 hover:underline">
+                    and {plural(waiting - SHOW_WAITING, 'more employer')} waiting →
+                  </Link>
+                </li>
+              )}
               {toReview > 0 && (
                 <li className="flex flex-wrap items-center gap-3 px-5 py-3">
                   <div className="flex-1 min-w-60">
@@ -129,10 +140,12 @@ export default function AdminDashboard() {
         {data && (
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             {[
-              { label: 'Students', value: data.counts.students, to: '/admin/users?role=student' },
-              { label: 'Employers', value: data.counts.employers, to: '/admin/users?role=employer' },
+              { label: 'Students', value: data.counts.students, to: '/admin/users?role=student',
+                note: `${data.counts.students_new_30d} joined in the last 30 days` },
+              { label: 'Employers', value: data.counts.employers, to: '/admin/users?role=employer',
+                note: data.counts.employers_pending ? `${data.counts.employers_pending} waiting for approval` : 'None waiting for approval' },
               { label: 'Live jobs', value: data.counts.live_jobs, note: `Newest added ${fmtDay(data.counts.newest_live_job_at)}` },
-              { label: 'Modules', value: data.counts.modules },
+              { label: 'Modules', value: data.counts.modules, note: `${data.counts.modules_reviewed} of ${data.counts.modules} skills reviewed` },
             ].map(c => {
               const body = (
                 <>
@@ -150,16 +163,16 @@ export default function AdminDashboard() {
 
         {data && (
           <div className="flex-1 grid lg:grid-cols-2 gap-4">
-            <section className="bg-white rounded-xl border border-slate-200">
+            <section className="bg-white rounded-xl border border-slate-200 flex flex-col">
               <div className="px-5 py-3 border-b border-slate-100">
                 <h2 className="text-sm font-semibold text-slate-700">Most common skill gaps</h2>
                 <p className="text-xs text-slate-500 mt-0.5">Skills students most often lack in their top job matches</p>
               </div>
-              <div className="px-5 py-4">
+              <div className="flex-1 flex flex-col px-5 py-4">
                 {gaps === null && <p className="text-sm text-slate-500">Working it out for every student…</p>}
                 {gaps?.length === 0 && <p className="text-sm text-slate-500">No student has a skill profile yet.</p>}
                 {gaps?.length > 0 && (
-                  <ul className="space-y-3">
+                  <ul className="flex-1 flex flex-col justify-evenly gap-3">
                     {gaps.map(g => (
                       <li key={g.skill} className="grid grid-cols-[minmax(0,10rem)_1fr_auto] items-center gap-3 text-sm">
                         <span className="truncate text-slate-800">{skillName(g.skill)}</span>
@@ -172,12 +185,12 @@ export default function AdminDashboard() {
               </div>
             </section>
 
-            <section className="bg-white rounded-xl border border-slate-200">
+            <section className="bg-white rounded-xl border border-slate-200 flex flex-col">
               <div className="px-5 py-3 border-b border-slate-100">
                 <h2 className="text-sm font-semibold text-slate-700">Student profiles</h2>
                 <p className="text-xs text-slate-500 mt-0.5">Matching only works once grades are in</p>
               </div>
-              <ul className="px-5 py-4 space-y-4 text-sm">
+              <ul className="flex-1 flex flex-col justify-evenly gap-4 px-5 py-4 text-sm">
                 {[
                   ['Grades entered', p.with_grades],
                   ['Added a project or certificate', p.with_project_or_cert],
