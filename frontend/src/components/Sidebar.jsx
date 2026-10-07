@@ -58,6 +58,17 @@ const ADMIN_ITEMS = [
       </svg>
     ),
   },
+  {
+    to: '/admin/academic',
+    label: 'Academic structure',
+    badge: 'modules_to_review',
+    badgeLabel: 'to review',
+    icon: (
+      <svg className="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422A12.083 12.083 0 0118.82 17.9 11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.155 12.083 12.083 0 01.665-7.322L12 14zm-4 6v-7.5l4-2.222" />
+      </svg>
+    ),
+  },
 ]
 
 const ROLE_LABEL = { student: 'For Graduates', employer: 'For Employers', admin: 'Admin Panel' }
@@ -173,7 +184,7 @@ export default function Sidebar() {
                 </span>
                 {!collapsed && <span className="truncate flex-1">{item.label}</span>}
                 {item.badge && counts[item.badge] > 0 && (
-                  <span aria-label={`${counts[item.badge]} waiting`}
+                  <span aria-label={`${counts[item.badge]} ${item.badgeLabel || 'waiting'}`}
                     className={`text-[11px] font-semibold bg-amber-100 text-amber-800 rounded-full px-1.5 min-w-5 text-center ${
                       collapsed ? 'absolute ml-5 -mt-4' : ''}`}>
                     {counts[item.badge]}

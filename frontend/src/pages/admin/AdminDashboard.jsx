@@ -128,7 +128,10 @@ export default function AdminDashboard() {
                       {todo.modules_to_review_sample.length > 0 && ` · ${todo.modules_to_review_sample.map(m => m.name).join(', ')}${toReview > todo.modules_to_review_sample.length ? '…' : ''}`}
                     </p>
                   </div>
-                  <span className="text-xs text-slate-500">Review comes with Academic structure</span>
+                  <Link to="/admin/academic?show=todo"
+                    className="px-3.5 py-2 text-sm font-medium rounded-lg border border-slate-200 text-slate-700 hover:bg-slate-50">
+                    Review
+                  </Link>
                 </li>
               )}
             </ul>

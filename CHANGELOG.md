@@ -3,9 +3,31 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 7 Oct 2026 — Admin, batch 2: Academic structure (module skills review, intakes)
+
+- (this commit) New admin page **Academic structure** (sidebar, badge = modules still to review; her pick A of two
+  mock-ups: list and details side by side, Microsoft list/details pattern, references.md "Admin Academic structure
+  layout"). No migration: the tables came with `migrate_admin_structure.py`.
+  - **Modules:** list by year with "To review" / "Reviewed" (search, "To review" filter); the chosen module on the
+    right: description (edit and save; saving marks it "To review" again), its skills (× removes one, "+ Add skill"
+    adds one, shown as a white chip "Added by an admin"), "Find skills again" (one Groq call on the saved description,
+    same prompt as `reextract_module_skills.py`; skills an admin added are kept; if the AI doesn't answer, nothing
+    changes and a message says so), "Mark as reviewed" (moves on to the next module to review). Shows how many
+    students have the module. Students' profiles are built live, so a change shows in their matches at once
+    (IR Objective 1 with a human review step).
+  - **Intakes:** add (code upper-cased, start date; duplicates refused), list with how many students picked each,
+    delete only when no student has picked it. Students choose an intake in the first sign-in setup (next batch).
+  - New router `app/routers/admin_academic.py` (`/admin/academic`, `/admin/modules/{id}`…, `/admin/intakes`).
+  - Dashboard: "Module skills to review" now has a **Review** button that opens the list filtered to "To review".
+  - Users: the search box has a magnifying glass and ✕ to clear, like the Job Matches search.
+- Checked in a browser at 1333×680 (17 checks, AI extraction replaced by a stand-in because the sandbox can't
+  reach Groq): badge, Review link, filter, remove / add / duplicate skill, save description, find again keeps
+  admin skills, mark reviewed moves on and the badge drops, AI failure leaves skills unchanged, intakes add /
+  duplicate / delete, no page errors; Users page re-checked (19 checks).
+
 ## 7 Oct 2026 — Admin Users: filter buttons, one ⋯ menu per row, decision history
 
-- (this commit) Her review of an external audit and four mock-ups (her pick: B; references.md "Admin Users table"):
+- (3f1b6d8) Her review of an external audit and four mock-ups (her pick: B; references.md "Admin Users table"):
   - Filter buttons with counts replace the Role and Status dropdowns: All · Students · Employers · Waiting ·
     Deactivated (one click; the number says what is there). New `GET /admin/users/counts?q=` (counts for the
     current search). Dashboard links (`?role=student`, `?role=employer`) still open the matching filter.

@@ -319,3 +319,483 @@ id,a,b,label_gpt_oss,model
 318,Kanban,Kanban methodology,SAME,openai/gpt-oss-120b
 319,IT Support,IT Security,DIFFERENT,openai/gpt-oss-120b
 320,Network Support,Network documentation,RELATED,openai/gpt-oss-120b
+321,SIEM,SIEM implementation,BROADER,openai/gpt-oss-120b
+322,Service Desk Operations,Service Desk Management,BROADER,openai/gpt-oss-120b
+323,CCTV Management,CCTV maintenance,BROADER,openai/gpt-oss-120b
+324,Release Management,Release Planning,BROADER,openai/gpt-oss-120b
+325,Software Documentation,Software validation,DIFFERENT,openai/gpt-oss-120b
+326,Network Optimization,Network Monitoring,RELATED,openai/gpt-oss-120b
+327,IPS,IDS/IPS configuration,BROADER,openai/gpt-oss-120b
+328,IT Governance,IT Operations,DIFFERENT,openai/gpt-oss-120b
+329,Software Engineering,Software Training,DIFFERENT,openai/gpt-oss-120b
+330,Data validation,Data Automation,RELATED,openai/gpt-oss-120b
+331,Red Hat,Red Hat Enterprise Linux,BROADER,openai/gpt-oss-120b
+332,Apache,Apache Tomcat,BROADER,openai/gpt-oss-120b
+333,Network Operations,Network automation,BROADER,openai/gpt-oss-120b
+334,Business Process Automation,Business Process Documentation,RELATED,openai/gpt-oss-120b
+335,Storage,Storage solutions,BROADER,openai/gpt-oss-120b
+336,Server Installation,Server Maintenance,RELATED,openai/gpt-oss-120b
+337,ServiceNow Ticketing,ServiceNow,NARROWER,openai/gpt-oss-120b
+338,Cost Analysis,Cost Estimation,NARROWER,openai/gpt-oss-120b
+339,macOS,macOS Administration,BROADER,openai/gpt-oss-120b
+340,SQL Server Administration,SQL Server,NARROWER,openai/gpt-oss-120b
+341,Load balancer,F5 Load Balancer,BROADER,openai/gpt-oss-120b
+342,Business Process Documentation,Business Process Automation,RELATED,openai/gpt-oss-120b
+343,Azure Active Directory,Active Directory,NARROWER,openai/gpt-oss-120b
+344,Project Governance,Project Deployment,RELATED,openai/gpt-oss-120b
+345,Data Migration,Data Modeling,RELATED,openai/gpt-oss-120b
+346,Cloud,Cloud Optimization,BROADER,openai/gpt-oss-120b
+347,Desktop Support,Desktop Installation,NARROWER,openai/gpt-oss-120b
+348,Printer configuration,Printer Maintenance,BROADER,openai/gpt-oss-120b
+349,Functional Testing,Non-functional Testing,RELATED,openai/gpt-oss-120b
+350,Business Reporting,Business Analysis,BROADER,openai/gpt-oss-120b
+351,.NET Core,.NET,NARROWER,openai/gpt-oss-120b
+352,WAN,LAN/WAN,NARROWER,openai/gpt-oss-120b
+353,Non-functional Testing,Functional Testing,RELATED,openai/gpt-oss-120b
+354,.NET,.NET Core,BROADER,openai/gpt-oss-120b
+355,Data Privacy Compliance,Compliance,NARROWER,openai/gpt-oss-120b
+356,Azure Resource Manager,Azure,NARROWER,openai/gpt-oss-120b
+357,Database Tuning,Database Optimization,NARROWER,openai/gpt-oss-120b
+358,Web Analytics,Web Testing,DIFFERENT,openai/gpt-oss-120b
+359,Agile,Agile Delivery,BROADER,openai/gpt-oss-120b
+360,Oracle,Oracle R12,BROADER,openai/gpt-oss-120b
+361,Wireless Technologies,Wireless,SAME,openai/gpt-oss-120b
+362,Database,Database troubleshooting,BROADER,openai/gpt-oss-120b
+363,Backend Security,Backend Architecture,RELATED,openai/gpt-oss-120b
+364,API Automation,API Security,RELATED,openai/gpt-oss-120b
+365,Windows OS,Windows,SAME,openai/gpt-oss-120b
+366,Network Implementation,Network automation,RELATED,openai/gpt-oss-120b
+367,Application Performance Monitoring,Performance Monitoring,NARROWER,openai/gpt-oss-120b
+368,Mobile App Development,Mobile App Architecture,RELATED,openai/gpt-oss-120b
+369,RPGLE,AS400 RPGLE,BROADER,openai/gpt-oss-120b
+370,ITIL problem management,Problem Management,NARROWER,openai/gpt-oss-120b
+371,IT Operations,IT Troubleshooting,NARROWER,openai/gpt-oss-120b
+372,Performance Reporting,Performance Tuning,RELATED,openai/gpt-oss-120b
+373,Application debugging,Application architecture,RELATED,openai/gpt-oss-120b
+374,Encryption Technologies,Encryption,NARROWER,openai/gpt-oss-120b
+375,Process Optimization,Process Modeling,RELATED,openai/gpt-oss-120b
+376,Network Monitoring,Network Optimization,RELATED,openai/gpt-oss-120b
+377,Technical Design,Technical Specification,NARROWER,openai/gpt-oss-120b
+378,J2EE,Java J2EE,SAME,openai/gpt-oss-120b
+379,Microsoft Teams Integration,Microsoft Teams,NARROWER,openai/gpt-oss-120b
+380,AWS,AWS data services,BROADER,openai/gpt-oss-120b
+381,EIGRP routing,EIGRP,NARROWER,openai/gpt-oss-120b
+382,Information Security,Information Security Policies,BROADER,openai/gpt-oss-120b
+383,Network documentation,Network Management,BROADER,openai/gpt-oss-120b
+384,Database installation,Database Programming,RELATED,openai/gpt-oss-120b
+385,Oracle R12,Oracle,NARROWER,openai/gpt-oss-120b
+386,IT Infrastructure Design,IT infrastructure integration,RELATED,openai/gpt-oss-120b
+387,MES implementation,MES,NARROWER,openai/gpt-oss-120b
+388,Access Management,User Access Management,BROADER,openai/gpt-oss-120b
+389,Desktop troubleshooting,Remote Desktop Troubleshooting,BROADER,openai/gpt-oss-120b
+390,Software security,Software Maintenance,DIFFERENT,openai/gpt-oss-120b
+391,Compliance,Data Privacy Compliance,BROADER,openai/gpt-oss-120b
+392,Agile,Agile Coaching,BROADER,openai/gpt-oss-120b
+393,GraphQL,GraphQL API,BROADER,openai/gpt-oss-120b
+394,SAP,SAP Integration,BROADER,openai/gpt-oss-120b
+395,Infrastructure Automation,Infrastructure Management,RELATED,openai/gpt-oss-120b
+396,ASP.NET Core MVC,ASP.NET Core,NARROWER,openai/gpt-oss-120b
+397,Compliance,Security Compliance,BROADER,openai/gpt-oss-120b
+398,Workflow optimization,Workflow Configuration,RELATED,openai/gpt-oss-120b
+399,Business Requirements Documentation,Business Requirements Analysis,BROADER,openai/gpt-oss-120b
+400,Network automation,Network Operations,RELATED,openai/gpt-oss-120b
+401,SQL Performance Tuning,Performance Tuning,NARROWER,openai/gpt-oss-120b
+402,SD-WAN,SD-WAN troubleshooting,BROADER,openai/gpt-oss-120b
+403,Hardware debugging,Hardware Installation,RELATED,openai/gpt-oss-120b
+404,Interface Design,Interface development,RELATED,openai/gpt-oss-120b
+405,Cloud,Salesforce Sales Cloud,BROADER,openai/gpt-oss-120b
+406,Web Testing,Web Analytics,RELATED,openai/gpt-oss-120b
+407,Solaris,Solaris Administration,BROADER,openai/gpt-oss-120b
+408,Kanban methodology,Kanban,SAME,openai/gpt-oss-120b
+409,Android testing,Android Deployment,RELATED,openai/gpt-oss-120b
+410,API Integration,API Development,RELATED,openai/gpt-oss-120b
+411,Data Governance,Data Analytics,RELATED,openai/gpt-oss-120b
+412,UML Modeling,UML,NARROWER,openai/gpt-oss-120b
+413,IDS/IPS monitoring,IDS/IPS,NARROWER,openai/gpt-oss-120b
+414,Database Administration,Oracle Database Administration,BROADER,openai/gpt-oss-120b
+415,AWS EC2,AWS,NARROWER,openai/gpt-oss-120b
+416,Backup Restore,Backup,NARROWER,openai/gpt-oss-120b
+417,Software Installation,Software Architecture,DIFFERENT,openai/gpt-oss-120b
+418,Execution,Test case execution,BROADER,openai/gpt-oss-120b
+419,macOS,macOS troubleshooting,BROADER,openai/gpt-oss-120b
+420,Application Security,Application Troubleshooting,RELATED,openai/gpt-oss-120b
+421,Technical Documentation,Technical Design,RELATED,openai/gpt-oss-120b
+422,Compliance,SDLC Compliance,BROADER,openai/gpt-oss-120b
+423,Database troubleshooting,Database,NARROWER,openai/gpt-oss-120b
+424,SOAP API,SOAP,NARROWER,openai/gpt-oss-120b
+425,API Development,API Integration,RELATED,openai/gpt-oss-120b
+426,User Access Management,Access Management,NARROWER,openai/gpt-oss-120b
+427,Network documentation,Network Support,RELATED,openai/gpt-oss-120b
+428,Redis caching,Redis,NARROWER,openai/gpt-oss-120b
+429,Hardware debugging,Hardware Troubleshooting,SAME,openai/gpt-oss-120b
+430,Network Maintenance,Network Security,RELATED,openai/gpt-oss-120b
+431,WAN,LAN/WAN Management,BROADER,openai/gpt-oss-120b
+432,Workflow Design,Workflow Configuration,RELATED,openai/gpt-oss-120b
+433,MVP Architecture,MVP,NARROWER,openai/gpt-oss-120b
+434,SQL,Azure SQL,BROADER,openai/gpt-oss-120b
+435,MES,MES implementation,BROADER,openai/gpt-oss-120b
+436,Microsoft Teams,Microsoft Teams Integration,BROADER,openai/gpt-oss-120b
+437,Backend Architecture,Backend Security,RELATED,openai/gpt-oss-120b
+438,SAP Administration,SAP Configuration,NARROWER,openai/gpt-oss-120b
+439,IT infrastructure integration,IT infrastructure maintenance,RELATED,openai/gpt-oss-120b
+440,Oracle Database Administration,Database Administration,NARROWER,openai/gpt-oss-120b
+441,IDS/IPS configuration,IDS/IPS,NARROWER,openai/gpt-oss-120b
+442,Office 365 Support,Office 365,NARROWER,openai/gpt-oss-120b
+443,SAP Support,SAP Reporting,RELATED,openai/gpt-oss-120b
+444,ServiceNow,ServiceNow Ticketing,BROADER,openai/gpt-oss-120b
+445,Database maintenance,Database Security,RELATED,openai/gpt-oss-120b
+446,ERP Support,ERP Implementation,RELATED,openai/gpt-oss-120b
+447,Salesforce Sales Cloud,Cloud,NARROWER,openai/gpt-oss-120b
+448,Azure Security Center,Azure,NARROWER,openai/gpt-oss-120b
+449,Maven Build,Maven,NARROWER,openai/gpt-oss-120b
+450,IDS/IPS monitoring,IDS/IPS Management,BROADER,openai/gpt-oss-120b
+451,Incident Reporting,Incident Review,BROADER,openai/gpt-oss-120b
+452,ORM,Eloquent ORM,BROADER,openai/gpt-oss-120b
+453,Trend Analysis,Market trend analysis,BROADER,openai/gpt-oss-120b
+454,Functional configuration,Functional Design,RELATED,openai/gpt-oss-120b
+455,OAuth,OAuth 2.0,BROADER,openai/gpt-oss-120b
+456,SQL Scripting,SQL,NARROWER,openai/gpt-oss-120b
+457,CISM,CISM Certification,SAME,openai/gpt-oss-120b
+458,Antivirus Management,Antivirus deployment,NARROWER,openai/gpt-oss-120b
+459,Application Monitoring,Application debugging,RELATED,openai/gpt-oss-120b
+460,Cybersecurity Governance,Cybersecurity,NARROWER,openai/gpt-oss-120b
+461,Shell,Shell Scripting,BROADER,openai/gpt-oss-120b
+462,IDS/IPS,IDS,NARROWER,openai/gpt-oss-120b
+463,Application Security,Application debugging,DIFFERENT,openai/gpt-oss-120b
+464,Ticket Management,Incident Ticket Management,SAME,openai/gpt-oss-120b
+465,SAP Configuration,SAP Training,RELATED,openai/gpt-oss-120b
+466,branding,Personal Branding,SAME,openai/gpt-oss-120b
+467,Production Support,Production Planning,DIFFERENT,openai/gpt-oss-120b
+468,JavaScript,JavaScript ES6,BROADER,openai/gpt-oss-120b
+469,IDS,IDS/IPS,BROADER,openai/gpt-oss-120b
+470,Functional Documentation,Functional analysis,BROADER,openai/gpt-oss-120b
+471,SAP ERP 6.0,SAP,NARROWER,openai/gpt-oss-120b
+472,Database Integration,Database Tuning,RELATED,openai/gpt-oss-120b
+473,VM Virtualization,Virtualization,NARROWER,openai/gpt-oss-120b
+474,Eloquent ORM,ORM,NARROWER,openai/gpt-oss-120b
+475,Big Data,Big Data Analytics,BROADER,openai/gpt-oss-120b
+476,Power BI,Power BI Report Server,BROADER,openai/gpt-oss-120b
+477,Software programming,Software Architecture,BROADER,openai/gpt-oss-120b
+478,VPN implementation,VPN Troubleshooting,RELATED,openai/gpt-oss-120b
+479,Unix Shell Scripting,Shell,NARROWER,openai/gpt-oss-120b
+480,Scheduling,Delivery scheduling,BROADER,openai/gpt-oss-120b
+481,Database Security,Database maintenance,RELATED,openai/gpt-oss-120b
+482,Data Modeling,Data Migration,RELATED,openai/gpt-oss-120b
+483,OSPF,OSPF Protocol,SAME,openai/gpt-oss-120b
+484,Data Recovery,Recovery,NARROWER,openai/gpt-oss-120b
+485,Hardware Troubleshooting,Hardware debugging,SAME,openai/gpt-oss-120b
+486,User Support,User Training,RELATED,openai/gpt-oss-120b
+487,ITIL Change Management,Change Management,NARROWER,openai/gpt-oss-120b
+488,LAN,LAN/WAN Management,BROADER,openai/gpt-oss-120b
+489,Azure,Azure Resource Manager,BROADER,openai/gpt-oss-120b
+490,Functional Specification,Functional Testing,RELATED,openai/gpt-oss-120b
+491,Software Testing Methodologies,Testing Methodologies,NARROWER,openai/gpt-oss-120b
+492,Office 365,Office 365 administration,BROADER,openai/gpt-oss-120b
+493,IoT,IoT Solutions,BROADER,openai/gpt-oss-120b
+494,Office 365 administration,Office 365,NARROWER,openai/gpt-oss-120b
+495,API Integration,API Testing,RELATED,openai/gpt-oss-120b
+496,Data Reporting,Data Engineering,RELATED,openai/gpt-oss-120b
+497,Oracle PL/SQL,Oracle,NARROWER,openai/gpt-oss-120b
+498,PHP,PHP Laravel,BROADER,openai/gpt-oss-120b
+499,Test Planning,Test Automation,RELATED,openai/gpt-oss-120b
+500,Production Planning,Production Support,DIFFERENT,openai/gpt-oss-120b
+501,Database Administration,Database Integration,RELATED,openai/gpt-oss-120b
+502,Workflow Configuration,Workflow optimization,RELATED,openai/gpt-oss-120b
+503,SAP Administration,SAP Implementation,BROADER,openai/gpt-oss-120b
+504,Risk Analytics,Risk Reporting,BROADER,openai/gpt-oss-120b
+505,Software Implementation,Software validation,RELATED,openai/gpt-oss-120b
+506,Incident Management,Security Incident Management,BROADER,openai/gpt-oss-120b
+507,Big Data Analytics,Big Data,NARROWER,openai/gpt-oss-120b
+508,SIT Testing,SIT Support,RELATED,openai/gpt-oss-120b
+509,Mentoring Juniors,Mentoring,NARROWER,openai/gpt-oss-120b
+510,SQL,Microsoft SQL,BROADER,openai/gpt-oss-120b
+511,Roadmap Planning,Roadmap Development,BROADER,openai/gpt-oss-120b
+512,Technical Troubleshooting,Technical Support,SAME,openai/gpt-oss-120b
+513,Network Engineering,Network Configuration,NARROWER,openai/gpt-oss-120b
+514,MySQL,MySQL Administration,BROADER,openai/gpt-oss-120b
+515,Server Hardware Troubleshooting,Hardware Troubleshooting,NARROWER,openai/gpt-oss-120b
+516,Network Testing,Network installation,RELATED,openai/gpt-oss-120b
+517,Red Hat,Red Hat OpenShift,BROADER,openai/gpt-oss-120b
+518,Data Integration,Data Reporting,RELATED,openai/gpt-oss-120b
+519,Desktop Installation,Desktop Support,SAME,openai/gpt-oss-120b
+520,User Support,End-User Support,SAME,openai/gpt-oss-120b
+521,Database Migration,Database configuration,RELATED,openai/gpt-oss-120b
+522,Performance Monitoring,Performance Reporting,RELATED,openai/gpt-oss-120b
+523,L2/L3 switching,Switching,NARROWER,openai/gpt-oss-120b
+524,SOAP,SOAP Web Services,BROADER,openai/gpt-oss-120b
+525,Agile Documentation,Agile Testing,RELATED,openai/gpt-oss-120b
+526,Jenkins,Jenkins pipelines,BROADER,openai/gpt-oss-120b
+527,KPI Analysis,KPI Reporting,RELATED,openai/gpt-oss-120b
+528,SQL Reporting,SQL Scripting,RELATED,openai/gpt-oss-120b
+529,S/4HANA,SAP S/4HANA,SAME,openai/gpt-oss-120b
+530,SAP Reporting,SAP Support,RELATED,openai/gpt-oss-120b
+531,Application Security,Application Development,RELATED,openai/gpt-oss-120b
+532,Network Management,Network Support,BROADER,openai/gpt-oss-120b
+533,Patching,Software Patching,BROADER,openai/gpt-oss-120b
+534,Virtual Machines,Azure Virtual Machines,BROADER,openai/gpt-oss-120b
+535,API Security,API Development,RELATED,openai/gpt-oss-120b
+536,SIEM implementation,SIEM,NARROWER,openai/gpt-oss-120b
+537,Azure SQL Database,Azure SQL,NARROWER,openai/gpt-oss-120b
+538,Project Deployment,Project Governance,RELATED,openai/gpt-oss-120b
+539,Cost Optimization,Cost Management,NARROWER,openai/gpt-oss-120b
+540,AWS data services,AWS,NARROWER,openai/gpt-oss-120b
+541,End-User Training,User Training,SAME,openai/gpt-oss-120b
+542,Agile Testing,Agile Documentation,RELATED,openai/gpt-oss-120b
+543,Hardware Deployment,Hardware Installation,NARROWER,openai/gpt-oss-120b
+544,AS400 RPGLE,RPGLE,NARROWER,openai/gpt-oss-120b
+545,Data Automation,Data Modeling,RELATED,openai/gpt-oss-120b
+546,SAP HANA,SAP,NARROWER,openai/gpt-oss-120b
+547,Performance Reporting,Performance Monitoring,RELATED,openai/gpt-oss-120b
+548,Database Security,Database Optimization,RELATED,openai/gpt-oss-120b
+549,Test Case Management,Test Case Design,RELATED,openai/gpt-oss-120b
+550,User Training,End-User Training,SAME,openai/gpt-oss-120b
+551,QA collaboration,Collaboration,NARROWER,openai/gpt-oss-120b
+552,IT Project Coordination,Project Coordination,NARROWER,openai/gpt-oss-120b
+553,Workflow Configuration,Workflow Design,RELATED,openai/gpt-oss-120b
+554,Database,Database maintenance,BROADER,openai/gpt-oss-120b
+555,Unix,Unix Administration,BROADER,openai/gpt-oss-120b
+556,macOS troubleshooting,macOS,NARROWER,openai/gpt-oss-120b
+557,Data Governance,Data Management,NARROWER,openai/gpt-oss-120b
+558,Infrastructure Management,Infrastructure monitoring,NARROWER,openai/gpt-oss-120b
+559,Business Requirements Analysis,Business Requirements Documentation,RELATED,openai/gpt-oss-120b
+560,.NET,ASP.NET Web Forms,BROADER,openai/gpt-oss-120b
+561,Technical Specification,Technical Design,RELATED,openai/gpt-oss-120b
+562,Hardware Configuration,Hardware Deployment,BROADER,openai/gpt-oss-120b
+563,Scheduling,Control-M Scheduling,BROADER,openai/gpt-oss-120b
+564,Active Directory,Azure Active Directory,BROADER,openai/gpt-oss-120b
+565,Server Installation,Server Monitoring,RELATED,openai/gpt-oss-120b
+566,Cost Estimation,Cost Analysis,RELATED,openai/gpt-oss-120b
+567,LAN,Wireless LAN,BROADER,openai/gpt-oss-120b
+568,Network Design,Network Optimization,RELATED,openai/gpt-oss-120b
+569,Agile Coaching,Agile,NARROWER,openai/gpt-oss-120b
+570,Software Documentation,Software Configuration,RELATED,openai/gpt-oss-120b
+571,SAP S/4HANA,S/4HANA,SAME,openai/gpt-oss-120b
+572,VPN implementation,VPN Configuration,NARROWER,openai/gpt-oss-120b
+573,Wireless LAN,Wireless,NARROWER,openai/gpt-oss-120b
+574,Azure Virtual Machines,Virtual Machines,NARROWER,openai/gpt-oss-120b
+575,Database development,Database Programming,NARROWER,openai/gpt-oss-120b
+576,Client Training,Client Support,NARROWER,openai/gpt-oss-120b
+577,SOAP,SOAP API,BROADER,openai/gpt-oss-120b
+578,Pre-sales Engineering,Pre-sales support,NARROWER,openai/gpt-oss-120b
+579,SDLC Compliance,Compliance,NARROWER,openai/gpt-oss-120b
+580,Pre-sales support,Pre-sales Engineering,BROADER,openai/gpt-oss-120b
+581,Change Management,ITIL Change Management,BROADER,openai/gpt-oss-120b
+582,Service Management,ITIL Service Management,BROADER,openai/gpt-oss-120b
+583,DNS Configuration,DNS,NARROWER,openai/gpt-oss-120b
+584,Remote Desktop Support,Remote Desktop Troubleshooting,NARROWER,openai/gpt-oss-120b
+585,Routing protocols,Routing,NARROWER,openai/gpt-oss-120b
+586,Network installation,Network documentation,RELATED,openai/gpt-oss-120b
+587,Delivery scheduling,Scheduling,NARROWER,openai/gpt-oss-120b
+588,Project Coordination,IT Project Coordination,BROADER,openai/gpt-oss-120b
+589,Web Design,Web Development,NARROWER,openai/gpt-oss-120b
+590,Policy Development,Security Policy Development,BROADER,openai/gpt-oss-120b
+591,AWS CloudFormation,AWS,NARROWER,openai/gpt-oss-120b
+592,Personal Branding,branding,NARROWER,openai/gpt-oss-120b
+593,Patch Deployment,Patch Management,NARROWER,openai/gpt-oss-120b
+594,IT infrastructure integration,IT Infrastructure Design,RELATED,openai/gpt-oss-120b
+595,Software programming,Software security,RELATED,openai/gpt-oss-120b
+596,Database monitoring,Database configuration,RELATED,openai/gpt-oss-120b
+597,Network automation,Network Security,RELATED,openai/gpt-oss-120b
+598,Market trend analysis,Trend Analysis,NARROWER,openai/gpt-oss-120b
+599,Red Hat Enterprise Linux,Red Hat,NARROWER,openai/gpt-oss-120b
+600,Network Testing,Network Maintenance,NARROWER,openai/gpt-oss-120b
+601,Data Governance,Data Architecture,RELATED,openai/gpt-oss-120b
+602,Network Implementation,Network Design,RELATED,openai/gpt-oss-120b
+603,Server Deployment,Server Migration,BROADER,openai/gpt-oss-120b
+604,Software Training,Software Engineering,RELATED,openai/gpt-oss-120b
+605,Jenkins pipelines,Jenkins,NARROWER,openai/gpt-oss-120b
+606,Database Optimization,Database Security,RELATED,openai/gpt-oss-120b
+607,Data Engineering,Data Management,NARROWER,openai/gpt-oss-120b
+608,Cisco Nexus,Nexus,SAME,openai/gpt-oss-120b
+609,Collaboration,Remote Collaboration,BROADER,openai/gpt-oss-120b
+610,Business Reporting,Business Automation,RELATED,openai/gpt-oss-120b
+611,Encryption,SSL/TLS Encryption,BROADER,openai/gpt-oss-120b
+612,VPN Troubleshooting,VPN implementation,RELATED,openai/gpt-oss-120b
+613,Azure AKS,AKS,SAME,openai/gpt-oss-120b
+614,Process Modeling,Process Optimization,RELATED,openai/gpt-oss-120b
+615,Data Architecture,Data Governance,RELATED,openai/gpt-oss-120b
+616,Webpack,Webpack Bundler,SAME,openai/gpt-oss-120b
+617,Apache Iceberg,Apache,NARROWER,openai/gpt-oss-120b
+618,Security Incident Management,Incident Management,NARROWER,openai/gpt-oss-120b
+619,Power BI,Power BI gateways,BROADER,openai/gpt-oss-120b
+620,Postman API Testing,API Testing,NARROWER,openai/gpt-oss-120b
+621,Hardware Troubleshooting,Hardware Configuration,RELATED,openai/gpt-oss-120b
+622,Java J2EE,J2EE,SAME,openai/gpt-oss-120b
+623,Database installation,Database Integration,BROADER,openai/gpt-oss-120b
+624,Shell Scripting,Shell,NARROWER,openai/gpt-oss-120b
+625,Business Process Optimization,Business Process Analysis,NARROWER,openai/gpt-oss-120b
+626,ASP.NET Core,ASP.NET Core MVC,BROADER,openai/gpt-oss-120b
+627,Cloud Migration,Cloud Deployment,RELATED,openai/gpt-oss-120b
+628,Technical Support,Technical Troubleshooting,NARROWER,openai/gpt-oss-120b
+629,Wi-Fi Administration,Wi-Fi,NARROWER,openai/gpt-oss-120b
+630,Capacity Planning,Network Capacity Planning,BROADER,openai/gpt-oss-120b
+631,Data validation,Data Architecture,RELATED,openai/gpt-oss-120b
+632,Server Monitoring,Server Troubleshooting,RELATED,openai/gpt-oss-120b
+633,Sales Strategy,Sales Engineering,DIFFERENT,openai/gpt-oss-120b
+634,Infrastructure Automation,Infrastructure monitoring,RELATED,openai/gpt-oss-120b
+635,IoT Solutions,IoT,NARROWER,openai/gpt-oss-120b
+636,Azure,Azure Security Center,BROADER,openai/gpt-oss-120b
+637,Network Testing,Network Configuration,RELATED,openai/gpt-oss-120b
+638,Performance Monitoring,Application Performance Monitoring,BROADER,openai/gpt-oss-120b
+639,Functional Design,Functional Testing,RELATED,openai/gpt-oss-120b
+640,Network performance monitoring,Network performance optimization,BROADER,openai/gpt-oss-120b
+641,SOAP Web Services,SOAP,NARROWER,openai/gpt-oss-120b
+642,Network Programming,Network Management,RELATED,openai/gpt-oss-120b
+643,Microsoft SQL,SQL,NARROWER,openai/gpt-oss-120b
+644,Performance Optimization,Performance Management,NARROWER,openai/gpt-oss-120b
+645,IDS/IPS Management,IDS/IPS monitoring,NARROWER,openai/gpt-oss-120b
+646,Mobile App Architecture,Mobile App Development,RELATED,openai/gpt-oss-120b
+647,Business Architecture,Business Documentation,DIFFERENT,openai/gpt-oss-120b
+648,IT Infrastructure Management,IT Infrastructure Design,RELATED,openai/gpt-oss-120b
+649,API Security,API Automation,RELATED,openai/gpt-oss-120b
+650,Storage solutions,Storage,NARROWER,openai/gpt-oss-120b
+651,Selenium Automation,Selenium,SAME,openai/gpt-oss-120b
+652,Network documentation,Network installation,RELATED,openai/gpt-oss-120b
+653,English Mandarin Communication,Mandarin Communication,NARROWER,openai/gpt-oss-120b
+654,Server Migration,Server Deployment,RELATED,openai/gpt-oss-120b
+655,Data Management,Data Governance,NARROWER,openai/gpt-oss-120b
+656,Server Migration,Server Configuration,RELATED,openai/gpt-oss-120b
+657,Help Desk,Help Desk Support,SAME,openai/gpt-oss-120b
+658,MES,Camstar MES,BROADER,openai/gpt-oss-120b
+659,SVN Version Control,Version Control,NARROWER,openai/gpt-oss-120b
+660,VPN Configuration,VPN implementation,NARROWER,openai/gpt-oss-120b
+661,Business Documentation,Business Architecture,BROADER,openai/gpt-oss-120b
+662,Network Programming,Network Engineering,RELATED,openai/gpt-oss-120b
+663,CRM implementation,CRM Integration,NARROWER,openai/gpt-oss-120b
+664,Problem Management,ITIL problem management,BROADER,openai/gpt-oss-120b
+665,SQL Server,SQL Server Administration,BROADER,openai/gpt-oss-120b
+666,Database,Database configuration,BROADER,openai/gpt-oss-120b
+667,Google Cloud Platform,Google Cloud,SAME,openai/gpt-oss-120b
+668,Network Support,Network Security,RELATED,openai/gpt-oss-120b
+669,Network Optimization,Network Implementation,RELATED,openai/gpt-oss-120b
+670,Splunk SIEM,Splunk,NARROWER,openai/gpt-oss-120b
+671,KPI Monitoring,KPI Reporting,RELATED,openai/gpt-oss-120b
+672,Threat Modeling,Threat Analysis,NARROWER,openai/gpt-oss-120b
+673,ABAP Development,ABAP debugging,NARROWER,openai/gpt-oss-120b
+674,Network Design,Network Architecture,SAME,openai/gpt-oss-120b
+675,Server Maintenance,Server Troubleshooting,RELATED,openai/gpt-oss-120b
+676,Software Configuration,Software Documentation,DIFFERENT,openai/gpt-oss-120b
+677,Groovy scripting,Groovy,NARROWER,openai/gpt-oss-120b
+678,Software Training,Software Implementation,RELATED,openai/gpt-oss-120b
+679,Server Troubleshooting,Server Monitoring,RELATED,openai/gpt-oss-120b
+680,AWS,AWS CloudFormation,BROADER,openai/gpt-oss-120b
+681,Website development,Website Maintenance,NARROWER,openai/gpt-oss-120b
+682,Global Collaboration,Collaboration,NARROWER,openai/gpt-oss-120b
+683,Business Intelligence,Business Intelligence Reporting,NARROWER,openai/gpt-oss-120b
+684,Printer Maintenance,Printer configuration,NARROWER,openai/gpt-oss-120b
+685,Server Configuration,Server Migration,RELATED,openai/gpt-oss-120b
+686,Windows OS Support,Windows OS Installation,NARROWER,openai/gpt-oss-120b
+687,IT Support,IT Operations,BROADER,openai/gpt-oss-120b
+688,SAP Configuration,SAP Administration,BROADER,openai/gpt-oss-120b
+689,Control-M Scheduling,Control-M,NARROWER,openai/gpt-oss-120b
+690,Networking,Wireless networking,NARROWER,openai/gpt-oss-120b
+691,Client Support,Client Training,RELATED,openai/gpt-oss-120b
+692,Control-M,Control-M Scheduling,SAME,openai/gpt-oss-120b
+693,SAP Integration,SAP,NARROWER,openai/gpt-oss-120b
+694,Maven,Maven Build,SAME,openai/gpt-oss-120b
+695,Network automation,Network Implementation,RELATED,openai/gpt-oss-120b
+696,Wireless networking,Networking,NARROWER,openai/gpt-oss-120b
+697,Data Visualization,Data Architecture,RELATED,openai/gpt-oss-120b
+698,Routing,Routing protocols,BROADER,openai/gpt-oss-120b
+699,ServiceNow Integration,ServiceNow,NARROWER,openai/gpt-oss-120b
+700,Salesforce,Salesforce Sales Cloud,BROADER,openai/gpt-oss-120b
+701,Procurement,Procurement Coordination,BROADER,openai/gpt-oss-120b
+702,Application Development,Application Security,BROADER,openai/gpt-oss-120b
+703,Business Documentation,Business Analysis,BROADER,openai/gpt-oss-120b
+704,Linux,Kali Linux,BROADER,openai/gpt-oss-120b
+705,XML,XML Publisher,BROADER,openai/gpt-oss-120b
+706,Selenium Testing,Selenium Automation,SAME,openai/gpt-oss-120b
+707,Data-driven Decision Making,Decision Making,NARROWER,openai/gpt-oss-120b
+708,User Access Review,User Access Management,BROADER,openai/gpt-oss-120b
+709,Network installation,Network Testing,RELATED,openai/gpt-oss-120b
+710,Windows Server 2012,Windows,NARROWER,openai/gpt-oss-120b
+711,Network Management,Network Programming,RELATED,openai/gpt-oss-120b
+712,IT infrastructure maintenance,IT infrastructure integration,RELATED,openai/gpt-oss-120b
+713,ITIL Service Management,Service Management,NARROWER,openai/gpt-oss-120b
+714,Database Tuning,Database Integration,RELATED,openai/gpt-oss-120b
+715,Network Management,Network documentation,NARROWER,openai/gpt-oss-120b
+716,Incident Response Planning,Incident Response,BROADER,openai/gpt-oss-120b
+717,Sales Engineering,Sales Operations,RELATED,openai/gpt-oss-120b
+718,Procurement,Procurement Compliance,BROADER,openai/gpt-oss-120b
+719,ASP.NET Web Forms,.NET,NARROWER,openai/gpt-oss-120b
+720,SOAP Web Services,Web Services,NARROWER,openai/gpt-oss-120b
+721,Decision Making,Data-driven Decision Making,BROADER,openai/gpt-oss-120b
+722,Azure SQL Database,SQL Database,NARROWER,openai/gpt-oss-120b
+723,Workflow Automation,Workflow Configuration,NARROWER,openai/gpt-oss-120b
+724,Database configuration,Database Migration,RELATED,openai/gpt-oss-120b
+725,SIT Support,SIT Testing,RELATED,openai/gpt-oss-120b
+726,Hardware Deployment,Hardware Configuration,NARROWER,openai/gpt-oss-120b
+727,macOS Administration,macOS,NARROWER,openai/gpt-oss-120b
+728,SIEM Management,SIEM Integration,NARROWER,openai/gpt-oss-120b
+729,LAN/WAN networking,WAN,NARROWER,openai/gpt-oss-120b
+730,Reliability Engineering,Site Reliability Engineering,BROADER,openai/gpt-oss-120b
+731,Unix/Linux administration,Linux Administration,NARROWER,openai/gpt-oss-120b
+732,Network performance optimization,Network performance monitoring,RELATED,openai/gpt-oss-120b
+733,Performance Tuning,SQL Performance Tuning,BROADER,openai/gpt-oss-120b
+734,SSL/TLS Encryption,Encryption,NARROWER,openai/gpt-oss-120b
+735,ERP Support,ERP Administration,BROADER,openai/gpt-oss-120b
+736,Apache,Apache Spark,DIFFERENT,openai/gpt-oss-120b
+737,Code Review,Code maintenance,NARROWER,openai/gpt-oss-120b
+738,API Testing,Postman API Testing,BROADER,openai/gpt-oss-120b
+739,SAP Reporting,SAP Integration,RELATED,openai/gpt-oss-120b
+740,CRM Integration,CRM implementation,BROADER,openai/gpt-oss-120b
+741,Networking,AWS networking,BROADER,openai/gpt-oss-120b
+742,Network Support,Network Management,BROADER,openai/gpt-oss-120b
+743,WAN,LAN/WAN networking,BROADER,openai/gpt-oss-120b
+744,Windows Imaging,Windows,NARROWER,openai/gpt-oss-120b
+745,OSPF Protocol,OSPF,SAME,openai/gpt-oss-120b
+746,LAN/WAN Management,LAN/WAN design,RELATED,openai/gpt-oss-120b
+747,Antivirus deployment,Antivirus Management,BROADER,openai/gpt-oss-120b
+748,Wireless,Wireless networking,BROADER,openai/gpt-oss-120b
+749,Collaboration,Global Collaboration,BROADER,openai/gpt-oss-120b
+750,Functional analysis,Functional configuration,RELATED,openai/gpt-oss-120b
+751,EIGRP,EIGRP routing,SAME,openai/gpt-oss-120b
+752,JavaScript ES6,JavaScript,NARROWER,openai/gpt-oss-120b
+753,Apache Tomcat,Apache,NARROWER,openai/gpt-oss-120b
+754,XML Publisher,XML,NARROWER,openai/gpt-oss-120b
+755,Scheduling,Shift Scheduling,BROADER,openai/gpt-oss-120b
+756,SLA Management,SLA Monitoring,NARROWER,openai/gpt-oss-120b
+757,Testing Methodologies,Software Testing Methodologies,RELATED,openai/gpt-oss-120b
+758,Prometheus,Prometheus Monitoring,SAME,openai/gpt-oss-120b
+759,Red Hat OpenShift,Red Hat,NARROWER,openai/gpt-oss-120b
+760,Compliance Testing,Compliance Reporting,RELATED,openai/gpt-oss-120b
+761,Windows,Windows OS,SAME,openai/gpt-oss-120b
+762,Service Desk Management,Service Desk Operations,NARROWER,openai/gpt-oss-120b
+763,IT Infrastructure Design,IT Infrastructure Management,BROADER,openai/gpt-oss-120b
+764,Password policy enforcement,Policy Enforcement,NARROWER,openai/gpt-oss-120b
+765,DNS,DNS Configuration,BROADER,openai/gpt-oss-120b
+766,Wireless,Wireless LAN,BROADER,openai/gpt-oss-120b
+767,Network Operations,Network installation,BROADER,openai/gpt-oss-120b
+768,Functional Design,Functional configuration,RELATED,openai/gpt-oss-120b
+769,Procurement Coordination,Procurement,NARROWER,openai/gpt-oss-120b
+770,Database Programming,Database installation,RELATED,openai/gpt-oss-120b
+771,Financial Management,Financial Analysis,NARROWER,openai/gpt-oss-120b
+772,Software Maintenance,Software security,RELATED,openai/gpt-oss-120b
+773,Web Security,Web Design,DIFFERENT,openai/gpt-oss-120b
+774,AWS cloud security,AWS Cloud Architecture,BROADER,openai/gpt-oss-120b
+775,Incident Ticket Management,Ticket Management,NARROWER,openai/gpt-oss-120b
+776,IT Strategy,IT Support,DIFFERENT,openai/gpt-oss-120b
+777,SD-WAN troubleshooting,SD-WAN,NARROWER,openai/gpt-oss-120b
+778,Application Testing,Application Troubleshooting,RELATED,openai/gpt-oss-120b
+779,ServiceNow Integration,ServiceNow Administration,BROADER,openai/gpt-oss-120b
+780,Switching,Network Switching,BROADER,openai/gpt-oss-120b
+781,MySQL Administration,MySQL,NARROWER,openai/gpt-oss-120b
+782,Shift Scheduling,Scheduling,NARROWER,openai/gpt-oss-120b
+783,LAN Configuration,WAN/LAN Configuration,SAME,openai/gpt-oss-120b
+784,Unified Communications,Cisco Unified Communications,BROADER,openai/gpt-oss-120b
+785,Network Design,Network Implementation,RELATED,openai/gpt-oss-120b
+786,Network Monitoring,Network Operations,SAME,openai/gpt-oss-120b
+787,Playwright Automation,Playwright,SAME,openai/gpt-oss-120b
+788,Data Automation,Data Integration,RELATED,openai/gpt-oss-120b
+789,UAT Support,UAT Testing,RELATED,openai/gpt-oss-120b
+790,CCTV maintenance,CCTV Management,SAME,openai/gpt-oss-120b
+791,Performance Tuning,Database Performance Tuning,BROADER,openai/gpt-oss-120b
+792,Functional analysis,Functional Documentation,NARROWER,openai/gpt-oss-120b
+793,SAP,SAP HANA,BROADER,openai/gpt-oss-120b
+794,Linux,Linux Administration,BROADER,openai/gpt-oss-120b
+795,Pre-sales,Technical Pre-sales,BROADER,openai/gpt-oss-120b
+796,SSRS Reporting,SSRS,SAME,openai/gpt-oss-120b
+797,UAT Testing,UAT Support,RELATED,openai/gpt-oss-120b
+798,Microsoft Dynamics 365FO,Microsoft Dynamics,NARROWER,openai/gpt-oss-120b
+799,VMware,VMware vSphere,BROADER,openai/gpt-oss-120b
+800,Business Analysis,Business Documentation,NARROWER,openai/gpt-oss-120b
