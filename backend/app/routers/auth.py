@@ -60,6 +60,7 @@ def validate_username_format(username: str) -> tuple[bool, str]:
 # issue time (iat, whole seconds) with the change time: no rounding window where an old token from the same second
 # still works or a new one is refused. The device that made the change gets a fresh token with the new stamp.
 SIGNED_OUT = "Your password was changed. Please sign in again."
+DEACTIVATED = "This account has been deactivated. Please contact the career office."
 
 
 def _pw_stamp(user: User) -> int:
@@ -90,6 +91,8 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
         raise HTTPException(status_code=401, detail="User not found")
     if stamp != _pw_stamp(user):
         raise HTTPException(status_code=401, detail=SIGNED_OUT)
+    if not user.is_active:   # deactivated by Admin (7 Oct): signed out on the next request
+        raise HTTPException(status_code=401, detail=DEACTIVATED)
     return user
 
 
@@ -262,6 +265,9 @@ def register(payload: UserRegister, db: Session = Depends(get_db)):
         hashed_password=hash_password(payload.password),
         role=UserRole(payload.role),
     )
+    if payload.role == "employer":   # Admin approves employers before they can post jobs (7 Oct)
+        user.employer_status = "pending"
+        user.company_name = (payload.company_name or "").strip() or None
     db.add(user)
     db.commit()
     db.refresh(user)
@@ -311,6 +317,8 @@ def login(payload: UserLogin, request: Request, db: Session = Depends(get_db)):
     if throttle:
         db.delete(throttle)   # a successful sign-in clears the count
         db.commit()
+    if not user.is_active:   # told only after the right password, so it reveals nothing to a guesser
+        raise HTTPException(status_code=403, detail=DEACTIVATED)
     return {"access_token": _login_token(user), "token_type": "bearer"}
 
 

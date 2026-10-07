@@ -25,6 +25,9 @@ class Job(Base):
     # Live jobs: set when the latest search results no longer return the job (fetch_live_jobs.py sync, 6 Oct).
     # Hidden from Job Matches, kept for the report; cleared if a later refresh returns it again.
     gone_at = Column(DateTime(timezone=True), nullable=True)
+    # Employer posts (7 Oct): who posted it (NULL = JSearch or the 2024 dataset), and Admin's "hide" (kept, not shown)
+    posted_by_user_id = Column(Integer, ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
+    hidden_by_admin_at = Column(DateTime(timezone=True), nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
 
@@ -43,3 +46,6 @@ class JobSkill(Base):
     match_score = Column(Float, nullable=True)       # quote vs ad text, 1.0 = exact
     alternative_group = Column(String, nullable=True)  # same label = the ad accepts any one of these
     created_at = Column(DateTime(timezone=True), server_default=func.now())
+
+# Load the table jobs point at (users, for employer posts), so a script that saves only jobs works (7 Oct)
+from app.models import user  # noqa: E402,F401

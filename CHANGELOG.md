@@ -3,9 +3,27 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 7 Oct 2026 — Admin, batch 1: academic structure tables, user management, dashboard data
+
+- (this commit) Backend only (pages come in a later batch). Run `python migrations/migrate_admin_structure.py`
+  once (safe to rerun): new tables programmes, intakes, programme_modules; module descriptions moved into the
+  database from data/modules.json; users get programme / intake (students) and company name / approval status
+  (employers); jobs get "posted by" and "hidden by admin". The prototype's one programme (BSc (Hons) Software
+  Engineering, code SE) is created with its modules by year. Employers who signed up before approvals existed are
+  marked approved, so nobody is locked out.
+- `/admin` endpoints (admin only): dashboard data for layout D (to-do: employers waiting, modules not reviewed;
+  counts; student profiles; most common skill gaps = students' own "skills to learn next" counted over students,
+  cached 5 minutes), user list with role / status / search filters, approve / reject employers, deactivate /
+  reactivate accounts.
+- Deactivation now works: `is_active` existed but was never checked. A deactivated account is signed out on its next
+  request and can't sign in (told only after the right password). New employers start as "pending".
+- `scripts/tools/create_admin.py`: the only way to make an Admin account (Admin can't be chosen at sign-up).
+- Models now load the tables they point at, so scripts that save users or jobs on their own keep working.
+- Cut-off comment clarified (audit): 0.8 is run 4's cut-off, chosen on blind set v1; run 5's comes from v1 + v2.
+
 ## 6 Oct 2026 — Pass rule in the evaluation script; each skill pair scored once
 
-- (this commit) `evaluate_reference.py`: "has it" judged as the app decides it (model p_satisfies >= `--cutoff`,
+- (5a21996) `evaluate_reference.py`: "has it" judged as the app decides it (model p_satisfies >= `--cutoff`,
   default 0.8; cosine >= 0.7), population-weighted precision / recall / F1 (each band scaled to its real number of
   candidate pairs; checked against the hand calculation: v1 model 0.63 / 0.44 vs cosine 0.42 / 0.29). `--set v3`
   and `--baseline <run-4 folder>` print both models side by side and the run-5 pass rule verdict (fixed in

@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Text
 from sqlalchemy.sql import func
 from app.database import Base
 
@@ -12,6 +12,10 @@ class Module(Base):
     level = Column(Integer, nullable=False)
     type = Column(String, nullable=False)  # common, specialised, elective
     institution = Column(String, default="Representative SE Programme")
+    # Admin (7 Oct): the module descriptor skills are extracted from (was only in data/modules.json), and when an
+    # admin last reviewed this module's extracted skills (NULL = not reviewed yet: shown on the Admin to-do list)
+    description = Column(Text, nullable=True)
+    skills_reviewed_at = Column(DateTime(timezone=True), nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
 

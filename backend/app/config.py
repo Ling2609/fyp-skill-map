@@ -14,7 +14,9 @@ class Settings(BaseSettings):
     # Skill relationship model (app/services/skill_relation.py). Empty = off: matching uses cosine >= 0.7.
     # e.g. RELATION_MODEL_DIR=data/relation_model_esco_onet_v1_skillmap_v2_nli_rw3x20 (folder unzipped from Colab)
     relation_model_dir: str = ""
-    relation_cutoff: float = 0.8     # p_satisfies at or above = has it (chosen on blind set v1, 6 Oct)
+    # p_satisfies at or above = has it. 0.8 is RUN 4's cut-off, chosen on blind set v1 only (6 Oct); run 5's is chosen
+    # on v1 + v2 before blind set v3 exists (references.md, run-5 pass rule)
+    relation_cutoff: float = 0.8
     # Email for "Forgot password" (Gmail SMTP + app password; see references.md "OTP, email verification and
     # forgot password"). Empty = not set up: the code is printed in the backend console instead (development only)
     smtp_host: str = "smtp.gmail.com"

@@ -1,6 +1,6 @@
 import re
 from typing import Literal
-from pydantic import BaseModel, EmailStr, field_validator
+from pydantic import BaseModel, EmailStr, Field, field_validator
 from app.models.user import UserRole
 
 NAME_PATTERN = re.compile(r"^[a-zA-Z\s\-']+$")   # same rule as the Register page
@@ -33,6 +33,7 @@ class UserRegister(BaseModel):
     password: str
     # Only these two can be chosen at sign-up. Admin accounts are created by the seed script.
     role: Literal["student", "employer"] = "student"
+    company_name: str | None = Field(default=None, max_length=120)   # employers (7 Oct)
 
     @field_validator("password")
     @classmethod
@@ -50,6 +51,11 @@ class UserOut(BaseModel):
     last_name: str
     email: str
     role: UserRole
+    # 7 Oct: the employer's approval state and the student's programme/intake (the setup step reads them)
+    company_name: str | None = None
+    employer_status: str | None = None
+    programme_id: int | None = None
+    intake_id: int | None = None
 
     class Config:
         from_attributes = True

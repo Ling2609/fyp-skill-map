@@ -1,5 +1,5 @@
 import enum
-from sqlalchemy import Column, Integer, String, Enum, DateTime, Boolean, JSON
+from sqlalchemy import Column, Integer, String, Enum, DateTime, Boolean, JSON, ForeignKey
 from sqlalchemy.sql import func
 from app.database import Base
 
@@ -25,3 +25,11 @@ class User(Base):
     # Set when the password is changed or reset; sign-in tokens issued under an older password are refused
     # (4 Oct, migrations/migrate_account_security.py)
     password_changed_at     = Column(DateTime(timezone=True), nullable=True)
+    # Admin + Employer flows (7 Oct, migrations/migrate_admin_structure.py)
+    programme_id    = Column(Integer, ForeignKey("programmes.id", ondelete="SET NULL"), nullable=True)  # students
+    intake_id       = Column(Integer, ForeignKey("intakes.id", ondelete="SET NULL"), nullable=True)     # students
+    company_name    = Column(String(120), nullable=True)                                                 # employers
+    employer_status = Column(String(10), nullable=True)   # employers: pending / approved / rejected (by Admin)
+
+# Load the tables users point at (programmes, intakes), so any script that saves a User works on its own (7 Oct)
+from app.models import programme  # noqa: E402,F401

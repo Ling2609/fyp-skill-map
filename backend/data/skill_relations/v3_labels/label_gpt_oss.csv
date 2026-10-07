@@ -59,3 +59,43 @@ id,a,b,label_gpt_oss,model
 58,Data Analytics,Data Governance,RELATED,openai/gpt-oss-120b
 59,AWS networking,Networking,NARROWER,openai/gpt-oss-120b
 60,Agile,Agile Project Management,BROADER,openai/gpt-oss-120b
+61,Server Deployment,Server Troubleshooting,RELATED,openai/gpt-oss-120b
+62,SQL,SQL Scripting,BROADER,openai/gpt-oss-120b
+63,Network installation,Network Operations,RELATED,openai/gpt-oss-120b
+64,Service Desk Operations,Service Desk,NARROWER,openai/gpt-oss-120b
+65,Linux,Linux Server,BROADER,openai/gpt-oss-120b
+66,Wireless,Wireless Technologies,BROADER,openai/gpt-oss-120b
+67,Google Cloud,Google Cloud Platform,SAME,openai/gpt-oss-120b
+68,Help Desk Ticketing,Help Desk,NARROWER,openai/gpt-oss-120b
+69,Jenkins CI/CD,CI/CD,NARROWER,openai/gpt-oss-120b
+70,Azure SQL,Azure SQL Database,BROADER,openai/gpt-oss-120b
+71,Patch Management,Patch Deployment,NARROWER,openai/gpt-oss-120b
+72,Encryption,Encryption Technologies,BROADER,openai/gpt-oss-120b
+73,Test Case Development,Test Case Management,RELATED,openai/gpt-oss-120b
+74,LAN/WAN,WAN,NARROWER,openai/gpt-oss-120b
+75,Technical Design,Technical Documentation,RELATED,openai/gpt-oss-120b
+76,Windows,Windows Server 2012,BROADER,openai/gpt-oss-120b
+77,Remote Desktop Troubleshooting,Remote Desktop Support,NARROWER,openai/gpt-oss-120b
+78,Server Troubleshooting,Server Deployment,RELATED,openai/gpt-oss-120b
+79,SD-WAN implementation,SD-WAN troubleshooting,RELATED,openai/gpt-oss-120b
+80,Database Programming,Database monitoring,RELATED,openai/gpt-oss-120b
+81,Kali Linux,Linux,NARROWER,openai/gpt-oss-120b
+82,On-page SEO,SEO,NARROWER,openai/gpt-oss-120b
+83,Kubernetes Orchestration,Kubernetes,SAME,openai/gpt-oss-120b
+84,IT Support,IT Strategy,RELATED,openai/gpt-oss-120b
+85,ServiceNow,ServiceNow incident handling,BROADER,openai/gpt-oss-120b
+86,Database configuration,Database monitoring,RELATED,openai/gpt-oss-120b
+87,Linux Administration,Unix/Linux administration,NARROWER,openai/gpt-oss-120b
+88,Data Architecture,Data Visualization,DIFFERENT,openai/gpt-oss-120b
+89,Data Engineering,Data Reporting,RELATED,openai/gpt-oss-120b
+90,CI/CD,Jenkins CI/CD,BROADER,openai/gpt-oss-120b
+91,Network Configuration,Network Architecture,RELATED,openai/gpt-oss-120b
+92,Software Training,Software Installation,DIFFERENT,openai/gpt-oss-120b
+93,Computer Networking,Networking,NARROWER,openai/gpt-oss-120b
+94,ERP Implementation,ERP Support,RELATED,openai/gpt-oss-120b
+95,User Training,User Administration,RELATED,openai/gpt-oss-120b
+96,Webpack Bundler,Webpack,SAME,openai/gpt-oss-120b
+97,Help Desk,Help Desk Ticketing,NARROWER,openai/gpt-oss-120b
+98,Microsoft 365,Microsoft 365 Exchange,NARROWER,openai/gpt-oss-120b
+99,Mentoring,Mentoring Juniors,NARROWER,openai/gpt-oss-120b
+100,Risk Reporting,Risk Analytics,RELATED,openai/gpt-oss-120b
