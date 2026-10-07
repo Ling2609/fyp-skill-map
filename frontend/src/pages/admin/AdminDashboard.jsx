@@ -4,6 +4,8 @@ import api from '../../api'
 import PageHeader from '../../components/PageHeader'
 import { skillName } from '../../skillName'
 import { ADMIN_COUNTS_CHANGED } from '../../components/Sidebar'
+import { useAuth } from '../../context/useAuth'
+import ReasonForm from './ReasonForm'
 
 // Admin home, layout D (7 Oct, her pick; references.md "Admin layout"): what needs action first and most visible
 // (NN/g: "make important information visually salient"), then glanceable counts, then two panels the career office
@@ -13,6 +15,11 @@ const fmtDay = (iso) => iso ? new Date(iso).toLocaleDateString('en-GB', { day: '
 const ago = (iso) => {
   const days = Math.floor((Date.now() - new Date(iso)) / 864e5)
   return days <= 0 ? 'today' : days === 1 ? 'yesterday' : `${days} days ago`
+}
+
+const getGreeting = () => {
+  const hour = new Date().getHours()
+  return hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening'
 }
 
 function Bar({ value, max }) {
@@ -25,6 +32,8 @@ function Bar({ value, max }) {
 }
 
 export default function AdminDashboard() {
+  const { user } = useAuth()
+  const [rejecting, setRejecting] = useState(null)   // employer id showing the optional reason box
   const [data, setData] = useState(null)
   const [gaps, setGaps] = useState(null)      // null = loading (it runs the matching for every student)
   const [error, setError] = useState('')
@@ -40,10 +49,10 @@ export default function AdminDashboard() {
     api.get('/admin/skill-gaps').then(res => setGaps(res.data)).catch(() => setGaps([]))
   }, [load])
 
-  const decide = (id, action) => {
+  const decide = (id, action, reason) => {
     setBusy(id)
-    api.post(`/admin/users/${id}/${action}`)
-      .then(() => { window.dispatchEvent(new Event(ADMIN_COUNTS_CHANGED)); return load() })
+    api.post(`/admin/users/${id}/${action}`, reason === undefined ? undefined : { reason })
+      .then(() => { setRejecting(null); window.dispatchEvent(new Event(ADMIN_COUNTS_CHANGED)); return load() })
       .catch(err => setError(err.response?.data?.detail || "Couldn't save that. Try again."))
       .finally(() => setBusy(null))
   }
@@ -55,18 +64,21 @@ export default function AdminDashboard() {
   const p = data?.profiles
 
   return (
-    <div>
+    <div className="min-h-screen flex flex-col">
       <PageHeader>
         <div className="pb-5">
-          <p className="text-[11px] font-semibold text-blue-600 uppercase tracking-widest mb-2">Admin</p>
-          <h1 className="text-2xl font-semibold tracking-tight text-slate-900">Dashboard</h1>
+          <p className="text-[11px] font-semibold text-blue-600 uppercase tracking-widest mb-2">Dashboard</p>
+          <h1 className="text-2xl font-semibold tracking-tight text-slate-900">
+            {getGreeting()}, {user?.first_name || 'there'} 👋
+          </h1>
           <p className="text-sm text-slate-500 mt-1">
             {!data ? 'Loading…' : actions ? `${actions} thing${actions > 1 ? 's' : ''} need${actions > 1 ? '' : 's'} you today.` : 'Nothing needs you right now.'}
           </p>
         </div>
       </PageHeader>
 
-      <div className="px-8 py-6 space-y-5">
+      {/* fills the screen: the two panels at the bottom stretch to its foot */}
+      <div className="flex-1 flex flex-col gap-5 px-8 py-6">
         {error && <p className="text-sm text-rose-600">{error}</p>}
 
         {data && actions > 0 && (
@@ -81,14 +93,21 @@ export default function AdminDashboard() {
                     <p className="text-sm font-medium text-slate-800">{u.company_name || u.name}</p>
                     <p className="text-xs text-slate-500 mt-0.5">Employer · {u.email} · registered {ago(u.created_at)}</p>
                   </div>
-                  <button onClick={() => decide(u.id, 'reject')} disabled={busy === u.id}
-                    className="px-3.5 py-2 text-sm font-medium rounded-lg border border-slate-200 text-slate-700 hover:bg-slate-50 disabled:opacity-50">
-                    Reject
-                  </button>
-                  <button onClick={() => decide(u.id, 'approve')} disabled={busy === u.id}
-                    className="px-3.5 py-2 text-sm font-medium rounded-lg bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50">
-                    Approve
-                  </button>
+                  {rejecting === u.id ? (
+                    <ReasonForm action="Reject" required={false} busy={busy === u.id}
+                      onConfirm={reason => decide(u.id, 'reject', reason)} onCancel={() => setRejecting(null)} />
+                  ) : (
+                    <>
+                      <button onClick={() => setRejecting(u.id)} disabled={busy === u.id}
+                        className="px-3.5 py-2 text-sm font-medium rounded-lg border border-slate-200 text-slate-700 hover:bg-slate-50 disabled:opacity-50">
+                        Reject
+                      </button>
+                      <button onClick={() => decide(u.id, 'approve')} disabled={busy === u.id}
+                        className="px-3.5 py-2 text-sm font-medium rounded-lg bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50">
+                        Approve
+                      </button>
+                    </>
+                  )}
                 </li>
               ))}
               {toReview > 0 && (
@@ -130,7 +149,7 @@ export default function AdminDashboard() {
         )}
 
         {data && (
-          <div className="grid lg:grid-cols-2 gap-4">
+          <div className="flex-1 grid lg:grid-cols-2 gap-4">
             <section className="bg-white rounded-xl border border-slate-200">
               <div className="px-5 py-3 border-b border-slate-100">
                 <h2 className="text-sm font-semibold text-slate-700">Most common skill gaps</h2>

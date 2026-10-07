@@ -3,9 +3,24 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 7 Oct 2026 — Admin decisions kept with a reason; greeting; full-height dashboard
+
+- (this commit) Run `python migrations/migrate_admin_actions.py` once (safe to rerun): new table `admin_actions`.
+  Every approve / reject / deactivate / reactivate is recorded with who, when and why (references.md
+  "Deactivating and reactivating accounts": OWASP logging, NIST AC-2, GitHub asks for a reason). A reason is
+  required to deactivate and to reactivate, optional to reject (to be shown to the employer later), not asked to
+  approve. Repeating a decision ("already deactivated") is refused. `/admin/users/{id}/history` lists them all.
+- Users: the reason box opens in the row (Enter confirms, Esc cancels; the button stays off until a reason is
+  typed). Under each status: the latest decision, e.g. "Deactivated 7 Oct by Career Office · Graduated". The
+  account count moved up next to the filters.
+- Dashboard: "Good afternoon, <name> 👋" header like the student one; the two bottom panels stretch to the foot of
+  the screen. Reject there asks for an optional reason too.
+- Checked in a browser on a database copy (13 checks: greeting, full height, count position, reason required /
+  optional, Esc, last-decision line, reasons carried from dashboard to Users, no page errors).
+
 ## 7 Oct 2026 — Admin pages full width; only the user list scrolls
 
-- (this commit) Admin pages use the full width like the student pages (her review). On Users the page itself no
+- (fd5dd8e) Admin pages use the full width like the student pages (her review). On Users the page itself no
   longer scrolls: only the list does, and its column titles stay on top (checked in a browser with 49 accounts).
 
 ## 7 Oct 2026 — Admin pages: dashboard (layout D) and Users

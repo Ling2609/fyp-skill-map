@@ -16,6 +16,7 @@ from collections import Counter
 from datetime import datetime, timezone
 
 from fastapi import APIRouter, Depends, HTTPException
+from pydantic import BaseModel, Field
 from sqlalchemy import func, inspect, or_
 from sqlalchemy.orm import Session
 
@@ -23,6 +24,7 @@ from app.database import engine, get_db
 from app.models.job import Job
 from app.models.module import Module
 from app.models.profile import UserCertification, UserProject
+from app.models.programme import AdminAction
 from app.models.user import User, UserRole
 from app.models.user_module import UserModule
 from app.routers.auth import get_current_user
@@ -47,10 +49,28 @@ def check_admin_schema():
     if not {"programmes", "intakes", "programme_modules"} <= tables or "employer_status" not in columns:
         raise RuntimeError("Database not updated: run  python migrations/migrate_admin_structure.py  "
                            "from the backend folder, then start the backend again.")
+    if "admin_actions" not in tables:
+        raise RuntimeError("Database not updated: run  python migrations/migrate_admin_actions.py  "
+                           "from the backend folder, then start the backend again.")
 
 
-def _user_row(u: User) -> dict:
-    return {"id": u.id, "username": u.username, "name": f"{u.first_name} {u.last_name}".strip(), "email": u.email,
+def _last_actions(db: Session, user_ids: list[int]) -> dict[int, dict]:
+    """The newest admin decision on each of these accounts (what the Users list shows under the status)."""
+    if not user_ids:
+        return {}
+    rows = (db.query(AdminAction, User.first_name, User.last_name)
+            .outerjoin(User, User.id == AdminAction.admin_id)
+            .filter(AdminAction.target_user_id.in_(user_ids))
+            .order_by(AdminAction.target_user_id, AdminAction.created_at.desc(), AdminAction.id.desc()))
+    latest = {}
+    for a, first, last in rows:
+        latest.setdefault(a.target_user_id, {"action": a.action, "reason": a.reason, "at": a.created_at,
+                                             "by": f"{first or ''} {last or ''}".strip() or "a former admin"})
+    return latest
+
+
+def _user_row(u: User, last: dict | None = None) -> dict:
+    return {"last_action": last, "id": u.id, "username": u.username, "name": f"{u.first_name} {u.last_name}".strip(), "email": u.email,
             "role": u.role.value if hasattr(u.role, "value") else u.role, "is_active": u.is_active,
             "company_name": u.company_name, "employer_status": u.employer_status, "created_at": u.created_at}
 
@@ -145,7 +165,41 @@ def list_users(role: str = "", status: str = "", q: str = "", db: Session = Depe
         query = query.filter(or_(func.lower(User.username).like(like), func.lower(User.email).like(like),
                                  func.lower(User.first_name + " " + User.last_name).like(like),
                                  func.lower(func.coalesce(User.company_name, "")).like(like)))
-    return [_user_row(u) for u in query.order_by(User.created_at.desc()).limit(500)]
+    users = query.order_by(User.created_at.desc()).limit(500).all()
+    latest = _last_actions(db, [u.id for u in users])
+    return [_user_row(u, latest.get(u.id)) for u in users]
+
+
+@router.get("/users/{user_id}/history")
+def user_history(user_id: int, db: Session = Depends(get_db), admin: User = Depends(require_admin)):
+    """Every admin decision on one account, newest first."""
+    if not db.get(User, user_id):
+        raise HTTPException(status_code=404, detail="User not found.")
+    rows = (db.query(AdminAction, User.first_name, User.last_name).outerjoin(User, User.id == AdminAction.admin_id)
+            .filter(AdminAction.target_user_id == user_id)
+            .order_by(AdminAction.created_at.desc(), AdminAction.id.desc()))
+    return [{"action": a.action, "reason": a.reason, "at": a.created_at,
+             "by": f"{f or ''} {l or ''}".strip() or "a former admin"} for a, f, l in rows]
+
+
+class Reason(BaseModel):
+    reason: str = Field(default="", max_length=300)
+
+
+REASON_NEEDED = "Please give a short reason (it is kept in the account's history)."
+
+
+def _reason(body: Reason | None, required: bool) -> str | None:
+    text = " ".join(((body.reason if body else "") or "").split())
+    if required and len(text) < 3:
+        raise HTTPException(status_code=400, detail=REASON_NEEDED)
+    return text or None
+
+
+def _record(db: Session, admin: User, user: User, action: str, reason: str | None) -> dict:
+    db.add(AdminAction(admin_id=admin.id, target_user_id=user.id, action=action, reason=reason))
+    db.commit()
+    return _user_row(user, _last_actions(db, [user.id]).get(user.id))
 
 
 def _target(user_id: int, db: Session, admin: User) -> User:
@@ -157,41 +211,52 @@ def _target(user_id: int, db: Session, admin: User) -> User:
     return user
 
 
+# Every decision is written to admin_actions (who, when, what, why). A reason is required to deactivate AND to
+# reactivate (GitHub's rule), optional to reject (later shown to the employer), not asked to approve.
+
 @router.post("/users/{user_id}/approve")
 def approve_employer(user_id: int, db: Session = Depends(get_db), admin: User = Depends(require_admin)):
-    return _set_employer_status(user_id, "approved", db, admin)
+    return _set_employer_status(user_id, "approved", None, db, admin)
 
 
 @router.post("/users/{user_id}/reject")
-def reject_employer(user_id: int, db: Session = Depends(get_db), admin: User = Depends(require_admin)):
-    return _set_employer_status(user_id, "rejected", db, admin)
+def reject_employer(user_id: int, body: Reason | None = None, db: Session = Depends(get_db),
+                    admin: User = Depends(require_admin)):
+    return _set_employer_status(user_id, "rejected", _reason(body, required=False), db, admin)
 
 
-def _set_employer_status(user_id: int, status: str, db: Session, admin: User) -> dict:
+def _set_employer_status(user_id: int, status: str, reason: str | None, db: Session, admin: User) -> dict:
     user = _target(user_id, db, admin)
     if user.role != UserRole.employer:
         raise HTTPException(status_code=400, detail="Only employer accounts are approved or rejected.")
+    if user.employer_status == status:
+        raise HTTPException(status_code=400, detail=f"This employer is already {status}.")
     user.employer_status = status
-    db.commit()
-    return _user_row(user)
+    return _record(db, admin, user, "approve" if status == "approved" else "reject", reason)
 
 
 @router.post("/users/{user_id}/deactivate")
-def deactivate_user(user_id: int, db: Session = Depends(get_db), admin: User = Depends(require_admin)):
+def deactivate_user(user_id: int, body: Reason | None = None, db: Session = Depends(get_db),
+                    admin: User = Depends(require_admin)):
     """Signs the user out on their next request and blocks sign-in; nothing is deleted."""
     user = _target(user_id, db, admin)
     if user.role == UserRole.admin:
         raise HTTPException(status_code=400, detail="Admin accounts can't be deactivated here.")
+    if not user.is_active:
+        raise HTTPException(status_code=400, detail="This account is already deactivated.")
+    reason = _reason(body, required=True)
     user.is_active = False
-    db.commit()
     _gaps_cache["value"] = None
-    return _user_row(user)
+    return _record(db, admin, user, "deactivate", reason)
 
 
 @router.post("/users/{user_id}/reactivate")
-def reactivate_user(user_id: int, db: Session = Depends(get_db), admin: User = Depends(require_admin)):
+def reactivate_user(user_id: int, body: Reason | None = None, db: Session = Depends(get_db),
+                    admin: User = Depends(require_admin)):
     user = _target(user_id, db, admin)
+    if user.is_active:
+        raise HTTPException(status_code=400, detail="This account is already active.")
+    reason = _reason(body, required=True)
     user.is_active = True
-    db.commit()
     _gaps_cache["value"] = None
-    return _user_row(user)
+    return _record(db, admin, user, "reactivate", reason)

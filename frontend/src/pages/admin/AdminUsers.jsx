@@ -4,6 +4,7 @@ import api from '../../api'
 import PageHeader from '../../components/PageHeader'
 import { useAuth } from '../../context/useAuth'
 import { ADMIN_COUNTS_CHANGED } from '../../components/Sidebar'
+import ReasonForm from './ReasonForm'
 
 // Admin > Users (7 Oct): every account, filtered by role / status / search (kept in the URL, so the dashboard's
 // count cards open a filtered list). Employers are approved or rejected here; any account but an admin can be
@@ -15,6 +16,9 @@ const STATUS = {
   rejected: { label: 'Rejected', cls: 'bg-slate-100 text-slate-600' },
 }
 const ROLE = { student: 'Student', employer: 'Employer', admin: 'Admin' }
+// The latest decision, shown under the status: "Deactivated 7 Oct by Career Office · Graduated"
+const DONE = { approve: 'Approved', reject: 'Rejected', deactivate: 'Deactivated', reactivate: 'Reactivated' }
+const short = (iso) => new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })
 const day = (iso) => new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
 
 export default function AdminUsers() {
@@ -26,7 +30,7 @@ export default function AdminUsers() {
   const [users, setUsers] = useState(null)
   const [error, setError] = useState('')
   const [busy, setBusy] = useState(null)
-  const [confirmId, setConfirmId] = useState(null)   // asks "Deactivate?" inline before doing it
+  const [asking, setAsking] = useState(null)   // { id, action }: the row showing the reason box
 
   const setFilter = (key, value) => {
     const next = new URLSearchParams(params)
@@ -49,12 +53,12 @@ export default function AdminUsers() {
     return () => { cancelled = true }
   }, [query])
 
-  const act = (id, action) => {
+  const act = (id, action, reason) => {
     setBusy(id)
-    setConfirmId(null)
-    api.post(`/admin/users/${id}/${action}`)
+    api.post(`/admin/users/${id}/${action}`, reason === undefined ? undefined : { reason })
       .then(res => {
         setUsers(list => list.map(u => (u.id === id ? res.data : u)))
+        setAsking(null)
         window.dispatchEvent(new Event(ADMIN_COUNTS_CHANGED))
       })
       .catch(err => setError(err.response?.data?.detail || "Couldn't save that. Try again."))
@@ -96,6 +100,9 @@ export default function AdminUsers() {
             <option value="rejected">Rejected</option>
             <option value="inactive">Deactivated</option>
           </select>
+          {users?.length > 0 && (
+            <span className="text-xs text-slate-500 whitespace-nowrap">{users.length} account{users.length > 1 ? 's' : ''}</span>
+          )}
         </div>
 
         {error && <p className="text-sm text-rose-600">{error}</p>}
@@ -133,30 +140,38 @@ export default function AdminUsers() {
                         {u.is_active && s && <span className={`text-xs font-medium rounded-full px-2 py-0.5 ${s.cls}`}>{s.label}</span>}
                         {u.is_active && !s && <span className="text-xs text-slate-500">Active</span>}
                       </div>
+                      {u.last_action && (
+                        <p className="text-xs text-slate-500 mt-1 max-w-72">
+                          {DONE[u.last_action.action]} {short(u.last_action.at)} by {u.last_action.by}
+                          {u.last_action.reason && <span className="text-slate-600"> · {u.last_action.reason}</span>}
+                        </p>
+                      )}
                     </td>
                     <td className="px-4 py-3">
-                      <div className="flex justify-end gap-2">
-                        {u.role === 'employer' && u.employer_status !== 'approved' && (
-                          <button className={`${btn} bg-blue-600 text-white hover:bg-blue-700`} disabled={busy === u.id}
-                            onClick={() => act(u.id, 'approve')}>Approve</button>
-                        )}
-                        {u.role === 'employer' && u.employer_status === 'pending' && (
-                          <button className={quiet} disabled={busy === u.id} onClick={() => act(u.id, 'reject')}>Reject</button>
-                        )}
-                        {!self && u.role !== 'admin' && u.is_active && confirmId !== u.id && (
-                          <button className={quiet} disabled={busy === u.id} onClick={() => setConfirmId(u.id)}>Deactivate</button>
-                        )}
-                        {confirmId === u.id && (
-                          <>
-                            <span className="text-xs text-slate-600 self-center">Deactivate?</span>
-                            <button className={`${btn} bg-rose-600 text-white hover:bg-rose-700`} onClick={() => act(u.id, 'deactivate')}>Yes</button>
-                            <button className={quiet} onClick={() => setConfirmId(null)}>No</button>
-                          </>
-                        )}
-                        {!self && !u.is_active && (
-                          <button className={quiet} disabled={busy === u.id} onClick={() => act(u.id, 'reactivate')}>Reactivate</button>
-                        )}
-                      </div>
+                      {asking?.id === u.id ? (
+                        <ReasonForm action={asking.label} required={asking.action !== 'reject'}
+                          danger={asking.action === 'deactivate'} busy={busy === u.id}
+                          onConfirm={reason => act(u.id, asking.action, reason)} onCancel={() => setAsking(null)} />
+                      ) : (
+                        <div className="flex justify-end gap-2">
+                          {u.role === 'employer' && u.employer_status !== 'approved' && (
+                            <button className={`${btn} bg-blue-600 text-white hover:bg-blue-700`} disabled={busy === u.id}
+                              onClick={() => act(u.id, 'approve')}>Approve</button>
+                          )}
+                          {u.role === 'employer' && u.employer_status === 'pending' && (
+                            <button className={quiet} disabled={busy === u.id}
+                              onClick={() => setAsking({ id: u.id, action: 'reject', label: 'Reject' })}>Reject</button>
+                          )}
+                          {!self && u.role !== 'admin' && u.is_active && (
+                            <button className={quiet} disabled={busy === u.id}
+                              onClick={() => setAsking({ id: u.id, action: 'deactivate', label: 'Deactivate' })}>Deactivate</button>
+                          )}
+                          {!self && !u.is_active && (
+                            <button className={quiet} disabled={busy === u.id}
+                              onClick={() => setAsking({ id: u.id, action: 'reactivate', label: 'Reactivate' })}>Reactivate</button>
+                          )}
+                        </div>
+                      )}
                     </td>
                   </tr>
                 )
@@ -164,7 +179,6 @@ export default function AdminUsers() {
             </tbody>
           </table>
         </div>
-        {users?.length > 0 && <p className="shrink-0 text-xs text-slate-500">{users.length} account{users.length > 1 ? 's' : ''}</p>}
       </div>
     </div>
   )

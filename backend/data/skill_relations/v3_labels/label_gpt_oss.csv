@@ -119,3 +119,63 @@ id,a,b,label_gpt_oss,model
 118,Apache,Apache Iceberg,DIFFERENT,openai/gpt-oss-120b
 119,SQL Scripting,SQL Optimization,RELATED,openai/gpt-oss-120b
 120,Data Integration,Data Engineering,NARROWER,openai/gpt-oss-120b
+121,Risk Development,Risk Analysis,NARROWER,openai/gpt-oss-120b
+122,Cisco Unified Communications,Unified Communications,NARROWER,openai/gpt-oss-120b
+123,SAP Implementation,SAP Administration,RELATED,openai/gpt-oss-120b
+124,Security Compliance,Compliance,NARROWER,openai/gpt-oss-120b
+125,Data Management,Data Reporting,RELATED,openai/gpt-oss-120b
+126,Collaboration,QA collaboration,BROADER,openai/gpt-oss-120b
+127,Network Switches,switches,NARROWER,openai/gpt-oss-120b
+128,Mobile Testing,Appium Mobile Testing,BROADER,openai/gpt-oss-120b
+129,Sales Operations,Sales Engineering,DIFFERENT,openai/gpt-oss-120b
+130,Network Monitoring,Network Maintenance,RELATED,openai/gpt-oss-120b
+131,Data Visualization,Data Modeling,RELATED,openai/gpt-oss-120b
+132,Code maintenance,Code Review,RELATED,openai/gpt-oss-120b
+133,Software Documentation,Software Architecture,RELATED,openai/gpt-oss-120b
+134,Policy Enforcement,Password policy enforcement,BROADER,openai/gpt-oss-120b
+135,SEO,SEO Optimization,SAME,openai/gpt-oss-120b
+136,IT Administration,IT Security,RELATED,openai/gpt-oss-120b
+137,Unix/Linux administration,Unix/Linux,NARROWER,openai/gpt-oss-120b
+138,Azure,Azure Monitor,BROADER,openai/gpt-oss-120b
+139,SQL Optimization,SQL Scripting,RELATED,openai/gpt-oss-120b
+140,Software security,Software validation,RELATED,openai/gpt-oss-120b
+141,Software Implementation,Software Training,RELATED,openai/gpt-oss-120b
+142,KPI Reporting,KPI Monitoring,NARROWER,openai/gpt-oss-120b
+143,Functional Specification,Functional configuration,RELATED,openai/gpt-oss-120b
+144,Data Modeling,Data Visualization,RELATED,openai/gpt-oss-120b
+145,SIEM Integration,SIEM,NARROWER,openai/gpt-oss-120b
+146,Database Optimization,Database Tuning,SAME,openai/gpt-oss-120b
+147,Cloud Optimization,Cloud,NARROWER,openai/gpt-oss-120b
+148,Network Security,Network Support,RELATED,openai/gpt-oss-120b
+149,ASP.NET Core MVC,ASP.NET,NARROWER,openai/gpt-oss-120b
+150,Software validation,Software security,RELATED,openai/gpt-oss-120b
+151,Server Monitoring,Server Installation,RELATED,openai/gpt-oss-120b
+152,Performance Tuning,Performance Reporting,RELATED,openai/gpt-oss-120b
+153,Network Implementation,Network Optimization,RELATED,openai/gpt-oss-120b
+154,Predictive Analytics,Predictive Modeling,NARROWER,openai/gpt-oss-120b
+155,F5 Load Balancer,Load balancer,NARROWER,openai/gpt-oss-120b
+156,OAuth 2.0,OAuth,NARROWER,openai/gpt-oss-120b
+157,Azure Monitor,Azure,NARROWER,openai/gpt-oss-120b
+158,Functional Testing,Functional Specification,RELATED,openai/gpt-oss-120b
+159,Incident Response,Incident Response Planning,RELATED,openai/gpt-oss-120b
+160,Windows,Windows Imaging,BROADER,openai/gpt-oss-120b
+161,API Testing,API Integration,RELATED,openai/gpt-oss-120b
+162,ERP Administration,ERP Support,NARROWER,openai/gpt-oss-120b
+163,Remote Desktop Troubleshooting,Remote Desktop,NARROWER,openai/gpt-oss-120b
+164,ABAP debugging,ABAP Development,NARROWER,openai/gpt-oss-120b
+165,Red Hat,Red Hat Linux,BROADER,openai/gpt-oss-120b
+166,Network Architecture,Network Design,SAME,openai/gpt-oss-120b
+167,Test Case Management,Test Case Development,RELATED,openai/gpt-oss-120b
+168,switches,Network Switches,BROADER,openai/gpt-oss-120b
+169,IT Security,IT Support,DIFFERENT,openai/gpt-oss-120b
+170,Information Security Policies,Information Security,NARROWER,openai/gpt-oss-120b
+171,Git Version Control,Version Control,NARROWER,openai/gpt-oss-120b
+172,Mentoring,Mentoring Engineers,SAME,openai/gpt-oss-120b
+173,Test case execution,Execution,NARROWER,openai/gpt-oss-120b
+174,End-User Support,User Support,SAME,openai/gpt-oss-120b
+175,Database Programming,Database development,SAME,openai/gpt-oss-120b
+176,AWS,AWS EC2,BROADER,openai/gpt-oss-120b
+177,SQL Scripting,SQL Reporting,RELATED,openai/gpt-oss-120b
+178,Red Hat Linux,Red Hat,NARROWER,openai/gpt-oss-120b
+179,Application debugging,Application Monitoring,RELATED,openai/gpt-oss-120b
+180,VPN Configuration,VPN Management,NARROWER,openai/gpt-oss-120b

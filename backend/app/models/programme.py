@@ -39,3 +39,17 @@ class ProgrammeModule(Base):
     year = Column(Integer, nullable=False)                       # year of study the module is taken in
 
     __table_args__ = (UniqueConstraint("programme_id", "module_id", name="uq_programme_module"),)
+
+
+class AdminAction(Base):
+    """Audit log of admin decisions on accounts (7 Oct; OWASP: log user administration actions with "when, where,
+    who and what"; NIST SP 800-53 AC-2: audit enabling and disabling of accounts; GitHub asks a reason for both
+    suspending and unsuspending). Never edited or deleted by the app."""
+    __tablename__ = "admin_actions"
+
+    id = Column(Integer, primary_key=True, index=True)
+    created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+    admin_id = Column(Integer, ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
+    target_user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
+    action = Column(String(20), nullable=False)       # approve / reject / deactivate / reactivate
+    reason = Column(String(300), nullable=True)
