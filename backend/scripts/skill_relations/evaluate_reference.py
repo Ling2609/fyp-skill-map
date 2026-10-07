@@ -34,12 +34,16 @@ so results of different models never overwrite each other. Cosine is the same in
 import argparse
 import json
 import os
+import sys
 
 import numpy as np
 import pandas as pd
 import torch
 from sklearn.metrics import f1_score, precision_score, recall_score
 from transformers import AutoModelForSequenceClassification, AutoTokenizer
+
+sys.path.append(".")
+from app.services.model_folder import members  # noqa: E402  (no app settings needed)
 
 PAIRS_CSV = "data/skill_relations/reference_pairs_v1.csv"
 MODEL_DIR = "data/relation_model_esco_onet"
@@ -55,14 +59,22 @@ def cosine_class(sim: float) -> str:
 
 @torch.no_grad()
 def model_predict(a: list[str], b: list[str], model_dir: str = MODEL_DIR) -> tuple[list[str], np.ndarray]:
-    """Class and the three probabilities for each pair "a -> b" (the model reads the two names in order)."""
-    tok = AutoTokenizer.from_pretrained(model_dir)
-    model = AutoModelForSequenceClassification.from_pretrained(model_dir).eval()
-    probs = []
-    for i in range(0, len(a), 64):
-        batch = tok(a[i:i + 64], b[i:i + 64], padding=True, truncation=True, max_length=64, return_tensors="pt")
-        probs.append(torch.softmax(model(**batch).logits, dim=-1))
-    p = torch.cat(probs).numpy()
+    """Class and the three probabilities for each pair "a -> b" (the model reads the two names in order).
+    A seed ensemble (seed_*/ folders, run 6 on) averages its members' probabilities, as the app does."""
+    folders = members(model_dir)
+    if not folders:
+        raise SystemExit(f"{model_dir} has no config.json and no seed_*/ model folders")
+    total = None
+    for folder in folders:
+        tok = AutoTokenizer.from_pretrained(folder)
+        model = AutoModelForSequenceClassification.from_pretrained(folder).eval()
+        probs = []
+        for i in range(0, len(a), 64):
+            batch = tok(a[i:i + 64], b[i:i + 64], padding=True, truncation=True, max_length=64, return_tensors="pt")
+            probs.append(torch.softmax(model(**batch).logits, dim=-1))
+        p = torch.cat(probs).numpy()
+        total = p if total is None else total + p
+    p = total / len(folders)
     return [LABELS[k] for k in p.argmax(axis=1)], p
 
 
@@ -87,7 +99,7 @@ def weighted_accuracy(df: pd.DataFrame, truth: str, pred: str) -> float:
 
 
 SETS = {"v1": "data/skill_relations/reference_pairs_v1.csv", "v2": "data/skill_relations/reference_pairs_v2.csv",
-        "v3": "data/skill_relations/reference_pairs_v3.csv"}
+        "v3": "data/skill_relations/reference_pairs_v3.csv", "v4": "data/skill_relations/reference_pairs_v4.csv"}
 
 
 def weighted_has(df: pd.DataFrame, truth: str, has: pd.Series) -> dict:
@@ -115,7 +127,7 @@ def output_paths(model_dir: str, test_set: str = "v1") -> tuple[str, str]:
         tag = os.path.basename(os.path.normpath(model_dir)).replace("relation_model_", "")
         pred, out = pred.replace(".csv", f"_{tag}.csv"), out.replace(".json", f"_{tag}.json")
     if test_set != "v1":
-        tag = {"v2": "_set2", "v3": "_set3"}[test_set]
+        tag = {"v2": "_set2", "v3": "_set3", "v4": "_set4"}[test_set]
         pred, out = pred.replace(".csv", f"{tag}.csv"), out.replace(".json", f"{tag}.json")
     return pred, out
 
@@ -123,9 +135,10 @@ def output_paths(model_dir: str, test_set: str = "v1") -> tuple[str, str]:
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--model", default=MODEL_DIR, help="folder of the trained model (unzipped from Colab)")
-    ap.add_argument("--set", choices=sorted(SETS), default="v1", help="v1 = first test set, v2 = fresh blind set, v3 = run-5 blind set")
+    ap.add_argument("--set", choices=sorted(SETS), default="v1", help="v1 = first test set, v2 = fresh blind set, v3 = run-5 blind set, v4 = run-6 blind set")
     ap.add_argument("--cutoff", type=float, default=0.8, help="p_satisfies at or above = has it (the app's RELATION_CUTOFF)")
     ap.add_argument("--baseline", help="another model folder (run 4) to compare with on the same pairs (pass rule)")
+    ap.add_argument("--baseline-cutoff", type=float, default=0.8, help="the baseline's cut-off (run 4 in the app: 0.8)")
     args = ap.parse_args()
     model_dir = args.model
     global PAIRS_CSV
@@ -174,7 +187,7 @@ def main():
         # What students see: "has it" as the app decides it, weighted to the real mix of pairs
         rules = {"cosine >= 0.7": s.cosine >= 0.7, f"model p >= {args.cutoff}": s.p_satisfies >= args.cutoff}
         if args.baseline:
-            rules[f"baseline p >= {args.cutoff}"] = s.p_satisfies_baseline >= args.cutoff
+            rules[f"baseline p >= {args.baseline_cutoff}"] = s.p_satisfies_baseline >= args.baseline_cutoff
         wh = {who: weighted_has(s, col, has) for who, has in rules.items()}
         result[name]["weighted_has"] = wh
         print(f"\n'Has it' as the app decides, population-weighted (bands >= 0.55):")
@@ -182,7 +195,7 @@ def main():
         for who, r in wh.items():
             print(f"{who:<22} {r['precision']:>10} {r['recall']:>7} {r['f1']:>6}")
         if name == "majority" and args.baseline:
-            m, c, b = wh[f"model p >= {args.cutoff}"], wh["cosine >= 0.7"], wh[f"baseline p >= {args.cutoff}"]
+            m, c, b = wh[f"model p >= {args.cutoff}"], wh["cosine >= 0.7"], wh[f"baseline p >= {args.baseline_cutoff}"]
             beats_cos = bool(m["precision"] > c["precision"] and m["recall"] > c["recall"])
             beats_base = bool(m["f1"] > b["f1"])
             result["pass_rule"] = {"beats_cosine": beats_cos, "beats_baseline_f1": beats_base,
@@ -192,7 +205,8 @@ def main():
                   f"beats baseline on F1: {beats_base} -> {result['pass_rule']['verdict']}")
 
     os.makedirs(os.path.dirname(out_json), exist_ok=True)
-    json.dump({"model": model_dir, "baseline": args.baseline, "cutoff": args.cutoff, "pairs": PAIRS_CSV, **result}, open(out_json, "w"), indent=1)
+    json.dump({"model": model_dir, "baseline": args.baseline, "cutoff": args.cutoff,
+               "baseline_cutoff": args.baseline_cutoff, "pairs": PAIRS_CSV, **result}, open(out_json, "w"), indent=1)
     print(f"\nSaved predictions to {pred_csv} and the summary to {out_json}")
 
 

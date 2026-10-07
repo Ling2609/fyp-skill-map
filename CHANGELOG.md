@@ -3,9 +3,33 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 7 Oct 2026 — Run 6 prep: soft labels, every seed kept and averaged, blind set v4, cut-off chooser
+
+- (this commit) After run 5 failed the pass rule (7e6af09), research-backed changes (references.md "How to improve the
+  relation model"): run 4 is over-confident (p 0.99 / 0.001) on pairs that share words, and half the labelled pairs
+  were thrown away because the two judges disagreed.
+  - **Soft labels:** `merge_training_labels.py --soft` keeps every pair with 3+ of its 4 votes (2 judges x 2
+    orders) and writes the vote shares as the target (`p_satisfies`, `p_related`, `p_not`): v2 1,153 pairs
+    (was 482 agreed), v3 393; pairs with a skill of any blind set v1-v3 left out (47 + 7). Uma et al. 2021;
+    Wu et al. 2023.
+  - **Notebook:** trains on the vote shares (class-weighted cross-entropy against a distribution), option
+    `DROP_SOURCES=skillmap_extend` (the pairs that made run 5 over-correct), saves **every seed**
+    (`relation_model_<run>/seed_<n>/`), reports the seed ensemble; installs sentencepiece for DeBERTa-v3.
+  - **Seed ensemble in the app and the evaluation:** a model folder may hold `seed_*/` sub-folders; their
+    probabilities are averaged (`app/services/model_folder.py`, `skill_relation.py`, `evaluate_reference.py`).
+    One-model folders (run 4) work as before. Xu et al. 2020.
+  - **Blind set v4** (`sample_reference_pairs.py --set v4`, seed 13; skills of every training file incl. the
+    soft files and pairs of v1-v3 left out); `merge_reference_labels.py --set v4`; `evaluate_reference.py --set v4`
+    and `--baseline-cutoff` (run 4 stays at 0.8 while a run-6 model uses its own cut-off).
+  - **`choose_cutoff.py`:** picks a model's p_satisfies cut-off on v1-v3 (weighted F1, majority labels) before v4
+    exists, so the v4 test stays blind.
+- Checked offline with a tiny stand-in model (the sandbox can't download models): the notebook runs end to end
+  (soft targets on 2,694 rows, 398 extend rows dropped, seed_13/ and seed_42/ saved, ensemble reported), the app
+  loads a seed folder ("2 seeds averaged") and caches scores, evaluation and the cut-off chooser read it.
+
 ## 7 Oct 2026 — Academic structure: add, edit and remove modules; darker year headers
 
-- (this commit) Her review: modules were only pre-filled by the migration (from `data/modules.json`), with no way to
+- (0ce4c25) Her review: modules were only pre-filled by the migration (from `data/modules.json`), with no way to
   add one. Now (one programme, her decision: no "add programme"):
   - **+ Add module** (code, name, year, type, description): saved into the programme, then its skills are found in
     the description straight away (IR Objective 1) and it starts "To review". If the AI doesn't answer, the module is

@@ -23,6 +23,10 @@ so a confirmation needs NEW pairs. Its skills may repeat test-set skills (the mo
 skills of every training CSV and every pair already in reference_pairs_v1 are left out:
   python scripts/skill_relations/sample_reference_pairs.py --set v2
 
+Fourth blind set (run 6, 7 Oct): same bands, seed 13, skills of all training files (soft-label files too) and the
+pairs of v1-v3 left out:
+  python scripts/skill_relations/sample_reference_pairs.py --set v4
+
 Third blind set (run 5, 6 Oct): the p_satisfies cut-off is now chosen on v1 + v2, so the run-5 model is confirmed
 on new pairs again. Same bands as v2; skills of all three training CSVs and pairs of v1 and v2 are left out:
   python scripts/skill_relations/sample_reference_pairs.py --set v3
@@ -62,7 +66,14 @@ SETS = {"v1": dict(train=[TRAIN_CSV], bands=BANDS, seed=SEED, out=OUT, skip_pair
                    out=V2_OUT, skip_pairs_of=[OUT]),
         "v3": dict(train=[TRAIN_CSV, "data/skill_relations/pairs_skillmap_v2.csv",
                           "data/skill_relations/pairs_skillmap_v3.csv"], bands=BANDS_V2, seed=11,
-                   out="data/skill_relations/reference_pairs_v3.csv", skip_pairs_of=[OUT, V2_OUT])}
+                   out="data/skill_relations/reference_pairs_v3.csv", skip_pairs_of=[OUT, V2_OUT]),
+        # Run 6 (7 Oct): v1-v3 are all spent (the cut-off is chosen on them), so a fourth fresh set. Skills of every
+        # training file, the soft-label files included, are left out, and so are the pairs of v1, v2 and v3
+        "v4": dict(train=[TRAIN_CSV, "data/skill_relations/pairs_skillmap_v2.csv",
+                          "data/skill_relations/pairs_skillmap_v3.csv", "data/skill_relations/pairs_skillmap_v2_soft.csv",
+                          "data/skill_relations/pairs_skillmap_v3_soft.csv"], bands=BANDS_V2, seed=13,
+                   out="data/skill_relations/reference_pairs_v4.csv",
+                   skip_pairs_of=[OUT, V2_OUT, "data/skill_relations/reference_pairs_v3.csv"])}
 
 
 def sample_pairs(mod_names, mod_keys, job_names, job_keys, sims, seed=SEED, bands=BANDS, skip=frozenset()):
@@ -99,7 +110,7 @@ def sample_pairs(mod_names, mod_keys, job_names, job_keys, sims, seed=SEED, band
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--set", choices=sorted(SETS), default="v1", help="v1 = the first test set, v2 and v3 = fresh ones")
+    ap.add_argument("--set", choices=sorted(SETS), default="v1", help="v1 = the first test set, v2-v4 = fresh ones")
     ap.add_argument("--out", help="output CSV (default depends on --set)")
     args = ap.parse_args()
     cfg = SETS[args.set]

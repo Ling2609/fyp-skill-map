@@ -13,6 +13,9 @@ How matching uses it (app/services/skill_profile.py, match_matrix):
 SBERT picks the candidates and the model re-ranks them ("retrieve, then re-rank": Nogueira & Cho 2019). On both
 blind sets no real match had a cosine below 0.55 (lowest 0.551), so the floor loses no tested match.
 
+A model folder can hold one model or a seed ensemble (seed_*/ sub-folders, run 6 on): the members' probabilities
+are averaged (app/services/model_folder.py).
+
 Off unless RELATION_MODEL_DIR is set in backend/.env (e.g. data/relation_model_esco_onet_v1_skillmap_v2_nli_rw3x20).
 Off, or the folder missing, = the old rule (cosine >= 0.7), so the app never breaks because of the model.
 
@@ -27,6 +30,7 @@ import threading
 import numpy as np
 
 from app.config import settings
+from app.services.model_folder import members
 
 CANDIDATE_FLOOR = 0.55     # below: never the same skill on either blind set; the model is not asked
 CACHE_FILE = "data/relation_cache.json"
@@ -35,7 +39,7 @@ MAX_LEN = 64
 SATISFIES = 0              # class order of the training notebook: SATISFIES, RELATED, NOT
 
 _lock = threading.Lock()
-_model = None              # (tokeniser, model) once loaded; False = could not load (use the cosine rule)
+_model = None              # [(tokeniser, model), ...] once loaded (one per seed); False = could not load
 _cache: dict[str, float] | None = None
 _cache_model = None
 
@@ -57,16 +61,17 @@ def _load():
     if not path:
         _model = False
         return _model
-    if not os.path.isfile(os.path.join(path, "config.json")):
-        print(f"[relation] RELATION_MODEL_DIR={path} has no config.json: using the cosine >= 0.7 rule")
+    folders = members(path)
+    if not folders:
+        print(f"[relation] RELATION_MODEL_DIR={path} has no config.json (nor seed_*/ folders): using the cosine >= 0.7 rule")
         _model = False
         return _model
     try:
         from transformers import AutoModelForSequenceClassification, AutoTokenizer
-        tok = AutoTokenizer.from_pretrained(path)
-        model = AutoModelForSequenceClassification.from_pretrained(path).eval()
-        _model = (tok, model)
-        print(f"[relation] model loaded: {os.path.basename(os.path.normpath(path))}, cut-off {cutoff()}")
+        _model = [(AutoTokenizer.from_pretrained(f), AutoModelForSequenceClassification.from_pretrained(f).eval())
+                  for f in folders]
+        print(f"[relation] model loaded: {os.path.basename(os.path.normpath(path))}"
+              f"{f' ({len(folders)} seeds averaged)' if len(folders) > 1 else ''}, cut-off {cutoff()}")
     except Exception as e:                      # a broken download must not take the app down
         print(f"[relation] could not load {path}: {type(e).__name__}: {e}. Using the cosine >= 0.7 rule")
         _model = False
@@ -105,16 +110,21 @@ def _save_cache():
 
 
 def _score(a: list[str], b: list[str]) -> np.ndarray:
-    """p_satisfies for each pair a[i] -> b[i] (same as evaluate_reference.py: softmax over the 3 classes)."""
+    """p_satisfies for each pair a[i] -> b[i] (same as evaluate_reference.py: softmax over the 3 classes, averaged
+    over the seeds of an ensemble)."""
     import torch
-    tok, model = _model
-    out = []
+    if not a:
+        return np.zeros(0)
+    total = np.zeros(len(a))
     with torch.no_grad():
-        for i in range(0, len(a), BATCH):
-            batch = tok(a[i:i + BATCH], b[i:i + BATCH], padding=True, truncation=True, max_length=MAX_LEN,
-                        return_tensors="pt")
-            out.append(torch.softmax(model(**batch).logits, dim=-1)[:, SATISFIES])
-    return torch.cat(out).numpy() if out else np.zeros(0)
+        for tok, model in _model:
+            out = []
+            for i in range(0, len(a), BATCH):
+                batch = tok(a[i:i + BATCH], b[i:i + BATCH], padding=True, truncation=True, max_length=MAX_LEN,
+                            return_tensors="pt")
+                out.append(torch.softmax(model(**batch).logits, dim=-1)[:, SATISFIES])
+            total += torch.cat(out).numpy()
+    return total / len(_model)
 
 
 def p_satisfies(pairs: list[tuple[str, str]]) -> np.ndarray:

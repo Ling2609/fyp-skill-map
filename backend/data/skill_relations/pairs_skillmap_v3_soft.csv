@@ -1,0 +1,787 @@
+a,b,label5,source,split,p_satisfies,p_related,p_not,votes,label3
+AWS Cloud Architecture,AWS cloud security,RELATED,skillmap_sibling,train,0.25,0.75,0.0,4,RELATED
+AWS cloud security,AWS Cloud Architecture,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+Oracle Database,Oracle Database Administration,BROADER,skillmap_extend,train,0.5,0.5,0.0,4,RELATED
+Oracle Database Administration,Oracle Database,BROADER,skillmap_extend,train,0.5,0.5,0.0,4,RELATED
+Test Automation,Test Planning,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+Test Planning,Test Automation,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+Kubernetes,Kubernetes Orchestration,SAME,skillmap_extend,test,0.75,0.25,0.0,4,SATISFIES
+Kubernetes Orchestration,Kubernetes,SAME,skillmap_extend,test,1.0,0.0,0.0,4,SATISFIES
+Database monitoring,Database Programming,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+Database Programming,Database monitoring,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+Hardware Configuration,Hardware Troubleshooting,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+Hardware Troubleshooting,Hardware Configuration,RELATED,skillmap_sibling,train,0.25,0.75,0.0,4,RELATED
+Application debugging,Application Security,DIFFERENT,skillmap_sibling,test,0.0,0.0,1.0,4,NOT
+Application Security,Application debugging,DIFFERENT,skillmap_sibling,test,0.0,0.0,1.0,4,NOT
+Microsoft Dynamics,Microsoft Dynamics 365FO,BROADER,skillmap_extend,val,0.25,0.75,0.0,4,RELATED
+Microsoft Dynamics 365FO,Microsoft Dynamics,NARROWER,skillmap_extend,val,0.75,0.25,0.0,4,SATISFIES
+Web Services,SOAP Web Services,BROADER,skillmap_extend,test,0.25,0.75,0.0,4,RELATED
+SOAP Web Services,Web Services,NARROWER,skillmap_extend,test,0.75,0.25,0.0,4,SATISFIES
+Redis,Redis caching,BROADER,skillmap_extend,train,0.5,0.5,0.0,4,RELATED
+Redis caching,Redis,NARROWER,skillmap_extend,train,0.75,0.25,0.0,4,SATISFIES
+Switching,L2/L3 switching,BROADER,skillmap_extend,train,0.0,1.0,0.0,4,RELATED
+L2/L3 switching,Switching,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+Playwright,Playwright Automation,SAME,skillmap_extend,train,0.75,0.25,0.0,4,SATISFIES
+Playwright Automation,Playwright,SAME,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+Fine-tuning,Model fine-tuning,BROADER,skillmap_extend,val,0.5,0.5,0.0,4,RELATED
+Model fine-tuning,Fine-tuning,NARROWER,skillmap_extend,val,1.0,0.0,0.0,4,SATISFIES
+.NET,C# .NET,BROADER,skillmap_extend,train,0.0,1.0,0.0,4,RELATED
+C# .NET,.NET,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+Version Control,SVN Version Control,BROADER,skillmap_extend,train,0.0,1.0,0.0,4,RELATED
+SVN Version Control,Version Control,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+Test Case Design,Test Case Management,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+Test Case Management,Test Case Design,RELATED,skillmap_sibling,train,0.25,0.75,0.0,4,RELATED
+Database monitoring,Database Optimization,RELATED,skillmap_sibling,val,0.0,1.0,0.0,4,RELATED
+Database Optimization,Database monitoring,RELATED,skillmap_sibling,val,0.0,1.0,0.0,4,RELATED
+Business Automation,Business Reporting,RELATED,skillmap_sibling,train,0.0,0.75,0.25,4,RELATED
+Business Reporting,Business Automation,RELATED,skillmap_sibling,train,0.0,0.75,0.25,4,RELATED
+Business Process Analysis,Business Process Optimization,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+Business Process Optimization,Business Process Analysis,RELATED,skillmap_sibling,train,0.5,0.5,0.0,4,RELATED
+IT Operations,IT Support,RELATED,skillmap_sibling,train,0.5,0.5,0.0,4,RELATED
+IT Support,IT Operations,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+Version Control,Git Version Control,BROADER,skillmap_extend,train,0.0,1.0,0.0,4,RELATED
+Git Version Control,Version Control,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+Performance Management,Performance Optimization,RELATED,skillmap_sibling,train,0.25,0.75,0.0,4,RELATED
+Performance Optimization,Performance Management,RELATED,skillmap_sibling,train,0.25,0.75,0.0,4,RELATED
+SSRS,SSRS Reporting,SAME,skillmap_extend,train,0.75,0.25,0.0,4,SATISFIES
+SSRS Reporting,SSRS,SAME,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+Hardware Troubleshooting,Server Hardware Troubleshooting,BROADER,skillmap_extend,train,0.0,1.0,0.0,4,RELATED
+Server Hardware Troubleshooting,Hardware Troubleshooting,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+Shell,Unix Shell Scripting,BROADER,skillmap_extend,train,0.25,0.75,0.0,4,RELATED
+Unix Shell Scripting,Shell,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+Backup,Backup Restore,BROADER,skillmap_extend,train,0.25,0.75,0.0,4,RELATED
+Backup Restore,Backup,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+Networking,Computer Networking,SAME,skillmap_extend,train,0.75,0.25,0.0,4,SATISFIES
+Computer Networking,Networking,SAME,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+API Security,API Testing,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+API Testing,API Security,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+Threat Analysis,Threat Modeling,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+Threat Modeling,Threat Analysis,RELATED,skillmap_sibling,train,0.5,0.5,0.0,4,RELATED
+Business Analysis,Business Reporting,RELATED,skillmap_sibling,train,0.25,0.75,0.0,4,RELATED
+Business Reporting,Business Analysis,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+Data Analytics,Data Governance,RELATED,skillmap_sibling,train,0.0,0.75,0.25,4,RELATED
+Data Governance,Data Analytics,RELATED,skillmap_sibling,train,0.0,0.75,0.25,4,RELATED
+Agile,Agile Project Management,BROADER,skillmap_extend,test,0.25,0.75,0.0,4,RELATED
+Agile Project Management,Agile,NARROWER,skillmap_extend,test,0.75,0.25,0.0,4,SATISFIES
+Server Deployment,Server Troubleshooting,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+Server Troubleshooting,Server Deployment,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+SQL,SQL Scripting,BROADER,skillmap_extend,train,0.25,0.75,0.0,4,RELATED
+SQL Scripting,SQL,NARROWER,skillmap_extend,train,0.75,0.25,0.0,4,SATISFIES
+Network installation,Network Operations,RELATED,skillmap_sibling,train,0.25,0.75,0.0,4,RELATED
+Network Operations,Network installation,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+Linux,Linux Server,BROADER,skillmap_extend,train,0.25,0.75,0.0,4,RELATED
+Linux Server,Linux,NARROWER,skillmap_extend,train,0.75,0.25,0.0,4,SATISFIES
+Wireless,Wireless Technologies,BROADER,skillmap_extend,train,0.5,0.5,0.0,4,RELATED
+Wireless Technologies,Wireless,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+Google Cloud,Google Cloud Platform,SAME,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+Google Cloud Platform,Google Cloud,SAME,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+Azure SQL,Azure SQL Database,BROADER,skillmap_extend,train,0.5,0.5,0.0,4,RELATED
+Azure SQL Database,Azure SQL,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+Encryption,Encryption Technologies,BROADER,skillmap_extend,train,0.5,0.5,0.0,4,RELATED
+Encryption Technologies,Encryption,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+Test Case Development,Test Case Management,RELATED,skillmap_sibling,val,0.25,0.75,0.0,4,RELATED
+Test Case Management,Test Case Development,RELATED,skillmap_sibling,val,0.0,1.0,0.0,4,RELATED
+Technical Design,Technical Documentation,RELATED,skillmap_sibling,train,0.0,0.75,0.25,4,RELATED
+Technical Documentation,Technical Design,RELATED,skillmap_sibling,train,0.0,0.75,0.25,4,RELATED
+Windows,Windows Server 2012,BROADER,skillmap_extend,train,0.0,1.0,0.0,4,RELATED
+Windows Server 2012,Windows,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+SD-WAN implementation,SD-WAN troubleshooting,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+SD-WAN troubleshooting,SD-WAN implementation,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+ServiceNow,ServiceNow incident handling,BROADER,skillmap_extend,train,0.0,1.0,0.0,4,RELATED
+ServiceNow incident handling,ServiceNow,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+Database configuration,Database monitoring,RELATED,skillmap_sibling,test,0.0,1.0,0.0,4,RELATED
+Database monitoring,Database configuration,RELATED,skillmap_sibling,test,0.0,1.0,0.0,4,RELATED
+Linux Administration,Unix/Linux administration,BROADER,skillmap_extend,train,0.5,0.5,0.0,4,RELATED
+Unix/Linux administration,Linux Administration,NARROWER,skillmap_extend,train,0.75,0.25,0.0,4,SATISFIES
+Data Architecture,Data Visualization,RELATED,skillmap_sibling,train,0.0,0.5,0.5,4,RELATED
+Data Visualization,Data Architecture,RELATED,skillmap_sibling,train,0.0,0.5,0.5,4,RELATED
+Data Engineering,Data Reporting,RELATED,skillmap_sibling,train,0.0,0.75,0.25,4,RELATED
+Data Reporting,Data Engineering,RELATED,skillmap_sibling,train,0.0,0.75,0.25,4,RELATED
+CI/CD,Jenkins CI/CD,BROADER,skillmap_extend,train,0.0,1.0,0.0,4,RELATED
+Jenkins CI/CD,CI/CD,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+Help Desk,Help Desk Ticketing,BROADER,skillmap_extend,val,0.25,0.75,0.0,4,RELATED
+Help Desk Ticketing,Help Desk,NARROWER,skillmap_extend,val,0.75,0.25,0.0,4,SATISFIES
+Microsoft 365,Microsoft 365 Exchange,BROADER,skillmap_extend,train,0.25,0.75,0.0,4,RELATED
+Microsoft 365 Exchange,Microsoft 365,NARROWER,skillmap_extend,train,0.75,0.25,0.0,4,SATISFIES
+Mentoring,Mentoring Juniors,BROADER,skillmap_extend,train,0.25,0.75,0.0,4,RELATED
+Mentoring Juniors,Mentoring,NARROWER,skillmap_extend,train,0.75,0.25,0.0,4,SATISFIES
+Hardware debugging,Hardware Maintenance,RELATED,skillmap_sibling,train,0.25,0.75,0.0,4,RELATED
+Hardware Maintenance,Hardware debugging,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+Application integration,Application Support,RELATED,skillmap_sibling,val,0.0,0.75,0.25,4,RELATED
+Application Support,Application integration,RELATED,skillmap_sibling,val,0.0,0.75,0.25,4,RELATED
+Selenium,Selenium Automation,SAME,skillmap_extend,train,0.75,0.25,0.0,4,SATISFIES
+Selenium Automation,Selenium,SAME,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+Database installation,Database Security,RELATED,skillmap_sibling,val,0.0,0.5,0.5,4,RELATED
+Database Security,Database installation,RELATED,skillmap_sibling,val,0.0,0.5,0.5,4,RELATED
+SEO,On-page SEO,BROADER,skillmap_extend,train,0.0,1.0,0.0,4,RELATED
+On-page SEO,SEO,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+Windows OS Installation,Windows OS Support,RELATED,skillmap_sibling,train,0.25,0.75,0.0,4,RELATED
+Windows OS Support,Windows OS Installation,RELATED,skillmap_sibling,train,0.25,0.75,0.0,4,RELATED
+Unix/Linux,Unix/Linux administration,BROADER,skillmap_extend,train,0.25,0.75,0.0,4,RELATED
+Unix/Linux administration,Unix/Linux,NARROWER,skillmap_extend,train,0.75,0.25,0.0,4,SATISFIES
+Network Maintenance,Network Testing,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+Network Testing,Network Maintenance,RELATED,skillmap_sibling,train,0.25,0.75,0.0,4,RELATED
+Apache,Apache Iceberg,BROADER,skillmap_extend,test,0.0,0.5,0.5,4,RELATED
+Apache Iceberg,Apache,DIFFERENT,skillmap_extend,test,0.5,0.0,0.5,4,NOT
+Risk Development,Risk Analysis,NARROWER,skillmap_sibling,train,0.5,0.25,0.25,4,SATISFIES
+Risk Analysis,Risk Development,BROADER,skillmap_sibling,train,0.0,0.75,0.25,4,RELATED
+Data Management,Data Reporting,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+Data Reporting,Data Management,RELATED,skillmap_sibling,train,0.25,0.75,0.0,4,RELATED
+Collaboration,QA collaboration,BROADER,skillmap_extend,train,0.0,1.0,0.0,4,RELATED
+QA collaboration,Collaboration,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+Mobile Testing,Appium Mobile Testing,BROADER,skillmap_extend,train,0.0,1.0,0.0,4,RELATED
+Appium Mobile Testing,Mobile Testing,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+Code maintenance,Code Review,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+Code Review,Code maintenance,RELATED,skillmap_sibling,train,0.25,0.75,0.0,4,RELATED
+Policy Enforcement,Password policy enforcement,BROADER,skillmap_extend,test,0.0,1.0,0.0,4,RELATED
+Password policy enforcement,Policy Enforcement,NARROWER,skillmap_extend,test,1.0,0.0,0.0,4,SATISFIES
+SEO,SEO Optimization,BROADER,skillmap_extend,train,0.5,0.5,0.0,4,RELATED
+SEO Optimization,SEO,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+IT Administration,IT Security,RELATED,skillmap_sibling,train,0.0,0.75,0.25,4,RELATED
+IT Security,IT Administration,RELATED,skillmap_sibling,train,0.0,0.75,0.25,4,RELATED
+Azure,Azure Monitor,BROADER,skillmap_extend,train,0.0,1.0,0.0,4,RELATED
+Azure Monitor,Azure,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+SQL Optimization,SQL Scripting,RELATED,skillmap_sibling,val,0.0,1.0,0.0,4,RELATED
+SQL Scripting,SQL Optimization,RELATED,skillmap_sibling,val,0.0,1.0,0.0,4,RELATED
+Data Modeling,Data Visualization,RELATED,skillmap_sibling,train,0.0,0.75,0.25,4,RELATED
+Data Visualization,Data Modeling,RELATED,skillmap_sibling,train,0.0,0.75,0.25,4,RELATED
+Database Optimization,Database Tuning,SAME,skillmap_sibling,val,0.75,0.25,0.0,4,SATISFIES
+Database Tuning,Database Optimization,SAME,skillmap_sibling,val,1.0,0.0,0.0,4,SATISFIES
+Network Security,Network Support,RELATED,skillmap_sibling,train,0.0,0.75,0.25,4,RELATED
+Network Support,Network Security,RELATED,skillmap_sibling,train,0.0,0.75,0.25,4,RELATED
+Network Implementation,Network Optimization,RELATED,skillmap_sibling,train,0.0,0.75,0.25,4,RELATED
+Network Optimization,Network Implementation,RELATED,skillmap_sibling,train,0.0,0.75,0.25,4,RELATED
+Predictive Analytics,Predictive Modeling,SAME,skillmap_sibling,train,0.75,0.25,0.0,4,SATISFIES
+Predictive Modeling,Predictive Analytics,SAME,skillmap_sibling,train,0.75,0.25,0.0,4,SATISFIES
+Incident Response,Incident Response Planning,NARROWER,skillmap_extend,train,0.5,0.5,0.0,4,SATISFIES
+Incident Response Planning,Incident Response,BROADER,skillmap_extend,train,0.25,0.75,0.0,4,RELATED
+Windows,Windows Imaging,BROADER,skillmap_extend,train,0.25,0.75,0.0,4,RELATED
+Windows Imaging,Windows,NARROWER,skillmap_extend,train,0.75,0.25,0.0,4,SATISFIES
+ERP Administration,ERP Support,RELATED,skillmap_sibling,test,0.5,0.5,0.0,4,RELATED
+ERP Support,ERP Administration,RELATED,skillmap_sibling,test,0.0,1.0,0.0,4,RELATED
+Red Hat,Red Hat Linux,BROADER,skillmap_extend,train,0.0,1.0,0.0,4,RELATED
+Red Hat Linux,Red Hat,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+Network Architecture,Network Design,SAME,skillmap_sibling,train,1.0,0.0,0.0,4,SATISFIES
+Network Design,Network Architecture,SAME,skillmap_sibling,train,1.0,0.0,0.0,4,SATISFIES
+switches,Network Switches,BROADER,skillmap_extend,train,0.5,0.5,0.0,4,RELATED
+Network Switches,switches,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+IT Security,IT Support,DIFFERENT,skillmap_sibling,train,0.0,0.25,0.75,4,NOT
+IT Support,IT Security,DIFFERENT,skillmap_sibling,train,0.0,0.25,0.75,4,NOT
+Mentoring,Mentoring Engineers,BROADER,skillmap_extend,train,0.5,0.5,0.0,4,RELATED
+Mentoring Engineers,Mentoring,NARROWER,skillmap_extend,train,0.75,0.25,0.0,4,SATISFIES
+AWS,AWS EC2,BROADER,skillmap_extend,val,0.0,1.0,0.0,4,RELATED
+AWS EC2,AWS,NARROWER,skillmap_extend,val,1.0,0.0,0.0,4,SATISFIES
+Application debugging,Application Monitoring,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+Application Monitoring,Application debugging,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+VPN Configuration,VPN Management,NARROWER,skillmap_sibling,train,0.75,0.25,0.0,4,SATISFIES
+VPN Management,VPN Configuration,BROADER,skillmap_sibling,train,0.5,0.5,0.0,4,RELATED
+Data Architecture,Data validation,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+Data validation,Data Architecture,RELATED,skillmap_sibling,train,0.25,0.75,0.0,4,RELATED
+Web Design,Web Security,DIFFERENT,skillmap_sibling,train,0.0,0.25,0.75,4,NOT
+Web Security,Web Design,DIFFERENT,skillmap_sibling,train,0.0,0.25,0.75,4,NOT
+IDS/IPS,IDS/IPS configuration,BROADER,skillmap_extend,train,0.25,0.75,0.0,4,RELATED
+IDS/IPS configuration,IDS/IPS,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+Network Maintenance,Network Monitoring,RELATED,skillmap_sibling,train,0.25,0.75,0.0,4,RELATED
+Network Monitoring,Network Maintenance,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+Office 365,Office 365 Support,BROADER,skillmap_extend,test,0.25,0.75,0.0,4,RELATED
+Office 365 Support,Office 365,NARROWER,skillmap_extend,test,1.0,0.0,0.0,4,SATISFIES
+Cost Management,Cost Optimization,BROADER,skillmap_sibling,train,0.5,0.5,0.0,4,RELATED
+Cost Optimization,Cost Management,NARROWER,skillmap_sibling,train,1.0,0.0,0.0,4,SATISFIES
+Network Architecture,Network Configuration,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+Network Configuration,Network Architecture,RELATED,skillmap_sibling,train,0.25,0.75,0.0,4,RELATED
+Data Engineering,Data Integration,BROADER,skillmap_sibling,train,0.25,0.75,0.0,4,RELATED
+Data Integration,Data Engineering,NARROWER,skillmap_sibling,train,0.75,0.25,0.0,4,SATISFIES
+Mandarin Communication,English Mandarin Communication,BROADER,skillmap_extend,test,0.25,0.75,0.0,4,RELATED
+English Mandarin Communication,Mandarin Communication,NARROWER,skillmap_extend,test,1.0,0.0,0.0,4,SATISFIES
+IDS,IDS/IPS configuration,BROADER,skillmap_extend,train,0.0,1.0,0.0,4,RELATED
+IDS/IPS configuration,IDS,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+Oracle,Oracle PL/SQL,BROADER,skillmap_extend,train,0.0,1.0,0.0,4,RELATED
+Oracle PL/SQL,Oracle,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+Splunk,Splunk SIEM,BROADER,skillmap_extend,train,0.25,0.75,0.0,4,RELATED
+Splunk SIEM,Splunk,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+Service Desk,Service Desk Operations,NARROWER,skillmap_extend,train,0.75,0.25,0.0,4,SATISFIES
+Service Desk Operations,Service Desk,BROADER,skillmap_extend,train,0.5,0.5,0.0,4,RELATED
+Application architecture,Application debugging,RELATED,skillmap_sibling,train,0.0,0.75,0.25,4,RELATED
+Application debugging,Application architecture,RELATED,skillmap_sibling,train,0.0,0.75,0.25,4,RELATED
+Cybersecurity,Cybersecurity Governance,BROADER,skillmap_extend,train,0.0,1.0,0.0,4,RELATED
+Cybersecurity Governance,Cybersecurity,NARROWER,skillmap_extend,train,0.75,0.25,0.0,4,SATISFIES
+Remote Desktop,Remote Desktop Support,BROADER,skillmap_extend,train,0.25,0.75,0.0,4,RELATED
+Remote Desktop Support,Remote Desktop,NARROWER,skillmap_extend,train,0.75,0.25,0.0,4,SATISFIES
+SIEM Integration,SIEM Management,NARROWER,skillmap_sibling,train,0.5,0.5,0.0,4,SATISFIES
+SIEM Management,SIEM Integration,BROADER,skillmap_sibling,train,0.25,0.75,0.0,4,RELATED
+Recovery,Data Recovery,BROADER,skillmap_extend,train,0.0,1.0,0.0,4,RELATED
+Data Recovery,Recovery,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+MongoDB,MongoDB Administration,BROADER,skillmap_extend,train,0.5,0.5,0.0,4,RELATED
+MongoDB Administration,MongoDB,BROADER,skillmap_extend,train,0.5,0.5,0.0,4,RELATED
+Network Engineering,Network Programming,RELATED,skillmap_sibling,train,0.0,0.75,0.25,4,RELATED
+Network Programming,Network Engineering,RELATED,skillmap_sibling,train,0.0,0.75,0.25,4,RELATED
+Remote Desktop,Remote Desktop Troubleshooting,BROADER,skillmap_extend,train,0.0,1.0,0.0,4,RELATED
+Remote Desktop Troubleshooting,Remote Desktop,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+SAP,SAP ERP 6.0,BROADER,skillmap_extend,val,0.0,1.0,0.0,4,RELATED
+SAP ERP 6.0,SAP,NARROWER,skillmap_extend,val,1.0,0.0,0.0,4,SATISFIES
+ServiceNow,ServiceNow Integration,BROADER,skillmap_extend,train,0.0,1.0,0.0,4,RELATED
+ServiceNow Integration,ServiceNow,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+Network Configuration,Network Engineering,BROADER,skillmap_sibling,test,0.5,0.5,0.0,4,RELATED
+Network Engineering,Network Configuration,BROADER,skillmap_sibling,test,0.5,0.5,0.0,4,RELATED
+MVP,MVP Architecture,BROADER,skillmap_extend,test,0.0,0.75,0.25,4,RELATED
+MVP Architecture,MVP,NARROWER,skillmap_extend,test,0.75,0.0,0.25,4,SATISFIES
+Cloud,Cloud Sales,BROADER,skillmap_extend,train,0.0,1.0,0.0,4,RELATED
+Cloud Sales,Cloud,NARROWER,skillmap_extend,train,0.75,0.25,0.0,4,SATISFIES
+SIEM,SIEM Integration,BROADER,skillmap_extend,val,0.0,1.0,0.0,4,RELATED
+SIEM Integration,SIEM,NARROWER,skillmap_extend,val,1.0,0.0,0.0,4,SATISFIES
+Cloud Deployment,Cloud Migration,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+Cloud Migration,Cloud Deployment,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+Hardware Configuration,Hardware Testing,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+Hardware Testing,Hardware Configuration,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+Software Architecture,Software Documentation,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+Software Documentation,Software Architecture,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+Selenium Automation,Selenium Testing,SAME,skillmap_sibling,train,1.0,0.0,0.0,4,SATISFIES
+Selenium Testing,Selenium Automation,SAME,skillmap_sibling,train,1.0,0.0,0.0,4,SATISFIES
+UML,UML Modeling,BROADER,skillmap_extend,train,0.5,0.5,0.0,4,RELATED
+UML Modeling,UML,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+Functional configuration,Functional Specification,RELATED,skillmap_sibling,test,0.0,0.75,0.25,4,RELATED
+Functional Specification,Functional configuration,RELATED,skillmap_sibling,test,0.0,0.75,0.25,4,RELATED
+LAN/WAN design,LAN/WAN Management,RELATED,skillmap_sibling,train,0.25,0.75,0.0,4,RELATED
+LAN/WAN Management,LAN/WAN design,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+User Administration,User Training,RELATED,skillmap_sibling,train,0.0,0.5,0.5,4,RELATED
+User Training,User Administration,RELATED,skillmap_sibling,train,0.0,0.5,0.5,4,RELATED
+Software Architecture,Software programming,NARROWER,skillmap_sibling,train,0.5,0.25,0.25,4,SATISFIES
+Software programming,Software Architecture,BROADER,skillmap_sibling,train,0.0,0.75,0.25,4,RELATED
+Sales Engineering,Sales Strategy,RELATED,skillmap_sibling,val,0.0,0.75,0.25,4,RELATED
+Sales Strategy,Sales Engineering,RELATED,skillmap_sibling,val,0.0,0.75,0.25,4,RELATED
+Compliance Reporting,Compliance Testing,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+Compliance Testing,Compliance Reporting,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+Incident Management,Incident Review,BROADER,skillmap_sibling,train,0.25,0.75,0.0,4,RELATED
+Incident Review,Incident Management,NARROWER,skillmap_sibling,train,0.75,0.25,0.0,4,SATISFIES
+LAN Administration,LAN Configuration,NARROWER,skillmap_sibling,train,0.75,0.25,0.0,4,SATISFIES
+LAN Configuration,LAN Administration,BROADER,skillmap_sibling,train,0.25,0.75,0.0,4,RELATED
+MES implementation,MES Support,RELATED,skillmap_sibling,train,0.5,0.5,0.0,4,RELATED
+MES Support,MES implementation,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+AKS,Azure AKS,SAME,skillmap_extend,train,0.75,0.25,0.0,4,SATISFIES
+Azure AKS,AKS,SAME,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+Groovy,Groovy scripting,BROADER,skillmap_extend,val,0.5,0.5,0.0,4,RELATED
+Groovy scripting,Groovy,NARROWER,skillmap_extend,val,1.0,0.0,0.0,4,SATISFIES
+Data Automation,Data validation,RELATED,skillmap_sibling,train,0.0,0.75,0.25,4,RELATED
+Data validation,Data Automation,RELATED,skillmap_sibling,train,0.0,0.75,0.25,4,RELATED
+Wi-Fi,Wi-Fi Administration,BROADER,skillmap_extend,test,0.25,0.75,0.0,4,RELATED
+Wi-Fi Administration,Wi-Fi,NARROWER,skillmap_extend,test,0.75,0.25,0.0,4,SATISFIES
+CCIE,CCIE certification,SAME,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+CCIE certification,CCIE,SAME,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+Android Deployment,Android testing,RELATED,skillmap_sibling,test,0.0,1.0,0.0,4,RELATED
+Android testing,Android Deployment,RELATED,skillmap_sibling,test,0.0,1.0,0.0,4,RELATED
+Software Installation,Software Training,DIFFERENT,skillmap_sibling,train,0.0,0.25,0.75,4,NOT
+Software Training,Software Installation,DIFFERENT,skillmap_sibling,train,0.0,0.25,0.75,4,NOT
+Network Configuration,Network Testing,RELATED,skillmap_sibling,test,0.0,1.0,0.0,4,RELATED
+Network Testing,Network Configuration,RELATED,skillmap_sibling,test,0.0,1.0,0.0,4,RELATED
+Financial Analysis,Financial Management,BROADER,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+Financial Management,Financial Analysis,NARROWER,skillmap_sibling,train,0.75,0.25,0.0,4,SATISFIES
+SAP Integration,SAP Reporting,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+SAP Reporting,SAP Integration,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+Interface development,Interface Design,RELATED,skillmap_sibling,train,0.25,0.75,0.0,4,RELATED
+Interface Design,Interface development,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+ServiceNow Administration,ServiceNow Integration,RELATED,skillmap_sibling,train,0.25,0.75,0.0,4,RELATED
+ServiceNow Integration,ServiceNow Administration,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+Financial Modeling,Financial Reporting,RELATED,skillmap_sibling,test,0.0,1.0,0.0,4,RELATED
+Financial Reporting,Financial Modeling,RELATED,skillmap_sibling,test,0.0,1.0,0.0,4,RELATED
+Software Architecture,Software Installation,DIFFERENT,skillmap_sibling,train,0.0,0.0,1.0,4,NOT
+Software Installation,Software Architecture,DIFFERENT,skillmap_sibling,train,0.0,0.0,1.0,4,NOT
+SQL Database,Azure SQL Database,BROADER,skillmap_extend,val,0.25,0.75,0.0,4,RELATED
+Azure SQL Database,SQL Database,NARROWER,skillmap_extend,val,1.0,0.0,0.0,4,SATISFIES
+ASP.NET,ASP.NET Core MVC,BROADER,skillmap_extend,train,0.0,1.0,0.0,4,RELATED
+ASP.NET Core MVC,ASP.NET,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+Roadmap Development,Roadmap Planning,SAME,skillmap_sibling,test,1.0,0.0,0.0,4,SATISFIES
+Roadmap Planning,Roadmap Development,SAME,skillmap_sibling,test,0.75,0.25,0.0,4,SATISFIES
+Virtualization,VM Virtualization,BROADER,skillmap_extend,train,0.0,1.0,0.0,4,RELATED
+VM Virtualization,Virtualization,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+IDS/IPS,IDS/IPS monitoring,BROADER,skillmap_extend,train,0.25,0.75,0.0,4,RELATED
+IDS/IPS monitoring,IDS/IPS,NARROWER,skillmap_extend,train,0.75,0.25,0.0,4,SATISFIES
+Prototyping,Rapid Prototyping,BROADER,skillmap_extend,train,0.25,0.75,0.0,4,RELATED
+Rapid Prototyping,Prototyping,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+Nexus,Cisco Nexus,BROADER,skillmap_extend,train,0.5,0.5,0.0,4,RELATED
+Cisco Nexus,Nexus,NARROWER,skillmap_extend,train,0.75,0.25,0.0,4,SATISFIES
+API Development,API Security,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+API Security,API Development,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+Routing,Cisco Routing,BROADER,skillmap_extend,train,0.25,0.75,0.0,4,RELATED
+Cisco Routing,Routing,NARROWER,skillmap_extend,train,0.75,0.25,0.0,4,SATISFIES
+Cost Analysis,Cost Management,BROADER,skillmap_sibling,train,0.5,0.5,0.0,4,RELATED
+Cost Management,Cost Analysis,NARROWER,skillmap_sibling,train,0.75,0.25,0.0,4,SATISFIES
+Kanban,Kanban methodology,SAME,skillmap_extend,test,1.0,0.0,0.0,4,SATISFIES
+Kanban methodology,Kanban,SAME,skillmap_extend,test,1.0,0.0,0.0,4,SATISFIES
+SIEM,SIEM implementation,BROADER,skillmap_extend,val,0.0,1.0,0.0,4,RELATED
+SIEM implementation,SIEM,NARROWER,skillmap_extend,val,1.0,0.0,0.0,4,SATISFIES
+Release Management,Release Planning,BROADER,skillmap_sibling,train,0.25,0.75,0.0,4,RELATED
+Release Planning,Release Management,NARROWER,skillmap_sibling,train,0.5,0.5,0.0,4,SATISFIES
+IPS,IDS/IPS configuration,BROADER,skillmap_extend,train,0.25,0.75,0.0,4,RELATED
+IDS/IPS configuration,IPS,NARROWER,skillmap_extend,train,0.75,0.25,0.0,4,SATISFIES
+IT Governance,IT Operations,DIFFERENT,skillmap_sibling,train,0.25,0.25,0.5,4,NOT
+IT Operations,IT Governance,DIFFERENT,skillmap_sibling,train,0.0,0.5,0.5,4,NOT
+Software Engineering,Software Training,DIFFERENT,skillmap_sibling,val,0.0,0.25,0.75,4,NOT
+Software Training,Software Engineering,DIFFERENT,skillmap_sibling,val,0.0,0.25,0.75,4,NOT
+Red Hat,Red Hat Enterprise Linux,BROADER,skillmap_extend,train,0.0,1.0,0.0,4,RELATED
+Red Hat Enterprise Linux,Red Hat,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+Apache,Apache Tomcat,BROADER,skillmap_extend,test,0.0,1.0,0.0,4,RELATED
+Apache Tomcat,Apache,NARROWER,skillmap_extend,test,1.0,0.0,0.0,4,SATISFIES
+Business Process Automation,Business Process Documentation,RELATED,skillmap_sibling,train,0.0,0.75,0.25,4,RELATED
+Business Process Documentation,Business Process Automation,RELATED,skillmap_sibling,train,0.0,0.75,0.25,4,RELATED
+Storage,Storage solutions,BROADER,skillmap_extend,test,0.25,0.75,0.0,4,RELATED
+Storage solutions,Storage,NARROWER,skillmap_extend,test,1.0,0.0,0.0,4,SATISFIES
+Server Installation,Server Maintenance,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+Server Maintenance,Server Installation,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+Cost Analysis,Cost Estimation,RELATED,skillmap_sibling,train,0.25,0.75,0.0,4,RELATED
+Cost Estimation,Cost Analysis,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+macOS,macOS Administration,BROADER,skillmap_extend,train,0.0,1.0,0.0,4,RELATED
+macOS Administration,macOS,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+Load balancer,F5 Load Balancer,BROADER,skillmap_extend,train,0.0,1.0,0.0,4,RELATED
+F5 Load Balancer,Load balancer,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+Data Migration,Data Modeling,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+Data Modeling,Data Migration,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+Cloud,Cloud Optimization,BROADER,skillmap_extend,train,0.0,1.0,0.0,4,RELATED
+Cloud Optimization,Cloud,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+Printer configuration,Printer Maintenance,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+Printer Maintenance,Printer configuration,RELATED,skillmap_sibling,train,0.5,0.5,0.0,4,RELATED
+Functional Testing,Non-functional Testing,RELATED,skillmap_extend,train,0.0,1.0,0.0,4,RELATED
+Non-functional Testing,Functional Testing,RELATED,skillmap_extend,train,0.0,1.0,0.0,4,RELATED
+WAN,LAN/WAN,NARROWER,skillmap_extend,train,0.75,0.25,0.0,4,SATISFIES
+LAN/WAN,WAN,BROADER,skillmap_extend,train,0.25,0.75,0.0,4,RELATED
+.NET,.NET Core,BROADER,skillmap_extend,train,0.0,1.0,0.0,4,RELATED
+.NET Core,.NET,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+Web Analytics,Web Testing,RELATED,skillmap_sibling,val,0.0,0.75,0.25,4,RELATED
+Web Testing,Web Analytics,RELATED,skillmap_sibling,val,0.0,0.75,0.25,4,RELATED
+Agile,Agile Delivery,BROADER,skillmap_extend,test,0.25,0.75,0.0,4,RELATED
+Agile Delivery,Agile,NARROWER,skillmap_extend,test,1.0,0.0,0.0,4,SATISFIES
+Oracle,Oracle R12,BROADER,skillmap_extend,train,0.0,1.0,0.0,4,RELATED
+Oracle R12,Oracle,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+Database,Database troubleshooting,BROADER,skillmap_extend,train,0.0,1.0,0.0,4,RELATED
+Database troubleshooting,Database,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+API Automation,API Security,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+API Security,API Automation,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+RPGLE,AS400 RPGLE,BROADER,skillmap_extend,train,0.5,0.5,0.0,4,RELATED
+AS400 RPGLE,RPGLE,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+IT Operations,IT Troubleshooting,BROADER,skillmap_sibling,train,0.25,0.75,0.0,4,RELATED
+IT Troubleshooting,IT Operations,NARROWER,skillmap_sibling,train,0.75,0.25,0.0,4,SATISFIES
+Performance Reporting,Performance Tuning,RELATED,skillmap_sibling,train,0.0,0.75,0.25,4,RELATED
+Performance Tuning,Performance Reporting,RELATED,skillmap_sibling,train,0.0,0.75,0.25,4,RELATED
+Network Monitoring,Network Optimization,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+Network Optimization,Network Monitoring,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+Technical Design,Technical Specification,RELATED,skillmap_sibling,train,0.25,0.75,0.0,4,RELATED
+Technical Specification,Technical Design,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+J2EE,Java J2EE,SAME,skillmap_extend,train,0.75,0.25,0.0,4,SATISFIES
+Java J2EE,J2EE,SAME,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+AWS,AWS data services,BROADER,skillmap_extend,val,0.0,1.0,0.0,4,RELATED
+AWS data services,AWS,NARROWER,skillmap_extend,val,1.0,0.0,0.0,4,SATISFIES
+Information Security,Information Security Policies,BROADER,skillmap_extend,train,0.0,1.0,0.0,4,RELATED
+Information Security Policies,Information Security,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+Network documentation,Network Management,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+Network Management,Network documentation,RELATED,skillmap_sibling,train,0.5,0.5,0.0,4,RELATED
+Database installation,Database Programming,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+Database Programming,Database installation,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+IT Infrastructure Design,IT infrastructure integration,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+IT infrastructure integration,IT Infrastructure Design,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+Access Management,User Access Management,BROADER,skillmap_extend,train,0.5,0.5,0.0,4,RELATED
+User Access Management,Access Management,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+Desktop troubleshooting,Remote Desktop Troubleshooting,BROADER,skillmap_extend,train,0.0,1.0,0.0,4,RELATED
+Remote Desktop Troubleshooting,Desktop troubleshooting,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+Compliance,Data Privacy Compliance,BROADER,skillmap_extend,val,0.0,1.0,0.0,4,RELATED
+Data Privacy Compliance,Compliance,NARROWER,skillmap_extend,val,1.0,0.0,0.0,4,SATISFIES
+Agile,Agile Coaching,BROADER,skillmap_extend,test,0.0,1.0,0.0,4,RELATED
+Agile Coaching,Agile,NARROWER,skillmap_extend,test,1.0,0.0,0.0,4,SATISFIES
+GraphQL,GraphQL API,BROADER,skillmap_extend,train,0.25,0.75,0.0,4,RELATED
+GraphQL API,GraphQL,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+SAP,SAP Integration,BROADER,skillmap_extend,val,0.0,1.0,0.0,4,RELATED
+SAP Integration,SAP,NARROWER,skillmap_extend,val,1.0,0.0,0.0,4,SATISFIES
+Infrastructure Automation,Infrastructure Management,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+Infrastructure Management,Infrastructure Automation,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+Compliance,Security Compliance,BROADER,skillmap_extend,val,0.0,1.0,0.0,4,RELATED
+Security Compliance,Compliance,NARROWER,skillmap_extend,val,1.0,0.0,0.0,4,SATISFIES
+Business Requirements Documentation,Business Requirements Analysis,RELATED,skillmap_sibling,test,0.0,1.0,0.0,4,RELATED
+Business Requirements Analysis,Business Requirements Documentation,RELATED,skillmap_sibling,test,0.5,0.5,0.0,4,RELATED
+Network automation,Network Operations,RELATED,skillmap_sibling,train,0.5,0.5,0.0,4,RELATED
+Network Operations,Network automation,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+SD-WAN,SD-WAN troubleshooting,BROADER,skillmap_extend,train,0.25,0.75,0.0,4,RELATED
+SD-WAN troubleshooting,SD-WAN,NARROWER,skillmap_extend,train,0.75,0.25,0.0,4,SATISFIES
+Hardware debugging,Hardware Installation,RELATED,skillmap_sibling,train,0.0,0.75,0.25,4,RELATED
+Hardware Installation,Hardware debugging,RELATED,skillmap_sibling,train,0.0,0.75,0.25,4,RELATED
+Cloud,Salesforce Sales Cloud,BROADER,skillmap_extend,train,0.0,1.0,0.0,4,RELATED
+Salesforce Sales Cloud,Cloud,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+Solaris,Solaris Administration,BROADER,skillmap_extend,train,0.0,1.0,0.0,4,RELATED
+Solaris Administration,Solaris,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+Database Administration,Oracle Database Administration,BROADER,skillmap_extend,train,0.0,1.0,0.0,4,RELATED
+Oracle Database Administration,Database Administration,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+Execution,Test case execution,BROADER,skillmap_extend,train,0.0,1.0,0.0,4,RELATED
+Test case execution,Execution,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+macOS,macOS troubleshooting,BROADER,skillmap_extend,train,0.0,1.0,0.0,4,RELATED
+macOS troubleshooting,macOS,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+Application Security,Application Troubleshooting,RELATED,skillmap_sibling,test,0.0,1.0,0.0,4,RELATED
+Application Troubleshooting,Application Security,RELATED,skillmap_sibling,test,0.0,1.0,0.0,4,RELATED
+Compliance,SDLC Compliance,BROADER,skillmap_extend,val,0.0,1.0,0.0,4,RELATED
+SDLC Compliance,Compliance,NARROWER,skillmap_extend,val,1.0,0.0,0.0,4,SATISFIES
+API Development,API Integration,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+API Integration,API Development,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+Network documentation,Network Support,RELATED,skillmap_sibling,train,0.0,0.75,0.25,4,RELATED
+Network Support,Network documentation,RELATED,skillmap_sibling,train,0.0,0.75,0.25,4,RELATED
+Hardware debugging,Hardware Troubleshooting,SAME,skillmap_sibling,train,1.0,0.0,0.0,4,SATISFIES
+Hardware Troubleshooting,Hardware debugging,SAME,skillmap_sibling,train,1.0,0.0,0.0,4,SATISFIES
+Network Maintenance,Network Security,RELATED,skillmap_sibling,train,0.0,0.75,0.25,4,RELATED
+Network Security,Network Maintenance,RELATED,skillmap_sibling,train,0.0,0.75,0.25,4,RELATED
+WAN,LAN/WAN Management,BROADER,skillmap_extend,train,0.25,0.75,0.0,4,RELATED
+LAN/WAN Management,WAN,NARROWER,skillmap_extend,train,0.75,0.25,0.0,4,SATISFIES
+SQL,Azure SQL,BROADER,skillmap_extend,train,0.0,1.0,0.0,4,RELATED
+Azure SQL,SQL,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+MES,MES implementation,BROADER,skillmap_extend,train,0.0,1.0,0.0,4,RELATED
+MES implementation,MES,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+Microsoft Teams,Microsoft Teams Integration,BROADER,skillmap_extend,train,0.0,1.0,0.0,4,RELATED
+Microsoft Teams Integration,Microsoft Teams,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+Backend Architecture,Backend Security,RELATED,skillmap_sibling,train,0.0,0.75,0.25,4,RELATED
+Backend Security,Backend Architecture,RELATED,skillmap_sibling,train,0.0,0.75,0.25,4,RELATED
+SAP Administration,SAP Configuration,RELATED,skillmap_sibling,test,0.5,0.5,0.0,4,RELATED
+SAP Configuration,SAP Administration,RELATED,skillmap_sibling,test,0.0,1.0,0.0,4,RELATED
+IT infrastructure integration,IT infrastructure maintenance,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+IT infrastructure maintenance,IT infrastructure integration,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+ServiceNow,ServiceNow Ticketing,BROADER,skillmap_extend,train,0.0,1.0,0.0,4,RELATED
+ServiceNow Ticketing,ServiceNow,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+Database maintenance,Database Security,RELATED,skillmap_sibling,val,0.0,1.0,0.0,4,RELATED
+Database Security,Database maintenance,RELATED,skillmap_sibling,val,0.0,1.0,0.0,4,RELATED
+Incident Reporting,Incident Review,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+Incident Review,Incident Reporting,RELATED,skillmap_sibling,train,0.25,0.75,0.0,4,RELATED
+ORM,Eloquent ORM,BROADER,skillmap_extend,train,0.0,1.0,0.0,4,RELATED
+Eloquent ORM,ORM,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+Trend Analysis,Market trend analysis,BROADER,skillmap_extend,train,0.0,1.0,0.0,4,RELATED
+Market trend analysis,Trend Analysis,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+Functional configuration,Functional Design,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+Functional Design,Functional configuration,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+OAuth,OAuth 2.0,BROADER,skillmap_extend,val,0.0,1.0,0.0,4,RELATED
+OAuth 2.0,OAuth,NARROWER,skillmap_extend,val,1.0,0.0,0.0,4,SATISFIES
+CISM,CISM Certification,SAME,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+CISM Certification,CISM,SAME,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+Shell,Shell Scripting,BROADER,skillmap_extend,train,0.25,0.75,0.0,4,RELATED
+Shell Scripting,Shell,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+Ticket Management,Incident Ticket Management,BROADER,skillmap_extend,train,0.25,0.75,0.0,4,RELATED
+Incident Ticket Management,Ticket Management,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+SAP Configuration,SAP Training,RELATED,skillmap_sibling,test,0.0,0.75,0.25,4,RELATED
+SAP Training,SAP Configuration,RELATED,skillmap_sibling,test,0.0,0.75,0.25,4,RELATED
+branding,Personal Branding,BROADER,skillmap_extend,test,0.25,0.75,0.0,4,RELATED
+Personal Branding,branding,NARROWER,skillmap_extend,test,1.0,0.0,0.0,4,SATISFIES
+JavaScript,JavaScript ES6,BROADER,skillmap_extend,train,0.0,1.0,0.0,4,RELATED
+JavaScript ES6,JavaScript,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+IDS,IDS/IPS,BROADER,skillmap_extend,train,0.5,0.5,0.0,4,RELATED
+IDS/IPS,IDS,BROADER,skillmap_extend,train,0.5,0.5,0.0,4,RELATED
+Database Integration,Database Tuning,RELATED,skillmap_sibling,train,0.0,0.75,0.25,4,RELATED
+Database Tuning,Database Integration,RELATED,skillmap_sibling,train,0.0,0.75,0.25,4,RELATED
+Big Data,Big Data Analytics,BROADER,skillmap_extend,train,0.25,0.75,0.0,4,RELATED
+Big Data Analytics,Big Data,NARROWER,skillmap_extend,train,0.75,0.25,0.0,4,SATISFIES
+Power BI,Power BI Report Server,BROADER,skillmap_extend,test,0.25,0.75,0.0,4,RELATED
+Power BI Report Server,Power BI,NARROWER,skillmap_extend,test,0.75,0.25,0.0,4,SATISFIES
+VPN implementation,VPN Troubleshooting,RELATED,skillmap_sibling,test,0.0,0.75,0.25,4,RELATED
+VPN Troubleshooting,VPN implementation,RELATED,skillmap_sibling,test,0.0,0.75,0.25,4,RELATED
+Scheduling,Delivery scheduling,BROADER,skillmap_extend,train,0.25,0.75,0.0,4,RELATED
+Delivery scheduling,Scheduling,NARROWER,skillmap_extend,train,0.75,0.25,0.0,4,SATISFIES
+OSPF,OSPF Protocol,SAME,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+OSPF Protocol,OSPF,SAME,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+User Support,User Training,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+User Training,User Support,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+LAN,LAN/WAN Management,BROADER,skillmap_extend,train,0.5,0.5,0.0,4,RELATED
+LAN/WAN Management,LAN,BROADER,skillmap_extend,train,0.5,0.5,0.0,4,RELATED
+Azure,Azure Resource Manager,BROADER,skillmap_extend,train,0.0,1.0,0.0,4,RELATED
+Azure Resource Manager,Azure,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+Functional Specification,Functional Testing,RELATED,skillmap_sibling,test,0.0,0.75,0.25,4,RELATED
+Functional Testing,Functional Specification,RELATED,skillmap_sibling,test,0.0,0.75,0.25,4,RELATED
+Office 365,Office 365 administration,BROADER,skillmap_extend,test,0.0,1.0,0.0,4,RELATED
+Office 365 administration,Office 365,NARROWER,skillmap_extend,test,1.0,0.0,0.0,4,SATISFIES
+IoT,IoT Solutions,BROADER,skillmap_extend,val,0.25,0.75,0.0,4,RELATED
+IoT Solutions,IoT,NARROWER,skillmap_extend,val,0.75,0.25,0.0,4,SATISFIES
+API Integration,API Testing,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+API Testing,API Integration,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+PHP,PHP Laravel,BROADER,skillmap_extend,train,0.0,1.0,0.0,4,RELATED
+PHP Laravel,PHP,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+Production Planning,Production Support,DIFFERENT,skillmap_sibling,train,0.0,0.25,0.75,4,NOT
+Production Support,Production Planning,DIFFERENT,skillmap_sibling,train,0.0,0.25,0.75,4,NOT
+Database Administration,Database Integration,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+Database Integration,Database Administration,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+Workflow Configuration,Workflow optimization,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+Workflow optimization,Workflow Configuration,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+SAP Administration,SAP Implementation,RELATED,skillmap_sibling,test,0.0,1.0,0.0,4,RELATED
+SAP Implementation,SAP Administration,RELATED,skillmap_sibling,test,0.25,0.75,0.0,4,RELATED
+Risk Analytics,Risk Reporting,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+Risk Reporting,Risk Analytics,RELATED,skillmap_sibling,train,0.25,0.75,0.0,4,RELATED
+Incident Management,Security Incident Management,BROADER,skillmap_extend,train,0.0,1.0,0.0,4,RELATED
+Security Incident Management,Incident Management,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+SQL,Microsoft SQL,BROADER,skillmap_extend,train,0.0,1.0,0.0,4,RELATED
+Microsoft SQL,SQL,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+MySQL,MySQL Administration,BROADER,skillmap_extend,train,0.0,1.0,0.0,4,RELATED
+MySQL Administration,MySQL,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+Red Hat,Red Hat OpenShift,BROADER,skillmap_extend,train,0.0,1.0,0.0,4,RELATED
+Red Hat OpenShift,Red Hat,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+Data Integration,Data Reporting,RELATED,skillmap_sibling,train,0.0,0.75,0.25,4,RELATED
+Data Reporting,Data Integration,RELATED,skillmap_sibling,train,0.0,0.75,0.25,4,RELATED
+Desktop Installation,Desktop Support,NARROWER,skillmap_sibling,train,0.75,0.25,0.0,4,SATISFIES
+Desktop Support,Desktop Installation,BROADER,skillmap_sibling,train,0.5,0.5,0.0,4,RELATED
+User Support,End-User Support,SAME,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+End-User Support,User Support,SAME,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+Performance Monitoring,Performance Reporting,RELATED,skillmap_sibling,test,0.0,1.0,0.0,4,RELATED
+Performance Reporting,Performance Monitoring,RELATED,skillmap_sibling,test,0.0,1.0,0.0,4,RELATED
+SOAP,SOAP Web Services,BROADER,skillmap_extend,train,0.25,0.75,0.0,4,RELATED
+SOAP Web Services,SOAP,NARROWER,skillmap_extend,train,0.75,0.25,0.0,4,SATISFIES
+Agile Documentation,Agile Testing,RELATED,skillmap_sibling,train,0.0,0.75,0.25,4,RELATED
+Agile Testing,Agile Documentation,RELATED,skillmap_sibling,train,0.0,0.75,0.25,4,RELATED
+Jenkins,Jenkins pipelines,BROADER,skillmap_extend,train,0.25,0.75,0.0,4,RELATED
+Jenkins pipelines,Jenkins,NARROWER,skillmap_extend,train,0.75,0.25,0.0,4,SATISFIES
+KPI Analysis,KPI Reporting,RELATED,skillmap_sibling,train,0.25,0.75,0.0,4,RELATED
+KPI Reporting,KPI Analysis,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+SQL Reporting,SQL Scripting,RELATED,skillmap_sibling,val,0.0,1.0,0.0,4,RELATED
+SQL Scripting,SQL Reporting,RELATED,skillmap_sibling,val,0.0,1.0,0.0,4,RELATED
+S/4HANA,SAP S/4HANA,SAME,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+SAP S/4HANA,S/4HANA,SAME,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+SAP Reporting,SAP Support,RELATED,skillmap_sibling,val,0.0,1.0,0.0,4,RELATED
+SAP Support,SAP Reporting,RELATED,skillmap_sibling,val,0.0,1.0,0.0,4,RELATED
+Network Management,Network Support,RELATED,skillmap_sibling,train,0.25,0.75,0.0,4,RELATED
+Network Support,Network Management,RELATED,skillmap_sibling,train,0.25,0.75,0.0,4,RELATED
+Patching,Software Patching,BROADER,skillmap_extend,train,0.25,0.75,0.0,4,RELATED
+Software Patching,Patching,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+Virtual Machines,Azure Virtual Machines,BROADER,skillmap_extend,train,0.0,1.0,0.0,4,RELATED
+Azure Virtual Machines,Virtual Machines,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+Project Deployment,Project Governance,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+Project Governance,Project Deployment,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+Hardware Deployment,Hardware Installation,NARROWER,skillmap_sibling,train,1.0,0.0,0.0,4,SATISFIES
+Hardware Installation,Hardware Deployment,BROADER,skillmap_sibling,train,0.5,0.5,0.0,4,RELATED
+Data Automation,Data Modeling,RELATED,skillmap_sibling,train,0.0,0.75,0.25,4,RELATED
+Data Modeling,Data Automation,RELATED,skillmap_sibling,train,0.0,0.75,0.25,4,RELATED
+User Training,End-User Training,SAME,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+End-User Training,User Training,SAME,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+Workflow Configuration,Workflow Design,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+Workflow Design,Workflow Configuration,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+Database,Database maintenance,BROADER,skillmap_extend,train,0.0,1.0,0.0,4,RELATED
+Database maintenance,Database,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+Unix,Unix Administration,BROADER,skillmap_extend,train,0.0,1.0,0.0,4,RELATED
+Unix Administration,Unix,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+Data Governance,Data Management,NARROWER,skillmap_sibling,train,0.5,0.5,0.0,4,SATISFIES
+Data Management,Data Governance,BROADER,skillmap_sibling,train,0.25,0.75,0.0,4,RELATED
+Infrastructure Management,Infrastructure monitoring,BROADER,skillmap_sibling,train,0.5,0.5,0.0,4,RELATED
+Infrastructure monitoring,Infrastructure Management,BROADER,skillmap_sibling,train,0.5,0.5,0.0,4,RELATED
+.NET,ASP.NET Web Forms,BROADER,skillmap_extend,train,0.0,1.0,0.0,4,RELATED
+ASP.NET Web Forms,.NET,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+Hardware Configuration,Hardware Deployment,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+Hardware Deployment,Hardware Configuration,RELATED,skillmap_sibling,train,0.5,0.5,0.0,4,RELATED
+Scheduling,Control-M Scheduling,BROADER,skillmap_extend,train,0.0,1.0,0.0,4,RELATED
+Control-M Scheduling,Scheduling,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+Active Directory,Azure Active Directory,BROADER,skillmap_extend,train,0.0,1.0,0.0,4,RELATED
+Azure Active Directory,Active Directory,NARROWER,skillmap_extend,train,0.75,0.25,0.0,4,SATISFIES
+Server Installation,Server Monitoring,RELATED,skillmap_sibling,train,0.0,0.75,0.25,4,RELATED
+Server Monitoring,Server Installation,RELATED,skillmap_sibling,train,0.0,0.75,0.25,4,RELATED
+LAN,Wireless LAN,BROADER,skillmap_extend,train,0.0,1.0,0.0,4,RELATED
+Wireless LAN,LAN,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+Network Design,Network Optimization,RELATED,skillmap_sibling,train,0.25,0.75,0.0,4,RELATED
+Network Optimization,Network Design,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+Database development,Database Programming,SAME,skillmap_sibling,train,1.0,0.0,0.0,4,SATISFIES
+Database Programming,Database development,SAME,skillmap_sibling,train,0.75,0.25,0.0,4,SATISFIES
+SOAP,SOAP API,BROADER,skillmap_extend,train,0.0,1.0,0.0,4,RELATED
+SOAP API,SOAP,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+Pre-sales Engineering,Pre-sales support,NARROWER,skillmap_sibling,train,1.0,0.0,0.0,4,SATISFIES
+Pre-sales support,Pre-sales Engineering,BROADER,skillmap_sibling,train,0.5,0.5,0.0,4,RELATED
+Change Management,ITIL Change Management,BROADER,skillmap_extend,train,0.0,1.0,0.0,4,RELATED
+ITIL Change Management,Change Management,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+Service Management,ITIL Service Management,BROADER,skillmap_extend,train,0.0,1.0,0.0,4,RELATED
+ITIL Service Management,Service Management,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+Remote Desktop Support,Remote Desktop Troubleshooting,SAME,skillmap_sibling,train,0.75,0.25,0.0,4,SATISFIES
+Remote Desktop Troubleshooting,Remote Desktop Support,SAME,skillmap_sibling,train,0.75,0.25,0.0,4,SATISFIES
+Project Coordination,IT Project Coordination,BROADER,skillmap_extend,train,0.0,1.0,0.0,4,RELATED
+IT Project Coordination,Project Coordination,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+Web Design,Web Development,RELATED,skillmap_sibling,train,0.25,0.75,0.0,4,RELATED
+Web Development,Web Design,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+Policy Development,Security Policy Development,BROADER,skillmap_extend,train,0.0,1.0,0.0,4,RELATED
+Security Policy Development,Policy Development,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+Patch Deployment,Patch Management,NARROWER,skillmap_sibling,train,0.75,0.25,0.0,4,SATISFIES
+Patch Management,Patch Deployment,BROADER,skillmap_sibling,train,0.5,0.5,0.0,4,RELATED
+Software programming,Software security,RELATED,skillmap_sibling,train,0.0,0.75,0.25,4,RELATED
+Software security,Software programming,RELATED,skillmap_sibling,train,0.25,0.5,0.25,4,RELATED
+Network automation,Network Security,RELATED,skillmap_sibling,train,0.0,0.5,0.5,4,RELATED
+Network Security,Network automation,RELATED,skillmap_sibling,train,0.0,0.5,0.5,4,RELATED
+Server Deployment,Server Migration,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+Server Migration,Server Deployment,RELATED,skillmap_sibling,train,0.25,0.75,0.0,4,RELATED
+Database Optimization,Database Security,RELATED,skillmap_sibling,val,0.0,0.75,0.25,4,RELATED
+Database Security,Database Optimization,RELATED,skillmap_sibling,val,0.0,0.75,0.25,4,RELATED
+Data Engineering,Data Management,NARROWER,skillmap_sibling,train,0.75,0.25,0.0,4,SATISFIES
+Data Management,Data Engineering,BROADER,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+Collaboration,Remote Collaboration,BROADER,skillmap_extend,train,0.25,0.75,0.0,4,RELATED
+Remote Collaboration,Collaboration,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+Encryption,SSL/TLS Encryption,BROADER,skillmap_extend,train,0.0,1.0,0.0,4,RELATED
+SSL/TLS Encryption,Encryption,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+Process Modeling,Process Optimization,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+Process Optimization,Process Modeling,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+Data Architecture,Data Governance,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+Data Governance,Data Architecture,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+Webpack,Webpack Bundler,SAME,skillmap_extend,val,0.75,0.25,0.0,4,SATISFIES
+Webpack Bundler,Webpack,SAME,skillmap_extend,val,1.0,0.0,0.0,4,SATISFIES
+Power BI,Power BI gateways,BROADER,skillmap_extend,test,0.0,1.0,0.0,4,RELATED
+Power BI gateways,Power BI,NARROWER,skillmap_extend,test,1.0,0.0,0.0,4,SATISFIES
+Database installation,Database Integration,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+Database Integration,Database installation,RELATED,skillmap_sibling,train,0.25,0.75,0.0,4,RELATED
+ASP.NET Core,ASP.NET Core MVC,BROADER,skillmap_extend,val,0.0,1.0,0.0,4,RELATED
+ASP.NET Core MVC,ASP.NET Core,NARROWER,skillmap_extend,val,1.0,0.0,0.0,4,SATISFIES
+Technical Support,Technical Troubleshooting,BROADER,skillmap_sibling,train,0.5,0.5,0.0,4,RELATED
+Technical Troubleshooting,Technical Support,NARROWER,skillmap_sibling,train,0.75,0.25,0.0,4,SATISFIES
+Capacity Planning,Network Capacity Planning,BROADER,skillmap_extend,train,0.0,1.0,0.0,4,RELATED
+Network Capacity Planning,Capacity Planning,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+Server Monitoring,Server Troubleshooting,RELATED,skillmap_sibling,test,0.0,1.0,0.0,4,RELATED
+Server Troubleshooting,Server Monitoring,RELATED,skillmap_sibling,test,0.0,1.0,0.0,4,RELATED
+Infrastructure Automation,Infrastructure monitoring,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+Infrastructure monitoring,Infrastructure Automation,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+Azure,Azure Security Center,BROADER,skillmap_extend,train,0.0,1.0,0.0,4,RELATED
+Azure Security Center,Azure,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+Performance Monitoring,Application Performance Monitoring,BROADER,skillmap_extend,train,0.0,1.0,0.0,4,RELATED
+Application Performance Monitoring,Performance Monitoring,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+Functional Design,Functional Testing,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+Functional Testing,Functional Design,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+Network performance monitoring,Network performance optimization,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+Network performance optimization,Network performance monitoring,RELATED,skillmap_sibling,train,0.25,0.75,0.0,4,RELATED
+IDS/IPS Management,IDS/IPS monitoring,NARROWER,skillmap_sibling,train,0.75,0.25,0.0,4,SATISFIES
+IDS/IPS monitoring,IDS/IPS Management,BROADER,skillmap_sibling,train,0.25,0.75,0.0,4,RELATED
+Mobile App Architecture,Mobile App Development,RELATED,skillmap_sibling,train,0.25,0.75,0.0,4,RELATED
+Mobile App Development,Mobile App Architecture,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+Business Architecture,Business Documentation,DIFFERENT,skillmap_sibling,train,0.25,0.25,0.5,4,NOT
+Business Documentation,Business Architecture,DIFFERENT,skillmap_sibling,train,0.0,0.5,0.5,4,NOT
+Network documentation,Network installation,RELATED,skillmap_sibling,train,0.0,0.75,0.25,4,RELATED
+Network installation,Network documentation,RELATED,skillmap_sibling,train,0.0,0.75,0.25,4,RELATED
+Help Desk,Help Desk Support,SAME,skillmap_extend,val,1.0,0.0,0.0,4,SATISFIES
+Help Desk Support,Help Desk,SAME,skillmap_extend,val,1.0,0.0,0.0,4,SATISFIES
+MES,Camstar MES,BROADER,skillmap_extend,test,0.0,1.0,0.0,4,RELATED
+Camstar MES,MES,NARROWER,skillmap_extend,test,1.0,0.0,0.0,4,SATISFIES
+VPN Configuration,VPN implementation,RELATED,skillmap_sibling,train,0.5,0.5,0.0,4,RELATED
+VPN implementation,VPN Configuration,RELATED,skillmap_sibling,train,0.5,0.5,0.0,4,RELATED
+CRM implementation,CRM Integration,RELATED,skillmap_sibling,train,0.5,0.5,0.0,4,RELATED
+CRM Integration,CRM implementation,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+Problem Management,ITIL problem management,BROADER,skillmap_extend,train,0.5,0.5,0.0,4,RELATED
+ITIL problem management,Problem Management,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+SQL Server,SQL Server Administration,BROADER,skillmap_extend,train,0.0,1.0,0.0,4,RELATED
+SQL Server Administration,SQL Server,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+Database,Database configuration,BROADER,skillmap_extend,train,0.0,1.0,0.0,4,RELATED
+Database configuration,Database,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+KPI Monitoring,KPI Reporting,RELATED,skillmap_sibling,train,0.25,0.75,0.0,4,RELATED
+KPI Reporting,KPI Monitoring,RELATED,skillmap_sibling,train,0.5,0.5,0.0,4,RELATED
+ABAP Development,ABAP debugging,BROADER,skillmap_sibling,train,0.25,0.75,0.0,4,RELATED
+ABAP debugging,ABAP Development,NARROWER,skillmap_sibling,train,0.75,0.25,0.0,4,SATISFIES
+Server Maintenance,Server Troubleshooting,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+Server Troubleshooting,Server Maintenance,RELATED,skillmap_sibling,train,0.25,0.75,0.0,4,RELATED
+Software Configuration,Software Documentation,RELATED,skillmap_sibling,train,0.0,0.5,0.5,4,RELATED
+Software Documentation,Software Configuration,RELATED,skillmap_sibling,train,0.0,0.5,0.5,4,RELATED
+AWS,AWS CloudFormation,BROADER,skillmap_extend,val,0.0,1.0,0.0,4,RELATED
+AWS CloudFormation,AWS,NARROWER,skillmap_extend,val,1.0,0.0,0.0,4,SATISFIES
+Website development,Website Maintenance,RELATED,skillmap_sibling,train,0.5,0.5,0.0,4,RELATED
+Website Maintenance,Website development,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+Business Intelligence,Business Intelligence Reporting,BROADER,skillmap_extend,train,0.25,0.75,0.0,4,RELATED
+Business Intelligence Reporting,Business Intelligence,NARROWER,skillmap_extend,train,0.75,0.25,0.0,4,SATISFIES
+Server Configuration,Server Migration,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+Server Migration,Server Configuration,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+Networking,Wireless networking,BROADER,skillmap_extend,train,0.25,0.75,0.0,4,RELATED
+Wireless networking,Networking,NARROWER,skillmap_extend,train,0.75,0.25,0.0,4,SATISFIES
+Client Support,Client Training,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+Client Training,Client Support,RELATED,skillmap_sibling,train,0.25,0.75,0.0,4,RELATED
+Control-M,Control-M Scheduling,BROADER,skillmap_extend,val,0.25,0.75,0.0,4,RELATED
+Control-M Scheduling,Control-M,NARROWER,skillmap_extend,val,1.0,0.0,0.0,4,SATISFIES
+Maven,Maven Build,BROADER,skillmap_extend,train,0.25,0.75,0.0,4,RELATED
+Maven Build,Maven,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+Network automation,Network Implementation,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+Network Implementation,Network automation,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+Routing,Routing protocols,BROADER,skillmap_extend,test,0.0,1.0,0.0,4,RELATED
+Routing protocols,Routing,NARROWER,skillmap_extend,test,1.0,0.0,0.0,4,SATISFIES
+Salesforce,Salesforce Sales Cloud,BROADER,skillmap_extend,train,0.0,1.0,0.0,4,RELATED
+Salesforce Sales Cloud,Salesforce,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+Procurement,Procurement Coordination,BROADER,skillmap_extend,test,0.0,1.0,0.0,4,RELATED
+Procurement Coordination,Procurement,NARROWER,skillmap_extend,test,1.0,0.0,0.0,4,SATISFIES
+Application Development,Application Security,RELATED,skillmap_sibling,train,0.0,0.75,0.25,4,RELATED
+Application Security,Application Development,RELATED,skillmap_sibling,train,0.25,0.5,0.25,4,RELATED
+Linux,Kali Linux,BROADER,skillmap_extend,train,0.0,1.0,0.0,4,RELATED
+Kali Linux,Linux,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+XML,XML Publisher,BROADER,skillmap_extend,train,0.0,1.0,0.0,4,RELATED
+XML Publisher,XML,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+User Access Review,User Access Management,BROADER,skillmap_sibling,train,0.25,0.75,0.0,4,RELATED
+User Access Management,User Access Review,NARROWER,skillmap_sibling,train,0.5,0.5,0.0,4,SATISFIES
+Network installation,Network Testing,RELATED,skillmap_sibling,val,0.0,1.0,0.0,4,RELATED
+Network Testing,Network installation,RELATED,skillmap_sibling,val,0.0,1.0,0.0,4,RELATED
+Network Management,Network Programming,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+Network Programming,Network Management,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+Sales Engineering,Sales Operations,RELATED,skillmap_sibling,val,0.0,0.75,0.25,4,RELATED
+Sales Operations,Sales Engineering,RELATED,skillmap_sibling,val,0.0,0.75,0.25,4,RELATED
+Procurement,Procurement Compliance,BROADER,skillmap_extend,test,0.0,1.0,0.0,4,RELATED
+Procurement Compliance,Procurement,NARROWER,skillmap_extend,test,1.0,0.0,0.0,4,SATISFIES
+Decision Making,Data-driven Decision Making,BROADER,skillmap_extend,train,0.0,1.0,0.0,4,RELATED
+Data-driven Decision Making,Decision Making,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+Workflow Automation,Workflow Configuration,RELATED,skillmap_sibling,train,0.25,0.75,0.0,4,RELATED
+Workflow Configuration,Workflow Automation,RELATED,skillmap_sibling,train,0.25,0.75,0.0,4,RELATED
+Database configuration,Database Migration,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+Database Migration,Database configuration,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+SIT Support,SIT Testing,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+SIT Testing,SIT Support,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+Reliability Engineering,Site Reliability Engineering,BROADER,skillmap_extend,train,0.25,0.75,0.0,4,RELATED
+Site Reliability Engineering,Reliability Engineering,NARROWER,skillmap_extend,train,0.75,0.25,0.0,4,SATISFIES
+Performance Tuning,SQL Performance Tuning,BROADER,skillmap_extend,train,0.0,1.0,0.0,4,RELATED
+SQL Performance Tuning,Performance Tuning,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+Apache,Apache Spark,DIFFERENT,skillmap_extend,test,0.0,0.5,0.5,4,NOT
+Apache Spark,Apache,DIFFERENT,skillmap_extend,test,0.25,0.25,0.5,4,NOT
+API Testing,Postman API Testing,BROADER,skillmap_extend,train,0.0,1.0,0.0,4,RELATED
+Postman API Testing,API Testing,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+Networking,AWS networking,BROADER,skillmap_extend,train,0.0,1.0,0.0,4,RELATED
+AWS networking,Networking,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+WAN,LAN/WAN networking,BROADER,skillmap_extend,train,0.5,0.5,0.0,4,RELATED
+LAN/WAN networking,WAN,BROADER,skillmap_extend,train,0.5,0.5,0.0,4,RELATED
+Antivirus deployment,Antivirus Management,BROADER,skillmap_sibling,train,0.25,0.75,0.0,4,RELATED
+Antivirus Management,Antivirus deployment,NARROWER,skillmap_sibling,train,0.5,0.5,0.0,4,SATISFIES
+Wireless,Wireless networking,BROADER,skillmap_extend,train,0.0,1.0,0.0,4,RELATED
+Wireless networking,Wireless,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+Collaboration,Global Collaboration,BROADER,skillmap_extend,train,0.0,1.0,0.0,4,RELATED
+Global Collaboration,Collaboration,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+Functional analysis,Functional configuration,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+Functional configuration,Functional analysis,RELATED,skillmap_sibling,train,0.25,0.75,0.0,4,RELATED
+EIGRP,EIGRP routing,BROADER,skillmap_extend,train,0.5,0.5,0.0,4,RELATED
+EIGRP routing,EIGRP,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+Scheduling,Shift Scheduling,BROADER,skillmap_extend,train,0.0,1.0,0.0,4,RELATED
+Shift Scheduling,Scheduling,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+SLA Management,SLA Monitoring,BROADER,skillmap_sibling,train,0.5,0.5,0.0,4,RELATED
+SLA Monitoring,SLA Management,BROADER,skillmap_sibling,train,0.5,0.5,0.0,4,RELATED
+Prometheus,Prometheus Monitoring,BROADER,skillmap_extend,val,0.5,0.5,0.0,4,RELATED
+Prometheus Monitoring,Prometheus,NARROWER,skillmap_extend,val,1.0,0.0,0.0,4,SATISFIES
+Windows,Windows OS,SAME,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+Windows OS,Windows,SAME,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+Service Desk Management,Service Desk Operations,NARROWER,skillmap_sibling,train,1.0,0.0,0.0,4,SATISFIES
+Service Desk Operations,Service Desk Management,BROADER,skillmap_sibling,train,0.5,0.5,0.0,4,RELATED
+IT Infrastructure Design,IT Infrastructure Management,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+IT Infrastructure Management,IT Infrastructure Design,RELATED,skillmap_sibling,train,0.25,0.75,0.0,4,RELATED
+DNS,DNS Configuration,BROADER,skillmap_extend,train,0.0,1.0,0.0,4,RELATED
+DNS Configuration,DNS,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+Wireless,Wireless LAN,BROADER,skillmap_extend,train,0.0,1.0,0.0,4,RELATED
+Wireless LAN,Wireless,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+Software Maintenance,Software security,RELATED,skillmap_sibling,train,0.0,0.75,0.25,4,RELATED
+Software security,Software Maintenance,RELATED,skillmap_sibling,train,0.0,0.75,0.25,4,RELATED
+IT Strategy,IT Support,DIFFERENT,skillmap_sibling,train,0.0,0.25,0.75,4,NOT
+IT Support,IT Strategy,DIFFERENT,skillmap_sibling,train,0.0,0.25,0.75,4,NOT
+Application Testing,Application Troubleshooting,RELATED,skillmap_sibling,val,0.0,1.0,0.0,4,RELATED
+Application Troubleshooting,Application Testing,RELATED,skillmap_sibling,val,0.0,1.0,0.0,4,RELATED
+Switching,Network Switching,BROADER,skillmap_extend,train,0.5,0.5,0.0,4,RELATED
+Network Switching,Switching,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+LAN Configuration,WAN/LAN Configuration,BROADER,skillmap_extend,train,0.5,0.5,0.0,4,RELATED
+WAN/LAN Configuration,LAN Configuration,NARROWER,skillmap_extend,train,0.75,0.25,0.0,4,SATISFIES
+Unified Communications,Cisco Unified Communications,BROADER,skillmap_extend,train,0.0,1.0,0.0,4,RELATED
+Cisco Unified Communications,Unified Communications,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+Network Design,Network Implementation,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+Network Implementation,Network Design,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+Network Monitoring,Network Operations,NARROWER,skillmap_sibling,train,1.0,0.0,0.0,4,SATISFIES
+Network Operations,Network Monitoring,BROADER,skillmap_sibling,train,0.25,0.75,0.0,4,RELATED
+Data Automation,Data Integration,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+Data Integration,Data Automation,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+UAT Support,UAT Testing,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+UAT Testing,UAT Support,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
+CCTV maintenance,CCTV Management,RELATED,skillmap_sibling,train,0.5,0.5,0.0,4,RELATED
+CCTV Management,CCTV maintenance,RELATED,skillmap_sibling,train,0.25,0.75,0.0,4,RELATED
+Performance Tuning,Database Performance Tuning,BROADER,skillmap_extend,test,0.0,1.0,0.0,4,RELATED
+Database Performance Tuning,Performance Tuning,NARROWER,skillmap_extend,test,1.0,0.0,0.0,4,SATISFIES
+Functional analysis,Functional Documentation,NARROWER,skillmap_sibling,train,0.5,0.25,0.25,4,SATISFIES
+Functional Documentation,Functional analysis,BROADER,skillmap_sibling,train,0.0,0.75,0.25,4,RELATED
+SAP,SAP HANA,BROADER,skillmap_extend,val,0.0,1.0,0.0,4,RELATED
+SAP HANA,SAP,NARROWER,skillmap_extend,val,1.0,0.0,0.0,4,SATISFIES
+Linux,Linux Administration,BROADER,skillmap_extend,train,0.0,1.0,0.0,4,RELATED
+Linux Administration,Linux,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+Pre-sales,Technical Pre-sales,BROADER,skillmap_extend,train,0.0,1.0,0.0,4,RELATED
+Technical Pre-sales,Pre-sales,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+VMware,VMware vSphere,BROADER,skillmap_extend,train,0.0,1.0,0.0,4,RELATED
+VMware vSphere,VMware,NARROWER,skillmap_extend,train,1.0,0.0,0.0,4,SATISFIES
+Business Analysis,Business Documentation,RELATED,skillmap_sibling,train,0.5,0.5,0.0,4,RELATED
+Business Documentation,Business Analysis,RELATED,skillmap_sibling,train,0.0,1.0,0.0,4,RELATED
