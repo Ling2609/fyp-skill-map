@@ -1,0 +1,136 @@
+id,a,b,label_claude
+1,intelligent agents,Agents,SAME
+2,full-stack development,Full stack web development,SAME
+3,ERP systems,Procurement ERP,BROADER
+4,Software project management,IT Project Management,NARROWER
+5,transaction management,Transactional data,RELATED
+6,System monitoring,Log Monitoring,BROADER
+7,software development,AI-assisted software development,BROADER
+8,mathematical optimisation,System Optimization,DIFFERENT
+9,Docker containers,Container technologies,NARROWER
+10,Software quality metrics,Quality metrics reporting,RELATED
+11,scalable architecture design,Integration Architecture Design,RELATED
+12,Requirements traceability,Requirements Specification,RELATED
+13,scalable architecture design,Product development,DIFFERENT
+14,System testing,Component testing,RELATED
+15,authentication implementation,mobile authentication,BROADER
+16,project scheduling,IT Project Planning,RELATED
+17,Communication,Team communication,BROADER
+18,CSS styling,CSS System,RELATED
+19,middleware integration,Integration Tools,RELATED
+20,database normalisation,database queries,RELATED
+21,Software architecture design,Enterprise Architecture Collaboration,RELATED
+22,concurrency fundamentals,Concurrency patterns,RELATED
+23,Requirements analysis,Application Analysis,RELATED
+24,relational database implementation,Database schema design,RELATED
+25,Advanced Java programming,Java,NARROWER
+26,team leadership,Team administration,RELATED
+27,software development,IT Project Planning,DIFFERENT
+28,Enterprise Java development,Java SE,NARROWER
+29,Software project management,Software Management,RELATED
+30,Product idea development,AI product development,RELATED
+31,Requirements analysis,Requirements Specification,RELATED
+32,Integration testing,Interface testing,RELATED
+33,Microservices implementation,Service Oriented Architecture,RELATED
+34,Searching techniques,retrieval optimization,RELATED
+35,microservices deployment,Microservices Design,RELATED
+36,requirements gathering,Requirement Tracking,RELATED
+37,Market validation,Model validation,DIFFERENT
+38,file system administration,Data Storage Management,RELATED
+39,Performance testing,Performance testing support,SAME
+40,usability testing,E-commerce Order Processing,DIFFERENT
+41,abstraction,Copier maintenance,DIFFERENT
+42,software evaluation,Evaluation,NARROWER
+43,Quality assurance,Software Quality Assurance,BROADER
+44,function implementation,Function calling,RELATED
+45,data collection,Data Collection Automation,BROADER
+46,Web accessibility,Accessibility,NARROWER
+47,usability testing,Exploratory Testing,RELATED
+48,enterprise application architecture,Enterprise Development,RELATED
+49,Requirements analysis,Functional Requirements,RELATED
+50,Android development,Laptop hardware support,DIFFERENT
+51,IP addressing,IP Configuration,RELATED
+52,Requirements validation,Requirements analysis,RELATED
+53,DevOps practices,DevOps collaboration,BROADER
+54,AI problem solving,AI governance,DIFFERENT
+55,System testing,Test systems operation,DIFFERENT
+56,intelligent agents,AI prompt engineering,RELATED
+57,Java programming,Android Java,BROADER
+58,relational database design,Database best practices,RELATED
+59,ERP systems,ERP Process Mapping,RELATED
+60,Design pattern application,Design Pattern Documentation,RELATED
+61,Front-end development,Front-end Customization,BROADER
+62,Use case modeling,Use Case Development,SAME
+63,system-level programming,Programming Knowledge,NARROWER
+64,software project planning,Project Estimation,RELATED
+65,usability testing,Statistical Testing,DIFFERENT
+66,Acceptance testing,Site testing,RELATED
+67,Business model development,Model management,DIFFERENT
+68,list manipulation,IPVPN Services,DIFFERENT
+69,Enterprise Java development,Java for ABAP,RELATED
+70,Unit testing,Regression testing,RELATED
+71,set theory,ROS actions,DIFFERENT
+72,HTML markup,Network Security Configuration,DIFFERENT
+73,relational database implementation,Relational SQL,RELATED
+74,polymorphism,STLC Test Management,DIFFERENT
+75,process management,Process Control Systems,DIFFERENT
+76,Sprint planning,Trade Processing,DIFFERENT
+77,layered architecture,Architectural modeling,RELATED
+78,mathematical optimisation,Model optimisation,RELATED
+79,analytical thinking,Analytical problem solving,RELATED
+80,Requirements traceability,Requirements analysis,RELATED
+81,entity-relationship modelling,Product Modeling,DIFFERENT
+82,System monitoring,System automation,RELATED
+83,system-level programming,Programmability,RELATED
+84,software development,DApp development,BROADER
+85,Software project management,Project Risk Management,BROADER
+86,risk management,Financial risk mitigation,RELATED
+87,process management,Sales Process Management,DIFFERENT
+88,embedded computing,computer architecture,RELATED
+89,process management,Process Coordination,RELATED
+90,big data storage,Block Storage,RELATED
+91,microservices architecture,Distributed systems architecture,NARROWER
+92,Front-end development,Back-end software engineering,RELATED
+93,Enterprise Java development,Enterprise Systems,RELATED
+94,distributed databases,Distributed systems,NARROWER
+95,Design patterns,Design processes,DIFFERENT
+96,Android development,Android Architecture,RELATED
+97,Quality assurance,Quality metrics reporting,RELATED
+98,Teamwork,Cross-functional teamwork,BROADER
+99,middleware integration,Middleware Configuration,RELATED
+100,Unit testing,UI Testing,RELATED
+101,intelligent agents,AI Agent platforms,RELATED
+102,risk management,Technical Risk Management,BROADER
+103,software evaluation,Infrastructure Evaluation,RELATED
+104,Business model development,Import Documentation,DIFFERENT
+105,graph theory,Multi-threaded Programming,DIFFERENT
+106,computer architecture,N-tier Architecture,RELATED
+107,Pitch development,Fortinet,DIFFERENT
+108,backpropagation,Security SIEM,DIFFERENT
+109,team leadership,Role Management,DIFFERENT
+110,Deploying blockchain solutions,Global Deployment,DIFFERENT
+111,project management,Digital Project Management,BROADER
+112,layered architecture,Data-layer architecture,RELATED
+113,cloud-native architecture,Cloud optimisation,RELATED
+114,UX research,User Research,SAME
+115,ERP systems,Enterprise Systems,NARROWER
+116,risk management,Cyber Risk Management,BROADER
+117,entity-relationship modelling,Database schema design,RELATED
+118,cloud-native architecture,Cloud Security Architecture,RELATED
+119,requirements gathering,Requirements Elicitation,SAME
+120,basic object-oriented programming,Object Oriented ABAP,BROADER
+121,Responsive design,Responsive UI/UX,SAME
+122,software design,Pricing procedures,DIFFERENT
+123,mathematical optimisation,Conversion optimization,DIFFERENT
+124,project management,Project Portfolio Management,RELATED
+125,UX research,Quantitative research,RELATED
+126,Front-end development,Web Front-End,SAME
+127,Design pattern application,Software Design Patterns,SAME
+128,System testing,Testing execution,NARROWER
+129,basic object-oriented programming,gRPC protocol,DIFFERENT
+130,project scheduling,Project Engineering,DIFFERENT
+131,cloud security,Azure Security,BROADER
+132,Integration testing,System Integration Testing (SIT),SAME
+133,project scheduling,Project Builder,DIFFERENT
+134,Stack usage,Full-stack development,DIFFERENT
+135,Unit testing,Parallel Testing,RELATED

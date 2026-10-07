@@ -1,0 +1,136 @@
+id,a,b,label_gpt_oss,model
+1,intelligent agents,Agents,NARROWER,openai/gpt-oss-120b
+2,full-stack development,Full stack web development,BROADER,openai/gpt-oss-120b
+3,ERP systems,Procurement ERP,BROADER,openai/gpt-oss-120b
+4,Software project management,IT Project Management,NARROWER,openai/gpt-oss-120b
+5,transaction management,Transactional data,RELATED,openai/gpt-oss-120b
+6,System monitoring,Log Monitoring,BROADER,openai/gpt-oss-120b
+7,software development,AI-assisted software development,BROADER,openai/gpt-oss-120b
+8,mathematical optimisation,System Optimization,RELATED,openai/gpt-oss-120b
+9,Docker containers,Container technologies,NARROWER,openai/gpt-oss-120b
+10,Software quality metrics,Quality metrics reporting,BROADER,openai/gpt-oss-120b
+11,scalable architecture design,Integration Architecture Design,RELATED,openai/gpt-oss-120b
+12,Requirements traceability,Requirements Specification,RELATED,openai/gpt-oss-120b
+13,scalable architecture design,Product development,RELATED,openai/gpt-oss-120b
+14,System testing,Component testing,BROADER,openai/gpt-oss-120b
+15,authentication implementation,mobile authentication,BROADER,openai/gpt-oss-120b
+16,project scheduling,IT Project Planning,BROADER,openai/gpt-oss-120b
+17,Communication,Team communication,BROADER,openai/gpt-oss-120b
+18,CSS styling,CSS System,RELATED,openai/gpt-oss-120b
+19,middleware integration,Integration Tools,NARROWER,openai/gpt-oss-120b
+20,database normalisation,database queries,RELATED,openai/gpt-oss-120b
+21,Software architecture design,Enterprise Architecture Collaboration,RELATED,openai/gpt-oss-120b
+22,concurrency fundamentals,Concurrency patterns,BROADER,openai/gpt-oss-120b
+23,Requirements analysis,Application Analysis,RELATED,openai/gpt-oss-120b
+24,relational database implementation,Database schema design,RELATED,openai/gpt-oss-120b
+25,Advanced Java programming,Java,NARROWER,openai/gpt-oss-120b
+26,team leadership,Team administration,RELATED,openai/gpt-oss-120b
+27,software development,IT Project Planning,RELATED,openai/gpt-oss-120b
+28,Enterprise Java development,Java SE,NARROWER,openai/gpt-oss-120b
+29,Software project management,Software Management,NARROWER,openai/gpt-oss-120b
+30,Product idea development,AI product development,BROADER,openai/gpt-oss-120b
+31,Requirements analysis,Requirements Specification,BROADER,openai/gpt-oss-120b
+32,Integration testing,Interface testing,RELATED,openai/gpt-oss-120b
+33,Microservices implementation,Service Oriented Architecture,RELATED,openai/gpt-oss-120b
+34,Searching techniques,retrieval optimization,RELATED,openai/gpt-oss-120b
+35,microservices deployment,Microservices Design,RELATED,openai/gpt-oss-120b
+36,requirements gathering,Requirement Tracking,RELATED,openai/gpt-oss-120b
+37,Market validation,Model validation,DIFFERENT,openai/gpt-oss-120b
+38,file system administration,Data Storage Management,NARROWER,openai/gpt-oss-120b
+39,Performance testing,Performance testing support,NARROWER,openai/gpt-oss-120b
+40,usability testing,E-commerce Order Processing,DIFFERENT,openai/gpt-oss-120b
+41,abstraction,Copier maintenance,DIFFERENT,openai/gpt-oss-120b
+42,software evaluation,Evaluation,NARROWER,openai/gpt-oss-120b
+43,Quality assurance,Software Quality Assurance,BROADER,openai/gpt-oss-120b
+44,function implementation,Function calling,NARROWER,openai/gpt-oss-120b
+45,data collection,Data Collection Automation,BROADER,openai/gpt-oss-120b
+46,Web accessibility,Accessibility,NARROWER,openai/gpt-oss-120b
+47,usability testing,Exploratory Testing,RELATED,openai/gpt-oss-120b
+48,enterprise application architecture,Enterprise Development,NARROWER,openai/gpt-oss-120b
+49,Requirements analysis,Functional Requirements,NARROWER,openai/gpt-oss-120b
+50,Android development,Laptop hardware support,DIFFERENT,openai/gpt-oss-120b
+51,IP addressing,IP Configuration,SAME,openai/gpt-oss-120b
+52,Requirements validation,Requirements analysis,RELATED,openai/gpt-oss-120b
+53,DevOps practices,DevOps collaboration,NARROWER,openai/gpt-oss-120b
+54,AI problem solving,AI governance,RELATED,openai/gpt-oss-120b
+55,System testing,Test systems operation,RELATED,openai/gpt-oss-120b
+56,intelligent agents,AI prompt engineering,RELATED,openai/gpt-oss-120b
+57,Java programming,Android Java,BROADER,openai/gpt-oss-120b
+58,relational database design,Database best practices,NARROWER,openai/gpt-oss-120b
+59,ERP systems,ERP Process Mapping,BROADER,openai/gpt-oss-120b
+60,Design pattern application,Design Pattern Documentation,RELATED,openai/gpt-oss-120b
+61,Front-end development,Front-end Customization,BROADER,openai/gpt-oss-120b
+62,Use case modeling,Use Case Development,SAME,openai/gpt-oss-120b
+63,system-level programming,Programming Knowledge,NARROWER,openai/gpt-oss-120b
+64,software project planning,Project Estimation,NARROWER,openai/gpt-oss-120b
+65,usability testing,Statistical Testing,RELATED,openai/gpt-oss-120b
+66,Acceptance testing,Site testing,RELATED,openai/gpt-oss-120b
+67,Business model development,Model management,RELATED,openai/gpt-oss-120b
+68,list manipulation,IPVPN Services,DIFFERENT,openai/gpt-oss-120b
+69,Enterprise Java development,Java for ABAP,RELATED,openai/gpt-oss-120b
+70,Unit testing,Regression testing,RELATED,openai/gpt-oss-120b
+71,set theory,ROS actions,DIFFERENT,openai/gpt-oss-120b
+72,HTML markup,Network Security Configuration,DIFFERENT,openai/gpt-oss-120b
+73,relational database implementation,Relational SQL,NARROWER,openai/gpt-oss-120b
+74,polymorphism,STLC Test Management,DIFFERENT,openai/gpt-oss-120b
+75,process management,Process Control Systems,RELATED,openai/gpt-oss-120b
+76,Sprint planning,Trade Processing,DIFFERENT,openai/gpt-oss-120b
+77,layered architecture,Architectural modeling,RELATED,openai/gpt-oss-120b
+78,mathematical optimisation,Model optimisation,RELATED,openai/gpt-oss-120b
+79,analytical thinking,Analytical problem solving,SAME,openai/gpt-oss-120b
+80,Requirements traceability,Requirements analysis,RELATED,openai/gpt-oss-120b
+81,entity-relationship modelling,Product Modeling,DIFFERENT,openai/gpt-oss-120b
+82,System monitoring,System automation,RELATED,openai/gpt-oss-120b
+83,system-level programming,Programmability,NARROWER,openai/gpt-oss-120b
+84,software development,DApp development,BROADER,openai/gpt-oss-120b
+85,Software project management,Project Risk Management,RELATED,openai/gpt-oss-120b
+86,risk management,Financial risk mitigation,BROADER,openai/gpt-oss-120b
+87,process management,Sales Process Management,BROADER,openai/gpt-oss-120b
+88,embedded computing,computer architecture,NARROWER,openai/gpt-oss-120b
+89,process management,Process Coordination,BROADER,openai/gpt-oss-120b
+90,big data storage,Block Storage,RELATED,openai/gpt-oss-120b
+91,microservices architecture,Distributed systems architecture,NARROWER,openai/gpt-oss-120b
+92,Front-end development,Back-end software engineering,RELATED,openai/gpt-oss-120b
+93,Enterprise Java development,Enterprise Systems,NARROWER,openai/gpt-oss-120b
+94,distributed databases,Distributed systems,NARROWER,openai/gpt-oss-120b
+95,Design patterns,Design processes,RELATED,openai/gpt-oss-120b
+96,Android development,Android Architecture,BROADER,openai/gpt-oss-120b
+97,Quality assurance,Quality metrics reporting,BROADER,openai/gpt-oss-120b
+98,Teamwork,Cross-functional teamwork,BROADER,openai/gpt-oss-120b
+99,middleware integration,Middleware Configuration,RELATED,openai/gpt-oss-120b
+100,Unit testing,UI Testing,RELATED,openai/gpt-oss-120b
+101,intelligent agents,AI Agent platforms,BROADER,openai/gpt-oss-120b
+102,risk management,Technical Risk Management,BROADER,openai/gpt-oss-120b
+103,software evaluation,Infrastructure Evaluation,DIFFERENT,openai/gpt-oss-120b
+104,Business model development,Import Documentation,DIFFERENT,openai/gpt-oss-120b
+105,graph theory,Multi-threaded Programming,DIFFERENT,openai/gpt-oss-120b
+106,computer architecture,N-tier Architecture,DIFFERENT,openai/gpt-oss-120b
+107,Pitch development,Fortinet,DIFFERENT,openai/gpt-oss-120b
+108,backpropagation,Security SIEM,DIFFERENT,openai/gpt-oss-120b
+109,team leadership,Role Management,DIFFERENT,openai/gpt-oss-120b
+110,Deploying blockchain solutions,Global Deployment,NARROWER,openai/gpt-oss-120b
+111,project management,Digital Project Management,BROADER,openai/gpt-oss-120b
+112,layered architecture,Data-layer architecture,BROADER,openai/gpt-oss-120b
+113,cloud-native architecture,Cloud optimisation,RELATED,openai/gpt-oss-120b
+114,UX research,User Research,NARROWER,openai/gpt-oss-120b
+115,ERP systems,Enterprise Systems,NARROWER,openai/gpt-oss-120b
+116,risk management,Cyber Risk Management,BROADER,openai/gpt-oss-120b
+117,entity-relationship modelling,Database schema design,NARROWER,openai/gpt-oss-120b
+118,cloud-native architecture,Cloud Security Architecture,RELATED,openai/gpt-oss-120b
+119,requirements gathering,Requirements Elicitation,SAME,openai/gpt-oss-120b
+120,basic object-oriented programming,Object Oriented ABAP,BROADER,openai/gpt-oss-120b
+121,Responsive design,Responsive UI/UX,NARROWER,openai/gpt-oss-120b
+122,software design,Pricing procedures,DIFFERENT,openai/gpt-oss-120b
+123,mathematical optimisation,Conversion optimization,RELATED,openai/gpt-oss-120b
+124,project management,Project Portfolio Management,BROADER,openai/gpt-oss-120b
+125,UX research,Quantitative research,RELATED,openai/gpt-oss-120b
+126,Front-end development,Web Front-End,NARROWER,openai/gpt-oss-120b
+127,Design pattern application,Software Design Patterns,SAME,openai/gpt-oss-120b
+128,System testing,Testing execution,NARROWER,openai/gpt-oss-120b
+129,basic object-oriented programming,gRPC protocol,DIFFERENT,openai/gpt-oss-120b
+130,project scheduling,Project Engineering,BROADER,openai/gpt-oss-120b
+131,cloud security,Azure Security,BROADER,openai/gpt-oss-120b
+132,Integration testing,System Integration Testing (SIT),BROADER,openai/gpt-oss-120b
+133,project scheduling,Project Builder,DIFFERENT,openai/gpt-oss-120b
+134,Stack usage,Full-stack development,BROADER,openai/gpt-oss-120b
+135,Unit testing,Parallel Testing,RELATED,openai/gpt-oss-120b

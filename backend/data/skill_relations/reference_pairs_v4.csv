@@ -1,0 +1,136 @@
+id,a,b,cosine,band,band_population,job_source,label_claude,label_gpt_oss,label_qwen,label3_unanimous,label3_majority
+1,intelligent agents,Agents,0.781,0.75-0.85,104,live,SAME,NARROWER,SAME,SATISFIES,SATISFIES
+2,full-stack development,Full stack web development,0.822,0.75-0.85,104,live,SAME,BROADER,SAME,,SATISFIES
+3,ERP systems,Procurement ERP,0.673,0.65-0.75,575,2024,BROADER,BROADER,BROADER,RELATED,RELATED
+4,Software project management,IT Project Management,0.787,0.75-0.85,104,2024+live,NARROWER,NARROWER,SAME,SATISFIES,SATISFIES
+5,transaction management,Transactional data,0.707,0.65-0.75,575,2024,RELATED,RELATED,DIFFERENT,,RELATED
+6,System monitoring,Log Monitoring,0.676,0.65-0.75,575,2024,BROADER,BROADER,BROADER,RELATED,RELATED
+7,software development,AI-assisted software development,0.677,0.65-0.75,575,live,BROADER,BROADER,BROADER,RELATED,RELATED
+8,mathematical optimisation,System Optimization,0.717,0.65-0.75,575,2024,DIFFERENT,RELATED,DIFFERENT,,NOT
+9,Docker containers,Container technologies,0.717,0.65-0.75,575,live,NARROWER,NARROWER,NARROWER,SATISFIES,SATISFIES
+10,Software quality metrics,Quality metrics reporting,0.744,0.65-0.75,575,2024,RELATED,BROADER,RELATED,RELATED,RELATED
+11,scalable architecture design,Integration Architecture Design,0.617,0.55-0.65,2016,2024,RELATED,RELATED,RELATED,RELATED,RELATED
+12,Requirements traceability,Requirements Specification,0.679,0.65-0.75,575,2024,RELATED,RELATED,RELATED,RELATED,RELATED
+13,scalable architecture design,Product development,0.221,<0.55,1467686,2024,DIFFERENT,RELATED,RELATED,,RELATED
+14,System testing,Component testing,0.654,0.65-0.75,575,2024,RELATED,BROADER,BROADER,RELATED,RELATED
+15,authentication implementation,mobile authentication,0.672,0.65-0.75,575,live,BROADER,BROADER,BROADER,RELATED,RELATED
+16,project scheduling,IT Project Planning,0.584,0.55-0.65,2016,2024,RELATED,BROADER,RELATED,RELATED,RELATED
+17,Communication,Team communication,0.763,0.75-0.85,104,2024,BROADER,BROADER,BROADER,RELATED,RELATED
+18,CSS styling,CSS System,0.789,0.75-0.85,104,live,RELATED,RELATED,BROADER,RELATED,RELATED
+19,middleware integration,Integration Tools,0.562,0.55-0.65,2016,2024+live,RELATED,NARROWER,RELATED,,RELATED
+20,database normalisation,database queries,0.564,0.55-0.65,2016,live,RELATED,RELATED,DIFFERENT,,RELATED
+21,Software architecture design,Enterprise Architecture Collaboration,0.551,0.55-0.65,2016,2024,RELATED,RELATED,RELATED,RELATED,RELATED
+22,concurrency fundamentals,Concurrency patterns,0.815,0.75-0.85,104,2024,RELATED,BROADER,BROADER,RELATED,RELATED
+23,Requirements analysis,Application Analysis,0.608,0.55-0.65,2016,2024,RELATED,RELATED,RELATED,RELATED,RELATED
+24,relational database implementation,Database schema design,0.711,0.65-0.75,575,2024,RELATED,RELATED,RELATED,RELATED,RELATED
+25,Advanced Java programming,Java,0.782,0.75-0.85,104,2024+live,NARROWER,NARROWER,NARROWER,SATISFIES,SATISFIES
+26,team leadership,Team administration,0.755,0.75-0.85,104,live,RELATED,RELATED,RELATED,RELATED,RELATED
+27,software development,IT Project Planning,0.566,0.55-0.65,2016,2024,DIFFERENT,RELATED,RELATED,,RELATED
+28,Enterprise Java development,Java SE,0.68,0.65-0.75,575,2024,NARROWER,NARROWER,NARROWER,SATISFIES,SATISFIES
+29,Software project management,Software Management,0.837,0.75-0.85,104,2024,RELATED,NARROWER,RELATED,,RELATED
+30,Product idea development,AI product development,0.743,0.65-0.75,575,live,RELATED,BROADER,RELATED,RELATED,RELATED
+31,Requirements analysis,Requirements Specification,0.835,0.75-0.85,104,2024,RELATED,BROADER,RELATED,RELATED,RELATED
+32,Integration testing,Interface testing,0.656,0.65-0.75,575,live,RELATED,RELATED,RELATED,RELATED,RELATED
+33,Microservices implementation,Service Oriented Architecture,0.577,0.55-0.65,2016,2024,RELATED,RELATED,RELATED,RELATED,RELATED
+34,Searching techniques,retrieval optimization,0.658,0.65-0.75,575,live,RELATED,RELATED,RELATED,RELATED,RELATED
+35,microservices deployment,Microservices Design,0.736,0.65-0.75,575,2024,RELATED,RELATED,RELATED,RELATED,RELATED
+36,requirements gathering,Requirement Tracking,0.753,0.75-0.85,104,2024,RELATED,RELATED,RELATED,RELATED,RELATED
+37,Market validation,Model validation,0.616,0.55-0.65,2016,live,DIFFERENT,DIFFERENT,DIFFERENT,NOT,NOT
+38,file system administration,Data Storage Management,0.581,0.55-0.65,2016,2024,RELATED,NARROWER,RELATED,,RELATED
+39,Performance testing,Performance testing support,0.845,0.75-0.85,104,live,SAME,NARROWER,SAME,SATISFIES,SATISFIES
+40,usability testing,E-commerce Order Processing,0.193,<0.55,1467686,2024,DIFFERENT,DIFFERENT,DIFFERENT,NOT,NOT
+41,abstraction,Copier maintenance,0.153,<0.55,1467686,2024,DIFFERENT,DIFFERENT,DIFFERENT,NOT,NOT
+42,software evaluation,Evaluation,0.753,0.75-0.85,104,live,NARROWER,NARROWER,BROADER,,SATISFIES
+43,Quality assurance,Software Quality Assurance,0.841,0.75-0.85,104,2024+live,BROADER,BROADER,SAME,,RELATED
+44,function implementation,Function calling,0.673,0.65-0.75,575,live,RELATED,NARROWER,DIFFERENT,,
+45,data collection,Data Collection Automation,0.763,0.75-0.85,104,2024,BROADER,BROADER,BROADER,RELATED,RELATED
+46,Web accessibility,Accessibility,0.839,0.75-0.85,104,2024+live,NARROWER,NARROWER,NARROWER,SATISFIES,SATISFIES
+47,usability testing,Exploratory Testing,0.58,0.55-0.65,2016,2024,RELATED,RELATED,RELATED,RELATED,RELATED
+48,enterprise application architecture,Enterprise Development,0.617,0.55-0.65,2016,2024,RELATED,NARROWER,NARROWER,,SATISFIES
+49,Requirements analysis,Functional Requirements,0.672,0.65-0.75,575,2024+live,RELATED,NARROWER,BROADER,,RELATED
+50,Android development,Laptop hardware support,0.211,<0.55,1467686,2024,DIFFERENT,DIFFERENT,DIFFERENT,NOT,NOT
+51,IP addressing,IP Configuration,0.765,0.75-0.85,104,2024,RELATED,SAME,SAME,,SATISFIES
+52,Requirements validation,Requirements analysis,0.71,0.65-0.75,575,2024+live,RELATED,RELATED,RELATED,RELATED,RELATED
+53,DevOps practices,DevOps collaboration,0.815,0.75-0.85,104,2024,BROADER,NARROWER,SAME,,SATISFIES
+54,AI problem solving,AI governance,0.554,0.55-0.65,2016,live,DIFFERENT,RELATED,DIFFERENT,,NOT
+55,System testing,Test systems operation,0.807,0.75-0.85,104,live,DIFFERENT,RELATED,RELATED,,RELATED
+56,intelligent agents,AI prompt engineering,0.57,0.55-0.65,2016,live,RELATED,RELATED,DIFFERENT,,RELATED
+57,Java programming,Android Java,0.684,0.65-0.75,575,2024,BROADER,BROADER,BROADER,RELATED,RELATED
+58,relational database design,Database best practices,0.636,0.55-0.65,2016,live,RELATED,NARROWER,NARROWER,,SATISFIES
+59,ERP systems,ERP Process Mapping,0.695,0.65-0.75,575,2024,RELATED,BROADER,BROADER,RELATED,RELATED
+60,Design pattern application,Design Pattern Documentation,0.794,0.75-0.85,104,2024,RELATED,RELATED,RELATED,RELATED,RELATED
+61,Front-end development,Front-end Customization,0.681,0.65-0.75,575,2024,BROADER,BROADER,BROADER,RELATED,RELATED
+62,Use case modeling,Use Case Development,0.808,0.75-0.85,104,2024,SAME,SAME,SAME,SATISFIES,SATISFIES
+63,system-level programming,Programming Knowledge,0.641,0.55-0.65,2016,2024,NARROWER,NARROWER,NARROWER,SATISFIES,SATISFIES
+64,software project planning,Project Estimation,0.669,0.65-0.75,575,2024,RELATED,NARROWER,NARROWER,,SATISFIES
+65,usability testing,Statistical Testing,0.564,0.55-0.65,2016,2024,DIFFERENT,RELATED,DIFFERENT,,NOT
+66,Acceptance testing,Site testing,0.593,0.55-0.65,2016,2024,RELATED,RELATED,DIFFERENT,,RELATED
+67,Business model development,Model management,0.684,0.65-0.75,575,live,DIFFERENT,RELATED,DIFFERENT,,NOT
+68,list manipulation,IPVPN Services,-0.018,<0.55,1467686,2024,DIFFERENT,DIFFERENT,DIFFERENT,NOT,NOT
+69,Enterprise Java development,Java for ABAP,0.567,0.55-0.65,2016,2024,RELATED,RELATED,DIFFERENT,,RELATED
+70,Unit testing,Regression testing,0.638,0.55-0.65,2016,2024+live,RELATED,RELATED,RELATED,RELATED,RELATED
+71,set theory,ROS actions,0.063,<0.55,1467686,live,DIFFERENT,DIFFERENT,DIFFERENT,NOT,NOT
+72,HTML markup,Network Security Configuration,0.015,<0.55,1467686,2024,DIFFERENT,DIFFERENT,DIFFERENT,NOT,NOT
+73,relational database implementation,Relational SQL,0.773,0.75-0.85,104,2024,RELATED,NARROWER,NARROWER,,SATISFIES
+74,polymorphism,STLC Test Management,-0.034,<0.55,1467686,2024,DIFFERENT,DIFFERENT,DIFFERENT,NOT,NOT
+75,process management,Process Control Systems,0.762,0.75-0.85,104,2024,DIFFERENT,RELATED,DIFFERENT,,NOT
+76,Sprint planning,Trade Processing,0.196,<0.55,1467686,2024,DIFFERENT,DIFFERENT,DIFFERENT,NOT,NOT
+77,layered architecture,Architectural modeling,0.64,0.55-0.65,2016,2024,RELATED,RELATED,RELATED,RELATED,RELATED
+78,mathematical optimisation,Model optimisation,0.693,0.65-0.75,575,live,RELATED,RELATED,RELATED,RELATED,RELATED
+79,analytical thinking,Analytical problem solving,0.578,0.55-0.65,2016,2024,RELATED,SAME,SAME,,SATISFIES
+80,Requirements traceability,Requirements analysis,0.731,0.65-0.75,575,2024+live,RELATED,RELATED,RELATED,RELATED,RELATED
+81,entity-relationship modelling,Product Modeling,0.559,0.55-0.65,2016,2024,DIFFERENT,DIFFERENT,RELATED,,NOT
+82,System monitoring,System automation,0.571,0.55-0.65,2016,2024,RELATED,RELATED,RELATED,RELATED,RELATED
+83,system-level programming,Programmability,0.618,0.55-0.65,2016,live,RELATED,NARROWER,RELATED,,RELATED
+84,software development,DApp development,0.577,0.55-0.65,2016,2024,BROADER,BROADER,BROADER,RELATED,RELATED
+85,Software project management,Project Risk Management,0.677,0.65-0.75,575,2024,BROADER,RELATED,BROADER,RELATED,RELATED
+86,risk management,Financial risk mitigation,0.678,0.65-0.75,575,2024,RELATED,BROADER,BROADER,RELATED,RELATED
+87,process management,Sales Process Management,0.754,0.75-0.85,104,2024,DIFFERENT,BROADER,BROADER,,RELATED
+88,embedded computing,computer architecture,0.609,0.55-0.65,2016,live,RELATED,NARROWER,RELATED,,RELATED
+89,process management,Process Coordination,0.744,0.65-0.75,575,2024,RELATED,BROADER,BROADER,RELATED,RELATED
+90,big data storage,Block Storage,0.572,0.55-0.65,2016,2024,RELATED,RELATED,RELATED,RELATED,RELATED
+91,microservices architecture,Distributed systems architecture,0.559,0.55-0.65,2016,live,NARROWER,NARROWER,NARROWER,SATISFIES,SATISFIES
+92,Front-end development,Back-end software engineering,0.664,0.65-0.75,575,live,RELATED,RELATED,DIFFERENT,,RELATED
+93,Enterprise Java development,Enterprise Systems,0.573,0.55-0.65,2016,2024,RELATED,NARROWER,NARROWER,,SATISFIES
+94,distributed databases,Distributed systems,0.696,0.65-0.75,575,2024+live,NARROWER,NARROWER,NARROWER,SATISFIES,SATISFIES
+95,Design patterns,Design processes,0.652,0.65-0.75,575,live,DIFFERENT,RELATED,RELATED,,RELATED
+96,Android development,Android Architecture,0.74,0.65-0.75,575,2024,RELATED,BROADER,BROADER,RELATED,RELATED
+97,Quality assurance,Quality metrics reporting,0.562,0.55-0.65,2016,2024,RELATED,BROADER,BROADER,RELATED,RELATED
+98,Teamwork,Cross-functional teamwork,0.659,0.65-0.75,575,live,BROADER,BROADER,BROADER,RELATED,RELATED
+99,middleware integration,Middleware Configuration,0.84,0.75-0.85,104,2024,RELATED,RELATED,RELATED,RELATED,RELATED
+100,Unit testing,UI Testing,0.671,0.65-0.75,575,2024,RELATED,RELATED,RELATED,RELATED,RELATED
+101,intelligent agents,AI Agent platforms,0.757,0.75-0.85,104,live,RELATED,BROADER,NARROWER,,RELATED
+102,risk management,Technical Risk Management,0.806,0.75-0.85,104,2024,BROADER,BROADER,BROADER,RELATED,RELATED
+103,software evaluation,Infrastructure Evaluation,0.571,0.55-0.65,2016,2024,RELATED,DIFFERENT,RELATED,,RELATED
+104,Business model development,Import Documentation,0.115,<0.55,1467686,2024,DIFFERENT,DIFFERENT,DIFFERENT,NOT,NOT
+105,graph theory,Multi-threaded Programming,0.185,<0.55,1467686,2024,DIFFERENT,DIFFERENT,DIFFERENT,NOT,NOT
+106,computer architecture,N-tier Architecture,0.593,0.55-0.65,2016,2024,RELATED,DIFFERENT,RELATED,,RELATED
+107,Pitch development,Fortinet,0.051,<0.55,1467686,2024+live,DIFFERENT,DIFFERENT,DIFFERENT,NOT,NOT
+108,backpropagation,Security SIEM,0.082,<0.55,1467686,2024,DIFFERENT,DIFFERENT,DIFFERENT,NOT,NOT
+109,team leadership,Role Management,0.562,0.55-0.65,2016,2024,DIFFERENT,DIFFERENT,DIFFERENT,NOT,NOT
+110,Deploying blockchain solutions,Global Deployment,0.559,0.55-0.65,2016,2024,DIFFERENT,NARROWER,RELATED,,
+111,project management,Digital Project Management,0.808,0.75-0.85,104,2024,BROADER,BROADER,BROADER,RELATED,RELATED
+112,layered architecture,Data-layer architecture,0.76,0.75-0.85,104,live,RELATED,BROADER,BROADER,RELATED,RELATED
+113,cloud-native architecture,Cloud optimisation,0.604,0.55-0.65,2016,live,RELATED,RELATED,RELATED,RELATED,RELATED
+114,UX research,User Research,0.669,0.65-0.75,575,2024,SAME,NARROWER,SAME,SATISFIES,SATISFIES
+115,ERP systems,Enterprise Systems,0.831,0.75-0.85,104,2024,NARROWER,NARROWER,NARROWER,SATISFIES,SATISFIES
+116,risk management,Cyber Risk Management,0.709,0.65-0.75,575,2024,BROADER,BROADER,BROADER,RELATED,RELATED
+117,entity-relationship modelling,Database schema design,0.565,0.55-0.65,2016,2024,RELATED,NARROWER,NARROWER,,SATISFIES
+118,cloud-native architecture,Cloud Security Architecture,0.62,0.55-0.65,2016,2024+live,RELATED,RELATED,RELATED,RELATED,RELATED
+119,requirements gathering,Requirements Elicitation,0.773,0.75-0.85,104,2024+live,SAME,SAME,SAME,SATISFIES,SATISFIES
+120,basic object-oriented programming,Object Oriented ABAP,0.669,0.65-0.75,575,2024,BROADER,BROADER,BROADER,RELATED,RELATED
+121,Responsive design,Responsive UI/UX,0.814,0.75-0.85,104,2024,SAME,NARROWER,NARROWER,SATISFIES,SATISFIES
+122,software design,Pricing procedures,0.242,<0.55,1467686,live,DIFFERENT,DIFFERENT,DIFFERENT,NOT,NOT
+123,mathematical optimisation,Conversion optimization,0.6,0.55-0.65,2016,live,DIFFERENT,RELATED,DIFFERENT,,NOT
+124,project management,Project Portfolio Management,0.801,0.75-0.85,104,2024,RELATED,BROADER,BROADER,RELATED,RELATED
+125,UX research,Quantitative research,0.617,0.55-0.65,2016,2024,RELATED,RELATED,BROADER,RELATED,RELATED
+126,Front-end development,Web Front-End,0.666,0.65-0.75,575,2024,SAME,NARROWER,SAME,SATISFIES,SATISFIES
+127,Design pattern application,Software Design Patterns,0.814,0.75-0.85,104,2024,SAME,SAME,SAME,SATISFIES,SATISFIES
+128,System testing,Testing execution,0.757,0.75-0.85,104,live,NARROWER,NARROWER,NARROWER,SATISFIES,SATISFIES
+129,basic object-oriented programming,gRPC protocol,0.195,<0.55,1467686,2024,DIFFERENT,DIFFERENT,DIFFERENT,NOT,NOT
+130,project scheduling,Project Engineering,0.666,0.65-0.75,575,2024,DIFFERENT,BROADER,NARROWER,,
+131,cloud security,Azure Security,0.67,0.65-0.75,575,2024+live,BROADER,BROADER,BROADER,RELATED,RELATED
+132,Integration testing,System Integration Testing (SIT),0.715,0.65-0.75,575,live,SAME,BROADER,SAME,,SATISFIES
+133,project scheduling,Project Builder,0.652,0.65-0.75,575,live,DIFFERENT,DIFFERENT,DIFFERENT,NOT,NOT
+134,Stack usage,Full-stack development,0.679,0.65-0.75,575,2024+live,DIFFERENT,BROADER,BROADER,,RELATED
+135,Unit testing,Parallel Testing,0.667,0.65-0.75,575,2024,RELATED,RELATED,RELATED,RELATED,RELATED

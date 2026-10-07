@@ -1,0 +1,31 @@
+id,a,b,judges_say,author_check
+1,intelligent agents,Agents,SATISFIES,agree
+7,software development,AI-assisted software development,RELATED,agree
+15,authentication implementation,mobile authentication,RELATED,agree
+16,project scheduling,IT Project Planning,RELATED,agree
+17,Communication,Team communication,RELATED,agree
+22,concurrency fundamentals,Concurrency patterns,RELATED,agree
+25,Advanced Java programming,Java,SATISFIES,agree
+31,Requirements analysis,Requirements Specification,RELATED,agree
+35,microservices deployment,Microservices Design,RELATED,agree
+37,Market validation,Model validation,NOT,agree
+40,usability testing,E-commerce Order Processing,NOT,agree
+41,abstraction,Copier maintenance,NOT,agree
+46,Web accessibility,Accessibility,SATISFIES,agree
+50,Android development,Laptop hardware support,NOT,agree
+60,Design pattern application,Design Pattern Documentation,RELATED,agree
+61,Front-end development,Front-end Customization,RELATED,agree
+70,Unit testing,Regression testing,RELATED,agree
+77,layered architecture,Architectural modeling,RELATED,agree
+86,risk management,Financial risk mitigation,RELATED,agree
+98,Teamwork,Cross-functional teamwork,RELATED,agree
+100,Unit testing,UI Testing,RELATED,disagree
+102,risk management,Technical Risk Management,RELATED,agree
+104,Business model development,Import Documentation,NOT,agree
+105,graph theory,Multi-threaded Programming,NOT,agree
+107,Pitch development,Fortinet,NOT,agree
+109,team leadership,Role Management,NOT,agree
+116,risk management,Cyber Risk Management,RELATED,agree
+118,cloud-native architecture,Cloud Security Architecture,RELATED,agree
+127,Design pattern application,Software Design Patterns,SATISFIES,agree
+131,cloud security,Azure Security,RELATED,agree
