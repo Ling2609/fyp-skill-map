@@ -1,0 +1,54 @@
+{
+ "run": "esco_onet_v1_skillmap_v2_soft_skillmap_v3_soft_nli_rw3x20_noextend",
+ "pairs_csv": [
+  "pairs_esco_onet_v1.csv",
+  "pairs_skillmap_v2_soft.csv",
+  "pairs_skillmap_v3_soft.csv"
+ ],
+ "mapping": {
+  "SAME": "SATISFIES",
+  "NARROWER": "SATISFIES",
+  "RELATED": "RELATED",
+  "BROADER": "RELATED",
+  "DIFFERENT": "NOT"
+ },
+ "model": "cross-encoder/nli-MiniLM2-L6-H768",
+ "seeds": [
+  13,
+  42,
+  77
+ ],
+ "epochs": 10,
+ "baseline_macro_f1": 0.4533329324553479,
+ "test_macro_f1": [
+  0.759271830006563,
+  0.751836384288155,
+  0.7505949644005551
+ ],
+ "ensemble_test_macro_f1": 0.7674908041342926,
+ "drop_sources": [
+  "skillmap_extend"
+ ],
+ "direction_model": 0.7977839335180056,
+ "direction_cosine": 0.5041551246537396,
+ "runs": [
+  {
+   "seed": 13,
+   "val_f1": 0.7866682911953592,
+   "test_f1": 0.759271830006563,
+   "minutes": 4.2
+  },
+  {
+   "seed": 42,
+   "val_f1": 0.7646437155757521,
+   "test_f1": 0.751836384288155,
+   "minutes": 4.0
+  },
+  {
+   "seed": 77,
+   "val_f1": 0.7880040172464365,
+   "test_f1": 0.7505949644005551,
+   "minutes": 4.0
+  }
+ ]
+}

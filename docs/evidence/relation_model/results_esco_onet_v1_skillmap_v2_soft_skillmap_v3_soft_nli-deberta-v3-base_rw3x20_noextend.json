@@ -1,0 +1,54 @@
+{
+ "run": "esco_onet_v1_skillmap_v2_soft_skillmap_v3_soft_nli-deberta-v3-base_rw3x20_noextend",
+ "pairs_csv": [
+  "pairs_esco_onet_v1.csv",
+  "pairs_skillmap_v2_soft.csv",
+  "pairs_skillmap_v3_soft.csv"
+ ],
+ "mapping": {
+  "SAME": "SATISFIES",
+  "NARROWER": "SATISFIES",
+  "RELATED": "RELATED",
+  "BROADER": "RELATED",
+  "DIFFERENT": "NOT"
+ },
+ "model": "cross-encoder/nli-deberta-v3-base",
+ "seeds": [
+  13,
+  42,
+  77
+ ],
+ "epochs": 10,
+ "baseline_macro_f1": 0.4533329324553479,
+ "test_macro_f1": [
+  0.8169156620385808,
+  0.8031371391052154,
+  0.792335015432804
+ ],
+ "ensemble_test_macro_f1": 0.8214745980794794,
+ "drop_sources": [
+  "skillmap_extend"
+ ],
+ "direction_model": 0.8448753462603878,
+ "direction_cosine": 0.5041551246537396,
+ "runs": [
+  {
+   "seed": 13,
+   "val_f1": 0.8245360330447018,
+   "test_f1": 0.8169156620385808,
+   "minutes": 12.4
+  },
+  {
+   "seed": 42,
+   "val_f1": 0.821706776241309,
+   "test_f1": 0.8031371391052154,
+   "minutes": 12.2
+  },
+  {
+   "seed": 77,
+   "val_f1": 0.8340782499799454,
+   "test_f1": 0.792335015432804,
+   "minutes": 12.2
+  }
+ ]
+}
