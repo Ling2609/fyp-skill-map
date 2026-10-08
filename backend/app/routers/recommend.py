@@ -12,10 +12,12 @@ from app.services.job_search import TITLE, names_company_or_place, search_match,
 from app.services.skill_names import canonical_key
 from app.services.job_requirements import BONUS_WEIGHT, job_skill_items, score_job, unit_name
 from app.services.skill_profile import (
-    EMPTY_PROFILE_MESSAGE, build_skill_profile, count_modules, matched_mask, normalise_rows, profile_spellings,
+    EMPTY_PROFILE_MESSAGE, build_skill_profile, count_modules, matched_mask, normalise_rows, prefetch_relations,
+    profile_spellings,
 )
 import math
 import threading
+import time
 from datetime import datetime, timezone
 from collections import Counter
 
@@ -167,6 +169,7 @@ def recommend_jobs(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
+    started = time.perf_counter()
     # One shared Graduate Skill Profile (modules + grades, projects, certifications)
     profile = build_skill_profile(current_user.id, db)
     if not profile:
@@ -241,6 +244,12 @@ def recommend_jobs(
     sbert_scores.sort(key=lambda x: (-search[x[0]][0], -(x[1] - seniority_penalty(_job_cache[x[0]]["level"]))))
     top_candidates = sbert_scores if payload.top_n <= 0 else sbert_scores[:payload.top_n]
 
+    # The relationship model scores every new pair of every job in ONE batch first; the loop below then reads them
+    # from the cache (8 Oct: one model call per request instead of one per job)
+    prefetch_relations(grad_embeddings, spellings, spelling_keys,
+                       [(c["skill_vecs"], c["skill_keys"], c["skills"])
+                        for c in (_job_cache.get(job_id) for job_id, _ in top_candidates) if c])
+
     # ── Coverage on top candidates only — uses pre-computed + pre-normalised vecs ──
     results = []
     for job_id, sbert_score in top_candidates:
@@ -308,6 +317,8 @@ def recommend_jobs(
             names.setdefault(key, name)
     for r in results:
         del r["_to_learn"]
+    # One line per request in the backend window, to see where a slow page comes from (8 Oct)
+    print(f"[recommend] {time.perf_counter() - started:.2f} s: {len(results)} jobs for user {current_user.id}")
 
     return {
         "graduate_profile": {

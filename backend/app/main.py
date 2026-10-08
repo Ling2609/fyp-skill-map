@@ -23,6 +23,11 @@ async def lifespan(app: FastAPI):
         print("WARNING: MongoDB is not running, so chat history won't be saved. Start the MongoDB service.")
     from app.routers.recommend import build_job_cache
     build_job_cache()
+    # Load the skill relationship model in the background (8 Oct): the API is ready at once, and the first student
+    # after a restart no longer waits for the model to load (a request that comes earlier simply waits for it)
+    import threading
+    from app.services import skill_relation
+    threading.Thread(target=skill_relation.warm_up, name="relation-warm-up", daemon=True).start()
     yield
 
 

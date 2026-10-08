@@ -78,6 +78,14 @@ def _load():
     return _model
 
 
+def warm_up():
+    """Load the model and its score cache now (8 Oct). Called once at start-up in a background thread
+    (app/main.py), so the first student after a restart doesn't wait while three DeBERTa models load."""
+    with _lock:
+        if _load():
+            _load_cache()
+
+
 def enabled() -> bool:
     with _lock:
         return bool(_load())

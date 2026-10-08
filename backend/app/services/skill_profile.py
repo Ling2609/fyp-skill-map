@@ -194,6 +194,28 @@ def match_matrix(job_vecs_normed: np.ndarray, spelling_vecs_normed: np.ndarray, 
     return sims, has
 
 
+def prefetch_relations(spelling_vecs_normed: np.ndarray, spellings: list[str], spelling_keys: list[str],
+                       jobs: list[tuple[np.ndarray, list[str], list[str]]]):
+    """Score every pair the relationship model will be asked about, for ALL the jobs, in one batch (8 Oct, slow load
+    after sign-in). Without this, each job asked the model on its own: up to 200 small model calls and 200 rewrites
+    of data/relation_cache.json when a student had new skills. Afterwards match_matrix finds every pair in the cache.
+    jobs = [(job skill vectors (normalised), job skill keys, job skill names), ...]; the same candidate rule as
+    match_matrix (cosine >= CANDIDATE_FLOOR, not the same skill)."""
+    if not skill_relation.enabled() or not len(spelling_vecs_normed):
+        return
+    spelling_keys_arr = np.asarray(spelling_keys, dtype=object)
+    pairs = []
+    for vecs, keys, names in jobs:
+        if not len(vecs):
+            continue
+        rows = vecs @ spelling_vecs_normed.T
+        same = np.asarray(keys, dtype=object)[:, None] == spelling_keys_arr[None, :]
+        js, ss = np.nonzero((rows >= skill_relation.CANDIDATE_FLOOR) & ~same)
+        pairs.extend((spellings[s], names[j]) for j, s in zip(js, ss))
+    if pairs:
+        skill_relation.p_satisfies(pairs)
+
+
 def matched_mask(spelling_vecs_normed: np.ndarray, job_skill_vecs_normed: np.ndarray,
                  spelling_keys: list[str], owner: list[int], job_keys: list[str],
                  spellings: list[str], job_names: list[str]) -> np.ndarray:
