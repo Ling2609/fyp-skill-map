@@ -27,7 +27,9 @@ export const studyComplete = (options, value) => {
   return !!programme && (!programme.intakes.length || !!value.intake_id)
 }
 
-// Buttons on My Profile (9 Oct): one blue main action per tab, the others white
-export const btnCls = 'text-sm font-medium px-3.5 py-2 rounded-xl border border-slate-200 bg-white text-slate-700 hover:border-blue-300 hover:text-blue-700 transition'
+// Buttons on My Profile (9 Oct): one blue main action per tab
 export const btnBlueCls = 'text-sm font-medium px-4 py-2 rounded-xl bg-blue-700 text-white hover:bg-blue-800 transition'
 
+// The light-blue button for a page's own tools ("Links & visibility", "Import from GitHub"), the same look as
+// "Update profile" on Job Matches (9 Oct)
+export const softBtnCls = 'flex items-center gap-2 text-sm font-medium text-blue-700 bg-blue-50 border border-blue-200 rounded-lg px-3.5 py-2 hover:bg-blue-100 hover:border-blue-300 transition'

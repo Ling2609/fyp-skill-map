@@ -5,12 +5,13 @@ import PageHeader from '../../components/PageHeader'
 import { useAuth } from '../../context/useAuth'
 import { Modal, Spinner } from './profileParts'
 import { ProfileForm, StudyForm } from './profileForms'
+import { softBtnCls } from './profileUtils'
 import { AwardsTab, CertsTab, ModulesTab, ProjectsTab } from './profileSections'
 import GithubImport from './GithubImport'
 
 // My Profile (9 Oct, her design): the page where a student puts things in. Four tabs, the four places her skills come
 // from: Modules, Projects, Certificates, Awards. What SkillMap works out from them (matches, skills to learn) is on the
-// Dashboard and Job Matches, not here. Edit profile (far right) = links to her other profiles + profile visibility.
+// Dashboard and Job Matches, not here. "Links & visibility" = links to her other profiles + who can see the profile.
 // Research: references.md "Showcase profile" and "Profile layout with many categories" (NN/g tabs, Handshake).
 
 const TABS = [
@@ -23,7 +24,7 @@ const TABS = [
 function VisibilityPill({ on }) {
   return on
     ? <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">● Visible to employers</span>
-    : <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200">Hidden from employers</span>
+    : <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-amber-50 text-amber-700 border border-amber-200">● Hidden from employers</span>
 }
 
 export default function MyProfile() {
@@ -77,29 +78,30 @@ export default function MyProfile() {
     // Wide screens: the page fills the window and only the open tab's list scrolls; narrow: the page scrolls
     <div className="min-h-screen lg:h-screen bg-slate-50 flex flex-col">
       <PageHeader>
-        <div className="pt-1">
+        <div className="pt-1 pb-4">
           <p className="text-[11px] font-semibold text-blue-600 uppercase tracking-widest mb-2">My Profile</p>
-          <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-            <h1 className="text-2xl font-semibold tracking-tight text-slate-900">{data.name}</h1>
-            <VisibilityPill on={data.visible_to_employers} />
-          </div>
-          {/* Edit profile on the same line as the skill count, styled like "Update profile" on Job Matches (her request 9 Oct) */}
-          <div className="flex flex-wrap items-center justify-between gap-3 mt-1 pb-4">
-            <p className="text-sm text-slate-500">
-              {data.total_skills} {data.total_skills === 1 ? 'skill' : 'skills'} from your modules, projects, certificates and awards
+          {/* One line about you: name, links, visibility; "Links & visibility" at its right end (her layout, 9 Oct) */}
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-1 min-w-0">
+              <h1 className="text-2xl font-semibold tracking-tight text-slate-900">{data.name}</h1>
               {linkList.map(([label, url]) => (
-                <span key={label}> · <a href={url} target="_blank" rel="noopener noreferrer" className="text-blue-700 hover:underline">{label} ↗</a></span>
+                <a key={label} href={url} target="_blank" rel="noopener noreferrer" className="text-sm text-blue-700 hover:underline">{label} ↗</a>
               ))}
-            </p>
-            <button type="button" onClick={() => setOpen('profile')}
-              className="flex items-center gap-2 text-sm font-medium text-blue-700 bg-blue-50 border border-blue-200 rounded-lg px-3.5 py-2 hover:bg-blue-100 hover:border-blue-300 transition shrink-0">
+              <VisibilityPill on={data.visible_to_employers} />
+            </div>
+            <button type="button" onClick={() => setOpen('profile')} className={`${softBtnCls} shrink-0`}>
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                  d="M15.232 5.232l3.536 3.536M9 13l6.232-6.232a2.5 2.5 0 113.536 3.536L12.536 16.536 8 18l1.464-4.536z" />
+                  d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
               </svg>
-              Edit profile
+              Links &amp; visibility
             </button>
           </div>
+          {/* The skill count, large enough to notice: the one sign on this page that the entries below count */}
+          <p className="mt-2 text-sm text-slate-500">
+            <span className="text-xl font-semibold text-slate-900 tabular-nums">{data.total_skills}</span>{' '}
+            <span className="font-medium text-slate-700">{data.total_skills === 1 ? 'skill' : 'skills'}</span> found in your modules, projects, certificates and awards
+          </p>
         </div>
         {/* Tabs wrap onto a second line on a narrow window: never a sideways scrollbar (her request 8 Oct) */}
         <div role="tablist" aria-label="Profile sections" className="flex flex-wrap gap-x-6 border-t border-slate-200 -mx-8 px-8">
@@ -132,7 +134,7 @@ export default function MyProfile() {
       </div>
 
       {open === 'profile' && (
-        <Modal title="Edit profile" dirty={dirty} onClose={close}>
+        <Modal title="Links & visibility" dirty={dirty} onClose={close}>
           <ProfileForm data={data} onDirty={setDirty} onCancel={close} onDone={saved} />
         </Modal>
       )}

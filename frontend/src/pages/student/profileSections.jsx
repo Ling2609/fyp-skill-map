@@ -2,7 +2,7 @@ import { useState } from 'react'
 import api from '../../api'
 import { AddSkillChip, ConfirmDelete, CrossIcon, IconButton, Modal, PencilIcon, SkillChip } from './profileParts'
 import { AwardForm, CertForm, ProjectForm } from './profileForms'
-import { ADDED_BY_YOU, btnBlueCls, btnCls, monthLabel } from './profileUtils'
+import { ADDED_BY_YOU, btnBlueCls, monthLabel, softBtnCls } from './profileUtils'
 import ModulesEditor from './ModulesEditor'
 
 // The four tabs of My Profile (9 Oct): Modules, Projects, Certificates, Awards, the places a student's skills come
@@ -108,7 +108,12 @@ export function ProjectsTab({ projects, onRefresh, onImport, importNote, onImpor
 
   return (
     <Panel title="Your projects" actions={<>
-      <button type="button" onClick={onImport} className={btnCls}>Import from GitHub</button>{addButton}
+      <button type="button" onClick={onImport} className={softBtnCls}>
+        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M12 4v11m0 0l-4-4m4 4l4-4" />
+        </svg>
+        Import from GitHub
+      </button>{addButton}
     </>}>
       <Note text={importNote} onClose={onImportNoteClose} />
       <Note text={s.note} onClose={() => s.setNote('')} />

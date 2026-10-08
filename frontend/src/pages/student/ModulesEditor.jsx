@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import api from '../../api'
 import { Spinner } from './profileParts'
+import { skillName } from '../../skillName'
 
 // Modules & grades: the year-by-year grid (4 Oct), shown straight in My Profile's Modules tab (9 Oct, her choice: no
 // separate read-only list and side panel, one click fewer). Leaving the tab with grades not saved asks first
@@ -15,6 +16,31 @@ const GRADE_OPTIONS = [
   { label: 'C+ (2.3)', value: 2.3 },
   { label: 'C (2.0)', value: 2.0 },
 ]
+
+// Under each module: its code and "3 skills ▾" (9 Oct, her idea: shows where the skill count comes from, i.e. why a
+// grade matters). Closed by default, so rows keep their size; open, the module's skills show as small chips.
+function ModuleSkills({ mod }) {
+  const [open, setOpen] = useState(false)
+  const names = (mod.skills || []).map(skillName)
+  return (
+    <div>
+      <p className="text-xs text-gray-400">
+        {mod.code}
+        {names.length > 0 && (
+          <> · <button type="button" onClick={() => setOpen(o => !o)} aria-expanded={open}
+            className="text-blue-600 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-300 rounded">
+            {names.length} {names.length === 1 ? 'skill' : 'skills'} {open ? '▴' : '▾'}
+          </button></>
+        )}
+      </p>
+      {open && (
+        <div className="flex flex-wrap gap-1 mt-1.5">
+          {names.map(n => <span key={n} className="text-[11px] px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-100">{n}</span>)}
+        </div>
+      )}
+    </div>
+  )
+}
 
 export default function ModulesEditor({ onUnsavedChange, onSaved }) {
   const [modules, setModules] = useState([])
@@ -154,12 +180,12 @@ export default function ModulesEditor({ onUnsavedChange, onSaved }) {
           <div key={`c${selectedYear}`} tabIndex={0} aria-label="Compulsory modules"
             className="px-6 py-2 divide-y divide-gray-50 lg:flex-1 lg:overflow-y-auto focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-300">
             {compulsory.map(mod => (
-              <div key={mod.code} className="flex items-center justify-between py-3">
-                <div className="flex items-center gap-3 min-w-0 flex-1">
-                  <span className="w-2 h-2 rounded-full bg-blue-500 shrink-0" />
+              <div key={mod.code} className="flex items-start justify-between py-3">
+                <div className="flex items-start gap-3 min-w-0 flex-1">
+                  <span className="w-2 h-2 rounded-full bg-blue-500 shrink-0 mt-1.5" />
                   <div className="min-w-0">
-                    <p className="text-sm font-medium text-gray-800 truncate">{mod.name}</p>
-                    <p className="text-xs text-gray-400">{mod.code}</p>
+                    <p className="text-sm font-medium text-gray-800">{mod.name}</p>
+                    <ModuleSkills mod={mod} />
                   </div>
                 </div>
                 <select
@@ -192,7 +218,7 @@ export default function ModulesEditor({ onUnsavedChange, onSaved }) {
                     className="w-4 h-4 mt-0.5 accent-blue-700 shrink-0" />
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium text-gray-800">{mod.name}</p>
-                    <p className="text-xs text-gray-400">{mod.code}</p>
+                    <ModuleSkills mod={mod} />
                     {selections[mod.code] !== undefined && (
                       <select value={selections[mod.code] ?? ''} onChange={e => setGrade(mod.code, e.target.value)}
                         className="mt-2 border border-gray-200 rounded-lg px-2 py-1 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full">

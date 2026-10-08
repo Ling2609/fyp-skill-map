@@ -3,6 +3,17 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 9 Oct 2026 — My Profile header tidied; each module shows its skills
+
+- (this commit) Her review of 12324ef:
+  - **Header**: one line about you (name, LinkedIn / GitHub / portfolio links, visibility) with **"Links & visibility"**
+    (was "Edit profile": it only changes links and who can see the profile) at its right end, level with the name.
+    The skill count sits below in large type ("178 skills found in your modules, …").
+  - "Hidden from employers" now amber, like "Visible to employers" is green (words and colour, not colour alone).
+  - **Modules tab**: under each module, "3 skills ▾" opens its skills as small chips (closed by default, so rows keep
+    their size). Shows why a grade matters: the module's skills come from it.
+  - "Import from GitHub" in the same light-blue style as "Links & visibility", with an import icon.
+
 ## 9 Oct 2026 — Modules tab shows the grade grid; centred empty tabs
 
 - (this commit) Her review of 50c72da: the Modules tab IS the year-by-year grade grid (no read-only list and side
