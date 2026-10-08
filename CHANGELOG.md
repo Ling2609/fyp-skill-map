@@ -3,6 +3,11 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 9 Oct 2026 — Roomier module lists
+
+- (this commit) "Compulsory Modules" and "Elective Modules" share one line with their hints, so the lists get more
+  room (her review of fc13195); clearer lines between module rows.
+
 ## 9 Oct 2026 — My Profile header tidied; each module shows its skills
 
 - (this commit) Her review of 12324ef:
