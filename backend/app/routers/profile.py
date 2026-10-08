@@ -10,6 +10,8 @@ Profile router — user's personal skill profile built from:
   - Awards (8 Oct): title, issuer, date, what it was for; the AI suggests skills, the student checks them before saving
   - About & links (8 Oct): headline, About, LinkedIn / portfolio / GitHub links, two switches for employers
   - GET /profile/showcase: everything My Profile shows (app/services/showcase.py)
+  - Programme + intake (8 Oct): GET / PUT /profile/study, asked at first sign-in and editable on My Profile
+  - Import from GitHub (8 Oct): GET /profile/github/repos lists public repos; each one picked is added as a project
 
 GET /profile/skills returns the shared Graduate Skill Profile (app/services/skill_profile.py).
 """
@@ -26,9 +28,10 @@ from app.routers.auth import get_current_user
 from app.models.user import User
 from app.config import settings
 
+from app.models.programme import Intake, Programme
 from app.models.user_module import UserModule
 from app.services.evidence import check_quote, normalise_text
-from app.services.github_repo import repo_languages
+from app.services.github_repo import public_repos, repo_languages, same_repo
 from app.services.skill_names import canonical_key
 from app.services.showcase import build_showcase
 from app.services.skill_profile import build_skill_profile
@@ -914,3 +917,62 @@ def get_module_grades(
             for m in saved
         ]
     }
+
+
+# ── Programme + intake (8 Oct) ────────────────────────────────────────────────
+# Decided 7 Oct (references.md "Programme + intake"): asked in a one-step setup at first sign-in, like Handshake's
+# onboarding, and editable later. The Admin keeps the list (admin_academic.py); students only read it and pick.
+
+class StudyIn(BaseModel):
+    programme_id: int
+    intake_id: int | None = None     # may stay empty only while the programme has no intakes yet
+
+
+def _study_out(user: User, db: Session) -> dict:
+    programmes = db.query(Programme).order_by(Programme.name).all()
+    intakes = db.query(Intake).order_by(Intake.start_date.desc().nulls_last(), Intake.code).all()
+    return {"programme_id": user.programme_id, "intake_id": user.intake_id,
+            "programmes": [{"id": p.id, "name": p.name,
+                            "intakes": [{"id": i.id, "code": i.code} for i in intakes if i.programme_id == p.id]}
+                           for p in programmes]}
+
+
+@router.get("/study")
+def get_study(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    """The student's programme and intake, and the choices (every programme with its intakes, newest first)."""
+    return _study_out(current_user, db)
+
+
+@router.put("/study")
+def save_study(data: StudyIn, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    if current_user.role != "student":
+        raise HTTPException(status_code=403, detail="Only students have a programme and intake")
+    programme = db.get(Programme, data.programme_id)
+    if not programme:
+        raise HTTPException(status_code=400, detail="Please pick your programme")
+    has_intakes = db.query(Intake).filter(Intake.programme_id == programme.id).count() > 0
+    intake = db.get(Intake, data.intake_id) if data.intake_id else None
+    if intake is None and has_intakes:
+        raise HTTPException(status_code=400, detail="Please pick your intake")
+    if intake is not None and intake.programme_id != programme.id:
+        raise HTTPException(status_code=400, detail="That intake belongs to another programme")
+    current_user.programme_id, current_user.intake_id = programme.id, intake.id if intake else None
+    db.commit()
+    db.refresh(current_user)
+    return _study_out(current_user, db)
+
+
+# ── Import from GitHub (8 Oct) ────────────────────────────────────────────────
+# Her choice: alongside "+ Add project", not instead of it (projects outside GitHub, repos without a description).
+# This only LISTS the repos; the page adds each repo she ticks through POST /profile/projects, so an imported repo is
+# an ordinary project (same skill extraction, same languages rule, editable). references.md "Showcase profile".
+
+@router.get("/github/repos")
+def list_github_repos(account: str, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    repos, note = public_repos(account)
+    if note:
+        raise HTTPException(status_code=400, detail=note)
+    links = [p.github_url for p in db.query(UserProject).filter(UserProject.user_id == current_user.id)]
+    for r in repos:
+        r["added"] = any(same_repo(r["url"], link) for link in links)
+    return {"repos": repos}

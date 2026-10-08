@@ -13,3 +13,16 @@ export const monthLabel = (value) => {
   const [year, month] = (value || '').split('-')
   return year && month ? `${MONTHS[Number(month) - 1]} ${year}` : ''
 }
+
+// GET /profile/showcase -> the body PUT /profile/about expects (it takes every About field at once, 8 Oct)
+export const aboutBody = (d) => ({
+  headline: d.headline || '', about: d.about || '',
+  linkedin_url: d.links?.linkedin || '', portfolio_url: d.links?.portfolio || '', github_url: d.links?.github || '',
+  visible_to_employers: !!d.visible_to_employers, show_grades_to_employers: !!d.show_grades_to_employers,
+})
+
+// A programme picked, and an intake too whenever that programme has intakes
+export const studyComplete = (options, value) => {
+  const programme = options?.programmes.find(p => p.id === value?.programme_id)
+  return !!programme && (!programme.intakes.length || !!value.intake_id)
+}

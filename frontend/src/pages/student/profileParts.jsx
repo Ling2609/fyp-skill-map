@@ -2,8 +2,8 @@ import { useState, useEffect, useCallback } from 'react'
 import { skillName } from '../../skillName'
 import { errText } from './profileUtils'
 
-// Pieces shared by the Skill Profile tabs (moved out of Profile.jsx on 8 Oct, so the new About & links and Awards
-// tabs, each in its own file, use exactly the same chips, pop-ups and buttons as Projects and Certifications).
+// Pieces shared by the My Profile cards and pop-ups (moved out of the old Profile.jsx on 8 Oct, so every card
+// and pop-up uses exactly the same chips, pop-ups and buttons).
 
 // ── Shared ────────────────────────────────────────────────────────────────────
 
@@ -194,6 +194,22 @@ export function SkillsRow({ children, empty, emptyText }) {
     <div className="mt-3 pt-3 border-t border-gray-100">
       {empty && <p className="text-xs text-gray-500 mb-2">{emptyText}</p>}
       <div className="flex flex-wrap items-center gap-1.5">{children}</div>
+    </div>
+  )
+}
+
+// An on/off switch (moved from the old About & links tab, 8 Oct). Keyboard: Tab to it, Space to flip.
+export function Toggle({ id, checked, onChange, label, hint, disabled = false }) {
+  return (
+    <div className="flex items-start gap-3">
+      <button type="button" id={id} role="switch" aria-checked={checked} disabled={disabled} onClick={() => onChange(!checked)}
+        className={`mt-0.5 relative w-9 h-5 rounded-full shrink-0 transition disabled:opacity-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 ${checked ? 'bg-blue-600' : 'bg-gray-300'}`}>
+        <span className={`absolute top-0.5 w-4 h-4 rounded-full bg-white shadow transition-all ${checked ? 'left-4.5' : 'left-0.5'}`} />
+      </button>
+      <label htmlFor={id} className="cursor-pointer">
+        <span className="block text-sm text-gray-800">{label}</span>
+        {hint && <span className="block text-xs text-gray-500 mt-0.5">{hint}</span>}
+      </label>
     </div>
   )
 }

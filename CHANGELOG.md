@@ -3,6 +3,25 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 8 Oct 2026 — One My Profile page, programme + intake setup, Import from GitHub, faster job matches
+
+- (this commit) Her rethink of c721aad: one page instead of My Profile + Skill Profile (clean A mock-up).
+  - **My Profile** (`/profile`; `/my-profile` and `/modules` still work): edit where it is shown. Each card has one
+    Edit / + Add; a row's ✎ and ✕ appear on hover. Modules & grades open in a wide side panel (`ModulesPanel.jsx`,
+    the old year grid unchanged). Side column: "Finish your profile" checklist (6 items; hides itself when done,
+    returns if something is removed) and Profile details (links + the two employer switches, which save at once).
+  - **Programme + intake**: `GET / PUT /profile/study`. A student without a programme is sent to `/setup` (one step,
+    two drop-downs) before anything else; editable later under Edit intro. Decided 7 Oct (references.md).
+  - **Import from GitHub**: `GET /profile/github/repos` lists the account's own public repos (1 GitHub call; forks
+    left out; repos already added greyed out). Each repo ticked is added through the normal `POST /profile/projects`,
+    so its languages (>= 10% of the code) become skills and it can be edited. "+ Add" stays for other projects.
+  - Files: `profileForms.jsx` (all pop-up forms), `profileSections.jsx` (cards), `GithubImport.jsx`,
+    `StudySetup.jsx`; `Profile.jsx`, `AwardsTab.jsx`, `AboutLinksTab.jsx` removed. Sidebar: one "My Profile" item.
+- (this commit) Faster job matches after sign-in: the relation model loads at start-up in a background thread, and
+  all jobs' candidate skill pairs are scored in one batch per request (was one model call per job). The backend
+  prints `[recommend] X s: N jobs for user U` for each request.
+- No migration needed.
+
 ## 8 Oct 2026 — Showcase profile: My Profile, Awards, About & links
 
 - (this commit) Supervisor meeting 8 Oct: one profile, like LinkedIn, that gathers portfolio, LinkedIn,

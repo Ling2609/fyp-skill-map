@@ -107,6 +107,7 @@ def build_showcase(user: User, db: Session, for_employer: bool = False) -> dict:
         "show_grades_to_employers": user.show_grades_to_employers,
         "programme": programme.name if programme else None,
         "intake": intake.code if intake else None,
+        "module_count": len(modules),     # modules with a grade (the profile checklist and the Education card)
         "strongest_modules": [{"name": name, "grade": grade_letter(grade) if show_grades else ""}
                               for name, grade in strongest.items()],
         "top_skills": top_skills,

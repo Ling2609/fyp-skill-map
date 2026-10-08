@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate } from 'react-router-dom'
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { SidebarProvider, useSidebar } from './components/SidebarContext'
 import { useAuth } from './context/useAuth'
 import Sidebar from './components/Sidebar'
@@ -9,8 +9,8 @@ import Dashboard from './pages/student/Dashboard';
 import Recommend from './pages/student/Recommend';
 import JobDetail from './pages/student/JobDetail';
 import Chatbot from './pages/student/Chatbot';
-import Profile from './pages/student/Profile';
 import MyProfile from './pages/student/MyProfile'
+import StudySetup from './pages/student/StudySetup'
 import AccountSettings from './pages/AccountSettings'
 import AdminDashboard from './pages/admin/AdminDashboard'
 import AdminUsers from './pages/admin/AdminUsers'
@@ -18,6 +18,7 @@ import AdminAcademic from './pages/admin/AdminAcademic'
 
 function RoleRoute({ children, roles }) {
   const { user, loading, serverDown } = useAuth()
+  const { pathname } = useLocation()
   if (loading) return null
   if (!user && serverDown) return (
     <div className="min-h-screen flex items-center justify-center bg-slate-100 p-4">
@@ -31,6 +32,8 @@ function RoleRoute({ children, roles }) {
   )
   if (!user) return <Navigate to="/login" replace />
   if (roles && !roles.includes(user.role)) return <Navigate to="/dashboard" />
+  // First sign-in setup (8 Oct): a student without a programme picks one before anything else
+  if (user.role === 'student' && !user.programme_id && pathname !== '/setup') return <Navigate to="/setup" replace />
   return children
 }
 
@@ -65,12 +68,14 @@ function AppRoutes() {
       <Route path="/dashboard" element={<RoleRoute><Layout><Home /></Layout></RoleRoute>} />
       <Route path="/admin/users" element={<RoleRoute roles={['admin']}><Layout><AdminUsers /></Layout></RoleRoute>} />
       <Route path="/admin/academic" element={<RoleRoute roles={['admin']}><Layout><AdminAcademic /></Layout></RoleRoute>} />
-      <Route path="/modules" element={<Navigate to="/profile?tab=modules" replace />} />
+      <Route path="/setup" element={<RoleRoute roles={['student']}><StudySetup /></RoleRoute>} />
+      <Route path="/modules" element={<Navigate to="/profile?edit=modules" replace />} />
       <Route path="/recommend" element={<RoleRoute roles={['student']}><Layout><Recommend /></Layout></RoleRoute>} />
       <Route path="/jobs/:jobId" element={<RoleRoute><Layout><JobDetail /></Layout></RoleRoute>} />
       <Route path="/chatbot" element={<RoleRoute roles={['student']}><Layout><Chatbot /></Layout></RoleRoute>} />
-      <Route path="/profile" element={<RoleRoute roles={['student']}><Layout><Profile /></Layout></RoleRoute>} />
-      <Route path="/my-profile" element={<RoleRoute roles={['student']}><Layout><MyProfile /></Layout></RoleRoute>} />
+      {/* 8 Oct: My Profile and Skill Profile are one page; the old /my-profile address still works */}
+      <Route path="/profile" element={<RoleRoute roles={['student']}><Layout><MyProfile /></Layout></RoleRoute>} />
+      <Route path="/my-profile" element={<Navigate to="/profile" replace />} />
       <Route path="/account" element={<RoleRoute><Layout><AccountSettings /></Layout></RoleRoute>} />
     </Routes>
   )
