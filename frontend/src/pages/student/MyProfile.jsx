@@ -97,11 +97,18 @@ export default function MyProfile() {
               Links &amp; visibility
             </button>
           </div>
-          {/* The skill count, large enough to notice: the one sign on this page that the entries below count */}
-          <p className="mt-2 text-sm text-slate-500">
-            <span className="text-xl font-semibold text-slate-900 tabular-nums">{data.total_skills}</span>{' '}
-            <span className="font-medium text-slate-700">{data.total_skills === 1 ? 'skill' : 'skills'}</span> found in your modules, projects, certificates and awards
-          </p>
+          {/* Skill count on the left; programme and intake on the right of the same line, under "Links & visibility":
+              they describe the student, so they sit in the header, and the empty space there costs no height (9 Oct) */}
+          <div className="mt-2 flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
+            <p className="text-sm text-slate-500">
+              <span className="text-xl font-semibold text-slate-900 tabular-nums">{data.total_skills}</span>{' '}
+              <span className="font-medium text-slate-700">{data.total_skills === 1 ? 'skill' : 'skills'}</span> found in your modules, projects, certificates and awards
+            </p>
+            <p className="text-sm text-slate-600">
+              {data.programme || 'Programme not set'}{data.intake && <span className="text-slate-400"> · Intake {data.intake}</span>}
+              {' · '}<button type="button" onClick={() => setOpen('study')} className="font-medium text-blue-700 hover:underline">Change</button>
+            </p>
+          </div>
         </div>
         {/* Tabs wrap onto a second line on a narrow window: never a sideways scrollbar (her request 8 Oct) */}
         <div role="tablist" aria-label="Profile sections" className="flex flex-wrap gap-x-6 border-t border-slate-200 -mx-8 px-8">
@@ -123,7 +130,7 @@ export default function MyProfile() {
 
       <div className="flex-1 min-h-0 px-8 py-6">
         {tab === 'modules' && (
-          <ModulesTab data={data} onChangeStudy={() => setOpen('study')} onUnsavedChange={setGradesUnsaved} onSaved={load} />
+          <ModulesTab onUnsavedChange={setGradesUnsaved} onSaved={load} />
         )}
         {tab === 'projects' && (
           <ProjectsTab projects={projects} onRefresh={load} onImport={() => setOpen('github')}

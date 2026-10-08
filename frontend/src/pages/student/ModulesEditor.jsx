@@ -18,31 +18,36 @@ const GRADE_OPTIONS = [
 ]
 
 // Under each module: its code and "3 skills ▾" (9 Oct, her idea: shows where the skill count comes from, i.e. why a
-// grade matters). Closed by default, so rows keep their size; open, the module's skills show as small chips.
-function ModuleSkills({ mod }) {
-  const [open, setOpen] = useState(false)
-  const names = (mod.skills || []).map(skillName)
+// grade matters). Closed by default, so rows keep their size. Open, the skills show as chips across the whole row
+// width, under the grade box too, so a long list takes fewer lines (her request 9 Oct).
+function SkillsToggle({ mod, open, onToggle }) {
+  const n = (mod.skills || []).length
   return (
-    <div>
-      <p className="text-xs text-gray-400">
-        {mod.code}
-        {names.length > 0 && (
-          <> · <button type="button" onClick={() => setOpen(o => !o)} aria-expanded={open}
-            className="text-blue-600 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-300 rounded">
-            {names.length} {names.length === 1 ? 'skill' : 'skills'} {open ? '▴' : '▾'}
-          </button></>
-        )}
-      </p>
-      {open && (
-        <div className="flex flex-wrap gap-1 mt-1.5">
-          {names.map(n => <span key={n} className="text-[11px] px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-100">{n}</span>)}
-        </div>
+    <p className="text-xs text-gray-400">
+      {mod.code}
+      {n > 0 && (
+        <> · <button type="button" onClick={onToggle} aria-expanded={open}
+          className="text-blue-600 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-300 rounded">
+          {n} {n === 1 ? 'skill' : 'skills'} {open ? '▴' : '▾'}
+        </button></>
       )}
+    </p>
+  )
+}
+
+function SkillChips({ mod }) {
+  return (
+    <div className="flex flex-wrap gap-1 mt-2">
+      {(mod.skills || []).map(skillName).map(n => (
+        <span key={n} className="text-[11px] px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-100">{n}</span>
+      ))}
     </div>
   )
 }
 
 export default function ModulesEditor({ onUnsavedChange, onSaved }) {
+  const [openSkills, setOpenSkills] = useState({})   // module code -> skills shown
+  const toggleSkills = (code) => setOpenSkills(o => ({ ...o, [code]: !o[code] }))
   const [modules, setModules] = useState([])
   const [selections, setSelections] = useState({})
   const [savedSelections, setSavedSelections] = useState({})
@@ -120,7 +125,7 @@ export default function ModulesEditor({ onUnsavedChange, onSaved }) {
     <div className="lg:h-full flex flex-col gap-5">
 
       {/* Year tabs + save status */}
-      <div className="shrink-0 flex items-center justify-between gap-3">
+      <div className="shrink-0 flex flex-wrap items-center justify-between gap-3">
         <div className="flex gap-2">
           {[1, 2, 3].map(year => (
             <button key={year} onClick={() => setSelectedYear(year)}
@@ -170,8 +175,8 @@ export default function ModulesEditor({ onUnsavedChange, onSaved }) {
       {/* Split panels */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 lg:flex-1 lg:min-h-0">
         <div className="lg:col-span-2 bg-white rounded-2xl border border-gray-200 flex flex-col lg:min-h-0 overflow-hidden">
-          {/* Title and hint on one line, so the list gets more room (her request 9 Oct) */}
-          <div className="shrink-0 px-6 py-3 border-b border-gray-200 flex flex-wrap items-baseline gap-x-2">
+          {/* Title left, hint right, on one line, so the list gets more room (her requests 9 Oct) */}
+          <div className="shrink-0 px-6 py-3 border-b border-gray-200 flex flex-wrap items-baseline justify-between gap-x-3">
             <p className="text-sm font-semibold text-gray-800">Compulsory Modules</p>
             {/* Users are final-year students and recent graduates (IR §3.2.2); only completed modules count (IR §1.6.1),
                 so a final-year student leaves current modules blank. No honesty checkbox (Kristal et al. 2020) */}
@@ -181,29 +186,32 @@ export default function ModulesEditor({ onUnsavedChange, onSaved }) {
           <div key={`c${selectedYear}`} tabIndex={0} aria-label="Compulsory modules"
             className="px-6 py-2 divide-y divide-gray-200 lg:flex-1 lg:overflow-y-auto focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-300">
             {compulsory.map(mod => (
-              <div key={mod.code} className="flex items-start justify-between py-3">
-                <div className="flex items-start gap-3 min-w-0 flex-1">
-                  <span className="w-2 h-2 rounded-full bg-blue-500 shrink-0 mt-1.5" />
-                  <div className="min-w-0">
-                    <p className="text-sm font-medium text-gray-800">{mod.name}</p>
-                    <ModuleSkills mod={mod} />
+              <div key={mod.code} className="py-3">
+                <div className="flex items-start justify-between">
+                  <div className="flex items-start gap-3 min-w-0 flex-1">
+                    <span className="w-2 h-2 rounded-full bg-blue-500 shrink-0 mt-1.5" />
+                    <div className="min-w-0">
+                      <p className="text-sm font-medium text-gray-800">{mod.name}</p>
+                      <SkillsToggle mod={mod} open={!!openSkills[mod.code]} onToggle={() => toggleSkills(mod.code)} />
+                    </div>
                   </div>
+                  <select
+                    value={selections[mod.code] ?? ''}
+                    onChange={e => setGrade(mod.code, e.target.value)}
+                    className="ml-4 border border-gray-200 rounded-lg px-2 py-1 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 shrink-0"
+                  >
+                    <option value="">Not graded yet</option>
+                    {GRADE_OPTIONS.map(g => <option key={g.value} value={g.value}>{g.label}</option>)}
+                  </select>
                 </div>
-                <select
-                  value={selections[mod.code] ?? ''}
-                  onChange={e => setGrade(mod.code, e.target.value)}
-                  className="ml-4 border border-gray-200 rounded-lg px-2 py-1 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 shrink-0"
-                >
-                  <option value="">Not graded yet</option>
-                  {GRADE_OPTIONS.map(g => <option key={g.value} value={g.value}>{g.label}</option>)}
-                </select>
+                {openSkills[mod.code] && <div className="pl-5"><SkillChips mod={mod} /></div>}
               </div>
             ))}
           </div>
         </div>
 
         <div className="bg-white rounded-2xl border border-gray-200 flex flex-col lg:min-h-0 overflow-hidden">
-          <div className="shrink-0 px-6 py-3 border-b border-gray-200 flex flex-wrap items-baseline gap-x-2">
+          <div className="shrink-0 px-6 py-3 border-b border-gray-200 flex flex-wrap items-baseline justify-between gap-x-3">
             <p className="text-sm font-semibold text-gray-800">Elective Modules</p>
             <p className="text-xs text-gray-400">Tick the ones you took</p>
           </div>
@@ -219,7 +227,8 @@ export default function ModulesEditor({ onUnsavedChange, onSaved }) {
                     className="w-4 h-4 mt-0.5 accent-blue-700 shrink-0" />
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium text-gray-800">{mod.name}</p>
-                    <ModuleSkills mod={mod} />
+                    <SkillsToggle mod={mod} open={!!openSkills[mod.code]} onToggle={() => toggleSkills(mod.code)} />
+                    {openSkills[mod.code] && <SkillChips mod={mod} />}
                     {selections[mod.code] !== undefined && (
                       <select value={selections[mod.code] ?? ''} onChange={e => setGrade(mod.code, e.target.value)}
                         className="mt-2 border border-gray-200 rounded-lg px-2 py-1 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full">

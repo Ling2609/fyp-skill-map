@@ -75,22 +75,10 @@ function useItems(base, onRefresh) {
 }
 
 // ── Modules ───────────────────────────────────────────────────────────────────
-// The year-by-year grade grid itself (ModulesEditor.jsx), with programme and intake on top (9 Oct, her choice).
+// The year-by-year grade grid itself (ModulesEditor.jsx). Programme and intake are in the page header (9 Oct).
 
-export function ModulesTab({ data, onChangeStudy, onUnsavedChange, onSaved }) {
-  return (
-    <div className="lg:h-full flex flex-col gap-4 min-h-0">
-      <div className="shrink-0 flex flex-wrap items-baseline justify-between gap-2 bg-white border border-slate-200 rounded-2xl px-6 py-3 shadow-sm">
-        <p className="text-sm text-slate-700">
-          {data.programme || 'Programme not set'}{data.intake && <span className="text-slate-500"> · Intake {data.intake}</span>}
-        </p>
-        <button type="button" onClick={onChangeStudy} className="text-sm font-medium text-blue-700 hover:underline">Change programme</button>
-      </div>
-      <div className="lg:flex-1 lg:min-h-0">
-        <ModulesEditor onUnsavedChange={onUnsavedChange} onSaved={onSaved} />
-      </div>
-    </div>
-  )
+export function ModulesTab({ onUnsavedChange, onSaved }) {
+  return <div className="lg:h-full"><ModulesEditor onUnsavedChange={onUnsavedChange} onSaved={onSaved} /></div>
 }
 
 // ── Projects ──────────────────────────────────────────────────────────────────

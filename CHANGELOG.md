@@ -3,6 +3,15 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 9 Oct 2026 — Programme in the header; module skills use the full row
+
+- (this commit) Her review of d7f612e, to give the module lists more room:
+  - Programme, intake and "Change" moved into the page header, on the skill-count line, right-aligned under
+    "Links & visibility" (it describes the student; the space was empty, so no extra height). The Year row is back
+    to Year 1-3, the unsaved-changes note and Save Grades. On a small window the programme drops under the count.
+  - List hints right-aligned ("14 modules · leave blank…", "Tick the ones you took"), upright (no italics).
+  - A module's skills, when opened, run across the whole row width (under the grade box too), so fewer lines.
+
 ## 9 Oct 2026 — Roomier module lists
 
 - (this commit) "Compulsory Modules" and "Elective Modules" share one line with their hints, so the lists get more
