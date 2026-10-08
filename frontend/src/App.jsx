@@ -69,7 +69,7 @@ function AppRoutes() {
       <Route path="/admin/users" element={<RoleRoute roles={['admin']}><Layout><AdminUsers /></Layout></RoleRoute>} />
       <Route path="/admin/academic" element={<RoleRoute roles={['admin']}><Layout><AdminAcademic /></Layout></RoleRoute>} />
       <Route path="/setup" element={<RoleRoute roles={['student']}><StudySetup /></RoleRoute>} />
-      <Route path="/modules" element={<Navigate to="/profile?edit=modules" replace />} />
+      <Route path="/modules" element={<Navigate to="/profile?tab=modules" replace />} />
       <Route path="/recommend" element={<RoleRoute roles={['student']}><Layout><Recommend /></Layout></RoleRoute>} />
       <Route path="/jobs/:jobId" element={<RoleRoute><Layout><JobDetail /></Layout></RoleRoute>} />
       <Route path="/chatbot" element={<RoleRoute roles={['student']}><Layout><Chatbot /></Layout></RoleRoute>} />

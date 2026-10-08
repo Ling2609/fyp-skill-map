@@ -9,7 +9,7 @@ import { errText, studyComplete } from './profileUtils'
 // First sign-in setup (8 Oct; decided 7 Oct, references.md "Programme + intake"): one step, two drop-downs, before
 // anything else. A student without a programme is sent here by the route guard in App.jsx; this also catches
 // accounts made before the step existed. Like Handshake's onboarding: account first, then these, editable later
-// (My Profile → Edit intro). Next stop: the modules panel, since modules and grades are what the profile is built on.
+// (My Profile → Modules → Change programme). Next stop: the Modules tab, since modules and grades are what the profile is built on.
 
 export default function StudySetup() {
   const { user, setUser, logout } = useAuth()
@@ -36,7 +36,7 @@ export default function StudySetup() {
     try {
       await api.put('/profile/study', study)
       setUser(u => ({ ...u, ...study }))
-      navigate('/profile?edit=modules', { replace: true })
+      navigate('/profile?tab=modules', { replace: true })
     } catch (err) {
       setError(errText(err, "Couldn't save. Please try again."))
       setBusy(false)

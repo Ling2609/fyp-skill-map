@@ -1,10 +1,10 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect } from 'react'
 import api from '../../api'
 import { Spinner } from './profileParts'
 
-// Modules & grades (8 Oct, one page): the year-by-year grid of the old Modules tab, unchanged, in a wide panel that
-// slides in from the right when "Edit modules & grades" is pressed (clean A mock-up). "Save Grades" saves and closes
-// it. Closing with grades not saved (✕, Esc, a click outside) asks first, like the pop-ups.
+// Modules & grades: the year-by-year grid (4 Oct), shown straight in My Profile's Modules tab (9 Oct, her choice: no
+// separate read-only list and side panel, one click fewer). Leaving the tab with grades not saved asks first
+// (My Profile handles that through onUnsavedChange).
 
 const GRADE_OPTIONS = [
   { label: 'A (4.0)', value: 4.0 },
@@ -16,7 +16,7 @@ const GRADE_OPTIONS = [
   { label: 'C (2.0)', value: 2.0 },
 ]
 
-function ModulesEditor({ onUnsavedChange, onSaved }) {
+export default function ModulesEditor({ onUnsavedChange, onSaved }) {
   const [modules, setModules] = useState([])
   const [selections, setSelections] = useState({})
   const [savedSelections, setSavedSelections] = useState({})
@@ -61,7 +61,8 @@ function ModulesEditor({ onUnsavedChange, onSaved }) {
       await api.post('/profile/modules', { grades })
       setSavedSelections(gradedSelections(selections))
       setSaveStatus('saved')
-      onSaved?.()  // My Profile reloads and the panel closes
+      onSaved?.()  // My Profile reloads its counts
+      setTimeout(() => setSaveStatus(''), 2500)
     } catch {
       setSaveStatus('error')
     } finally { setSaving(false) }
@@ -207,54 +208,6 @@ function ModulesEditor({ onUnsavedChange, onSaved }) {
         </div>
       </div>
 
-    </div>
-  )
-}
-
-export default function ModulesPanel({ onClose, onSaved }) {
-  const [unsaved, setUnsaved] = useState(false)
-  const [asking, setAsking] = useState(false)
-  const tryClose = useCallback(() => { if (unsaved) setAsking(true); else onClose() }, [unsaved, onClose])
-
-  useEffect(() => {
-    const onKey = (e) => { if (e.key === 'Escape') tryClose() }
-    window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
-  }, [tryClose])
-
-  // Closing the browser tab with grades not saved: the browser asks too
-  useEffect(() => {
-    const onLeave = (e) => { if (unsaved) { e.preventDefault(); e.returnValue = '' } }
-    window.addEventListener('beforeunload', onLeave)
-    return () => window.removeEventListener('beforeunload', onLeave)
-  }, [unsaved])
-
-  return (
-    <div className="fixed inset-0 z-40 flex justify-end bg-slate-900/30" onMouseDown={tryClose}>
-      <div role="dialog" aria-modal="true" aria-label="Modules and grades" onMouseDown={e => e.stopPropagation()}
-        className="bg-slate-50 w-full max-w-5xl h-full flex flex-col shadow-xl">
-        <div className="shrink-0 bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between gap-3">
-          <div>
-            <h2 className="text-base font-semibold text-gray-800">Modules &amp; grades</h2>
-            <p className="text-xs text-gray-500 mt-0.5">Your grades are the strongest evidence for your skills.</p>
-          </div>
-          <button type="button" onClick={tryClose} aria-label="Close" className="text-gray-400 hover:text-gray-700 p-1 rounded-lg hover:bg-gray-100">
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
-          </button>
-        </div>
-        {asking && (
-          <div role="alertdialog" aria-label="Discard changes" className="shrink-0 mx-6 mt-4 bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 flex items-center justify-between gap-3">
-            <p className="text-sm text-amber-800">You have unsaved grade changes. Close without saving?</p>
-            <div className="flex gap-2 shrink-0">
-              <button type="button" onClick={() => setAsking(false)} autoFocus className="px-3 py-1.5 text-sm text-gray-600 hover:text-gray-900">Keep editing</button>
-              <button type="button" onClick={onClose} className="px-3 py-1.5 text-sm font-medium text-red-600 hover:bg-red-50 rounded-lg">Close without saving</button>
-            </div>
-          </div>
-        )}
-        <div className="flex-1 min-h-0 overflow-auto lg:overflow-hidden px-6 py-5">
-          <ModulesEditor onUnsavedChange={setUnsaved} onSaved={() => { onSaved(); onClose() }} />
-        </div>
-      </div>
     </div>
   )
 }

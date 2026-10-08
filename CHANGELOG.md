@@ -3,6 +3,14 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 9 Oct 2026 — Modules tab shows the grade grid; centred empty tabs
+
+- (this commit) Her review of 50c72da: the Modules tab IS the year-by-year grade grid (no read-only list and side
+  panel: one click fewer), with programme + intake and "Change programme" above it. Leaving the tab or the page with
+  grades not saved asks first. `ModulesPanel.jsx` replaced by `ModulesEditor.jsx`. First sign-in and `/modules` open
+  `/profile?tab=modules`; the address follows the open tab.
+- Empty Projects / Certificates / Awards tabs: message centred in the panel, emoji back (🗂️ 🎓 🏆).
+
 ## 9 Oct 2026 — My Profile becomes the input page; sidebar follows the flow
 
 - (this commit) Her redesign after several rounds of mock-ups (references.md "Profile layout with many categories",

@@ -8,7 +8,6 @@ import { ProfileForm, StudyForm } from './profileForms'
 import { AwardsTab, CertsTab, ModulesTab, ProjectsTab } from './profileSections'
 import { btnCls } from './profileUtils'
 import GithubImport from './GithubImport'
-import ModulesPanel from './ModulesPanel'
 
 // My Profile (9 Oct, her design): the page where a student puts things in. Four tabs, the four places her skills come
 // from: Modules, Projects, Certificates, Awards. What SkillMap works out from them (matches, skills to learn) is on the
@@ -36,12 +35,12 @@ export default function MyProfile() {
   const [certs, setCerts] = useState([])
   const [awards, setAwards] = useState([])
   const [error, setError] = useState('')
-  // ?tab=projects opens that tab; ?edit=modules opens the modules panel (first sign-in, the old /modules address)
+  // ?tab=projects opens that tab (first sign-in and the old /modules address use ?tab=modules)
   const [tab, setTab] = useState(() => TABS.some(t => t.key === searchParams.get('tab')) ? searchParams.get('tab') : 'modules')
-  const [open, setOpen] = useState(searchParams.get('edit') === 'modules' ? 'modules' : null)   // 'profile' | 'study' | 'modules' | 'github'
+  const [open, setOpen] = useState(null)   // the pop-up open now: 'profile' | 'study' | 'github'
+  const [gradesUnsaved, setGradesUnsaved] = useState(false)   // the Modules tab has grades not saved yet
   const [dirty, setDirty] = useState(false)
   const [importNote, setImportNote] = useState('')
-  const [modulesVersion, setModulesVersion] = useState(0)
 
   const load = useCallback(() => Promise.all([
     api.get('/profile/showcase'), api.get('/profile/projects'), api.get('/profile/certifications'), api.get('/profile/awards'),
@@ -51,10 +50,21 @@ export default function MyProfile() {
 
   useEffect(() => { load() }, [load])
 
-  const close = () => {
-    setOpen(null); setDirty(false)
-    if (searchParams.get('edit')) setSearchParams({}, { replace: true })
+  const close = () => { setOpen(null); setDirty(false) }
+
+  // Leaving the Modules tab, or the page, with grades not saved asks first (as the old Skill Profile did, 4 Oct)
+  const chooseTab = (key) => {
+    if (key === tab) return
+    if (gradesUnsaved && !window.confirm('You have unsaved grade changes. Leave without saving?')) return
+    setGradesUnsaved(false)
+    setTab(key)
+    setSearchParams(key === 'modules' ? {} : { tab: key }, { replace: true })
   }
+  useEffect(() => {
+    const onLeave = (e) => { if (gradesUnsaved) { e.preventDefault(); e.returnValue = '' } }
+    window.addEventListener('beforeunload', onLeave)
+    return () => window.removeEventListener('beforeunload', onLeave)
+  }, [gradesUnsaved])
   const saved = () => { close(); load() }
 
   if (error && !data) return <div className="p-8"><p role="alert" className="text-sm text-red-600 bg-red-50 rounded-lg px-4 py-3">{error}</p></div>
@@ -89,7 +99,7 @@ export default function MyProfile() {
           {TABS.map(t => {
             const active = tab === t.key
             return (
-              <button key={t.key} type="button" role="tab" aria-selected={active} onClick={() => setTab(t.key)}
+              <button key={t.key} type="button" role="tab" aria-selected={active} onClick={() => chooseTab(t.key)}
                 className={`flex items-center gap-2 py-3 text-sm font-medium border-b-2 transition-colors ${active
                   ? 'border-blue-600 text-blue-700' : 'border-transparent text-slate-500 hover:text-slate-800 hover:border-slate-200'}`}>
                 {t.label}
@@ -104,7 +114,7 @@ export default function MyProfile() {
 
       <div className="flex-1 min-h-0 px-8 py-6">
         {tab === 'modules' && (
-          <ModulesTab data={data} version={modulesVersion} onEditGrades={() => setOpen('modules')} onChangeStudy={() => setOpen('study')} />
+          <ModulesTab data={data} onChangeStudy={() => setOpen('study')} onUnsavedChange={setGradesUnsaved} onSaved={load} />
         )}
         {tab === 'projects' && (
           <ProjectsTab projects={projects} onRefresh={load} onImport={() => setOpen('github')}
@@ -125,12 +135,9 @@ export default function MyProfile() {
             onDone={(study) => { setUser(u => ({ ...u, ...study })); saved() }} />
         </Modal>
       )}
-      {open === 'modules' && (
-        <ModulesPanel onClose={close} onSaved={() => { load(); setModulesVersion(v => v + 1); setTab('modules') }} />
-      )}
       {open === 'github' && (
         <GithubImport githubLink={links.github} onClose={close}
-          onDone={(note) => { setImportNote(note); setTab('projects'); saved() }} />
+          onDone={(note) => { setImportNote(note); saved() }} />
       )}
     </div>
   )

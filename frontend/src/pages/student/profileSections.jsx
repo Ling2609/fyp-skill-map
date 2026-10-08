@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import api from '../../api'
-import { AddSkillChip, ConfirmDelete, CrossIcon, IconButton, Modal, PencilIcon, SkillChip, Spinner } from './profileParts'
+import { AddSkillChip, ConfirmDelete, CrossIcon, IconButton, Modal, PencilIcon, SkillChip } from './profileParts'
 import { AwardForm, CertForm, ProjectForm } from './profileForms'
-import { ADDED_BY_YOU, btnBlueCls, btnCls, gradeLetter, monthLabel } from './profileUtils'
+import { ADDED_BY_YOU, btnBlueCls, btnCls, monthLabel } from './profileUtils'
+import ModulesEditor from './ModulesEditor'
 
 // The four tabs of My Profile (9 Oct): Modules, Projects, Certificates, Awards, the places a student's skills come
 // from. Each tab is one white panel: a title row with its buttons (fixed), then the list (scrolls inside the panel on
@@ -16,7 +17,7 @@ function Panel({ title, actions, children }) {
         {actions && <div className="flex flex-wrap items-center gap-2">{actions}</div>}
       </div>
       <div tabIndex={0} aria-label={title}
-        className="px-6 py-4 lg:flex-1 lg:min-h-0 lg:overflow-y-auto rounded-b-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-300">
+        className="px-6 py-4 flex flex-col lg:flex-1 lg:min-h-0 lg:overflow-y-auto rounded-b-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-300">
         {children}
       </div>
     </section>
@@ -41,13 +42,15 @@ function Note({ text, onClose }) {
   )
 }
 
-// An empty tab says what goes here and how to add the first one (NN/g, empty states)
-function Empty({ title, text, action }) {
+// An empty tab says what goes here and how to add the first one (NN/g, empty states), centred in the panel
+function Empty({ icon, title, text }) {
   return (
-    <div className="py-10 text-center max-w-sm mx-auto">
-      <p className="text-sm font-medium text-slate-700">{title}</p>
-      <p className="text-sm text-slate-500 mt-1">{text}</p>
-      {action && <div className="mt-4">{action}</div>}
+    <div className="flex-1 flex flex-col items-center justify-center text-center py-12 gap-3">
+      <span aria-hidden="true" className="text-4xl">{icon}</span>
+      <div className="max-w-sm">
+        <p className="text-sm font-medium text-slate-700">{title}</p>
+        <p className="text-sm text-slate-500 mt-1">{text}</p>
+      </div>
     </div>
   )
 }
@@ -72,54 +75,21 @@ function useItems(base, onRefresh) {
 }
 
 // ── Modules ───────────────────────────────────────────────────────────────────
-// The graded modules, by year. Programme and intake sit on top (moved here from the page header, 9 Oct).
-// version changes after grades are saved, so the list loads again.
+// The year-by-year grade grid itself (ModulesEditor.jsx), with programme and intake on top (9 Oct, her choice).
 
-export function ModulesTab({ data, version, onEditGrades, onChangeStudy }) {
-  const [rows, setRows] = useState(null)      // null = loading
-  const [error, setError] = useState('')
-
-  useEffect(() => {
-    let cancelled = false
-    Promise.all([api.get('/modules/'), api.get('/profile/modules')])
-      .then(([mods, mine]) => {
-        if (cancelled) return
-        const grade = Object.fromEntries(mine.data.grades.map(g => [g.module_code, g.grade]))
-        setRows(mods.data.filter(m => grade[m.code] !== undefined).map(m => ({ ...m, grade: grade[m.code] })))
-      })
-      .catch(() => { if (!cancelled) setError("Couldn't load your modules. Please refresh the page.") })
-    return () => { cancelled = true }
-  }, [version])
-
-  const years = rows ? [...new Set(rows.map(r => r.level))].sort() : []
+export function ModulesTab({ data, onChangeStudy, onUnsavedChange, onSaved }) {
   return (
-    <Panel title="Your modules" actions={<button type="button" onClick={onEditGrades} className={btnBlueCls}>Edit modules &amp; grades</button>}>
-      <div className="flex flex-wrap items-baseline justify-between gap-2 pb-3 mb-1 border-b border-slate-100">
+    <div className="lg:h-full flex flex-col gap-4 min-h-0">
+      <div className="shrink-0 flex flex-wrap items-baseline justify-between gap-2 bg-white border border-slate-200 rounded-2xl px-6 py-3 shadow-sm">
         <p className="text-sm text-slate-700">
           {data.programme || 'Programme not set'}{data.intake && <span className="text-slate-500"> · Intake {data.intake}</span>}
         </p>
         <button type="button" onClick={onChangeStudy} className="text-sm font-medium text-blue-700 hover:underline">Change programme</button>
       </div>
-      {error && <p role="alert" className="text-sm text-red-600 bg-red-50 rounded-lg px-3 py-2 mt-3">{error}</p>}
-      {!rows && !error && <div className="flex justify-center py-8 text-blue-600"><Spinner /></div>}
-      {rows && rows.length === 0 && (
-        <Empty title="No grades yet" text="Your grades are the strongest evidence for your skills. Add the modules you have finished."
-          action={<button type="button" onClick={onEditGrades} className={btnBlueCls}>Add modules &amp; grades</button>} />
-      )}
-      {years.map(y => (
-        <div key={y} className="mt-3">
-          <p className="text-xs font-semibold text-slate-500 mb-1">Year {y}</p>
-          <ul className="divide-y divide-slate-100">
-            {rows.filter(r => r.level === y).map(r => (
-              <li key={r.code} className="flex items-center justify-between gap-3 py-2">
-                <span className="text-sm text-slate-800 min-w-0">{r.name} <span className="text-xs text-slate-400">{r.code}</span></span>
-                <span className="text-sm font-semibold text-slate-700 tabular-nums shrink-0">{gradeLetter(r.grade)}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      ))}
-    </Panel>
+      <div className="lg:flex-1 lg:min-h-0">
+        <ModulesEditor onUnsavedChange={onUnsavedChange} onSaved={onSaved} />
+      </div>
+    </div>
   )
 }
 
@@ -143,7 +113,7 @@ export function ProjectsTab({ projects, onRefresh, onImport, importNote, onImpor
       <Note text={importNote} onClose={onImportNoteClose} />
       <Note text={s.note} onClose={() => s.setNote('')} />
       {projects.length === 0 ? (
-        <Empty title="No projects yet" text="Add a project you built, or import your repositories from GitHub. SkillMap finds the skills you used." />
+        <Empty icon="🗂️" title="No projects yet" text="Add a project you built, or import your repositories from GitHub. SkillMap finds the skills you used." />
       ) : (
         <ul className="divide-y divide-slate-100">
           {projects.map(p => (
@@ -192,7 +162,7 @@ export function CertsTab({ certs, onRefresh }) {
     <Panel title="Your certificates" actions={<button type="button" onClick={() => s.setEditing('new')} className={btnBlueCls}>+ Add certificate</button>}>
       <Note text={s.note} onClose={() => s.setNote('')} />
       {certs.length === 0 ? (
-        <Empty title="No certificates yet" text="Add a certificate and the skills it lists, or let SkillMap suggest them from its name." />
+        <Empty icon="🎓" title="No certificates yet" text="Add a certificate and the skills it lists, or let SkillMap suggest them from its name." />
       ) : (
         <ul className="divide-y divide-slate-100">
           {certs.map(c => {
@@ -249,7 +219,7 @@ export function AwardsTab({ awards, onRefresh }) {
     <Panel title="Your awards" actions={<button type="button" onClick={() => s.setEditing('new')} className={btnBlueCls}>+ Add award</button>}>
       <Note text={s.note} onClose={() => s.setNote('')} />
       {awards.length === 0 ? (
-        <Empty title="No awards yet" text="Add competition wins, scholarships or a dean's list. SkillMap suggests the skills each one shows." />
+        <Empty icon="🏆" title="No awards yet" text="Add competition wins, scholarships or a dean's list. SkillMap suggests the skills each one shows." />
       ) : (
         <ul className="divide-y divide-slate-100">
           {awards.map(a => {

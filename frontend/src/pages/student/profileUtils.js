@@ -31,6 +31,3 @@ export const studyComplete = (options, value) => {
 export const btnCls = 'text-sm font-medium px-3.5 py-2 rounded-xl border border-slate-200 bg-white text-slate-700 hover:border-blue-300 hover:text-blue-700 transition'
 export const btnBlueCls = 'text-sm font-medium px-4 py-2 rounded-xl bg-blue-700 text-white hover:bg-blue-800 transition'
 
-const GRADE_LETTERS = { 4: 'A', 3.7: 'A-', 3.3: 'B+', 3: 'B', 2.7: 'B-', 2.3: 'C+', 2: 'C' }
-// 3.7 -> "A-" (the same letters as the grade lists)
-export const gradeLetter = (grade) => GRADE_LETTERS[Math.round(grade * 10) / 10] || ''
