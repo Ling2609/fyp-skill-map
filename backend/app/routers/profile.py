@@ -7,6 +7,9 @@ Profile router — user's personal skill profile built from:
     estimates them from the name and issuer ("estimated"), or returns none if it doesn't know the certificate
   - The student can remove any single skill (✕ on the chip); adding skills by hand is not offered (no evidence)
 4 Oct, references.md "Project and certificate skill extraction".
+  - Awards (8 Oct): title, issuer, date, what it was for; the AI suggests skills, the student checks them before saving
+  - About & links (8 Oct): headline, About, LinkedIn / portfolio / GitHub links, two switches for employers
+  - GET /profile/showcase: everything My Profile shows (app/services/showcase.py)
 
 GET /profile/skills returns the shared Graduate Skill Profile (app/services/skill_profile.py).
 """
@@ -18,7 +21,7 @@ from pydantic import BaseModel
 from groq import Groq
 
 from app.database import get_db
-from app.models.profile import ADDED_BY_YOU, UserProject, UserCertification
+from app.models.profile import ADDED_BY_YOU, UserAward, UserProject, UserCertification
 from app.routers.auth import get_current_user
 from app.models.user import User
 from app.config import settings
@@ -27,6 +30,7 @@ from app.models.user_module import UserModule
 from app.services.evidence import check_quote, normalise_text
 from app.services.github_repo import repo_languages
 from app.services.skill_names import canonical_key
+from app.services.showcase import build_showcase
 from app.services.skill_profile import build_skill_profile
 
 router = APIRouter(prefix="/profile", tags=["profile"])
@@ -99,6 +103,44 @@ class CertOut(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+class AwardIn(BaseModel):
+    title: str
+    issuer: str
+    award_date: str | None = None      # "2025-11" from the month picker, or empty
+    description: str = ""
+    skills: list[str] = []             # the chips the student kept in the pop-up
+    allow_duplicate: bool = False
+
+
+class AwardSuggestIn(BaseModel):
+    title: str
+    issuer: str
+    description: str = ""
+
+
+class AwardOut(BaseModel):
+    id: int
+    title: str
+    issuer: str
+    award_date: str | None = None
+    description: str | None = None
+    mapped_skills: list[str]
+    added_skills: list[str] | None = None
+
+    class Config:
+        from_attributes = True
+
+
+class AboutIn(BaseModel):
+    headline: str = ""
+    about: str = ""
+    linkedin_url: str = ""
+    portfolio_url: str = ""
+    github_url: str = ""
+    visible_to_employers: bool = False
+    show_grades_to_employers: bool = False
 
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
@@ -253,6 +295,10 @@ def check_profile_schema():
     if "skill_quotes" not in projects or not {"skills_source", "added_skills", "credly_url"} <= certs:
         raise RuntimeError("Database not updated: run  python migrations/migrate_profile_skill_evidence.py  "
                            "from the backend folder, then start the backend again.")
+    users = {c["name"] for c in inspect(engine).get_columns("users")}
+    if not {"headline", "show_grades_to_employers"} <= users or not inspect(engine).has_table("user_awards"):
+        raise RuntimeError("Database not updated: run  python migrations/migrate_profile_showcase.py  "
+                           "from the backend folder, then start the backend again.")
 
 
 # ── Endpoints ─────────────────────────────────────────────────────────────────
@@ -286,7 +332,9 @@ def _own_cert(cert_id: int, user: User, db: Session) -> UserCertification:
 # Field limits (5 Oct): a longer value used to reach the database and fail with a 500 (columns are String(200/300/500)).
 # Checked by hand, not with pydantic max_length, so the student gets one plain sentence instead of a 422 list.
 LIMITS = {"Project name": 100, "Description": 3000, "GitHub link": 500,
-          "Certificate name": 150, "Issuer": 100, "Credly link": 500}
+          "Certificate name": 150, "Issuer": 100, "Credly link": 500,
+          "Award title": 150, "Given by": 100, "What it was for": 1000,
+          "Headline": 120, "About": 1000, "LinkedIn link": 300, "Portfolio link": 300, "GitHub profile link": 300}
 
 
 def _check_length(label: str, value: str | None):
@@ -587,7 +635,213 @@ def get_skill_profile(
         "from_modules": by_source("module"),
         "from_projects": by_source("project"),
         "from_certs": by_source("cert"),
+        "from_awards": by_source("award"),
     }
+
+# ── Awards (8 Oct) ─────────────────────────────────────────────────────────────
+# Same flow as a certificate (4 Oct): the pop-up suggests skills, the student keeps or removes them, then saves. So
+# every saved skill was seen; there is no "estimated" state to confirm later. An award may have no skills (Dean's List).
+
+MAX_AWARD_SKILLS = 8
+MONTH = re.compile(r"^\d{4}-(0[1-9]|1[0-2])$")
+
+
+def award_prompt(title: str, issuer: str, description: str) -> str:
+    return f"""Which skills does this award show the student has?
+
+Award: {title}
+Given by: {issuer}
+What it was for: {description or "(not given)"}
+
+Rules:
+- Only skills the award title or the description clearly shows were used to win it, e.g. a hackathon prize for a
+  mobile app shows mobile app development. Skills can be technical or soft (such as teamwork or public speaking).
+- An award for grades alone (such as a dean's list or a scholarship for results) shows no particular skill: return [].
+- One skill per item, each a short name (1-4 words). No groups or lists inside an item.
+- At most {MAX_AWARD_SKILLS} skills. If unsure, return [].
+
+Return ONLY a JSON array of skill names."""
+
+
+def _suggest_award(title: str, issuer: str, description: str) -> list[str] | None:
+    """Suggested skills ([] if the award shows none); None if the AI call failed (limit, network)."""
+    answer = _ask_json(award_prompt(title, issuer, description), "award skills")
+    if answer is None:
+        return None
+    out, seen = [], set()
+    for item in answer if isinstance(answer, list) else []:
+        name = " ".join(str(item).split()).strip() if isinstance(item, (str, int, float)) else ""
+        key = canonical_key(name)
+        if name and key and key not in seen and len(name) <= MAX_SKILL_CHARS and "," not in name:
+            seen.add(key)
+            out.append(name)
+    return out[:MAX_AWARD_SKILLS]
+
+
+def _own_award(award_id: int, user: User, db: Session) -> UserAward:
+    award = db.query(UserAward).filter(UserAward.id == award_id, UserAward.user_id == user.id).first()
+    if not award:
+        raise HTTPException(status_code=404, detail="Award not found")
+    return award
+
+
+def _check_award(data: AwardIn, user: User, db: Session, current: UserAward | None = None):
+    """Required fields, lengths, the date, then the same award twice (title + issuer; asked, as for certificates)."""
+    if not data.title.strip() or not data.issuer.strip():
+        raise HTTPException(status_code=400, detail="Award title and who gave it are required")
+    for label, value in (("Award title", data.title), ("Given by", data.issuer), ("What it was for", data.description)):
+        _check_length(label, value)
+    if data.award_date and not MONTH.match(data.award_date):
+        raise HTTPException(status_code=400, detail="Pick the month and year from the date box, or leave it empty")
+    if data.allow_duplicate or (current and _same(current.title, data.title) and _same(current.issuer, data.issuer)):
+        return
+    for other in db.query(UserAward).filter(UserAward.user_id == user.id, UserAward.id != (current.id if current else 0)):
+        if _same(other.title, data.title) and _same(other.issuer, data.issuer):
+            ask = "use this name for this one too" if current else f"add another “{other.title}”"
+            raise HTTPException(status_code=409, detail=f"You already have “{other.title}” from {other.issuer}. "
+                                                        f"Are you sure you want to {ask}?")
+
+
+def _clean_skills(names: list[str]) -> list[str]:
+    """The pop-up's chips: tidy, drop empties and repeats (canonical key), at most MAX_SKILLS_PER_ITEM."""
+    out, seen = [], set()
+    for name in names or []:
+        name = " ".join(str(name).split()).strip(" ,;.")
+        key = canonical_key(name)
+        if name and key and key not in seen and len(name) <= MAX_SKILL_CHARS:
+            seen.add(key)
+            out.append(name)
+    return out[:MAX_SKILLS_PER_ITEM]
+
+
+@router.post("/awards/suggest")
+def suggest_award_skills(data: AwardSuggestIn, current_user: User = Depends(get_current_user)):
+    """Skills for the pop-up to show before saving (nothing is stored)."""
+    if not data.title.strip() or not data.issuer.strip():
+        raise HTTPException(status_code=400, detail="Award title and who gave it are required")
+    found = _suggest_award(data.title.strip(), data.issuer.strip(), data.description.strip())
+    return {"skills": found or [], "failed": found is None}
+
+
+@router.post("/awards", response_model=AwardOut, status_code=201)
+def add_award(data: AwardIn, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    _check_award(data, current_user, db)
+    award = UserAward(user_id=current_user.id, title=data.title.strip(), issuer=data.issuer.strip(),
+                      award_date=data.award_date or None, description=data.description.strip() or None,
+                      mapped_skills=_clean_skills(data.skills), added_skills=[])
+    db.add(award)
+    db.commit()
+    db.refresh(award)
+    return award
+
+
+@router.put("/awards/{award_id}", response_model=AwardOut)
+def edit_award(award_id: int, data: AwardIn, current_user: User = Depends(get_current_user),
+               db: Session = Depends(get_db)):
+    award = _own_award(award_id, current_user, db)
+    _check_award(data, current_user, db, award)
+    award.title, award.issuer = data.title.strip(), data.issuer.strip()
+    award.award_date, award.description = data.award_date or None, data.description.strip() or None
+    award.mapped_skills = _clean_skills(data.skills)
+    award.added_skills = [s for s in (award.added_skills or []) if s in award.mapped_skills]
+    db.commit()
+    db.refresh(award)
+    return award
+
+
+@router.get("/awards", response_model=list[AwardOut])
+def list_awards(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    return db.query(UserAward).filter(UserAward.user_id == current_user.id).order_by(UserAward.id).all()
+
+
+@router.delete("/awards/{award_id}", status_code=204)
+def delete_award(award_id: int, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    db.delete(_own_award(award_id, current_user, db))
+    db.commit()
+
+
+@router.post("/awards/{award_id}/remove-skill", response_model=AwardOut)
+def remove_award_skill(award_id: int, data: SkillRemove, current_user: User = Depends(get_current_user),
+                       db: Session = Depends(get_db)):
+    award = _own_award(award_id, current_user, db)
+    award.mapped_skills = [s for s in award.mapped_skills if s != data.skill]
+    award.added_skills = [s for s in (award.added_skills or []) if s != data.skill]
+    db.commit()
+    db.refresh(award)
+    return award
+
+
+@router.post("/awards/{award_id}/add-skill", response_model=AwardOut)
+def add_award_skill(award_id: int, data: SkillAdd, current_user: User = Depends(get_current_user),
+                    db: Session = Depends(get_db)):
+    award = _own_award(award_id, current_user, db)
+    name = _clean_skill(data.skill)
+    if canonical_key(name) in {canonical_key(s) for s in award.mapped_skills}:
+        raise HTTPException(status_code=400, detail="This award already has that skill")
+    if len(award.mapped_skills) >= MAX_SKILLS_PER_ITEM:
+        raise HTTPException(status_code=400, detail=f"An award can have up to {MAX_SKILLS_PER_ITEM} skills")
+    award.mapped_skills = [*award.mapped_skills, name]
+    award.added_skills = [*(award.added_skills or []), name]
+    db.commit()
+    db.refresh(award)
+    return award
+
+
+# ── About & links, showcase (8 Oct) ───────────────────────────────────────────
+
+LINK_RULES = {   # field -> (label, the address must contain this, example for the message)
+    "linkedin_url": ("LinkedIn link", "linkedin.com/", "https://www.linkedin.com/in/your-name"),
+    "portfolio_url": ("Portfolio link", "", "https://your-site.com"),
+    "github_url": ("GitHub profile link", "github.com/", "https://github.com/your-name"),
+}
+
+
+def _check_link(field: str, value: str) -> str | None:
+    """Empty is fine. Otherwise a full https:// address (http:// is accepted and stored as it is), with the right
+    site for LinkedIn and GitHub. Only the address is checked; whether the page exists is not."""
+    label, must_have, example = LINK_RULES[field]
+    url = (value or "").strip()
+    if not url:
+        return None
+    _check_length(label, url)
+    if not re.match(r"^https?://[^\s/]+\.[^\s]+$", url, re.I) or (must_have and must_have not in url.lower()):
+        raise HTTPException(status_code=400, detail=f"{label}: use the full address, e.g. {example}")
+    return url
+
+
+def _about_out(user: User) -> dict:
+    return {"headline": user.headline or "", "about": user.about or "", "linkedin_url": user.linkedin_url or "",
+            "portfolio_url": user.portfolio_url or "", "github_url": user.github_url or "",
+            "visible_to_employers": user.is_visible_to_employers,
+            "show_grades_to_employers": user.show_grades_to_employers}
+
+
+@router.get("/about")
+def get_about(current_user: User = Depends(get_current_user)):
+    return _about_out(current_user)
+
+
+@router.put("/about")
+def save_about(data: AboutIn, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    _check_length("Headline", data.headline)
+    _check_length("About", data.about)
+    links = {field: _check_link(field, getattr(data, field)) for field in LINK_RULES}   # all checked before saving
+    current_user.headline = " ".join(data.headline.split()) or None
+    current_user.about = data.about.strip() or None
+    current_user.linkedin_url, current_user.portfolio_url, current_user.github_url = (
+        links["linkedin_url"], links["portfolio_url"], links["github_url"])
+    current_user.is_visible_to_employers = data.visible_to_employers
+    current_user.show_grades_to_employers = data.show_grades_to_employers
+    db.commit()
+    db.refresh(current_user)
+    return _about_out(current_user)
+
+
+@router.get("/showcase")
+def get_showcase(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    """Everything My Profile shows (the student's own view: grades included)."""
+    return build_showcase(current_user, db)
+
 
 # ── Module grades ──────────────────────────────────────────────────────────────
 class ModuleGradeInput(BaseModel):

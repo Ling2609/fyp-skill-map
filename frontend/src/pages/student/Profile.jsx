@@ -1,47 +1,14 @@
 import { useState, useEffect, useCallback } from 'react'
 import PageHeader from '../../components/PageHeader'
-import { useSearchParams } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import api from '../../api'
-import { skillName } from '../../skillName'
+import { AddSkillChip, ConfirmDelete, CrossIcon, DuplicateAsk, EmptyState, Field, FormButtons, IconButton, Modal,
+  PencilIcon, SkillChip, SkillsRow, Spinner } from './profileParts'
+import { ADDED_BY_YOU, errText, inputCls, splitSkills } from './profileUtils'
+import AwardsTab from './AwardsTab'
+import AboutLinksTab from './AboutLinksTab'
 
-// ── Shared ────────────────────────────────────────────────────────────────────
-
-// One skill. title = hover text (the student's own words, "GitHub: …", "Added by you", "Suggested by AI"); onRemove adds
-// an ✕ (4 Oct: the student can take out a wrong skill, Nielsen "user control and freedom"). Looks: AI estimate = dashed
-// border; added by the student = grey; everything with evidence = blue.
-function SkillChip({ skill, title, onRemove, estimated = false, added = false }) {
-  const look = added ? 'bg-gray-100 text-gray-700 border-gray-200'
-    : estimated ? 'bg-white text-blue-700 border-blue-200 border-dashed'
-    : 'bg-blue-50 text-blue-700 border-blue-100'
-  return (
-    <span title={title} className={`group/chip inline-flex items-center gap-1 text-xs px-2.5 py-1 rounded-full font-medium border ${look}`}>
-      {skillName(skill)}
-      {onRemove && (
-        <button type="button" onClick={onRemove} aria-label={`Remove ${skill}`}
-          className="-mr-1 ml-0.5 w-4 h-4 inline-flex items-center justify-center rounded-full text-current opacity-40 hover:text-red-500 hover:bg-red-50 group-hover/chip:opacity-100 focus:opacity-100">
-          ×
-        </button>
-      )}
-    </span>
-  )
-}
-
-function EmptyState({ icon, title, subtitle }) {
-  return (
-    <div className="flex flex-col items-center justify-center min-h-55 gap-3 text-center">
-      <span className="text-4xl">{icon}</span>
-      <div>
-        <p className="text-sm font-medium text-gray-500">{title}</p>
-        {subtitle && <p className="text-xs text-gray-400 mt-1">{subtitle}</p>}
-      </div>
-    </div>
-  )
-}
-
-function Spinner({ size = 'md' }) {
-  const sz = size === 'sm' ? 'w-3.5 h-3.5 border-2' : 'w-5 h-5 border-2'
-  return <div className={`${sz} border-current border-t-transparent rounded-full animate-spin`} />
-}
+// Shared pieces (chips, pop-ups, buttons) live in profileParts.jsx and profileUtils.js (8 Oct)
 
 const GRADE_OPTIONS = [
   { label: 'A (4.0)', value: 4.0 },
@@ -52,162 +19,6 @@ const GRADE_OPTIONS = [
   { label: 'C+ (2.3)', value: 2.3 },
   { label: 'C (2.0)', value: 2.0 },
 ]
-
-// ── Projects and certificates (4 Oct, her review) ─────────────────────────────
-// Layout C: the list uses the full width; "+ Add" and each card's Edit open the same form in a pop-up (one form for
-// both, as LinkedIn's "Add licence or certification"). One page scrollbar, no nested scroll areas (references.md).
-
-const inputCls = 'w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500'
-const ADDED_BY_YOU = 'Added by you'
-const errText = (err, fallback) => err.response?.data?.detail || fallback
-
-// dirty = something has been typed: clicking outside, Esc or the corner ✕ then asks before throwing it away
-// (5 Oct: a stray click outside lost a long description). The form's own Cancel closes straight away.
-function Modal({ title, onClose, dirty = false, children }) {
-  const [asking, setAsking] = useState(false)
-  const tryClose = useCallback(() => { if (dirty) setAsking(true); else onClose() }, [dirty, onClose])
-  useEffect(() => {
-    const onKey = (e) => { if (e.key === 'Escape') tryClose() }
-    window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
-  }, [tryClose])
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/30" onMouseDown={tryClose}>
-      <div role="dialog" aria-modal="true" aria-label={title} onMouseDown={e => e.stopPropagation()}
-        className="bg-white rounded-2xl shadow-xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
-        <div className="flex items-center justify-between px-6 pt-5 pb-1">
-          <h3 className="text-base font-semibold text-gray-800">{title}</h3>
-          <button type="button" onClick={tryClose} aria-label="Close" className="text-gray-400 hover:text-gray-700 p-1 rounded-lg hover:bg-gray-100">
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
-          </button>
-        </div>
-        {asking && (
-          <div role="alertdialog" aria-label="Discard changes" className="mx-6 mt-2 bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 flex items-center justify-between gap-3">
-            <p className="text-sm text-amber-800">Discard your changes?</p>
-            <div className="flex gap-2 shrink-0">
-              <button type="button" onClick={() => setAsking(false)} autoFocus className="px-3 py-1.5 text-sm text-gray-600 hover:text-gray-900">Keep editing</button>
-              <button type="button" onClick={onClose} className="px-3 py-1.5 text-sm font-medium text-red-600 hover:bg-red-50 rounded-lg">Discard</button>
-            </div>
-          </div>
-        )}
-        <div className="px-6 pb-6 pt-3">{children}</div>
-      </div>
-    </div>
-  )
-}
-
-// "Delete X?" before a project or certificate goes (5 Oct: the card's ✕ sits near the chips' ×)
-// onDelete must throw if the delete failed: the question then stays open and says so (5 Oct audit: a failed delete
-// used to close it silently, so the student couldn't tell whether anything was deleted)
-function ConfirmDelete({ name, onCancel, onDelete }) {
-  const [busy, setBusy] = useState(false)
-  const [failed, setFailed] = useState(false)
-  const del = async () => {
-    setBusy(true); setFailed(false)
-    try { await onDelete() } catch { setFailed(true); setBusy(false) }
-  }
-  return (
-    <Modal title="Delete?" onClose={onCancel}>
-      <p className="text-sm text-gray-600">Delete <span className="font-medium text-gray-800">“{name}”</span>? Its skills will leave your profile.</p>
-      {failed && <p className="text-xs text-red-500 bg-red-50 rounded-lg px-3 py-2 mt-3">Couldn't delete it. Please try again.</p>}
-      <div className="flex justify-end gap-2 pt-5">
-        <button type="button" onClick={onCancel} autoFocus className="px-4 py-2 text-sm text-gray-500 hover:text-gray-800">Cancel</button>
-        <button type="button" disabled={busy} onClick={del}
-          className="bg-red-600 text-white text-sm font-medium px-4 py-2 rounded-xl hover:bg-red-700 disabled:opacity-40">Delete</button>
-      </div>
-    </Modal>
-  )
-}
-
-function Field({ label, optional, hint, children }) {
-  return (
-    <div>
-      <label className="block text-xs font-medium text-gray-600 mb-1.5">
-        {label} {optional ? <span className="text-gray-300 font-normal">(optional)</span> : <span className="text-red-400">*</span>}
-      </label>
-      {children}
-      {hint && <p className="text-xs text-gray-400 mt-1.5">{hint}</p>}
-    </div>
-  )
-}
-
-function FormButtons({ loading, busyText, label, onCancel, disabled }) {
-  return (
-    <div className="flex items-center justify-end gap-2 pt-2">
-      <button type="button" onClick={onCancel} className="px-4 py-2.5 text-sm text-gray-500 hover:text-gray-800">Cancel</button>
-      <button type="submit" disabled={loading || disabled}
-        className="bg-blue-700 text-white text-sm font-medium px-5 py-2.5 rounded-xl hover:bg-blue-800 disabled:opacity-40 transition flex items-center gap-2">
-        {loading ? <><Spinner size="sm" />{busyText}</> : label}
-      </button>
-    </div>
-  )
-}
-
-// "You already have one called X. Are you sure…?" (her wording, 5 Oct): shown in the pop-up in place of the buttons;
-// "Yes, add it" sends the form again with allow_duplicate. Changing the name hides it.
-function DuplicateAsk({ message, yesLabel, onYes, onBack, busy }) {
-  return (
-    <div role="alertdialog" aria-label="Same name" className="bg-amber-50 border border-amber-200 rounded-xl px-4 py-3">
-      <p className="text-sm text-amber-800">{message}</p>
-      <div className="flex justify-end gap-2 mt-3">
-        <button type="button" onClick={onBack} className="px-4 py-2 text-sm text-gray-600 hover:text-gray-900">Go back</button>
-        <button type="button" onClick={onYes} disabled={busy} autoFocus
-          className="bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-xl hover:bg-blue-800 disabled:opacity-40">{yesLabel}</button>
-      </div>
-    </div>
-  )
-}
-
-function IconButton({ label, onClick, children, danger }) {
-  return (
-    <button type="button" onClick={onClick} title={label} aria-label={label}
-      className={`text-gray-300 transition shrink-0 p-1 rounded-lg ${danger ? 'hover:text-red-400 hover:bg-red-50' : 'hover:text-blue-600 hover:bg-blue-50'}`}>
-      {children}
-    </button>
-  )
-}
-const PencilIcon = () => <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536M9 13l6.536-6.536a2.5 2.5 0 113.536 3.536L12.536 16.536 8 17l.464-4.536z" /></svg>
-const CrossIcon = () => <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
-
-// "+ Add skill": a chip that turns into a small box; Enter adds, Esc cancels
-function AddSkillChip({ onAdd }) {
-  const [open, setOpen] = useState(false)
-  const [value, setValue] = useState('')
-  const [error, setError] = useState('')
-  const [busy, setBusy] = useState(false)
-  const close = () => { setOpen(false); setValue(''); setError('') }
-  const submit = async () => {
-    if (!value.trim()) { close(); return }
-    setBusy(true); setError('')
-    try { await onAdd(value.trim()); close() }
-    catch (err) { setError(errText(err, "Couldn't add the skill")) }
-    finally { setBusy(false) }
-  }
-  if (!open) return (
-    <button type="button" onClick={() => setOpen(true)}
-      className="text-xs px-2.5 py-1 rounded-full font-medium border border-dashed border-gray-300 text-gray-500 hover:border-blue-400 hover:text-blue-700">
-      + Add skill
-    </button>
-  )
-  return (
-    <span className="inline-flex flex-col">
-      <input autoFocus value={value} disabled={busy} maxLength={60} placeholder="Skill, then Enter"
-        onChange={e => setValue(e.target.value)} onBlur={() => !value.trim() && close()}
-        onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); submit() } if (e.key === 'Escape') close() }}
-        className="text-xs px-2.5 py-1 rounded-full border border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-200 w-40" />
-      {error && <span className="text-[11px] text-red-500 mt-1">{error}</span>}
-    </span>
-  )
-}
-
-function SkillsRow({ children, empty, emptyText }) {
-  return (
-    <div className="mt-3 pt-3 border-t border-gray-100">
-      {empty && <p className="text-xs text-gray-500 mb-2">{emptyText}</p>}
-      <div className="flex flex-wrap items-center gap-1.5">{children}</div>
-    </div>
-  )
-}
 
 // ── Projects tab ──────────────────────────────────────────────────────────────
 
@@ -346,7 +157,6 @@ function ProjectsTab({ projects, onRefresh }) {
 // and checked (Amershi et al. 2019: support efficient correction; references.md "Reviewing AI-suggested skills").
 // Type or paste the skills listed on the certificate, or "Suggest skills" from the name; × removes a chip.
 // With no skills yet, the main button suggests first, so a certificate is never saved with skills nobody looked at.
-const splitSkills = (text) => text.split(/[,;\n•]+/).map(t => t.replace(/\s+/g, ' ').trim()).filter(Boolean)
 
 function CertForm({ cert, onDone, onCancel, onDirty }) {
   const editing = !!cert
@@ -749,53 +559,63 @@ const TABS = [
   { key: 'modules',  label: 'Modules' },
   { key: 'projects', label: 'Projects' },
   { key: 'certs',    label: 'Certifications' },
+  { key: 'awards',   label: 'Awards' },          // 8 Oct (Mr Au): AwardsTab.jsx
+  { key: 'about',    label: 'About & links' },   // 8 Oct: AboutLinksTab.jsx, the top of My Profile
 ]
+// Tabs that keep typed changes until "Save": leaving them asks first (the words name what would be lost)
+const UNSAVED_QUESTION = {
+  modules: 'You have unsaved grade changes. Leave without saving?',
+  about: 'You have unsaved changes in About & links. Leave without saving?',
+}
 
 export default function Profile() {
   const [searchParams] = useSearchParams()
   const [projects, setProjects] = useState([])
   const [certs, setCerts] = useState([])
+  const [awards, setAwards] = useState([])
   const [profile, setProfile] = useState(null)
   const [profileLoading, setProfileLoading] = useState(true)
+  // ?tab=projects / certs / awards / about opens that tab (My Profile's Edit links use it)
   const [activeTab, setActiveTab] = useState(
-    searchParams.get('tab') === 'projects' ? 'projects'
-    : searchParams.get('tab') === 'certs' ? 'certs'
-    : 'modules'
+    TABS.some(t => t.key === searchParams.get('tab')) ? searchParams.get('tab') : 'modules'
   )
-  const [modulesHasUnsaved, setModulesHasUnsaved] = useState(false)
+  // The open tab has typed changes not saved yet (Modules: grades; About & links: the form)
+  const [hasUnsaved, setHasUnsaved] = useState(false)
 
   // Warn on browser/tab close when unsaved
   useEffect(() => {
     const handler = (e) => {
-      if (modulesHasUnsaved) {
+      if (hasUnsaved) {
         e.preventDefault()
         e.returnValue = ''
       }
     }
     window.addEventListener('beforeunload', handler)
     return () => window.removeEventListener('beforeunload', handler)
-  }, [modulesHasUnsaved])
+  }, [hasUnsaved])
 
-  // Ask only when leaving Modules with unsaved grades. Leaving discards them (the tab's state goes), so the flag is
-  // cleared: moving between Projects and Certifications afterwards doesn't ask again (her report 4 Oct)
+  // Ask only when leaving a tab with unsaved changes. Leaving discards them (the tab's state goes), so the flag is
+  // cleared: moving between other tabs afterwards doesn't ask again (her report 4 Oct)
   const handleTabChange = useCallback((key) => {
-    if (activeTab === 'modules' && key !== 'modules' && modulesHasUnsaved) {
-      const ok = window.confirm('You have unsaved grade changes. Leave without saving?')
+    if (key !== activeTab && hasUnsaved) {
+      const ok = window.confirm(UNSAVED_QUESTION[activeTab] || 'You have unsaved changes. Leave without saving?')
       if (!ok) return
-      setModulesHasUnsaved(false)
+      setHasUnsaved(false)
     }
     setActiveTab(key)
-  }, [activeTab, modulesHasUnsaved])
+  }, [activeTab, hasUnsaved])
 
   const fetchAll = () => {
     setProfileLoading(true)
     Promise.all([
       api.get('/profile/projects'),
       api.get('/profile/certifications'),
+      api.get('/profile/awards'),
       api.get('/profile/skills'),
-    ]).then(([projRes, certRes, skillRes]) => {
+    ]).then(([projRes, certRes, awardRes, skillRes]) => {
       setProjects(projRes.data)
       setCerts(certRes.data)
+      setAwards(awardRes.data)
       setProfile(skillRes.data)
     }).catch(console.error).finally(() => setProfileLoading(false))
   }
@@ -815,7 +635,8 @@ export default function Profile() {
           <div>
             <p className="text-[11px] font-semibold text-blue-600 uppercase tracking-widest mb-2">Skill Profile</p>
             <h1 className="text-2xl font-semibold tracking-tight text-slate-900">Build Your Skill Profile</h1>
-            <p className="text-sm text-slate-500 mt-1">Your modules, projects and certifications become the skills your job matches use</p>
+            <p className="text-sm text-slate-500 mt-1">Your modules, projects, certifications and awards become the skills your job matches use</p>
+            <Link to="/my-profile" className="inline-block text-sm font-medium text-blue-700 hover:underline mt-2">See My Profile →</Link>
           </div>
 
           {/* Stats */}
@@ -824,6 +645,7 @@ export default function Profile() {
               { label: 'Skills', value: profileLoading ? '—' : (profile?.total ?? 0) },
               { label: 'Projects', value: profileLoading ? '—' : projects.length },
               { label: 'Certs', value: profileLoading ? '—' : certs.length },
+              { label: 'Awards', value: profileLoading ? '—' : awards.length },
             ].map(({ label, value }, i, arr) => (
               <div key={label} className="flex items-center">
                 <div className="text-center px-6">
@@ -842,7 +664,8 @@ export default function Profile() {
         <div className="flex border-t border-slate-200 mt-2 -mx-8 px-8">
           {TABS.map(tab => {
             const isActive = activeTab === tab.key
-            const count = tab.key === 'projects' ? projects.length : tab.key === 'certs' ? certs.length : null
+            const count = tab.key === 'projects' ? projects.length : tab.key === 'certs' ? certs.length
+              : tab.key === 'awards' ? awards.length : null
             return (
               <button
                 key={tab.key}
@@ -871,9 +694,11 @@ export default function Profile() {
       {/* Wide screens: each tab fills the window and scrolls inside its own panels; narrow: the page scrolls */}
       <div className="flex-1 min-h-0 overflow-auto lg:overflow-hidden">
         <div className="px-8 py-6 lg:h-full">
-          {activeTab === 'modules'   && <ModulesTab onUnsavedChange={setModulesHasUnsaved} onSaved={fetchAll} />}
+          {activeTab === 'modules'   && <ModulesTab onUnsavedChange={setHasUnsaved} onSaved={fetchAll} />}
           {activeTab === 'projects'  && <ProjectsTab  projects={projects} onRefresh={fetchAll} />}
           {activeTab === 'certs'     && <CertificationsTab certs={certs}  onRefresh={fetchAll} />}
+          {activeTab === 'awards'    && <AwardsTab awards={awards} onRefresh={fetchAll} />}
+          {activeTab === 'about'     && <AboutLinksTab onUnsavedChange={setHasUnsaved} />}
         </div>
       </div>
 

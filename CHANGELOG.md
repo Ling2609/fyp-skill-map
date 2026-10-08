@@ -3,6 +3,22 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 8 Oct 2026 — Showcase profile: My Profile, Awards, About & links
+
+- (this commit) Supervisor meeting 8 Oct: one profile, like LinkedIn, that gathers portfolio, LinkedIn,
+  certifications and awards to show a student's skills and strong points (references.md "Showcase profile").
+  - **My Profile** (`/my-profile`, new sidebar item): read-only page built from what the student already entered
+    (`GET /profile/showcase`, `app/services/showcase.py`). Top skills list their evidence (module + grade, project,
+    certificate, award), which a LinkedIn skill does not have. Employers will see the same page in the Employer flow;
+    grades are then hidden unless the student allows it.
+  - **Awards** tab on Skill Profile (`AwardsTab.jsx`, `user_awards` table): title, given by, date, what it was for;
+    the AI suggests skills, the student keeps or removes them before saving. Award skills count in matching.
+  - **About & links** tab (`AboutLinksTab.jsx`): headline, About, LinkedIn / portfolio / GitHub links (checked),
+    "Let employers see my profile" (the existing `is_visible_to_employers`) and "Show my grades to employers".
+  - Shared chips, pop-ups and buttons moved from `Profile.jsx` to `profileParts.jsx` and `profileUtils.js`, so the
+    new tabs look and behave exactly like Projects and Certifications.
+- Run `python migrations/migrate_profile_showcase.py` once (safe to rerun).
+
 ## 7 Oct 2026 — Run 6 prep: soft labels, every seed kept and averaged, blind set v4, cut-off chooser
 
 - (this commit) After run 5 failed the pass rule (7e6af09), research-backed changes (references.md "How to improve the

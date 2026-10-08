@@ -10,6 +10,7 @@ import Recommend from './pages/student/Recommend';
 import JobDetail from './pages/student/JobDetail';
 import Chatbot from './pages/student/Chatbot';
 import Profile from './pages/student/Profile';
+import MyProfile from './pages/student/MyProfile'
 import AccountSettings from './pages/AccountSettings'
 import AdminDashboard from './pages/admin/AdminDashboard'
 import AdminUsers from './pages/admin/AdminUsers'
@@ -69,6 +70,7 @@ function AppRoutes() {
       <Route path="/jobs/:jobId" element={<RoleRoute><Layout><JobDetail /></Layout></RoleRoute>} />
       <Route path="/chatbot" element={<RoleRoute roles={['student']}><Layout><Chatbot /></Layout></RoleRoute>} />
       <Route path="/profile" element={<RoleRoute roles={['student']}><Layout><Profile /></Layout></RoleRoute>} />
+      <Route path="/my-profile" element={<RoleRoute roles={['student']}><Layout><MyProfile /></Layout></RoleRoute>} />
       <Route path="/account" element={<RoleRoute><Layout><AccountSettings /></Layout></RoleRoute>} />
     </Routes>
   )

@@ -35,3 +35,19 @@ class UserCertification(Base):
     added_skills = Column(JSON, nullable=False, default=list, server_default='[]')   # typed in via "+ Add skill"
     credly_url = Column(String(500), nullable=True)   # shown as a link so anyone can verify the badge
     created_at = Column(DateTime(timezone=True), server_default=func.now())
+
+class UserAward(Base):
+    """Honours and awards (8 Oct, Mr Au: "portfolio, LinkedIn, awards, certifications" on one profile). Fields follow
+    LinkedIn's Honors & awards form (title, issuer, date, description). Skills work like certificates: the AI suggests
+    them from the title and description, the student keeps or removes them before saving, so every skill was seen."""
+    __tablename__ = "user_awards"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
+    title = Column(String(150), nullable=False)                 # "Champion, APU Hackathon 2025"
+    issuer = Column(String(100), nullable=False)                # who gave it, e.g. "Asia Pacific University"
+    award_date = Column(String(7), nullable=True)               # "2025-11" (month and year), optional
+    description = Column(Text, nullable=True)                   # what it was for, optional
+    mapped_skills = Column(ARRAY(String), nullable=False, default=[])
+    added_skills = Column(JSON, nullable=False, default=list, server_default='[]')   # typed in via "+ Add skill"
+    created_at = Column(DateTime(timezone=True), server_default=func.now())

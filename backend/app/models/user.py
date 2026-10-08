@@ -1,5 +1,5 @@
 import enum
-from sqlalchemy import Column, Integer, String, Enum, DateTime, Boolean, JSON, ForeignKey
+from sqlalchemy import Column, Integer, String, Enum, DateTime, Boolean, JSON, ForeignKey, Text
 from sqlalchemy.sql import func
 from app.database import Base
 
@@ -30,6 +30,13 @@ class User(Base):
     intake_id       = Column(Integer, ForeignKey("intakes.id", ondelete="SET NULL"), nullable=True)     # students
     company_name    = Column(String(120), nullable=True)                                                 # employers
     employer_status = Column(String(10), nullable=True)   # employers: pending / approved / rejected (by Admin)
+    # Showcase profile (8 Oct, Mr Au): shown on My Profile and to employers (migrations/migrate_profile_showcase.py)
+    headline      = Column(String(120), nullable=True)   # one line, e.g. "Final-year Software Engineering student"
+    about         = Column(Text, nullable=True)          # a short paragraph about the student
+    linkedin_url  = Column(String(300), nullable=True)
+    portfolio_url = Column(String(300), nullable=True)
+    github_url    = Column(String(300), nullable=True)
+    show_grades_to_employers = Column(Boolean, default=False, nullable=False, server_default="false")
 
 # Load the tables users point at (programmes, intakes), so any script that saves a User works on its own (7 Oct)
 from app.models import programme  # noqa: E402,F401
