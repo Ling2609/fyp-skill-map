@@ -3,6 +3,21 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 9 Oct 2026 — My Profile becomes the input page; sidebar follows the flow
+
+- (this commit) Her redesign after several rounds of mock-ups (references.md "Profile layout with many categories",
+  "Dashboard redesign and career goal"): My Profile is where a student puts things in; results move to the Dashboard.
+  - **My Profile**: the same header as the other pages (name, green "Visible to employers" / grey "Hidden from
+    employers", skill count and links; Edit profile on the far right) and four tabs with counts: **Modules**
+    (programme + intake on top with "Change programme", graded modules by year, Edit modules & grades panel),
+    **Projects** (Import from GitHub, + Add project), **Certificates**, **Awards**. Each tab is one white panel; only
+    its list scrolls on a wide screen; tabs wrap, never scroll sideways.
+  - **Edit profile**: "Your other profiles" (LinkedIn, GitHub, portfolio) and "Profile visibility" (two switches).
+    Headline, About, the Skills card, the checklist and "See all skills" are gone from the page (the columns stay).
+  - **Sidebar**: Dashboard, My Profile, Job Matches, AI Assistant (input before results).
+  - Setup: "Pick your programme / intake" can't be chosen.
+- No migration needed.
+
 ## 8 Oct 2026 — One My Profile page, programme + intake setup, Import from GitHub, faster job matches
 
 - (this commit) Her rethink of c721aad: one page instead of My Profile + Skill Profile (clean A mock-up).

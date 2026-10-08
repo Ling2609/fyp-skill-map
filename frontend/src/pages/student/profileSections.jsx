@@ -1,27 +1,26 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import api from '../../api'
-import { AddSkillChip, ConfirmDelete, CrossIcon, IconButton, Modal, PencilIcon, SkillChip } from './profileParts'
+import { AddSkillChip, ConfirmDelete, CrossIcon, IconButton, Modal, PencilIcon, SkillChip, Spinner } from './profileParts'
 import { AwardForm, CertForm, ProjectForm } from './profileForms'
-import { ADDED_BY_YOU, monthLabel } from './profileUtils'
+import { ADDED_BY_YOU, btnBlueCls, btnCls, gradeLetter, monthLabel } from './profileUtils'
 
-// The cards of My Profile (8 Oct, clean A mock-up): a heading, one action on the right, rows split by thin lines.
-// A row's ✎ and ✕ appear on hover (and stay reachable with Tab). The rows keep the old tabs' skill chips: × removes a
-// skill, "+ Add skill" adds one.
+// The four tabs of My Profile (9 Oct): Modules, Projects, Certificates, Awards, the places a student's skills come
+// from. Each tab is one white panel: a title row with its buttons (fixed), then the list (scrolls inside the panel on
+// wide screens, like the module lists). A row's ✎ and ✕ appear on hover and stay reachable with Tab.
 
-export function Card({ title, action, children }) {
+function Panel({ title, actions, children }) {
   return (
-    <section className="bg-white rounded-2xl border border-gray-200 p-5">
-      <div className="flex items-center justify-between gap-3 mb-3">
-        <h2 className="text-sm font-semibold text-gray-800">{title}</h2>
-        {action && <div className="flex items-center gap-4">{action}</div>}
+    <section className="bg-white rounded-2xl border border-slate-200 shadow-sm flex flex-col lg:h-full min-h-0">
+      <div className="shrink-0 flex flex-wrap items-center justify-between gap-3 px-6 py-4 border-b border-slate-100">
+        <h2 className="text-base font-semibold text-slate-800">{title}</h2>
+        {actions && <div className="flex flex-wrap items-center gap-2">{actions}</div>}
       </div>
-      {children}
+      <div tabIndex={0} aria-label={title}
+        className="px-6 py-4 lg:flex-1 lg:min-h-0 lg:overflow-y-auto rounded-b-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-300">
+        {children}
+      </div>
     </section>
   )
-}
-
-export function CardAction({ onClick, children }) {
-  return <button type="button" onClick={onClick} className="text-xs font-medium text-blue-700 hover:underline">{children}</button>
 }
 
 function RowActions({ what, onEdit, onDelete }) {
@@ -42,7 +41,18 @@ function Note({ text, onClose }) {
   )
 }
 
-// What every list card shares: the open pop-up, the "Delete?" question, a note, and small chip actions that say when
+// An empty tab says what goes here and how to add the first one (NN/g, empty states)
+function Empty({ title, text, action }) {
+  return (
+    <div className="py-10 text-center max-w-sm mx-auto">
+      <p className="text-sm font-medium text-slate-700">{title}</p>
+      <p className="text-sm text-slate-500 mt-1">{text}</p>
+      {action && <div className="mt-4">{action}</div>}
+    </div>
+  )
+}
+
+// What every list tab shares: the open pop-up, the "Delete?" question, a note, and small chip actions that say when
 // they fail (5 Oct audit). base = '/profile/projects' etc.
 function useItems(base, onRefresh) {
   const [editing, setEditing] = useState(null)     // null | 'new' | the item
@@ -61,11 +71,61 @@ function useItems(base, onRefresh) {
   }
 }
 
-const Empty = ({ children }) => <p className="text-sm text-gray-500">{children}</p>
+// ── Modules ───────────────────────────────────────────────────────────────────
+// The graded modules, by year. Programme and intake sit on top (moved here from the page header, 9 Oct).
+// version changes after grades are saved, so the list loads again.
+
+export function ModulesTab({ data, version, onEditGrades, onChangeStudy }) {
+  const [rows, setRows] = useState(null)      // null = loading
+  const [error, setError] = useState('')
+
+  useEffect(() => {
+    let cancelled = false
+    Promise.all([api.get('/modules/'), api.get('/profile/modules')])
+      .then(([mods, mine]) => {
+        if (cancelled) return
+        const grade = Object.fromEntries(mine.data.grades.map(g => [g.module_code, g.grade]))
+        setRows(mods.data.filter(m => grade[m.code] !== undefined).map(m => ({ ...m, grade: grade[m.code] })))
+      })
+      .catch(() => { if (!cancelled) setError("Couldn't load your modules. Please refresh the page.") })
+    return () => { cancelled = true }
+  }, [version])
+
+  const years = rows ? [...new Set(rows.map(r => r.level))].sort() : []
+  return (
+    <Panel title="Your modules" actions={<button type="button" onClick={onEditGrades} className={btnBlueCls}>Edit modules &amp; grades</button>}>
+      <div className="flex flex-wrap items-baseline justify-between gap-2 pb-3 mb-1 border-b border-slate-100">
+        <p className="text-sm text-slate-700">
+          {data.programme || 'Programme not set'}{data.intake && <span className="text-slate-500"> · Intake {data.intake}</span>}
+        </p>
+        <button type="button" onClick={onChangeStudy} className="text-sm font-medium text-blue-700 hover:underline">Change programme</button>
+      </div>
+      {error && <p role="alert" className="text-sm text-red-600 bg-red-50 rounded-lg px-3 py-2 mt-3">{error}</p>}
+      {!rows && !error && <div className="flex justify-center py-8 text-blue-600"><Spinner /></div>}
+      {rows && rows.length === 0 && (
+        <Empty title="No grades yet" text="Your grades are the strongest evidence for your skills. Add the modules you have finished."
+          action={<button type="button" onClick={onEditGrades} className={btnBlueCls}>Add modules &amp; grades</button>} />
+      )}
+      {years.map(y => (
+        <div key={y} className="mt-3">
+          <p className="text-xs font-semibold text-slate-500 mb-1">Year {y}</p>
+          <ul className="divide-y divide-slate-100">
+            {rows.filter(r => r.level === y).map(r => (
+              <li key={r.code} className="flex items-center justify-between gap-3 py-2">
+                <span className="text-sm text-slate-800 min-w-0">{r.name} <span className="text-xs text-slate-400">{r.code}</span></span>
+                <span className="text-sm font-semibold text-slate-700 tabular-nums shrink-0">{gradeLetter(r.grade)}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </Panel>
+  )
+}
 
 // ── Projects ──────────────────────────────────────────────────────────────────
 
-export function ProjectsCard({ projects, onRefresh, onImport, importNote, onImportNoteClose }) {
+export function ProjectsTab({ projects, onRefresh, onImport, importNote, onImportNoteClose }) {
   const s = useItems('/profile/projects', onRefresh)
   const done = (saved) => {
     s.close()
@@ -74,25 +134,27 @@ export function ProjectsCard({ projects, onRefresh, onImport, importNote, onImpo
     onRefresh()
   }
   const tooltip = (q) => !q ? undefined : q === ADDED_BY_YOU || q.startsWith('GitHub:') ? q : `“${q}”`
+  const addButton = <button type="button" onClick={() => s.setEditing('new')} className={btnBlueCls}>+ Add project</button>
 
   return (
-    <Card title="Projects" action={<>
-      <CardAction onClick={onImport}>Import from GitHub</CardAction>
-      <CardAction onClick={() => s.setEditing('new')}>+ Add</CardAction>
+    <Panel title="Your projects" actions={<>
+      <button type="button" onClick={onImport} className={btnCls}>Import from GitHub</button>{addButton}
     </>}>
       <Note text={importNote} onClose={onImportNoteClose} />
       <Note text={s.note} onClose={() => s.setNote('')} />
-      {projects.length === 0 ? <Empty>No projects yet. Add one, or import your repositories from GitHub.</Empty> : (
-        <ul className="divide-y divide-gray-100">
+      {projects.length === 0 ? (
+        <Empty title="No projects yet" text="Add a project you built, or import your repositories from GitHub. SkillMap finds the skills you used." />
+      ) : (
+        <ul className="divide-y divide-slate-100">
           {projects.map(p => (
-            <li key={p.id} className="group py-3 first:pt-0 last:pb-0">
+            <li key={p.id} className="group py-4 first:pt-1">
               <div className="flex items-start justify-between gap-3">
                 <div className="min-w-0">
                   <div className="flex items-baseline gap-2 flex-wrap">
-                    <p className="text-sm font-semibold text-gray-800">{p.name}</p>
+                    <p className="text-sm font-semibold text-slate-800">{p.name}</p>
                     {p.github_url && <a href={p.github_url} target="_blank" rel="noopener noreferrer" className="text-xs text-blue-600 hover:underline">GitHub ↗</a>}
                   </div>
-                  <p className="text-sm text-gray-600 mt-0.5 line-clamp-2">{p.description}</p>
+                  <p className="text-sm text-slate-600 mt-0.5 line-clamp-2">{p.description}</p>
                 </div>
                 <RowActions what="project" onEdit={() => s.setEditing(p)} onDelete={() => s.setDeleting(p)} />
               </div>
@@ -113,13 +175,13 @@ export function ProjectsCard({ projects, onRefresh, onImport, importNote, onImpo
           <ProjectForm project={s.editing === 'new' ? null : s.editing} onDone={done} onDirty={s.setDirty} onCancel={s.close} />
         </Modal>
       )}
-    </Card>
+    </Panel>
   )
 }
 
-// ── Certifications ────────────────────────────────────────────────────────────
+// ── Certificates ──────────────────────────────────────────────────────────────
 
-export function CertsCard({ certs, onRefresh }) {
+export function CertsTab({ certs, onRefresh }) {
   const s = useItems('/profile/certifications', onRefresh)
   const confirm = async (id) => {
     try { await api.post(`/profile/certifications/${id}/confirm`); onRefresh() }
@@ -127,27 +189,28 @@ export function CertsCard({ certs, onRefresh }) {
   }
 
   return (
-    <Card title="Certifications" action={<CardAction onClick={() => s.setEditing('new')}>+ Add</CardAction>}>
+    <Panel title="Your certificates" actions={<button type="button" onClick={() => s.setEditing('new')} className={btnBlueCls}>+ Add certificate</button>}>
       <Note text={s.note} onClose={() => s.setNote('')} />
-      {certs.length === 0 ? <Empty>No certifications yet.</Empty> : (
-        <ul className="divide-y divide-gray-100">
+      {certs.length === 0 ? (
+        <Empty title="No certificates yet" text="Add a certificate and the skills it lists, or let SkillMap suggest them from its name." />
+      ) : (
+        <ul className="divide-y divide-slate-100">
           {certs.map(c => {
             const added = c.added_skills || []
             const estimated = c.skills_source == null || c.skills_source === 'estimated'
             const aiSkills = c.mapped_skills.filter(sk => !added.includes(sk))
             return (
-              <li key={c.id} className="group py-3 first:pt-0 last:pb-0">
+              <li key={c.id} className="group py-4 first:pt-1">
                 <div className="flex items-start justify-between gap-3">
                   <p className="text-sm min-w-0">
-                    <span className="font-semibold text-gray-800">{c.cert_name}</span>
-                    <span className="text-gray-500"> · {c.issuer}</span>
+                    <span className="font-semibold text-slate-800">{c.cert_name}</span>
+                    <span className="text-slate-500"> · {c.issuer}</span>
                     {c.credly_url && <a href={c.credly_url} target="_blank" rel="noopener noreferrer" className="text-xs text-blue-600 hover:underline ml-2">Credly ↗</a>}
                   </p>
                   <RowActions what="certificate" onEdit={() => s.setEditing(c)} onDelete={() => s.setDeleting(c)} />
                 </div>
-                {/* An AI estimate says so, with one click to confirm it after checking (unchanged from the old tab) */}
                 {estimated && aiSkills.length > 0 && (
-                  <p className="text-xs text-gray-500 mt-1.5 flex flex-wrap items-center gap-2">
+                  <p className="text-xs text-slate-500 mt-1.5 flex flex-wrap items-center gap-2">
                     Suggested by AI from the certificate name. Remove any that don't apply.
                     <button type="button" onClick={() => confirm(c.id)}
                       className="font-medium text-blue-700 border border-blue-200 rounded-full px-2.5 py-0.5 hover:bg-blue-50">Confirm skills</button>
@@ -173,29 +236,31 @@ export function CertsCard({ certs, onRefresh }) {
             onDone={() => { s.close(); onRefresh() }} onCancel={s.close} />
         </Modal>
       )}
-    </Card>
+    </Panel>
   )
 }
 
-// ── Honours & awards ──────────────────────────────────────────────────────────
+// ── Awards ────────────────────────────────────────────────────────────────────
 
-export function AwardsCard({ awards, onRefresh }) {
+export function AwardsTab({ awards, onRefresh }) {
   const s = useItems('/profile/awards', onRefresh)
 
   return (
-    <Card title="Honours & awards" action={<CardAction onClick={() => s.setEditing('new')}>+ Add</CardAction>}>
+    <Panel title="Your awards" actions={<button type="button" onClick={() => s.setEditing('new')} className={btnBlueCls}>+ Add award</button>}>
       <Note text={s.note} onClose={() => s.setNote('')} />
-      {awards.length === 0 ? <Empty>No awards yet: competition wins, scholarships or a dean's list.</Empty> : (
-        <ul className="divide-y divide-gray-100">
+      {awards.length === 0 ? (
+        <Empty title="No awards yet" text="Add competition wins, scholarships or a dean's list. SkillMap suggests the skills each one shows." />
+      ) : (
+        <ul className="divide-y divide-slate-100">
           {awards.map(a => {
             const added = a.added_skills || []
             return (
-              <li key={a.id} className="group py-3 first:pt-0 last:pb-0">
+              <li key={a.id} className="group py-4 first:pt-1">
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">
-                    <p className="text-sm font-semibold text-gray-800">{a.title}</p>
-                    <p className="text-xs text-gray-500">{a.issuer}{a.award_date && ` · ${monthLabel(a.award_date)}`}</p>
-                    {a.description && <p className="text-sm text-gray-600 mt-1">{a.description}</p>}
+                    <p className="text-sm font-semibold text-slate-800">{a.title}</p>
+                    <p className="text-xs text-slate-500">{a.issuer}{a.award_date && ` · ${monthLabel(a.award_date)}`}</p>
+                    {a.description && <p className="text-sm text-slate-600 mt-1">{a.description}</p>}
                   </div>
                   <RowActions what="award" onEdit={() => s.setEditing(a)} onDelete={() => s.setDeleting(a)} />
                 </div>
@@ -218,6 +283,6 @@ export function AwardsCard({ awards, onRefresh }) {
             onDone={() => { s.close(); onRefresh() }} onCancel={s.close} />
         </Modal>
       )}
-    </Card>
+    </Panel>
   )
 }

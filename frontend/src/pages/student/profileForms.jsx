@@ -1,12 +1,11 @@
 import { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
 import api from '../../api'
-import { DuplicateAsk, Field, FormButtons, SkillChip, Spinner } from './profileParts'
+import { DuplicateAsk, Field, FormButtons, SkillChip, Spinner, Toggle } from './profileParts'
 import { aboutBody, errText, inputCls, splitSkills, studyComplete } from './profileUtils'
 
-// Every pop-up form on My Profile (8 Oct, one page). Each one is opened by an "Edit" or "+ Add" on its card and closes
-// itself through onDone / onCancel; onDirty tells the pop-up there is something typed, so a stray click outside asks
-// first. Project, certificate and award forms moved here unchanged from the old Skill Profile tabs.
+// Every pop-up form on My Profile (8-9 Oct). Each one is opened by a button on the page and closes itself through
+// onDone / onCancel; onDirty tells the pop-up there is something typed, so a stray click outside asks first.
+// Project, certificate and award forms moved here unchanged from the old Skill Profile tabs.
 
 // ── Project (moved from Profile.jsx) ──────────────────────────────────────────
 
@@ -305,7 +304,7 @@ export function StudyFields({ options, value, onChange }) {
         <label htmlFor="study-programme" className="block text-xs font-medium text-gray-600 mb-1.5">Programme <span className="text-red-400">*</span></label>
         <select id="study-programme" value={value.programme_id ?? ''} className={inputCls} required
           onChange={e => onChange({ programme_id: e.target.value ? Number(e.target.value) : null, intake_id: null })}>
-          <option value="">Pick your programme</option>
+          <option value="" disabled>Pick your programme</option>
           {options.programmes.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
         </select>
       </div>
@@ -314,7 +313,7 @@ export function StudyFields({ options, value, onChange }) {
         <select id="study-intake" value={value.intake_id ?? ''} className={inputCls} disabled={!programme || !programme.intakes.length}
           required={!!programme?.intakes.length}
           onChange={e => onChange({ ...value, intake_id: e.target.value ? Number(e.target.value) : null })}>
-          <option value="">{programme && !programme.intakes.length ? 'No intakes yet' : 'Pick your intake'}</option>
+          <option value="" disabled>{programme && !programme.intakes.length ? 'No intakes yet' : 'Pick your intake'}</option>
           {programme?.intakes.map(i => <option key={i.id} value={i.id}>{i.code}</option>)}
         </select>
         {programme && !programme.intakes.length && <p className="text-xs text-gray-400 mt-1.5">The career office hasn't added intakes yet. You can pick it later.</p>}
@@ -323,12 +322,9 @@ export function StudyFields({ options, value, onChange }) {
   )
 }
 
-// ── Intro: headline + programme and intake (8 Oct) ────────────────────────────
-// data = GET /profile/showcase. Saves only what changed: the study (PUT /profile/study) and/or the headline
-// (PUT /profile/about, which takes every About field, so the others are sent back as they are).
+// ── Programme and intake, changed from the Modules tab (9 Oct) ─────────────
 
-export function IntroForm({ data, onDone, onCancel, onDirty }) {
-  const [headline, setHeadline] = useState(data.headline || '')
+export function StudyForm({ onDone, onCancel, onDirty }) {
   const [options, setOptions] = useState(null)      // the programmes and intakes to pick from
   const [study, setStudy] = useState(null)          // what is picked: { programme_id, intake_id }
   const [busy, setBusy] = useState(false)
@@ -340,94 +336,74 @@ export function IntroForm({ data, onDone, onCancel, onDirty }) {
       .catch(() => setError("Couldn't load the programmes. Please try again."))
   }, [])
 
-  const studyChanged = !!options && (study.programme_id !== options.programme_id || study.intake_id !== options.intake_id)
-  const headlineChanged = headline.trim() !== (data.headline || '')
-  useEffect(() => { onDirty?.(studyChanged || headlineChanged) }, [studyChanged, headlineChanged, onDirty])
+  const changed = !!options && (study.programme_id !== options.programme_id || study.intake_id !== options.intake_id)
+  useEffect(() => { onDirty?.(changed) }, [changed, onDirty])
 
   const save = async (e) => {
     e.preventDefault()
     setBusy(true); setError('')
-    try {
-      if (studyChanged) await api.put('/profile/study', study)
-      if (headlineChanged) await api.put('/profile/about', { ...aboutBody(data), headline })
-      onDone(studyChanged ? study : null)
-    } catch (err) {
-      setError(errText(err, "Couldn't save. Please try again."))
-    } finally { setBusy(false) }
+    try { await api.put('/profile/study', study); onDone(study) }
+    catch (err) { setError(errText(err, "Couldn't save. Please try again.")) }
+    finally { setBusy(false) }
   }
 
   return (
     <form onSubmit={save} className="space-y-4">
-      <p className="text-xs text-gray-500">Your name comes from <Link to="/account" className="text-blue-700 hover:underline">Account settings</Link>.</p>
-      <Field label="Headline" optional>
-        <input value={headline} onChange={e => setHeadline(e.target.value)} maxLength={120} className={inputCls} autoFocus
-          placeholder="e.g. Final-year Software Engineering student · aspiring backend developer" />
-      </Field>
+      <p className="text-xs text-gray-500">Your modules follow your programme. Grades you already entered are kept.</p>
       {options ? <StudyFields options={options} value={study} onChange={setStudy} />
         : !error && <div className="flex justify-center py-4 text-blue-600"><Spinner /></div>}
       {error && <p className="text-xs text-red-500 bg-red-50 rounded-lg px-3 py-2">{error}</p>}
       <FormButtons loading={busy} busyText="Saving…" label="Save" onCancel={onCancel}
-        disabled={!options || !studyComplete(options, study) || !(studyChanged || headlineChanged)} />
+        disabled={!options || !studyComplete(options, study) || !changed} />
     </form>
   )
 }
 
-// ── About, and links (8 Oct) ──────────────────────────────────────────────────
-// Both save through PUT /profile/about with the other fields sent back unchanged.
-
-function useAboutSave(data, onDone) {
-  const [busy, setBusy] = useState(false)
-  const [error, setError] = useState('')
-  const save = async (changes) => {
-    setBusy(true); setError('')
-    try { await api.put('/profile/about', { ...aboutBody(data), ...changes }); onDone() }
-    catch (err) { setError(errText(err, "Couldn't save. Please try again.")) }
-    finally { setBusy(false) }
-  }
-  return { busy, error, save }
-}
-
-export function AboutForm({ data, onDone, onCancel, onDirty }) {
-  const [about, setAbout] = useState(data.about || '')
-  const { busy, error, save } = useAboutSave(data, onDone)
-  const changed = about.trim() !== (data.about || '')
-  useEffect(() => { onDirty?.(changed) }, [changed, onDirty])
-  return (
-    <form onSubmit={e => { e.preventDefault(); save({ about }) }} className="space-y-4">
-      <div>
-        <textarea aria-label="About" value={about} onChange={e => setAbout(e.target.value)} rows={8} maxLength={1000} autoFocus
-          className={`${inputCls} resize-none`} placeholder="A few sentences: what you enjoy building, what kind of role you are looking for" />
-        <p className="text-xs text-gray-400 mt-1 text-right tabular-nums">{about.length} / 1000</p>
-      </div>
-      {error && <p className="text-xs text-red-500 bg-red-50 rounded-lg px-3 py-2">{error}</p>}
-      <FormButtons loading={busy} busyText="Saving…" label="Save" onCancel={onCancel} disabled={!changed} />
-    </form>
-  )
-}
+// ── Edit profile: other profiles + profile visibility (9 Oct) ─────────────
+// One PUT /profile/about, which takes every About field; headline and About are no longer shown (9 Oct design) but
+// are sent back unchanged so nothing saved before is lost. Group names follow Handshake ("Profile visibility").
 
 const LINKS = [
   { key: 'linkedin_url', label: 'LinkedIn', placeholder: 'https://www.linkedin.com/in/your-name' },
-  { key: 'portfolio_url', label: 'Portfolio or personal website', placeholder: 'https://your-site.com' },
-  { key: 'github_url', label: 'GitHub profile', placeholder: 'https://github.com/your-name' },
+  { key: 'github_url', label: 'GitHub', placeholder: 'https://github.com/your-name' },
+  { key: 'portfolio_url', label: 'Portfolio or website', placeholder: 'https://your-site.com' },
 ]
 
-export function LinksForm({ data, onDone, onCancel, onDirty }) {
-  const [initial] = useState(() => {
-    const body = aboutBody(data)
-    return Object.fromEntries(LINKS.map(l => [l.key, body[l.key]]))
-  })
-  const [links, setLinks] = useState(initial)
-  const { busy, error, save } = useAboutSave(data, onDone)
-  const changed = JSON.stringify(links) !== JSON.stringify(initial)
+export function ProfileForm({ data, onDone, onCancel, onDirty }) {
+  const [initial] = useState(() => aboutBody(data))
+  const [form, setForm] = useState(initial)
+  const [busy, setBusy] = useState(false)
+  const [error, setError] = useState('')
+  const changed = JSON.stringify(form) !== JSON.stringify(initial)
   useEffect(() => { onDirty?.(changed) }, [changed, onDirty])
+  const set = (key, value) => setForm(f => ({ ...f, [key]: value }))
+
+  const save = async (e) => {
+    e.preventDefault()
+    setBusy(true); setError('')
+    try { await api.put('/profile/about', form); onDone() }
+    catch (err) { setError(errText(err, "Couldn't save. Please try again.")) }
+    finally { setBusy(false) }
+  }
+
   return (
-    <form onSubmit={e => { e.preventDefault(); save(links) }} className="space-y-4">
-      {LINKS.map((l, i) => (
-        <Field key={l.key} label={l.label} optional>
-          <input type="url" value={links[l.key]} maxLength={300} className={inputCls} placeholder={l.placeholder} autoFocus={i === 0}
-            onChange={e => setLinks(prev => ({ ...prev, [l.key]: e.target.value }))} />
-        </Field>
-      ))}
+    <form onSubmit={save} className="space-y-6">
+      <fieldset className="space-y-3">
+        <legend className="text-sm font-semibold text-gray-800 mb-2">Your other profiles</legend>
+        {LINKS.map((l, i) => (
+          <Field key={l.key} label={l.label} optional>
+            <input type="url" value={form[l.key]} maxLength={300} className={inputCls} placeholder={l.placeholder} autoFocus={i === 0}
+              onChange={e => set(l.key, e.target.value)} />
+          </Field>
+        ))}
+      </fieldset>
+      <fieldset className="space-y-3">
+        <legend className="text-sm font-semibold text-gray-800 mb-2">Profile visibility</legend>
+        <Toggle id="flag-visible" checked={form.visible_to_employers} onChange={v => set('visible_to_employers', v)}
+          label="Employers can see my profile" hint="Turn it off when you are not looking for a job." />
+        <Toggle id="flag-grades" checked={form.show_grades_to_employers} onChange={v => set('show_grades_to_employers', v)}
+          label="Show my grades to employers" hint="Off: they see your modules and skills, not the grades." />
+      </fieldset>
       {error && <p className="text-xs text-red-500 bg-red-50 rounded-lg px-3 py-2">{error}</p>}
       <FormButtons loading={busy} busyText="Saving…" label="Save" onCancel={onCancel} disabled={!changed} />
     </form>

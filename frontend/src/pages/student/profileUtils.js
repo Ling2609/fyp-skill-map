@@ -1,4 +1,4 @@
-// Small helpers shared by the Skill Profile tabs (8 Oct; kept apart from profileParts.jsx because a file that
+// Small helpers shared by the My Profile tabs (8 Oct; kept apart from profileParts.jsx because a file that
 // exports React components should export only components, so the page can reload in place while editing).
 
 export const inputCls = 'w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500'
@@ -26,3 +26,11 @@ export const studyComplete = (options, value) => {
   const programme = options?.programmes.find(p => p.id === value?.programme_id)
   return !!programme && (!programme.intakes.length || !!value.intake_id)
 }
+
+// Buttons on My Profile (9 Oct): one blue main action per tab, the others white
+export const btnCls = 'text-sm font-medium px-3.5 py-2 rounded-xl border border-slate-200 bg-white text-slate-700 hover:border-blue-300 hover:text-blue-700 transition'
+export const btnBlueCls = 'text-sm font-medium px-4 py-2 rounded-xl bg-blue-700 text-white hover:bg-blue-800 transition'
+
+const GRADE_LETTERS = { 4: 'A', 3.7: 'A-', 3.3: 'B+', 3: 'B', 2.7: 'B-', 2.3: 'C+', 2: 'C' }
+// 3.7 -> "A-" (the same letters as the grade lists)
+export const gradeLetter = (grade) => GRADE_LETTERS[Math.round(grade * 10) / 10] || ''

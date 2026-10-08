@@ -15,6 +15,17 @@ const NAV_ITEMS = [
     ),
   },
   {
+    // 8 Oct: one page for the showcase and editing; 9 Oct: second, because the student fills it in before the
+    // results on Job Matches and the AI Assistant mean much (input first, then results)
+    to: '/profile',
+    label: 'My Profile',
+    icon: (
+      <svg className="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+      </svg>
+    ),
+  },
+  {
     to: '/recommend',
     label: 'Job Matches',
     icon: (
@@ -29,16 +40,6 @@ const NAV_ITEMS = [
     icon: (
       <svg className="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
-      </svg>
-    ),
-  },
-  {
-    // 8 Oct: one page for the showcase and editing (My Profile + Skill Profile merged)
-    to: '/profile',
-    label: 'My Profile',
-    icon: (
-      <svg className="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
       </svg>
     ),
   },
