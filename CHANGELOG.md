@@ -10,6 +10,8 @@ Planning, reasoning and research behind each decision are in the project roadmap
   grades not saved asks first. `ModulesPanel.jsx` replaced by `ModulesEditor.jsx`. First sign-in and `/modules` open
   `/profile?tab=modules`; the address follows the open tab.
 - Empty Projects / Certificates / Awards tabs: message centred in the panel, emoji back (🗂️ 🎓 🏆).
+- Header: Edit profile on the skill-count line, styled like "Update profile" on Job Matches (blue, pencil icon); a
+  line separates the header from the tabs.
 
 ## 9 Oct 2026 — My Profile becomes the input page; sidebar follows the flow
 

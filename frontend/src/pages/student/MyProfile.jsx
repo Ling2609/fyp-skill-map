@@ -6,7 +6,6 @@ import { useAuth } from '../../context/useAuth'
 import { Modal, Spinner } from './profileParts'
 import { ProfileForm, StudyForm } from './profileForms'
 import { AwardsTab, CertsTab, ModulesTab, ProjectsTab } from './profileSections'
-import { btnCls } from './profileUtils'
 import GithubImport from './GithubImport'
 
 // My Profile (9 Oct, her design): the page where a student puts things in. Four tabs, the four places her skills come
@@ -78,24 +77,32 @@ export default function MyProfile() {
     // Wide screens: the page fills the window and only the open tab's list scrolls; narrow: the page scrolls
     <div className="min-h-screen lg:h-screen bg-slate-50 flex flex-col">
       <PageHeader>
-        <div className="flex flex-wrap items-start justify-between gap-4 pt-1">
-          <div className="min-w-0">
-            <p className="text-[11px] font-semibold text-blue-600 uppercase tracking-widest mb-2">My Profile</p>
-            <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-              <h1 className="text-2xl font-semibold tracking-tight text-slate-900">{data.name}</h1>
-              <VisibilityPill on={data.visible_to_employers} />
-            </div>
-            <p className="text-sm text-slate-500 mt-1">
+        <div className="pt-1">
+          <p className="text-[11px] font-semibold text-blue-600 uppercase tracking-widest mb-2">My Profile</p>
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+            <h1 className="text-2xl font-semibold tracking-tight text-slate-900">{data.name}</h1>
+            <VisibilityPill on={data.visible_to_employers} />
+          </div>
+          {/* Edit profile on the same line as the skill count, styled like "Update profile" on Job Matches (her request 9 Oct) */}
+          <div className="flex flex-wrap items-center justify-between gap-3 mt-1 pb-4">
+            <p className="text-sm text-slate-500">
               {data.total_skills} {data.total_skills === 1 ? 'skill' : 'skills'} from your modules, projects, certificates and awards
               {linkList.map(([label, url]) => (
                 <span key={label}> · <a href={url} target="_blank" rel="noopener noreferrer" className="text-blue-700 hover:underline">{label} ↗</a></span>
               ))}
             </p>
+            <button type="button" onClick={() => setOpen('profile')}
+              className="flex items-center gap-2 text-sm font-medium text-blue-700 bg-blue-50 border border-blue-200 rounded-lg px-3.5 py-2 hover:bg-blue-100 hover:border-blue-300 transition shrink-0">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                  d="M15.232 5.232l3.536 3.536M9 13l6.232-6.232a2.5 2.5 0 113.536 3.536L12.536 16.536 8 18l1.464-4.536z" />
+              </svg>
+              Edit profile
+            </button>
           </div>
-          <button type="button" onClick={() => setOpen('profile')} className={`${btnCls} shrink-0`}>Edit profile</button>
         </div>
         {/* Tabs wrap onto a second line on a narrow window: never a sideways scrollbar (her request 8 Oct) */}
-        <div role="tablist" aria-label="Profile sections" className="flex flex-wrap gap-x-6 mt-4">
+        <div role="tablist" aria-label="Profile sections" className="flex flex-wrap gap-x-6 border-t border-slate-200 -mx-8 px-8">
           {TABS.map(t => {
             const active = tab === t.key
             return (
