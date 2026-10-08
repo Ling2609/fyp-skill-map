@@ -11,3 +11,15 @@ body {
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
 }
+/* Drop-downs (8 Oct, her request): the browser's own arrow sat against the right border. Every <select> now draws
+   one arrow, 12px in from the right edge, with room before it so long text never runs under it. Written outside
+   Tailwind's layers on purpose: it wins over px-* classes, so all drop-downs in SkillMap look the same. */
+select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='%2364748b' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 8l4 4 4-4'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.35rem center;
+  background-size: 1rem;
+  padding-right: 2.5rem;
+}
+select:disabled { opacity: 0.6; cursor: not-allowed; }
