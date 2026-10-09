@@ -388,14 +388,14 @@ export default function Dashboard() {
                   {!goalData.wanted.length ? <p className="text-sm text-slate-500 py-3">None of your skills appear in these jobs yet.</p> : (
                     <ul className="divide-y divide-slate-200">
                       {goalData.wanted.map(w => (
-                        <li key={w.skill} className="flex items-center justify-between gap-3 py-3">
-                          <span className="text-sm text-slate-800 truncate">{skillName(w.skill)}</span>
-                          <span className="flex items-center gap-2 shrink-0">
-                            <span className="w-20 h-1.5 rounded-full bg-slate-200 overflow-hidden" aria-hidden="true">
-                              <span className="block h-full bg-blue-500 rounded-full" style={{ width: pct(w.share) }} />
-                            </span>
-                            <span className="text-xs text-slate-500 tabular-nums w-9 text-right">{pct(w.share)}</span>
+                        // Name, then the bar filling the middle, then the % (9 Oct, her review: a short bar at the far
+                        // right left a wide gap after the name). The bar is out of 100% of the jobs, so short bars are honest
+                        <li key={w.skill} className="grid grid-cols-[minmax(0,9rem)_1fr_2.5rem] items-center gap-3 py-3">
+                          <span className="text-sm text-slate-800 truncate" title={skillName(w.skill)}>{skillName(w.skill)}</span>
+                          <span className="h-1.5 rounded-full bg-slate-200 overflow-hidden" aria-hidden="true">
+                            <span className="block h-full bg-blue-500 rounded-full" style={{ width: pct(w.share) }} />
                           </span>
+                          <span className="text-xs text-slate-500 tabular-nums text-right">{pct(w.share)}</span>
                         </li>
                       ))}
                     </ul>

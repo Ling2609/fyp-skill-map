@@ -3,6 +3,12 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 9 Oct 2026 — Skills-employers-want bars fill the row
+
+- (this commit) Her review: in "Your skills employers want most" a short bar at the far right left a wide gap after
+  the skill name. Each row is now name | bar across the middle | %, so the bars are long enough to compare. The bar
+  stays out of 100% of the jobs (a short bar is the honest reading).
+
 ## 9 Oct 2026 — Skill-name merges after the re-extraction: 79 added, 6 refused
 
 - (this commit) Results of review_skill_merges.py on her data (evidence for the report):
