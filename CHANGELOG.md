@@ -3,6 +3,19 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 9 Oct 2026 — Review script for skill-name duplicates the merge step missed
+
+- (this commit) `scripts/pipeline/review_skill_merges.py`: after the Stage 1 re-extraction students saw the same skill
+  under two names ("Docker Containerisation" / "Docker Containers", "CI/CD" / "CI/CD Pipelines"). It lists three kinds
+  of pairs, only names used in live jobs or profiles, most used first: (a) disputed: decide_skill_merges.py's first
+  check said "same", its stricter second check did not; (b) near: similarity 0.75-0.85, just under its cut-off;
+  (c) plus one word: one name is the other plus one word, whatever the similarity. Two judges from different model
+  families (gpt-oss-120b and Qwen via Groq) label each pair with the label guide's rules; a pair is merged only if
+  both say "same" (as for the abbreviations). The author checks a blind sample; a pair she disagrees with is written
+  as "different" and never merged. `--apply` writes into `data/skill_merge_overrides.json`.
+  Tested on a copy with fake judges and a fake embedder: 13 checks (all three kinds found, author decisions skipped,
+  resume, disagreeing judges = no merge, blind sample, author veto, apply twice = no duplicates, app sees the merge).
+
 ## 9 Oct 2026 — "Your skills employers want most" counts each employer skill once
 
 - (this commit) Her review of 1f42ff4: the card listed her own skill names, and every one that covered the same job
