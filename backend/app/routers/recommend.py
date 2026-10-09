@@ -394,7 +394,10 @@ def _readiness(jobs, grad, spellings, spelling_keys, owner):
 
 
 def _wanted(jobs, profile, grad, spellings, spelling_keys, owner):
-    """The student's skills that most of these jobs ask for: share of jobs where the skill covers a requirement."""
+    """The skills these jobs ask for that the student has, most asked first: share of jobs asking for each.
+    Counted by the employers' skill (canonical key), once per job (9 Oct, her review): counting her own skill names
+    let one requirement show up several times ("Java Programming", "Advanced Java Programming", "Enterprise Java
+    Development" all covering the same "Java" ads). Same names and rule as the goal card above it."""
     if not jobs or not len(grad):
         return []
     picked = []
@@ -403,14 +406,16 @@ def _wanted(jobs, profile, grad, spellings, spelling_keys, owner):
         if idx:
             picked.append((c["skill_vecs"][idx], [c["skill_keys"][i] for i in idx], [c["skills"][i] for i in idx]))
     prefetch_relations(grad, spellings, spelling_keys, picked)
-    covered = np.zeros(len(profile), dtype=int)
+    count, spelling = Counter(), {}
     for vecs, keys, names in picked:
         _, has = match_matrix(vecs, grad, names, keys, spellings, spelling_keys, owner)
-        covered += has.any(axis=0)
-    evidence = list(profile.values())
-    order = sorted(range(len(evidence)), key=lambda g: -covered[g])
-    return [{"skill": evidence[g].name, "share": round(covered[g] / len(jobs), 3)}
-            for g in order[:WANTED_SHOWN] if covered[g] > 0]
+        for key in {k for k, ok in zip(keys, has.any(axis=1)) if ok}:     # once per job
+            count[key] += 1
+        for k, n in zip(keys, names):
+            spelling.setdefault(k, Counter())[n] += 1
+    # each skill under the spelling employers use most ("Java", not "java programming")
+    return [{"skill": spelling[k].most_common(1)[0][0], "share": round(n / len(jobs), 3)}
+            for k, n in count.most_common(WANTED_SHOWN)]
 
 
 @router.get("/goal")

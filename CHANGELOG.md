@@ -3,6 +3,15 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 9 Oct 2026 — "Your skills employers want most" counts each employer skill once
+
+- (this commit) Her review of 1f42ff4: the card listed her own skill names, and every one that covered the same job
+  requirement got credit, so "Java Programming", "Advanced Java Programming" and "Enterprise Java Development" all
+  showed (17%, 16%, 15%) for mostly the same "Java" ads; "Python Data Analysis" and "Python Programming" likewise.
+  Now it counts the employers' skills (canonical key), once per job, under the spelling employers use most
+  ("Java", "Python", "SQL"), the same names and rule as the goal card. For a skill she has, its % equals the goal
+  card's "asked by" %. The Docker merge stays (it is still the same skill everywhere else).
+
 ## 9 Oct 2026 — Student role tidy-up: evidence labels, evidence strength, one Docker skill, phone layout
 
 - (this commit) Small student items before the employer flow:
