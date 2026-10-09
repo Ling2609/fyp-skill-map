@@ -393,7 +393,7 @@ export default function Dashboard() {
                       <tbody>
                         {goalData.wanted.map(w => (
                           <tr key={w.skill} className="border-b border-slate-200 last:border-0">
-                            <td className="py-3 pr-4 align-middle">
+                            <td className="py-3 pr-10 align-middle">
                               <span className="block w-max max-w-36 sm:max-w-64 text-sm text-slate-800">{skillName(w.skill)}</span>
                             </td>
                             <td className="w-full py-3 align-middle" aria-hidden="true">
