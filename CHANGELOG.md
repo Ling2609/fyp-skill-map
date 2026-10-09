@@ -3,6 +3,14 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 9 Oct 2026 — Skills-employers-want list: whole names, aligned bars
+
+- (this commit) Her review of ab69b13: names were cut at 9rem. The list is now a table: the name column is as wide as
+  the longest name in the list, so every name shows in full and every bar starts at the same point with the same
+  length. A name longer than 16rem (9rem on a phone) wraps to a second line instead of squeezing the bars; a bar is
+  never shorter than 4rem. Measured with short, long and very long names at 1440px and 390px: one start point, one
+  length, nothing cut.
+
 ## 9 Oct 2026 — Skills-employers-want bars fill the row
 
 - (this commit) Her review: in "Your skills employers want most" a short bar at the far right left a wide gap after

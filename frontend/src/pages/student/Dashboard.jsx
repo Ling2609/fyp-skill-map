@@ -386,19 +386,26 @@ export default function Dashboard() {
               <Card title="Your skills employers want most" sub={`Share of ${goalData.goal ? 'these' : 'all live'} jobs asking for each`} className="lg:flex-1 min-h-56">
                 <div className="pl-6 pr-3 pb-4 min-h-0 lg:overflow-y-auto">
                   {!goalData.wanted.length ? <p className="text-sm text-slate-500 py-3">None of your skills appear in these jobs yet.</p> : (
-                    <ul className="divide-y divide-slate-200">
-                      {goalData.wanted.map(w => (
-                        // Name, then the bar filling the middle, then the % (9 Oct, her review: a short bar at the far
-                        // right left a wide gap after the name). The bar is out of 100% of the jobs, so short bars are honest
-                        <li key={w.skill} className="grid grid-cols-[minmax(0,9rem)_1fr_2.5rem] items-center gap-3 py-3">
-                          <span className="text-sm text-slate-800 truncate" title={skillName(w.skill)}>{skillName(w.skill)}</span>
-                          <span className="h-1.5 rounded-full bg-slate-200 overflow-hidden" aria-hidden="true">
-                            <span className="block h-full bg-blue-500 rounded-full" style={{ width: pct(w.share) }} />
-                          </span>
-                          <span className="text-xs text-slate-500 tabular-nums text-right">{pct(w.share)}</span>
-                        </li>
-                      ))}
-                    </ul>
+                    // A table, so the name column is as wide as the longest name (all names in full) and every bar
+                    // starts at the same point with the same length (9 Oct, her review). A name over 16rem (9rem on a
+                    // phone) wraps rather than squeezing the bars; a bar is never shorter than 4rem. Bars are out of 100% of the jobs, so short bars are honest
+                    <table className="w-full border-collapse">
+                      <tbody>
+                        {goalData.wanted.map(w => (
+                          <tr key={w.skill} className="border-b border-slate-200 last:border-0">
+                            <td className="py-3 pr-4 align-middle">
+                              <span className="block w-max max-w-36 sm:max-w-64 text-sm text-slate-800">{skillName(w.skill)}</span>
+                            </td>
+                            <td className="w-full py-3 align-middle" aria-hidden="true">
+                              <span className="block min-w-16 h-1.5 rounded-full bg-slate-200 overflow-hidden">
+                                <span className="block h-full bg-blue-500 rounded-full" style={{ width: pct(w.share) }} />
+                              </span>
+                            </td>
+                            <td className="py-3 pl-3 align-middle text-right text-xs text-slate-500 tabular-nums whitespace-nowrap">{pct(w.share)}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
                   )}
                 </div>
               </Card>
