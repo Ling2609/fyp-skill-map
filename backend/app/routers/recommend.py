@@ -12,8 +12,8 @@ from app.services.job_search import TITLE, names_company_or_place, search_match,
 from app.services.skill_names import canonical_key
 from app.services.job_requirements import BONUS_WEIGHT, job_skill_items, score_job, unit_name
 from app.services.skill_profile import (
-    EMPTY_PROFILE_MESSAGE, build_skill_profile, count_modules, matched_mask, normalise_rows, prefetch_relations,
-    profile_spellings,
+    EMPTY_PROFILE_MESSAGE, build_skill_profile, count_modules, match_matrix, matched_mask, normalise_rows,
+    prefetch_relations, profile_spellings,
 )
 import math
 import threading
@@ -336,6 +336,124 @@ def recommend_jobs(
             and not (c.get("source") == "live" and (age_days(c.get("listing_date")) or 0) > MAX_AGE_DAYS)
         ),
     }
+
+
+# ── Career goal (9 Oct) ────────────────────────────────────────────────────────
+# The Dashboard's goal card. A goal is one of the ICT job categories every job ad carries (JobStreet's
+# subcategories, e.g. "Developers/Programmers"); none = "Open to all ICT roles". Every "has it" below uses the same
+# rule as Job Matches and Skill Gap (match_matrix: same skill, else SBERT >= 0.55 and the relationship model).
+# Research: references.md "Dashboard redesign and career goal" (goal-gradient effect; Handshake onboarding).
+
+GOAL_TOP = 10              # "You have 7 of the 10 skills these jobs ask for most"
+WANTED_SHOWN = 4           # "Your skills employers want most"
+BEST_FIT_SHOWN = 3         # no goal: the categories her skills fit best
+MIN_CATEGORY_JOBS = 3      # a category needs a few live jobs before it is offered as a best fit
+ASKED_TIERS = ("core", "bonus")   # required and preferred skills; not soft, "trained on the job" or plain duties
+
+
+def live_jobs() -> list[tuple[int, dict]]:
+    """The jobs Job Matches recommends: live, not gone, posted within MAX_AGE_DAYS."""
+    return [(job_id, c) for job_id, c in list(_job_cache.items())
+            if c.get("source") == "live" and (age_days(c.get("listing_date")) or 0) <= MAX_AGE_DAYS]
+
+
+def goal_categories() -> list[dict]:
+    """Every category with live jobs, most jobs first: [{name, jobs}]."""
+    counts = Counter(c["subcategory"] for _, c in live_jobs() if c.get("subcategory"))
+    return [{"name": name, "jobs": n} for name, n in sorted(counts.items(), key=lambda x: (-x[1], x[0]))]
+
+
+def _asked(jobs):
+    """canonical key -> number of jobs asking for it (required or preferred), its name, and one vector for it."""
+    count, name, vec = Counter(), {}, {}
+    for _, c in jobs:
+        seen = set()
+        for i, it in enumerate(c["items"]):
+            if it.tier not in ASKED_TIERS or it.key in seen:
+                continue
+            seen.add(it.key)
+            count[it.key] += 1
+            name.setdefault(it.key, it.name)
+            if it.key not in vec:
+                vec[it.key] = c["skill_vecs"][i]
+    return count, name, vec
+
+
+def _readiness(jobs, grad, spellings, spelling_keys, owner):
+    """The GOAL_TOP skills these jobs ask for most, each with has / share of jobs."""
+    count, name, vec = _asked(jobs)
+    top = count.most_common(GOAL_TOP)
+    if not top or not len(grad):
+        return []
+    keys = [k for k, _ in top]
+    names = [name[k] for k in keys]
+    vecs = np.stack([vec[k] for k in keys])
+    prefetch_relations(grad, spellings, spelling_keys, [(vecs, keys, names)])
+    has = matched_mask(grad, vecs, spelling_keys, owner, keys, spellings, names)
+    return [{"skill": names[i], "has": bool(has[i]), "share": round(n / len(jobs), 3)} for i, (_, n) in enumerate(top)]
+
+
+def _wanted(jobs, profile, grad, spellings, spelling_keys, owner):
+    """The student's skills that most of these jobs ask for: share of jobs where the skill covers a requirement."""
+    if not jobs or not len(grad):
+        return []
+    picked = []
+    for _, c in jobs:
+        idx = [i for i, it in enumerate(c["items"]) if it.tier in ASKED_TIERS]
+        if idx:
+            picked.append((c["skill_vecs"][idx], [c["skill_keys"][i] for i in idx], [c["skills"][i] for i in idx]))
+    prefetch_relations(grad, spellings, spelling_keys, picked)
+    covered = np.zeros(len(profile), dtype=int)
+    for vecs, keys, names in picked:
+        _, has = match_matrix(vecs, grad, names, keys, spellings, spelling_keys, owner)
+        covered += has.any(axis=0)
+    evidence = list(profile.values())
+    order = sorted(range(len(evidence)), key=lambda g: -covered[g])
+    return [{"skill": evidence[g].name, "share": round(covered[g] / len(jobs), 3)}
+            for g in order[:WANTED_SHOWN] if covered[g] > 0]
+
+
+@router.get("/goal")
+def goal_summary(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    """Everything the Dashboard's goal card needs, in one request."""
+    started = time.perf_counter()
+    profile = build_skill_profile(current_user.id, db)
+    if not profile:
+        raise HTTPException(status_code=400, detail=EMPTY_PROFILE_MESSAGE)
+    build_job_cache()
+    spellings, spelling_keys, owner = profile_spellings(profile)
+    grad = normalise_rows(embedder.embed_cached(spellings)) if spellings else np.array([])
+
+    jobs = live_jobs()
+    categories = goal_categories()
+    known = {c["name"] for c in categories}
+    goal = current_user.target_category if current_user.target_category in known else None
+    scope = [(j, c) for j, c in jobs if c.get("subcategory") == goal] if goal else jobs
+
+    best_fit = []
+    if not goal:   # no goal: how close she is to each category, best first
+        for cat in categories:
+            if cat["jobs"] < MIN_CATEGORY_JOBS:
+                continue
+            ready = _readiness([(j, c) for j, c in jobs if c.get("subcategory") == cat["name"]],
+                               grad, spellings, spelling_keys, owner)
+            if ready:
+                best_fit.append({"category": cat["name"], "jobs": cat["jobs"],
+                                 "have": sum(r["has"] for r in ready), "of": len(ready)})
+        best_fit.sort(key=lambda b: (-b["have"] / b["of"], -b["jobs"]))
+        best_fit = best_fit[:BEST_FIT_SHOWN]
+
+    out = {
+        "goal": goal,
+        "goal_saved": current_user.target_category,     # differs from goal when its category has no live jobs now
+        "jobs": len(scope),
+        "categories": categories,
+        "readiness": _readiness(scope, grad, spellings, spelling_keys, owner) if goal else [],
+        "wanted": _wanted(scope, profile, grad, spellings, spelling_keys, owner),
+        "best_fit": best_fit,
+    }
+    print(f"[goal] {time.perf_counter() - started:.2f} s for user {current_user.id}")
+    return out
 
 
 @router.get("/profile/{module_code}")

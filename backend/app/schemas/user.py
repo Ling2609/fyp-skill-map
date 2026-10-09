@@ -59,6 +59,7 @@ class UserOut(BaseModel):
     employer_status: str | None = None
     programme_id: int | None = None
     intake_id: int | None = None
+    target_category: str | None = None    # 9 Oct: career goal (empty = open to all ICT roles)
 
     class Config:
         from_attributes = True

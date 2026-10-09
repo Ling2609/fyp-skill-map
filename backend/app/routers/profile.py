@@ -302,6 +302,9 @@ def check_profile_schema():
     if not {"headline", "show_grades_to_employers"} <= users or not inspect(engine).has_table("user_awards"):
         raise RuntimeError("Database not updated: run  python migrations/migrate_profile_showcase.py  "
                            "from the backend folder, then start the backend again.")
+    if "target_category" not in users:
+        raise RuntimeError("Database not updated: run  python migrations/migrate_career_goal.py  "
+                           "from the backend folder, then start the backend again.")
 
 
 # ── Endpoints ─────────────────────────────────────────────────────────────────
@@ -976,3 +979,24 @@ def list_github_repos(account: str, current_user: User = Depends(get_current_use
     for r in repos:
         r["added"] = any(same_repo(r["url"], link) for link in links)
     return {"repos": repos}
+
+
+# ── Career goal (9 Oct) ───────────────────────────────────────────────────────
+# Asked (optionally) at first sign-in after programme + intake, changed any time from the Dashboard. Handshake asks
+# students the same at onboarding and lets them "update ... anytime" (references.md "Dashboard redesign and career
+# goal"). The choices are the categories that have live jobs (GET /recommend/goal lists them with counts).
+
+class GoalIn(BaseModel):
+    category: str | None = None      # None or "" = open to all ICT roles
+
+
+@router.put("/goal")
+def save_goal(data: GoalIn, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    from app.models.job import Job
+    category = (data.category or "").strip() or None
+    if category and not db.query(Job.id).filter(Job.subcategory == category, Job.source == "live",
+                                                 Job.gone_at.is_(None)).first():
+        raise HTTPException(status_code=400, detail="That job category has no current openings. Please pick another.")
+    current_user.target_category = category
+    db.commit()
+    return {"target_category": current_user.target_category}

@@ -3,6 +3,25 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 9 Oct 2026 — Career goal; one-screen Dashboard
+
+- (this commit) **Career goal** (`users.target_category`, a JobStreet ICT job category; empty = "Open to all ICT
+  roles"). Asked once at first sign-in as an optional step 2 (after programme + intake, before the Modules tab), and
+  changeable any time from the Dashboard. `PUT /profile/goal` accepts only a category with current live jobs.
+  **Run `python migrations/migrate_career_goal.py` from `backend/`** (the API refuses to start until it has run).
+- **Dashboard rebuilt around the goal** (`GET /recommend/goal`), fitting one laptop screen; lists scroll inside their
+  cards, and cards stack on narrow screens:
+  - Goal set: "8/10 of the top skills these jobs ask for" (core + bonus skills only, same matching rule as Job
+    Matches), the skills you have, and "Still to learn" with tick boxes; "Plan how to learn X and Y" opens the AI
+    Assistant on those skills and the goal; "See the N jobs" opens Job Matches on the goal.
+  - No goal: the 3 job categories your skills fit best, "Set as my goal", and "Not sure? Talk to the counsellor",
+    which opens the career counsellor with a question already typed (not sent).
+  - Top job matches and "Your skills employers want most" say what they are based on (the goal, or all live jobs).
+  - Empty profile: invites modules, projects, certificates and awards, not only grades.
+- **Job Matches opens on the goal category** (cleared or changed with the category filter as before); the filter row
+  wraps on a phone.
+- Below 768px the sidebar starts as the icon rail, so phone-width pages keep most of the width.
+
 ## 9 Oct 2026 — Programme in the header; module skills use the full row
 
 - (this commit) Her review of d7f612e, to give the module lists more room:

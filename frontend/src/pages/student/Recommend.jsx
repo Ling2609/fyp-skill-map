@@ -1,5 +1,6 @@
 import { Fragment, useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useAuth } from '../../context/useAuth'
 import { cached, peek } from '../../pageCache'
 import PageHeader from '../../components/PageHeader'
 import LevelTag from '../../components/LevelTag'
@@ -79,6 +80,7 @@ const searchBody = (role, category) => ({
 
 export default function Recommend() {
   const navigate = useNavigate()
+  const { user } = useAuth()
 
   const [skillCount, setSkillCount] = useState(() => peek('/profile/skills')?.total ?? null) // null = loading, 0 = empty profile, -1 = failed
   const [results, setResults] = useState(null)
@@ -159,7 +161,9 @@ export default function Recommend() {
       // show different numbers from Job Detail: the 30 Sep problem)
       sessionStorage.removeItem('lastRecommendResults')   // left by older versions
       sessionStorage.removeItem('jobMatchesCache')        // left by 19a84cb
-      const savedCategory = sessionStorage.getItem('lastActiveCategory') || 'all'
+      // The category picked earlier in this visit; else the career goal (9 Oct: Job Matches opens on it, and the
+      // category filter can still be cleared or changed); else all jobs
+      const savedCategory = sessionStorage.getItem('lastActiveCategory') || user?.target_category || 'all'
       // Before 3 Oct a chip also wrote its name into the search box; don't restore that as typed text
       const savedRole = (sessionStorage.getItem('lastRoleFilter') || '') === savedCategory ? ''
         : sessionStorage.getItem('lastRoleFilter') || ''
@@ -373,7 +377,7 @@ export default function Recommend() {
           </div>
           {/* Filters (3 Oct): one row of identical buttons, sort on the right (Indeed-style top bar, references.md
               "How job sites lay out search + filters"). A button shows its value when set and clears with ✕. */}
-          <div className="flex items-center gap-2 pb-4">
+          <div className="flex flex-wrap items-center gap-2 pb-4">
             <FilterButton label="Location" display={locationLabel(location)} active={location !== 'all'}
               value={location} onChange={handleLocation} onClear={() => handleLocation('all')}>{locationOptions}</FilterButton>
             <FilterButton label="Job category" display={activeCategory} active={activeCategory !== 'all'}

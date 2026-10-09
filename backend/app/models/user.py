@@ -37,6 +37,8 @@ class User(Base):
     portfolio_url = Column(String(300), nullable=True)
     github_url    = Column(String(300), nullable=True)
     show_grades_to_employers = Column(Boolean, default=False, nullable=False, server_default="false")
+    # Career goal (9 Oct, migrations/migrate_career_goal.py): a job category, empty = open to all ICT roles
+    target_category = Column(String(80), nullable=True)
 
 # Load the tables users point at (programmes, intakes), so any script that saves a User works on its own (7 Oct)
 from app.models import programme  # noqa: E402,F401

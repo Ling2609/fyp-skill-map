@@ -123,6 +123,9 @@ export default function Chatbot() {
   const params = new URLSearchParams(location.search)
   const preloadSkill = params.get('skill')
   const preloadJob = params.get('job')
+  // From the Dashboard's "Talk to the counsellor" (9 Oct): a first message written from her profile, put in the box
+  // but NOT sent, so she can change it first
+  const preloadAsk = params.get('ask')
 
   const initialMode = preloadSkill ? 'skill_development' : 'career_counsellor'
   const [mode, setMode] = useState(initialMode)
@@ -131,6 +134,7 @@ export default function Chatbot() {
   const [loading, setLoading] = useState(false)
   const bottomRef = useRef(null)
   const hasAutoSent = useRef(false)
+  const askUsed = useRef(false)          // the counsellor's pre-filled question is offered once
 
   // Saved chats (MongoDB, 6 Oct). sessionId = the chat being shown; null = a new chat, saved on its first reply
   const [sessionId, setSessionId] = useState(null)
@@ -257,7 +261,8 @@ export default function Chatbot() {
     }
     const timer = setTimeout(() => {
       setMessages(initMessages)
-      setInput('')
+      setInput(!askUsed.current && preloadAsk && mode === 'career_counsellor' ? preloadAsk : '')
+      askUsed.current = true
       if (shouldAutoSend) {
         hasAutoSent.current = true
         sendMessages(initMessages)
