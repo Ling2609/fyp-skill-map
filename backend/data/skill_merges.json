@@ -90,6 +90,21 @@
    "similarity": 0.91,
    "verified": true
   },
+  "acceptancecriteria || acceptancecriteriadefinition": {
+   "a": "acceptance criteria",
+   "b": "Acceptance criteria definition",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.911,
+   "verified": false
+  },
+  "acceptancecriteria || acceptancecriteriawriting": {
+   "a": "acceptance criteria",
+   "b": "Acceptance criteria writing",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.867
+  },
   "acceptancetesting || testingacceptance": {
    "a": "Acceptance Testing",
    "b": "Testing & Acceptance",
@@ -193,6 +208,13 @@
    "checked": "2026-09-30",
    "same": false,
    "similarity": 0.882
+  },
+  "accessnetwork || networkaccess": {
+   "a": "Access Network",
+   "b": "Network access",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.924
   },
   "accesspointdesign || accesspointsetup": {
    "a": "Access Point Setup",
@@ -298,6 +320,14 @@
    "same": false,
    "similarity": 0.88
   },
+  "advancedscheduling || intelligentscheduling": {
+   "a": "Advanced Scheduling",
+   "b": "Intelligent scheduling",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.889,
+   "verified": false
+  },
   "advancedscheduling || scheduling": {
    "a": "Advanced Scheduling",
    "b": "Scheduling",
@@ -311,6 +341,70 @@
    "checked": "2026-09-30",
    "same": false,
    "similarity": 0.873
+  },
+  "advancedtroubleshooting || technicaltroubleshooting": {
+   "a": "Technical Troubleshooting",
+   "b": "Advanced troubleshooting",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.863
+  },
+  "advancedtroubleshooting || troubleshooting": {
+   "a": "Troubleshooting",
+   "b": "Advanced troubleshooting",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.865
+  },
+  "agenticai || agenticaibot": {
+   "a": "Agentic AI",
+   "b": "Agentic AI bots",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.872
+  },
+  "agenticai || aiagent": {
+   "a": "Agentic AI",
+   "b": "AI agents",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.897
+  },
+  "agenticaibot || aiagent": {
+   "a": "AI agents",
+   "b": "Agentic AI bots",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.857,
+   "verified": false
+  },
+  "agenticworkflows || agentworkflows": {
+   "a": "Agent workflows",
+   "b": "Agentic Workflows",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.95
+  },
+  "agenticworkflows || multiagentworkflows": {
+   "a": "Agentic Workflows",
+   "b": "multi-agent workflows",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.864
+  },
+  "agentplatform || aiagentplatform": {
+   "a": "AI Agent platforms",
+   "b": "Agent platforms",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.857
+  },
+  "agentworkflows || multiagentworkflows": {
+   "a": "Agent workflows",
+   "b": "multi-agent workflows",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.887
   },
   "agile || agileenvironment": {
    "a": "Agile Development",
@@ -327,6 +421,20 @@
    "similarity": 0.858,
    "verified": false
   },
+  "agile || agilescrum": {
+   "a": "Agile Scrum",
+   "b": "Agile",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.856
+  },
+  "agile || scrumagile": {
+   "a": "Agile",
+   "b": "Scrum Agile",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.859
+  },
   "agiledelivery || agilesoftwaredelivery": {
    "a": "Agile Delivery",
    "b": "Agile software delivery",
@@ -334,6 +442,13 @@
    "same": true,
    "similarity": 0.94,
    "verified": false
+  },
+  "agilescrum || agilescrummaster": {
+   "a": "Agile Scrum",
+   "b": "Agile Scrum Master",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.893
   },
   "agilescrum || scrum": {
    "a": "Agile Scrum",
@@ -351,6 +466,21 @@
    "similarity": 0.993,
    "verified": true
   },
+  "agilescrummaster || scrumagile": {
+   "a": "Scrum Agile",
+   "b": "Agile Scrum Master",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.886
+  },
+  "agilescrummaster || scrummaster": {
+   "a": "Scrum Master",
+   "b": "Agile Scrum Master",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.907,
+   "verified": false
+  },
   "agilesprintplanning || sprintplanning": {
    "a": "Agile sprint planning",
    "b": "Sprint Planning",
@@ -359,12 +489,43 @@
    "similarity": 0.904,
    "verified": false
   },
+  "aiagent || aiagentplatform": {
+   "a": "AI agents",
+   "b": "AI Agent platforms",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.861
+  },
+  "aiagent || intelligentagent": {
+   "a": "AI agents",
+   "b": "intelligent agents",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.87,
+   "verified": false
+  },
   "aiassistant || aicodingassistant": {
    "a": "AI Coding Assistants",
    "b": "AI Assistants",
    "checked": "2026-09-30",
    "same": false,
    "similarity": 0.872
+  },
+  "aiassisted || aiassistedsoftware": {
+   "a": "AI-assisted development",
+   "b": "AI-assisted software development",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.925,
+   "verified": false
+  },
+  "aiassistedtesting || aidriventesting": {
+   "a": "AI-driven testing",
+   "b": "AI-assisted testing tools",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.86,
+   "verified": false
   },
   "aiautomation || intelligentautomation": {
    "a": "Intelligent Automation",
@@ -379,6 +540,51 @@
    "checked": "2026-09-30",
    "same": false,
    "similarity": 0.884
+  },
+  "aievaluation || aimodelevaluation": {
+   "a": "AI evaluation",
+   "b": "AI model evaluation",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.915
+  },
+  "aievaluation || aioutputevaluation": {
+   "a": "AI evaluation",
+   "b": "AI output evaluation",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.887
+  },
+  "aiworkflow || aiworkflows": {
+   "a": "AI workflow development",
+   "b": "AI development workflows",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.932,
+   "verified": false
+  },
+  "aix || aixadministration": {
+   "a": "AIX Administration",
+   "b": "AIX",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.877
+  },
+  "aix || aixunix": {
+   "a": "AIX Unix",
+   "b": "AIX",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.902,
+   "verified": false
+  },
+  "aix || ibmaix": {
+   "a": "IBM AIX",
+   "b": "AIX",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.892,
+   "verified": true
   },
   "aixunix || ibmaix": {
    "a": "AIX Unix",
@@ -449,6 +655,35 @@
    "same": true,
    "similarity": 0.878,
    "verified": true
+  },
+  "amazonsagemaker || sagemaker": {
+   "a": "Amazon SageMaker",
+   "b": "SageMaker",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.864,
+   "verified": true
+  },
+  "analytic || businessanalytic": {
+   "a": "Business analytics",
+   "b": "Analytics",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.876
+  },
+  "analytic || dataanalytic": {
+   "a": "Data Analytics",
+   "b": "Analytics",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.879
+  },
+  "analytic || googleanalytic": {
+   "a": "Google Analytics",
+   "b": "Analytics",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.888
   },
   "analyticproduct || productanalytic": {
    "a": "Analytics Product Development",
@@ -532,6 +767,13 @@
    "same": true,
    "similarity": 0.949,
    "verified": true
+  },
+  "apiautomation || apiautomationtesting": {
+   "a": "API automation",
+   "b": "API automation testing",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.868
   },
   "apidevelopment || webapidevelopment": {
    "a": "API Development",
@@ -653,6 +895,13 @@
    "similarity": 0.863,
    "verified": false
   },
+  "applicationmanagedservice || managedservice": {
+   "a": "Managed Services",
+   "b": "Application managed services",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.869
+  },
   "applicationmanagement || businessapplicationmanagement": {
    "a": "Application Management",
    "b": "Business Application Management",
@@ -660,12 +909,26 @@
    "same": false,
    "similarity": 0.886
   },
+  "applicationpatchmanagement || patchmanagement": {
+   "a": "Patch Management",
+   "b": "Application patch management",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.896
+  },
   "applicationperformancemonitoring || performancemonitoring": {
    "a": "Performance Monitoring",
    "b": "Application Performance Monitoring",
    "checked": "2026-09-30",
    "same": false,
    "similarity": 0.863
+  },
+  "applicationupgrade || softwareupgrade": {
+   "a": "Software Upgrades",
+   "b": "Application upgrades",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.854
   },
   "architecturaldesignpattern || designpattern": {
    "a": "Design Patterns",
@@ -761,6 +1024,13 @@
    "similarity": 0.87,
    "verified": false
   },
+  "asp.netwebform || webform": {
+   "a": "ASP.NET Web Forms",
+   "b": "Web forms",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.862
+  },
   "aspclassic || classicasp": {
    "a": "Classic ASP",
    "b": "ASP Classic",
@@ -791,6 +1061,14 @@
    "similarity": 0.918,
    "verified": false
   },
+  "assetinventorymanagement || itassetinventorymanagement": {
+   "a": "Asset Inventory Management",
+   "b": "IT asset inventory management",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.861,
+   "verified": false
+  },
   "attendancemonitoring || attendancetracking": {
    "a": "Attendance Monitoring",
    "b": "Attendance Tracking",
@@ -805,6 +1083,14 @@
    "checked": "2026-09-30",
    "same": false,
    "similarity": 0.855
+  },
+  "audiovisual || audiovisualsystem": {
+   "a": "Audio Visual Systems",
+   "b": "Audio visual",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.88,
+   "verified": false
   },
   "auditcompliance || complianceauditing": {
    "a": "Compliance Auditing",
@@ -827,6 +1113,27 @@
    "checked": "2026-09-30",
    "same": false,
    "similarity": 0.868
+  },
+  "auditing || auditmanagement": {
+   "a": "Audit Management",
+   "b": "Auditing",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.869
+  },
+  "auditing || auditreporting": {
+   "a": "Audit reporting",
+   "b": "Auditing",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.864
+  },
+  "auditing || securityauditing": {
+   "a": "Security Auditing",
+   "b": "Auditing",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.858
   },
   "auditmanagement || auditriskmanagement": {
    "a": "Audit Management",
@@ -893,6 +1200,14 @@
    "similarity": 0.889,
    "verified": true
   },
+  "automatedreporting || automationreporting": {
+   "a": "Automated reporting",
+   "b": "Automation reporting",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.858,
+   "verified": false
+  },
   "automatedreporting || reportautomation": {
    "a": "Automated Reporting",
    "b": "Report automation",
@@ -908,6 +1223,13 @@
    "same": true,
    "similarity": 0.895,
    "verified": true
+  },
+  "automatedsoftwaredelivery || softwaredelivery": {
+   "a": "Software Delivery",
+   "b": "Automated software delivery",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.853
   },
   "automatedtesting || automationtesting": {
    "a": "Automated Testing",
@@ -925,12 +1247,36 @@
    "similarity": 0.869,
    "verified": true
   },
+  "automatedtestscript || testautomationscripting": {
+   "a": "Test Automation Scripting",
+   "b": "automated test scripts",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.905,
+   "verified": false
+  },
   "automateduitesting || uitesting": {
    "a": "UI Testing",
    "b": "Automated UI Testing",
    "checked": "2026-09-30",
    "same": false,
    "similarity": 0.885
+  },
+  "automatedworkflows || automationworkflows": {
+   "a": "automated workflows",
+   "b": "Automation workflows",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.918,
+   "verified": false
+  },
+  "automatedworkflows || workflowautomation": {
+   "a": "Workflow Automation",
+   "b": "automated workflows",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.907,
+   "verified": false
   },
   "automaticstoragemanagement || storagemanagement": {
    "a": "Storage Management",
@@ -945,6 +1291,20 @@
    "checked": "2026-09-30",
    "same": false,
    "similarity": 0.877
+  },
+  "automation || automationprocesse": {
+   "a": "Automation",
+   "b": "Automation Processes",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.873
+  },
+  "automation || automationsolution": {
+   "a": "Automation",
+   "b": "Automation solutions",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.911
   },
   "automation || intelligentautomation": {
    "a": "Automation",
@@ -974,6 +1334,36 @@
    "same": false,
    "similarity": 0.855
   },
+  "automationprocesse || processautomation": {
+   "a": "Process Automation",
+   "b": "Automation Processes",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.914
+  },
+  "automationproject || automationsolution": {
+   "a": "Automation Projects",
+   "b": "Automation solutions",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.854,
+   "verified": false
+  },
+  "automationreporting || reportautomation": {
+   "a": "Report automation",
+   "b": "Automation reporting",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.905
+  },
+  "automationreporting || reportingautomation": {
+   "a": "Reporting Automation",
+   "b": "Automation reporting",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.91,
+   "verified": false
+  },
   "automationscripting || scriptingautomation": {
    "a": "Automation Scripting",
    "b": "Scripting Automation",
@@ -988,6 +1378,13 @@
    "checked": "2026-09-30",
    "same": false,
    "similarity": 0.856
+  },
+  "automationtesting || automationtestingstrategy": {
+   "a": "Automation Testing",
+   "b": "Automation testing strategy",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.921
   },
   "automationtesting || testautomation": {
    "a": "Test Automation",
@@ -1004,12 +1401,41 @@
    "same": false,
    "similarity": 0.867
   },
+  "automationtestingstrategy || testautomation": {
+   "a": "Test Automation",
+   "b": "Automation testing strategy",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.891
+  },
+  "automationtestingstrategy || testautomationarchitecture": {
+   "a": "Automation testing strategy",
+   "b": "Test automation architecture",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.871
+  },
+  "automationworkflowdesign || automationworkflows": {
+   "a": "Automation workflow design",
+   "b": "Automation workflows",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.936
+  },
   "automationworkflowdesign || workflowautomation": {
    "a": "Workflow Automation",
    "b": "Automation workflow design",
    "checked": "2026-09-30",
    "same": false,
    "similarity": 0.915
+  },
+  "automationworkflows || workflowautomation": {
+   "a": "Workflow Automation",
+   "b": "Automation workflows",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.949,
+   "verified": false
   },
   "avayatelephony || avayavoip": {
    "a": "Avaya VoIP",
@@ -1018,6 +1444,13 @@
    "same": true,
    "similarity": 0.87,
    "verified": false
+  },
+  "avsystem || avsystemdesign": {
+   "a": "AV System Design",
+   "b": "AV systems",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.852
   },
   "aws || awsecs": {
    "a": "AWS",
@@ -1040,6 +1473,13 @@
    "same": true,
    "similarity": 0.925,
    "verified": false
+  },
+  "awscertification || awscertifiedsecurityspecialty": {
+   "a": "AWS Certification",
+   "b": "AWS Certified Security – Specialty",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.85
   },
   "awscloud || awscloudcomputing": {
    "a": "AWS Cloud",
@@ -1157,6 +1597,14 @@
    "same": false,
    "similarity": 0.908
   },
+  "awsec2 || ec2": {
+   "a": "AWS EC2",
+   "b": "EC2",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.858,
+   "verified": true
+  },
   "awsecs || awsecseks": {
    "a": "AWS ECS/EKS",
    "b": "AWS ECS",
@@ -1209,6 +1657,13 @@
    "same": true,
    "similarity": 0.985,
    "verified": true
+  },
+  "awssns || awssqssns": {
+   "a": "AWS SQS/SNS",
+   "b": "AWS SNS",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.89
   },
   "awssolutionarchitect || awssolutionarchitecture": {
    "a": "AWS Solutions Architect",
@@ -1308,6 +1763,13 @@
    "same": false,
    "similarity": 0.863
   },
+  "azurecloudplatform || azuredataplatform": {
+   "a": "Azure Cloud Platform",
+   "b": "Azure Data Platform",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.86
+  },
   "azurecloudsecurity || azuresecurity": {
    "a": "Azure Security",
    "b": "Azure Cloud Security",
@@ -1337,6 +1799,14 @@
    "same": false,
    "similarity": 0.869
   },
+  "azureidentity || azureidentitymanagement": {
+   "a": "Azure Identity Management",
+   "b": "Azure identity",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.884,
+   "verified": false
+  },
   "azuremonitor || azuremonitoring": {
    "a": "Azure Monitor",
    "b": "Azure Monitoring",
@@ -1350,6 +1820,22 @@
    "checked": "2026-09-30",
    "same": false,
    "similarity": 0.941
+  },
+  "azuresql || microsoftazuresqldatabase": {
+   "a": "Azure SQL",
+   "b": "Microsoft Azure SQL Database",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.934,
+   "verified": false
+  },
+  "azuresqldatabase || microsoftazuresqldatabase": {
+   "a": "Azure SQL Database",
+   "b": "Microsoft Azure SQL Database",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.993,
+   "verified": true
   },
   "b2bsaa || b2bsaasale": {
    "a": "B2B SaaS Sales",
@@ -1365,6 +1851,21 @@
    "same": false,
    "similarity": 0.884
   },
+  "backend || backendengineering": {
+   "a": "Backend Development",
+   "b": "Backend engineering",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.878,
+   "verified": false
+  },
+  "backendarchitecture || backendengineering": {
+   "a": "Backend Architecture",
+   "b": "Backend engineering",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.864
+  },
   "backendintegration || backendsystemintegration": {
    "a": "Backend Integration",
    "b": "Backend Systems Integration",
@@ -1372,6 +1873,20 @@
    "same": true,
    "similarity": 0.867,
    "verified": false
+  },
+  "backup || backupsolution": {
+   "a": "Backup Solutions",
+   "b": "Backup",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.863
+  },
+  "backup || backupstrategy": {
+   "a": "Backup Strategies",
+   "b": "Backup",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.853
   },
   "backupadministration || backupmanagement": {
    "a": "Backup Administration",
@@ -1442,6 +1957,14 @@
    "same": false,
    "similarity": 0.863
   },
+  "backuprecovery || backuprestore": {
+   "a": "Backup Recovery",
+   "b": "Backup Restore",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.858,
+   "verified": false
+  },
   "backuprecovery || databackupandrecovery": {
    "a": "Backup & Recovery",
    "b": "Data backup and recovery",
@@ -1492,6 +2015,13 @@
    "checked": "2026-09-30",
    "same": false,
    "similarity": 0.886
+  },
+  "banking || bankingsolution": {
+   "a": "Banking Solutions",
+   "b": "Banking",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.861
   },
   "bankingdomain || retailbankingdomain": {
    "a": "Banking domain",
@@ -1587,6 +2117,29 @@
    "checked": "2026-09-30",
    "same": false,
    "similarity": 0.922
+  },
+  "batchcomputing || batchprocessing": {
+   "a": "Batch processing",
+   "b": "batch computing",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.913,
+   "verified": false
+  },
+  "batchmanagement || batchprocessing": {
+   "a": "Batch processing",
+   "b": "Batch Management",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.851
+  },
+  "batchmonitoring || batchprocessingmonitoring": {
+   "a": "Batch Monitoring",
+   "b": "Batch processing monitoring",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.955,
+   "verified": false
   },
   "batchscripting || windowsbatchscripting": {
    "a": "Windows batch scripting",
@@ -1719,6 +2272,13 @@
    "similarity": 0.98,
    "verified": true
   },
+  "billing || salesforcebilling": {
+   "a": "Salesforce Billing",
+   "b": "Billing",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.891
+  },
   "bitbucket || bitbucketrepository": {
    "a": "Bitbucket",
    "b": "BitBucket Repository",
@@ -1764,6 +2324,20 @@
    "same": false,
    "similarity": 0.876
   },
+  "branching || branchingstrategy": {
+   "a": "Branching Strategies",
+   "b": "branching",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.855
+  },
+  "branding || personalbranding": {
+   "a": "Personal Branding",
+   "b": "branding",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.87
+  },
   "browsercompatibility || crossbrowsercompatibility": {
    "a": "Browser Compatibility",
    "b": "Cross-Browser Compatibility",
@@ -1794,12 +2368,33 @@
    "same": false,
    "similarity": 0.958
   },
+  "budgeting || budgetmanagement": {
+   "a": "Budget Management",
+   "b": "Budgeting",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.867
+  },
+  "budgeting || itbudgeting": {
+   "a": "IT Budgeting",
+   "b": "Budgeting",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.86
+  },
   "budgetmanagement || budgetplanning": {
    "a": "Budget Management",
    "b": "Budget Planning",
    "checked": "2026-09-30",
    "same": false,
    "similarity": 0.864
+  },
+  "buganalysis || bugdetection": {
+   "a": "Bug Detection",
+   "b": "Bug analysis",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.893
   },
   "bugdetection || bugtracking": {
    "a": "Bug Tracking",
@@ -2060,6 +2655,20 @@
    "similarity": 0.885,
    "verified": true
   },
+  "calibration || calibrationmanagement": {
+   "a": "Calibration Management",
+   "b": "Calibration",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.888
+  },
+  "calibration || machinecalibration": {
+   "a": "Machine calibration",
+   "b": "Calibration",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.858
+  },
   "callmanagementsystem || servicecallmanagement": {
    "a": "Service Call Management",
    "b": "Call Management System",
@@ -2095,6 +2704,13 @@
    "checked": "2026-09-30",
    "same": false,
    "similarity": 0.899
+  },
+  "casemanagement || casemanagementsystem": {
+   "a": "Case management",
+   "b": "Case management systems",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.91
   },
   "cciecertification || ciscocciecertification": {
    "a": "Cisco CCIE certification",
@@ -2193,6 +2809,13 @@
    "same": false,
    "similarity": 0.881
   },
+  "changerequest || changerequestsupport": {
+   "a": "Change Request Support",
+   "b": "Change Request",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.889
+  },
   "changesetdeployment || updatesetdeployment": {
    "a": "Update Set Deployment",
    "b": "Change Set Deployment",
@@ -2206,6 +2829,21 @@
    "checked": "2026-09-30",
    "same": false,
    "similarity": 0.871
+  },
+  "chatsupport || livechatsupport": {
+   "a": "Live Chat Support",
+   "b": "Chat support",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.87,
+   "verified": false
+  },
+  "chinesecommunication || mandarinchinesecommunication": {
+   "a": "Chinese Communication",
+   "b": "Mandarin Chinese communication",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.902
   },
   "cicdgithubaction || githubactionci": {
    "a": "GitHub Actions CI",
@@ -2239,12 +2877,33 @@
    "similarity": 0.977,
    "verified": true
   },
+  "cisacertification || ciscertification": {
+   "a": "CISA Certification",
+   "b": "CIS certification",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.926
+  },
   "cisacertification || cismcertification": {
    "a": "CISM Certification",
    "b": "CISA Certification",
    "checked": "2026-09-30",
    "same": false,
    "similarity": 0.884
+  },
+  "ciscertification || cismcertification": {
+   "a": "CISM Certification",
+   "b": "CIS certification",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.91
+  },
+  "ciscertification || cisspcertification": {
+   "a": "CISSP Certification",
+   "b": "CIS certification",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.883
   },
   "ciscofirewall || ciscofirewallconfiguration": {
    "a": "Cisco Firewall",
@@ -2311,12 +2970,26 @@
    "same": false,
    "similarity": 0.88
   },
+  "classification || dataclassification": {
+   "a": "Data classification",
+   "b": "Classification",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.871
+  },
   "clientcommunication || clientinteraction": {
    "a": "Client Communication",
    "b": "Client Interaction",
    "checked": "2026-09-30",
    "same": false,
    "similarity": 0.855
+  },
+  "clientconsulting || consulting": {
+   "a": "Client Consulting",
+   "b": "Consulting",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.873
   },
   "clientconsulting || consultingservice": {
    "a": "Consulting Services",
@@ -2361,6 +3034,28 @@
    "same": false,
    "similarity": 0.915
   },
+  "cloudcomputingplatform || cloudplatform": {
+   "a": "Cloud platforms",
+   "b": "Cloud computing platforms",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.907,
+   "verified": false
+  },
+  "cloudcontainerservice || containerservice": {
+   "a": "Container services",
+   "b": "Cloud container services",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.879
+  },
+  "cloudcostoptimization || cloudoptimisation": {
+   "a": "Cloud cost optimization",
+   "b": "Cloud optimisation",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.864
+  },
   "cloudcostoptimization || cloudoptimization": {
    "a": "Cloud cost optimization",
    "b": "Cloud Optimization",
@@ -2403,6 +3098,13 @@
    "same": false,
    "similarity": 0.871
   },
+  "cloudinfrastructuresupport || cloudservicesupport": {
+   "a": "Cloud Infrastructure Support",
+   "b": "Cloud service support",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.863
+  },
   "cloudnative || cloudnativearchitecture": {
    "a": "Cloud-native Architecture",
    "b": "Cloud-native development",
@@ -2410,12 +3112,48 @@
    "same": false,
    "similarity": 0.872
   },
+  "cloudnative || cloudnativeinfrastructure": {
+   "a": "Cloud-native development",
+   "b": "Cloud-native infrastructure",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.866
+  },
+  "cloudnativearchitecture || cloudnativeinfrastructure": {
+   "a": "Cloud-native Architecture",
+   "b": "Cloud-native infrastructure",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.904
+  },
+  "cloudoptimisation || cloudoptimization": {
+   "a": "Cloud Optimization",
+   "b": "Cloud optimisation",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.946,
+   "verified": true
+  },
   "cloudplatform || cloudplatformdesign": {
    "a": "Cloud Platforms",
    "b": "Cloud platform design",
    "checked": "2026-09-30",
    "same": false,
    "similarity": 0.851
+  },
+  "cloudplatform || largescalecloudplatform": {
+   "a": "Cloud platforms",
+   "b": "Large-scale cloud platforms",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.86
+  },
+  "cloudplatform || multicloudplatform": {
+   "a": "Cloud platforms",
+   "b": "Multi-cloud platforms",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.884
   },
   "cloudsale || salecloud": {
    "a": "Cloud Sales",
@@ -2468,6 +3206,20 @@
    "similarity": 0.854,
    "verified": true
   },
+  "cmake || cmakebuild": {
+   "a": "CMake build",
+   "b": "CMake",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.923
+  },
+  "cmake || makecmake": {
+   "a": "Make/CMake",
+   "b": "CMake",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.908
+  },
   "cmakebuild || makecmake": {
    "a": "Make/CMake",
    "b": "CMake build",
@@ -2496,6 +3248,13 @@
    "same": true,
    "similarity": 0.888,
    "verified": true
+  },
+  "coaching || teamcoaching": {
+   "a": "Team Coaching",
+   "b": "Coaching",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.908
   },
   "coachingandmentoring || coachingmentoring": {
    "a": "Coaching and Mentoring",
@@ -2582,6 +3341,20 @@
    "similarity": 0.856,
    "verified": true
   },
+  "collaboration || collaborationmanagement": {
+   "a": "Collaboration",
+   "b": "Collaboration Management",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.869
+  },
+  "collaboration || teamcollaboration": {
+   "a": "Team Collaboration",
+   "b": "Collaboration",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.915
+  },
   "commissioning || commissioningactivity": {
    "a": "Commissioning",
    "b": "Commissioning activities",
@@ -2618,6 +3391,20 @@
    "same": false,
    "similarity": 0.898
   },
+  "compliance || compliancemanagement": {
+   "a": "Compliance Management",
+   "b": "Compliance",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.888
+  },
+  "compliance || legalcompliance": {
+   "a": "Compliance",
+   "b": "Legal Compliance",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.853
+  },
   "complianceauditing || securitycomplianceaudit": {
    "a": "Compliance Auditing",
    "b": "Security Compliance Audits",
@@ -2639,6 +3426,13 @@
    "same": true,
    "similarity": 0.936,
    "verified": true
+  },
+  "computerhardware || hardware": {
+   "a": "Computer Hardware",
+   "b": "Hardware",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.933
   },
   "computerhardware || pchardware": {
    "a": "PC Hardware",
@@ -2714,6 +3508,14 @@
    "same": false,
    "similarity": 0.855
   },
+  "configbackup || configurationbackup": {
+   "a": "Config backup",
+   "b": "Configuration backup",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.945,
+   "verified": true
+  },
   "configuration || configurationassistance": {
    "a": "Configuration",
    "b": "Configuration Assistance",
@@ -2721,12 +3523,26 @@
    "same": false,
    "similarity": 0.908
   },
+  "configurationmanagement || configurationmanagementtooling": {
+   "a": "Configuration Management",
+   "b": "Configuration-management tooling",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.893
+  },
   "configurationmanagement || softwareconfigurationmanagement": {
    "a": "Configuration Management",
    "b": "Software Configuration Management",
    "checked": "2026-09-30",
    "same": false,
    "similarity": 0.886
+  },
+  "configurationmanagementtooling || softwareconfigurationmanagement": {
+   "a": "Software Configuration Management",
+   "b": "Configuration-management tooling",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.851
   },
   "confluence || confluencecollaboration": {
    "a": "Confluence",
@@ -2736,12 +3552,41 @@
    "similarity": 0.875,
    "verified": true
   },
+  "connectivity || networkconnectivity": {
+   "a": "Network connectivity",
+   "b": "Connectivity",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.857
+  },
+  "connectivitytroubleshooting || networkconnectivitytroubleshooting": {
+   "a": "Connectivity Troubleshooting",
+   "b": "Network connectivity troubleshooting",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.908
+  },
   "consulting || consultingservice": {
    "a": "Consulting Services",
    "b": "Consulting Experience",
    "checked": "2026-09-30",
    "same": false,
    "similarity": 0.855
+  },
+  "containerisation || containerization": {
+   "a": "Containerization",
+   "b": "Containerisation",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.978,
+   "verified": true
+  },
+  "containerisation || containerizationplatform": {
+   "a": "Containerization platforms",
+   "b": "Containerisation",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.869
   },
   "containerization || containerizationplatform": {
    "a": "Containerization",
@@ -2787,6 +3632,21 @@
    "similarity": 0.93,
    "verified": false
   },
+  "conversionoptimization || conversionrateoptimization": {
+   "a": "Conversion Rate Optimization",
+   "b": "Conversion optimization",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.906
+  },
+  "copilotstudio || microsoftcopilotstudio": {
+   "a": "Copilot Studio",
+   "b": "Microsoft Copilot Studio",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.885,
+   "verified": true
+  },
   "corebanking || corebankingplatform": {
    "a": "Core Banking",
    "b": "Core banking platforms",
@@ -2822,6 +3682,13 @@
    "checked": "2026-09-30",
    "same": false,
    "similarity": 0.851
+  },
+  "creditadministration || creditmanagement": {
+   "a": "Credit Administration",
+   "b": "Credit Management",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.892
   },
   "crm || crmadministration": {
    "a": "CRM",
@@ -2859,12 +3726,36 @@
    "same": false,
    "similarity": 0.87
   },
+  "crossfunctionalcollaboration || crossfunctionalteamcollaboration": {
+   "a": "Cross-functional Collaboration",
+   "b": "Cross-functional team collaboration",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.928,
+   "verified": false
+  },
   "crossfunctionalcollaboration || crossteamcollaboration": {
    "a": "Cross-functional Collaboration",
    "b": "Cross-team collaboration",
    "checked": "2026-09-30",
    "same": false,
    "similarity": 0.858
+  },
+  "crossfunctionalteamcollaboration || crossfunctionalteamwork": {
+   "a": "Cross-functional team collaboration",
+   "b": "Cross-functional teamwork",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.925,
+   "verified": false
+  },
+  "crossfunctionalteamcollaboration || crossteamcollaboration": {
+   "a": "Cross-team collaboration",
+   "b": "Cross-functional team collaboration",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.877,
+   "verified": false
   },
   "crossteamcollaboration || teamcollaboration": {
    "a": "Team Collaboration",
@@ -2880,6 +3771,13 @@
    "same": true,
    "similarity": 0.853,
    "verified": false
+  },
+  "css || csssystem": {
+   "a": "CSS",
+   "b": "CSS System",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.878
   },
   "css || htmlcss": {
    "a": "CSS",
@@ -2931,6 +3829,21 @@
    "same": false,
    "similarity": 0.94
   },
+  "customerdataplatform || dataplatform": {
+   "a": "Customer data platforms",
+   "b": "Data platforms",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.858
+  },
+  "customerneedanalysis || customerrequirementanalysis": {
+   "a": "Customer requirement analysis",
+   "b": "Customer needs analysis",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.907,
+   "verified": false
+  },
   "customerupselling || saleupselling": {
    "a": "Sales Upselling",
    "b": "Customer Upselling",
@@ -2944,6 +3857,20 @@
    "checked": "2026-09-30",
    "same": false,
    "similarity": 0.861
+  },
+  "cyberriskassessment || cybersecurityassessment": {
+   "a": "Cyber Security Assessment",
+   "b": "Cyber risk assessment",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.861
+  },
+  "cybersecurity || itcybersecurity": {
+   "a": "Cybersecurity",
+   "b": "IT Cybersecurity",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.895
   },
   "cybersecurityawarenesstraining || cybersecuritytraining": {
    "a": "Cybersecurity Training",
@@ -2989,6 +3916,14 @@
    "checked": "2026-09-30",
    "same": false,
    "similarity": 0.853
+  },
+  "dashboard || dashboarding": {
+   "a": "Dashboard Development",
+   "b": "Dashboarding",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.869,
+   "verified": false
   },
   "dashboardreporting || reportingdashboard": {
    "a": "Reporting dashboards",
@@ -3085,6 +4020,28 @@
    "same": false,
    "similarity": 0.91
   },
+  "databasequery || databasequerying": {
+   "a": "Database Querying",
+   "b": "database queries",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.943,
+   "verified": false
+  },
+  "databasequery || sqlquery": {
+   "a": "SQL Queries",
+   "b": "database queries",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.909
+  },
+  "databasequerying || querying": {
+   "a": "Database Querying",
+   "b": "Querying",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.853
+  },
   "databasequerying || sqlquerying": {
    "a": "SQL Querying",
    "b": "Database Querying",
@@ -3098,6 +4055,21 @@
    "checked": "2026-09-30",
    "same": false,
    "similarity": 0.874
+  },
+  "databasereplication || replication": {
+   "a": "Database Replication",
+   "b": "Replication",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.852
+  },
+  "databaseschema || databaseschemadesign": {
+   "a": "Database Schema Design",
+   "b": "Database schemas",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.868,
+   "verified": false
   },
   "databaseschemadesign || schemadesign": {
    "a": "Database Schema Design",
@@ -3142,6 +4114,13 @@
    "checked": "2026-09-30",
    "same": false,
    "similarity": 0.908
+  },
+  "databricklakehouseplatform || databrickplatform": {
+   "a": "Databricks Platform",
+   "b": "Databricks Lakehouse Platform",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.9
   },
   "datacenterarchitecture || datacenterdesign": {
    "a": "Data Center Design",
@@ -3256,6 +4235,13 @@
    "similarity": 0.912,
    "verified": false
   },
+  "datacommunication || datacommunicationsystem": {
+   "a": "Data communication systems",
+   "b": "Data Communication",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.861
+  },
   "datacompliance || dataprivacycompliance": {
    "a": "Data Privacy Compliance",
    "b": "Data Compliance",
@@ -3351,6 +4337,13 @@
    "same": false,
    "similarity": 0.859
   },
+  "dataprotectioncompliance || dataprotectionlegislation": {
+   "a": "Data Protection Compliance",
+   "b": "Data-protection legislation",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.866
+  },
   "dataquality || dataqualityanalysis": {
    "a": "Data Quality",
    "b": "Data quality analysis",
@@ -3407,6 +4400,13 @@
    "same": false,
    "similarity": 0.874
   },
+  "dataqualitycontrol || dataqualitymanagement": {
+   "a": "Data Quality Management",
+   "b": "Data quality controls",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.864
+  },
   "dataqualityinitiative || dataqualitymanagement": {
    "a": "Data Quality Management",
    "b": "Data quality initiatives",
@@ -3414,12 +4414,26 @@
    "same": false,
    "similarity": 0.854
   },
+  "datareplication || replication": {
+   "a": "Data Replication",
+   "b": "Replication",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.869
+  },
   "datareplication || transactionaldatareplication": {
    "a": "Transactional Data Replication",
    "b": "Data Replication",
    "checked": "2026-09-30",
    "same": false,
    "similarity": 0.852
+  },
+  "dataretrievaloptimization || retrievaloptimization": {
+   "a": "Data retrieval optimization",
+   "b": "retrieval optimization",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.91
   },
   "datastorage || datastoragemanagement": {
    "a": "Data Storage Management",
@@ -3466,6 +4480,13 @@
    "same": false,
    "similarity": 0.886
   },
+  "datawarehouse || datawarehousearchitecture": {
+   "a": "Data Warehouse",
+   "b": "Data warehouse architecture",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.864
+  },
   "datawarehouse || datawarehousedesign": {
    "a": "Data Warehouse",
    "b": "Data Warehouse Design",
@@ -3486,6 +4507,21 @@
    "checked": "2026-09-30",
    "same": false,
    "similarity": 0.879
+  },
+  "datawarehousearchitecture || datawarehousedesign": {
+   "a": "Data Warehouse Design",
+   "b": "Data warehouse architecture",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.918,
+   "verified": false
+  },
+  "datawarehousearchitecture || datawarehouseengineering": {
+   "a": "Data Warehouse Engineering",
+   "b": "Data warehouse architecture",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.88
   },
   "datawarehousedesign || datawarehouseengineering": {
    "a": "Data Warehouse Design",
@@ -3594,6 +4630,28 @@
    "same": false,
    "similarity": 0.853
   },
+  "defectanalysis || defectinvestigation": {
+   "a": "Defect analysis",
+   "b": "Defect investigation",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.855,
+   "verified": true
+  },
+  "defectlogging || defectlogmanagement": {
+   "a": "Defect log management",
+   "b": "Defect logging",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.889
+  },
+  "deliverymanagement || deliverysystem": {
+   "a": "Delivery Management",
+   "b": "Delivery systems",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.865
+  },
   "deliverymanagement || servicedeliverymanagement": {
    "a": "Service Delivery Management",
    "b": "Delivery Management",
@@ -3601,12 +4659,27 @@
    "same": false,
    "similarity": 0.854
   },
+  "deliveryprocessing || deliverysystem": {
+   "a": "Delivery Processing",
+   "b": "Delivery systems",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.853
+  },
   "demandplanning || demandplanningsystem": {
    "a": "Demand Planning",
    "b": "Demand Planning Systems",
    "checked": "2026-09-30",
    "same": false,
    "similarity": 0.941
+  },
+  "deployinggenai || genaideployment": {
+   "a": "GenAI deployment",
+   "b": "Deploying GenAI",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.968,
+   "verified": true
   },
   "deployment || deploymentmanagement": {
    "a": "Deployment Management",
@@ -3622,6 +4695,13 @@
    "same": false,
    "similarity": 0.866
   },
+  "deploymentvalidation || postdeploymentvalidation": {
+   "a": "Deployment validation",
+   "b": "Post-deployment validation",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.924
+  },
   "designformanufacturing || manufacturingprocessdesign": {
    "a": "Design for Manufacturing",
    "b": "Manufacturing process design",
@@ -3629,6 +4709,14 @@
    "same": true,
    "similarity": 0.89,
    "verified": false
+  },
+  "designofexperiment || experimentaldesign": {
+   "a": "Design of Experiments",
+   "b": "Experimental design",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.906,
+   "verified": true
   },
   "designofexperiment || experimentdesign": {
    "a": "Design of Experiments",
@@ -3668,6 +4756,22 @@
    "similarity": 0.925,
    "verified": false
   },
+  "designreview || designreviews": {
+   "a": "Design Review",
+   "b": "Design reviews",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.905,
+   "verified": true
+  },
+  "designspecificationdocumentation || technicaldesigndocumentation": {
+   "a": "Technical Design Documentation",
+   "b": "Design specification documentation",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.864,
+   "verified": false
+  },
   "desktophardwaretroubleshooting || hardwaretroubleshooting": {
    "a": "Hardware Troubleshooting",
    "b": "Desktop hardware troubleshooting",
@@ -3690,6 +4794,22 @@
    "same": true,
    "similarity": 0.893,
    "verified": false
+  },
+  "detectionrulecreation || detectionruledesign": {
+   "a": "Detection rule creation",
+   "b": "detection rule design",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.917,
+   "verified": false
+  },
+  "deviceconfiguration || devicesetup": {
+   "a": "Device Configuration",
+   "b": "Device setup",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.883,
+   "verified": true
   },
   "devicedriver || hardwaredriver": {
    "a": "Hardware driver development",
@@ -3780,6 +4900,13 @@
    "similarity": 0.993,
    "verified": true
   },
+  "digitalization || digitalizationengineering": {
+   "a": "Digitalization Engineering",
+   "b": "Digitalization",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.903
+  },
   "digitalizationengineering || digitalizationtechnology": {
    "a": "Digitalization Engineering",
    "b": "Digitalization Technologies",
@@ -3859,12 +4986,27 @@
    "same": false,
    "similarity": 0.87
   },
+  "distributedsystem || distributedsystemarchitecture": {
+   "a": "Distributed systems",
+   "b": "Distributed systems architecture",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.855
+  },
   "distributedsystem || distributedsystemdesign": {
    "a": "Distributed Systems Design",
    "b": "Distributed Systems",
    "checked": "2026-09-30",
    "same": false,
    "similarity": 0.885
+  },
+  "distributedsystemarchitecture || distributedsystemdesign": {
+   "a": "Distributed Systems Design",
+   "b": "Distributed systems architecture",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.85,
+   "verified": false
   },
   "dnsdhcp || dnsdhcpadministration": {
    "a": "DNS/DHCP",
@@ -3969,6 +5111,13 @@
    "checked": "2026-09-30",
    "same": false,
    "similarity": 0.904
+  },
+  "drupalmodule || module": {
+   "a": "Drupal Module Development",
+   "b": "Module Development",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.91
   },
   "dynamic365 || dynamic365ce": {
    "a": "Dynamics 365",
@@ -4097,12 +5246,34 @@
    "similarity": 0.874,
    "verified": false
   },
+  "endpointsecurity || endpointsecurityarchitecture": {
+   "a": "Endpoint Security",
+   "b": "Endpoint security architecture",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.894
+  },
   "endpointsecurity || endpointsecuritymanagement": {
    "a": "Endpoint Security",
    "b": "Endpoint Security Management",
    "checked": "2026-09-30",
    "same": false,
    "similarity": 0.905
+  },
+  "endpointsecurityarchitecture || endpointsecuritymanagement": {
+   "a": "Endpoint security management",
+   "b": "Endpoint security architecture",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.9
+  },
+  "engineeringdrawing || technicaldrawing": {
+   "a": "Engineering drawings",
+   "b": "Technical drawings",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.868,
+   "verified": false
   },
   "engineeringinspection || mechanicalinspection": {
    "a": "Engineering Inspection",
@@ -4134,6 +5305,13 @@
    "same": false,
    "similarity": 0.9
   },
+  "englishmandarincommunication || mandarinchinesecommunication": {
+   "a": "English Mandarin Communication",
+   "b": "Mandarin Chinese communication",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.919
+  },
   "englishmandarincommunication || mandarincommunication": {
    "a": "Mandarin Communication",
    "b": "English Mandarin Communication",
@@ -4154,6 +5332,21 @@
    "checked": "2026-09-30",
    "same": false,
    "similarity": 0.87
+  },
+  "enterprisenetwork || enterprisenetworking": {
+   "a": "Enterprise network",
+   "b": "Enterprise networking",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.945,
+   "verified": false
+  },
+  "enterpriseplatformintegration || platformintegration": {
+   "a": "Platform integration",
+   "b": "Enterprise platform integration",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.876
   },
   "enterprisesecurity || enterprisesecurityarchitecture": {
    "a": "Enterprise Security",
@@ -4176,6 +5369,13 @@
    "checked": "2026-09-30",
    "same": false,
    "similarity": 0.897
+  },
+  "equipmentcontrolsoftware || equipmentcontrolsystem": {
+   "a": "Equipment control systems",
+   "b": "Equipment control software",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.874
   },
   "equipmentinstallation || itequipmentinstallation": {
    "a": "Equipment Installation",
@@ -4274,6 +5474,14 @@
    "same": false,
    "similarity": 0.87
   },
+  "errordebugging || issuedebugging": {
+   "a": "Issue Debugging",
+   "b": "Error debugging",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.909,
+   "verified": true
+  },
   "es6 || es6+": {
    "a": "ES6+",
    "b": "ES6",
@@ -4340,6 +5548,13 @@
    "similarity": 0.902,
    "verified": true
   },
+  "evaluationpipeline || modelevaluationpipeline": {
+   "a": "Evaluation pipelines",
+   "b": "Model evaluation pipelines",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.856
+  },
   "eventdrivenarchitecture || eventdrivendesign": {
    "a": "Event-Driven Design",
    "b": "Event-driven architecture",
@@ -4377,6 +5592,21 @@
    "same": false,
    "similarity": 0.869
   },
+  "executivestakeholderengagement || stakeholderengagement": {
+   "a": "Stakeholder Engagement",
+   "b": "Executive stakeholder engagement",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.905
+  },
+  "experimentaldesign || experimentdesign": {
+   "a": "Experiment design",
+   "b": "Experimental design",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.905,
+   "verified": true
+  },
   "express || expressjs": {
    "a": "Express.js",
    "b": "Express.js framework",
@@ -4384,6 +5614,27 @@
    "same": true,
    "similarity": 0.897,
    "verified": true
+  },
+  "facilitymanagement || facilityoperation": {
+   "a": "Facilities Management",
+   "b": "Facilities operations",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.869
+  },
+  "factoryautomation || factoryautomationengineering": {
+   "a": "Factory Automation Engineering",
+   "b": "factory automation",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.936
+  },
+  "failover || failoveranalysis": {
+   "a": "Failover analysis",
+   "b": "Failover",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.863
   },
   "fastlane || fastlaneci": {
    "a": "Fastlane",
@@ -4398,6 +5649,21 @@
    "checked": "2026-09-30",
    "same": false,
    "similarity": 0.865
+  },
+  "faultmanagement || faultmanagementsystem": {
+   "a": "Fault Management",
+   "b": "Fault Management Systems",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.921
+  },
+  "feasibilityanalysis || feasibilitystudy": {
+   "a": "Feasibility analysis",
+   "b": "Feasibility studies",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.894,
+   "verified": true
   },
   "fiberopticcabling || networkfiberopticcabling": {
    "a": "Network Fiber Optic Cabling",
@@ -4451,6 +5717,13 @@
    "similarity": 0.93,
    "verified": false
   },
+  "financialmarket || stockmarket": {
+   "a": "Stock Market Knowledge",
+   "b": "Financial markets knowledge",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.852
+  },
   "fintech || fintechexpertise": {
    "a": "FinTech Expertise",
    "b": "FinTech Knowledge",
@@ -4458,6 +5731,13 @@
    "same": true,
    "similarity": 0.884,
    "verified": true
+  },
+  "fintechinfrastructure || fintechsolution": {
+   "a": "Fintech Solutions",
+   "b": "fintech infrastructure",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.864
   },
   "firealarmsystem || firesystemalarm": {
    "a": "Fire System Alarms",
@@ -4474,6 +5754,20 @@
    "same": true,
    "similarity": 0.909,
    "verified": true
+  },
+  "firesafety || firesafetyengineering": {
+   "a": "Fire Safety Engineering",
+   "b": "Fire safety",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.864
+  },
+  "firesafety || firesafetyregulation": {
+   "a": "Fire Safety Regulations",
+   "b": "Fire safety",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.857
   },
   "firewall || firewalladministration": {
    "a": "Firewall Administration",
@@ -4511,6 +5805,13 @@
    "same": false,
    "similarity": 0.933
   },
+  "firewallpolicy || firewallpolicydesign": {
+   "a": "Firewall policy",
+   "b": "Firewall policy design",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.902
+  },
   "firmwareupdate || firmwareupgrade": {
    "a": "Firmware upgrade",
    "b": "Firmware Updates",
@@ -4540,6 +5841,13 @@
    "same": true,
    "similarity": 0.884,
    "verified": true
+  },
+  "flexiblescheduling || intelligentscheduling": {
+   "a": "Flexible Scheduling",
+   "b": "Intelligent scheduling",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.851
   },
   "flexiblescheduling || scheduling": {
    "a": "Scheduling",
@@ -4592,12 +5900,28 @@
    "same": false,
    "similarity": 0.898
   },
+  "fulllifecycle || lifecycle": {
+   "a": "Full Development Lifecycle",
+   "b": "development lifecycle",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.92,
+   "verified": true
+  },
   "fullsdlc || sdlc": {
    "a": "SDLC",
    "b": "Full SDLC",
    "checked": "2026-09-30",
    "same": true,
    "similarity": 0.886,
+   "verified": false
+  },
+  "functionalconsultant || functionalconsulting": {
+   "a": "Functional Consulting",
+   "b": "Functional Consultant",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.911,
    "verified": false
   },
   "functionaldesign || functionaldesignspecification": {
@@ -4636,6 +5960,13 @@
    "same": true,
    "similarity": 0.901,
    "verified": false
+  },
+  "functionalrequirement || functionalrequirementdocument": {
+   "a": "Functional Requirements",
+   "b": "Functional Requirement Documents",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.856
   },
   "functionalspecification || functionalspecificationdesign": {
    "a": "Functional Specification",
@@ -4682,6 +6013,13 @@
    "similarity": 0.896,
    "verified": false
   },
+  "gcc || gcc+": {
+   "a": "GCC",
+   "b": "GCC+",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.945
+  },
   "gcp || gcpcloud": {
    "a": "GCP Cloud",
    "b": "GCP",
@@ -4720,6 +6058,14 @@
    "same": true,
    "similarity": 0.875,
    "verified": false
+  },
+  "gitbasedworkflows || gitworkflow": {
+   "a": "Git workflow",
+   "b": "Git-based workflows",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.899,
+   "verified": true
   },
   "github || githubproject": {
    "a": "GitHub",
@@ -4764,6 +6110,14 @@
    "checked": "2026-09-30",
    "same": false,
    "similarity": 0.903
+  },
+  "gitlab || gitlabplatform": {
+   "a": "GitLab",
+   "b": "GitLab platform",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.876,
+   "verified": true
   },
   "gitlabci || gitlabcicd": {
    "a": "GitLab CI/CD",
@@ -4849,6 +6203,13 @@
    "same": false,
    "similarity": 0.866
   },
+  "grc || itgrc": {
+   "a": "GRC",
+   "b": "IT GRC",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.896
+  },
   "grouppolicy || grouppolicymanagement": {
    "a": "Group Policy Management",
    "b": "Group Policy",
@@ -4884,6 +6245,13 @@
    "checked": "2026-09-30",
    "same": false,
    "similarity": 0.872
+  },
+  "hardware || ithardware": {
+   "a": "IT Hardware",
+   "b": "Hardware",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.858
   },
   "hardwarediagnostic || ithardwarediagnostic": {
    "a": "Hardware diagnostics",
@@ -4965,6 +6333,13 @@
    "same": false,
    "similarity": 0.925
   },
+  "hardwaretroubleshooting || laptophardwaretroubleshooting": {
+   "a": "Hardware Troubleshooting",
+   "b": "Laptop hardware troubleshooting",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.878
+  },
   "hardwaretroubleshooting || pchardwaretroubleshooting": {
    "a": "Hardware Troubleshooting",
    "b": "PC hardware troubleshooting",
@@ -4978,6 +6353,13 @@
    "checked": "2026-09-30",
    "same": false,
    "similarity": 0.875
+  },
+  "healthcaredomain || medicaldomain": {
+   "a": "Healthcare Domain Knowledge",
+   "b": "Medical domain knowledge",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.889
   },
   "helpdesk || helpdesksupport": {
    "a": "Help Desk Support",
@@ -5067,6 +6449,13 @@
    "same": false,
    "similarity": 0.88
   },
+  "highavailabilitydesign || highavailabilitynetworkdesign": {
+   "a": "High availability design",
+   "b": "High-availability network design",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.885
+  },
   "highavailabilitydesign || highavailabilitysystem": {
    "a": "High-Availability Systems",
    "b": "High availability design",
@@ -5103,6 +6492,13 @@
    "same": true,
    "similarity": 0.901,
    "verified": true
+  },
+  "hosting || webhosting": {
+   "a": "Web Hosting",
+   "b": "Hosting",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.865
   },
   "hpux || hpuxos": {
    "a": "HPUX",
@@ -5229,12 +6625,33 @@
    "same": false,
    "similarity": 0.923
   },
+  "huawei || huaweicloud": {
+   "a": "Huawei Cloud",
+   "b": "Huawei",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.854
+  },
   "huaweicloud || huaweicloudoperation": {
    "a": "Huawei Cloud",
    "b": "Huawei Cloud Operations",
    "checked": "2026-09-30",
    "same": false,
    "similarity": 0.886
+  },
+  "huaweiequipment || huaweinetworkdevice": {
+   "a": "Huawei equipment",
+   "b": "Huawei network devices",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.869
+  },
+  "huaweinetworkdevice || huaweinetworking": {
+   "a": "Huawei Networking",
+   "b": "Huawei network devices",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.888
   },
   "huaweiswitche || huaweiswitching": {
    "a": "Huawei switching",
@@ -5257,6 +6674,13 @@
    "checked": "2026-09-30",
    "same": false,
    "similarity": 0.876
+  },
+  "hypercaremanagement || hypercaresupport": {
+   "a": "Hypercare Support",
+   "b": "Hypercare management",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.859
   },
   "hyperv || microsofthyperv": {
    "a": "Microsoft Hyper-V",
@@ -5320,12 +6744,34 @@
    "similarity": 0.957,
    "verified": true
   },
+  "identityaccessmanagement || identityandaccessmanagement": {
+   "a": "Identity Access Management",
+   "b": "Identity and Access Management",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.955,
+   "verified": true
+  },
   "identityaccessmanagement || identitymanagement": {
    "a": "Identity Access Management",
    "b": "Identity Management",
    "checked": "2026-09-30",
    "same": false,
    "similarity": 0.865
+  },
+  "identityandaccesscontrol || identityandaccessmanagement": {
+   "a": "Identity and access controls",
+   "b": "Identity and Access Management",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.853
+  },
+  "identityandaccessmanagement || identitymanagement": {
+   "a": "Identity Management",
+   "b": "Identity and Access Management",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.855
   },
   "idoc || idochandling": {
    "a": "IDoc Handling",
@@ -5444,6 +6890,20 @@
    "similarity": 0.863,
    "verified": true
   },
+  "imagedeployment || windowsimagedeployment": {
+   "a": "Image Deployment",
+   "b": "Windows image deployment",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.868
+  },
+  "imagesegmentation || segmentation": {
+   "a": "Image Segmentation",
+   "b": "Segmentation",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.915
+  },
   "immutable || immutablejs": {
    "a": "Immutable.js",
    "b": "Immutable.js Library",
@@ -5471,6 +6931,21 @@
    "a": "Incident Escalation",
    "b": "Incident Escalation Management",
    "checked": "2026-09-30",
+   "same": false,
+   "similarity": 0.899
+  },
+  "incidenthandling || incidentmanagement": {
+   "a": "Incident Management",
+   "b": "Incident handling",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.868,
+   "verified": true
+  },
+  "incidentlifecycle || incidentlifecyclemanagement": {
+   "a": "Incident Lifecycle",
+   "b": "Incident lifecycle management",
+   "checked": "2026-10-09",
    "same": false,
    "similarity": 0.899
   },
@@ -5502,6 +6977,13 @@
    "same": false,
    "similarity": 0.895
   },
+  "incidentmonitoring || incidenttracking": {
+   "a": "Incident tracking",
+   "b": "Incident monitoring",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.873
+  },
   "incidentproblemmanagement || incidentresponsemanagement": {
    "a": "Incident response management",
    "b": "Incident Problem Management",
@@ -5522,6 +7004,21 @@
    "checked": "2026-09-30",
    "same": false,
    "similarity": 0.882
+  },
+  "independentwork || independentworking": {
+   "a": "Independent work",
+   "b": "Independent working",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.939,
+   "verified": true
+  },
+  "industrialprinter || printer": {
+   "a": "Printers",
+   "b": "Industrial printers",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.868
   },
   "industrialtelecommunication || telecommunication": {
    "a": "Telecommunications",
@@ -5552,12 +7049,33 @@
    "same": false,
    "similarity": 0.882
   },
+  "informationsecuritycontrol || securitycontrol": {
+   "a": "Security controls",
+   "b": "Information security controls",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.873
+  },
   "informationsecuritymanagement || securitymanagement": {
    "a": "Security Management",
    "b": "Information Security Management",
    "checked": "2026-09-30",
    "same": false,
    "similarity": 0.861
+  },
+  "informationsecuritystandard || securitystandard": {
+   "a": "Security standards",
+   "b": "Information security standards",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.897
+  },
+  "infrastructure || infrastructureoperation": {
+   "a": "Infrastructure Operations",
+   "b": "Infrastructure",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.857
   },
   "infrastructurearchitecture || infrastructuredesign": {
    "a": "Infrastructure Architecture",
@@ -5572,6 +7090,21 @@
    "checked": "2026-09-30",
    "same": false,
    "similarity": 0.864
+  },
+  "infrastructuremanagement || infrastructureservicemanagement": {
+   "a": "Infrastructure Management",
+   "b": "Infrastructure service management",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.893
+  },
+  "infrastructurenetworking || networkinfrastructure": {
+   "a": "Network Infrastructure",
+   "b": "Infrastructure networking",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.901,
+   "verified": false
   },
   "integrationarchitecture || integrationarchitecturedesign": {
    "a": "Integration Architecture Design",
@@ -5593,6 +7126,35 @@
    "checked": "2026-09-30",
    "same": false,
    "similarity": 0.882
+  },
+  "intelligentscheduling || scheduling": {
+   "a": "Scheduling",
+   "b": "Intelligent scheduling",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.888
+  },
+  "intelligentscheduling || schedulingmanagement": {
+   "a": "Scheduling Management",
+   "b": "Intelligent scheduling",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.875
+  },
+  "interactiveprototyping || prototyping": {
+   "a": "Prototyping",
+   "b": "Interactive prototyping",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.916
+  },
+  "interactiveprototyping || rapidprototyping": {
+   "a": "Rapid prototyping",
+   "b": "Interactive prototyping",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.854,
+   "verified": false
   },
   "interfacedesign || userinterfacedesign": {
    "a": "Interface Design",
@@ -5681,6 +7243,13 @@
    "checked": "2026-09-30",
    "same": false,
    "similarity": 0.879
+  },
+  "iot || iotsystem": {
+   "a": "IoT",
+   "b": "IoT systems",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.877
   },
   "iotdeviceintegration || iotintegration": {
    "a": "IoT Integration",
@@ -5811,6 +7380,13 @@
    "same": false,
    "similarity": 0.931
   },
+  "iso27001 || iso27701": {
+   "a": "ISO 27001",
+   "b": "ISO 27701",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.873
+  },
   "iso27001 || iso37001": {
    "a": "ISO 27001",
    "b": "ISO 37001",
@@ -5876,6 +7452,14 @@
    "same": false,
    "similarity": 0.851
   },
+  "issuetracking || trackingissueresolution": {
+   "a": "Issue tracking",
+   "b": "Tracking issue resolution",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.855,
+   "verified": false
+  },
   "issuetroubleshooting || problemtroubleshooting": {
    "a": "Issue Troubleshooting",
    "b": "Problem Troubleshooting",
@@ -5898,6 +7482,28 @@
    "checked": "2026-09-30",
    "same": true,
    "similarity": 0.959,
+   "verified": false
+  },
+  "itassetinventory || itassetinventorymanagement": {
+   "a": "IT Asset Inventory",
+   "b": "IT asset inventory management",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.921
+  },
+  "itassetinventorymanagement || itassetmanagement": {
+   "a": "IT Asset Management",
+   "b": "IT asset inventory management",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.854
+  },
+  "itassetinventorymanagement || itinventorymanagement": {
+   "a": "IT Inventory Management",
+   "b": "IT asset inventory management",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.867,
    "verified": false
   },
   "itaudit || itauditcompliance": {
@@ -5934,6 +7540,13 @@
    "checked": "2026-09-30",
    "same": false,
    "similarity": 0.871
+  },
+  "itcompliance || itstandardcompliance": {
+   "a": "IT Compliance",
+   "b": "IT standards compliance",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.878
   },
   "itdevicedeployment || ithardwaredeployment": {
    "a": "IT Device Deployment",
@@ -6070,6 +7683,13 @@
    "same": false,
    "similarity": 0.897
   },
+  "itmonitoring || monitoring": {
+   "a": "Monitoring",
+   "b": "IT Monitoring",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.856
+  },
   "itnetworking || networking": {
    "a": "Networking",
    "b": "IT Networking",
@@ -6077,6 +7697,28 @@
    "same": true,
    "similarity": 0.853,
    "verified": false
+  },
+  "itoffboarding || offboarding": {
+   "a": "Offboarding",
+   "b": "IT offboarding",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.892
+  },
+  "itonboarding || onboarding": {
+   "a": "Onboarding",
+   "b": "IT onboarding",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.87
+  },
+  "itoperationalsupport || operationalitsupport": {
+   "a": "Operational IT Support",
+   "b": "IT operational support",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.968,
+   "verified": true
   },
   "itpolicyenforcement || itsecuritypolicy": {
    "a": "IT Security Policies",
@@ -6099,6 +7741,13 @@
    "same": true,
    "similarity": 0.854,
    "verified": false
+  },
+  "itsecuritycompliance || itstandardcompliance": {
+   "a": "IT Security Compliance",
+   "b": "IT standards compliance",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.858
   },
   "itsecurityhardening || securityhardening": {
    "a": "Security Hardening",
@@ -6225,6 +7874,13 @@
    "similarity": 0.938,
    "verified": true
   },
+  "javascripttypescript || typescript": {
+   "a": "TypeScript",
+   "b": "JavaScript/TypeScript",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.893
+  },
   "javaspark || spark": {
    "a": "Apache Spark",
    "b": "Java Spark",
@@ -6334,6 +7990,14 @@
    "similarity": 0.902,
    "verified": true
   },
+  "judgement || judgment": {
+   "a": "Judgment",
+   "b": "judgement",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.967,
+   "verified": true
+  },
   "juniordevelopermentoring || mentoringdeveloper": {
    "a": "Mentoring Developers",
    "b": "Junior developer mentoring",
@@ -6430,6 +8094,21 @@
    "same": false,
    "similarity": 0.873
   },
+  "kubernete || kuberneteplatform": {
+   "a": "Kubernetes",
+   "b": "Kubernetes platforms",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.869,
+   "verified": false
+  },
+  "kubernete || managedkubernete": {
+   "a": "Kubernetes",
+   "b": "Managed Kubernetes",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.879
+  },
   "kuberneteadministration || kubernetemanagement": {
    "a": "Kubernetes Management",
    "b": "Kubernetes Administration",
@@ -6437,6 +8116,27 @@
    "same": true,
    "similarity": 0.94,
    "verified": true
+  },
+  "kuberneteadministration || managedkubernete": {
+   "a": "Kubernetes Administration",
+   "b": "Managed Kubernetes",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.887
+  },
+  "kubernetemanagement || managedkubernete": {
+   "a": "Kubernetes Management",
+   "b": "Managed Kubernetes",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.92
+  },
+  "kuberneteplatform || managedkubernete": {
+   "a": "Managed Kubernetes",
+   "b": "Kubernetes platforms",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.852
   },
   "l1l2support || l1support": {
    "a": "L1 Support",
@@ -6479,6 +8179,13 @@
    "checked": "2026-09-30",
    "same": false,
    "similarity": 0.921
+  },
+  "l2l3troubleshooting || l2troubleshooting": {
+   "a": "L2 troubleshooting",
+   "b": "L2/L3 troubleshooting",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.86
   },
   "l3l4support || l3support": {
    "a": "L3 Support",
@@ -6552,6 +8259,13 @@
    "same": false,
    "similarity": 0.854
   },
+  "landingpage || landingpagedesign": {
+   "a": "landing page design",
+   "b": "Landing page development",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.867
+  },
   "lanmanagement || lanwanmanagement": {
    "a": "LAN/WAN Management",
    "b": "LAN Management",
@@ -6622,6 +8336,14 @@
    "checked": "2026-09-30",
    "same": false,
    "similarity": 0.854
+  },
+  "lanwan || wanlaninternetworking": {
+   "a": "LAN/WAN",
+   "b": "WAN/LAN internetworking",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.851,
+   "verified": false
   },
   "lanwan || wanlannetworking": {
    "a": "WAN/LAN Networking",
@@ -6786,6 +8508,14 @@
    "similarity": 0.879,
    "verified": false
   },
+  "lanwannetworking || wanlaninternetworking": {
+   "a": "LAN/WAN networking",
+   "b": "WAN/LAN internetworking",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.87,
+   "verified": true
+  },
   "lanwannetworking || wanlannetworking": {
    "a": "WAN/LAN Networking",
    "b": "LAN/WAN networking",
@@ -6821,6 +8551,20 @@
    "checked": "2026-09-30",
    "same": false,
    "similarity": 0.893
+  },
+  "laptophardwaretroubleshooting || laptoptroubleshooting": {
+   "a": "Laptop troubleshooting",
+   "b": "Laptop hardware troubleshooting",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.899
+  },
+  "laptophardwaretroubleshooting || troubleshootinglaptop": {
+   "a": "Troubleshooting laptops",
+   "b": "Laptop hardware troubleshooting",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.881
   },
   "laptoptroubleshooting || troubleshootinglaptop": {
    "a": "Laptop troubleshooting",
@@ -6875,6 +8619,20 @@
    "similarity": 0.997,
    "verified": true
   },
+  "layer23networking || layer2networking": {
+   "a": "Layer‑2 networking",
+   "b": "Layer 2/3 networking",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.896
+  },
+  "layer23networking || layer3networking": {
+   "a": "Layer‑3 networking",
+   "b": "Layer 2/3 networking",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.932
+  },
   "layer23switching || layer2switching": {
    "a": "Layer 2 Switching",
    "b": "Layer 2/3 switching",
@@ -6896,6 +8654,13 @@
    "same": false,
    "similarity": 0.885
   },
+  "layout || layoutdesign": {
+   "a": "Layout Design",
+   "b": "layout",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.892
+  },
   "ldap || ldapintegration": {
    "a": "LDAP Integration",
    "b": "LDAP",
@@ -6910,6 +8675,22 @@
    "same": true,
    "similarity": 0.922,
    "verified": false
+  },
+  "leastprivilege || leastprivilegeaccess": {
+   "a": "Least privilege access",
+   "b": "Least privilege",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.891,
+   "verified": false
+  },
+  "leastprivilegeaccess || leastprivilegeaccesscontrol": {
+   "a": "Least privilege access",
+   "b": "Least-privilege access control",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.921,
+   "verified": true
   },
   "legacysystemmigration || systemmigration": {
    "a": "System Migration",
@@ -6977,12 +8758,27 @@
    "similarity": 0.934,
    "verified": true
   },
+  "licensecompliance || licensingcompliance": {
+   "a": "License Compliance",
+   "b": "Licensing compliance",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.935,
+   "verified": true
+  },
   "licensemanagement || softwarelicensemanagement": {
    "a": "License Management",
    "b": "Software License Management",
    "checked": "2026-09-30",
    "same": false,
    "similarity": 0.885
+  },
+  "lifecycle || systemlifecycle": {
+   "a": "System development lifecycle",
+   "b": "development lifecycle",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.852
   },
   "lifecyclemanagement || lifecyclemanager": {
    "a": "Lifecycle Manager",
@@ -7041,6 +8837,13 @@
    "checked": "2026-09-30",
    "same": false,
    "similarity": 0.854
+  },
+  "linux || windowslinux": {
+   "a": "Linux",
+   "b": "Windows/Linux",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.877
   },
   "linuxadministration || linuxserveradministration": {
    "a": "Linux Administration",
@@ -7127,6 +8930,13 @@
    "checked": "2026-09-30",
    "same": false,
    "similarity": 0.867
+  },
+  "linuxos || windowslinux": {
+   "a": "Linux OS",
+   "b": "Windows/Linux",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.858
   },
   "linuxos || windowslinuxos": {
    "a": "Linux OS",
@@ -7230,6 +9040,13 @@
    "same": false,
    "similarity": 0.864
   },
+  "linuxsystemadministration || unixsystemadministration": {
+   "a": "Linux System Administration",
+   "b": "UNIX system administration",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.874
+  },
   "linuxubuntu || ubuntulinux": {
    "a": "Ubuntu Linux",
    "b": "Linux (Ubuntu)",
@@ -7296,6 +9113,28 @@
    "same": false,
    "similarity": 0.913
   },
+  "logbasedmonitoring || loggingmonitoring": {
+   "a": "Logging & Monitoring",
+   "b": "Log-based monitoring",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.887
+  },
+  "logbasedmonitoring || logmonitoring": {
+   "a": "Log Monitoring",
+   "b": "Log-based monitoring",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.937,
+   "verified": true
+  },
+  "logbasedmonitoring || monitoringandlogging": {
+   "a": "Monitoring and Logging",
+   "b": "Log-based monitoring",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.912
+  },
   "logging || loggingimplementation": {
    "a": "Logging",
    "b": "Logging implementation",
@@ -7346,6 +9185,14 @@
    "same": false,
    "similarity": 0.929
   },
+  "lte || ltetechnology": {
+   "a": "LTE Technology",
+   "b": "LTE",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.862,
+   "verified": true
+  },
   "machinelearning || machinelearningalgorithm": {
    "a": "Machine Learning",
    "b": "Machine Learning Algorithms",
@@ -7376,12 +9223,41 @@
    "same": false,
    "similarity": 0.915
   },
+  "maintenance || servicemaintenance": {
+   "a": "Service Maintenance",
+   "b": "Maintenance",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.852
+  },
+  "maintenance || systemmaintenance": {
+   "a": "System Maintenance",
+   "b": "Maintenance",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.864
+  },
+  "maintenance || technicalmaintenance": {
+   "a": "Technical Maintenance",
+   "b": "Maintenance",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.87
+  },
   "mandarin || mandarintranslation": {
    "a": "Mandarin Language",
    "b": "Mandarin translation",
    "checked": "2026-09-30",
    "same": false,
    "similarity": 0.851
+  },
+  "mandarinchinesecommunication || mandarincommunication": {
+   "a": "Mandarin Communication",
+   "b": "Mandarin Chinese communication",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.948,
+   "verified": true
   },
   "manufacturingprocessdesign || manufacturingprocesse": {
    "a": "Manufacturing processes",
@@ -7411,6 +9287,13 @@
    "same": false,
    "similarity": 0.867
   },
+  "mathematicaloptimisation || optimisation": {
+   "a": "Optimisation",
+   "b": "mathematical optimisation",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.885
+  },
   "matlab || matlabsoftware": {
    "a": "MATLAB Software",
    "b": "MATLAB",
@@ -7419,12 +9302,28 @@
    "similarity": 0.914,
    "verified": true
   },
+  "mcse || microsoftmcse": {
+   "a": "MCSE",
+   "b": "Microsoft MCSE",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.875,
+   "verified": true
+  },
   "mediadelivery || mediadeliverysolution": {
    "a": "Media Delivery",
    "b": "Media Delivery Solutions",
    "checked": "2026-09-30",
    "same": false,
    "similarity": 0.916
+  },
+  "meetingroomdevice || meetingroomequipment": {
+   "a": "Meeting room devices",
+   "b": "Meeting room equipment",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.871,
+   "verified": true
   },
   "mentoring || mentorship": {
    "a": "Mentorship",
@@ -7604,6 +9503,13 @@
    "similarity": 0.937,
    "verified": true
   },
+  "microsoftcertification || microsoftcertifiedprofessional": {
+   "a": "Microsoft Certified Professional",
+   "b": "Microsoft Certifications",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.863
+  },
   "microsoftcertifieditprofessional || microsoftcertifiedprofessional": {
    "a": "Microsoft Certified IT Professional",
    "b": "Microsoft Certified Professional",
@@ -7727,6 +9633,13 @@
    "similarity": 0.909,
    "verified": true
   },
+  "microsoftsc100 || microsoftsc200": {
+   "a": "Microsoft SC-200",
+   "b": "Microsoft SC-100",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.872
+  },
   "microsoftsccm || sccm": {
    "a": "Microsoft SCCM",
    "b": "SCCM",
@@ -7823,6 +9736,13 @@
    "same": true,
    "similarity": 0.946,
    "verified": true
+  },
+  "migration || migrationplanning": {
+   "a": "Migration Planning",
+   "b": "Migration",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.867
   },
   "mobileapparchitecture || mobilearchitecture": {
    "a": "Mobile App Architecture",
@@ -7959,6 +9879,14 @@
    "same": false,
    "similarity": 0.859
   },
+  "modeloptimisation || modeloptimization": {
+   "a": "Model Optimization",
+   "b": "Model optimisation",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.933,
+   "verified": true
+  },
   "modeloptimization || optimizationmodeling": {
    "a": "Model Optimization",
    "b": "Optimization Modeling",
@@ -7989,6 +9917,13 @@
    "same": true,
    "similarity": 0.854,
    "verified": true
+  },
+  "monitoring || monitoringsystem": {
+   "a": "Monitoring systems",
+   "b": "Monitoring",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.856
   },
   "monitoringalerting || monitoringandalerting": {
    "a": "Monitoring and alerting",
@@ -8085,6 +10020,13 @@
    "same": true,
    "similarity": 0.931,
    "verified": true
+  },
+  "multicloud || multicloudplatform": {
+   "a": "Multi-cloud platforms",
+   "b": "Multi-cloud",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.852
   },
   "multicommunication || multilingualcommunication": {
    "a": "Multilingual Communication",
@@ -8213,6 +10155,20 @@
    "same": false,
    "similarity": 0.928
   },
+  "networkconnectivitytroubleshooting || networkingtroubleshooting": {
+   "a": "Network connectivity troubleshooting",
+   "b": "Networking troubleshooting",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.888
+  },
+  "networkconnectivitytroubleshooting || networktroubleshooting": {
+   "a": "Network Troubleshooting",
+   "b": "Network connectivity troubleshooting",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.925
+  },
   "networkdesign || networksolutiondesign": {
    "a": "Network Design",
    "b": "Network solution design",
@@ -8236,6 +10192,13 @@
    "similarity": 0.86,
    "verified": false
   },
+  "networkencryption || networktrafficencryption": {
+   "a": "Network Encryption",
+   "b": "Network traffic encryption",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.863
+  },
   "networkequipmentmaintenance || networkmaintenance": {
    "a": "Network Maintenance",
    "b": "Network Equipment Maintenance",
@@ -8249,6 +10212,13 @@
    "checked": "2026-09-30",
    "same": false,
    "similarity": 0.882
+  },
+  "networkhardwaretroubleshooting || networkingtroubleshooting": {
+   "a": "Network Hardware Troubleshooting",
+   "b": "Networking troubleshooting",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.852
   },
   "networkhardwaretroubleshooting || networktroubleshooting": {
    "a": "Network Troubleshooting",
@@ -8273,6 +10243,14 @@
    "similarity": 0.945,
    "verified": true
   },
+  "networkingtroubleshooting || networktroubleshooting": {
+   "a": "Network Troubleshooting",
+   "b": "Networking troubleshooting",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.951,
+   "verified": false
+  },
   "networklanwan || wanlanconfiguration": {
    "a": "Network LAN/WAN",
    "b": "WAN/LAN Configuration",
@@ -8286,6 +10264,14 @@
    "checked": "2026-09-30",
    "same": false,
    "similarity": 0.869
+  },
+  "networklanwan || wanlaninternetworking": {
+   "a": "Network LAN/WAN",
+   "b": "WAN/LAN internetworking",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.864,
+   "verified": false
   },
   "networklanwan || wanlannetworking": {
    "a": "Network LAN/WAN",
@@ -8308,6 +10294,13 @@
    "checked": "2026-09-30",
    "same": false,
    "similarity": 0.871
+  },
+  "networkmicrosegmentation || networksegmentation": {
+   "a": "Network segmentation",
+   "b": "Network micro-segmentation",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.865
   },
   "networkmonitoring || networksecuritymonitoring": {
    "a": "Network Monitoring",
@@ -8337,6 +10330,20 @@
    "same": true,
    "similarity": 0.893,
    "verified": false
+  },
+  "networkpatching || physicalnetworkpatching": {
+   "a": "Network Patching",
+   "b": "Physical network patching",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.909
+  },
+  "networkperformance || networkperformanceanalysis": {
+   "a": "Network Performance Analysis",
+   "b": "Network performance",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.858
   },
   "networkrouterconfiguration || routerconfiguration": {
    "a": "Router Configuration",
@@ -8382,6 +10389,13 @@
    "checked": "2026-09-30",
    "same": false,
    "similarity": 0.859
+  },
+  "networksecurityprotocol || securityprotocol": {
+   "a": "Security Protocols",
+   "b": "Network security protocols",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.902
   },
   "networkswitchconfiguration || switchconfiguration": {
    "a": "Switch Configuration",
@@ -8611,6 +10625,29 @@
    "same": false,
    "similarity": 0.875
   },
+  "operationalrisk || operationalriskmanagement": {
+   "a": "Operational Risk Management",
+   "b": "Operational risk",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.883
+  },
+  "opticalfiber || opticalfibre": {
+   "a": "Optical Fibre",
+   "b": "Optical fiber",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.978,
+   "verified": true
+  },
+  "optimizationapproache || optimizationtechnique": {
+   "a": "Optimization techniques",
+   "b": "Optimization approaches",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.947,
+   "verified": false
+  },
   "oracle || oracledb": {
    "a": "Oracle",
    "b": "Oracle DB",
@@ -8730,6 +10767,20 @@
    "same": false,
    "similarity": 0.895
   },
+  "oscilloscope || oscilloscopeoperation": {
+   "a": "Oscilloscope operation",
+   "b": "Oscilloscope",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.913
+  },
+  "oscilloscope || oscilloscopeuse": {
+   "a": "Oscilloscope Use",
+   "b": "Oscilloscope",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.926
+  },
   "oscilloscopeoperation || oscilloscopeuse": {
    "a": "Oscilloscope operation",
    "b": "Oscilloscope Use",
@@ -8773,6 +10824,13 @@
    "checked": "2026-09-30",
    "same": false,
    "similarity": 0.89
+  },
+  "otnetworksecurity || otsecurity": {
+   "a": "OT Security",
+   "b": "OT network security",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.889
   },
   "owaspmobilesecurity || owaspsecurity": {
    "a": "OWASP Mobile Security",
@@ -8919,6 +10977,22 @@
    "same": false,
    "similarity": 0.887
   },
+  "performanceoptimisation || performanceoptimization": {
+   "a": "Performance Optimization",
+   "b": "performance optimisation",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.956,
+   "verified": true
+  },
+  "performanceoptimisation || systemperformanceoptimization": {
+   "a": "System Performance Optimization",
+   "b": "performance optimisation",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.86,
+   "verified": false
+  },
   "performanceoptimization || systemperformanceoptimization": {
    "a": "System Performance Optimization",
    "b": "Performance Optimization",
@@ -8933,6 +11007,13 @@
    "same": false,
    "similarity": 0.914
   },
+  "phishinganalysis || phishingdefence": {
+   "a": "Phishing Analysis",
+   "b": "Phishing defence",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.85
+  },
   "phonesupport || smartphonesupport": {
    "a": "Smartphone support",
    "b": "Phone support",
@@ -8946,6 +11027,27 @@
    "checked": "2026-09-30",
    "same": false,
    "similarity": 0.873
+  },
+  "pipeline || pipelinemanagement": {
+   "a": "Pipeline Management",
+   "b": "Pipeline development",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.903
+  },
+  "pipeline || pipelinereview": {
+   "a": "Pipeline Review",
+   "b": "Pipeline development",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.852
+  },
+  "platformintegration || thirdpartyplatformintegration": {
+   "a": "Platform integration",
+   "b": "Third-party platform integration",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.874
   },
   "plsqlscripting || sqlscripting": {
    "a": "SQL Scripting",
@@ -9057,6 +11159,14 @@
    "same": false,
    "similarity": 0.877
   },
+  "postgre || postgresql": {
+   "a": "PostgreSQL",
+   "b": "Postgres",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.899,
+   "verified": true
+  },
   "postgresql || postgresqldatabase": {
    "a": "PostgreSQL",
    "b": "PostgreSQL database",
@@ -9148,6 +11258,14 @@
    "same": true,
    "similarity": 0.947,
    "verified": true
+  },
+  "pricingprocedure || pricingroutine": {
+   "a": "Pricing procedures",
+   "b": "Pricing routines",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.866,
+   "verified": false
   },
   "printeradministration || printermanagement": {
    "a": "Printer Administration",
@@ -9314,6 +11432,20 @@
    "same": false,
    "similarity": 0.854
   },
+  "productionsystem || productionsystemmanagement": {
+   "a": "Production System Management",
+   "b": "Production systems",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.871
+  },
+  "productlifecycle || productlifecyclemanagement": {
+   "a": "Product Lifecycle",
+   "b": "Product lifecycle management",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.897
+  },
   "productroadmapping || productroadmapplanning": {
    "a": "Product Roadmapping",
    "b": "Product Roadmap Planning",
@@ -9337,12 +11469,36 @@
    "similarity": 0.856,
    "verified": false
   },
+  "programming || softwareprogramming": {
+   "a": "Programming",
+   "b": "Software programming",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.873,
+   "verified": false
+  },
   "progressmonitoring || progresstracking": {
    "a": "Progress Monitoring",
    "b": "Progress Tracking",
    "checked": "2026-09-30",
    "same": true,
    "similarity": 0.883,
+   "verified": false
+  },
+  "projectaccounting || projectbasedaccounting": {
+   "a": "Project accounting",
+   "b": "Project-based Accounting",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.896,
+   "verified": false
+  },
+  "projectbasedsale || projectsale": {
+   "a": "Project sales",
+   "b": "Project-based sales",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.882,
    "verified": false
   },
   "projectcostcontrol || projectcosting": {
@@ -9386,6 +11542,13 @@
    "checked": "2026-09-30",
    "same": false,
    "similarity": 0.886
+  },
+  "propertymanagement || propertymanagementsystem": {
+   "a": "Property Management",
+   "b": "property management systems",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.902
   },
   "proposal || proposalmanagement": {
    "a": "Proposal Development",
@@ -9474,6 +11637,13 @@
    "same": false,
    "similarity": 0.921
   },
+  "qualitymetricanalysis || qualitymetricreporting": {
+   "a": "Quality metrics reporting",
+   "b": "Quality metrics analysis",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.861
+  },
   "qualitymetricreporting || qualityreporting": {
    "a": "Quality Reporting",
    "b": "Quality metrics reporting",
@@ -9496,6 +11666,13 @@
    "same": false,
    "similarity": 0.886
   },
+  "queryoptimization || queryperformance": {
+   "a": "Query optimization",
+   "b": "query performance",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.855
+  },
   "queryoptimization || sqlqueryoptimization": {
    "a": "SQL Query Optimization",
    "b": "Query Optimization",
@@ -9509,6 +11686,28 @@
    "checked": "2026-09-30",
    "same": false,
    "similarity": 0.863
+  },
+  "realtimerevenuerecognition || revenuerecognition": {
+   "a": "Revenue Recognition",
+   "b": "Real-time Revenue Recognition",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.858
+  },
+  "recommendationsystem || recommendersystem": {
+   "a": "Recommender Systems",
+   "b": "Recommendation systems",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.892,
+   "verified": false
+  },
+  "recovery || recoverymanagement": {
+   "a": "Recovery",
+   "b": "Recovery management",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.853
   },
   "redhatenterpriselinux || redhatlinux": {
    "a": "Red Hat Linux",
@@ -9590,6 +11789,13 @@
    "same": false,
    "similarity": 0.851
   },
+  "releasemanagement || softwarereleasemanagement": {
+   "a": "Release Management",
+   "b": "Software Release Management",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.889
+  },
   "remotecollaboration || remoteteamcollaboration": {
    "a": "Remote Collaboration",
    "b": "Remote Team Collaboration",
@@ -9627,6 +11833,14 @@
    "same": true,
    "similarity": 0.967,
    "verified": true
+  },
+  "requirementdefinition || requirementspecification": {
+   "a": "Requirements Specification",
+   "b": "Requirements definition",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.852,
+   "verified": false
   },
   "requirementengineering || requirementmanagement": {
    "a": "Requirements Engineering",
@@ -9803,6 +12017,14 @@
    "same": false,
    "similarity": 0.858
   },
+  "riskregistermaintenance || riskregistermanagement": {
+   "a": "Risk register management",
+   "b": "risk register maintenance",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.861,
+   "verified": false
+  },
   "rmahandling || rmaprocess": {
    "a": "RMA handling",
    "b": "RMA Process",
@@ -9848,6 +12070,14 @@
    "checked": "2026-09-30",
    "same": true,
    "similarity": 0.862,
+   "verified": false
+  },
+  "roboticperception || robotperception": {
+   "a": "Robot perception",
+   "b": "robotics perception",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.941,
    "verified": false
   },
   "ros1 || ros2": {
@@ -10037,6 +12267,21 @@
    "same": false,
    "similarity": 0.854
   },
+  "sap || sapsystem": {
+   "a": "SAP",
+   "b": "SAP systems",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.871
+  },
+  "sap || saptechnology": {
+   "a": "SAP",
+   "b": "SAP technologies",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.876,
+   "verified": false
+  },
   "sapaccessadministration || sapadministration": {
    "a": "SAP Access Administration",
    "b": "SAP Administration",
@@ -10044,12 +12289,27 @@
    "same": false,
    "similarity": 0.854
   },
+  "sapaccessadministration || sapsystemadministration": {
+   "a": "SAP Access Administration",
+   "b": "SAP system administration",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.85
+  },
   "sapadministration || sapoperation": {
    "a": "SAP Operations",
    "b": "SAP Administration",
    "checked": "2026-09-30",
    "same": false,
    "similarity": 0.861
+  },
+  "sapadministration || sapsystemadministration": {
+   "a": "SAP Administration",
+   "b": "SAP system administration",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.936,
+   "verified": false
   },
   "sapapi || sapapimanagement": {
    "a": "SAP API",
@@ -10064,6 +12324,13 @@
    "checked": "2026-09-30",
    "same": false,
    "similarity": 0.91
+  },
+  "sapapplicationsupport || sapsupport": {
+   "a": "SAP Support",
+   "b": "SAP application support",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.887
   },
   "saparchitecture || sapimplementation": {
    "a": "SAP Implementation",
@@ -10122,6 +12389,13 @@
    "same": false,
    "similarity": 0.929
   },
+  "sapbusinessone || sapbusinesssuite": {
+   "a": "SAP Business One",
+   "b": "SAP Business Suite",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.853
+  },
   "sapbusinesstechnologyplatform || sapcloudplatform": {
    "a": "SAP Cloud Platform",
    "b": "SAP Business Technology Platform",
@@ -10129,6 +12403,13 @@
    "same": true,
    "similarity": 0.854,
    "verified": false
+  },
+  "sapbusinesstechnologyplatform || saptechnology": {
+   "a": "SAP technologies",
+   "b": "SAP Business Technology Platform",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.862
   },
   "sapbw || sapbw4hana": {
    "a": "SAP BW",
@@ -10158,6 +12439,21 @@
    "same": false,
    "similarity": 0.869
   },
+  "sapcertification || sapcertified": {
+   "a": "SAP Certified",
+   "b": "SAP certification",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.943,
+   "verified": false
+  },
+  "sapcertifiedassociateprojectmanagersapactivate || sapcertifiedspecialistprojectmanagersapactivate": {
+   "a": "SAP Certified Associate – Project Manager – SAP Activate",
+   "b": "SAP Certified Specialist – Project Manager – SAP Activate",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.947
+  },
   "sapcloud || sapcloudalm": {
    "a": "SAP Cloud ALM",
    "b": "SAP Cloud",
@@ -10186,12 +12482,34 @@
    "same": false,
    "similarity": 0.859
   },
+  "sapdataservice || sapsystem": {
+   "a": "SAP Data Services",
+   "b": "SAP systems",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.851
+  },
   "sapecc || sapecc6": {
    "a": "SAP ECC",
    "b": "SAP ECC6",
    "checked": "2026-09-30",
    "same": true,
    "similarity": 0.919,
+   "verified": false
+  },
+  "sapecc || sapecc6.0": {
+   "a": "SAP ECC",
+   "b": "SAP ECC 6.0",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.872
+  },
+  "sapecc6 || sapecc6.0": {
+   "a": "SAP ECC6",
+   "b": "SAP ECC 6.0",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.93,
    "verified": false
   },
   "saperp || saperpintegration": {
@@ -10228,6 +12546,20 @@
    "checked": "2026-09-30",
    "same": false,
    "similarity": 0.876
+  },
+  "sapfiori || sapfioriapplication": {
+   "a": "SAP Fiori",
+   "b": "SAP Fiori application development",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.859
+  },
+  "sapfioriapplication || sapfioriwebcomponent": {
+   "a": "SAP Fiori application development",
+   "b": "SAP Fiori Web components",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.868
   },
   "sapfunctional || sapfunctionalconfiguration": {
    "a": "SAP Functional",
@@ -10279,6 +12611,20 @@
    "similarity": 0.887,
    "verified": false
   },
+  "sapinfrastructure || sapsystem": {
+   "a": "SAP Infrastructure",
+   "b": "SAP systems",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.877
+  },
+  "sapinfrastructure || saptechnology": {
+   "a": "SAP Infrastructure",
+   "b": "SAP technologies",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.867
+  },
   "sapintegration || sapintegrationsuite": {
    "a": "SAP Integration",
    "b": "SAP Integration Suite",
@@ -10299,6 +12645,13 @@
    "checked": "2026-09-30",
    "same": false,
    "similarity": 0.873
+  },
+  "sapoperation || sapsystemadministration": {
+   "a": "SAP Operations",
+   "b": "SAP system administration",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.855
   },
   "sappi || sappipo": {
    "a": "SAP PI/PO",
@@ -10328,12 +12681,40 @@
    "same": false,
    "similarity": 0.852
   },
+  "sapproductionsupport || sapsupport": {
+   "a": "SAP Support",
+   "b": "SAP production support",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.914
+  },
   "sapprojectimplementation || sapprojectsystem": {
    "a": "SAP Project Systems",
    "b": "SAP Project Implementation",
    "checked": "2026-09-30",
    "same": false,
    "similarity": 0.889
+  },
+  "sapprojectsystem || sapsystem": {
+   "a": "SAP Project Systems",
+   "b": "SAP systems",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.882
+  },
+  "saps4hana || saps4hanaintegration": {
+   "a": "SAP S/4HANA",
+   "b": "SAP S/4HANA integration",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.85
+  },
+  "saps4hana || saps4hanalifecycle": {
+   "a": "SAP S/4HANA",
+   "b": "SAP S/4HANA lifecycle",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.852
   },
   "saps4hana || saps4hanasd": {
    "a": "SAP S/4HANA",
@@ -10363,12 +12744,55 @@
    "same": false,
    "similarity": 0.859
   },
+  "sapsolution || sapsystem": {
+   "a": "SAP Solutions",
+   "b": "SAP systems",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.862,
+   "verified": false
+  },
+  "sapsolution || saptechnology": {
+   "a": "SAP Solutions",
+   "b": "SAP technologies",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.852
+  },
+  "sapsystem || sapsystemadministration": {
+   "a": "SAP system administration",
+   "b": "SAP systems",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.903
+  },
+  "sapsystem || saptechnicalbasis": {
+   "a": "SAP Technical Basis",
+   "b": "SAP systems",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.862
+  },
+  "sapsystem || saptechnology": {
+   "a": "SAP technologies",
+   "b": "SAP systems",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.896
+  },
   "sapsystemtesting || saptesting": {
    "a": "SAP Testing",
    "b": "SAP System Testing",
    "checked": "2026-09-30",
    "same": false,
    "similarity": 0.947
+  },
+  "saptechnicalbasis || saptechnology": {
+   "a": "SAP Technical Basis",
+   "b": "SAP technologies",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.886
   },
   "sapwm || sapwmmodule": {
    "a": "SAP WM Module",
@@ -10415,6 +12839,13 @@
    "checked": "2026-09-30",
    "same": false,
    "similarity": 0.9
+  },
+  "scalability || scalabilityoptimization": {
+   "a": "Scalability Optimization",
+   "b": "Scalability",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.85
   },
   "scalablearchitecture || scalablearchitecturedesign": {
    "a": "Scalable Architecture",
@@ -10483,6 +12914,13 @@
    "same": false,
    "similarity": 0.883
   },
+  "schematic || schematicanalysis": {
+   "a": "Schematic analysis",
+   "b": "Schematics",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.863
+  },
   "scopemanagement || scopeplanning": {
    "a": "Scope Management",
    "b": "Scope Planning",
@@ -10541,6 +12979,13 @@
    "checked": "2026-09-30",
    "same": false,
    "similarity": 0.853
+  },
+  "sdlc || sdvlc": {
+   "a": "SDLC",
+   "b": "SDVLC",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.891
   },
   "sdlccompliance || sdlcpractice": {
    "a": "SDLC Compliance",
@@ -10642,6 +13087,14 @@
    "same": false,
    "similarity": 0.898
   },
+  "secureconnection || secureconnectivity": {
+   "a": "Secure connection",
+   "b": "Secure connectivity",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.867,
+   "verified": false
+  },
   "securityaccesscontrol || securityaccessmanagement": {
    "a": "Security Access Control",
    "b": "Security Access Management",
@@ -10669,6 +13122,13 @@
    "checked": "2026-09-30",
    "same": false,
    "similarity": 0.913
+  },
+  "securityalertanalysis || securityalerttriaging": {
+   "a": "Security alert triaging",
+   "b": "Security alert analysis",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.877
   },
   "securityarchitecture || securityarchitecturedesign": {
    "a": "Security Architecture",
@@ -10795,6 +13255,21 @@
    "similarity": 0.886,
    "verified": true
   },
+  "securitytelemetry || securitytelemetryintegration": {
+   "a": "security telemetry",
+   "b": "security telemetry integration",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.899
+  },
+  "securityvulnerabilityassessment || vulnerabilityanalysis": {
+   "a": "Security Vulnerability Assessment",
+   "b": "Vulnerability analysis",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.866,
+   "verified": false
+  },
   "securityvulnerabilityassessment || vulnerabilityassessment": {
    "a": "Vulnerability Assessment",
    "b": "Security Vulnerability Assessment",
@@ -10810,6 +13285,13 @@
    "same": true,
    "similarity": 0.957,
    "verified": true
+  },
+  "segmentation || segmentationtechnique": {
+   "a": "Segmentation",
+   "b": "Segmentation techniques",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.872
   },
   "semiconductormanufacturing || semiconductormanufacturingit": {
    "a": "Semiconductor Manufacturing",
@@ -10931,6 +13413,13 @@
    "checked": "2026-09-30",
    "same": false,
    "similarity": 0.861
+  },
+  "servicelevelagreement || servicelevelagreementcompliance": {
+   "a": "Service Level Agreement",
+   "b": "Service Level Agreement compliance",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.876
   },
   "servicelevelagreement || servicelevelagreementmanagement": {
    "a": "Service Level Agreement",
@@ -11061,12 +13550,63 @@
    "same": false,
    "similarity": 0.888
   },
+  "siemarchitecture || siemengineering": {
+   "a": "SIEM engineering",
+   "b": "SIEM architecture",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.875
+  },
+  "siemarchitecture || siemimplementation": {
+   "a": "SIEM implementation",
+   "b": "SIEM architecture",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.878
+  },
+  "siemarchitecture || sieminfrastructuredesign": {
+   "a": "SIEM architecture",
+   "b": "SIEM infrastructure design",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.895,
+   "verified": false
+  },
+  "siemarchitecture || siemplatformdesign": {
+   "a": "SIEM architecture",
+   "b": "SIEM platform design",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.888,
+   "verified": false
+  },
+  "siemarchitecture || siemplatformengineering": {
+   "a": "SIEM platform engineering",
+   "b": "SIEM architecture",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.857
+  },
+  "siemengineering || siemengineeringstandard": {
+   "a": "SIEM engineering",
+   "b": "SIEM engineering standards",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.88
+  },
   "siemengineering || siemmanagement": {
    "a": "SIEM Management",
    "b": "SIEM Engineering",
    "checked": "2026-09-30",
    "same": false,
    "similarity": 0.858
+  },
+  "siemengineering || siemplatformengineering": {
+   "a": "SIEM engineering",
+   "b": "SIEM platform engineering",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.865
   },
   "siemimplementation || siemoperation": {
    "a": "SIEM implementation",
@@ -11075,12 +13615,63 @@
    "same": false,
    "similarity": 0.866
   },
+  "sieminfrastructuredesign || siemplatformdesign": {
+   "a": "SIEM infrastructure design",
+   "b": "SIEM platform design",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.887,
+   "verified": false
+  },
+  "sieminfrastructuredesign || siemplatformengineering": {
+   "a": "SIEM platform engineering",
+   "b": "SIEM infrastructure design",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.851,
+   "verified": false
+  },
+  "siemplatform || siemplatformdesign": {
+   "a": "SIEM platform design",
+   "b": "SIEM platform",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.908
+  },
+  "siemplatform || siemplatformengineering": {
+   "a": "SIEM platform engineering",
+   "b": "SIEM platform",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.898
+  },
+  "siemplatformdesign || siemplatformengineering": {
+   "a": "SIEM platform engineering",
+   "b": "SIEM platform design",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.936
+  },
   "simulationsoftware || softwaresimulation": {
    "a": "Simulation software",
    "b": "Software Simulation",
    "checked": "2026-09-30",
    "same": false,
    "similarity": 0.916
+  },
+  "sitemonitoring || websitemonitoring": {
+   "a": "Site Monitoring",
+   "b": "Website monitoring",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.925
+  },
+  "sitesecurity || websitesecurity": {
+   "a": "Site Security",
+   "b": "Website security",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.925
   },
   "sitesurvey || sitesurveyanalysis": {
    "a": "Site Survey Analysis",
@@ -11096,6 +13687,13 @@
    "same": false,
    "similarity": 0.884
   },
+  "sla || slamanagement": {
+   "a": "SLA Management",
+   "b": "SLA",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.851
+  },
   "soapservice || soapwebservice": {
    "a": "SOAP Web Services",
    "b": "SOAP Services",
@@ -11103,6 +13701,13 @@
    "same": true,
    "similarity": 0.945,
    "verified": true
+  },
+  "soc || soc2": {
+   "a": "SOC 2",
+   "b": "SOC",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.864
   },
   "soc1review || soc2review": {
    "a": "SOC1 Review",
@@ -11155,6 +13760,13 @@
    "same": false,
    "similarity": 0.869
   },
+  "softwareknowledge || softwareproductknowledge": {
+   "a": "Software product knowledge",
+   "b": "software knowledge",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.865
+  },
   "softwarelicensemanagement || softwarelicensingmanagement": {
    "a": "Software License Management",
    "b": "Software Licensing Management",
@@ -11192,6 +13804,13 @@
    "similarity": 0.889,
    "verified": false
   },
+  "softwaretesting || softwaretestingprocesse": {
+   "a": "Software Testing",
+   "b": "Software testing processes",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.869
+  },
   "softwaretestingmethodology || softwaretestmethodology": {
    "a": "Software Testing Methodologies",
    "b": "Software Test Methodologies",
@@ -11206,6 +13825,14 @@
    "checked": "2026-09-30",
    "same": false,
    "similarity": 0.891
+  },
+  "softwaretestingprocess || softwaretestingprocesse": {
+   "a": "Software testing process",
+   "b": "Software testing processes",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.948,
+   "verified": true
   },
   "softwaretestmethodology || testingmethodology": {
    "a": "Software Test Methodologies",
@@ -11399,12 +14026,41 @@
    "similarity": 0.873,
    "verified": false
   },
+  "ssltls || ssltlsconfiguration": {
+   "a": "SSL/TLS Configuration",
+   "b": "SSL/TLS",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.851
+  },
+  "ssltls || ssltlsencryption": {
+   "a": "SSL/TLS Encryption",
+   "b": "SSL/TLS",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.861,
+   "verified": false
+  },
   "stakeholderanalysis || stakeholdercollaboration": {
    "a": "Stakeholder Collaboration",
    "b": "Stakeholder Analysis",
    "checked": "2026-09-30",
    "same": false,
    "similarity": 0.862
+  },
+  "stakeholderanalysis || stakeholderconversation": {
+   "a": "Stakeholder Analysis",
+   "b": "Stakeholder conversation",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.855
+  },
+  "stakeholderanalysis || stakeholderinteraction": {
+   "a": "Stakeholder Analysis",
+   "b": "Stakeholder interactions",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.921
   },
   "stakeholderanalysis || stakeholdermanagement": {
    "a": "Stakeholder Management",
@@ -11434,12 +14090,33 @@
    "same": false,
    "similarity": 0.87
   },
+  "stakeholdercollaboration || stakeholderinteraction": {
+   "a": "Stakeholder Collaboration",
+   "b": "Stakeholder interactions",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.889
+  },
   "stakeholdercollaboration || stakeholdermanagement": {
    "a": "Stakeholder Management",
    "b": "Stakeholder Collaboration",
    "checked": "2026-09-30",
    "same": false,
    "similarity": 0.88
+  },
+  "stakeholdercommunication || stakeholderconversation": {
+   "a": "Stakeholder Communication",
+   "b": "Stakeholder conversation",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.932
+  },
+  "stakeholdercommunication || stakeholderinteraction": {
+   "a": "Stakeholder Communication",
+   "b": "Stakeholder interactions",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.891
   },
   "stakeholdercommunication || stakeholdermanagement": {
    "a": "Stakeholder Management",
@@ -11455,6 +14132,34 @@
    "same": false,
    "similarity": 0.868
   },
+  "stakeholderconversation || stakeholderinteraction": {
+   "a": "Stakeholder interactions",
+   "b": "Stakeholder conversation",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.909
+  },
+  "stakeholderconversation || stakeholderinterviewing": {
+   "a": "Stakeholder conversation",
+   "b": "Stakeholder interviewing",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.875
+  },
+  "stakeholderconversation || stakeholderinterviews": {
+   "a": "stakeholder interviews",
+   "b": "Stakeholder conversation",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.875
+  },
+  "stakeholderconversation || stakeholdernegotiation": {
+   "a": "Stakeholder Negotiation",
+   "b": "Stakeholder conversation",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.854
+  },
   "stakeholdercoordination || stakeholderfacilitation": {
    "a": "Stakeholder Coordination",
    "b": "Stakeholder facilitation",
@@ -11462,12 +14167,26 @@
    "same": false,
    "similarity": 0.861
   },
+  "stakeholdercoordination || stakeholderinteraction": {
+   "a": "Stakeholder Coordination",
+   "b": "Stakeholder interactions",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.886
+  },
   "stakeholdercoordination || stakeholdermanagement": {
    "a": "Stakeholder Management",
    "b": "Stakeholder Coordination",
    "checked": "2026-09-30",
    "same": false,
    "similarity": 0.873
+  },
+  "stakeholderengagement || stakeholderinteraction": {
+   "a": "Stakeholder Engagement",
+   "b": "Stakeholder interactions",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.862
   },
   "stakeholderfacilitation || stakeholdermanagement": {
    "a": "Stakeholder Management",
@@ -11483,12 +14202,49 @@
    "same": false,
    "similarity": 0.882
   },
+  "stakeholderinteraction || stakeholdermanagement": {
+   "a": "Stakeholder Management",
+   "b": "Stakeholder interactions",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.879
+  },
+  "stakeholderinteraction || stakeholdernegotiation": {
+   "a": "Stakeholder Negotiation",
+   "b": "Stakeholder interactions",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.871
+  },
+  "stakeholderinterviewing || stakeholderinterviews": {
+   "a": "stakeholder interviews",
+   "b": "Stakeholder interviewing",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.97,
+   "verified": false
+  },
   "stakeholdermanagement || stakeholdernegotiation": {
    "a": "Stakeholder Management",
    "b": "Stakeholder Negotiation",
    "checked": "2026-09-30",
    "same": false,
    "similarity": 0.853
+  },
+  "stakeholdermanagement || stakeholderrelationshipmanagement": {
+   "a": "Stakeholder Management",
+   "b": "Stakeholder relationship management",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.869,
+   "verified": false
+  },
+  "stakeholderrelationshipbuilding || stakeholderrelationshipmanagement": {
+   "a": "Stakeholder relationship management",
+   "b": "stakeholder relationship building",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.924
   },
   "stakeholderworkshop || stakeholderworkshopfacilitation": {
    "a": "Stakeholder Workshops",
@@ -11511,6 +14267,13 @@
    "same": true,
    "similarity": 0.939,
    "verified": false
+  },
+  "storagesolution || storagesolutiondesign": {
+   "a": "Storage solutions",
+   "b": "Storage solution design",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.872
   },
   "storagesolution || storagesystem": {
    "a": "Storage solutions",
@@ -11598,12 +14361,27 @@
    "same": false,
    "similarity": 0.857
   },
+  "supplychainoperation || supplychainprocesse": {
+   "a": "Supply chain processes",
+   "b": "Supply chain operations",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.877,
+   "verified": false
+  },
   "supplychainoperation || supplychainsystem": {
    "a": "Supply Chain Systems",
    "b": "Supply Chain Operations",
    "checked": "2026-09-30",
    "same": false,
    "similarity": 0.855
+  },
+  "switch || switching": {
+   "a": "Switching",
+   "b": "Switch",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.869
   },
   "systemadministration || windowssystemadministration": {
    "a": "System Administration",
@@ -11626,6 +14404,14 @@
    "checked": "2026-09-30",
    "same": false,
    "similarity": 0.859
+  },
+  "systemintegrationtesting || systemintegrationtestingsit": {
+   "a": "System Integration Testing",
+   "b": "System Integration Testing (SIT)",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.861,
+   "verified": true
   },
   "systemlevel || systemprogramming": {
    "a": "System Programming",
@@ -11752,12 +14538,33 @@
    "same": false,
    "similarity": 0.88
   },
+  "technicalworkshop || workshop": {
+   "a": "Technical Workshops",
+   "b": "workshops",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.896
+  },
   "technicalworkshopfacilitation || workshopfacilitation": {
    "a": "Workshop Facilitation",
    "b": "Technical Workshop Facilitation",
    "checked": "2026-09-30",
    "same": false,
    "similarity": 0.907
+  },
+  "technologyrisk || technologyriskassessment": {
+   "a": "Technology Risk Assessment",
+   "b": "Technology Risk",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.889
+  },
+  "technologyrisk || technologyriskmanagement": {
+   "a": "Technology Risk Management",
+   "b": "Technology Risk",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.851
   },
   "technologyriskassessment || technologyriskmanagement": {
    "a": "Technology Risk Management",
@@ -11782,12 +14589,27 @@
    "similarity": 0.91,
    "verified": true
   },
+  "tenderdocument || tenderdocumentation": {
+   "a": "Tender Documentation",
+   "b": "Tender documents",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.892,
+   "verified": false
+  },
   "territorymanagement || territoryplanning": {
    "a": "Territory Management",
    "b": "Territory Planning",
    "checked": "2026-09-30",
    "same": false,
    "similarity": 0.867
+  },
+  "testanalysis || testresultanalysis": {
+   "a": "Test analysis",
+   "b": "Test result analysis",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.886
   },
   "testautomation || testautomationarchitecture": {
    "a": "Test Automation",
@@ -11825,12 +14647,35 @@
    "same": false,
    "similarity": 0.858
   },
+  "testcoverage || testcoverageanalysis": {
+   "a": "Test Coverage Analysis",
+   "b": "Test coverage",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.899
+  },
   "testdatamanagement || testmanagement": {
    "a": "Test Management",
    "b": "Test data management",
    "checked": "2026-09-30",
    "same": false,
    "similarity": 0.86
+  },
+  "testdocumentation || testingdocumentation": {
+   "a": "Test Documentation",
+   "b": "Testing documentation",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.95,
+   "verified": true
+  },
+  "testexecution || testingexecution": {
+   "a": "Test Execution",
+   "b": "Testing execution",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.945,
+   "verified": true
   },
   "testingacceptance || useracceptancetesting": {
    "a": "User Acceptance Testing",
@@ -11893,6 +14738,14 @@
    "same": false,
    "similarity": 0.922
   },
+  "testscenariocreation || testscenariodesign": {
+   "a": "Test Scenario Design",
+   "b": "Test scenario creation",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.893,
+   "verified": true
+  },
   "testscript || testscriptdesign": {
    "a": "Test Script Development",
    "b": "Test Script Design",
@@ -11907,6 +14760,13 @@
    "same": true,
    "similarity": 0.907,
    "verified": false
+  },
+  "testvalidation || validation": {
+   "a": "Test Validation",
+   "b": "Validation",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.854
   },
   "thirdpartyrisk || thirdpartyriskassessment": {
    "a": "Third-Party Risk Assessment",
@@ -11963,6 +14823,14 @@
    "checked": "2026-09-30",
    "same": false,
    "similarity": 0.915
+  },
+  "tickethandling || ticketmanagement": {
+   "a": "Ticket Management",
+   "b": "Ticket handling",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.871,
+   "verified": true
   },
   "ticketingsystem || ticketingsystemadministration": {
    "a": "Ticketing System",
@@ -12045,6 +14913,13 @@
    "checked": "2026-09-30",
    "same": false,
    "similarity": 0.863
+  },
+  "traceability || traceabilitysystem": {
+   "a": "traceability system",
+   "b": "Traceability",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.902
   },
   "traceabilitymanagement || traceabilitysystem": {
    "a": "Traceability system",
@@ -12179,6 +15054,14 @@
    "same": false,
    "similarity": 0.942
   },
+  "unixadministration || unixsystemadministration": {
+   "a": "Unix Administration",
+   "b": "UNIX system administration",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.947,
+   "verified": true
+  },
   "unixcommand || unixlinuxcommand": {
    "a": "Unix Commands",
    "b": "Unix/Linux commands",
@@ -12216,6 +15099,14 @@
    "similarity": 0.902,
    "verified": true
   },
+  "unixlinuxadministration || unixsystemadministration": {
+   "a": "Unix/Linux administration",
+   "b": "UNIX system administration",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.908,
+   "verified": false
+  },
   "unixscripting || unixshellscripting": {
    "a": "Unix scripting",
    "b": "Unix Shell Scripting",
@@ -12230,6 +15121,13 @@
    "checked": "2026-09-30",
    "same": false,
    "similarity": 0.855
+  },
+  "usability || usabilityevaluation": {
+   "a": "Usability",
+   "b": "Usability evaluation",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.875
   },
   "usecasemodeling || usecasemodelling": {
    "a": "Use Case Modeling",
@@ -12447,6 +15345,13 @@
    "similarity": 0.908,
    "verified": true
   },
+  "visionactionmodel || visionmodel": {
+   "a": "Vision-language-action models",
+   "b": "Vision-language models",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.87
+  },
   "visualbasic || visualbasicnet": {
    "a": "Visual Basic",
    "b": "Visual Basic .NET",
@@ -12606,6 +15511,13 @@
    "similarity": 0.936,
    "verified": true
   },
+  "vrrp || vrrphsrp": {
+   "a": "VRRP HSRP",
+   "b": "VRRP",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.879
+  },
   "vsphere || vsphereadministration": {
    "a": "vSphere Administration",
    "b": "vSphere",
@@ -12628,6 +15540,14 @@
    "same": true,
    "similarity": 0.9,
    "verified": true
+  },
+  "vulnerabilityanalysis || vulnerabilityassessment": {
+   "a": "Vulnerability Assessment",
+   "b": "Vulnerability analysis",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.899,
+   "verified": false
   },
   "wanbackbonedesign || wandesign": {
    "a": "WAN Design",
@@ -12691,6 +15611,14 @@
    "checked": "2026-09-30",
    "same": false,
    "similarity": 0.884
+  },
+  "wanlaninternetworking || wanlannetworking": {
+   "a": "WAN/LAN Networking",
+   "b": "WAN/LAN internetworking",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.879,
+   "verified": false
   },
   "wanlanmanagement || wanlannetworking": {
    "a": "WAN/LAN Networking",
@@ -12798,6 +15726,14 @@
    "same": false,
    "similarity": 0.913
   },
+  "webdesign || websitedesign": {
+   "a": "Web Design",
+   "b": "website design",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.882,
+   "verified": true
+  },
   "webdevelopment || website": {
    "a": "Web Development",
    "b": "Website development",
@@ -12865,6 +15801,13 @@
    "similarity": 0.92,
    "verified": false
   },
+  "websecurity || websitesecurity": {
+   "a": "Web Security",
+   "b": "Website security",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.895
+  },
   "webserveradministration || webservermanagement": {
    "a": "Web Server Administration",
    "b": "Web server management",
@@ -12872,6 +15815,13 @@
    "same": true,
    "similarity": 0.902,
    "verified": true
+  },
+  "websiteworkflowautomation || workflowautomation": {
+   "a": "Workflow Automation",
+   "b": "Website workflow automation",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.858
   },
   "websocket || websocketintegration": {
    "a": "WebSockets",
@@ -12921,6 +15871,13 @@
    "similarity": 0.856,
    "verified": true
   },
+  "wificontroller || wirelesscontroller": {
+   "a": "Wireless controllers",
+   "b": "Wi-Fi controllers",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.863
+  },
   "wifirouterconfiguration || wifiroutersetup": {
    "a": "WiFi Router Configuration",
    "b": "WiFi router setup",
@@ -12935,6 +15892,13 @@
    "checked": "2026-09-30",
    "same": false,
    "similarity": 0.863
+  },
+  "windows1011 || windows11": {
+   "a": "Windows 10/11",
+   "b": "Windows 11",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.892
   },
   "windowsadmin || windowsserveradmin": {
    "a": "Windows Server Admin",
@@ -12957,6 +15921,14 @@
    "checked": "2026-09-30",
    "same": true,
    "similarity": 0.896,
+   "verified": true
+  },
+  "windowslinux || windowslinuxos": {
+   "a": "Windows/Linux OS",
+   "b": "Windows/Linux",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.953,
    "verified": true
   },
   "windowslinuxos || windowsos": {
@@ -13013,6 +15985,14 @@
    "similarity": 0.867,
    "verified": true
   },
+  "wireframe || wireframedesign": {
+   "a": "Wireframe Design",
+   "b": "wireframes",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.869,
+   "verified": false
+  },
   "wireframecreation || wireframedesign": {
    "a": "Wireframe Design",
    "b": "Wireframe Creation",
@@ -13029,6 +16009,13 @@
    "similarity": 0.854,
    "verified": false
   },
+  "wirelesscontroller || wirelesscontrollermanagement": {
+   "a": "Wireless Controller Management",
+   "b": "Wireless controllers",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.884
+  },
   "wirelesslan || wirelesslandesign": {
    "a": "Wireless LAN Design",
    "b": "Wireless LAN",
@@ -13043,6 +16030,28 @@
    "same": true,
    "similarity": 0.916,
    "verified": true
+  },
+  "workflow || workflowmanagement": {
+   "a": "Workflow Management",
+   "b": "Workflow",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.855
+  },
+  "workflow || workflows": {
+   "a": "Workflows",
+   "b": "Workflow",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.942,
+   "verified": true
+  },
+  "workflowmanagement || workflows": {
+   "a": "Workflow Management",
+   "b": "Workflows",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.855
   },
   "wpf || wpfui": {
    "a": "WPF development",
@@ -13073,6 +16082,49 @@
    "checked": "2026-09-30",
    "same": false,
    "similarity": 0.937
+  },
+  "zerotrust || zerotrustsecurity": {
+   "a": "Zero-Trust",
+   "b": "Zero-trust security",
+   "checked": "2026-10-09",
+   "same": true,
+   "similarity": 0.906,
+   "verified": true
+  },
+  "zscaler || zscalerzcc": {
+   "a": "Zscaler ZCC",
+   "b": "Zscaler",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.892
+  },
+  "zscaler || zscalerzia": {
+   "a": "Zscaler ZIA",
+   "b": "Zscaler",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.884
+  },
+  "zscaler || zscalerzpa": {
+   "a": "Zscaler ZPA",
+   "b": "Zscaler",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.902
+  },
+  "zscalerzcc || zscalerzpa": {
+   "a": "Zscaler ZPA",
+   "b": "Zscaler ZCC",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.885
+  },
+  "zscalerzia || zscalerzpa": {
+   "a": "Zscaler ZIA",
+   "b": "Zscaler ZPA",
+   "checked": "2026-10-09",
+   "same": false,
+   "similarity": 0.903
   }
  }
 }

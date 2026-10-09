@@ -624,6 +624,346 @@
   [
    "Docker Containerization",
    "Docker Containers"
+  ],
+  [
+   "Debugging",
+   "Error debugging"
+  ],
+  [
+   "GCP",
+   "Google Cloud"
+  ],
+  [
+   "Networking",
+   "Computer networking"
+  ],
+  [
+   "C#",
+   "C#.NET"
+  ],
+  [
+   "Microservices",
+   "Microservices architecture"
+  ],
+  [
+   "CSS",
+   "CSS styling"
+  ],
+  [
+   "Workflow automation",
+   "automated workflows"
+  ],
+  [
+   "Workflow automation",
+   "Automation workflows"
+  ],
+  [
+   "Dashboard development",
+   "Dashboard creation"
+  ],
+  [
+   "Dashboard development",
+   "Dashboarding"
+  ],
+  [
+   "AI agents",
+   "Agentic AI bots"
+  ],
+  [
+   "AI-assisted development",
+   "AI-assisted software development"
+  ],
+  [
+   "High availability",
+   "High-availability systems"
+  ],
+  [
+   "Software architecture",
+   "Software architecture design"
+  ],
+  [
+   "AI agents",
+   "intelligent agents"
+  ],
+  [
+   "backend development",
+   "Backend engineering"
+  ],
+  [
+   "Cloud platforms",
+   "Cloud computing platforms"
+  ],
+  [
+   "Programming",
+   "Software programming"
+  ],
+  [
+   "Responsive design",
+   "Responsive web design"
+  ],
+  [
+   "Test case design",
+   "Test case development"
+  ],
+  [
+   "Endpoint protection",
+   "Endpoint security"
+  ],
+  [
+   "Inventory management",
+   "Inventory Control"
+  ],
+  [
+   "Network troubleshooting",
+   "Networking troubleshooting"
+  ],
+  [
+   "NoSQL Database",
+   "NoSQL"
+  ],
+  [
+   "Backup and recovery",
+   "Backup and restore"
+  ],
+  [
+   "Backup and recovery",
+   "Backup/restore"
+  ],
+  [
+   "Data cleaning",
+   "Data cleansing"
+  ],
+  [
+   "Monitoring systems",
+   "System monitoring"
+  ],
+  [
+   "Automated reporting",
+   "Automation reporting"
+  ],
+  [
+   "Network infrastructure",
+   "Infrastructure networking"
+  ],
+  [
+   "LAN/WAN",
+   "WAN/LAN internetworking"
+  ],
+  [
+   "Least-privilege access control",
+   "Least privilege"
+  ],
+  [
+   "Mobile testing",
+   "Mobile application testing"
+  ],
+  [
+   "Secure connection",
+   "Secure connectivity"
+  ],
+  [
+   "acceptance criteria",
+   "Acceptance criteria definition"
+  ],
+  [
+   "Scrum Master",
+   "Agile Scrum Master"
+  ],
+  [
+   "AI workflow development",
+   "AI development workflows"
+  ],
+  [
+   "automated workflows",
+   "Automation workflows"
+  ],
+  [
+   "Azure SQL",
+   "Microsoft Azure SQL Database"
+  ],
+  [
+   "Backup/restore",
+   "Backup and restore"
+  ],
+  [
+   "Batch processing",
+   "batch computing"
+  ],
+  [
+   "Cross-functional collaboration",
+   "Cross-functional team collaboration"
+  ],
+  [
+   "Cross-functional team collaboration",
+   "Cross-functional teamwork"
+  ],
+  [
+   "Database querying",
+   "database queries"
+  ],
+  [
+   "Enterprise network",
+   "Enterprise networking"
+  ],
+  [
+   "functional requirements",
+   "Functional requirements definition"
+  ],
+  [
+   "Project sales",
+   "Project-based sales"
+  ],
+  [
+   "stakeholder interviews",
+   "Stakeholder interviewing"
+  ],
+  [
+   "Web performance",
+   "Website performance"
+  ],
+  [
+   "Automation",
+   "Process automation"
+  ],
+  [
+   "Java",
+   "Java 8"
+  ],
+  [
+   "Documentation",
+   "Documentation practices"
+  ],
+  [
+   "ITIL",
+   "ITIL Foundation"
+  ],
+  [
+   "SQL Server",
+   "MSSQL"
+  ],
+  [
+   "Prompt engineering",
+   "AI prompt engineering"
+  ],
+  [
+   "Incident management",
+   "Incident lifecycle management"
+  ],
+  [
+   "Requirements gathering",
+   "Requirements elicitation"
+  ],
+  [
+   "User Acceptance Testing",
+   "User Acceptance Testing (UAT)"
+  ],
+  [
+   "Windows",
+   "Windows OS"
+  ],
+  [
+   "Customer service",
+   "Customer support"
+  ],
+  [
+   "HTML",
+   "HTML5"
+  ],
+  [
+   "Oracle",
+   "Oracle 19c"
+  ],
+  [
+   "Oracle",
+   "Oracle 23ai"
+  ],
+  [
+   "Data security",
+   "Data protection"
+  ],
+  [
+   "CSS",
+   "CSS3"
+  ],
+  [
+   "Software development",
+   "Software programming"
+  ],
+  [
+   "ETL",
+   "ETL/ELT"
+  ],
+  [
+   "Workflow automation",
+   "Process automation"
+  ],
+  [
+   "WAN",
+   "WAN connectivity"
+  ],
+  [
+   "Backup",
+   "Backup/restore"
+  ],
+  [
+   "CCNA",
+   "Cisco CCNA"
+  ],
+  [
+   "SQL Server",
+   "SQL Server 2012"
+  ],
+  [
+   "Programming",
+   "Coding"
+  ],
+  [
+   "Quality assurance",
+   "Software quality assurance"
+  ],
+  [
+   "Full stack web development",
+   "full-stack development"
+  ],
+  [
+   "Usability evaluation",
+   "Usability testing"
+  ],
+  [
+   "Team management",
+   "team leadership"
+  ],
+  [
+   "Team Leading",
+   "team leadership"
+  ],
+  [
+   "Analytical",
+   "Analytical thinking"
+  ],
+  [
+   "Automation",
+   "Automation solutions"
+  ],
+  [
+   "Automation",
+   "Automation Processes"
+  ],
+  [
+   "CI/CD",
+   "CI/CD pipelines"
+  ],
+  [
+   "REST",
+   "REST APIs"
+  ],
+  [
+   "Debugging",
+   "code debugging"
+  ],
+  [
+   "Monitoring",
+   "Monitoring systems"
   ]
  ],
  "different": [
