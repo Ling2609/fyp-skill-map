@@ -112,7 +112,7 @@ export default function MyProfile() {
           </div>
         </div>
         {/* Tabs wrap onto a second line on a narrow window: never a sideways scrollbar (her request 8 Oct) */}
-        <div role="tablist" aria-label="Profile sections" className="flex flex-wrap gap-x-6 border-t border-slate-200 -mx-8 px-8">
+        <div role="tablist" aria-label="Profile sections" className="flex flex-wrap gap-x-6 border-t border-slate-200 -mx-4 sm:-mx-8 px-4 sm:px-8">
           {TABS.map(t => {
             const active = tab === t.key
             return (
@@ -129,7 +129,7 @@ export default function MyProfile() {
         </div>
       </PageHeader>
 
-      <div className="flex-1 min-h-0 px-8 py-6">
+      <div className="flex-1 min-h-0 px-4 sm:px-8 py-6">
         {tab === 'modules' && (
           <ModulesTab onUnsavedChange={setGradesUnsaved} onSaved={load} />
         )}
@@ -171,11 +171,11 @@ function ProfileSkeleton() {
           <div className="flex items-center justify-between gap-3"><Bar className="h-7 w-56" /><Bar className="h-9 w-40 rounded-xl" /></div>
           <div className="mt-3 flex items-center justify-between gap-6"><Bar className="h-4 w-80" /><Bar className="h-4 w-60" /></div>
         </div>
-        <div className="flex gap-6 border-t border-slate-200 -mx-8 px-8 py-3.5">
+        <div className="flex gap-6 border-t border-slate-200 -mx-4 sm:-mx-8 px-4 sm:px-8 py-3.5">
           {['w-20', 'w-20', 'w-24', 'w-16'].map((w, i) => <Bar key={i} className={`h-4 ${w}`} />)}
         </div>
       </PageHeader>
-      <div className="flex-1 min-h-0 px-8 py-6">
+      <div className="flex-1 min-h-0 px-4 sm:px-8 py-6">
         <div className="bg-white rounded-2xl border border-slate-200 shadow-sm h-full">
           <div className="px-6 py-4 border-b border-slate-200 flex items-center justify-between"><Bar className="h-4 w-44" /><Bar className="h-9 w-28 rounded-xl" /></div>
           <div className="px-6 divide-y divide-slate-100">{[...Array(6)].map((_, i) => <RowSkeleton key={i} />)}</div>

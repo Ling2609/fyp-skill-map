@@ -2,11 +2,15 @@ import { useState, useEffect } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { cached, peek } from '../../pageCache'
 import { skillName } from '../../skillName'
+import { SELF_DECLARED_TIP, sourcePillCls } from './profileUtils'
 
 // The grade itself, not its weight: the weight is the same for C+ and C, so a C showed as "C+" (5 Oct)
 const GRADE_LETTERS = { '4.0': 'A', '3.7': 'A-', '3.3': 'B+', '3.0': 'B', '2.7': 'B-', '2.3': 'C+', '2.0': 'C' }
 
 const gradeLabel = (grade) => (grade == null ? '' : GRADE_LETTERS[Number(grade).toFixed(1)] || '')
+// B4 (decided 27 Sep, built 9 Oct): a grade says how strong the academic evidence is, never how skilled she is, and it
+// never decides a match. A/A- strong, B+/B/B- good, below fair.
+const evidenceStrength = (grade) => (grade == null ? '' : grade >= 3.7 ? 'strong evidence' : grade >= 2.7 ? 'good evidence' : 'fair evidence')
 
 // "today", "3 days ago", "2 weeks ago"
 const daysSince = (iso) => (iso ? Math.floor((Date.now() - new Date(iso).getTime()) / 86400000) : 0)
@@ -118,6 +122,8 @@ export default function JobDetail() {
           // Module names like "Project in Software Engineering" read like a project, so say what it is
           label: m.evidence_source === 'module' && key !== 'Other' ? `Module: ${key}` : key,
           grade: m.evidence_source === 'module' ? gradeLabel(m.grade) : '',
+          strength: m.evidence_source === 'module' ? evidenceStrength(m.grade) : '',
+          selfDeclared: m.evidence_source !== 'module' && key !== 'Other',
           items: [],
         }
       }
@@ -140,14 +146,14 @@ export default function JobDetail() {
 
       {/* Top nav */}
       {/* Same left edge as the other pages' headings (PageHeader: px-8) */}
-      <div className="bg-white border-b border-slate-200 px-8 py-3">
+      <div className="bg-white border-b border-slate-200 px-4 sm:px-8 py-3">
         <button onClick={goBack} className="flex items-center gap-1 text-xs text-slate-500 hover:text-blue-600 transition">
           <span>←</span>
           <span>Back to {backLabel}</span>
         </button>
       </div>
 
-      <div className="px-6 py-5 max-w-4xl mx-auto space-y-4">
+      <div className="px-4 sm:px-6 py-5 max-w-4xl mx-auto space-y-4">
 
         {/* Job header: info + action on top, one score row underneath */}
         <div className="bg-white rounded-xl p-6 border border-gray-100 shadow-sm">
@@ -350,6 +356,10 @@ export default function JobDetail() {
                         <span className="text-xs font-semibold text-gray-700">{group.label}</span>
                         {group.grade && (
                           <span className="text-[10px] bg-blue-50 text-blue-600 px-1.5 py-0.5 rounded font-semibold">{group.grade}</span>
+                        )}
+                        {group.strength && <span className="text-[11px] text-gray-500">{group.strength}</span>}
+                        {group.selfDeclared && (
+                          <span className={sourcePillCls} title={SELF_DECLARED_TIP}>Self-declared</span>
                         )}
                       </div>
                       <div className="flex flex-wrap gap-1.5">

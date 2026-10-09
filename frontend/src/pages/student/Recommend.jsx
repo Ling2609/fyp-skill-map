@@ -34,7 +34,7 @@ const SENIOR_LEVELS = ['senior', 'lead', 'manager']
 function NoSkillsState() {
   const navigate = useNavigate()
   return (
-    <div className="h-screen bg-slate-50 flex flex-col items-center justify-center gap-5 px-8 text-center">
+    <div className="h-screen bg-slate-50 flex flex-col items-center justify-center gap-5 px-4 sm:px-8 text-center">
       <div className="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center">
         <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
@@ -216,7 +216,7 @@ export default function Recommend() {
           <div className="flex gap-2 mt-3">{['w-28', 'w-36', 'w-36'].map((w, i) => <Bar key={i} className={`h-9 ${w} rounded-full`} />)}</div>
         </div>
       </PageHeader>
-      <div className="flex-1 overflow-hidden px-8 py-4"><JobCardsSkeleton /></div>
+      <div className="flex-1 overflow-hidden px-4 sm:px-8 py-4"><JobCardsSkeleton /></div>
     </div>
   )
 
@@ -332,7 +332,7 @@ export default function Recommend() {
   )
   const searchButton = (
     <button onClick={handleFindJobs} disabled={loading}
-      className="bg-blue-600 text-white px-5 rounded-lg text-sm font-medium hover:bg-blue-700 transition disabled:opacity-50">
+      className="shrink-0 bg-blue-600 text-white px-4 sm:px-5 rounded-lg text-sm font-medium hover:bg-blue-700 transition disabled:opacity-50">
       {loading ? 'Searching…' : 'Search'}
     </button>
   )
@@ -382,7 +382,7 @@ export default function Recommend() {
           </div>
 
           <div className="flex gap-2 mb-3">
-            <div className="flex-1 flex items-center bg-white border border-slate-200 rounded-lg focus-within:border-blue-300 transition">
+            <div className="flex-1 min-w-0 flex items-center bg-white border border-slate-200 rounded-lg focus-within:border-blue-300 transition">
               {searchInput('pl-3.5')}
             </div>
             {searchButton}
@@ -404,7 +404,7 @@ export default function Recommend() {
         </div>
       </PageHeader>
 
-      <div ref={listRef} className="flex-1 overflow-auto px-8 py-4">
+      <div ref={listRef} className="flex-1 overflow-auto px-4 sm:px-8 py-4">
         {loading && (
           <>
           <div className="flex flex-col items-center justify-center pt-6 pb-5 gap-4">

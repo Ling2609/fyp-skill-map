@@ -229,7 +229,7 @@ function StartCard({ onGo }) {
   ]
   return (
     <Card>
-      <div className="px-8 py-8">
+      <div className="px-4 sm:px-8 py-8">
         <p className="text-xl font-semibold tracking-tight text-slate-900">Add what you've done to see your matches</p>
         <p className="text-sm text-slate-500 mt-1">SkillMap turns your modules, projects, certificates and awards into skills, then compares them with live jobs.</p>
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3 mt-6">
@@ -327,7 +327,7 @@ export default function Dashboard() {
         </div>
       </PageHeader>
 
-      <div className="flex-1 min-h-0 px-8 py-6">
+      <div className="flex-1 min-h-0 px-4 sm:px-8 py-6">
         {loadError && <p role="alert" className="text-sm text-rose-600 bg-rose-50 rounded-lg px-4 py-3 mb-4">{loadError}</p>}
 
         {emptyProfile ? <StartCard onGo={(tab) => navigate(`/profile?tab=${tab}`)} /> : !goalData ? (

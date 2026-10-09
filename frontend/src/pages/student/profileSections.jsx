@@ -2,7 +2,7 @@ import { useState } from 'react'
 import api from '../../api'
 import { AddSkillChip, ConfirmDelete, CrossIcon, IconButton, Modal, PencilIcon, SkillChip } from './profileParts'
 import { AwardForm, CertForm, ProjectForm } from './profileForms'
-import { ADDED_BY_YOU, btnBlueCls, monthLabel, softBtnCls } from './profileUtils'
+import { ADDED_BY_YOU, SELF_DECLARED_TIP, btnBlueCls, monthLabel, softBtnCls, sourcePillCls } from './profileUtils'
 import ModulesEditor from './ModulesEditor'
 
 // The four tabs of My Profile (9 Oct): Modules, Projects, Certificates, Awards, the places a student's skills come
@@ -10,10 +10,14 @@ import ModulesEditor from './ModulesEditor'
 // wide screens, like the module lists). A row's ✎ and ✕ appear on hover and stay reachable with Tab.
 
 function Panel({ title, actions, children }) {
+  // Projects, certificates and awards are all self-declared (A6)
   return (
     <section className="bg-white rounded-2xl border border-slate-200 shadow-sm flex flex-col lg:h-full min-h-0">
       <div className="shrink-0 flex flex-wrap items-center justify-between gap-3 px-6 py-4 border-b border-slate-100">
-        <h2 className="text-base font-semibold text-slate-800">{title}</h2>
+        <div className="flex items-center gap-2">
+          <h2 className="text-base font-semibold text-slate-800">{title}</h2>
+          <span className={sourcePillCls} title={SELF_DECLARED_TIP}>Self-declared</span>
+        </div>
         {actions && <div className="flex flex-wrap items-center gap-2">{actions}</div>}
       </div>
       <div tabIndex={0} aria-label={title}

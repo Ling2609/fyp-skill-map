@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import api from '../../api'
 import { Spinner } from './profileParts'
 import { Bar, LoadingLabel } from '../../components/Skeleton'
+import { PROGRAMME_TIP, sourcePillCls } from './profileUtils'
 import { skillName } from '../../skillName'
 
 // Modules & grades: the year-by-year grid (4 Oct), shown straight in My Profile's Modules tab (9 Oct, her choice: no
@@ -140,7 +141,7 @@ export default function ModulesEditor({ onUnsavedChange, onSaved }) {
 
       {/* Year tabs + save status */}
       <div className="shrink-0 flex flex-wrap items-center justify-between gap-3">
-        <div className="flex gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           {[1, 2, 3].map(year => (
             <button key={year} onClick={() => setSelectedYear(year)}
               className={`px-5 py-2 rounded-xl text-sm font-medium border transition ${
@@ -151,6 +152,8 @@ export default function ModulesEditor({ onUnsavedChange, onSaved }) {
               Year {year}
             </button>
           ))}
+          {/* Where these skills come from (A6): the programme, not the student */}
+          <span className={`${sourcePillCls} ml-1`} title={PROGRAMME_TIP}>Skills set by your programme</span>
         </div>
 
         {/* Right side: status text + always-visible Save Grades button */}
@@ -198,11 +201,12 @@ export default function ModulesEditor({ onUnsavedChange, onSaved }) {
           </div>
           {/* key = year: a new year opens at the top of its list, not where the last year was scrolled to */}
           <div key={`c${selectedYear}`} tabIndex={0} aria-label="Compulsory modules"
-            className="px-6 py-2 divide-y divide-gray-200 lg:flex-1 lg:overflow-y-auto focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-300">
+            className="px-4 sm:px-6 py-2 divide-y divide-gray-200 lg:flex-1 lg:overflow-y-auto focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-300">
             {compulsory.map(mod => (
               <div key={mod.code} className="py-3">
-                <div className="flex items-start justify-between">
-                  <div className="flex items-start gap-3 min-w-0 flex-1">
+                {/* A phone has no room for name and grade side by side: the grade box drops under the name */}
+                <div className="flex flex-wrap items-start justify-between gap-x-4 gap-y-2">
+                  <div className="flex items-start gap-3 min-w-48 flex-1">
                     <span className="w-2 h-2 rounded-full bg-blue-500 shrink-0 mt-1.5" />
                     <div className="min-w-0">
                       <p className="text-sm font-medium text-gray-800">{mod.name}</p>
@@ -212,7 +216,7 @@ export default function ModulesEditor({ onUnsavedChange, onSaved }) {
                   <select
                     value={selections[mod.code] ?? ''}
                     onChange={e => setGrade(mod.code, e.target.value)}
-                    className="ml-4 border border-gray-200 rounded-lg px-2 py-1 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 shrink-0"
+                    className="max-sm:ml-5 border border-gray-200 rounded-lg px-2 py-1 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 shrink-0"
                   >
                     <option value="">Not graded yet</option>
                     {GRADE_OPTIONS.map(g => <option key={g.value} value={g.value}>{g.label}</option>)}

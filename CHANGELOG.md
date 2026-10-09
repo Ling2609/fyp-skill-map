@@ -3,6 +3,23 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 9 Oct 2026 — Student role tidy-up: evidence labels, evidence strength, one Docker skill, phone layout
+
+- (this commit) Small student items before the employer flow:
+  - **Where skills come from (A6):** Modules says "Skills set by your programme" (from the module descriptions,
+    reviewed by the career office; the student only enters grades). Projects, Certificates and Awards say
+    "Self-declared" (read by AI, confirmed by the student). Hover for a one-line explanation. Not "from university":
+    students enter their own grades (decided 7 Oct).
+  - **Grade as strength of evidence (B4):** in Job Detail's "where these come from", a module shows its grade with
+    "strong / good / fair evidence" (A and A- / B+ to B- / below); certificates, projects and awards say
+    "Self-declared". The grade never decides a match.
+  - **One Docker skill:** "Docker Containerisation", "Docker Containerization" and "Docker Containers" are one skill
+    (two human "same" decisions in `data/skill_merge_overrides.json`; the LLM's second check had not confirmed them).
+    Plain "Docker" stays separate. Restart the backend to load it.
+  - **Phone layout:** 16px side margins below 640px (32px above); AI Assistant: past chats start closed and open
+    over the chat, the mode switch wraps under the title, wider message bubbles; Job Matches: the Search button no
+    longer runs off the edge; Modules: the grade box drops under the module name.
+
 ## 9 Oct 2026 — AI Assistant grounded in the job's skill gap and the career goal (E3)
 
 - (this commit) "Learn →" on a job now passes the job's id (`job_id`), not only its title. The backend reads that

@@ -102,7 +102,7 @@ function MessageBubble({ msg }) {
         </div>
       )}
       <div
-        className={`max-w-[75%] min-w-0 px-4 py-3 rounded-2xl ${
+        className={`max-w-[88%] sm:max-w-[75%] min-w-0 px-4 py-3 rounded-2xl ${
           isUser
             ? 'bg-blue-600 text-white rounded-br-sm'
             : 'bg-white border border-slate-200 rounded-bl-sm shadow-sm'
@@ -151,11 +151,15 @@ export default function Chatbot() {
   const [historyNote, setHistoryNote] = useState('')    // why the list can't be shown (MongoDB off)
   const [confirmDelete, setConfirmDelete] = useState(null)
   // The list can be folded away for more room (her request, 6 Oct); remembered on this browser
+  // On a phone (below 768px) the past-chats list starts closed and opens over the chat, not beside it: side by side it
+  // left the messages one word per line (9 Oct)
+  const narrow = () => window.matchMedia?.('(max-width: 767px)').matches
   const [listOpen, setListOpen] = useState(() => {
+    if (narrow()) return false
     try { return localStorage.getItem('chatListOpen') !== '0' } catch { return true }
   })
   const toggleList = () => setListOpen(open => {
-    try { localStorage.setItem('chatListOpen', open ? '0' : '1') } catch { /* not saved: fine */ }
+    if (!narrow()) try { localStorage.setItem('chatListOpen', open ? '0' : '1') } catch { /* not saved: fine */ }
     return !open
   })
   const [chatKey, setChatKey] = useState(0)            // bumped to start or open a chat
@@ -319,6 +323,7 @@ export default function Chatbot() {
     setChatCtx({ target_skill: null, job_title: null, job_id: null })
     setMode(newMode)
     setChatKey(k => k + 1)
+    if (narrow()) setListOpen(false)
   }
 
   const switchMode = (newMode) => {
@@ -338,6 +343,7 @@ export default function Chatbot() {
         job_id: res.data.context?.job_id || null })
       setMode(res.data.mode)
       setChatKey(k => k + 1)
+      if (narrow()) setListOpen(false)          // on a phone the list covers the chat: close it once one is chosen
     } catch {
       setHistoryNote("Couldn't open that chat. Please try again.")
     }
@@ -375,7 +381,7 @@ export default function Chatbot() {
     <div className="flex flex-col h-screen">
 
       <PageHeader>
-        <div className="flex items-start justify-between pb-4 pt-1">
+        <div className="flex flex-wrap items-start justify-between gap-3 pb-4 pt-1">
           <div>
             <p className="text-[11px] font-semibold text-blue-600 uppercase tracking-widest mb-2">AI Assistant</p>
             <h1 className="text-2xl font-semibold tracking-tight text-slate-900">{currentMode.label}</h1>
@@ -422,7 +428,7 @@ export default function Chatbot() {
         </div>
       </PageHeader>
 
-      <div className="flex flex-1 min-h-0">
+      <div className="relative flex flex-1 min-h-0">
         {/* Past chats (her choice A, 6 Oct): always visible on the left, like ChatGPT / Claude / Gemini */}
         {!listOpen ? (
           <aside className="w-12 shrink-0 bg-white border-r border-slate-200 flex flex-col items-center gap-2 py-3">
@@ -438,7 +444,7 @@ export default function Chatbot() {
             </button>
           </aside>
         ) : (
-        <aside className="w-56 shrink-0 bg-white border-r border-slate-200 flex flex-col min-h-0">
+        <aside className="w-56 shrink-0 bg-white border-r border-slate-200 flex flex-col min-h-0 max-md:absolute max-md:inset-y-0 max-md:left-0 max-md:z-20 max-md:shadow-xl">
           <div className="p-3 flex items-center gap-2">
             <button onClick={() => newChat()} disabled={loading}
               className="flex-1 flex items-center justify-center gap-1.5 bg-blue-600 text-white text-xs font-medium rounded-lg py-2 hover:bg-blue-700 disabled:opacity-40 disabled:cursor-not-allowed transition">
@@ -495,7 +501,7 @@ export default function Chatbot() {
 
         <div className="flex-1 flex flex-col min-w-0">
         {/* Messages */}
-        <div className="flex-1 overflow-y-auto px-6 py-5 bg-slate-50">
+        <div className="flex-1 overflow-y-auto px-3 sm:px-6 py-5 bg-slate-50">
           <div className="space-y-4">
             {messages.map((msg, idx) => (
               <MessageBubble key={idx} msg={msg} />
@@ -506,7 +512,7 @@ export default function Chatbot() {
         </div>
 
         {/* Input */}
-        <div className="bg-white border-t border-slate-200 px-6 py-4 shrink-0">
+        <div className="bg-white border-t border-slate-200 px-3 sm:px-6 py-4 shrink-0">
           <div className="flex items-end gap-3">
             <textarea
               ref={inputRef}
