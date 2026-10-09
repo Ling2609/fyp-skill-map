@@ -31,13 +31,16 @@ const getGreeting = () => {
 const pct = (share) => `${Math.round(share * 100)}%`
 const listAnd = (items) => items.length < 2 ? items.join('') : `${items.slice(0, -1).join(', ')} and ${items.at(-1)}`
 
+// Card title on white with a clear line under it and a stronger title (9 Oct, her review: a grey band matched the
+// page, a blue band read as "selected" like the active sidebar item); the action ("View all") sits on the subtitle
+// line (items-end)
 function Card({ title, sub, action, className = '', children }) {
   return (
     <section className={`bg-white rounded-2xl border border-slate-200 shadow-sm flex flex-col min-h-0 ${className}`}>
       {title && (
-        <div className="shrink-0 flex items-baseline justify-between gap-3 px-6 pt-4 pb-3 mb-1 bg-slate-50 border-b border-slate-200 rounded-t-2xl">
+        <div className="shrink-0 flex items-end justify-between gap-3 px-6 pt-4 pb-3 mb-1 border-b border-slate-200">
           <div className="min-w-0">
-            <h2 className="text-sm font-semibold text-slate-800">{title}</h2>
+            <h2 className="text-base font-semibold text-slate-900">{title}</h2>
             {sub && <p className="text-xs text-slate-500 mt-0.5">{sub}</p>}
           </div>
           {action}

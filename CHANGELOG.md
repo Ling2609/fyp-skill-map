@@ -9,7 +9,8 @@ Planning, reasoning and research behind each decision are in the project roadmap
   - No goal: the 5 job categories that fit best (was 3; at most ~6 radio buttons, more go in a drop-down), and the
     goal drop-down lists every category best fit first with its fit ("Testing & Quality Assurance · 5 of 10 skills").
   - "Your skills employers want most" shows up to 10 (the card fills; the rest scroll).
-  - Card titles on a light grey band with a line under them; darker lines between rows.
+  - Card titles larger on white with a clear line under them (a grey band matched the page; a blue band looked
+    "selected"); "View all" on the subtitle line; darker lines between rows.
   - 10 of 10: "You have every skill on this list. Well done!" and "See the N jobs and apply".
   - Under "Still to learn": a skill counts once a project, certificate or grade in My Profile shows it (the ticks
     only choose what to plan).
