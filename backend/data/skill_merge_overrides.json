@@ -710,10 +710,6 @@
    "Endpoint security"
   ],
   [
-   "Inventory management",
-   "Inventory Control"
-  ],
-  [
    "Network troubleshooting",
    "Networking troubleshooting"
   ],
@@ -822,10 +818,6 @@
    "Website performance"
   ],
   [
-   "Automation",
-   "Process automation"
-  ],
-  [
    "Java",
    "Java 8"
   ],
@@ -886,14 +878,6 @@
    "CSS3"
   ],
   [
-   "Software development",
-   "Software programming"
-  ],
-  [
-   "ETL",
-   "ETL/ELT"
-  ],
-  [
    "Workflow automation",
    "Process automation"
   ],
@@ -924,14 +908,6 @@
   [
    "Full stack web development",
    "full-stack development"
-  ],
-  [
-   "Usability evaluation",
-   "Usability testing"
-  ],
-  [
-   "Team management",
-   "team leadership"
   ],
   [
    "Team Leading",
@@ -974,6 +950,30 @@
   [
    "SbE",
    "Specification by Example"
+  ],
+  [
+   "Inventory management",
+   "Inventory Control"
+  ],
+  [
+   "Automation",
+   "Process automation"
+  ],
+  [
+   "Software development",
+   "Software programming"
+  ],
+  [
+   "ETL",
+   "ETL/ELT"
+  ],
+  [
+   "Usability evaluation",
+   "Usability testing"
+  ],
+  [
+   "Team management",
+   "team leadership"
   ]
  ]
 }

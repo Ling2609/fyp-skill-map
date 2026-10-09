@@ -13,7 +13,8 @@ Only names in use matter (in a live job, a module or a student's profile), most 
 Method, as for the abbreviations (find_abbreviations.py): two judges from different model families, gpt-oss-120b and
 Qwen (both via Groq), label each pair with the label guide's rules (docs/skill_relation_label_guide.md, rule 2: spelling,
 abbreviation, filler words and versions are the same skill; rules 3-7: tool/area, part/field, broader/narrower, related,
-look-alike = different). A pair is merged only if BOTH say "same". The author then checks a blind sample.
+look-alike = different). A pair is merged only if BOTH say "same". The author then checks a blind sample;
+"disagree" or "unsure" stops the merge (label guide rule 1: when unsure, the cautious label).
 
 Files: data/skill_merge_review.csv (one row per pair, both answers, a `decision` column the author may fill to overrule:
 same / different), data/skill_merge_review_sample.csv (blind sample). --apply writes the merged pairs into
@@ -259,14 +260,15 @@ def sample(n):
     out["author_check"] = ""
     out.to_csv(SAMPLE_CSV, index=False, encoding="utf-8")
     print(f"Wrote {len(out)} of {len(pool)} pairs to {SAMPLE_CSV} (no judge answers shown). "
-          "Fill author_check: agree / disagree / unsure (agree = the same skill).")
+          "Fill author_check: agree / disagree / unsure (agree = the same skill; disagree or unsure = not merged).")
 
 
 def apply():
     df = pd.read_csv(REVIEW_CSV, dtype=str).fillna("")
-    if os.path.exists(SAMPLE_CSV):                        # a pair the author disagreed with is never merged
+    if os.path.exists(SAMPLE_CSV):     # disagree or unsure: never merged (label guide rule 1, cautious when unsure)
         s = pd.read_csv(SAMPLE_CSV, dtype=str).fillna("")
-        for r in s[s.author_check.str.lower().str.startswith("dis")].itertuples():
+        check = s.author_check.str.strip().str.lower()
+        for r in s[check.str.startswith("dis") | check.str.startswith("uns")].itertuples():
             df.loc[(df.a == r.a) & (df.b == r.b), "decision"] = "different"
         df.to_csv(REVIEW_CSV, index=False, encoding="utf-8")
     data = json.load(open(OVERRIDES, encoding="utf-8"))

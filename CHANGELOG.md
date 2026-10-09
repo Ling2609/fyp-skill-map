@@ -3,6 +3,22 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 9 Oct 2026 — Skill-name merges after the re-extraction: 79 added, 6 refused
+
+- (this commit) Results of review_skill_merges.py on her data (evidence for the report):
+  - decide_skill_merges.py: 418 new close pairs since the re-extraction; 126 "same", 47 confirmed by --verify.
+  - review_skill_merges.py: 600 further pairs in use (78 disputed, 297 near, 225 plus one word); both judges
+    (gpt-oss-120b, Qwen) said "same" for 85; they disagreed on 72 (not merged).
+  - Blind sample of 20 of the 85: author 16 agree, 4 unsure, 0 disagree. Second reading of the same 20 by Claude
+    (a third model, not the author): 18 agree, 2 disagree (ETL / ETL/ELT; Automation / Process automation: one is
+    broader, label guide rule 3).
+  - Kept apart ("different"), by label guide rules 1, 3 and 4, after reading all 85: ETL / ETL/ELT, Automation /
+    Process automation, Software development / Software programming (would also have joined "Software development"
+    with "Coding"), Team management / team leadership, Usability evaluation / Usability testing, Inventory management /
+    Inventory Control. 79 merges stay, including CI/CD / CI/CD pipelines.
+  - Largest merged group: 6 names (the automation-workflow group); no generic skill joins a whole area.
+- review_skill_merges.py: "unsure" in the author's sample now stops a merge, like "disagree" (label guide rule 1).
+
 ## 9 Oct 2026 — Review script for skill-name duplicates the merge step missed
 
 - (this commit) `scripts/pipeline/review_skill_merges.py`: after the Stage 1 re-extraction students saw the same skill
