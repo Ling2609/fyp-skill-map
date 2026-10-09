@@ -3,6 +3,20 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 9 Oct 2026 — Fuller Dashboard cards; narrower sidebar
+
+- (this commit) Her review of b060ac1 on her own data:
+  - No goal: the 5 job categories that fit best (was 3; at most ~6 radio buttons, more go in a drop-down), and the
+    goal drop-down lists every category best fit first with its fit ("Testing & Quality Assurance · 5 of 10 skills").
+  - "Your skills employers want most" shows up to 10 (the card fills; the rest scroll).
+  - Card titles on a light grey band with a line under them; darker lines between rows.
+  - 10 of 10: "You have every skill on this list. Well done!" and "See the N jobs and apply".
+  - Under "Still to learn": a skill counts once a project, certificate or grade in My Profile shows it (the ticks
+    only choose what to plan).
+  - Goal drop-down wider, so long category names aren't cut.
+  - Sidebar 224px → 192px (empty space after the labels). The admin link "Academic structure" is now "Academics" so
+    it still fits beside its badge (the page title is unchanged).
+
 ## 9 Oct 2026 — Career goal; one-screen Dashboard
 
 - (this commit) **Career goal** (`users.target_category`, a JobStreet ICT job category; empty = "Open to all ICT

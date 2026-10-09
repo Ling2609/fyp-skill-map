@@ -345,8 +345,8 @@ def recommend_jobs(
 # Research: references.md "Dashboard redesign and career goal" (goal-gradient effect; Handshake onboarding).
 
 GOAL_TOP = 10              # "You have 7 of the 10 skills these jobs ask for most"
-WANTED_SHOWN = 4           # "Your skills employers want most"
-BEST_FIT_SHOWN = 3         # no goal: the categories her skills fit best
+WANTED_SHOWN = 10          # "Your skills employers want most" (the card shows what fits, the rest scroll)
+BEST_FIT_SHOWN = 5         # no goal: radios for the 5 best fits (at most ~6 radios; the goal drop-down has the rest)
 MIN_CATEGORY_JOBS = 3      # a category needs a few live jobs before it is offered as a best fit
 ASKED_TIERS = ("core", "bonus")   # required and preferred skills; not soft, "trained on the job" or plain duties
 
@@ -441,7 +441,8 @@ def goal_summary(db: Session = Depends(get_db), current_user: User = Depends(get
                 best_fit.append({"category": cat["name"], "jobs": cat["jobs"],
                                  "have": sum(r["has"] for r in ready), "of": len(ready)})
         best_fit.sort(key=lambda b: (-b["have"] / b["of"], -b["jobs"]))
-        best_fit = best_fit[:BEST_FIT_SHOWN]
+        # Every category with enough jobs, best first: the first BEST_FIT_SHOWN are the radios, and the goal
+        # drop-down lists them all in this order with their fit
 
     out = {
         "goal": goal,
@@ -451,6 +452,7 @@ def goal_summary(db: Session = Depends(get_db), current_user: User = Depends(get
         "readiness": _readiness(scope, grad, spellings, spelling_keys, owner) if goal else [],
         "wanted": _wanted(scope, profile, grad, spellings, spelling_keys, owner),
         "best_fit": best_fit,
+        "best_fit_shown": BEST_FIT_SHOWN,
     }
     print(f"[goal] {time.perf_counter() - started:.2f} s for user {current_user.id}")
     return out

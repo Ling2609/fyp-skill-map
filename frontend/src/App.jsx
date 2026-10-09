@@ -48,9 +48,9 @@ function Layout({ children }) {
   return (
     <div className="flex min-h-screen bg-slate-100">
       <Sidebar />
-      {/* Same width classes and timing as the sidebar (w-14 / w-56, 200 ms); 64px left an 8px gap when collapsed */}
+      {/* Same width classes and timing as the sidebar (w-14 / w-48, 200 ms; 192px since 9 Oct, was 224px with empty space after the labels); 64px left an 8px gap when collapsed */}
       <main
-        className={`flex-1 min-h-screen min-w-0 overflow-x-hidden transition-all duration-200 ${collapsed ? 'ml-14' : 'ml-56'}`}
+        className={`flex-1 min-h-screen min-w-0 overflow-x-hidden transition-all duration-200 ${collapsed ? 'ml-14' : 'ml-48'}`}
       >
         {children}
       </main>

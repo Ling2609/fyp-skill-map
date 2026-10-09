@@ -62,7 +62,7 @@ const ADMIN_ITEMS = [
   },
   {
     to: '/admin/academic',
-    label: 'Academic structure',
+    label: 'Academics',          // page title "Academic structure"; the full name doesn't fit the 192px sidebar with its badge
     badge: 'modules_to_review',
     badgeLabel: 'to review',
     icon: (
@@ -122,7 +122,7 @@ export default function Sidebar() {
   const initials = ((user?.first_name?.[0] || '') + (user?.last_name?.[0] || '')).toUpperCase() || '?'
 
   return (
-    <div className={`${collapsed ? 'w-14' : 'w-56'} bg-white border-r border-slate-200 flex flex-col h-screen fixed left-0 top-0 z-10 transition-all duration-200`}>
+    <div className={`${collapsed ? 'w-14' : 'w-48'} bg-white border-r border-slate-200 flex flex-col h-screen fixed left-0 top-0 z-10 transition-all duration-200`}>
 
       {/* Logo + collapse */}
       <div className="px-3 py-4 border-b border-slate-100 flex items-center justify-between min-h-15">

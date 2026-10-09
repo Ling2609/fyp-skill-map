@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import api from '../../api'
 import { cached, ALL_MATCHES } from '../../pageCache'
 import { useAuth } from '../../context/useAuth'
@@ -35,7 +35,7 @@ function Card({ title, sub, action, className = '', children }) {
   return (
     <section className={`bg-white rounded-2xl border border-slate-200 shadow-sm flex flex-col min-h-0 ${className}`}>
       {title && (
-        <div className="shrink-0 flex items-baseline justify-between gap-3 px-6 pt-5 pb-2">
+        <div className="shrink-0 flex items-baseline justify-between gap-3 px-6 pt-4 pb-3 mb-1 bg-slate-50 border-b border-slate-200 rounded-t-2xl">
           <div className="min-w-0">
             <h2 className="text-sm font-semibold text-slate-800">{title}</h2>
             {sub && <p className="text-xs text-slate-500 mt-0.5">{sub}</p>}
@@ -49,14 +49,20 @@ function Card({ title, sub, action, className = '', children }) {
 }
 
 // The goal drop-down at the top of the goal card: changing it saves straight away
-function GoalPicker({ goal, categories, busy, onChange }) {
+function GoalPicker({ goal, categories, fit, busy, onChange }) {
+  // No goal yet: every category, best fit first, each with how many of its top skills she has (9 Oct, her review:
+  // the 5 radios are only the best fits, so the drop-down shows the full choice in the same order)
+  const fitOf = Object.fromEntries((fit || []).map(b => [b.category, b]))
+  const ordered = fit ? [...(fit.map(b => categories.find(c => c.name === b.category)).filter(Boolean)),
+    ...categories.filter(c => !fitOf[c.name])] : categories
+  const label = (c) => fitOf[c.name] ? `${c.name} · ${fitOf[c.name].have} of ${fitOf[c.name].of} skills` : `${c.name} (${c.jobs})`
   return (
     <label className="flex flex-wrap items-center gap-2 text-sm text-slate-500">
       Your goal
       <select value={goal || ''} disabled={busy} onChange={e => onChange(e.target.value || null)}
-        className="text-sm font-semibold text-slate-900 bg-white border border-slate-300 rounded-lg pl-3 py-1.5 max-w-full sm:max-w-xs min-w-0 focus:outline-none focus:ring-2 focus:ring-blue-500">
+        className="text-sm font-semibold text-slate-900 bg-white border border-slate-300 rounded-lg pl-3 py-1.5 max-w-full sm:max-w-md min-w-0 focus:outline-none focus:ring-2 focus:ring-blue-500">
         <option value="">Open to all ICT roles</option>
-        {categories.map(c => <option key={c.name} value={c.name}>{c.name} ({c.jobs})</option>)}
+        {ordered.map(c => <option key={c.name} value={c.name}>{label(c)}</option>)}
       </select>
     </label>
   )
@@ -101,7 +107,7 @@ function GoalCard({ data, busy, onGoal, onPlan, onJobs }) {
             {/* pr-3: the % keeps a little space from the scroll bar */}
             <ul className="mt-1 min-h-0 lg:overflow-y-auto pr-3">
               {missing.map((r, i) => (
-                <li key={r.skill} className="border-t border-slate-100 first:border-t-0">
+                <li key={r.skill} className="border-t border-slate-200 first:border-t-0">
                   <label className="flex items-center gap-3 py-2 cursor-pointer">
                     <input type="checkbox" checked={picked.includes(r.skill)} onChange={() => toggle(r.skill)} className="w-4 h-4 accent-blue-700" />
                     <span className="flex-1 text-sm text-slate-800">{skillName(r.skill)}</span>
@@ -110,6 +116,17 @@ function GoalCard({ data, busy, onGoal, onPlan, onJobs }) {
                 </li>
               ))}
             </ul>
+            {/* The ticks only choose what to plan; a skill counts once the profile shows it */}
+            <p className="shrink-0 text-xs text-slate-500 mt-2">
+              Learnt one? Add the project, certificate or grade that shows it in <Link to="/profile" className="text-blue-700 hover:underline">My Profile</Link> and it counts here.
+            </p>
+          </div>
+        )}
+        {/* All of them: celebrate, then the next step is applying (Atlassian: celebrate, then point to next steps) */}
+        {total > 0 && missing.length === 0 && (
+          <div className="mt-5 rounded-xl border border-emerald-200 bg-emerald-50 px-5 py-4">
+            <p className="text-base font-semibold text-emerald-900">You have every skill on this list. Well done!</p>
+            <p className="text-sm text-emerald-800 mt-1">These are the skills {data.goal} jobs ask for most, so you're ready to apply. Keep adding projects and certificates to stand out.</p>
           </div>
         )}
         <div className="mt-auto pt-5 flex flex-wrap items-center gap-2">
@@ -120,8 +137,8 @@ function GoalCard({ data, busy, onGoal, onPlan, onJobs }) {
             </button>
           )}
           <button type="button" onClick={onJobs}
-            className="text-sm font-medium px-4 py-2 rounded-xl border border-slate-200 bg-white text-slate-700 hover:border-blue-300 hover:text-blue-700 transition">
-            See the {data.jobs} {data.jobs === 1 ? 'job' : 'jobs'}
+            className={`text-sm font-medium px-4 py-2 rounded-xl transition ${missing.length ? 'border border-slate-200 bg-white text-slate-700 hover:border-blue-300 hover:text-blue-700' : 'bg-blue-700 text-white hover:bg-blue-800'}`}>
+            See the {data.jobs} {data.jobs === 1 ? 'job' : 'jobs'}{missing.length ? '' : ' and apply'}
           </button>
         </div>
       </div>
@@ -130,19 +147,20 @@ function GoalCard({ data, busy, onGoal, onPlan, onJobs }) {
 }
 
 function NoGoalCard({ data, busy, onGoal, onCounsellor }) {
-  const [choice, setChoice] = useState(data.best_fit[0]?.category || '')
+  const shown = data.best_fit.slice(0, data.best_fit_shown || 5)
+  const [choice, setChoice] = useState(shown[0]?.category || '')
   return (
     <Card className="lg:flex-1">
       <div className="px-5 sm:px-7 pt-6 pb-6 flex flex-col flex-1 min-h-0">
-        <GoalPicker goal={null} categories={data.categories} busy={busy} onChange={onGoal} />
+        <GoalPicker goal={null} categories={data.categories} fit={data.best_fit} busy={busy} onChange={onGoal} />
         <p className="text-2xl font-semibold tracking-tight text-slate-900 mt-5 leading-tight">
           Not sure which role fits you yet?<br /><span className="text-slate-400">That's normal.</span>
         </p>
         {data.best_fit.length > 0 ? (
           <>
-            <p className="text-sm text-slate-500 mt-2">These job categories fit your skills best. Pick one to see how close you are.</p>
+            <p className="text-sm text-slate-500 mt-2">These job categories fit your skills best. Pick one to see how close you are, or choose any other from the list above.</p>
             <div role="radiogroup" aria-label="Job categories" className="mt-4 grid gap-2 min-h-0 lg:overflow-y-auto">
-              {data.best_fit.map(b => (
+              {shown.map(b => (
                 <label key={b.category} className={`flex items-center gap-3 border rounded-xl px-4 py-2.5 cursor-pointer transition ${
                   choice === b.category ? 'border-blue-600 bg-blue-50' : 'border-slate-200 hover:border-blue-300'}`}>
                   <input type="radio" name="best-fit" checked={choice === b.category} onChange={() => setChoice(b.category)} className="accent-blue-700" />
@@ -256,7 +274,7 @@ export default function Dashboard() {
   // The counsellor chat opens with this message in the box, not sent: she can change it first (9 Oct)
   const counsellor = () => {
     const strong = (goalData?.wanted || []).slice(0, 3).map(w => skillName(w.skill))
-    const fits = (goalData?.best_fit || []).map(b => b.category)
+    const fits = (goalData?.best_fit || []).slice(0, 3).map(b => b.category)
     const ask = "I'm not sure which ICT role suits me."
       + (strong.length ? ` My strongest skills are ${listAnd(strong)}` : '')
       + (fits.length ? `${strong.length ? ', and' : ''} the job categories that fit me best are ${listAnd(fits)}.` : strong.length ? '.' : '')
@@ -314,7 +332,7 @@ export default function Dashboard() {
                   {matches === null ? <p className="text-sm text-slate-400 py-3">Loading…</p>
                     : !matches.length ? <p className="text-sm text-slate-500 py-3">No current openings here yet. Try another goal, or check back after the next job update.</p>
                     : (
-                      <ul className="divide-y divide-slate-100">
+                      <ul className="divide-y divide-slate-200">
                         {matches.slice(0, 6).map(job => (
                           <li key={job.job_id}>
                             <button type="button" onClick={() => navigate(`/jobs/${encodeURIComponent(job.job_id)}`, { state: { from: 'Dashboard' } })}
@@ -339,7 +357,7 @@ export default function Dashboard() {
               <Card title="Your skills employers want most" sub={`Share of ${goalData.goal ? 'these' : 'all live'} jobs asking for each`} className="lg:flex-1 min-h-56">
                 <div className="pl-6 pr-3 pb-4 min-h-0 lg:overflow-y-auto">
                   {!goalData.wanted.length ? <p className="text-sm text-slate-500 py-3">None of your skills appear in these jobs yet.</p> : (
-                    <ul className="divide-y divide-slate-100">
+                    <ul className="divide-y divide-slate-200">
                       {goalData.wanted.map(w => (
                         <li key={w.skill} className="flex items-center justify-between gap-3 py-3">
                           <span className="text-sm text-slate-800 truncate">{skillName(w.skill)}</span>
