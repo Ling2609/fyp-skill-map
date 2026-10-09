@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import Markdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import api from '../../api'
+import { Bar, LoadingLabel } from '../../components/Skeleton'
 import { cached, ALL_MATCHES } from '../../pageCache'
 import PageHeader from '../../components/PageHeader'
 
@@ -140,6 +141,7 @@ export default function Chatbot() {
   const [sessionId, setSessionId] = useState(null)
   const sessionRef = useRef(null)
   const [sessions, setSessions] = useState([])
+  const [sessionsLoaded, setSessionsLoaded] = useState(false)   // false: show grey rows, not "Your chats will be saved here"
   const [historyNote, setHistoryNote] = useState('')    // why the list can't be shown (MongoDB off)
   const [confirmDelete, setConfirmDelete] = useState(null)
   // The list can be folded away for more room (her request, 6 Oct); remembered on this browser
@@ -179,6 +181,7 @@ export default function Chatbot() {
         if (!cancelled) setHistoryNote(err.response?.status === 503
           ? 'Chat history is off: MongoDB is not running, so chats are not saved.' : "Couldn't load your past chats.")
       })
+      .finally(() => { if (!cancelled) setSessionsLoaded(true) })
     return () => { cancelled = true }
   }, [])
 
@@ -433,7 +436,13 @@ export default function Chatbot() {
           </div>
           <nav className="flex-1 overflow-y-auto px-2 pb-3" aria-label="Past chats">
             {historyNote && <p className="text-[11px] text-amber-700 bg-amber-50 rounded-md px-2 py-1.5 mx-1 mb-2">{historyNote}</p>}
-            {!historyNote && !sessions.length && (
+            {!sessionsLoaded && (
+              <div className="space-y-2.5 px-2 pt-2" aria-busy="true">
+                <LoadingLabel>Loading your past chats…</LoadingLabel>
+                {['w-3/4', 'w-full', 'w-2/3', 'w-5/6'].map((w, i) => <Bar key={i} className={`h-3 ${w}`} />)}
+              </div>
+            )}
+            {sessionsLoaded && !historyNote && !sessions.length && (
               <p className="text-[11px] text-slate-400 px-2">Your chats will be saved here.</p>
             )}
             {groups.map(([label, list]) => (

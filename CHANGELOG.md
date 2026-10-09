@@ -3,6 +3,19 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 9 Oct 2026 — Loading screens in the shape of each page
+
+- (this commit) Her review: an empty box or a lone spinner "doesn't look nice". While a page loads it now shows grey
+  bars in the shape of its real layout, so nothing jumps when the content arrives (NN/g, skeleton screens; the pulse
+  stops for anyone who turns on reduced motion). New `components/Skeleton.jsx` (Bar, RowSkeleton, LoadingLabel for
+  screen readers).
+  - Dashboard: goal card, both right-hand cards, Continue a chat; the Top job matches list while it loads.
+  - My Profile: header, tabs and list; the Modules tab: year buttons and module rows with a grade box.
+  - Job Matches: header, search bar, filter buttons and job cards on first load. A search keeps its step text and %
+    (it can take over 10 s, when a progress indicator is the better choice) with job cards underneath.
+  - AI Assistant: grey rows in the past-chats list (it used to say "Your chats will be saved here" while loading).
+- Removed `frontend/App.jsx`, a stray copy of `frontend/src/App.jsx` added by mistake in 0b08dc1 (never used).
+
 ## 9 Oct 2026 — Fuller Dashboard cards; narrower sidebar
 
 - (this commit) Her review of b060ac1 on her own data:

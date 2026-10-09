@@ -4,6 +4,7 @@ import { useAuth } from '../../context/useAuth'
 import { cached, peek } from '../../pageCache'
 import PageHeader from '../../components/PageHeader'
 import LevelTag from '../../components/LevelTag'
+import { Bar, LoadingLabel } from '../../components/Skeleton'
 import { skillName } from '../../skillName'
 
 const LOADING_STEPS = [
@@ -202,9 +203,20 @@ export default function Recommend() {
     navigate(`/jobs/${encodeURIComponent(jobId)}`, { state: { from: 'Job Matches' } })
   }
 
+  // First load (checking the profile): the page's own header and a few job cards in grey bars (9 Oct)
   if (skillCount === null) return (
-    <div className="h-screen bg-slate-50 flex items-center justify-center">
-      <div className="w-5 h-5 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
+    <div className="h-screen bg-slate-50 flex flex-col" aria-busy="true">
+      <LoadingLabel>Loading your job matches…</LoadingLabel>
+      <PageHeader>
+        <div className="pt-1 pb-4">
+          <p className="text-[11px] font-semibold text-blue-600 uppercase tracking-widest mb-2">Job Matches</p>
+          <h1 className="text-2xl font-semibold tracking-tight text-slate-900">Explore Your Career Fit</h1>
+          <Bar className="h-3.5 w-72 mt-2" />
+          <Bar className="h-11 w-full rounded-xl mt-4" />
+          <div className="flex gap-2 mt-3">{['w-28', 'w-36', 'w-36'].map((w, i) => <Bar key={i} className={`h-9 ${w} rounded-full`} />)}</div>
+        </div>
+      </PageHeader>
+      <div className="flex-1 overflow-hidden px-8 py-4"><JobCardsSkeleton /></div>
     </div>
   )
 
@@ -394,7 +406,8 @@ export default function Recommend() {
 
       <div ref={listRef} className="flex-1 overflow-auto px-8 py-4">
         {loading && (
-          <div className="flex flex-col items-center justify-center py-20 gap-4">
+          <>
+          <div className="flex flex-col items-center justify-center pt-6 pb-5 gap-4">
             <div className="w-full max-w-xs">
               <div className="flex justify-between text-xs mb-2">
                 <span className="text-slate-500">{LOADING_STEPS[loadingStep]}</span>
@@ -405,6 +418,10 @@ export default function Recommend() {
               </div>
             </div>
           </div>
+          {/* A search can take over 10 s, so the step text and % stay (NN/g: progress bar beyond ~10 s); the cards
+              below show where the results will appear */}
+          <JobCardsSkeleton />
+          </>
         )}
 
         {error && !loading && (
@@ -529,5 +546,25 @@ function FilterButton({ label, display, active, value, onChange, onClear, childr
           className="pr-3 pl-1 py-1.5 text-blue-500 hover:text-blue-800">✕</button>
       )}
     </span>
+  )
+}
+
+// Job cards in grey bars: the same card shape as the results (accent bar, title, company line, pill, tags)
+function JobCardsSkeleton({ count = 5 }) {
+  return (
+    <div className="space-y-2.5" aria-hidden="true">
+      {[...Array(count)].map((_, i) => (
+        <div key={i} className="bg-white rounded-xl border border-slate-200 overflow-hidden flex">
+          <div className="w-1 shrink-0 bg-slate-200" />
+          <div className="flex-1 px-4 py-3.5 space-y-2.5">
+            <div className="flex items-center justify-between gap-3">
+              <div className="space-y-2 flex-1"><Bar className="h-3.5 w-2/5" /><Bar className="h-3 w-1/3" /></div>
+              <Bar className="h-6 w-20 rounded-full" />
+            </div>
+            <div className="flex gap-1.5">{['w-24', 'w-14', 'w-16', 'w-20'].map((w, k) => <Bar key={k} className={`h-5 ${w}`} />)}</div>
+          </div>
+        </div>
+      ))}
+    </div>
   )
 }

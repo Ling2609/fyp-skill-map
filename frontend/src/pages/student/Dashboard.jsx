@@ -5,6 +5,7 @@ import { cached, ALL_MATCHES } from '../../pageCache'
 import { useAuth } from '../../context/useAuth'
 import PageHeader from '../../components/PageHeader'
 import LevelTag from '../../components/LevelTag'
+import { Bar, RowSkeleton, LoadingLabel } from '../../components/Skeleton'
 import { skillName } from '../../skillName'
 
 // Dashboard (9 Oct redesign, her choice after the "Dashboard on One Screen" mock-ups). A dashboard tells the student
@@ -191,6 +192,33 @@ function NoGoalCard({ data, busy, onGoal, onCounsellor }) {
   )
 }
 
+// While the Dashboard loads: the same two columns and cards, grey bars where the text goes (9 Oct)
+function DashboardSkeleton() {
+  const side = (rows) => (
+    <section className="bg-white rounded-2xl border border-slate-200 shadow-sm flex flex-col lg:flex-1 min-h-56 overflow-hidden">
+      <div className="px-6 pt-4 pb-3 border-b border-slate-200 space-y-2"><Bar className="h-4 w-36" /><Bar className="h-3 w-52" /></div>
+      <div className="px-6 divide-y divide-slate-100">{[...Array(rows)].map((_, i) => <RowSkeleton key={i} />)}</div>
+    </section>
+  )
+  return (
+    <div className="grid lg:grid-cols-[1.3fr_1fr] gap-5 lg:h-full" aria-busy="true">
+      <LoadingLabel>Loading your dashboard…</LoadingLabel>
+      <div className="flex flex-col gap-5 min-h-0">
+        <section className="bg-white rounded-2xl border border-slate-200 shadow-sm lg:flex-1 px-5 sm:px-7 pt-6 pb-6 flex flex-col">
+          <div className="flex items-center gap-2"><Bar className="h-3.5 w-16" /><Bar className="h-8 w-64 rounded-lg" /></div>
+          <div className="flex items-end gap-5 mt-5"><Bar className="h-12 w-24" /><div className="space-y-2 pb-1"><Bar className="h-5 w-64" /><Bar className="h-3.5 w-48" /></div></div>
+          <div className="grid grid-cols-10 gap-1.5 mt-4">{[...Array(10)].map((_, i) => <Bar key={i} className="h-3" />)}</div>
+          <div className="flex gap-1.5 mt-4">{['w-20', 'w-24', 'w-16', 'w-18'].map(w => <Bar key={w} className={`h-6 ${w} rounded-full`} />)}</div>
+          <div className="mt-5 space-y-3">{[...Array(4)].map((_, i) => <div key={i} className="flex items-center gap-3"><Bar className="h-4 w-4 rounded" /><Bar className="h-3.5 w-40" /></div>)}</div>
+          <div className="mt-auto pt-5 flex gap-2"><Bar className="h-9 w-48 rounded-xl" /><Bar className="h-9 w-32 rounded-xl" /></div>
+        </section>
+        <section className="bg-white rounded-2xl border border-slate-200 shadow-sm px-6 py-4 shrink-0"><Bar className="h-4 w-64" /></section>
+      </div>
+      <div className="flex flex-col gap-5 min-h-0">{side(4)}{side(4)}</div>
+    </div>
+  )
+}
+
 // No modules, projects, certificates or awards yet: one clear way forward, not empty cards (NN/g, empty states)
 function StartCard({ onGo }) {
   const steps = [
@@ -303,9 +331,7 @@ export default function Dashboard() {
         {loadError && <p role="alert" className="text-sm text-rose-600 bg-rose-50 rounded-lg px-4 py-3 mb-4">{loadError}</p>}
 
         {emptyProfile ? <StartCard onGo={(tab) => navigate(`/profile?tab=${tab}`)} /> : !goalData ? (
-          <div className="grid lg:grid-cols-[1.3fr_1fr] gap-5 lg:h-full" aria-busy="true">
-            {[0, 1].map(i => <div key={i} className="bg-white rounded-2xl border border-slate-200 animate-pulse min-h-64" />)}
-          </div>
+          <DashboardSkeleton />
         ) : (
           <div className="grid lg:grid-cols-[1.3fr_1fr] gap-5 lg:h-full">
             <div className="flex flex-col gap-5 min-h-0 min-w-0">
@@ -332,7 +358,7 @@ export default function Dashboard() {
               <Card title="Top job matches" sub={`${scope} · best fit first`} className="lg:flex-1 min-h-56"
                 action={<button type="button" onClick={() => navigate('/recommend')} className="text-sm font-medium text-blue-700 hover:underline shrink-0">View all</button>}>
                 <div className="pl-6 pr-3 pb-4 min-h-0 lg:overflow-y-auto">
-                  {matches === null ? <p className="text-sm text-slate-400 py-3">Loading…</p>
+                  {matches === null ? <div className="divide-y divide-slate-100">{[...Array(4)].map((_, i) => <RowSkeleton key={i} />)}</div>
                     : !matches.length ? <p className="text-sm text-slate-500 py-3">No current openings here yet. Try another goal, or check back after the next job update.</p>
                     : (
                       <ul className="divide-y divide-slate-200">

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import api from '../../api'
 import { Spinner } from './profileParts'
+import { Bar, LoadingLabel } from '../../components/Skeleton'
 import { skillName } from '../../skillName'
 
 // Modules & grades: the year-by-year grid (4 Oct), shown straight in My Profile's Modules tab (9 Oct, her choice: no
@@ -111,9 +112,22 @@ export default function ModulesEditor({ onUnsavedChange, onSaved }) {
   // "Not graded yet" ('') clears a grade picked by mistake; only graded modules are saved (IR §1.6.1: completed modules)
   const setGrade = (code, grade) => setSelections(prev => ({ ...prev, [code]: grade === '' ? '' : parseFloat(grade) }))
 
+  // Loading: year buttons and module rows (name + grade box) in grey bars, the shape of the grid below (9 Oct)
   if (loading) return (
-    <div className="flex items-center justify-center py-24 gap-3 text-gray-400">
-      <Spinner /><span className="text-sm">Loading modules…</span>
+    <div aria-busy="true">
+      <LoadingLabel>Loading modules…</LoadingLabel>
+      <div className="flex gap-2 mb-4">{[0, 1, 2].map(i => <Bar key={i} className="h-10 w-20 rounded-xl" />)}</div>
+      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm">
+        <div className="px-6 py-4 border-b border-slate-200"><Bar className="h-4 w-48" /></div>
+        <div className="px-6 divide-y divide-slate-100">
+          {[...Array(6)].map((_, i) => (
+            <div key={i} className="flex items-center justify-between gap-4 py-3.5">
+              <div className="space-y-2"><Bar className="h-3.5 w-48" /><Bar className="h-3 w-20" /></div>
+              <Bar className="h-9 w-36 rounded-lg" />
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   )
 

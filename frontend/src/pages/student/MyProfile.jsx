@@ -3,11 +3,12 @@ import { useSearchParams } from 'react-router-dom'
 import api from '../../api'
 import PageHeader from '../../components/PageHeader'
 import { useAuth } from '../../context/useAuth'
-import { Modal, Spinner } from './profileParts'
+import { Modal } from './profileParts'
 import { ProfileForm, StudyForm } from './profileForms'
 import { softBtnCls } from './profileUtils'
 import { AwardsTab, CertsTab, ModulesTab, ProjectsTab } from './profileSections'
 import GithubImport from './GithubImport'
+import { Bar, RowSkeleton, LoadingLabel } from '../../components/Skeleton'
 
 // My Profile (9 Oct, her design): the page where a student puts things in. Four tabs, the four places her skills come
 // from: Modules, Projects, Certificates, Awards. What SkillMap works out from them (matches, skills to learn) is on the
@@ -68,7 +69,7 @@ export default function MyProfile() {
   const saved = () => { close(); load() }
 
   if (error && !data) return <div className="p-8"><p role="alert" className="text-sm text-red-600 bg-red-50 rounded-lg px-4 py-3">{error}</p></div>
-  if (!data) return <div className="p-8 flex items-center gap-3 text-sm text-slate-400"><Spinner />Loading your profile…</div>
+  if (!data) return <ProfileSkeleton />
 
   const count = { modules: data.module_count, projects: projects.length, certs: certs.length, awards: awards.length }
   const { links } = data
@@ -155,6 +156,31 @@ export default function MyProfile() {
         <GithubImport githubLink={links.github} onClose={close}
           onDone={(note) => { setImportNote(note); saved() }} />
       )}
+    </div>
+  )
+}
+
+// While My Profile loads: the real header shape (name, skill count, tabs) and a list panel, in grey bars (9 Oct)
+function ProfileSkeleton() {
+  return (
+    <div className="min-h-screen lg:h-screen bg-slate-50 flex flex-col" aria-busy="true">
+      <LoadingLabel>Loading your profile…</LoadingLabel>
+      <PageHeader>
+        <div className="pt-1 pb-4">
+          <p className="text-[11px] font-semibold text-blue-600 uppercase tracking-widest mb-2">My Profile</p>
+          <div className="flex items-center justify-between gap-3"><Bar className="h-7 w-56" /><Bar className="h-9 w-40 rounded-xl" /></div>
+          <div className="mt-3 flex items-center justify-between gap-6"><Bar className="h-4 w-80" /><Bar className="h-4 w-60" /></div>
+        </div>
+        <div className="flex gap-6 border-t border-slate-200 -mx-8 px-8 py-3.5">
+          {['w-20', 'w-20', 'w-24', 'w-16'].map((w, i) => <Bar key={i} className={`h-4 ${w}`} />)}
+        </div>
+      </PageHeader>
+      <div className="flex-1 min-h-0 px-8 py-6">
+        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm h-full">
+          <div className="px-6 py-4 border-b border-slate-200 flex items-center justify-between"><Bar className="h-4 w-44" /><Bar className="h-9 w-28 rounded-xl" /></div>
+          <div className="px-6 divide-y divide-slate-100">{[...Array(6)].map((_, i) => <RowSkeleton key={i} />)}</div>
+        </div>
+      </div>
     </div>
   )
 }
