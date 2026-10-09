@@ -31,10 +31,12 @@ export default function JobDetail() {
   const backLabel = location.state?.from || 'Job Matches'
   const goBack = () => (window.history.state?.idx > 0 ? navigate(-1) : navigate('/recommend'))
   // The chatbot's "Back to <job>" returns here on the same tab: remember it in this history entry first
-  const openChat = (skill, reason) => {
+  // The job's id goes too (E3, 9 Oct): the chatbot reads this job's skill gap itself (what she has, what is missing,
+  // the ad's words), so its plan uses the same numbers as this page. (The old &reason= was never read.)
+  const openChat = (skill) => {
     navigate(location.pathname, { replace: true, state: { ...location.state, tab: activeTab } })
     navigate(`/chatbot?skill=${encodeURIComponent(skill)}&job=${encodeURIComponent(gap?.job?.job_title || '')}`
-      + `&reason=${encodeURIComponent(reason)}`, { state: { fromJob: gap?.job?.job_title } })
+      + `&job_id=${encodeURIComponent(gap?.job?.job_id || '')}`, { state: { fromJob: gap?.job?.job_title } })
   }
   const [gap, setGap] = useState(() => peek('/skillgap/', { job_id: decodeURIComponent(jobId) }))
   const [loading, setLoading] = useState(() => !gap)
@@ -300,7 +302,7 @@ export default function JobDetail() {
                           )}
                         </span>
                         <button
-                          onClick={() => openChat(item.job_skill, item.gap_reason || '')}
+                          onClick={() => openChat(item.job_skill)}
                           className="text-xs text-blue-600 bg-blue-50 hover:bg-blue-100 px-2.5 py-1 rounded-full transition font-medium shrink-0"
                         >
                           Learn →
@@ -389,7 +391,7 @@ export default function JobDetail() {
                   ) : (
                     <button key={idx} type="button"
                       title={item.ad_quote ? `From the ad: “${item.ad_quote}” · Learn more` : 'Learn more'}
-                      onClick={() => openChat(item.job_skill, 'Nice to have for this job')}
+                      onClick={() => openChat(item.job_skill)}
                       className="inline-flex items-center gap-1 text-xs text-blue-700 bg-white border border-blue-200 hover:bg-blue-50 px-2.5 py-1 rounded-lg transition">
                       {skillName(item.job_skill)} <span aria-hidden="true">→</span>
                     </button>

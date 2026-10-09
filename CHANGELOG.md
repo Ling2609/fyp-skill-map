@@ -3,6 +3,20 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 9 Oct 2026 — AI Assistant grounded in the job's skill gap and the career goal (E3)
+
+- (this commit) "Learn →" on a job now passes the job's id (`job_id`), not only its title. The backend reads that
+  job's skill gap itself (`analyse_skill_gap`, the same numbers Job Detail shows) and gives the AI: the job and
+  company, "has X of N", the skills she already has for it and where from (module + grade, project, certificate),
+  the skills still missing, nice-to-haves, and the ad's own words about the skill she wants to learn. Every chat
+  also gets her career goal. A job that has gone, or an empty profile, just leaves those lines out.
+- The Skill Development prompt now builds on what she already has and suggests a project that covers other missing
+  skills too; it says whether the ad requires the skill or only lists it as nice to have.
+- A saved chat keeps the job id, so reopening it keeps the same grounding. The unused `&reason=` link part removed
+  (the chat page never read it).
+- The message box grows with its text (up to about 7 lines, then scrolls), with normal line spacing: the
+  counsellor's pre-typed question showed as one cut-off line with its own scroll bar. Send stays at the bottom.
+
 ## 9 Oct 2026 — Loading screens in the shape of each page
 
 - (this commit) Her review: an empty box or a lone spinner "doesn't look nice". While a page loads it now shows grey

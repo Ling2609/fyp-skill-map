@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from 'react'
+import { useState, useEffect, useLayoutEffect, useRef, useCallback } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import Markdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
@@ -124,6 +124,7 @@ export default function Chatbot() {
   const params = new URLSearchParams(location.search)
   const preloadSkill = params.get('skill')
   const preloadJob = params.get('job')
+  const preloadJobId = params.get('job_id')   // from "Learn →" on a job: the backend reads that job's skill gap (E3)
   // From the Dashboard's "Talk to the counsellor" (9 Oct): a first message written from her profile, put in the box
   // but NOT sent, so she can change it first
   const preloadAsk = params.get('ask')
@@ -134,6 +135,11 @@ export default function Chatbot() {
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
   const bottomRef = useRef(null)
+  // The message box grows with its text (up to INPUT_MAX px, then it scrolls), so a long question, e.g. the one the
+  // Dashboard's counsellor button types in, shows in full instead of one cut-off line (9 Oct, her review). Measured in
+  // JS: CSS field-sizing isn't in every browser (it failed on hers for the Job Matches sort, 3 Oct).
+  const inputRef = useRef(null)
+  const INPUT_MAX = 168   // about 7 lines
   const hasAutoSent = useRef(false)
   const askUsed = useRef(false)          // the counsellor's pre-filled question is offered once
 
@@ -155,7 +161,7 @@ export default function Chatbot() {
   const [chatKey, setChatKey] = useState(0)            // bumped to start or open a chat
   const pendingChat = useRef(null)                     // messages of a chat being opened
   // What the chat is about: from "Learn →" on a job, or from the saved chat being continued
-  const [chatCtx, setChatCtx] = useState({ target_skill: preloadSkill, job_title: preloadJob })
+  const [chatCtx, setChatCtx] = useState({ target_skill: preloadSkill, job_title: preloadJob, job_id: preloadJobId })
 
   const currentMode = MODES.find(m => m.key === mode)
 
@@ -185,6 +191,15 @@ export default function Chatbot() {
     return () => { cancelled = true }
   }, [])
 
+  useLayoutEffect(() => {
+    const el = inputRef.current
+    if (!el) return
+    el.style.height = 'auto'                                   // shrink first, so deleting text makes it smaller
+    const full = el.scrollHeight + el.offsetHeight - el.clientHeight   // + the border (scrollHeight leaves it out)
+    el.style.height = `${Math.min(full, INPUT_MAX)}px`
+    el.style.overflowY = full > INPUT_MAX ? 'auto' : 'hidden'  // a scroll bar only when it is really full
+  }, [input])
+
   const getContext = useCallback(async () => {
     const ctx = {}
     // The student's real skill profile (works even if Job Matches wasn't opened yet)
@@ -213,6 +228,7 @@ export default function Chatbot() {
     if (topJobs.current?.length) ctx.matched_jobs = topJobs.current
     if (chatCtx.job_title) ctx.job_title = chatCtx.job_title
     if (chatCtx.target_skill) ctx.target_skill = chatCtx.target_skill
+    if (chatCtx.job_id) ctx.job_id = chatCtx.job_id
     return ctx
   }, [chatCtx])
 
@@ -300,7 +316,7 @@ export default function Chatbot() {
     hasAutoSent.current = true          // never re-send "I want to learn X" in a new chat
     sessionRef.current = null
     setSessionId(null)
-    setChatCtx({ target_skill: null, job_title: null })
+    setChatCtx({ target_skill: null, job_title: null, job_id: null })
     setMode(newMode)
     setChatKey(k => k + 1)
   }
@@ -318,7 +334,8 @@ export default function Chatbot() {
       hasAutoSent.current = true
       sessionRef.current = id
       setSessionId(id)
-      setChatCtx({ target_skill: res.data.context?.target_skill || null, job_title: res.data.context?.job_title || null })
+      setChatCtx({ target_skill: res.data.context?.target_skill || null, job_title: res.data.context?.job_title || null,
+        job_id: res.data.context?.job_id || null })
       setMode(res.data.mode)
       setChatKey(k => k + 1)
     } catch {
@@ -490,16 +507,17 @@ export default function Chatbot() {
 
         {/* Input */}
         <div className="bg-white border-t border-slate-200 px-6 py-4 shrink-0">
-          <div className="flex gap-3">
+          <div className="flex items-end gap-3">
             <textarea
+              ref={inputRef}
               value={input}
               onChange={e => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
               placeholder={currentMode.placeholder}
               maxLength={4000}
               rows={1}
-              className="flex-1 resize-none rounded-xl border border-slate-200 px-4 py-3 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition leading-relaxed"
-              style={{ maxHeight: '120px', overflowY: 'auto' }}
+              className="flex-1 resize-none rounded-xl border border-slate-200 px-4 py-3 text-sm leading-5 text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              style={{ maxHeight: `${INPUT_MAX}px` }}
               disabled={loading}
             />
             <button

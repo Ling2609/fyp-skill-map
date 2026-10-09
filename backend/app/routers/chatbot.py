@@ -13,13 +13,17 @@ import uuid
 from datetime import datetime, timezone
 
 from fastapi import APIRouter, Depends, HTTPException, Response
+from sqlalchemy.orm import Session
 from pydantic import BaseModel, Field
 from pymongo.errors import PyMongoError
 from groq import Groq
 from app.config import settings
+from app.database import get_db
 from app.models.user import User
 from app.mongo import chat_sessions, history_ok
 from app.routers.auth import get_current_user
+from app.routers.skillgap import SkillGapRequest, analyse_skill_gap
+from app.services.showcase import grade_letter
 
 router = APIRouter(prefix="/chatbot", tags=["chatbot"])
 
@@ -60,6 +64,10 @@ Your role:
 - Suggest SPECIFIC free resources: exact Coursera courses, YouTube channels/playlists, official docs, freeCodeCamp tutorials
 - Estimate realistic time to learn (e.g., "2-3 weeks with 1 hour/day")
 - Show how the skill connects to the user's target job role
+- Build on what the user already has: when the context lists skills they already have for the job, start from those
+  (e.g. "you know Python, so...") and suggest one project that also covers other skills they are still missing
+- When the context quotes the job ad, use it to explain why the skill matters; say whether the ad requires it or
+  only lists it as nice to have
 - Keep responses focused — one skill at a time, actionable steps
 
 Format your responses with:
@@ -97,21 +105,65 @@ class ChatRequest(BaseModel):
     matched_jobs: list[dict] | None = None
     target_skill: str | None = None
     job_title: str | None = None
+    # "Learn →" on a job (E3, 9 Oct): the backend reads that job's skill gap itself, the same numbers Job Detail shows
+    job_id: str | None = Field(default=None, max_length=200)
     session_id: str | None = Field(default=None, max_length=64)   # continue a saved chat; None = start a new one
 
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
 
-def build_context_block(req: ChatRequest) -> str:
+def _evidence(m: dict) -> str:
+    """Where a matched skill comes from, in a few words: module + grade, project or certificate."""
+    where = m.get("matched_via_module") or ""          # "Python Programming", or "Project: SkillMap" etc.
+    if m.get("evidence_source") == "module":
+        letter = grade_letter(m.get("grade"))
+        return f"module {where}" + (f", grade {letter}" if letter else "")
+    return where
+
+
+def job_gap_lines(gap: dict, target_skill: str | None) -> list[str]:
+    """The job's skill gap (as on Job Detail) as context lines: what the student already has (with evidence), what
+    is still missing, nice to have, and the ad's own words about the skill being learnt."""
+    job = gap["job"]
+    lines = [f"Target job: {job['job_title']} at {job['company']}"
+             + (f" ({job['location']})" if job.get("location") else "")]
+    s = gap["summary"]
+    lines.append(f"Has {s['matched_skills']} of {s['job_skills_total']} "
+                 f"{'required' if s.get('coverage_basis') == 'required' else 'listed'} skills for this job")
+    if gap["matched_skills"]:
+        lines.append("Already has for this job: " + "; ".join(
+            f"{m['job_skill']} (from {_evidence(m)})" for m in gap["matched_skills"][:8]))
+    if gap["missing_skills"]:
+        lines.append("Still missing (required by the ad): " + ", ".join(m["job_skill"] for m in gap["missing_skills"][:10]))
+    nice = [n["job_skill"] for n in gap.get("nice_to_have", []) if not n["has"]]
+    if nice:
+        lines.append("Nice to have, not yet: " + ", ".join(nice[:6]))
+    if target_skill:
+        t = target_skill.lower()
+        for kind, rows in (("requires", gap["missing_skills"]), ("lists as nice to have", gap.get("nice_to_have", []))):
+            row = next((r for r in rows if r["job_skill"].lower() == t), None)
+            if row:
+                quote = row.get("ad_quote")
+                lines.append(f"The ad {kind} {row['job_skill']}" + (f': "{quote}"' if quote else ""))
+                break
+    return lines
+
+
+def build_context_block(req: ChatRequest, gap: dict | None = None, goal: str | None = None) -> str:
     lines = []
-    if req.job_title:
+    if gap:
+        lines += job_gap_lines(gap, req.target_skill)
+    elif req.job_title:
         lines.append(f"Target job: {req.job_title}")
+    if goal:
+        lines.append(f"Career goal (job category the user is working towards): {goal}")
     if req.user_skills:
         top = req.user_skills[:15]
         lines.append(f"User's skills ({len(req.user_skills)} total): {', '.join(top)}"
                      + (" ..." if len(req.user_skills) > 15 else ""))
     if req.missing_skills:
-        lines.append(f"Missing skills for target job: {', '.join(req.missing_skills[:10])}")
+        if not gap:   # with a job's gap the missing skills are already listed above
+            lines.append(f"Missing skills for target job: {', '.join(req.missing_skills[:10])}")
     if req.matched_jobs:
         top_jobs = [f"{j.get('job_title', '')} at {j.get('company', '')} ({j.get('match_percent', '')}% match)"
                     for j in req.matched_jobs[:3]]
@@ -175,7 +227,7 @@ def save_exchange(req: ChatRequest, user: User, reply: str) -> str | None:
         title = " ".join(question.split())
         col.insert_one({"_id": session_id, "user_id": user.id, "mode": req.mode,
                         "title": title[:TITLE_CHARS] + ("…" if len(title) > TITLE_CHARS else ""),
-                        "context": {"target_skill": req.target_skill, "job_title": req.job_title},
+                        "context": {"target_skill": req.target_skill, "job_title": req.job_title, "job_id": req.job_id},
                         "created_at": now, "updated_at": now, "messages": turn})
         return session_id
     except PyMongoError as e:
@@ -214,7 +266,7 @@ def delete_session(session_id: str, current_user: User = Depends(get_current_use
 
 
 @router.post("/")
-def chat(req: ChatRequest, current_user: User = Depends(get_current_user)):
+def chat(req: ChatRequest, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     if req.mode not in ("career_counsellor", "skill_development"):
         raise HTTPException(status_code=400, detail="mode must be 'career_counsellor' or 'skill_development'")
     if not req.messages:
@@ -227,7 +279,15 @@ def chat(req: ChatRequest, current_user: User = Depends(get_current_user)):
 
     groq_messages = [{"role": "system", "content": system_prompt}]
 
-    context = build_context_block(req)
+    # Grounded in the student's real data (E3): the job's skill gap when the chat came from a job, and the career goal.
+    # A job that is gone or a profile that is empty just leaves those lines out; the chat still works.
+    gap = None
+    if req.job_id:
+        try:
+            gap = analyse_skill_gap(SkillGapRequest(job_id=req.job_id), db, current_user)
+        except HTTPException:
+            gap = None
+    context = build_context_block(req, gap, current_user.target_category)
     if context:
         groq_messages.append({
             "role": "system",
