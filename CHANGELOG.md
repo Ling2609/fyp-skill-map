@@ -3,6 +3,26 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 10 Oct 2026 — Answer key: same skill under different names counted once
+
+- (this commit) Her first merge left 283 skills to decide, many only wording ("Amazon S3" / "AWS S3" / "S3",
+  "Predictive modelling" / "modeling", "ERP" / "ERP systems"), so one skill could be decided two or three times and
+  three labellers who agreed were counted as three single votes. Names are now grouped as one skill when the app's
+  canonical key matches or they are equal after safe rules (British/American spelling, a leading AWS / Amazon /
+  Microsoft / MS, a trailing generic word such as systems / platforms / methodology / OS, plurals). The same grouping
+  is used when scoring, so the extractor is not marked wrong for writing "AWS S3" where the key says "Amazon S3".
+  Looser matches (one name's words inside another's, e.g. "Segmentation" / "Image segmentation") are never merged
+  automatically: `disagreements.csv` shows them in a new `similar_in_answer_key` column so she can drop repeats fast.
+  Decided before any result was seen.
+
+## 10 Oct 2026 — Answer key from three labellers + the author's spot-check
+
+- (this commit) Her choice ("1+2"), made before any result: Gemini added as a third labeller (`gemini` step,
+  `answer_key_gemini.json`); a skill listed by at least 2 of Claude, Qwen and Gemini goes in the answer key, one listed
+  by only one comes to her (`disagreements.csv`). Spot-check from the 9 Oct plan, missing from the first version: she
+  checks every agreed skill in 5 ads (seed 2, `spot_check.csv`: correct / wrong, plus rows for skills all three
+  missed); `score` reports it as the answer key's own error rate. The extractor (gpt-oss) is still never a labeller.
+
 ## 10 Oct 2026 — Evaluation files renamed: "answer key" instead of "gold"
 
 - (this commit) Her request: `gold_claude.json`, `gold_qwen.json`, `gold.json` → `answer_key_claude.json`,

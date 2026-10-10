@@ -3,9 +3,12 @@ E1b: how well SkillMap extracts the skills a job ad asks for (IR Objective 1, ev
 
 Plan agreed 9 Oct (roadmap "E1 PLAN"), fixed before any result is seen:
   - 30 live ads, stratified by JobStreet ICT subcategory (seed 1), the text the extractor read (full JSearch text)
-  - answer key = technical skills listed by BOTH independent labellers, Claude and Qwen (a different model
-    family from the extractor, gpt-oss, so the extractor never grades itself); a skill only one of them listed is
-    decided by the author (keep / drop). Both follow labelling_guide.md and never see the extractor's skills.
+  - answer key = technical skills listed by at least 2 of 3 independent labellers, Claude, Qwen and Gemini (three
+    model families, none of them the extractor, gpt-oss, so the extractor never grades itself); a skill only one of
+    them listed is decided by the author (keep / drop). All follow labelling_guide.md and never see the extractor's
+    skills. (10 Oct, before any result: Gemini added and the author's spot-check of 5 ads, her choice "1+2".)
+  - spot-check: the author checks every skill the labellers agreed on in 5 ads (seed 2) and adds any all three
+    missed, to measure how often the labellers are wrong together (reported, the answer key is not changed)
   - compared with the extractor's stored hard skills (any level) by the app's canonical skill key (same rule the app
     uses to call two names one skill); soft skills are left out of both sides (too subjective to label)
   - precision, recall, F1 (micro, over all skills) with a 95% bootstrap interval over ads (10,000 resamples, seed 0)
@@ -14,15 +17,18 @@ Steps (from backend/, venv active; files go to ../docs/evidence/job_skill_extrac
   python scripts/evaluation/evaluate_job_skill_extraction.py sample     # 1. pick the 30 ads -> ads.json + ads.md (no skills shown)
      -> upload ads.json to Claude, who labels them blind -> save its answer as answer_key_claude.json
   python scripts/evaluation/evaluate_job_skill_extraction.py qwen       # 2. Qwen labels the same ads (Groq) -> answer_key_qwen.json
-  python scripts/evaluation/evaluate_job_skill_extraction.py merge      # 3. agreements + disagreements.csv (fill your_decision)
-  python scripts/evaluation/evaluate_job_skill_extraction.py merge      # 4. again once every row is decided -> answer_key.json
-  python scripts/evaluation/evaluate_job_skill_extraction.py score      # 5. scores.txt, per_ad.csv, errors.csv
+  python scripts/evaluation/evaluate_job_skill_extraction.py gemini     # 3. Gemini labels them -> answer_key_gemini.json
+  python scripts/evaluation/evaluate_job_skill_extraction.py merge      # 4. 2-of-3 agreements, disagreements.csv and
+                                                                        #    spot_check.csv (fill both, see below)
+  python scripts/evaluation/evaluate_job_skill_extraction.py merge      # 5. again once every row is decided -> answer_key.json
+  python scripts/evaluation/evaluate_job_skill_extraction.py score      # 6. scores.txt, per_ad.csv, errors.csv
 """
 import argparse
 import csv
 import json
 import os
 import random
+import re
 import sys
 import time
 from collections import defaultdict
@@ -36,6 +42,8 @@ from app.services.skill_names import canonical_key
 OUT = "../docs/evidence/job_skill_extraction"
 N_ADS, SEED = 30, 1
 QWEN_MODEL = "qwen/qwen3.8-27b"     # the same Qwen as the other judges (judge_reference_pairs.py)
+LABELLERS = ("claude", "qwen", "gemini")
+SPOT_ADS, SPOT_SEED = 5, 2
 LIVE_CACHE = "data/live_jobs_cache.json"
 
 GUIDE = """# Labelling guide: technical skills in a job ad
@@ -147,7 +155,7 @@ def sample(n: int, seed: int):
     print(f"{len(ads)} ads from {len(jobs)} live jobs with checked skills, {len(take)} subcategories:")
     for g in sorted(take, key=lambda g: -take[g]):
         print(f"  {take[g]:>2}  {g} (of {len(groups[g])})")
-    print(f"Written {path('ads.json')}, ads.md and labelling_guide.md. Next: upload ads.json to Claude, then run qwen.")
+    print(f"Written {path('ads.json')}, ads.md and labelling_guide.md. Next: upload ads.json to Claude, then run qwen and gemini.")
 
 
 # ── 2. qwen ──────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -161,67 +169,165 @@ def ask_qwen(prompt: str) -> list[str]:
     return [" ".join(str(s).split()) for s in skills if str(s).strip()]
 
 
-def qwen(pause: float):
-    ads = load("ads.json")
-    done = load("answer_key_qwen.json") if os.path.exists(path("answer_key_qwen.json")) else {}
+def ask_gemini(prompt: str) -> list[str]:
+    from google import genai
+    from google.genai import types
+    from app.config import settings
+    model = os.getenv("GEMINI_JUDGE_MODEL") or os.getenv("GEMINI_MODEL", "gemini-3.1-flash-lite")
+    client = genai.Client(api_key=os.getenv("GEMINI_API_KEY") or settings.gemini_api_key)
+    r = client.models.generate_content(model=model, contents=prompt, config=types.GenerateContentConfig(
+        temperature=0, response_mime_type="application/json",
+        automatic_function_calling=types.AutomaticFunctionCallingConfig(disable=True)))
+    skills = json.loads(r.text or "{}").get("skills", [])
+    return [" ".join(str(s).split()) for s in skills if str(s).strip()]
+
+
+def label(who: str, ask, pause: float):
+    """One labeller over all ads; saved after each ad, so a stopped run (daily limit) continues where it stopped."""
+    ads, name = load("ads.json"), f"answer_key_{who}.json"
+    done = load(name) if os.path.exists(path(name)) else {}
     for i, a in enumerate(ads, 1):
         if a["job_ref"] in done:
             continue
         try:
-            done[a["job_ref"]] = ask_qwen(QWEN_PROMPT.format(title=a["title"], text=a["text"]))
+            done[a["job_ref"]] = ask(QWEN_PROMPT.format(title=a["title"], text=a["text"]))
         except Exception as e:     # daily limit or network: keep what is done, run again later to continue
             print(f"Stopped at ad {i}: {type(e).__name__}: {e}")
             break
-        save("answer_key_qwen.json", done)
+        save(name, done)
         print(f"{i:>2}/{len(ads)}  {len(done[a['job_ref']]):>2} skills  {a['title']}")
         time.sleep(pause)
-    print(f"Qwen labelled {len(done)} of {len(ads)} ads.")
+    print(f"{who.capitalize()} labelled {len(done)} of {len(ads)} ads.")
 
 
 # ── 3. merge ─────────────────────────────────────────────────────────────────────────────────────────────────────
-def by_key(names: list[str]) -> dict[str, str]:
-    out = {}
-    for n in names:
-        k = canonical_key(n)
-        if k and k not in out:
-            out[k] = n
-    return out
+# Same skill, different name (10 Oct, before any result; her first merge had 283 rows to decide, many only wording:
+# "Amazon S3" / "AWS S3" / "S3", "Predictive modelling" / "modeling", "ERP" / "ERP systems"). Two names are one skill
+# if the app's canonical key is equal, or they are equal after these safe rules: British -> American spelling, a
+# leading AWS / Amazon / Microsoft / MS dropped, a trailing generic word dropped (systems, platforms, methodology,
+# tools, technologies, services...), plurals made singular. Used the same way for the answer key and for scoring.
+SPELLING = [("isation", "ization"), ("ising", "izing"), ("modelling", "modeling"), ("analyse", "analyze"),
+            ("colour", "color"), ("licence", "license"), ("catalogue", "catalog"), ("behaviour", "behavior"),
+            ("centre", "center"), ("optimise", "optimize"), ("organise", "organize"), ("visualise", "visualize")]
+PREFIXES = ("aws ", "amazon ", "microsoft ", "ms ")
+GENERIC = {"methodology", "methodologies", "method", "methods", "system", "systems", "platform", "platforms", "tool",
+           "tools", "technology", "technologies", "service", "services", "concepts", "fundamentals", "knowledge", "skills", "os"}
+
+
+def plain(name: str) -> str:
+    s = " ".join(re.sub(r"[^a-z0-9+#/. ]", " ", name.lower()).split())
+    for a, b in SPELLING:
+        s = s.replace(a, b)
+    for p in PREFIXES:
+        if s.startswith(p) and len(s) > len(p):
+            s = s[len(p):]
+    words = s.split()
+    while len(words) > 1 and words[-1] in GENERIC:
+        words.pop()
+    return " ".join(w[:-1] if len(w) > 3 and w.endswith("s") and not w.endswith(("ss", "is", "us")) else w for w in words)
+
+
+def clusters(named: dict[str, list[str]]) -> list[dict[str, str]]:
+    """Names from several sources (labellers, or answer key + extractor) grouped into skills: each group is
+    {source: the name it used}; a source's own duplicates collapse into one."""
+    items = [(src, n) for src, names in named.items() for n in names if canonical_key(n)]
+    parent = list(range(len(items)))
+
+    def find(i):
+        while parent[i] != i:
+            parent[i] = parent[parent[i]]
+            i = parent[i]
+        return i
+    seen = {}
+    for i, (_, n) in enumerate(items):
+        for k in (("ck", canonical_key(n)), ("plain", plain(n))):
+            if k[1]:
+                if k in seen:
+                    parent[find(i)] = find(seen[k])
+                else:
+                    seen[k] = i
+    groups = {}
+    for i, (src, n) in enumerate(items):
+        groups.setdefault(find(i), {}).setdefault(src, n)
+    return list(groups.values())
+
+
+def words(name: str) -> set[str]:
+    return set(plain(name).replace("-", " ").replace("/", " ").split())
+
+
+def read_csv(name: str) -> list[dict]:
+    if not os.path.exists(path(name)):
+        return []
+    with open(path(name), encoding="utf-8-sig") as f:
+        return list(csv.DictReader(f))
+
+
+def write_csv(name: str, rows: list[dict], fields: list[str]):
+    with open(path(name), "w", newline="", encoding="utf-8-sig") as f:
+        w = csv.DictWriter(f, fieldnames=fields)
+        w.writeheader()
+        w.writerows(rows)
 
 
 def merge():
     ads = load("ads.json")
-    claude, qw = load("answer_key_claude.json"), load("answer_key_qwen.json")
-    missing = [a["job_ref"] for a in ads if a["job_ref"] not in claude or a["job_ref"] not in qw]
+    labels = {who: load(f"answer_key_{who}.json") for who in LABELLERS if os.path.exists(path(f"answer_key_{who}.json"))}
+    if len(labels) < len(LABELLERS):
+        sys.exit(f"Missing labels from: {', '.join(w for w in LABELLERS if w not in labels)}.")
+    missing = [a["job_ref"] for a in ads if any(a["job_ref"] not in l for l in labels.values())]
     if missing:
-        sys.exit(f"{len(missing)} ads lack a label from Claude or Qwen (e.g. {missing[0]}).")
-    decided = {}
-    if os.path.exists(path("disagreements.csv")):
-        with open(path("disagreements.csv"), encoding="utf-8-sig") as f:
-            for r in csv.DictReader(f):
-                decided[(r["job_ref"], r["key"])] = (r["your_decision"] or "").strip().lower()
-    agreed = union = 0
-    rows, key = [], {}
+        sys.exit(f"{len(missing)} ads lack a label from one of the labellers (e.g. {missing[0]}).")
+    decided = {(r["job_ref"], r["key"]): (r["your_decision"] or "").strip().lower() for r in read_csv("disagreements.csv")}
+    rows, key, spot = [], {}, []
+    votes_total = {1: 0, 2: 0, 3: 0}
+    spot_refs = {a["job_ref"] for a in random.Random(SPOT_SEED).sample(ads, SPOT_ADS)}
+    old_spot = {(r["job_ref"], r["skill"]): r for r in read_csv("spot_check.csv")}
+    order = {who.capitalize(): i for i, who in enumerate(LABELLERS)}
     for a in ads:
-        c, q = by_key(claude[a["job_ref"]]), by_key(qw[a["job_ref"]])
-        both = c.keys() & q.keys()
-        agreed += len(both)
-        union += len(c.keys() | q.keys())
-        key[a["job_ref"]] = [c[k] for k in c if k in both]
-        for k, name, by in [(k, c[k], "Claude") for k in c if k not in q] + [(k, q[k], "Qwen") for k in q if k not in c]:
+        groups = clusters({who.capitalize(): labels[who][a["job_ref"]] for who in LABELLERS})
+        key[a["job_ref"]] = []
+        agreed = []
+        for g in groups:
+            votes_total[len(g)] += 1
+            if len(g) >= 2:
+                name = min(g.values(), key=lambda n: list(g.values()).count(n) * -1)  # the name most labellers used
+                agreed.append(name)
+                key[a["job_ref"]].append(name)
+                if a["job_ref"] in spot_refs:
+                    prev = old_spot.get((a["job_ref"], name), {})
+                    spot.append({"job_ref": a["job_ref"], "title": a["title"], "kind": "agreed", "skill": name,
+                                 "your_check": prev.get("your_check", "")})
+        singles = sorted((g for g in groups if len(g) == 1), key=lambda g: order[next(iter(g))])
+        for g in singles:
+            by, name = next(iter(g.items()))
+            k = canonical_key(name)
+            # hint only: a skill in the answer key whose words contain this one's, or the other way round
+            near = [x for x in agreed if words(name) and (words(name) < words(x) or words(x) < words(name))]
             d = decided.get((a["job_ref"], k), "")
             rows.append({"job_ref": a["job_ref"], "title": a["title"], "skill": name, "key": k, "listed_by": by,
-                         "your_decision": d})
+                         "similar_in_answer_key": "; ".join(near), "your_decision": d})
             if d == "keep":
                 key[a["job_ref"]].append(name)
-    with open(path("disagreements.csv"), "w", newline="", encoding="utf-8-sig") as f:
-        w = csv.DictWriter(f, fieldnames=["job_ref", "title", "skill", "key", "listed_by", "your_decision"])
-        w.writeheader()
-        w.writerows(rows)
+    # skills the author added in the spot-check as missed by all three stay in the file
+    spot += [r for r in read_csv("spot_check.csv") if r.get("kind") == "missing"]
+    write_csv("disagreements.csv", rows, ["job_ref", "title", "skill", "key", "listed_by", "similar_in_answer_key",
+                                          "your_decision"])
+    write_csv("spot_check.csv", spot, ["job_ref", "title", "kind", "skill", "your_check"])
+    union = sum(votes_total.values())
+    print(f"{union} different skills listed: all three agree on {votes_total[3]} ({votes_total[3] / union:.0%}), two on "
+          f"{votes_total[2]} ({votes_total[2] / union:.0%}), only one on {votes_total[1]} ({votes_total[1] / union:.0%}).")
     open_rows = [r for r in rows if r["your_decision"] not in ("keep", "drop")]
-    print(f"Claude and Qwen agree on {agreed} of {union} skills ({agreed / union:.0%}, overlap of the two lists).")
+    open_spot = [r for r in spot if r["kind"] == "agreed" and (r["your_check"] or "").strip().lower() not in ("correct", "wrong")]
     if open_rows:
-        print(f"{len(open_rows)} of {len(rows)} disagreements to decide: open {path('disagreements.csv')}, type keep or "
-              f"drop in your_decision (keep = the ad really needs it, by the guide), save, run merge again.")
+        print(f"{len(open_rows)} of {len(rows)} skills listed by only one labeller: open {path('disagreements.csv')}, type keep "
+              f"or drop in your_decision (keep = the ad really needs it, by the guide; drop it if it only repeats the "
+              f"skill in similar_in_answer_key), save, run merge again.")
+    if open_spot:
+        print(f"Spot-check: {len(open_spot)} agreed skills in {SPOT_ADS} ads to check in {path('spot_check.csv')}: type "
+              f"correct or wrong in your_check (read the ad in ads.md). For a skill all three missed, add a row with "
+              f"kind = missing and the skill name.")
+    if open_rows:
         return
     save("answer_key.json", key)
     print(f"All {len(rows)} decided: answer_key.json written ({sum(map(len, key.values()))} skills in {len(key)} ads). Next: score.")
@@ -246,12 +352,15 @@ def score():
         db.close()
     per_ad, errors = [], []
     for a in ads:
-        g, p = by_key(key[a["job_ref"]]), by_key(predicted.get(ids.get(a["job_ref"]), []))
-        tp, fp, fn = g.keys() & p.keys(), p.keys() - g.keys(), g.keys() - p.keys()
+        groups = clusters({"key": key[a["job_ref"]], "pred": predicted.get(ids.get(a["job_ref"]), [])})
+        tp = [g for g in groups if len(g) == 2]
+        fp = [g["pred"] for g in groups if list(g) == ["pred"]]
+        fn = [g["key"] for g in groups if list(g) == ["key"]]
         per_ad.append({"job_ref": a["job_ref"], "title": a["title"], "subcategory": a["subcategory"],
-                       "answer_key": len(g), "predicted": len(p), "tp": len(tp), "fp": len(fp), "fn": len(fn)})
-        errors += [{"job_ref": a["job_ref"], "title": a["title"], "error": "extra (not in answer key)", "skill": p[k]} for k in fp]
-        errors += [{"job_ref": a["job_ref"], "title": a["title"], "error": "missed (in answer key)", "skill": g[k]} for k in fn]
+                       "answer_key": len(tp) + len(fn), "predicted": len(tp) + len(fp),
+                       "tp": len(tp), "fp": len(fp), "fn": len(fn)})
+        errors += [{"job_ref": a["job_ref"], "title": a["title"], "error": "extra (not in answer key)", "skill": n} for n in fp]
+        errors += [{"job_ref": a["job_ref"], "title": a["title"], "error": "missed (in answer key)", "skill": n} for n in fn]
     tot = lambda rows, k: sum(r[k] for r in rows)
     P, R, F = prf(tot(per_ad, "tp"), tot(per_ad, "fp"), tot(per_ad, "fn"))
     rng, boots = random.Random(0), []
@@ -265,6 +374,14 @@ def score():
     for name, i, v in (("Precision", 0, P), ("Recall", 1, R), ("F1", 2, F)):
         lo, hi = ci(i)
         lines.append(f"{name:<9} {v:.3f}  (95% CI {lo:.3f}-{hi:.3f}, bootstrap over ads)")
+    spot = read_csv("spot_check.csv")
+    checked = [r for r in spot if r["kind"] == "agreed" and (r["your_check"] or "").strip().lower() in ("correct", "wrong")]
+    if checked:
+        right = sum(1 for r in checked if r["your_check"].strip().lower() == "correct")
+        missed = sum(1 for r in spot if r["kind"] == "missing")
+        lines.append(f"Answer-key check by the author ({len({r['job_ref'] for r in checked})} ads): {right} of "
+                     f"{len(checked)} agreed skills correct ({right / len(checked):.0%}); {missed} skill{'' if missed == 1 else 's'} "
+                     f"all three labellers missed")
     with open(path("scores.txt"), "w", encoding="utf-8") as f:
         f.write("\n".join(lines) + "\n")
     for name, rows in (("per_ad.csv", per_ad), ("errors.csv", errors)):
@@ -278,9 +395,10 @@ def score():
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("step", choices=["sample", "qwen", "merge", "score"])
+    ap.add_argument("step", choices=["sample", "qwen", "gemini", "merge", "score"])
     ap.add_argument("--n", type=int, default=N_ADS)
     ap.add_argument("--seed", type=int, default=SEED)
     ap.add_argument("--pause", type=float, default=2.0, help="seconds between Qwen calls")
     a = ap.parse_args()
-    {"sample": lambda: sample(a.n, a.seed), "qwen": lambda: qwen(a.pause), "merge": merge, "score": score}[a.step]()
+    {"sample": lambda: sample(a.n, a.seed), "qwen": lambda: label("qwen", ask_qwen, a.pause),
+     "gemini": lambda: label("gemini", ask_gemini, a.pause), "merge": merge, "score": score}[a.step]()
