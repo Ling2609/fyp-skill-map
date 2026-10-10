@@ -31,6 +31,13 @@ export default function ModuleForm({ module, scopeLabel, busy, error, onSave, on
   }, [working, onCancel])
 
   const detailsReady = name.trim().length >= 3 && (editing || (code.trim().length >= 3 && description.trim().length >= 20))
+  // What still stops "Find skills" (10 Oct: her test with a 1-letter name and a 2-letter description gave a greyed-out
+  // button and no reason)
+  const missing = [
+    !editing && code.trim().length < 3 && 'a module code (3+ characters)',
+    name.trim().length < 3 && 'a name (3+ characters)',
+    !editing && description.trim().length < 20 && `a description of at least one sentence (${description.trim().length} / 20 characters)`,
+  ].filter(Boolean)
   const found = foundFor !== null
   const stale = found && foundFor !== description.trim()
 
@@ -119,6 +126,9 @@ export default function ModuleForm({ module, scopeLabel, busy, error, onSave, on
               <textarea id="mf-description" rows={4} value={description} onChange={e => setDescription(e.target.value)} maxLength={4000}
                 placeholder="What the module teaches, e.g. from its module descriptor or learning outcomes" className={`${field} resize-none leading-relaxed`} />
               {!found && <p className="text-xs text-slate-500 mt-1">SkillMap finds the skills in this text for you to check before adding.</p>}
+              {!found && missing.length > 0 && (
+                <p className="text-xs text-amber-800 mt-1">To find skills, add {missing.join(', ')}.</p>
+              )}
             </div>
           )}
           {!editing && found && (

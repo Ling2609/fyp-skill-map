@@ -12,6 +12,9 @@ Profile router — user's personal skill profile built from:
   - GET /profile/showcase: everything My Profile shows (app/services/showcase.py)
   - Programme + intake (8 Oct): GET / PUT /profile/study, asked at first sign-in and editable on My Profile
   - Import from GitHub (8 Oct): GET /profile/github/repos lists public repos; each one picked is added as a project
+  - Find skills before saving (10 Oct, her flow): POST /profile/projects/suggest finds a project's skills without
+    saving; the pop-up shows them as chips; add / edit send the checked skills. GET /profile/github/readme fills a
+    picked repo's missing description from its README, for the student to edit before adding
 
 GET /profile/skills returns the shared Graduate Skill Profile (app/services/skill_profile.py).
 """
@@ -31,7 +34,7 @@ from app.config import settings
 from app.models.programme import Intake, Programme
 from app.models.user_module import UserModule
 from app.services.evidence import check_quote, normalise_text
-from app.services.github_repo import public_repos, repo_languages, same_repo
+from app.services.github_repo import NOT_GITHUB, public_repos, repo_languages, repo_readme, same_repo
 from app.services.skill_names import canonical_key
 from app.services.showcase import build_showcase
 from app.services.skill_profile import build_skill_profile
@@ -54,6 +57,15 @@ class ProjectIn(BaseModel):
     description: str
     github_url: str | None = None
     allow_duplicate: bool = False   # the student saw "you already have one called ..." and chose to add it anyway
+    # 10 Oct (her flow, as certificates): the skills the student checked in the pop-up, {skill: evidence} in order;
+    # evidence = her own words, "GitHub: N% of the code" or "Added by you". None = found on save (older callers).
+    skills: dict[str, str] | None = None
+
+
+class ProjectSuggestIn(BaseModel):
+    name: str
+    description: str = ""
+    github_url: str | None = None
 
 
 class CertIn(BaseModel):
@@ -423,10 +435,66 @@ def _clean_skill(name: str) -> str:
     return name
 
 
+MIN_DESCRIPTION = 20        # characters: shorter text is too thin to find skills in (the same rule as admin modules)
+_GITHUB_EVIDENCE = re.compile(r"GitHub: \d{1,3}% of the code")
+
+
+def _checked_project_skills(data: ProjectIn) -> dict[str, str]:
+    """The chips the student checked: tidied, duplicates (same canonical key) dropped. Evidence is kept only if it
+    still holds: her words must be in the name or description (fuzzy, as on save), a GitHub share must look like
+    one; anything else counts as added by her."""
+    text = f"{data.name.strip()}\n{data.description.strip()}"
+    out, seen = {}, set()
+    for raw, evidence in (data.skills or {}).items():
+        name = _clean_skill(raw)
+        key = canonical_key(name)
+        if key in seen:
+            continue
+        evidence = " ".join(str(evidence or "").split())
+        if not (evidence == ADDED_BY_YOU or _GITHUB_EVIDENCE.fullmatch(evidence)
+                or (evidence and check_quote(evidence, text)[0])):
+            evidence = ADDED_BY_YOU
+        seen.add(key)
+        out[name] = evidence
+    if not out:
+        raise HTTPException(status_code=400, detail="Add at least one skill.")
+    if len(out) > MAX_SKILLS_PER_ITEM:
+        raise HTTPException(status_code=400, detail=f"A project can have up to {MAX_SKILLS_PER_ITEM} skills")
+    return out
+
+
+@router.post("/projects/suggest")
+def suggest_project_skills(data: ProjectSuggestIn, current_user: User = Depends(get_current_user)):
+    """A project's skills for the pop-up, nothing saved: the AI reads the student's words (if there is at least a
+    sentence) and GitHub gives the repo's main languages. The student removes or adds chips, then saves."""
+    for label, value in (("Project name", data.name), ("Description", data.description), ("GitHub link", data.github_url)):
+        _check_length(label, value)
+    name, description = " ".join(data.name.split()), data.description.strip()
+    if not name:
+        raise HTTPException(status_code=400, detail="Type the project name first.")
+    quotes, failed = ({}, False)
+    if len(description) >= MIN_DESCRIPTION:
+        quotes, failed = _extract_project(name, description)
+    github_note = None
+    if (data.github_url or "").strip():
+        languages, github_note = repo_languages(data.github_url)
+        have = {canonical_key(s) for s in quotes}
+        for lang, pct in languages.items():
+            if canonical_key(lang) not in have:
+                quotes[lang] = f"GitHub: {pct}% of the code"
+    return {"skills": [{"name": k, "evidence": v} for k, v in quotes.items()],
+            "github_note": github_note, "skills_note": SKILLS_NOT_READ if failed else None}
+
+
 @router.post("/projects", response_model=ProjectOut, status_code=201)
 def add_project(data: ProjectIn, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     _check_project(data, current_user, db)
-    quotes, github_note, skills_note = _project_skills(data, {})
+    if data.skills is not None:
+        if not data.name.strip() or not data.description.strip():
+            raise HTTPException(status_code=400, detail="Project name and description are required")
+        quotes, github_note, skills_note = _checked_project_skills(data), None, None
+    else:
+        quotes, github_note, skills_note = _project_skills(data, {})
     project = UserProject(user_id=current_user.id, name=data.name.strip(), description=data.description.strip(),
                           github_url=(data.github_url or "").strip() or None,
                           extracted_skills=list(quotes), skill_quotes=quotes)
@@ -447,6 +515,15 @@ def edit_project(project_id: int, data: ProjectIn, current_user: User = Depends(
     _check_project(data, current_user, db, project)
     github = (data.github_url or "").strip() or None
     github_note = skills_note = None
+    if data.skills is not None:     # checked in the pop-up (found again there if the text changed)
+        if not data.name.strip() or not data.description.strip():
+            raise HTTPException(status_code=400, detail="Project name and description are required")
+        quotes = _checked_project_skills(data)
+        project.name, project.description, project.github_url = data.name.strip(), data.description.strip(), github
+        project.extracted_skills, project.skill_quotes = list(quotes), quotes
+        db.commit()
+        db.refresh(project)
+        return ProjectOut.model_validate(project)
     changed = (data.name.strip(), data.description.strip(), github) != (project.name, project.description, project.github_url)
     # also when it has no skills from its text yet (e.g. the AI call failed last time): "edit later to try again"
     nothing_read = not any(v != ADDED_BY_YOU for v in (project.skill_quotes or {}).values())
@@ -981,6 +1058,15 @@ def list_github_repos(account: str, current_user: User = Depends(get_current_use
     for r in repos:
         r["added"] = any(same_repo(r["url"], link) for link in links)
     return {"repos": repos}
+
+
+@router.get("/github/readme")
+def github_readme(url: str, current_user: User = Depends(get_current_user)):
+    """The first paragraph of a repo's README ('' if none), to start a picked repo's description (10 Oct)."""
+    text, note = repo_readme(url)
+    if note:
+        raise HTTPException(status_code=503 if note != NOT_GITHUB else 400, detail=note)
+    return {"text": text}
 
 
 # ── Career goal (9 Oct) ───────────────────────────────────────────────────────

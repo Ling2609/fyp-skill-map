@@ -3,6 +3,26 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 10 Oct 2026 — Projects: find skills before saving, GitHub import checked before adding, cards
+
+- (this commit) Her review of My Profile > Projects (researched: references.md "Projects tab and GitHub import").
+- Projects work like certificates and admin modules: the pop-up has a "Find skills" step (new
+  `POST /profile/projects/suggest`: her words read by the AI if there is at least a sentence, plus the repo's main
+  languages; nothing saved), she checks the chips (× removes, typing adds one as "Added by you"), then "Add project" /
+  "Save" sends them (`skills` on POST/PUT /profile/projects; evidence that no longer holds is kept as "Added by you").
+  Changing the name, description or link after finding asks to find them again; skills she typed stay. Before, skills
+  were found silently on save, and on edit only when the text changed, so it looked random.
+- When Find skills can't run yet, the form says why ("Write at least one sentence…", "11 / 20 characters"); the
+  admin new-module form now says what is missing too (her test with "g" / "vb" gave a greyed-out button and no reason).
+- Import from GitHub: pick repos, then one "Check your N projects" page. Each picked repo gets its GitHub description,
+  or the first paragraph of its README (new `GET /profile/github/readme`; template text such as "bootstrapped with
+  Create React App" is skipped), and its skills, all at once. Cards say Ready / Needs a description; "Add N projects"
+  adds the ready ones with the skills she checked. The long yellow "no description on GitHub, so add one (✎)…" note
+  is gone.
+- Projects, Certificates and Awards: each item is a card in one column (her pick over two columns); ✎ and ✕ are always
+  shown (were hover-only), hovering tints the card blue. The "Self-declared" pill left these three tabs (Job Detail
+  still labels where a matched skill came from).
+
 ## 10 Oct 2026 — Module lists per intake
 
 - (this commit) Her design (researched: references.md "Module lists per intake"): a student follows the module list of

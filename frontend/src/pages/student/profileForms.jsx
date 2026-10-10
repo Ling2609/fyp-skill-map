@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import api from '../../api'
-import { DuplicateAsk, Field, FormButtons, SkillChip, Spinner, Toggle } from './profileParts'
-import { aboutBody, errText, inputCls, splitSkills, studyComplete } from './profileUtils'
+import { DuplicateAsk, Field, FormButtons, SkillChecker, SkillChip, Spinner, Toggle } from './profileParts'
+import { MIN_DESCRIPTION, aboutBody, errText, inputCls, mergeFound, projectChips, projectKey, splitSkills, studyComplete } from './profileUtils'
 
 // Every pop-up form on My Profile (8-9 Oct). Each one is opened by a button on the page and closes itself through
 // onDone / onCancel; onDirty tells the pop-up there is something typed, so a stray click outside asks first.
@@ -9,50 +9,111 @@ import { aboutBody, errText, inputCls, splitSkills, studyComplete } from './prof
 
 // ── Project (moved from Profile.jsx) ──────────────────────────────────────────
 
+// Project pop-up (10 Oct, her flow, the same as certificates and admin modules): fill in the details, "Find skills"
+// (POST /profile/projects/suggest: the AI reads her words, GitHub gives the repo's main languages; nothing saved),
+// check the chips, then add. Changing the name, description or link after finding asks to find them again (skills she
+// typed stay), so what is saved always matches the text. The button says why it can't run yet.
 export function ProjectForm({ project, onDone, onCancel, onDirty }) {
   const editing = !!project
   const [initial] = useState(() => ({
     name: project?.name || '', description: project?.description || '', github_url: project?.github_url || '',
   }))
   const [form, setForm] = useState(initial)
-  useEffect(() => { onDirty?.(JSON.stringify(form) !== JSON.stringify(initial)) }, [form, initial, onDirty])
-  const [loading, setLoading] = useState(false)
+  const [skills, setSkills] = useState(() => projectChips(project))
+  const [foundFor, setFoundFor] = useState(() => (editing ? projectKey(initial) : null))
+  const [notes, setNotes] = useState([])
+  const [busy, setBusy] = useState('')            // '' | 'find' | 'save'
   const [error, setError] = useState('')
-  const [dupe, setDupe] = useState('')   // "you already have one called ..." question
+  const [dupe, setDupe] = useState('')            // "you already have one called ..." question
+  useEffect(() => {
+    onDirty?.(JSON.stringify(form) !== JSON.stringify(initial)
+      || JSON.stringify(skills) !== JSON.stringify(projectChips(project)))
+  }, [form, initial, skills, project, onDirty])
+
+  const descLength = form.description.trim().length
+  const ready = form.name.trim() && descLength >= MIN_DESCRIPTION
+  const found = foundFor !== null
+  const stale = found && foundFor !== projectKey(form)
+  const set = (k) => (e) => { setForm(p => ({ ...p, [k]: e.target.value })); setDupe('') }
+
+  const find = async () => {
+    setBusy('find'); setError(''); setNotes([])
+    try {
+      const res = await api.post('/profile/projects/suggest', { name: form.name.trim(), description: form.description.trim(),
+        github_url: form.github_url.trim() || null })
+      setSkills(prev => mergeFound(prev, res.data.skills))
+      setNotes([res.data.skills_note, res.data.github_note].filter(Boolean))
+      setFoundFor(projectKey(form))
+    } catch (err) {
+      setError(errText(err, "Couldn't find skills right now. Type them yourself, or try again later."))
+      setFoundFor(projectKey(form))
+    } finally { setBusy('') }
+  }
   const save = async (allowDuplicate = false) => {
-    setLoading(true); setError('')
+    setBusy('save'); setError('')
     const body = { name: form.name.trim(), description: form.description.trim(), github_url: form.github_url.trim() || null,
-                   allow_duplicate: allowDuplicate }
+                   skills: Object.fromEntries(skills.map(s => [s.name, s.evidence])), allow_duplicate: allowDuplicate }
     try {
       const res = editing ? await api.put(`/profile/projects/${project.id}`, body) : await api.post('/profile/projects', body)
       onDone(res.data)
     } catch (err) {
       if (err.response?.status === 409) setDupe(err.response.data.detail)
       else setError(errText(err, editing ? "Couldn't save the project" : "Couldn't add the project"))
-    } finally { setLoading(false) }
+    } finally { setBusy('') }
   }
-  const submit = (e) => { e.preventDefault(); save() }
+  const submit = (e) => {
+    e.preventDefault()
+    if (!ready || busy) return
+    if (!found || stale) find()
+    else if (skills.length) save()
+  }
+  const label = !found ? 'Find skills' : stale ? 'Find skills again' : editing ? 'Save' : 'Add project'
   return (
     <form onSubmit={submit} className="space-y-4">
       <Field label="Project name">
-        <input type="text" value={form.name} onChange={e => { setForm(p => ({ ...p, name: e.target.value })); setDupe('') }}
+        <input type="text" value={form.name} onChange={set('name')}
           placeholder="e.g. Inventory Management System" className={inputCls} maxLength={100} required autoFocus />
       </Field>
-      <Field label="Description">
-        <textarea value={form.description} onChange={e => setForm(p => ({ ...p, description: e.target.value }))}
-          placeholder="What you built and the tools you used..." rows={5} className={`${inputCls} resize-none`} maxLength={3000} required />
-      </Field>
-      <Field label="GitHub URL" optional hint="SkillMap reads the languages used in public repositories only.">
-        <input type="url" value={form.github_url} onChange={e => setForm(p => ({ ...p, github_url: e.target.value }))}
+      <div>
+        <Field label="What you built and the tools you used">
+          <textarea value={form.description} onChange={set('description')}
+            placeholder="e.g. A booking app for the campus library in React, with a FastAPI backend and PostgreSQL" rows={4}
+            className={`${inputCls} resize-none`} maxLength={3000} required />
+        </Field>
+        {descLength < MIN_DESCRIPTION && (
+          <p className="flex justify-between text-xs mt-1.5">
+            <span className="text-amber-700">Write at least one sentence so skills can be found.</span>
+            <span className="text-gray-400 tabular-nums">{descLength} / {MIN_DESCRIPTION} characters</span>
+          </p>
+        )}
+      </div>
+      <Field label="GitHub link" optional hint="The repo's main languages are added as skills (public repos only).">
+        <input type="url" value={form.github_url} onChange={set('github_url')}
           placeholder="https://github.com/username/repo" className={inputCls} maxLength={500} />
       </Field>
-      {editing && <p className="text-xs text-gray-400">If you change the text, SkillMap finds the skills again and keeps the ones you added</p>}
+      {found ? (
+        <div>
+          <SkillChecker id="project-skills" skills={skills} onChange={setSkills} />
+          {stale && <p className="text-xs text-amber-800 bg-amber-50 rounded-lg px-3 py-2 mt-2">You changed the details: find the skills again so they match. Skills you typed stay.</p>}
+          {notes.map(n => <p key={n} className="text-xs text-amber-800 bg-amber-50 rounded-lg px-3 py-2 mt-2">{n}</p>)}
+          {!stale && (
+            <button type="button" onClick={find} disabled={!ready || !!busy}
+              className="mt-2 text-xs font-medium text-blue-700 hover:underline disabled:text-gray-300 disabled:no-underline">
+              {busy === 'find' ? 'Finding skills…' : 'Find skills again'}
+            </button>
+          )}
+        </div>
+      ) : (
+        <p className="text-xs text-gray-500 border border-dashed border-gray-200 rounded-xl px-3 py-3 text-center">
+          Skills appear here after Find skills, for you to check before {editing ? 'saving' : 'adding'}.
+        </p>
+      )}
       {error && <p className="text-xs text-red-500 bg-red-50 rounded-lg px-3 py-2">{error}</p>}
       {dupe
-        ? <DuplicateAsk message={dupe} yesLabel={editing ? 'Yes, save it' : 'Yes, add it'} busy={loading}
+        ? <DuplicateAsk message={dupe} yesLabel={editing ? 'Yes, save it' : 'Yes, add it'} busy={!!busy}
             onYes={() => save(true)} onBack={() => setDupe('')} />
-        : <FormButtons loading={loading} busyText="Finding skills…" label={editing ? 'Save' : 'Add project'} onCancel={onCancel}
-            disabled={!form.name.trim() || !form.description.trim()} />}
+        : <FormButtons loading={!!busy} busyText={busy === 'find' ? 'Finding skills…' : 'Saving…'} label={label} onCancel={onCancel}
+            disabled={!ready || (found && !stale && !skills.length)} />}
     </form>
   )
 }

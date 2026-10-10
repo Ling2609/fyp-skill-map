@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { skillName } from '../../skillName'
-import { errText } from './profileUtils'
+import { ADDED_BY_YOU, errText } from './profileUtils'
 
 // Pieces shared by the My Profile cards and pop-ups (moved out of the old Profile.jsx on 8 Oct, so every card
 // and pop-up uses exactly the same chips, pop-ups and buttons).
@@ -52,7 +52,7 @@ export function Spinner({ size = 'md' }) {
 
 // dirty = something has been typed: clicking outside, Esc or the corner ✕ then asks before throwing it away
 // (5 Oct: a stray click outside lost a long description). The form's own Cancel closes straight away.
-export function Modal({ title, onClose, dirty = false, children }) {
+export function Modal({ title, onClose, dirty = false, wide = false, children }) {
   const [asking, setAsking] = useState(false)
   const tryClose = useCallback(() => { if (dirty) setAsking(true); else onClose() }, [dirty, onClose])
   useEffect(() => {
@@ -63,7 +63,7 @@ export function Modal({ title, onClose, dirty = false, children }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/30" onMouseDown={tryClose}>
       <div role="dialog" aria-modal="true" aria-label={title} onMouseDown={e => e.stopPropagation()}
-        className="bg-white rounded-2xl shadow-xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
+        className={`bg-white rounded-2xl shadow-xl w-full ${wide ? 'max-w-2xl' : 'max-w-lg'} max-h-[90vh] overflow-y-auto`}>
         <div className="flex items-center justify-between px-6 pt-5 pb-1">
           <h3 className="text-base font-semibold text-gray-800">{title}</h3>
           <button type="button" onClick={tryClose} aria-label="Close" className="text-gray-400 hover:text-gray-700 p-1 rounded-lg hover:bg-gray-100">
@@ -150,7 +150,7 @@ export function DuplicateAsk({ message, yesLabel, onYes, onBack, busy }) {
 export function IconButton({ label, onClick, children, danger }) {
   return (
     <button type="button" onClick={onClick} title={label} aria-label={label}
-      className={`text-gray-300 transition shrink-0 p-1 rounded-lg ${danger ? 'hover:text-red-400 hover:bg-red-50' : 'hover:text-blue-600 hover:bg-blue-50'}`}>
+      className={`text-slate-500 transition shrink-0 p-1.5 rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-300 ${danger ? 'hover:text-red-600 hover:bg-red-50' : 'hover:text-blue-700 hover:bg-blue-100'}`}>
       {children}
     </button>
   )
@@ -186,6 +186,41 @@ export function AddSkillChip({ onAdd }) {
         className="text-xs px-2.5 py-1 rounded-full border border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-200 w-40" />
       {error && <span className="text-[11px] text-red-500 mt-1">{error}</span>}
     </span>
+  )
+}
+
+// The chips in a pop-up before saving (10 Oct: projects work like certificates and admin modules: find the skills,
+// check them, then save). skills = [{ name, evidence }]; evidence is the hover text (her words, "GitHub: …",
+// "Added by you"). × removes a chip; typing a skill and Enter (or a comma) adds one as "Added by you".
+export function SkillChecker({ skills, onChange, label = 'Skills', id = 'skill-checker' }) {
+  const [draft, setDraft] = useState('')
+  const add = (text) => {
+    const have = new Set(skills.map(s => s.name.toLowerCase()))
+    const typed = text.split(/[,;\n]+/).map(t => t.replace(/\s+/g, ' ').trim()).filter(t => t && t.length <= 60)
+    const fresh = typed.filter(t => !have.has(t.toLowerCase()) && have.add(t.toLowerCase()))
+    if (fresh.length) onChange([...skills, ...fresh.map(name => ({ name, evidence: ADDED_BY_YOU }))])
+    setDraft('')
+  }
+  const tip = (e) => (!e || e === ADDED_BY_YOU || e.startsWith('GitHub:') ? e : `“${e}”`)
+  return (
+    <div>
+      <div className="flex items-baseline justify-between mb-1.5">
+        <label htmlFor={id} className="text-xs font-medium text-gray-600">{label} ({skills.length})</label>
+        <span className="text-xs text-gray-400">Remove any that don't fit; type to add one</span>
+      </div>
+      <div className="border border-gray-200 rounded-xl px-3 py-2.5 flex flex-wrap items-center gap-1.5 focus-within:ring-2 focus-within:ring-blue-500">
+        {skills.map(s => (
+          <SkillChip key={s.name} skill={s.name} title={tip(s.evidence)} added={s.evidence === ADDED_BY_YOU}
+            onRemove={() => onChange(skills.filter(x => x !== s))} />
+        ))}
+        <input id={id} value={draft} onChange={e => setDraft(e.target.value)} onBlur={() => draft.trim() && add(draft)}
+          onKeyDown={e => {
+            if (e.key === 'Enter' || e.key === ',') { e.preventDefault(); add(draft) }
+            if (e.key === 'Backspace' && !draft && skills.length) onChange(skills.slice(0, -1))
+          }}
+          placeholder={skills.length ? 'Add a skill' : 'e.g. Python, SQL'} className="flex-1 min-w-32 text-sm py-0.5 placeholder-gray-300 focus:outline-none" />
+      </div>
+    </div>
   )
 }
 

@@ -2,22 +2,21 @@ import { useState } from 'react'
 import api from '../../api'
 import { AddSkillChip, ConfirmDelete, CrossIcon, IconButton, Modal, PencilIcon, SkillChip } from './profileParts'
 import { AwardForm, CertForm, ProjectForm } from './profileForms'
-import { ADDED_BY_YOU, SELF_DECLARED_TIP, btnBlueCls, monthLabel, softBtnCls, sourcePillCls } from './profileUtils'
+import { ADDED_BY_YOU, btnBlueCls, monthLabel, softBtnCls } from './profileUtils'
 import ModulesEditor from './ModulesEditor'
 
 // The four tabs of My Profile (9 Oct): Modules, Projects, Certificates, Awards, the places a student's skills come
 // from. Each tab is one white panel: a title row with its buttons (fixed), then the list (scrolls inside the panel on
-// wide screens, like the module lists). A row's ✎ and ✕ appear on hover and stay reachable with Tab.
+// wide screens, like the module lists). 10 Oct (her review): each item is a card in one column; its ✎ and ✕ are always
+// shown (hover-only buttons are easy to miss and don't work on touch, references.md "Projects tab and GitHub
+// import"); hovering tints the card blue. The "Self-declared" pill left these tabs: she typed them herself, so it
+// told her nothing; Job Detail still labels where a matched skill came from.
 
 function Panel({ title, actions, children }) {
-  // Projects, certificates and awards are all self-declared (A6)
   return (
     <section className="bg-white rounded-2xl border border-slate-200 shadow-sm flex flex-col lg:h-full min-h-0">
       <div className="shrink-0 flex flex-wrap items-center justify-between gap-3 px-6 py-4 border-b border-slate-100">
-        <div className="flex items-center gap-2">
-          <h2 className="text-base font-semibold text-slate-800">{title}</h2>
-          <span className={sourcePillCls} title={SELF_DECLARED_TIP}>Self-declared</span>
-        </div>
+        <h2 className="text-base font-semibold text-slate-800">{title}</h2>
         {actions && <div className="flex flex-wrap items-center gap-2">{actions}</div>}
       </div>
       <div tabIndex={0} aria-label={title}
@@ -30,12 +29,14 @@ function Panel({ title, actions, children }) {
 
 function RowActions({ what, onEdit, onDelete }) {
   return (
-    <div className="flex items-center gap-0.5 shrink-0 opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition">
+    <div className="flex items-center gap-0.5 shrink-0 -mt-1 -mr-1">
       <IconButton label={`Edit ${what}`} onClick={onEdit}><PencilIcon /></IconButton>
       <IconButton label={`Delete ${what}`} danger onClick={onDelete}><CrossIcon /></IconButton>
     </div>
   )
 }
+
+const cardCls = 'border border-slate-200 rounded-xl px-5 py-4 transition-colors hover:border-blue-300 hover:bg-blue-50/40'
 
 function Note({ text, onClose }) {
   if (!text) return null
@@ -112,9 +113,9 @@ export function ProjectsTab({ projects, onRefresh, onImport, importNote, onImpor
       {projects.length === 0 ? (
         <Empty icon="🗂️" title="No projects yet" text="Add a project you built, or import your repositories from GitHub. SkillMap finds the skills you used." />
       ) : (
-        <ul className="divide-y divide-slate-100">
+        <ul className="flex flex-col gap-3">
           {projects.map(p => (
-            <li key={p.id} className="group py-4 first:pt-1">
+            <li key={p.id} className={cardCls}>
               <div className="flex items-start justify-between gap-3">
                 <div className="min-w-0">
                   <div className="flex items-baseline gap-2 flex-wrap">
@@ -161,13 +162,13 @@ export function CertsTab({ certs, onRefresh }) {
       {certs.length === 0 ? (
         <Empty icon="🎓" title="No certificates yet" text="Add a certificate and the skills it lists, or let SkillMap suggest them from its name." />
       ) : (
-        <ul className="divide-y divide-slate-100">
+        <ul className="flex flex-col gap-3">
           {certs.map(c => {
             const added = c.added_skills || []
             const estimated = c.skills_source == null || c.skills_source === 'estimated'
             const aiSkills = c.mapped_skills.filter(sk => !added.includes(sk))
             return (
-              <li key={c.id} className="group py-4 first:pt-1">
+              <li key={c.id} className={cardCls}>
                 <div className="flex items-start justify-between gap-3">
                   <p className="text-sm min-w-0">
                     <span className="font-semibold text-slate-800">{c.cert_name}</span>
@@ -218,11 +219,11 @@ export function AwardsTab({ awards, onRefresh }) {
       {awards.length === 0 ? (
         <Empty icon="🏆" title="No awards yet" text="Add competition wins, scholarships or a dean's list. SkillMap suggests the skills each one shows." />
       ) : (
-        <ul className="divide-y divide-slate-100">
+        <ul className="flex flex-col gap-3">
           {awards.map(a => {
             const added = a.added_skills || []
             return (
-              <li key={a.id} className="group py-4 first:pt-1">
+              <li key={a.id} className={cardCls}>
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">
                     <p className="text-sm font-semibold text-slate-800">{a.title}</p>

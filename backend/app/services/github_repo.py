@@ -113,3 +113,65 @@ def public_repos(account: str) -> tuple[list[dict], str | None]:
     return [{"name": r.get("name", ""), "description": (r.get("description") or "").strip(),
              "url": r.get("html_url", ""), "language": r.get("language") or "", "topics": r.get("topics") or []}
             for r in data if isinstance(r, dict) and not r.get("fork") and r.get("html_url")], None
+
+
+# ── README as a starting description (10 Oct, her review: imported repos with no description had to be edited after
+# saving). GitHub's "Get a repository README" (GET /repos/{owner}/{repo}/readme, raw media type, no key needed) is read
+# only for a picked repo that has no GitHub description: one call each. The student checks and edits the text before
+# anything is saved. https://docs.github.com/en/rest/repos/contents#get-a-repository-readme
+
+# Template text that says nothing about what the student built (create-vite, create-react-app, Flutter, Next.js)
+_BOILERPLATE = re.compile(r"bootstrapped with|this template (should help|provides)|getting started with create react app"
+                          r"|a new flutter project|this is a \[?next\.js\]? project|react \+ vite|minimal setup to get "
+                          r"react working", re.I)
+README_MAX = 600
+
+
+def readme_summary(text: str) -> str:
+    """The first real paragraph of a README in plain text ('' if it has none): headings, badges, images, HTML, code
+    blocks, tables and list markers are skipped; links keep their words."""
+    text = re.sub(r"```.*?```", "\n\n", text or "", flags=re.S)
+    text = re.sub(r"<!--.*?-->", " ", text, flags=re.S)
+    for block in re.split(r"\n\s*\n", text):
+        lines = []
+        for line in block.splitlines():
+            line = line.strip()
+            if not line or line.startswith(("#", "|", ">", "<", "---", "===", "***")) or re.fullmatch(r"(\[?!\[.*)", line):
+                continue
+            line = re.sub(r"!\[[^\]]*\]\([^)]*\)", "", line)              # images and badges
+            line = re.sub(r"\[([^\]]+)\]\([^)]*\)", r"\1", line)           # [words](link) -> words
+            line = re.sub(r"<[^>]+>", "", line)                             # inline HTML
+            item = re.match(r"^([-*+]|\d+[.)])\s+", line)
+            line = re.sub(r"^([-*+]|\d+[.)])\s+", "", line)                 # list markers
+            line = re.sub(r"[*_`]{1,3}", "", line).strip()
+            if item and line and line[-1] not in ".!?:;":
+                line += "."                                                 # list items read as sentences
+            if line:
+                lines.append(line)
+        para = " ".join(lines).strip()
+        if len(para) >= 30 and not _BOILERPLATE.search(para):
+            if len(para) > README_MAX:
+                para = para[:README_MAX].rsplit(" ", 1)[0] + "…"
+            return para
+    return ""
+
+
+def repo_readme(url: str) -> tuple[str, str | None]:
+    """(the README's first paragraph or '', note for the student or None)."""
+    repo = parse_repo(url)
+    if not repo:
+        return "", NOT_GITHUB
+    try:
+        resp = requests.get(f"https://api.github.com/repos/{repo[0]}/{repo[1]}/readme", timeout=TIMEOUT,
+                            headers={"Accept": "application/vnd.github.raw+json", "User-Agent": "SkillMap-FYP"})
+    except requests.RequestException as e:
+        print(f"[github] readme {url}: {e}")
+        return "", LIST_UNREACHABLE
+    if resp.status_code == 404:
+        return "", None      # no README: nothing to fill in, nothing wrong
+    if resp.status_code != 200:
+        print(f"[github] readme {url}: HTTP {resp.status_code}")
+        if resp.status_code in (403, 429) and resp.headers.get("x-ratelimit-remaining") == "0":
+            return "", LIST_RATE_LIMITED
+        return "", LIST_UNREACHABLE
+    return readme_summary(resp.text), None

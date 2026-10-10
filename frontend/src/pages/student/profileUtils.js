@@ -40,3 +40,16 @@ export const softBtnCls = 'flex items-center gap-2 text-sm font-medium text-blue
 export const sourcePillCls = 'text-[11px] font-medium px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 cursor-help'
 export const SELF_DECLARED_TIP = 'You added these. SkillMap reads the skills with AI and you confirm them.'
 export const PROGRAMME_TIP = "These skills come from your programme's module descriptions, reviewed by the career office. You enter the grades."
+
+// Projects (10 Oct): skills are found on request and checked before saving. A sentence is the least the AI can read.
+export const MIN_DESCRIPTION = 20
+// The fields a project's skills were found for; when they change, the skills must be found again
+export const projectKey = (f) => [f.name.trim(), f.description.trim(), (f.github_url || '').trim()].join('\u0001')
+// The project's saved skills as chips: [{ name, evidence }]
+export const projectChips = (p) => (p?.extracted_skills || []).map(name => ({ name, evidence: p.skill_quotes?.[name] || '' }))
+// Fresh chips from POST /profile/projects/suggest replace the AI's and GitHub's; the ones the student typed stay
+export const mergeFound = (current, found) => {
+  const mine = current.filter(s => s.evidence === ADDED_BY_YOU)
+  const have = new Set(mine.map(s => s.name.toLowerCase()))
+  return [...found.filter(s => !have.has(s.name.toLowerCase())), ...mine]
+}
