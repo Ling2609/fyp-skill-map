@@ -38,6 +38,7 @@ REFRESH = {
     "IT-L3-006", "IT-L3-014", "IT-L3-019", "IT-L3-022", "IT-L3-025", "IT-L3-029", "IT-L3-034", "CS-L3-003",
     "QC-L3-004", "DA-L3-004", "AI-L3-003", "CY-L3-006", "CY-L3-012", "MM-L3-006", "GD-L3-002",
     "IT-L1-001", "IT-L1-003", "GD-L1-004", "MM-L1-002",
+    "SE-L3-003", "MM-L3-007", "MM-L2-009",
 }
 
 
@@ -59,13 +60,22 @@ def main():
 
     db = SessionLocal()
     try:
-        changed, skipped = [], []
+        changed, skipped, renamed = [], [], []
         for mod in db.query(Module).filter(Module.code.in_(codes)).order_by(Module.code).all():
+            name = " ".join((catalogue.get(mod.code, {}).get("name") or "").split())
+            if name and name != mod.name:
+                renamed.append((mod.code, mod.name, name))
+                if not dry_run:
+                    mod.name = name
             new = " ".join((catalogue.get(mod.code, {}).get("description") or "").split())
             if not new or new == " ".join((mod.description or "").split()):
                 continue
             (skipped if mod.skills_reviewed_at is not None else changed).append((mod, new))
 
+        if renamed and not dry_run:
+            db.commit()
+        for code, old_name, name in renamed:
+            print(f"{'would rename' if dry_run else 'renamed'}: {code} {old_name} -> {name}")
         print(f"{len(changed)} module(s) to refresh" + (f"; {len(skipped)} skipped (already reviewed)" if skipped else ""))
         for mod, _ in skipped:
             print(f"  skipped (reviewed): {mod.code} {mod.name}")

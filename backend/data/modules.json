@@ -200,7 +200,7 @@
     "name": "Investigations in Software Engineering",
     "level": 3,
     "type": "specialised",
-    "description": "A research-based module where students investigate current topics and challenges in software engineering through literature review, experimentation and critical analysis."
+    "description": "The investigation phase of the final year project: students define a software problem, review literature and similar systems, gather functional and non-functional requirements from target users through a survey or interviews, choose a development methodology such as Agile Scrum and plan the sprints. The output is an Investigation Report with the aims, objectives, requirements and project plan for the final year project."
   },
   {
     "code": "SE-L3-004",
@@ -368,7 +368,7 @@
     "name": "Investigations in Information Technology",
     "level": 3,
     "type": "specialised",
-    "description": "Students choose a current problem in information technology, search and review published research, compare existing solutions and choose a research method. They write a research proposal for their final year project with aims, methodology, a project plan and ethical considerations."
+    "description": "The investigation phase of the final year project: students identify a problem an organisation or user group faces, review literature and existing systems, collect requirements through a survey or interviews, compare candidate technologies and plan the development. The output is an Investigation Report with the aims, objectives, requirements and project plan for the final year project."
   },
   {
     "code": "IT-L3-006",
@@ -445,7 +445,7 @@
     "name": "Investigations in Information System Security",
     "level": 3,
     "type": "specialised",
-    "description": "Students choose a current problem in information system security, search and review published research, compare existing solutions and choose a research method. They write a research proposal for their final year project with aims, methodology, a project plan and ethical considerations."
+    "description": "The investigation phase of the final year project: students identify an information security problem, review literature and security standards, assess the risks of the system they will protect, gather security requirements and plan how the solution will be tested safely and ethically. The output is an Investigation Report with the aims, objectives, requirements and project plan for the final year project."
   },
   {
     "code": "IT-L3-014",
@@ -487,7 +487,7 @@
     "name": "Investigations in Cloud Engineering",
     "level": 3,
     "type": "specialised",
-    "description": "Students choose a current problem in cloud engineering, search and review published research, compare existing solutions and choose a research method. They write a research proposal for their final year project with aims, methodology, a project plan and ethical considerations."
+    "description": "The investigation phase of the final year project: students identify a problem suited to the cloud, review literature and existing cloud services, gather requirements, compare cloud providers and services on cost and features, and plan the architecture and deployment. The output is an Investigation Report with the aims, objectives, requirements and project plan for the final year project."
   },
   {
     "code": "IT-L3-019",
@@ -529,7 +529,7 @@
     "name": "Investigations in Internet of Things",
     "level": 3,
     "type": "specialised",
-    "description": "Students choose a current problem in the Internet of Things, search and review published research, compare existing solutions and choose a research method. They write a research proposal for their final year project with aims, methodology, a project plan and ethical considerations."
+    "description": "The investigation phase of the final year project: students identify a problem an IoT system can address, review literature and existing devices, gather requirements from users, compare sensors, boards and communication options, and plan the prototype and its field test. The output is an Investigation Report with the aims, objectives, requirements and project plan for the final year project."
   },
   {
     "code": "IT-L3-022",
@@ -564,7 +564,7 @@
     "name": "Investigations in Financial Technology",
     "level": 3,
     "type": "specialised",
-    "description": "Students choose a current problem in financial technology, search and review published research, compare existing solutions and choose a research method. They write a research proposal for their final year project with aims, methodology, a project plan and ethical considerations."
+    "description": "The investigation phase of the final year project: students identify a problem in financial services, review literature and existing fintech products, gather requirements from users, examine the regulations that apply and plan the development. The output is an Investigation Report with the aims, objectives, requirements and project plan for the final year project."
   },
   {
     "code": "IT-L3-025",
@@ -606,7 +606,7 @@
     "name": "Investigations in Business Information Systems",
     "level": 3,
     "type": "specialised",
-    "description": "Students choose a current problem in business information systems, search and review published research, compare existing solutions and choose a research method. They write a research proposal for their final year project with aims, methodology, a project plan and ethical considerations."
+    "description": "The investigation phase of the final year project: students identify a business problem, review literature and existing information systems, interview stakeholders and model the current business process, gather requirements and plan the development. The output is an Investigation Report with the aims, objectives, requirements and project plan for the final year project."
   },
   {
     "code": "IT-L3-029",
@@ -648,7 +648,7 @@
     "name": "Investigations in Sustainable Computing",
     "level": 3,
     "type": "specialised",
-    "description": "Students choose a current problem in sustainable computing, search and review published research, compare existing solutions and choose a research method. They write a research proposal for their final year project with aims, methodology, a project plan and ethical considerations."
+    "description": "The investigation phase of the final year project: students identify an environmental problem caused by IT, review literature and sustainability standards, choose how impact such as energy use will be measured, gather requirements and plan the project. The output is an Investigation Report with the aims, objectives, requirements and project plan for the final year project."
   },
   {
     "code": "IT-L3-034",
@@ -683,7 +683,7 @@
     "name": "Investigations in Computer Science",
     "level": 3,
     "type": "specialised",
-    "description": "Students choose a current problem in computer science, search and review published research, compare existing solutions and choose a research method. They write a research proposal for their final year project with aims, methodology, a project plan and ethical considerations."
+    "description": "The investigation phase of the final year project: students define a computing problem, review literature and existing algorithms or systems, gather requirements, choose how the solution will be evaluated against existing approaches and plan the project. The output is an Investigation Report with the aims, objectives, requirements and project plan for the final year project."
   },
   {
     "code": "CS-L3-002",
@@ -739,7 +739,7 @@
     "name": "Investigations in Quantum Computing",
     "level": 3,
     "type": "specialised",
-    "description": "Students choose a current problem in quantum computing, search and review published research, compare existing solutions and choose a research method. They write a research proposal for their final year project with aims, methodology, a project plan and ethical considerations."
+    "description": "The investigation phase of the final year project: students identify a problem that quantum computing may help with, review literature on quantum algorithms, compare quantum and classical approaches, choose simulators or hardware to use and plan the experiments. The output is an Investigation Report with the aims, objectives, requirements and project plan for the final year project."
   },
   {
     "code": "QC-L3-004",
@@ -774,7 +774,7 @@
     "name": "Investigations in Data Analytics",
     "level": 3,
     "type": "specialised",
-    "description": "Students choose a current problem in data analytics, search and review published research, compare existing solutions and choose a research method. They write a research proposal for their final year project with aims, methodology, a project plan and ethical considerations."
+    "description": "The investigation phase of the final year project: students define an analytics question for a real organisation or domain, review literature and similar studies, identify data sources and permission to use the data, choose analysis methods and plan the project. The output is an Investigation Report with the aims, objectives, requirements and project plan for the final year project."
   },
   {
     "code": "DA-L3-002",
@@ -809,7 +809,7 @@
     "name": "Investigations in Artificial Intelligence",
     "level": 3,
     "type": "specialised",
-    "description": "Students choose a current problem in artificial intelligence, search and review published research, compare existing solutions and choose a research method. They write a research proposal for their final year project with aims, methodology, a project plan and ethical considerations."
+    "description": "The investigation phase of the final year project: students define a problem an AI model can solve, review literature and existing models, identify a suitable data set, choose evaluation measures, consider bias and fairness, and plan the project. The output is an Investigation Report with the aims, objectives, requirements and project plan for the final year project."
   },
   {
     "code": "AI-L3-002",
@@ -865,7 +865,7 @@
     "name": "Investigations in Cyber Security",
     "level": 3,
     "type": "specialised",
-    "description": "Students choose a current problem in cyber security, search and review published research, compare existing solutions and choose a research method. They write a research proposal for their final year project with aims, methodology, a project plan and ethical considerations."
+    "description": "The investigation phase of the final year project: students identify a cyber security problem, review literature and current attack techniques, gather security requirements, set the scope and permission rules for any security testing, and plan the project. The output is an Investigation Report with the aims, objectives, requirements and project plan for the final year project."
   },
   {
     "code": "CY-L3-004",
@@ -935,7 +935,7 @@
     "name": "Investigations in Digital Forensics",
     "level": 3,
     "type": "specialised",
-    "description": "Students choose a current problem in digital forensics, search and review published research, compare existing solutions and choose a research method. They write a research proposal for their final year project with aims, methodology, a project plan and ethical considerations."
+    "description": "The investigation phase of the final year project: students identify a digital forensics problem, review literature and forensic tools, consider the legal rules on evidence and privacy, define how test evidence will be created and handled, and plan the project. The output is an Investigation Report with the aims, objectives, requirements and project plan for the final year project."
   },
   {
     "code": "CY-L3-011",
@@ -960,7 +960,7 @@
   },
   {
     "code": "MM-L1-002",
-    "name": "Introduction to VRAR and Metaverse",
+    "name": "Introduction to VR/AR and Metaverse",
     "level": 1,
     "type": "specialised",
     "description": "Introduces virtual reality, augmented reality and the metaverse including VR headsets and AR devices, building simple 3D scenes, interaction in VR and AR, and uses of immersive technology in education, retail and entertainment."
@@ -1096,7 +1096,7 @@
     "name": "Investigations in Multimedia Technology",
     "level": 3,
     "type": "specialised",
-    "description": "Students choose a current problem in multimedia technology, search and review published research, compare existing solutions and choose a research method. They write a research proposal for their final year project with aims, methodology, a project plan and ethical considerations."
+    "description": "The investigation phase of the final year project: students identify a problem a multimedia or immersive application can address, review literature and similar applications, survey the target audience, and plan the content, tools and production schedule. The output is an Investigation Report with the aims, objectives, requirements and project plan for the final year project."
   },
   {
     "code": "MM-L3-006",
@@ -1107,14 +1107,14 @@
   },
   {
     "code": "MM-L3-007",
-    "name": "VRAR Design Project",
+    "name": "VR/AR Design Project",
     "level": 3,
     "type": "elective",
     "description": "A project module where students design and build a virtual or augmented reality application using Unity, from concept and prototyping to user testing."
   },
   {
     "code": "MM-L2-009",
-    "name": "VRAR Design Principles",
+    "name": "VR/AR Design Principles",
     "level": 2,
     "type": "specialised",
     "description": "Covers design principles for virtual and augmented reality including immersion, presence, spatial interaction, user comfort and VR/AR user experience."
@@ -1306,7 +1306,7 @@
     "name": "Investigations in Game Development",
     "level": 3,
     "type": "common",
-    "description": "Students choose a current problem in game development, search and review published research, compare existing solutions and choose a research method. They write a research proposal for their final year project with aims, methodology, a project plan and ethical considerations."
+    "description": "The investigation phase of the final year project: students choose a game concept or game technology problem, review literature and similar games, survey target players, define the scope of a playable prototype and plan production milestones. The output is an Investigation Report with the aims, objectives, requirements and project plan for the final year project."
   },
   {
     "code": "GD-L3-002",

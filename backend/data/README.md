@@ -24,6 +24,8 @@
 - Codes are SkillMap's own (APU's real module codes aren't in the brochure). The prefix is the family of the first
   programme listing the module: SE, IT, CS, QC (quantum), DA (data analytics), AI, CY (cyber security, forensics),
   MM (interactive media), GD (game development).
+- "VRAR" in three module names is written "VR/AR" (as in the programme title). Investigations modules are described
+  as the investigation phase of the final year project, whose output is the Investigation Report.
 - "OR" choices and Game Development's Art / Technology tracks are stored as electives (students tick the ones they took).
 
 ## Skill Taxonomy

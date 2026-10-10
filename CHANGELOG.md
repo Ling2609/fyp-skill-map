@@ -3,6 +3,21 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 10 Oct 2026 — Investigations modules described as the FYP investigation phase; VR/AR names
+
+- (this commit) Her review: the 15 investigations descriptions were one sentence with the subject swapped (so all gave
+  the same skills), and an Investigations module is really the investigation phase of the final year project, whose
+  output is the Investigation Report (IR). The 16 investigations descriptions (now incl. SE's) describe that phase:
+  define the problem, review literature and similar systems, gather requirements from target users, choose a method
+  and plan the project, plus what differs by field (e.g. Digital Forensics: legal rules on evidence; Data Analytics:
+  data sources and permission; AI: data set, evaluation measures, bias; Cyber Security: scope and permission for
+  testing; Game Development: player survey, prototype scope).
+- "VRAR" written "VR/AR" in three module names, her call, as in the brochure's programme title (Introduction to VR/AR
+  and Metaverse, VR/AR Design Principles, VR/AR Design Project).
+- `refresh_module_descriptions.py` also copies changed names (no AI call, review kept); its list now includes
+  SE-L3-003, MM-L2-009 and MM-L3-007. **Run, from `backend/`: `python scripts/pipeline/refresh_module_descriptions.py`**
+  (renames 3, refreshes 16 with Groq; modules already Reviewed are skipped and listed).
+
 ## 10 Oct 2026 — Clearer descriptions for project, investigations and four intro modules
 
 - (this commit) Her extraction run (158 modules, 818 skills) showed padded skills caused by the descriptions' wording:
