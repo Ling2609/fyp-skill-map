@@ -3,6 +3,20 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 10 Oct 2026 — Clearer descriptions for project, investigations and four intro modules
+
+- (this commit) Her extraction run (158 modules, 818 skills) showed padded skills caused by the descriptions' wording:
+  every project module gave "<X> solution design / development / evaluation", every investigations module
+  "Literature review; Critical analysis; Research proposal writing" plus a vague "<X> investigation", and four intro
+  modules gave "awareness"-type skills (Threat and attack awareness, team role awareness, metaverse applications
+  awareness, decision support understanding). 34 descriptions in `data/modules.json` rewritten to name concrete
+  content (e.g. Cyber Security project: threat modelling, building a security tool, penetration testing; Data
+  Analytics project: data cleaning, predictive models, dashboard). The 40 SE modules are unchanged (A11 evidence).
+- New `scripts/pipeline/refresh_module_descriptions.py`: copies the new text into the database for those 34 modules
+  only (or `--codes`), finds the skills again with the same prompt, keeps skills an admin added, and skips modules
+  already marked Reviewed. `--dry-run` lists old skills and new text. Resumable; a second run changes nothing.
+  **Run, from `backend/`: `python scripts/pipeline/refresh_module_descriptions.py`** (34 Groq calls).
+
 ## 10 Oct 2026 — All 17 computing programmes
 
 - (this commit) Her request: add every programme in APU's July 2026 Computing brochure, not only Software Engineering.

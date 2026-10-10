@@ -284,7 +284,7 @@
     "name": "Introduction to Security and Forensic Technologies",
     "level": 1,
     "type": "common",
-    "description": "Introduces information security principles including confidentiality, integrity and availability, common threats and attacks, cryptography basics, access control and an overview of digital forensic investigation."
+    "description": "Introduces information security principles including confidentiality, integrity and availability, common types of cyber attack such as malware and phishing, basic cryptography, user authentication, access control and the steps of a digital forensic investigation."
   },
   {
     "code": "IT-L2-001",
@@ -368,14 +368,14 @@
     "name": "Investigations in Information Technology",
     "level": 3,
     "type": "specialised",
-    "description": "A research-based module where students investigate current topics in information technology through literature review, critical analysis and a research proposal."
+    "description": "Students choose a current problem in information technology, search and review published research, compare existing solutions and choose a research method. They write a research proposal for their final year project with aims, methodology, a project plan and ethical considerations."
   },
   {
     "code": "IT-L3-006",
     "name": "Information Technology Project",
     "level": 3,
     "type": "specialised",
-    "description": "Final year project requiring students to investigate a real-world problem and design, develop and evaluate an information technology solution, demonstrating technical, analytical and project management skills."
+    "description": "Final year project: students gather requirements for a real-world problem, design the system and its database, build it, test it and present it in a technical report and a demonstration."
   },
   {
     "code": "IT-L3-007",
@@ -445,14 +445,14 @@
     "name": "Investigations in Information System Security",
     "level": 3,
     "type": "specialised",
-    "description": "A research-based module where students investigate current information system security topics through literature review, critical analysis and a research proposal."
+    "description": "Students choose a current problem in information system security, search and review published research, compare existing solutions and choose a research method. They write a research proposal for their final year project with aims, methodology, a project plan and ethical considerations."
   },
   {
     "code": "IT-L3-014",
     "name": "Information Systems Security Project",
     "level": 3,
     "type": "specialised",
-    "description": "Final year project requiring students to design, develop and evaluate an information security solution for a real-world problem, demonstrating technical, analytical and project management skills."
+    "description": "Final year project: students analyse the security requirements of a real-world system, carry out threat modelling, build security controls or a security tool, test it against attacks and present it in a technical report."
   },
   {
     "code": "IT-L2-009",
@@ -487,14 +487,14 @@
     "name": "Investigations in Cloud Engineering",
     "level": 3,
     "type": "specialised",
-    "description": "A research-based module where students investigate current topics in cloud engineering through literature review, critical analysis and a research proposal."
+    "description": "Students choose a current problem in cloud engineering, search and review published research, compare existing solutions and choose a research method. They write a research proposal for their final year project with aims, methodology, a project plan and ethical considerations."
   },
   {
     "code": "IT-L3-019",
     "name": "Cloud Engineering Project",
     "level": 3,
     "type": "specialised",
-    "description": "Final year project requiring students to design, build and evaluate a cloud-based solution for a real-world problem, demonstrating technical, analytical and project management skills."
+    "description": "Final year project: students design a cloud architecture for a real-world problem, deploy it on a cloud platform such as AWS, monitor its performance and cost, test it and present it in a technical report."
   },
   {
     "code": "IT-L1-002",
@@ -529,14 +529,14 @@
     "name": "Investigations in Internet of Things",
     "level": 3,
     "type": "specialised",
-    "description": "A research-based module where students investigate current Internet of Things topics through literature review, critical analysis and a research proposal."
+    "description": "Students choose a current problem in the Internet of Things, search and review published research, compare existing solutions and choose a research method. They write a research proposal for their final year project with aims, methodology, a project plan and ethical considerations."
   },
   {
     "code": "IT-L3-022",
     "name": "Internet of Things Project",
     "level": 3,
     "type": "specialised",
-    "description": "Final year project requiring students to design, build and evaluate an IoT solution for a real-world problem, demonstrating technical, analytical and project management skills."
+    "description": "Final year project: students build an IoT prototype with sensors and a microcontroller, send its data to a cloud dashboard, test it in a real setting and present it in a technical report."
   },
   {
     "code": "IT-L2-012",
@@ -564,21 +564,21 @@
     "name": "Investigations in Financial Technology",
     "level": 3,
     "type": "specialised",
-    "description": "A research-based module where students investigate current financial technology topics through literature review, critical analysis and a research proposal."
+    "description": "Students choose a current problem in financial technology, search and review published research, compare existing solutions and choose a research method. They write a research proposal for their final year project with aims, methodology, a project plan and ethical considerations."
   },
   {
     "code": "IT-L3-025",
     "name": "Financial Technology Project",
     "level": 3,
     "type": "specialised",
-    "description": "Final year project requiring students to investigate and develop a financial technology solution for a real business problem, demonstrating technical, analytical and project management skills."
+    "description": "Final year project: students analyse a problem in a financial business, gather requirements, build a prototype financial application, test it and present it in a technical report."
   },
   {
     "code": "IT-L1-003",
     "name": "Introduction to Information Systems",
     "level": 1,
     "type": "specialised",
-    "description": "Introduces information systems in organisations including types of information systems, business processes, databases, e-commerce and how information systems support decision making."
+    "description": "Introduces information systems in organisations including types of information systems, business process modelling, databases, e-commerce, and how management information systems and reports support decision making."
   },
   {
     "code": "IT-L2-014",
@@ -606,14 +606,14 @@
     "name": "Investigations in Business Information Systems",
     "level": 3,
     "type": "specialised",
-    "description": "A research-based module where students investigate current business information systems topics through literature review, critical analysis and a research proposal."
+    "description": "Students choose a current problem in business information systems, search and review published research, compare existing solutions and choose a research method. They write a research proposal for their final year project with aims, methodology, a project plan and ethical considerations."
   },
   {
     "code": "IT-L3-029",
     "name": "Business Information Systems Project",
     "level": 3,
     "type": "specialised",
-    "description": "Final year project requiring students to analyse a business problem and design, develop and evaluate an information systems solution, demonstrating technical, analytical and project management skills."
+    "description": "Final year project: students analyse a business problem, model its business processes, design and build an information system, run user acceptance testing and present it in a technical report."
   },
   {
     "code": "IT-L2-015",
@@ -648,14 +648,14 @@
     "name": "Investigations in Sustainable Computing",
     "level": 3,
     "type": "specialised",
-    "description": "A research-based module where students investigate current sustainable computing topics through literature review, critical analysis and a research proposal."
+    "description": "Students choose a current problem in sustainable computing, search and review published research, compare existing solutions and choose a research method. They write a research proposal for their final year project with aims, methodology, a project plan and ethical considerations."
   },
   {
     "code": "IT-L3-034",
     "name": "Sustainable Computing Project",
     "level": 3,
     "type": "specialised",
-    "description": "Final year project requiring students to design, develop and evaluate a sustainable computing solution for a real-world problem, demonstrating technical, analytical and project management skills."
+    "description": "Final year project: students measure the energy use or environmental impact of an IT system, design and build a more sustainable solution, evaluate its impact and present it in a technical report."
   },
   {
     "code": "CS-L2-001",
@@ -683,7 +683,7 @@
     "name": "Investigations in Computer Science",
     "level": 3,
     "type": "specialised",
-    "description": "A research-based module where students investigate current computer science topics through literature review, experimentation and critical analysis."
+    "description": "Students choose a current problem in computer science, search and review published research, compare existing solutions and choose a research method. They write a research proposal for their final year project with aims, methodology, a project plan and ethical considerations."
   },
   {
     "code": "CS-L3-002",
@@ -697,7 +697,7 @@
     "name": "Project in Computer Science",
     "level": 3,
     "type": "specialised",
-    "description": "Final year project requiring students to design, develop and evaluate a computer science solution for a real-world problem, demonstrating technical, analytical and project management skills."
+    "description": "Final year project: students analyse the requirements of a real-world problem, design algorithms and a system to solve it, implement and test it, evaluate its performance and present it in a technical report."
   },
   {
     "code": "QC-L3-001",
@@ -739,14 +739,14 @@
     "name": "Investigations in Quantum Computing",
     "level": 3,
     "type": "specialised",
-    "description": "A research-based module where students investigate current quantum computing topics through literature review, experimentation and critical analysis."
+    "description": "Students choose a current problem in quantum computing, search and review published research, compare existing solutions and choose a research method. They write a research proposal for their final year project with aims, methodology, a project plan and ethical considerations."
   },
   {
     "code": "QC-L3-004",
     "name": "Project in Quantum Computing",
     "level": 3,
     "type": "specialised",
-    "description": "Final year project requiring students to design, develop and evaluate a quantum computing solution for a real-world problem, demonstrating technical, analytical and project management skills."
+    "description": "Final year project: students formulate a real-world problem for a quantum computer, implement quantum circuits in Qiskit, run them on simulators, compare the results with a classical approach and present them in a technical report."
   },
   {
     "code": "DA-L1-001",
@@ -774,7 +774,7 @@
     "name": "Investigations in Data Analytics",
     "level": 3,
     "type": "specialised",
-    "description": "A research-based module where students investigate current data analytics topics through literature review, experimentation and critical analysis."
+    "description": "Students choose a current problem in data analytics, search and review published research, compare existing solutions and choose a research method. They write a research proposal for their final year project with aims, methodology, a project plan and ethical considerations."
   },
   {
     "code": "DA-L3-002",
@@ -795,7 +795,7 @@
     "name": "Project in Data Analytics",
     "level": 3,
     "type": "specialised",
-    "description": "Final year project requiring students to investigate a real-world problem and design, develop and evaluate a data analytics solution, demonstrating technical, analytical and project management skills."
+    "description": "Final year project: students collect and clean a real data set, explore it, build and evaluate predictive models, visualise the findings in a dashboard and present them in a technical report."
   },
   {
     "code": "AI-L2-001",
@@ -809,7 +809,7 @@
     "name": "Investigations in Artificial Intelligence",
     "level": 3,
     "type": "specialised",
-    "description": "A research-based module where students investigate current artificial intelligence topics through literature review, experimentation and critical analysis."
+    "description": "Students choose a current problem in artificial intelligence, search and review published research, compare existing solutions and choose a research method. They write a research proposal for their final year project with aims, methodology, a project plan and ethical considerations."
   },
   {
     "code": "AI-L3-002",
@@ -823,7 +823,7 @@
     "name": "Project in Artificial Intelligence",
     "level": 3,
     "type": "specialised",
-    "description": "Final year project requiring students to design, develop and evaluate an artificial intelligence solution for a real-world problem, demonstrating technical, analytical and project management skills."
+    "description": "Final year project: students prepare a data set, train and evaluate a machine learning model for a real-world problem, build it into a prototype application and present it in a technical report."
   },
   {
     "code": "CY-L2-002",
@@ -865,7 +865,7 @@
     "name": "Investigations in Cyber Security",
     "level": 3,
     "type": "specialised",
-    "description": "A research-based module where students investigate current cyber security topics through literature review, experimentation and critical analysis."
+    "description": "Students choose a current problem in cyber security, search and review published research, compare existing solutions and choose a research method. They write a research proposal for their final year project with aims, methodology, a project plan and ethical considerations."
   },
   {
     "code": "CY-L3-004",
@@ -886,7 +886,7 @@
     "name": "Project in Cyber Security",
     "level": 3,
     "type": "specialised",
-    "description": "Final year project requiring students to design, develop and evaluate a cyber security solution for a real-world problem, demonstrating technical, analytical and project management skills."
+    "description": "Final year project: students carry out threat modelling for a real-world system, build a security tool or a secure system, test it with penetration testing and present it in a technical report."
   },
   {
     "code": "CY-L3-007",
@@ -935,7 +935,7 @@
     "name": "Investigations in Digital Forensics",
     "level": 3,
     "type": "specialised",
-    "description": "A research-based module where students investigate current digital forensics topics through literature review, experimentation and critical analysis."
+    "description": "Students choose a current problem in digital forensics, search and review published research, compare existing solutions and choose a research method. They write a research proposal for their final year project with aims, methodology, a project plan and ethical considerations."
   },
   {
     "code": "CY-L3-011",
@@ -949,7 +949,7 @@
     "name": "Project in Digital Forensics",
     "level": 3,
     "type": "specialised",
-    "description": "Final year project requiring students to design, develop and evaluate a digital forensics solution for a real-world problem, demonstrating technical, analytical and project management skills."
+    "description": "Final year project: students carry out a digital forensic investigation or build a forensic tool, handle evidence with a chain of custody, analyse the findings and present them in a forensic report."
   },
   {
     "code": "MM-L1-001",
@@ -963,7 +963,7 @@
     "name": "Introduction to VRAR and Metaverse",
     "level": 1,
     "type": "specialised",
-    "description": "Introduces virtual reality, augmented reality and the metaverse including immersive hardware, 3D environments, interaction in VR and AR, and their applications."
+    "description": "Introduces virtual reality, augmented reality and the metaverse including VR headsets and AR devices, building simple 3D scenes, interaction in VR and AR, and uses of immersive technology in education, retail and entertainment."
   },
   {
     "code": "MM-L1-003",
@@ -1096,14 +1096,14 @@
     "name": "Investigations in Multimedia Technology",
     "level": 3,
     "type": "specialised",
-    "description": "A research-based module where students investigate current multimedia technology topics through literature review, critical analysis and a research proposal."
+    "description": "Students choose a current problem in multimedia technology, search and review published research, compare existing solutions and choose a research method. They write a research proposal for their final year project with aims, methodology, a project plan and ethical considerations."
   },
   {
     "code": "MM-L3-006",
     "name": "Multimedia Technology Project",
     "level": 3,
     "type": "specialised",
-    "description": "Final year project requiring students to design, develop and evaluate a multimedia technology solution for a real-world problem, demonstrating technical, creative and project management skills."
+    "description": "Final year project: students storyboard and produce the media assets for an interactive multimedia application, build it, run user testing and present it in a technical report and a demonstration."
   },
   {
     "code": "MM-L3-007",
@@ -1166,7 +1166,7 @@
     "name": "Game Development Fundamentals",
     "level": 1,
     "type": "common",
-    "description": "Introduces the game development process including team roles, production pipelines, game engines, version control and building a simple game."
+    "description": "Introduces how games are made including the roles in a game team, the production pipeline from concept to release, using a game engine such as Unity, version control with Git and building a simple game."
   },
   {
     "code": "GD-L1-005",
@@ -1306,14 +1306,14 @@
     "name": "Investigations in Game Development",
     "level": 3,
     "type": "common",
-    "description": "A research-based module where students investigate current game development topics through literature review, critical analysis and a research proposal."
+    "description": "Students choose a current problem in game development, search and review published research, compare existing solutions and choose a research method. They write a research proposal for their final year project with aims, methodology, a project plan and ethical considerations."
   },
   {
     "code": "GD-L3-002",
     "name": "Game Development Final Year Project",
     "level": 3,
     "type": "common",
-    "description": "Final year project requiring students to develop a game development prototype for a chosen specialism, demonstrating technical knowledge, teamwork, critical thinking and analytical skills."
+    "description": "Final year project: students build a game prototype in a game engine for their chosen specialism, write a game design document, run playtesting and present the prototype in a portfolio."
   },
   {
     "code": "GD-L3-003",
