@@ -3,6 +3,16 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 10 Oct 2026 — GitHub import: clearer "not ready" cards, character counter; switch hints follow the setting
+
+- (this commit) Her test: a card whose description she changed said "Find the skills again" but it wasn't a button,
+  so she couldn't tell how to make it ready. Now: leaving the description box finds the skills by itself; until then
+  the card says "Skills not updated" with a "Find skills" button. The counter under a description shows the box's
+  maximum ("12 / 3000"); the 20-character minimum is said in words while the text is shorter.
+- Links & visibility: each switch has a short fixed label ("Visible to employers", "Show grades") and the text under it
+  states what is true now ("Your profile is hidden. Employers cannot find or view it." / "Employers can find your
+  profile…"), the way PatternFly and Sainsbury's design systems and Handshake's settings word it (references.md).
+
 ## 10 Oct 2026 — Projects: find skills before saving, GitHub import checked before adding, cards
 
 - (this commit) Her review of My Profile > Projects (researched: references.md "Projects tab and GitHub import").

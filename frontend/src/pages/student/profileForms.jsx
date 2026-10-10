@@ -80,12 +80,10 @@ export function ProjectForm({ project, onDone, onCancel, onDirty }) {
             placeholder="e.g. A booking app for the campus library in React, with a FastAPI backend and PostgreSQL" rows={4}
             className={`${inputCls} resize-none`} maxLength={3000} required />
         </Field>
-        {descLength < MIN_DESCRIPTION && (
-          <p className="flex justify-between text-xs mt-1.5">
-            <span className="text-amber-700">Describe what you built in at least one sentence.</span>
-            <span className="text-gray-400 tabular-nums">{descLength} / {MIN_DESCRIPTION} characters</span>
-          </p>
-        )}
+        <p className="flex justify-between text-xs mt-1.5">
+          <span className="text-amber-700">{descLength < MIN_DESCRIPTION ? `Write at least ${MIN_DESCRIPTION} characters so skills can be found.` : ''}</span>
+          <span className="text-gray-400 tabular-nums shrink-0 ml-3">{form.description.length} / 3000</span>
+        </p>
       </div>
       <Field label="GitHub link" optional hint="The repo's main languages are added as skills (public repos only).">
         <input type="url" value={form.github_url} onChange={set('github_url')}
@@ -469,9 +467,13 @@ export function ProfileForm({ data, onDone, onCancel, onDirty }) {
       <fieldset className="space-y-3">
         <legend className="text-sm font-semibold text-gray-800 mb-2">Profile visibility</legend>
         <Toggle id="flag-visible" checked={form.visible_to_employers} onChange={v => set('visible_to_employers', v)}
-          label="Employers can see my profile" hint="Turn it off when you are not looking for a job." />
+          label="Visible to employers" hint={form.visible_to_employers
+            ? 'Employers can find your profile and view your skills, projects and certificates.'
+            : 'Your profile is hidden. Employers cannot find or view it.'} />
         <Toggle id="flag-grades" checked={form.show_grades_to_employers} onChange={v => set('show_grades_to_employers', v)}
-          label="Show my grades to employers" hint="Off: they see your modules and skills, not the grades." />
+          label="Show grades" hint={form.show_grades_to_employers
+            ? 'Employers see your grade for each module.'
+            : 'Employers see your modules and skills, but not your grades.'} />
       </fieldset>
       {error && <p className="text-xs text-red-500 bg-red-50 rounded-lg px-3 py-2">{error}</p>}
       <FormButtons loading={busy} busyText="Saving…" label="Save" onCancel={onCancel} disabled={!changed} />

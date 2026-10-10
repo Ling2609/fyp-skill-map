@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import api from '../../api'
 import { FormButtons, Modal, SkillChecker, SkillChip, Spinner } from './profileParts'
 import { ADDED_BY_YOU, MIN_DESCRIPTION, errText, inputCls, mergeFound, projectKey } from './profileUtils'
@@ -38,7 +38,10 @@ export default function GithubImport({ githubLink, onClose, onDone }) {
     ? { ...it, ...(typeof changes === 'function' ? changes(it) : changes) } : it)))
 
   // Skills for one card (her words if there is a sentence, plus the repo's languages); nothing is saved
+  const inFlight = useRef(new Set())   // leaving the box and clicking "Find skills" must not ask twice
   const find = async (it) => {
+    if (inFlight.current.has(it.url)) return
+    inFlight.current.add(it.url)
     update(it.url, { busy: true, notes: [] })
     try {
       const res = await api.post('/profile/projects/suggest', { name: it.name, description: it.description.trim(), github_url: it.url })
@@ -46,7 +49,7 @@ export default function GithubImport({ githubLink, onClose, onDone }) {
         notes: [res.data.skills_note, res.data.github_note].filter(Boolean) }))
     } catch (err) {
       update(it.url, { busy: false, foundFor: keyOf(it), notes: [errText(err, "Couldn't find skills right now. Type them yourself.")] })
-    }
+    } finally { inFlight.current.delete(it.url) }
   }
 
   // Step 1 -> 2: fill in each description, then find each one's skills, one repo after another
@@ -161,10 +164,13 @@ function CheckCard({ it, update, find, onRemove }) {
   const found = it.foundFor !== null
   const stale = found && it.foundFor !== keyOf(it)
   const ready = isReady(it)
+  // The description changed (or was too short) since the skills were found: they must be found for this text.
+  // 10 Oct (her test): the status said "Find the skills again" but wasn't a button, so she couldn't tell what to do.
+  const canFind = length >= MIN_DESCRIPTION && !it.busy && (!found || stale)
   const status = it.busy ? { text: 'Finding skills…', cls: 'text-blue-700' }
     : ready ? { text: 'Ready', cls: 'text-green-700' }
     : length < MIN_DESCRIPTION ? { text: 'Needs a description', cls: 'text-amber-700' }
-    : stale ? { text: 'Find the skills again', cls: 'text-amber-700' }
+    : canFind ? { text: 'Skills not updated', cls: 'text-amber-700' }
     : { text: 'Needs a skill', cls: 'text-amber-700' }
   const tip = (e) => (!e || e === ADDED_BY_YOU || e.startsWith('GitHub:') ? e : `“${e}”`)
 
@@ -173,6 +179,10 @@ function CheckCard({ it, update, find, onRemove }) {
       <div className="flex items-baseline gap-3">
         <span className="text-sm font-semibold text-gray-800 flex-1 min-w-0 truncate">{it.name}</span>
         <span className={`text-xs font-medium ${status.cls}`}>{status.text}</span>
+        {canFind && (
+          <button type="button" onClick={() => find(it)}
+            className="text-xs font-medium text-white bg-blue-700 rounded-md px-2.5 py-1 hover:bg-blue-800">Find skills</button>
+        )}
         {!it.busy && (
           <button type="button" onClick={() => update(it.url, { open: !it.open })} aria-expanded={it.open}
             className="text-xs font-medium text-blue-700 hover:underline">{it.open ? 'Close' : 'Edit'}</button>
@@ -195,15 +205,16 @@ function CheckCard({ it, update, find, onRemove }) {
             <label htmlFor={`desc-${it.url}`} className="block text-xs font-medium text-gray-600 mb-1.5">What you built and the tools you used</label>
             <textarea id={`desc-${it.url}`} rows={3} value={it.description} maxLength={3000}
               onChange={e => update(it.url, { description: e.target.value })}
+              onBlur={() => { if (canFind) find(it) }}
               placeholder="e.g. REST API for a fitness app in FastAPI with PostgreSQL"
               className={`${inputCls} resize-none bg-white`} />
             <p className="flex justify-between text-xs mt-1">
               <span className={length < MIN_DESCRIPTION ? 'text-amber-700' : 'text-gray-400'}>
-                {length < MIN_DESCRIPTION ? 'Describe what you built in at least one sentence.'
+                {length < MIN_DESCRIPTION ? `Write at least ${MIN_DESCRIPTION} characters. Skills are found when you click outside the box.`
                   : it.source === 'readme' ? "Filled in from the repo's README. Change it to say what you did."
                   : it.source === 'github' ? 'From the repo’s description on GitHub.' : ''}
               </span>
-              {length < MIN_DESCRIPTION && <span className="text-gray-400 tabular-nums">{length} / {MIN_DESCRIPTION}</span>}
+              <span className="text-gray-400 tabular-nums shrink-0 ml-3">{it.description.length} / 3000</span>
             </p>
           </div>
           <SkillChecker id={`skills-${it.url}`} skills={it.skills} onChange={skills => update(it.url, { skills })} />
