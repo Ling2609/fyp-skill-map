@@ -15,14 +15,18 @@ Planning, reasoning and research behind each decision are in the project roadmap
 - Admin > Academics: an Intake picker next to the programme (latest picked by default); the Modules tab shows that
   intake's list, says which intake and what it is compared with; modules are marked "New in this intake" or with
   their changed type; modules the intake before had are listed crossed out with "Put back". "+ Add module" opens a
-  catalogue search (a module keeps its description and skills; added at its usual year and type unless changed), with
+  catalogue search (a module keeps its description and skills; added at its catalogue year and type unless changed), with
   "Create a new module" for one that isn't there. Remove takes a module out of this intake only (refused if a student
   of this intake has a grade for it). Intakes tab: add an intake with its later codes and "Copy of <latest>"
   preselected; each intake shows its module count, "Latest", and how many changes it has against the one before;
-  "Open module list" jumps to it. A module's description, skills and review stay one per module everywhere.
+  "Edit list" opens it; only the table scrolls. A module's description, skills and review stay one per module everywhere.
+- New module (her flow, like a student's certificate): fill in the details, "Find skills" (new
+  `POST /admin/modules/suggest`, saves nothing), remove or type skills, then "Add module": it is saved with the checked
+  skills and starts "Reviewed". If the description changes after finding, the skills must be found again (typed ones
+  stay).
 - Students: modules come from their intake's list. A student whose programme has intakes must pick one (sent to the
   setup step until they do: `needs_study` on /auth/me); the intake drop-down shows the code, the group's later codes
-  and the start month, with a hint that the code is on their timetable.
+  and the start month, with a short hint ("As on your timetable, e.g. APU3F2605CS(DA)").
 
 ## 10 Oct 2026 — Admin module panel: less crowded, clear-search button
 

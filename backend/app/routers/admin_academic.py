@@ -229,9 +229,35 @@ class ModuleFields(BaseModel):
     type: str
 
 
+class SkillIn(BaseModel):
+    name: str = Field(max_length=80)
+    added_by_admin: bool = False
+
+
 class NewModule(ModuleFields):
     code: str = Field(max_length=20)
     description: str = Field(max_length=4000)
+    # 10 Oct (her flow, like certificates on the student side): skills found and checked BEFORE saving. Given = saved
+    # as they are and the module counts as reviewed; not given = found after saving, "To review" (older callers)
+    skills: list[SkillIn] | None = Field(default=None, max_length=40)
+
+
+class SuggestIn(BaseModel):
+    name: str = Field(max_length=120)
+    description: str = Field(max_length=4000)
+
+
+@router.post("/modules/suggest")
+def suggest_skills(body: SuggestIn, admin: User = Depends(require_admin)):
+    """Skills in a new module's description, for the admin to check before the module is added. Saves nothing."""
+    text = " ".join(body.description.split())
+    if len(text) < 20:
+        raise HTTPException(status_code=400, detail="Please write at least a sentence: skills are found in this text.")
+    skills = _find_skills(" ".join(body.name.split()), text)
+    if not skills:
+        raise HTTPException(status_code=503, detail="The AI service didn't answer (often its daily limit). "
+                                                    "Try again later, or add the skills yourself.")
+    return {"skills": skills}
 
 
 def _check_fields(body: ModuleFields) -> str:
@@ -243,17 +269,24 @@ def _check_fields(body: ModuleFields) -> str:
     return name
 
 
-def _extract_into(db: Session, mod: Module) -> bool:
-    """Skills from the description (one Groq call); admin-added skills kept. False if the AI gave nothing."""
-    from app.nlp.skill_extractor import MODULE_EXTRACTED_BY, SkillExtractor
+def _find_skills(name: str, description: str, level: int = 1, kind: str = "common") -> list[str]:
+    """Skills in a module's description (one Groq call), de-duplicated; [] if the AI gave nothing."""
+    from app.nlp.skill_extractor import SkillExtractor
     found = SkillExtractor().extract_from_module(
-        {"code": mod.code, "name": mod.name, "level": mod.level, "type": mod.type, "description": mod.description})
+        {"code": "", "name": name, "level": level, "type": kind, "description": description})
     seen, skills = set(), []
     for s in found["extracted_skills"]:
         s = " ".join(s.split())
         if s and s.lower() not in seen:
             seen.add(s.lower())
             skills.append(s)
+    return skills
+
+
+def _extract_into(db: Session, mod: Module) -> bool:
+    """Skills from the description (one Groq call); admin-added skills kept. False if the AI gave nothing."""
+    from app.nlp.skill_extractor import MODULE_EXTRACTED_BY
+    skills = _find_skills(mod.name, mod.description, mod.level, mod.type)
     if not skills:
         return False
     kept = {s["name"].lower() for s in _skills(db, mod) if s["added_by_admin"]}
@@ -271,9 +304,9 @@ AI_DOWN = ("The AI service didn't answer (often its daily limit). The skills wer
 
 @router.post("/modules")
 def add_module(body: NewModule, db: Session = Depends(get_db), admin: User = Depends(require_admin)):
-    """A new module in the list being looked at (the intake's, else the programme's): saved, then its skills are
-    found in the description (it starts "To review"). If the AI doesn't answer, the module is still saved, with no
-    skills, and the reply says so."""
+    """A new module in the list being looked at (the intake's, else the programme's). From the pop-up (10 Oct, her
+    flow) the skills come with it, found and checked before adding, so it starts "Reviewed". Without skills (older
+    callers) they are found after saving and it starts "To review"; if the AI doesn't answer, the reply says so."""
     prog, intake = _scope(db, body.programme_id, body.intake_id)
     name = _check_fields(body)
     code = "".join(body.code.split()).upper()
@@ -284,6 +317,15 @@ def add_module(body: NewModule, db: Session = Depends(get_db), admin: User = Dep
     text = " ".join(body.description.split())
     if len(text) < 20:
         raise HTTPException(status_code=400, detail="Please write at least a sentence: skills are found in this text.")
+    checked = None                  # skills the admin has already checked in the form, de-duplicated
+    if body.skills is not None:
+        checked = {}
+        for sk in body.skills:
+            skill = " ".join(sk.name.split())
+            if skill and skill.lower() not in checked:
+                checked[skill.lower()] = (skill, sk.added_by_admin)
+        if not checked:
+            raise HTTPException(status_code=400, detail="Add at least one skill.")
     mod = Module(code=code, name=name, level=body.year, type=body.type, description=text,
                  institution="Representative APU Computing programmes")
     db.add(mod)
@@ -293,6 +335,14 @@ def add_module(body: NewModule, db: Session = Depends(get_db), admin: User = Dep
     else:
         db.add(ProgrammeModule(programme_id=prog.id, module_id=mod.id, year=body.year, kind=body.type))
     db.commit()
+    if checked is not None:         # checked by the admin already, so the module starts "Reviewed"
+        from app.nlp.skill_extractor import MODULE_EXTRACTED_BY
+        for skill, by_admin in checked.values():
+            db.add(ModuleSkill(module_id=mod.id, module_code=mod.code, skill_name=skill,
+                               extracted_by=ADDED_BY_ADMIN if by_admin else MODULE_EXTRACTED_BY))
+        mod.skills_reviewed_at = datetime.now(timezone.utc)
+        _changed(db, mod)
+        return {**_detail(db, mod), "warning": None}
     found = _extract_into(db, mod)
     _changed(db, mod, unreview=True)
     return {**_detail(db, mod), "warning": None if found else (

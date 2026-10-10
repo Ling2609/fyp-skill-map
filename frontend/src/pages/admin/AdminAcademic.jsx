@@ -246,8 +246,9 @@ function Intakes({ programmeId, intakes, setIntakes, onOpen }) {
 
   return (
     // the add form beside the list (same side-by-side layout as Modules), so the page uses its full width
-    <div className="flex items-start gap-4">
-      <form onSubmit={add} className="w-88 shrink-0 bg-white border border-slate-200 rounded-xl p-5 flex flex-col gap-3">
+    // only the table scrolls (her 10 Oct): the row fills the space under the header, the table card scrolls inside it
+    <div className="flex-1 min-h-0 flex items-start gap-4">
+      <form onSubmit={add} className="w-96 shrink-0 bg-white border border-slate-200 rounded-xl p-5 flex flex-col gap-3">
         <h2 className="text-sm font-semibold text-slate-700">Add an intake</h2>
         <div>
           <label htmlFor="intake-code" className="block text-xs font-medium text-slate-600 mb-1">Intake code (Year 1)</label>
@@ -262,55 +263,57 @@ function Intakes({ programmeId, intakes, setIntakes, onOpen }) {
           <input id="intake-others" value={others} onChange={e => setOthers(e.target.value)} placeholder="e.g. APU2F2709CS(DA), APU3F2805CS(DA)" maxLength={200} className={field} />
         </div>
         <div>
-          <label htmlFor="intake-copy" className="block text-xs font-medium text-slate-600 mb-1">Module list</label>
+          <label htmlFor="intake-copy" className="block text-xs font-medium text-slate-600 mb-1">Start its module list as a copy of</label>
           <select id="intake-copy" value={copyFrom} onChange={e => setCopyFrom(e.target.value)} className={field}>
-            {intakes.length === 0 && <option value="">Copy of the programme's list</option>}
-            {intakes.map((i, n) => <option key={i.id} value={i.id}>Copy of {i.code}{n === 0 ? ' (latest)' : ''} · {i.modules} modules</option>)}
+            {intakes.length === 0 && <option value="">The programme's list</option>}
+            {intakes.map((i, n) => <option key={i.id} value={i.id}>{i.code}{n === 0 ? ' (latest)' : ''} · {i.modules} modules</option>)}
           </select>
         </div>
         {error && <p role="alert" className="text-sm text-rose-600">{error}</p>}
         <button type="submit" disabled={busy || code.trim().length < 3 || !start}
           className="px-4 py-2 text-sm font-medium rounded-lg bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-40">Add intake</button>
-        <p className="text-xs text-slate-500">Change the copied list afterwards in the Modules tab; other intakes keep their own lists.</p>
+        <p className="text-xs text-slate-500">Change the copied list with Edit list; other intakes keep their own lists.</p>
       </form>
-      <div className="flex-1 min-w-0 bg-white border border-slate-200 rounded-xl overflow-hidden max-h-full overflow-y-auto">
+      <div className="flex-1 min-w-0 self-stretch flex flex-col">
+      <div className="min-h-0 bg-white border border-slate-200 rounded-xl overflow-y-auto">
         <table className="w-full text-sm">
           <thead className="sticky top-0">
             <tr className="text-left text-xs text-blue-900 bg-blue-100">
-              <th scope="col" className="font-semibold uppercase tracking-wide px-4 py-2.5">Intake</th>
-              <th scope="col" className="font-semibold uppercase tracking-wide px-4 py-2.5">Starts</th>
-              <th scope="col" className="font-semibold uppercase tracking-wide px-4 py-2.5">Module list</th>
-              <th scope="col" className="font-semibold uppercase tracking-wide px-4 py-2.5">Students</th>
-              <th scope="col" className="px-4 py-2.5"><span className="sr-only">Actions</span></th>
+              <th scope="col" className="font-semibold uppercase tracking-wide px-3 py-2.5">Intake</th>
+              <th scope="col" className="font-semibold uppercase tracking-wide px-3 py-2.5">Starts</th>
+              <th scope="col" className="font-semibold uppercase tracking-wide px-3 py-2.5">Module list</th>
+              <th scope="col" className="font-semibold uppercase tracking-wide px-3 py-2.5">Students</th>
+              <th scope="col" className="px-3 py-2.5"><span className="sr-only">Actions</span></th>
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-100">
             {intakes.length === 0 && <tr><td colSpan={5} className="px-4 py-5 text-slate-500">No intakes yet. Add the first one; it copies the programme's list.</td></tr>}
             {intakes.map(i => (
               <tr key={i.id}>
-                <td className="px-4 py-3 whitespace-nowrap">
+                <td className="px-3 py-3 whitespace-nowrap">
                   <span className="font-medium text-slate-800">{i.code}</span>
                   {i.other_codes && <span className="block text-xs text-slate-500">{i.other_codes}</span>}
                 </td>
-                <td className="px-4 py-3 text-slate-700 whitespace-nowrap">{i.start_date ? shortDay(i.start_date) : '—'}</td>
-                <td className="px-4 py-3 text-slate-700">
+                <td className="px-3 py-3 text-slate-700 whitespace-nowrap">{i.start_date ? shortDay(i.start_date) : '—'}</td>
+                <td className="px-3 py-3 text-slate-700">
                   <span className="whitespace-nowrap">{i.modules} modules
                     {i.latest && <span className="ml-1.5 text-xs font-medium rounded-full px-2 py-0.5 bg-blue-50 text-blue-700">Latest</span>}</span>
                   <span className={`block text-xs ${i.changes ? 'text-amber-700' : 'text-slate-500'}`}>{i.compared_with
                     ? (i.changes ? `${i.changes} change${i.changes > 1 ? 's' : ''} from ${i.compared_with}` : `Same as ${i.compared_with}`)
                     : 'First intake'}</span>
                 </td>
-                <td className="px-4 py-3 text-slate-700 tabular-nums">{i.students}</td>
-                <td className="px-4 py-3 text-right whitespace-nowrap">
-                  <button type="button" onClick={() => onOpen(i)} className="text-sm text-blue-700 hover:underline">Open module list</button>
+                <td className="px-3 py-3 text-slate-700 tabular-nums">{i.students}</td>
+                <td className="px-3 py-3 text-right whitespace-nowrap">
+                  <button type="button" onClick={() => onOpen(i)} className="text-sm text-blue-700 hover:underline">Edit list</button>
                   {i.students === 0 && (
-                    <button type="button" onClick={() => remove(i)} className="ml-4 text-sm text-rose-700 hover:underline">Delete</button>
+                    <button type="button" onClick={() => remove(i)} className="ml-3 text-sm text-rose-700 hover:underline">Delete</button>
                   )}
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
+      </div>
       </div>
     </div>
   )
@@ -320,7 +323,7 @@ function Intakes({ programmeId, intakes, setIntakes, onOpen }) {
 function AddModule({ scope, scopeLabel, onAdded, onNew, onCancel }) {
   const [q, setQ] = useState('')
   const [results, setResults] = useState(null)
-  const [year, setYear] = useState('')      // '' = the module's usual year / type (where it is taught already)
+  const [year, setYear] = useState('')      // '' = as in the catalogue: the year and type the module was created with
   const [type, setType] = useState('')
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
@@ -359,14 +362,15 @@ function AddModule({ scope, scopeLabel, onAdded, onNew, onCancel }) {
           <div className="mt-3 flex flex-wrap items-center gap-2 text-sm text-slate-600">
             <span>Add as</span>
             <select aria-label="Year" value={year} onChange={e => setYear(e.target.value)} className={field}>
-              <option value="">Its usual year</option>
+              <option value="">Catalogue year</option>
               {[1, 2, 3, 4].map(y => <option key={y} value={y}>Year {y}</option>)}
             </select>
             <select aria-label="Type" value={type} onChange={e => setType(e.target.value)} className={field}>
-              <option value="">Its usual type</option>
+              <option value="">Catalogue type</option>
               <option value="common">Common</option><option value="specialised">Specialised</option><option value="elective">Elective</option>
             </select>
           </div>
+          <p className="text-xs text-slate-500 mt-1.5">Catalogue year and type are those shown under each module. Change them only if this intake teaches it differently.</p>
         </div>
         <ul className="flex-1 overflow-y-auto px-6 py-3 flex flex-col gap-2" aria-label="Catalogue results">
           {shownResults === null && <li className="text-sm text-slate-500 py-2">Type at least two letters.</li>}
@@ -376,7 +380,7 @@ function AddModule({ scope, scopeLabel, onAdded, onNew, onCancel }) {
               <span className="min-w-0">
                 <span className="block text-sm font-medium">{m.name}</span>
                 <span className="block text-xs text-slate-500">
-                  {m.code} · {m.in_list ? 'already in this list' : `Year ${m.year} · ${m.skills} skill${m.skills === 1 ? '' : 's'} · ${m.reviewed ? 'Reviewed' : 'To review'} · in ${m.programmes} programme${m.programmes === 1 ? '' : 's'}`}
+                  {m.code} · {m.in_list ? 'already in this list' : `Year ${m.year} · ${m.type.charAt(0).toUpperCase() + m.type.slice(1)} · ${m.skills} skill${m.skills === 1 ? '' : 's'} · ${m.reviewed ? 'Reviewed' : 'To review'} · in ${m.programmes} programme${m.programmes === 1 ? '' : 's'}`}
                 </span>
               </span>
               {!m.in_list && <button type="button" disabled={busy} onClick={() => add(m)}

@@ -324,7 +324,7 @@ export function StudyFields({ options, value, onChange }) {
         </select>
         {programme && !programme.intakes.length && <p className="text-xs text-gray-400 mt-1.5">The career office hasn't added intakes yet. You can pick it later.</p>}
         {/* 10 Oct: each intake has its own module list, so the intake decides which modules the student sees */}
-        {!!programme?.intakes.length && <p className="text-xs text-gray-400 mt-1.5">As on your timetable, e.g. APU3F2605CS(DA). Your modules follow your intake.</p>}
+        {!!programme?.intakes.length && <p className="text-xs text-gray-400 mt-1.5">As on your timetable, e.g. APU3F2605CS(DA)</p>}
       </div>
     </div>
   )
