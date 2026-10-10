@@ -258,6 +258,35 @@ def words(name: str) -> set[str]:
     return set(plain(name).replace("-", " ").replace("/", " ").split())
 
 
+# Where a spot-check skill is in the ad (10 Oct, her request: the check should not need searching the ad, and
+# should come from the code, not a hand-made file): the ad sentence naming it, so she only judges "is this a
+# technical skill the job needs, by the guide". Plain text search, no AI.
+_STOP = {"and", "of", "the", "for", "with", "a", "to", "in", "models", "model", "tools", "systems", "development",
+         "management"}
+
+
+def where_in_ad(skill: str, text: str) -> tuple[str, str]:
+    """("found" / "words found" / "partly" / "not found", the ad sentence)."""
+    sents = [x.strip() for x in re.split(r"(?<=[.!?;:])\s+|\n+|\u2022", text or "") if x.strip()]
+    low = str.lower
+    variants = []
+    for v in (skill, re.sub(r"\s+", "", skill), skill.replace("-", " "), plain(skill)):
+        variants += [v, v[:-1] if v.lower().endswith("s") else v + "s", re.sub(r"ing$", "", v), re.sub(r"ful\b", "", v)]
+    for v in variants:
+        for x in sents:
+            if v and re.search(r"(?<![a-z0-9])" + re.escape(low(v)) + r"(?![a-z0-9])", low(x)):
+                return "found", x
+    words = [w for w in re.findall(r"[a-z0-9+#]+", low(skill)) if w not in _STOP and len(w) > 1]
+    best = None
+    for x in sents:
+        hit = sum(1 for w in words if re.search(r"(?<![a-z0-9])" + re.escape(w[:max(4, len(w) - 3)]), low(x)))
+        if words and hit == len(words):
+            return "words found", x
+        if hit and (not best or hit > best[0]):
+            best = (hit, x)
+    return ("partly", best[1]) if best else ("not found", "")
+
+
 def read_csv(name: str) -> list[dict]:
     if not os.path.exists(path(name)):
         return []
@@ -298,8 +327,10 @@ def merge():
                 key[a["job_ref"]].append(name)
                 if a["job_ref"] in spot_refs:
                     prev = old_spot.get((a["job_ref"], name), {})
+                    found, sentence = where_in_ad(name, a["text"])
                     spot.append({"job_ref": a["job_ref"], "title": a["title"], "kind": "agreed", "skill": name,
-                                 "your_check": prev.get("your_check", "")})
+                                 "your_check": prev.get("your_check", ""), "in_ad": found,
+                                 "where_in_ad": sentence if len(sentence) <= 220 else sentence[:220] + "…"})
         singles = sorted((g for g in groups if len(g) == 1), key=lambda g: order[next(iter(g))])
         for g in singles:
             by, name = next(iter(g.items()))
@@ -315,17 +346,18 @@ def merge():
     spot += [r for r in read_csv("spot_check.csv") if r.get("kind") == "missing"]
     write_csv("disagreements.csv", rows, ["job_ref", "title", "skill", "key", "listed_by", "similar_in_answer_key",
                                           "your_decision"])
-    write_csv("spot_check.csv", spot, ["job_ref", "title", "kind", "skill", "your_check"])
+    write_csv("spot_check.csv", spot, ["job_ref", "title", "kind", "skill", "your_check", "in_ad", "where_in_ad"])
     union = sum(votes_total.values())
     print(f"{union} different skills listed: all three agree on {votes_total[3]} ({votes_total[3] / union:.0%}), two on "
           f"{votes_total[2]} ({votes_total[2] / union:.0%}), only one on {votes_total[1]} ({votes_total[1] / union:.0%}).")
-    open_spot = [r for r in spot if r["kind"] == "agreed" and (r["your_check"] or "").strip().lower() not in ("correct", "wrong")]
+    open_spot = [r for r in spot if r["kind"] == "agreed" and (r["your_check"] or "").strip().lower() not in ("correct", "wrong", "unsure")]
     kept = sum(1 for r in rows if r["your_decision"] == "keep")
     print(f"{len(rows)} skills listed by only one labeller stay out of the answer key ({kept} kept by you in "
           f"disagreements.csv; optional: type keep there for one the ad really needs, then run merge again).")
     if open_spot:
         print(f"Spot-check: {len(open_spot)} agreed skills in {SPOT_ADS} ads to check in {path('spot_check.csv')}: type "
-              f"correct or wrong in your_check (read the ad in ads.md). For a skill all three missed, add a row with "
+              f"correct (the ad names it and it is a technical skill by the guide), wrong (it does not, or it is a task, "
+              f"soft skill or company product) or unsure in your_check (where_in_ad shows the ad sentence naming it; ads.md has the whole ad). For a skill all three missed, add a row with "
               f"kind = missing and the skill name.")
     save("answer_key.json", key)
     print(f"answer_key.json written ({sum(map(len, key.values()))} skills in {len(key)} ads). Next: the spot-check, then score.")
@@ -377,9 +409,10 @@ def score():
     if checked:
         right = sum(1 for r in checked if r["your_check"].strip().lower() == "correct")
         missed = sum(1 for r in spot if r["kind"] == "missing")
+        unsure = sum(1 for r in spot if r["kind"] == "agreed" and (r["your_check"] or "").strip().lower() == "unsure")
         lines.append(f"Answer-key check by the author ({len({r['job_ref'] for r in checked})} ads): {right} of "
                      f"{len(checked)} agreed skills correct ({right / len(checked):.0%}); {missed} skill{'' if missed == 1 else 's'} "
-                     f"all three labellers missed")
+                     f"all three labellers missed; {unsure} marked unsure (left out)")
     with open(path("scores.txt"), "w", encoding="utf-8") as f:
         f.write("\n".join(lines) + "\n")
     for name, rows in (("per_ad.csv", per_ad), ("errors.csv", errors)):

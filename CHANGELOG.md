@@ -3,6 +3,15 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 10 Oct 2026 — Spot-check: "unsure" allowed, ad sentence shown
+
+- (this commit) Her worry: she can't always judge a skill outside her field. Each spot-check row is now answered from
+  the ad text only (correct = the ad names it and it is a technical skill by the guide; wrong = it doesn't, or it is a
+  task / soft skill / company product); `unsure` is accepted, left out of the rate and counted in scores.txt.
+- `merge` adds two columns to `spot_check.csv` so she doesn't have to search the ad: `in_ad` (found / words found /
+  partly / not found) and `where_in_ad` (the ad sentence that names the skill; plain text search, no AI). Her answers
+  are kept when `merge` runs again.
+
 ## 10 Oct 2026 — Answer key: majority vote of three labellers; same skill under different names counted once
 
 - (this commit) Her first merge left 283 skills to decide, many only wording ("Amazon S3" / "AWS S3" / "S3",
