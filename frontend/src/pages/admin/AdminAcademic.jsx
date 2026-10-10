@@ -28,7 +28,16 @@ function SearchBox({ value, onChange, label, placeholder }) {
       </svg>
       <input aria-label={label} value={value} onChange={e => onChange(e.target.value)} placeholder={placeholder}
         onKeyDown={e => { if (e.key === 'Escape') onChange('') }}
-        className="w-full pl-9 pr-3 py-2 text-sm bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+        className="w-full pl-9 pr-9 py-2 text-sm bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+      {/* Clear the search (her request 10 Oct); Esc does the same */}
+      {value && (
+        <button type="button" aria-label="Clear search" onClick={() => onChange('')}
+          className="absolute right-2 top-1/2 -translate-y-1/2 w-6 h-6 inline-flex items-center justify-center rounded-full text-slate-400 hover:text-slate-700 hover:bg-slate-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500">
+          <svg aria-hidden="true" className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 6l12 12M18 6L6 18" />
+          </svg>
+        </button>
+      )}
     </div>
   )
 }
@@ -45,6 +54,7 @@ function ModuleDetails({ id, programmeId, onChanged, onReviewed, onEdit, onRemov
   const [adding, setAdding] = useState(false)
   const [busy, setBusy] = useState('')          // which action is running
   const [error, setError] = useState('')
+  const [showShared, setShowShared] = useState(false)   // the other programmes' codes, on request
 
   useEffect(() => {
     let cancelled = false     // the component is keyed by module id, so a new module starts with fresh state
@@ -74,12 +84,33 @@ function ModuleDetails({ id, programmeId, onChanged, onReviewed, onEdit, onRemov
     if (newSkill.trim()) run('add', () => api.post(`/admin/modules/${id}/skills`, { name: newSkill }), () => setNewSkill(''))
   }
 
+  // Layout (her review 10 Oct, "crowded"): the body scrolls and the action bar stays at the bottom of the panel, so
+  // "Mark as reviewed" is always in view; sections are spaced further apart; the list of programmes that share the
+  // module is folded into one line ("Shared by 14 programmes") and opens on request.
   return (
-    <div className="p-6 flex flex-col gap-5">
-      <div className="flex items-start justify-between gap-3">
+    <div className="flex-1 flex flex-col min-h-0">
+      {/* Name and details on top with a line under them (her request 10 Oct); only the body below scrolls */}
+      <div className="shrink-0 flex items-start justify-between gap-3 px-6 pt-5 pb-4 border-b border-slate-200">
         <div className="min-w-0">
           <h2 className="text-lg font-semibold text-slate-900">{mod.name}</h2>
-          <p className="text-sm text-slate-500 mt-0.5">{mod.code} · Year {here.year} · {here.type}</p>
+          <p className="text-sm text-slate-500 mt-1">
+            {mod.code} · Year {here.year} · {here.type}
+            {others.length > 0 && (
+              <> · <button type="button" onClick={() => setShowShared(v => !v)} aria-expanded={showShared}
+                className="text-blue-700 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-300 rounded">
+                Shared by {others.length + 1} programmes {showShared ? '▴' : '▾'}
+              </button></>
+            )}
+          </p>
+          {showShared && (
+            <div className="mt-2.5">
+              <ul className="flex flex-wrap gap-1.5" aria-label="Other programmes that teach this module">
+                {others.map(p => <li key={p.id} className="text-xs font-medium px-2 py-0.5 rounded-md bg-slate-100 text-slate-600"
+                  title={`Year ${p.year} · ${p.type}`}>{p.code}</li>)}
+              </ul>
+              <p className="text-xs text-slate-500 mt-1.5">Description, skills and review are the same in all of them.</p>
+            </div>
+          )}
         </div>
         <div className="flex items-center gap-2 shrink-0">
           <Chip reviewed={reviewed} />
@@ -90,19 +121,14 @@ function ModuleDetails({ id, programmeId, onChanged, onReviewed, onEdit, onRemov
         </div>
       </div>
 
-      {others.length > 0 && (
-        <p className="-mt-2 text-sm text-slate-600 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2">
-          Also taught in {others.length} other programme{others.length > 1 ? 's' : ''}: {others.map(p => p.code).join(', ')}.
-          The description, skills and review apply to all of them.
-        </p>
-      )}
+    <div className="flex-1 min-h-0 overflow-y-auto px-6 pt-5 pb-5 flex flex-col gap-7">
 
       <div>
-        <div className="flex items-baseline justify-between mb-1.5">
+        <div className="flex items-baseline justify-between mb-2">
           <label htmlFor="module-description" className="text-sm font-semibold text-slate-700">Description</label>
           <span className="text-xs text-slate-500">Skills are found in this text</span>
         </div>
-        <textarea id="module-description" rows={4} value={draft} onChange={e => setDraft(e.target.value)} maxLength={4000}
+        <textarea id="module-description" rows={3} value={draft} onChange={e => setDraft(e.target.value)} maxLength={4000}
           className="w-full px-3 py-2.5 text-sm leading-relaxed text-slate-700 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
         {dirty && (
           <div className="flex items-center justify-end gap-2 mt-2">
@@ -119,13 +145,11 @@ function ModuleDetails({ id, programmeId, onChanged, onReviewed, onEdit, onRemov
       </div>
 
       <div>
-        <div className="flex items-baseline justify-between mb-2">
+        {/* The admin sets one skill list per module; every student who completes it gets the same list (her 10 Oct:
+            students never set module skills, so the same module means the same skills for everyone) */}
+        <div className="flex items-baseline justify-between mb-2.5">
           <h3 className="text-sm font-semibold text-slate-700">Skills ({mod.skills.length})</h3>
-          <span className="text-xs text-slate-500">
-            {mod.students
-              ? `${mod.students} student${mod.students > 1 ? 's have' : ' has'} this module; their matches use these skills`
-              : 'Students who enter a grade for this module get these skills'}
-          </span>
+          <span className="text-xs text-slate-500">Every student who completes this module gets these skills</span>
         </div>
         <ul className="flex flex-wrap gap-2" aria-label="Skills">
           {mod.skills.map(s => (
@@ -157,8 +181,9 @@ function ModuleDetails({ id, programmeId, onChanged, onReviewed, onEdit, onRemov
       </div>
 
       {error && <p role="alert" className="text-sm text-rose-600">{error}</p>}
+    </div>
 
-      <div className="flex flex-wrap items-center justify-end gap-2 pt-4 border-t border-slate-100">
+      <div className="shrink-0 flex flex-wrap items-center justify-end gap-2 px-6 py-3.5 border-t border-slate-200 bg-slate-50/60 rounded-b-xl">
         <span className="text-xs text-slate-500 mr-auto">
           {reviewed ? `Reviewed ${shortDay(mod.reviewed_at)}` : 'Find skills again replaces the AI\'s skills; skills you added stay.'}
         </span>
@@ -405,7 +430,10 @@ export default function AdminAcademic() {
                 {shown.length === 0 && <p className="p-4 text-sm text-slate-500">{onlyToReview && !q ? 'All modules are reviewed.' : 'No modules match.'}</p>}
                 {years.map(y => (
                   <div key={y}>
-                    <p className="sticky top-0 z-10 px-4 py-2 text-xs font-semibold tracking-widest text-white bg-slate-600">YEAR {y}</p>
+                    {/* Light grey band (her pick A, 10 Oct): the dark band drew the eye away from the chosen module */}
+                    <p className="sticky top-0 z-10 px-4 py-2 text-xs font-semibold text-slate-600 bg-slate-100 border-y border-slate-200">
+                      Year {y} <span className="font-normal text-slate-500">· {shown.filter(m => m.year === y).length} modules</span>
+                    </p>
                     <ul>
                       {shown.filter(m => m.year === y).map(m => (
                         <li key={m.id}>
@@ -413,7 +441,7 @@ export default function AdminAcademic() {
                             className={`w-full text-left flex items-center justify-between gap-3 px-4 py-2.5 border-b border-slate-50 ${m.id === selected
                               ? 'bg-blue-50 shadow-[inset_3px_0_0_#2563eb]' : 'hover:bg-slate-50'}`}>
                             <span className="min-w-0">
-                              <span className="block text-sm text-slate-800 truncate">{m.name}</span>
+                              <span className="block text-sm text-slate-800 line-clamp-2">{m.name}</span>
                               <span className="block text-xs text-slate-400">{m.code} · {m.skills} skill{m.skills === 1 ? '' : 's'}</span>
                             </span>
                             <Chip reviewed={m.reviewed} />
@@ -425,7 +453,7 @@ export default function AdminAcademic() {
                 ))}
               </div>
             </section>
-            <section aria-label="Module details" className="flex-1 min-w-0 self-start max-h-full overflow-y-auto bg-white border border-slate-200 rounded-xl">
+            <section aria-label="Module details" className="flex-1 min-w-0 flex flex-col bg-white border border-slate-200 rounded-xl overflow-hidden">
               {notice && <p role="status" className="mx-6 mt-5 -mb-1 text-sm text-amber-800 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2">{notice}</p>}
               {selected ? <ModuleDetails key={`${selected}-${tick}`} id={selected} programmeId={programmeId} onChanged={onChanged} onReviewed={onReviewed}
                   onEdit={mod => openForm({ mode: 'edit', module: mod })} onRemove={mod => { setFormError(''); setRemoving(mod) }} />

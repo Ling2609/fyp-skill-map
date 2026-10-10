@@ -3,6 +3,19 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 10 Oct 2026 — Admin module panel: less crowded, clear-search button
+
+- (this commit) Her review of Admin > Academics: the action bar ("Find skills again" / "Mark as reviewed") now stays
+  at the bottom of the panel while the rest scrolls; sections spaced further apart; the long "Also taught in 13 other
+  programmes: …" box folded into one line, "Shared by 14 programmes ▾", which opens the programme codes on request;
+  description box 3 rows. Skills note now says what the list is for, "Every student who completes this module gets
+  these skills", instead of a count of students (the admin sets one list per module; students never set module
+  skills, so the same module gives everyone the same skills). Search box has an ✕ to clear it (Esc still works).
+  Long module names in the list wrap to two lines instead of being cut. Year headers in the list: light grey band
+  "Year 1 · 16 modules" instead of the dark "YEAR 1" band (her pick A of two drawn on the real page). The details
+  panel is as tall as the module list, with a line under the module name and details (justified skill pills were
+  tried and dropped: she preferred them left-aligned).
+
 ## 10 Oct 2026 — Four oddly worded module skills renamed
 
 - (this commit) From her refresh run: `scripts/tools/rename_module_skills.py` renames "Permission rule setting" →
