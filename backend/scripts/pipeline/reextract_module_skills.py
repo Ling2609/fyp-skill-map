@@ -75,6 +75,10 @@ def main():
             if rows and all(r.extracted_by == LABEL for r in rows) and not dry_run:
                 skipped += 1
                 continue
+            # Since Admin review (7 Oct): never overwrite a module an admin reviewed or added skills to (10 Oct)
+            if mod.skills_reviewed_at is not None or any(r.extracted_by == "admin" for r in rows):
+                skipped += 1
+                continue
             info = catalogue.get(mod.code)
             if not info or not info.get("description"):
                 print(f"[{i}/{len(modules)}] {mod.code} {mod.name}: no description in modules.json, kept as is")

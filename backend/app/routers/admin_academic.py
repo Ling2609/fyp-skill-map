@@ -3,6 +3,11 @@ Admin > Academic structure (7 Oct, batch 2; layout A = list + details, reference
 The career office keeps the module descriptors and checks the skills extracted from them (IR Objective 1: academic
 skill extraction, with a human review step), and keeps the programme's intakes (students pick one at setup).
 
+Programmes (10 Oct): all 17 computing programmes of APU's July 2026 brochure. The admin picks a programme; a module
+shared by several programmes is ONE module (one descriptor, one skill list, one review), with its own year and kind
+(common / specialised / elective) in each programme (programme_modules). Removing a module takes it out of the
+programme picked; the module itself is deleted only when no programme teaches it any more.
+
 Modules
   - the description is the text skills are extracted from; editing it marks the module "to review" again
   - skills: remove one, add one (stored with extracted_by = "admin"), or extract again from the description (Groq,
@@ -30,11 +35,22 @@ ADDED_BY_ADMIN = "admin"
 TYPES = {"common": "Common", "specialised": "Specialised", "elective": "Elective"}
 
 
-def _programme(db: Session) -> Programme:
-    prog = db.query(Programme).order_by(Programme.id).first()
+def _programme(db: Session, programme_id: int | None = None) -> Programme:
+    """The programme asked for, or the first one (the SE programme of the original prototype)."""
+    prog = (db.get(Programme, programme_id) if programme_id is not None
+            else db.query(Programme).order_by(Programme.id).first())
     if not prog:
-        raise HTTPException(status_code=404, detail="No programme yet: run migrations/migrate_admin_structure.py.")
+        raise HTTPException(status_code=404, detail="Programme not found. If there is none yet, run "
+                                                    "migrations/migrate_admin_structure.py and migrate_all_programmes.py.")
     return prog
+
+
+def _link(db: Session, prog: Programme, mod: Module) -> ProgrammeModule:
+    link = db.query(ProgrammeModule).filter(ProgrammeModule.programme_id == prog.id,
+                                            ProgrammeModule.module_id == mod.id).first()
+    if not link:
+        raise HTTPException(status_code=404, detail=f"{mod.code} isn't in {prog.code}.")
+    return link
 
 
 def _module(db: Session, module_id: int) -> Module:
@@ -50,10 +66,16 @@ def _skills(db: Session, mod: Module) -> list[dict]:
 
 
 def _detail(db: Session, mod: Module) -> dict:
+    """One module. Year and type differ per programme, so they come per programme in "programmes" (the page shows
+    the one picked); "year"/"type" are the module's own, for a module no programme teaches."""
     students = db.query(func.count(func.distinct(UserModule.user_id))).filter(UserModule.module_code == mod.code).scalar()
+    links = (db.query(Programme, ProgrammeModule).join(ProgrammeModule, ProgrammeModule.programme_id == Programme.id)
+             .filter(ProgrammeModule.module_id == mod.id).order_by(Programme.code).all())
     return {"id": mod.id, "code": mod.code, "name": mod.name, "year": mod.level, "type": TYPES.get(mod.type, mod.type),
             "description": mod.description or "", "skills": _skills(db, mod),
-            "reviewed_at": mod.skills_reviewed_at, "students": students}
+            "reviewed_at": mod.skills_reviewed_at, "students": students,
+            "programmes": [{"id": p.id, "code": p.code, "year": pm.year, "type": TYPES.get(pm.kind, pm.kind)}
+                           for p, pm in links]}
 
 
 def _changed(db: Session, mod: Module, unreview: bool = False):
@@ -64,19 +86,32 @@ def _changed(db: Session, mod: Module, unreview: bool = False):
 
 
 @router.get("/academic")
-def academic(db: Session = Depends(get_db), admin: User = Depends(require_admin)):
-    """The programme, its modules (for the list) and its intakes."""
-    prog = _programme(db)
+def academic(programme_id: int | None = None, db: Session = Depends(get_db), admin: User = Depends(require_admin)):
+    """Every programme (for the picker, with its module and to-review counts), and the picked programme's modules
+    (for the list) and intakes."""
+    prog = _programme(db, programme_id)
     counts = dict(db.query(ModuleSkill.module_id, func.count(ModuleSkill.id)).group_by(ModuleSkill.module_id).all())
-    mods = (db.query(Module).join(ProgrammeModule, ProgrammeModule.module_id == Module.id)
-            .filter(ProgrammeModule.programme_id == prog.id).order_by(Module.level, Module.code).all())
+    shared = dict(db.query(ProgrammeModule.module_id, func.count(ProgrammeModule.id))
+                  .group_by(ProgrammeModule.module_id).all())
+    rows = (db.query(Module, ProgrammeModule).join(ProgrammeModule, ProgrammeModule.module_id == Module.id)
+            .filter(ProgrammeModule.programme_id == prog.id).order_by(ProgrammeModule.year, ProgrammeModule.id).all())
+    per_prog = (db.query(ProgrammeModule.programme_id, func.count(ProgrammeModule.id),
+                         func.count(ProgrammeModule.id).filter(Module.skills_reviewed_at.is_(None)))
+                .join(Module, Module.id == ProgrammeModule.module_id).group_by(ProgrammeModule.programme_id).all())
+    per_prog = {pid: (n, todo) for pid, n, todo in per_prog}
+    programmes = db.query(Programme).order_by(Programme.code).all()
     return {"programme": {"id": prog.id, "code": prog.code, "name": prog.name},
-            "modules": [{"id": m.id, "code": m.code, "name": m.name, "year": m.level,
-                         "reviewed": m.skills_reviewed_at is not None, "skills": counts.get(m.id, 0)} for m in mods],
+            "programmes": [{"id": p.id, "code": p.code, "name": p.name, "modules": per_prog.get(p.id, (0, 0))[0],
+                            "to_review": per_prog.get(p.id, (0, 0))[1]} for p in programmes],
+            "modules": [{"id": m.id, "code": m.code, "name": m.name, "year": pm.year,
+                         "type": TYPES.get(pm.kind, pm.kind), "shared": shared.get(m.id, 1),
+                         "reviewed": m.skills_reviewed_at is not None, "skills": counts.get(m.id, 0)}
+                        for m, pm in rows],
             "intakes": _intakes(db, prog)}
 
 
 class ModuleFields(BaseModel):
+    programme_id: int | None = None       # the programme the year and type are for (None = the first programme)
     name: str = Field(max_length=120)
     year: int = Field(ge=1, le=4)
     type: str
@@ -126,7 +161,7 @@ AI_DOWN = ("The AI service didn't answer (often its daily limit). The skills wer
 def add_module(body: NewModule, db: Session = Depends(get_db), admin: User = Depends(require_admin)):
     """A new module in the programme: saved, then its skills are found in the description (it starts "To review").
     If the AI doesn't answer, the module is still saved, with no skills, and the reply says so."""
-    prog = _programme(db)
+    prog = _programme(db, body.programme_id)
     name = _check_fields(body)
     code = "".join(body.code.split()).upper()
     if len(code) < 3:
@@ -137,10 +172,10 @@ def add_module(body: NewModule, db: Session = Depends(get_db), admin: User = Dep
     if len(text) < 20:
         raise HTTPException(status_code=400, detail="Please write at least a sentence: skills are found in this text.")
     mod = Module(code=code, name=name, level=body.year, type=body.type, description=text,
-                 institution="Representative SE Programme")
+                 institution="Representative APU Computing programmes")
     db.add(mod)
     db.flush()
-    db.add(ProgrammeModule(programme_id=prog.id, module_id=mod.id, year=body.year))
+    db.add(ProgrammeModule(programme_id=prog.id, module_id=mod.id, year=body.year, kind=body.type))
     db.commit()
     found = _extract_into(db, mod)
     _changed(db, mod, unreview=True)
@@ -151,29 +186,43 @@ def add_module(body: NewModule, db: Session = Depends(get_db), admin: User = Dep
 
 @router.put("/modules/{module_id}")
 def edit_module(module_id: int, body: ModuleFields, db: Session = Depends(get_db), admin: User = Depends(require_admin)):
-    """Name, year and type (the code stays: students' grades are stored under it)."""
+    """Name (every programme), and year and type in the programme picked (the code stays: students' grades are
+    stored under it)."""
     mod = _module(db, module_id)
-    mod.name, mod.level, mod.type = _check_fields(body), body.year, body.type
-    db.query(ProgrammeModule).filter(ProgrammeModule.module_id == mod.id).update({"year": body.year})
+    link = _link(db, _programme(db, body.programme_id), mod)
+    mod.name = _check_fields(body)
+    link.year, link.kind = body.year, body.type
+    if db.query(ProgrammeModule).filter(ProgrammeModule.module_id == mod.id).count() == 1:
+        mod.level, mod.type = body.year, body.type      # only one programme: the module's own values follow it
     _changed(db, mod)
     return _detail(db, mod)
 
 
 @router.delete("/modules/{module_id}")
-def remove_module(module_id: int, db: Session = Depends(get_db), admin: User = Depends(require_admin)):
-    """Removes a module the programme no longer teaches. Refused once a student has entered a grade for it, so no
-    student's profile loses skills they have evidence for."""
+def remove_module(module_id: int, programme_id: int | None = None, db: Session = Depends(get_db),
+                  admin: User = Depends(require_admin)):
+    """Takes a module out of a programme that no longer teaches it. Refused once a student of that programme has
+    entered a grade for it, so no student's profile loses skills they have evidence for. When no programme teaches
+    the module any more (and nobody has a grade for it), the module and its skills are deleted too."""
     mod = _module(db, module_id)
-    students = db.query(func.count(func.distinct(UserModule.user_id))).filter(UserModule.module_code == mod.code).scalar()
+    prog = _programme(db, programme_id)
+    link = _link(db, prog, mod)
+    students = (db.query(func.count(func.distinct(UserModule.user_id))).join(User, User.id == UserModule.user_id)
+                .filter(UserModule.module_code == mod.code, User.programme_id == prog.id).scalar())
     if students:
         raise HTTPException(status_code=400, detail=f"{students} student{'s have' if students > 1 else ' has'} entered "
                                                     "a grade for this module, so it can't be removed.")
-    db.query(ModuleSkill).filter(ModuleSkill.module_id == mod.id).delete(synchronize_session=False)
-    db.query(ProgrammeModule).filter(ProgrammeModule.module_id == mod.id).delete(synchronize_session=False)
-    db.delete(mod)
+    db.delete(link)
+    db.flush()
+    left = db.query(ProgrammeModule).filter(ProgrammeModule.module_id == mod.id).count()
+    graded = db.query(UserModule).filter(UserModule.module_code == mod.code).count()
+    deleted = not left and not graded
+    if deleted:
+        db.query(ModuleSkill).filter(ModuleSkill.module_id == mod.id).delete(synchronize_session=False)
+        db.delete(mod)
     db.commit()
     _gaps_cache["value"] = None
-    return {"removed": mod.code}
+    return {"removed": mod.code, "deleted": deleted, "still_in": left}
 
 
 @router.get("/modules/{module_id}")
@@ -271,13 +320,14 @@ def _intakes(db: Session, prog: Programme) -> list[dict]:
 
 
 class NewIntake(BaseModel):
+    programme_id: int | None = None
     code: str = Field(max_length=30)
     start_date: date
 
 
 @router.post("/intakes")
 def add_intake(body: NewIntake, db: Session = Depends(get_db), admin: User = Depends(require_admin)):
-    prog = _programme(db)
+    prog = _programme(db, body.programme_id)
     code = "".join(body.code.split()).upper()
     if len(code) < 3:
         raise HTTPException(status_code=400, detail="Please type the intake code, e.g. APD3F2409SE.")

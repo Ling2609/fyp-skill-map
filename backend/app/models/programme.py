@@ -1,7 +1,9 @@
 """
 Academic structure, kept by Admin (the career office), 7 Oct: programmes, their intakes, and which modules each
-programme teaches in which year. Scope: one university; the prototype has one programme (a representative APU BSc
-Software Engineering, data/modules.json). A module can belong to several programmes (programme_modules).
+programme teaches in which year. Scope: one university; since 10 Oct the 17 computing programmes of APU's July 2026
+brochure (data/programmes.json, modules in data/modules.json). A module can belong to several programmes
+(programme_modules), with its own year and kind in each (e.g. Mathematical Concepts for Computing is common in IT,
+specialised in SE).
 Students pick programme + intake in a one-step setup after registration (references.md, "Programme + intake").
 """
 from sqlalchemy import Column, Date, DateTime, ForeignKey, Integer, String, UniqueConstraint
@@ -37,6 +39,7 @@ class ProgrammeModule(Base):
     programme_id = Column(Integer, ForeignKey("programmes.id", ondelete="CASCADE"), nullable=False, index=True)
     module_id = Column(Integer, ForeignKey("modules.id", ondelete="CASCADE"), nullable=False)
     year = Column(Integer, nullable=False)                       # year of study the module is taken in
+    kind = Column(String(12), nullable=False, default="common")  # common / specialised / elective, in this programme
 
     __table_args__ = (UniqueConstraint("programme_id", "module_id", name="uq_programme_module"),)
 

@@ -12,6 +12,9 @@ import RowMenu from './RowMenu'
 // side-by-side on wide screens). Each module's skills come from its description (IR Objective 1); the admin
 // checks them, removes or adds one, or finds them again after editing the text. Intakes: the programme's intakes,
 // which students pick at setup. Tab, module and filter are kept in the address.
+// Programmes (10 Oct): a picker above the tabs switches between the 17 computing programmes (with each one's "to
+// review" count). A module shared by several programmes is one module: its description, skills and review apply to
+// all of them; its year and type are per programme, so they show for the programme picked.
 
 const errText = (err, fallback) => err.response?.data?.detail || fallback
 const shortDay = (iso) => new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
@@ -35,7 +38,7 @@ const Chip = ({ reviewed }) => reviewed
   : <span className="shrink-0 text-xs font-medium rounded-full px-2 py-0.5 bg-amber-100 text-amber-800">To review</span>
 
 // ── The chosen module ──────────────────────────────────────────────────────────────────────────────────────────────
-function ModuleDetails({ id, onChanged, onReviewed, onEdit, onRemove }) {
+function ModuleDetails({ id, programmeId, onChanged, onReviewed, onEdit, onRemove }) {
   const [mod, setMod] = useState(null)
   const [draft, setDraft] = useState('')
   const [newSkill, setNewSkill] = useState('')
@@ -63,6 +66,9 @@ function ModuleDetails({ id, onChanged, onReviewed, onEdit, onRemove }) {
 
   const dirty = draft.trim() !== mod.description.trim()
   const reviewed = !!mod.reviewed_at
+  // Year and type as taught in the programme picked; the other programmes that share this module
+  const here = mod.programmes.find(p => p.id === programmeId) || { year: mod.year, type: mod.type }
+  const others = mod.programmes.filter(p => p.id !== programmeId)
   const addSkill = (e) => {
     e.preventDefault()
     if (newSkill.trim()) run('add', () => api.post(`/admin/modules/${id}/skills`, { name: newSkill }), () => setNewSkill(''))
@@ -73,16 +79,23 @@ function ModuleDetails({ id, onChanged, onReviewed, onEdit, onRemove }) {
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
           <h2 className="text-lg font-semibold text-slate-900">{mod.name}</h2>
-          <p className="text-sm text-slate-500 mt-0.5">{mod.code} · Year {mod.year} · {mod.type}</p>
+          <p className="text-sm text-slate-500 mt-0.5">{mod.code} · Year {here.year} · {here.type}</p>
         </div>
         <div className="flex items-center gap-2 shrink-0">
           <Chip reviewed={reviewed} />
           <RowMenu label={`More for ${mod.name}`} items={[
-            { label: 'Edit details', onSelect: () => onEdit(mod) },
+            { label: 'Edit details', onSelect: () => onEdit({ ...mod, year: here.year, type: here.type, shared: others.length }) },
             { label: 'Remove module…', danger: true, onSelect: () => onRemove(mod) },
           ]} />
         </div>
       </div>
+
+      {others.length > 0 && (
+        <p className="-mt-2 text-sm text-slate-600 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2">
+          Also taught in {others.length} other programme{others.length > 1 ? 's' : ''}: {others.map(p => p.code).join(', ')}.
+          The description, skills and review apply to all of them.
+        </p>
+      )}
 
       <div>
         <div className="flex items-baseline justify-between mb-1.5">
@@ -174,7 +187,7 @@ function ModuleDetails({ id, onChanged, onReviewed, onEdit, onRemove }) {
 }
 
 // ── Intakes ────────────────────────────────────────────────────────────────────────────────────────────────────────
-function Intakes({ intakes, setIntakes }) {
+function Intakes({ programmeId, intakes, setIntakes }) {
   const [code, setCode] = useState('')
   const [start, setStart] = useState('')
   const [error, setError] = useState('')
@@ -182,7 +195,7 @@ function Intakes({ intakes, setIntakes }) {
 
   const add = (e) => {
     e.preventDefault(); setBusy(true); setError('')
-    api.post('/admin/intakes', { code, start_date: start })
+    api.post('/admin/intakes', { programme_id: programmeId, code, start_date: start })
       .then(res => { setIntakes(res.data); setCode(''); setStart('') })
       .catch(err => setError(errText(err, "Couldn't add the intake.")))
       .finally(() => setBusy(false))
@@ -250,6 +263,7 @@ export default function AdminAcademic() {
   const tab = params.get('tab') === 'intakes' ? 'intakes' : 'modules'
   const onlyToReview = params.get('show') === 'todo'
   const selected = Number(params.get('m')) || null
+  const programmeParam = Number(params.get('p')) || null
   const [data, setData] = useState(null)
   const [error, setError] = useState('')
   const [q, setQ] = useState('')
@@ -266,14 +280,25 @@ export default function AdminAcademic() {
     setParams(next, { replace: true })
   }, [params, setParams])
 
-  const reload = useCallback(() => api.get('/admin/academic').then(res => { setData(res.data); return res.data })
-    .catch(err => setError(errText(err, "Couldn't load the academic structure. Is the backend running?"))), [])
+  const reload = useCallback(() => api.get('/admin/academic', { params: programmeParam ? { programme_id: programmeParam } : {} })
+    .then(res => { setData(res.data); return res.data })
+    .catch(err => setError(errText(err, "Couldn't load the academic structure. Is the backend running?"))), [programmeParam])
   useEffect(() => { reload() }, [reload])
+  const programmeId = data?.programme.id
+
+  // From the dashboard's "to review" link (no programme picked): open the first programme that has modules to review
+  useEffect(() => {
+    if (!data || programmeParam || !onlyToReview) return
+    if (data.modules.some(m => !m.reviewed)) return
+    const next = data.programmes.find(p => p.to_review > 0)
+    if (next) set({ p: String(next.id), m: '' })
+  }, [data, programmeParam, onlyToReview, set])
 
   const openForm = (f) => { setFormError(''); setForm(f) }
   const saveForm = (fields) => {
     setFormBusy(true); setFormError('')
-    const req = form.mode === 'add' ? api.post('/admin/modules', fields) : api.put(`/admin/modules/${form.module.id}`, fields)
+    const body = { ...fields, programme_id: programmeId }
+    const req = form.mode === 'add' ? api.post('/admin/modules', body) : api.put(`/admin/modules/${form.module.id}`, body)
     req.then(res => reload().then(() => {
       setForm(null); setNotice(res.data.warning || '')
       setTick(t => t + 1)
@@ -285,7 +310,7 @@ export default function AdminAcademic() {
   }
   const confirmRemove = () => {
     setFormBusy(true); setFormError('')
-    api.delete(`/admin/modules/${removing.id}`)
+    api.delete(`/admin/modules/${removing.id}`, { params: { programme_id: programmeId } })
       .then(() => reload().then(() => {
         setRemoving(null); setNotice(''); set({ m: '' })
         window.dispatchEvent(new Event(ADMIN_COUNTS_CHANGED))
@@ -311,8 +336,14 @@ export default function AdminAcademic() {
   }, [tab, selected, modules, set])
 
   const onChanged = (d) => {
-    setData(old => ({ ...old, modules: old.modules.map(m => (m.id === d.id
-      ? { ...m, reviewed: !!d.reviewed_at, skills: d.skills.length } : m)) }))
+    setData(old => {
+      const was = old.modules.find(m => m.id === d.id)
+      const delta = was ? Number(!!was.reviewed) - Number(!!d.reviewed_at) : 0     // +1 back to review, -1 reviewed
+      const inProg = new Set(d.programmes.map(p => p.id))
+      return { ...old,
+        modules: old.modules.map(m => (m.id === d.id ? { ...m, reviewed: !!d.reviewed_at, skills: d.skills.length } : m)),
+        programmes: old.programmes.map(p => (inProg.has(p.id) ? { ...p, to_review: p.to_review + delta } : p)) }
+    })
     window.dispatchEvent(new Event(ADMIN_COUNTS_CHANGED))
   }
   // After "Mark as reviewed", move on to the next module still to review
@@ -330,9 +361,18 @@ export default function AdminAcademic() {
         <div className="pt-0">
           <p className="text-[11px] font-semibold text-blue-600 uppercase tracking-widest mb-2">Admin</p>
           <h1 className="text-2xl font-semibold tracking-tight text-slate-900">Academic structure</h1>
-          <p className="text-sm text-slate-500 mt-1">
-            {data ? `${data.programme.name} · ` : ''}check the skills found in each module's description.
-          </p>
+          <p className="text-sm text-slate-500 mt-1">Check the skills found in each module's description.</p>
+          {data && (
+            <div className="mt-3 flex flex-wrap items-center gap-2">
+              <label htmlFor="programme" className="text-sm font-medium text-slate-700">Programme</label>
+              <select id="programme" value={programmeId} onChange={e => { setQ(''); set({ p: e.target.value, m: '' }) }}
+                className="max-w-full min-w-0 px-3 py-1.5 text-sm bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                {data.programmes.map(p => (
+                  <option key={p.id} value={p.id}>{p.name}{p.to_review ? ` (${p.to_review} to review)` : ''}</option>
+                ))}
+              </select>
+            </div>
+          )}
           <div role="tablist" className="flex gap-6 mt-4">
             <button role="tab" aria-selected={tab === 'modules'} className={tabCls(tab === 'modules')}
               onClick={() => set({ tab: '' })}>Modules <span className="text-slate-400 font-normal ml-0.5">{modules.length || ''}</span></button>
@@ -345,7 +385,7 @@ export default function AdminAcademic() {
       <div className="flex-1 min-h-0 px-8 py-6 flex flex-col">
         {error && <p className="text-sm text-rose-600">{error}</p>}
         {data && tab === 'intakes' && (
-          <Intakes intakes={data.intakes} setIntakes={list => setData(d => ({ ...d, intakes: list }))} />
+          <Intakes key={programmeId} programmeId={programmeId} intakes={data.intakes} setIntakes={list => setData(d => ({ ...d, intakes: list }))} />
         )}
         {data && tab === 'modules' && (
           <div className="flex-1 min-h-0 flex gap-4">
@@ -387,7 +427,7 @@ export default function AdminAcademic() {
             </section>
             <section aria-label="Module details" className="flex-1 min-w-0 self-start max-h-full overflow-y-auto bg-white border border-slate-200 rounded-xl">
               {notice && <p role="status" className="mx-6 mt-5 -mb-1 text-sm text-amber-800 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2">{notice}</p>}
-              {selected ? <ModuleDetails key={`${selected}-${tick}`} id={selected} onChanged={onChanged} onReviewed={onReviewed}
+              {selected ? <ModuleDetails key={`${selected}-${tick}`} id={selected} programmeId={programmeId} onChanged={onChanged} onReviewed={onReviewed}
                   onEdit={mod => openForm({ mode: 'edit', module: mod })} onRemove={mod => { setFormError(''); setRemoving(mod) }} />
                 : <p className="p-6 text-sm text-slate-500">Choose a module on the left.</p>}
             </section>
@@ -395,7 +435,7 @@ export default function AdminAcademic() {
         )}
       </div>
 
-      {form && <ModuleForm module={form.module} busy={formBusy} error={formError} onSave={saveForm} onCancel={() => setForm(null)} />}
+      {form && <ModuleForm module={form.module} programme={data?.programme} busy={formBusy} error={formError} onSave={saveForm} onCancel={() => setForm(null)} />}
       {removing && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/30" onMouseDown={() => { if (!formBusy) setRemoving(null) }}>
           <div role="alertdialog" aria-modal="true" aria-labelledby="remove-title" onMouseDown={e => e.stopPropagation()}
@@ -404,19 +444,17 @@ export default function AdminAcademic() {
             <div className="px-6 pt-5">
               <h2 id="remove-title" className="text-base font-semibold text-slate-900">Remove {removing.name}?</h2>
               <p className="text-sm text-slate-600 mt-1.5">
-                {removing.code} and its skills are taken out of the programme. Only possible while no student has entered a grade for it.
+                {removing.programmes.length > 1
+                  ? `${removing.code} is taken out of ${data?.programme.code}. The ${removing.programmes.length - 1} other programme${removing.programmes.length > 2 ? 's keep' : ' keeps'} it, with its skills.`
+                  : `${removing.code} and its skills are deleted: no other programme teaches it.`}
+                {' '}Only possible while no student of this programme has entered a grade for it.
               </p>
-              {removing.students > 0 && (
-                <p className="text-sm text-amber-800 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2 mt-3">
-                  {removing.students} student{removing.students > 1 ? 's have' : ' has'} entered a grade for this module, so it stays.
-                </p>
-              )}
               {formError && <p role="alert" className="text-sm text-rose-600 mt-3">{formError}</p>}
             </div>
             <div className="flex justify-end gap-2 px-6 py-4 mt-5 bg-slate-50 border-t border-slate-100 rounded-b-2xl">
               <button type="button" autoFocus onClick={() => setRemoving(null)} disabled={formBusy}
                 className="px-4 py-2 text-sm font-medium rounded-lg border border-slate-200 bg-white text-slate-700 hover:bg-slate-50">Cancel</button>
-              <button type="button" onClick={confirmRemove} disabled={formBusy || removing.students > 0}
+              <button type="button" onClick={confirmRemove} disabled={formBusy}
                 className="px-4 py-2 text-sm font-medium rounded-lg bg-rose-600 text-white hover:bg-rose-700 disabled:opacity-40">
                 {formBusy ? 'Removing…' : 'Remove module'}
               </button>

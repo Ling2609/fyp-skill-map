@@ -162,6 +162,7 @@ Groq's free tier allows about 200,000 tokens a day (≈ 100 jobs). Don't run two
 | `migrate_admin_actions.py` | 7 Oct 2026 | new table `admin_actions` (who, when, what, why) for every approve / reject / deactivate / reactivate. The API refuses to start until this has run |
 | `migrate_profile_showcase.py` | 8 Oct 2026 | adds `users.headline`, `about`, `linkedin_url`, `portfolio_url`, `github_url`, `show_grades_to_employers`; new table `user_awards` (honours and awards with their skills). The API refuses to start until this has run |
 | `migrate_career_goal.py` | 9 Oct 2026 | adds `users.target_category` (the student's career goal, a job category; empty = open to all ICT roles). The API refuses to start until this has run |
+| `migrate_all_programmes.py` | 10 Oct 2026 | adds `programme_modules.kind` (a module's type per programme); adds the modules in `data/modules.json` that are missing (198 in all) and the 17 computing programmes in `data/programmes.json` (APU July 2026 brochure) with each module's year and type. Then run `python scripts/pipeline/extract_module_skills.py` to find skills for the new modules (they start "To review"). The API refuses to start until this has run |
 
 A **new, empty** database doesn't need them: the tables are created from `app/models/` when the API starts. To apply one: `python migrations/<file>.py` from `backend/`. A new database change gets a new `migrate_<what_it_does>.py` and a row in this table.
 

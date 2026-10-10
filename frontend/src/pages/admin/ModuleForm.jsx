@@ -2,10 +2,11 @@ import { useEffect, useState } from 'react'
 
 // Pop-up to add a module to the programme, or edit a module's name, year and type (7 Oct). A new module's skills
 // are found in its description straight after saving (IR Objective 1), so the description is required; the code
-// can't change later because students' grades are stored under it.
+// can't change later because students' grades are stored under it. Year and type are for the programme picked
+// (10 Oct: a module can be common in one programme and an elective in another).
 const TYPES = [['common', 'Common'], ['specialised', 'Specialised'], ['elective', 'Elective']]
 
-export default function ModuleForm({ module, busy, error, onSave, onCancel }) {
+export default function ModuleForm({ module, programme, busy, error, onSave, onCancel }) {
   const editing = !!module
   const [code, setCode] = useState('')
   const [name, setName] = useState(module?.name || '')
@@ -32,8 +33,11 @@ export default function ModuleForm({ module, busy, error, onSave, onCancel }) {
         className="bg-white rounded-2xl shadow-xl w-full max-w-lg">
         <div className="px-6 pt-5 flex flex-col gap-4">
           <h2 id="module-form-title" className="text-base font-semibold text-slate-900">
-            {editing ? `Edit ${module.code}` : 'Add a module'}
+            {editing ? `Edit ${module.code}` : `Add a module to ${programme?.code || 'the programme'}`}
           </h2>
+          {editing && module.shared > 0 && (
+            <p className="-mt-2 text-sm text-slate-600">Year and type are for {programme?.code}. The name changes in all {module.shared + 1} programmes that teach it.</p>
+          )}
           {!editing && (
             <div>
               <label htmlFor="mf-code" className="block text-sm font-medium text-slate-700 mb-1">Module code</label>

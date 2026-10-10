@@ -10,8 +10,21 @@
 
 ## Modules Data
 
-- File: `modules.json`
-- Source: APU BSc Software Engineering programme brochure (2026)
+- Files: `modules.json` (198 modules: code, name, level, type, description) and `programmes.json` (17 programmes: each
+  module's code, year and kind in that programme)
+- Source: APU Computing brochure, July 2026 intake (pp. 42-62): programme names and module outlines by level. The
+  first 40 modules (SE-...) came from the 2026 BSc Software Engineering brochure; the other 158 were added on 10 Oct.
+- Left out: MQA compulsory subjects and the internship (no computing skills to find).
+- Descriptions are representative, not APU's official module descriptors: the brochure lists module names only, so
+  each description is written from the module name, the brochure's level summary and common curriculum content.
+- Modules taught in several programmes are stored once (e.g. Python Programming is in 14 programmes). Name variants in
+  the brochure were joined ("System Analysis & Design" / "Systems Analysis and Design", "Data Structure(s)",
+  "Web Application(s)", "... on the Cloud" / "on Cloud"); "Investigations Module" (Game Development) is named
+  "Investigations in Game Development" like the other programmes' investigation modules.
+- Codes are SkillMap's own (APU's real module codes aren't in the brochure). The prefix is the family of the first
+  programme listing the module: SE, IT, CS, QC (quantum), DA (data analytics), AI, CY (cyber security, forensics),
+  MM (interactive media), GD (game development).
+- "OR" choices and Game Development's Art / Technology tracks are stored as electives (students tick the ones they took).
 
 ## Skill Taxonomy
 

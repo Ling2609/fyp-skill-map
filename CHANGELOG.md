@@ -3,6 +3,28 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 10 Oct 2026 — All 17 computing programmes
+
+- (this commit) Her request: add every programme in APU's July 2026 Computing brochure, not only Software Engineering.
+  `data/programmes.json` holds the 17 programmes (7 IT, SE, 4 CS, 2 Cyber Security, 2 Interactive Media, Game
+  Development) with each module's year and kind; `data/modules.json` grows from 40 to 198 modules (158 new, with
+  representative descriptions; see `data/README.md` for how names were joined and codes chosen). 620 programme links.
+- `programme_modules.kind`: a module's type now belongs to the programme (Mathematical Concepts for Computing is common
+  in IT, specialised in SE). `migrations/migrate_all_programmes.py` adds the column, the modules and the programmes;
+  running it twice changes nothing; links an admin made are kept.
+- Students: `GET /modules/` now needs sign-in and returns the student's own programme's modules, with that
+  programme's year and type, in brochure order (whole catalogue before setup, and for other roles).
+- Admin > Academic structure: a programme picker (with each programme's "to review" count); year and type show and
+  are edited per programme; a shared module says which other programmes teach it (its description, skills and review
+  apply to all). Removing takes a module out of the picked programme only; it is deleted when no programme teaches
+  it any more. Intakes are added to the picked programme. The dashboard's "Review" link opens the first programme
+  with modules to review.
+- `scripts/pipeline/extract_module_skills.py` rewritten: finds skills only for modules that have none (same prompt
+  and label as Admin "Find skills again"); it no longer re-creates modules from the JSON, which would have deleted
+  their programme links. `reextract_module_skills.py` now skips modules an admin reviewed or added skills to.
+  **Run, from `backend/`: `python migrations/migrate_all_programmes.py`, then
+  `python scripts/pipeline/extract_module_skills.py`** (158 Groq calls; resumable if the daily limit stops it).
+
 ## 9 Oct 2026 — Skills-employers-want list: whole names, aligned bars
 
 - (this commit) Her review of ab69b13: names were cut at 9rem. The list is now a table: the name column is as wide as

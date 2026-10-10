@@ -1,103 +1,81 @@
 """
-Module Skill Extraction Pipeline
-=================================
-Runs Groq skill extraction on each module's descriptor (name + description) and stores results in PostgreSQL.
-Run once — results are stored and reused from DB.
+Module Skill Extraction
+=======================
+Finds skills for every module in the database that has a description but no skills yet (e.g. the modules added by
+migrations/migrate_all_programmes.py). Same Groq prompt and label as Admin > Academic structure "Find skills again",
+so the result is the same as if an admin had added the module by hand. Each module starts "To review".
 
-Usage:
-  cd backend
+Never touches a module that already has skills, so admin reviews and admin-added skills are safe. Resumable: if Groq
+returns nothing (usually its daily token limit) it stops; run it again later to continue.
+
+(Until 10 Oct this script read data/modules.json and re-created modules; with programmes and admin review in the
+database, modules are now created by the migration or by Admin, and this script only fills in skills.)
+
+Usage (from backend/, venv active):
+  python scripts/pipeline/extract_module_skills.py --dry-run   # lists the modules it would do, no Groq calls
   python scripts/pipeline/extract_module_skills.py
 """
-
 import sys
-import json
 import time
+
 sys.path.append(".")
+
+from sqlalchemy import func
 
 from app.database import SessionLocal
 from app.models.module import Module, ModuleSkill
 from app.nlp.skill_extractor import MODULE_EXTRACTED_BY, SkillExtractor
 
-def run():
-    print("=" * 60)
-    print("Module Skill Extraction Pipeline")
-    print("=" * 60)
 
-    # Load modules
-    with open("data/modules.json", encoding="utf-8") as f:
-        modules = json.load(f)
-    print(f"\nModules to process: {len(modules)}")
+def dedupe(skills: list[str]) -> list[str]:
+    seen, out = set(), []
+    for s in skills:
+        s = " ".join(str(s).split())
+        if s and s.lower() not in seen:
+            seen.add(s.lower())
+            out.append(s)
+    return out
 
-    extractor = SkillExtractor()
+
+def main():
+    dry_run = "--dry-run" in sys.argv
     db = SessionLocal()
-
     try:
-        total_skills = 0
+        with_skills = {mid for (mid,) in db.query(ModuleSkill.module_id).distinct()}
+        todo = [m for m in db.query(Module).order_by(Module.code).all()
+                if m.id not in with_skills and (m.description or "").strip()]
+        no_text = db.query(func.count(Module.id)).filter((Module.description.is_(None)) | (Module.description == "")).scalar()
+        print(f"{len(todo)} module(s) without skills" + (f"; {no_text} without a description (skipped)" if no_text else ""))
+        if dry_run:
+            for m in todo:
+                print(f"  {m.code}  {m.name}")
+            return
 
-        for i, mod in enumerate(modules, 1):
-            print(f"\n[{i}/{len(modules)}] {mod['name']}")
-
-            # Check if already processed WITH skills
-            existing = db.query(Module).filter(
-                Module.code == mod["code"]
-            ).first()
-
-            if existing:
-                skill_count = db.query(ModuleSkill).filter(
-                    ModuleSkill.module_id == existing.id
-                ).count()
-                if skill_count > 0:
-                    print(f"  Already processed ({skill_count} skills) — skipping")
-                    total_skills += skill_count
-                    continue
-                else:
-                    # Has DB entry but no skills — delete and retry
-                    db.query(ModuleSkill).filter(ModuleSkill.module_id == existing.id).delete()
-                    db.delete(existing)
-                    db.commit()
-                    print(f"  Found empty entry — reprocessing")
-
-            # Insert module
-            db_module = Module(
-                code=mod["code"],
-                name=mod["name"],
-                level=mod["level"],
-                type=mod["type"],
-            )
-            db.add(db_module)
-            db.commit()
-            db.refresh(db_module)
-
-            # Extract skills from the descriptor via Groq
-            result = extractor.extract_from_module(mod)
-            skills = result["extracted_skills"]
-            print(f"  Extracted {len(skills)} skills: {skills}")
-
-            # Store skills
-            for skill_name in skills:
-                db_skill = ModuleSkill(
-                    module_id=db_module.id,
-                    module_code=mod["code"],
-                    skill_name=skill_name,
-                    extracted_by=MODULE_EXTRACTED_BY,
-                )
-                db.add(db_skill)
-
-            db.commit()
-            total_skills += len(skills)
-
-            # Rate limit — free tier is 15 RPM
-            if i < len(modules):
-                time.sleep(5)
-
-        print("\n" + "=" * 60)
-        print("EXTRACTION COMPLETE")
-        print("=" * 60)
-        print(f"Modules processed: {len(modules)}")
-        print(f"Total skills stored: {total_skills}")
-
+        extractor = SkillExtractor()
+        done = total = 0
+        for i, mod in enumerate(todo, 1):
+            found = extractor.extract_from_module(
+                {"code": mod.code, "name": mod.name, "level": mod.level, "type": mod.type,
+                 "description": mod.description})
+            skills = dedupe(found["extracted_skills"])
+            if not skills:
+                print(f"\nGroq returned no skills for {mod.code} (usually the daily token limit).")
+                print("Stopped. Run again later: modules that have skills are skipped.")
+                break
+            for name in skills:
+                db.add(ModuleSkill(module_id=mod.id, module_code=mod.code, skill_name=name,
+                                   extracted_by=MODULE_EXTRACTED_BY))
+            mod.skills_reviewed_at = None
+            db.commit()     # one module at a time, so a stop never leaves a module half-done
+            done += 1
+            total += len(skills)
+            print(f"[{i}/{len(todo)}] {mod.code} {mod.name}: {'; '.join(skills)}")
+            if i < len(todo):
+                time.sleep(2)
+        print(f"\nSaved: {done} module(s), {total} skill(s). They show as \"To review\" in Admin > Academic structure.")
     finally:
         db.close()
 
+
 if __name__ == "__main__":
-    run()
+    main()

@@ -278,5 +278,1111 @@
     "level": 3,
     "type": "elective",
     "description": "Covers mathematical optimisation techniques and deep learning architectures including neural networks, backpropagation, CNNs and RNNs. Students implement and train deep learning models using Python."
+  },
+  {
+    "code": "IT-L1-001",
+    "name": "Introduction to Security and Forensic Technologies",
+    "level": 1,
+    "type": "common",
+    "description": "Introduces information security principles including confidentiality, integrity and availability, common threats and attacks, cryptography basics, access control and an overview of digital forensic investigation."
+  },
+  {
+    "code": "IT-L2-001",
+    "name": "Green Computing",
+    "level": 2,
+    "type": "common",
+    "description": "Examines the environmental impact of computing including energy-efficient hardware, data centre power management, virtualisation, e-waste and sustainable IT practices."
+  },
+  {
+    "code": "IT-L2-002",
+    "name": "Mobile and Wireless Technology",
+    "level": 2,
+    "type": "common",
+    "description": "Covers wireless communication principles, Wi-Fi and cellular networks including 4G and 5G, Bluetooth, mobile network architecture and mobile device technologies."
+  },
+  {
+    "code": "IT-L2-003",
+    "name": "Human Computer Interaction",
+    "level": 2,
+    "type": "common",
+    "description": "Introduces human factors in interface design including usability principles, user-centred design, interaction styles, accessibility and evaluation of user interfaces."
+  },
+  {
+    "code": "IT-L2-004",
+    "name": "Web Applications",
+    "level": 2,
+    "type": "common",
+    "description": "Covers server-side web application development including HTTP, sessions, form handling, database connectivity, MVC frameworks and web application security."
+  },
+  {
+    "code": "IT-L2-005",
+    "name": "Systems and Network Administration",
+    "level": 2,
+    "type": "specialised",
+    "description": "Covers administration of Linux and Windows servers including user management, file systems, network services such as DNS and DHCP, shell scripting, backup and system monitoring."
+  },
+  {
+    "code": "IT-L2-006",
+    "name": "Integrated Business Processes with ERP Systems",
+    "level": 2,
+    "type": "specialised",
+    "description": "Introduces enterprise resource planning systems and the business processes they support including procurement, sales and finance, using SAP for hands-on process configuration."
+  },
+  {
+    "code": "IT-L2-007",
+    "name": "Data Center Infrastructure",
+    "level": 2,
+    "type": "specialised",
+    "description": "Covers data centre design and operation including server and storage infrastructure, power and cooling, virtualisation, network cabling and data centre availability standards."
+  },
+  {
+    "code": "IT-L3-001",
+    "name": "Critical Issues in Managing Information Systems in Organisations",
+    "level": 3,
+    "type": "common",
+    "description": "Examines how organisations manage information systems including IT governance, IT strategy alignment, ethics, data privacy, change management and information systems risk."
+  },
+  {
+    "code": "IT-L3-002",
+    "name": "Cloud Infrastructure and Services",
+    "level": 3,
+    "type": "common",
+    "description": "Covers cloud computing models including IaaS, PaaS and SaaS, virtualisation, cloud storage, cloud networking and deploying services on public cloud platforms such as AWS."
+  },
+  {
+    "code": "IT-L3-003",
+    "name": "Mobile and Web Multimedia",
+    "level": 3,
+    "type": "specialised",
+    "description": "Covers creating multimedia content for web and mobile platforms including images, audio, video and animation, responsive design and multimedia optimisation for delivery."
+  },
+  {
+    "code": "IT-L3-004",
+    "name": "Emergent Technology",
+    "level": 3,
+    "type": "specialised",
+    "description": "Explores emerging technologies including artificial intelligence, extended reality, blockchain and quantum computing, and evaluates their adoption, impact and business value."
+  },
+  {
+    "code": "IT-L3-005",
+    "name": "Investigations in Information Technology",
+    "level": 3,
+    "type": "specialised",
+    "description": "A research-based module where students investigate current topics in information technology through literature review, critical analysis and a research proposal."
+  },
+  {
+    "code": "IT-L3-006",
+    "name": "Information Technology Project",
+    "level": 3,
+    "type": "specialised",
+    "description": "Final year project requiring students to investigate a real-world problem and design, develop and evaluate an information technology solution, demonstrating technical, analytical and project management skills."
+  },
+  {
+    "code": "IT-L3-007",
+    "name": "Internet of Things: Concepts and Applications",
+    "level": 3,
+    "type": "elective",
+    "description": "Introduces IoT architecture, sensors and actuators, microcontrollers, IoT communication protocols such as MQTT, and building simple IoT applications."
+  },
+  {
+    "code": "IT-L3-008",
+    "name": "Knowledge Discovery and Big Data Analytics",
+    "level": 3,
+    "type": "elective",
+    "description": "Covers the knowledge discovery process, data preprocessing, data mining techniques, big data platforms such as Hadoop and Spark, and analysing large data sets."
+  },
+  {
+    "code": "QC-L2-001",
+    "name": "Fundamentals of Quantum Computing",
+    "level": 2,
+    "type": "elective",
+    "description": "Introduces quantum computing concepts including qubits, superposition, entanglement, quantum gates and circuits, and writing simple quantum programs with Qiskit."
+  },
+  {
+    "code": "IT-L2-008",
+    "name": "Network Security",
+    "level": 2,
+    "type": "specialised",
+    "description": "Covers securing computer networks including firewalls, VPNs, intrusion detection systems, network attacks, secure protocols and network security policies."
+  },
+  {
+    "code": "CY-L2-001",
+    "name": "Ethical Hacking and Incident Response",
+    "level": 2,
+    "type": "specialised",
+    "description": "Covers ethical hacking methodology including reconnaissance, scanning, exploitation and reporting, together with incident response planning, detection, containment and recovery."
+  },
+  {
+    "code": "IT-L3-009",
+    "name": "Computer Systems Security",
+    "level": 3,
+    "type": "specialised",
+    "description": "Covers operating system and host security including authentication, access control, malware, vulnerability management, system hardening and security auditing."
+  },
+  {
+    "code": "IT-L3-010",
+    "name": "Penetration Testing",
+    "level": 3,
+    "type": "specialised",
+    "description": "Covers planning and performing penetration tests on networks and web applications using tools such as Nmap, Metasploit and Burp Suite, and writing penetration test reports."
+  },
+  {
+    "code": "IT-L3-011",
+    "name": "Database Security",
+    "level": 3,
+    "type": "specialised",
+    "description": "Covers securing database systems including access control, SQL injection prevention, encryption, auditing, backup and recovery, and database security policies."
+  },
+  {
+    "code": "IT-L3-012",
+    "name": "Wireless and Mobile Security",
+    "level": 3,
+    "type": "specialised",
+    "description": "Covers security of wireless networks and mobile devices including Wi-Fi encryption, wireless attacks, mobile application security and mobile device management."
+  },
+  {
+    "code": "IT-L3-013",
+    "name": "Investigations in Information System Security",
+    "level": 3,
+    "type": "specialised",
+    "description": "A research-based module where students investigate current information system security topics through literature review, critical analysis and a research proposal."
+  },
+  {
+    "code": "IT-L3-014",
+    "name": "Information Systems Security Project",
+    "level": 3,
+    "type": "specialised",
+    "description": "Final year project requiring students to design, develop and evaluate an information security solution for a real-world problem, demonstrating technical, analytical and project management skills."
+  },
+  {
+    "code": "IT-L2-009",
+    "name": "Switching and Routing Essentials",
+    "level": 2,
+    "type": "specialised",
+    "description": "Covers switching and routing including VLANs, spanning tree, static and dynamic routing protocols such as OSPF, and configuring Cisco routers and switches."
+  },
+  {
+    "code": "IT-L3-015",
+    "name": "Edge Computing: Concepts and Applications",
+    "level": 3,
+    "type": "specialised",
+    "description": "Introduces edge and fog computing architectures, processing data close to IoT devices, latency and bandwidth trade-offs, and deploying applications at the edge."
+  },
+  {
+    "code": "IT-L3-016",
+    "name": "Enterprise Networking and Automation",
+    "level": 3,
+    "type": "specialised",
+    "description": "Covers enterprise network design, WAN technologies, quality of service, network virtualisation and network automation using Python and configuration management tools."
+  },
+  {
+    "code": "IT-L3-017",
+    "name": "Cloud Architecture",
+    "level": 3,
+    "type": "specialised",
+    "description": "Covers designing cloud solutions including high availability, scalability, fault tolerance, cloud security, cost optimisation and well-architected cloud design on AWS."
+  },
+  {
+    "code": "IT-L3-018",
+    "name": "Investigations in Cloud Engineering",
+    "level": 3,
+    "type": "specialised",
+    "description": "A research-based module where students investigate current topics in cloud engineering through literature review, critical analysis and a research proposal."
+  },
+  {
+    "code": "IT-L3-019",
+    "name": "Cloud Engineering Project",
+    "level": 3,
+    "type": "specialised",
+    "description": "Final year project requiring students to design, build and evaluate a cloud-based solution for a real-world problem, demonstrating technical, analytical and project management skills."
+  },
+  {
+    "code": "IT-L1-002",
+    "name": "Introduction to Internet of Things",
+    "level": 1,
+    "type": "specialised",
+    "description": "Introduces the Internet of Things including sensors, microcontrollers such as Arduino and Raspberry Pi, basic electronics, IoT architecture and simple IoT programming."
+  },
+  {
+    "code": "IT-L2-010",
+    "name": "IoT Connectivity",
+    "level": 2,
+    "type": "specialised",
+    "description": "Covers communication technologies for IoT including Wi-Fi, Bluetooth Low Energy, LoRaWAN and Zigbee, and IoT protocols such as MQTT and CoAP."
+  },
+  {
+    "code": "IT-L2-011",
+    "name": "Developing IoT Applications",
+    "level": 2,
+    "type": "specialised",
+    "description": "Covers building end-to-end IoT applications including device programming, collecting sensor data, cloud IoT platforms, dashboards and data storage."
+  },
+  {
+    "code": "IT-L3-020",
+    "name": "Human Computer Interaction and Usability",
+    "level": 3,
+    "type": "specialised",
+    "description": "Covers interaction design and usability engineering including user research, prototyping, usability testing, heuristic evaluation and accessibility."
+  },
+  {
+    "code": "IT-L3-021",
+    "name": "Investigations in Internet of Things",
+    "level": 3,
+    "type": "specialised",
+    "description": "A research-based module where students investigate current Internet of Things topics through literature review, critical analysis and a research proposal."
+  },
+  {
+    "code": "IT-L3-022",
+    "name": "Internet of Things Project",
+    "level": 3,
+    "type": "specialised",
+    "description": "Final year project requiring students to design, build and evaluate an IoT solution for a real-world problem, demonstrating technical, analytical and project management skills."
+  },
+  {
+    "code": "IT-L2-012",
+    "name": "Financial Management",
+    "level": 2,
+    "type": "specialised",
+    "description": "Introduces financial management including financial statements, budgeting, cost analysis, investment appraisal and working capital management."
+  },
+  {
+    "code": "IT-L2-013",
+    "name": "Financial Technology",
+    "level": 2,
+    "type": "specialised",
+    "description": "Introduces FinTech including digital payments, mobile banking, peer-to-peer lending, robo-advisors, cryptocurrencies and the technologies behind financial services innovation."
+  },
+  {
+    "code": "IT-L3-023",
+    "name": "Fintech Risk Management and Regulations",
+    "level": 3,
+    "type": "specialised",
+    "description": "Covers risk management in financial technology including operational, cyber and compliance risk, anti-money laundering, data protection and financial regulations."
+  },
+  {
+    "code": "IT-L3-024",
+    "name": "Investigations in Financial Technology",
+    "level": 3,
+    "type": "specialised",
+    "description": "A research-based module where students investigate current financial technology topics through literature review, critical analysis and a research proposal."
+  },
+  {
+    "code": "IT-L3-025",
+    "name": "Financial Technology Project",
+    "level": 3,
+    "type": "specialised",
+    "description": "Final year project requiring students to investigate and develop a financial technology solution for a real business problem, demonstrating technical, analytical and project management skills."
+  },
+  {
+    "code": "IT-L1-003",
+    "name": "Introduction to Information Systems",
+    "level": 1,
+    "type": "specialised",
+    "description": "Introduces information systems in organisations including types of information systems, business processes, databases, e-commerce and how information systems support decision making."
+  },
+  {
+    "code": "IT-L2-014",
+    "name": "Management Information Systems",
+    "level": 2,
+    "type": "specialised",
+    "description": "Covers how information systems support management including decision support systems, business intelligence, reporting, data-driven decision making and information systems planning."
+  },
+  {
+    "code": "IT-L3-026",
+    "name": "Developing E-Commerce Applications with XML",
+    "level": 3,
+    "type": "specialised",
+    "description": "Covers developing e-commerce applications using XML technologies including XML schemas, XSLT, web services and data exchange between business systems."
+  },
+  {
+    "code": "IT-L3-027",
+    "name": "Information Systems Development Trends",
+    "level": 3,
+    "type": "specialised",
+    "description": "Examines current trends in information systems development including low-code platforms, cloud-based systems, agile delivery, automation and digital transformation."
+  },
+  {
+    "code": "IT-L3-028",
+    "name": "Investigations in Business Information Systems",
+    "level": 3,
+    "type": "specialised",
+    "description": "A research-based module where students investigate current business information systems topics through literature review, critical analysis and a research proposal."
+  },
+  {
+    "code": "IT-L3-029",
+    "name": "Business Information Systems Project",
+    "level": 3,
+    "type": "specialised",
+    "description": "Final year project requiring students to analyse a business problem and design, develop and evaluate an information systems solution, demonstrating technical, analytical and project management skills."
+  },
+  {
+    "code": "IT-L2-015",
+    "name": "Sustainable Technology and Policy",
+    "level": 2,
+    "type": "specialised",
+    "description": "Examines sustainable technology and the policies that govern it including environmental regulations, sustainability reporting, ESG frameworks and green IT policy."
+  },
+  {
+    "code": "IT-L3-030",
+    "name": "Digital Strategy and Analytics",
+    "level": 3,
+    "type": "specialised",
+    "description": "Covers developing digital strategies and measuring them with analytics including key performance indicators, web and social media analytics, dashboards and data-driven decision making."
+  },
+  {
+    "code": "IT-L3-031",
+    "name": "Social and Collaborative Computing",
+    "level": 3,
+    "type": "specialised",
+    "description": "Examines social media platforms, online communities and collaboration tools, and how organisations use social and collaborative computing for communication and teamwork."
+  },
+  {
+    "code": "IT-L3-032",
+    "name": "Sustainable Leadership",
+    "level": 3,
+    "type": "specialised",
+    "description": "Covers leadership for sustainable organisations including change management, stakeholder engagement, corporate social responsibility and leading sustainability initiatives."
+  },
+  {
+    "code": "IT-L3-033",
+    "name": "Investigations in Sustainable Computing",
+    "level": 3,
+    "type": "specialised",
+    "description": "A research-based module where students investigate current sustainable computing topics through literature review, critical analysis and a research proposal."
+  },
+  {
+    "code": "IT-L3-034",
+    "name": "Sustainable Computing Project",
+    "level": 3,
+    "type": "specialised",
+    "description": "Final year project requiring students to design, develop and evaluate a sustainable computing solution for a real-world problem, demonstrating technical, analytical and project management skills."
+  },
+  {
+    "code": "CS-L2-001",
+    "name": "Computer Systems Low Level Technique",
+    "level": 2,
+    "type": "specialised",
+    "description": "Covers low-level programming including C programming, pointers, memory management, assembly language, system calls and interaction with operating system and hardware."
+  },
+  {
+    "code": "CS-L2-002",
+    "name": "Probability and Statistical Modelling",
+    "level": 2,
+    "type": "elective",
+    "description": "Covers probability theory, probability distributions, hypothesis testing, regression analysis and statistical modelling of data using R or Python."
+  },
+  {
+    "code": "CS-L2-003",
+    "name": "Business Intelligence Systems",
+    "level": 2,
+    "type": "elective",
+    "description": "Covers business intelligence including data warehousing, ETL processes, OLAP, dashboards and reporting tools such as Power BI for decision support."
+  },
+  {
+    "code": "CS-L3-001",
+    "name": "Investigations in Computer Science",
+    "level": 3,
+    "type": "specialised",
+    "description": "A research-based module where students investigate current computer science topics through literature review, experimentation and critical analysis."
+  },
+  {
+    "code": "CS-L3-002",
+    "name": "Algorithms",
+    "level": 3,
+    "type": "specialised",
+    "description": "Covers algorithm design and analysis including complexity analysis, divide and conquer, greedy algorithms, dynamic programming, graph algorithms and NP-completeness."
+  },
+  {
+    "code": "CS-L3-003",
+    "name": "Project in Computer Science",
+    "level": 3,
+    "type": "specialised",
+    "description": "Final year project requiring students to design, develop and evaluate a computer science solution for a real-world problem, demonstrating technical, analytical and project management skills."
+  },
+  {
+    "code": "QC-L3-001",
+    "name": "Quantum Algorithms",
+    "level": 3,
+    "type": "elective",
+    "description": "Covers quantum algorithms including Deutsch-Jozsa, Grover's search, the quantum Fourier transform and Shor's algorithm, implemented with Qiskit."
+  },
+  {
+    "code": "CS-L3-004",
+    "name": "Image Processing, Computer Vision and Pattern Recognition",
+    "level": 3,
+    "type": "elective",
+    "description": "Covers digital image processing, feature extraction, object detection, image classification and pattern recognition techniques using OpenCV and Python."
+  },
+  {
+    "code": "QC-L3-002",
+    "name": "Quantum Machine Learning",
+    "level": 3,
+    "type": "elective",
+    "description": "Introduces quantum machine learning including variational quantum circuits, quantum kernels and hybrid quantum-classical models, implemented with Qiskit."
+  },
+  {
+    "code": "CS-L2-004",
+    "name": "AI Methods",
+    "level": 2,
+    "type": "specialised",
+    "description": "Covers artificial intelligence methods including search, optimisation, fuzzy logic, evolutionary algorithms, machine learning and knowledge-based systems."
+  },
+  {
+    "code": "CS-L2-005",
+    "name": "Computing Theory",
+    "level": 2,
+    "type": "specialised",
+    "description": "Covers the theory of computation including automata, regular languages, context-free grammars, Turing machines, computability and complexity."
+  },
+  {
+    "code": "QC-L3-003",
+    "name": "Investigations in Quantum Computing",
+    "level": 3,
+    "type": "specialised",
+    "description": "A research-based module where students investigate current quantum computing topics through literature review, experimentation and critical analysis."
+  },
+  {
+    "code": "QC-L3-004",
+    "name": "Project in Quantum Computing",
+    "level": 3,
+    "type": "specialised",
+    "description": "Final year project requiring students to design, develop and evaluate a quantum computing solution for a real-world problem, demonstrating technical, analytical and project management skills."
+  },
+  {
+    "code": "DA-L1-001",
+    "name": "Introduction to C Programming",
+    "level": 1,
+    "type": "specialised",
+    "description": "Introduces programming in C including data types, control structures, functions, arrays, pointers, structures and file handling."
+  },
+  {
+    "code": "DA-L2-001",
+    "name": "Data Management",
+    "level": 2,
+    "type": "specialised",
+    "description": "Covers managing data for analytics including data modelling, data quality, data governance, data integration, metadata and data storage solutions."
+  },
+  {
+    "code": "DA-L2-002",
+    "name": "Data Mining and Predictive Modelling",
+    "level": 2,
+    "type": "specialised",
+    "description": "Covers data mining and predictive modelling including classification, regression, clustering, association rules, model evaluation and tools such as SAS and Python."
+  },
+  {
+    "code": "DA-L3-001",
+    "name": "Investigations in Data Analytics",
+    "level": 3,
+    "type": "specialised",
+    "description": "A research-based module where students investigate current data analytics topics through literature review, experimentation and critical analysis."
+  },
+  {
+    "code": "DA-L3-002",
+    "name": "Text Analytics and Sentiment Analysis",
+    "level": 3,
+    "type": "specialised",
+    "description": "Covers natural language processing for text analytics including text preprocessing, text classification, topic modelling and sentiment analysis using Python."
+  },
+  {
+    "code": "DA-L3-003",
+    "name": "Behavioural Science and Marketing Analytics",
+    "level": 3,
+    "type": "specialised",
+    "description": "Applies behavioural science and analytics to marketing including customer segmentation, consumer behaviour, campaign analysis and marketing metrics."
+  },
+  {
+    "code": "DA-L3-004",
+    "name": "Project in Data Analytics",
+    "level": 3,
+    "type": "specialised",
+    "description": "Final year project requiring students to investigate a real-world problem and design, develop and evaluate a data analytics solution, demonstrating technical, analytical and project management skills."
+  },
+  {
+    "code": "AI-L2-001",
+    "name": "Imaging and Special Effects",
+    "level": 2,
+    "type": "specialised",
+    "description": "Covers digital imaging and visual special effects including image manipulation, compositing, colour correction and generating visual effects."
+  },
+  {
+    "code": "AI-L3-001",
+    "name": "Investigations in Artificial Intelligence",
+    "level": 3,
+    "type": "specialised",
+    "description": "A research-based module where students investigate current artificial intelligence topics through literature review, experimentation and critical analysis."
+  },
+  {
+    "code": "AI-L3-002",
+    "name": "Further Artificial Intelligence",
+    "level": 3,
+    "type": "specialised",
+    "description": "Covers advanced artificial intelligence including machine learning, natural language processing, reinforcement learning, intelligent agents and generative AI."
+  },
+  {
+    "code": "AI-L3-003",
+    "name": "Project in Artificial Intelligence",
+    "level": 3,
+    "type": "specialised",
+    "description": "Final year project requiring students to design, develop and evaluate an artificial intelligence solution for a real-world problem, demonstrating technical, analytical and project management skills."
+  },
+  {
+    "code": "CY-L2-002",
+    "name": "Practical CTF Strategies",
+    "level": 2,
+    "type": "specialised",
+    "description": "Covers capture-the-flag security challenges including cryptography, web exploitation, reverse engineering, binary exploitation and forensics puzzles."
+  },
+  {
+    "code": "CY-L2-003",
+    "name": "Implementation of Secure Systems",
+    "level": 2,
+    "type": "elective",
+    "description": "Covers designing and implementing secure systems including secure coding, authentication, cryptography in applications, threat modelling and security testing."
+  },
+  {
+    "code": "CY-L2-004",
+    "name": "Social Psychology",
+    "level": 2,
+    "type": "elective",
+    "description": "Introduces social psychology including social influence, persuasion, group behaviour and attitudes, and how they relate to human factors in cyber security."
+  },
+  {
+    "code": "CY-L3-001",
+    "name": "Deep Learning for Intrusion Detection",
+    "level": 3,
+    "type": "common",
+    "description": "Applies deep learning to intrusion detection including network traffic analysis, anomaly detection and neural network models for detecting cyber attacks."
+  },
+  {
+    "code": "CY-L3-002",
+    "name": "Advanced Software Security",
+    "level": 3,
+    "type": "common",
+    "description": "Covers secure software development including the OWASP Top 10, secure coding practices, static and dynamic analysis, code review and software vulnerability management."
+  },
+  {
+    "code": "CY-L3-003",
+    "name": "Investigations in Cyber Security",
+    "level": 3,
+    "type": "specialised",
+    "description": "A research-based module where students investigate current cyber security topics through literature review, experimentation and critical analysis."
+  },
+  {
+    "code": "CY-L3-004",
+    "name": "Vulnerability Assessment and Penetration Testing",
+    "level": 3,
+    "type": "specialised",
+    "description": "Covers vulnerability assessment and penetration testing including vulnerability scanning, exploitation, risk rating and reporting using tools such as Nessus, Nmap and Metasploit."
+  },
+  {
+    "code": "CY-L3-005",
+    "name": "Advanced Cyber Security",
+    "level": 3,
+    "type": "specialised",
+    "description": "Covers advanced cyber security topics including threat intelligence, security operations, malware analysis, security frameworks such as NIST and ISO 27001, and cyber defence strategies."
+  },
+  {
+    "code": "CY-L3-006",
+    "name": "Project in Cyber Security",
+    "level": 3,
+    "type": "specialised",
+    "description": "Final year project requiring students to design, develop and evaluate a cyber security solution for a real-world problem, demonstrating technical, analytical and project management skills."
+  },
+  {
+    "code": "CY-L3-007",
+    "name": "Network Threat Management and Defense",
+    "level": 3,
+    "type": "elective",
+    "description": "Covers detecting and defending against network threats including security monitoring, SIEM, intrusion prevention, threat hunting and incident handling."
+  },
+  {
+    "code": "CY-L3-008",
+    "name": "DevSecOps Principles and Practices",
+    "level": 3,
+    "type": "elective",
+    "description": "Covers integrating security into DevOps including secure CI/CD pipelines, automated security testing, container security and infrastructure as code security."
+  },
+  {
+    "code": "CY-L3-009",
+    "name": "Cyberpsychology",
+    "level": 3,
+    "type": "elective",
+    "description": "Examines human behaviour in cyberspace including online behaviour, social engineering, cybercrime psychology and human factors in cyber security."
+  },
+  {
+    "code": "QC-L3-005",
+    "name": "Quantum Circuits and Algorithms",
+    "level": 3,
+    "type": "elective",
+    "description": "Covers quantum circuits and algorithms including quantum gates, circuit design, quantum search and factoring algorithms, and implications for cryptography."
+  },
+  {
+    "code": "CY-L2-005",
+    "name": "Advanced Forensics Methods",
+    "level": 2,
+    "type": "specialised",
+    "description": "Covers advanced digital forensics including memory forensics, network forensics, mobile device forensics and the use of forensic tools such as Autopsy and FTK."
+  },
+  {
+    "code": "CY-L2-006",
+    "name": "Forensic Analysis and Recovery",
+    "level": 2,
+    "type": "specialised",
+    "description": "Covers forensic acquisition and analysis of digital evidence including disk imaging, file system analysis, data recovery, chain of custody and forensic reporting."
+  },
+  {
+    "code": "CY-L3-010",
+    "name": "Investigations in Digital Forensics",
+    "level": 3,
+    "type": "specialised",
+    "description": "A research-based module where students investigate current digital forensics topics through literature review, experimentation and critical analysis."
+  },
+  {
+    "code": "CY-L3-011",
+    "name": "Legal and Professional Practice in the Cyber World",
+    "level": 3,
+    "type": "specialised",
+    "description": "Covers cyber law and professional practice including computer crime legislation, data protection laws, digital evidence admissibility, intellectual property and professional ethics."
+  },
+  {
+    "code": "CY-L3-012",
+    "name": "Project in Digital Forensics",
+    "level": 3,
+    "type": "specialised",
+    "description": "Final year project requiring students to design, develop and evaluate a digital forensics solution for a real-world problem, demonstrating technical, analytical and project management skills."
+  },
+  {
+    "code": "MM-L1-001",
+    "name": "Programming with Python",
+    "level": 1,
+    "type": "common",
+    "description": "Introduces programming using Python including variables, control structures, functions, data structures and file handling, with simple interactive and media programs."
+  },
+  {
+    "code": "MM-L1-002",
+    "name": "Introduction to VRAR and Metaverse",
+    "level": 1,
+    "type": "specialised",
+    "description": "Introduces virtual reality, augmented reality and the metaverse including immersive hardware, 3D environments, interaction in VR and AR, and their applications."
+  },
+  {
+    "code": "MM-L1-003",
+    "name": "Web Design and Development",
+    "level": 1,
+    "type": "specialised",
+    "description": "Covers designing and building websites with HTML, CSS and JavaScript including layout, typography, responsive design and web accessibility."
+  },
+  {
+    "code": "MM-L1-004",
+    "name": "Audio Visual Technology",
+    "level": 1,
+    "type": "specialised",
+    "description": "Covers audio and video fundamentals including recording, digital formats, compression, editing and producing audio-visual content."
+  },
+  {
+    "code": "MM-L1-005",
+    "name": "Introduction to Graphics and Basic 3D Applications",
+    "level": 1,
+    "type": "specialised",
+    "description": "Introduces computer graphics and 3D applications including 2D graphics, 3D modelling basics, texturing, lighting and rendering using Blender."
+  },
+  {
+    "code": "MM-L1-006",
+    "name": "Digital Image Production",
+    "level": 1,
+    "type": "specialised",
+    "description": "Covers creating and editing digital images including photography basics, image editing in Adobe Photoshop, colour theory and composition."
+  },
+  {
+    "code": "MM-L1-007",
+    "name": "Intercultural Awareness and Cultural Diversity",
+    "level": 1,
+    "type": "elective",
+    "description": "Develops intercultural awareness including cultural differences, cross-cultural communication and working effectively in diverse teams."
+  },
+  {
+    "code": "MM-L1-008",
+    "name": "Introduction to Visual Programming",
+    "level": 1,
+    "type": "elective",
+    "description": "Introduces programming with visual and event-driven tools including user interface design, event handling and building interactive applications."
+  },
+  {
+    "code": "MM-L2-001",
+    "name": "Multimedia Applications",
+    "level": 2,
+    "type": "specialised",
+    "description": "Covers designing and developing multimedia applications combining text, graphics, audio, video and animation, including authoring tools and interactivity."
+  },
+  {
+    "code": "MM-L2-002",
+    "name": "Interactive Content Development",
+    "level": 2,
+    "type": "specialised",
+    "description": "Covers developing interactive digital content including interaction design, scripting interactivity and building interactive experiences with Unity."
+  },
+  {
+    "code": "MM-L2-003",
+    "name": "Basic 3D Computer Character Modelling",
+    "level": 2,
+    "type": "specialised",
+    "description": "Covers modelling 3D characters including polygon modelling, topology, UV mapping and texturing using Autodesk Maya or Blender."
+  },
+  {
+    "code": "MM-L2-004",
+    "name": "Digital Audio and Video",
+    "level": 2,
+    "type": "specialised",
+    "description": "Covers producing digital audio and video including sound recording, audio editing, video editing, encoding and post-production using Adobe Premiere Pro."
+  },
+  {
+    "code": "MM-L2-005",
+    "name": "Synthesiser Technology",
+    "level": 2,
+    "type": "specialised",
+    "description": "Covers sound synthesis including synthesiser types, oscillators, filters, MIDI and creating sound and music for media."
+  },
+  {
+    "code": "MM-L2-006",
+    "name": "Principles of Creative Animation",
+    "level": 2,
+    "type": "specialised",
+    "description": "Covers the principles of animation including timing, squash and stretch, keyframing, storyboarding and creating 2D and 3D animations."
+  },
+  {
+    "code": "MM-L2-007",
+    "name": "Intellectual Property, Ethics and Legal Issues",
+    "level": 2,
+    "type": "specialised",
+    "description": "Covers intellectual property including copyright, trademarks, licensing of digital content, and ethical and legal issues in the media industry."
+  },
+  {
+    "code": "MM-L2-008",
+    "name": "Web Multimedia",
+    "level": 2,
+    "type": "specialised",
+    "description": "Covers adding multimedia to websites including web audio and video, animation with CSS and JavaScript, and optimising media for the web."
+  },
+  {
+    "code": "MM-L3-001",
+    "name": "Advanced Multimedia",
+    "level": 3,
+    "type": "specialised",
+    "description": "Covers advanced multimedia production including interactive media, motion graphics, multimedia project management and producing professional multimedia content."
+  },
+  {
+    "code": "MM-L3-002",
+    "name": "Advanced 3D Character Modelling and Animation",
+    "level": 3,
+    "type": "specialised",
+    "description": "Covers advanced 3D character work including high-detail modelling, rigging, skinning and character animation using Autodesk Maya."
+  },
+  {
+    "code": "MM-L3-003",
+    "name": "Multimedia Scripting",
+    "level": 3,
+    "type": "specialised",
+    "description": "Covers scripting for multimedia and interactive applications including C# scripting in Unity, game logic, user input and animation control."
+  },
+  {
+    "code": "MM-L3-004",
+    "name": "Multimedia Techniques for Animation, Games and Film Effects",
+    "level": 3,
+    "type": "specialised",
+    "description": "Covers techniques for animation, game and film effects including particle systems, compositing, motion graphics and visual effects production."
+  },
+  {
+    "code": "MM-L3-005",
+    "name": "Investigations in Multimedia Technology",
+    "level": 3,
+    "type": "specialised",
+    "description": "A research-based module where students investigate current multimedia technology topics through literature review, critical analysis and a research proposal."
+  },
+  {
+    "code": "MM-L3-006",
+    "name": "Multimedia Technology Project",
+    "level": 3,
+    "type": "specialised",
+    "description": "Final year project requiring students to design, develop and evaluate a multimedia technology solution for a real-world problem, demonstrating technical, creative and project management skills."
+  },
+  {
+    "code": "MM-L3-007",
+    "name": "VRAR Design Project",
+    "level": 3,
+    "type": "elective",
+    "description": "A project module where students design and build a virtual or augmented reality application using Unity, from concept and prototyping to user testing."
+  },
+  {
+    "code": "MM-L2-009",
+    "name": "VRAR Design Principles",
+    "level": 2,
+    "type": "specialised",
+    "description": "Covers design principles for virtual and augmented reality including immersion, presence, spatial interaction, user comfort and VR/AR user experience."
+  },
+  {
+    "code": "MM-L2-010",
+    "name": "Advanced Virtual Reality Technology",
+    "level": 2,
+    "type": "specialised",
+    "description": "Covers developing virtual reality applications including VR hardware, 3D interaction, VR development with Unity and performance optimisation for VR."
+  },
+  {
+    "code": "MM-L2-011",
+    "name": "Simulation, Visualisation and Virtual Reality",
+    "level": 2,
+    "type": "specialised",
+    "description": "Covers computer simulation and data visualisation in virtual environments including 3D visualisation, simulation modelling and VR training applications."
+  },
+  {
+    "code": "MM-L3-008",
+    "name": "Stereoscopic Vision System",
+    "level": 3,
+    "type": "specialised",
+    "description": "Covers stereoscopic vision including depth perception, stereo cameras, 3D display technologies and stereoscopic rendering for immersive systems."
+  },
+  {
+    "code": "GD-L1-001",
+    "name": "Principles of Game Art",
+    "level": 1,
+    "type": "common",
+    "description": "Introduces art for games including visual style, colour theory, 2D and 3D game assets and the game art production pipeline."
+  },
+  {
+    "code": "GD-L1-002",
+    "name": "Principles of Game Design",
+    "level": 1,
+    "type": "common",
+    "description": "Introduces game design including game mechanics, rules, player experience, level design basics, prototyping and game design documents."
+  },
+  {
+    "code": "GD-L1-003",
+    "name": "Principles of Game Technology",
+    "level": 1,
+    "type": "common",
+    "description": "Introduces the technology behind games including game engines, the game loop, rendering, physics and scripting with Unity."
+  },
+  {
+    "code": "GD-L1-004",
+    "name": "Game Development Fundamentals",
+    "level": 1,
+    "type": "common",
+    "description": "Introduces the game development process including team roles, production pipelines, game engines, version control and building a simple game."
+  },
+  {
+    "code": "GD-L1-005",
+    "name": "Game Development Team Project 1",
+    "level": 1,
+    "type": "common",
+    "description": "A team project simulating a game studio where students plan and build a small game prototype, practising teamwork, project management and game development workflows."
+  },
+  {
+    "code": "GD-L1-006",
+    "name": "Texturing Essentials",
+    "level": 1,
+    "type": "elective",
+    "description": "Covers texturing 3D models including UV unwrapping, texture painting, materials and physically based rendering textures using Substance Painter."
+  },
+  {
+    "code": "GD-L1-007",
+    "name": "Introduction to 3D Modelling",
+    "level": 1,
+    "type": "elective",
+    "description": "Introduces 3D modelling including polygon modelling, modelling props and environments, topology and exporting models for game engines using Autodesk Maya or Blender."
+  },
+  {
+    "code": "GD-L1-008",
+    "name": "Art Fundamentals",
+    "level": 1,
+    "type": "elective",
+    "description": "Covers drawing and visual art fundamentals including perspective, anatomy, composition, colour and digital painting."
+  },
+  {
+    "code": "GD-L1-009",
+    "name": "Introduction to C++ Programming",
+    "level": 1,
+    "type": "elective",
+    "description": "Introduces programming in C++ including data types, control structures, functions, classes, pointers and memory management."
+  },
+  {
+    "code": "GD-L1-010",
+    "name": "Mathematics for Games",
+    "level": 1,
+    "type": "elective",
+    "description": "Covers mathematics used in games including vectors, matrices, transformations, trigonometry, collision detection and basic physics."
+  },
+  {
+    "code": "GD-L1-011",
+    "name": "Data Structures and Algorithms",
+    "level": 1,
+    "type": "elective",
+    "description": "Covers data structures and algorithms including arrays, linked lists, trees, graphs, sorting, searching and pathfinding algorithms, implemented in C++."
+  },
+  {
+    "code": "GD-L2-001",
+    "name": "Game Business and Publishing",
+    "level": 2,
+    "type": "common",
+    "description": "Covers the business of games including game markets, monetisation, marketing, publishing platforms and game business planning."
+  },
+  {
+    "code": "GD-L2-002",
+    "name": "Game Development Team Project 2",
+    "level": 2,
+    "type": "common",
+    "description": "A team project where students build a game in a studio-like setting using Agile practices, version control and a game engine, from concept to playable build."
+  },
+  {
+    "code": "GD-L2-003",
+    "name": "Game Development Team Project 3",
+    "level": 2,
+    "type": "common",
+    "description": "A team project where students produce a polished game, focusing on production management, testing, iteration and delivering a workable game product."
+  },
+  {
+    "code": "GD-L2-004",
+    "name": "Visual Ideation and Concept Art for Games",
+    "level": 2,
+    "type": "elective",
+    "description": "Covers concept art for games including character and environment concepts, visual development, sketching and digital painting."
+  },
+  {
+    "code": "GD-L2-005",
+    "name": "3D Modelling for Games",
+    "level": 2,
+    "type": "elective",
+    "description": "Covers creating game-ready 3D models including low-poly modelling, high-to-low poly baking, UV mapping and optimising models for game engines."
+  },
+  {
+    "code": "GD-L2-006",
+    "name": "3D Workflow and Design",
+    "level": 2,
+    "type": "elective",
+    "description": "Covers the 3D production workflow for games including asset pipelines, modelling standards, texturing, lighting and importing assets into Unreal Engine."
+  },
+  {
+    "code": "GD-L2-007",
+    "name": "Advanced 3D Modelling for Games",
+    "level": 2,
+    "type": "elective",
+    "description": "Covers advanced 3D modelling including sculpting in ZBrush, high-detail characters and props, retopology and normal map baking."
+  },
+  {
+    "code": "GD-L2-008",
+    "name": "Introduction to Gameplay Animation",
+    "level": 2,
+    "type": "elective",
+    "description": "Introduces animation for games including keyframe animation, character rigs, animation cycles and importing animations into game engines."
+  },
+  {
+    "code": "GD-L2-009",
+    "name": "Applied Mechanics and Progressive Game Engines",
+    "level": 2,
+    "type": "elective",
+    "description": "Covers implementing game mechanics in modern game engines including gameplay programming, physics, input handling and Unreal Engine with C++."
+  },
+  {
+    "code": "GD-L2-010",
+    "name": "Advanced C++",
+    "level": 2,
+    "type": "elective",
+    "description": "Covers advanced C++ including templates, the Standard Template Library, smart pointers, move semantics, memory management and performance."
+  },
+  {
+    "code": "GD-L2-011",
+    "name": "Game Optimization and Performance",
+    "level": 2,
+    "type": "elective",
+    "description": "Covers optimising games including profiling, frame rate, memory and CPU optimisation, level of detail and optimising rendering in game engines."
+  },
+  {
+    "code": "GD-L2-012",
+    "name": "Performant Rendering with C++",
+    "level": 2,
+    "type": "elective",
+    "description": "Covers real-time rendering programming in C++ including the graphics pipeline, OpenGL or DirectX, shaders and rendering performance."
+  },
+  {
+    "code": "GD-L3-001",
+    "name": "Investigations in Game Development",
+    "level": 3,
+    "type": "common",
+    "description": "A research-based module where students investigate current game development topics through literature review, critical analysis and a research proposal."
+  },
+  {
+    "code": "GD-L3-002",
+    "name": "Game Development Final Year Project",
+    "level": 3,
+    "type": "common",
+    "description": "Final year project requiring students to develop a game development prototype for a chosen specialism, demonstrating technical knowledge, teamwork, critical thinking and analytical skills."
+  },
+  {
+    "code": "GD-L3-003",
+    "name": "Advanced Gameplay Animation",
+    "level": 3,
+    "type": "elective",
+    "description": "Covers advanced animation for games including motion capture, animation blending, state machines and character animation in game engines."
+  },
+  {
+    "code": "GD-L3-004",
+    "name": "World Building",
+    "level": 3,
+    "type": "elective",
+    "description": "Covers creating game worlds including environment design, world lore, level layout, terrain and set dressing in a game engine."
+  },
+  {
+    "code": "GD-L3-005",
+    "name": "Advanced Game Engine Application",
+    "level": 3,
+    "type": "elective",
+    "description": "Covers advanced use of game engines including engine architecture, tools programming, multiplayer networking and building complex gameplay systems in Unreal Engine."
+  },
+  {
+    "code": "GD-L3-006",
+    "name": "Graphics and Shader Programming",
+    "level": 3,
+    "type": "elective",
+    "description": "Covers shader programming including vertex and fragment shaders, lighting models, post-processing effects and HLSL or GLSL."
+  },
+  {
+    "code": "GD-L3-007",
+    "name": "Character Development and Storytelling for Games",
+    "level": 3,
+    "type": "elective",
+    "description": "Covers storytelling in games including narrative design, character development, dialogue writing and interactive storytelling."
+  },
+  {
+    "code": "GD-L3-008",
+    "name": "Game World Creation",
+    "level": 3,
+    "type": "elective",
+    "description": "Covers building playable game worlds including environment art, terrain, lighting and populating game levels in a game engine."
+  },
+  {
+    "code": "GD-L3-009",
+    "name": "Game Level Design",
+    "level": 3,
+    "type": "elective",
+    "description": "Covers level design including level layout, pacing, player guidance, gameplay balancing and building and playtesting levels."
+  },
+  {
+    "code": "GD-L3-010",
+    "name": "UX/UI for Games",
+    "level": 3,
+    "type": "elective",
+    "description": "Covers user experience and interface design for games including HUD design, menus, player feedback, usability testing and UI implementation in game engines."
+  },
+  {
+    "code": "GD-L3-011",
+    "name": "Artificial Intelligence for Games",
+    "level": 3,
+    "type": "elective",
+    "description": "Covers AI techniques for games including pathfinding with A*, finite state machines, behaviour trees and decision making for non-player characters."
+  },
+  {
+    "code": "GD-L3-012",
+    "name": "Mobile Game Development",
+    "level": 3,
+    "type": "elective",
+    "description": "Covers developing games for mobile devices including touch input, mobile performance, monetisation and publishing to app stores using Unity."
   }
 ]

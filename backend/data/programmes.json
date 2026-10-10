@@ -1,0 +1,3204 @@
+[
+ {
+  "code": "IT",
+  "name": "BSc (Hons) Information Technology",
+  "modules": [
+   {
+    "code": "SE-L1-003",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-001",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-002",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-005",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-004",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-006",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-007",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-010",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "IT-L1-001",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-008",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-012",
+    "year": 1,
+    "kind": "specialised"
+   },
+   {
+    "code": "IT-L2-001",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L2-004",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L2-005",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L2-001",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "IT-L2-002",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L2-012",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "IT-L2-003",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "IT-L2-004",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L2-002",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "IT-L2-005",
+    "year": 2,
+    "kind": "specialised"
+   },
+   {
+    "code": "IT-L2-006",
+    "year": 2,
+    "kind": "specialised"
+   },
+   {
+    "code": "IT-L2-007",
+    "year": 2,
+    "kind": "specialised"
+   },
+   {
+    "code": "SE-L3-004",
+    "year": 3,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L3-013",
+    "year": 3,
+    "kind": "common"
+   },
+   {
+    "code": "IT-L3-001",
+    "year": 3,
+    "kind": "common"
+   },
+   {
+    "code": "IT-L3-002",
+    "year": 3,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L3-001",
+    "year": 3,
+    "kind": "common"
+   },
+   {
+    "code": "IT-L3-003",
+    "year": 3,
+    "kind": "specialised"
+   },
+   {
+    "code": "IT-L3-004",
+    "year": 3,
+    "kind": "specialised"
+   },
+   {
+    "code": "IT-L3-005",
+    "year": 3,
+    "kind": "specialised"
+   },
+   {
+    "code": "IT-L3-006",
+    "year": 3,
+    "kind": "specialised"
+   },
+   {
+    "code": "IT-L3-007",
+    "year": 3,
+    "kind": "elective"
+   },
+   {
+    "code": "SE-L3-010",
+    "year": 3,
+    "kind": "elective"
+   },
+   {
+    "code": "SE-L3-012",
+    "year": 3,
+    "kind": "elective"
+   },
+   {
+    "code": "SE-L3-009",
+    "year": 3,
+    "kind": "elective"
+   },
+   {
+    "code": "IT-L3-008",
+    "year": 3,
+    "kind": "elective"
+   },
+   {
+    "code": "QC-L2-001",
+    "year": 3,
+    "kind": "elective"
+   }
+  ]
+ },
+ {
+  "code": "IT-ISS",
+  "name": "BSc (Hons) Information Technology with a specialism in Information System Security",
+  "modules": [
+   {
+    "code": "SE-L1-003",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-001",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-002",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-005",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-004",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-006",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-007",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-010",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "IT-L1-001",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-008",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-012",
+    "year": 1,
+    "kind": "specialised"
+   },
+   {
+    "code": "IT-L2-001",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L2-004",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L2-005",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L2-001",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "IT-L2-002",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L2-012",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "IT-L2-003",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "IT-L2-004",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L2-002",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "IT-L2-008",
+    "year": 2,
+    "kind": "specialised"
+   },
+   {
+    "code": "IT-L2-005",
+    "year": 2,
+    "kind": "specialised"
+   },
+   {
+    "code": "CY-L2-001",
+    "year": 2,
+    "kind": "specialised"
+   },
+   {
+    "code": "SE-L3-004",
+    "year": 3,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L3-013",
+    "year": 3,
+    "kind": "common"
+   },
+   {
+    "code": "IT-L3-001",
+    "year": 3,
+    "kind": "common"
+   },
+   {
+    "code": "IT-L3-002",
+    "year": 3,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L3-001",
+    "year": 3,
+    "kind": "common"
+   },
+   {
+    "code": "IT-L3-009",
+    "year": 3,
+    "kind": "specialised"
+   },
+   {
+    "code": "IT-L3-010",
+    "year": 3,
+    "kind": "specialised"
+   },
+   {
+    "code": "IT-L3-011",
+    "year": 3,
+    "kind": "specialised"
+   },
+   {
+    "code": "IT-L3-012",
+    "year": 3,
+    "kind": "specialised"
+   },
+   {
+    "code": "IT-L3-013",
+    "year": 3,
+    "kind": "specialised"
+   },
+   {
+    "code": "IT-L3-014",
+    "year": 3,
+    "kind": "specialised"
+   }
+  ]
+ },
+ {
+  "code": "IT-CE",
+  "name": "BSc (Hons) Information Technology with a specialism in Cloud Engineering",
+  "modules": [
+   {
+    "code": "SE-L1-003",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-001",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-002",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-005",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-004",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-006",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-007",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-010",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "IT-L1-001",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-008",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-012",
+    "year": 1,
+    "kind": "specialised"
+   },
+   {
+    "code": "IT-L2-001",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L2-004",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L2-005",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L2-001",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "IT-L2-002",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L2-012",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "IT-L2-003",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "IT-L2-004",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L2-002",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "IT-L2-008",
+    "year": 2,
+    "kind": "specialised"
+   },
+   {
+    "code": "IT-L2-009",
+    "year": 2,
+    "kind": "specialised"
+   },
+   {
+    "code": "IT-L2-007",
+    "year": 2,
+    "kind": "specialised"
+   },
+   {
+    "code": "SE-L3-004",
+    "year": 3,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L3-013",
+    "year": 3,
+    "kind": "common"
+   },
+   {
+    "code": "IT-L3-001",
+    "year": 3,
+    "kind": "common"
+   },
+   {
+    "code": "IT-L3-002",
+    "year": 3,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L3-001",
+    "year": 3,
+    "kind": "common"
+   },
+   {
+    "code": "IT-L3-015",
+    "year": 3,
+    "kind": "specialised"
+   },
+   {
+    "code": "IT-L3-016",
+    "year": 3,
+    "kind": "specialised"
+   },
+   {
+    "code": "SE-L3-009",
+    "year": 3,
+    "kind": "specialised"
+   },
+   {
+    "code": "IT-L3-017",
+    "year": 3,
+    "kind": "specialised"
+   },
+   {
+    "code": "IT-L3-018",
+    "year": 3,
+    "kind": "specialised"
+   },
+   {
+    "code": "IT-L3-019",
+    "year": 3,
+    "kind": "specialised"
+   }
+  ]
+ },
+ {
+  "code": "IT-IOT",
+  "name": "BSc (Hons) Information Technology with a specialism in Internet of Things (IoT)",
+  "modules": [
+   {
+    "code": "SE-L1-003",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-001",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-002",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-005",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-004",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-006",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-007",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-010",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "IT-L1-001",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-008",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "IT-L1-002",
+    "year": 1,
+    "kind": "specialised"
+   },
+   {
+    "code": "IT-L2-001",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L2-004",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L2-005",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L2-001",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "IT-L2-002",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L2-012",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "IT-L2-003",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "IT-L2-004",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L2-002",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "IT-L2-008",
+    "year": 2,
+    "kind": "specialised"
+   },
+   {
+    "code": "IT-L2-010",
+    "year": 2,
+    "kind": "specialised"
+   },
+   {
+    "code": "IT-L2-011",
+    "year": 2,
+    "kind": "specialised"
+   },
+   {
+    "code": "SE-L3-004",
+    "year": 3,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L3-013",
+    "year": 3,
+    "kind": "common"
+   },
+   {
+    "code": "IT-L3-001",
+    "year": 3,
+    "kind": "common"
+   },
+   {
+    "code": "IT-L3-002",
+    "year": 3,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L3-001",
+    "year": 3,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L3-010",
+    "year": 3,
+    "kind": "specialised"
+   },
+   {
+    "code": "IT-L3-015",
+    "year": 3,
+    "kind": "specialised"
+   },
+   {
+    "code": "IT-L3-004",
+    "year": 3,
+    "kind": "specialised"
+   },
+   {
+    "code": "IT-L3-020",
+    "year": 3,
+    "kind": "specialised"
+   },
+   {
+    "code": "IT-L3-021",
+    "year": 3,
+    "kind": "specialised"
+   },
+   {
+    "code": "IT-L3-022",
+    "year": 3,
+    "kind": "specialised"
+   }
+  ]
+ },
+ {
+  "code": "IT-FT",
+  "name": "BSc (Hons) Information Technology with a specialism in Financial Technology (FinTech)",
+  "modules": [
+   {
+    "code": "SE-L1-003",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-001",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-002",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-005",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-004",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-006",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-007",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-010",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "IT-L1-001",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-008",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-012",
+    "year": 1,
+    "kind": "specialised"
+   },
+   {
+    "code": "IT-L2-001",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L2-004",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L2-005",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L2-001",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "IT-L2-002",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L2-012",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "IT-L2-003",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "IT-L2-004",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L2-002",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "IT-L2-008",
+    "year": 2,
+    "kind": "specialised"
+   },
+   {
+    "code": "IT-L2-012",
+    "year": 2,
+    "kind": "specialised"
+   },
+   {
+    "code": "IT-L2-013",
+    "year": 2,
+    "kind": "specialised"
+   },
+   {
+    "code": "SE-L3-004",
+    "year": 3,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L3-013",
+    "year": 3,
+    "kind": "common"
+   },
+   {
+    "code": "IT-L3-001",
+    "year": 3,
+    "kind": "common"
+   },
+   {
+    "code": "IT-L3-002",
+    "year": 3,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L3-001",
+    "year": 3,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L3-010",
+    "year": 3,
+    "kind": "specialised"
+   },
+   {
+    "code": "SE-L3-012",
+    "year": 3,
+    "kind": "specialised"
+   },
+   {
+    "code": "IT-L3-004",
+    "year": 3,
+    "kind": "specialised"
+   },
+   {
+    "code": "IT-L3-023",
+    "year": 3,
+    "kind": "specialised"
+   },
+   {
+    "code": "IT-L3-024",
+    "year": 3,
+    "kind": "specialised"
+   },
+   {
+    "code": "IT-L3-025",
+    "year": 3,
+    "kind": "specialised"
+   }
+  ]
+ },
+ {
+  "code": "IT-BIS",
+  "name": "BSc (Hons) Information Technology with a specialism in Business Information Systems",
+  "modules": [
+   {
+    "code": "SE-L1-003",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-001",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-002",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-005",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-004",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-006",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-007",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-010",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "IT-L1-001",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-008",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "IT-L1-003",
+    "year": 1,
+    "kind": "specialised"
+   },
+   {
+    "code": "IT-L2-001",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L2-004",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L2-005",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L2-001",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "IT-L2-002",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L2-012",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "IT-L2-003",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "IT-L2-004",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L2-002",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "IT-L2-006",
+    "year": 2,
+    "kind": "specialised"
+   },
+   {
+    "code": "SE-L2-007",
+    "year": 2,
+    "kind": "specialised"
+   },
+   {
+    "code": "IT-L2-014",
+    "year": 2,
+    "kind": "specialised"
+   },
+   {
+    "code": "SE-L3-004",
+    "year": 3,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L3-013",
+    "year": 3,
+    "kind": "common"
+   },
+   {
+    "code": "IT-L3-001",
+    "year": 3,
+    "kind": "common"
+   },
+   {
+    "code": "IT-L3-002",
+    "year": 3,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L3-001",
+    "year": 3,
+    "kind": "common"
+   },
+   {
+    "code": "IT-L3-026",
+    "year": 3,
+    "kind": "specialised"
+   },
+   {
+    "code": "IT-L3-007",
+    "year": 3,
+    "kind": "specialised"
+   },
+   {
+    "code": "IT-L3-004",
+    "year": 3,
+    "kind": "specialised"
+   },
+   {
+    "code": "IT-L3-027",
+    "year": 3,
+    "kind": "specialised"
+   },
+   {
+    "code": "IT-L3-028",
+    "year": 3,
+    "kind": "specialised"
+   },
+   {
+    "code": "IT-L3-029",
+    "year": 3,
+    "kind": "specialised"
+   }
+  ]
+ },
+ {
+  "code": "IT-SC",
+  "name": "BSc (Hons) Information Technology with a specialism in Sustainable Computing",
+  "modules": [
+   {
+    "code": "SE-L1-003",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-001",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-002",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-005",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-004",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-006",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-007",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-010",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "IT-L1-001",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-008",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-012",
+    "year": 1,
+    "kind": "specialised"
+   },
+   {
+    "code": "IT-L2-001",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L2-004",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L2-005",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L2-001",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "IT-L2-002",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L2-012",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "IT-L2-003",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "IT-L2-004",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L2-002",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "IT-L2-006",
+    "year": 2,
+    "kind": "specialised"
+   },
+   {
+    "code": "IT-L2-015",
+    "year": 2,
+    "kind": "specialised"
+   },
+   {
+    "code": "IT-L2-008",
+    "year": 2,
+    "kind": "specialised"
+   },
+   {
+    "code": "SE-L3-004",
+    "year": 3,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L3-013",
+    "year": 3,
+    "kind": "common"
+   },
+   {
+    "code": "IT-L3-001",
+    "year": 3,
+    "kind": "common"
+   },
+   {
+    "code": "IT-L3-002",
+    "year": 3,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L3-001",
+    "year": 3,
+    "kind": "common"
+   },
+   {
+    "code": "IT-L3-030",
+    "year": 3,
+    "kind": "specialised"
+   },
+   {
+    "code": "IT-L3-031",
+    "year": 3,
+    "kind": "specialised"
+   },
+   {
+    "code": "IT-L3-004",
+    "year": 3,
+    "kind": "specialised"
+   },
+   {
+    "code": "IT-L3-032",
+    "year": 3,
+    "kind": "specialised"
+   },
+   {
+    "code": "IT-L3-033",
+    "year": 3,
+    "kind": "specialised"
+   },
+   {
+    "code": "IT-L3-034",
+    "year": 3,
+    "kind": "specialised"
+   }
+  ]
+ },
+ {
+  "code": "SE",
+  "name": "BSc (Hons) Software Engineering",
+  "modules": [
+   {
+    "code": "SE-L1-001",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-002",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-003",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-004",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-005",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-006",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-007",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-008",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-009",
+    "year": 1,
+    "kind": "specialised"
+   },
+   {
+    "code": "SE-L1-010",
+    "year": 1,
+    "kind": "specialised"
+   },
+   {
+    "code": "SE-L1-011",
+    "year": 1,
+    "kind": "elective"
+   },
+   {
+    "code": "SE-L1-012",
+    "year": 1,
+    "kind": "elective"
+   },
+   {
+    "code": "SE-L2-001",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L2-002",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L2-003",
+    "year": 2,
+    "kind": "specialised"
+   },
+   {
+    "code": "SE-L2-004",
+    "year": 2,
+    "kind": "specialised"
+   },
+   {
+    "code": "SE-L2-005",
+    "year": 2,
+    "kind": "specialised"
+   },
+   {
+    "code": "SE-L2-006",
+    "year": 2,
+    "kind": "specialised"
+   },
+   {
+    "code": "SE-L2-007",
+    "year": 2,
+    "kind": "specialised"
+   },
+   {
+    "code": "SE-L2-008",
+    "year": 2,
+    "kind": "specialised"
+   },
+   {
+    "code": "SE-L2-009",
+    "year": 2,
+    "kind": "specialised"
+   },
+   {
+    "code": "SE-L2-010",
+    "year": 2,
+    "kind": "specialised"
+   },
+   {
+    "code": "SE-L2-011",
+    "year": 2,
+    "kind": "specialised"
+   },
+   {
+    "code": "SE-L2-012",
+    "year": 2,
+    "kind": "elective"
+   },
+   {
+    "code": "SE-L2-013",
+    "year": 2,
+    "kind": "elective"
+   },
+   {
+    "code": "SE-L2-014",
+    "year": 2,
+    "kind": "elective"
+   },
+   {
+    "code": "SE-L3-001",
+    "year": 3,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L3-002",
+    "year": 3,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L3-003",
+    "year": 3,
+    "kind": "specialised"
+   },
+   {
+    "code": "SE-L3-004",
+    "year": 3,
+    "kind": "specialised"
+   },
+   {
+    "code": "SE-L3-005",
+    "year": 3,
+    "kind": "specialised"
+   },
+   {
+    "code": "SE-L3-006",
+    "year": 3,
+    "kind": "specialised"
+   },
+   {
+    "code": "SE-L3-007",
+    "year": 3,
+    "kind": "specialised"
+   },
+   {
+    "code": "SE-L3-008",
+    "year": 3,
+    "kind": "specialised"
+   },
+   {
+    "code": "SE-L3-009",
+    "year": 3,
+    "kind": "specialised"
+   },
+   {
+    "code": "SE-L3-010",
+    "year": 3,
+    "kind": "elective"
+   },
+   {
+    "code": "SE-L3-011",
+    "year": 3,
+    "kind": "elective"
+   },
+   {
+    "code": "SE-L3-012",
+    "year": 3,
+    "kind": "elective"
+   },
+   {
+    "code": "SE-L3-013",
+    "year": 3,
+    "kind": "elective"
+   },
+   {
+    "code": "SE-L3-014",
+    "year": 3,
+    "kind": "elective"
+   }
+  ]
+ },
+ {
+  "code": "CS",
+  "name": "BSc (Hons) Computer Science",
+  "modules": [
+   {
+    "code": "SE-L1-001",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-002",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-003",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-004",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-005",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-006",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-007",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-008",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-010",
+    "year": 1,
+    "kind": "specialised"
+   },
+   {
+    "code": "SE-L1-011",
+    "year": 1,
+    "kind": "specialised"
+   },
+   {
+    "code": "SE-L1-009",
+    "year": 1,
+    "kind": "specialised"
+   },
+   {
+    "code": "SE-L2-001",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L2-002",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "IT-L2-005",
+    "year": 2,
+    "kind": "specialised"
+   },
+   {
+    "code": "SE-L2-004",
+    "year": 2,
+    "kind": "specialised"
+   },
+   {
+    "code": "SE-L2-005",
+    "year": 2,
+    "kind": "specialised"
+   },
+   {
+    "code": "IT-L2-004",
+    "year": 2,
+    "kind": "specialised"
+   },
+   {
+    "code": "SE-L2-012",
+    "year": 2,
+    "kind": "specialised"
+   },
+   {
+    "code": "CS-L2-001",
+    "year": 2,
+    "kind": "specialised"
+   },
+   {
+    "code": "SE-L2-008",
+    "year": 2,
+    "kind": "specialised"
+   },
+   {
+    "code": "SE-L2-003",
+    "year": 2,
+    "kind": "elective"
+   },
+   {
+    "code": "CS-L2-002",
+    "year": 2,
+    "kind": "elective"
+   },
+   {
+    "code": "CS-L2-003",
+    "year": 2,
+    "kind": "elective"
+   },
+   {
+    "code": "IT-L2-008",
+    "year": 2,
+    "kind": "elective"
+   },
+   {
+    "code": "IT-L2-002",
+    "year": 2,
+    "kind": "elective"
+   },
+   {
+    "code": "SE-L2-014",
+    "year": 2,
+    "kind": "elective"
+   },
+   {
+    "code": "QC-L2-001",
+    "year": 2,
+    "kind": "elective"
+   },
+   {
+    "code": "SE-L3-004",
+    "year": 3,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L3-001",
+    "year": 3,
+    "kind": "common"
+   },
+   {
+    "code": "CS-L3-001",
+    "year": 3,
+    "kind": "specialised"
+   },
+   {
+    "code": "CS-L3-002",
+    "year": 3,
+    "kind": "specialised"
+   },
+   {
+    "code": "SE-L3-007",
+    "year": 3,
+    "kind": "specialised"
+   },
+   {
+    "code": "SE-L3-013",
+    "year": 3,
+    "kind": "specialised"
+   },
+   {
+    "code": "CS-L3-003",
+    "year": 3,
+    "kind": "specialised"
+   },
+   {
+    "code": "IT-L3-009",
+    "year": 3,
+    "kind": "elective"
+   },
+   {
+    "code": "QC-L3-001",
+    "year": 3,
+    "kind": "elective"
+   },
+   {
+    "code": "CS-L3-004",
+    "year": 3,
+    "kind": "elective"
+   },
+   {
+    "code": "SE-L3-012",
+    "year": 3,
+    "kind": "elective"
+   },
+   {
+    "code": "SE-L3-009",
+    "year": 3,
+    "kind": "elective"
+   },
+   {
+    "code": "QC-L3-002",
+    "year": 3,
+    "kind": "elective"
+   },
+   {
+    "code": "IT-L3-012",
+    "year": 3,
+    "kind": "elective"
+   },
+   {
+    "code": "SE-L3-014",
+    "year": 3,
+    "kind": "elective"
+   }
+  ]
+ },
+ {
+  "code": "CS-QC",
+  "name": "BSc (Hons) Computer Science with a specialism in Quantum Computing",
+  "modules": [
+   {
+    "code": "SE-L1-001",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-002",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-003",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-004",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-005",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-006",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-007",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-008",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-010",
+    "year": 1,
+    "kind": "specialised"
+   },
+   {
+    "code": "SE-L1-011",
+    "year": 1,
+    "kind": "specialised"
+   },
+   {
+    "code": "SE-L1-009",
+    "year": 1,
+    "kind": "specialised"
+   },
+   {
+    "code": "SE-L2-001",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L2-002",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "IT-L2-005",
+    "year": 2,
+    "kind": "specialised"
+   },
+   {
+    "code": "SE-L2-004",
+    "year": 2,
+    "kind": "specialised"
+   },
+   {
+    "code": "SE-L2-005",
+    "year": 2,
+    "kind": "specialised"
+   },
+   {
+    "code": "IT-L2-004",
+    "year": 2,
+    "kind": "specialised"
+   },
+   {
+    "code": "SE-L2-012",
+    "year": 2,
+    "kind": "specialised"
+   },
+   {
+    "code": "CS-L2-001",
+    "year": 2,
+    "kind": "specialised"
+   },
+   {
+    "code": "SE-L2-008",
+    "year": 2,
+    "kind": "specialised"
+   },
+   {
+    "code": "CS-L2-004",
+    "year": 2,
+    "kind": "specialised"
+   },
+   {
+    "code": "CS-L2-005",
+    "year": 2,
+    "kind": "specialised"
+   },
+   {
+    "code": "QC-L2-001",
+    "year": 2,
+    "kind": "specialised"
+   },
+   {
+    "code": "SE-L3-004",
+    "year": 3,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L3-001",
+    "year": 3,
+    "kind": "common"
+   },
+   {
+    "code": "QC-L3-003",
+    "year": 3,
+    "kind": "specialised"
+   },
+   {
+    "code": "CS-L3-002",
+    "year": 3,
+    "kind": "specialised"
+   },
+   {
+    "code": "SE-L3-007",
+    "year": 3,
+    "kind": "specialised"
+   },
+   {
+    "code": "SE-L3-013",
+    "year": 3,
+    "kind": "specialised"
+   },
+   {
+    "code": "IT-L3-009",
+    "year": 3,
+    "kind": "specialised"
+   },
+   {
+    "code": "SE-L3-009",
+    "year": 3,
+    "kind": "specialised"
+   },
+   {
+    "code": "QC-L3-001",
+    "year": 3,
+    "kind": "specialised"
+   },
+   {
+    "code": "QC-L3-002",
+    "year": 3,
+    "kind": "specialised"
+   },
+   {
+    "code": "QC-L3-004",
+    "year": 3,
+    "kind": "specialised"
+   }
+  ]
+ },
+ {
+  "code": "CS-DA",
+  "name": "BSc (Hons) Computer Science with a specialism in Data Analytics",
+  "modules": [
+   {
+    "code": "SE-L1-001",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-002",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-003",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-004",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-005",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-006",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-007",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-008",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-010",
+    "year": 1,
+    "kind": "specialised"
+   },
+   {
+    "code": "SE-L1-011",
+    "year": 1,
+    "kind": "specialised"
+   },
+   {
+    "code": "DA-L1-001",
+    "year": 1,
+    "kind": "specialised"
+   },
+   {
+    "code": "SE-L2-001",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L2-002",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "IT-L2-005",
+    "year": 2,
+    "kind": "specialised"
+   },
+   {
+    "code": "SE-L2-004",
+    "year": 2,
+    "kind": "specialised"
+   },
+   {
+    "code": "SE-L2-005",
+    "year": 2,
+    "kind": "specialised"
+   },
+   {
+    "code": "IT-L2-004",
+    "year": 2,
+    "kind": "specialised"
+   },
+   {
+    "code": "SE-L2-012",
+    "year": 2,
+    "kind": "specialised"
+   },
+   {
+    "code": "CS-L2-001",
+    "year": 2,
+    "kind": "specialised"
+   },
+   {
+    "code": "SE-L2-008",
+    "year": 2,
+    "kind": "specialised"
+   },
+   {
+    "code": "CS-L2-002",
+    "year": 2,
+    "kind": "specialised"
+   },
+   {
+    "code": "DA-L2-001",
+    "year": 2,
+    "kind": "specialised"
+   },
+   {
+    "code": "DA-L2-002",
+    "year": 2,
+    "kind": "specialised"
+   },
+   {
+    "code": "SE-L3-004",
+    "year": 3,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L3-001",
+    "year": 3,
+    "kind": "common"
+   },
+   {
+    "code": "DA-L3-001",
+    "year": 3,
+    "kind": "specialised"
+   },
+   {
+    "code": "CS-L3-002",
+    "year": 3,
+    "kind": "specialised"
+   },
+   {
+    "code": "SE-L3-007",
+    "year": 3,
+    "kind": "specialised"
+   },
+   {
+    "code": "SE-L3-013",
+    "year": 3,
+    "kind": "specialised"
+   },
+   {
+    "code": "DA-L3-002",
+    "year": 3,
+    "kind": "specialised"
+   },
+   {
+    "code": "DA-L3-003",
+    "year": 3,
+    "kind": "specialised"
+   },
+   {
+    "code": "IT-L3-011",
+    "year": 3,
+    "kind": "specialised"
+   },
+   {
+    "code": "SE-L3-014",
+    "year": 3,
+    "kind": "specialised"
+   },
+   {
+    "code": "DA-L3-004",
+    "year": 3,
+    "kind": "specialised"
+   }
+  ]
+ },
+ {
+  "code": "CS-AI",
+  "name": "Bachelor of Computer Science (Hons) (Artificial Intelligence)",
+  "modules": [
+   {
+    "code": "SE-L1-001",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-002",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-003",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-004",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-005",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-006",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-007",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-008",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-010",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-011",
+    "year": 1,
+    "kind": "specialised"
+   },
+   {
+    "code": "SE-L1-009",
+    "year": 1,
+    "kind": "specialised"
+   },
+   {
+    "code": "SE-L2-001",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L2-002",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L2-004",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L2-005",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "IT-L2-005",
+    "year": 2,
+    "kind": "specialised"
+   },
+   {
+    "code": "IT-L2-004",
+    "year": 2,
+    "kind": "specialised"
+   },
+   {
+    "code": "SE-L2-012",
+    "year": 2,
+    "kind": "specialised"
+   },
+   {
+    "code": "CS-L2-001",
+    "year": 2,
+    "kind": "specialised"
+   },
+   {
+    "code": "SE-L2-008",
+    "year": 2,
+    "kind": "specialised"
+   },
+   {
+    "code": "SE-L2-003",
+    "year": 2,
+    "kind": "specialised"
+   },
+   {
+    "code": "CS-L2-004",
+    "year": 2,
+    "kind": "specialised"
+   },
+   {
+    "code": "AI-L2-001",
+    "year": 2,
+    "kind": "specialised"
+   },
+   {
+    "code": "SE-L3-004",
+    "year": 3,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L3-001",
+    "year": 3,
+    "kind": "common"
+   },
+   {
+    "code": "AI-L3-001",
+    "year": 3,
+    "kind": "specialised"
+   },
+   {
+    "code": "CS-L3-002",
+    "year": 3,
+    "kind": "specialised"
+   },
+   {
+    "code": "SE-L3-007",
+    "year": 3,
+    "kind": "specialised"
+   },
+   {
+    "code": "SE-L3-013",
+    "year": 3,
+    "kind": "specialised"
+   },
+   {
+    "code": "DA-L3-002",
+    "year": 3,
+    "kind": "specialised"
+   },
+   {
+    "code": "CS-L3-004",
+    "year": 3,
+    "kind": "specialised"
+   },
+   {
+    "code": "AI-L3-002",
+    "year": 3,
+    "kind": "specialised"
+   },
+   {
+    "code": "SE-L3-014",
+    "year": 3,
+    "kind": "specialised"
+   },
+   {
+    "code": "AI-L3-003",
+    "year": 3,
+    "kind": "specialised"
+   }
+  ]
+ },
+ {
+  "code": "CS-CY",
+  "name": "BSc (Hons) Computer Science (Cyber Security)",
+  "modules": [
+   {
+    "code": "SE-L1-001",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-002",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-003",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-004",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-005",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-006",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-007",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-008",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-010",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "IT-L1-001",
+    "year": 1,
+    "kind": "specialised"
+   },
+   {
+    "code": "SE-L1-011",
+    "year": 1,
+    "kind": "elective"
+   },
+   {
+    "code": "SE-L1-009",
+    "year": 1,
+    "kind": "elective"
+   },
+   {
+    "code": "SE-L2-004",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L2-005",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "IT-L2-005",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L2-001",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L2-002",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "CS-L2-005",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "IT-L2-004",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "IT-L2-003",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L2-008",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "CY-L2-002",
+    "year": 2,
+    "kind": "specialised"
+   },
+   {
+    "code": "IT-L2-009",
+    "year": 2,
+    "kind": "specialised"
+   },
+   {
+    "code": "CY-L2-001",
+    "year": 2,
+    "kind": "elective"
+   },
+   {
+    "code": "CY-L2-003",
+    "year": 2,
+    "kind": "elective"
+   },
+   {
+    "code": "CY-L2-004",
+    "year": 2,
+    "kind": "elective"
+   },
+   {
+    "code": "QC-L2-001",
+    "year": 2,
+    "kind": "elective"
+   },
+   {
+    "code": "SE-L3-004",
+    "year": 3,
+    "kind": "common"
+   },
+   {
+    "code": "CS-L3-002",
+    "year": 3,
+    "kind": "common"
+   },
+   {
+    "code": "CY-L3-001",
+    "year": 3,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L3-001",
+    "year": 3,
+    "kind": "common"
+   },
+   {
+    "code": "CY-L3-002",
+    "year": 3,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L3-013",
+    "year": 3,
+    "kind": "common"
+   },
+   {
+    "code": "CY-L3-003",
+    "year": 3,
+    "kind": "specialised"
+   },
+   {
+    "code": "CY-L3-004",
+    "year": 3,
+    "kind": "specialised"
+   },
+   {
+    "code": "CY-L3-005",
+    "year": 3,
+    "kind": "specialised"
+   },
+   {
+    "code": "CY-L3-006",
+    "year": 3,
+    "kind": "specialised"
+   },
+   {
+    "code": "IT-L3-002",
+    "year": 3,
+    "kind": "elective"
+   },
+   {
+    "code": "IT-L3-007",
+    "year": 3,
+    "kind": "elective"
+   },
+   {
+    "code": "CY-L3-007",
+    "year": 3,
+    "kind": "elective"
+   },
+   {
+    "code": "CY-L3-008",
+    "year": 3,
+    "kind": "elective"
+   },
+   {
+    "code": "CY-L3-009",
+    "year": 3,
+    "kind": "elective"
+   },
+   {
+    "code": "QC-L3-005",
+    "year": 3,
+    "kind": "elective"
+   }
+  ]
+ },
+ {
+  "code": "CS-CY-DF",
+  "name": "BSc (Hons) Computer Science (Cyber Security) with a specialism in Digital Forensics",
+  "modules": [
+   {
+    "code": "SE-L1-001",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-002",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-003",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-004",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-005",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-006",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-007",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-008",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-010",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-011",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "IT-L1-001",
+    "year": 1,
+    "kind": "specialised"
+   },
+   {
+    "code": "SE-L2-004",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L2-005",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "IT-L2-005",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L2-001",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L2-002",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "CS-L2-005",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "IT-L2-004",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L2-008",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "IT-L2-003",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "CY-L2-005",
+    "year": 2,
+    "kind": "specialised"
+   },
+   {
+    "code": "CY-L2-001",
+    "year": 2,
+    "kind": "specialised"
+   },
+   {
+    "code": "CY-L2-006",
+    "year": 2,
+    "kind": "specialised"
+   },
+   {
+    "code": "SE-L3-004",
+    "year": 3,
+    "kind": "common"
+   },
+   {
+    "code": "CS-L3-002",
+    "year": 3,
+    "kind": "common"
+   },
+   {
+    "code": "CY-L3-002",
+    "year": 3,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L3-013",
+    "year": 3,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L3-001",
+    "year": 3,
+    "kind": "common"
+   },
+   {
+    "code": "CY-L3-001",
+    "year": 3,
+    "kind": "specialised"
+   },
+   {
+    "code": "CY-L3-010",
+    "year": 3,
+    "kind": "specialised"
+   },
+   {
+    "code": "CY-L3-005",
+    "year": 3,
+    "kind": "specialised"
+   },
+   {
+    "code": "CY-L3-011",
+    "year": 3,
+    "kind": "specialised"
+   },
+   {
+    "code": "CY-L3-012",
+    "year": 3,
+    "kind": "specialised"
+   },
+   {
+    "code": "IT-L3-010",
+    "year": 3,
+    "kind": "specialised"
+   }
+  ]
+ },
+ {
+  "code": "IMIT",
+  "name": "Bachelor in Interactive Media and Immersive Technology (Hons)",
+  "modules": [
+   {
+    "code": "SE-L1-006",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "MM-L1-001",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-010",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-008",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "MM-L1-002",
+    "year": 1,
+    "kind": "specialised"
+   },
+   {
+    "code": "MM-L1-003",
+    "year": 1,
+    "kind": "specialised"
+   },
+   {
+    "code": "MM-L1-004",
+    "year": 1,
+    "kind": "specialised"
+   },
+   {
+    "code": "MM-L1-005",
+    "year": 1,
+    "kind": "specialised"
+   },
+   {
+    "code": "MM-L1-006",
+    "year": 1,
+    "kind": "specialised"
+   },
+   {
+    "code": "MM-L1-007",
+    "year": 1,
+    "kind": "elective"
+   },
+   {
+    "code": "SE-L1-004",
+    "year": 1,
+    "kind": "elective"
+   },
+   {
+    "code": "SE-L1-009",
+    "year": 1,
+    "kind": "elective"
+   },
+   {
+    "code": "MM-L1-008",
+    "year": 1,
+    "kind": "elective"
+   },
+   {
+    "code": "SE-L2-003",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L2-001",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L2-002",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "MM-L2-001",
+    "year": 2,
+    "kind": "specialised"
+   },
+   {
+    "code": "MM-L2-002",
+    "year": 2,
+    "kind": "specialised"
+   },
+   {
+    "code": "MM-L2-003",
+    "year": 2,
+    "kind": "specialised"
+   },
+   {
+    "code": "MM-L2-004",
+    "year": 2,
+    "kind": "specialised"
+   },
+   {
+    "code": "MM-L2-005",
+    "year": 2,
+    "kind": "specialised"
+   },
+   {
+    "code": "MM-L2-006",
+    "year": 2,
+    "kind": "specialised"
+   },
+   {
+    "code": "MM-L2-007",
+    "year": 2,
+    "kind": "specialised"
+   },
+   {
+    "code": "MM-L2-008",
+    "year": 2,
+    "kind": "specialised"
+   },
+   {
+    "code": "IT-L2-004",
+    "year": 2,
+    "kind": "elective"
+   },
+   {
+    "code": "IT-L2-003",
+    "year": 2,
+    "kind": "elective"
+   },
+   {
+    "code": "SE-L3-001",
+    "year": 3,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L3-004",
+    "year": 3,
+    "kind": "common"
+   },
+   {
+    "code": "MM-L3-001",
+    "year": 3,
+    "kind": "specialised"
+   },
+   {
+    "code": "IT-L3-020",
+    "year": 3,
+    "kind": "specialised"
+   },
+   {
+    "code": "MM-L3-002",
+    "year": 3,
+    "kind": "specialised"
+   },
+   {
+    "code": "MM-L3-003",
+    "year": 3,
+    "kind": "specialised"
+   },
+   {
+    "code": "MM-L3-004",
+    "year": 3,
+    "kind": "specialised"
+   },
+   {
+    "code": "SE-L3-007",
+    "year": 3,
+    "kind": "specialised"
+   },
+   {
+    "code": "MM-L3-005",
+    "year": 3,
+    "kind": "specialised"
+   },
+   {
+    "code": "MM-L3-006",
+    "year": 3,
+    "kind": "specialised"
+   },
+   {
+    "code": "IT-L3-003",
+    "year": 3,
+    "kind": "elective"
+   },
+   {
+    "code": "MM-L3-007",
+    "year": 3,
+    "kind": "elective"
+   }
+  ]
+ },
+ {
+  "code": "IMIT-VRAR",
+  "name": "Bachelor in Interactive Media and Immersive Technology (Hons) with a specialism in VR/AR",
+  "modules": [
+   {
+    "code": "SE-L1-006",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "MM-L1-001",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-010",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L1-008",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "MM-L1-002",
+    "year": 1,
+    "kind": "specialised"
+   },
+   {
+    "code": "MM-L1-003",
+    "year": 1,
+    "kind": "specialised"
+   },
+   {
+    "code": "MM-L1-004",
+    "year": 1,
+    "kind": "specialised"
+   },
+   {
+    "code": "MM-L1-005",
+    "year": 1,
+    "kind": "specialised"
+   },
+   {
+    "code": "MM-L1-006",
+    "year": 1,
+    "kind": "specialised"
+   },
+   {
+    "code": "MM-L1-007",
+    "year": 1,
+    "kind": "elective"
+   },
+   {
+    "code": "SE-L1-004",
+    "year": 1,
+    "kind": "elective"
+   },
+   {
+    "code": "SE-L1-009",
+    "year": 1,
+    "kind": "elective"
+   },
+   {
+    "code": "MM-L1-008",
+    "year": 1,
+    "kind": "elective"
+   },
+   {
+    "code": "SE-L2-003",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L2-001",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L2-002",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "MM-L2-001",
+    "year": 2,
+    "kind": "specialised"
+   },
+   {
+    "code": "MM-L2-002",
+    "year": 2,
+    "kind": "specialised"
+   },
+   {
+    "code": "MM-L2-003",
+    "year": 2,
+    "kind": "specialised"
+   },
+   {
+    "code": "MM-L2-004",
+    "year": 2,
+    "kind": "specialised"
+   },
+   {
+    "code": "MM-L2-009",
+    "year": 2,
+    "kind": "specialised"
+   },
+   {
+    "code": "MM-L2-010",
+    "year": 2,
+    "kind": "specialised"
+   },
+   {
+    "code": "MM-L2-007",
+    "year": 2,
+    "kind": "specialised"
+   },
+   {
+    "code": "MM-L2-011",
+    "year": 2,
+    "kind": "specialised"
+   },
+   {
+    "code": "IT-L2-004",
+    "year": 2,
+    "kind": "elective"
+   },
+   {
+    "code": "IT-L2-003",
+    "year": 2,
+    "kind": "elective"
+   },
+   {
+    "code": "SE-L3-001",
+    "year": 3,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L3-004",
+    "year": 3,
+    "kind": "common"
+   },
+   {
+    "code": "MM-L3-008",
+    "year": 3,
+    "kind": "specialised"
+   },
+   {
+    "code": "IT-L3-020",
+    "year": 3,
+    "kind": "specialised"
+   },
+   {
+    "code": "MM-L3-002",
+    "year": 3,
+    "kind": "specialised"
+   },
+   {
+    "code": "MM-L3-003",
+    "year": 3,
+    "kind": "specialised"
+   },
+   {
+    "code": "MM-L3-007",
+    "year": 3,
+    "kind": "specialised"
+   },
+   {
+    "code": "SE-L3-007",
+    "year": 3,
+    "kind": "specialised"
+   },
+   {
+    "code": "MM-L3-005",
+    "year": 3,
+    "kind": "specialised"
+   },
+   {
+    "code": "MM-L3-006",
+    "year": 3,
+    "kind": "specialised"
+   },
+   {
+    "code": "IT-L3-003",
+    "year": 3,
+    "kind": "elective"
+   },
+   {
+    "code": "MM-L3-004",
+    "year": 3,
+    "kind": "elective"
+   }
+  ]
+ },
+ {
+  "code": "GD",
+  "name": "Bachelor in Game Development (Hons)",
+  "modules": [
+   {
+    "code": "SE-L1-008",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "GD-L1-001",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "GD-L1-002",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "GD-L1-003",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "GD-L1-004",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "GD-L1-005",
+    "year": 1,
+    "kind": "common"
+   },
+   {
+    "code": "GD-L1-006",
+    "year": 1,
+    "kind": "elective"
+   },
+   {
+    "code": "GD-L1-007",
+    "year": 1,
+    "kind": "elective"
+   },
+   {
+    "code": "GD-L1-008",
+    "year": 1,
+    "kind": "elective"
+   },
+   {
+    "code": "GD-L1-009",
+    "year": 1,
+    "kind": "elective"
+   },
+   {
+    "code": "GD-L1-010",
+    "year": 1,
+    "kind": "elective"
+   },
+   {
+    "code": "GD-L1-011",
+    "year": 1,
+    "kind": "elective"
+   },
+   {
+    "code": "SE-L2-001",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L2-002",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "GD-L2-001",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "GD-L2-002",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "GD-L2-003",
+    "year": 2,
+    "kind": "common"
+   },
+   {
+    "code": "GD-L2-004",
+    "year": 2,
+    "kind": "elective"
+   },
+   {
+    "code": "GD-L2-005",
+    "year": 2,
+    "kind": "elective"
+   },
+   {
+    "code": "GD-L2-006",
+    "year": 2,
+    "kind": "elective"
+   },
+   {
+    "code": "GD-L2-007",
+    "year": 2,
+    "kind": "elective"
+   },
+   {
+    "code": "GD-L2-008",
+    "year": 2,
+    "kind": "elective"
+   },
+   {
+    "code": "GD-L2-009",
+    "year": 2,
+    "kind": "elective"
+   },
+   {
+    "code": "GD-L2-010",
+    "year": 2,
+    "kind": "elective"
+   },
+   {
+    "code": "SE-L2-006",
+    "year": 2,
+    "kind": "elective"
+   },
+   {
+    "code": "GD-L2-011",
+    "year": 2,
+    "kind": "elective"
+   },
+   {
+    "code": "GD-L2-012",
+    "year": 2,
+    "kind": "elective"
+   },
+   {
+    "code": "SE-L3-001",
+    "year": 3,
+    "kind": "common"
+   },
+   {
+    "code": "SE-L3-004",
+    "year": 3,
+    "kind": "common"
+   },
+   {
+    "code": "GD-L3-001",
+    "year": 3,
+    "kind": "common"
+   },
+   {
+    "code": "GD-L3-002",
+    "year": 3,
+    "kind": "common"
+   },
+   {
+    "code": "GD-L3-003",
+    "year": 3,
+    "kind": "elective"
+   },
+   {
+    "code": "GD-L3-004",
+    "year": 3,
+    "kind": "elective"
+   },
+   {
+    "code": "GD-L3-005",
+    "year": 3,
+    "kind": "elective"
+   },
+   {
+    "code": "GD-L3-006",
+    "year": 3,
+    "kind": "elective"
+   },
+   {
+    "code": "GD-L3-007",
+    "year": 3,
+    "kind": "elective"
+   },
+   {
+    "code": "GD-L3-008",
+    "year": 3,
+    "kind": "elective"
+   },
+   {
+    "code": "GD-L3-009",
+    "year": 3,
+    "kind": "elective"
+   },
+   {
+    "code": "GD-L3-010",
+    "year": 3,
+    "kind": "elective"
+   },
+   {
+    "code": "GD-L3-011",
+    "year": 3,
+    "kind": "elective"
+   },
+   {
+    "code": "GD-L3-012",
+    "year": 3,
+    "kind": "elective"
+   }
+  ]
+ }
+]
