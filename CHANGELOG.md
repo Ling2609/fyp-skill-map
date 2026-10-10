@@ -3,6 +3,14 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 10 Oct 2026 — Four oddly worded module skills renamed
+
+- (this commit) From her refresh run: `scripts/tools/rename_module_skills.py` renames "Permission rule setting" →
+  "Security testing authorisation" and "Scope definition" → "Project scoping" (Investigations in Cyber Security, Game
+  Development), and "Investigation reporting" → "Technical report writing" (FinTech, same as the other modules).
+  Stored as admin-added (same as doing it by hand in Admin), so "Find skills again" keeps them; if the new name is
+  already listed, the old one is just removed. Running it twice changes nothing.
+
 ## 10 Oct 2026 — Investigations modules described as the FYP investigation phase; VR/AR names
 
 - (this commit) Her review: the 15 investigations descriptions were one sentence with the subject swapped (so all gave
