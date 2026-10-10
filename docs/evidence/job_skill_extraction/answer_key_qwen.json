@@ -496,5 +496,29 @@
   "C#",
   "Agile",
   "Scrum"
+ ],
+ "live_94383f47e31bbf09": [
+  "React",
+  "Node.js",
+  "TypeScript",
+  "GraphQL",
+  "PostgreSQL",
+  "TimescaleDB",
+  "MongoDB",
+  "SQL",
+  "REST APIs",
+  "AWS",
+  "CloudWatch",
+  "Python",
+  "Cloudflare",
+  "MCP servers",
+  "AI coding assistants",
+  "Amazon SP API",
+  "Data Kiosk",
+  "Walmart API",
+  "Shopify",
+  "WooCommerce",
+  "ETL",
+  "Machine learning"
  ]
 }
