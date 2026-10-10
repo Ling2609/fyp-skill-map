@@ -33,7 +33,8 @@ function RoleRoute({ children, roles }) {
   if (!user) return <Navigate to="/login" replace />
   if (roles && !roles.includes(user.role)) return <Navigate to="/dashboard" />
   // First sign-in setup (8 Oct): a student without a programme picks one before anything else
-  if (user.role === 'student' && !user.programme_id && pathname !== '/setup') return <Navigate to="/setup" replace />
+  // 10 Oct: also a student whose programme has intakes but who hasn't picked one (each intake has its own module list)
+  if (user.role === 'student' && (!user.programme_id || user.needs_study) && pathname !== '/setup') return <Navigate to="/setup" replace />
   return children
 }
 

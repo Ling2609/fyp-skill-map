@@ -41,7 +41,7 @@ export default function StudySetup() {
     setBusy(true); setError('')
     try {
       await api.put('/profile/study', study)
-      setUser(u => ({ ...u, ...study }))
+      setUser(u => ({ ...u, ...study, needs_study: false }))
       cached('/jobs/subcategories').then(setCategories).catch(() => setCategories([]))
       setStep(2)
     } catch (err) {

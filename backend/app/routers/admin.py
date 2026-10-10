@@ -55,6 +55,9 @@ def check_admin_schema():
     if "kind" not in {c["name"] for c in inspect(engine).get_columns("programme_modules")}:     # 10 Oct
         raise RuntimeError("Database not updated: run  python migrations/migrate_all_programmes.py  "
                            "from the backend folder, then start the backend again.")
+    if "other_codes" not in {c["name"] for c in inspect(engine).get_columns("intakes")}:       # 10 Oct, intakes
+        raise RuntimeError("Database not updated: run  python migrations/migrate_intake_modules.py  "
+                           "from the backend folder, then start the backend again.")
 
 
 def _last_actions(db: Session, user_ids: list[int]) -> dict[int, dict]:

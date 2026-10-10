@@ -27,8 +27,12 @@ class Intake(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     programme_id = Column(Integer, ForeignKey("programmes.id", ondelete="CASCADE"), nullable=False, index=True)
-    code = Column(String(30), unique=True, nullable=False)       # the university's own intake code
+    code = Column(String(30), unique=True, nullable=False)       # the university's own intake code (Year 1's)
     start_date = Column(Date, nullable=True)
+    # 10 Oct: APU gives each year of study its own code (APU1F2409CS(DA), APU2F…, APU3F…), and the month can shift
+    # between years, so the admin may list the group's later codes here (comma-separated); students find their intake
+    # by the code on their current timetable
+    other_codes = Column(String(200), nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
 
@@ -42,6 +46,23 @@ class ProgrammeModule(Base):
     kind = Column(String(12), nullable=False, default="common")  # common / specialised / elective, in this programme
 
     __table_args__ = (UniqueConstraint("programme_id", "module_id", name="uq_programme_module"),)
+
+
+class IntakeModule(Base):
+    """10 Oct: each intake has its own module list (references.md "Module lists per intake"): a student follows the
+    list of the intake they joined. A new intake starts as a copy of the latest intake's list (a "rollover"), then only
+    what is new is changed; editing one intake never changes another. A module's description and skills stay one per
+    module; only membership, year and kind belong to the intake. programme_modules is kept as the programme's starting
+    list, copied into its first intake."""
+    __tablename__ = "intake_modules"
+
+    id = Column(Integer, primary_key=True, index=True)
+    intake_id = Column(Integer, ForeignKey("intakes.id", ondelete="CASCADE"), nullable=False, index=True)
+    module_id = Column(Integer, ForeignKey("modules.id", ondelete="CASCADE"), nullable=False)
+    year = Column(Integer, nullable=False)
+    kind = Column(String(12), nullable=False, default="common")
+
+    __table_args__ = (UniqueConstraint("intake_id", "module_id", name="uq_intake_module"),)
 
 
 class AdminAction(Base):

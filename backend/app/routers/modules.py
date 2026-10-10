@@ -1,14 +1,15 @@
 """
 Module catalogue with extracted skills.
-GET /modules/ (10 Oct): a student sees their own programme's modules, with the year and kind (common / specialised /
-elective) the module has in that programme; anyone else, or a student before setup, sees the whole catalogue.
+GET /modules/ (10 Oct): a student sees their own intake's module list (else their programme's starting list), with
+the year and kind (common / specialised / elective) the module has there; anyone else, or a student before setup,
+sees the whole catalogue.
 """
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from app.database import get_db
 from app.models.module import Module, ModuleSkill
-from app.models.programme import ProgrammeModule
+from app.models.programme import IntakeModule, ProgrammeModule
 from app.models.user import User
 from app.routers.auth import get_current_user
 
@@ -31,6 +32,13 @@ def _row(mod: Module, skills: list[str], level: int, kind: str) -> dict:
 def get_modules(db: Session = Depends(get_db), user: User = Depends(get_current_user)):
     """Modules with their extracted skills: the student's programme only, once they have picked one."""
     skills = _skills_by_module(db)
+    if user.role == "student" and user.intake_id and \
+            db.query(IntakeModule).filter(IntakeModule.intake_id == user.intake_id).first():
+        rows = (db.query(Module, IntakeModule.year, IntakeModule.kind)
+                .join(IntakeModule, IntakeModule.module_id == Module.id)
+                .filter(IntakeModule.intake_id == user.intake_id)
+                .order_by(IntakeModule.year, IntakeModule.id).all())    # brochure order, as copied
+        return [_row(m, skills.get(m.id, []), year, kind) for m, year, kind in rows]
     if user.role == "student" and user.programme_id:
         rows = (db.query(Module, ProgrammeModule.year, ProgrammeModule.kind)
                 .join(ProgrammeModule, ProgrammeModule.module_id == Module.id)

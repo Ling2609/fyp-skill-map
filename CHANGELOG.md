@@ -3,6 +3,27 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 10 Oct 2026 — Module lists per intake
+
+- (this commit) Her design (researched: references.md "Module lists per intake"): a student follows the module list of
+  the intake they joined; a new intake starts as a copy of the latest intake's list ("rollover") and only what is new
+  is changed; changing one intake never changes another, so a student's list can't change after they start.
+- New table `intake_modules`; `intakes.other_codes` (APU gives each year its own code, e.g. APU1F2409CS(DA) →
+  APU3F2605CS(DA), so the group's later codes can be listed). `migrations/migrate_intake_modules.py` adds both, gives
+  every programme without intakes demo intakes for March / July / September 2023–2025, and copies each programme's
+  list into its intakes. The API refuses to start until it has run.
+- Admin > Academics: an Intake picker next to the programme (latest picked by default); the Modules tab shows that
+  intake's list, says which intake and what it is compared with; modules are marked "New in this intake" or with
+  their changed type; modules the intake before had are listed crossed out with "Put back". "+ Add module" opens a
+  catalogue search (a module keeps its description and skills; added at its usual year and type unless changed), with
+  "Create a new module" for one that isn't there. Remove takes a module out of this intake only (refused if a student
+  of this intake has a grade for it). Intakes tab: add an intake with its later codes and "Copy of <latest>"
+  preselected; each intake shows its module count, "Latest", and how many changes it has against the one before;
+  "Open module list" jumps to it. A module's description, skills and review stay one per module everywhere.
+- Students: modules come from their intake's list. A student whose programme has intakes must pick one (sent to the
+  setup step until they do: `needs_study` on /auth/me); the intake drop-down shows the code, the group's later codes
+  and the start month, with a hint that the code is on their timetable.
+
 ## 10 Oct 2026 — Admin module panel: less crowded, clear-search button
 
 - (this commit) Her review of Admin > Academics: the action bar ("Find skills again" / "Mark as reviewed") now stays

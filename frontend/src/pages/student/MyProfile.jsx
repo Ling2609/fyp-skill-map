@@ -149,7 +149,7 @@ export default function MyProfile() {
       {open === 'study' && (
         <Modal title="Change programme" dirty={dirty} onClose={close}>
           <StudyForm onDirty={setDirty} onCancel={close}
-            onDone={(study) => { setUser(u => ({ ...u, ...study })); saved() }} />
+            onDone={(study) => { setUser(u => ({ ...u, ...study, needs_study: false })); saved() }} />
         </Modal>
       )}
       {open === 'github' && (

@@ -118,7 +118,12 @@ def delete_old_codes():
 
 
 @router.get("/me", response_model=UserOut)
-def get_me(current_user: User = Depends(get_current_user)):
+def get_me(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    if current_user.role == "student" or getattr(current_user.role, "value", None) == "student":
+        from app.models.programme import Intake
+        current_user.needs_study = (not current_user.programme_id) or (
+            not current_user.intake_id
+            and db.query(Intake).filter(Intake.programme_id == current_user.programme_id).first() is not None)
     return current_user
 
 

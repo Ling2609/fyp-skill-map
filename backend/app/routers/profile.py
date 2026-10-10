@@ -936,7 +936,9 @@ def _study_out(user: User, db: Session) -> dict:
     intakes = db.query(Intake).order_by(Intake.start_date.desc().nulls_last(), Intake.code).all()
     return {"programme_id": user.programme_id, "intake_id": user.intake_id,
             "programmes": [{"id": p.id, "name": p.name,
-                            "intakes": [{"id": i.id, "code": i.code} for i in intakes if i.programme_id == p.id]}
+                            "intakes": [{"id": i.id, "code": i.code, "other_codes": i.other_codes or "",
+                                         "start_date": i.start_date}
+                                        for i in intakes if i.programme_id == p.id]}
                            for p in programmes]}
 
 

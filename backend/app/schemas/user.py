@@ -60,6 +60,8 @@ class UserOut(BaseModel):
     programme_id: int | None = None
     intake_id: int | None = None
     target_category: str | None = None    # 9 Oct: career goal (empty = open to all ICT roles)
+    # 10 Oct: a student with no programme, or no intake while their programme has intakes, is sent to the setup step
+    needs_study: bool = False
 
     class Config:
         from_attributes = True

@@ -295,6 +295,12 @@ export function AwardForm({ award, onDone, onCancel, onDirty }) {
 // The intake list follows the programme picked. A programme the career office hasn't given intakes yet can be saved
 // without one.
 
+// "APU1F2409CS(DA) · also APU3F2605CS(DA) · started Sep 2024": APU gives each year its own code, so the group's later
+// codes are shown too and a student can find theirs by today's code
+const intakeLabel = (i) => [i.code, i.other_codes && `also ${i.other_codes}`,
+  i.start_date && `started ${new Date(i.start_date).toLocaleDateString('en-GB', { month: 'short', year: 'numeric' })}`]
+  .filter(Boolean).join(' · ')
+
 export function StudyFields({ options, value, onChange }) {
   const programme = options.programmes.find(p => p.id === value.programme_id)
   return (
@@ -314,9 +320,11 @@ export function StudyFields({ options, value, onChange }) {
           required={!!programme?.intakes.length}
           onChange={e => onChange({ ...value, intake_id: e.target.value ? Number(e.target.value) : null })}>
           <option value="" disabled>{programme && !programme.intakes.length ? 'No intakes yet' : 'Pick your intake'}</option>
-          {programme?.intakes.map(i => <option key={i.id} value={i.id}>{i.code}</option>)}
+          {programme?.intakes.map(i => <option key={i.id} value={i.id}>{intakeLabel(i)}</option>)}
         </select>
         {programme && !programme.intakes.length && <p className="text-xs text-gray-400 mt-1.5">The career office hasn't added intakes yet. You can pick it later.</p>}
+        {/* 10 Oct: each intake has its own module list, so the intake decides which modules the student sees */}
+        {!!programme?.intakes.length && <p className="text-xs text-gray-400 mt-1.5">As on your timetable, e.g. APU3F2605CS(DA). Your modules follow your intake.</p>}
       </div>
     </div>
   )
@@ -349,7 +357,7 @@ export function StudyForm({ onDone, onCancel, onDirty }) {
 
   return (
     <form onSubmit={save} className="space-y-4">
-      <p className="text-xs text-gray-500">Your modules follow your programme. Grades you already entered are kept.</p>
+      <p className="text-xs text-gray-500">Your modules follow your programme and intake. Grades you already entered are kept.</p>
       {options ? <StudyFields options={options} value={study} onChange={setStudy} />
         : !error && <div className="flex justify-center py-4 text-blue-600"><Spinner /></div>}
       {error && <p className="text-xs text-red-500 bg-red-50 rounded-lg px-3 py-2">{error}</p>}

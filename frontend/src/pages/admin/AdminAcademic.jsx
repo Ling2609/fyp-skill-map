@@ -12,6 +12,10 @@ import RowMenu from './RowMenu'
 // side-by-side on wide screens). Each module's skills come from its description (IR Objective 1); the admin
 // checks them, removes or adds one, or finds them again after editing the text. Intakes: the programme's intakes,
 // which students pick at setup. Tab, module and filter are kept in the address.
+// Intakes (10 Oct, her design; references.md "Module lists per intake"): next to the programme, an intake picker. The
+// Modules tab shows the list of the intake picked (the latest by default): each intake has its own list, a new intake
+// starts as a copy of the latest, and editing one intake never changes another. Modules new or changed against the
+// intake before are marked, and the ones it dropped are listed at the bottom with "Put back".
 // Programmes (10 Oct): a picker above the tabs switches between the 17 computing programmes (with each one's "to
 // review" count). A module shared by several programmes is one module: its description, skills and review apply to
 // all of them; its year and type are per programme, so they show for the programme picked.
@@ -47,7 +51,7 @@ const Chip = ({ reviewed }) => reviewed
   : <span className="shrink-0 text-xs font-medium rounded-full px-2 py-0.5 bg-amber-100 text-amber-800">To review</span>
 
 // ── The chosen module ──────────────────────────────────────────────────────────────────────────────────────────────
-function ModuleDetails({ id, programmeId, onChanged, onReviewed, onEdit, onRemove }) {
+function ModuleDetails({ id, programmeId, row, onChanged, onReviewed, onEdit, onRemove }) {
   const [mod, setMod] = useState(null)
   const [draft, setDraft] = useState('')
   const [newSkill, setNewSkill] = useState('')
@@ -77,7 +81,7 @@ function ModuleDetails({ id, programmeId, onChanged, onReviewed, onEdit, onRemov
   const dirty = draft.trim() !== mod.description.trim()
   const reviewed = !!mod.reviewed_at
   // Year and type as taught in the programme picked; the other programmes that share this module
-  const here = mod.programmes.find(p => p.id === programmeId) || { year: mod.year, type: mod.type }
+  const here = row || mod.programmes.find(p => p.id === programmeId) || { year: mod.year, type: mod.type }
   const others = mod.programmes.filter(p => p.id !== programmeId)
   const addSkill = (e) => {
     e.preventDefault()
@@ -116,7 +120,7 @@ function ModuleDetails({ id, programmeId, onChanged, onReviewed, onEdit, onRemov
           <Chip reviewed={reviewed} />
           <RowMenu label={`More for ${mod.name}`} items={[
             { label: 'Edit details', onSelect: () => onEdit({ ...mod, year: here.year, type: here.type, shared: others.length }) },
-            { label: 'Remove module…', danger: true, onSelect: () => onRemove(mod) },
+            { label: 'Remove from this list…', danger: true, onSelect: () => onRemove(mod) },
           ]} />
         </div>
       </div>
@@ -212,16 +216,24 @@ function ModuleDetails({ id, programmeId, onChanged, onReviewed, onEdit, onRemov
 }
 
 // ── Intakes ────────────────────────────────────────────────────────────────────────────────────────────────────────
-function Intakes({ programmeId, intakes, setIntakes }) {
+// A new intake's module list starts as a copy of another intake's (the latest is picked). APU gives each year of study
+// its own code (APU1F…, APU2F…, APU3F…), so the group's later codes can be listed too: students find their intake by
+// the code on their current timetable.
+const monthYear = (iso) => new Date(iso).toLocaleDateString('en-GB', { month: 'short', year: 'numeric' })
+
+function Intakes({ programmeId, intakes, setIntakes, onOpen }) {
   const [code, setCode] = useState('')
   const [start, setStart] = useState('')
+  const [others, setOthers] = useState('')
+  const [copyFrom, setCopyFrom] = useState(intakes[0]?.id ?? '')
   const [error, setError] = useState('')
   const [busy, setBusy] = useState(false)
 
   const add = (e) => {
     e.preventDefault(); setBusy(true); setError('')
-    api.post('/admin/intakes', { programme_id: programmeId, code, start_date: start })
-      .then(res => { setIntakes(res.data); setCode(''); setStart('') })
+    api.post('/admin/intakes', { programme_id: programmeId, code, start_date: start, other_codes: others,
+      copy_from: copyFrom === '' ? null : Number(copyFrom) })
+      .then(res => { setIntakes(res.data.intakes); setCode(''); setStart(''); setOthers(''); setCopyFrom(res.data.intakes[0]?.id ?? '') })
       .catch(err => setError(errText(err, "Couldn't add the intake.")))
       .finally(() => setBusy(false))
   }
@@ -230,6 +242,7 @@ function Intakes({ programmeId, intakes, setIntakes }) {
     api.delete(`/admin/intakes/${i.id}`).then(res => setIntakes(res.data))
       .catch(err => setError(errText(err, "Couldn't delete the intake.")))
   }
+  const field = 'w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500'
 
   return (
     // the add form beside the list (same side-by-side layout as Modules), so the page uses its full width
@@ -237,46 +250,146 @@ function Intakes({ programmeId, intakes, setIntakes }) {
       <form onSubmit={add} className="w-88 shrink-0 bg-white border border-slate-200 rounded-xl p-5 flex flex-col gap-3">
         <h2 className="text-sm font-semibold text-slate-700">Add an intake</h2>
         <div>
-          <label htmlFor="intake-code" className="block text-xs font-medium text-slate-600 mb-1">Intake code</label>
-          <input id="intake-code" value={code} onChange={e => setCode(e.target.value)} placeholder="e.g. APD3F2409SE" maxLength={30}
-            className="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+          <label htmlFor="intake-code" className="block text-xs font-medium text-slate-600 mb-1">Intake code (Year 1)</label>
+          <input id="intake-code" value={code} onChange={e => setCode(e.target.value)} placeholder="e.g. APU1F2609CS(DA)" maxLength={30} className={field} />
         </div>
         <div>
           <label htmlFor="intake-start" className="block text-xs font-medium text-slate-600 mb-1">Starts</label>
-          <input id="intake-start" type="date" value={start} onChange={e => setStart(e.target.value)}
-            className="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+          <input id="intake-start" type="date" value={start} onChange={e => setStart(e.target.value)} className={field} />
+        </div>
+        <div>
+          <label htmlFor="intake-others" className="block text-xs font-medium text-slate-600 mb-1">Later codes of this group <span className="font-normal text-slate-400">(optional)</span></label>
+          <input id="intake-others" value={others} onChange={e => setOthers(e.target.value)} placeholder="e.g. APU2F2709CS(DA), APU3F2805CS(DA)" maxLength={200} className={field} />
+        </div>
+        <div>
+          <label htmlFor="intake-copy" className="block text-xs font-medium text-slate-600 mb-1">Module list</label>
+          <select id="intake-copy" value={copyFrom} onChange={e => setCopyFrom(e.target.value)} className={field}>
+            {intakes.length === 0 && <option value="">Copy of the programme's list</option>}
+            {intakes.map((i, n) => <option key={i.id} value={i.id}>Copy of {i.code}{n === 0 ? ' (latest)' : ''} · {i.modules} modules</option>)}
+          </select>
         </div>
         {error && <p role="alert" className="text-sm text-rose-600">{error}</p>}
         <button type="submit" disabled={busy || code.trim().length < 3 || !start}
           className="px-4 py-2 text-sm font-medium rounded-lg bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-40">Add intake</button>
-        <p className="text-xs text-slate-500">Students pick their intake when they first sign in.</p>
+        <p className="text-xs text-slate-500">Change the copied list afterwards in the Modules tab; other intakes keep their own lists.</p>
       </form>
-      <div className="flex-1 min-w-0 bg-white border border-slate-200 rounded-xl overflow-hidden">
+      <div className="flex-1 min-w-0 bg-white border border-slate-200 rounded-xl overflow-hidden max-h-full overflow-y-auto">
         <table className="w-full text-sm">
-          <thead>
+          <thead className="sticky top-0">
             <tr className="text-left text-xs text-blue-900 bg-blue-100">
               <th scope="col" className="font-semibold uppercase tracking-wide px-4 py-2.5">Intake</th>
               <th scope="col" className="font-semibold uppercase tracking-wide px-4 py-2.5">Starts</th>
+              <th scope="col" className="font-semibold uppercase tracking-wide px-4 py-2.5">Module list</th>
               <th scope="col" className="font-semibold uppercase tracking-wide px-4 py-2.5">Students</th>
               <th scope="col" className="px-4 py-2.5"><span className="sr-only">Actions</span></th>
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-100">
-            {intakes.length === 0 && <tr><td colSpan={4} className="px-4 py-5 text-slate-500">No intakes yet. Add the first one above.</td></tr>}
+            {intakes.length === 0 && <tr><td colSpan={5} className="px-4 py-5 text-slate-500">No intakes yet. Add the first one; it copies the programme's list.</td></tr>}
             {intakes.map(i => (
               <tr key={i.id}>
-                <td className="px-4 py-3 font-medium text-slate-800">{i.code}</td>
-                <td className="px-4 py-3 text-slate-700">{i.start_date ? shortDay(i.start_date) : '—'}</td>
+                <td className="px-4 py-3 whitespace-nowrap">
+                  <span className="font-medium text-slate-800">{i.code}</span>
+                  {i.other_codes && <span className="block text-xs text-slate-500">{i.other_codes}</span>}
+                </td>
+                <td className="px-4 py-3 text-slate-700 whitespace-nowrap">{i.start_date ? shortDay(i.start_date) : '—'}</td>
+                <td className="px-4 py-3 text-slate-700">
+                  <span className="whitespace-nowrap">{i.modules} modules
+                    {i.latest && <span className="ml-1.5 text-xs font-medium rounded-full px-2 py-0.5 bg-blue-50 text-blue-700">Latest</span>}</span>
+                  <span className={`block text-xs ${i.changes ? 'text-amber-700' : 'text-slate-500'}`}>{i.compared_with
+                    ? (i.changes ? `${i.changes} change${i.changes > 1 ? 's' : ''} from ${i.compared_with}` : `Same as ${i.compared_with}`)
+                    : 'First intake'}</span>
+                </td>
                 <td className="px-4 py-3 text-slate-700 tabular-nums">{i.students}</td>
-                <td className="px-4 py-3 text-right">
+                <td className="px-4 py-3 text-right whitespace-nowrap">
+                  <button type="button" onClick={() => onOpen(i)} className="text-sm text-blue-700 hover:underline">Open module list</button>
                   {i.students === 0 && (
-                    <button type="button" onClick={() => remove(i)} className="text-sm text-rose-700 hover:underline">Delete</button>
+                    <button type="button" onClick={() => remove(i)} className="ml-4 text-sm text-rose-700 hover:underline">Delete</button>
                   )}
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
+      </div>
+    </div>
+  )
+}
+
+// ── Add a module to the list: from the catalogue (keeps its description and skills), or a new one ─────────────────
+function AddModule({ scope, scopeLabel, onAdded, onNew, onCancel }) {
+  const [q, setQ] = useState('')
+  const [results, setResults] = useState(null)
+  const [year, setYear] = useState('')      // '' = the module's usual year / type (where it is taught already)
+  const [type, setType] = useState('')
+  const [busy, setBusy] = useState(false)
+  const [error, setError] = useState('')
+
+  useEffect(() => {
+    const words = q.trim()
+    if (words.length < 2) return
+    const t = setTimeout(() => api.get('/admin/catalogue', { params: { q: words, ...scope } })
+      .then(res => setResults(res.data)).catch(() => setResults([])), 250)
+    return () => clearTimeout(t)
+  }, [q, scope])
+  useEffect(() => {
+    const onKey = (e) => { if (e.key === 'Escape' && !busy) onCancel() }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [busy, onCancel])
+
+  const shownResults = q.trim().length < 2 ? null : results   // fewer than two letters: nothing searched yet
+  const add = (m) => {
+    setBusy(true); setError('')
+    api.post('/admin/list/modules', { ...scope, module_id: m.id, year: Number(year || m.year), type: type || m.type })
+      .then(() => onAdded(m))
+      .catch(err => setError(errText(err, "Couldn't add the module.")))
+      .finally(() => setBusy(false))
+  }
+  const field = 'px-3 py-2 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500'
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-start justify-center p-4 pt-16 bg-slate-900/30" onMouseDown={() => { if (!busy) onCancel() }}>
+      <div role="dialog" aria-modal="true" aria-labelledby="add-module-title" onMouseDown={e => e.stopPropagation()}
+        className="bg-white rounded-2xl shadow-xl w-full max-w-xl max-h-[80vh] flex flex-col">
+        <div className="px-6 pt-5 pb-4 border-b border-slate-100">
+          <h2 id="add-module-title" className="text-base font-semibold text-slate-900">Add a module to {scopeLabel}</h2>
+          <p className="text-sm text-slate-500 mt-1">Pick one from the catalogue: it keeps its description and skills.</p>
+          <div className="mt-3"><SearchBox value={q} onChange={setQ} label="Search the catalogue" placeholder="Search by name or code" /></div>
+          <div className="mt-3 flex flex-wrap items-center gap-2 text-sm text-slate-600">
+            <span>Add as</span>
+            <select aria-label="Year" value={year} onChange={e => setYear(e.target.value)} className={field}>
+              <option value="">Its usual year</option>
+              {[1, 2, 3, 4].map(y => <option key={y} value={y}>Year {y}</option>)}
+            </select>
+            <select aria-label="Type" value={type} onChange={e => setType(e.target.value)} className={field}>
+              <option value="">Its usual type</option>
+              <option value="common">Common</option><option value="specialised">Specialised</option><option value="elective">Elective</option>
+            </select>
+          </div>
+        </div>
+        <ul className="flex-1 overflow-y-auto px-6 py-3 flex flex-col gap-2" aria-label="Catalogue results">
+          {shownResults === null && <li className="text-sm text-slate-500 py-2">Type at least two letters.</li>}
+          {shownResults?.length === 0 && <li className="text-sm text-slate-500 py-2">Nothing found. Create it as a new module instead.</li>}
+          {shownResults?.map(m => (
+            <li key={m.id} className={`flex items-center justify-between gap-3 px-3 py-2.5 border border-slate-200 rounded-lg ${m.in_list ? 'text-slate-400' : ''}`}>
+              <span className="min-w-0">
+                <span className="block text-sm font-medium">{m.name}</span>
+                <span className="block text-xs text-slate-500">
+                  {m.code} · {m.in_list ? 'already in this list' : `Year ${m.year} · ${m.skills} skill${m.skills === 1 ? '' : 's'} · ${m.reviewed ? 'Reviewed' : 'To review'} · in ${m.programmes} programme${m.programmes === 1 ? '' : 's'}`}
+                </span>
+              </span>
+              {!m.in_list && <button type="button" disabled={busy} onClick={() => add(m)}
+                className="shrink-0 px-3 py-1.5 text-sm font-medium rounded-lg bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50">Add</button>}
+            </li>
+          ))}
+        </ul>
+        {error && <p role="alert" className="px-6 text-sm text-rose-600">{error}</p>}
+        <div className="flex justify-between gap-2 px-6 py-4 bg-slate-50 border-t border-slate-100 rounded-b-2xl">
+          <button type="button" onClick={onNew} className="text-sm font-medium text-blue-700 hover:underline">Not in the catalogue? Create a new module</button>
+          <button type="button" onClick={onCancel} disabled={busy}
+            className="px-4 py-2 text-sm font-medium rounded-lg border border-slate-200 bg-white text-slate-700 hover:bg-slate-50">Close</button>
+        </div>
       </div>
     </div>
   )
@@ -289,10 +402,12 @@ export default function AdminAcademic() {
   const onlyToReview = params.get('show') === 'todo'
   const selected = Number(params.get('m')) || null
   const programmeParam = Number(params.get('p')) || null
+  const intakeParam = Number(params.get('i')) || null
   const [data, setData] = useState(null)
   const [error, setError] = useState('')
   const [q, setQ] = useState('')
   const [form, setForm] = useState(null)        // null, { mode: 'add' } or { mode: 'edit', module }
+  const [picking, setPicking] = useState(false) // the "Add a module" pop-up (catalogue)
   const [formBusy, setFormBusy] = useState(false)
   const [formError, setFormError] = useState('')
   const [removing, setRemoving] = useState(null) // the module whose "Remove?" pop-up is open
@@ -305,11 +420,16 @@ export default function AdminAcademic() {
     setParams(next, { replace: true })
   }, [params, setParams])
 
-  const reload = useCallback(() => api.get('/admin/academic', { params: programmeParam ? { programme_id: programmeParam } : {} })
+  const reload = useCallback(() => api.get('/admin/academic', {
+    params: intakeParam ? { intake_id: intakeParam } : programmeParam ? { programme_id: programmeParam } : {} })
     .then(res => { setData(res.data); return res.data })
-    .catch(err => setError(errText(err, "Couldn't load the academic structure. Is the backend running?"))), [programmeParam])
+    .catch(err => setError(errText(err, "Couldn't load the academic structure. Is the backend running?"))), [programmeParam, intakeParam])
   useEffect(() => { reload() }, [reload])
   const programmeId = data?.programme.id
+  const intake = data?.intake || null
+  // The list being looked at: the intake's, else (no intakes yet) the programme's own list
+  const scope = useMemo(() => (intake ? { intake_id: intake.id } : { programme_id: programmeId }), [intake, programmeId])
+  const scopeLabel = intake ? `intake ${intake.code}` : data?.programme.code
 
   // From the dashboard's "to review" link (no programme picked): open the first programme that has modules to review
   useEffect(() => {
@@ -322,7 +442,7 @@ export default function AdminAcademic() {
   const openForm = (f) => { setFormError(''); setForm(f) }
   const saveForm = (fields) => {
     setFormBusy(true); setFormError('')
-    const body = { ...fields, programme_id: programmeId }
+    const body = { ...fields, ...scope }
     const req = form.mode === 'add' ? api.post('/admin/modules', body) : api.put(`/admin/modules/${form.module.id}`, body)
     req.then(res => reload().then(() => {
       setForm(null); setNotice(res.data.warning || '')
@@ -335,7 +455,7 @@ export default function AdminAcademic() {
   }
   const confirmRemove = () => {
     setFormBusy(true); setFormError('')
-    api.delete(`/admin/modules/${removing.id}`, { params: { programme_id: programmeId } })
+    api.delete(`/admin/modules/${removing.id}`, { params: scope })
       .then(() => reload().then(() => {
         setRemoving(null); setNotice(''); set({ m: '' })
         window.dispatchEvent(new Event(ADMIN_COUNTS_CHANGED))
@@ -345,6 +465,11 @@ export default function AdminAcademic() {
   }
 
   const modules = useMemo(() => data?.modules || [], [data])
+  const selectedRow = modules.find(m => m.id === selected)
+  // "Put back" a module the intake before had (same year and type as there)
+  const putBack = (m) => api.post('/admin/list/modules', { ...scope, module_id: m.id, year: m.year,
+    type: m.type.toLowerCase() }).then(() => reload().then(() => set({ m: String(m.id) })))
+    .catch(err => setNotice(errText(err, "Couldn't put it back.")))
   const toReview = modules.filter(m => !m.reviewed).length
   const shown = useMemo(() => {
     const words = q.trim().toLowerCase()
@@ -390,12 +515,21 @@ export default function AdminAcademic() {
           {data && (
             <div className="mt-3 flex flex-wrap items-center gap-2">
               <label htmlFor="programme" className="text-sm font-medium text-slate-700">Programme</label>
-              <select id="programme" value={programmeId} onChange={e => { setQ(''); set({ p: e.target.value, m: '' }) }}
-                className="max-w-full min-w-0 px-3 py-1.5 text-sm bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+              <select id="programme" value={programmeId} onChange={e => { setQ(''); set({ p: e.target.value, i: '', m: '' }) }}
+                className="w-124 max-w-full min-w-0 px-3 py-1.5 text-sm bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                 {data.programmes.map(p => (
                   <option key={p.id} value={p.id}>{p.name}{p.to_review ? ` (${p.to_review} to review)` : ''}</option>
                 ))}
               </select>
+              {data.intakes.length > 0 && (<>
+                <label htmlFor="intake" className="ml-2 text-sm font-medium text-slate-700">Intake</label>
+                <select id="intake" value={intake?.id ?? ''} onChange={e => set({ i: e.target.value, m: '' })}
+                  className="min-w-0 px-3 py-1.5 text-sm bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                  {data.intakes.map(i => (
+                    <option key={i.id} value={i.id}>{i.code}{i.start_date ? ` · ${monthYear(i.start_date)}` : ''}{i.latest ? ' · latest' : ''}</option>
+                  ))}
+                </select>
+              </>)}
             </div>
           )}
           <div role="tablist" className="flex gap-6 mt-4">
@@ -410,7 +544,15 @@ export default function AdminAcademic() {
       <div className="flex-1 min-h-0 px-8 py-6 flex flex-col">
         {error && <p className="text-sm text-rose-600">{error}</p>}
         {data && tab === 'intakes' && (
-          <Intakes key={programmeId} programmeId={programmeId} intakes={data.intakes} setIntakes={list => setData(d => ({ ...d, intakes: list }))} />
+          <Intakes key={programmeId} programmeId={programmeId} intakes={data.intakes}
+            setIntakes={() => reload()} onOpen={i => set({ tab: '', i: String(i.id), m: '' })} />
+        )}
+        {data && tab === 'modules' && (
+          <p className="-mt-2 mb-3 text-sm text-slate-600">
+            {intake
+              ? <>Module list of intake <b className="font-semibold">{intake.code}</b>{intake.latest ? ' (latest)' : ''}. Changes apply to this intake only{intake.compared_with ? <>; marked against {intake.compared_with}</> : ''}.</>
+              : <>No intakes yet: this is the programme's list, copied into its first intake.</>}
+          </p>
         )}
         {data && tab === 'modules' && (
           <div className="flex-1 min-h-0 flex gap-4">
@@ -423,7 +565,7 @@ export default function AdminAcademic() {
                     : toReview ? 'bg-amber-50 border-amber-300 text-amber-800 hover:bg-amber-100' : 'bg-white border-slate-200 text-slate-700'}`}>
                   To review <span className="font-semibold tabular-nums">{toReview}</span>
                 </button>
-                <button type="button" onClick={() => openForm({ mode: 'add' })}
+                <button type="button" onClick={() => setPicking(true)}
                   className="ml-auto shrink-0 px-3 py-1.5 text-sm font-medium rounded-lg bg-blue-600 text-white hover:bg-blue-700">+ Add module</button>
               </div>
               <div className="flex-1 overflow-y-auto">
@@ -442,7 +584,10 @@ export default function AdminAcademic() {
                               ? 'bg-blue-50 shadow-[inset_3px_0_0_#2563eb]' : 'hover:bg-slate-50'}`}>
                             <span className="min-w-0">
                               <span className="block text-sm text-slate-800 line-clamp-2">{m.name}</span>
-                              <span className="block text-xs text-slate-400">{m.code} · {m.skills} skill{m.skills === 1 ? '' : 's'}</span>
+                              <span className="block text-xs text-slate-400">{m.code} · {m.skills} skill{m.skills === 1 ? '' : 's'}
+                                {m.status === 'new' && <span className="text-emerald-700 font-medium"> · New in this intake</span>}
+                                {m.status === 'changed' && <span className="text-amber-700 font-medium"> · {m.type} here</span>}
+                              </span>
                             </span>
                             <Chip reviewed={m.reviewed} />
                           </button>
@@ -451,11 +596,30 @@ export default function AdminAcademic() {
                     </ul>
                   </div>
                 ))}
+                {/* Modules the intake before had but this one doesn't (her mock-up: crossed out, "Put back") */}
+                {data.removed.length > 0 && !onlyToReview && !q && (
+                  <div>
+                    <p className="sticky top-0 z-10 px-4 py-2 text-xs font-semibold text-slate-600 bg-slate-100 border-y border-slate-200">
+                      Not in this intake <span className="font-normal text-slate-500">· were in {intake?.compared_with}</span>
+                    </p>
+                    <ul>
+                      {data.removed.map(m => (
+                        <li key={m.id} className="flex items-center justify-between gap-3 px-4 py-2.5 border-b border-slate-50">
+                          <span className="min-w-0 text-slate-400">
+                            <span className="block text-sm line-through">{m.name}</span>
+                            <span className="block text-xs">{m.code} · Year {m.year} · {m.type}</span>
+                          </span>
+                          <button type="button" onClick={() => putBack(m)} className="shrink-0 text-sm text-blue-700 hover:underline">Put back</button>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
               </div>
             </section>
             <section aria-label="Module details" className="flex-1 min-w-0 flex flex-col bg-white border border-slate-200 rounded-xl overflow-hidden">
               {notice && <p role="status" className="mx-6 mt-5 -mb-1 text-sm text-amber-800 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2">{notice}</p>}
-              {selected ? <ModuleDetails key={`${selected}-${tick}`} id={selected} programmeId={programmeId} onChanged={onChanged} onReviewed={onReviewed}
+              {selected ? <ModuleDetails key={`${selected}-${tick}`} id={selected} programmeId={programmeId} row={selectedRow} onChanged={onChanged} onReviewed={onReviewed}
                   onEdit={mod => openForm({ mode: 'edit', module: mod })} onRemove={mod => { setFormError(''); setRemoving(mod) }} />
                 : <p className="p-6 text-sm text-slate-500">Choose a module on the left.</p>}
             </section>
@@ -463,7 +627,10 @@ export default function AdminAcademic() {
         )}
       </div>
 
-      {form && <ModuleForm module={form.module} programme={data?.programme} busy={formBusy} error={formError} onSave={saveForm} onCancel={() => setForm(null)} />}
+      {picking && <AddModule scope={scope} scopeLabel={scopeLabel} onCancel={() => setPicking(false)}
+        onNew={() => { setPicking(false); openForm({ mode: 'add' }) }}
+        onAdded={m => { setPicking(false); reload().then(() => set({ m: String(m.id), show: '' })) }} />}
+      {form && <ModuleForm module={form.module} scopeLabel={scopeLabel} busy={formBusy} error={formError} onSave={saveForm} onCancel={() => setForm(null)} />}
       {removing && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/30" onMouseDown={() => { if (!formBusy) setRemoving(null) }}>
           <div role="alertdialog" aria-modal="true" aria-labelledby="remove-title" onMouseDown={e => e.stopPropagation()}
@@ -472,10 +639,9 @@ export default function AdminAcademic() {
             <div className="px-6 pt-5">
               <h2 id="remove-title" className="text-base font-semibold text-slate-900">Remove {removing.name}?</h2>
               <p className="text-sm text-slate-600 mt-1.5">
-                {removing.programmes.length > 1
-                  ? `${removing.code} is taken out of ${data?.programme.code}. The ${removing.programmes.length - 1} other programme${removing.programmes.length > 2 ? 's keep' : ' keeps'} it, with its skills.`
-                  : `${removing.code} and its skills are deleted: no other programme teaches it.`}
-                {' '}Only possible while no student of this programme has entered a grade for it.
+                {removing.code} is taken out of {scopeLabel}. {intake ? 'Other intakes keep their own lists' : 'Other programmes keep it'};
+                the module and its skills are deleted only when no list has it any more.
+                {' '}Only possible while no student of {intake ? 'this intake' : 'this programme'} has entered a grade for it.
               </p>
               {formError && <p role="alert" className="text-sm text-rose-600 mt-3">{formError}</p>}
             </div>
@@ -484,7 +650,7 @@ export default function AdminAcademic() {
                 className="px-4 py-2 text-sm font-medium rounded-lg border border-slate-200 bg-white text-slate-700 hover:bg-slate-50">Cancel</button>
               <button type="button" onClick={confirmRemove} disabled={formBusy}
                 className="px-4 py-2 text-sm font-medium rounded-lg bg-rose-600 text-white hover:bg-rose-700 disabled:opacity-40">
-                {formBusy ? 'Removing…' : 'Remove module'}
+                {formBusy ? 'Removing…' : 'Remove from list'}
               </button>
             </div>
           </div>

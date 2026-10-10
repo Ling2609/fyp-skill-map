@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react'
 // (10 Oct: a module can be common in one programme and an elective in another).
 const TYPES = [['common', 'Common'], ['specialised', 'Specialised'], ['elective', 'Elective']]
 
-export default function ModuleForm({ module, programme, busy, error, onSave, onCancel }) {
+export default function ModuleForm({ module, scopeLabel, busy, error, onSave, onCancel }) {
   const editing = !!module
   const [code, setCode] = useState('')
   const [name, setName] = useState(module?.name || '')
@@ -33,10 +33,10 @@ export default function ModuleForm({ module, programme, busy, error, onSave, onC
         className="bg-white rounded-2xl shadow-xl w-full max-w-lg">
         <div className="px-6 pt-5 flex flex-col gap-4">
           <h2 id="module-form-title" className="text-base font-semibold text-slate-900">
-            {editing ? `Edit ${module.code}` : `Add a module to ${programme?.code || 'the programme'}`}
+            {editing ? `Edit ${module.code}` : `New module in ${scopeLabel || 'the programme'}`}
           </h2>
-          {editing && module.shared > 0 && (
-            <p className="-mt-2 text-sm text-slate-600">Year and type are for {programme?.code}. The name changes in all {module.shared + 1} programmes that teach it.</p>
+          {editing && (
+            <p className="-mt-2 text-sm text-slate-600">Year and type are for {scopeLabel} only.{module.shared > 0 ? ` The name changes everywhere the module is taught.` : ''}</p>
           )}
           {!editing && (
             <div>
