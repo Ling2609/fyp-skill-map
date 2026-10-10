@@ -3,6 +3,12 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 10 Oct 2026 — Evaluation files renamed: "answer key" instead of "gold"
+
+- (this commit) Her request: `gold_claude.json`, `gold_qwen.json`, `gold.json` → `answer_key_claude.json`,
+  `answer_key_qwen.json`, `answer_key.json`; per_ad.csv column `answer_key`; errors.csv says "missed (in answer key)" /
+  "extra (not in answer key)". Plain wording for the report (same meaning as "gold standard").
+
 ## 10 Oct 2026 — Job skill extraction evaluation script (E1)
 
 - (this commit) `scripts/evaluation/evaluate_job_skill_extraction.py` (plan agreed 9 Oct, fixed before results): 30 live ads stratified
