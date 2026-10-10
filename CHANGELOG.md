@@ -3,6 +3,15 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 10 Oct 2026 — Job skill extraction evaluation script (E1)
+
+- (this commit) `scripts/evaluation/evaluate_job_skill_extraction.py` (plan agreed 9 Oct, fixed before results): 30 live ads stratified
+  by ICT subcategory (seed 1, full ad text); answer key = technical skills listed by both Claude and Qwen (the
+  extractor gpt-oss never grades itself), the rest decided by the author in `disagreements.csv`; compared with the
+  stored hard skills by the app's canonical key; precision / recall / F1 with a 95% bootstrap interval over ads;
+  every extra and missed skill listed for the error analysis. Steps: sample → (Claude labels) → qwen → merge → score.
+  Results go to `docs/evidence/job_skill_extraction/`; `ads.json` / `ads.md` hold full ad text, so they stay out of git like the JSearch cache.
+
 ## 10 Oct 2026 — GitHub import: clearer "not ready" cards, character counter; switch hints follow the setting
 
 - (this commit) Her test: a card whose description she changed said "Find the skills again" but it wasn't a button,
