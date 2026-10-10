@@ -3,7 +3,7 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
-## 10 Oct 2026 — Answer key: same skill under different names counted once
+## 10 Oct 2026 — Answer key: majority vote of three labellers; same skill under different names counted once
 
 - (this commit) Her first merge left 283 skills to decide, many only wording ("Amazon S3" / "AWS S3" / "S3",
   "Predictive modelling" / "modeling", "ERP" / "ERP systems"), so one skill could be decided two or three times and
@@ -14,6 +14,10 @@ Planning, reasoning and research behind each decision are in the project roadmap
   Looser matches (one name's words inside another's, e.g. "Segmentation" / "Image segmentation") are never merged
   automatically: `disagreements.csv` shows them in a new `similar_in_answer_key` column so she can drop repeats fast.
   Decided before any result was seen.
+- Still 252 single-labeller skills after that (real scope differences, e.g. Gemini listing tasks the guide leaves
+  out), too many to decide by hand. Answer key = majority vote (at least 2 of 3), as with several non-expert annotators
+  (Snow et al., EMNLP 2008): `merge` writes it at once, single-labeller skills stay out, keeping one in
+  `disagreements.csv` is optional. Her spot-check of 5 ads measures what the majority vote gets wrong or misses.
 
 ## 10 Oct 2026 — Answer key from three labellers + the author's spot-check
 

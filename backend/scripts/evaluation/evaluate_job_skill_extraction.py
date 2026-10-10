@@ -4,8 +4,10 @@ E1b: how well SkillMap extracts the skills a job ad asks for (IR Objective 1, ev
 Plan agreed 9 Oct (roadmap "E1 PLAN"), fixed before any result is seen:
   - 30 live ads, stratified by JobStreet ICT subcategory (seed 1), the text the extractor read (full JSearch text)
   - answer key = technical skills listed by at least 2 of 3 independent labellers, Claude, Qwen and Gemini (three
-    model families, none of them the extractor, gpt-oss, so the extractor never grades itself); a skill only one of
-    them listed is decided by the author (keep / drop). All follow labelling_guide.md and never see the extractor's
+    model families, none of them the extractor, gpt-oss, so the extractor never grades itself): majority vote, as
+    with several non-expert annotators (Snow et al., EMNLP 2008). A skill only one of them listed stays out; the
+    author MAY keep one in disagreements.csv (10 Oct, before any result: deciding all 252 by hand was too much, the
+    spot-check below measures what the majority vote gets wrong or misses instead). All follow labelling_guide.md and never see the extractor's
     skills. (10 Oct, before any result: Gemini added and the author's spot-check of 5 ads, her choice "1+2".)
   - spot-check: the author checks every skill the labellers agreed on in 5 ads (seed 2) and adds any all three
     missed, to measure how often the labellers are wrong together (reported, the answer key is not changed)
@@ -18,9 +20,9 @@ Steps (from backend/, venv active; files go to ../docs/evidence/job_skill_extrac
      -> upload ads.json to Claude, who labels them blind -> save its answer as answer_key_claude.json
   python scripts/evaluation/evaluate_job_skill_extraction.py qwen       # 2. Qwen labels the same ads (Groq) -> answer_key_qwen.json
   python scripts/evaluation/evaluate_job_skill_extraction.py gemini     # 3. Gemini labels them -> answer_key_gemini.json
-  python scripts/evaluation/evaluate_job_skill_extraction.py merge      # 4. 2-of-3 agreements, disagreements.csv and
-                                                                        #    spot_check.csv (fill both, see below)
-  python scripts/evaluation/evaluate_job_skill_extraction.py merge      # 5. again once every row is decided -> answer_key.json
+  python scripts/evaluation/evaluate_job_skill_extraction.py merge      # 4. answer_key.json (2 of 3), spot_check.csv to
+                                                                        #    fill, disagreements.csv (optional keeps)
+  python scripts/evaluation/evaluate_job_skill_extraction.py merge      # 5. again after any keeps (spot-check answers stay)
   python scripts/evaluation/evaluate_job_skill_extraction.py score      # 6. scores.txt, per_ad.csv, errors.csv
 """
 import argparse
@@ -317,20 +319,16 @@ def merge():
     union = sum(votes_total.values())
     print(f"{union} different skills listed: all three agree on {votes_total[3]} ({votes_total[3] / union:.0%}), two on "
           f"{votes_total[2]} ({votes_total[2] / union:.0%}), only one on {votes_total[1]} ({votes_total[1] / union:.0%}).")
-    open_rows = [r for r in rows if r["your_decision"] not in ("keep", "drop")]
     open_spot = [r for r in spot if r["kind"] == "agreed" and (r["your_check"] or "").strip().lower() not in ("correct", "wrong")]
-    if open_rows:
-        print(f"{len(open_rows)} of {len(rows)} skills listed by only one labeller: open {path('disagreements.csv')}, type keep "
-              f"or drop in your_decision (keep = the ad really needs it, by the guide; drop it if it only repeats the "
-              f"skill in similar_in_answer_key), save, run merge again.")
+    kept = sum(1 for r in rows if r["your_decision"] == "keep")
+    print(f"{len(rows)} skills listed by only one labeller stay out of the answer key ({kept} kept by you in "
+          f"disagreements.csv; optional: type keep there for one the ad really needs, then run merge again).")
     if open_spot:
         print(f"Spot-check: {len(open_spot)} agreed skills in {SPOT_ADS} ads to check in {path('spot_check.csv')}: type "
               f"correct or wrong in your_check (read the ad in ads.md). For a skill all three missed, add a row with "
               f"kind = missing and the skill name.")
-    if open_rows:
-        return
     save("answer_key.json", key)
-    print(f"All {len(rows)} decided: answer_key.json written ({sum(map(len, key.values()))} skills in {len(key)} ads). Next: score.")
+    print(f"answer_key.json written ({sum(map(len, key.values()))} skills in {len(key)} ads). Next: the spot-check, then score.")
 
 
 # ── 4. score ─────────────────────────────────────────────────────────────────────────────────────────────────────
