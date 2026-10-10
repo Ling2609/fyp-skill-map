@@ -199,7 +199,7 @@ function CheckCard({ it, update, find, onRemove }) {
               className={`${inputCls} resize-none bg-white`} />
             <p className="flex justify-between text-xs mt-1">
               <span className={length < MIN_DESCRIPTION ? 'text-amber-700' : 'text-gray-400'}>
-                {length < MIN_DESCRIPTION ? 'Write at least one sentence so skills can be found.'
+                {length < MIN_DESCRIPTION ? 'Describe what you built in at least one sentence.'
                   : it.source === 'readme' ? "Filled in from the repo's README. Change it to say what you did."
                   : it.source === 'github' ? 'From the repo’s description on GitHub.' : ''}
               </span>

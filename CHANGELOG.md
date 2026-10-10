@@ -12,11 +12,12 @@ Planning, reasoning and research behind each decision are in the project roadmap
   "Save" sends them (`skills` on POST/PUT /profile/projects; evidence that no longer holds is kept as "Added by you").
   Changing the name, description or link after finding asks to find them again; skills she typed stay. Before, skills
   were found silently on save, and on edit only when the text changed, so it looked random.
-- When Find skills can't run yet, the form says why ("Write at least one sentence…", "11 / 20 characters"); the
+- When Find skills can't run yet, the form says why ("Describe what you built in at least one sentence.", "11 / 20
+  characters"; a length check only: the skill a project needs can come from the repo's code or be typed); the
   admin new-module form now says what is missing too (her test with "g" / "vb" gave a greyed-out button and no reason).
 - Import from GitHub: pick repos, then one "Check your N projects" page. Each picked repo gets its GitHub description,
   or the first paragraph of its README (new `GET /profile/github/readme`; template text such as "bootstrapped with
-  Create React App" is skipped), and its skills, all at once. Cards say Ready / Needs a description; "Add N projects"
+  Create React App" is skipped; a paragraph ending in ":" keeps the list after it), and its skills, all at once. Cards say Ready / Needs a description; "Add N projects"
   adds the ready ones with the skills she checked. The long yellow "no description on GitHub, so add one (✎)…" note
   is gone.
 - Projects, Certificates and Awards: each item is a card in one column (her pick over two columns); ✎ and ✕ are always

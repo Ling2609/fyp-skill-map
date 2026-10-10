@@ -82,7 +82,7 @@ export function ProjectForm({ project, onDone, onCancel, onDirty }) {
         </Field>
         {descLength < MIN_DESCRIPTION && (
           <p className="flex justify-between text-xs mt-1.5">
-            <span className="text-amber-700">Write at least one sentence so skills can be found.</span>
+            <span className="text-amber-700">Describe what you built in at least one sentence.</span>
             <span className="text-gray-400 tabular-nums">{descLength} / {MIN_DESCRIPTION} characters</span>
           </p>
         )}

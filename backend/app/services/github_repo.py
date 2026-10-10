@@ -132,6 +132,7 @@ def readme_summary(text: str) -> str:
     blocks, tables and list markers are skipped; links keep their words."""
     text = re.sub(r"```.*?```", "\n\n", text or "", flags=re.S)
     text = re.sub(r"<!--.*?-->", " ", text, flags=re.S)
+    paras = []
     for block in re.split(r"\n\s*\n", text):
         lines = []
         for line in block.splitlines():
@@ -148,8 +149,14 @@ def readme_summary(text: str) -> str:
                 line += "."                                                 # list items read as sentences
             if line:
                 lines.append(line)
-        para = " ".join(lines).strip()
+        paras.append(" ".join(lines).strip())
+    paras = [p for p in paras if p]
+    for i, para in enumerate(paras):
         if len(para) >= 30 and not _BOILERPLATE.search(para):
+            # "…built around a simple loop:" introduces the list after it (her lumina README, 10 Oct): keep going
+            while para.endswith(":") and i + 1 < len(paras) and len(para) < README_MAX:
+                i += 1
+                para = f"{para} {paras[i]}"
             if len(para) > README_MAX:
                 para = para[:README_MAX].rsplit(" ", 1)[0] + "…"
             return para
