@@ -1,0 +1,13 @@
+E1b extraction + checker vs answer key: 30 ads, 522 answer-key skills, 610 extracted hard skills
+TP 406  FP 204  FN 116
+Precision 0.666  (95% CI 0.586-0.740, bootstrap over ads)
+Recall    0.778  (95% CI 0.709-0.842, bootstrap over ads)
+F1        0.717  (95% CI 0.654-0.771, bootstrap over ads)
+Answer-key check by the author (5 ads): 91 of 94 agreed skills correct (97%); 0 skills all three labellers missed; 0 marked unsure (left out)
+
+Without vs with the checker (same ads; change, 95% CI paired bootstrap over ads):
+Precision 0.610 -> 0.666  (+0.055, CI +0.024 to +0.094)
+Recall    0.807 -> 0.778  (-0.029, CI -0.062 to -0.004)
+F1        0.695 -> 0.717  (+0.023, CI +0.004 to +0.041)
+Rule (F1 up by 0.03+ on development ads / F1 up on new ads, recall down by 0.03 or less): F1 +0.023, recall -0.029 -> FAIL at the 0.03 gate
+Checker: 77 dropped (17 of them were in the answer key = wrongly dropped), 9 renamed, 0 renames refused by the code check

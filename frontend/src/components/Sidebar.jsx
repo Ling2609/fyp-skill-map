@@ -73,6 +73,21 @@ const ADMIN_ITEMS = [
   },
 ]
 
+// Employer (11 Oct, batch 1): My jobs is their home (/dashboard); Post a job. Not approved yet: home only (it shows
+// where they stand)
+const EMPLOYER_ITEMS = [
+  { ...NAV_ITEMS[0], label: 'My jobs' },
+  {
+    to: '/employer/post',
+    label: 'Post a job',
+    icon: (
+      <svg className="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M12 4v16m8-8H4" />
+      </svg>
+    ),
+  },
+]
+
 const ROLE_LABEL = { student: 'For Graduates', employer: 'For Employers', admin: 'Admin Panel' }
 const ROLE_NAME = { student: 'Student', employer: 'Employer', admin: 'Admin' }
 
@@ -82,7 +97,9 @@ export default function Sidebar() {
   const { user, logout: authLogout } = useAuth()
   const location = useLocation()
   const isAdmin = user?.role === 'admin'
-  const items = isAdmin ? ADMIN_ITEMS : NAV_ITEMS
+  const items = isAdmin ? ADMIN_ITEMS
+    : user?.role === 'employer' ? (user.employer_status === 'approved' ? EMPLOYER_ITEMS : EMPLOYER_ITEMS.slice(0, 1))
+    : NAV_ITEMS
 
   // Admin badges, asked again on every page change (two small counts), so an approval shows straight away
   // and when an admin page says something changed (an approval on the dashboard doesn't change the page)

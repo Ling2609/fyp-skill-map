@@ -1081,9 +1081,9 @@ class GoalIn(BaseModel):
 @router.put("/goal")
 def save_goal(data: GoalIn, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     from app.models.job import Job
+    from app.routers.jobs import current_jobs_filter
     category = (data.category or "").strip() or None
-    if category and not db.query(Job.id).filter(Job.subcategory == category, Job.source == "live",
-                                                 Job.gone_at.is_(None)).first():
+    if category and not current_jobs_filter(db.query(Job.id).filter(Job.subcategory == category)).first():
         raise HTTPException(status_code=400, detail="That job category has no current openings. Please pick another.")
     current_user.target_category = category
     db.commit()

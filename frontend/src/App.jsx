@@ -15,6 +15,8 @@ import AccountSettings from './pages/AccountSettings'
 import AdminDashboard from './pages/admin/AdminDashboard'
 import AdminUsers from './pages/admin/AdminUsers'
 import AdminAcademic from './pages/admin/AdminAcademic'
+import EmployerHome from './pages/employer/EmployerHome'
+import PostJob from './pages/employer/PostJob'
 
 function RoleRoute({ children, roles }) {
   const { user, loading, serverDown } = useAuth()
@@ -32,6 +34,8 @@ function RoleRoute({ children, roles }) {
   )
   if (!user) return <Navigate to="/login" replace />
   if (roles && !roles.includes(user.role)) return <Navigate to="/dashboard" />
+  // An employer the career office hasn't approved only sees their status (on /dashboard) and account settings
+  if (user.role === 'employer' && user.employer_status !== 'approved' && !['/dashboard', '/account'].includes(pathname)) return <Navigate to="/dashboard" replace />
   // First sign-in setup (8 Oct): a student without a programme picks one before anything else
   // 10 Oct: also a student whose programme has intakes but who hasn't picked one (each intake has its own module list)
   if (user.role === 'student' && (!user.programme_id || user.needs_study) && pathname !== '/setup') return <Navigate to="/setup" replace />
@@ -41,7 +45,9 @@ function RoleRoute({ children, roles }) {
 // One /dashboard address for everyone (Login goes there); each role sees its own home (7 Oct)
 function Home() {
   const { user } = useAuth()
-  return user?.role === 'admin' ? <AdminDashboard /> : <Dashboard />
+  if (user?.role === 'admin') return <AdminDashboard />
+  if (user?.role === 'employer') return <EmployerHome />     // 11 Oct: My jobs, or "waiting for approval"
+  return <Dashboard />
 }
 
 function Layout({ children }) {
@@ -69,6 +75,7 @@ function AppRoutes() {
       <Route path="/dashboard" element={<RoleRoute><Layout><Home /></Layout></RoleRoute>} />
       <Route path="/admin/users" element={<RoleRoute roles={['admin']}><Layout><AdminUsers /></Layout></RoleRoute>} />
       <Route path="/admin/academic" element={<RoleRoute roles={['admin']}><Layout><AdminAcademic /></Layout></RoleRoute>} />
+      <Route path="/employer/post" element={<RoleRoute roles={['employer']}><Layout><PostJob /></Layout></RoleRoute>} />
       <Route path="/setup" element={<RoleRoute roles={['student']}><StudySetup /></RoleRoute>} />
       <Route path="/modules" element={<Navigate to="/profile?tab=modules" replace />} />
       <Route path="/recommend" element={<RoleRoute roles={['student']}><Layout><Recommend /></Layout></RoleRoute>} />

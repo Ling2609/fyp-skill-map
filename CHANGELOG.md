@@ -3,6 +3,35 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 11 Oct 2026 — E1b checker stop gate: not adopted (two runs)
+
+- (this commit) The skill checker (Cohere Command A Plus) on the 30 development ads, two full runs with the same
+  prompt: F1 +0.008 (95% CI -0.011 to +0.030) and +0.023 (+0.004 to +0.041); precision up (+0.041 / +0.055),
+  recall down (-0.042 / -0.029). Both are below the pre-registered gate (F1 +0.03), so the checker is not adopted
+  and no new ads are labelled. The two runs dropped different skills (run 1 dropped React, Node.js, TypeScript;
+  run 2 kept them and dropped Kotlin), so its decisions are not stable either. Run 2's files are in
+  `docs/evidence/job_skill_extraction/`, run 1's in `checker_run1/`.
+
+## 11 Oct 2026 — Employer flow, batch 1: approval screen, My jobs, Post a job
+
+- (this commit) Registration with a company and Admin approval existed (7 Oct), but an employer who signed in saw
+  the student dashboard. Following the 9 Oct mock-ups (boards 1 and 2):
+  - **Not approved yet / rejected:** the home page says where they stand; nothing else is reachable.
+  - **My jobs** (`/dashboard` for employers): their posts in Open / Closed tabs, skills per post, Close job / Reopen.
+  - **Post a job** (`/employer/post`): the ad on the left; "Read the skills" runs the same extractor and quote check
+    as live jobs and fills Required / Nice to have / Taught on the job on the right. The employer removes and adds
+    chips (hover shows the ad's words for each), then publishes. Editing the ad asks for the skills to be read
+    again; typed skills stay. If the AI is down they can add the skills themselves.
+- Backend: new `app/routers/employer.py` (approved employers only; 403 says "pending" / "rejected"). A post is
+  source `employer`: shown in Job Matches like a live job, never expiring by age, until closed. A skill the employer
+  typed is saved as `added by employer` with no quote; a quote is kept only if it is in the published ad.
+- Job Matches, category chips, locations and the career goal now use one rule for "current" jobs (live or posted
+  on SkillMap, not gone, not closed, not hidden by Admin); closed and hidden jobs leave Job Matches at once.
+  Cards and Job Detail mark these jobs "Posted on SkillMap".
+- **Run once:** `python migrations/migrate_employer_jobs.py` (adds `jobs.closed_at`; the API refuses to start
+  until it is run).
+- Applying, My applications and the applicants list come in batch 2.
+
 ## 11 Oct 2026 — Skill checker waits and retries on a server error too
 
 - (this commit) Her run stopped at ad 5 on a Cohere 500 ("internal server error, reported to our developers"), a

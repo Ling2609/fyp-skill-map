@@ -167,7 +167,9 @@ export default function JobDetail() {
                   : 'Salary not disclosed'}
                 {gap?.job?.source === 'live'
                   ? (postedAgo(gap.job.listing_date) ? ` · Posted ${postedAgo(gap.job.listing_date)}` : '')
-                  : ' · Past posting from JobStreet (2024)'}
+                  : gap?.job?.source === 'employer'
+                    ? ` · Posted on SkillMap${postedAgo(gap.job.listing_date) ? ` ${postedAgo(gap.job.listing_date)}` : ''}`
+                    : ' · Past posting from JobStreet (2024)'}
               </p>
             </div>
             {gap?.job?.source === 'live' && gap.job.source_url && (

@@ -1,0 +1,87 @@
+﻿job_ref,title,skill,action,new,reason,was_in_answer_key
+live_aff472a6bd39f9ae,VMWare Admin (Windows),Analytical,drop,,"Soft skill/personal quality, not a technical skill.",no
+live_aff472a6bd39f9ae,VMWare Admin (Windows),Troubleshooting,drop,,"Soft skill/personal quality, not a technical skill.",no
+live_aff472a6bd39f9ae,VMWare Admin (Windows),Problem solving,drop,,"Soft skill/personal quality, not a technical skill.",no
+live_7fdb8e26f07560f7,Senior Android Platform Engineer,Mobile Platform Engineering,drop,,Not a specific technical skill,no
+live_bcc0de4d2d69a8e6,SAP Basis Consultant,Data integrity,drop,,Not a technical skill,no
+live_bcc0de4d2d69a8e6,SAP Basis Consultant,Technical support,drop,,Not a technical skill,no
+live_80d6f269f676b931,Data Engineer,Data warehousing,rename,Data quality checks,Make more specific,yes
+live_80d6f269f676b931,Data Engineer,Kimball methodology,drop,,"Generic task, not skill",no
+live_80d6f269f676b931,Data Engineer,Data integration,drop,,"Too generic, not specific",yes
+live_80d6f269f676b931,Data Engineer,ETL development,drop,,"Business domain, not technical",yes
+live_a3f1ad0df4156bd7,SAP Implementation Consultant/Lead (KUL),PP/QM,rename,SAP PP; SAP QM,Separate modules,no
+live_a3f1ad0df4156bd7,SAP Implementation Consultant/Lead (KUL),EWM/WM,rename,SAP EWM; SAP WM,Separate modules,no
+live_a3f1ad0df4156bd7,SAP Implementation Consultant/Lead (KUL),Blueprint workshop,drop,,Not a technical skill,no
+live_a3f1ad0df4156bd7,SAP Implementation Consultant/Lead (KUL),Data migration,drop,,"Task, not skill",yes
+live_a3f1ad0df4156bd7,SAP Implementation Consultant/Lead (KUL),Functional specification development,drop,,"Task, not skill",yes
+live_a3f1ad0df4156bd7,SAP Implementation Consultant/Lead (KUL),Authorization design,drop,,"Task, not skill",no
+live_ec0c6a5aa725ffa0,Senior Business Analyst,Business Analyst,drop,,"Job title, not technical skill",no
+live_ec0c6a5aa725ffa0,Senior Business Analyst,Functional Consultant,drop,,"Job title, not technical skill",no
+live_ec0c6a5aa725ffa0,Senior Business Analyst,ERP implementation,drop,,"Project type, not a skill",yes
+live_ec0c6a5aa725ffa0,Senior Business Analyst,ERP functionalities,drop,,"Soft skill, not technical",no
+live_5d1161b174527a2d,"Technical Consulting Engineer, Networking (Japanese Speaker)",Cisco networking,drop,,"generic umbrella term, not a specific skill",yes
+live_5d1161b174527a2d,"Technical Consulting Engineer, Networking (Japanese Speaker)",Solution design,drop,,"task, not technical skill",no
+live_5d1161b174527a2d,"Technical Consulting Engineer, Networking (Japanese Speaker)",HLD/LLD,rename,HLD; LLD,split combined acronym,no
+live_5d1161b174527a2d,"Technical Consulting Engineer, Networking (Japanese Speaker)",Test environments,drop,,"task, not technical skill",no
+live_5d1161b174527a2d,"Technical Consulting Engineer, Networking (Japanese Speaker)",Japanese language,drop,,"language, not technical skill",no
+live_64c8c310a608d5e7,Software Engineer - Core Banking,APIs,rename refused,API development,"generic term, use specific skill name",no
+live_64c8c310a608d5e7,Software Engineer - Core Banking,code reviews,drop,,not a technical skill,no
+live_64c8c310a608d5e7,Software Engineer - Core Banking,technical documentation,drop,,not a technical skill,no
+live_e40ae1cf3c0026f3,Senior Software QA Engineer (Automation),Issue tracking,drop,,Not a technical skill,no
+live_e40ae1cf3c0026f3,Senior Software QA Engineer (Automation),Quality investigation,drop,,Not a technical skill,no
+live_e40ae1cf3c0026f3,Senior Software QA Engineer (Automation),Quality planning,drop,,Not a technical skill,no
+live_e40ae1cf3c0026f3,Senior Software QA Engineer (Automation),Data collection,drop,,Not a technical skill,no
+live_e40ae1cf3c0026f3,Senior Software QA Engineer (Automation),Test documentation,drop,,Not a technical skill,no
+live_eca71c72e724fbb4,Cybersecurity Consultant - Penetration Testing,Penetration Testing,drop,,generic term with specific types,yes
+live_4aef39a395a09b3c,Back End Developer,Onboarding,drop,,"Business area, not technical",no
+live_4aef39a395a09b3c,Back End Developer,Accounts,drop,,"Business area, not technical",no
+live_4aef39a395a09b3c,Back End Developer,Payments,drop,,"Business area, not technical",yes
+live_4aef39a395a09b3c,Back End Developer,Cards,drop,,"Business area, not technical",no
+live_4aef39a395a09b3c,Back End Developer,Transfers,drop,,"Business area, not technical",no
+live_4aef39a395a09b3c,Back End Developer,Rewards,drop,,"Business area, not technical",no
+live_4aef39a395a09b3c,Back End Developer,Travel,drop,,"Business area, not technical",no
+live_4aef39a395a09b3c,Back End Developer,Risk flows,drop,,"Business area, not technical",no
+live_4aef39a395a09b3c,Back End Developer,Reliability,drop,,"System quality, not skill",no
+live_4aef39a395a09b3c,Back End Developer,Latency,drop,,"System quality, not skill",no
+live_4aef39a395a09b3c,Back End Developer,Data integrity,drop,,"System quality, not skill",yes
+live_4aef39a395a09b3c,Back End Developer,Data quality,drop,,"System quality, not skill",no
+live_4aef39a395a09b3c,Back End Developer,Speed,drop,,"System quality, not skill",no
+live_4aef39a395a09b3c,Back End Developer,Correctness,drop,,"System quality, not skill",no
+live_4aef39a395a09b3c,Back End Developer,Scalability,drop,,"System quality, not skill",no
+live_4aef39a395a09b3c,Back End Developer,Maintainability,drop,,"System quality, not skill",no
+live_4aef39a395a09b3c,Back End Developer,Fintech,drop,,"Business sector, not technical",yes
+live_4aef39a395a09b3c,Back End Developer,Banking,drop,,"Business sector, not technical",yes
+live_4aef39a395a09b3c,Back End Developer,Wallet,drop,,"Business product, not technical",no
+live_4aef39a395a09b3c,Back End Developer,English,drop,,"Spoken language, not technical",no
+live_67e5d581c8e82b12,IT Operations Analyst,Ticket handling,drop,,Not a technical skill,no
+live_67e5d581c8e82b12,IT Operations Analyst,Cloud service support,drop,,Not a technical skill,no
+live_67e5d581c8e82b12,IT Operations Analyst,Knowledge base management,drop,,Not a technical skill,no
+live_67e5d581c8e82b12,IT Operations Analyst,SLA management,drop,,Not a technical skill,yes
+live_d28433cc84f332be,"Senior Executive, IT (Contract)",Office applications,drop,,"generic term, not specific skill",yes
+live_d28433cc84f332be,"Senior Executive, IT (Contract)",Printers,drop,,"device, not a skill",no
+live_d28433cc84f332be,"Senior Executive, IT (Contract)",AV equipment,drop,,"device, not a skill",no
+live_d28433cc84f332be,"Senior Executive, IT (Contract)",MacBooks,drop,,"device, not a skill",no
+live_ca39fceedf53e6f6,Network Engineer,Network security,rename refused,F5 APM; F5 LTM; F5 GTM,Ad lists separate modules,yes
+live_ca39fceedf53e6f6,Network Engineer,CheckPoint Firewalls,rename refused,Cisco Nexus 9K; Cisco Nexus 7K; Cisco Nexus 5K; Cisco Nexus 2K,Ad specifies multiple models,yes
+live_f94d7e50bcca80e3,Network Support Engineer,Windows,drop,,Not a technical skill,yes
+live_143b3f50af14b124,Software Engineering & AI Internships,AI tools,drop,,"Generic category, not specific skill",yes
+live_143b3f50af14b124,Software Engineering & AI Internships,Computer Science,drop,,"Academic discipline, not skill",yes
+live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",Data collection,drop,,"Task, not skill",no
+live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",Data preprocessing,drop,,"Task, not skill",yes
+live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",Feature engineering,drop,,"Task, not skill",yes
+live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",Data analysis,drop,,"Task, not skill",yes
+live_050af1c8591bfa5e,Backend Developer,SQL,drop,,generic when specific DBs listed,yes
+live_050af1c8591bfa5e,Backend Developer,Code review,drop,,"process, not technical skill",no
+live_b9cbf9ab9987a49a,Service Desk Specialist I,Inventory management,drop,,Not technical,no
+live_b9cbf9ab9987a49a,Service Desk Specialist I,Ticket management,drop,,Not technical,no
+live_b9cbf9ab9987a49a,Service Desk Specialist I,Issue identification,drop,,Soft skill,no
+live_471d55a57402522b,"Business Architect / Business Analyst, Technology Solutions (Cards)",Analytical,drop,,"soft skill, not technical",no
+live_471d55a57402522b,"Business Architect / Business Analyst, Technology Solutions (Cards)",Digital Banking,drop,,"business domain, not technical",yes
+live_2dfd1835617b539e,Software Project Manager,Testing,drop,,"Generic task, not required skill.",no
+live_2dfd1835617b539e,Software Project Manager,Deployment,drop,,"Generic task, not required skill.",no
+live_2dfd1835617b539e,Software Project Manager,Post-implementation support,drop,,"Generic task, not required skill.",no
+live_2dfd1835617b539e,Software Project Manager,Documentation,drop,,"Generic task, not required skill.",no
+live_94383f47e31bbf09,Full-Stack Engineer,React,drop,,"Generic term, not a specific technology",yes
+live_94383f47e31bbf09,Full-Stack Engineer,Node.js,drop,,"Generic business area, not technical",yes
+live_94383f47e31bbf09,Full-Stack Engineer,TypeScript,drop,,"Generic business area, not technical",yes
+live_94383f47e31bbf09,Full-Stack Engineer,GraphQL,drop,,"Generic concept, not a specific tool",yes

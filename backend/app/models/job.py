@@ -28,6 +28,7 @@ class Job(Base):
     # Employer posts (7 Oct): who posted it (NULL = JSearch or the 2024 dataset), and Admin's "hide" (kept, not shown)
     posted_by_user_id = Column(Integer, ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
     hidden_by_admin_at = Column(DateTime(timezone=True), nullable=True)
+    closed_at = Column(DateTime(timezone=True), nullable=True)   # employer closed their post (11 Oct); reopen = NULL
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
 

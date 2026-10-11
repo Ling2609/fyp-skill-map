@@ -468,7 +468,11 @@ export default function Recommend() {
                         <div className="flex items-center gap-2.5 min-w-0">
                           <span className="text-xs text-slate-300 font-medium tabular-nums shrink-0 w-4">{idx + 1}</span>
                           <div className="min-w-0">
-                            <p className="font-semibold text-slate-800 text-sm truncate group-hover:text-blue-700 transition leading-snug">{job.job_title}</p>
+                            <p className="font-semibold text-slate-800 text-sm truncate group-hover:text-blue-700 transition leading-snug">
+                              {job.job_title}
+                              {/* 11 Oct: a post by one of the university's partner employers, applied for on SkillMap */}
+                              {job.source === 'employer' && <span className="ml-2 align-middle text-[11px] font-medium text-blue-700 bg-blue-50 border border-blue-200 rounded-full px-2 py-0.5">Posted on SkillMap</span>}
+                            </p>
                             <p className="text-xs text-slate-400 mt-0.5 truncate">
                               {job.company} · {job.location}{daysAgo(job.posted_days_ago) && ` · ${daysAgo(job.posted_days_ago)}`}
                             </p>

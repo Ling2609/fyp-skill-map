@@ -24,12 +24,24 @@ SECTION_KEYWORDS = [
 _extractor = None
 
 def check_jobs_schema():
-    """Start-up check: jobs.gone_at (6 Oct) must exist (migrations/migrate_add_job_gone_at.py)."""
+    """Start-up check: jobs.gone_at (6 Oct) and jobs.closed_at (11 Oct) must exist."""
     from sqlalchemy import inspect
     from app.database import engine
-    if "gone_at" not in {c["name"] for c in inspect(engine).get_columns("jobs")}:
-        raise RuntimeError("Database not updated: run  python migrations/migrate_add_job_gone_at.py  "
-                           "from the backend folder, then start the backend again.")
+    columns = {c["name"] for c in inspect(engine).get_columns("jobs")}
+    for column, script in (("gone_at", "migrate_add_job_gone_at.py"), ("closed_at", "migrate_employer_jobs.py")):
+        if column not in columns:
+            raise RuntimeError(f"Database not updated: run  python migrations/{script}  "
+                               "from the backend folder, then start the backend again.")
+
+
+# Jobs a student can apply to now (11 Oct): live JSearch jobs and SkillMap employers' posts, not gone, not closed by
+# their employer, not hidden by Admin. The 2024 dataset is market data only ("include past" on Job Matches).
+CURRENT_SOURCES = ("live", "employer")
+
+
+def current_jobs_filter(q):
+    return q.filter(Job.source.in_(CURRENT_SOURCES), Job.gone_at.is_(None), Job.closed_at.is_(None),
+                    Job.hidden_by_admin_at.is_(None))
 
 
 def get_extractor():
@@ -85,7 +97,7 @@ def get_subcategories(include_past: bool = False, db: Session = Depends(get_db))
     so no chip leads to an empty list."""
     q = db.query(distinct(Job.subcategory)).filter(Job.subcategory != None)
     if not include_past:
-        q = q.filter(Job.source == "live", Job.gone_at.is_(None))
+        q = current_jobs_filter(q)
     subcats = q.all()
     return sorted([s[0] for s in subcats if s[0]])
 
@@ -95,7 +107,7 @@ def get_locations(db: Session = Depends(get_db)):
     """Location filter on Job Matches: every (country, location) of current openings. The page builds the
     country -> state list from these once, so the options stay the same whatever the search; options with no
     jobs are greyed out, not removed (NN/g dropdown guidelines, references.md "Location filter layout")."""
-    rows = db.query(Job.country, Job.location).filter(Job.source == "live", Job.gone_at.is_(None)).distinct().all()
+    rows = current_jobs_filter(db.query(Job.country, Job.location)).distinct().all()
     return [{"country": country, "location": location} for country, location in rows]
 
 

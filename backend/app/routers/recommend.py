@@ -76,6 +76,17 @@ def seniority_penalty(level: str) -> float:
     return steps * PENALTY_PER_STEP
 
 
+def is_current(c: dict) -> bool:
+    """A job students can apply to now: a live JSearch job or a SkillMap employer's post (11 Oct). Gone, closed and
+    hidden jobs never reach the cache (_sync_job_cache)."""
+    return c.get("source") in ("live", "employer")
+
+
+def too_old(c: dict) -> bool:
+    """A live job listed more than MAX_AGE_DAYS ago. An employer's post stays until they close it."""
+    return c.get("source") == "live" and (age_days(c.get("listing_date")) or 0) > MAX_AGE_DAYS
+
+
 router = APIRouter(prefix="/recommend", tags=["recommend"])
 
 embedder = get_embedder()   # shared with skillgap.py; vectors cached on disk
@@ -100,7 +111,9 @@ def _sync_job_cache():
         db_ids = {row[0] for row in db.query(JobSkill.job_id).distinct()}
         # Live jobs the latest search results no longer return are left out (fetch_live_jobs.py sync); checked on
         # every request, so a sync shows without restarting uvicorn
-        db_ids -= {row[0] for row in db.query(Job.id).filter(Job.gone_at.isnot(None))}
+        # The same for posts their employer closed or Admin hid (11 Oct)
+        db_ids -= {row[0] for row in db.query(Job.id).filter(
+            Job.gone_at.isnot(None) | Job.closed_at.isnot(None) | Job.hidden_by_admin_at.isnot(None))}
         for gone in set(_job_cache) - db_ids:
             del _job_cache[gone]
         new_ids = db_ids - set(_job_cache)
@@ -200,8 +213,8 @@ def recommend_jobs(
     # Search relevance of every eligible job, BEFORE any shortlist, so a job matching the query is never cut by
     # top_n (external audit, 3 Oct). Tier 0 / "" for everyone without a typed query.
     eligible = [(job_id, cached) for job_id, cached in list(_job_cache.items())
-                if (payload.include_past or cached.get("source") == "live")
-                and not (cached.get("source") == "live" and (age_days(cached.get("listing_date")) or 0) > MAX_AGE_DAYS)
+                if (payload.include_past or is_current(cached))
+                and not too_old(cached)
                 and (not category or cached.get("subcategory") == category)]
     search = {job_id: search_match(query, cached["job_title"], cached["company"], cached["location"],
                                    cached["skills"], cached["skill_keys"], query_key) if query else (0, "")
@@ -332,8 +345,7 @@ def recommend_jobs(
         "skills_to_learn": [{"skill": names[k], "jobs": n, "of_top": min(TO_LEARN_FROM_TOP, len(results))}
                             for k, n in to_learn.most_common(5)],
         "total_jobs_compared": sum(
-            1 for c in list(_job_cache.values()) if (payload.include_past or c.get("source") == "live")
-            and not (c.get("source") == "live" and (age_days(c.get("listing_date")) or 0) > MAX_AGE_DAYS)
+            1 for c in list(_job_cache.values()) if (payload.include_past or is_current(c)) and not too_old(c)
         ),
     }
 
@@ -352,9 +364,8 @@ ASKED_TIERS = ("core", "bonus")   # required and preferred skills; not soft, "tr
 
 
 def live_jobs() -> list[tuple[int, dict]]:
-    """The jobs Job Matches recommends: live, not gone, posted within MAX_AGE_DAYS."""
-    return [(job_id, c) for job_id, c in list(_job_cache.items())
-            if c.get("source") == "live" and (age_days(c.get("listing_date")) or 0) <= MAX_AGE_DAYS]
+    """The jobs Job Matches recommends: live (posted within MAX_AGE_DAYS) or posted on SkillMap, not gone / closed."""
+    return [(job_id, c) for job_id, c in list(_job_cache.items()) if is_current(c) and not too_old(c)]
 
 
 def goal_categories() -> list[dict]:

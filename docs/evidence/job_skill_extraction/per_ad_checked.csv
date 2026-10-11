@@ -1,0 +1,31 @@
+﻿job_ref,title,subcategory,answer_key,predicted,tp,fp,fn
+live_aff472a6bd39f9ae,VMWare Admin (Windows),Networks & Systems Administration,6,6,5,1,1
+live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",Engineering - Software,38,63,36,27,2
+live_7fdb8e26f07560f7,Senior Android Platform Engineer,Networks & Systems Administration,13,13,8,5,5
+live_bcc0de4d2d69a8e6,SAP Basis Consultant,Consultants,8,12,7,5,1
+live_9ac6e5a328f45fb8,Data Engineer (Regional Role),Management,17,30,13,17,4
+live_80d6f269f676b931,Data Engineer,Database Development & Administration,33,40,28,12,5
+live_319eb8479a356b7d,UI/UX Analyst,Web Development & Production,13,35,7,28,6
+live_ad730103a35257d4,Data Engineering & Integration Operations Manager,Database Development & Administration,22,29,21,8,1
+live_a3f1ad0df4156bd7,SAP Implementation Consultant/Lead (KUL),Consultants,18,23,9,14,9
+live_ec0c6a5aa725ffa0,Senior Business Analyst,Business/Systems Analysts,6,5,4,1,2
+live_5d1161b174527a2d,"Technical Consulting Engineer, Networking (Japanese Speaker)",Engineering - Network,21,25,18,7,3
+live_64c8c310a608d5e7,Software Engineer - Core Banking,Developers/Programmers,16,17,16,1,0
+live_e62712dd30350df3,Senior UI/UX Design Expert,Web Development & Production,11,11,8,3,3
+live_e40ae1cf3c0026f3,Senior Software QA Engineer (Automation),Testing & Quality Assurance,20,24,17,7,3
+live_eca71c72e724fbb4,Cybersecurity Consultant - Penetration Testing,Security,16,14,11,3,5
+live_4aef39a395a09b3c,Back End Developer,Developers/Programmers,19,16,6,10,13
+live_2ec2feca24d1a38b,"Senior Specialist, Software Quality Assurance",Testing & Quality Assurance,17,17,15,2,2
+live_67e5d581c8e82b12,IT Operations Analyst,Help Desk & IT Support,2,1,1,0,1
+live_d28433cc84f332be,"Senior Executive, IT (Contract)",Management,25,21,16,5,9
+live_ca39fceedf53e6f6,Network Engineer,Engineering - Network,40,31,25,6,15
+live_a92c87273c2955a9,Cybersecurity SOC,Security,3,3,3,0,0
+live_f94d7e50bcca80e3,Network Support Engineer,Help Desk & IT Support,17,19,16,3,1
+live_143b3f50af14b124,Software Engineering & AI Internships,Engineering - Software,3,1,1,0,2
+live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",Engineering - Software,35,52,34,18,1
+live_050af1c8591bfa5e,Backend Developer,Developers/Programmers,36,32,28,4,8
+live_b9cbf9ab9987a49a,Service Desk Specialist I,Help Desk & IT Support,9,9,7,2,2
+live_471d55a57402522b,"Business Architect / Business Analyst, Technology Solutions (Cards)",Business/Systems Analysts,19,18,12,6,7
+live_2dfd1835617b539e,Software Project Manager,Programme & Project Management,8,12,8,4,0
+live_a5d058f47165ecb8,Software Engineer,Engineering - Software,7,8,6,2,1
+live_94383f47e31bbf09,Full-Stack Engineer,Database Development & Administration,24,23,20,3,4

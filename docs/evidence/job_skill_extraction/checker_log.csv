@@ -1,0 +1,87 @@
+﻿job_ref,title,skill,action,new,reason,was_in_answer_key
+live_aff472a6bd39f9ae,VMWare Admin (Windows),Analytical,drop,,"Soft skill/personal quality, not a technical skill.",no
+live_aff472a6bd39f9ae,VMWare Admin (Windows),Troubleshooting,drop,,"Soft skill/personal quality, not a technical skill.",no
+live_aff472a6bd39f9ae,VMWare Admin (Windows),Problem solving,drop,,"Soft skill/personal quality, not a technical skill.",no
+live_7fdb8e26f07560f7,Senior Android Platform Engineer,Kotlin,drop,,"Bonus experience, not required skill",yes
+live_bcc0de4d2d69a8e6,SAP Basis Consultant,SAP patches,drop,,"Task, not a skill",no
+live_bcc0de4d2d69a8e6,SAP Basis Consultant,SAP upgrades,drop,,"Task, not a skill",no
+live_bcc0de4d2d69a8e6,SAP Basis Consultant,System copies,drop,,"Task, not a skill",no
+live_bcc0de4d2d69a8e6,SAP Basis Consultant,Data integrity,drop,,"System quality, not skill",no
+live_bcc0de4d2d69a8e6,SAP Basis Consultant,Technical support,drop,,"Responsibility, not technical skill",no
+live_9ac6e5a328f45fb8,Data Engineer (Regional Role),Mandarin,drop,,"spoken language, not technical",no
+live_9ac6e5a328f45fb8,Data Engineer (Regional Role),Digital Marketing,drop,,"business area, not technical",no
+live_9ac6e5a328f45fb8,Data Engineer (Regional Role),E‑commerce,drop,,"business area, not technical",no
+live_9ac6e5a328f45fb8,Data Engineer (Regional Role),Data quality,drop,,"quality attribute, not skill",no
+live_9ac6e5a328f45fb8,Data Engineer (Regional Role),On‑premise environments,drop,,"environment, not technical skill",yes
+live_9ac6e5a328f45fb8,Data Engineer (Regional Role),Compliance,drop,,"regulatory requirement, not skill",no
+live_319eb8479a356b7d,UI/UX Analyst,User persona creation,rename,User personas,use standard name,no
+live_319eb8479a356b7d,UI/UX Analyst,User flow creation,rename,User flow design,use standard name,no
+live_319eb8479a356b7d,UI/UX Analyst,UI mockups,rename,High-fidelity mockups,use standard name,no
+live_319eb8479a356b7d,UI/UX Analyst,Usability testing,rename,User testing,use standard name,yes
+live_319eb8479a356b7d,UI/UX Analyst,Reusable design assets,rename,Design system assets,use standard name,no
+live_ec0c6a5aa725ffa0,Senior Business Analyst,Business Analyst,drop,,"Job title, not technical",no
+live_ec0c6a5aa725ffa0,Senior Business Analyst,Functional Consultant,drop,,"Role, not technical skill",no
+live_ec0c6a5aa725ffa0,Senior Business Analyst,ERP projects,drop,,"Project type, not skill",no
+live_ec0c6a5aa725ffa0,Senior Business Analyst,Analytical skills,drop,,"Soft skill, not technical",no
+live_64c8c310a608d5e7,Software Engineer - Core Banking,code reviews,drop,,non-technical task,no
+live_64c8c310a608d5e7,Software Engineer - Core Banking,technical documentation,drop,,non-technical task,no
+live_e62712dd30350df3,Senior UI/UX Design Expert,Layout,drop,,Not a technical skill,no
+live_e62712dd30350df3,Senior UI/UX Design Expert,Typography,drop,,Not a technical skill,yes
+live_e62712dd30350df3,Senior UI/UX Design Expert,Visual hierarchy,drop,,Not a technical skill,yes
+live_e62712dd30350df3,Senior UI/UX Design Expert,Design tools,drop,,Not a technical skill,yes
+live_e40ae1cf3c0026f3,Senior Software QA Engineer (Automation),Requirements analysis,drop,,Not a technical skill,no
+live_e40ae1cf3c0026f3,Senior Software QA Engineer (Automation),Software testing,drop,,Not a technical skill,no
+live_e40ae1cf3c0026f3,Senior Software QA Engineer (Automation),Test case design,drop,,Not a technical skill,no
+live_e40ae1cf3c0026f3,Senior Software QA Engineer (Automation),Issue tracking,drop,,Not a technical skill,no
+live_e40ae1cf3c0026f3,Senior Software QA Engineer (Automation),Quality investigation,drop,,Not a technical skill,no
+live_e40ae1cf3c0026f3,Senior Software QA Engineer (Automation),Quality planning,drop,,Not a technical skill,no
+live_e40ae1cf3c0026f3,Senior Software QA Engineer (Automation),Data collection,drop,,Not a technical skill,no
+live_e40ae1cf3c0026f3,Senior Software QA Engineer (Automation),Test documentation,drop,,Not a technical skill,no
+live_eca71c72e724fbb4,Cybersecurity Consultant - Penetration Testing,Networks,drop,,"Generic term, not specific skill",no
+live_eca71c72e724fbb4,Cybersecurity Consultant - Penetration Testing,Operating systems,drop,,"Generic term, not specific skill",yes
+live_4aef39a395a09b3c,Back End Developer,Backend engineering,drop,,"Role, not technical skill",yes
+live_4aef39a395a09b3c,Back End Developer,Onboarding,drop,,"Business process, not technical",no
+live_4aef39a395a09b3c,Back End Developer,Accounts,drop,,"Business area, not technical",no
+live_4aef39a395a09b3c,Back End Developer,Payments,drop,,"Business area, not technical",yes
+live_4aef39a395a09b3c,Back End Developer,Cards,drop,,"Product, not technical",no
+live_4aef39a395a09b3c,Back End Developer,Transfers,drop,,"Business process, not technical",no
+live_4aef39a395a09b3c,Back End Developer,Rewards,drop,,"Business area, not technical",no
+live_4aef39a395a09b3c,Back End Developer,Travel,drop,,"Business area, not technical",no
+live_4aef39a395a09b3c,Back End Developer,KYC,drop,,"Business process, not technical",yes
+live_4aef39a395a09b3c,Back End Developer,Risk flows,drop,,"Business process, not technical",no
+live_4aef39a395a09b3c,Back End Developer,Reliability,drop,,"System quality, not skill",no
+live_4aef39a395a09b3c,Back End Developer,Latency,drop,,"System quality, not skill",no
+live_4aef39a395a09b3c,Back End Developer,Data integrity,drop,,"System quality, not skill",yes
+live_4aef39a395a09b3c,Back End Developer,Production systems,drop,,"System type, not skill",no
+live_4aef39a395a09b3c,Back End Developer,Data quality,drop,,"System quality, not skill",no
+live_4aef39a395a09b3c,Back End Developer,Speed,drop,,"System quality, not skill",no
+live_4aef39a395a09b3c,Back End Developer,Correctness,drop,,"System quality, not skill",no
+live_4aef39a395a09b3c,Back End Developer,Scalability,drop,,"System quality, not skill",no
+live_4aef39a395a09b3c,Back End Developer,Maintainability,drop,,"System quality, not skill",no
+live_4aef39a395a09b3c,Back End Developer,Fintech,drop,,"Business area, not technical",yes
+live_4aef39a395a09b3c,Back End Developer,Banking,drop,,"Business area, not technical",yes
+live_4aef39a395a09b3c,Back End Developer,Wallet,drop,,"Product, not technical",no
+live_4aef39a395a09b3c,Back End Developer,Fraud,drop,,"Business area, not technical",no
+live_4aef39a395a09b3c,Back End Developer,Risk,drop,,"Business area, not technical",no
+live_4aef39a395a09b3c,Back End Developer,English,drop,,"Spoken language, not technical",no
+live_2ec2feca24d1a38b,"Senior Specialist, Software Quality Assurance",Automation,rename,Test automation,"Too generic, needs specific focus",no
+live_67e5d581c8e82b12,IT Operations Analyst,Ticket handling,drop,,Not a technical skill,no
+live_67e5d581c8e82b12,IT Operations Analyst,Cloud service support,drop,,Not a technical skill,no
+live_67e5d581c8e82b12,IT Operations Analyst,Knowledge base management,drop,,Not a technical skill,no
+live_67e5d581c8e82b12,IT Operations Analyst,Technical writing,drop,,Not a technical skill,no
+live_67e5d581c8e82b12,IT Operations Analyst,SLA management,drop,,Not a technical skill,yes
+live_d28433cc84f332be,"Senior Executive, IT (Contract)",Office applications,drop,,generic term with specifics,yes
+live_ca39fceedf53e6f6,Network Engineer,Application/URL filtering,rename,Application filtering; URL filtering,Split combined filtering types,no
+live_f94d7e50bcca80e3,Network Support Engineer,Networking,drop,,generic term with specifics,no
+live_143b3f50af14b124,Software Engineering & AI Internships,AI tools,drop,,"generic category, not specific tool",yes
+live_143b3f50af14b124,Software Engineering & AI Internships,Software engineering,drop,,"academic discipline, not technical skill",yes
+live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",Software development,rename,Software development practices,Missing 'practices' in name,no
+live_b9cbf9ab9987a49a,Service Desk Specialist I,Inventory management,drop,,Not a technical skill,no
+live_b9cbf9ab9987a49a,Service Desk Specialist I,Ticket management,drop,,Not a technical skill,no
+live_b9cbf9ab9987a49a,Service Desk Specialist I,Network access,drop,,Not a technical skill,no
+live_b9cbf9ab9987a49a,Service Desk Specialist I,Issue identification,drop,,"Soft skill, not technical",no
+live_471d55a57402522b,"Business Architect / Business Analyst, Technology Solutions (Cards)",Analytical,drop,,"soft skill, not technical",no
+live_471d55a57402522b,"Business Architect / Business Analyst, Technology Solutions (Cards)",Business process modeling,rename,Card lifecycle process modeling,specify card lifecycle context,yes
+live_471d55a57402522b,"Business Architect / Business Analyst, Technology Solutions (Cards)",Digital Banking,drop,,"business area, not technical",yes
+live_2dfd1835617b539e,Software Project Manager,Post-implementation support,drop,,Not a technical skill,no
+live_94383f47e31bbf09,Full-Stack Engineer,AI-powered developer tooling,drop,,"Generic category, not specific skill",no

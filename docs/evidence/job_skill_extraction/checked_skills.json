@@ -28,5 +28,1276 @@
     "reason": "Soft skill/personal quality, not a technical skill."
    }
   ]
+ },
+ "live_fa6a8ad82db6e431": {
+  "skills": [
+   "Autonomous driving",
+   "Robotics",
+   "Physical AI",
+   "ROS",
+   "SLAM",
+   "Perception",
+   "Planning",
+   "Control",
+   "Sensors",
+   "System integration",
+   "Vision-language-action models",
+   "Embodied AI",
+   "ROS1",
+   "ROS2",
+   "Localization",
+   "Mapping",
+   "AI-based perception",
+   "VLA-based methods",
+   "Scene understanding",
+   "Decision-making",
+   "Robot action",
+   "LiDAR",
+   "Cameras",
+   "GNSS",
+   "IMU",
+   "Encoders",
+   "Networking",
+   "Python",
+   "C++",
+   "AI-assisted development tools",
+   "ROS packages",
+   "ROS topics",
+   "ROS services",
+   "ROS actions",
+   "ROS launch systems",
+   "ROS bags",
+   "ROS debugging tools",
+   "Linux",
+   "Ubuntu",
+   "Navigation",
+   "Path planning",
+   "Sensor fusion",
+   "Autonomous control",
+   "Mobile robotics",
+   "VLA models",
+   "Vision-language models",
+   "Multimodal perception",
+   "Imitation learning",
+   "Learned planning",
+   "Learned control",
+   "AI model evaluation",
+   "Detection",
+   "Segmentation",
+   "Tracking",
+   "Prediction",
+   "AI-assisted coding tools",
+   "Calibration",
+   "Time synchronization",
+   "Profiling",
+   "Containers",
+   "CI/CD",
+   "Fleet deployment",
+   "Hardware integration",
+   "Electronics debugging"
+  ],
+  "log": []
+ },
+ "live_7fdb8e26f07560f7": {
+  "skills": [
+   "Android Studio",
+   "CI/CD pipelines",
+   "Android",
+   "Jetpack Compose",
+   "Android SDK",
+   "XML layouts",
+   "Shared libraries",
+   "Dependency management",
+   "Modularisation",
+   "Automated software delivery",
+   "Mobile Platform Engineering",
+   "Mobile architecture modernisation",
+   "Performance optimisation"
+  ],
+  "log": [
+   {
+    "skill": "Kotlin",
+    "action": "drop",
+    "new": "",
+    "reason": "Bonus experience, not required skill"
+   }
+  ]
+ },
+ "live_bcc0de4d2d69a8e6": {
+  "skills": [
+   "SAP ERP",
+   "SAP S/4HANA",
+   "SAP BW",
+   "SAP system administration",
+   "System performance monitoring",
+   "SAP user management",
+   "SAP authorizations",
+   "IT security compliance",
+   "Disaster recovery",
+   "Backup strategies",
+   "System troubleshooting",
+   "System integration"
+  ],
+  "log": [
+   {
+    "skill": "SAP patches",
+    "action": "drop",
+    "new": "",
+    "reason": "Task, not a skill"
+   },
+   {
+    "skill": "SAP upgrades",
+    "action": "drop",
+    "new": "",
+    "reason": "Task, not a skill"
+   },
+   {
+    "skill": "System copies",
+    "action": "drop",
+    "new": "",
+    "reason": "Task, not a skill"
+   },
+   {
+    "skill": "Data integrity",
+    "action": "drop",
+    "new": "",
+    "reason": "System quality, not skill"
+   },
+   {
+    "skill": "Technical support",
+    "action": "drop",
+    "new": "",
+    "reason": "Responsibility, not technical skill"
+   }
+  ]
+ },
+ "live_9ac6e5a328f45fb8": {
+  "skills": [
+   "Python",
+   "SQL",
+   "Data processing",
+   "Pipeline development",
+   "Data Engineering",
+   "AI applications",
+   "Data pipelines",
+   "ERP",
+   "CRM",
+   "Master data migration",
+   "Data extraction",
+   "Master data management",
+   "Data consolidation",
+   "Data migration",
+   "AI models",
+   "Automation workflows",
+   "Data analysis",
+   "Cloud computing",
+   "Data integration",
+   "Omnichannel platforms",
+   "Data governance",
+   "Data security",
+   "Data warehouses",
+   "Data modeling",
+   "Data cleaning",
+   "Query optimization",
+   "Commercial data modeling",
+   "Marketing data modeling",
+   "Digital media data modeling",
+   "Supply chain data modeling"
+  ],
+  "log": [
+   {
+    "skill": "Mandarin",
+    "action": "drop",
+    "new": "",
+    "reason": "spoken language, not technical"
+   },
+   {
+    "skill": "Digital Marketing",
+    "action": "drop",
+    "new": "",
+    "reason": "business area, not technical"
+   },
+   {
+    "skill": "E‑commerce",
+    "action": "drop",
+    "new": "",
+    "reason": "business area, not technical"
+   },
+   {
+    "skill": "Data quality",
+    "action": "drop",
+    "new": "",
+    "reason": "quality attribute, not skill"
+   },
+   {
+    "skill": "On‑premise environments",
+    "action": "drop",
+    "new": "",
+    "reason": "environment, not technical skill"
+   },
+   {
+    "skill": "Compliance",
+    "action": "drop",
+    "new": "",
+    "reason": "regulatory requirement, not skill"
+   }
+  ]
+ },
+ "live_80d6f269f676b931": {
+  "skills": [
+   "Data warehousing",
+   "Kimball methodology",
+   "Data integration",
+   "ETL development",
+   "Data modeling",
+   "Data quality",
+   "Performance tuning",
+   "Query performance monitoring",
+   "Data retrieval optimization",
+   "Data governance",
+   "Data security",
+   "Access control",
+   "Data lineage",
+   "Compliance",
+   "Dashboard development",
+   "Reporting",
+   "Data visualization",
+   "Self-service reporting",
+   "SQL",
+   "Data quality checks",
+   "MS SSIS",
+   "Azure Data Factory",
+   "MS SQL Database",
+   "Azure DevOps",
+   "ServiceNow",
+   "C",
+   "C++",
+   "C#",
+   "Python",
+   "R",
+   "Data analysis",
+   "Data mining",
+   "Segmentation techniques",
+   "Azure Data Platform",
+   "Power BI",
+   "Database",
+   "SQL Server/Cloud Services",
+   "Agile",
+   "Scrum",
+   "Medical domain knowledge"
+  ],
+  "log": []
+ },
+ "live_319eb8479a356b7d": {
+  "skills": [
+   "UI/UX design",
+   "UX research",
+   "Business process analysis",
+   "User journey analysis",
+   "UX assessment",
+   "Usability evaluation",
+   "User personas",
+   "Empathy maps",
+   "Customer journey mapping",
+   "Information architecture",
+   "User flow design",
+   "Interaction modeling",
+   "Wireframing",
+   "Low-fidelity prototyping",
+   "Usability standards",
+   "Accessibility",
+   "Responsive design",
+   "Mobile UI design",
+   "High-fidelity mockups",
+   "Visual design",
+   "Design systems",
+   "Component libraries",
+   "Style guides",
+   "Interactive prototyping",
+   "User testing",
+   "Design iteration",
+   "Design consulting",
+   "Design specification documentation",
+   "User acceptance testing",
+   "Design principles",
+   "Branding",
+   "Design review",
+   "UX research reporting",
+   "Design system assets",
+   "Design handoff"
+  ],
+  "log": [
+   {
+    "skill": "User persona creation",
+    "action": "rename",
+    "new": "User personas",
+    "reason": "use standard name"
+   },
+   {
+    "skill": "User flow creation",
+    "action": "rename",
+    "new": "User flow design",
+    "reason": "use standard name"
+   },
+   {
+    "skill": "UI mockups",
+    "action": "rename",
+    "new": "High-fidelity mockups",
+    "reason": "use standard name"
+   },
+   {
+    "skill": "Usability testing",
+    "action": "rename",
+    "new": "User testing",
+    "reason": "use standard name"
+   },
+   {
+    "skill": "Reusable design assets",
+    "action": "rename",
+    "new": "Design system assets",
+    "reason": "use standard name"
+   }
+  ]
+ },
+ "live_ad730103a35257d4": {
+  "skills": [
+   "SQL",
+   "Python",
+   "API",
+   "Agile",
+   "Automation tools",
+   "Snowflake",
+   "Google BigQuery",
+   "Databricks",
+   "API integration",
+   "Data warehousing",
+   "Data integration",
+   "File-based integration",
+   "ETL",
+   "ELT",
+   "Scripting",
+   "Data warehouse architecture",
+   "JSON",
+   "XML",
+   "Technical troubleshooting",
+   "Debugging",
+   "Migration",
+   "Java",
+   "Azure DevOps",
+   "Splunk",
+   "Salesforce",
+   "Power BI",
+   "Operational monitoring tools",
+   "Cloud technologies",
+   "Large-scale distribution platforms"
+  ],
+  "log": []
+ },
+ "live_a3f1ad0df4156bd7": {
+  "skills": [
+   "SAP",
+   "SAP certification",
+   "SAP MM",
+   "SAP FICO",
+   "SuccessFactors",
+   "PP/QM",
+   "SAP Basis",
+   "EWM/WM",
+   "Ariba",
+   "PaPM",
+   "Blueprint workshop",
+   "Data migration",
+   "Functional specification development",
+   "Authorization design",
+   "User Acceptance Testing",
+   "User training",
+   "System cutover",
+   "Post‑implementation support",
+   "End‑to‑end implementation",
+   "Solution configuration",
+   "Transformation program delivery",
+   "Program delivery",
+   "Full lifecycle implementation"
+  ],
+  "log": []
+ },
+ "live_ec0c6a5aa725ffa0": {
+  "skills": [
+   "ERP implementation",
+   "ERP functionalities",
+   "Agile",
+   "Product Lifecycle",
+   "Requirement Gathering"
+  ],
+  "log": [
+   {
+    "skill": "Business Analyst",
+    "action": "drop",
+    "new": "",
+    "reason": "Job title, not technical"
+   },
+   {
+    "skill": "Functional Consultant",
+    "action": "drop",
+    "new": "",
+    "reason": "Role, not technical skill"
+   },
+   {
+    "skill": "ERP projects",
+    "action": "drop",
+    "new": "",
+    "reason": "Project type, not skill"
+   },
+   {
+    "skill": "Analytical skills",
+    "action": "drop",
+    "new": "",
+    "reason": "Soft skill, not technical"
+   }
+  ]
+ },
+ "live_5d1161b174527a2d": {
+  "skills": [
+   "Cisco Analytics",
+   "Cisco networking",
+   "Solution design",
+   "HLD/LLD",
+   "Test environments",
+   "Automation",
+   "Programmability",
+   "Japanese language",
+   "Routing and Switching",
+   "SD-WAN",
+   "SDA",
+   "Catalyst Centre",
+   "Cisco Nexus",
+   "Cisco ACI",
+   "ASR9K",
+   "NCS5K",
+   "Network automation",
+   "Python",
+   "APIs",
+   "NETCONF",
+   "RESTCONF",
+   "YANG",
+   "CCNA",
+   "CCNP Enterprise",
+   "CCIE Enterprise"
+  ],
+  "log": []
+ },
+ "live_64c8c310a608d5e7": {
+  "skills": [
+   "Java",
+   "SpringBoot",
+   "MySQL",
+   "Kafka",
+   "microservices architecture",
+   "APIs",
+   "microservices",
+   "RESTful API",
+   "Git",
+   "Agile development",
+   "security principles",
+   "Mambu",
+   "AWS",
+   "Splunk",
+   "Cursor",
+   "Claude Code",
+   "Azure",
+   "GCP"
+  ],
+  "log": [
+   {
+    "skill": "code reviews",
+    "action": "drop",
+    "new": "",
+    "reason": "non-technical task"
+   },
+   {
+    "skill": "technical documentation",
+    "action": "drop",
+    "new": "",
+    "reason": "non-technical task"
+   }
+  ]
+ },
+ "live_e62712dd30350df3": {
+  "skills": [
+   "UX research",
+   "UX/UI design",
+   "Information architecture",
+   "Cross-platform flows",
+   "Design systems",
+   "Design processes",
+   "Claude Design",
+   "Figma AI",
+   "Visual design fundamentals",
+   "Design thinking",
+   "Product thinking"
+  ],
+  "log": [
+   {
+    "skill": "Layout",
+    "action": "drop",
+    "new": "",
+    "reason": "Not a technical skill"
+   },
+   {
+    "skill": "Typography",
+    "action": "drop",
+    "new": "",
+    "reason": "Not a technical skill"
+   },
+   {
+    "skill": "Visual hierarchy",
+    "action": "drop",
+    "new": "",
+    "reason": "Not a technical skill"
+   },
+   {
+    "skill": "Design tools",
+    "action": "drop",
+    "new": "",
+    "reason": "Not a technical skill"
+   }
+  ]
+ },
+ "live_e40ae1cf3c0026f3": {
+  "skills": [
+   "Automation scripting",
+   "Risk-based testing",
+   "Automation frameworks",
+   "REST API automation",
+   "UI automation",
+   "Mobile automation",
+   "Mobile application testing",
+   "Android",
+   "iOS",
+   "Web application testing",
+   "Cross-browser testing",
+   "Selenium",
+   "Cucumber",
+   "Katalon Studio",
+   "Shell",
+   "Python",
+   "PHP",
+   "JavaScript",
+   "SQL",
+   "Git",
+   "Web security",
+   "Agile/Scrum",
+   "ClickUp",
+   "Jira"
+  ],
+  "log": [
+   {
+    "skill": "Requirements analysis",
+    "action": "drop",
+    "new": "",
+    "reason": "Not a technical skill"
+   },
+   {
+    "skill": "Software testing",
+    "action": "drop",
+    "new": "",
+    "reason": "Not a technical skill"
+   },
+   {
+    "skill": "Test case design",
+    "action": "drop",
+    "new": "",
+    "reason": "Not a technical skill"
+   },
+   {
+    "skill": "Issue tracking",
+    "action": "drop",
+    "new": "",
+    "reason": "Not a technical skill"
+   },
+   {
+    "skill": "Quality investigation",
+    "action": "drop",
+    "new": "",
+    "reason": "Not a technical skill"
+   },
+   {
+    "skill": "Quality planning",
+    "action": "drop",
+    "new": "",
+    "reason": "Not a technical skill"
+   },
+   {
+    "skill": "Data collection",
+    "action": "drop",
+    "new": "",
+    "reason": "Not a technical skill"
+   },
+   {
+    "skill": "Test documentation",
+    "action": "drop",
+    "new": "",
+    "reason": "Not a technical skill"
+   }
+  ]
+ },
+ "live_eca71c72e724fbb4": {
+  "skills": [
+   "Penetration Testing",
+   "Web application penetration testing",
+   "Mobile application penetration testing",
+   "Network penetration testing",
+   "Source code review",
+   "Red team assessment",
+   "Social engineering",
+   "Security controls",
+   "OSCP",
+   "CREST CRT",
+   "Cloud security assessment",
+   "Blockchain security",
+   "IoT testing",
+   "Threat hunting"
+  ],
+  "log": [
+   {
+    "skill": "Networks",
+    "action": "drop",
+    "new": "",
+    "reason": "Generic term, not specific skill"
+   },
+   {
+    "skill": "Operating systems",
+    "action": "drop",
+    "new": "",
+    "reason": "Generic term, not specific skill"
+   }
+  ]
+ },
+ "live_4aef39a395a09b3c": {
+  "skills": [
+   "APIs",
+   "Workflows",
+   "System design",
+   "Integration",
+   "AI services",
+   "Security",
+   "Observability",
+   "Incident handling",
+   "Automation",
+   "Databases",
+   "Authentication",
+   "Authorization",
+   "Queues",
+   "Jobs",
+   "Events",
+   "Debugging"
+  ],
+  "log": [
+   {
+    "skill": "Backend engineering",
+    "action": "drop",
+    "new": "",
+    "reason": "Role, not technical skill"
+   },
+   {
+    "skill": "Onboarding",
+    "action": "drop",
+    "new": "",
+    "reason": "Business process, not technical"
+   },
+   {
+    "skill": "Accounts",
+    "action": "drop",
+    "new": "",
+    "reason": "Business area, not technical"
+   },
+   {
+    "skill": "Payments",
+    "action": "drop",
+    "new": "",
+    "reason": "Business area, not technical"
+   },
+   {
+    "skill": "Cards",
+    "action": "drop",
+    "new": "",
+    "reason": "Product, not technical"
+   },
+   {
+    "skill": "Transfers",
+    "action": "drop",
+    "new": "",
+    "reason": "Business process, not technical"
+   },
+   {
+    "skill": "Rewards",
+    "action": "drop",
+    "new": "",
+    "reason": "Business area, not technical"
+   },
+   {
+    "skill": "Travel",
+    "action": "drop",
+    "new": "",
+    "reason": "Business area, not technical"
+   },
+   {
+    "skill": "KYC",
+    "action": "drop",
+    "new": "",
+    "reason": "Business process, not technical"
+   },
+   {
+    "skill": "Risk flows",
+    "action": "drop",
+    "new": "",
+    "reason": "Business process, not technical"
+   },
+   {
+    "skill": "Reliability",
+    "action": "drop",
+    "new": "",
+    "reason": "System quality, not skill"
+   },
+   {
+    "skill": "Latency",
+    "action": "drop",
+    "new": "",
+    "reason": "System quality, not skill"
+   },
+   {
+    "skill": "Data integrity",
+    "action": "drop",
+    "new": "",
+    "reason": "System quality, not skill"
+   },
+   {
+    "skill": "Production systems",
+    "action": "drop",
+    "new": "",
+    "reason": "System type, not skill"
+   },
+   {
+    "skill": "Data quality",
+    "action": "drop",
+    "new": "",
+    "reason": "System quality, not skill"
+   },
+   {
+    "skill": "Speed",
+    "action": "drop",
+    "new": "",
+    "reason": "System quality, not skill"
+   },
+   {
+    "skill": "Correctness",
+    "action": "drop",
+    "new": "",
+    "reason": "System quality, not skill"
+   },
+   {
+    "skill": "Scalability",
+    "action": "drop",
+    "new": "",
+    "reason": "System quality, not skill"
+   },
+   {
+    "skill": "Maintainability",
+    "action": "drop",
+    "new": "",
+    "reason": "System quality, not skill"
+   },
+   {
+    "skill": "Fintech",
+    "action": "drop",
+    "new": "",
+    "reason": "Business area, not technical"
+   },
+   {
+    "skill": "Banking",
+    "action": "drop",
+    "new": "",
+    "reason": "Business area, not technical"
+   },
+   {
+    "skill": "Wallet",
+    "action": "drop",
+    "new": "",
+    "reason": "Product, not technical"
+   },
+   {
+    "skill": "Fraud",
+    "action": "drop",
+    "new": "",
+    "reason": "Business area, not technical"
+   },
+   {
+    "skill": "Risk",
+    "action": "drop",
+    "new": "",
+    "reason": "Business area, not technical"
+   },
+   {
+    "skill": "English",
+    "action": "drop",
+    "new": "",
+    "reason": "Spoken language, not technical"
+   }
+  ]
+ },
+ "live_2ec2feca24d1a38b": {
+  "skills": [
+   "QA processes",
+   "Functional testing",
+   "Non-functional testing",
+   "Performance testing",
+   "Usability testing",
+   "Regression testing",
+   "Sanity testing",
+   "Smoke testing",
+   "API testing",
+   "Compatibility testing",
+   "System integration testing",
+   "Mobile testing",
+   "Web testing",
+   "Test automation",
+   "Defect management",
+   "Defect analysis",
+   "Process improvement"
+  ],
+  "log": [
+   {
+    "skill": "Automation",
+    "action": "rename",
+    "new": "Test automation",
+    "reason": "Too generic, needs specific focus"
+   }
+  ]
+ },
+ "live_67e5d581c8e82b12": {
+  "skills": [
+   "Public cloud"
+  ],
+  "log": [
+   {
+    "skill": "Ticket handling",
+    "action": "drop",
+    "new": "",
+    "reason": "Not a technical skill"
+   },
+   {
+    "skill": "Cloud service support",
+    "action": "drop",
+    "new": "",
+    "reason": "Not a technical skill"
+   },
+   {
+    "skill": "Knowledge base management",
+    "action": "drop",
+    "new": "",
+    "reason": "Not a technical skill"
+   },
+   {
+    "skill": "Technical writing",
+    "action": "drop",
+    "new": "",
+    "reason": "Not a technical skill"
+   },
+   {
+    "skill": "SLA management",
+    "action": "drop",
+    "new": "",
+    "reason": "Not a technical skill"
+   }
+  ]
+ },
+ "live_d28433cc84f332be": {
+  "skills": [
+   "Microsoft 365",
+   "Windows",
+   "Endpoint security",
+   "Antivirus",
+   "Patching",
+   "Outlook",
+   "Teams",
+   "OneDrive",
+   "SharePoint",
+   "User account management",
+   "Microsoft 365 administration",
+   "LAN",
+   "Wi-Fi",
+   "VPN",
+   "Printers",
+   "AV equipment",
+   "Backup",
+   "Endpoint protection",
+   "TCP/IP",
+   "DNS",
+   "DHCP",
+   "MacBooks"
+  ],
+  "log": [
+   {
+    "skill": "Office applications",
+    "action": "drop",
+    "new": "",
+    "reason": "generic term with specifics"
+   }
+  ]
+ },
+ "live_ca39fceedf53e6f6": {
+  "skills": [
+   "Network security",
+   "CheckPoint Firewalls",
+   "NAT",
+   "Application filtering",
+   "URL filtering",
+   "IPS",
+   "Zscaler Internet Access",
+   "Bluecoat ProxySG",
+   "F5 BIG-IP",
+   "Internetworking",
+   "BGP",
+   "EIGRP",
+   "OSPF",
+   "PIM",
+   "GRE",
+   "VRF",
+   "VPC",
+   "STP",
+   "EtherChannel",
+   "IPSec VPN",
+   "Cisco Nexus",
+   "Cisco Wireless LAN",
+   "Aruba Wireless LAN",
+   "Wireshark",
+   "McAfee NSM",
+   "HP Network Automation",
+   "Cisco ISE",
+   "Cisco ACS",
+   "Azure VNET peering",
+   "Azure ExpressRoute",
+   "Azure NSG"
+  ],
+  "log": [
+   {
+    "skill": "Application/URL filtering",
+    "action": "rename",
+    "new": "Application filtering; URL filtering",
+    "reason": "Split combined filtering types"
+   }
+  ]
+ },
+ "live_a92c87273c2955a9": {
+  "skills": [
+   "CrowdStrike",
+   "MS Defender",
+   "SIEM"
+  ],
+  "log": []
+ },
+ "live_f94d7e50bcca80e3": {
+  "skills": [
+   "Windows",
+   "Linux",
+   "Microsoft 365",
+   "LAN",
+   "WAN",
+   "WLAN",
+   "switches",
+   "routers",
+   "firewall",
+   "Windows Server",
+   "Linux Server",
+   "patching",
+   "monitoring",
+   "troubleshooting",
+   "VMware",
+   "Backup",
+   "Storage",
+   "Recovery",
+   "VPN"
+  ],
+  "log": [
+   {
+    "skill": "Networking",
+    "action": "drop",
+    "new": "",
+    "reason": "generic term with specifics"
+   }
+  ]
+ },
+ "live_143b3f50af14b124": {
+  "skills": [
+   "Computer Science"
+  ],
+  "log": [
+   {
+    "skill": "AI tools",
+    "action": "drop",
+    "new": "",
+    "reason": "generic category, not specific tool"
+   },
+   {
+    "skill": "Software engineering",
+    "action": "drop",
+    "new": "",
+    "reason": "academic discipline, not technical skill"
+   }
+  ]
+ },
+ "live_2ea7c3f21a77d6d9": {
+  "skills": [
+   "Artificial Intelligence",
+   "Machine Learning",
+   "Generative AI",
+   "IoT",
+   "Big Data",
+   "Analytics",
+   "Automation",
+   "AI agents",
+   "Retrieval-Augmented Generation",
+   "Vector databases",
+   "Prompt engineering",
+   "Large Language Models",
+   "Data collection",
+   "Data preprocessing",
+   "Feature engineering",
+   "Data analysis",
+   "APIs",
+   "Predictive modeling",
+   "Recommendation systems",
+   "Autonomous monitoring",
+   "Model evaluation",
+   "Data visualization",
+   "AI storytelling",
+   "AI product development",
+   "Responsible AI",
+   "Machine learning algorithms",
+   "Deep learning",
+   "Python",
+   "SQL",
+   "Software development practices",
+   "JSON",
+   "Application architecture",
+   "OpenAI",
+   "Azure OpenAI",
+   "LangChain",
+   "Function calling",
+   "Tool calling",
+   "AI agent design patterns",
+   "Vector search",
+   "Embeddings",
+   "LLM evaluation",
+   "AI assistants",
+   "Chatbots",
+   "Copilots",
+   "Workflow automation",
+   "Data pipelines",
+   "ETL",
+   "Knowledge management",
+   "Fine-tuning",
+   "GenAI deployment",
+   "Open-source AI platforms",
+   "Cloud AI platforms"
+  ],
+  "log": [
+   {
+    "skill": "Software development",
+    "action": "rename",
+    "new": "Software development practices",
+    "reason": "Missing 'practices' in name"
+   }
+  ]
+ },
+ "live_050af1c8591bfa5e": {
+  "skills": [
+   "C# .NET",
+   "Node.js",
+   "SQL",
+   "SQL Server",
+   "PostgreSQL",
+   "Database design",
+   "Docker",
+   "AWS EC2",
+   "AWS Lambda",
+   "AWS S3",
+   "AWS RDS",
+   "AWS API Gateway",
+   "AWS SQS",
+   "AWS SNS",
+   "Code review",
+   "Database optimization",
+   "Stored procedures",
+   "AWS VPC",
+   "AWS CloudWatch",
+   "RESTful APIs",
+   "Git",
+   "Azure",
+   "Google Cloud",
+   "Jenkins",
+   "GitLab CI",
+   "AWS CodePipeline",
+   "Microservices architecture",
+   "Unit testing",
+   "Integration testing",
+   "Mocking frameworks",
+   "Web security",
+   "Terraform"
+  ],
+  "log": []
+ },
+ "live_b9cbf9ab9987a49a": {
+  "skills": [
+   "Hardware troubleshooting",
+   "Software troubleshooting",
+   "Ticketing system",
+   "Wireless networking",
+   "VPN",
+   "Data analysis",
+   "Network troubleshooting",
+   "Software installation",
+   "Technical problem solving"
+  ],
+  "log": [
+   {
+    "skill": "Inventory management",
+    "action": "drop",
+    "new": "",
+    "reason": "Not a technical skill"
+   },
+   {
+    "skill": "Ticket management",
+    "action": "drop",
+    "new": "",
+    "reason": "Not a technical skill"
+   },
+   {
+    "skill": "Network access",
+    "action": "drop",
+    "new": "",
+    "reason": "Not a technical skill"
+   },
+   {
+    "skill": "Issue identification",
+    "action": "drop",
+    "new": "",
+    "reason": "Soft skill, not technical"
+   }
+  ]
+ },
+ "live_471d55a57402522b": {
+  "skills": [
+   "Card lifecycle process modeling",
+   "System architecture diagramming",
+   "Data flow modeling",
+   "User stories",
+   "Functional specifications",
+   "Impact analysis",
+   "Feasibility studies",
+   "Process improvement",
+   "Process automation",
+   "Business process reengineering",
+   "Business analysis",
+   "Documentation",
+   "Agile",
+   "SCRUM",
+   "SDLC",
+   "Microservices",
+   "API",
+   "Cloud"
+  ],
+  "log": [
+   {
+    "skill": "Analytical",
+    "action": "drop",
+    "new": "",
+    "reason": "soft skill, not technical"
+   },
+   {
+    "skill": "Business process modeling",
+    "action": "rename",
+    "new": "Card lifecycle process modeling",
+    "reason": "specify card lifecycle context"
+   },
+   {
+    "skill": "Digital Banking",
+    "action": "drop",
+    "new": "",
+    "reason": "business area, not technical"
+   }
+  ]
+ },
+ "live_2dfd1835617b539e": {
+  "skills": [
+   "Warehouse Management Systems",
+   "Intralogistics automation",
+   "Kardex WES",
+   "Testing",
+   "Deployment",
+   "Documentation",
+   "AutoStore",
+   "SDLC",
+   "Agile methodologies",
+   "Project management",
+   "PMP",
+   "Agile Scrum Master"
+  ],
+  "log": [
+   {
+    "skill": "Post-implementation support",
+    "action": "drop",
+    "new": "",
+    "reason": "Not a technical skill"
+   }
+  ]
+ },
+ "live_a5d058f47165ecb8": {
+  "skills": [
+   "debugging",
+   "code review",
+   "Python",
+   "Java",
+   "C++",
+   "C#",
+   "Agile",
+   "Scrum"
+  ],
+  "log": []
+ },
+ "live_94383f47e31bbf09": {
+  "skills": [
+   "React",
+   "Node.js",
+   "TypeScript",
+   "GraphQL",
+   "PostgreSQL",
+   "TimescaleDB",
+   "MongoDB",
+   "Amazon SP API",
+   "Data Kiosk",
+   "AWS",
+   "CloudWatch",
+   "SQL",
+   "REST APIs",
+   "Cursor",
+   "Claude",
+   "Python",
+   "Amazon",
+   "Shopify",
+   "WooCommerce",
+   "Analytics",
+   "Reporting",
+   "Cloudflare",
+   "MCP servers"
+  ],
+  "log": [
+   {
+    "skill": "AI-powered developer tooling",
+    "action": "drop",
+    "new": "",
+    "reason": "Generic category, not specific skill"
+   }
+  ]
  }
 }
