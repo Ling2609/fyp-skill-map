@@ -56,17 +56,18 @@ Names: a short standard name (1-4 words). Separate technologies stay separate ("
 "PP/QM" in an SAP ad -> "SAP PP", "SAP QM"). Name a skill as specifically as the ad does ("Object detection", not
 "Detection", when the ad means object detection)."""
 
-PROMPT = """You check skills that another model extracted from a job ad. For each numbered skill decide:
-- "keep": it is a technical skill the ad asks for, prefers, will teach, or names as used in the work
-- "drop": it is clearly NOT a technical skill by the rules below (give a short reason)
+PROMPT = """You check skills that another model extracted from a job ad. Each numbered skill is kept unless you say:
+- "drop": it is clearly NOT a technical skill by the rules below
 - "rename": it is a technical skill but badly named or several skills joined; give the right name(s)
+A skill is kept when it is a technical skill the ad asks for, prefers, will teach, or names as used in the work.
 
 When unsure, keep. Never add skills that are not in the list.
 
 {rules}
 
-Return only JSON: {{"decisions": [{{"id": 1, "action": "keep|drop|rename", "names": ["..."], "reason": "..."}}]}}
-("names" only for rename.)
+List ONLY the skills to drop or rename (leave kept skills out); reason = at most 8 words.
+Return only JSON: {{"decisions": [{{"id": 1, "action": "drop|rename", "names": ["..."], "reason": "..."}}]}}
+("names" only for rename; {{"decisions": []}} if every skill is kept.)
 
 Job title: {title}
 
@@ -78,7 +79,13 @@ Extracted skills (id. name -- quote from the ad):
 
 
 def ask(prompt: str) -> dict:
-    return {"cohere": ask_cohere, "mistral": ask_mistral, "groq": ask_groq}[provider()](prompt)
+    """One retry if the answer is not valid JSON (e.g. cut off); a second failure stops the run (it can resume)."""
+    call = {"cohere": ask_cohere, "mistral": ask_mistral, "groq": ask_groq}[provider()]
+    try:
+        return call(prompt)
+    except json.JSONDecodeError:
+        print("  answer was not valid JSON: asking once more")
+        return call(prompt)
 
 
 def _post_json(url: str, key: str, body: dict, name: str) -> dict:
@@ -100,7 +107,7 @@ def ask_cohere(prompt: str) -> dict:
     if not settings.cohere_api_key:
         raise RuntimeError("COHERE_API_KEY is not set in backend/.env")
     data = _post_json(COHERE_URL, settings.cohere_api_key, {
-        "model": model(), "temperature": 0, "max_tokens": 4096, "response_format": {"type": "json_object"},
+        "model": model(), "temperature": 0, "max_tokens": 8000, "response_format": {"type": "json_object"},
         "messages": [{"role": "user", "content": prompt}]}, "Cohere")
     parts = (data.get("message") or {}).get("content") or []
     return json.loads(next((p.get("text") for p in parts if p.get("type", "text") == "text"), "") or "{}")
@@ -120,7 +127,7 @@ def ask_mistral(prompt: str) -> dict:
     if not settings.mistral_api_key:
         raise RuntimeError("MISTRAL_API_KEY is not set in backend/.env")
     data = _post_json(MISTRAL_URL, settings.mistral_api_key, {
-        "model": model(), "temperature": 0, "max_tokens": 4096, "response_format": {"type": "json_object"},
+        "model": model(), "temperature": 0, "max_tokens": 8000, "response_format": {"type": "json_object"},
         "messages": [{"role": "user", "content": prompt}]}, "Mistral")
     return json.loads(data["choices"][0]["message"]["content"] or "{}")
 

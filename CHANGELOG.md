@@ -3,6 +3,13 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 11 Oct 2026 — Skill checker: answers list only drops and renames
+
+- (this commit) Her first Cohere run stopped at ad 8 with cut-off JSON: listing a decision and reason for every
+  skill (up to 64 in one ad) ran past the output limit. The checker now lists only the skills to drop or rename
+  (reason at most 8 words); a skill left out is kept, as before. Output limit 8,000 tokens; one retry if an answer
+  is still not valid JSON. The 7 ads checked with the old prompt are run again so all 30 use the same prompt.
+
 ## 11 Oct 2026 — Skill checker runs on Cohere Command A Plus
 
 - (this commit) Mistral's free API answered 429 (rate limit) on the very first call, even after 2 minutes of
