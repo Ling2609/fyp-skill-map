@@ -3,6 +3,21 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 11 Oct 2026 — Skill checker: a second model reviews the extracted job skills (stop gate on the 30 development ads)
+
+- (this commit) Her idea after the E1b result (precision 0.61): model 1 (gpt-oss) extracts, model 2 checks. New
+  `app/services/skill_checker.py`: Llama 3.3 70B on Groq (not the extractor, not a labeller) reads the ad and the
+  extracted skills with their quotes and answers keep / drop (with a reason) / rename (split "PP/QM" -> "SAP PP",
+  "SAP QM", or name it as the ad does). Code checks every rename (each new name must share a word with the ad's
+  quote, otherwise the original stays); no answer = keep; told to keep when unsure. Research: a model correcting
+  itself without outside feedback often does not improve (Huang et al., ICLR 2024); outside feedback helps (CRITIC,
+  Gou et al., ICLR 2024).
+- E1 script: `check` (resumes after a daily limit) and `score --checked` (`scores_checked.txt`, `per_ad_checked.csv`,
+  `errors_checked.csv`, `checker_log.csv` with whether each dropped skill was in the answer key, and the change in
+  P / R / F1 with a paired bootstrap). Not used by the app yet.
+- Rules fixed before any new ads exist: stop if F1 rises by less than 0.03 on these 30 development ads; otherwise
+  test on 30 new ads and keep the checker only if F1 is higher and recall drops by no more than 0.03.
+
 ## 11 Oct 2026 — Answer key: "IMU" and "IMUs" are the same skill
 
 - (this commit) Her first score listed "IMU" as extra and "IMUs" as missed in the same ad: the plural rule skipped

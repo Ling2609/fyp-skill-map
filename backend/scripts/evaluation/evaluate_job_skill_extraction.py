@@ -24,6 +24,13 @@ Steps (from backend/, venv active; files go to ../docs/evidence/job_skill_extrac
                                                                         #    fill, disagreements.csv (optional keeps)
   python scripts/evaluation/evaluate_job_skill_extraction.py merge      # 5. again after any keeps (spot-check answers stay)
   python scripts/evaluation/evaluate_job_skill_extraction.py score      # 6. scores.txt, per_ad.csv, errors.csv
+
+Checker (11 Oct, her idea; app/services/skill_checker.py): a second model (Llama, not the extractor and not a
+labeller) keeps / drops / renames the extracted skills. Pass rule fixed before any new ads exist: keep the checker if
+F1 on 30 NEW ads is higher than without it and recall drops by no more than 0.03. Stop gate first, on these 30
+(development) ads: if F1 rises by less than 0.03 here, stop.
+  python scripts/evaluation/evaluate_job_skill_extraction.py check      # 7. checked_skills.json (resumes), checker_log.csv
+  python scripts/evaluation/evaluate_job_skill_extraction.py score --checked   # 8. *_checked files + the comparison
 """
 import argparse
 import csv
@@ -40,6 +47,7 @@ sys.path.append(".")
 from app.database import SessionLocal
 from app.models.job import Job, JobSkill
 from app.services.skill_names import canonical_key
+from app.services.skill_checker import ask_groq as ask_checker, check_skills
 
 OUT = "../docs/evidence/job_skill_extraction"
 N_ADS, SEED = 30, 1
@@ -373,19 +381,55 @@ def prf(tp: int, fp: int, fn: int) -> tuple[float, float, float]:
     return p, r, (2 * p * r / (p + r) if p + r else 0.0)
 
 
-def score():
-    ads, key = load("ads.json"), load("answer_key.json")
+def extracted(ads: list[dict]) -> dict[str, list[dict]]:
+    """The extractor's stored hard skills (any level) per ad: {job_ref: [{"skill", "quote"}]}."""
     db = SessionLocal()
     try:
-        ids = {j.job_id: j.id for j in db.query(Job).filter(Job.job_id.in_([a["job_ref"] for a in ads]))}
-        predicted = defaultdict(list)
-        for s in db.query(JobSkill).filter(JobSkill.job_id.in_(ids.values()), JobSkill.skill_type == "hard"):
-            predicted[s.job_id].append(s.skill_name)
+        ids = {j.id: j.job_id for j in db.query(Job).filter(Job.job_id.in_([a["job_ref"] for a in ads]))}
+        out = defaultdict(list)
+        for s in db.query(JobSkill).filter(JobSkill.job_id.in_(ids), JobSkill.skill_type == "hard").order_by(JobSkill.id):
+            out[ids[s.job_id]].append({"skill": s.skill_name, "quote": s.evidence_quote or ""})
+        return out
     finally:
         db.close()
+
+
+# ── 5. checker (11 Oct) ──────────────────────────────────────────────────────────────────────────────────────────
+def check(pause: float):
+    """Run the checker over the stored skills of every ad; saved after each ad (a stopped run continues)."""
+    ads = load("ads.json")
+    done = load("checked_skills.json") if os.path.exists(path("checked_skills.json")) else {}
+    found = extracted(ads)
+    for i, a in enumerate(ads, 1):
+        if a["job_ref"] in done:
+            continue
+        try:
+            names, log = check_skills(a["title"], a["text"], found.get(a["job_ref"], []), ask=ask_checker)
+        except Exception as e:     # daily limit or network: keep what is done, run again later to continue
+            print(f"Stopped at ad {i}: {type(e).__name__}: {e}")
+            break
+        done[a["job_ref"]] = {"skills": names, "log": log}
+        save("checked_skills.json", done)
+        print(f"{i:>2}/{len(ads)}  {len(found.get(a['job_ref'], [])):>2} -> {len(names):>2} skills  {a['title']}")
+        time.sleep(pause)
+    print(f"Checked {len(done)} of {len(ads)} ads.")
+
+
+def score(with_checker: bool = False):
+    ads, key = load("ads.json"), load("answer_key.json")
+    found = extracted(ads)
+    if with_checker:
+        done = load("checked_skills.json")
+        missing = [a["title"] for a in ads if a["job_ref"] not in done]
+        if missing:
+            sys.exit(f"{len(missing)} ads not checked yet (run check again): {', '.join(missing[:3])}...")
+        predicted = {r: v["skills"] for r, v in done.items()}
+    else:
+        predicted = {r: [s["skill"] for s in v] for r, v in found.items()}
+    end = "_checked" if with_checker else ""
     per_ad, errors = [], []
     for a in ads:
-        groups = clusters({"key": key[a["job_ref"]], "pred": predicted.get(ids.get(a["job_ref"]), [])})
+        groups = clusters({"key": key[a["job_ref"]], "pred": predicted.get(a["job_ref"], [])})
         tp = [g for g in groups if len(g) == 2]
         fp = [g["pred"] for g in groups if list(g) == ["pred"]]
         fn = [g["key"] for g in groups if list(g) == ["key"]]
@@ -416,23 +460,67 @@ def score():
         lines.append(f"Answer-key check by the author ({len({r['job_ref'] for r in checked})} ads): {right} of "
                      f"{len(checked)} agreed skills correct ({right / len(checked):.0%}); {missed} skill{'' if missed == 1 else 's'} "
                      f"all three labellers missed; {unsure} marked unsure (left out)")
-    with open(path("scores.txt"), "w", encoding="utf-8") as f:
+    if with_checker:
+        lines[0] = lines[0].replace("E1b extraction", "E1b extraction + checker")
+        lines += compare(ads, key, found, per_ad)
+    with open(path(f"scores{end}.txt"), "w", encoding="utf-8") as f:
         f.write("\n".join(lines) + "\n")
-    for name, rows in (("per_ad.csv", per_ad), ("errors.csv", errors)):
+    for name, rows in ((f"per_ad{end}.csv", per_ad), (f"errors{end}.csv", errors)):
         with open(path(name), "w", newline="", encoding="utf-8-sig") as f:
             w = csv.DictWriter(f, fieldnames=list(rows[0].keys()))
             w.writeheader()
             w.writerows(rows)
     print("\n".join(lines))
-    print("Written scores.txt, per_ad.csv and errors.csv (every extra and missed skill, for the error analysis).")
+    print(f"Written scores{end}.txt, per_ad{end}.csv and errors{end}.csv"
+          + (" and checker_log.csv (every drop / rename, and whether the answer key had it)." if with_checker
+             else " (every extra and missed skill, for the error analysis)."))
+
+
+def compare(ads, key, found, after) -> list[str]:
+    """Without vs with the checker on the same ads: change in P / R / F1 (paired bootstrap over ads) + the log."""
+    before = []
+    for a in ads:
+        g = clusters({"key": key[a["job_ref"]], "pred": [s["skill"] for s in found.get(a["job_ref"], [])]})
+        before.append({"tp": sum(len(x) == 2 for x in g), "fp": sum(list(x) == ["pred"] for x in g),
+                       "fn": sum(list(x) == ["key"] for x in g)})
+    tot = lambda rows, k, idx=None: sum(rows[i][k] for i in (idx if idx is not None else range(len(rows))))
+    m = lambda rows, idx=None: prf(tot(rows, "tp", idx), tot(rows, "fp", idx), tot(rows, "fn", idx))
+    b, w = m(before), m(after)
+    rng, d = random.Random(0), []
+    for _ in range(10_000):
+        idx = [rng.randrange(len(ads)) for _ in ads]
+        x, y = m(before, idx), m(after, idx)
+        d.append((y[0] - x[0], y[1] - x[1], y[2] - x[2]))
+    ci = lambda i: (sorted(t[i] for t in d)[249], sorted(t[i] for t in d)[9749])
+    lines = ["", "Without vs with the checker (same ads; change, 95% CI paired bootstrap over ads):"]
+    for name, i in (("Precision", 0), ("Recall", 1), ("F1", 2)):
+        lo, hi = ci(i)
+        lines.append(f"{name:<9} {b[i]:.3f} -> {w[i]:.3f}  ({w[i] - b[i]:+.3f}, CI {lo:+.3f} to {hi:+.3f})")
+    gate = w[2] - b[2] >= 0.03 and b[1] - w[1] <= 0.03
+    lines.append(f"Rule (F1 up by 0.03+ on development ads / F1 up on new ads, recall down by 0.03 or less): "
+                 f"F1 {w[2] - b[2]:+.3f}, recall {w[1] - b[1]:+.3f} -> {'PASS' if gate else 'FAIL'} at the 0.03 gate")
+    log, rows = load("checked_skills.json"), []
+    for a in ads:
+        for e in log[a["job_ref"]]["log"]:
+            in_key = any(len(g) == 2 for g in clusters({"key": key[a["job_ref"]], "pred": [e["skill"]]}))
+            rows.append({"job_ref": a["job_ref"], "title": a["title"], **e, "was_in_answer_key": "yes" if in_key else "no"})
+    if rows:
+        write_csv("checker_log.csv", rows, list(rows[0].keys()))
+    drops = [r for r in rows if r["action"] == "drop"]
+    lines.append(f"Checker: {len(drops)} dropped ({sum(r['was_in_answer_key'] == 'yes' for r in drops)} of them were in "
+                 f"the answer key = wrongly dropped), {sum(r['action'] == 'rename' for r in rows)} renamed, "
+                 f"{sum(r['action'] == 'rename refused' for r in rows)} renames refused by the code check")
+    return lines
 
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("step", choices=["sample", "qwen", "gemini", "merge", "score"])
+    ap.add_argument("step", choices=["sample", "qwen", "gemini", "merge", "score", "check"])
+    ap.add_argument("--checked", action="store_true", help="score: use the checker's skills (checked_skills.json)")
     ap.add_argument("--n", type=int, default=N_ADS)
     ap.add_argument("--seed", type=int, default=SEED)
-    ap.add_argument("--pause", type=float, default=2.0, help="seconds between Qwen calls")
+    ap.add_argument("--pause", type=float, default=2.0, help="seconds between Qwen / checker calls")
     a = ap.parse_args()
     {"sample": lambda: sample(a.n, a.seed), "qwen": lambda: label("qwen", ask_qwen, a.pause),
-     "gemini": lambda: label("gemini", ask_gemini, a.pause), "merge": merge, "score": score}[a.step]()
+     "gemini": lambda: label("gemini", ask_gemini, a.pause), "merge": merge,
+     "score": lambda: score(a.checked), "check": lambda: check(a.pause)}[a.step]()
