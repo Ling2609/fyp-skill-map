@@ -25,8 +25,8 @@ Steps (from backend/, venv active; files go to ../docs/evidence/job_skill_extrac
   python scripts/evaluation/evaluate_job_skill_extraction.py merge      # 5. again after any keeps (spot-check answers stay)
   python scripts/evaluation/evaluate_job_skill_extraction.py score      # 6. scores.txt, per_ad.csv, errors.csv
 
-Checker (11 Oct, her idea; app/services/skill_checker.py): a second model (Mistral, not the extractor and not a
-labeller) keeps / drops / renames the extracted skills. Pass rule fixed before any new ads exist: keep the checker if
+Checker (11 Oct, her idea; app/services/skill_checker.py): a second model (Cohere Command A Plus; never a
+labeller, not the extractor's family) keeps / drops / renames the extracted skills. Pass rule fixed before any new ads exist: keep the checker if
 F1 on 30 NEW ads is higher than without it and recall drops by no more than 0.03. Stop gate first, on these 30
 (development) ads: if F1 rises by less than 0.03 here, stop.
   python scripts/evaluation/evaluate_job_skill_extraction.py check      # 7. checked_skills.json (resumes), checker_log.csv
@@ -47,7 +47,7 @@ sys.path.append(".")
 from app.database import SessionLocal
 from app.models.job import Job, JobSkill
 from app.services.skill_names import canonical_key
-from app.services.skill_checker import ask_mistral as ask_checker, check_skills
+from app.services.skill_checker import ask as ask_checker, check_skills, model as checker_model
 
 OUT = "../docs/evidence/job_skill_extraction"
 N_ADS, SEED = 30, 1
@@ -400,6 +400,7 @@ def check(pause: float):
     ads = load("ads.json")
     done = load("checked_skills.json") if os.path.exists(path("checked_skills.json")) else {}
     found = extracted(ads)
+    print(f"Checker model: {checker_model()}")
     for i, a in enumerate(ads, 1):
         if a["job_ref"] in done:
             continue

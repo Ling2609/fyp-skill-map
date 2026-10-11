@@ -3,6 +3,15 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 11 Oct 2026 — Skill checker runs on Cohere Command A Plus
+
+- (this commit) Mistral's free API answered 429 (rate limit) on the very first call, even after 2 minutes of
+  waiting, and her Groq key has no Llama. Free options researched (references.md "Which model can be the checker?"):
+  Cohere's trial key (20 chat calls a minute, 1,000 a month; ~60 needed) gives a model from another company and
+  family: `command-a-plus-05-2026` (COHERE_API_KEY in backend/.env). Not a labeller and not the extractor's family.
+  Options kept: `CHECKER_PROVIDER=groq` (gpt-oss-20b, same family as the extractor) or `mistral`. All three wait and
+  retry on a per-minute limit; `check` prints which model it uses.
+
 ## 11 Oct 2026 — Skill checker: a second model reviews the extracted job skills (stop gate on the 30 development ads)
 
 - (this commit) Her idea after the E1b result (precision 0.61): model 1 (gpt-oss) extracts, model 2 checks. New

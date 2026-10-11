@@ -1,0 +1,32 @@
+{
+ "live_aff472a6bd39f9ae": {
+  "skills": [
+   "Windows OS",
+   "Linux",
+   "Networking concepts",
+   "Infrastructure service management",
+   "Diagnostic tools",
+   "Endpoint security management"
+  ],
+  "log": [
+   {
+    "skill": "Analytical",
+    "action": "drop",
+    "new": "",
+    "reason": "Soft skill/personal quality, not a technical skill."
+   },
+   {
+    "skill": "Troubleshooting",
+    "action": "drop",
+    "new": "",
+    "reason": "Soft skill/personal quality, not a technical skill."
+   },
+   {
+    "skill": "Problem solving",
+    "action": "drop",
+    "new": "",
+    "reason": "Soft skill/personal quality, not a technical skill."
+   }
+  ]
+ }
+}

@@ -7,7 +7,8 @@ class Settings(BaseSettings):
     access_token_expire_minutes: int = 30
     gemini_api_key: str = ""
     groq_api_key: str = ""
-    mistral_api_key: str = ""   # skill checker (app/services/skill_checker.py), Mistral's free API tier
+    mistral_api_key: str = ""   # skill checker option (app/services/skill_checker.py), Mistral's free API tier
+    cohere_api_key: str = ""    # skill checker (app/services/skill_checker.py), Cohere trial key
     jsearch_key: str = ""   # RapidAPI key for JSearch (live jobs)
     # MongoDB: chatbot conversations (app/mongo.py). Defaults match a local install; override in backend/.env
     mongodb_url: str = "mongodb://localhost:27017"

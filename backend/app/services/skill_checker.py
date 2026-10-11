@@ -6,7 +6,7 @@ That stops invented skills but not real words that are not skills ("Mandarin", "
 join or blur skills ("PP/QM", "C# .NET"). The checker reads the ad and the extracted list against the labelling
 guide and answers, per skill: keep, drop (with a reason) or rename (split or name it as the ad does).
 
-Why a DIFFERENT model with a code check after it: a model asked to correct itself without outside feedback often
+Why another model with a code check after it: a model asked to correct itself without outside feedback often
 does not improve and can get worse (Huang et al., ICLR 2024); checking with outside feedback does help (CRITIC,
 Gou et al., ICLR 2024). So the checker is another model family, and its renames are checked by code again (every
 new name must share a word with the ad's quote; otherwise the original name stays). It is told to keep a skill
@@ -19,11 +19,24 @@ import time
 
 from app.services.evidence import normalise_text
 
-# Mistral: not the extractor (OpenAI gpt-oss) and not a labeller (Claude / Qwen / Gemini). 11 Oct: Groq's Llama models
-# are not open to her free account (404), so the checker uses Mistral's own API (free tier, docs.mistral.ai).
-CHECKER_MODEL = "mistral-medium-latest"    # Large is not in the free tier (403); Medium is the strongest general one in it
-RATE_WAITS = (20, 40, 60)                   # free tier: a few requests a minute; on 429 wait and try again
+# Which model checks (11 Oct). It must not be a labeller of the answer key (Claude / Qwen / Gemini), or the test
+# favours it, and should not be the extractor's family (gpt-oss), or they may share blind spots. Tried: Llama on Groq
+# (404, not open to her free account), Mistral Medium (free tier: 429 on the very first call). Chosen: Cohere's
+# Command A Plus (another company and model family; trial key: 20 chat calls a minute, 1,000 a month, we need ~60).
+# Options in backend/.env: CHECKER_PROVIDER=groq (gpt-oss-20b, same family as the extractor) or mistral; CHECKER_MODEL.
+CHECKER_PROVIDER = "cohere"
+CHECKER_MODELS = {"cohere": "command-a-plus-05-2026", "groq": "openai/gpt-oss-20b", "mistral": "mistral-medium-latest"}
+COHERE_URL = "https://api.cohere.com/v2/chat"
+RATE_WAITS = (20, 40, 60)                   # on a per-minute limit (429): wait and try again
 MISTRAL_URL = "https://api.mistral.ai/v1/chat/completions"
+
+
+def provider() -> str:
+    return (os.getenv("CHECKER_PROVIDER") or CHECKER_PROVIDER).strip().lower()
+
+
+def model() -> str:
+    return os.getenv("CHECKER_MODEL") or CHECKER_MODELS[provider()]
 MAX_NEW_NAMES = 5
 
 RULES = """A technical skill is a programming language, framework, library, tool, software product, platform, database,
@@ -64,29 +77,59 @@ Extracted skills (id. name -- quote from the ad):
 {skills}"""
 
 
-def ask_mistral(prompt: str) -> dict:
+def ask(prompt: str) -> dict:
+    return {"cohere": ask_cohere, "mistral": ask_mistral, "groq": ask_groq}[provider()](prompt)
+
+
+def _post_json(url: str, key: str, body: dict, name: str) -> dict:
+    """POST with waits on a per-minute limit (429); the response JSON, or an error naming the provider."""
     import httpx
+    for wait in (*RATE_WAITS, None):
+        r = httpx.post(url, timeout=120, headers={"Authorization": f"Bearer {key}"}, json=body)
+        if r.status_code != 429 or wait is None:
+            break
+        print(f"  {name} rate limit: waiting {wait} s")
+        time.sleep(wait)
+    if r.status_code != 200:
+        raise RuntimeError(f"{name} {r.status_code}: {r.text[:300]}")
+    return r.json()
+
+
+def ask_cohere(prompt: str) -> dict:
+    from app.config import settings
+    if not settings.cohere_api_key:
+        raise RuntimeError("COHERE_API_KEY is not set in backend/.env")
+    data = _post_json(COHERE_URL, settings.cohere_api_key, {
+        "model": model(), "temperature": 0, "max_tokens": 4096, "response_format": {"type": "json_object"},
+        "messages": [{"role": "user", "content": prompt}]}, "Cohere")
+    parts = (data.get("message") or {}).get("content") or []
+    return json.loads(next((p.get("text") for p in parts if p.get("type", "text") == "text"), "") or "{}")
+
+
+def ask_groq(prompt: str) -> dict:
+    from groq import Groq
+    from app.config import settings
+    r = Groq(api_key=settings.groq_api_key).chat.completions.create(
+        model=model(), temperature=0, max_completion_tokens=8192,
+        response_format={"type": "json_object"}, messages=[{"role": "user", "content": prompt}])
+    return json.loads(r.choices[0].message.content or "{}")
+
+
+def ask_mistral(prompt: str) -> dict:
     from app.config import settings
     if not settings.mistral_api_key:
         raise RuntimeError("MISTRAL_API_KEY is not set in backend/.env")
-    for wait in (*RATE_WAITS, None):
-        r = httpx.post(MISTRAL_URL, timeout=120, headers={"Authorization": f"Bearer {settings.mistral_api_key}"}, json={
-            "model": os.getenv("CHECKER_MODEL") or CHECKER_MODEL, "temperature": 0, "max_tokens": 4096,
-            "response_format": {"type": "json_object"}, "messages": [{"role": "user", "content": prompt}]})
-        if r.status_code != 429 or wait is None:
-            break
-        print(f"  Mistral rate limit: waiting {wait} s")
-        time.sleep(wait)
-    if r.status_code != 200:
-        raise RuntimeError(f"Mistral {r.status_code}: {r.text[:300]}")
-    return json.loads(r.json()["choices"][0]["message"]["content"] or "{}")
+    data = _post_json(MISTRAL_URL, settings.mistral_api_key, {
+        "model": model(), "temperature": 0, "max_tokens": 4096, "response_format": {"type": "json_object"},
+        "messages": [{"role": "user", "content": prompt}]}, "Mistral")
+    return json.loads(data["choices"][0]["message"]["content"] or "{}")
 
 
 def _words(text: str) -> set[str]:
     return {w for w in re.split(r"[\s/,()]+", normalise_text(text)) if len(w) >= 2}
 
 
-def check_skills(title: str, ad_text: str, skills: list[dict], ask=ask_mistral) -> tuple[list[str], list[dict]]:
+def check_skills(title: str, ad_text: str, skills: list[dict], ask=ask) -> tuple[list[str], list[dict]]:
     """skills: [{"skill", "quote"}]. Returns (names after the check, log of every drop / rename / refused rename).
     A skill the checker gives no valid answer for is kept (safe default)."""
     if not skills:
