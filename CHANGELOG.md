@@ -3,6 +3,12 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 11 Oct 2026 — Answer key: "IMU" and "IMUs" are the same skill
+
+- (this commit) Her first score listed "IMU" as extra and "IMUs" as missed in the same ad: the plural rule skipped
+  words ending "-us" / "-is" (status, analysis), so an acronym's plural ("IMUs", "APIs", "GPUs") never matched the
+  acronym. Fixes the code to do what the 10 Oct rule already said (plurals are one skill); the rule itself is unchanged.
+
 ## 10 Oct 2026 — Spot-check: "unsure" allowed, ad sentence shown
 
 - (this commit) Her worry: she can't always judge a skill outside her field. Each spot-check row is now answered from

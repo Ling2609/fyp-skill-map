@@ -1,0 +1,6 @@
+E1b extraction vs answer key: 30 ads, 522 answer-key skills, 690 extracted hard skills
+TP 421  FP 269  FN 101
+Precision 0.610  (95% CI 0.529-0.688, bootstrap over ads)
+Recall    0.807  (95% CI 0.747-0.864, bootstrap over ads)
+F1        0.695  (95% CI 0.630-0.751, bootstrap over ads)
+Answer-key check by the author (5 ads): 91 of 94 agreed skills correct (97%); 0 skills all three labellers missed; 0 marked unsure (left out)

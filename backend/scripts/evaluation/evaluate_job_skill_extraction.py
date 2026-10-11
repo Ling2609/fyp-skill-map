@@ -217,6 +217,9 @@ GENERIC = {"methodology", "methodologies", "method", "methods", "system", "syste
 
 
 def plain(name: str) -> str:
+    # An acronym's plural ("IMUs", "APIs", "GPUs") is the acronym; the word rule below skips "-us"/"-is" endings
+    # (status, analysis), so do these first (11 Oct: "IMU" and "IMUs" were scored as two different skills)
+    name = re.sub(r"\b([A-Z][A-Z0-9]+)s\b", r"\1", name)
     s = " ".join(re.sub(r"[^a-z0-9+#/. ]", " ", name.lower()).split())
     for a, b in SPELLING:
         s = s.replace(a, b)

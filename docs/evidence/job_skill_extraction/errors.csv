@@ -1,0 +1,371 @@
+﻿job_ref,title,error,skill
+live_aff472a6bd39f9ae,VMWare Admin (Windows),extra (not in answer key),Analytical
+live_aff472a6bd39f9ae,VMWare Admin (Windows),extra (not in answer key),Troubleshooting
+live_aff472a6bd39f9ae,VMWare Admin (Windows),extra (not in answer key),Problem solving
+live_aff472a6bd39f9ae,VMWare Admin (Windows),extra (not in answer key),Diagnostic tools
+live_aff472a6bd39f9ae,VMWare Admin (Windows),missed (in answer key),Windows Server
+live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",extra (not in answer key),Autonomous driving
+live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",extra (not in answer key),Robotics
+live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",extra (not in answer key),Physical AI
+live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",extra (not in answer key),ROS
+live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",extra (not in answer key),Planning
+live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",extra (not in answer key),Control
+live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",extra (not in answer key),Sensors
+live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",extra (not in answer key),System integration
+live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",extra (not in answer key),Mapping
+live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",extra (not in answer key),AI-based perception
+live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",extra (not in answer key),VLA-based methods
+live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",extra (not in answer key),Scene understanding
+live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",extra (not in answer key),Decision-making
+live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",extra (not in answer key),Robot action
+live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",extra (not in answer key),AI-assisted development tools
+live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",extra (not in answer key),ROS packages
+live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",extra (not in answer key),ROS topics
+live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",extra (not in answer key),ROS actions
+live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",extra (not in answer key),ROS launch systems
+live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",extra (not in answer key),ROS bags
+live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",extra (not in answer key),ROS debugging tools
+live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",extra (not in answer key),Mobile robotics
+live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",extra (not in answer key),VLA models
+live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",extra (not in answer key),Learned control
+live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",extra (not in answer key),AI model evaluation
+live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",extra (not in answer key),Detection
+live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",extra (not in answer key),Tracking
+live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",missed (in answer key),Object detection
+live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",missed (in answer key),Object tracking
+live_7fdb8e26f07560f7,Senior Android Platform Engineer,extra (not in answer key),XML layouts
+live_7fdb8e26f07560f7,Senior Android Platform Engineer,extra (not in answer key),Shared libraries
+live_7fdb8e26f07560f7,Senior Android Platform Engineer,extra (not in answer key),Automated software delivery
+live_7fdb8e26f07560f7,Senior Android Platform Engineer,extra (not in answer key),Mobile Platform Engineering
+live_7fdb8e26f07560f7,Senior Android Platform Engineer,extra (not in answer key),Mobile architecture modernisation
+live_7fdb8e26f07560f7,Senior Android Platform Engineer,missed (in answer key),Application security
+live_7fdb8e26f07560f7,Senior Android Platform Engineer,missed (in answer key),Observability
+live_7fdb8e26f07560f7,Senior Android Platform Engineer,missed (in answer key),AI integration
+live_7fdb8e26f07560f7,Senior Android Platform Engineer,missed (in answer key),XML
+live_bcc0de4d2d69a8e6,SAP Basis Consultant,extra (not in answer key),SAP system administration
+live_bcc0de4d2d69a8e6,SAP Basis Consultant,extra (not in answer key),SAP patches
+live_bcc0de4d2d69a8e6,SAP Basis Consultant,extra (not in answer key),SAP upgrades
+live_bcc0de4d2d69a8e6,SAP Basis Consultant,extra (not in answer key),System copies
+live_bcc0de4d2d69a8e6,SAP Basis Consultant,extra (not in answer key),System performance monitoring
+live_bcc0de4d2d69a8e6,SAP Basis Consultant,extra (not in answer key),SAP user management
+live_bcc0de4d2d69a8e6,SAP Basis Consultant,extra (not in answer key),IT security compliance
+live_bcc0de4d2d69a8e6,SAP Basis Consultant,extra (not in answer key),Data integrity
+live_bcc0de4d2d69a8e6,SAP Basis Consultant,extra (not in answer key),System troubleshooting
+live_bcc0de4d2d69a8e6,SAP Basis Consultant,extra (not in answer key),Technical support
+live_bcc0de4d2d69a8e6,SAP Basis Consultant,missed (in answer key),SAP Basis
+live_9ac6e5a328f45fb8,Data Engineer (Regional Role),extra (not in answer key),Data processing
+live_9ac6e5a328f45fb8,Data Engineer (Regional Role),extra (not in answer key),Pipeline development
+live_9ac6e5a328f45fb8,Data Engineer (Regional Role),extra (not in answer key),Data Engineering
+live_9ac6e5a328f45fb8,Data Engineer (Regional Role),extra (not in answer key),Mandarin
+live_9ac6e5a328f45fb8,Data Engineer (Regional Role),extra (not in answer key),Digital Marketing
+live_9ac6e5a328f45fb8,Data Engineer (Regional Role),extra (not in answer key),AI applications
+live_9ac6e5a328f45fb8,Data Engineer (Regional Role),extra (not in answer key),E‑commerce
+live_9ac6e5a328f45fb8,Data Engineer (Regional Role),extra (not in answer key),Master data migration
+live_9ac6e5a328f45fb8,Data Engineer (Regional Role),extra (not in answer key),Data extraction
+live_9ac6e5a328f45fb8,Data Engineer (Regional Role),extra (not in answer key),Data consolidation
+live_9ac6e5a328f45fb8,Data Engineer (Regional Role),extra (not in answer key),AI models
+live_9ac6e5a328f45fb8,Data Engineer (Regional Role),extra (not in answer key),Automation workflows
+live_9ac6e5a328f45fb8,Data Engineer (Regional Role),extra (not in answer key),Data analysis
+live_9ac6e5a328f45fb8,Data Engineer (Regional Role),extra (not in answer key),Data quality
+live_9ac6e5a328f45fb8,Data Engineer (Regional Role),extra (not in answer key),Cloud computing
+live_9ac6e5a328f45fb8,Data Engineer (Regional Role),extra (not in answer key),Omnichannel platforms
+live_9ac6e5a328f45fb8,Data Engineer (Regional Role),extra (not in answer key),Compliance
+live_9ac6e5a328f45fb8,Data Engineer (Regional Role),extra (not in answer key),Data warehouses
+live_9ac6e5a328f45fb8,Data Engineer (Regional Role),extra (not in answer key),Commercial data modeling
+live_9ac6e5a328f45fb8,Data Engineer (Regional Role),extra (not in answer key),Marketing data modeling
+live_9ac6e5a328f45fb8,Data Engineer (Regional Role),extra (not in answer key),Digital media data modeling
+live_9ac6e5a328f45fb8,Data Engineer (Regional Role),extra (not in answer key),Supply chain data modeling
+live_9ac6e5a328f45fb8,Data Engineer (Regional Role),missed (in answer key),Data warehousing
+live_9ac6e5a328f45fb8,Data Engineer (Regional Role),missed (in answer key),AI
+live_9ac6e5a328f45fb8,Data Engineer (Regional Role),missed (in answer key),Cloud environments
+live_80d6f269f676b931,Data Engineer,extra (not in answer key),Kimball methodology
+live_80d6f269f676b931,Data Engineer,extra (not in answer key),Data quality
+live_80d6f269f676b931,Data Engineer,extra (not in answer key),Query performance monitoring
+live_80d6f269f676b931,Data Engineer,extra (not in answer key),Data retrieval optimization
+live_80d6f269f676b931,Data Engineer,extra (not in answer key),Compliance
+live_80d6f269f676b931,Data Engineer,extra (not in answer key),Reporting
+live_80d6f269f676b931,Data Engineer,extra (not in answer key),Self-service reporting
+live_80d6f269f676b931,Data Engineer,extra (not in answer key),Data analysis
+live_80d6f269f676b931,Data Engineer,extra (not in answer key),Segmentation techniques
+live_80d6f269f676b931,Data Engineer,extra (not in answer key),Database
+live_80d6f269f676b931,Data Engineer,extra (not in answer key),SQL Server/Cloud Services
+live_80d6f269f676b931,Data Engineer,extra (not in answer key),Medical domain knowledge
+live_80d6f269f676b931,Data Engineer,missed (in answer key),Qlik
+live_80d6f269f676b931,Data Engineer,missed (in answer key),Tableau
+live_80d6f269f676b931,Data Engineer,missed (in answer key),Data segmentation
+live_80d6f269f676b931,Data Engineer,missed (in answer key),Business intelligence
+live_80d6f269f676b931,Data Engineer,missed (in answer key),Ralph Kimball methodologies
+live_319eb8479a356b7d,UI/UX Analyst,extra (not in answer key),UI/UX design
+live_319eb8479a356b7d,UI/UX Analyst,extra (not in answer key),UX research
+live_319eb8479a356b7d,UI/UX Analyst,extra (not in answer key),Business process analysis
+live_319eb8479a356b7d,UI/UX Analyst,extra (not in answer key),User journey analysis
+live_319eb8479a356b7d,UI/UX Analyst,extra (not in answer key),UX assessment
+live_319eb8479a356b7d,UI/UX Analyst,extra (not in answer key),Usability evaluation
+live_319eb8479a356b7d,UI/UX Analyst,extra (not in answer key),User personas
+live_319eb8479a356b7d,UI/UX Analyst,extra (not in answer key),Empathy maps
+live_319eb8479a356b7d,UI/UX Analyst,extra (not in answer key),Customer journey mapping
+live_319eb8479a356b7d,UI/UX Analyst,extra (not in answer key),User flow design
+live_319eb8479a356b7d,UI/UX Analyst,extra (not in answer key),Interaction modeling
+live_319eb8479a356b7d,UI/UX Analyst,extra (not in answer key),Low-fidelity prototyping
+live_319eb8479a356b7d,UI/UX Analyst,extra (not in answer key),Usability standards
+live_319eb8479a356b7d,UI/UX Analyst,extra (not in answer key),Accessibility
+live_319eb8479a356b7d,UI/UX Analyst,extra (not in answer key),Mobile UI design
+live_319eb8479a356b7d,UI/UX Analyst,extra (not in answer key),High-fidelity mockups
+live_319eb8479a356b7d,UI/UX Analyst,extra (not in answer key),Visual design
+live_319eb8479a356b7d,UI/UX Analyst,extra (not in answer key),Interactive prototyping
+live_319eb8479a356b7d,UI/UX Analyst,extra (not in answer key),User testing
+live_319eb8479a356b7d,UI/UX Analyst,extra (not in answer key),Design iteration
+live_319eb8479a356b7d,UI/UX Analyst,extra (not in answer key),Design consulting
+live_319eb8479a356b7d,UI/UX Analyst,extra (not in answer key),Design specification documentation
+live_319eb8479a356b7d,UI/UX Analyst,extra (not in answer key),Design principles
+live_319eb8479a356b7d,UI/UX Analyst,extra (not in answer key),Branding
+live_319eb8479a356b7d,UI/UX Analyst,extra (not in answer key),Design review
+live_319eb8479a356b7d,UI/UX Analyst,extra (not in answer key),UX research reporting
+live_319eb8479a356b7d,UI/UX Analyst,extra (not in answer key),User persona creation
+live_319eb8479a356b7d,UI/UX Analyst,extra (not in answer key),User flow creation
+live_319eb8479a356b7d,UI/UX Analyst,extra (not in answer key),UI mockups
+live_319eb8479a356b7d,UI/UX Analyst,extra (not in answer key),Design system assets
+live_319eb8479a356b7d,UI/UX Analyst,extra (not in answer key),Design handoff
+live_319eb8479a356b7d,UI/UX Analyst,extra (not in answer key),Reusable design assets
+live_319eb8479a356b7d,UI/UX Analyst,missed (in answer key),Interaction design
+live_319eb8479a356b7d,UI/UX Analyst,missed (in answer key),Prototyping
+live_319eb8479a356b7d,UI/UX Analyst,missed (in answer key),UI design
+live_319eb8479a356b7d,UI/UX Analyst,missed (in answer key),Agile
+live_319eb8479a356b7d,UI/UX Analyst,missed (in answer key),User Research
+live_ad730103a35257d4,Data Engineering & Integration Operations Manager,extra (not in answer key),Automation tools
+live_ad730103a35257d4,Data Engineering & Integration Operations Manager,extra (not in answer key),API integration
+live_ad730103a35257d4,Data Engineering & Integration Operations Manager,extra (not in answer key),File-based integration
+live_ad730103a35257d4,Data Engineering & Integration Operations Manager,extra (not in answer key),Data warehouse architecture
+live_ad730103a35257d4,Data Engineering & Integration Operations Manager,extra (not in answer key),Technical troubleshooting
+live_ad730103a35257d4,Data Engineering & Integration Operations Manager,extra (not in answer key),Debugging
+live_ad730103a35257d4,Data Engineering & Integration Operations Manager,extra (not in answer key),Migration
+live_ad730103a35257d4,Data Engineering & Integration Operations Manager,extra (not in answer key),Large-scale distribution platforms
+live_ad730103a35257d4,Data Engineering & Integration Operations Manager,missed (in answer key),Microsoft Excel
+live_a3f1ad0df4156bd7,SAP Implementation Consultant/Lead (KUL),extra (not in answer key),SuccessFactors
+live_a3f1ad0df4156bd7,SAP Implementation Consultant/Lead (KUL),extra (not in answer key),PP/QM
+live_a3f1ad0df4156bd7,SAP Implementation Consultant/Lead (KUL),extra (not in answer key),EWM/WM
+live_a3f1ad0df4156bd7,SAP Implementation Consultant/Lead (KUL),extra (not in answer key),Ariba
+live_a3f1ad0df4156bd7,SAP Implementation Consultant/Lead (KUL),extra (not in answer key),PaPM
+live_a3f1ad0df4156bd7,SAP Implementation Consultant/Lead (KUL),extra (not in answer key),Blueprint workshop
+live_a3f1ad0df4156bd7,SAP Implementation Consultant/Lead (KUL),extra (not in answer key),Authorization design
+live_a3f1ad0df4156bd7,SAP Implementation Consultant/Lead (KUL),extra (not in answer key),User training
+live_a3f1ad0df4156bd7,SAP Implementation Consultant/Lead (KUL),extra (not in answer key),Post‑implementation support
+live_a3f1ad0df4156bd7,SAP Implementation Consultant/Lead (KUL),extra (not in answer key),End‑to‑end implementation
+live_a3f1ad0df4156bd7,SAP Implementation Consultant/Lead (KUL),extra (not in answer key),Solution configuration
+live_a3f1ad0df4156bd7,SAP Implementation Consultant/Lead (KUL),extra (not in answer key),Transformation program delivery
+live_a3f1ad0df4156bd7,SAP Implementation Consultant/Lead (KUL),extra (not in answer key),Program delivery
+live_a3f1ad0df4156bd7,SAP Implementation Consultant/Lead (KUL),extra (not in answer key),Full lifecycle implementation
+live_a3f1ad0df4156bd7,SAP Implementation Consultant/Lead (KUL),missed (in answer key),SAP SD
+live_a3f1ad0df4156bd7,SAP Implementation Consultant/Lead (KUL),missed (in answer key),SAP SuccessFactors
+live_a3f1ad0df4156bd7,SAP Implementation Consultant/Lead (KUL),missed (in answer key),SAP PP
+live_a3f1ad0df4156bd7,SAP Implementation Consultant/Lead (KUL),missed (in answer key),SAP QM
+live_a3f1ad0df4156bd7,SAP Implementation Consultant/Lead (KUL),missed (in answer key),SAP EWM
+live_a3f1ad0df4156bd7,SAP Implementation Consultant/Lead (KUL),missed (in answer key),SAP WM
+live_a3f1ad0df4156bd7,SAP Implementation Consultant/Lead (KUL),missed (in answer key),SAP Ariba
+live_a3f1ad0df4156bd7,SAP Implementation Consultant/Lead (KUL),missed (in answer key),SAP PaPM
+live_a3f1ad0df4156bd7,SAP Implementation Consultant/Lead (KUL),missed (in answer key),FRICEW
+live_ec0c6a5aa725ffa0,Senior Business Analyst,extra (not in answer key),Business Analyst
+live_ec0c6a5aa725ffa0,Senior Business Analyst,extra (not in answer key),Functional Consultant
+live_ec0c6a5aa725ffa0,Senior Business Analyst,extra (not in answer key),ERP functionalities
+live_ec0c6a5aa725ffa0,Senior Business Analyst,extra (not in answer key),ERP projects
+live_ec0c6a5aa725ffa0,Senior Business Analyst,extra (not in answer key),Analytical skills
+live_ec0c6a5aa725ffa0,Senior Business Analyst,missed (in answer key),Business analysis
+live_ec0c6a5aa725ffa0,Senior Business Analyst,missed (in answer key),ERP finance modules
+live_5d1161b174527a2d,"Technical Consulting Engineer, Networking (Japanese Speaker)",extra (not in answer key),Cisco Analytics
+live_5d1161b174527a2d,"Technical Consulting Engineer, Networking (Japanese Speaker)",extra (not in answer key),Solution design
+live_5d1161b174527a2d,"Technical Consulting Engineer, Networking (Japanese Speaker)",extra (not in answer key),HLD/LLD
+live_5d1161b174527a2d,"Technical Consulting Engineer, Networking (Japanese Speaker)",extra (not in answer key),Test environments
+live_5d1161b174527a2d,"Technical Consulting Engineer, Networking (Japanese Speaker)",extra (not in answer key),Automation
+live_5d1161b174527a2d,"Technical Consulting Engineer, Networking (Japanese Speaker)",extra (not in answer key),Programmability
+live_5d1161b174527a2d,"Technical Consulting Engineer, Networking (Japanese Speaker)",extra (not in answer key),Japanese language
+live_5d1161b174527a2d,"Technical Consulting Engineer, Networking (Japanese Speaker)",missed (in answer key),Enterprise networking
+live_5d1161b174527a2d,"Technical Consulting Engineer, Networking (Japanese Speaker)",missed (in answer key),Network design
+live_5d1161b174527a2d,"Technical Consulting Engineer, Networking (Japanese Speaker)",missed (in answer key),Scripting
+live_64c8c310a608d5e7,Software Engineer - Core Banking,extra (not in answer key),APIs
+live_64c8c310a608d5e7,Software Engineer - Core Banking,extra (not in answer key),code reviews
+live_64c8c310a608d5e7,Software Engineer - Core Banking,extra (not in answer key),technical documentation
+live_e62712dd30350df3,Senior UI/UX Design Expert,extra (not in answer key),Cross-platform flows
+live_e62712dd30350df3,Senior UI/UX Design Expert,extra (not in answer key),Layout
+live_e62712dd30350df3,Senior UI/UX Design Expert,extra (not in answer key),Design processes
+live_e62712dd30350df3,Senior UI/UX Design Expert,extra (not in answer key),Visual design fundamentals
+live_e62712dd30350df3,Senior UI/UX Design Expert,missed (in answer key),AI-powered design tools
+live_e40ae1cf3c0026f3,Senior Software QA Engineer (Automation),extra (not in answer key),Requirements analysis
+live_e40ae1cf3c0026f3,Senior Software QA Engineer (Automation),extra (not in answer key),Software testing
+live_e40ae1cf3c0026f3,Senior Software QA Engineer (Automation),extra (not in answer key),Test case design
+live_e40ae1cf3c0026f3,Senior Software QA Engineer (Automation),extra (not in answer key),Automation scripting
+live_e40ae1cf3c0026f3,Senior Software QA Engineer (Automation),extra (not in answer key),Issue tracking
+live_e40ae1cf3c0026f3,Senior Software QA Engineer (Automation),extra (not in answer key),Quality investigation
+live_e40ae1cf3c0026f3,Senior Software QA Engineer (Automation),extra (not in answer key),Quality planning
+live_e40ae1cf3c0026f3,Senior Software QA Engineer (Automation),extra (not in answer key),Risk-based testing
+live_e40ae1cf3c0026f3,Senior Software QA Engineer (Automation),extra (not in answer key),Data collection
+live_e40ae1cf3c0026f3,Senior Software QA Engineer (Automation),extra (not in answer key),Test documentation
+live_e40ae1cf3c0026f3,Senior Software QA Engineer (Automation),extra (not in answer key),REST API automation
+live_e40ae1cf3c0026f3,Senior Software QA Engineer (Automation),extra (not in answer key),Mobile application testing
+live_e40ae1cf3c0026f3,Senior Software QA Engineer (Automation),extra (not in answer key),Web application testing
+live_e40ae1cf3c0026f3,Senior Software QA Engineer (Automation),extra (not in answer key),Cross-browser testing
+live_e40ae1cf3c0026f3,Senior Software QA Engineer (Automation),extra (not in answer key),Agile/Scrum
+live_e40ae1cf3c0026f3,Senior Software QA Engineer (Automation),missed (in answer key),Agile
+live_e40ae1cf3c0026f3,Senior Software QA Engineer (Automation),missed (in answer key),Scrum
+live_e40ae1cf3c0026f3,Senior Software QA Engineer (Automation),missed (in answer key),REST APIs
+live_eca71c72e724fbb4,Cybersecurity Consultant - Penetration Testing,extra (not in answer key),Red team assessment
+live_eca71c72e724fbb4,Cybersecurity Consultant - Penetration Testing,extra (not in answer key),Networks
+live_eca71c72e724fbb4,Cybersecurity Consultant - Penetration Testing,extra (not in answer key),Cloud security assessment
+live_eca71c72e724fbb4,Cybersecurity Consultant - Penetration Testing,extra (not in answer key),IoT testing
+live_eca71c72e724fbb4,Cybersecurity Consultant - Penetration Testing,missed (in answer key),Vulnerability assessment
+live_eca71c72e724fbb4,Cybersecurity Consultant - Penetration Testing,missed (in answer key),Red teaming
+live_eca71c72e724fbb4,Cybersecurity Consultant - Penetration Testing,missed (in answer key),Cloud security
+live_eca71c72e724fbb4,Cybersecurity Consultant - Penetration Testing,missed (in answer key),IoT security
+live_4aef39a395a09b3c,Back End Developer,extra (not in answer key),Risk
+live_4aef39a395a09b3c,Back End Developer,extra (not in answer key),Fraud
+live_4aef39a395a09b3c,Back End Developer,extra (not in answer key),APIs
+live_4aef39a395a09b3c,Back End Developer,extra (not in answer key),Workflows
+live_4aef39a395a09b3c,Back End Developer,extra (not in answer key),Onboarding
+live_4aef39a395a09b3c,Back End Developer,extra (not in answer key),Accounts
+live_4aef39a395a09b3c,Back End Developer,extra (not in answer key),Cards
+live_4aef39a395a09b3c,Back End Developer,extra (not in answer key),Transfers
+live_4aef39a395a09b3c,Back End Developer,extra (not in answer key),Rewards
+live_4aef39a395a09b3c,Back End Developer,extra (not in answer key),Travel
+live_4aef39a395a09b3c,Back End Developer,extra (not in answer key),Risk flows
+live_4aef39a395a09b3c,Back End Developer,extra (not in answer key),System design
+live_4aef39a395a09b3c,Back End Developer,extra (not in answer key),Integration
+live_4aef39a395a09b3c,Back End Developer,extra (not in answer key),AI services
+live_4aef39a395a09b3c,Back End Developer,extra (not in answer key),Reliability
+live_4aef39a395a09b3c,Back End Developer,extra (not in answer key),Latency
+live_4aef39a395a09b3c,Back End Developer,extra (not in answer key),Automation
+live_4aef39a395a09b3c,Back End Developer,extra (not in answer key),Production systems
+live_4aef39a395a09b3c,Back End Developer,extra (not in answer key),Queues
+live_4aef39a395a09b3c,Back End Developer,extra (not in answer key),Jobs
+live_4aef39a395a09b3c,Back End Developer,extra (not in answer key),Events
+live_4aef39a395a09b3c,Back End Developer,extra (not in answer key),Debugging
+live_4aef39a395a09b3c,Back End Developer,extra (not in answer key),Data quality
+live_4aef39a395a09b3c,Back End Developer,extra (not in answer key),Speed
+live_4aef39a395a09b3c,Back End Developer,extra (not in answer key),Correctness
+live_4aef39a395a09b3c,Back End Developer,extra (not in answer key),Scalability
+live_4aef39a395a09b3c,Back End Developer,extra (not in answer key),Maintainability
+live_4aef39a395a09b3c,Back End Developer,extra (not in answer key),Wallet
+live_4aef39a395a09b3c,Back End Developer,extra (not in answer key),English
+live_4aef39a395a09b3c,Back End Developer,missed (in answer key),API development
+live_4aef39a395a09b3c,Back End Developer,missed (in answer key),Message queues
+live_4aef39a395a09b3c,Back End Developer,missed (in answer key),Background jobs
+live_4aef39a395a09b3c,Back End Developer,missed (in answer key),Event-driven architecture
+live_4aef39a395a09b3c,Back End Developer,missed (in answer key),System integration
+live_4aef39a395a09b3c,Back End Developer,missed (in answer key),Fraud detection
+live_4aef39a395a09b3c,Back End Developer,missed (in answer key),Risk management
+live_2ec2feca24d1a38b,"Senior Specialist, Software Quality Assurance",extra (not in answer key),Automation
+live_2ec2feca24d1a38b,"Senior Specialist, Software Quality Assurance",extra (not in answer key),Defect analysis
+live_2ec2feca24d1a38b,"Senior Specialist, Software Quality Assurance",extra (not in answer key),Process improvement
+live_2ec2feca24d1a38b,"Senior Specialist, Software Quality Assurance",missed (in answer key),Test planning
+live_2ec2feca24d1a38b,"Senior Specialist, Software Quality Assurance",missed (in answer key),Test case development
+live_2ec2feca24d1a38b,"Senior Specialist, Software Quality Assurance",missed (in answer key),Test automation
+live_67e5d581c8e82b12,IT Operations Analyst,extra (not in answer key),Ticket handling
+live_67e5d581c8e82b12,IT Operations Analyst,extra (not in answer key),Cloud service support
+live_67e5d581c8e82b12,IT Operations Analyst,extra (not in answer key),Knowledge base management
+live_67e5d581c8e82b12,IT Operations Analyst,extra (not in answer key),Technical writing
+live_d28433cc84f332be,"Senior Executive, IT (Contract)",extra (not in answer key),User account management
+live_d28433cc84f332be,"Senior Executive, IT (Contract)",extra (not in answer key),Microsoft 365 administration
+live_d28433cc84f332be,"Senior Executive, IT (Contract)",extra (not in answer key),Printers
+live_d28433cc84f332be,"Senior Executive, IT (Contract)",extra (not in answer key),AV equipment
+live_d28433cc84f332be,"Senior Executive, IT (Contract)",extra (not in answer key),MacBooks
+live_d28433cc84f332be,"Senior Executive, IT (Contract)",missed (in answer key),Hardware troubleshooting
+live_d28433cc84f332be,"Senior Executive, IT (Contract)",missed (in answer key),Network troubleshooting
+live_d28433cc84f332be,"Senior Executive, IT (Contract)",missed (in answer key),Software deployment
+live_d28433cc84f332be,"Senior Executive, IT (Contract)",missed (in answer key),IT asset management
+live_d28433cc84f332be,"Senior Executive, IT (Contract)",missed (in answer key),IT procurement
+live_d28433cc84f332be,"Senior Executive, IT (Contract)",missed (in answer key),Inventory management
+live_d28433cc84f332be,"Senior Executive, IT (Contract)",missed (in answer key),macOS
+live_d28433cc84f332be,"Senior Executive, IT (Contract)",missed (in answer key),Software troubleshooting
+live_ca39fceedf53e6f6,Network Engineer,extra (not in answer key),Application/URL filtering
+live_ca39fceedf53e6f6,Network Engineer,extra (not in answer key),F5 BIG-IP
+live_ca39fceedf53e6f6,Network Engineer,extra (not in answer key),Internetworking
+live_ca39fceedf53e6f6,Network Engineer,extra (not in answer key),IPSec VPN
+live_ca39fceedf53e6f6,Network Engineer,extra (not in answer key),Azure VNET peering
+live_ca39fceedf53e6f6,Network Engineer,extra (not in answer key),Azure ExpressRoute
+live_ca39fceedf53e6f6,Network Engineer,extra (not in answer key),Azure NSG
+live_ca39fceedf53e6f6,Network Engineer,missed (in answer key),Network operations
+live_ca39fceedf53e6f6,Network Engineer,missed (in answer key),URL filtering
+live_ca39fceedf53e6f6,Network Engineer,missed (in answer key),SSL interception
+live_ca39fceedf53e6f6,Network Engineer,missed (in answer key),F5 APM
+live_ca39fceedf53e6f6,Network Engineer,missed (in answer key),F5 LTM
+live_ca39fceedf53e6f6,Network Engineer,missed (in answer key),F5 GTM
+live_ca39fceedf53e6f6,Network Engineer,missed (in answer key),Routing
+live_ca39fceedf53e6f6,Network Engineer,missed (in answer key),Switching
+live_ca39fceedf53e6f6,Network Engineer,missed (in answer key),VPN
+live_ca39fceedf53e6f6,Network Engineer,missed (in answer key),IPSec
+live_ca39fceedf53e6f6,Network Engineer,missed (in answer key),Wireless LAN
+live_ca39fceedf53e6f6,Network Engineer,missed (in answer key),Azure networking
+live_ca39fceedf53e6f6,Network Engineer,missed (in answer key),VNET peering
+live_ca39fceedf53e6f6,Network Engineer,missed (in answer key),ExpressRoute
+live_ca39fceedf53e6f6,Network Engineer,missed (in answer key),Application filtering
+live_ca39fceedf53e6f6,Network Engineer,missed (in answer key),IPS sensors
+live_ca39fceedf53e6f6,Network Engineer,missed (in answer key),NSG
+live_f94d7e50bcca80e3,Network Support Engineer,extra (not in answer key),patching
+live_f94d7e50bcca80e3,Network Support Engineer,extra (not in answer key),troubleshooting
+live_f94d7e50bcca80e3,Network Support Engineer,extra (not in answer key),Recovery
+live_f94d7e50bcca80e3,Network Support Engineer,extra (not in answer key),Networking
+live_f94d7e50bcca80e3,Network Support Engineer,missed (in answer key),IT asset management
+live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",extra (not in answer key),Automation
+live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",extra (not in answer key),Data collection
+live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",extra (not in answer key),Autonomous monitoring
+live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",extra (not in answer key),Model evaluation
+live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",extra (not in answer key),AI storytelling
+live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",extra (not in answer key),AI product development
+live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",extra (not in answer key),Machine learning algorithms
+live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",extra (not in answer key),Software development
+live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",extra (not in answer key),Application architecture
+live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",extra (not in answer key),AI agent design patterns
+live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",extra (not in answer key),AI assistants
+live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",extra (not in answer key),Chatbots
+live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",extra (not in answer key),Copilots
+live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",extra (not in answer key),Workflow automation
+live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",extra (not in answer key),Fine-tuning
+live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",extra (not in answer key),GenAI deployment
+live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",extra (not in answer key),Open-source AI platforms
+live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",extra (not in answer key),Cloud AI platforms
+live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",missed (in answer key),Industry 4.0
+live_050af1c8591bfa5e,Backend Developer,extra (not in answer key),C# .NET
+live_050af1c8591bfa5e,Backend Developer,extra (not in answer key),Code review
+live_050af1c8591bfa5e,Backend Developer,extra (not in answer key),Database optimization
+live_050af1c8591bfa5e,Backend Developer,extra (not in answer key),Stored procedures
+live_050af1c8591bfa5e,Backend Developer,missed (in answer key),C#
+live_050af1c8591bfa5e,Backend Developer,missed (in answer key),.NET
+live_050af1c8591bfa5e,Backend Developer,missed (in answer key),AWS
+live_050af1c8591bfa5e,Backend Developer,missed (in answer key),CI/CD
+live_050af1c8591bfa5e,Backend Developer,missed (in answer key),Agile
+live_050af1c8591bfa5e,Backend Developer,missed (in answer key),Scrum
+live_050af1c8591bfa5e,Backend Developer,missed (in answer key),Infrastructure as Code
+live_050af1c8591bfa5e,Backend Developer,missed (in answer key),.NET Core
+live_b9cbf9ab9987a49a,Service Desk Specialist I,extra (not in answer key),Inventory management
+live_b9cbf9ab9987a49a,Service Desk Specialist I,extra (not in answer key),Ticket management
+live_b9cbf9ab9987a49a,Service Desk Specialist I,extra (not in answer key),Network access
+live_b9cbf9ab9987a49a,Service Desk Specialist I,extra (not in answer key),Data analysis
+live_b9cbf9ab9987a49a,Service Desk Specialist I,extra (not in answer key),Issue identification
+live_b9cbf9ab9987a49a,Service Desk Specialist I,extra (not in answer key),Technical problem solving
+live_b9cbf9ab9987a49a,Service Desk Specialist I,missed (in answer key),Computer imaging
+live_b9cbf9ab9987a49a,Service Desk Specialist I,missed (in answer key),RMA processing
+live_471d55a57402522b,"Business Architect / Business Analyst, Technology Solutions (Cards)",extra (not in answer key),Analytical
+live_471d55a57402522b,"Business Architect / Business Analyst, Technology Solutions (Cards)",extra (not in answer key),System architecture diagramming
+live_471d55a57402522b,"Business Architect / Business Analyst, Technology Solutions (Cards)",extra (not in answer key),Data flow modeling
+live_471d55a57402522b,"Business Architect / Business Analyst, Technology Solutions (Cards)",extra (not in answer key),Process improvement
+live_471d55a57402522b,"Business Architect / Business Analyst, Technology Solutions (Cards)",extra (not in answer key),Process automation
+live_471d55a57402522b,"Business Architect / Business Analyst, Technology Solutions (Cards)",extra (not in answer key),Documentation
+live_471d55a57402522b,"Business Architect / Business Analyst, Technology Solutions (Cards)",missed (in answer key),Business architecture
+live_471d55a57402522b,"Business Architect / Business Analyst, Technology Solutions (Cards)",missed (in answer key),Card issuing
+live_471d55a57402522b,"Business Architect / Business Analyst, Technology Solutions (Cards)",missed (in answer key),Merchant acquiring
+live_471d55a57402522b,"Business Architect / Business Analyst, Technology Solutions (Cards)",missed (in answer key),System integration
+live_471d55a57402522b,"Business Architect / Business Analyst, Technology Solutions (Cards)",missed (in answer key),System architecture
+live_2dfd1835617b539e,Software Project Manager,extra (not in answer key),Kardex WES
+live_2dfd1835617b539e,Software Project Manager,extra (not in answer key),Testing
+live_2dfd1835617b539e,Software Project Manager,extra (not in answer key),Deployment
+live_2dfd1835617b539e,Software Project Manager,extra (not in answer key),Post-implementation support
+live_2dfd1835617b539e,Software Project Manager,extra (not in answer key),Documentation
+live_a5d058f47165ecb8,Software Engineer,extra (not in answer key),debugging
+live_a5d058f47165ecb8,Software Engineer,extra (not in answer key),code review
+live_a5d058f47165ecb8,Software Engineer,missed (in answer key),Software development
+live_94383f47e31bbf09,Full-Stack Engineer,extra (not in answer key),Amazon
+live_94383f47e31bbf09,Full-Stack Engineer,extra (not in answer key),Analytics
+live_94383f47e31bbf09,Full-Stack Engineer,extra (not in answer key),Reporting
+live_94383f47e31bbf09,Full-Stack Engineer,extra (not in answer key),AI-powered developer tooling
+live_94383f47e31bbf09,Full-Stack Engineer,missed (in answer key),AI coding assistants
+live_94383f47e31bbf09,Full-Stack Engineer,missed (in answer key),ETL
+live_94383f47e31bbf09,Full-Stack Engineer,missed (in answer key),Data modelling
+live_94383f47e31bbf09,Full-Stack Engineer,missed (in answer key),Walmart API

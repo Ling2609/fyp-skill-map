@@ -1,95 +1,95 @@
-﻿job_ref,title,kind,skill,your_check
-live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",agreed,ROS1,
-live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",agreed,ROS2,
-live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",agreed,SLAM,
-live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",agreed,Localization,
-live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",agreed,Navigation,
-live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",agreed,Path planning,
-live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",agreed,Autonomous control,
-live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",agreed,Sensor fusion,
-live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",agreed,LiDAR,
-live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",agreed,GNSS,
-live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",agreed,Python,
-live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",agreed,C++,
-live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",agreed,Linux,
-live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",agreed,Ubuntu,
-live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",agreed,Vision-language-action models,
-live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",agreed,Vision-language models,
-live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",agreed,Embodied AI,
-live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",agreed,Multimodal perception,
-live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",agreed,Imitation learning,
-live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",agreed,Object detection,
-live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",agreed,Object tracking,
-live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",agreed,Containers,
-live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",agreed,Networking,
-live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",agreed,CI/CD,
-live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",agreed,Profiling,
-live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",agreed,Time synchronization,
-live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",agreed,Hardware integration,
-live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",agreed,Electronics debugging,
-live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",agreed,AI-assisted coding tools,
-live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",agreed,Perception,
-live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",agreed,Cameras,
-live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",agreed,IMUs,
-live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",agreed,Encoders,
-live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",agreed,Learned planning,
-live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",agreed,Segmentation,
-live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",agreed,Prediction,
-live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",agreed,Calibration,
-live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",agreed,Fleet deployment,
-live_7fdb8e26f07560f7,Senior Android Platform Engineer,agreed,Android,
-live_7fdb8e26f07560f7,Senior Android Platform Engineer,agreed,Kotlin,
-live_7fdb8e26f07560f7,Senior Android Platform Engineer,agreed,Jetpack Compose,
-live_7fdb8e26f07560f7,Senior Android Platform Engineer,agreed,Android SDK,
-live_7fdb8e26f07560f7,Senior Android Platform Engineer,agreed,Android Studio,
-live_7fdb8e26f07560f7,Senior Android Platform Engineer,agreed,Modularisation,
-live_7fdb8e26f07560f7,Senior Android Platform Engineer,agreed,Dependency management,
-live_7fdb8e26f07560f7,Senior Android Platform Engineer,agreed,CI/CD,
-live_7fdb8e26f07560f7,Senior Android Platform Engineer,agreed,Application security,
-live_7fdb8e26f07560f7,Senior Android Platform Engineer,agreed,Performance optimisation,
-live_7fdb8e26f07560f7,Senior Android Platform Engineer,agreed,Observability,
-live_7fdb8e26f07560f7,Senior Android Platform Engineer,agreed,AI integration,
-live_7fdb8e26f07560f7,Senior Android Platform Engineer,agreed,XML,
-live_64c8c310a608d5e7,Software Engineer - Core Banking,agreed,Java,
-live_64c8c310a608d5e7,Software Engineer - Core Banking,agreed,SpringBoot,
-live_64c8c310a608d5e7,Software Engineer - Core Banking,agreed,MySQL,
-live_64c8c310a608d5e7,Software Engineer - Core Banking,agreed,Kafka,
-live_64c8c310a608d5e7,Software Engineer - Core Banking,agreed,Microservices,
-live_64c8c310a608d5e7,Software Engineer - Core Banking,agreed,RESTful APIs,
-live_64c8c310a608d5e7,Software Engineer - Core Banking,agreed,Git,
-live_64c8c310a608d5e7,Software Engineer - Core Banking,agreed,Agile,
-live_64c8c310a608d5e7,Software Engineer - Core Banking,agreed,Mambu,
-live_64c8c310a608d5e7,Software Engineer - Core Banking,agreed,AWS,
-live_64c8c310a608d5e7,Software Engineer - Core Banking,agreed,Azure,
-live_64c8c310a608d5e7,Software Engineer - Core Banking,agreed,GCP,
-live_64c8c310a608d5e7,Software Engineer - Core Banking,agreed,Splunk,
-live_64c8c310a608d5e7,Software Engineer - Core Banking,agreed,Cursor,
-live_64c8c310a608d5e7,Software Engineer - Core Banking,agreed,Claude Code,
-live_64c8c310a608d5e7,Software Engineer - Core Banking,agreed,Security,
-live_471d55a57402522b,"Business Architect / Business Analyst, Technology Solutions (Cards)",agreed,Business analysis,
-live_471d55a57402522b,"Business Architect / Business Analyst, Technology Solutions (Cards)",agreed,Business architecture,
-live_471d55a57402522b,"Business Architect / Business Analyst, Technology Solutions (Cards)",agreed,Card issuing,
-live_471d55a57402522b,"Business Architect / Business Analyst, Technology Solutions (Cards)",agreed,Merchant acquiring,
-live_471d55a57402522b,"Business Architect / Business Analyst, Technology Solutions (Cards)",agreed,Business process modeling,
-live_471d55a57402522b,"Business Architect / Business Analyst, Technology Solutions (Cards)",agreed,System integration,
-live_471d55a57402522b,"Business Architect / Business Analyst, Technology Solutions (Cards)",agreed,User stories,
-live_471d55a57402522b,"Business Architect / Business Analyst, Technology Solutions (Cards)",agreed,Functional specifications,
-live_471d55a57402522b,"Business Architect / Business Analyst, Technology Solutions (Cards)",agreed,Impact analysis,
-live_471d55a57402522b,"Business Architect / Business Analyst, Technology Solutions (Cards)",agreed,Feasibility studies,
-live_471d55a57402522b,"Business Architect / Business Analyst, Technology Solutions (Cards)",agreed,Digital banking,
-live_471d55a57402522b,"Business Architect / Business Analyst, Technology Solutions (Cards)",agreed,Business process reengineering,
-live_471d55a57402522b,"Business Architect / Business Analyst, Technology Solutions (Cards)",agreed,Agile,
-live_471d55a57402522b,"Business Architect / Business Analyst, Technology Solutions (Cards)",agreed,SCRUM,
-live_471d55a57402522b,"Business Architect / Business Analyst, Technology Solutions (Cards)",agreed,SDLC,
-live_471d55a57402522b,"Business Architect / Business Analyst, Technology Solutions (Cards)",agreed,Microservices,
-live_471d55a57402522b,"Business Architect / Business Analyst, Technology Solutions (Cards)",agreed,APIs,
-live_471d55a57402522b,"Business Architect / Business Analyst, Technology Solutions (Cards)",agreed,System architecture,
-live_471d55a57402522b,"Business Architect / Business Analyst, Technology Solutions (Cards)",agreed,Cloud,
-live_2dfd1835617b539e,Software Project Manager,agreed,Warehouse Management Systems,
-live_2dfd1835617b539e,Software Project Manager,agreed,Intralogistics automation,
-live_2dfd1835617b539e,Software Project Manager,agreed,AutoStore,
-live_2dfd1835617b539e,Software Project Manager,agreed,Software development lifecycle,
-live_2dfd1835617b539e,Software Project Manager,agreed,Agile methodologies,
-live_2dfd1835617b539e,Software Project Manager,agreed,Project management,
-live_2dfd1835617b539e,Software Project Manager,agreed,PMP,
-live_2dfd1835617b539e,Software Project Manager,agreed,Agile Scrum Master,
+﻿job_ref,title,kind,skill,your_check,in_ad,where_in_ad
+live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",agreed,ROS1,correct,found,"Develop, integrate, and maintain ROS1 and ROS2 software for autonomous mobile robots and driving platforms."
+live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",agreed,ROS2,correct,found,"Develop, integrate, and maintain ROS1 and ROS2 software for autonomous mobile robots and driving platforms."
+live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",agreed,SLAM,correct,found,"You will work across ROS software, SLAM, perception, planning, control, sensors, and system integration."
+live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",agreed,Localization,correct,found,"Improve localization, mapping, perception, planning, and control for indoor and outdoor operation."
+live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",agreed,Navigation,correct,found,"Working knowledge of SLAM, localization, navigation, path planning, perception, sensor fusion, or autonomous control."
+live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",agreed,Path planning,correct,found,"Working knowledge of SLAM, localization, navigation, path planning, perception, sensor fusion, or autonomous control."
+live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",agreed,Autonomous control,correct,found,"Working knowledge of SLAM, localization, navigation, path planning, perception, sensor fusion, or autonomous control."
+live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",agreed,Sensor fusion,correct,found,"Working knowledge of SLAM, localization, navigation, path planning, perception, sensor fusion, or autonomous control."
+live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",agreed,LiDAR,correct,found,"Integrate and calibrate LiDAR, cameras, GNSS, IMUs, encoders, and other sensors."
+live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",agreed,GNSS,correct,found,"Integrate and calibrate LiDAR, cameras, GNSS, IMUs, encoders, and other sensors."
+live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",agreed,IMUs,correct,found,"Integrate and calibrate LiDAR, cameras, GNSS, IMUs, encoders, and other sensors."
+live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",agreed,Python,correct,found,"Write maintainable Python and C++ code, launch configurations, tests, documentation, and deployment procedures."
+live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",agreed,C++,correct,found,"Write maintainable Python and C++ code, launch configurations, tests, documentation, and deployment procedures."
+live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",agreed,Linux,correct,found,Ability to program in Python and/or C++ on Linux or Ubuntu.
+live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",agreed,Ubuntu,correct,found,Ability to program in Python and/or C++ on Linux or Ubuntu.
+live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",agreed,Vision-language-action models,correct,words found,"You will also have opportunities to prototype and evaluate newer approaches, including vision-language-action (VLA) models and other embodied AI methods, where they can improve how robots understand and respond to their …"
+live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",agreed,Vision-language models,correct,found,"Experience with physical AI or embodied AI, including VLA models, vision-language models, multimodal perception, imitation learning, or learned planning and control."
+live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",agreed,Embodied AI,correct,found,"You will also have opportunities to prototype and evaluate newer approaches, including vision-language-action (VLA) models and other embodied AI methods, where they can improve how robots understand and respond to their …"
+live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",agreed,Multimodal perception,correct,found,"Experience with physical AI or embodied AI, including VLA models, vision-language models, multimodal perception, imitation learning, or learned planning and control."
+live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",agreed,Imitation learning,correct,found,"Experience with physical AI or embodied AI, including VLA models, vision-language models, multimodal perception, imitation learning, or learned planning and control."
+live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",agreed,Object detection,correct,partly,"Experience with detection, segmentation, tracking, prediction, or sensor fusion."
+live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",agreed,Object tracking,correct,partly,"Experience with detection, segmentation, tracking, prediction, or sensor fusion."
+live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",agreed,Containers,correct,found,"Knowledge of calibration, time synchronization, profiling, containers, networking, CI/CD, or fleet deployment."
+live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",agreed,Networking,correct,found,"Diagnose software, networking, compute, sensor, electrical, and mechanical integration problems."
+live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",agreed,CI/CD,correct,found,"Knowledge of calibration, time synchronization, profiling, containers, networking, CI/CD, or fleet deployment."
+live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",agreed,Profiling,correct,found,"Knowledge of calibration, time synchronization, profiling, containers, networking, CI/CD, or fleet deployment."
+live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",agreed,Time synchronization,correct,found,"Knowledge of calibration, time synchronization, profiling, containers, networking, CI/CD, or fleet deployment."
+live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",agreed,Hardware integration,correct,found,Hardware integration or electronics debugging skills.
+live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",agreed,Electronics debugging,correct,found,Hardware integration or electronics debugging skills.
+live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",agreed,AI-assisted coding tools,correct,found,"Experience using AI-assisted coding tools in a completed project, supported by testing and clear code ownership."
+live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",agreed,Perception,correct,found,"You will work across ROS software, SLAM, perception, planning, control, sensors, and system integration."
+live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",agreed,Cameras,wrong,found,"Integrate and calibrate LiDAR, cameras, GNSS, IMUs, encoders, and other sensors."
+live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",agreed,Encoders,wrong,found,"Integrate and calibrate LiDAR, cameras, GNSS, IMUs, encoders, and other sensors."
+live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",agreed,Learned planning,correct,found,"Experience with physical AI or embodied AI, including VLA models, vision-language models, multimodal perception, imitation learning, or learned planning and control."
+live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",agreed,Segmentation,correct,found,"Experience with detection, segmentation, tracking, prediction, or sensor fusion."
+live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",agreed,Prediction,correct,found,"Experience with detection, segmentation, tracking, prediction, or sensor fusion."
+live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",agreed,Calibration,correct,found,"Knowledge of calibration, time synchronization, profiling, containers, networking, CI/CD, or fleet deployment."
+live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",agreed,Fleet deployment,correct,found,"Knowledge of calibration, time synchronization, profiling, containers, networking, CI/CD, or fleet deployment."
+live_7fdb8e26f07560f7,Senior Android Platform Engineer,agreed,Android,correct,found,"We are looking for a Senior Android Platform Engineer with at least 8 years of experience, to help shape the technical direction of our mobile ecosystem."
+live_7fdb8e26f07560f7,Senior Android Platform Engineer,agreed,Kotlin,correct,found,"If you're passionate about mobile platform architecture, developer experience (DevEx) and writing exceptional Kotlin code, this is your chance to lead technical transformations at a massive scale."
+live_7fdb8e26f07560f7,Senior Android Platform Engineer,agreed,Jetpack Compose,correct,found,"Advanced proficiency in Kotlin and Jetpack Compose, alongside a strong understanding of the Android SDK and legacy XML layouts."
+live_7fdb8e26f07560f7,Senior Android Platform Engineer,agreed,Android SDK,correct,found,"Advanced proficiency in Kotlin and Jetpack Compose, alongside a strong understanding of the Android SDK and legacy XML layouts."
+live_7fdb8e26f07560f7,Senior Android Platform Engineer,agreed,Android Studio,correct,found,"Build self-service tooling, optimise Android Studio configurations and create comprehensive documentation to streamline local development for multiple mobile teams."
+live_7fdb8e26f07560f7,Senior Android Platform Engineer,agreed,Modularisation,correct,found,"Proven experience designing and scaling Android application architecture, modularisation, shared libraries and dependency management."
+live_7fdb8e26f07560f7,Senior Android Platform Engineer,agreed,Dependency management,correct,found,"Proven experience designing and scaling Android application architecture, modularisation, shared libraries and dependency management."
+live_7fdb8e26f07560f7,Senior Android Platform Engineer,agreed,CI/CD,correct,found,"Partner with product and platform teams to improve CI/CD pipelines, application security, performance optimisation and observability."
+live_7fdb8e26f07560f7,Senior Android Platform Engineer,agreed,Application security,correct,found,"Partner with product and platform teams to improve CI/CD pipelines, application security, performance optimisation and observability."
+live_7fdb8e26f07560f7,Senior Android Platform Engineer,agreed,Performance optimisation,correct,found,"Partner with product and platform teams to improve CI/CD pipelines, application security, performance optimisation and observability."
+live_7fdb8e26f07560f7,Senior Android Platform Engineer,agreed,Observability,correct,found,"Partner with product and platform teams to improve CI/CD pipelines, application security, performance optimisation and observability."
+live_7fdb8e26f07560f7,Senior Android Platform Engineer,agreed,AI integration,correct,found,"Act as a technical anchor (and potential Epic Lead) for complex Android projects including architecture modernisation, AI integrations and navigation library upgrades."
+live_7fdb8e26f07560f7,Senior Android Platform Engineer,agreed,XML,correct,found,"Advanced proficiency in Kotlin and Jetpack Compose, alongside a strong understanding of the Android SDK and legacy XML layouts."
+live_64c8c310a608d5e7,Software Engineer - Core Banking,agreed,Java,correct,found,"The idea candidate will have extensive experience in Java, SpringBoot, MySQL, Kafka and microservices architecture."
+live_64c8c310a608d5e7,Software Engineer - Core Banking,agreed,SpringBoot,correct,found,"The idea candidate will have extensive experience in Java, SpringBoot, MySQL, Kafka and microservices architecture."
+live_64c8c310a608d5e7,Software Engineer - Core Banking,agreed,MySQL,correct,found,"The idea candidate will have extensive experience in Java, SpringBoot, MySQL, Kafka and microservices architecture."
+live_64c8c310a608d5e7,Software Engineer - Core Banking,agreed,Kafka,correct,found,"The idea candidate will have extensive experience in Java, SpringBoot, MySQL, Kafka and microservices architecture."
+live_64c8c310a608d5e7,Software Engineer - Core Banking,agreed,Microservices,correct,found,"The idea candidate will have extensive experience in Java, SpringBoot, MySQL, Kafka and microservices architecture."
+live_64c8c310a608d5e7,Software Engineer - Core Banking,agreed,RESTful APIs,correct,found,Experience with RESTful API development and integration.
+live_64c8c310a608d5e7,Software Engineer - Core Banking,agreed,Git,correct,found,Git).
+live_64c8c310a608d5e7,Software Engineer - Core Banking,agreed,Agile,correct,found,Knowledge of agile development methodologies.
+live_64c8c310a608d5e7,Software Engineer - Core Banking,agreed,Mambu,correct,found,Experience with Mambu is a plus.
+live_64c8c310a608d5e7,Software Engineer - Core Banking,agreed,AWS,correct,found,AWS) is a plus.
+live_64c8c310a608d5e7,Software Engineer - Core Banking,agreed,Azure,correct,found,Cloud (AWS / Azure / GCP)Java
+live_64c8c310a608d5e7,Software Engineer - Core Banking,agreed,GCP,correct,found,Cloud (AWS / Azure / GCP)Java
+live_64c8c310a608d5e7,Software Engineer - Core Banking,agreed,Splunk,correct,found,Splunk
+live_64c8c310a608d5e7,Software Engineer - Core Banking,agreed,Cursor,correct,found,Cursor
+live_64c8c310a608d5e7,Software Engineer - Core Banking,agreed,Claude Code,correct,found,Claude Code
+live_64c8c310a608d5e7,Software Engineer - Core Banking,agreed,Security,correct,found,Understanding of security principles and how they apply to banking systems.
+live_471d55a57402522b,"Business Architect / Business Analyst, Technology Solutions (Cards)",agreed,Business analysis,correct,found,Possess business analysis experience.
+live_471d55a57402522b,"Business Architect / Business Analyst, Technology Solutions (Cards)",agreed,Business architecture,correct,found,"Design and document end-to-end card lifecycle business process models, system and business architecture diagrams, product lifecycle, interfaces, data flows, and integration points with other systems."
+live_471d55a57402522b,"Business Architect / Business Analyst, Technology Solutions (Cards)",agreed,Card issuing,correct,found,"Develop and maintain a comprehensive understanding of the card lifecycle in the respective regions, including card issuing, merchant acquiring, and card payment industrial requirements."
+live_471d55a57402522b,"Business Architect / Business Analyst, Technology Solutions (Cards)",agreed,Merchant acquiring,correct,found,"Develop and maintain a comprehensive understanding of the card lifecycle in the respective regions, including card issuing, merchant acquiring, and card payment industrial requirements."
+live_471d55a57402522b,"Business Architect / Business Analyst, Technology Solutions (Cards)",agreed,Business process modeling,correct,words found,"Design and document end-to-end card lifecycle business process models, system and business architecture diagrams, product lifecycle, interfaces, data flows, and integration points with other systems."
+live_471d55a57402522b,"Business Architect / Business Analyst, Technology Solutions (Cards)",agreed,System integration,correct,words found,"Design and document end-to-end card lifecycle business process models, system and business architecture diagrams, product lifecycle, interfaces, data flows, and integration points with other systems."
+live_471d55a57402522b,"Business Architect / Business Analyst, Technology Solutions (Cards)",agreed,User stories,correct,found,to understand regional business requirements and translate them into user stories/functional specifications.
+live_471d55a57402522b,"Business Architect / Business Analyst, Technology Solutions (Cards)",agreed,Functional specifications,correct,found,to understand regional business requirements and translate them into user stories/functional specifications.
+live_471d55a57402522b,"Business Architect / Business Analyst, Technology Solutions (Cards)",agreed,Impact analysis,correct,found,"Evaluate business processes, conduct impact analysis and feasibility studies, and provide compelling and innovative solutions."
+live_471d55a57402522b,"Business Architect / Business Analyst, Technology Solutions (Cards)",agreed,Feasibility studies,correct,found,"Evaluate business processes, conduct impact analysis and feasibility studies, and provide compelling and innovative solutions."
+live_471d55a57402522b,"Business Architect / Business Analyst, Technology Solutions (Cards)",agreed,Digital banking,correct,found,Experience in Digital Banking & business process reengineering project will be added advantages.
+live_471d55a57402522b,"Business Architect / Business Analyst, Technology Solutions (Cards)",agreed,Business process reengineering,correct,found,Experience in Digital Banking & business process reengineering project will be added advantages.
+live_471d55a57402522b,"Business Architect / Business Analyst, Technology Solutions (Cards)",agreed,Agile,correct,found,"Comfortable communicating across business divisions and levels of seniority Experience in agile/SCRUM deliver/SDLC, digital initiatives involving technologies such as microservices, API, cloud etc."
+live_471d55a57402522b,"Business Architect / Business Analyst, Technology Solutions (Cards)",agreed,SCRUM,correct,found,"Comfortable communicating across business divisions and levels of seniority Experience in agile/SCRUM deliver/SDLC, digital initiatives involving technologies such as microservices, API, cloud etc."
+live_471d55a57402522b,"Business Architect / Business Analyst, Technology Solutions (Cards)",agreed,SDLC,correct,found,"Comfortable communicating across business divisions and levels of seniority Experience in agile/SCRUM deliver/SDLC, digital initiatives involving technologies such as microservices, API, cloud etc."
+live_471d55a57402522b,"Business Architect / Business Analyst, Technology Solutions (Cards)",agreed,Microservices,correct,found,"Comfortable communicating across business divisions and levels of seniority Experience in agile/SCRUM deliver/SDLC, digital initiatives involving technologies such as microservices, API, cloud etc."
+live_471d55a57402522b,"Business Architect / Business Analyst, Technology Solutions (Cards)",agreed,APIs,correct,found,"Comfortable communicating across business divisions and levels of seniority Experience in agile/SCRUM deliver/SDLC, digital initiatives involving technologies such as microservices, API, cloud etc."
+live_471d55a57402522b,"Business Architect / Business Analyst, Technology Solutions (Cards)",agreed,System architecture,correct,words found,We are seeking a highly skilled and experienced Business Architect / Business Analyst to join our team and play a key role in the Group’s major re-platform implementation for our Cards Management System across the region…
+live_471d55a57402522b,"Business Architect / Business Analyst, Technology Solutions (Cards)",agreed,Cloud,correct,found,"Comfortable communicating across business divisions and levels of seniority Experience in agile/SCRUM deliver/SDLC, digital initiatives involving technologies such as microservices, API, cloud etc."
+live_2dfd1835617b539e,Software Project Manager,agreed,Warehouse Management Systems,correct,found,The ideal candidate will have a strong background in Warehouse Management Systems (WMS) and extensive experience in intralogistics automation.
+live_2dfd1835617b539e,Software Project Manager,agreed,Intralogistics automation,correct,found,The ideal candidate will have a strong background in Warehouse Management Systems (WMS) and extensive experience in intralogistics automation.
+live_2dfd1835617b539e,Software Project Manager,agreed,AutoStore,wrong,found,Kardex AutoStore is seeking a motivated self-starter to be in the role of Software Project Manager.
+live_2dfd1835617b539e,Software Project Manager,agreed,Software development lifecycle,correct,found,"Strong understanding of software development lifecycle (SDLC), agile methodologies, and project management principles."
+live_2dfd1835617b539e,Software Project Manager,agreed,Agile methodologies,correct,found,"Strong understanding of software development lifecycle (SDLC), agile methodologies, and project management principles."
+live_2dfd1835617b539e,Software Project Manager,agreed,Project management,correct,found,"Strong understanding of software development lifecycle (SDLC), agile methodologies, and project management principles."
+live_2dfd1835617b539e,Software Project Manager,agreed,PMP,correct,found,"Certification in relevant technologies (e.g., PMP, Agile Scrum Master, etc.)."
+live_2dfd1835617b539e,Software Project Manager,agreed,Agile Scrum Master,correct,found,"Certification in relevant technologies (e.g., PMP, Agile Scrum Master, etc.)."
