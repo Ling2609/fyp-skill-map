@@ -3,6 +3,12 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 11 Oct 2026 — Skill checker waits and retries on a server error too
+
+- (this commit) Her run stopped at ad 5 on a Cohere 500 ("internal server error, reported to our developers"), a
+  passing fault on their side. A 5xx is now handled like a rate limit: wait 20 / 40 / 60 s and try again; other
+  errors (wrong key, bad request) still stop at once.
+
 ## 11 Oct 2026 — Skill checker: answers list only drops and renames
 
 - (this commit) Her first Cohere run stopped at ad 8 with cut-off JSON: listing a decision and reason for every

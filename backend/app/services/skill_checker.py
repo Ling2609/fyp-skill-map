@@ -27,7 +27,7 @@ from app.services.evidence import normalise_text
 CHECKER_PROVIDER = "cohere"
 CHECKER_MODELS = {"cohere": "command-a-plus-05-2026", "groq": "openai/gpt-oss-20b", "mistral": "mistral-medium-latest"}
 COHERE_URL = "https://api.cohere.com/v2/chat"
-RATE_WAITS = (20, 40, 60)                   # on a per-minute limit (429): wait and try again
+RATE_WAITS = (20, 40, 60)                   # on a per-minute limit (429) or a server error (5xx): wait, try again
 MISTRAL_URL = "https://api.mistral.ai/v1/chat/completions"
 
 
@@ -89,13 +89,14 @@ def ask(prompt: str) -> dict:
 
 
 def _post_json(url: str, key: str, body: dict, name: str) -> dict:
-    """POST with waits on a per-minute limit (429); the response JSON, or an error naming the provider."""
+    """POST with waits on a per-minute limit (429) or a server error (5xx); the response JSON, or an error."""
     import httpx
     for wait in (*RATE_WAITS, None):
         r = httpx.post(url, timeout=120, headers={"Authorization": f"Bearer {key}"}, json=body)
-        if r.status_code != 429 or wait is None:
+        busy = r.status_code == 429 or r.status_code >= 500      # rate limit, or a passing server error
+        if not busy or wait is None:
             break
-        print(f"  {name} rate limit: waiting {wait} s")
+        print(f"  {name} {'rate limit' if r.status_code == 429 else f'server error {r.status_code}'}: waiting {wait} s")
         time.sleep(wait)
     if r.status_code != 200:
         raise RuntimeError(f"{name} {r.status_code}: {r.text[:300]}")
