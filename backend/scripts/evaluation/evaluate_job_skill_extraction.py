@@ -25,7 +25,7 @@ Steps (from backend/, venv active; files go to ../docs/evidence/job_skill_extrac
   python scripts/evaluation/evaluate_job_skill_extraction.py merge      # 5. again after any keeps (spot-check answers stay)
   python scripts/evaluation/evaluate_job_skill_extraction.py score      # 6. scores.txt, per_ad.csv, errors.csv
 
-Checker (11 Oct, her idea; app/services/skill_checker.py): a second model (Llama, not the extractor and not a
+Checker (11 Oct, her idea; app/services/skill_checker.py): a second model (Mistral, not the extractor and not a
 labeller) keeps / drops / renames the extracted skills. Pass rule fixed before any new ads exist: keep the checker if
 F1 on 30 NEW ads is higher than without it and recall drops by no more than 0.03. Stop gate first, on these 30
 (development) ads: if F1 rises by less than 0.03 here, stop.
@@ -47,7 +47,7 @@ sys.path.append(".")
 from app.database import SessionLocal
 from app.models.job import Job, JobSkill
 from app.services.skill_names import canonical_key
-from app.services.skill_checker import ask_groq as ask_checker, check_skills
+from app.services.skill_checker import ask_mistral as ask_checker, check_skills
 
 OUT = "../docs/evidence/job_skill_extraction"
 N_ADS, SEED = 30, 1
@@ -419,6 +419,8 @@ def score(with_checker: bool = False):
     ads, key = load("ads.json"), load("answer_key.json")
     found = extracted(ads)
     if with_checker:
+        if not os.path.exists(path("checked_skills.json")):
+            sys.exit("No checked_skills.json yet: run the check step first.")
         done = load("checked_skills.json")
         missing = [a["title"] for a in ads if a["job_ref"] not in done]
         if missing:

@@ -6,7 +6,9 @@ Planning, reasoning and research behind each decision are in the project roadmap
 ## 11 Oct 2026 — Skill checker: a second model reviews the extracted job skills (stop gate on the 30 development ads)
 
 - (this commit) Her idea after the E1b result (precision 0.61): model 1 (gpt-oss) extracts, model 2 checks. New
-  `app/services/skill_checker.py`: Llama 3.3 70B on Groq (not the extractor, not a labeller) reads the ad and the
+  `app/services/skill_checker.py`: Mistral Medium through Mistral's own free API (Large is not in the free tier;
+  waits and retries on its per-minute limit) (MISTRAL_API_KEY in backend/.env;
+  Groq's Llama is not open to her free account) — not the extractor's family, not a labeller — reads the ad and the
   extracted skills with their quotes and answers keep / drop (with a reason) / rename (split "PP/QM" -> "SAP PP",
   "SAP QM", or name it as the ad does). Code checks every rename (each new name must share a word with the ad's
   quote, otherwise the original stays); no answer = keep; told to keep when unsure. Research: a model correcting

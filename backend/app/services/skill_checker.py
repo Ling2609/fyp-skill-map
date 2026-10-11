@@ -15,10 +15,15 @@ when unsure: one wrongly dropped skill is a false gap removed from every student
 import json
 import os
 import re
+import time
 
 from app.services.evidence import normalise_text
 
-CHECKER_MODEL = "llama-3.3-70b-versatile"     # Meta: not the extractor (gpt-oss) and not a labeller (Claude/Qwen/Gemini)
+# Mistral: not the extractor (OpenAI gpt-oss) and not a labeller (Claude / Qwen / Gemini). 11 Oct: Groq's Llama models
+# are not open to her free account (404), so the checker uses Mistral's own API (free tier, docs.mistral.ai).
+CHECKER_MODEL = "mistral-medium-latest"    # Large is not in the free tier (403); Medium is the strongest general one in it
+RATE_WAITS = (20, 40, 60)                   # free tier: a few requests a minute; on 429 wait and try again
+MISTRAL_URL = "https://api.mistral.ai/v1/chat/completions"
 MAX_NEW_NAMES = 5
 
 RULES = """A technical skill is a programming language, framework, library, tool, software product, platform, database,
@@ -59,20 +64,29 @@ Extracted skills (id. name -- quote from the ad):
 {skills}"""
 
 
-def ask_groq(prompt: str) -> dict:
-    from groq import Groq
+def ask_mistral(prompt: str) -> dict:
+    import httpx
     from app.config import settings
-    r = Groq(api_key=settings.groq_api_key).chat.completions.create(
-        model=os.getenv("CHECKER_MODEL") or CHECKER_MODEL, temperature=0, max_completion_tokens=4096,
-        response_format={"type": "json_object"}, messages=[{"role": "user", "content": prompt}])
-    return json.loads(r.choices[0].message.content or "{}")
+    if not settings.mistral_api_key:
+        raise RuntimeError("MISTRAL_API_KEY is not set in backend/.env")
+    for wait in (*RATE_WAITS, None):
+        r = httpx.post(MISTRAL_URL, timeout=120, headers={"Authorization": f"Bearer {settings.mistral_api_key}"}, json={
+            "model": os.getenv("CHECKER_MODEL") or CHECKER_MODEL, "temperature": 0, "max_tokens": 4096,
+            "response_format": {"type": "json_object"}, "messages": [{"role": "user", "content": prompt}]})
+        if r.status_code != 429 or wait is None:
+            break
+        print(f"  Mistral rate limit: waiting {wait} s")
+        time.sleep(wait)
+    if r.status_code != 200:
+        raise RuntimeError(f"Mistral {r.status_code}: {r.text[:300]}")
+    return json.loads(r.json()["choices"][0]["message"]["content"] or "{}")
 
 
 def _words(text: str) -> set[str]:
     return {w for w in re.split(r"[\s/,()]+", normalise_text(text)) if len(w) >= 2}
 
 
-def check_skills(title: str, ad_text: str, skills: list[dict], ask=ask_groq) -> tuple[list[str], list[dict]]:
+def check_skills(title: str, ad_text: str, skills: list[dict], ask=ask_mistral) -> tuple[list[str], list[dict]]:
     """skills: [{"skill", "quote"}]. Returns (names after the check, log of every drop / rename / refused rename).
     A skill the checker gives no valid answer for is kept (safe default)."""
     if not skills:
