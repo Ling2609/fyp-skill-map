@@ -3,6 +3,13 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 12 Oct 2026 — Register: company name for employers
+
+- (this commit) Her test: the Register page had no company field, so an employer reached Admin with no company to
+  check (the API accepted `company_name` since 7 Oct, but nothing sent it). Choosing Employer now shows a required
+  "Company name" field with a note that the career office approves it first; the API refuses an employer sign-up
+  without one ("Add your company name.").
+
 ## 11 Oct 2026 — Employer flow, batch 2: Apply on SkillMap, My applications, applicants (3A), applicant profile
 
 - (this commit) Following the 9 Oct mock-ups (boards 3A, 4, 5 and 6):

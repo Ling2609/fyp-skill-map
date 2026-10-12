@@ -1,6 +1,6 @@
 import re
 from typing import Literal
-from pydantic import BaseModel, EmailStr, Field, field_validator
+from pydantic import BaseModel, EmailStr, Field, field_validator, model_validator
 from app.models.user import UserRole
 from app.services.password_policy import MAX_BYTES, MIN_LENGTH
 
@@ -42,6 +42,13 @@ class UserRegister(BaseModel):
     @classmethod
     def check_password_length(cls, v: str) -> str:
         return check_password(v)
+
+    @model_validator(mode="after")
+    def employer_needs_company(self):
+        """12 Oct: the Register page had no company field, so employers reached Admin with no company to check."""
+        if self.role == "employer" and len((self.company_name or "").strip()) < 2:
+            raise ValueError("Add your company name.")
+        return self
 
 class UserLogin(BaseModel):
     email: str

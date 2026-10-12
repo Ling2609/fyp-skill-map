@@ -26,7 +26,7 @@ export default function Register() {
   const navigate = useNavigate()
   const [form, setForm] = useState({
     username: '', first_name: '', last_name: '',
-    email: '', password: '', confirm_password: '', role: 'student'
+    email: '', password: '', confirm_password: '', role: 'student', company_name: ''
   })
   const [errors, setErrors] = useState({})
   const [error, setError] = useState('')
@@ -106,7 +106,8 @@ export default function Register() {
       !validateName(form.last_name) &&
       form.email.length > 0 &&
       form.password.length >= 8 &&
-      form.password === form.confirm_password
+      form.password === form.confirm_password &&
+      (form.role !== 'employer' || form.company_name.trim().length >= 2)
   }
 
   const handleBlur = (field) => {
@@ -139,6 +140,7 @@ export default function Register() {
         email: form.email,
         password: form.password,
         role: form.role,
+        company_name: form.role === 'employer' ? form.company_name.trim() : null,
       })
       navigate('/login', { state: { message: 'Account created successfully! Please sign in.' } })
     } catch (err) {
@@ -336,6 +338,24 @@ export default function Register() {
               <option value="employer">Employer</option>
             </select>
           </div>
+
+          {/* Company (12 Oct): employers only; the career office checks it before approving the account */}
+          {form.role === 'employer' && (
+            <div>
+              <label htmlFor="reg-company" className="block text-sm font-medium text-gray-700 mb-1">Company name</label>
+              <input
+                id="reg-company"
+                value={form.company_name}
+                onChange={e => setForm({ ...form, company_name: e.target.value })}
+                maxLength={120}
+                className={inputClass(attemptedSubmit && form.company_name.trim().length < 2)}
+                placeholder="e.g. Kayu Digital Sdn Bhd"
+              />
+              {attemptedSubmit && form.company_name.trim().length < 2
+                ? <p className="text-xs text-red-500 mt-1">Company name is required</p>
+                : <p className="text-xs text-gray-500 mt-1">The university's career office approves your company before you can post jobs.</p>}
+            </div>
+          )}
 
           <button
             type="submit"
