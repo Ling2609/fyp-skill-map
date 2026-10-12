@@ -3,6 +3,22 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 12 Oct 2026 — Regression test suite (backend/tests) and a checked fresh install
+
+- (this commit) The audit's main point: no repeatable tests in the repository. `backend/tests/` (pytest, 34 tests)
+  runs the real API on a throwaway database that is made again on every run: a brand-new install (start-up on an
+  empty database, the data migrations, every migration run twice without changing data, unique rules present),
+  sign-up and sign-in (company name for employers, no admin sign-up, duplicate email, wrong password, a
+  deactivated account's old token), role checks, admin decisions with history, applying (once, four at the same
+  time, closed / gone / live jobs), progress (Viewed only when the profile is opened, shortlist → back → again,
+  reject then correct, Undo from history, the 14- and 30-day notes), closing a job with waiting applicants,
+  invitations (once only, hidden or applied students, closed jobs, the email never shown before applying,
+  deactivated students), and cross-employer / cross-student access by changing ids. Checked that the tests catch
+  real faults: putting back the Undo bug and the missing "gone" check makes two of them fail.
+- README: how to run the tests; a new install also needs three data migrations (programmes, modules, intakes),
+  module skill extraction and an admin account (it said a new database needs no migrations); the two 11 Oct
+  migrations added to the table. `pytest` added to requirements.txt.
+
 ## 12 Oct 2026 — Fixes from an outside audit of the application flow
 
 - (this commit) Checked each point of the audit against the code, then fixed what was real:

@@ -164,8 +164,21 @@ Groq's free tier allows about 200,000 tokens a day (≈ 100 jobs). Don't run two
 | `migrate_career_goal.py` | 9 Oct 2026 | adds `users.target_category` (the student's career goal, a job category; empty = open to all ICT roles). The API refuses to start until this has run |
 | `migrate_all_programmes.py` | 10 Oct 2026 | adds `programme_modules.kind` (a module's type per programme); adds the modules in `data/modules.json` that are missing (198 in all) and the 17 computing programmes in `data/programmes.json` (APU July 2026 brochure) with each module's year and type. Then run `python scripts/pipeline/extract_module_skills.py` to find skills for the new modules (they start "To review"). The API refuses to start until this has run |
 | `migrate_intake_modules.py` | 10 Oct 2026 | new table `intake_modules` (each intake's own module list) and `intakes.other_codes`; every programme without intakes gets demo intakes for March, July and September 2023–2025 (Year 1 codes like `APU1F2409CS(DA)`), and every intake gets a copy of its programme's list. The API refuses to start until this has run |
+| `migrate_employer_jobs.py` | 11 Oct 2026 | adds `jobs.closed_at` (an employer closes or reopens a post). The API refuses to start until this has run |
+| `migrate_applications.py` | 11 Oct 2026 | new table `applications` (one per student per job, with its status). The API refuses to start until this has run |
 
-A **new, empty** database doesn't need them: the tables are created from `app/models/` when the API starts. To apply one: `python migrations/<file>.py` from `backend/`. A new database change gets a new `migrate_<what_it_does>.py` and a row in this table.
+A **new, empty** database gets its tables from `app/models/` when the API starts (the 12 Oct tables `application_events` and `job_invitations` too), but three of these scripts also load **data** a new install needs, so after the first start run, in this order: `migrate_admin_structure.py`, `migrate_all_programmes.py`, `migrate_intake_modules.py` (17 programmes, 198 modules, demo intakes), then `python scripts/pipeline/extract_module_skills.py` (module skills, Groq) and `python scripts/tools/create_admin.py` (the career-office account). Checked by `tests/test_install.py` on a brand-new database. Post a job lists the job categories already in the database, so load the JobStreet data (or fetch live jobs) before employers post. To apply one: `python migrations/<file>.py` from `backend/`. A new database change gets a new `migrate_<what_it_does>.py` and a row in this table.
+
+## Tests
+
+`backend/tests/` (12 Oct 2026) runs the real API on a **throwaway** PostgreSQL database that is dropped and made again on every run, so your own data is never touched. It checks a brand-new install (start-up, data migrations, running every migration twice), sign-up and sign-in, role checks, admin decisions, applying and the student's progress (Viewed, Shortlisted, Undo, the 14- and 30-day notes, closing a job), invitations, and that nobody reaches another person's records by changing an id. Skill extraction and matching quality are not tested here (see `docs/evidence/`): the embedding model is replaced by a small stand-in and the relationship model is off, so the tests are fast and need no API keys.
+
+From `backend/` with the venv active (PowerShell shown; the database name must contain "test"):
+```
+$env:TEST_DATABASE_URL="postgresql+psycopg2://postgres:<password>@localhost:5432/skillmap_test"
+python -m pytest
+```
+Git Bash: `export TEST_DATABASE_URL=...` instead of `$env:`. Takes about a minute and a half.
 
 ## Never commit
 
