@@ -25,7 +25,7 @@ from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 
 from app.database import get_db
-from app.models.application import Application
+from app.models.application import Application, ApplicationEvent, JobInvitation
 from app.models.job import Job, JobSkill
 from app.models.user import User, UserRole
 from app.routers.auth import get_current_user
@@ -61,7 +61,9 @@ def _row(job: Job, skills: list[JobSkill], statuses: list[str] = ()) -> dict:
             "posted_at": job.listing_date, "closed_at": job.closed_at,
             "required": sum(1 for s in hard if s.level in ("required", "unspecified")),
             "preferred": sum(1 for s in hard if s.level == "preferred"),
-            "applicants": len(statuses), "new_applicants": sum(1 for st in statuses if st == "applied")}
+            "applicants": len(statuses), "new_applicants": sum(1 for st in statuses if st == "applied"),
+            # 12 Oct: still waiting for a decision (closing the job asks what to tell them)
+            "waiting": sum(1 for st in statuses if st in ("applied", "shortlisted"))}
 
 
 def _statuses(job_ids: list[int], db: Session) -> dict[int, list[str]]:
@@ -91,13 +93,20 @@ def my_jobs(employer: User = Depends(require_employer), db: Session = Depends(ge
 
 class CloseIn(BaseModel):
     closed: bool
+    not_selected_waiting: bool = False   # 12 Oct: when closing, tell applicants still waiting "Not selected"
 
 
 @router.patch("/jobs/{job_id}")
 def close_or_reopen(job_id: int, data: CloseIn, employer: User = Depends(require_employer),
                     db: Session = Depends(get_db)):
     job = _own_job(job_id, employer, db)
-    job.closed_at = datetime.now(timezone.utc) if data.closed else None
+    now = datetime.now(timezone.utc)
+    job.closed_at = now if data.closed else None
+    if data.closed and data.not_selected_waiting:
+        # 12 Oct: close the loop: applicants still waiting are told "Not selected" instead of "closed without a decision"
+        for a in db.query(Application).filter(Application.job_id == job.id, Application.status.in_(("applied", "shortlisted"))):
+            a.status, a.status_changed_at = "rejected", now
+            db.add(ApplicationEvent(application_id=a.id, kind="status", status="rejected", created_at=now))
     db.commit()
     return _row(job, db.query(JobSkill).filter(JobSkill.job_id == job.id).all(), _statuses([job.id], db).get(job.id, []))
 
@@ -209,7 +218,8 @@ def publish(data: JobIn, employer: User = Depends(require_employer), db: Session
                                  extracted_by=JOB_EVIDENCE_VERSION, evidence_quote=k.quote or None))
     db.add_all(rows)
     db.commit()
-    return _row(job, rows)
+    # 12 Oct: say straight away how many visible graduates fit the new job, so the employer can invite them
+    return {**_row(job, rows), "graduates_fit": len(_graduates_who_fit([job], db, limit=None))}
 
 
 # ── Applicants (batch 2) ─────────────────────────────────────────────────────────────────────────────────────────
@@ -236,7 +246,13 @@ def _applicant(a: Application, student: User, job: Job, db: Session) -> dict:
     gap = _fit(student, job, db)
     have = len(gap["matched_skills"]) if gap else 0
     total = have + len(gap["missing_skills"]) if gap else 0
+    from app.services.application_progress import first_seen
+    events = db.query(ApplicationEvent).filter(ApplicationEvent.application_id == a.id).all()
     return {"id": a.id, "name": f"{student.first_name} {student.last_name}", "programme": _programme(student, db),
+            # 12 Oct: shown bold with "Not opened" until the employer opens the profile (like an unread email)
+            "opened": first_seen(a, events) is not None,
+            "invited": db.query(JobInvitation).filter(JobInvitation.job_id == job.id,
+                                                      JobInvitation.student_id == student.id).first() is not None,
             "status": a.status, "applied_at": a.created_at, "status_changed_at": a.status_changed_at,
             "have": have, "total": total, "missing": [m["job_skill"] for m in gap["missing_skills"]] if gap else []}
 
@@ -267,6 +283,7 @@ def _own_application(app_id: int, employer: User, db: Session) -> tuple[Applicat
 
 class StatusIn(BaseModel):
     status: str
+    undo: bool = False       # 12 Oct: the Undo in the "Shortlisted" toast puts the previous status back
 
 
 @router.patch("/applications/{app_id}")
@@ -275,9 +292,23 @@ def set_status(app_id: int, data: StatusIn, employer: User = Depends(require_emp
     if data.status not in STATUSES:
         raise HTTPException(status_code=400, detail="Unknown status.")
     a, job, student = _own_application(app_id, employer, db)
-    if a.status != data.status:
+    if data.undo:
+        # Undo removes the change it undoes (so the student's progress and the employer's activity don't show a
+        # change that was taken back) and puts the previous status and its time back
+        last = (db.query(ApplicationEvent).filter(ApplicationEvent.application_id == a.id, ApplicationEvent.kind == "status")
+                .order_by(ApplicationEvent.created_at.desc(), ApplicationEvent.id.desc()).first())
+        if last and last.status == a.status:
+            db.delete(last)
+            db.flush()
+            before = (db.query(ApplicationEvent).filter(ApplicationEvent.application_id == a.id, ApplicationEvent.kind == "status")
+                      .order_by(ApplicationEvent.created_at.desc(), ApplicationEvent.id.desc()).first())
+            a.status = data.status
+            a.status_changed_at = before.created_at if before else None
+            db.commit()
+    elif a.status != data.status:
         a.status = data.status
         a.status_changed_at = datetime.now(timezone.utc)
+        db.add(ApplicationEvent(application_id=a.id, kind="status", status=data.status, created_at=a.status_changed_at))
         db.commit()
     return {"id": a.id, "status": a.status, "status_changed_at": a.status_changed_at}
 
@@ -308,7 +339,15 @@ def _profile_for(student: User, job: Job, db: Session, contact: bool) -> dict:
 def applicant_profile(app_id: int, employer: User = Depends(require_employer), db: Session = Depends(get_db)):
     """One applicant for one of the employer's posts (applying shares the profile and email with this employer)."""
     a, job, student = _own_application(app_id, employer, db)
+    from app.services.application_progress import record_view
+    record_view(a, db)        # the student's "Viewed" step (12 Oct)
+    # 12 Oct: the next application for this job still at Applied (oldest first), so the employer can go on without
+    # going back to the list
+    nxt = (db.query(Application, User).join(User, User.id == Application.student_id)
+           .filter(Application.job_id == job.id, Application.status == "applied", Application.id != a.id)
+           .order_by(Application.created_at).first())
     return {"application": {"id": a.id, "status": a.status, "applied_at": a.created_at},
+            "next_to_review": {"id": nxt[0].id, "name": f"{nxt[1].first_name} {nxt[1].last_name}"} if nxt else None,
             **_profile_for(student, job, db, contact=True)}
 
 
@@ -323,10 +362,12 @@ def _visible_students(db: Session) -> list[User]:
                                   User.is_active.is_(True)).all())
 
 
-def _graduates_who_fit(open_jobs: list[Job], db: Session) -> list[dict]:
+def _graduates_who_fit(open_jobs: list[Job], db: Session, limit: int | None = FIT_SHOWN) -> list[dict]:
     """Visible students who haven't applied, each with the open job they fit best, best match first."""
     applied = {(a.job_id, a.student_id) for a in db.query(Application).filter(
         Application.job_id.in_([j.id for j in open_jobs]))}
+    invited = {(i.job_id, i.student_id): i.created_at for i in db.query(JobInvitation).filter(
+        JobInvitation.job_id.in_([j.id for j in open_jobs]))}
     best = {}
     for student in _visible_students(db):
         for job in open_jobs:
@@ -341,8 +382,9 @@ def _graduates_who_fit(open_jobs: list[Job], db: Session) -> list[dict]:
             if ratio >= FIT_MIN and (student.id not in best or ratio > best[student.id]["ratio"]):
                 best[student.id] = {"student_id": student.id, "name": f"{student.first_name} {student.last_name}",
                                     "programme": _programme(student, db), "job_id": job.id, "job_title": job.job_title,
-                                    "have": have, "total": total, "ratio": ratio}
-    return sorted(best.values(), key=lambda g: (-g["ratio"], -g["have"], g["name"]))[:FIT_SHOWN]
+                                    "have": have, "total": total, "ratio": ratio,
+                                    "invited_at": invited.get((job.id, student.id))}
+    return sorted(best.values(), key=lambda g: (-g["ratio"], -g["have"], g["name"]))[:limit]
 
 
 @router.get("/dashboard")
@@ -363,7 +405,82 @@ def dashboard(employer: User = Depends(require_employer), db: Session = Depends(
         "open_jobs": [{"id": j.id, "title": j.job_title, "posted_at": j.listing_date,
                        "counts": {st: statuses.get(j.id, []).count(st) for st in STATUSES}} for j in open_jobs],
         "graduates": _graduates_who_fit(open_jobs, db) if open_jobs else [],
+        "activity": _activity(jobs, db),
+        "attention": _attention(employer, open_jobs, db),
     }
+
+
+QUIET_JOB_DAYS = 7     # an open job with no applicants after a week: suggest inviting graduates who fit
+
+
+def _attention(employer: User, open_jobs: list[Job], db: Session) -> dict:
+    """12 Oct: what else needs the employer, beyond new applications.
+    - applicants waiting over NUDGE_DAYS (14) since anything happened: the same day the student is told to keep
+      applying elsewhere (references.md "Application progress"), so the employer sees it at the same time;
+    - open jobs a week old with no applicants, with how many visible graduates fit them;
+    - how fast this employer usually views applications (what students are shown)."""
+    from datetime import timedelta
+    from app.services.application_progress import NUDGE_DAYS, employer_review_days, events_for, progress
+    rows = (db.query(Application, User, Job).join(User, User.id == Application.student_id).join(Job, Job.id == Application.job_id)
+            .filter(Job.posted_by_user_id == employer.id, Application.status.in_(("applied", "shortlisted"))).all())
+    ev = events_for([a.id for a, _, _ in rows], db)
+    waiting = []
+    for a, u, j in rows:
+        if j not in open_jobs:
+            continue
+        p = progress(a, ev[a.id], True)
+        if p["quiet_days"] >= NUDGE_DAYS:
+            waiting.append({"application_id": a.id, "name": f"{u.first_name} {u.last_name}", "job_title": j.job_title,
+                            "days": p["quiet_days"]})
+    now = datetime.now(timezone.utc)
+    has_apps = {a.job_id for a in db.query(Application.job_id).filter(Application.job_id.in_([j.id for j in open_jobs]))}
+    quiet = [{"job_id": j.id, "title": j.job_title, "fit": len(_graduates_who_fit([j], db, limit=None))}
+             for j in open_jobs if j.id not in has_apps and j.listing_date
+             and now - _aware(j.listing_date) >= timedelta(days=QUIET_JOB_DAYS)]
+    return {"waiting_long": sorted(waiting, key=lambda w: -w["days"]), "quiet_jobs": quiet,
+            "review_days": employer_review_days(employer.id, db)}
+
+
+ACTIVITY_DAYS, ACTIVITY_SHOWN = 14, 30
+
+
+def _activity(jobs: list[Job], db: Session) -> list[dict]:
+    """What happened on the employer's jobs in the last 14 days, newest first: posts, applications, the employer's
+    own status changes and invitations. A record that each change landed and what the student now sees."""
+    from datetime import timedelta
+    since = datetime.now(timezone.utc) - timedelta(days=ACTIVITY_DAYS)
+    by_id = {j.id: j for j in jobs}
+    names = {}
+    def name(uid):
+        if uid not in names:
+            u = db.get(User, uid)
+            names[uid] = f"{u.first_name} {u.last_name}" if u else "A student"
+        return names[uid]
+    out = []
+    for j in jobs:
+        if j.listing_date and _aware(j.listing_date) >= since:
+            out.append({"kind": "posted", "at": j.listing_date, "job": j.job_title, "job_id": j.id})
+    apps = db.query(Application).filter(Application.job_id.in_(by_id)).all() if by_id else []
+    for a in apps:
+        if _aware(a.created_at) >= since:
+            out.append({"kind": "applied", "at": a.created_at, "job": by_id[a.job_id].job_title, "job_id": a.job_id,
+                        "student": name(a.student_id), "application_id": a.id})
+    app_by_id = {a.id: a for a in apps}
+    if app_by_id:
+        for e in db.query(ApplicationEvent).filter(ApplicationEvent.application_id.in_(app_by_id),
+                                                   ApplicationEvent.kind == "status", ApplicationEvent.created_at >= since):
+            a = app_by_id[e.application_id]
+            out.append({"kind": "status", "status": e.status, "at": e.created_at, "job": by_id[a.job_id].job_title,
+                        "job_id": a.job_id, "student": name(a.student_id), "application_id": a.id})
+    if by_id:
+        for i in db.query(JobInvitation).filter(JobInvitation.job_id.in_(by_id), JobInvitation.created_at >= since):
+            out.append({"kind": "invited", "at": i.created_at, "job": by_id[i.job_id].job_title, "job_id": i.job_id,
+                        "student": name(i.student_id), "student_id": i.student_id})
+    return sorted(out, key=lambda x: _aware(x["at"]), reverse=True)[:ACTIVITY_SHOWN]
+
+
+def _aware(t):
+    return t.replace(tzinfo=timezone.utc) if t and t.tzinfo is None else t
 
 
 @router.get("/counts")
@@ -382,4 +499,35 @@ def graduate_profile(student_id: int, job_id: int, employer: User = Depends(requ
                                     User.is_visible_to_employers.is_(True), User.is_active.is_(True)).first()
     if not student:
         raise HTTPException(status_code=404, detail="This graduate's profile isn't visible to employers.")
-    return {"application": None, **_profile_for(student, job, db, contact=False)}
+    inv = db.query(JobInvitation).filter(JobInvitation.job_id == job.id, JobInvitation.student_id == student.id).first()
+    applied = db.query(Application).filter(Application.job_id == job.id, Application.student_id == student.id).first()
+    return {"application": None, "invited_at": inv.created_at if inv else None,
+            "applied_application_id": applied.id if applied else None,
+            **_profile_for(student, job, db, contact=False)}
+
+
+class InviteIn(BaseModel):
+    job_id: int
+    student_id: int
+
+
+@router.post("/invitations")
+def invite(data: InviteIn, employer: User = Depends(require_employer), db: Session = Depends(get_db)):
+    """Invite a visible graduate to apply for one of the employer's open jobs (12 Oct; in-app only, one per job per
+    student). The student sees it at the top of My applications and decides; their email stays private."""
+    job = _own_job(data.job_id, employer, db)
+    if _status(job) != "open":
+        raise HTTPException(status_code=400, detail="This job is closed. Reopen it to invite graduates.")
+    student = db.query(User).filter(User.id == data.student_id, User.role == UserRole.student,
+                                    User.is_visible_to_employers.is_(True), User.is_active.is_(True)).first()
+    if not student:
+        raise HTTPException(status_code=404, detail="This graduate's profile isn't visible to employers.")
+    if db.query(Application).filter(Application.job_id == job.id, Application.student_id == student.id).first():
+        raise HTTPException(status_code=409, detail="They already applied for this job.")
+    if db.query(JobInvitation).filter(JobInvitation.job_id == job.id, JobInvitation.student_id == student.id).first():
+        raise HTTPException(status_code=409, detail="You already invited them to apply for this job.")
+    inv = JobInvitation(job_id=job.id, student_id=student.id)
+    db.add(inv)
+    db.commit()
+    db.refresh(inv)
+    return {"id": inv.id, "job_id": job.id, "student_id": student.id, "invited_at": inv.created_at}

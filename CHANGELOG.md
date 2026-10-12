@@ -3,6 +3,36 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 12 Oct 2026 — Application flow: progress for students, invitations, clearer employer actions
+
+- (this commit) Her review of the employer flow, then a walk through the whole application flow for both roles
+  (research: references.md "Application progress, waiting time, status feedback, invitations").
+  - **Student progress:** every SkillMap application shows Applied → Viewed → Shortlisted → Decision with dates.
+    "Viewed" is recorded the first time the employer opens the profile (LinkedIn's "Application viewed"). After 14 days
+    with no change: "Keep applying to other jobs while you wait"; after 30: treat it as unlikely (MyCareersFuture: follow
+    up after 1-2 weeks, move on after about a month). "Kayu usually views applications within N days" once the employer
+    has viewed 3. Not selected links to the job's skill gap.
+  - **My applications:** one column, newest update first. **Job Detail:** the same steps; the outcome pill replaces the
+    green "Applied" (it stayed green after a rejection). **Job Matches:** "You applied · status" and "Invited to apply"
+    tags; the "Posted on SkillMap" pill no longer has its bottom cut off.
+  - **Invite to apply** (her supervisor's point): an employer invites a visible graduate who fits an open job (at
+    least half its required skills: TalentWorks found matching 50% of listed skills is as likely to get an interview).
+    The student sees it on the Dashboard and My applications (badge on the sidebar) and can apply or say "Not
+    interested" (the employer isn't told). In-app only, one per job per student; the email stays private until they apply.
+  - **Status changes:** Rejected and Accepted ask first and say what the student will see; Shortlisted and back to
+    Applied change at once with an Undo toast (Undo removes the change from the student's progress).
+  - **Employer dashboard:** "Needs your attention" (applications to review with "not opened", applicants waiting 14+
+    days, week-old jobs with no applicants and how many graduates fit them, the employer's usual time to view);
+    Recent activity; Invite in Graduates who fit; columns no longer run off the screen at 1440px.
+  - **Applicants:** not-opened applications bold with "Not opened" (like an unread email), "Invited" tag; the
+    profile links to the next application still to review.
+  - **Closing a job** with applicants still waiting asks whether to tell them "Not selected" or only close it.
+  - **After publishing:** "N visible graduates already fit it: invite them from your Dashboard".
+  - **Layout:** employer page headers match the other pages (eyebrow, title, one line; Post a job only in the
+    sidebar); headers stay put and only the content scrolls; My jobs says "N to review" instead of "1 · 1 new";
+    the collapsed sidebar shows a dot beside the icon instead of a number on top of it.
+  - New tables application_events and job_invitations (created at start-up; no migration to run).
+
 ## 12 Oct 2026 — Employer dashboard (layout E), My jobs table fix, "new" badge
 
 - (this commit) Her pick E after mock-ups A–E (research: references.md "Employer dashboard layout"). An approved

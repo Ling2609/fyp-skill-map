@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import api from '../../api'
 import PageHeader from '../../components/PageHeader'
-import { ADMIN_COUNTS_CHANGED } from '../../components/Sidebar'
 import { errText } from '../student/profileUtils'
 import { STATUSES, STATUS_CLS, fmtDay } from './statuses'
+import { useStatusChange } from './statusChange'
 
 // Employer > one job's applicants (11 Oct, batch 2; her pick 3A "applicants as a list"). Best match first: the
 // share of the job's required skills each student has, the same match the student sees. Changing a status shows on
@@ -15,26 +15,22 @@ export default function Applicants() {
   const [data, setData] = useState(null)
   const [tab, setTab] = useState('all')
   const [error, setError] = useState('')
-  const [saving, setSaving] = useState(null)
 
   useEffect(() => {
     api.get(`/employer/jobs/${jobId}/applicants`).then(res => setData(res.data)).catch(err => setError(errText(err, "Couldn't load the applicants.")))
   }, [jobId])
 
-  const setStatus = (a, status) => {
-    setSaving(a.id); setError('')
-    api.patch(`/employer/applications/${a.id}`, { status })
-      .then(res => { setData(d => ({ ...d, applicants: d.applicants.map(x => x.id === a.id ? { ...x, ...res.data } : x) })); window.dispatchEvent(new Event(ADMIN_COUNTS_CHANGED)) })
-      .catch(err => setError(errText(err, "Couldn't change the status. Try again.")))
-      .finally(() => setSaving(null))
-  }
+  // 12 Oct: Rejected / Accepted ask first; Shortlisted / Applied change at once with Undo (statusChange.jsx)
+  const status = useStatusChange((id, res) =>
+    setData(d => ({ ...d, applicants: d.applicants.map(x => x.id === id ? { ...x, ...res } : x) })))
+
   const people = data?.applicants || []
   const count = (s) => people.filter(p => s === 'all' || p.status === s).length
   const shown = people.filter(p => tab === 'all' || p.status === tab)
   const job = data?.job
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col h-screen">
       <PageHeader>
         <div className="pb-5">
           <Link to="/employer/jobs" className="text-sm text-slate-500 hover:text-blue-700">← My jobs</Link>
@@ -50,7 +46,7 @@ export default function Applicants() {
         </div>
       </PageHeader>
 
-      <div className="flex-1 px-8 py-6 flex flex-col gap-4">
+      <div className="flex-1 min-h-0 overflow-y-auto px-8 py-6 flex flex-col gap-4">
         {error && <p role="alert" className="text-sm text-rose-700 bg-rose-50 border border-rose-200 rounded-lg px-4 py-2.5">{error}</p>}
         {!data && !error && <p className="text-sm text-slate-400">Loading applicants…</p>}
         {data && people.length === 0 && (
@@ -80,7 +76,13 @@ export default function Applicants() {
                     return (
                       <tr key={p.id} onClick={() => navigate(`/employer/applications/${p.id}`)} className="cursor-pointer hover:bg-blue-50/40">
                         <td className="px-5 py-3.5">
-                          <p className="font-medium text-slate-900">{p.name}</p>
+                          {/* 12 Oct: an application not opened yet reads bold with "Not opened", like an unread email
+                              (DfE design history: a bold row for messages not viewed) */}
+                          <p className={`text-slate-900 ${p.opened ? 'font-medium' : 'font-bold'}`}>
+                            {p.name}
+                            {!p.opened && <span className="ml-2 text-[11px] font-semibold text-blue-700">Not opened</span>}
+                            {p.invited && <span className="ml-2 text-[11px] font-semibold text-violet-700 bg-violet-50 rounded-full px-2 py-0.5">Invited</span>}
+                          </p>
                           <p className="text-xs text-slate-500 mt-0.5">{p.programme}</p>
                         </td>
                         <td className="px-5 py-3.5">
@@ -91,8 +93,8 @@ export default function Applicants() {
                         </td>
                         <td className="px-5 py-3.5 text-slate-600">{fmtDay(p.applied_at)}</td>
                         <td className="px-5 py-3.5" onClick={e => e.stopPropagation()}>
-                          <select aria-label={`Status for ${p.name}`} value={p.status} disabled={saving === p.id}
-                            onChange={e => setStatus(p, e.target.value)}
+                          <select aria-label={`Status for ${p.name}`} value={p.status} disabled={status.busy === p.id}
+                            onChange={e => status.request({ ...p, job_title: job.title }, e.target.value)}
                             className={`text-xs font-semibold border rounded-full pl-2.5 pr-7 py-1 ${STATUS_CLS[p.status]}`}>
                             {STATUSES.map(([v, l]) => <option key={v} value={v}>{l}</option>)}
                           </select>
@@ -104,10 +106,11 @@ export default function Applicants() {
                 </tbody>
               </table>
             </div>
-            <p className="text-xs text-slate-500">Best match first. Changing a status tells the student on their "My applications" page.</p>
+            <p className="text-xs text-slate-500">Best match first. The student sees each status on their "My applications" page (Rejected shows as "Not selected").</p>
           </>
         )}
       </div>
+      {status.ui}
     </div>
   )
 }

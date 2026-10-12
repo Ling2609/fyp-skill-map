@@ -101,13 +101,13 @@ export default function PostJob() {
   const publish = () => {
     setPublishing(true); setError('')
     api.post('/employer/jobs', { ...ad, skills, soft })
-      .then(() => navigate('/employer/jobs', { state: { posted: ad.title.trim() } }))
+      .then(res => navigate('/employer/jobs', { state: { posted: ad.title.trim(), fit: res.data.graduates_fit } }))
       .catch(err => { setError(errText(err, "Couldn't publish the job. Try again.")); setPublishing(false) })
   }
   const byLevel = useMemo(() => Object.fromEntries(BOXES.map(b => [b.level, skills.filter(s => s.level === b.level)])), [skills])
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col h-screen">
       <PageHeader>
         <div className="pb-5">
           <p className="text-[11px] font-semibold text-blue-600 uppercase tracking-widest mb-2">Post a job</p>
@@ -118,7 +118,7 @@ export default function PostJob() {
         </div>
       </PageHeader>
 
-      <div className="flex-1 px-8 py-6 flex flex-wrap items-start gap-5">
+      <div className="flex-1 min-h-0 overflow-y-auto px-8 py-6 flex flex-wrap items-start content-start gap-5">
         <section className="flex-1 basis-80 min-w-80 bg-white border border-slate-200 rounded-2xl p-5 flex flex-col gap-4">
           <h2 className="text-[15px] font-semibold text-slate-900">Your ad</h2>
           <div>

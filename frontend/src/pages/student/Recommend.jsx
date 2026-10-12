@@ -1,6 +1,7 @@
 import { Fragment, useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../context/useAuth'
+import api from '../../api'
 import { cached, peek } from '../../pageCache'
 import PageHeader from '../../components/PageHeader'
 import LevelTag from '../../components/LevelTag'
@@ -185,6 +186,11 @@ export default function Recommend() {
       setSkillCount(-1)
     })
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+  // 12 Oct: jobs already applied for (with where they stand) and invitations, for a tag on the card, so a job the
+  // student has dealt with doesn't look new (fetched fresh: a status can change at any time)
+  const [mine, setMine] = useState({})
+  useEffect(() => { api.get('/applications/refs').then(res => setMine(res.data)).catch(() => {}) }, [])
 
   useEffect(() => {
     if (results && restoreScroll.current !== null) {
@@ -468,11 +474,15 @@ export default function Recommend() {
                         <div className="flex items-center gap-2.5 min-w-0">
                           <span className="text-xs text-slate-300 font-medium tabular-nums shrink-0 w-4">{idx + 1}</span>
                           <div className="min-w-0">
-                            <p className="font-semibold text-slate-800 text-sm truncate group-hover:text-blue-700 transition leading-snug">
-                              {job.job_title}
+                            {/* 12 Oct (her review): the pill sat inside the truncated title line, so its bottom was cut off;
+                                now the title truncates on its own and the pills sit beside it */}
+                            <div className="flex items-center gap-2 min-w-0">
+                              <p className="font-semibold text-slate-800 text-sm truncate group-hover:text-blue-700 transition leading-snug">{job.job_title}</p>
                               {/* 11 Oct: a post by one of the university's partner employers, applied for on SkillMap */}
-                              {job.source === 'employer' && <span className="ml-2 align-middle text-[11px] font-medium text-blue-700 bg-blue-50 border border-blue-200 rounded-full px-2 py-0.5">Posted on SkillMap</span>}
-                            </p>
+                              {job.source === 'employer' && <span className="shrink-0 text-[11px] font-medium text-blue-700 bg-blue-50 border border-blue-200 rounded-full px-2 py-0.5">Posted on SkillMap</span>}
+                              {mine[job.job_id]?.applied && <span className="shrink-0 text-[11px] font-medium text-slate-700 bg-slate-100 border border-slate-200 rounded-full px-2 py-0.5">You applied · {mine[job.job_id].status_label}</span>}
+                              {mine[job.job_id]?.invited && <span className="shrink-0 text-[11px] font-medium text-violet-700 bg-violet-50 border border-violet-200 rounded-full px-2 py-0.5">Invited to apply</span>}
+                            </div>
                             <p className="text-xs text-slate-400 mt-0.5 truncate">
                               {job.company} · {job.location}{daysAgo(job.posted_days_ago) && ` · ${daysAgo(job.posted_days_ago)}`}
                             </p>

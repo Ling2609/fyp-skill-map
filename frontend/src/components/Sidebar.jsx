@@ -38,6 +38,8 @@ const NAV_ITEMS = [
     // 11 Oct (Employer flow batch 2): jobs applied for on SkillMap and their status
     to: '/applications',
     label: 'My applications',
+    badge: 'invitations',            // 12 Oct: employers' invitations to apply, waiting for an answer
+    badgeLabel: 'invitations',
     icon: (
       <svg className="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
@@ -121,9 +123,10 @@ export default function Sidebar() {
     window.addEventListener(ADMIN_COUNTS_CHANGED, bump)
     return () => window.removeEventListener(ADMIN_COUNTS_CHANGED, bump)
   }, [])
-  // Approved employers get the same: new applications (status "applied") on My jobs
+  // Approved employers get the same: new applications ("applied") on My jobs; students: invitations to apply (12 Oct)
   const countsUrl = isAdmin ? '/admin/counts'
-    : user?.role === 'employer' && user.employer_status === 'approved' ? '/employer/counts' : null
+    : user?.role === 'employer' && user.employer_status === 'approved' ? '/employer/counts'
+    : user?.role === 'student' ? '/applications/counts' : null
   useEffect(() => {
     if (!countsUrl) return
     let cancelled = false
@@ -199,7 +202,7 @@ export default function Sidebar() {
           <NavLink
             key={item.to}
             to={item.to}
-            title={collapsed ? item.label : ''}
+            title={collapsed ? item.label + (item.badge && counts[item.badge] > 0 ? ` (${counts[item.badge]} ${item.badgeLabel || 'waiting'})` : '') : ''}
             className={({ isActive }) =>
               `relative flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-sm font-medium transition-all ${
                 collapsed ? 'justify-center' : ''
@@ -216,12 +219,15 @@ export default function Sidebar() {
                   {item.icon}
                 </span>
                 {!collapsed && <span className="truncate flex-1">{item.label}</span>}
-                {item.badge && counts[item.badge] > 0 && (
-                  <span aria-label={`${counts[item.badge]} ${item.badgeLabel || 'waiting'}`}
-                    className={`text-[11px] font-semibold bg-amber-100 text-amber-800 rounded-full px-1.5 min-w-5 text-center ${
-                      collapsed ? 'absolute ml-5 -mt-4' : ''}`}>
-                    {counts[item.badge]}
-                  </span>
+                {/* 12 Oct (her review): collapsed, the number sat on top of the icon; now a dot in the corner, clear of
+                    the icon (the count stays in the label and the tooltip) */}
+                {item.badge && counts[item.badge] > 0 && (collapsed
+                  ? <span role="img" aria-label={`${counts[item.badge]} ${item.badgeLabel || 'waiting'}`}
+                      className="absolute top-1.5 right-0.5 w-2 h-2 rounded-full bg-amber-500 ring-2 ring-white" />
+                  : <span aria-label={`${counts[item.badge]} ${item.badgeLabel || 'waiting'}`}
+                      className="text-[11px] font-semibold bg-amber-100 text-amber-800 rounded-full px-1.5 min-w-5 text-center">
+                      {counts[item.badge]}
+                    </span>
                 )}
               </>
             )}

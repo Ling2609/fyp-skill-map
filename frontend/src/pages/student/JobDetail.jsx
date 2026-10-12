@@ -4,6 +4,8 @@ import api from '../../api'
 import { cached, peek } from '../../pageCache'
 import { skillName } from '../../skillName'
 import { SELF_DECLARED_TIP, errText, sourcePillCls } from './profileUtils'
+import ApplicationSteps from '../../components/ApplicationSteps'
+import { ADMIN_COUNTS_CHANGED } from '../../components/Sidebar'
 
 // The grade itself, not its weight: the weight is the same for C+ and C, so a C showed as "C+" (5 Oct)
 const GRADE_LETTERS = { '4.0': 'A', '3.7': 'A-', '3.3': 'B+', '3.0': 'B', '2.7': 'B-', '2.3': 'C+', '2.0': 'C' }
@@ -30,29 +32,41 @@ const fmtDay = (iso) => iso ? new Date(iso).toLocaleDateString('en-GB', { day: '
 
 // Apply on a job posted on SkillMap (11 Oct, Employer flow batch 2; mock-up board 5). There is no outside site,
 // so the student applies with their SkillMap profile; the employer then sees it and the match for this job.
-function ApplyOnSkillMap({ jobRef, company, closed }) {
+// 12 Oct (flow review, mock-up M3): after applying, the same progress steps as My applications (no more green
+// "Applied" when the answer was Not selected); before applying, an employer's invitation is shown above Apply.
+const OUTCOME = { rejected: 'text-rose-700 bg-rose-50 border-rose-200', accepted: 'text-emerald-800 bg-emerald-50 border-emerald-200' }
+
+function useSkillMapApplication(jobRef, onSkillMap) {
   const [app, setApp] = useState(undefined)       // undefined = loading, null = not applied
+  const [invite, setInvite] = useState(null)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
   useEffect(() => {
+    if (!jobRef || !onSkillMap) return
     api.get(`/applications/job/${encodeURIComponent(jobRef)}`).then(res => setApp(res.data)).catch(() => setApp(null))
-  }, [jobRef])
+    api.get('/applications/invitations').then(res => setInvite(res.data.find(i => i.job_ref === jobRef) || null)).catch(() => {})
+  }, [jobRef, onSkillMap])
   const apply = () => {
     setBusy(true); setError('')
     api.post('/applications', { job_id: jobRef })
-      .then(res => setApp(res.data))
+      .then(res => { setApp(res.data); setInvite(null); window.dispatchEvent(new Event(ADMIN_COUNTS_CHANGED)) })
       .catch(err => setError(errText(err, "Couldn't send your application. Try again.")))
       .finally(() => setBusy(false))
   }
+  return { app, invite, busy, error, apply }
+}
+
+function ApplyAction({ a, company, closed }) {
+  const { app, busy, error, apply } = a
   if (app === undefined) return null
   return (
     <div className="shrink-0 flex flex-col items-end gap-1 max-w-64 text-right">
       {app ? (
         <>
-          <span className="text-sm font-semibold text-emerald-800 bg-emerald-50 border border-emerald-200 px-4 py-2 rounded-lg">
-            Applied · {fmtDay(app.applied_at)}
+          <span className={`text-sm font-semibold border px-4 py-2 rounded-lg ${OUTCOME[app.status] || 'text-slate-700 bg-slate-50 border-slate-200'}`}>
+            {['accepted', 'rejected'].includes(app.status) ? `${app.status_label} · ${fmtDay(app.status_changed_at)}` : `Applied · ${fmtDay(app.applied_at)}`}
           </span>
-          <Link to="/applications" className="text-xs text-blue-700 hover:underline">Status: {app.status_label} · My applications</Link>
+          <Link to="/applications" className="text-xs text-blue-700 hover:underline">My applications</Link>
         </>
       ) : closed ? (
         <span className="text-sm text-slate-500 bg-slate-100 px-4 py-2 rounded-lg">This job is closed</span>
@@ -66,6 +80,26 @@ function ApplyOnSkillMap({ jobRef, company, closed }) {
         </>
       )}
       {error && <p role="alert" className="text-xs text-rose-600">{error}</p>}
+    </div>
+  )
+}
+
+function ApplicationProgress({ a, company }) {
+  const { app, invite } = a
+  if (!app && invite) return (
+    <p className="mt-4 text-sm text-violet-900 bg-violet-50 border border-violet-200 rounded-lg px-3.5 py-2.5">
+      <b>{invite.company || company} invited you to apply</b> on {fmtDay(invite.invited_at)}. Applying shares your profile and email with them.
+    </p>
+  )
+  if (!app?.progress) return null
+  const p = app.progress
+  return (
+    <div className="mt-2 border-t border-gray-100">
+      <ApplicationSteps steps={p.steps} decided={['accepted', 'rejected'].includes(app.status)} />
+      {p.nudge && <p className="mt-3 text-sm text-amber-900 bg-amber-50 rounded-lg px-3.5 py-2">
+        <b>No update for {p.quiet_days} days.</b> {p.nudge === 'move_on' ? 'Treat this one as unlikely and put your time into other jobs.' : 'Keep applying to other jobs while you wait.'}
+      </p>}
+      {app.status === 'rejected' && <p className="mt-3 text-sm text-slate-600">Not selected this time. What you were missing is in <b>Skill Gap Analysis</b> below.</p>}
     </div>
   )
 }
@@ -87,6 +121,7 @@ export default function JobDetail() {
       + `&job_id=${encodeURIComponent(gap?.job?.job_id || '')}`, { state: { fromJob: gap?.job?.job_title } })
   }
   const [gap, setGap] = useState(() => peek('/skillgap/', { job_id: decodeURIComponent(jobId) }))
+  const skillmapApp = useSkillMapApplication(gap?.job?.job_id, gap?.job?.source === 'employer')
   const [loading, setLoading] = useState(() => !gap)
   const [error, setError] = useState('')
   const [activeTab, setActiveTab] = useState(location.state?.tab || 'description')
@@ -216,9 +251,7 @@ export default function JobDetail() {
                     : ' · Past posting from JobStreet (2024)'}
               </p>
             </div>
-            {gap?.job?.source === 'employer' && (
-              <ApplyOnSkillMap jobRef={gap.job.job_id} company={gap.job.company} closed={gap.job.closed} />
-            )}
+            {gap?.job?.source === 'employer' && <ApplyAction a={skillmapApp} company={gap.job.company} closed={gap.job.closed} />}
             {gap?.job?.source === 'live' && gap.job.source_url && (
               <div className="shrink-0 flex flex-col items-end gap-1">
               <a
@@ -236,6 +269,8 @@ export default function JobDetail() {
               </div>
             )}
           </div>
+
+          {gap?.job?.source === 'employer' && <ApplicationProgress a={skillmapApp} company={gap.job.company} />}
 
           {/* Score: one number, one bar (they say the same thing) */}
           <div className="mt-5">

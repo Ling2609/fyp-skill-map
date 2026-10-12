@@ -7,6 +7,7 @@ import PageHeader from '../../components/PageHeader'
 import LevelTag from '../../components/LevelTag'
 import { Bar, RowSkeleton, LoadingLabel } from '../../components/Skeleton'
 import { skillName } from '../../skillName'
+import { ADMIN_COUNTS_CHANGED } from '../../components/Sidebar'
 
 // Dashboard (9 Oct redesign, her choice after the "Dashboard on One Screen" mock-ups). A dashboard tells the student
 // what she doesn't know yet (NN/g: "communicating critical information"), so:
@@ -201,7 +202,7 @@ function DashboardSkeleton() {
     </section>
   )
   return (
-    <div className="grid lg:grid-cols-[1.3fr_1fr] gap-5 lg:h-full" aria-busy="true">
+    <div className="grid lg:grid-cols-[1.3fr_1fr] gap-5 lg:flex-1 lg:min-h-0" aria-busy="true">
       <LoadingLabel>Loading your dashboard…</LoadingLabel>
       <div className="flex flex-col gap-5 min-h-0">
         <section className="bg-white rounded-2xl border border-slate-200 shadow-sm lg:flex-1 px-5 sm:px-7 pt-6 pb-6 flex flex-col">
@@ -257,6 +258,15 @@ export default function Dashboard() {
   const [busy, setBusy] = useState(false)
   const [chats, setChats] = useState(null)
   const [chatNote, setChatNote] = useState('')
+  // 12 Oct (her review): an employer's invitation to apply shows here, where she looks first; only when there is one
+  const [invites, setInvites] = useState([])
+  useEffect(() => { api.get('/applications/invitations').then(res => setInvites(res.data)).catch(() => {}) }, [])
+  const dismissInvite = (inv) => {
+    setInvites(list => list.filter(i => i.id !== inv.id))
+    api.patch(`/applications/invitations/${inv.id}`, { dismissed: true })
+      .then(() => window.dispatchEvent(new Event(ADMIN_COUNTS_CHANGED)))
+      .catch(() => setInvites(list => [inv, ...list]))
+  }
 
   // Only sets state when an answer comes back (so it can run from an effect)
   const load = useCallback(() => {
@@ -327,13 +337,28 @@ export default function Dashboard() {
         </div>
       </PageHeader>
 
-      <div className="flex-1 min-h-0 px-4 sm:px-8 py-6">
+      <div className="flex-1 min-h-0 px-4 sm:px-8 py-6 flex flex-col">
         {loadError && <p role="alert" className="text-sm text-rose-600 bg-rose-50 rounded-lg px-4 py-3 mb-4">{loadError}</p>}
+        {invites.length > 0 && (
+          <section aria-label="Invitations to apply" className="mb-5 bg-violet-50 border border-violet-200 rounded-2xl divide-y divide-violet-100">
+            {invites.slice(0, 3).map(inv => (
+              <div key={inv.id} className="px-5 py-3 flex flex-wrap items-center gap-x-4 gap-y-1.5">
+                <p className="flex-1 min-w-60 text-sm text-slate-700">
+                  <b className="text-slate-900">{inv.company} invited you to apply</b> for {inv.title}{inv.match && ` · you have ${inv.match}`}
+                </p>
+                <Link to={`/jobs/${encodeURIComponent(inv.job_ref)}`} state={{ from: 'Dashboard' }}
+                  className="text-sm font-medium text-violet-800 bg-white border border-violet-200 rounded-lg px-3.5 py-1.5 hover:bg-violet-100">View job</Link>
+                <button onClick={() => dismissInvite(inv)} className="text-sm text-slate-500 hover:text-slate-800">Not interested</button>
+              </div>
+            ))}
+            {invites.length > 3 && <Link to="/applications" className="block px-5 py-2.5 text-sm font-medium text-violet-800 hover:underline">See all {invites.length} in My applications</Link>}
+          </section>
+        )}
 
         {emptyProfile ? <StartCard onGo={(tab) => navigate(`/profile?tab=${tab}`)} /> : !goalData ? (
           <DashboardSkeleton />
         ) : (
-          <div className="grid lg:grid-cols-[1.3fr_1fr] gap-5 lg:h-full">
+          <div className="grid lg:grid-cols-[1.3fr_1fr] gap-5 lg:flex-1 lg:min-h-0">
             <div className="flex flex-col gap-5 min-h-0 min-w-0">
               {goalData.goal
                 ? <GoalCard key={goalData.goal} data={goalData} busy={busy} onGoal={changeGoal} onPlan={plan} onJobs={seeGoalJobs} />

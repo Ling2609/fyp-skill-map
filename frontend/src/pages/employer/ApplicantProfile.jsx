@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react'
 import { Link, useParams, useSearchParams } from 'react-router-dom'
 import api from '../../api'
 import PageHeader from '../../components/PageHeader'
-import { ADMIN_COUNTS_CHANGED } from '../../components/Sidebar'
 import { errText } from '../student/profileUtils'
-import { STATUSES, STATUS_CLS } from './statuses'
+import { STATUSES, STATUS_CLS, fmtDay } from './statuses'
+import { useStatusChange } from './statusChange'
 
 // Employer > one applicant (11 Oct, batch 2; mock-up board 4). Their match for this job, each required skill with
 // where it comes from (module, project, certificate), then the showcase: projects, strongest modules (grades only if
@@ -19,25 +19,28 @@ export default function ApplicantProfile() {
   const jobId = params.get('job')
   const [data, setData] = useState(null)
   const [error, setError] = useState('')
-  const [saving, setSaving] = useState(false)
+  const [inviting, setInviting] = useState(false)
 
   useEffect(() => {
     const url = appId ? `/employer/applications/${appId}` : `/employer/graduates/${studentId}?job_id=${jobId}`
     api.get(url).then(res => setData(res.data)).catch(err => setError(errText(err, "Couldn't load this profile.")))
   }, [appId, studentId, jobId])
 
-  const setStatus = (status) => {
-    setSaving(true); setError('')
-    api.patch(`/employer/applications/${appId}`, { status })
-      .then(res => { setData(d => ({ ...d, application: { ...d.application, status: res.data.status } })); window.dispatchEvent(new Event(ADMIN_COUNTS_CHANGED)) })
-      .catch(err => setError(errText(err, "Couldn't change the status. Try again.")))
-      .finally(() => setSaving(false))
+  // 12 Oct: Rejected / Accepted ask first; Shortlisted / Applied change at once with Undo (statusChange.jsx)
+  const status = useStatusChange((id, res) => setData(d => ({ ...d, application: { ...d.application, status: res.status } })))
+  // 12 Oct (her supervisor's point): a graduate who fits can be invited to apply; they decide, their email stays private
+  const invite = () => {
+    setInviting(true); setError('')
+    api.post('/employer/invitations', { job_id: data.job.id, student_id: Number(studentId) })
+      .then(res => setData(d => ({ ...d, invited_at: res.data.invited_at })))
+      .catch(err => setError(errText(err, "Couldn't send the invitation. Try again.")))
+      .finally(() => setInviting(false))
   }
   const s = data?.student, fit = data?.fit
   const links = s ? [['GitHub', s.links?.github], ['LinkedIn', s.links?.linkedin], ['Portfolio', s.links?.portfolio]].filter(([, u]) => u) : []
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col h-screen">
       <PageHeader>
         <div className="pb-5 flex items-end justify-between gap-4">
           <div className="min-w-0">
@@ -51,22 +54,35 @@ export default function ApplicantProfile() {
             </p>}
             {s?.headline && <p className="text-sm text-slate-700 mt-1">{s.headline}</p>}
             {data && !data.application && <p className="text-xs text-slate-500 mt-2">
-              They haven't applied, so their email isn't shared{links.length ? '. You can reach them through the links above.' : '.'}
+              They haven't applied, so their email isn't shared. Invite them to apply: if they do, you see their email here.
             </p>}
           </div>
           {data?.application && (
+            <div className="shrink-0 flex items-end gap-5">
+            {/* 12 Oct: go on to the next application for this job still at Applied, without going back to the list */}
+            {data.next_to_review && <Link to={`/employer/applications/${data.next_to_review.id}`} className="text-sm font-medium text-blue-700 hover:underline pb-2">Next to review: {data.next_to_review.name} ›</Link>}
             <label className="shrink-0 text-xs text-slate-500 flex flex-col gap-1">
               Status for this job
-              <select value={data.application.status} disabled={saving} onChange={e => setStatus(e.target.value)}
+              <select value={data.application.status} disabled={status.busy === data.application.id}
+                onChange={e => status.request({ id: data.application.id, name: s.name, status: data.application.status, job_title: data.job.title }, e.target.value)}
                 className={`text-sm font-semibold border rounded-lg px-3 py-1.5 ${STATUS_CLS[data.application.status]}`}>
                 {STATUSES.map(([v, l]) => <option key={v} value={v}>{l}</option>)}
               </select>
             </label>
+            </div>
           )}
+          {data && !data.application && (data.applied_application_id
+            ? <Link to={`/employer/applications/${data.applied_application_id}`} className="shrink-0 text-sm font-medium text-blue-700 hover:underline">They applied: open the application</Link>
+            : data.invited_at
+              ? <span className="shrink-0 text-sm font-medium text-blue-700 bg-blue-50 border border-blue-200 rounded-lg px-3.5 py-2">Invited {fmtDay(data.invited_at)}</span>
+              : <button onClick={invite} disabled={inviting}
+                  className="shrink-0 px-4 py-2 text-sm font-medium rounded-lg bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-40">
+                  {inviting ? 'Inviting…' : 'Invite to apply'}
+                </button>)}
         </div>
       </PageHeader>
 
-      <div className="flex-1 px-8 py-6 flex flex-wrap items-start gap-5">
+      <div className="flex-1 min-h-0 overflow-y-auto px-8 py-6 flex flex-wrap items-start content-start gap-5">
         {error && <p role="alert" className="w-full text-sm text-rose-700 bg-rose-50 border border-rose-200 rounded-lg px-4 py-2.5">{error}</p>}
         {!data && !error && <p className="text-sm text-slate-400">Loading…</p>}
         {data && (
@@ -138,6 +154,7 @@ export default function ApplicantProfile() {
           </>
         )}
       </div>
+      {status.ui}
     </div>
   )
 }

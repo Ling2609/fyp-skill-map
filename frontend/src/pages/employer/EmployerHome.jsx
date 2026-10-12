@@ -39,6 +39,32 @@ function StatusPill({ status }) {
   return <span className={`text-xs font-medium border rounded-full px-2.5 py-0.5 ${cls}`}>{text}</span>
 }
 
+// Closing a job with applicants still waiting (12 Oct, flow review): they would otherwise only see "closed without a
+// decision". Telling them "Not selected" closes the loop (Talent Board: nearly half of candidates never hear back).
+function CloseDialog({ job, busy, onCancel, onClose }) {
+  const n = job.waiting
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/30" onMouseDown={() => { if (!busy) onCancel() }}>
+      <div role="alertdialog" aria-modal="true" aria-labelledby="close-title" onMouseDown={e => e.stopPropagation()} className="bg-white rounded-2xl shadow-xl w-full max-w-md">
+        <div className="px-6 pt-5 pb-4">
+          <h2 id="close-title" className="text-base font-semibold text-slate-900">Close "{job.title}"?</h2>
+          <p className="text-sm text-slate-600 mt-1.5 leading-relaxed">
+            {n} applicant{n === 1 ? ' is' : 's are'} still waiting for a decision. Tell them "Not selected", or close it and they
+            see "The employer closed this job without a decision".
+          </p>
+        </div>
+        <div className="flex flex-wrap justify-end gap-2 px-6 py-4 bg-slate-50 border-t border-slate-100 rounded-b-2xl">
+          <button type="button" onClick={onCancel} disabled={busy} className="px-4 py-2 text-sm font-medium rounded-lg border border-slate-200 bg-white text-slate-700 hover:bg-slate-50">Cancel</button>
+          <button type="button" onClick={() => onClose(false)} disabled={busy} className="px-4 py-2 text-sm font-medium rounded-lg border border-slate-200 bg-white text-slate-700 hover:bg-slate-50">Close only</button>
+          <button type="button" autoFocus onClick={() => onClose(true)} disabled={busy} className="px-4 py-2 text-sm font-medium rounded-lg bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-40">
+            {busy ? 'Closing…' : `Close and tell ${n === 1 ? 'them' : `all ${n}`} "Not selected"`}
+          </button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 export function MyJobs() {
   const { state } = useLocation()
   const [jobs, setJobs] = useState(null)
@@ -46,19 +72,26 @@ export function MyJobs() {
   const [busy, setBusy] = useState(null)
   const [error, setError] = useState('')
   const [notice, setNotice] = useState(state?.posted ? `"${state.posted}" is live. Students see it in Job Matches now.` : '')
+  // 12 Oct (flow review): after publishing, how many visible graduates already fit, so the next step is clear
+  const [fitNote] = useState(state?.posted && state.fit > 0 ? state.fit : 0)
+  const [askClose, setAskClose] = useState(null)       // a job with applicants still waiting
 
   useEffect(() => {
     if (state?.posted) window.history.replaceState({}, '')     // the "is live" note shows once, not after a reload
     api.get('/employer/jobs').then(res => setJobs(res.data)).catch(err => setError(errText(err, "Couldn't load your jobs.")))
   }, [state?.posted])
 
-  const toggle = (job) => {
+  const toggle = (job, notSelected = null) => {
     const closing = job.status === 'open'
+    // 12 Oct (flow review): closing with applicants still waiting asks what to tell them first
+    if (closing && job.waiting > 0 && notSelected === null) { setAskClose(job); return }
+    setAskClose(null)
     setBusy(job.id); setError(''); setNotice('')
-    api.patch(`/employer/jobs/${job.id}`, { closed: closing })
+    api.patch(`/employer/jobs/${job.id}`, { closed: closing, not_selected_waiting: !!notSelected })
       .then(res => {
         setJobs(prev => prev.map(j => j.id === job.id ? res.data : j))
-        setNotice(closing ? `"${job.title}" is closed. Students no longer see it.` : `"${job.title}" is open again.`)
+        setNotice(closing ? `"${job.title}" is closed. Students no longer see it.${notSelected ? ` ${job.waiting} waiting applicant${job.waiting === 1 ? ' sees' : 's see'} "Not selected".` : ''}`
+          : `"${job.title}" is open again.`)
       })
       .catch(err => setError(errText(err, "Couldn't change the job. Try again.")))
       .finally(() => setBusy(null))
@@ -70,18 +103,21 @@ export function MyJobs() {
   return (
     <>
       <PageHeader>
-        <div className="pb-5 flex items-end justify-between gap-4">
-          <div>
-            <p className="text-[11px] font-semibold text-blue-600 uppercase tracking-widest mb-2">My jobs</p>
-            <h1 className="text-2xl font-semibold tracking-tight text-slate-900">Your job posts</h1>
-            <p className="text-sm text-slate-500 mt-1">Posted jobs appear in students' Job Matches straight away, marked "Posted on SkillMap".</p>
-          </div>
-          <Link to="/employer/post" className="shrink-0 px-4 py-2 text-sm font-medium rounded-lg bg-blue-600 text-white hover:bg-blue-700">+ Post a job</Link>
+        {/* 12 Oct (her review): same header as the other pages (eyebrow, title, one line); Post a job lives in the sidebar */}
+        <div className="pb-5">
+          <p className="text-[11px] font-semibold text-blue-600 uppercase tracking-widest mb-2">My jobs</p>
+          <h1 className="text-2xl font-semibold tracking-tight text-slate-900">Your job posts</h1>
+          <p className="text-sm text-slate-500 mt-1">Posted jobs appear in students' Job Matches straight away, marked "Posted on SkillMap".</p>
         </div>
       </PageHeader>
 
-      <div className="flex-1 px-8 py-6 flex flex-col gap-4">
-        {notice && <p role="status" className="text-sm text-emerald-800 bg-emerald-50 border border-emerald-200 rounded-lg px-4 py-2.5">{notice}</p>}
+      <div className="flex-1 min-h-0 overflow-y-auto px-8 py-6 flex flex-col gap-4">
+        {notice && <p role="status" className="text-sm text-emerald-800 bg-emerald-50 border border-emerald-200 rounded-lg px-4 py-2.5">
+          {notice}
+          {fitNote > 0 && notice.includes('is live') && <> {fitNote} visible graduate{fitNote === 1 ? '' : 's'} already fit it (at least half of its required skills). <Link to="/dashboard" className="font-semibold underline">Invite them from your Dashboard</Link></>}
+        </p>}
+        {askClose && <CloseDialog job={askClose} busy={busy === askClose.id} onCancel={() => setAskClose(null)}
+          onClose={(notSelected) => toggle(askClose, notSelected)} />}
         {error && <p role="alert" className="text-sm text-rose-700 bg-rose-50 border border-rose-200 rounded-lg px-4 py-2.5">{error}</p>}
         {jobs === null && !error && <p className="text-sm text-slate-400">Loading your jobs…</p>}
         {jobs?.length === 0 && (
@@ -121,8 +157,10 @@ export function MyJobs() {
                         <p className="text-xs text-slate-500 mt-0.5">{[j.location, j.category, `posted ${fmtDate(j.posted_at)}`].filter(Boolean).join(' · ')}</p>
                       </td>
                       <td className="px-5 py-3.5"><StatusPill status={j.status} /></td>
+                      {/* 12 Oct: "1 · 1 new" read as a puzzle; now the total, and how many still wait for a status */}
                       <td className="px-5 py-3.5 text-slate-600">
-                        {j.applicants}{j.new_applicants > 0 && <span className="ml-1.5 text-xs font-semibold text-blue-700">· {j.new_applicants} new</span>}
+                        {j.applicants}
+                        {j.new_applicants > 0 && <p className="text-xs font-semibold text-blue-700 mt-0.5">{j.new_applicants} to review</p>}
                       </td>
                       <td className="px-5 py-3.5 text-slate-600 whitespace-nowrap">{j.required} required{j.preferred ? ` · ${j.preferred} nice to have` : ''}</td>
                       <td className="px-5 py-3.5 text-right whitespace-nowrap">
@@ -154,5 +192,5 @@ export function MyJobs() {
 export default function EmployerHome() {
   const { user } = useAuth()
   if (user?.employer_status === 'approved') return <EmployerDashboard />
-  return <div className="flex flex-col min-h-screen"><Waiting status={user?.employer_status} company={user?.company_name} /></div>
+  return <div className="flex flex-col h-screen"><Waiting status={user?.employer_status} company={user?.company_name} /></div>
 }
