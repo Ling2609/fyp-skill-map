@@ -3,6 +3,16 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 12 Oct 2026 — Post a job: no stale skills after a failed re-read; Reopen grey until hovered
+
+- (this commit) From a second audit: when the employer changed the ad and SkillMap's skill reader was down (503),
+  the skills read from the EARLIER ad stayed and could be published with the new one. Now they are dropped and only
+  the skills the employer typed stay, so the employer adds the rest by hand (checked in the browser: old-ad Python /
+  SQL gone, typed Kotlin kept, publish still possible).
+- My jobs: Reopen is grey like Close job and turns green on hover (her question: the same rule for both; View
+  applicants stays the blue main action). The code comment moved out of the button tag (it built fine, but reads
+  better there).
+
 ## 12 Oct 2026 — Regression test suite (backend/tests) and a checked fresh install
 
 - (this commit) The audit's main point: no repeatable tests in the repository. `backend/tests/` (pytest, 34 tests)

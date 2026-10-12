@@ -90,7 +90,16 @@ export default function PostJob() {
         setSoft(res.data.soft)
         setReadFor(adKey)
       })
-      .catch(err => { setError(errText(err, "Couldn't read the skills. Try again.")); if (err.response?.status === 503) setReadFor(adKey) })
+      .catch(err => {
+        setError(errText(err, "Couldn't read the skills. Try again."))
+        if (err.response?.status === 503) {
+          // SkillMap's reader is down: the employer may add the skills by hand. 12 Oct (audit): skills read from an
+          // EARLIER version of the ad are dropped first, so they can't be published with the new ad; typed ones stay
+          setSkills(prev => prev.filter(s => !s.quote))
+          setSoft([])
+          setReadFor(adKey)
+        }
+      })
       .finally(() => setReading(false))
   }
   const add = (level) => (name) => setSkills(prev =>

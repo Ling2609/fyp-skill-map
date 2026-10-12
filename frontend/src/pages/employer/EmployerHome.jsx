@@ -166,12 +166,13 @@ export function MyJobs() {
                       <td className="px-5 py-3.5 text-slate-600 whitespace-nowrap">{j.required} required{j.preferred ? ` · ${j.preferred} nice to have` : ''}</td>
                       <td className="px-5 py-3.5 whitespace-nowrap">
                         <Link to={`/employer/jobs/${j.id}`} className="inline-block text-sm font-medium text-blue-700 border border-blue-300 bg-blue-50 rounded-lg px-3 py-1 hover:bg-blue-100 mr-2">View applicants</Link>
+                        {/* 12 Oct (her review, references.md "Close job button colour"): View applicants is the row's main
+                            action (blue); the other button is grey until hovered, then red for Close job, green for Reopen */}
                         {j.status !== 'hidden' && (
                           <button onClick={() => toggle(j)} disabled={busy === j.id}
-                            // 12 Oct (her review): Close turns red on hover (it hides the job from students), Reopen is green
-                            className={`text-sm font-medium border rounded-lg px-3 py-1 transition-colors disabled:opacity-40 ${j.status === 'open'
-                              ? 'text-slate-600 border-slate-200 hover:text-rose-700 hover:border-rose-300 hover:bg-rose-50'
-                              : 'text-emerald-700 border-emerald-300 hover:bg-emerald-50'}`}>
+                            className={`text-sm font-medium text-slate-600 border border-slate-200 rounded-lg px-3 py-1 transition-colors disabled:opacity-40 ${j.status === 'open'
+                              ? 'hover:text-rose-700 hover:border-rose-300 hover:bg-rose-50'
+                              : 'hover:text-emerald-700 hover:border-emerald-300 hover:bg-emerald-50'}`}>
                             {busy === j.id ? 'Saving…' : j.status === 'open' ? 'Close job' : 'Reopen'}
                           </button>
                         )}
