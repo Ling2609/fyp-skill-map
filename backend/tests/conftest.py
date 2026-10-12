@@ -71,12 +71,29 @@ sys.modules["app.nlp.embedder"] = _stub
 
 
 def _fresh_database():
-    """Drop and create the test database (a brand-new, empty install every run)."""
-    admin = create_engine(_url.set(database="postgres"), isolation_level="AUTOCOMMIT")
-    with admin.connect() as c:
-        c.execute(text(f'DROP DATABASE IF EXISTS "{_url.database}" WITH (FORCE)'))
-        c.execute(text(f'CREATE DATABASE "{_url.database}"'))
-    admin.dispose()
+    """Make the test database empty (a brand-new install every run). If it exists, its tables are wiped by
+    recreating the "public" schema, which needs no special right; if it doesn't, it is created, which needs the
+    CREATEDB right (12 Oct: her app's database user doesn't have it, so the message says how to make it once)."""
+    from sqlalchemy.exc import OperationalError, ProgrammingError
+    try:
+        eng = create_engine(_url, isolation_level="AUTOCOMMIT")
+        with eng.connect() as c:
+            c.execute(text("DROP SCHEMA IF EXISTS public CASCADE"))
+            c.execute(text("CREATE SCHEMA public"))
+        eng.dispose()
+        return
+    except OperationalError as e:
+        if f'"{_url.database}" does not exist' not in str(e):
+            raise
+    try:
+        admin = create_engine(_url.set(database="postgres"), isolation_level="AUTOCOMMIT")
+        with admin.connect() as c:
+            c.execute(text(f'CREATE DATABASE "{_url.database}"'))
+        admin.dispose()
+    except ProgrammingError:
+        pytest.exit(f'The database user "{_url.username}" may not create databases. Make the test database once, '
+                    f'in pgAdmin (Query Tool on any database, signed in as postgres) or psql, then run the tests again:\n'
+                    f'    CREATE DATABASE {_url.database} OWNER {_url.username};', returncode=2)
 
 
 def run_migration(name: str) -> str:

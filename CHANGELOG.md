@@ -3,6 +3,13 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 12 Oct 2026 — Tests work with a database user that may not create databases
+
+- (this commit) Her second run: her app's user (fyp_user) has no CREATEDB right. The tests now empty an existing
+  `skillmap_test` by recreating its `public` schema (no special right needed) and only create the database when it
+  is missing; if they can't, they say the one line to run as postgres. Checked with a user like hers: clear message
+  first, then 34 passed twice in a row after `CREATE DATABASE skillmap_test OWNER ...`.
+
 ## 12 Oct 2026 — Tests use backend/.env's database login by default
 
 - (this commit) Her first run on Windows failed at the database password (the README asked her to type it into a

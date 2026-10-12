@@ -173,7 +173,7 @@ A **new, empty** database gets its tables from `app/models/` when the API starts
 
 `backend/tests/` (12 Oct 2026) runs the real API on a **throwaway** PostgreSQL database that is dropped and made again on every run, so your own data is never touched. It checks a brand-new install (start-up, data migrations, running every migration twice), sign-up and sign-in, role checks, admin decisions, applying and the student's progress (Viewed, Shortlisted, Undo, the 14- and 30-day notes, closing a job), invitations, and that nobody reaches another person's records by changing an id. Skill extraction and matching quality are not tested here (see `docs/evidence/`): the embedding model is replaced by a small stand-in and the relationship model is off, so the tests are fast and need no API keys.
 
-From `backend/` with the venv active, run `python -m pytest`. It uses the server, user and password of `DATABASE_URL` in `backend/.env` with a separate database called `skillmap_test`, made for the run (your own database is never touched). To use a different throwaway database, set `TEST_DATABASE_URL` first (its name must contain "test"). Takes about a minute and a half.
+From `backend/` with the venv active, run `python -m pytest`. It uses the server, user and password of `DATABASE_URL` in `backend/.env` with a separate database called `skillmap_test`, made for the run (your own database is never touched). To use a different throwaway database, set `TEST_DATABASE_URL` first (its name must contain "test"). If your database user may not create databases, make it once as `postgres` (pgAdmin Query Tool or psql): `CREATE DATABASE skillmap_test OWNER <your user>;` — the tests then empty it at the start of each run. Takes about a minute and a half.
 
 ## Never commit
 
