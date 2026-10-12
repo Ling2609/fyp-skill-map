@@ -66,7 +66,6 @@ function ApplyAction({ a, company, closed }) {
           <span className={`text-sm font-semibold border px-4 py-2 rounded-lg ${OUTCOME[app.status] || 'text-slate-700 bg-slate-50 border-slate-200'}`}>
             {['accepted', 'rejected'].includes(app.status) ? `${app.status_label} · ${fmtDay(app.status_changed_at)}` : `Applied · ${fmtDay(app.applied_at)}`}
           </span>
-          <Link to="/applications" className="text-xs text-blue-700 hover:underline">My applications</Link>
         </>
       ) : closed ? (
         <span className="text-sm text-slate-500 bg-slate-100 px-4 py-2 rounded-lg">This job is closed</span>
@@ -99,7 +98,9 @@ function ApplicationProgress({ a, company }) {
       {p.nudge && <p className="mt-3 text-sm text-amber-900 bg-amber-50 rounded-lg px-3.5 py-2">
         <b>No update for {p.quiet_days} days.</b> {p.nudge === 'move_on' ? 'Treat this one as unlikely and put your time into other jobs.' : 'Keep applying to other jobs while you wait.'}
       </p>}
-      {app.status === 'rejected' && <p className="mt-3 text-sm text-slate-600">Not selected this time. What you were missing is in <b>Skill Gap Analysis</b> below.</p>}
+      {/* 12 Oct (her review): no sentence about the gap (the score row and the Skill Gap tab, opened for a rejected
+          application, already say it); the way to all applications sits with the progress it belongs to */}
+      <div className="mt-2 text-right"><Link to="/applications" className="text-xs font-medium text-blue-700 hover:underline">All your applications →</Link></div>
     </div>
   )
 }
@@ -124,7 +125,10 @@ export default function JobDetail() {
   const skillmapApp = useSkillMapApplication(gap?.job?.job_id, gap?.job?.source === 'employer')
   const [loading, setLoading] = useState(() => !gap)
   const [error, setError] = useState('')
-  const [activeTab, setActiveTab] = useState(location.state?.tab || 'description')
+  // 12 Oct (her review): a rejected application opens on Skill Gap Analysis (what to work on next) unless the
+  // student picked a tab (or came back to one)
+  const [chosenTab, setActiveTab] = useState(location.state?.tab || null)
+  const activeTab = chosenTab || (skillmapApp.app?.status === 'rejected' ? 'gap' : 'description')
   const [bullets, setBullets] = useState(() => peek(`/jobs/${encodeURIComponent(jobId)}/description`)?.bullets ?? null)
   const [bulletsLoading, setBulletsLoading] = useState(false)
   const [showSources, setShowSources] = useState(false)

@@ -3,6 +3,14 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 12 Oct 2026 — Her review of the application flow: layout fixes
+
+- (this commit) My applications uses the full page width. Job Detail: no extra sentence under a "Not selected"
+  (a rejected application opens on Skill Gap Analysis instead); "All your applications →" sits under the progress
+  steps instead of under the status pill; a step passed over shows "—" instead of "Shortlisted: skipped". My jobs:
+  every column left-aligned and the actions are buttons. Post a job: the description box takes the height left, so
+  the whole form fits the screen (checked at 1440×900 and 1536×730).
+
 ## 12 Oct 2026 — Application flow: progress for students, invitations, clearer employer actions
 
 - (this commit) Her review of the employer flow, then a walk through the whole application flow for both roles

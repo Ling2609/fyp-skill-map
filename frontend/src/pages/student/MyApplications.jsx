@@ -11,7 +11,7 @@ import ApplicationSteps from '../../components/ApplicationSteps'
 // Decision, each with its date, so the student isn't left waiting in silence (LinkedIn shows "Application viewed";
 // Talent Board: nearly half of candidates never get a status update). After 14 quiet days the card says to keep
 // applying elsewhere, after 30 that this one is unlikely (MyCareersFuture: follow up after 1-2 weeks, move on after
-// about a month). Employers' invitations to apply sit on top. One column, newest update first (her review, 12 Oct). References: references.md "Application progress".
+// about a month). Employers' invitations to apply sit on top. One column across the page width, newest update first (her review, 12 Oct). References: references.md "Application progress".
 const fmtDay = (iso) => iso ? new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }) : ''
 const PILL = {
   applied: 'bg-slate-100 text-slate-700', viewed: 'bg-slate-100 text-slate-700', shortlisted: 'bg-blue-50 text-blue-700',
@@ -82,7 +82,7 @@ export default function MyApplications() {
           <p className="text-sm text-slate-500 mt-1">Jobs you applied for on SkillMap, newest update first: Applied, Viewed by the employer, Shortlisted, then their decision.</p>
         </div>
       </PageHeader>
-      <div className="flex-1 min-h-0 overflow-y-auto px-8 py-6"><div className="max-w-3xl flex flex-col gap-4">
+      <div className="flex-1 min-h-0 overflow-y-auto px-8 py-6"><div className="flex flex-col gap-4">
         {error && <p role="alert" className="text-sm text-rose-700 bg-rose-50 border border-rose-200 rounded-lg px-4 py-2.5">{error}</p>}
 
         {invites.map(inv => (

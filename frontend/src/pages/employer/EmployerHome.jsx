@@ -137,16 +137,17 @@ export function MyJobs() {
               ))}
             </div>
             <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden">
-              {/* 12 Oct (her review): the Job column takes the spare width; the others are fixed, so no wide gaps */}
+              {/* 12 Oct (her review): the Job column takes the spare width; the others are fixed, so no wide gaps; every
+                  column left-aligned (Actions was right-aligned) and the actions are buttons */}
               <table className="w-full text-sm table-fixed">
-                <colgroup><col /><col className="w-28" /><col className="w-36" /><col className="w-60" /><col className="w-60" /></colgroup>
+                <colgroup><col /><col className="w-28" /><col className="w-36" /><col className="w-56" /><col className="w-64" /></colgroup>
                 <thead className="bg-slate-50 text-left text-xs font-semibold text-slate-500">
                   <tr>
                     <th className="px-5 py-3">Job</th>
                     <th className="px-5 py-3">Status</th>
                     <th className="px-5 py-3">Applicants</th>
                     <th className="px-5 py-3">Skills</th>
-                    <th className="px-5 py-3 text-right">Actions</th>
+                    <th className="px-5 py-3">Actions</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100">
@@ -163,11 +164,11 @@ export function MyJobs() {
                         {j.new_applicants > 0 && <p className="text-xs font-semibold text-blue-700 mt-0.5">{j.new_applicants} to review</p>}
                       </td>
                       <td className="px-5 py-3.5 text-slate-600 whitespace-nowrap">{j.required} required{j.preferred ? ` · ${j.preferred} nice to have` : ''}</td>
-                      <td className="px-5 py-3.5 text-right whitespace-nowrap">
-                        <Link to={`/employer/jobs/${j.id}`} className="text-sm font-medium text-blue-700 hover:underline mr-4">View applicants</Link>
+                      <td className="px-5 py-3.5 whitespace-nowrap">
+                        <Link to={`/employer/jobs/${j.id}`} className="inline-block text-sm font-medium text-blue-700 border border-blue-200 rounded-lg px-3 py-1 hover:bg-blue-50 mr-2">View applicants</Link>
                         {j.status !== 'hidden' && (
                           <button onClick={() => toggle(j)} disabled={busy === j.id}
-                            className="text-sm font-medium text-blue-700 hover:underline disabled:text-slate-300">
+                            className="text-sm font-medium text-slate-600 border border-slate-200 rounded-lg px-3 py-1 hover:bg-slate-50 disabled:text-slate-300">
                             {busy === j.id ? 'Saving…' : j.status === 'open' ? 'Close job' : 'Reopen'}
                           </button>
                         )}

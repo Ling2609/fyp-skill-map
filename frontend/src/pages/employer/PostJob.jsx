@@ -118,7 +118,9 @@ export default function PostJob() {
         </div>
       </PageHeader>
 
-      <div className="flex-1 min-h-0 overflow-y-auto px-8 py-6 flex flex-wrap items-start content-start gap-5">
+      {/* 12 Oct (her review): before reading, the form fills the screen and the description box takes the height left,
+          so the whole form shows without scrolling (down to a 6-line box); after reading, ad and skills sit side by side */}
+      <div className={`flex-1 min-h-0 overflow-y-auto px-8 py-6 flex gap-5 ${read ? 'flex-wrap items-start content-start' : 'items-stretch'}`}>
         <section className="flex-1 basis-80 min-w-80 bg-white border border-slate-200 rounded-2xl p-5 flex flex-col gap-4">
           <h2 className="text-[15px] font-semibold text-slate-900">Your ad</h2>
           <div>
@@ -142,11 +144,11 @@ export default function PostJob() {
               {categories.map(c => <option key={c} value={c}>{c}</option>)}
             </select>
           </div>
-          <div>
+          <div className={read ? '' : 'flex-1 min-h-0 flex flex-col'}>
             <label htmlFor="pj-description" className={label}>Description</label>
-            <textarea id="pj-description" rows={read ? 10 : 14} value={ad.description} onChange={set('description')} maxLength={MAX_DESCRIPTION}
+            <textarea id="pj-description" rows={read ? 8 : undefined} value={ad.description} onChange={set('description')} maxLength={MAX_DESCRIPTION}
               placeholder="What the graduate will do, and the skills you ask for, prefer, or will teach"
-              className={`${field} resize-y leading-relaxed`} />
+              className={`${field} leading-relaxed ${read ? 'resize-y' : 'flex-1 min-h-36 resize-none'}`} />
             <div className="flex items-start justify-between gap-3 mt-1">
               <p className="text-xs text-amber-800">{missing.length > 0 && `To read the skills, add ${missing.join(' and ')}.`}</p>
               <p className="text-xs text-slate-400 tabular-nums shrink-0">{ad.description.length} / {MAX_DESCRIPTION}</p>
