@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import api from '../../api'
 import PageHeader from '../../components/PageHeader'
 import { errText } from '../student/profileUtils'
@@ -46,8 +46,15 @@ function ChipBox({ box, skills, onRemove, onAdd }) {
   )
 }
 
+// 13 Oct: the same page edits a posted job (/employer/jobs/:jobId/edit; her design after research, references.md
+// "Editing a published job"). Title, location and category are locked once published; the rest works as here.
+const lockedCls = 'bg-slate-50 text-slate-500 cursor-not-allowed'
+
 export default function PostJob() {
   const navigate = useNavigate()
+  const { jobId } = useParams()
+  const editing = Boolean(jobId)
+  const [editJob, setEditJob] = useState(null)        // the post being edited (applicants count etc.)
   const [ad, setAd] = useState({ title: '', location: '', salary: '', category: '', description: '' })
   const [categories, setCategories] = useState([])
   const [skills, setSkills] = useState([])     // [{ name, level, quote, group }]
@@ -60,6 +67,16 @@ export default function PostJob() {
   useEffect(() => {
     api.get('/jobs/subcategories', { params: { include_past: true } }).then(res => setCategories(res.data)).catch(() => {})
   }, [])
+  useEffect(() => {
+    if (!editing) return
+    api.get(`/employer/jobs/${jobId}/edit`).then(res => {
+      const j = res.data
+      setEditJob(j)
+      setAd({ title: j.title, location: j.location || '', salary: j.salary || '', category: j.category || '', description: j.description })
+      setSkills(j.skills); setSoft(j.soft)
+      setReadFor(`${j.title.trim()}\n${j.description.trim()}`)     // the saved skills belong to the saved ad
+    }).catch(err => setError(errText(err, "Couldn't load this job.")))
+  }, [editing, jobId])
 
   const set = (key) => (e) => setAd(a => ({ ...a, [key]: e.target.value }))
   const adKey = `${ad.title.trim()}\n${ad.description.trim()}`
@@ -109,9 +126,11 @@ export default function PostJob() {
   const remove = (skill) => setSkills(prev => prev.filter(s => s !== skill))
   const publish = () => {
     setPublishing(true); setError('')
-    api.post('/employer/jobs', { ...ad, skills, soft })
-      .then(res => navigate('/employer/jobs', { state: { posted: ad.title.trim(), fit: res.data.graduates_fit } }))
-      .catch(err => { setError(errText(err, "Couldn't publish the job. Try again.")); setPublishing(false) })
+    const req = editing
+      ? api.put(`/employer/jobs/${jobId}`, { description: ad.description, salary: ad.salary, skills, soft })
+      : api.post('/employer/jobs', { ...ad, skills, soft })
+    req.then(res => navigate('/employer/jobs', { state: editing ? { saved: ad.title.trim() } : { posted: ad.title.trim(), fit: res.data.graduates_fit } }))
+      .catch(err => { setError(errText(err, editing ? "Couldn't save the changes. Try again." : "Couldn't publish the job. Try again.")); setPublishing(false) })
   }
   const byLevel = useMemo(() => Object.fromEntries(BOXES.map(b => [b.level, skills.filter(s => s.level === b.level)])), [skills])
 
@@ -119,11 +138,13 @@ export default function PostJob() {
     <div className="flex flex-col h-screen">
       <PageHeader>
         <div className="pb-5">
-          <p className="text-[11px] font-semibold text-blue-600 uppercase tracking-widest mb-2">Post a job</p>
-          <h1 className="text-2xl font-semibold tracking-tight text-slate-900">{read ? 'Check the skills SkillMap read from your ad' : 'Write your job ad'}</h1>
-          <p className="text-sm text-slate-500 mt-1">{read
-            ? 'Students are matched on these. Remove anything wrong, add anything missing, then publish.'
-            : 'SkillMap reads the skills from your ad, and you check them before the job goes live.'}</p>
+          <p className="text-[11px] font-semibold text-blue-600 uppercase tracking-widest mb-2">{editing ? 'My jobs' : 'Post a job'}</p>
+          <h1 className="text-2xl font-semibold tracking-tight text-slate-900">{editing ? `Edit ${editJob?.title || 'job'}` : read ? 'Check the skills SkillMap read from your ad' : 'Write your job ad'}</h1>
+          <p className="text-sm text-slate-500 mt-1">{editing
+            ? (editJob ? `${editJob.applicants ? `${editJob.applicants} applicant${editJob.applicants === 1 ? '' : 's'} · their match updates when you save` : 'Changes show in Job Matches when you save'} · posted date stays the same` : '')
+            : read
+              ? 'Students are matched on these. Remove anything wrong, add anything missing, then publish.'
+              : 'SkillMap reads the skills from your ad, and you check them before the job goes live.'}</p>
         </div>
       </PageHeader>
 
@@ -134,12 +155,14 @@ export default function PostJob() {
           <h2 className="text-[15px] font-semibold text-slate-900">Your ad</h2>
           <div>
             <label htmlFor="pj-title" className={label}>Job title</label>
-            <input id="pj-title" value={ad.title} onChange={set('title')} maxLength={120} placeholder="e.g. Junior Backend Developer" className={field} />
+            <input id="pj-title" value={ad.title} onChange={set('title')} maxLength={120} placeholder="e.g. Junior Backend Developer"
+              disabled={editing} className={`${field} ${editing ? lockedCls : ''}`} />
           </div>
           <div className="flex flex-wrap gap-3">
             <div className="flex-1 basis-36">
               <label htmlFor="pj-location" className={label}>Location</label>
-              <input id="pj-location" value={ad.location} onChange={set('location')} maxLength={120} placeholder="e.g. Kuala Lumpur" className={field} />
+              <input id="pj-location" value={ad.location} onChange={set('location')} maxLength={120} placeholder="e.g. Kuala Lumpur"
+                disabled={editing} className={`${field} ${editing ? lockedCls : ''}`} />
             </div>
             <div className="flex-1 basis-36">
               <label htmlFor="pj-salary" className={label}>Salary <span className="font-normal text-slate-400">(optional)</span></label>
@@ -148,10 +171,11 @@ export default function PostJob() {
           </div>
           <div>
             <label htmlFor="pj-category" className={label}>Job category</label>
-            <select id="pj-category" value={ad.category} onChange={set('category')} className={field}>
+            <select id="pj-category" value={ad.category} onChange={set('category')} disabled={editing} className={`${field} ${editing ? lockedCls : ''}`}>
               <option value="">Choose a category</option>
-              {categories.map(c => <option key={c} value={c}>{c}</option>)}
+              {[...new Set([...categories, ...(ad.category ? [ad.category] : [])])].map(c => <option key={c} value={c}>{c}</option>)}
             </select>
+            {editing && <p className="text-xs text-slate-500 mt-1.5">Title, location and category can't change once a job is posted. To change them, close this job and post a new one.</p>}
           </div>
           <div className={read ? '' : 'flex-1 min-h-0 flex flex-col'}>
             <label htmlFor="pj-description" className={label}>Description</label>
@@ -197,7 +221,7 @@ export default function PostJob() {
                 )}
                 <button type="button" onClick={publish} disabled={!canPublish}
                   className="px-4 py-2 text-sm font-medium rounded-lg bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-40">
-                  {publishing ? 'Publishing…' : 'Publish job'}
+                  {editing ? (publishing ? 'Saving…' : 'Save changes') : publishing ? 'Publishing…' : 'Publish job'}
                 </button>
               </div>
             </div>

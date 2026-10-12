@@ -3,6 +3,19 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 13 Oct 2026 — Employer: edit a posted job
+
+- (this commit) Her design after research (references.md "Editing a published job"): My jobs rows have View
+  applicants and a ⋯ menu (Edit job, Close job / Reopen job; Indeed puts a menu beside each job). Edit job opens the
+  Post a job page filled in. Title, location and category are locked once posted (AJobThing locks the title; some
+  boards lock title, location and industry), with a line saying to close the job and post a new one to change them.
+  Description, salary and skills can change; changing the ad means reading the skills again (the same rule as
+  posting). The posted date stays; applicants stay attached and their match is worked out from the saved skills.
+  Job Matches rebuilds the job from the new skills straight away.
+- API: GET /employer/jobs/{id}/edit, PUT /employer/jobs/{id} (title, location, category ignored). 3 new tests
+  (37 in all): locked fields kept, an applicant's match follows the new skills, rules as for posting, owner only.
+- The ⋯ menu's items stacked side by side inside a table cell that doesn't wrap; they now always stack.
+
 ## 12 Oct 2026 — Tests work with a database user that may not create databases
 
 - (this commit) Her second run: her app's user (fyp_user) has no CREATEDB right. The tests now empty an existing

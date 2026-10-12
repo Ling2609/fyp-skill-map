@@ -52,11 +52,11 @@ export default function RowMenu({ label, items, disabled }) {
       </button>
       {pos && (
         <div ref={menu} role="menu" aria-label={label} onKeyDown={onKey} style={{ position: 'fixed', ...pos }}
-          className="z-40 w-52 bg-white border border-slate-200 rounded-xl shadow-lg p-1.5 text-sm text-left">
+          className="z-40 w-52 bg-white border border-slate-200 rounded-xl shadow-lg p-1.5 text-sm text-left whitespace-normal">
           {items.map(it => (
             <button key={it.label} type="button" role="menuitem" tabIndex={-1}
               onClick={() => { close(); it.onSelect() }}
-              className={`w-full text-left px-3 py-2 rounded-lg focus:outline-none hover:bg-slate-100 focus:bg-slate-100 ${
+              className={`block w-full text-left px-3 py-2 rounded-lg focus:outline-none hover:bg-slate-100 focus:bg-slate-100 ${
                 it.danger ? 'text-rose-700' : 'text-slate-700'}`}>
               {it.label}
             </button>

@@ -104,6 +104,12 @@ def build_job_cache():
         _sync_job_cache()
 
 
+def forget_job(job_id: int):
+    """A job's skills changed (an employer edited the post, 13 Oct): drop it, so the next search rebuilds it."""
+    with _cache_lock:
+        _job_cache.pop(job_id, None)
+
+
 def _sync_job_cache():
     db = SessionLocal()
     try:

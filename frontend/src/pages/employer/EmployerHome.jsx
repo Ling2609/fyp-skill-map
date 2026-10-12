@@ -1,14 +1,15 @@
 import { useEffect, useState } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import api from '../../api'
 import PageHeader from '../../components/PageHeader'
 import { useAuth } from '../../context/useAuth'
 import EmployerDashboard from './EmployerDashboard'
 import { errText } from '../student/profileUtils'
+import RowMenu from '../admin/RowMenu'
 
 // Employer home (11 Oct; mock-up 9 Oct board 1). An employer the career office hasn't approved yet (or has rejected)
 // sees only where they stand. An approved one sees the Dashboard (12 Oct, EmployerDashboard.jsx); My jobs moved to
-// /employer/jobs: their posts, open or closed, with applicant counts, View applicants and close / reopen.
+// /employer/jobs: their posts, open or closed, with applicant counts, View applicants and a ⋯ menu (Edit job, Close / Reopen; 13 Oct).
 const fmtDate = (iso) => iso ? new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : ''
 
 function Waiting({ status, company }) {
@@ -71,15 +72,17 @@ export function MyJobs() {
   const [tab, setTab] = useState('open')
   const [busy, setBusy] = useState(null)
   const [error, setError] = useState('')
-  const [notice, setNotice] = useState(state?.posted ? `"${state.posted}" is live. Students see it in Job Matches now.` : '')
+  const navigate = useNavigate()
+  const [notice, setNotice] = useState(state?.posted ? `"${state.posted}" is live. Students see it in Job Matches now.`
+    : state?.saved ? `Changes to "${state.saved}" are saved. Students see them in Job Matches now.` : '')
   // 12 Oct (flow review): after publishing, how many visible graduates already fit, so the next step is clear
   const [fitNote] = useState(state?.posted && state.fit > 0 ? state.fit : 0)
   const [askClose, setAskClose] = useState(null)       // a job with applicants still waiting
 
   useEffect(() => {
-    if (state?.posted) window.history.replaceState({}, '')     // the "is live" note shows once, not after a reload
+    if (state?.posted || state?.saved) window.history.replaceState({}, '')     // the "is live" note shows once, not after a reload
     api.get('/employer/jobs').then(res => setJobs(res.data)).catch(err => setError(errText(err, "Couldn't load your jobs.")))
-  }, [state?.posted])
+  }, [state?.posted, state?.saved])
 
   const toggle = (job, notSelected = null) => {
     const closing = job.status === 'open'
@@ -140,7 +143,7 @@ export function MyJobs() {
               {/* 12 Oct (her review): the Job column takes the spare width; the others are fixed, so no wide gaps; every
                   column left-aligned (Actions was right-aligned) and the actions are buttons */}
               <table className="w-full text-sm table-fixed">
-                <colgroup><col /><col className="w-28" /><col className="w-36" /><col className="w-56" /><col className="w-64" /></colgroup>
+                <colgroup><col /><col className="w-28" /><col className="w-36" /><col className="w-56" /><col className="w-52" /></colgroup>
                 <thead className="bg-slate-50 text-left text-xs font-semibold text-slate-500">
                   <tr>
                     <th className="px-5 py-3">Job</th>
@@ -165,17 +168,17 @@ export function MyJobs() {
                       </td>
                       <td className="px-5 py-3.5 text-slate-600 whitespace-nowrap">{j.required} required{j.preferred ? ` · ${j.preferred} nice to have` : ''}</td>
                       <td className="px-5 py-3.5 whitespace-nowrap">
-                        <Link to={`/employer/jobs/${j.id}`} className="inline-block text-sm font-medium text-blue-700 border border-blue-300 bg-blue-50 rounded-lg px-3 py-1 hover:bg-blue-100 mr-2">View applicants</Link>
-                        {/* 12 Oct (her review, references.md "Close job button colour"): View applicants is the row's main
-                            action (blue); the other button is grey until hovered, then red for Close job, green for Reopen */}
-                        {j.status !== 'hidden' && (
-                          <button onClick={() => toggle(j)} disabled={busy === j.id}
-                            className={`text-sm font-medium text-slate-600 border border-slate-200 rounded-lg px-3 py-1 transition-colors disabled:opacity-40 ${j.status === 'open'
-                              ? 'hover:text-rose-700 hover:border-rose-300 hover:bg-rose-50'
-                              : 'hover:text-emerald-700 hover:border-emerald-300 hover:bg-emerald-50'}`}>
-                            {busy === j.id ? 'Saving…' : j.status === 'open' ? 'Close job' : 'Reopen'}
-                          </button>
-                        )}
+                        {/* 13 Oct (her pick after research, references.md "Editing a published job"): the row's main action,
+                            then a ⋯ menu beside it, like Indeed's menu beside each job */}
+                        <div className="flex items-center gap-2">
+                          <Link to={`/employer/jobs/${j.id}`} className="inline-block text-sm font-medium text-blue-700 border border-blue-300 bg-blue-50 rounded-lg px-3 py-1 hover:bg-blue-100">View applicants</Link>
+                          {j.status !== 'hidden' && (
+                            <RowMenu label={`Actions for ${j.title}`} disabled={busy === j.id} items={[
+                              { label: 'Edit job', onSelect: () => navigate(`/employer/jobs/${j.id}/edit`) },
+                              j.status === 'open' ? { label: 'Close job', danger: true, onSelect: () => toggle(j) } : { label: 'Reopen job', onSelect: () => toggle(j) },
+                            ]} />
+                          )}
+                        </div>
                       </td>
                     </tr>
                   ))}

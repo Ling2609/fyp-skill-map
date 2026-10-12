@@ -82,6 +82,7 @@ function AppRoutes() {
       <Route path="/employer/post" element={<RoleRoute roles={['employer']}><Layout><PostJob /></Layout></RoleRoute>} />
       <Route path="/employer/jobs" element={<RoleRoute roles={['employer']}><Layout><EmployerJobs /></Layout></RoleRoute>} />
       <Route path="/employer/graduates/:studentId" element={<RoleRoute roles={['employer']}><Layout><ApplicantProfile /></Layout></RoleRoute>} />
+      <Route path="/employer/jobs/:jobId/edit" element={<RoleRoute roles={['employer']}><Layout><PostJob /></Layout></RoleRoute>} />
       <Route path="/employer/jobs/:jobId" element={<RoleRoute roles={['employer']}><Layout><Applicants /></Layout></RoleRoute>} />
       <Route path="/employer/applications/:appId" element={<RoleRoute roles={['employer']}><Layout><ApplicantProfile /></Layout></RoleRoute>} />
       <Route path="/applications" element={<RoleRoute roles={['student']}><Layout><MyApplications /></Layout></RoleRoute>} />

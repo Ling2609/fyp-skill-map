@@ -172,13 +172,8 @@ class JobIn(AdIn):
     soft: list[SoftIn] = []
 
 
-@router.post("/jobs")
-def publish(data: JobIn, employer: User = Depends(require_employer), db: Session = Depends(get_db)):
-    _check_ad(data.title, data.description)
-    if len(data.location.strip()) < 2:
-        raise HTTPException(status_code=400, detail="Add where the job is based.")
-    if not data.category.strip():
-        raise HTTPException(status_code=400, detail="Pick a job category.")
+def _checked_skills(data) -> tuple[list, set]:
+    """The skills to save: tidied, one per canonical name, a known level, at least one required, at most MAX_SKILLS."""
     seen, skills = set(), []
     for s in data.skills:
         name = " ".join(s.name.split())
@@ -192,19 +187,15 @@ def publish(data: JobIn, employer: User = Depends(require_employer), db: Session
         raise HTTPException(status_code=400, detail="Add at least one required skill: students are matched on them.")
     if len(skills) > MAX_SKILLS:
         raise HTTPException(status_code=400, detail=f"Keep it to {MAX_SKILLS} skills or fewer.")
+    return skills, seen
 
+
+def _skill_rows(job: Job, data, skills: list, seen: set) -> list[JobSkill]:
     from app.nlp.skill_extractor import JOB_EVIDENCE_VERSION
     from app.services.evidence import check_quote
-    now = datetime.now(timezone.utc)
-    job = Job(job_id=f"skillmap-{uuid.uuid4().hex[:12]}", job_title=data.title.strip(), company=employer.company_name,
-              location=data.location.strip(), category="Information & Communication Technology",
-              subcategory=data.category.strip(), salary=data.salary.strip() or None, description=data.description,
-              source="employer", listing_date=now, country="MY", posted_by_user_id=employer.id)
-    db.add(job)
-    db.flush()
     rows = []
     for name, s in skills:
-        # A quote is kept only if it is really in the ad that is being published (the ad may have been edited)
+        # A quote is kept only if it is really in the ad that is being saved (the ad may have been edited)
         found, score, _ = check_quote(s.quote, data.description) if s.quote else (False, None, -1)
         rows.append(JobSkill(job_id=job.id, job_ref=job.job_id, skill_name=name, skill_type="hard", level=s.level,
                              extracted_by=JOB_EVIDENCE_VERSION if found else ADDED_BY_EMPLOYER,
@@ -217,10 +208,75 @@ def publish(data: JobIn, employer: User = Depends(require_employer), db: Session
             rows.append(JobSkill(job_id=job.id, job_ref=job.job_id, skill_name=name, skill_type="soft",
                                  level=k.level if k.level in (*LEVELS, "unspecified") else "unspecified",
                                  extracted_by=JOB_EVIDENCE_VERSION, evidence_quote=k.quote or None))
+    return rows
+
+
+@router.post("/jobs")
+def publish(data: JobIn, employer: User = Depends(require_employer), db: Session = Depends(get_db)):
+    _check_ad(data.title, data.description)
+    if len(data.location.strip()) < 2:
+        raise HTTPException(status_code=400, detail="Add where the job is based.")
+    if not data.category.strip():
+        raise HTTPException(status_code=400, detail="Pick a job category.")
+    skills, seen = _checked_skills(data)
+    now = datetime.now(timezone.utc)
+    job = Job(job_id=f"skillmap-{uuid.uuid4().hex[:12]}", job_title=data.title.strip(), company=employer.company_name,
+              location=data.location.strip(), category="Information & Communication Technology",
+              subcategory=data.category.strip(), salary=data.salary.strip() or None, description=data.description,
+              source="employer", listing_date=now, country="MY", posted_by_user_id=employer.id)
+    db.add(job)
+    db.flush()
+    rows = _skill_rows(job, data, skills, seen)
     db.add_all(rows)
     db.commit()
     # 12 Oct: say straight away how many visible graduates fit the new job, so the employer can invite them
     return {**_row(job, rows), "graduates_fit": len(_graduates_who_fit([job], db, limit=None))}
+
+
+# ── Edit a posted job (13 Oct; her design after research, references.md "Editing a published job") ──────────────
+# The Post a job page, filled in. Title, location and category are locked once published (AJobThing locks the title;
+# some boards lock title, location and industry; Indeed advises a new post for those): to change them, close the
+# job and post a new one. Description, salary and skills can change; fixing a skill SkillMap misread is the main
+# reason to edit. The posted date stays. Applicants stay attached; their match is worked out from the new skills.
+@router.get("/jobs/{job_id}/edit")
+def job_for_edit(job_id: int, employer: User = Depends(require_employer), db: Session = Depends(get_db)):
+    job = _own_job(job_id, employer, db)
+    if job.hidden_by_admin_at:
+        raise HTTPException(status_code=400, detail="The career office hid this job, so it can't be edited.")
+    rows = db.query(JobSkill).filter(JobSkill.job_id == job.id).order_by(JobSkill.id).all()
+    hard = [r for r in rows if r.skill_type == "hard"]
+    return {**_row(job, hard, _statuses([job.id], db).get(job.id, [])),
+            "description": job.description or "",
+            "skills": [{"name": r.skill_name, "level": r.level if r.level in LEVELS else "required",
+                        "quote": r.evidence_quote or "", "group": r.alternative_group or ""} for r in hard],
+            "soft": [{"name": r.skill_name, "level": r.level or "unspecified", "quote": r.evidence_quote or ""}
+                     for r in rows if r.skill_type == "soft"]}
+
+
+class EditIn(BaseModel):
+    description: str = Field(max_length=MAX_DESCRIPTION)
+    salary: str = Field(default="", max_length=60)
+    skills: list[SkillIn]
+    soft: list[SoftIn] = []
+
+
+@router.put("/jobs/{job_id}")
+def save_edit(job_id: int, data: EditIn, employer: User = Depends(require_employer), db: Session = Depends(get_db)):
+    job = _own_job(job_id, employer, db)
+    if job.hidden_by_admin_at:
+        raise HTTPException(status_code=400, detail="The career office hid this job, so it can't be edited.")
+    _check_ad(job.job_title, data.description)
+    skills, seen = _checked_skills(data)
+    job.description = data.description
+    job.salary = data.salary.strip() or None
+    job.formatted_description = None          # the students' bullet-point version is made again from the new text
+    db.query(JobSkill).filter(JobSkill.job_id == job.id).delete()
+    rows = _skill_rows(job, data, skills, seen)
+    db.add_all(rows)
+    db.commit()
+    from app.routers.recommend import forget_job
+    forget_job(job.id)                        # Job Matches rebuilds this job from the saved skills
+    return _row(job, rows, _statuses([job.id], db).get(job.id, []))
 
 
 # ── Applicants (batch 2) ─────────────────────────────────────────────────────────────────────────────────────────
