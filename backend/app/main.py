@@ -2,8 +2,8 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.database import Base, engine
-from app.routers import admin, admin_academic, auth, employer, modules, jobs, recommend, skillgap, chatbot, profile
-from app.models import user, module, job, programme  # noqa: F401
+from app.routers import admin, admin_academic, applications, auth, employer, modules, jobs, recommend, skillgap, chatbot, profile
+from app.models import user, module, job, programme, application  # noqa: F401
 from app.models import profile as profile_model  # noqa: F401 — registers tables with Base
 
 
@@ -15,6 +15,8 @@ async def lifespan(app: FastAPI):
     check_profile_schema()   # the same for migrate_profile_skill_evidence.py
     from app.routers.jobs import check_jobs_schema
     check_jobs_schema()      # the same for migrate_add_job_gone_at.py
+    from app.routers.applications import check_applications_schema
+    check_applications_schema()   # the same for migrate_applications.py (11 Oct)
     from app.routers.admin import check_admin_schema
     check_admin_schema()     # the same for migrate_admin_structure.py (7 Oct)
     delete_old_codes()
@@ -53,6 +55,7 @@ app.include_router(profile.router)
 app.include_router(admin.router)
 app.include_router(admin_academic.router)
 app.include_router(employer.router)
+app.include_router(applications.router)
 
 
 @app.get("/")

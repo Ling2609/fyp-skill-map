@@ -7,7 +7,7 @@ import { errText } from '../student/profileUtils'
 
 // Employer home (11 Oct; mock-up 9 Oct board 1). An employer the career office hasn't approved yet (or has rejected)
 // sees only where they stand. An approved one sees My jobs: their posts, open or closed, with close / reopen.
-// Applicants come in batch 2.
+// 11 Oct batch 2: applicant counts and View applicants.
 const fmtDate = (iso) => iso ? new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : ''
 
 function Waiting({ status, company }) {
@@ -105,6 +105,7 @@ function MyJobs() {
                   <tr>
                     <th className="px-5 py-3">Job</th>
                     <th className="px-5 py-3">Status</th>
+                    <th className="px-5 py-3">Applicants</th>
                     <th className="px-5 py-3">Skills</th>
                     <th className="px-5 py-3 text-right">Actions</th>
                   </tr>
@@ -117,8 +118,12 @@ function MyJobs() {
                         <p className="text-xs text-slate-500 mt-0.5">{[j.location, j.category, `posted ${fmtDate(j.posted_at)}`].filter(Boolean).join(' · ')}</p>
                       </td>
                       <td className="px-5 py-3.5"><StatusPill status={j.status} /></td>
+                      <td className="px-5 py-3.5 text-slate-600">
+                        {j.applicants}{j.new_applicants > 0 && <span className="ml-1.5 text-xs font-semibold text-blue-700">· {j.new_applicants} new</span>}
+                      </td>
                       <td className="px-5 py-3.5 text-slate-600">{j.required} required{j.preferred ? ` · ${j.preferred} nice to have` : ''}</td>
-                      <td className="px-5 py-3.5 text-right">
+                      <td className="px-5 py-3.5 text-right whitespace-nowrap">
+                        <Link to={`/employer/jobs/${j.id}`} className="text-sm font-medium text-blue-700 hover:underline mr-4">View applicants</Link>
                         {j.status !== 'hidden' && (
                           <button onClick={() => toggle(j)} disabled={busy === j.id}
                             className="text-sm font-medium text-blue-700 hover:underline disabled:text-slate-300">
@@ -129,7 +134,7 @@ function MyJobs() {
                     </tr>
                   ))}
                   {shown.length === 0 && (
-                    <tr><td colSpan={4} className="px-5 py-8 text-center text-sm text-slate-400">
+                    <tr><td colSpan={5} className="px-5 py-8 text-center text-sm text-slate-400">
                       {tab === 'open' ? 'No open jobs.' : 'No closed jobs.'}
                     </td></tr>
                   )}

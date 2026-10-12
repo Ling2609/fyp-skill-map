@@ -35,6 +35,16 @@ const NAV_ITEMS = [
     ),
   },
   {
+    // 11 Oct (Employer flow batch 2): jobs applied for on SkillMap and their status
+    to: '/applications',
+    label: 'My applications',
+    icon: (
+      <svg className="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+      </svg>
+    ),
+  },
+  {
     to: '/chatbot',
     label: 'AI Assistant',
     icon: (

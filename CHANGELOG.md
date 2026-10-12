@@ -3,6 +3,26 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 11 Oct 2026 — Employer flow, batch 2: Apply on SkillMap, My applications, applicants (3A), applicant profile
+
+- (this commit) Following the 9 Oct mock-ups (boards 3A, 4, 5 and 6):
+  - **Student, Job Detail:** a job posted on SkillMap has **Apply with my SkillMap profile** (the employer sees
+    the profile and the match for this job); afterwards "Applied · date" with the status. Live jobs keep "Apply on
+    LinkedIn / Hiredly ↗". A closed post says so. Applying needs a profile with skills.
+  - **Student, My applications** (new sidebar item): every application with the match ("3 of 3 required"), date,
+    status and when it last changed; tabs by status; "Job closed" tag. The employer's "Rejected" reads "Not selected".
+  - **Employer, My jobs:** Applicants column ("2 · 2 new") and **View applicants**.
+  - **Employer, applicants list (her pick 3A):** best match first, required skills each has ("3 of 3", "missing
+    Git"), applied date, a status menu per row (Applied / Shortlisted / Accepted / Rejected), tabs with counts.
+  - **Employer, one applicant:** "For this job: X of Y required skills" with where each comes from (module,
+    project, certificate; self-declared marked), what is missing, then projects, strongest modules (grades only if
+    the student allows it), certificates and awards, contact links; the status can be changed here too.
+- Backend: `applications` table (`app/models/application.py`, one per student per job), `app/routers/applications.py`
+  (student: apply, mine, status for one job), employer endpoints for applicants, status and one applicant (only
+  for their own posts; another employer gets 404). The skill gap was split into `skill_gap_for(student, job, db)`
+  so the employer sees exactly the match the student sees; Job Detail now knows when a SkillMap post is closed.
+- **Run once:** `python migrations/migrate_applications.py`.
+
 ## 11 Oct 2026 — E1b checker stop gate: not adopted (two runs)
 
 - (this commit) The skill checker (Cohere Command A Plus) on the 30 development ads, two full runs with the same

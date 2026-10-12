@@ -17,6 +17,9 @@ import AdminUsers from './pages/admin/AdminUsers'
 import AdminAcademic from './pages/admin/AdminAcademic'
 import EmployerHome from './pages/employer/EmployerHome'
 import PostJob from './pages/employer/PostJob'
+import Applicants from './pages/employer/Applicants'
+import ApplicantProfile from './pages/employer/ApplicantProfile'
+import MyApplications from './pages/student/MyApplications'
 
 function RoleRoute({ children, roles }) {
   const { user, loading, serverDown } = useAuth()
@@ -76,6 +79,9 @@ function AppRoutes() {
       <Route path="/admin/users" element={<RoleRoute roles={['admin']}><Layout><AdminUsers /></Layout></RoleRoute>} />
       <Route path="/admin/academic" element={<RoleRoute roles={['admin']}><Layout><AdminAcademic /></Layout></RoleRoute>} />
       <Route path="/employer/post" element={<RoleRoute roles={['employer']}><Layout><PostJob /></Layout></RoleRoute>} />
+      <Route path="/employer/jobs/:jobId" element={<RoleRoute roles={['employer']}><Layout><Applicants /></Layout></RoleRoute>} />
+      <Route path="/employer/applications/:appId" element={<RoleRoute roles={['employer']}><Layout><ApplicantProfile /></Layout></RoleRoute>} />
+      <Route path="/applications" element={<RoleRoute roles={['student']}><Layout><MyApplications /></Layout></RoleRoute>} />
       <Route path="/setup" element={<RoleRoute roles={['student']}><StudySetup /></RoleRoute>} />
       <Route path="/modules" element={<Navigate to="/profile?tab=modules" replace />} />
       <Route path="/recommend" element={<RoleRoute roles={['student']}><Layout><Recommend /></Layout></RoleRoute>} />

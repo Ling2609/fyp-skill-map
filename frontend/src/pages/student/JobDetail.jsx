@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react'
-import { useLocation, useNavigate, useParams } from 'react-router-dom'
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
+import api from '../../api'
 import { cached, peek } from '../../pageCache'
 import { skillName } from '../../skillName'
-import { SELF_DECLARED_TIP, sourcePillCls } from './profileUtils'
+import { SELF_DECLARED_TIP, errText, sourcePillCls } from './profileUtils'
 
 // The grade itself, not its weight: the weight is the same for C+ and C, so a C showed as "C+" (5 Oct)
 const GRADE_LETTERS = { '4.0': 'A', '3.7': 'A-', '3.3': 'B+', '3.0': 'B', '2.7': 'B-', '2.3': 'C+', '2.0': 'C' }
@@ -25,6 +26,49 @@ const postedAgo = (iso) => {
   return `${Math.floor(days / 7)} weeks ago`
 }
 
+const fmtDay = (iso) => iso ? new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }) : ''
+
+// Apply on a job posted on SkillMap (11 Oct, Employer flow batch 2; mock-up board 5). There is no outside site,
+// so the student applies with their SkillMap profile; the employer then sees it and the match for this job.
+function ApplyOnSkillMap({ jobRef, company, closed }) {
+  const [app, setApp] = useState(undefined)       // undefined = loading, null = not applied
+  const [busy, setBusy] = useState(false)
+  const [error, setError] = useState('')
+  useEffect(() => {
+    api.get(`/applications/job/${encodeURIComponent(jobRef)}`).then(res => setApp(res.data)).catch(() => setApp(null))
+  }, [jobRef])
+  const apply = () => {
+    setBusy(true); setError('')
+    api.post('/applications', { job_id: jobRef })
+      .then(res => setApp(res.data))
+      .catch(err => setError(errText(err, "Couldn't send your application. Try again.")))
+      .finally(() => setBusy(false))
+  }
+  if (app === undefined) return null
+  return (
+    <div className="shrink-0 flex flex-col items-end gap-1 max-w-64 text-right">
+      {app ? (
+        <>
+          <span className="text-sm font-semibold text-emerald-800 bg-emerald-50 border border-emerald-200 px-4 py-2 rounded-lg">
+            Applied · {fmtDay(app.applied_at)}
+          </span>
+          <Link to="/applications" className="text-xs text-blue-700 hover:underline">Status: {app.status_label} · My applications</Link>
+        </>
+      ) : closed ? (
+        <span className="text-sm text-slate-500 bg-slate-100 px-4 py-2 rounded-lg">This job is closed</span>
+      ) : (
+        <>
+          <button onClick={apply} disabled={busy}
+            className="text-sm font-semibold text-white bg-blue-700 hover:bg-blue-800 px-4 py-2 rounded-lg transition disabled:opacity-50">
+            {busy ? 'Applying…' : 'Apply with my SkillMap profile'}
+          </button>
+          <p className="text-xs text-slate-500">{company || 'The employer'} sees your profile and your match for this job.</p>
+        </>
+      )}
+      {error && <p role="alert" className="text-xs text-rose-600">{error}</p>}
+    </div>
+  )
+}
 
 export default function JobDetail() {
   const navigate = useNavigate()
@@ -172,6 +216,9 @@ export default function JobDetail() {
                     : ' · Past posting from JobStreet (2024)'}
               </p>
             </div>
+            {gap?.job?.source === 'employer' && (
+              <ApplyOnSkillMap jobRef={gap.job.job_id} company={gap.job.company} closed={gap.job.closed} />
+            )}
             {gap?.job?.source === 'live' && gap.job.source_url && (
               <div className="shrink-0 flex flex-col items-end gap-1">
               <a

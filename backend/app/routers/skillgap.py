@@ -27,9 +27,14 @@ def analyse_skill_gap(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
+    return skill_gap_for(current_user, payload.job_id, db)
+
+
+def skill_gap_for(student: User, job_ref: str, db: Session) -> dict:
+    """One student's skill gap for one job (11 Oct: also used for an employer's applicants, employer.py)."""
     # One shared Graduate Skill Profile (modules + grades, projects, certifications).
     # Module evidence wins over project/cert evidence because it carries a grade.
-    profile = build_skill_profile(current_user.id, db)
+    profile = build_skill_profile(student.id, db)
     if not profile:
         raise HTTPException(status_code=400, detail=EMPTY_PROFILE_MESSAGE)
     graduate_skills = {ev.name: ev.weight for ev in profile.values()}       # skill_name -> weight
@@ -38,7 +43,7 @@ def analyse_skill_gap(
     skill_grade = {ev.name: ev.grade for ev in profile.values()}            # the module grade itself (B4)
 
     # Get job
-    job = db.query(Job).filter(Job.job_id == payload.job_id).first()
+    job = db.query(Job).filter(Job.job_id == job_ref).first()
     if not job:
         raise HTTPException(status_code=404, detail="Job not found")
 
@@ -124,6 +129,8 @@ def analyse_skill_gap(
             "publisher": job.publisher,
             "listing_date": job.listing_date.isoformat() if job.listing_date else None,
             "country": job.country,
+            # 11 Oct: a SkillMap post its employer closed (or Admin hid) can still be opened, e.g. from My applications
+            "closed": bool(job.closed_at or job.hidden_by_admin_at),
         },
         "summary": {
             "job_skills_total": sc["total"],

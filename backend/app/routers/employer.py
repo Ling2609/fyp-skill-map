@@ -10,7 +10,12 @@ An employer is one of the university's industry partners. They register with a c
     al. 2019, references.md "Reviewing AI-suggested skills"), as Admin does for module skills.
 
 A published post is source "employer": Job Matches shows it like a live job (marked "Posted on SkillMap") until
-the employer closes it; it never expires by age. Applications and applicants come in batch 2.
+the employer closes it; it never expires by age.
+
+Batch 2 (11 Oct; mock-ups boards 3A and 4): the applicants of each post as a list, best match first, with a status
+per applicant (Applied / Shortlisted / Accepted / Rejected), and one applicant's profile for this job: their match
+with the evidence for each required skill, projects, strongest modules (grades only if the student allows it),
+certificates and awards. An employer sees only students who applied to one of their own posts.
 """
 import uuid
 from datetime import datetime, timezone
@@ -20,6 +25,7 @@ from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 
 from app.database import get_db
+from app.models.application import Application
 from app.models.job import Job, JobSkill
 from app.models.user import User, UserRole
 from app.routers.auth import get_current_user
@@ -48,13 +54,21 @@ def _status(job: Job) -> str:
     return "closed" if job.closed_at else "open"
 
 
-def _row(job: Job, skills: list[JobSkill]) -> dict:
+def _row(job: Job, skills: list[JobSkill], statuses: list[str] = ()) -> dict:
     hard = [s for s in skills if s.skill_type == "hard"]
     return {"id": job.id, "job_ref": job.job_id, "title": job.job_title, "location": job.location,
             "salary": job.salary, "category": job.subcategory, "status": _status(job),
             "posted_at": job.listing_date, "closed_at": job.closed_at,
             "required": sum(1 for s in hard if s.level in ("required", "unspecified")),
-            "preferred": sum(1 for s in hard if s.level == "preferred")}
+            "preferred": sum(1 for s in hard if s.level == "preferred"),
+            "applicants": len(statuses), "new_applicants": sum(1 for st in statuses if st == "applied")}
+
+
+def _statuses(job_ids: list[int], db: Session) -> dict[int, list[str]]:
+    out = {}
+    for job_id, status in db.query(Application.job_id, Application.status).filter(Application.job_id.in_(job_ids)):
+        out.setdefault(job_id, []).append(status)
+    return out
 
 
 def _own_job(job_id: int, employer: User, db: Session) -> Job:
@@ -71,7 +85,8 @@ def my_jobs(employer: User = Depends(require_employer), db: Session = Depends(ge
     skills = {}
     for s in db.query(JobSkill).filter(JobSkill.job_id.in_([j.id for j in jobs])):
         skills.setdefault(s.job_id, []).append(s)
-    return [_row(j, skills.get(j.id, [])) for j in jobs]
+    statuses = _statuses([j.id for j in jobs], db)
+    return [_row(j, skills.get(j.id, []), statuses.get(j.id, [])) for j in jobs]
 
 
 class CloseIn(BaseModel):
@@ -84,7 +99,7 @@ def close_or_reopen(job_id: int, data: CloseIn, employer: User = Depends(require
     job = _own_job(job_id, employer, db)
     job.closed_at = datetime.now(timezone.utc) if data.closed else None
     db.commit()
-    return _row(job, db.query(JobSkill).filter(JobSkill.job_id == job.id).all())
+    return _row(job, db.query(JobSkill).filter(JobSkill.job_id == job.id).all(), _statuses([job.id], db).get(job.id, []))
 
 
 # ── Post a job, step 1: read the skills in the ad ────────────────────────────────────────────────────────────────
@@ -195,3 +210,98 @@ def publish(data: JobIn, employer: User = Depends(require_employer), db: Session
     db.add_all(rows)
     db.commit()
     return _row(job, rows)
+
+
+# ── Applicants (batch 2) ─────────────────────────────────────────────────────────────────────────────────────────
+STATUSES = ("applied", "shortlisted", "accepted", "rejected")
+
+
+def _programme(student: User, db: Session) -> str:
+    from app.models.programme import Intake, Programme
+    programme = db.get(Programme, student.programme_id) if student.programme_id else None
+    intake = db.get(Intake, student.intake_id) if student.intake_id else None
+    return " · ".join(x for x in (programme.name if programme else "", intake.code if intake else "") if x)
+
+
+def _fit(student: User, job: Job, db: Session) -> dict | None:
+    """The student's match for this job: the same skill gap the student sees on Job Detail."""
+    from app.routers.skillgap import skill_gap_for
+    try:
+        return skill_gap_for(student, job.job_id, db)
+    except HTTPException:          # the student removed everything from their profile after applying
+        return None
+
+
+def _applicant(a: Application, student: User, job: Job, db: Session) -> dict:
+    gap = _fit(student, job, db)
+    have = len(gap["matched_skills"]) if gap else 0
+    total = have + len(gap["missing_skills"]) if gap else 0
+    return {"id": a.id, "name": f"{student.first_name} {student.last_name}", "programme": _programme(student, db),
+            "status": a.status, "applied_at": a.created_at, "status_changed_at": a.status_changed_at,
+            "have": have, "total": total, "missing": [m["job_skill"] for m in gap["missing_skills"]] if gap else []}
+
+
+@router.get("/jobs/{job_id}/applicants")
+def applicants(job_id: int, employer: User = Depends(require_employer), db: Session = Depends(get_db)):
+    """One post with its applicants, best match first (most required skills they have, then earliest)."""
+    job = _own_job(job_id, employer, db)
+    skills = db.query(JobSkill).filter(JobSkill.job_id == job.id).order_by(JobSkill.id).all()
+    rows = (db.query(Application, User).join(User, User.id == Application.student_id)
+            .filter(Application.job_id == job.id).all())
+    people = [_applicant(a, u, job, db) for a, u in rows]
+    people.sort(key=lambda p: (-(p["have"] / p["total"] if p["total"] else 0), p["applied_at"]))
+    return {"job": {**_row(job, skills, [a.status for a, _ in rows]),
+                    "required_names": [s.skill_name for s in skills if s.skill_type == "hard"
+                                       and s.level in ("required", "unspecified")]},
+            "applicants": people}
+
+
+def _own_application(app_id: int, employer: User, db: Session) -> tuple[Application, Job, User]:
+    row = (db.query(Application, Job, User).join(Job, Job.id == Application.job_id)
+           .join(User, User.id == Application.student_id)
+           .filter(Application.id == app_id, Job.posted_by_user_id == employer.id).first())
+    if not row:
+        raise HTTPException(status_code=404, detail="Application not found.")
+    return row
+
+
+class StatusIn(BaseModel):
+    status: str
+
+
+@router.patch("/applications/{app_id}")
+def set_status(app_id: int, data: StatusIn, employer: User = Depends(require_employer), db: Session = Depends(get_db)):
+    """The employer moves an application on; the student sees it on My applications ("rejected" as "Not selected")."""
+    if data.status not in STATUSES:
+        raise HTTPException(status_code=400, detail="Unknown status.")
+    a, job, student = _own_application(app_id, employer, db)
+    if a.status != data.status:
+        a.status = data.status
+        a.status_changed_at = datetime.now(timezone.utc)
+        db.commit()
+    return {"id": a.id, "status": a.status, "status_changed_at": a.status_changed_at}
+
+
+@router.get("/applications/{app_id}")
+def applicant_profile(app_id: int, employer: User = Depends(require_employer), db: Session = Depends(get_db)):
+    """One applicant for one of the employer's posts: their match for it (each required skill with where it comes
+    from) and their showcase profile. Grades only if the student allows employers to see them."""
+    from app.services.showcase import build_showcase, grade_letter
+    a, job, student = _own_application(app_id, employer, db)
+    show_grades = bool(student.show_grades_to_employers)
+    gap = _fit(student, job, db)
+    fit = None
+    if gap:
+        fit = {"have": len(gap["matched_skills"]), "total": len(gap["matched_skills"]) + len(gap["missing_skills"]),
+               "matched": [{"skill": m["job_skill"], "source": m["evidence_source"],
+                            # a module's name, or "Project: X" / "Certification: Y" / "Award: Z" (worded for the student)
+                            "from": (m["matched_via_module"] or "").replace("added by you", "added by the student"),
+                            "grade": grade_letter(m["grade"]) if show_grades and m["evidence_source"] == "module" else ""}
+                           for m in gap["matched_skills"]],
+               "missing": [m["job_skill"] for m in gap["missing_skills"]],
+               "nice_missing": [n["job_skill"] for n in gap["nice_to_have"] if not n["has"]]}
+    return {"application": {"id": a.id, "status": a.status, "applied_at": a.created_at},
+            "job": {"id": job.id, "title": job.job_title},
+            "student": {**build_showcase(student, db, for_employer=True), "email": student.email,
+                        "programme_line": _programme(student, db)},
+            "fit": fit}
