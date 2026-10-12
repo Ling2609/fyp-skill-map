@@ -3,6 +3,22 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 12 Oct 2026 — Fixes from an outside audit of the application flow
+
+- (this commit) Checked each point of the audit against the code, then fixed what was real:
+  - Undo set whatever status the request asked for; it now restores the status before the undone change from the
+    history (found by the new edge-case tests).
+  - Two applications or invitations sent at once returned a server error; now "You already applied" / "already
+    invited" (409). The unique constraints stay.
+  - Applying uses the same "current job" rule as Job Matches (gone, closed or hidden).
+  - "Viewed" is recorded on the first opening of the profile even if a status was set from the list first.
+  - Admin Users reloads the current filter after approve / reject / deactivate / reactivate (an approved employer
+    used to stay under Waiting) and says what happened.
+  - Written down, not changed: one invitation per job per student (after "Not interested" the employer can't ask
+    again), and any status can follow any other so mistakes can be put right (Accepted / Rejected ask first).
+  - 25 new edge-case API checks (simultaneous applies, status before opening, shortlist → back → again, reject then
+    correct, closing twice, reopening, gone job, cross-employer access, deactivated student).
+
 ## 12 Oct 2026 — Her review of the application flow: layout fixes
 
 - (this commit) My applications uses the full page width. Job Detail: no extra sentence under a "Not selected"

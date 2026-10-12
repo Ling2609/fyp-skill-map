@@ -104,7 +104,8 @@ def employer_review_days(employer_id: int, db: Session) -> int | None:
 
 
 def record_view(a: Application, db: Session):
-    """The employer opened this applicant's profile: the student's "Viewed" step (first time only)."""
-    if not db.query(ApplicationEvent).filter(ApplicationEvent.application_id == a.id).first():
+    """The employer opened this applicant's profile: the student's "Viewed" step (first time only). (A status change
+    made from the list before opening also counts as looked at: see first_seen.)"""
+    if not db.query(ApplicationEvent).filter(ApplicationEvent.application_id == a.id, ApplicationEvent.kind == "viewed").first():
         db.add(ApplicationEvent(application_id=a.id, kind="viewed"))
         db.commit()

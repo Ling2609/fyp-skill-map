@@ -9,6 +9,7 @@ to the student as "Not selected" (her 9 Oct mock-up, board 6).
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 from sqlalchemy import inspect
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from app.database import engine, get_db
@@ -37,7 +38,9 @@ def require_student(current_user: User = Depends(get_current_user)) -> User:
 
 
 def _job_open(job: Job) -> bool:
-    return not (job.closed_at or job.hidden_by_admin_at)
+    """The same "current" rule as Job Matches (jobs.current_jobs_filter): not gone, closed or hidden by the career
+    office (12 Oct, audit: gone_at was missing here; employer posts never go "gone" today, but one rule is safer)."""
+    return not (job.gone_at or job.closed_at or job.hidden_by_admin_at)
 
 
 class ApplyIn(BaseModel):
@@ -58,7 +61,11 @@ def apply(data: ApplyIn, student: User = Depends(require_student), db: Session =
         raise HTTPException(status_code=400, detail=EMPTY_PROFILE_MESSAGE)
     a = Application(job_id=job.id, student_id=student.id)
     db.add(a)
-    db.commit()
+    try:
+        db.commit()
+    except IntegrityError:        # two clicks at once: the unique (job, student) constraint stops the second
+        db.rollback()
+        raise HTTPException(status_code=409, detail="You already applied for this job.")
     db.refresh(a)
     return _mine(a, job)
 

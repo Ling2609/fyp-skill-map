@@ -22,6 +22,7 @@ from datetime import datetime, timezone
 
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, Field
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from app.database import get_db
@@ -288,7 +289,11 @@ class StatusIn(BaseModel):
 
 @router.patch("/applications/{app_id}")
 def set_status(app_id: int, data: StatusIn, employer: User = Depends(require_employer), db: Session = Depends(get_db)):
-    """The employer moves an application on; the student sees it on My applications ("rejected" as "Not selected")."""
+    """The employer moves an application on; the student sees it on My applications ("rejected" as "Not selected").
+    Status rule (12 Oct, after an audit asked for one): any status can follow any other, so a mistake can be put
+    right (ATS boards let recruiters move or un-reject candidates). The safeguards are in the UI: Accepted and
+    Rejected ask first and say what the student sees; Shortlisted and Applied have Undo, which removes the change.
+    Every change is an event, and the student's progress shows the current state with its dates."""
     if data.status not in STATUSES:
         raise HTTPException(status_code=400, detail="Unknown status.")
     a, job, student = _own_application(app_id, employer, db)
@@ -302,7 +307,9 @@ def set_status(app_id: int, data: StatusIn, employer: User = Depends(require_emp
             db.flush()
             before = (db.query(ApplicationEvent).filter(ApplicationEvent.application_id == a.id, ApplicationEvent.kind == "status")
                       .order_by(ApplicationEvent.created_at.desc(), ApplicationEvent.id.desc()).first())
-            a.status = data.status
+            # the status before the undone change comes from the history, not from the request (12 Oct, found by the
+            # audit's edge-case tests: an undo could set any status)
+            a.status = before.status if before else "applied"
             a.status_changed_at = before.created_at if before else None
             db.commit()
     elif a.status != data.status:
@@ -514,7 +521,9 @@ class InviteIn(BaseModel):
 @router.post("/invitations")
 def invite(data: InviteIn, employer: User = Depends(require_employer), db: Session = Depends(get_db)):
     """Invite a visible graduate to apply for one of the employer's open jobs (12 Oct; in-app only, one per job per
-    student). The student sees it at the top of My applications and decides; their email stays private."""
+    student). The student sees it at the top of My applications and decides; their email stays private.
+    Deliberately once only: after "Not interested" the employer can't invite again for the same job (the student
+    said no, and the employer isn't told, so a second invitation would be the only way they could find out)."""
     job = _own_job(data.job_id, employer, db)
     if _status(job) != "open":
         raise HTTPException(status_code=400, detail="This job is closed. Reopen it to invite graduates.")
@@ -528,6 +537,10 @@ def invite(data: InviteIn, employer: User = Depends(require_employer), db: Sessi
         raise HTTPException(status_code=409, detail="You already invited them to apply for this job.")
     inv = JobInvitation(job_id=job.id, student_id=student.id)
     db.add(inv)
-    db.commit()
+    try:
+        db.commit()
+    except IntegrityError:        # two clicks at once
+        db.rollback()
+        raise HTTPException(status_code=409, detail="You already invited them to apply for this job.")
     db.refresh(inv)
     return {"id": inv.id, "job_id": job.id, "student_id": student.id, "invited_at": inv.created_at}
