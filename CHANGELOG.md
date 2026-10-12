@@ -18,6 +18,7 @@ Planning, reasoning and research behind each decision are in the project roadmap
 - README: how to run the tests; a new install also needs three data migrations (programmes, modules, intakes),
   module skill extraction and an admin account (it said a new database needs no migrations); the two 11 Oct
   migrations added to the table. `pytest` added to requirements.txt.
+- My jobs (her review): View applicants is blue, Reopen green, and Close job turns red on hover.
 
 ## 12 Oct 2026 — Fixes from an outside audit of the application flow
 
