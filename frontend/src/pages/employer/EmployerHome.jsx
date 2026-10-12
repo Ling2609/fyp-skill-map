@@ -175,7 +175,7 @@ export function MyJobs() {
                           {j.status !== 'hidden' && (
                             <RowMenu label={`Actions for ${j.title}`} disabled={busy === j.id} items={[
                               { label: 'Edit job', onSelect: () => navigate(`/employer/jobs/${j.id}/edit`) },
-                              j.status === 'open' ? { label: 'Close job', danger: true, onSelect: () => toggle(j) } : { label: 'Reopen job', onSelect: () => toggle(j) },
+                              j.status === 'open' ? { label: 'Close job', danger: true, onSelect: () => toggle(j) } : { label: 'Reopen job', success: true, onSelect: () => toggle(j) },
                             ]} />
                           )}
                         </div>
