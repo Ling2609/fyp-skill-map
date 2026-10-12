@@ -3,10 +3,10 @@ SkillMap regression tests (12 Oct 2026; from an outside audit: "the biggest proj
 regression suite"). They run the real API (FastAPI TestClient) on a THROWAWAY PostgreSQL database that is dropped
 and created again at the start of every run, so your real data is never touched.
 
-Set once, then run from backend/ with the venv active:
-    Windows (PowerShell):  $env:TEST_DATABASE_URL="postgresql+psycopg2://postgres:<your password>@localhost:5432/skillmap_test"
-    Git Bash:              export TEST_DATABASE_URL="postgresql+psycopg2://postgres:<your password>@localhost:5432/skillmap_test"
-    python -m pytest tests -q
+Run from backend/ with the venv active:   python -m pytest
+By default it uses the server, user and password of DATABASE_URL in backend/.env with the database name
+"skillmap_test" (made for the run; your own database is never touched). To use another throwaway database, set
+TEST_DATABASE_URL first (Git Bash: export TEST_DATABASE_URL="postgresql://user:password@localhost:5432/skillmap_test").
 
 Safety: the database name must contain "test", and it is never the DATABASE_URL in backend/.env.
 What is NOT tested here: the quality of skill extraction and matching (that is the evaluation in
@@ -30,7 +30,15 @@ from sqlalchemy.engine import make_url
 BACKEND = Path(__file__).resolve().parents[1]
 TEST_URL = os.environ.get("TEST_DATABASE_URL", "")
 if not TEST_URL:
-    pytest.exit("Set TEST_DATABASE_URL to a throwaway database first (see tests/conftest.py).", returncode=2)
+    # 12 Oct (her first run): typing the password into a command is error-prone, so by default the tests use the
+    # same server, user and password as DATABASE_URL in backend/.env, with the database name "skillmap_test"
+    from dotenv import dotenv_values
+    main_url = os.environ.get("DATABASE_URL") or dotenv_values(BACKEND / ".env").get("DATABASE_URL", "")
+    if not main_url:
+        pytest.exit("No DATABASE_URL in backend/.env and no TEST_DATABASE_URL set (see tests/conftest.py).", returncode=2)
+    u = make_url(main_url)
+    TEST_URL = u.set(database="skillmap_test", drivername="postgresql+psycopg2" if u.drivername == "postgresql" else u.drivername
+                     ).render_as_string(hide_password=False)
 _url = make_url(TEST_URL)
 if "test" not in (_url.database or ""):
     pytest.exit(f'TEST_DATABASE_URL must name a database with "test" in it (got "{_url.database}").', returncode=2)

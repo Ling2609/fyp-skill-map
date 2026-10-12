@@ -3,6 +3,13 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 12 Oct 2026 — Tests use backend/.env's database login by default
+
+- (this commit) Her first run on Windows failed at the database password (the README asked her to type it into a
+  command). The tests now take the server, user and password from `DATABASE_URL` in `backend/.env` and use a
+  separate `skillmap_test` database (made for the run; her own database is untouched); `TEST_DATABASE_URL` still
+  overrides it. So the whole run is `python -m pytest`.
+
 ## 12 Oct 2026 — Post a job: no stale skills after a failed re-read; Reopen grey until hovered
 
 - (this commit) From a second audit: when the employer changed the ad and SkillMap's skill reader was down (503),
