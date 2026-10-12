@@ -16,6 +16,7 @@ import AdminDashboard from './pages/admin/AdminDashboard'
 import AdminUsers from './pages/admin/AdminUsers'
 import AdminAcademic from './pages/admin/AdminAcademic'
 import EmployerHome from './pages/employer/EmployerHome'
+import EmployerJobs from './pages/employer/EmployerJobs'
 import PostJob from './pages/employer/PostJob'
 import Applicants from './pages/employer/Applicants'
 import ApplicantProfile from './pages/employer/ApplicantProfile'
@@ -49,7 +50,7 @@ function RoleRoute({ children, roles }) {
 function Home() {
   const { user } = useAuth()
   if (user?.role === 'admin') return <AdminDashboard />
-  if (user?.role === 'employer') return <EmployerHome />     // 11 Oct: My jobs, or "waiting for approval"
+  if (user?.role === 'employer') return <EmployerHome />     // 12 Oct: the employer dashboard, or "waiting for approval"
   return <Dashboard />
 }
 
@@ -79,6 +80,8 @@ function AppRoutes() {
       <Route path="/admin/users" element={<RoleRoute roles={['admin']}><Layout><AdminUsers /></Layout></RoleRoute>} />
       <Route path="/admin/academic" element={<RoleRoute roles={['admin']}><Layout><AdminAcademic /></Layout></RoleRoute>} />
       <Route path="/employer/post" element={<RoleRoute roles={['employer']}><Layout><PostJob /></Layout></RoleRoute>} />
+      <Route path="/employer/jobs" element={<RoleRoute roles={['employer']}><Layout><EmployerJobs /></Layout></RoleRoute>} />
+      <Route path="/employer/graduates/:studentId" element={<RoleRoute roles={['employer']}><Layout><ApplicantProfile /></Layout></RoleRoute>} />
       <Route path="/employer/jobs/:jobId" element={<RoleRoute roles={['employer']}><Layout><Applicants /></Layout></RoleRoute>} />
       <Route path="/employer/applications/:appId" element={<RoleRoute roles={['employer']}><Layout><ApplicantProfile /></Layout></RoleRoute>} />
       <Route path="/applications" element={<RoleRoute roles={['student']}><Layout><MyApplications /></Layout></RoleRoute>} />

@@ -282,12 +282,10 @@ def set_status(app_id: int, data: StatusIn, employer: User = Depends(require_emp
     return {"id": a.id, "status": a.status, "status_changed_at": a.status_changed_at}
 
 
-@router.get("/applications/{app_id}")
-def applicant_profile(app_id: int, employer: User = Depends(require_employer), db: Session = Depends(get_db)):
-    """One applicant for one of the employer's posts: their match for it (each required skill with where it comes
-    from) and their showcase profile. Grades only if the student allows employers to see them."""
+def _profile_for(student: User, job: Job, db: Session, contact: bool) -> dict:
+    """A student's match for one of the employer's jobs (each required skill with where it comes from) and their
+    showcase profile. Grades only if the student allows employers to see them; the email only for applicants."""
     from app.services.showcase import build_showcase, grade_letter
-    a, job, student = _own_application(app_id, employer, db)
     show_grades = bool(student.show_grades_to_employers)
     gap = _fit(student, job, db)
     fit = None
@@ -300,8 +298,88 @@ def applicant_profile(app_id: int, employer: User = Depends(require_employer), d
                            for m in gap["matched_skills"]],
                "missing": [m["job_skill"] for m in gap["missing_skills"]],
                "nice_missing": [n["job_skill"] for n in gap["nice_to_have"] if not n["has"]]}
-    return {"application": {"id": a.id, "status": a.status, "applied_at": a.created_at},
-            "job": {"id": job.id, "title": job.job_title},
-            "student": {**build_showcase(student, db, for_employer=True), "email": student.email,
+    return {"job": {"id": job.id, "title": job.job_title},
+            "student": {**build_showcase(student, db, for_employer=True), "email": student.email if contact else None,
                         "programme_line": _programme(student, db)},
             "fit": fit}
+
+
+@router.get("/applications/{app_id}")
+def applicant_profile(app_id: int, employer: User = Depends(require_employer), db: Session = Depends(get_db)):
+    """One applicant for one of the employer's posts (applying shares the profile and email with this employer)."""
+    a, job, student = _own_application(app_id, employer, db)
+    return {"application": {"id": a.id, "status": a.status, "applied_at": a.created_at},
+            **_profile_for(student, job, db, contact=True)}
+
+
+# ── Dashboard (12 Oct; her pick E after mock-ups A-E, references.md "Employer dashboard layout") ──────────────────
+REVIEW_SHOWN = 20          # applications to review listed (newest first; the rest are in My jobs)
+FIT_SHOWN = 10             # graduates who fit
+FIT_MIN = 0.5              # a graduate "fits" a job when they have at least half of its required skills
+
+
+def _visible_students(db: Session) -> list[User]:
+    return (db.query(User).filter(User.role == UserRole.student, User.is_visible_to_employers.is_(True),
+                                  User.is_active.is_(True)).all())
+
+
+def _graduates_who_fit(open_jobs: list[Job], db: Session) -> list[dict]:
+    """Visible students who haven't applied, each with the open job they fit best, best match first."""
+    applied = {(a.job_id, a.student_id) for a in db.query(Application).filter(
+        Application.job_id.in_([j.id for j in open_jobs]))}
+    best = {}
+    for student in _visible_students(db):
+        for job in open_jobs:
+            if (job.id, student.id) in applied:
+                continue
+            gap = _fit(student, job, db)
+            if not gap:
+                break                         # no profile skills: no job will fit
+            have = len(gap["matched_skills"])
+            total = have + len(gap["missing_skills"])
+            ratio = have / total if total else 0
+            if ratio >= FIT_MIN and (student.id not in best or ratio > best[student.id]["ratio"]):
+                best[student.id] = {"student_id": student.id, "name": f"{student.first_name} {student.last_name}",
+                                    "programme": _programme(student, db), "job_id": job.id, "job_title": job.job_title,
+                                    "have": have, "total": total, "ratio": ratio}
+    return sorted(best.values(), key=lambda g: (-g["ratio"], -g["have"], g["name"]))[:FIT_SHOWN]
+
+
+@router.get("/dashboard")
+def dashboard(employer: User = Depends(require_employer), db: Session = Depends(get_db)):
+    jobs = db.query(Job).filter(Job.posted_by_user_id == employer.id).all()
+    open_jobs = sorted([j for j in jobs if _status(j) == "open"], key=lambda j: j.listing_date, reverse=True)
+    statuses = _statuses([j.id for j in jobs], db)
+    new = (db.query(Application, User, Job).join(User, User.id == Application.student_id)
+           .join(Job, Job.id == Application.job_id)
+           .filter(Job.posted_by_user_id == employer.id, Application.status == "applied")
+           .order_by(Application.created_at.desc()).all())
+    to_review = [{**_applicant(a, u, j, db), "job_id": j.id, "job_title": j.job_title} for a, u, j in new[:REVIEW_SHOWN]]
+    all_statuses = [st for sts in statuses.values() for st in sts]
+    return {
+        "summary": {"jobs": len(jobs), "open_jobs": len(open_jobs), "applicants": len(all_statuses),
+                    "new": sum(1 for st in all_statuses if st == "applied")},
+        "to_review": to_review,
+        "open_jobs": [{"id": j.id, "title": j.job_title, "posted_at": j.listing_date,
+                       "counts": {st: statuses.get(j.id, []).count(st) for st in STATUSES}} for j in open_jobs],
+        "graduates": _graduates_who_fit(open_jobs, db) if open_jobs else [],
+    }
+
+
+@router.get("/counts")
+def counts(employer: User = Depends(require_employer), db: Session = Depends(get_db)):
+    """The sidebar badge: applications nobody has looked at yet ("applied")."""
+    return {"new_applicants": db.query(Application).join(Job, Job.id == Application.job_id).filter(
+        Job.posted_by_user_id == employer.id, Application.status == "applied").count()}
+
+
+@router.get("/graduates/{student_id}")
+def graduate_profile(student_id: int, job_id: int, employer: User = Depends(require_employer),
+                     db: Session = Depends(get_db)):
+    """A visible graduate's profile and match for one of the employer's open jobs (no email: they haven't applied)."""
+    job = _own_job(job_id, employer, db)
+    student = db.query(User).filter(User.id == student_id, User.role == UserRole.student,
+                                    User.is_visible_to_employers.is_(True), User.is_active.is_(True)).first()
+    if not student:
+        raise HTTPException(status_code=404, detail="This graduate's profile isn't visible to employers.")
+    return {"application": None, **_profile_for(student, job, db, contact=False)}

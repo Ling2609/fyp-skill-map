@@ -3,6 +3,23 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 12 Oct 2026 — Employer dashboard (layout E), My jobs table fix, "new" badge
+
+- (this commit) Her pick E after mock-ups A–E (research: references.md "Employer dashboard layout"). An approved
+  employer's home is now a **Dashboard**; **My jobs** moved to its own sidebar item (/employer/jobs).
+  - **Applications to review:** every application still at "Applied", across all their jobs, newest first, with the
+    match ("2 of 2 required") and Review. Empty: "All caught up" or "No applications yet".
+  - **Your open jobs:** each with a stacked bar (applied / shortlisted / accepted / rejected). Shows 3, then scrolls,
+    with "See all N in My jobs".
+  - **Graduates who fit your jobs:** students with "Visible to employers" on who haven't applied to that job and have
+    at least half its required skills; best match first, top 10. Their profile opens without the email or status menu
+    ("They haven't applied, so their email isn't shared"); a hidden student or another employer's job gets 404.
+  - The page fills the screen and each card scrolls on its own (her rule); below laptop width the cards stack.
+  - Sidebar: **My jobs** shows a badge with the number of new applications; it updates when a status changes.
+  - My jobs table: fixed column widths so the gaps between columns are even.
+  - Student profile: the "Visible to employers" hints now say what it does and doesn't do (applying still shares the
+    profile and email with that employer).
+
 ## 12 Oct 2026 — Register: company name for employers
 
 - (this commit) Her test: the Register page had no company field, so an employer reached Admin with no company to

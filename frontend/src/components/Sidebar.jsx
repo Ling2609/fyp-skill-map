@@ -83,10 +83,11 @@ const ADMIN_ITEMS = [
   },
 ]
 
-// Employer (11 Oct, batch 1): My jobs is their home (/dashboard); Post a job. Not approved yet: home only (it shows
-// where they stand)
+// Employer (11 Oct, batch 1; 12 Oct dashboard E): Dashboard is their home (/dashboard), My jobs carries a badge for
+// new applications, Post a job. Not approved yet: home only (it shows where they stand)
 const EMPLOYER_ITEMS = [
-  { ...NAV_ITEMS[0], label: 'My jobs' },
+  NAV_ITEMS[0],
+  { ...NAV_ITEMS[2], to: '/employer/jobs', label: 'My jobs', badge: 'new_applicants', badgeLabel: 'new' },
   {
     to: '/employer/post',
     label: 'Post a job',
@@ -120,12 +121,15 @@ export default function Sidebar() {
     window.addEventListener(ADMIN_COUNTS_CHANGED, bump)
     return () => window.removeEventListener(ADMIN_COUNTS_CHANGED, bump)
   }, [])
+  // Approved employers get the same: new applications (status "applied") on My jobs
+  const countsUrl = isAdmin ? '/admin/counts'
+    : user?.role === 'employer' && user.employer_status === 'approved' ? '/employer/counts' : null
   useEffect(() => {
-    if (!isAdmin) return
+    if (!countsUrl) return
     let cancelled = false
-    api.get('/admin/counts').then(res => { if (!cancelled) setCounts(res.data) }).catch(() => {})
+    api.get(countsUrl).then(res => { if (!cancelled) setCounts(res.data) }).catch(() => {})
     return () => { cancelled = true }
-  }, [isAdmin, location.pathname, location.search, countsTick])
+  }, [countsUrl, location.pathname, location.search, countsTick])
 
   const logout = () => {
     sessionStorage.clear()

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import api from '../../api'
 import PageHeader from '../../components/PageHeader'
+import { ADMIN_COUNTS_CHANGED } from '../../components/Sidebar'
 import { errText } from '../student/profileUtils'
 import { STATUSES, STATUS_CLS, fmtDay } from './statuses'
 
@@ -23,7 +24,7 @@ export default function Applicants() {
   const setStatus = (a, status) => {
     setSaving(a.id); setError('')
     api.patch(`/employer/applications/${a.id}`, { status })
-      .then(res => setData(d => ({ ...d, applicants: d.applicants.map(x => x.id === a.id ? { ...x, ...res.data } : x) })))
+      .then(res => { setData(d => ({ ...d, applicants: d.applicants.map(x => x.id === a.id ? { ...x, ...res.data } : x) })); window.dispatchEvent(new Event(ADMIN_COUNTS_CHANGED)) })
       .catch(err => setError(errText(err, "Couldn't change the status. Try again.")))
       .finally(() => setSaving(null))
   }
@@ -36,7 +37,7 @@ export default function Applicants() {
     <div className="flex flex-col min-h-screen">
       <PageHeader>
         <div className="pb-5">
-          <Link to="/dashboard" className="text-sm text-slate-500 hover:text-blue-700">← My jobs</Link>
+          <Link to="/employer/jobs" className="text-sm text-slate-500 hover:text-blue-700">← My jobs</Link>
           <div className="flex items-center gap-3 mt-2">
             <h1 className="text-2xl font-semibold tracking-tight text-slate-900">{job?.title || 'Applicants'}</h1>
             {job && <span className={`text-xs font-medium border rounded-full px-2.5 py-0.5 ${job.status === 'open'

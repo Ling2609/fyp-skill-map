@@ -101,7 +101,7 @@ export default function PostJob() {
   const publish = () => {
     setPublishing(true); setError('')
     api.post('/employer/jobs', { ...ad, skills, soft })
-      .then(() => navigate('/dashboard', { state: { posted: ad.title.trim() } }))
+      .then(() => navigate('/employer/jobs', { state: { posted: ad.title.trim() } }))
       .catch(err => { setError(errText(err, "Couldn't publish the job. Try again.")); setPublishing(false) })
   }
   const byLevel = useMemo(() => Object.fromEntries(BOXES.map(b => [b.level, skills.filter(s => s.level === b.level)])), [skills])
@@ -177,7 +177,7 @@ export default function PostJob() {
             {BOXES.map(b => <ChipBox key={b.level} box={b} skills={byLevel[b.level]} onRemove={remove} onAdd={add(b.level)} />)}
             {error && <p role="alert" className="text-sm text-rose-600">{error}</p>}
             <div className="pt-4 border-t border-slate-200 flex flex-wrap items-center justify-between gap-3">
-              <Link to="/dashboard" className="text-sm text-slate-600 hover:underline">Cancel</Link>
+              <Link to="/employer/jobs" className="text-sm text-slate-600 hover:underline">Cancel</Link>
               <div className="flex items-center gap-3">
                 {!stale && (required === 0 || detailsMissing.length > 0) && (
                   <span className="text-xs text-amber-800">

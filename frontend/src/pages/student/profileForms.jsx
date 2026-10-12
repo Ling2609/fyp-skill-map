@@ -468,8 +468,8 @@ export function ProfileForm({ data, onDone, onCancel, onDirty }) {
         <legend className="text-sm font-semibold text-gray-800 mb-2">Profile visibility</legend>
         <Toggle id="flag-visible" checked={form.visible_to_employers} onChange={v => set('visible_to_employers', v)}
           label="Visible to employers" hint={form.visible_to_employers
-            ? 'Employers can find your profile and view your skills, projects and certificates.'
-            : 'Your profile is hidden. Employers cannot find or view it.'} />
+            ? 'Employers whose jobs fit you can find your profile (not your email).'
+            : "Employers can't find you. A job you apply for still shares your profile and email with that employer."} />
         <Toggle id="flag-grades" checked={form.show_grades_to_employers} onChange={v => set('show_grades_to_employers', v)}
           label="Show grades" hint={form.show_grades_to_employers
             ? 'Employers see your grade for each module.'

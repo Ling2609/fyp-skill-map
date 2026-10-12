@@ -1,29 +1,35 @@
 import { useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useParams, useSearchParams } from 'react-router-dom'
 import api from '../../api'
 import PageHeader from '../../components/PageHeader'
+import { ADMIN_COUNTS_CHANGED } from '../../components/Sidebar'
 import { errText } from '../student/profileUtils'
 import { STATUSES, STATUS_CLS } from './statuses'
 
 // Employer > one applicant (11 Oct, batch 2; mock-up board 4). Their match for this job, each required skill with
 // where it comes from (module, project, certificate), then the showcase: projects, strongest modules (grades only if
 // the student allows it), certificates and awards.
+// 12 Oct: also a graduate who fits one of the employer's jobs but hasn't applied (/employer/graduates/:studentId?job=):
+// the same page without the status menu and without the email (only applying shares it).
 const card = 'bg-white border border-slate-200 rounded-2xl p-5'
 
 export default function ApplicantProfile() {
-  const { appId } = useParams()
+  const { appId, studentId } = useParams()
+  const [params] = useSearchParams()
+  const jobId = params.get('job')
   const [data, setData] = useState(null)
   const [error, setError] = useState('')
   const [saving, setSaving] = useState(false)
 
   useEffect(() => {
-    api.get(`/employer/applications/${appId}`).then(res => setData(res.data)).catch(err => setError(errText(err, "Couldn't load this applicant.")))
-  }, [appId])
+    const url = appId ? `/employer/applications/${appId}` : `/employer/graduates/${studentId}?job_id=${jobId}`
+    api.get(url).then(res => setData(res.data)).catch(err => setError(errText(err, "Couldn't load this profile.")))
+  }, [appId, studentId, jobId])
 
   const setStatus = (status) => {
     setSaving(true); setError('')
     api.patch(`/employer/applications/${appId}`, { status })
-      .then(res => setData(d => ({ ...d, application: { ...d.application, status: res.data.status } })))
+      .then(res => { setData(d => ({ ...d, application: { ...d.application, status: res.data.status } })); window.dispatchEvent(new Event(ADMIN_COUNTS_CHANGED)) })
       .catch(err => setError(errText(err, "Couldn't change the status. Try again.")))
       .finally(() => setSaving(false))
   }
@@ -35,16 +41,20 @@ export default function ApplicantProfile() {
       <PageHeader>
         <div className="pb-5 flex items-end justify-between gap-4">
           <div className="min-w-0">
-            {data && <Link to={`/employer/jobs/${data.job.id}`} className="text-sm text-slate-500 hover:text-blue-700">← Applicants for {data.job.title}</Link>}
+            {data?.application && <Link to={`/employer/jobs/${data.job.id}`} className="text-sm text-slate-500 hover:text-blue-700">← Applicants for {data.job.title}</Link>}
+            {data && !data.application && <Link to="/dashboard" className="text-sm text-slate-500 hover:text-blue-700">← Dashboard · fits {data.job.title}</Link>}
             <h1 className="text-2xl font-semibold tracking-tight text-slate-900 mt-2">{s?.name || 'Applicant'}</h1>
             {s && <p className="text-sm text-slate-500 mt-1">
               {s.programme_line}
               {links.map(([label, url]) => <span key={label}> · <a href={url} target="_blank" rel="noopener noreferrer" className="text-blue-700 hover:underline">{label} ↗</a></span>)}
-              {' · '}<a href={`mailto:${s.email}`} className="text-blue-700 hover:underline">{s.email}</a>
+              {s.email && <> · <a href={`mailto:${s.email}`} className="text-blue-700 hover:underline">{s.email}</a></>}
             </p>}
             {s?.headline && <p className="text-sm text-slate-700 mt-1">{s.headline}</p>}
+            {data && !data.application && <p className="text-xs text-slate-500 mt-2">
+              They haven't applied, so their email isn't shared{links.length ? '. You can reach them through the links above.' : '.'}
+            </p>}
           </div>
-          {data && (
+          {data?.application && (
             <label className="shrink-0 text-xs text-slate-500 flex flex-col gap-1">
               Status for this job
               <select value={data.application.status} disabled={saving} onChange={e => setStatus(e.target.value)}

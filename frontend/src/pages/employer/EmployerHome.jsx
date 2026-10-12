@@ -3,11 +3,12 @@ import { Link, useLocation } from 'react-router-dom'
 import api from '../../api'
 import PageHeader from '../../components/PageHeader'
 import { useAuth } from '../../context/useAuth'
+import EmployerDashboard from './EmployerDashboard'
 import { errText } from '../student/profileUtils'
 
 // Employer home (11 Oct; mock-up 9 Oct board 1). An employer the career office hasn't approved yet (or has rejected)
-// sees only where they stand. An approved one sees My jobs: their posts, open or closed, with close / reopen.
-// 11 Oct batch 2: applicant counts and View applicants.
+// sees only where they stand. An approved one sees the Dashboard (12 Oct, EmployerDashboard.jsx); My jobs moved to
+// /employer/jobs: their posts, open or closed, with applicant counts, View applicants and close / reopen.
 const fmtDate = (iso) => iso ? new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : ''
 
 function Waiting({ status, company }) {
@@ -38,7 +39,7 @@ function StatusPill({ status }) {
   return <span className={`text-xs font-medium border rounded-full px-2.5 py-0.5 ${cls}`}>{text}</span>
 }
 
-function MyJobs() {
+export function MyJobs() {
   const { state } = useLocation()
   const [jobs, setJobs] = useState(null)
   const [tab, setTab] = useState('open')
@@ -100,7 +101,9 @@ function MyJobs() {
               ))}
             </div>
             <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden">
-              <table className="w-full text-sm">
+              {/* 12 Oct (her review): the Job column takes the spare width; the others are fixed, so no wide gaps */}
+              <table className="w-full text-sm table-fixed">
+                <colgroup><col /><col className="w-28" /><col className="w-36" /><col className="w-60" /><col className="w-60" /></colgroup>
                 <thead className="bg-slate-50 text-left text-xs font-semibold text-slate-500">
                   <tr>
                     <th className="px-5 py-3">Job</th>
@@ -114,14 +117,14 @@ function MyJobs() {
                   {shown.map(j => (
                     <tr key={j.id} className="hover:bg-blue-50/40">
                       <td className="px-5 py-3.5">
-                        <p className="font-medium text-slate-900">{j.title}</p>
+                        <p className="font-medium text-slate-900 truncate">{j.title}</p>
                         <p className="text-xs text-slate-500 mt-0.5">{[j.location, j.category, `posted ${fmtDate(j.posted_at)}`].filter(Boolean).join(' · ')}</p>
                       </td>
                       <td className="px-5 py-3.5"><StatusPill status={j.status} /></td>
                       <td className="px-5 py-3.5 text-slate-600">
                         {j.applicants}{j.new_applicants > 0 && <span className="ml-1.5 text-xs font-semibold text-blue-700">· {j.new_applicants} new</span>}
                       </td>
-                      <td className="px-5 py-3.5 text-slate-600">{j.required} required{j.preferred ? ` · ${j.preferred} nice to have` : ''}</td>
+                      <td className="px-5 py-3.5 text-slate-600 whitespace-nowrap">{j.required} required{j.preferred ? ` · ${j.preferred} nice to have` : ''}</td>
                       <td className="px-5 py-3.5 text-right whitespace-nowrap">
                         <Link to={`/employer/jobs/${j.id}`} className="text-sm font-medium text-blue-700 hover:underline mr-4">View applicants</Link>
                         {j.status !== 'hidden' && (
@@ -150,9 +153,6 @@ function MyJobs() {
 
 export default function EmployerHome() {
   const { user } = useAuth()
-  return (
-    <div className="flex flex-col min-h-screen">
-      {user?.employer_status === 'approved' ? <MyJobs /> : <Waiting status={user?.employer_status} company={user?.company_name} />}
-    </div>
-  )
+  if (user?.employer_status === 'approved') return <EmployerDashboard />
+  return <div className="flex flex-col min-h-screen"><Waiting status={user?.employer_status} company={user?.company_name} /></div>
 }
