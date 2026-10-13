@@ -121,3 +121,22 @@ def test_a_link_opened_by_hand_counts():
         {"url": "https://b.example/", "ok": None, "checked_by_hand": None},
         {"url": "https://c.example/", "ok": False, "checked_by_hand": "2026-10-13"}]}     # failed later: not shown
     assert [r["url"] for r in L.checked(entry)] == ["https://a.example/"]
+
+
+def test_the_skillmap_step_is_last_even_if_another_row_mentions_my_profile():
+    plan = PLAN.replace("| 1. Basics | Run a container |",
+                        "| 1. Basics | Run a container, then look at My Profile |")
+    out = chatbot.ensure_profile_step(plan)
+    rows = [line for line in out.splitlines() if line.startswith("|")]
+    assert rows[-1].startswith("| Add it to SkillMap")
+    assert chatbot.ensure_profile_step(out) == out                 # already last: not added twice
+
+
+def test_a_long_plan_prints_on_several_pages():
+    from app.services.plan_pdf import build_pdf
+    long_url = "https://www.youtube.com/results?search_query=" + "+".join(["docker"] * 40)
+    rows = "\n".join(f"| {i}. Step | Read {long_url} and <b>practise</b> | 1 week | You can show it |" for i in range(1, 25))
+    md = PLAN.split("#### Your plan")[0] + "```\ndocker run --rm hello-world\n```\n\n#### Your plan\n" \
+        "| Step | What to do | Time | Done when |\n|---|---|---|---|\n" + rows
+    pdf = build_pdf(md, student="Wei Ling", goal=None, job=None, have=[], missing=[], skill="Docker <script>")
+    assert pdf.startswith(b"%PDF") and pdf.count(b"/Type /Page\n") + pdf.count(b"/Type /Page ") >= 2

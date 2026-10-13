@@ -8,6 +8,10 @@ Planning, reasoning and research behind each decision are in the project roadmap
   assistant asks "how many hours a week can you spend learning this?" with 3 / 5 / 10 / 15+ hours as buttons (or a
   typed number), then plans for the answer. "I don't know what to learn" isn't asked; each new chat asks again.
 - Skill ranking for the learning resources lists ties by name, so the file is the same on every computer.
+- From the 13 Oct audit: the "Add it to SkillMap" step must be the plan's LAST row (a "My Profile" mention in an
+  earlier step no longer counts); the PDF note says links were checked to open, not reviewed in full, and that
+  Coursera / YouTube links are searches; command blocks are printed in the PDF. Tests: a 24-step plan with long
+  links prints on several pages; the last-row rule.
 
 ## 13 Oct 2026 — AI Assistant: learning plans to follow, check and print
 - Skill Development answers a "learn X" request as one plan: why it matters for the job (with the ad's words), 2-4

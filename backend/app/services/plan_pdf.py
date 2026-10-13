@@ -20,8 +20,10 @@ from reportlab.lib.units import mm
 from reportlab.platypus import (Flowable, HRFlowable, KeepTogether, ListFlowable, ListItem, Paragraph,
                                 SimpleDocTemplate, Spacer, Table, TableStyle)
 
-DISCLAIMER = ("Made by SkillMap's AI Assistant from your profile and the job's skills. Check each resource before "
-              "you rely on it: only links SkillMap has opened and checked are printed.")
+# 13 Oct (audit): say what the check does and doesn't cover, and that search links are searches
+DISCLAIMER = ("Made by SkillMap's AI Assistant from your profile and the job's skills. Links to resources were checked "
+              "to open on the date shown in SkillMap, not reviewed in full; Coursera and YouTube links are searches, "
+              "so pick a result yourself. Check each resource before you rely on it.")
 MD = MarkdownIt("commonmark").enable("table").enable("strikethrough")
 
 _base = dict(fontName="Helvetica", textColor=colors.black, alignment=TA_LEFT)
@@ -114,6 +116,10 @@ def plan_flowables(markdown: str, width: float, skip_title: bool = True) -> list
                                                             spaceBefore=1, spaceAfter=4)]
             first_heading = False
             i += 3
+        elif t.type in ("fence", "code_block"):          # a command block: monospace, wrapped like any text
+            code = "<br/>".join(escape(line) for line in t.content.rstrip("\n").split("\n"))
+            out.append(Paragraph(f'<font name="Courier">{code}</font>', S["body"]))
+            i += 1
         elif t.type == "paragraph_open":
             out.append(Paragraph(_inline(tokens[i + 1]), S["body"]))
             i += 3

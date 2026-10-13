@@ -201,7 +201,9 @@ def ensure_profile_step(reply: str) -> str:
     end = head
     while end + 1 < len(lines) and lines[end + 1].strip().startswith("|"):
         end += 1
-    if any("my profile" in l.lower() for l in lines[head:end + 1]):
+    # 13 Oct (audit): the LAST row must be the SkillMap step; "My Profile" in an earlier row doesn't count
+    last = lines[end].lower()
+    if end > head + 1 and "skillmap" in last and "my profile" in last:
         return reply
     lines.insert(end + 1, f"| Add it to SkillMap | Add the project to My Profile, Projects, so SkillMap counts the skill "
                           f"| 10 min | {skill} shows on My Profile |")
