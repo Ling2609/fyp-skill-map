@@ -81,13 +81,14 @@ def main():
                 return e["skill"]
         return ""
 
+    # most ads first; ties by name, so the file is the same on every computer (13 Oct: ties came out in another order on hers)
+    top = sorted(counts.items(), key=lambda kv: (-kv[1], kv[0]))[:TOP]
     COUNTS_OUT.parent.mkdir(parents=True, exist_ok=True)
     with open(COUNTS_OUT, "w", newline="", encoding="utf-8") as f:
         w = csv.writer(f)
         w.writerow(["rank", "skill", "ads", "resources_under"])
-        for i, (name, n) in enumerate(counts.most_common(TOP), 1):
+        for i, (name, n) in enumerate(top, 1):
             w.writerow([i, name, n, covered_by(name)])
-    top = counts.most_common(TOP)
     covered = sum(1 for name, _ in top if covered_by(name))
     data = {
         "about": ("The AI Assistant's learning links. Built by scripts/pipeline/build_learning_resources.py from "

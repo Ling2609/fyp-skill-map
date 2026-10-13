@@ -3,6 +3,12 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 13 Oct 2026 — AI Assistant asks for the hours a week in the chat
+- The "Hours a week 3 5 10" buttons above the chat are gone (her review: unclear). Before the first plan in a chat the
+  assistant asks "how many hours a week can you spend learning this?" with 3 / 5 / 10 / 15+ hours as buttons (or a
+  typed number), then plans for the answer. "I don't know what to learn" isn't asked; each new chat asks again.
+- Skill ranking for the learning resources lists ties by name, so the file is the same on every computer.
+
 ## 13 Oct 2026 — AI Assistant: learning plans to follow, check and print
 - Skill Development answers a "learn X" request as one plan: why it matters for the job (with the ad's words), 2-4
   resources, a table of 3-5 steps with the time each takes (fitted to the student's hours a week: 3, 5 or 10, picked

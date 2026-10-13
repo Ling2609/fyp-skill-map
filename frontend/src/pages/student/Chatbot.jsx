@@ -93,9 +93,15 @@ const MD = {
 // the student types; Microsoft's Bot Framework "suggested actions" pattern, references.md "Learning plan").
 const isPlan = (msg) => msg.role === 'assistant' && !msg.failed && /^#{1,4}\s*Learning plan:/m.test(msg.content)
 const FOLLOW_UPS = ['Explain step 1 in more detail', 'Suggest a different project', 'Make the plan shorter']
-const HOURS = [3, 5, 10]
+// 13 Oct (her review: the "Hours a week 3 5 10" chips above the chat were unclear): the assistant asks in the chat,
+// with the answers as buttons, before the first plan, and plans for the answer. The question and the answer stay in
+// this page only; the plan request goes to the AI with hours_per_week.
+const HOURS = [3, 5, 10, 15]
+const HOURS_Q = 'Before I plan it: how many hours a week can you spend learning this?'
+const wantsPlan = (text) => /\b(learn|learning|plan|study|roadmap|pick up|master)\b/i.test(text)
+  && !/(don'?t know|dunno|not sure|no idea).{0,20}(what|which)/i.test(text)
 
-function MessageBubble({ msg, onDownload, downloading }) {
+function MessageBubble({ msg, onDownload, downloading, onChoose }) {
   const isUser = msg.role === 'user'
 
   return (
@@ -119,6 +125,17 @@ function MessageBubble({ msg, onDownload, downloading }) {
           ? <p className="text-sm text-white leading-relaxed">{msg.content}</p>
           : <Markdown remarkPlugins={[remarkGfm]} components={MD}>{msg.content}</Markdown>
         }
+        {onChoose && (
+          <div className="mt-3 flex flex-wrap gap-2" role="group" aria-label="Hours a week">
+            {HOURS.map(h => (
+              <button key={h} type="button" onClick={() => onChoose(h)}
+                className="text-sm font-medium text-blue-700 bg-white border border-blue-200 rounded-lg px-3.5 py-1.5 hover:bg-blue-50">
+                {h === 15 ? '15+ hours' : `${h} hours`}
+              </button>
+            ))}
+          </div>
+        )}
+        {onChoose && <p className="text-xs text-slate-400 mt-2">Or type a number below.</p>}
         {onDownload && (
           <div className="mt-3 pt-3 border-t border-slate-100">
             <button type="button" onClick={onDownload} disabled={downloading}
@@ -152,7 +169,8 @@ export default function Chatbot() {
   const [messages, setMessages] = useState([])
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
-  const [hours, setHours] = useState(5)               // hours a week for the plan (13 Oct)
+  const hours = useRef(null)                           // hours a week for plans in this chat, once asked (13 Oct)
+  const pendingPlan = useRef(null)                     // the messages waiting for the hours answer
   const [downloading, setDownloading] = useState(null) // index of the plan being made into a PDF
   const [pdfError, setPdfError] = useState('')
   const bottomRef = useRef(null)
@@ -268,9 +286,9 @@ export default function Chatbot() {
       const res = await api.post('/chatbot/', {
         mode,
         // Only the last 20 messages: keeps each request small (backend limit is 40)
-        messages: msgs.filter(m => !m.failed).slice(-20).map(m => ({ role: m.role, content: m.content })),
+        messages: msgs.filter(m => !m.failed && !m.local).slice(-20).map(m => ({ role: m.role, content: m.content })),
         ...ctx,
-        ...(mode === 'skill_development' ? { hours_per_week: hours } : {}),
+        ...(mode === 'skill_development' && hours.current ? { hours_per_week: hours.current } : {}),
         session_id: sessionRef.current,
       })
       setMessages(prev => [...prev, { role: 'assistant', content: res.data.reply }])
@@ -294,7 +312,27 @@ export default function Chatbot() {
     } finally {
       setLoading(false)
     }
-  }, [mode, hours, getContext, loadSessions])
+  }, [mode, getContext, loadSessions])
+
+  // A plan request with no hours yet: ask first (the request waits), else send it
+  const sendOrAsk = useCallback((msgs, text) => {
+    if (mode === 'skill_development' && hours.current === null && wantsPlan(text)) {
+      pendingPlan.current = msgs
+      setMessages([...msgs, { role: 'assistant', content: HOURS_Q, local: true, ask: true }])
+      return
+    }
+    sendMessages(msgs)
+  }, [mode, sendMessages])
+
+  const chooseHours = (h) => {
+    if (!pendingPlan.current || loading) return
+    hours.current = h
+    const msgs = [...pendingPlan.current, { role: 'assistant', content: HOURS_Q, local: true },
+      { role: 'user', content: h === 15 ? '15 hours or more a week' : `About ${h} hours a week`, local: true }]
+    pendingPlan.current = null
+    setMessages(msgs)
+    sendMessages(msgs)
+  }
 
   // Start (or open) the chat each time chatKey changes: greeting first, then a saved chat's messages, or the
   // "I want to learn X" question when the page was opened from "Learn →" on a job
@@ -314,7 +352,7 @@ export default function Chatbot() {
       askUsed.current = true
       if (shouldAutoSend) {
         hasAutoSent.current = true
-        sendMessages(initMessages)
+        sendOrAsk(initMessages, initMessages[initMessages.length - 1].content)
       }
     }, 0)
     return () => clearTimeout(timer)
@@ -343,23 +381,24 @@ export default function Chatbot() {
     }
   }
 
-  const sendText = async (raw) => {
+  const sendText = (raw) => {
     const text = raw.trim()
     if (!text || loading) return
-    const newMessages = [...messages, { role: 'user', content: text }]
-    setMessages(newMessages)
     setInput('')
-    await sendMessages(newMessages)
+    // Waiting for the hours: a number answers the question; anything else drops it and is sent as it is
+    const n = parseInt(text, 10)
+    if (pendingPlan.current && /^\d{1,2}\b/.test(text) && n >= 1) {
+      chooseHours(Math.min(n, 40))
+      return
+    }
+    const base = pendingPlan.current ? messages.filter(m => !m.ask) : messages
+    pendingPlan.current = null
+    const newMessages = [...base, { role: 'user', content: text }]
+    setMessages(newMessages)
+    sendOrAsk(newMessages, text)
   }
 
-  const handleSend = async () => {
-    const text = input.trim()
-    if (!text || loading) return
-    const newMessages = [...messages, { role: 'user', content: text }]
-    setMessages(newMessages)
-    setInput('')
-    await sendMessages(newMessages)
-  }
+  const handleSend = () => sendText(input)
 
   const handleKeyDown = (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
@@ -372,6 +411,7 @@ export default function Chatbot() {
   const newChat = (newMode = mode) => {
     if (loading) return
     hasAutoSent.current = true          // never re-send "I want to learn X" in a new chat
+    hours.current = null; pendingPlan.current = null     // each chat asks for its own hours
     sessionRef.current = null
     setSessionId(null)
     setChatCtx({ target_skill: null, job_title: null, job_id: null })
@@ -391,6 +431,7 @@ export default function Chatbot() {
       const res = await api.get(`/chatbot/sessions/${id}`)
       pendingChat.current = res.data.messages
       hasAutoSent.current = true
+      hours.current = null; pendingPlan.current = null
       sessionRef.current = id
       setSessionId(id)
       setChatCtx({ target_skill: res.data.context?.target_skill || null, job_title: res.data.context?.job_title || null,
@@ -471,16 +512,6 @@ export default function Chatbot() {
               </p>
             ) : (
               <p className="min-w-0">{currentMode.description}</p>
-            )}
-            {mode === 'skill_development' && (
-              <div className="shrink-0 flex items-center gap-1.5" role="group" aria-label="Hours a week for learning">
-                <span>Hours a week</span>
-                {HOURS.map(h => (
-                  <button key={h} type="button" onClick={() => setHours(h)} aria-pressed={hours === h}
-                    className={`px-2 py-0.5 rounded-full border font-medium ${hours === h
-                      ? 'bg-blue-600 border-blue-600 text-white' : 'bg-white border-slate-200 text-slate-600 hover:border-blue-300'}`}>{h}</button>
-                ))}
-              </div>
             )}
             {fromJob && (
               <button onClick={() => navigate(-1)} title={`Back to ${fromJob}`}
@@ -569,7 +600,8 @@ export default function Chatbot() {
           <div className="space-y-4">
             {messages.map((msg, idx) => (
               <MessageBubble key={idx} msg={msg} downloading={downloading === idx}
-                onDownload={isPlan(msg) ? () => downloadPlan(msg, idx) : null} />
+                onDownload={isPlan(msg) ? () => downloadPlan(msg, idx) : null}
+                onChoose={msg.ask && idx === messages.length - 1 && !loading ? chooseHours : null} />
             ))}
             {loading && <TypingIndicator />}
             <div ref={bottomRef} />
