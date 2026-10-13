@@ -85,16 +85,20 @@ export default function PostJob() {
   const read = readFor !== null
   const stale = read && readFor !== adKey
   const desc = ad.description.trim().length
+  // 13 Oct: no maxLength on the box: a long ad pasted from Word or a website was cut off without a word. Now it
+  // pastes whole and the employer is asked to shorten it.
+  const tooLong = ad.description.length > MAX_DESCRIPTION
   const missing = [
     ad.title.trim().length < 3 && 'a job title',
     desc < MIN_DESCRIPTION && `a description of at least ${MIN_DESCRIPTION} characters`,
   ].filter(Boolean)
+  const cantRead = missing.length > 0 || tooLong
   const detailsMissing = [
     ad.location.trim().length < 2 && 'where the job is based',
     !ad.category && 'a job category',
   ].filter(Boolean)
   const required = skills.filter(s => s.level === 'required').length
-  const canPublish = read && !stale && required > 0 && !detailsMissing.length && !publishing
+  const canPublish = read && !stale && !tooLong && required > 0 && !detailsMissing.length && !publishing
 
   const readSkills = () => {
     setReading(true); setError('')
@@ -187,19 +191,20 @@ export default function PostJob() {
           </div>
           <div className={read ? '' : 'flex-1 min-h-0 flex flex-col'}>
             <label htmlFor="pj-description" className={label}>Description</label>
-            <textarea id="pj-description" rows={read ? 10 : undefined} value={ad.description} onChange={set('description')} maxLength={MAX_DESCRIPTION}
+            <textarea id="pj-description" rows={read ? 10 : undefined} value={ad.description} onChange={set('description')}
               placeholder="What the graduate will do, and the skills you ask for, prefer, or will teach"
               className={`${field} leading-relaxed ${read ? 'resize-y' : 'flex-1 min-h-36 resize-none'}`} />
             <div className="flex items-start justify-between gap-3 mt-1">
-              <p className="text-xs text-amber-800">{missing.length > 0 && `To read the skills, add ${missing.join(' and ')}.`}</p>
-              <p className="text-xs text-slate-400 tabular-nums shrink-0">{ad.description.length} / {MAX_DESCRIPTION}</p>
+              <p className="text-xs text-amber-800">{tooLong ? `Shorten the description to ${MAX_DESCRIPTION.toLocaleString()} characters to read the skills.`
+                : missing.length > 0 && `To read the skills, add ${missing.join(' and ')}.`}</p>
+              <p className={`text-xs tabular-nums shrink-0 ${tooLong ? 'text-rose-700 font-medium' : 'text-slate-400'}`}>{ad.description.length.toLocaleString()} / {MAX_DESCRIPTION.toLocaleString()}</p>
             </div>
           </div>
 
           {!read && (
             <div className="pt-4 border-t border-slate-200 flex flex-wrap items-center justify-between gap-3">
               <Link to="/employer/jobs" className="text-sm text-slate-600 hover:underline">Cancel</Link>
-              <button type="button" onClick={readSkills} disabled={reading || missing.length > 0}
+              <button type="button" onClick={readSkills} disabled={reading || cantRead}
                 className="px-4 py-2 text-sm font-medium rounded-lg bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-40">
                 {reading ? 'Reading the skills…' : 'Read the skills'}
               </button>
@@ -211,7 +216,7 @@ export default function PostJob() {
             <div ref={skillsRef} className="pt-5 border-t border-slate-200 flex flex-col gap-5 scroll-mt-4">
               <div className="flex flex-wrap items-baseline justify-between gap-3">
                 <h2 className="text-[15px] font-semibold text-slate-900">Skills students are matched on</h2>
-                <button type="button" onClick={readSkills} disabled={reading || missing.length > 0}
+                <button type="button" onClick={readSkills} disabled={reading || cantRead}
                   className="text-sm font-medium text-blue-700 hover:underline disabled:text-slate-300 disabled:no-underline">
                   {reading ? 'Reading the skills…' : 'Read the skills again'}
                 </button>

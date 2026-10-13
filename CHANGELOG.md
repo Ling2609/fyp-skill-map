@@ -11,6 +11,8 @@ Planning, reasoning and research behind each decision are in the project roadmap
   profile) and student (My applications, Job Detail) pages now show grey bars in the page's shape, like the student
   Dashboard and My Profile (9 Oct, NN/g "Skeleton Screens 101"), instead of "Loading…" text or a spinner.
 - ⋯ menu: Reopen job is green text (Close job is red).
+- A long ad pasted into the description is no longer cut off at 12,000 characters without a word: it pastes whole,
+  the counter turns red and the employer is asked to shorten it.
 
 ## 13 Oct 2026 — Employer: edit a posted job
 
