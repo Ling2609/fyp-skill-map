@@ -387,6 +387,7 @@ export default function Chatbot() {
     const text = raw.trim()
     if (!text || loading) return
     setInput('')
+    inputRef.current?.focus()      // also after a starter or follow-up button: the cursor is ready for her answer
     // Waiting for the hours: a number answers the question; anything else drops it and is sent as it is
     const n = parseInt(text, 10)
     if (pendingPlan.current && /^\d{1,2}\b/.test(text) && n >= 1) {
@@ -640,7 +641,8 @@ export default function Chatbot() {
               rows={1}
               className="flex-1 resize-none rounded-xl border border-slate-200 px-4 py-3 text-sm leading-5 text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               style={{ maxHeight: `${INPUT_MAX}px` }}
-              disabled={loading}
+              // 13 Oct (her report): not disabled while the reply loads; a disabled box loses the cursor, so she had to
+              // click it again before typing. Sending still waits for the reply (sendText and the button check loading).
             />
             <button
               onClick={handleSend}

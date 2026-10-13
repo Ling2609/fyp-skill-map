@@ -3,6 +3,11 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 13 Oct 2026 — AI Assistant: the message box keeps the cursor
+- The box was switched off while a reply loaded, which took the cursor away, so each answer needed a click on the box
+  before typing. It now stays active (the next message can be typed while waiting; sending waits for the reply), and
+  the cursor goes back to it after a starter or follow-up button.
+
 ## 13 Oct 2026 — AI Assistant: CV points and interview practice
 - The Career Counsellor now helps with the two things the IR's Sprint 4 promised and it didn't cover: "resume tips"
   and "interview preparation". Three starter buttons under its greeting: Which roles suit me? / Turn my projects into
