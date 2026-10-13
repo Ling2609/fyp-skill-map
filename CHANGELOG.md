@@ -13,6 +13,8 @@ Planning, reasoning and research behind each decision are in the project roadmap
 - ⋯ menu: Reopen job is green text (Close job is red).
 - A long ad pasted into the description is no longer cut off at 12,000 characters without a word: it pastes whole,
   the counter turns red and the employer is asked to shorten it.
+- ⋯ menu: the first item no longer looks greyed out when the menu is opened with the mouse (the grey band now
+  shows only when moving through the menu with the keyboard).
 
 ## 13 Oct 2026 — Employer: edit a posted job
 

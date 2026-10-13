@@ -4,6 +4,8 @@ import { useEffect, useRef, useState } from 'react'
 // buttons a row doesn't have. Few actions shown directly, more behind a kebab menu (uxdesign.cc, "Let's design data
 // tables"); the actions column is narrow and last (EUI table layout guidelines). The menu is positioned on the
 // screen (not inside the list), so it isn't cut off by the list's scroll area; it opens upwards near the bottom.
+// 13 Oct (her review: the first item looked greyed out, as if disabled): the grey focus band shows only for keyboard
+// users (focus-visible), not when the menu is opened with the mouse.
 // items: [{ label, onSelect, danger?, success? }] (danger red, success green: 13 Oct, Close job red / Reopen job green). Esc, a click outside or scrolling closes it; arrow keys move between items.
 export default function RowMenu({ label, items, disabled }) {
   const [pos, setPos] = useState(null)          // null = closed; else { top | bottom, right }
@@ -56,7 +58,7 @@ export default function RowMenu({ label, items, disabled }) {
           {items.map(it => (
             <button key={it.label} type="button" role="menuitem" tabIndex={-1}
               onClick={() => { close(); it.onSelect() }}
-              className={`block w-full text-left px-3 py-2 rounded-lg focus:outline-none hover:bg-slate-100 focus:bg-slate-100 ${
+              className={`block w-full text-left px-3 py-2 rounded-lg focus:outline-none hover:bg-slate-100 focus-visible:bg-slate-100 ${
                 it.danger ? 'text-rose-700' : it.success ? 'text-emerald-700' : 'text-slate-700'}`}>
               {it.label}
             </button>
