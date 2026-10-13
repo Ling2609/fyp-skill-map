@@ -417,7 +417,7 @@ def applicant_profile(app_id: int, employer: User = Depends(require_employer), d
 # ── Dashboard (12 Oct; her pick E after mock-ups A-E, references.md "Employer dashboard layout") ──────────────────
 REVIEW_SHOWN = 20          # applications to review listed (newest first; the rest are in My jobs)
 FIT_SHOWN = 10             # graduates who fit
-FIT_MIN = 0.5              # a graduate "fits" a job when they have at least half of its required skills
+from app.services.job_requirements import FIT_MIN  # noqa: E402  (half or more of the required skills; shared with the what-if)
 
 
 def _visible_students(db: Session) -> list[User]:

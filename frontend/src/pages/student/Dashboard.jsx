@@ -73,11 +73,35 @@ function GoalPicker({ goal, categories, fit, busy, onChange }) {
   )
 }
 
+// "What opens up" under a skill still to learn (13 Oct; research and wording: references.md "What-if simulator"). The
+// jobs she would newly fit (half or more of the required skills) with that one skill, each with its count before ->
+// after, and what was counted and what it can't promise (Google PAIR: say what data was used and the limits).
+function OpensUp({ r, goal, jobs }) {
+  const more = r.opens_count - r.opens.length
+  return (
+    <div className="ml-7 mb-2.5 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm">
+      <p className="font-semibold text-slate-800">With {skillName(r.skill)} on your profile, you'd have half or more of the required skills for:</p>
+      <ul className="mt-1 space-y-0.5">
+        {r.opens.map(o => (
+          <li key={o.job_ref} className="text-slate-700">
+            <Link to={`/jobs/${encodeURIComponent(o.job_ref)}`} className="hover:text-blue-700 hover:underline">{o.title}</Link>
+            <span className="text-slate-500">{o.company ? ` · ${o.company}` : ''}</span>
+            {' — '}<span className="tabular-nums"><b className="font-semibold">{o.before} → {o.after}</b> of {o.total} required skills</span>
+          </li>
+        ))}
+        {more > 0 && <li className="text-slate-500">and {more} more</li>}
+      </ul>
+      <p className="text-xs text-slate-500 mt-2">Checked on the {jobs} live {goal} {jobs === 1 ? 'job' : 'jobs'} with the same skill check as Job Matches. Employers also weigh experience, grades and the interview.</p>
+    </div>
+  )
+}
+
 function GoalCard({ data, busy, onGoal, onPlan, onJobs }) {
   const have = data.readiness.filter(r => r.has)
   const missing = data.readiness.filter(r => !r.has)
   const [picked, setPicked] = useState(() => missing.slice(0, 1).map(r => r.skill))
   const toggle = (skill) => setPicked(p => p.includes(skill) ? p.filter(s => s !== skill) : [...p, skill])
+  const [open, setOpen] = useState(null)        // the skill whose "What opens up" is open
   const total = data.readiness.length
   return (
     <Card className="lg:flex-1">
@@ -113,11 +137,21 @@ function GoalCard({ data, busy, onGoal, onPlan, onJobs }) {
             <ul className="mt-1 min-h-0 lg:overflow-y-auto pr-3">
               {missing.map((r, i) => (
                 <li key={r.skill} className="border-t border-slate-200 first:border-t-0">
-                  <label className="flex items-center gap-3 py-2 cursor-pointer">
-                    <input type="checkbox" checked={picked.includes(r.skill)} onChange={() => toggle(r.skill)} className="w-4 h-4 accent-blue-700" />
-                    <span className="flex-1 text-sm text-slate-800">{skillName(r.skill)}</span>
-                    <span className="text-xs text-slate-500 tabular-nums">{i === 0 ? `asked by ${pct(r.share)} of these jobs` : pct(r.share)}</span>
-                  </label>
+                  <div className="flex items-center gap-3">
+                    <label className="flex-1 min-w-0 flex items-center gap-3 py-2 cursor-pointer">
+                      <input type="checkbox" checked={picked.includes(r.skill)} onChange={() => toggle(r.skill)} className="w-4 h-4 accent-blue-700" />
+                      <span className="flex-1 text-sm text-slate-800">{skillName(r.skill)}</span>
+                    </label>
+                    {/* 13 Oct, small what-if: what this one skill would do for her, not just how common it is */}
+                    {r.opens_count > 0 ? (<>
+                      <span className="text-xs font-semibold text-emerald-700 tabular-nums">+{r.opens_count} more {r.opens_count === 1 ? 'job' : 'jobs'} you'd fit</span>
+                      <button type="button" onClick={() => setOpen(o => o === r.skill ? null : r.skill)} aria-expanded={open === r.skill}
+                        className="text-xs text-blue-700 hover:underline whitespace-nowrap">What opens up {open === r.skill ? '▴' : '▾'}</button>
+                    </>) : (
+                      <span className="text-xs text-slate-500 tabular-nums">{i === 0 ? `asked by ${pct(r.share)} of these jobs` : pct(r.share)}</span>
+                    )}
+                  </div>
+                  {open === r.skill && <OpensUp r={r} goal={data.goal} jobs={data.jobs} />}
                 </li>
               ))}
             </ul>

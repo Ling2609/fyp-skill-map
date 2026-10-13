@@ -28,6 +28,9 @@ from dataclasses import dataclass
 
 from app.services.skill_names import canonical_key
 
+# A student "fits" a job when they have at least half of its required skills (TalentWorks via CNBC: about as likely to
+# get an interview at 50% of the listed skills). Shared by employers' "Graduates who fit" and the students' what-if.
+FIT_MIN = 0.5
 BONUS_WEIGHT = 0.05      # ranking only: at most +0.05 for having every nice-to-have skill (< one level step, 0.12)
 
 

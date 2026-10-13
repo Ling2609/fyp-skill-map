@@ -3,6 +3,17 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 13 Oct 2026 — Dashboard: what one skill would open up (small what-if)
+- The goal card's "Still to learn" now says what each skill would do for the student: "+N more jobs you'd fit" =
+  goal jobs where that ONE skill takes them to half or more of the required skills (the same line as employers'
+  "Graduates who fit"). "What opens up" lists those jobs with their count before -> after ("1 -> 2 of 4 required
+  skills"), what was checked and its limits. A skill that opens no new job keeps the old "asked by N%" text.
+- Exact, not an estimate: the same skill check and scoring as Job Matches, with the skill added as one more profile
+  skill; one batched model call. Jobs already a fit are not counted. Nothing in the profile changes.
+- `FIT_MIN` (half or more) moved to `app/services/job_requirements.py`, shared by the employer dashboard and this.
+- Research: references.md "What-if simulator" (counterfactual explanations; Google PAIR on saying what data was used;
+  plain words instead of "within reach"). Test: `tests/test_whatif.py`.
+
 ## 13 Oct 2026 — Learning plan PDF: no more black squares
 - The 3 blocked links (Linux Journey, Kaggle, Tableau) opened by hand on 13 Oct: marked in `checked_by_hand`; Linux
   Journey's address updated to where it moved (labex.io/linuxjourney). All 49 resources can now be shown.

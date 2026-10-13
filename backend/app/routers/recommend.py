@@ -10,7 +10,7 @@ from app.models.user import User
 from app.services.job_titles import SENIORITY_RANK, job_level
 from app.services.job_search import TITLE, names_company_or_place, search_match, title_boost
 from app.services.skill_names import canonical_key
-from app.services.job_requirements import BONUS_WEIGHT, job_skill_items, score_job, unit_name
+from app.services.job_requirements import BONUS_WEIGHT, FIT_MIN, job_skill_items, score_job, unit_name
 from app.services.skill_profile import (
     EMPTY_PROFILE_MESSAGE, build_skill_profile, count_modules, match_matrix, matched_mask, normalise_rows,
     prefetch_relations, profile_spellings,
@@ -407,7 +407,43 @@ def _readiness(jobs, grad, spellings, spelling_keys, owner):
     vecs = np.stack([vec[k] for k in keys])
     prefetch_relations(grad, spellings, spelling_keys, [(vecs, keys, names)])
     has = matched_mask(grad, vecs, spelling_keys, owner, keys, spellings, names)
-    return [{"skill": names[i], "has": bool(has[i]), "share": round(n / len(jobs), 3)} for i, (_, n) in enumerate(top)]
+    return [{"skill": names[i], "has": bool(has[i]), "share": round(n / len(jobs), 3), "_key": keys[i], "_vec": vecs[i]}
+            for i, (_, n) in enumerate(top)]
+
+
+OPENS_SHOWN = 10           # jobs listed under "What opens up" per skill
+
+
+def _opens(jobs, missing, grad, spellings, spelling_keys, owner) -> dict[str, list]:
+    """The small what-if (13 Oct; references.md "What-if simulator"): for each missing goal skill, the goal jobs the
+    student would newly fit (half or more of the required skills, FIT_MIN) if that ONE skill were on their profile.
+    Exact, not an estimate of the rule: the same matched_mask and score_job as Job Matches, with the skill added as
+    one more profile skill (a profile's skills are separate columns, so adding one = has_now OR has_with_it).
+    Jobs the student already fits are not counted: they are not new."""
+    if not missing:
+        return {}
+    add_vecs = np.stack([m["_vec"] for m in missing])
+    add_names, add_keys = [m["skill"] for m in missing], [m["_key"] for m in missing]
+    picked = [(c["skill_vecs"], c["skill_keys"], c["skills"]) for _, c in jobs if len(c["skill_vecs"])]
+    prefetch_relations(grad, spellings, spelling_keys, picked)
+    prefetch_relations(add_vecs, add_names, add_keys, picked)          # one batch for every added skill
+    out = {k: [] for k in add_keys}
+    for _, c in jobs:
+        if not len(c["skill_vecs"]):
+            continue
+        items = c["items"]
+        now = matched_mask(grad, c["skill_vecs"], spelling_keys, owner, c["skill_keys"], spellings, c["skills"])
+        before = score_job(items, now)
+        if not before["total"] or before["matched"] / before["total"] >= FIT_MIN:
+            continue                                                # nothing to compare, or already a fit
+        for j, key in enumerate(add_keys):
+            with_it = matched_mask(add_vecs[j:j + 1], c["skill_vecs"], [key], [0], c["skill_keys"], [add_names[j]],
+                                   c["skills"])
+            after = score_job(items, now | with_it)
+            if after["matched"] / after["total"] >= FIT_MIN:
+                out[key].append({"job_ref": c["job_id"], "title": c["job_title"], "company": c["company"],
+                                 "before": before["matched"], "after": after["matched"], "total": before["total"]})
+    return out
 
 
 def _wanted(jobs, profile, grad, spellings, spelling_keys, owner):
@@ -466,12 +502,19 @@ def goal_summary(db: Session = Depends(get_db), current_user: User = Depends(get
         # Every category with enough jobs, best first: the first BEST_FIT_SHOWN are the radios, and the goal
         # drop-down lists them all in this order with their fit
 
+    readiness = _readiness(scope, grad, spellings, spelling_keys, owner) if goal else []
+    opens = _opens(scope, [r for r in readiness if not r["has"]], grad, spellings, spelling_keys, owner)
+    for r in readiness:
+        jobs_opened = opens.get(r.pop("_key"), [])
+        r.pop("_vec")
+        r["opens"] = sorted(jobs_opened, key=lambda o: (-o["after"] / o["total"], o["title"]))[:OPENS_SHOWN]
+        r["opens_count"] = len(jobs_opened)
     out = {
         "goal": goal,
         "goal_saved": current_user.target_category,     # differs from goal when its category has no live jobs now
         "jobs": len(scope),
         "categories": categories,
-        "readiness": _readiness(scope, grad, spellings, spelling_keys, owner) if goal else [],
+        "readiness": readiness,
         "wanted": _wanted(scope, profile, grad, spellings, spelling_keys, owner),
         "best_fit": best_fit,
         "best_fit_shown": BEST_FIT_SHOWN,
