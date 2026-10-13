@@ -98,3 +98,17 @@ def test_download_plan_as_pdf(client, users, post_job):
     assert r.status_code == 400
     # signed in only
     assert client.post("/chatbot/plan-pdf", json={"content": PLAN}).status_code == 401
+
+
+def test_search_links_work_for_any_skill(client, users, groq):
+    # A search page opens whatever the words, so it is allowed for every skill; a video or course page is not
+    text, removed = L.strip_unlisted_links("[Search Coursera](https://www.coursera.org/search?query=Kotlin) and "
+                                           "[a video](https://www.youtube.com/watch?v=made-up)")
+    assert "coursera.org/search?query=Kotlin" in text and "watch?v=" not in text and removed == 1
+    assert L.search_links("C#")[0].endswith("query=C%23")          # "#" would cut the address short
+    # A skill that isn't on the list gets search links in the context
+    student = users.student()
+    client.post("/chatbot/", headers=users.h(student), json={
+        "mode": "skill_development", "messages": [{"role": "user", "content": "plan"}], "target_skill": "Kotlin"})
+    context = next(m["content"] for m in groq.sent if m["role"] == "system" and m["content"].startswith("User context"))
+    assert "https://www.coursera.org/search?query=Kotlin" in context

@@ -6,10 +6,16 @@ Run from backend/ with the venv active (needs internet; takes about a minute):
     python scripts/tools/check_learning_links.py --coverage   also list the skills live jobs ask for most that have
                                                               no resources yet (reads your database)
 
-Then open a few of the links yourself to check they teach the skill (the script only checks that the page opens),
-and commit data/learning_resources.json.
+Two checks per link (13 Oct; references.md "Learning plan: link checks"):
+1. the page opens (HTTP status below 400, after redirects), and
+2. it is not a "soft 404": a page that opens but is really "Page not found" or an error (its title says so).
+A link passing both is marked ok. The page title is saved too; when it doesn't mention the skill (e.g. a redirect to a
+site's home page) the link is listed under "Check by hand". Open those, and a few others, then commit
+data/learning_resources.json.
 """
+import html
 import json
+import re
 import sys
 import time
 from collections import Counter
@@ -26,17 +32,29 @@ HEADERS = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/
                          "Chrome/126.0 Safari/537.36", "Accept-Language": "en"}
 
 
-def check(url: str) -> tuple[bool, str]:
-    """(works, what happened). A page that opens after redirects counts as working; the final address is shown
-    so a link that now lands somewhere else (e.g. a home page) can be spotted."""
+SOFT_404 = re.compile(r"\b(404|not found|page (cannot|can't|could not) be found|no longer available|server error|something went wrong)\b", re.I)
+
+
+def check(url: str) -> tuple[bool, str, str]:
+    """(works, what happened, page title). A page that opens after redirects counts as working; the final address is
+    shown so a link that now lands somewhere else (e.g. a home page) can be spotted."""
     try:
         r = requests.get(url, headers=HEADERS, timeout=20, allow_redirects=True)
     except requests.RequestException as e:
-        return False, type(e).__name__
+        return False, type(e).__name__, ""
     note = f"HTTP {r.status_code}"
     if r.url.rstrip("/") != url.rstrip("/"):
         note += f" -> {r.url}"
-    return r.status_code < 400, note
+    m = re.search(r"<title[^>]*>(.*?)</title>", r.text[:300_000], re.I | re.S)
+    title = " ".join(html.unescape(m.group(1)).split()) if m else ""
+    if r.status_code < 400 and SOFT_404.search(title):
+        return False, note + f" but the page says: {title}", title
+    return r.status_code < 400, note, title
+
+
+def mentions_skill(entry: dict, resource: dict, title: str) -> bool:
+    words = [entry["skill"], *entry.get("aliases", []), resource["provider"]]
+    return any(w.lower() in title.lower() for w in words if len(w) > 1)
 
 
 def coverage():
@@ -67,16 +85,24 @@ def main():
         results[url] = check(url)
         print(f"  {'ok  ' if results[url][0] else 'FAIL'} {url}  ({results[url][1]})")
         time.sleep(0.5)                 # be polite to the sites
+    by_hand = []
     for e in data["skills"]:
         for r in e["resources"]:
-            r["ok"], r["checked"] = results[r["url"]][0], today
+            ok, _, title = results[r["url"]]
+            r["ok"], r["checked"], r["page_title"] = ok, today, title
+            if ok and not mentions_skill(e, r, title):
+                by_hand.append(f"{e['skill']}: {r['url']}  (title: {title or 'none'})")
     FILE.write_text(json.dumps(data, indent=1, ensure_ascii=False) + "\n", encoding="utf-8")
-    bad = [u for u, (ok, _) in results.items() if not ok]
+    bad = [u for u, (ok, _, _) in results.items() if not ok]
     print(f"\n{len(urls) - len(bad)} of {len(urls)} links work. Saved to {FILE.name}.")
     if bad:
         print("Not shown to students until fixed (change the url in the file, then run this again):")
         for u in bad:
             print("  ", u, f"({results[u][1]})")
+    if by_hand:
+        print("\nCheck by hand (the page title doesn't mention the skill; still shown to students):")
+        for line in by_hand:
+            print("  ", line)
     if "--coverage" in sys.argv:
         coverage()
 

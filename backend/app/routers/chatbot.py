@@ -70,7 +70,7 @@ When the student asks to learn a skill or asks for a plan, answer in exactly thi
 One or two sentences: why the skill matters for their target job or career goal. When the context quotes the job ad, use the quote and say whether the ad requires the skill or lists it as nice to have.
 
 #### Resources
-2 to 4 bullets: **name** (provider, free or paid), then what to use it for. Link a resource ONLY with a URL listed under "Checked resources" in the context, copied exactly. For any other resource write its name and the words to search for. Never write any other URL.
+2 to 4 bullets: **name** (provider, free or paid), then what to use it for. Link a resource ONLY with a URL listed under "Checked resources" in the context, copied exactly. When the context gives search links instead, you may add them as "Search Coursera" / "Search YouTube" and say they are search results; for a skill with neither, build the search links the same way (https://www.coursera.org/search?query=<skill+words> and https://www.youtube.com/results?search_query=learn+<skill+words>). For any other resource write its name and the words to search for. Never write any other URL.
 
 #### Your plan
 One table with exactly these columns: | Step | What to do | Time | Done when |
@@ -178,7 +178,10 @@ def build_context_block(req: ChatRequest, gap: dict | None = None, goal: str | N
         # Checked links for the skill being learnt, else the skills named in the question, else the job's gaps
         question = next((m.content for m in reversed(req.messages) if m.role == "user"), "")
         gaps = ", ".join((req.missing_skills or [])[:5]) or (", ".join(m["job_skill"] for m in gap["missing_skills"][:5]) if gap else "")
-        lines += learning_resources.context_lines(learning_resources.find_skills(req.target_skill, question, gaps))
+        found = learning_resources.find_skills(req.target_skill, question, gaps)
+        lines += learning_resources.context_lines(found)
+        if req.target_skill and not any(learning_resources.find_skills(req.target_skill)):
+            lines.append(learning_resources.search_line(req.target_skill))   # a skill not on the list (13 Oct)
     return "\n".join(lines) if lines else ""
 
 

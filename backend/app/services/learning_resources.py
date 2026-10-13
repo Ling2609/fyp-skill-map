@@ -6,15 +6,21 @@ link and marks it ok = true / false with the date.
 - The assistant is given the resources for the skill being learnt (only links marked ok).
 - Any other link in a reply is removed and its words kept (an allowlist): language models make up links and
   references (Walters & Wilder 2023: 18% of GPT-4's references were fabricated; references.md "Learning plan").
+- 13 Oct (her request: every skill, not only the listed ones): a skill with no checked resource may get a SEARCH link
+  (Coursera or YouTube results for the skill). SkillMap knows these addresses always open, whatever the words; the
+  plan says they are search results, not a checked course.
 """
 import json
 import re
 from functools import lru_cache
 from pathlib import Path
-from urllib.parse import urlsplit
+from urllib.parse import quote_plus, urlsplit
 
 RESOURCES_FILE = Path(__file__).resolve().parents[2] / "data" / "learning_resources.json"
 MAX_SKILLS = 4          # resources for at most this many skills go into one prompt
+# Search pages: any words after "?" still open a results page, so these are allowed with any search words
+SEARCH_PAGES = {"coursera.org/search": "https://www.coursera.org/search?query=",
+                "youtube.com/results": "https://www.youtube.com/results?search_query="}
 
 
 @lru_cache(maxsize=1)
@@ -66,7 +72,12 @@ def checked(entry: dict) -> list[dict]:
 
 
 def allowed_urls() -> set[str]:
-    return {norm_url(r["url"]) for e in _load()["skills"] for r in checked(e)}
+    return {norm_url(r["url"]) for e in _load()["skills"] for r in checked(e)} | set(SEARCH_PAGES)
+
+
+def search_links(skill: str) -> list[str]:
+    words = quote_plus(" ".join(skill.split()))         # "C#" -> "C%23", "C++" -> "C%2B%2B"
+    return [f"{SEARCH_PAGES['coursera.org/search']}{words}", f"{SEARCH_PAGES['youtube.com/results']}learn+{words}"]
 
 
 def context_lines(entries: list[dict]) -> list[str]:
@@ -78,8 +89,15 @@ def context_lines(entries: list[dict]) -> list[str]:
             lines.append(f"Checked resources for {e['skill']}: " + "; ".join(
                 f"{r['name']} ({r['provider']}, {r['kind']}, {r['cost']}): {r['url']}" for r in res))
         else:
-            lines.append(f"No checked links for {e['skill']}: name resources and give words to search for, no links")
+            lines.append(f"No checked links for {e['skill']}: name resources; you may link these searches: "
+                         + " and ".join(search_links(e["skill"])))
     return lines
+
+
+def search_line(skill: str) -> str:
+    """For a skill that is not on the list at all."""
+    return (f"No checked links for {skill}: name resources; you may link these searches (say they are search "
+            f"results): " + " and ".join(search_links(skill)))
 
 
 _MD_LINK = re.compile(r"\[([^\]]*)\]\(\s*<?(https?://[^)\s>]+)>?(?:\s+\"[^\"]*\")?\s*\)")
