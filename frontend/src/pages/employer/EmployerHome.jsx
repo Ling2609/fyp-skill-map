@@ -6,6 +6,7 @@ import { useAuth } from '../../context/useAuth'
 import EmployerDashboard from './EmployerDashboard'
 import { errText } from '../student/profileUtils'
 import RowMenu from '../admin/RowMenu'
+import { CardSkeleton, LoadingLabel } from '../../components/Skeleton'
 
 // Employer home (11 Oct; mock-up 9 Oct board 1). An employer the career office hasn't approved yet (or has rejected)
 // sees only where they stand. An approved one sees the Dashboard (12 Oct, EmployerDashboard.jsx); My jobs moved to
@@ -122,7 +123,7 @@ export function MyJobs() {
         {askClose && <CloseDialog job={askClose} busy={busy === askClose.id} onCancel={() => setAskClose(null)}
           onClose={(notSelected) => toggle(askClose, notSelected)} />}
         {error && <p role="alert" className="text-sm text-rose-700 bg-rose-50 border border-rose-200 rounded-lg px-4 py-2.5">{error}</p>}
-        {jobs === null && !error && <p className="text-sm text-slate-400">Loading your jobs…</p>}
+        {jobs === null && !error && <><LoadingLabel>Loading your jobs…</LoadingLabel><CardSkeleton rows={5} /></>}
         {jobs?.length === 0 && (
           <div className="bg-white border border-slate-200 rounded-2xl p-8 text-center">
             <h2 className="text-base font-semibold text-slate-900">No jobs posted yet</h2>

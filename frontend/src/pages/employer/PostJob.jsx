@@ -1,11 +1,11 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import api from '../../api'
 import PageHeader from '../../components/PageHeader'
 import { errText } from '../student/profileUtils'
 
-// Employer > Post a job (11 Oct; mock-up 9 Oct board 2). One page: the ad on the left; "Read the skills" fills the
-// right side with what SkillMap found (the same extractor and quote check as live jobs). The employer removes what
+// Employer > Post a job (11 Oct; mock-up 9 Oct board 2; one form since 13 Oct). "Read the skills" adds what SkillMap
+// found under the ad (the same extractor and quote check as live jobs). The employer removes what
 // is wrong, adds what is missing, moves nothing they don't want to, then publishes. If the ad changes after reading,
 // the skills must be read again before publishing (the same rule as Admin's "Find skills" for modules).
 const MIN_DESCRIPTION = 80
@@ -63,6 +63,8 @@ export default function PostJob() {
   const [reading, setReading] = useState(false)
   const [publishing, setPublishing] = useState(false)
   const [error, setError] = useState('')
+  const skillsRef = useRef(null)
+  const [justRead, setJustRead] = useState(false)   // first read on a new post: bring the skills into view
 
   useEffect(() => {
     api.get('/jobs/subcategories', { params: { include_past: true } }).then(res => setCategories(res.data)).catch(() => {})
@@ -105,6 +107,7 @@ export default function PostJob() {
           return [...res.data.skills.filter(s => !have.has(s.name.toLowerCase())), ...mine]
         })
         setSoft(res.data.soft)
+        if (!read) setJustRead(true)
         setReadFor(adKey)
       })
       .catch(err => {
@@ -132,6 +135,11 @@ export default function PostJob() {
     req.then(res => navigate('/employer/jobs', { state: editing ? { saved: ad.title.trim() } : { posted: ad.title.trim(), fit: res.data.graduates_fit } }))
       .catch(err => { setError(errText(err, editing ? "Couldn't save the changes. Try again." : "Couldn't publish the job. Try again.")); setPublishing(false) })
   }
+  useEffect(() => {
+    if (!justRead) return
+    skillsRef.current?.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' })
+    setJustRead(false)    // eslint-disable-line react-hooks/set-state-in-effect
+  }, [justRead])
   const byLevel = useMemo(() => Object.fromEntries(BOXES.map(b => [b.level, skills.filter(s => s.level === b.level)])), [skills])
 
   return (
@@ -148,23 +156,23 @@ export default function PostJob() {
         </div>
       </PageHeader>
 
-      {/* 12 Oct (her review): before reading, the form fills the screen and the description box takes the height left,
-          so the whole form shows without scrolling (down to a 6-line box); after reading, ad and skills sit side by side */}
-      <div className={`flex-1 min-h-0 overflow-y-auto px-8 py-6 flex gap-5 ${read ? 'flex-wrap items-start content-start' : 'items-stretch'}`}>
-        <section className="flex-1 basis-80 min-w-80 bg-white border border-slate-200 rounded-2xl p-5 flex flex-col gap-4">
-          <h2 className="text-[15px] font-semibold text-slate-900">Your ad</h2>
+      {/* 13 Oct (her review: two columns felt crowded): ONE form, top to bottom. The ad first; "Read the skills" adds
+          the skills under it in the same form, then Cancel / Publish at the end. Before reading, the description box
+          takes the height left so the form shows without scrolling (12 Oct); after reading, the page scrolls. */}
+      <div className="flex-1 min-h-0 overflow-y-auto px-8 py-6 flex flex-col">
+        <section className={`bg-white border border-slate-200 rounded-2xl p-6 flex flex-col gap-4 ${read ? '' : 'flex-1'}`}>
           <div>
             <label htmlFor="pj-title" className={label}>Job title</label>
             <input id="pj-title" value={ad.title} onChange={set('title')} maxLength={120} placeholder="e.g. Junior Backend Developer"
               disabled={editing} className={`${field} ${editing ? lockedCls : ''}`} />
           </div>
           <div className="flex flex-wrap gap-3">
-            <div className="flex-1 basis-36">
+            <div className="flex-1 basis-48">
               <label htmlFor="pj-location" className={label}>Location</label>
               <input id="pj-location" value={ad.location} onChange={set('location')} maxLength={120} placeholder="e.g. Kuala Lumpur"
                 disabled={editing} className={`${field} ${editing ? lockedCls : ''}`} />
             </div>
-            <div className="flex-1 basis-36">
+            <div className="flex-1 basis-48">
               <label htmlFor="pj-salary" className={label}>Salary <span className="font-normal text-slate-400">(optional)</span></label>
               <input id="pj-salary" value={ad.salary} onChange={set('salary')} maxLength={60} placeholder="e.g. RM 3,500 - 4,500" className={field} />
             </div>
@@ -179,7 +187,7 @@ export default function PostJob() {
           </div>
           <div className={read ? '' : 'flex-1 min-h-0 flex flex-col'}>
             <label htmlFor="pj-description" className={label}>Description</label>
-            <textarea id="pj-description" rows={read ? 8 : undefined} value={ad.description} onChange={set('description')} maxLength={MAX_DESCRIPTION}
+            <textarea id="pj-description" rows={read ? 10 : undefined} value={ad.description} onChange={set('description')} maxLength={MAX_DESCRIPTION}
               placeholder="What the graduate will do, and the skills you ask for, prefer, or will teach"
               className={`${field} leading-relaxed ${read ? 'resize-y' : 'flex-1 min-h-36 resize-none'}`} />
             <div className="flex items-start justify-between gap-3 mt-1">
@@ -187,46 +195,51 @@ export default function PostJob() {
               <p className="text-xs text-slate-400 tabular-nums shrink-0">{ad.description.length} / {MAX_DESCRIPTION}</p>
             </div>
           </div>
-          {read && (
-            <button type="button" onClick={readSkills} disabled={reading || missing.length > 0}
-              className="self-start text-sm font-medium text-blue-700 hover:underline disabled:text-slate-300 disabled:no-underline">
-              {reading ? 'Reading the skills…' : 'Read the skills again'}
-            </button>
-          )}
-          {!read && (
-            <button type="button" onClick={readSkills} disabled={reading || missing.length > 0}
-              className="self-end px-4 py-2 text-sm font-medium rounded-lg bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-40">
-              {reading ? 'Reading the skills…' : 'Read the skills'}
-            </button>
-          )}
-          {!read && error && <p role="alert" className="text-sm text-rose-600">{error}</p>}
-        </section>
 
-        {read && (
-          <section className="flex-[1.3] basis-[26rem] min-w-80 bg-white border border-slate-200 rounded-2xl p-5 flex flex-col gap-5">
-            {stale && (
-              <p className="text-sm text-amber-800 bg-amber-50 rounded-lg px-3 py-2">
-                Your ad changed: read the skills again so they match it. Skills you added stay.
-              </p>
-            )}
-            {BOXES.map(b => <ChipBox key={b.level} box={b} skills={byLevel[b.level]} onRemove={remove} onAdd={add(b.level)} />)}
-            {error && <p role="alert" className="text-sm text-rose-600">{error}</p>}
+          {!read && (
             <div className="pt-4 border-t border-slate-200 flex flex-wrap items-center justify-between gap-3">
               <Link to="/employer/jobs" className="text-sm text-slate-600 hover:underline">Cancel</Link>
-              <div className="flex items-center gap-3">
-                {!stale && (required === 0 || detailsMissing.length > 0) && (
-                  <span className="text-xs text-amber-800">
-                    {required === 0 ? 'Add at least one required skill.' : `Add ${detailsMissing.join(' and ')}.`}
-                  </span>
-                )}
-                <button type="button" onClick={publish} disabled={!canPublish}
-                  className="px-4 py-2 text-sm font-medium rounded-lg bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-40">
-                  {editing ? (publishing ? 'Saving…' : 'Save changes') : publishing ? 'Publishing…' : 'Publish job'}
+              <button type="button" onClick={readSkills} disabled={reading || missing.length > 0}
+                className="px-4 py-2 text-sm font-medium rounded-lg bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-40">
+                {reading ? 'Reading the skills…' : 'Read the skills'}
+              </button>
+            </div>
+          )}
+          {!read && error && <p role="alert" className="text-sm text-rose-600">{error}</p>}
+
+          {read && (
+            <div ref={skillsRef} className="pt-5 border-t border-slate-200 flex flex-col gap-5 scroll-mt-4">
+              <div className="flex flex-wrap items-baseline justify-between gap-3">
+                <h2 className="text-[15px] font-semibold text-slate-900">Skills students are matched on</h2>
+                <button type="button" onClick={readSkills} disabled={reading || missing.length > 0}
+                  className="text-sm font-medium text-blue-700 hover:underline disabled:text-slate-300 disabled:no-underline">
+                  {reading ? 'Reading the skills…' : 'Read the skills again'}
                 </button>
               </div>
+              {stale && (
+                <p className="text-sm text-amber-800 bg-amber-50 rounded-lg px-3 py-2">
+                  Your ad changed: read the skills again so they match it. Skills you added stay.
+                </p>
+              )}
+              {BOXES.map(b => <ChipBox key={b.level} box={b} skills={byLevel[b.level]} onRemove={remove} onAdd={add(b.level)} />)}
+              {error && <p role="alert" className="text-sm text-rose-600">{error}</p>}
+              <div className="pt-4 border-t border-slate-200 flex flex-wrap items-center justify-between gap-3">
+                <Link to="/employer/jobs" className="text-sm text-slate-600 hover:underline">Cancel</Link>
+                <div className="flex items-center gap-3">
+                  {!stale && (required === 0 || detailsMissing.length > 0) && (
+                    <span className="text-xs text-amber-800">
+                      {required === 0 ? 'Add at least one required skill.' : `Add ${detailsMissing.join(' and ')}.`}
+                    </span>
+                  )}
+                  <button type="button" onClick={publish} disabled={!canPublish}
+                    className="px-4 py-2 text-sm font-medium rounded-lg bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-40">
+                    {editing ? (publishing ? 'Saving…' : 'Save changes') : publishing ? 'Publishing…' : 'Publish job'}
+                  </button>
+                </div>
+              </div>
             </div>
-          </section>
-        )}
+          )}
+        </section>
       </div>
     </div>
   )

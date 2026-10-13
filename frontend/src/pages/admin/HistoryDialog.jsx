@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import api from '../../api'
+import { RowSkeleton, LoadingLabel } from '../../components/Skeleton'
 
 // "View history" for one account (7 Oct): every admin decision kept in admin_actions, newest first, with who, when
 // and why (OWASP logging: "when, where, who and what"; references.md "Deactivating and reactivating accounts").
@@ -43,7 +44,7 @@ export default function HistoryDialog({ user, name, onClose }) {
         </div>
         <div className="overflow-y-auto px-6 py-2">
           {error && <p role="alert" className="text-sm text-rose-600 py-4">{error}</p>}
-          {!error && rows === null && <p className="text-sm text-slate-500 py-4">Loading…</p>}
+          {!error && rows === null && <div className="divide-y divide-slate-100"><LoadingLabel>Loading the history…</LoadingLabel>{[0, 1, 2].map(i => <RowSkeleton key={i} pill={false} />)}</div>}
           {rows?.length === 0 && <p className="text-sm text-slate-500 py-4">No admin decisions on this account yet.</p>}
           {rows?.length > 0 && (
             <ol className="divide-y divide-slate-100">

@@ -5,6 +5,7 @@ import PageHeader from '../../components/PageHeader'
 import { errText } from '../student/profileUtils'
 import { STATUSES, STATUS_CLS, fmtDay } from './statuses'
 import { useStatusChange } from './statusChange'
+import { CardSkeleton, LoadingLabel } from '../../components/Skeleton'
 
 // Employer > one job's applicants (11 Oct, batch 2; her pick 3A "applicants as a list"). Best match first: the
 // share of the job's required skills each student has, the same match the student sees. Changing a status shows on
@@ -48,7 +49,7 @@ export default function Applicants() {
 
       <div className="flex-1 min-h-0 overflow-y-auto px-8 py-6 flex flex-col gap-4">
         {error && <p role="alert" className="text-sm text-rose-700 bg-rose-50 border border-rose-200 rounded-lg px-4 py-2.5">{error}</p>}
-        {!data && !error && <p className="text-sm text-slate-400">Loading applicants…</p>}
+        {!data && !error && <><LoadingLabel>Loading applicants…</LoadingLabel><CardSkeleton rows={5} /></>}
         {data && people.length === 0 && (
           <div className="bg-white border border-slate-200 rounded-2xl p-8 text-center">
             <h2 className="text-base font-semibold text-slate-900">No applicants yet</h2>

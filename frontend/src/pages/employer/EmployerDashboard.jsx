@@ -4,6 +4,7 @@ import api from '../../api'
 import PageHeader from '../../components/PageHeader'
 import { useAuth } from '../../context/useAuth'
 import { errText } from '../student/profileUtils'
+import { CardSkeleton, LoadingLabel } from '../../components/Skeleton'
 
 // Employer dashboard (12 Oct, her pick E after mock-ups A-E; references.md "Employer dashboard layout"; left column
 // changed the same day to option B of mock-ups A-C (my proposal; her pick pending): to review sized to its rows + recent activity, so one application isn't a blank card).
@@ -114,7 +115,13 @@ export default function EmployerDashboard() {
       </PageHeader>
 
       {error && <p role="alert" className="mx-8 mt-6 text-sm text-rose-700 bg-rose-50 border border-rose-200 rounded-lg px-4 py-2.5">{error}</p>}
-      {!data && !error && <p className="px-8 py-6 text-sm text-slate-400">Loading your dashboard…</p>}
+      {!data && !error && (
+        <div className="flex-1 min-h-0 px-8 py-6 grid grid-cols-1 lg:grid-cols-[minmax(0,1.55fr)_minmax(0,1fr)] gap-5 content-start" aria-busy="true">
+          <LoadingLabel>Loading your dashboard…</LoadingLabel>
+          <CardSkeleton rows={5} />
+          <div className="flex flex-col gap-5"><CardSkeleton rows={3} /><CardSkeleton rows={3} /></div>
+        </div>
+      )}
 
       {noJobs && (
         <div className="flex-1 px-8 py-6">

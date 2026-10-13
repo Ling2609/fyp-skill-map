@@ -7,6 +7,7 @@ import { ADMIN_COUNTS_CHANGED } from '../../components/Sidebar'
 import ReasonDialog from './ReasonDialog'
 import HistoryDialog from './HistoryDialog'
 import RowMenu from './RowMenu'
+import { TableRowsSkeleton } from '../../components/Skeleton'
 import { DECISIONS } from './decisions'
 
 // Admin > Users (7 Oct, her pick B after mock-ups; references.md "Admin Users table"). Every account, with:
@@ -202,7 +203,7 @@ export default function AdminUsers() {
                 <tr>{COLS.map(([n]) => <th key={n} scope="col" className="p-0 h-0"><span className="sr-only">{n}</span></th>)}</tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
-                {users === null && <tr><td colSpan={COLS.length} className="px-4 py-6 text-slate-500">Loading…</td></tr>}
+                {users === null && <TableRowsSkeleton cols={COLS.length} rows={8} />}
                 {users?.length === 0 && <tr><td colSpan={COLS.length} className="px-4 py-6 text-slate-500">No accounts match.</td></tr>}
                 {users?.map(u => (
                   <tr key={u.id} className={u.is_active && u.employer_status === 'pending' ? 'bg-amber-50/70' : ''}>

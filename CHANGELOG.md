@@ -3,6 +3,15 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 13 Oct 2026 — One-form Post a job; the same loading bars on every page
+- Post a job and Edit job are one form, top to bottom (her review: the two columns felt crowded). "Read the skills"
+  adds the skills under the description; Cancel and Publish (or Save changes) are at the end. The page scrolls down to
+  the skills after the first read.
+- Loading: admin (Dashboard, Users, Academic structure, history), employer (Dashboard, My jobs, Applicants, applicant
+  profile) and student (My applications, Job Detail) pages now show grey bars in the page's shape, like the student
+  Dashboard and My Profile (9 Oct, NN/g "Skeleton Screens 101"), instead of "Loading…" text or a spinner.
+- ⋯ menu: Reopen job is green text (Close job is red).
+
 ## 13 Oct 2026 — Employer: edit a posted job
 
 - (this commit) Her design after research (references.md "Editing a published job"): My jobs rows have View

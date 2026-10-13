@@ -5,6 +5,7 @@ import PageHeader from '../../components/PageHeader'
 import { ADMIN_COUNTS_CHANGED } from '../../components/Sidebar'
 import { errText } from './profileUtils'
 import ApplicationSteps from '../../components/ApplicationSteps'
+import { Bar, LoadingLabel } from '../../components/Skeleton'
 
 // My applications (11 Oct, Employer flow batch 2; mock-up board 6): every job the student applied for on SkillMap.
 // 12 Oct (her request; mock-up P2): one card per application with its progress, Applied -> Viewed -> Shortlisted ->
@@ -53,6 +54,21 @@ function pill(r) {
   return [r.progress.stage, r.progress.stage === 'viewed' ? 'Viewed' : 'Applied']
 }
 
+// While it loads: two application cards in grey bars, with the four progress steps (13 Oct, same as other pages)
+function AppsSkeleton() {
+  return (
+    <div className="flex flex-col gap-4" aria-busy="true">
+      <LoadingLabel>Loading your applications…</LoadingLabel>
+      {[0, 1].map(i => (
+        <div key={i} aria-hidden="true" className="bg-white border border-slate-200 rounded-2xl px-5 py-4">
+          <div className="flex justify-between gap-3"><div className="space-y-2"><Bar className="h-4 w-56" /><Bar className="h-3 w-40" /></div><Bar className="h-5 w-20 rounded-full" /></div>
+          <div className="grid grid-cols-4 gap-6 mt-5 px-8">{[0, 1, 2, 3].map(j => <div key={j} className="flex flex-col items-center gap-2"><Bar className="h-6 w-6 rounded-full" /><Bar className="h-3 w-16" /></div>)}</div>
+        </div>
+      ))}
+    </div>
+  )
+}
+
 export default function MyApplications() {
   const [rows, setRows] = useState(null)
   const [invites, setInvites] = useState([])
@@ -96,7 +112,7 @@ export default function MyApplications() {
           </section>
         ))}
 
-        {rows === null && !error && <p className="text-sm text-slate-400">Loading your applications…</p>}
+        {rows === null && !error && <AppsSkeleton />}
         {rows?.length === 0 && (
           <div className="bg-white border border-slate-200 rounded-2xl p-8 text-center">
             <h2 className="text-base font-semibold text-slate-900">No applications yet</h2>

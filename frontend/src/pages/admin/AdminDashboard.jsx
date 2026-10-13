@@ -7,6 +7,7 @@ import { ADMIN_COUNTS_CHANGED } from '../../components/Sidebar'
 import { useAuth } from '../../context/useAuth'
 import ReasonDialog from './ReasonDialog'
 import { DECISIONS } from './decisions'
+import { Bar as SkBar, CardSkeleton, StatsSkeleton, LoadingLabel } from '../../components/Skeleton'
 
 // Admin home, layout D (7 Oct, her pick; references.md "Admin layout"): what needs action first and most visible
 // (NN/g: "make important information visually salient"), then glanceable counts, then two panels the career office
@@ -80,7 +81,7 @@ export default function AdminDashboard() {
             {getGreeting()}, {user?.first_name || 'there'} 👋
           </h1>
           <p className="text-sm text-slate-500 mt-1">
-            {!data ? 'Loading…' : actions ? `${actions} thing${actions > 1 ? 's' : ''} need${actions > 1 ? '' : 's'} you today.` : 'Nothing needs you right now.'}
+            {!data ? (error ? '' : <SkBar className="h-4 w-56 mt-1.5" />) : actions ? `${actions} thing${actions > 1 ? 's' : ''} need${actions > 1 ? '' : 's'} you today.` : 'Nothing needs you right now.'}
           </p>
         </div>
       </PageHeader>
@@ -90,6 +91,11 @@ export default function AdminDashboard() {
       <div className="flex-1 flex flex-col gap-5 px-8 py-6">
         {error && <p className="text-sm text-rose-600">{error}</p>}
 
+        {!data && !error && (<>
+          <LoadingLabel>Loading the dashboard…</LoadingLabel>
+          <StatsSkeleton />
+          <div className="flex-1 grid lg:grid-cols-2 gap-4"><CardSkeleton rows={6} /><CardSkeleton rows={3} /></div>
+        </>)}
         {data && actions > 0 && (
           <section className="bg-white rounded-xl border border-amber-300">
             <h2 className="px-5 py-3 text-sm font-semibold text-amber-800 bg-amber-50 border-b border-amber-100 rounded-t-xl">

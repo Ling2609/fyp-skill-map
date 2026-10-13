@@ -5,6 +5,7 @@ import PageHeader from '../../components/PageHeader'
 import { errText } from '../student/profileUtils'
 import { STATUSES, STATUS_CLS, fmtDay } from './statuses'
 import { useStatusChange } from './statusChange'
+import { CardSkeleton, LoadingLabel } from '../../components/Skeleton'
 
 // Employer > one applicant (11 Oct, batch 2; mock-up board 4). Their match for this job, each required skill with
 // where it comes from (module, project, certificate), then the showcase: projects, strongest modules (grades only if
@@ -84,7 +85,11 @@ export default function ApplicantProfile() {
 
       <div className="flex-1 min-h-0 overflow-y-auto px-8 py-6 flex flex-wrap items-start content-start gap-5">
         {error && <p role="alert" className="w-full text-sm text-rose-700 bg-rose-50 border border-rose-200 rounded-lg px-4 py-2.5">{error}</p>}
-        {!data && !error && <p className="text-sm text-slate-400">Loading…</p>}
+        {!data && !error && (<>
+          <LoadingLabel>Loading the applicant…</LoadingLabel>
+          <CardSkeleton rows={5} className="flex-[1.3] basis-[26rem] min-w-80" />
+          <CardSkeleton rows={4} className="flex-1 basis-80 min-w-72" />
+        </>)}
         {data && (
           <>
             <section className={`${card} flex-[1.3] basis-[26rem] min-w-80`}>

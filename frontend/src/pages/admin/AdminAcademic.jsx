@@ -5,6 +5,7 @@ import PageHeader from '../../components/PageHeader'
 import { ADMIN_COUNTS_CHANGED } from '../../components/Sidebar'
 import ModuleForm from './ModuleForm'
 import RowMenu from './RowMenu'
+import { Bar, RowSkeleton, LoadingLabel } from '../../components/Skeleton'
 
 // Admin > Academic structure (7 Oct, her pick A; references.md "Admin Academic structure layout"). Modules: a list on
 // the left (by year, "To review" / "Reviewed") and the chosen module on the right, so the career office can work
@@ -50,6 +51,31 @@ const Chip = ({ reviewed }) => reviewed
   ? <span className="shrink-0 text-xs font-medium rounded-full px-2 py-0.5 bg-emerald-50 text-emerald-700">Reviewed</span>
   : <span className="shrink-0 text-xs font-medium rounded-full px-2 py-0.5 bg-amber-100 text-amber-800">To review</span>
 
+// While a module loads: its name, details and skill rows in grey bars (13 Oct, same as the student pages)
+function ModuleDetailsSkeleton() {
+  return (
+    <div className="flex-1 flex flex-col min-h-0" aria-busy="true">
+      <LoadingLabel>Loading the module…</LoadingLabel>
+      <div className="px-6 pt-5 pb-4 border-b border-slate-200 space-y-2.5"><Bar className="h-5 w-72" /><Bar className="h-3.5 w-52" /></div>
+      <div className="px-6 py-5 space-y-2"><Bar className="h-3.5 w-full" /><Bar className="h-3.5 w-11/12" /><Bar className="h-3.5 w-3/4" /></div>
+      <div className="px-6 divide-y divide-slate-100">{[0, 1, 2, 3, 4].map(i => <RowSkeleton key={i} />)}</div>
+    </div>
+  )
+}
+
+// While the academic structure loads: the module list on the left and a module on the right
+function AcademicSkeleton() {
+  return (
+    <div className="flex-1 min-h-0 flex gap-4" aria-busy="true">
+      <section aria-hidden="true" className="w-88 shrink-0 bg-white border border-slate-200 rounded-xl overflow-hidden">
+        <div className="p-3 border-b border-slate-100 space-y-2"><Bar className="h-9 w-full rounded-lg" /><div className="flex justify-between"><Bar className="h-8 w-28 rounded-full" /><Bar className="h-8 w-28 rounded-lg" /></div></div>
+        <div className="px-4 divide-y divide-slate-100">{[0, 1, 2, 3, 4, 5, 6].map(i => <RowSkeleton key={i} />)}</div>
+      </section>
+      <section className="flex-1 min-w-0 flex flex-col bg-white border border-slate-200 rounded-xl overflow-hidden"><ModuleDetailsSkeleton /></section>
+    </div>
+  )
+}
+
 // ── The chosen module ──────────────────────────────────────────────────────────────────────────────────────────────
 function ModuleDetails({ id, programmeId, row, onChanged, onReviewed, onEdit, onRemove }) {
   const [mod, setMod] = useState(null)
@@ -76,7 +102,7 @@ function ModuleDetails({ id, programmeId, row, onChanged, onReviewed, onEdit, on
   }
 
   if (error && !mod) return <div className="p-6 text-sm text-rose-600">{error}</div>
-  if (!mod) return <div className="p-6 text-sm text-slate-500">Loading…</div>
+  if (!mod) return <ModuleDetailsSkeleton />
 
   const dirty = draft.trim() !== mod.description.trim()
   const reviewed = !!mod.reviewed_at
@@ -547,6 +573,7 @@ export default function AdminAcademic() {
 
       <div className="flex-1 min-h-0 px-8 py-6 flex flex-col">
         {error && <p className="text-sm text-rose-600">{error}</p>}
+        {!data && !error && <AcademicSkeleton />}
         {data && tab === 'intakes' && (
           <Intakes key={programmeId} programmeId={programmeId} intakes={data.intakes}
             setIntakes={() => reload()} onOpen={i => set({ tab: '', i: String(i.id), m: '' })} />

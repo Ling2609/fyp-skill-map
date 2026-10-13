@@ -6,6 +6,7 @@ import { skillName } from '../../skillName'
 import { SELF_DECLARED_TIP, errText, sourcePillCls } from './profileUtils'
 import ApplicationSteps from '../../components/ApplicationSteps'
 import { ADMIN_COUNTS_CHANGED } from '../../components/Sidebar'
+import { Bar, RowSkeleton, LoadingLabel } from '../../components/Skeleton'
 
 // The grade itself, not its weight: the weight is the same for C+ and C, so a C showed as "C+" (5 Oct)
 const GRADE_LETTERS = { '4.0': 'A', '3.7': 'A-', '3.3': 'B+', '3.0': 'B', '2.7': 'B-', '2.3': 'C+', '2.0': 'C' }
@@ -159,10 +160,19 @@ export default function JobDetail() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-8 h-8 border-4 border-blue-700 border-t-transparent rounded-full animate-spin mx-auto mb-3" />
-          <p className="text-gray-500 text-sm">Loading job details...</p>
+      // 13 Oct: grey bars in the page's shape, like the other pages (was a lone spinner)
+      <div className="min-h-screen" aria-busy="true">
+        <LoadingLabel>Loading job details…</LoadingLabel>
+        <div className="bg-white border-b border-slate-200 px-4 sm:px-8 py-3.5"><Bar className="h-3 w-24" /></div>
+        <div className="px-4 sm:px-6 py-5 max-w-4xl mx-auto space-y-4" aria-hidden="true">
+          <div className="bg-white rounded-xl p-6 border border-slate-200 flex justify-between gap-6">
+            <div className="space-y-2.5"><Bar className="h-6 w-72" /><Bar className="h-3.5 w-56" /><Bar className="h-3 w-32" /></div>
+            <Bar className="h-12 w-20" />
+          </div>
+          <div className="bg-white rounded-xl border border-slate-200">
+            <div className="px-6 py-3.5 border-b border-slate-100 flex gap-6">{['w-20', 'w-20', 'w-24'].map(w => <Bar key={w} className={`h-4 ${w}`} />)}</div>
+            <div className="px-6 divide-y divide-slate-100">{[0, 1, 2, 3, 4].map(i => <RowSkeleton key={i} />)}</div>
+          </div>
         </div>
       </div>
     )
