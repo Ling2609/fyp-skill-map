@@ -3,6 +3,21 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 13 Oct 2026 — AI Assistant: learning plans to follow, check and print
+- Skill Development answers a "learn X" request as one plan: why it matters for the job (with the ad's words), 2-4
+  resources, a table of 3-5 steps with the time each takes (fitted to the student's hours a week: 3, 5 or 10, picked
+  above the chat) and "Done when" (something they can show), and a portfolio project. The last step is always "Add
+  it to SkillMap" (the project on My Profile, so the skill counts); the backend adds it if the reply leaves it out.
+- Links: only from `data/learning_resources.json` (34 skills most asked for in 213 live ads; official docs and
+  well-known free courses), and only once `scripts/tools/check_learning_links.py` has opened them. Any other link in a
+  reply, in either mode, is removed and its words kept.
+- "Download plan (PDF)" on every plan message: A4, black and white, with who it is for, the goal, the job, the skills
+  they have and miss, the plan with a Done box per step, and a note that the AI wrote it (`POST /chatbot/plan-pdf`).
+- Follow-up suggestions above the chat box after a plan (explain step 1, another project, a shorter plan); they go
+  once one is used.
+- New: `app/services/learning_resources.py`, `app/services/plan_pdf.py`, `tests/test_learning_plan.py` (4 tests);
+  requirements: reportlab, pillow.
+
 ## 13 Oct 2026 — One-form Post a job; the same loading bars on every page
 - Post a job and Edit job are one form, top to bottom (her review: the two columns felt crowded). "Read the skills"
   adds the skills under the description; Cancel and Publish (or Save changes) are at the end. The page scrolls down to

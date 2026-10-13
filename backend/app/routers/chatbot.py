@@ -24,6 +24,7 @@ from app.mongo import chat_sessions, history_ok
 from app.routers.auth import get_current_user
 from app.routers.skillgap import SkillGapRequest, analyse_skill_gap
 from app.services.showcase import grade_letter
+from app.services import learning_resources
 
 router = APIRouter(prefix="/chatbot", tags=["chatbot"])
 
@@ -53,39 +54,39 @@ Your role:
 - Keep responses concise (3-5 sentences max per reply) and conversational
 - Reference their actual skills and matched jobs when relevant
 - Focus on the Malaysian market context
-- Never make up URLs, salaries or company facts; say so when you are not sure
+- Never make up URLs, salaries or company facts; say so when you are not sure (links not on SkillMap's checked list are removed)
 
 Tone: Professional but warm, like a trusted mentor."""
 
-SKILL_DEVELOPMENT_SYSTEM = """You are a technical learning guide specialising in software engineering and ICT skills for Malaysian graduates.
+# 13 Oct (learning plan, her approval): a plan the student can follow and tick off. Each step has a time that fits
+# their hours a week and a "done when" they can see (SMART goals: specific, measurable, time-bound; Vanderbilt
+# University ILP guide, references.md "Learning plan"). The last step puts the result on My Profile, so SkillMap counts
+# the new skill. Links only from the checked list (app/services/learning_resources.py); any other link is removed.
+SKILL_DEVELOPMENT_SYSTEM = """You are a technical learning guide for Malaysian ICT graduates. You turn a skill the student is missing into a learning plan they can follow and tick off.
 
-Your role:
-- For each missing skill the user asks about, provide a clear, structured learning path
-- Suggest SPECIFIC free resources: exact Coursera courses, YouTube channels/playlists, official docs, freeCodeCamp tutorials
-- Estimate realistic time to learn (e.g., "2-3 weeks with 1 hour/day")
-- Show how the skill connects to the user's target job role
-- Build on what the user already has: when the context lists skills they already have for the job, start from those
-  (e.g. "you know Python, so...") and suggest one project that also covers other skills they are still missing
-- When the context quotes the job ad, use it to explain why the skill matters; say whether the ad requires it or
-  only lists it as nice to have
-- Keep responses focused — one skill at a time, actionable steps
+When the student asks to learn a skill or asks for a plan, answer in exactly this shape (Markdown, under 450 words):
 
-Format your responses with:
-1. Why this skill matters for their target role
-2. Recommended resources (with specific names, not just "YouTube")
-3. A simple 3-step learning plan
-4. How to demonstrate this skill (portfolio project idea)
+### Learning plan: <skill>
+One or two sentences: why the skill matters for their target job or career goal. When the context quotes the job ad, use the quote and say whether the ad requires the skill or lists it as nice to have.
 
-Links: never make up a URL. Name each resource exactly (course, channel, book) so it can be searched. Only link the
-official home page of a tool's documentation when you are certain of it (e.g. https://docs.docker.com). Never write
-playlist, video or course URLs: their IDs cannot be checked and are often wrong.
+#### Resources
+2 to 4 bullets: **name** (provider, free or paid), then what to use it for. Link a resource ONLY with a URL listed under "Checked resources" in the context, copied exactly. For any other resource write its name and the words to search for. Never write any other URL.
 
-Facts: only name a course, provider or university you are sure exists; if unsure, give the words to search for
-instead. Never say what a named company requires or uses unless it is in the user context below (e.g. "Hytech
-requires ISTQB" when the ad does not say so). No made-up numbers or statistics.
+#### Your plan
+One table with exactly these columns: | Step | What to do | Time | Done when |
+- 3 to 5 steps. "What to do" is one concrete action that builds on skills they already have (e.g. "you know Java, so...").
+- Time fits the student's hours a week from the context (assume 5 if not given), e.g. "1 week (5 h)".
+- "Done when" is something they can see or show, e.g. "your API runs in a container on localhost".
+- The last row is always: | Add it to SkillMap | Add the project to My Profile, Projects, so SkillMap counts the skill | 10 min | <skill> shows on My Profile |
 
-Formatting (shown in a chat bubble, rendered as Markdown): short "###" headings, bullet points, at most one small
-table with 2-3 short columns and no links inside it. No emoji numbering, no "---" lines. Aim for under 350 words.
+#### Show it: portfolio project
+One project that uses this skill and, if possible, other skills they are still missing (2 or 3 sentences).
+
+For a follow-up (change the plan, explain a step, another project) answer briefly. Send the whole plan again, in the same shape, only when the plan itself changes.
+
+Facts: only name a course, provider or university you are sure exists; if unsure, give the words to search for instead. Never say what a named company requires or uses unless it is in the user context below (e.g. "Hytech requires ISTQB" when the ad does not say so). No made-up numbers or statistics.
+
+Formatting (shown in a chat bubble): no emoji, no "---" lines, no other tables, no links inside the table.
 
 Tone: Direct and practical. No fluff."""
 
@@ -108,6 +109,7 @@ class ChatRequest(BaseModel):
     # "Learn →" on a job (E3, 9 Oct): the backend reads that job's skill gap itself, the same numbers Job Detail shows
     job_id: str | None = Field(default=None, max_length=200)
     session_id: str | None = Field(default=None, max_length=64)   # continue a saved chat; None = start a new one
+    hours_per_week: int | None = Field(default=None, ge=1, le=40)   # 13 Oct: the plan's times fit this
 
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
@@ -170,7 +172,32 @@ def build_context_block(req: ChatRequest, gap: dict | None = None, goal: str | N
         lines.append(f"Top job matches: {'; '.join(top_jobs)}")
     if req.target_skill:
         lines.append(f"The user wants to learn: {req.target_skill}")
+    if req.mode == "skill_development":
+        if req.hours_per_week:
+            lines.append(f"Hours a week the user can spend learning: {req.hours_per_week}")
+        # Checked links for the skill being learnt, else the skills named in the question, else the job's gaps
+        question = next((m.content for m in reversed(req.messages) if m.role == "user"), "")
+        gaps = ", ".join((req.missing_skills or [])[:5]) or (", ".join(m["job_skill"] for m in gap["missing_skills"][:5]) if gap else "")
+        lines += learning_resources.context_lines(learning_resources.find_skills(req.target_skill, question, gaps))
     return "\n".join(lines) if lines else ""
+
+
+def ensure_profile_step(reply: str) -> str:
+    """A plan's table always ends with putting the work on My Profile (the prompt asks; this makes sure)."""
+    from app.services.plan_pdf import plan_title
+    skill = plan_title(reply)
+    lines = reply.split("\n")
+    head = next((i for i, l in enumerate(lines) if l.strip().startswith("|") and "done when" in l.lower()), None)
+    if skill is None or head is None:
+        return reply
+    end = head
+    while end + 1 < len(lines) and lines[end + 1].strip().startswith("|"):
+        end += 1
+    if any("my profile" in l.lower() for l in lines[head:end + 1]):
+        return reply
+    lines.insert(end + 1, f"| Add it to SkillMap | Add the project to My Profile, Projects, so SkillMap counts the skill "
+                          f"| 10 min | {skill} shows on My Profile |")
+    return "\n".join(lines)
 
 
 # ── Endpoint ──────────────────────────────────────────────────────────────────
@@ -331,5 +358,42 @@ def chat(req: ChatRequest, current_user: User = Depends(get_current_user), db: S
         wait = re.search(r"try again in ([\d.hms]+)", str(last_error))
         when = f" in about {_minutes(wait.group(1))}" if wait else " later"
         raise HTTPException(status_code=429, detail=f"The assistant has reached its daily usage limit. Please try again{when}.")
+    reply, removed = learning_resources.strip_unlisted_links(reply)
+    if removed:
+        print(f"[chatbot] removed {removed} link(s) not on the checked list")
+    if req.mode == "skill_development":
+        reply = ensure_profile_step(reply)
     session_id = save_exchange(req, current_user, reply)
     return {"reply": reply, "mode": req.mode, "session_id": session_id, "saved": session_id is not None}
+
+# ── Download plan (PDF) ───────────────────────────────────────────────────────
+class PlanPdfIn(BaseModel):
+    content: str = Field(min_length=1, max_length=12000)     # the plan message, as shown in the chat
+    job_id: str | None = Field(default=None, max_length=200)  # the chat's job: its have / missing go in the header
+
+
+@router.post("/plan-pdf")
+def plan_pdf(req: PlanPdfIn, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    """The plan message as an A4 PDF to print and tick off (13 Oct, mock-up v4_plan_pdf). Links are checked again,
+    so a saved chat from before a link failed its check doesn't print it."""
+    from app.services.plan_pdf import build_pdf, plan_title
+    content, _ = learning_resources.strip_unlisted_links(req.content)
+    skill = plan_title(content)
+    if not skill:
+        raise HTTPException(status_code=400, detail="This message isn't a learning plan.")
+    job, have, missing = None, [], []
+    if req.job_id:
+        try:
+            gap = analyse_skill_gap(SkillGapRequest(job_id=req.job_id), db, current_user)
+            j = gap["job"]
+            job = f"{j['job_title']}, {j['company']}" if j.get("company") else j["job_title"]
+            have = [m["job_skill"] for m in gap["matched_skills"][:8]]
+            missing = [m["job_skill"] for m in gap["missing_skills"][:8]]
+        except HTTPException:
+            pass                          # the job is gone: the plan prints without it
+    name = " ".join(p for p in (current_user.first_name, current_user.last_name) if p) or current_user.username
+    pdf = build_pdf(content, student=name, goal=current_user.target_category, job=job, have=have, missing=missing,
+                    skill=skill)
+    slug = re.sub(r"[^a-z0-9]+", "-", skill.lower()).strip("-") or "skill"
+    return Response(content=pdf, media_type="application/pdf",
+                    headers={"Content-Disposition": f'attachment; filename="learning-plan-{slug}.pdf"'})

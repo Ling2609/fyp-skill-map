@@ -63,7 +63,7 @@ const MD = {
   h1: ({ children }) => <p className="text-sm font-semibold text-slate-900 mt-4 mb-1 first:mt-0">{children}</p>,
   h2: ({ children }) => <p className="text-sm font-semibold text-slate-900 mt-4 mb-1 first:mt-0">{children}</p>,
   h3: ({ children }) => <p className="text-sm font-semibold text-slate-800 mt-3 mb-1 first:mt-0">{children}</p>,
-  h4: ({ children }) => <p className="text-sm font-medium text-slate-800 mt-3 mb-1 first:mt-0">{children}</p>,
+  h4: ({ children }) => <p className="text-sm font-semibold text-slate-800 mt-3 mb-1 first:mt-0">{children}</p>,
   p: ({ children }) => <p className="text-sm text-slate-600 leading-relaxed my-1.5">{children}</p>,
   strong: ({ children }) => <strong className="font-semibold text-slate-900">{children}</strong>,
   a: ({ href, children }) => (
@@ -88,7 +88,14 @@ const MD = {
   td: ({ children }) => <td className="px-3 py-2 align-top text-slate-600 border-t border-slate-100">{children}</td>,
 }
 
-function MessageBubble({ msg }) {
+// 13 Oct (learning plan): a reply that starts a plan ("### Learning plan: Docker") gets "Download plan (PDF)" under it,
+// and while it is the latest message, follow-up suggestions sit above the message box (they go once one is used or
+// the student types; Microsoft's Bot Framework "suggested actions" pattern, references.md "Learning plan").
+const isPlan = (msg) => msg.role === 'assistant' && !msg.failed && /^#{1,4}\s*Learning plan:/m.test(msg.content)
+const FOLLOW_UPS = ['Explain step 1 in more detail', 'Suggest a different project', 'Make the plan shorter']
+const HOURS = [3, 5, 10]
+
+function MessageBubble({ msg, onDownload, downloading }) {
   const isUser = msg.role === 'user'
 
   return (
@@ -112,6 +119,17 @@ function MessageBubble({ msg }) {
           ? <p className="text-sm text-white leading-relaxed">{msg.content}</p>
           : <Markdown remarkPlugins={[remarkGfm]} components={MD}>{msg.content}</Markdown>
         }
+        {onDownload && (
+          <div className="mt-3 pt-3 border-t border-slate-100">
+            <button type="button" onClick={onDownload} disabled={downloading}
+              className="inline-flex items-center gap-1.5 text-xs font-medium text-blue-700 bg-white border border-blue-200 rounded-lg px-3 py-1.5 hover:bg-blue-50 disabled:opacity-50">
+              <svg aria-hidden="true" className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v11m0 0-4-4m4 4 4-4M5 20h14" />
+              </svg>
+              {downloading ? 'Making the PDF…' : 'Download plan (PDF)'}
+            </button>
+          </div>
+        )}
       </div>
     </div>
   )
@@ -134,6 +152,9 @@ export default function Chatbot() {
   const [messages, setMessages] = useState([])
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
+  const [hours, setHours] = useState(5)               // hours a week for the plan (13 Oct)
+  const [downloading, setDownloading] = useState(null) // index of the plan being made into a PDF
+  const [pdfError, setPdfError] = useState('')
   const bottomRef = useRef(null)
   // The message box grows with its text (up to INPUT_MAX px, then it scrolls), so a long question, e.g. the one the
   // Dashboard's counsellor button types in, shows in full instead of one cut-off line (9 Oct, her review). Measured in
@@ -245,6 +266,7 @@ export default function Chatbot() {
         // Only the last 20 messages: keeps each request small (backend limit is 40)
         messages: msgs.filter(m => !m.failed).slice(-20).map(m => ({ role: m.role, content: m.content })),
         ...ctx,
+        ...(mode === 'skill_development' ? { hours_per_week: hours } : {}),
         session_id: sessionRef.current,
       })
       setMessages(prev => [...prev, { role: 'assistant', content: res.data.reply }])
@@ -268,7 +290,7 @@ export default function Chatbot() {
     } finally {
       setLoading(false)
     }
-  }, [mode, getContext, loadSessions])
+  }, [mode, hours, getContext, loadSessions])
 
   // Start (or open) the chat each time chatKey changes: greeting first, then a saved chat's messages, or the
   // "I want to learn X" question when the page was opened from "Learn →" on a job
@@ -297,6 +319,34 @@ export default function Chatbot() {
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages, loading])
+
+  const downloadPlan = async (msg, idx) => {
+    setDownloading(idx); setPdfError('')
+    try {
+      const res = await api.post('/chatbot/plan-pdf', { content: msg.content, job_id: chatCtx.job_id || null }, { responseType: 'blob' })
+      // named from the plan's title (the browser can't read the server's file name across origins)
+      const skill = /Learning plan:\s*(.+)/.exec(msg.content)?.[1] || ''
+      const name = `learning-plan-${skill.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'skill'}.pdf`
+      const url = URL.createObjectURL(res.data)
+      const a = document.createElement('a')
+      a.href = url; a.download = name
+      document.body.appendChild(a); a.click(); a.remove()
+      setTimeout(() => URL.revokeObjectURL(url), 1000)
+    } catch {
+      setPdfError("Couldn't make the PDF. Please try again.")
+    } finally {
+      setDownloading(null)
+    }
+  }
+
+  const sendText = async (raw) => {
+    const text = raw.trim()
+    if (!text || loading) return
+    const newMessages = [...messages, { role: 'user', content: text }]
+    setMessages(newMessages)
+    setInput('')
+    await sendMessages(newMessages)
+  }
 
   const handleSend = async () => {
     const text = input.trim()
@@ -418,6 +468,16 @@ export default function Chatbot() {
             ) : (
               <p className="min-w-0">{currentMode.description}</p>
             )}
+            {mode === 'skill_development' && (
+              <div className="shrink-0 flex items-center gap-1.5" role="group" aria-label="Hours a week for learning">
+                <span>Hours a week</span>
+                {HOURS.map(h => (
+                  <button key={h} type="button" onClick={() => setHours(h)} aria-pressed={hours === h}
+                    className={`px-2 py-0.5 rounded-full border font-medium ${hours === h
+                      ? 'bg-blue-600 border-blue-600 text-white' : 'bg-white border-slate-200 text-slate-600 hover:border-blue-300'}`}>{h}</button>
+                ))}
+              </div>
+            )}
             {fromJob && (
               <button onClick={() => navigate(-1)} title={`Back to ${fromJob}`}
                 className="shrink-0 font-medium text-blue-600 hover:text-blue-700 hover:underline">
@@ -504,7 +564,8 @@ export default function Chatbot() {
         <div className="flex-1 overflow-y-auto px-3 sm:px-6 py-5 bg-slate-50">
           <div className="space-y-4">
             {messages.map((msg, idx) => (
-              <MessageBubble key={idx} msg={msg} />
+              <MessageBubble key={idx} msg={msg} downloading={downloading === idx}
+                onDownload={isPlan(msg) ? () => downloadPlan(msg, idx) : null} />
             ))}
             {loading && <TypingIndicator />}
             <div ref={bottomRef} />
@@ -513,6 +574,15 @@ export default function Chatbot() {
 
         {/* Input */}
         <div className="bg-white border-t border-slate-200 px-3 sm:px-6 py-4 shrink-0">
+          {pdfError && <p role="alert" className="text-xs text-rose-700 mb-2">{pdfError}</p>}
+          {!loading && messages.length > 0 && isPlan(messages[messages.length - 1]) && !input && (
+            <div className="flex flex-wrap gap-2 mb-3" aria-label="Suggested follow-ups">
+              {FOLLOW_UPS.map(f => (
+                <button key={f} type="button" onClick={() => sendText(f)}
+                  className="text-xs text-blue-700 bg-white border border-blue-200 rounded-full px-3 py-1.5 hover:bg-blue-50">{f}</button>
+              ))}
+            </div>
+          )}
           <div className="flex items-end gap-3">
             <textarea
               ref={inputRef}

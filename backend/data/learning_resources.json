@@ -1,0 +1,747 @@
+{
+ "about": "Checked learning resources the AI Assistant may link to (13 Oct 2026). Skills: the most asked-for skills in 213 live job ads (docs/evidence/stage1_dryrun_evidence-v8.csv), vague ones left out. Each link is shown to students only after scripts/tools/check_learning_links.py has opened it (ok = true); any other link in a reply is removed.",
+ "skills": [
+  {
+   "skill": "Python",
+   "aliases": [
+    "python 3",
+    "python programming"
+   ],
+   "resources": [
+    {
+     "name": "The Python Tutorial",
+     "url": "https://docs.python.org/3/tutorial/",
+     "provider": "Python.org",
+     "kind": "docs",
+     "cost": "free",
+     "checked": null,
+     "ok": null
+    },
+    {
+     "name": "Python for Everybody",
+     "url": "https://www.py4e.com/",
+     "provider": "Dr Chuck (University of Michigan)",
+     "kind": "course",
+     "cost": "free",
+     "checked": null,
+     "ok": null
+    }
+   ]
+  },
+  {
+   "skill": "SQL",
+   "aliases": [
+    "structured query language"
+   ],
+   "resources": [
+    {
+     "name": "SQLBolt",
+     "url": "https://sqlbolt.com/",
+     "provider": "SQLBolt",
+     "kind": "practice",
+     "cost": "free",
+     "checked": null,
+     "ok": null
+    },
+    {
+     "name": "PostgreSQL Tutorial (SQL language)",
+     "url": "https://www.postgresql.org/docs/current/tutorial.html",
+     "provider": "PostgreSQL",
+     "kind": "docs",
+     "cost": "free",
+     "checked": null,
+     "ok": null
+    }
+   ]
+  },
+  {
+   "skill": "Java",
+   "aliases": [
+    "java programming",
+    "core java"
+   ],
+   "resources": [
+    {
+     "name": "Learn Java",
+     "url": "https://dev.java/learn/",
+     "provider": "Oracle (dev.java)",
+     "kind": "docs",
+     "cost": "free",
+     "checked": null,
+     "ok": null
+    }
+   ]
+  },
+  {
+   "skill": "JavaScript",
+   "aliases": [
+    "js",
+    "ecmascript"
+   ],
+   "resources": [
+    {
+     "name": "JavaScript Guide",
+     "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide",
+     "provider": "MDN Web Docs",
+     "kind": "docs",
+     "cost": "free",
+     "checked": null,
+     "ok": null
+    },
+    {
+     "name": "The Modern JavaScript Tutorial",
+     "url": "https://javascript.info/",
+     "provider": "javascript.info",
+     "kind": "tutorial",
+     "cost": "free",
+     "checked": null,
+     "ok": null
+    }
+   ]
+  },
+  {
+   "skill": "TypeScript",
+   "aliases": [
+    "ts"
+   ],
+   "resources": [
+    {
+     "name": "The TypeScript Handbook",
+     "url": "https://www.typescriptlang.org/docs/handbook/intro.html",
+     "provider": "TypeScript",
+     "kind": "docs",
+     "cost": "free",
+     "checked": null,
+     "ok": null
+    }
+   ]
+  },
+  {
+   "skill": "HTML",
+   "aliases": [
+    "html5"
+   ],
+   "resources": [
+    {
+     "name": "Learn web development",
+     "url": "https://developer.mozilla.org/en-US/docs/Learn",
+     "provider": "MDN Web Docs",
+     "kind": "course",
+     "cost": "free",
+     "checked": null,
+     "ok": null
+    }
+   ]
+  },
+  {
+   "skill": "CSS",
+   "aliases": [
+    "css3"
+   ],
+   "resources": [
+    {
+     "name": "Learn CSS",
+     "url": "https://web.dev/learn/css",
+     "provider": "web.dev (Google)",
+     "kind": "course",
+     "cost": "free",
+     "checked": null,
+     "ok": null
+    },
+    {
+     "name": "Learn web development",
+     "url": "https://developer.mozilla.org/en-US/docs/Learn",
+     "provider": "MDN Web Docs",
+     "kind": "course",
+     "cost": "free",
+     "checked": null,
+     "ok": null
+    }
+   ]
+  },
+  {
+   "skill": "React",
+   "aliases": [
+    "react.js",
+    "reactjs"
+   ],
+   "resources": [
+    {
+     "name": "Learn React",
+     "url": "https://react.dev/learn",
+     "provider": "React",
+     "kind": "docs",
+     "cost": "free",
+     "checked": null,
+     "ok": null
+    }
+   ]
+  },
+  {
+   "skill": "Node.js",
+   "aliases": [
+    "nodejs",
+    "node"
+   ],
+   "resources": [
+    {
+     "name": "Learn Node.js",
+     "url": "https://nodejs.org/en/learn",
+     "provider": "Node.js",
+     "kind": "docs",
+     "cost": "free",
+     "checked": null,
+     "ok": null
+    }
+   ]
+  },
+  {
+   "skill": "Git",
+   "aliases": [
+    "version control",
+    "github",
+    "gitlab"
+   ],
+   "resources": [
+    {
+     "name": "Pro Git (book)",
+     "url": "https://git-scm.com/book/en/v2",
+     "provider": "git-scm.com",
+     "kind": "book",
+     "cost": "free",
+     "checked": null,
+     "ok": null
+    },
+    {
+     "name": "Learn Git Branching",
+     "url": "https://learngitbranching.js.org/",
+     "provider": "Learn Git Branching",
+     "kind": "practice",
+     "cost": "free",
+     "checked": null,
+     "ok": null
+    }
+   ]
+  },
+  {
+   "skill": "Docker",
+   "aliases": [
+    "containers",
+    "containerisation",
+    "containerization",
+    "docker compose"
+   ],
+   "resources": [
+    {
+     "name": "Docker: Get started",
+     "url": "https://docs.docker.com/get-started/",
+     "provider": "Docker",
+     "kind": "docs",
+     "cost": "free",
+     "checked": null,
+     "ok": null
+    }
+   ]
+  },
+  {
+   "skill": "Kubernetes",
+   "aliases": [
+    "k8s"
+   ],
+   "resources": [
+    {
+     "name": "Learn Kubernetes Basics",
+     "url": "https://kubernetes.io/docs/tutorials/kubernetes-basics/",
+     "provider": "Kubernetes",
+     "kind": "tutorial",
+     "cost": "free",
+     "checked": null,
+     "ok": null
+    }
+   ]
+  },
+  {
+   "skill": "AWS",
+   "aliases": [
+    "amazon web services"
+   ],
+   "resources": [
+    {
+     "name": "AWS Skill Builder",
+     "url": "https://skillbuilder.aws/",
+     "provider": "Amazon Web Services",
+     "kind": "course",
+     "cost": "free and paid",
+     "checked": null,
+     "ok": null
+    },
+    {
+     "name": "Getting Started on AWS",
+     "url": "https://aws.amazon.com/getting-started/",
+     "provider": "Amazon Web Services",
+     "kind": "tutorial",
+     "cost": "free",
+     "checked": null,
+     "ok": null
+    }
+   ]
+  },
+  {
+   "skill": "Azure",
+   "aliases": [
+    "microsoft azure"
+   ],
+   "resources": [
+    {
+     "name": "Azure training on Microsoft Learn",
+     "url": "https://learn.microsoft.com/en-us/training/azure/",
+     "provider": "Microsoft Learn",
+     "kind": "course",
+     "cost": "free",
+     "checked": null,
+     "ok": null
+    }
+   ]
+  },
+  {
+   "skill": "REST APIs",
+   "aliases": [
+    "rest api",
+    "restful apis",
+    "apis",
+    "api"
+   ],
+   "resources": [
+    {
+     "name": "HTTP (MDN)",
+     "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP",
+     "provider": "MDN Web Docs",
+     "kind": "docs",
+     "cost": "free",
+     "checked": null,
+     "ok": null
+    },
+    {
+     "name": "FastAPI Tutorial",
+     "url": "https://fastapi.tiangolo.com/tutorial/",
+     "provider": "FastAPI",
+     "kind": "tutorial",
+     "cost": "free",
+     "checked": null,
+     "ok": null
+    },
+    {
+     "name": "Building a RESTful Web Service (Spring)",
+     "url": "https://spring.io/guides/gs/rest-service/",
+     "provider": "Spring",
+     "kind": "tutorial",
+     "cost": "free",
+     "checked": null,
+     "ok": null
+    }
+   ]
+  },
+  {
+   "skill": "Linux",
+   "aliases": [
+    "unix",
+    "bash",
+    "shell scripting",
+    "command line"
+   ],
+   "resources": [
+    {
+     "name": "Linux Journey",
+     "url": "https://linuxjourney.com/",
+     "provider": "Linux Journey",
+     "kind": "course",
+     "cost": "free",
+     "checked": null,
+     "ok": null
+    },
+    {
+     "name": "The Linux command line for beginners",
+     "url": "https://ubuntu.com/tutorials/command-line-for-beginners",
+     "provider": "Ubuntu",
+     "kind": "tutorial",
+     "cost": "free",
+     "checked": null,
+     "ok": null
+    }
+   ]
+  },
+  {
+   "skill": "PostgreSQL",
+   "aliases": [
+    "postgres"
+   ],
+   "resources": [
+    {
+     "name": "PostgreSQL Tutorial",
+     "url": "https://www.postgresql.org/docs/current/tutorial.html",
+     "provider": "PostgreSQL",
+     "kind": "docs",
+     "cost": "free",
+     "checked": null,
+     "ok": null
+    }
+   ]
+  },
+  {
+   "skill": "Power BI",
+   "aliases": [
+    "powerbi",
+    "microsoft power bi"
+   ],
+   "resources": [
+    {
+     "name": "Power BI documentation",
+     "url": "https://learn.microsoft.com/en-us/power-bi/",
+     "provider": "Microsoft Learn",
+     "kind": "docs",
+     "cost": "free",
+     "checked": null,
+     "ok": null
+    }
+   ]
+  },
+  {
+   "skill": "Tableau",
+   "aliases": [],
+   "resources": [
+    {
+     "name": "Tableau free training videos",
+     "url": "https://www.tableau.com/learn/training",
+     "provider": "Tableau",
+     "kind": "course",
+     "cost": "free",
+     "checked": null,
+     "ok": null
+    }
+   ]
+  },
+  {
+   "skill": "Data analysis",
+   "aliases": [
+    "data analytics",
+    "pandas"
+   ],
+   "resources": [
+    {
+     "name": "Kaggle Learn",
+     "url": "https://www.kaggle.com/learn",
+     "provider": "Kaggle",
+     "kind": "course",
+     "cost": "free",
+     "checked": null,
+     "ok": null
+    },
+    {
+     "name": "pandas: Getting started",
+     "url": "https://pandas.pydata.org/docs/getting_started/index.html",
+     "provider": "pandas",
+     "kind": "docs",
+     "cost": "free",
+     "checked": null,
+     "ok": null
+    }
+   ]
+  },
+  {
+   "skill": "Machine learning",
+   "aliases": [
+    "ml"
+   ],
+   "resources": [
+    {
+     "name": "Kaggle Learn",
+     "url": "https://www.kaggle.com/learn",
+     "provider": "Kaggle",
+     "kind": "course",
+     "cost": "free",
+     "checked": null,
+     "ok": null
+    },
+    {
+     "name": "scikit-learn tutorials",
+     "url": "https://scikit-learn.org/stable/tutorial/index.html",
+     "provider": "scikit-learn",
+     "kind": "docs",
+     "cost": "free",
+     "checked": null,
+     "ok": null
+    }
+   ]
+  },
+  {
+   "skill": "Agile",
+   "aliases": [
+    "agile methodology",
+    "scrum",
+    "kanban"
+   ],
+   "resources": [
+    {
+     "name": "The Scrum Guide",
+     "url": "https://scrumguides.org/scrum-guide.html",
+     "provider": "Scrum.org / Scrum Inc.",
+     "kind": "docs",
+     "cost": "free",
+     "checked": null,
+     "ok": null
+    },
+    {
+     "name": "Agile tutorials",
+     "url": "https://www.atlassian.com/agile/tutorials",
+     "provider": "Atlassian",
+     "kind": "tutorial",
+     "cost": "free",
+     "checked": null,
+     "ok": null
+    }
+   ]
+  },
+  {
+   "skill": "Jira",
+   "aliases": [],
+   "resources": [
+    {
+     "name": "Agile tutorials (Jira)",
+     "url": "https://www.atlassian.com/agile/tutorials",
+     "provider": "Atlassian",
+     "kind": "tutorial",
+     "cost": "free",
+     "checked": null,
+     "ok": null
+    }
+   ]
+  },
+  {
+   "skill": "CI/CD",
+   "aliases": [
+    "ci/cd pipelines",
+    "continuous integration",
+    "github actions"
+   ],
+   "resources": [
+    {
+     "name": "GitHub Actions documentation",
+     "url": "https://docs.github.com/en/actions",
+     "provider": "GitHub",
+     "kind": "docs",
+     "cost": "free",
+     "checked": null,
+     "ok": null
+    }
+   ]
+  },
+  {
+   "skill": "Jenkins",
+   "aliases": [],
+   "resources": [
+    {
+     "name": "Jenkins tutorials",
+     "url": "https://www.jenkins.io/doc/tutorials/",
+     "provider": "Jenkins",
+     "kind": "tutorial",
+     "cost": "free",
+     "checked": null,
+     "ok": null
+    }
+   ]
+  },
+  {
+   "skill": "Unit testing",
+   "aliases": [
+    "testing",
+    "automated testing",
+    "pytest",
+    "junit"
+   ],
+   "resources": [
+    {
+     "name": "pytest: Get started",
+     "url": "https://docs.pytest.org/en/stable/getting-started.html",
+     "provider": "pytest",
+     "kind": "docs",
+     "cost": "free",
+     "checked": null,
+     "ok": null
+    },
+    {
+     "name": "JUnit 5 User Guide",
+     "url": "https://junit.org/junit5/docs/current/user-guide/",
+     "provider": "JUnit",
+     "kind": "docs",
+     "cost": "free",
+     "checked": null,
+     "ok": null
+    }
+   ]
+  },
+  {
+   "skill": "Terraform",
+   "aliases": [
+    "infrastructure as code"
+   ],
+   "resources": [
+    {
+     "name": "Terraform tutorials",
+     "url": "https://developer.hashicorp.com/terraform/tutorials",
+     "provider": "HashiCorp",
+     "kind": "tutorial",
+     "cost": "free",
+     "checked": null,
+     "ok": null
+    }
+   ]
+  },
+  {
+   "skill": "Ansible",
+   "aliases": [],
+   "resources": [
+    {
+     "name": "Getting started with Ansible",
+     "url": "https://docs.ansible.com/ansible/latest/getting_started/index.html",
+     "provider": "Ansible",
+     "kind": "docs",
+     "cost": "free",
+     "checked": null,
+     "ok": null
+    }
+   ]
+  },
+  {
+   "skill": "C#",
+   "aliases": [
+    "c sharp",
+    ".net"
+   ],
+   "resources": [
+    {
+     "name": "C# documentation",
+     "url": "https://learn.microsoft.com/en-us/dotnet/csharp/",
+     "provider": "Microsoft Learn",
+     "kind": "docs",
+     "cost": "free",
+     "checked": null,
+     "ok": null
+    }
+   ]
+  },
+  {
+   "skill": "C++",
+   "aliases": [
+    "cpp"
+   ],
+   "resources": [
+    {
+     "name": "LearnCpp",
+     "url": "https://www.learncpp.com/",
+     "provider": "LearnCpp.com",
+     "kind": "tutorial",
+     "cost": "free",
+     "checked": null,
+     "ok": null
+    }
+   ]
+  },
+  {
+   "skill": "Networking",
+   "aliases": [
+    "tcp/ip",
+    "dns",
+    "dhcp",
+    "routing",
+    "switching",
+    "computer networks",
+    "network fundamentals"
+   ],
+   "resources": [
+    {
+     "name": "Cisco Networking Academy",
+     "url": "https://www.netacad.com/",
+     "provider": "Cisco",
+     "kind": "course",
+     "cost": "free and paid",
+     "checked": null,
+     "ok": null
+    },
+    {
+     "name": "Professor Messer (CompTIA Network+ videos)",
+     "url": "https://www.professormesser.com/",
+     "provider": "Professor Messer",
+     "kind": "course",
+     "cost": "free",
+     "checked": null,
+     "ok": null
+    }
+   ]
+  },
+  {
+   "skill": "Network security",
+   "aliases": [
+    "firewalls",
+    "cybersecurity",
+    "cyber security",
+    "security"
+   ],
+   "resources": [
+    {
+     "name": "Cisco Networking Academy",
+     "url": "https://www.netacad.com/",
+     "provider": "Cisco",
+     "kind": "course",
+     "cost": "free and paid",
+     "checked": null,
+     "ok": null
+    },
+    {
+     "name": "Professor Messer (CompTIA Security+ videos)",
+     "url": "https://www.professormesser.com/",
+     "provider": "Professor Messer",
+     "kind": "course",
+     "cost": "free",
+     "checked": null,
+     "ok": null
+    }
+   ]
+  },
+  {
+   "skill": "Prompt engineering",
+   "aliases": [
+    "generative ai",
+    "llms",
+    "large language models"
+   ],
+   "resources": [
+    {
+     "name": "Prompt Engineering Guide",
+     "url": "https://www.promptingguide.ai/",
+     "provider": "DAIR.AI",
+     "kind": "docs",
+     "cost": "free",
+     "checked": null,
+     "ok": null
+    }
+   ]
+  },
+  {
+   "skill": "Software engineering (general)",
+   "aliases": [
+    "developer roadmap"
+   ],
+   "resources": [
+    {
+     "name": "Developer roadmaps",
+     "url": "https://roadmap.sh/",
+     "provider": "roadmap.sh",
+     "kind": "docs",
+     "cost": "free",
+     "checked": null,
+     "ok": null
+    }
+   ]
+  }
+ ]
+}
