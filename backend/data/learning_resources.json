@@ -1,5 +1,5 @@
 {
- "about": "Checked learning resources the AI Assistant may link to (13 Oct 2026). Skills: the most asked-for skills in 213 live job ads (docs/evidence/stage1_dryrun_evidence-v8.csv), vague ones left out. Each link is shown to students only after scripts/tools/check_learning_links.py has opened it (ok = true); any other link in a reply is removed.",
+ "about": "The AI Assistant's learning links. Built by scripts/pipeline/build_learning_resources.py from data/learning_resources_curated.csv (which resources) and the most-asked skills in stage1_dryrun_evidence-v8.csv (213 live ads); see backend/data/README.md. A link is shown to students only when scripts/tools/check_learning_links.py has opened it (ok = true).",
  "skills": [
   {
    "skill": "Python",
@@ -16,7 +16,8 @@
      "cost": "free",
      "checked": "2026-10-13",
      "ok": true,
-     "page_title": "The Python Tutorial — Python 3.15.0 documentation"
+     "page_title": "The Python Tutorial — Python 3.15.0 documentation",
+     "checked_by_hand": null
     },
     {
      "name": "Python for Everybody",
@@ -26,7 +27,8 @@
      "cost": "free",
      "checked": "2026-10-13",
      "ok": true,
-     "page_title": "PY4E - Python for Everybody"
+     "page_title": "PY4E - Python for Everybody",
+     "checked_by_hand": null
     }
    ]
   },
@@ -44,7 +46,8 @@
      "cost": "free",
      "checked": "2026-10-13",
      "ok": true,
-     "page_title": "SQLBolt - Learn SQL - Introduction to SQL"
+     "page_title": "SQLBolt - Learn SQL - Introduction to SQL",
+     "checked_by_hand": null
     },
     {
      "name": "PostgreSQL Tutorial (SQL language)",
@@ -54,7 +57,8 @@
      "cost": "free",
      "checked": "2026-10-13",
      "ok": true,
-     "page_title": "PostgreSQL: Documentation: 18: Part I. Tutorial"
+     "page_title": "PostgreSQL: Documentation: 18: Part I. Tutorial",
+     "checked_by_hand": null
     }
    ]
   },
@@ -73,7 +77,8 @@
      "cost": "free",
      "checked": "2026-10-13",
      "ok": true,
-     "page_title": "Learn Java - Dev.java"
+     "page_title": "Learn Java - Dev.java",
+     "checked_by_hand": null
     }
    ]
   },
@@ -92,7 +97,8 @@
      "cost": "free",
      "checked": "2026-10-13",
      "ok": true,
-     "page_title": "JavaScript Guide - JavaScript | MDN"
+     "page_title": "JavaScript Guide - JavaScript | MDN",
+     "checked_by_hand": null
     },
     {
      "name": "The Modern JavaScript Tutorial",
@@ -102,7 +108,8 @@
      "cost": "free",
      "checked": "2026-10-13",
      "ok": true,
-     "page_title": "The Modern JavaScript Tutorial"
+     "page_title": "The Modern JavaScript Tutorial",
+     "checked_by_hand": null
     }
    ]
   },
@@ -120,7 +127,8 @@
      "cost": "free",
      "checked": "2026-10-13",
      "ok": true,
-     "page_title": "TypeScript: Handbook - The TypeScript Handbook"
+     "page_title": "TypeScript: Handbook - The TypeScript Handbook",
+     "checked_by_hand": null
     }
    ]
   },
@@ -138,7 +146,8 @@
      "cost": "free",
      "checked": "2026-10-13",
      "ok": true,
-     "page_title": "Learn web development | MDN"
+     "page_title": "Learn web development | MDN",
+     "checked_by_hand": null
     }
    ]
   },
@@ -156,7 +165,8 @@
      "cost": "free",
      "checked": "2026-10-13",
      "ok": true,
-     "page_title": "Learn CSS | web.dev"
+     "page_title": "Learn CSS | web.dev",
+     "checked_by_hand": null
     },
     {
      "name": "Learn web development",
@@ -166,7 +176,8 @@
      "cost": "free",
      "checked": "2026-10-13",
      "ok": true,
-     "page_title": "Learn web development | MDN"
+     "page_title": "Learn web development | MDN",
+     "checked_by_hand": null
     }
    ]
   },
@@ -185,7 +196,8 @@
      "cost": "free",
      "checked": "2026-10-13",
      "ok": true,
-     "page_title": "Quick Start – React"
+     "page_title": "Quick Start – React",
+     "checked_by_hand": null
     }
    ]
   },
@@ -204,7 +216,8 @@
      "cost": "free",
      "checked": "2026-10-13",
      "ok": true,
-     "page_title": "Learn Node.js | Node.js Learn"
+     "page_title": "Learn Node.js | Node.js Learn",
+     "checked_by_hand": null
     }
    ]
   },
@@ -224,7 +237,8 @@
      "cost": "free",
      "checked": "2026-10-13",
      "ok": true,
-     "page_title": "Git"
+     "page_title": "Git",
+     "checked_by_hand": null
     },
     {
      "name": "Learn Git Branching",
@@ -234,7 +248,8 @@
      "cost": "free",
      "checked": "2026-10-13",
      "ok": true,
-     "page_title": "Learn Git Branching"
+     "page_title": "Learn Git Branching",
+     "checked_by_hand": null
     }
    ]
   },
@@ -255,7 +270,8 @@
      "cost": "free",
      "checked": "2026-10-13",
      "ok": true,
-     "page_title": "Get started | Docker Docs"
+     "page_title": "Get started | Docker Docs",
+     "checked_by_hand": null
     }
    ]
   },
@@ -273,7 +289,8 @@
      "cost": "free",
      "checked": "2026-10-13",
      "ok": true,
-     "page_title": "Learn Kubernetes Basics | Kubernetes"
+     "page_title": "Learn Kubernetes Basics | Kubernetes",
+     "checked_by_hand": null
     }
    ]
   },
@@ -291,7 +308,8 @@
      "cost": "free and paid",
      "checked": "2026-10-13",
      "ok": true,
-     "page_title": "AWS Skill Builder"
+     "page_title": "AWS Skill Builder",
+     "checked_by_hand": null
     },
     {
      "name": "Getting Started on AWS",
@@ -301,7 +319,8 @@
      "cost": "free",
      "checked": "2026-10-13",
      "ok": true,
-     "page_title": "Getting Started - Cloud Computing Tutorials for Building on AWS"
+     "page_title": "Getting Started - Cloud Computing Tutorials for Building on AWS",
+     "checked_by_hand": null
     }
    ]
   },
@@ -319,7 +338,8 @@
      "cost": "free",
      "checked": "2026-10-13",
      "ok": true,
-     "page_title": "Training for Azure | Microsoft Learn"
+     "page_title": "Training for Azure | Microsoft Learn",
+     "checked_by_hand": null
     }
    ]
   },
@@ -340,7 +360,8 @@
      "cost": "free",
      "checked": "2026-10-13",
      "ok": true,
-     "page_title": "HTTP: Hypertext Transfer Protocol | MDN"
+     "page_title": "HTTP: Hypertext Transfer Protocol | MDN",
+     "checked_by_hand": null
     },
     {
      "name": "FastAPI Tutorial",
@@ -350,7 +371,8 @@
      "cost": "free",
      "checked": "2026-10-13",
      "ok": true,
-     "page_title": "Tutorial - User Guide - FastAPI"
+     "page_title": "Tutorial - User Guide - FastAPI",
+     "checked_by_hand": null
     },
     {
      "name": "Building a RESTful Web Service (Spring)",
@@ -360,7 +382,8 @@
      "cost": "free",
      "checked": "2026-10-13",
      "ok": true,
-     "page_title": ""
+     "page_title": "",
+     "checked_by_hand": null
     }
    ]
   },
@@ -381,7 +404,8 @@
      "cost": "free",
      "checked": "2026-10-13",
      "ok": false,
-     "page_title": "Just a moment..."
+     "page_title": "Just a moment...",
+     "checked_by_hand": null
     },
     {
      "name": "The Linux command line for beginners",
@@ -391,7 +415,8 @@
      "cost": "free",
      "checked": "2026-10-13",
      "ok": true,
-     "page_title": "The Linux command line for beginners | Ubuntu"
+     "page_title": "The Linux command line for beginners | Ubuntu",
+     "checked_by_hand": null
     }
    ]
   },
@@ -409,7 +434,8 @@
      "cost": "free",
      "checked": "2026-10-13",
      "ok": true,
-     "page_title": "PostgreSQL: Documentation: 18: Part I. Tutorial"
+     "page_title": "PostgreSQL: Documentation: 18: Part I. Tutorial",
+     "checked_by_hand": null
     }
    ]
   },
@@ -428,7 +454,8 @@
      "cost": "free",
      "checked": "2026-10-13",
      "ok": true,
-     "page_title": "Power BI documentation - Power BI | Microsoft Learn"
+     "page_title": "Power BI documentation - Power BI | Microsoft Learn",
+     "checked_by_hand": null
     }
    ]
   },
@@ -444,7 +471,8 @@
      "cost": "free",
      "checked": "2026-10-13",
      "ok": false,
-     "page_title": "Access Denied"
+     "page_title": "Access Denied",
+     "checked_by_hand": null
     }
    ]
   },
@@ -463,7 +491,8 @@
      "cost": "free",
      "checked": "2026-10-13",
      "ok": true,
-     "page_title": "Checking your browser - reCAPTCHA"
+     "page_title": "Checking your browser - reCAPTCHA",
+     "checked_by_hand": null
     },
     {
      "name": "pandas: Getting started",
@@ -473,7 +502,8 @@
      "cost": "free",
      "checked": "2026-10-13",
      "ok": true,
-     "page_title": "Getting started — pandas 3.0.6 documentation"
+     "page_title": "Getting started — pandas 3.0.6 documentation",
+     "checked_by_hand": null
     }
    ]
   },
@@ -491,17 +521,19 @@
      "cost": "free",
      "checked": "2026-10-13",
      "ok": true,
-     "page_title": "Checking your browser - reCAPTCHA"
+     "page_title": "Checking your browser - reCAPTCHA",
+     "checked_by_hand": null
     },
     {
-     "name": "scikit-learn tutorials",
-     "url": "https://scikit-learn.org/stable/tutorial/index.html",
+     "name": "scikit-learn: Getting Started",
+     "url": "https://scikit-learn.org/stable/getting_started.html",
      "provider": "scikit-learn",
      "kind": "docs",
      "cost": "free",
-     "checked": "2026-10-13",
-     "ok": false,
-     "page_title": "Page not found · GitHub Pages"
+     "checked": null,
+     "ok": null,
+     "page_title": null,
+     "checked_by_hand": null
     }
    ]
   },
@@ -521,7 +553,8 @@
      "cost": "free",
      "checked": "2026-10-13",
      "ok": true,
-     "page_title": "Scrum Guide | Scrum Guides"
+     "page_title": "Scrum Guide | Scrum Guides",
+     "checked_by_hand": null
     },
     {
      "name": "Agile tutorials",
@@ -531,7 +564,8 @@
      "cost": "free",
      "checked": "2026-10-13",
      "ok": true,
-     "page_title": "Jira Tutorials: Learn Agile With Jira | Atlassian"
+     "page_title": "Jira Tutorials: Learn Agile With Jira | Atlassian",
+     "checked_by_hand": null
     }
    ]
   },
@@ -547,7 +581,8 @@
      "cost": "free",
      "checked": "2026-10-13",
      "ok": true,
-     "page_title": "Jira Tutorials: Learn Agile With Jira | Atlassian"
+     "page_title": "Jira Tutorials: Learn Agile With Jira | Atlassian",
+     "checked_by_hand": null
     }
    ]
   },
@@ -567,7 +602,8 @@
      "cost": "free",
      "checked": "2026-10-13",
      "ok": true,
-     "page_title": "GitHub Actions documentation - GitHub Docs"
+     "page_title": "GitHub Actions documentation - GitHub Docs",
+     "checked_by_hand": null
     }
    ]
   },
@@ -583,7 +619,8 @@
      "cost": "free",
      "checked": "2026-10-13",
      "ok": true,
-     "page_title": "Tutorials overview"
+     "page_title": "Tutorials overview",
+     "checked_by_hand": null
     }
    ]
   },
@@ -604,7 +641,8 @@
      "cost": "free",
      "checked": "2026-10-13",
      "ok": true,
-     "page_title": "Get Started - pytest documentation"
+     "page_title": "Get Started - pytest documentation",
+     "checked_by_hand": null
     },
     {
      "name": "JUnit 5 User Guide",
@@ -614,7 +652,8 @@
      "cost": "free",
      "checked": "2026-10-13",
      "ok": true,
-     "page_title": "Overview :: JUnit User Guide"
+     "page_title": "Overview :: JUnit User Guide",
+     "checked_by_hand": null
     }
    ]
   },
@@ -632,7 +671,8 @@
      "cost": "free",
      "checked": "2026-10-13",
      "ok": true,
-     "page_title": "Tutorials | Terraform | HashiCorp Developer"
+     "page_title": "Tutorials | Terraform | HashiCorp Developer",
+     "checked_by_hand": null
     }
    ]
   },
@@ -648,7 +688,8 @@
      "cost": "free",
      "checked": "2026-10-13",
      "ok": true,
-     "page_title": "Getting started with Ansible — Ansible Community Documentation"
+     "page_title": "Getting started with Ansible — Ansible Community Documentation",
+     "checked_by_hand": null
     }
    ]
   },
@@ -667,7 +708,8 @@
      "cost": "free",
      "checked": "2026-10-13",
      "ok": true,
-     "page_title": "C# Guide - .NET managed language - C# | Microsoft Learn"
+     "page_title": "C# Guide - .NET managed language - C# | Microsoft Learn",
+     "checked_by_hand": null
     }
    ]
   },
@@ -685,7 +727,8 @@
      "cost": "free",
      "checked": "2026-10-13",
      "ok": true,
-     "page_title": "Learn C++ - Skill up with our free tutorials"
+     "page_title": "Learn C++ - Skill up with our free tutorials",
+     "checked_by_hand": null
     }
    ]
   },
@@ -709,7 +752,8 @@
      "cost": "free and paid",
      "checked": "2026-10-13",
      "ok": true,
-     "page_title": "Cisco Networking Academy: Learn Cybersecurity, Python & More"
+     "page_title": "Cisco Networking Academy: Learn Cybersecurity, Python & More",
+     "checked_by_hand": null
     },
     {
      "name": "Professor Messer (CompTIA Network+ videos)",
@@ -719,7 +763,8 @@
      "cost": "free",
      "checked": "2026-10-13",
      "ok": true,
-     "page_title": "Home - Professor Messer IT Certification Training - CompTIA A+, Network+, Security+"
+     "page_title": "Home - Professor Messer IT Certification Training - CompTIA A+, Network+, Security+",
+     "checked_by_hand": null
     }
    ]
   },
@@ -740,7 +785,8 @@
      "cost": "free and paid",
      "checked": "2026-10-13",
      "ok": true,
-     "page_title": "Cisco Networking Academy: Learn Cybersecurity, Python & More"
+     "page_title": "Cisco Networking Academy: Learn Cybersecurity, Python & More",
+     "checked_by_hand": null
     },
     {
      "name": "Professor Messer (CompTIA Security+ videos)",
@@ -750,7 +796,8 @@
      "cost": "free",
      "checked": "2026-10-13",
      "ok": true,
-     "page_title": "Home - Professor Messer IT Certification Training - CompTIA A+, Network+, Security+"
+     "page_title": "Home - Professor Messer IT Certification Training - CompTIA A+, Network+, Security+",
+     "checked_by_hand": null
     }
    ]
   },
@@ -770,7 +817,8 @@
      "cost": "free",
      "checked": "2026-10-13",
      "ok": true,
-     "page_title": "Prompt Engineering Guide | Prompt Engineering Guide<!-- -->"
+     "page_title": "Prompt Engineering Guide | Prompt Engineering Guide<!-- -->",
+     "checked_by_hand": null
     }
    ]
   },
@@ -788,7 +836,8 @@
      "cost": "free",
      "checked": "2026-10-13",
      "ok": true,
-     "page_title": "Developer Roadmaps - roadmap.sh"
+     "page_title": "Developer Roadmaps - roadmap.sh",
+     "checked_by_hand": null
     }
    ]
   }

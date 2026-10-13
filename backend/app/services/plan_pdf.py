@@ -154,15 +154,6 @@ def plan_flowables(markdown: str, width: float, skip_title: bool = True) -> list
     return out
 
 
-def plan_title(markdown: str) -> str | None:
-    """'Docker' from the plan's '### Learning plan: Docker' heading."""
-    for line in (markdown or "").splitlines():
-        s = line.strip().lstrip("#").strip()
-        if s.lower().startswith("learning plan:"):
-            return s.split(":", 1)[1].strip(" *") or None
-    return None
-
-
 def build_pdf(markdown: str, *, student: str, goal: str | None, job: str | None, have: list[str],
               missing: list[str], skill: str | None, today: date | None = None) -> bytes:
     today = today or date.today()

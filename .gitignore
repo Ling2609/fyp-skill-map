@@ -4,6 +4,7 @@ backend/__pycache__/
 backend/**/__pycache__/
 backend/.env
 backend/data/*.csv
+!backend/data/learning_resources_curated.csv
 # Public reference data downloaded by hand (ESCO, O*NET): large, re-downloadable, see README
 backend/data/external/
 backend/data/relation_model*/

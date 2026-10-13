@@ -192,6 +192,7 @@ export default function Chatbot() {
 
   const userSkills = useRef(null)   // loaded once from /profile/skills
   const topJobs = useRef(null)      // loaded once from /recommend/ (same list as Job Matches' default view)
+  const toLearn = useRef([])        // "skills to learn next" from the same /recommend/ answer
 
   const loadSessions = useCallback(async () => {
     try {
@@ -240,6 +241,8 @@ export default function Chatbot() {
     if (topJobs.current === null) {
       try {
         const data = await cached('/recommend/', ALL_MATCHES)   // usually already loaded by Dashboard / Job Matches
+        // 13 Oct: the skills most often missing in her matches, for "I don't know what to learn"
+        toLearn.current = (data.skills_to_learn || []).slice(0, 8).map(s => s.skill)
         topJobs.current = data.recommendations?.slice(0, 3).map(j => ({
           job_title: j.job_title,
           company: j.company,
@@ -251,6 +254,7 @@ export default function Chatbot() {
       }
     }
     if (topJobs.current?.length) ctx.matched_jobs = topJobs.current
+    if (toLearn.current.length && !chatCtx.job_id) ctx.missing_skills = toLearn.current
     if (chatCtx.job_title) ctx.job_title = chatCtx.job_title
     if (chatCtx.target_skill) ctx.target_skill = chatCtx.target_skill
     if (chatCtx.job_id) ctx.job_id = chatCtx.job_id

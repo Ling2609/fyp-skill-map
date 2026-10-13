@@ -45,3 +45,17 @@
 - `jobstreet_clean.csv`: made by `scripts/pipeline/clean_jobstreet.py`
 
 This folder holds data files only. Scripts that create or process them are in `backend/scripts/`.
+
+## Learning resources (AI Assistant)
+
+- Files: `learning_resources_curated.csv` (the resources, one row each; edit this one, e.g. in Excel) and
+  `learning_resources.json` (what the app reads; built from the CSV, never edited by hand).
+- Which skills: the hard skills real ads ask for most, counted per ad from `docs/evidence/stage1_dryrun_evidence-v8.csv`
+  (213 live ads, every skill backed by a quote from its ad), or from the live jobs in the database (`--from-db`).
+  The ranking is saved to `docs/evidence/learning_resources_skill_counts.csv`. Vague skills (troubleshooting,
+  automation, documentation...) have no resources: there is no single course for them.
+- Which resources: for each skill the tool's own official documentation or tutorial, plus at most one well-known
+  free course or practice site; free first; no single videos or playlists.
+- Rebuild and check (from `backend/`): `python scripts/pipeline/build_learning_resources.py`, then
+  `python scripts/tools/check_learning_links.py`. A link reaches students only once the check marks it ok.
+- Skills with no resources get Coursera / YouTube search links instead (built by SkillMap, labelled as search results).

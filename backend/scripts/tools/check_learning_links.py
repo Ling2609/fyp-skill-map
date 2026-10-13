@@ -32,12 +32,17 @@ HEADERS = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/
                          "Chrome/126.0 Safari/537.36", "Accept-Language": "en"}
 
 
+# Pages a site shows robots instead of the real page (Cloudflare, reCAPTCHA, Akamai): the link may be fine, so it is
+# "blocked", not failed; open it yourself and put the date in the CSV's checked_by_hand column (13 Oct, her first run:
+# Linux Journey, Tableau, Kaggle)
+BLOCKED = re.compile(r"just a moment|checking your browser|captcha|access denied|attention required|are you a robot", re.I)
 SOFT_404 = re.compile(r"\b(404|not found|page (cannot|can't|could not) be found|no longer available|server error|something went wrong)\b", re.I)
 
 
-def check(url: str) -> tuple[bool, str, str]:
-    """(works, what happened, page title). A page that opens after redirects counts as working; the final address is
-    shown so a link that now lands somewhere else (e.g. a home page) can be spotted."""
+def check(url: str) -> tuple[bool | None, str, str]:
+    """(works, what happened, page title): True / False, or None when the site blocks robots. A page that opens
+    after redirects counts as working; the final address is shown so a link that now lands somewhere else (e.g. a
+    home page) can be spotted."""
     try:
         r = requests.get(url, headers=HEADERS, timeout=20, allow_redirects=True)
     except requests.RequestException as e:
@@ -47,6 +52,8 @@ def check(url: str) -> tuple[bool, str, str]:
         note += f" -> {r.url}"
     m = re.search(r"<title[^>]*>(.*?)</title>", r.text[:300_000], re.I | re.S)
     title = " ".join(html.unescape(m.group(1)).split()) if m else ""
+    if BLOCKED.search(title) or r.status_code in (403, 429):
+        return None, note + f", blocked: {title or 'no title'}", title
     if r.status_code < 400 and SOFT_404.search(title):
         return False, note + f" but the page says: {title}", title
     return r.status_code < 400, note, title
@@ -83,7 +90,8 @@ def main():
     print(f"Checking {len(urls)} links...")
     for url in urls:
         results[url] = check(url)
-        print(f"  {'ok  ' if results[url][0] else 'FAIL'} {url}  ({results[url][1]})")
+        tag = {True: "ok  ", False: "FAIL", None: "BLOCKED"}[results[url][0]]
+        print(f"  {tag} {url}  ({results[url][1]})")
         time.sleep(0.5)                 # be polite to the sites
     by_hand = []
     for e in data["skills"]:
@@ -93,11 +101,19 @@ def main():
             if ok and not mentions_skill(e, r, title):
                 by_hand.append(f"{e['skill']}: {r['url']}  (title: {title or 'none'})")
     FILE.write_text(json.dumps(data, indent=1, ensure_ascii=False) + "\n", encoding="utf-8")
-    bad = [u for u, (ok, _, _) in results.items() if not ok]
-    print(f"\n{len(urls) - len(bad)} of {len(urls)} links work. Saved to {FILE.name}.")
+    bad = [u for u, (ok, _, _) in results.items() if ok is False]
+    blocked = [u for u, (ok, _, _) in results.items() if ok is None]
+    print(f"\n{len(urls) - len(bad) - len(blocked)} of {len(urls)} links work. Saved to {FILE.name}.")
     if bad:
-        print("Not shown to students until fixed (change the url in the file, then run this again):")
+        print("Not shown to students until fixed (change the url in data/learning_resources_curated.csv, run "
+              "scripts/pipeline/build_learning_resources.py, then this again):")
         for u in bad:
+            print("  ", u, f"({results[u][1]})")
+    if blocked:
+        print("\nBlocked (the site stops robots, so it couldn't be checked). Open each one; if it works, put today's date "
+              "in its checked_by_hand column in data/learning_resources_curated.csv and run "
+              "scripts/pipeline/build_learning_resources.py:")
+        for u in blocked:
             print("  ", u, f"({results[u][1]})")
     if by_hand:
         print("\nCheck by hand (the page title doesn't mention the skill; still shown to students):")

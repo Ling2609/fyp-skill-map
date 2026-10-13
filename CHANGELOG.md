@@ -16,6 +16,15 @@ Planning, reasoning and research behind each decision are in the project roadmap
 - The link check also catches "soft 404s" (a page that opens but says "Page not found"), saves each page's title, and
   lists links whose title doesn't mention the skill under "Check by hand". It writes the results into the JSON
   file itself.
+- Where the list comes from is now reproducible: `data/learning_resources_curated.csv` (the resources, editable in
+  Excel) + `scripts/pipeline/build_learning_resources.py` (ranks the skills real ads ask for, writes
+  `docs/evidence/learning_resources_skill_counts.csv` and the JSON). Explained in `backend/data/README.md`.
+- A chat no longer fails when the PDF library isn't installed yet (only the PDF download needs it).
+- Link check, after her first run (46 of 49 ok): sites that stop robots ("Just a moment...", reCAPTCHA, "Access
+  Denied": Linux Journey, Kaggle, Tableau) are now "blocked", not failed; open them and put the date in the CSV's
+  `checked_by_hand` column. The scikit-learn tutorial page is gone (404): replaced by its Getting Started page.
+- "I don't know what to learn": the assistant suggests 2-3 of the skills most often missing in the student's matches
+  and asks which one to plan.
 - "Download plan (PDF)" on every plan message: A4, black and white, with who it is for, the goal, the job, the skills
   they have and miss, the plan with a Done box per step, and a note that the AI wrote it (`POST /chatbot/plan-pdf`).
 - Follow-up suggestions above the chat box after a plan (explain step 1, another project, a shorter plan); they go

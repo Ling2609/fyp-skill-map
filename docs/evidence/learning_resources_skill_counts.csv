@@ -1,0 +1,61 @@
+rank,skill,ads,resources_under
+1,python,65,Python
+2,sql,46,SQL
+3,troubleshooting,36,
+4,automation,32,
+5,java,28,Java
+6,aws,27,AWS
+7,docker,24,Docker
+8,javascript,22,JavaScript
+9,git,22,Git
+10,debugging,21,
+11,data analysis,21,Data analysis
+12,agile,21,Agile
+13,apis,19,REST APIs
+14,linux,19,Linux
+15,documentation,18,
+16,reporting,17,
+17,azure,17,Azure
+18,postgresql,16,PostgreSQL
+19,kubernetes,16,Kubernetes
+20,power bi,16,Power BI
+21,code review,15,
+22,react,15,React
+23,ci/cd pipelines,15,CI/CD
+24,prompt engineering,14,Prompt engineering
+25,ci/cd,14,CI/CD
+26,technical documentation,14,
+27,change management,14,
+28,generative ai,13,Prompt engineering
+29,unit testing,13,Unit testing
+30,networking,13,Networking
+31,c#,12,C#
+32,dns,12,Networking
+33,databases,12,
+34,system integration,12,
+35,incident management,12,
+36,testing,12,Unit testing
+37,jira,12,Jira
+38,c++,12,C++
+39,terraform,12,Terraform
+40,rest apis,11,REST APIs
+41,node.js,11,Node.js
+42,incident response,11,
+43,itil,11,
+44,typescript,11,TypeScript
+45,monitoring,11,
+46,vpn,11,
+47,analytics,11,
+48,scripting,10,
+49,powershell,10,
+50,security,10,Network security
+51,windows,10,
+52,disaster recovery,10,
+53,machine learning,10,Machine learning
+54,gcp,10,
+55,integration testing,10,
+56,oracle,10,
+57,performance optimization,10,
+58,ai,10,
+59,lan,10,
+60,scrum,10,Agile

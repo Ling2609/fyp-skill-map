@@ -67,8 +67,10 @@ def find_skills(*texts: str | None) -> list[dict]:
 
 
 def checked(entry: dict) -> list[dict]:
-    """An entry's resources whose link was opened and worked."""
-    return [r for r in entry.get("resources", []) if r.get("ok") is True]
+    """An entry's resources whose link was opened and worked: by the check script, or by hand for a site that
+    blocks robots (the check then says "blocked", not "failed")."""
+    return [r for r in entry.get("resources", []) if r.get("ok") is True
+            or (r.get("ok") is None and r.get("checked_by_hand"))]
 
 
 def allowed_urls() -> set[str]:
@@ -135,3 +137,12 @@ def strip_unlisted_links(text: str) -> tuple[str, int]:
     out = re.sub(r"[ \t]+(?=\n|$)", "", out)
     out = re.sub(r"\x00(\d+)\x00", lambda m: kept[int(m.group(1))], out)
     return out, removed
+
+
+def plan_title(markdown: str) -> str | None:
+    """'Docker' from the plan's '### Learning plan: Docker' heading."""
+    for line in (markdown or "").splitlines():
+        s = line.strip().lstrip("#").strip()
+        if s.lower().startswith("learning plan:"):
+            return s.split(":", 1)[1].strip(" *") or None
+    return None

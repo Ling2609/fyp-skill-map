@@ -112,3 +112,12 @@ def test_search_links_work_for_any_skill(client, users, groq):
         "mode": "skill_development", "messages": [{"role": "user", "content": "plan"}], "target_skill": "Kotlin"})
     context = next(m["content"] for m in groq.sent if m["role"] == "system" and m["content"].startswith("User context"))
     assert "https://www.coursera.org/search?query=Kotlin" in context
+
+
+def test_a_link_opened_by_hand_counts():
+    # A site that blocks robots can't be checked by the script (ok = None); a date in checked_by_hand lets it through
+    entry = {"skill": "Linux", "resources": [
+        {"url": "https://a.example/", "ok": None, "checked_by_hand": "2026-10-13"},
+        {"url": "https://b.example/", "ok": None, "checked_by_hand": None},
+        {"url": "https://c.example/", "ok": False, "checked_by_hand": "2026-10-13"}]}     # failed later: not shown
+    assert [r["url"] for r in L.checked(entry)] == ["https://a.example/"]

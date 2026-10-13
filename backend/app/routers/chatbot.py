@@ -82,6 +82,8 @@ One table with exactly these columns: | Step | What to do | Time | Done when |
 #### Show it: portfolio project
 One project that uses this skill and, if possible, other skills they are still missing (2 or 3 sentences).
 
+When the student doesn't know what to learn, suggest 2 or 3 skills from the missing skills in the context (the ones most of their matched jobs ask for), one line each on why, and ask which one to plan; no plan yet.
+
 For a follow-up (change the plan, explain a step, another project) answer briefly. Send the whole plan again, in the same shape, only when the plan itself changes.
 
 Facts: only name a course, provider or university you are sure exists; if unsure, give the words to search for instead. Never say what a named company requires or uses unless it is in the user context below (e.g. "Hytech requires ISTQB" when the ad does not say so). No made-up numbers or statistics.
@@ -165,7 +167,9 @@ def build_context_block(req: ChatRequest, gap: dict | None = None, goal: str | N
                      + (" ..." if len(req.user_skills) > 15 else ""))
     if req.missing_skills:
         if not gap:   # with a job's gap the missing skills are already listed above
-            lines.append(f"Missing skills for target job: {', '.join(req.missing_skills[:10])}")
+            label = ("Missing skills for target job" if req.job_title else
+                     "Skills most often missing in the user's top job matches (most jobs first)")
+            lines.append(f"{label}: {', '.join(req.missing_skills[:10])}")
     if req.matched_jobs:
         top_jobs = [f"{j.get('job_title', '')} at {j.get('company', '')} ({j.get('match_percent', '')}% match)"
                     for j in req.matched_jobs[:3]]
@@ -187,8 +191,9 @@ def build_context_block(req: ChatRequest, gap: dict | None = None, goal: str | N
 
 def ensure_profile_step(reply: str) -> str:
     """A plan's table always ends with putting the work on My Profile (the prompt asks; this makes sure)."""
-    from app.services.plan_pdf import plan_title
-    skill = plan_title(reply)
+    # 13 Oct: plan_title lives in learning_resources, not plan_pdf, so a chat works even before the PDF library
+    # (reportlab) is installed
+    skill = learning_resources.plan_title(reply)
     lines = reply.split("\n")
     head = next((i for i, l in enumerate(lines) if l.strip().startswith("|") and "done when" in l.lower()), None)
     if skill is None or head is None:
@@ -379,9 +384,9 @@ class PlanPdfIn(BaseModel):
 def plan_pdf(req: PlanPdfIn, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     """The plan message as an A4 PDF to print and tick off (13 Oct, mock-up v4_plan_pdf). Links are checked again,
     so a saved chat from before a link failed its check doesn't print it."""
-    from app.services.plan_pdf import build_pdf, plan_title
+    from app.services.plan_pdf import build_pdf
     content, _ = learning_resources.strip_unlisted_links(req.content)
-    skill = plan_title(content)
+    skill = learning_resources.plan_title(content)
     if not skill:
         raise HTTPException(status_code=400, detail="This message isn't a learning plan.")
     job, have, missing = None, [], []
