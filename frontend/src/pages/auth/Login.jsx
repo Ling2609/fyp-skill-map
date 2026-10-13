@@ -46,12 +46,15 @@ export default function Login() {
     : 'Your session has expired. Please sign in again.')
   const [loading, setLoading] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
-  const [showToast, setShowToast] = useState(!!location.state?.message)
+  // 13 Oct: after "Delete my account" the page opens as /login?deleted=1 (a fresh load, so no navigate state)
+  const deleted = new URLSearchParams(location.search).get('deleted') === '1'
+  const toastMessage = deleted ? 'Your account and its data were deleted.' : location.state?.message
+  const [showToast, setShowToast] = useState(!!toastMessage)
 
   // Show "session expired" once, then tidy the URL so a refresh doesn't show it again
   useEffect(() => {
-    if (sessionExpired) navigate('/login', { replace: true })
-  }, [sessionExpired, navigate])
+    if (sessionExpired || deleted) navigate('/login', { replace: true, state: deleted ? { message: toastMessage } : undefined })
+  }, [sessionExpired, deleted, toastMessage, navigate])
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -73,7 +76,7 @@ export default function Login() {
     <div className="min-h-screen bg-linear-to-br from-blue-50 to-slate-100 flex items-center justify-center p-4">
 
       {/* Toast notification */}
-      {showToast && <Toast message={location.state?.message} onClose={() => setShowToast(false)} />}
+      {showToast && <Toast message={toastMessage || location.state?.message} onClose={() => setShowToast(false)} />}
 
       <div className="bg-white rounded-2xl shadow-lg p-8 w-full max-w-md">
 

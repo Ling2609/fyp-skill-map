@@ -58,6 +58,13 @@ function NoSkillsState() {
   )
 }
 
+const BASIS_WORD = { required: 'required', unspecified: 'listed', preferred: 'preferred' }
+const BASIS_TIP = {
+  required: 'Required skills in the ad that you already have',
+  unspecified: 'The ad marks no skill as required: skills it lists that you already have',
+  preferred: 'The ad only lists preferred skills: preferred skills you already have',
+}
+
 // "12 days ago" on each card (F8, 5 Oct): most postings close within about a month, so the age helps decide
 const daysAgo = (days) => {
   if (days == null || days < 0) return ''
@@ -489,11 +496,13 @@ export default function Recommend() {
                           </div>
                         </div>
                         {/* Match % pill */}
+                        {/* 13 Oct (audit): say what the count is out of. Most ads have required skills; an ad that names
+                            none is counted on its listed (or only its preferred) skills, as Job Detail already says */}
                         <span
-                          title="Required skills you already have"
+                          title={BASIS_TIP[job.coverage_basis] || BASIS_TIP.required}
                           className={`shrink-0 text-xs font-bold tabular-nums px-2.5 py-1 rounded-full ${getMatchBgColor(coverageOf(job))}`}
                         >
-                          {job.skills_total ? `${job.skills_matched}/${job.skills_total} skills` : `${job.match_percent}%`}
+                          {job.skills_total ? `${job.skills_matched}/${job.skills_total} ${BASIS_WORD[job.coverage_basis] || 'required'}` : `${job.match_percent}%`}
                         </span>
                       </div>
                       <div className="flex gap-1.5 mt-2.5 flex-wrap">

@@ -25,6 +25,9 @@ class Settings(BaseSettings):
     smtp_port: int = 587
     smtp_user: str = ""
     smtp_password: str = ""
+    # Websites allowed to call the API (13 Oct audit): comma-separated, e.g. for a Docker / demo address
+    # CORS_ORIGINS=http://localhost:5173,http://192.168.1.20:5173
+    cors_origins: str = "http://localhost:5173"
 
     class Config:
         env_file = ".env"

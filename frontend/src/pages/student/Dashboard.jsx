@@ -432,7 +432,7 @@ export default function Dashboard() {
                               <span className="flex items-center gap-2 shrink-0">
                                 <LevelTag level={job.level} />
                                 <span className="text-xs font-semibold tabular-nums px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700">
-                                  {job.skills_matched}/{job.skills_total}
+                                  {job.skills_matched}/{job.skills_total} {{ unspecified: 'listed', preferred: 'preferred' }[job.coverage_basis] || 'required'}
                                 </span>
                               </span>
                             </button>

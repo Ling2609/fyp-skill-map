@@ -1,26 +1,29 @@
+import { lazy, Suspense } from 'react'
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { SidebarProvider, useSidebar } from './components/SidebarContext'
 import { useAuth } from './context/useAuth'
 import Sidebar from './components/Sidebar'
+// 13 Oct (audit: one 759 kB file): each page's code loads when it is first opened, so a student never downloads the
+// admin or employer pages, and the sign-in page opens faster. The sign-in pages stay in the first file.
 import Register from './pages/auth/Register';
 import Login from './pages/auth/Login';
 import ForgotPassword from './pages/auth/ForgotPassword'
-import Dashboard from './pages/student/Dashboard';
-import Recommend from './pages/student/Recommend';
-import JobDetail from './pages/student/JobDetail';
-import Chatbot from './pages/student/Chatbot';
-import MyProfile from './pages/student/MyProfile'
-import StudySetup from './pages/student/StudySetup'
-import AccountSettings from './pages/AccountSettings'
-import AdminDashboard from './pages/admin/AdminDashboard'
-import AdminUsers from './pages/admin/AdminUsers'
-import AdminAcademic from './pages/admin/AdminAcademic'
-import EmployerHome from './pages/employer/EmployerHome'
-import EmployerJobs from './pages/employer/EmployerJobs'
-import PostJob from './pages/employer/PostJob'
-import Applicants from './pages/employer/Applicants'
-import ApplicantProfile from './pages/employer/ApplicantProfile'
-import MyApplications from './pages/student/MyApplications'
+const Dashboard = lazy(() => import('./pages/student/Dashboard'))
+const Recommend = lazy(() => import('./pages/student/Recommend'))
+const JobDetail = lazy(() => import('./pages/student/JobDetail'))
+const Chatbot = lazy(() => import('./pages/student/Chatbot'))
+const MyProfile = lazy(() => import('./pages/student/MyProfile'))
+const StudySetup = lazy(() => import('./pages/student/StudySetup'))
+const AccountSettings = lazy(() => import('./pages/AccountSettings'))
+const AdminDashboard = lazy(() => import('./pages/admin/AdminDashboard'))
+const AdminUsers = lazy(() => import('./pages/admin/AdminUsers'))
+const AdminAcademic = lazy(() => import('./pages/admin/AdminAcademic'))
+const EmployerHome = lazy(() => import('./pages/employer/EmployerHome'))
+const EmployerJobs = lazy(() => import('./pages/employer/EmployerJobs'))
+const PostJob = lazy(() => import('./pages/employer/PostJob'))
+const Applicants = lazy(() => import('./pages/employer/Applicants'))
+const ApplicantProfile = lazy(() => import('./pages/employer/ApplicantProfile'))
+const MyApplications = lazy(() => import('./pages/student/MyApplications'))
 
 function RoleRoute({ children, roles }) {
   const { user, loading, serverDown } = useAuth()
@@ -71,6 +74,8 @@ function Layout({ children }) {
 
 function AppRoutes() {
   return (
+    // fallback null: a page's code arrives in well under a second, too short to need a loading sign (NN/g)
+    <Suspense fallback={null}>
     <Routes>
       <Route path="/" element={<Navigate to="/login" />} />
       <Route path="/register" element={<Register />} />
@@ -96,6 +101,7 @@ function AppRoutes() {
       <Route path="/my-profile" element={<Navigate to="/profile" replace />} />
       <Route path="/account" element={<RoleRoute><Layout><AccountSettings /></Layout></RoleRoute>} />
     </Routes>
+    </Suspense>
   )
 }
 

@@ -30,7 +30,7 @@ function Field({ label, children }) {
 }
 
 // One line of a section: label, current value, and a button that opens the row's form
-function Row({ label, value, action, onAction, note, open, children }) {
+function Row({ label, value, action, onAction, note, open, children, danger }) {
   return (
     <div className="py-4 border-t border-slate-100 first:border-t-0">
       <div className="flex items-center gap-4">
@@ -38,7 +38,8 @@ function Row({ label, value, action, onAction, note, open, children }) {
         <p className="flex-1 min-w-0 text-sm text-slate-800 truncate">{value}</p>
         {action && !open && (
           <button onClick={onAction}
-            className="text-sm font-medium text-blue-600 hover:text-blue-800 px-2 py-1 rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-200">
+            className={`text-sm font-medium px-2 py-1 rounded focus:outline-none focus-visible:ring-2 ${danger
+              ? 'text-rose-700 hover:text-rose-900 focus-visible:ring-rose-200' : 'text-blue-600 hover:text-blue-800 focus-visible:ring-blue-200'}`}>
             {action}
           </button>
         )}
@@ -62,7 +63,7 @@ function FormButtons({ saving, onCancel, label }) {
 }
 
 export default function AccountSettings() {
-  const { user, setUser } = useAuth()
+  const { user, setUser, logout } = useAuth()
   const [open, setOpen] = useState('')          // 'name' | 'email' | 'password' | ''
   const [form, setForm] = useState({})
   const [error, setError] = useState('')
@@ -139,6 +140,23 @@ export default function AccountSettings() {
     return save(e, () => api.put('/auth/me/password', {
       current_password: form.current_password, new_password: form.new_password,
     }), 'Password changed. Other devices were signed out.')
+  }
+
+  // 13 Oct (audit; Malaysia's PDPA 2010): a student can delete their account and everything in it. The password is
+  // asked again, and the form says what goes; it can't be undone
+  const deleteAccount = async (e) => {
+    e.preventDefault()
+    setSaving(true); setError('')
+    try {
+      await api.post('/auth/me/delete', { password: form.current_password || '' })
+      // Sign out and open the sign-in page afresh with the message in the address (as "session expired" does):
+      // a navigate() with state lost the message to the page guard's own redirect to /login
+      logout()
+      window.location.replace('/login?deleted=1')
+    } catch (err) {
+      setError(errorText(err))
+      setSaving(false)
+    }
   }
 
   const errorBox = error && <p className="text-sm text-rose-600 bg-rose-50 border border-rose-100 rounded-lg px-3 py-2">{error}</p>
@@ -232,6 +250,24 @@ export default function AccountSettings() {
               <FormButtons saving={saving} onCancel={cancel} label="Change password" />
             </form>
           </Row>
+
+          {user?.role === 'student' && (
+            <Row label="Delete account" value="Remove your account and your data" action="Delete account…" danger
+              onAction={() => start('delete')} open={open === 'delete'}>
+              <form onSubmit={deleteAccount} className="space-y-3">
+                <p className="text-sm text-slate-700">This deletes your profile, grades, projects, certificates, awards, applications and AI Assistant chats. Employers no longer see you. It can't be undone.</p>
+                <Field label="Your password"><input type="password" className={inputClass} value={form.current_password || ''} onChange={set('current_password')} autoComplete="current-password" autoFocus /></Field>
+                {errorBox}
+                <div className="flex items-center gap-2 pt-1">
+                  <button type="submit" disabled={saving || !form.current_password}
+                    className="bg-rose-700 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-rose-800 transition disabled:opacity-50">
+                    {saving ? 'Deleting…' : 'Delete my account'}
+                  </button>
+                  <button type="button" onClick={cancel} className="px-3 py-2 text-sm text-slate-500 hover:text-slate-800">Cancel</button>
+                </div>
+              </form>
+            </Row>
+          )}
         </section>
       </div>
     </div>

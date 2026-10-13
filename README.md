@@ -7,28 +7,33 @@ Final Year Project · Low Wei Ling (TP080089) · BSc (Hons) Software Engineering
 ## How it works
 
 ```
-Module descriptors ──► skill extraction (LLM) ──┐
-Projects / certifications ──► skill extraction ─┼─► Graduate Skill Profile ──► SBERT matching ──► Job Matches · Skill Gap · Dashboard
-Module grades (evidence strength) ──────────────┘                                  ▲
-Live jobs (JSearch API) ──► skill extraction (LLM) ────────────────────────────────┘
-2024 JobStreet postings ──► market data (career paths, skill demand)
+Module descriptors ──► skill extraction (LLM, checked by the career office) ──┐
+Projects / certificates / awards / GitHub languages ──► skill extraction ─────┼─► Graduate Skill Profile
+Module grades (strength of academic evidence, never "has it") ────────────────┘            │
+                                                                                         ▼
+Live jobs (JSearch) + jobs posted on SkillMap ──► skill extraction with quotes ──► matching: same skill, else
+                                                  (employers check theirs)        SBERT + relationship model
+                                                                                         │
+2024 JobStreet postings ──► market data only (skill demand), never shown as vacancies   ▼
+                       Job Matches · Skill Gap · Dashboard (goal + "what opens up") · AI Assistant (learning plans)
 ```
 
 | Part | Technology |
 |---|---|
-| Frontend | React 19, Vite, Tailwind CSS v4 |
+| Frontend | React 19, Vite, Tailwind CSS v4 (pages load on first use) |
 | Backend | FastAPI (Python 3.13), SQLAlchemy, JWT (python-jose), bcrypt |
-| Database | PostgreSQL 16 |
-| Skill extraction + chatbot | gpt-oss-120b via the Groq API (one model for all skills, so module and job skills are worded the same way) |
+| Databases | PostgreSQL 16 (all app data); MongoDB (AI Assistant chat history only; the chat still works without it) |
+| Skill extraction + AI Assistant | gpt-oss-120b via the Groq API (gpt-oss-20b when its daily limit is reached) |
 | Job description formatting (display only) | Gemini (`gemini-3.1-flash-lite`) |
-| Matching | SBERT `all-MiniLM-L6-v2` (pre-trained) + cosine similarity; vectors cached on disk |
+| Matching | SBERT `all-MiniLM-L6-v2` (pre-trained) + a fine-tuned DeBERTa relationship model ("does skill A cover job skill B?") when `RELATION_MODEL_DIR` is set; without it, cosine similarity only. The backend prints which one is in use at start-up |
+| Learning plan PDF | ReportLab (A4, black and white) |
 | Live jobs | JSearch API (RapidAPI) |
 
 ## Roles
 
-- **Student:** academic record, projects and certifications, job matches, skill gap, AI assistant
-- **Employer** (university industry partner): post jobs, see matched students who opted in *(planned)*
-- **Admin** (career office): import the module catalogue and student records, review extracted module skills *(planned)*
+- **Student:** academic record (modules + grades), projects, certificates, awards, career goal, Job Matches, Skill Gap, applying to jobs posted on SkillMap (with progress), the AI Assistant (career counsellor, learning plans)
+- **Employer** (approved by the career office): post and edit jobs (skills read from the ad, checked by the employer), review applicants, invite graduates who fit and chose to be visible
+- **Admin** (career office): approve employers, deactivate accounts, keep programmes, intakes and module lists, review the skills found in each module
 
 ## Folder map
 
@@ -39,35 +44,39 @@ fyp-skill-map/
 ├── README.md               this file
 ├── CHANGELOG.md            what changed, when, in which commit
 ├── docs/
-│   └── evidence/           run outputs kept for the report (e.g. A11 module re-extraction)
+│   └── evidence/           run outputs kept for the report (extraction scores, relationship model, test logs)
 ├── backend/
 │   ├── app/                the API (runs as the web server)
 │   │   ├── main.py         start-up, CORS, creates tables
 │   │   ├── config.py       settings read from backend/.env
-│   │   ├── database.py     PostgreSQL connection
-│   │   ├── routers/        HTTP endpoints by feature: auth, modules, jobs, recommend, skillgap, profile, chatbot
-│   │   │                   (planned: employer.py, admin.py)
-│   │   ├── services/       skill_profile.py: the one Graduate Skill Profile + matching thresholds;
-│   │   │                   job_titles.py: job level + ICT title rule; job_keys.py: duplicate-job rule
+│   │   ├── database.py     PostgreSQL connection; mongo.py: MongoDB (chat history)
+│   │   ├── routers/        HTTP endpoints by feature: auth, profile, modules, jobs, recommend, skillgap,
+│   │   │                   applications, chatbot, employer, admin, admin_academic
+│   │   ├── services/       skill_profile.py (the Graduate Skill Profile + matching), skill_relation.py
+│   │   │                   (relationship model), job_requirements.py (required / preferred, "fit"),
+│   │   │                   evidence.py (quote checks), learning_resources.py + plan_pdf.py (learning plans), ...
 │   │   ├── nlp/            skill_extractor.py (LLM calls), embedder.py (SBERT + disk cache)
 │   │   ├── models/         database tables (SQLAlchemy)
 │   │   ├── schemas/        request / response shapes (Pydantic)
 │   │   └── auth/           password hashing and JWT helpers
 │   ├── scripts/            command-line jobs, never imported by the app (see table below)
-│   │   ├── pipeline/       build the data: clean JobStreet, taxonomy, extract job / module skills
+│   │   ├── pipeline/       build the data: clean JobStreet, taxonomy, extract job / module skills, learning resources
 │   │   ├── live_jobs/      generate search queries from market data, fetch current jobs from JSearch
 │   │   └── tools/          diagnostics and maintenance
 │   ├── migrations/         one-off database changes (see below)
-│   ├── data/               data files only: modules.json, skill_taxonomy.json, skill_merges.json (+ overrides), caches
+│   ├── tests/              the regression suite (see Tests)
+│   ├── data/               data files only: modules.json, programmes.json, skill_taxonomy.json, learning
+│   │                       resources, caches
 │   └── requirements.txt
 └── frontend/
     └── src/
         ├── pages/
-        │   ├── auth/       Login, Register
-        │   ├── student/    Dashboard, Recommend (Job Matches), JobDetail, Profile, Chatbot
-        │   ├── employer/   (planned)
-        │   └── admin/      (planned)
-        ├── components/     shared: Sidebar, PageHeader, LevelTag
+        │   ├── auth/       Login, Register, Forgot password
+        │   ├── student/    Dashboard, My Profile, Job Matches, Job Detail, My applications, AI Assistant, setup
+        │   ├── employer/   Dashboard, My jobs, Post / edit a job, Applicants, applicant profile
+        │   ├── admin/      Dashboard, Users, Academic structure
+        │   └── AccountSettings.jsx (every role)
+        ├── components/     shared: Sidebar, PageHeader, Skeleton, LevelTag, ApplicationSteps, ...
         ├── context/        logged-in user (AuthContext)
         ├── api.js          axios client, adds the login token to every request
         └── App.jsx         routes; RoleRoute limits pages by role
@@ -97,6 +106,13 @@ SMTP_USER=<gmail address>
 SMTP_PASSWORD=<16-character app password>
 SMTP_HOST=smtp.gmail.com            # default
 SMTP_PORT=587                       # default, STARTTLS
+# optional: chat history (default mongodb://localhost:27017, database "skillmap")
+MONGODB_URL=mongodb://localhost:27017
+# optional: the skill relationship model (folder unzipped from the training run); empty = cosine similarity only
+RELATION_MODEL_DIR=<folder under backend/>
+RELATION_CUTOFF=0.6
+# optional: websites allowed to call the API, comma-separated (default http://localhost:5173)
+CORS_ORIGINS=http://localhost:5173
 ```
 Without `SMTP_USER` and `SMTP_PASSWORD`, no email is sent: the reset code is printed in the backend console instead, so Forgot password still works on a local machine.
 Start the API: `uvicorn app.main:app --reload` (http://localhost:8000, docs at /docs). On an empty database the tables are created automatically at start-up.
@@ -173,9 +189,19 @@ A **new, empty** database gets its tables from `app/models/` when the API starts
 
 ## Tests
 
-`backend/tests/` (12 Oct 2026) runs the real API on a **throwaway** PostgreSQL database that is dropped and made again on every run, so your own data is never touched. It checks a brand-new install (start-up, data migrations, running every migration twice), sign-up and sign-in, role checks, admin decisions, applying and the student's progress (Viewed, Shortlisted, Undo, the 14- and 30-day notes, closing a job), invitations, and that nobody reaches another person's records by changing an id. Skill extraction and matching quality are not tested here (see `docs/evidence/`): the embedding model is replaced by a small stand-in and the relationship model is off, so the tests are fast and need no API keys.
+`backend/tests/` (12 Oct 2026) runs the real API on a **throwaway** PostgreSQL database that is dropped and made again on every run, so your own data is never touched. It checks a brand-new install (start-up, data migrations, running every migration twice), sign-up and sign-in, role checks, admin decisions, applying and the student's progress (Viewed, Shortlisted, Undo, the 14- and 30-day notes, closing a job), invitations, editing a posted job, learning plans (only checked links, the PDF), the Dashboard's "what opens up" counts, accepted grades, and that nobody reaches another person's records by changing an id. Evidence of each run: `docs/evidence/tests/`. Skill extraction and matching quality are not tested here (see `docs/evidence/`): the embedding model is replaced by a small stand-in and the relationship model is off, so the tests are fast and need no API keys.
 
 From `backend/` with the venv active, run `python -m pytest`. It uses the server, user and password of `DATABASE_URL` in `backend/.env` with a separate database called `skillmap_test`, made for the run (your own database is never touched). To use a different throwaway database, set `TEST_DATABASE_URL` first (its name must contain "test"). If your database user may not create databases, make it once as `postgres` (pgAdmin Query Tool or psql): `CREATE DATABASE skillmap_test OWNER <your user>;` — the tests then empty it at the start of each run. Takes about a minute and a half.
+
+## Known limitations
+
+- Job skills and module skills are read by a language model; employers and the career office check them, and a quote from the ad or description backs each one, but a skill can still be missed or misread (scores in `docs/evidence/`).
+- "Fit" (half or more of a job's required skills) and the match counts compare skills only, not experience, degree or interview performance.
+- Live jobs are as fresh as the last JSearch fetch (each card shows how long ago the job was posted); the 2024 JobStreet postings are market data only.
+- Learning-plan links are checked to open, not reviewed in full; Coursera / YouTube links are searches.
+- The login token is kept in the browser's local storage (common for single-page apps; a cross-site scripting bug could expose it); sessions end after `ACCESS_TOKEN_EXPIRE_MINUTES`.
+- Changing an email asks for a code sent to the new address; there is no email check at sign-up.
+- Students can delete their account themselves; employers and admins ask the career office (their jobs and decisions involve other people).
 
 ## Never commit
 

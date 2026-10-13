@@ -7,6 +7,7 @@ from datetime import datetime, timedelta, timezone
 from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Request
 from fastapi.responses import PlainTextResponse
 from fastapi.security import OAuth2PasswordBearer
+from pydantic import BaseModel, Field
 from jose import JWTError, jwt
 from sqlalchemy import func, inspect, or_
 from sqlalchemy.orm import Session
@@ -210,6 +211,53 @@ def change_password(payload: PasswordChange, background: BackgroundTasks, db: Se
     background.add_task(send_email, current_user.email, *account_emails.password_changed(
         current_user.first_name, current_user.username))
     return {"access_token": _login_token(current_user), "token_type": "bearer"}
+
+
+# ── Delete my account (13 Oct; audit: grades and profiles are personal data, Malaysia's PDPA 2010) ─────────────────
+class DeleteAccountIn(BaseModel):
+    password: str = Field(max_length=200)
+
+
+def delete_student_data(user: User, db: Session):
+    """Every row about this student, child rows first. Written out table by table (not left to ON DELETE CASCADE),
+    because databases made by older migrations may not have every cascade rule. Jobs, modules and other students'
+    data are untouched. Commits nothing: the caller does, after MongoDB."""
+    from app.models.application import Application, ApplicationEvent, JobInvitation
+    from app.models.profile import UserAward, UserCertification, UserProject
+    from app.models.programme import AdminAction
+    from app.models.user_module import UserModule
+    app_ids = [a for (a,) in db.query(Application.id).filter(Application.student_id == user.id)]
+    if app_ids:
+        db.query(ApplicationEvent).filter(ApplicationEvent.application_id.in_(app_ids)).delete(synchronize_session=False)
+    for model, column in ((Application, Application.student_id), (JobInvitation, JobInvitation.student_id),
+                          (UserProject, UserProject.user_id), (UserCertification, UserCertification.user_id),
+                          (UserAward, UserAward.user_id), (UserModule, UserModule.user_id),
+                          (PasswordResetOTP, PasswordResetOTP.user_id), (AdminAction, AdminAction.target_user_id)):
+        db.query(model).filter(column == user.id).delete(synchronize_session=False)
+    names = [x.lower() for x in (user.username, user.email) if x]
+    db.query(LoginThrottle).filter(LoginThrottle.identifier.in_(names)).delete(synchronize_session=False)
+    db.delete(user)
+
+
+@router.post("/me/delete", status_code=204)
+def delete_my_account(payload: DeleteAccountIn, db: Session = Depends(get_db),
+                      current_user: User = Depends(get_current_user)):
+    """A student deletes their account and everything in it: profile, grades, projects, certificates, awards,
+    applications, invitations and AI Assistant chats. The password is asked again; it can't be undone.
+    Employers and admins ask the career office (their jobs and decisions are shared with others)."""
+    if current_user.role != UserRole.student:
+        raise HTTPException(status_code=403, detail="Only student accounts can be deleted here. Please contact the career office.")
+    _check_current_password(current_user, payload.password)
+    from pymongo.errors import PyMongoError
+    from app.mongo import chat_sessions
+    try:
+        # chats first: if MongoDB can't be reached, nothing is deleted, so no half-deleted account is left behind
+        chat_sessions().delete_many({"user_id": current_user.id})
+    except PyMongoError:
+        raise HTTPException(status_code=503, detail="Your chat history can't be reached right now, so nothing was "
+                                                    "deleted. Please try again later.")
+    delete_student_data(current_user, db)
+    db.commit()
 
 
 @router.get("/common-passwords", response_class=PlainTextResponse)

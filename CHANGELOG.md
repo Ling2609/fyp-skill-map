@@ -3,6 +3,21 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 13 Oct 2026 — Fixes from the 13 Oct audit
+- Students can delete their account (Account settings → Security → Delete account…): the password is asked again,
+  then their profile, grades, projects, certificates, awards, applications, invitations, codes and AI Assistant chats
+  are deleted (table by table, not relying on cascade rules older databases may lack). If chat history can't be
+  reached, nothing is deleted. Employers and admins ask the career office. `POST /auth/me/delete`; 3 tests.
+- README brought up to date: employer and admin are built (were "planned"), MongoDB, the relationship model and the
+  PDF library in the stack, every router and page in the folder map, new `.env` settings, a Known limitations list.
+- Job Matches and the Dashboard's top matches say what a count is out of: "6/10 required", or "listed" / "preferred"
+  for an ad that marks no skill as required (Job Detail already said so).
+- Module grades: only the pass grades the page offers (A to C) are accepted; any number from 0 to 4 was, so a fail
+  sent straight to the API would have counted that module's skills. Test: `tests/test_grades.py`.
+- Pages load on first use (React lazy): the first file went from 759 kB to 267 kB, and the size warning is gone.
+- Websites allowed to call the API come from `CORS_ORIGINS` in `.env` (default http://localhost:5173), so a demo on
+  another address works without changing code.
+
 ## 13 Oct 2026 — Dashboard: what one skill would open up (small what-if)
 - The goal card's "Still to learn" now says what each skill would do for the student: "+N more jobs you'd fit" =
   goal jobs where that ONE skill takes them to half or more of the required skills (the same line as employers'

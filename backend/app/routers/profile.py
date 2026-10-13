@@ -927,6 +927,9 @@ def get_showcase(current_user: User = Depends(get_current_user), db: Session = D
 
 
 # ── Module grades ──────────────────────────────────────────────────────────────
+PASS_GRADES = {4.0, 3.7, 3.3, 3.0, 2.7, 2.3, 2.0}     # A, A-, B+, B, B-, C+, C (GRADE_OPTIONS in ModulesEditor.jsx)
+
+
 class ModuleGradeInput(BaseModel):
     module_code: str
     grade: float
@@ -941,11 +944,13 @@ def save_module_grades(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
+    # 13 Oct (audit): only the pass grades the page offers (C and above). Any number from 0 to 4 used to be accepted,
+    # so a fail sent straight to the API would have counted the module's skills.
     for item in payload.grades:
-        if not (0.0 <= item.grade <= 4.0):
+        if round(item.grade, 1) not in PASS_GRADES:
             raise HTTPException(
                 status_code=422,
-                detail=f"Grade for {item.module_code} must be between 0.0 and 4.0"
+                detail=f"Grade for {item.module_code} must be one of A, A-, B+, B, B-, C+ or C."
             )
 
     incoming_codes = {item.module_code for item in payload.grades}
