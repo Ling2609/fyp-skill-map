@@ -22,14 +22,14 @@ Azure,microsoft azure,Azure training on Microsoft Learn,https://learn.microsoft.
 REST APIs,rest api; restful apis; apis; api,HTTP (MDN),https://developer.mozilla.org/en-US/docs/Web/HTTP,MDN Web Docs,docs,free,
 REST APIs,rest api; restful apis; apis; api,FastAPI Tutorial,https://fastapi.tiangolo.com/tutorial/,FastAPI,tutorial,free,
 REST APIs,rest api; restful apis; apis; api,Building a RESTful Web Service (Spring),https://spring.io/guides/gs/rest-service/,Spring,tutorial,free,
-Linux,unix; bash; shell scripting; command line,Linux Journey,https://linuxjourney.com/,Linux Journey,course,free,
+Linux,unix; bash; shell scripting; command line,Linux Journey,https://labex.io/linuxjourney,Linux Journey (LabEx),course,free,2026-10-13
 Linux,unix; bash; shell scripting; command line,The Linux command line for beginners,https://ubuntu.com/tutorials/command-line-for-beginners,Ubuntu,tutorial,free,
 PostgreSQL,postgres,PostgreSQL Tutorial,https://www.postgresql.org/docs/current/tutorial.html,PostgreSQL,docs,free,
 Power BI,powerbi; microsoft power bi,Power BI documentation,https://learn.microsoft.com/en-us/power-bi/,Microsoft Learn,docs,free,
-Tableau,,Tableau free training videos,https://www.tableau.com/learn/training,Tableau,course,free,
-Data analysis,data analytics; pandas,Kaggle Learn,https://www.kaggle.com/learn,Kaggle,course,free,
+Tableau,,Tableau free training videos,https://www.tableau.com/learn/training,Tableau,course,free,2026-10-13
+Data analysis,data analytics; pandas,Kaggle Learn,https://www.kaggle.com/learn,Kaggle,course,free,2026-10-13
 Data analysis,data analytics; pandas,pandas: Getting started,https://pandas.pydata.org/docs/getting_started/index.html,pandas,docs,free,
-Machine learning,ml,Kaggle Learn,https://www.kaggle.com/learn,Kaggle,course,free,
+Machine learning,ml,Kaggle Learn,https://www.kaggle.com/learn,Kaggle,course,free,2026-10-13
 Machine learning,ml,scikit-learn: Getting Started,https://scikit-learn.org/stable/getting_started.html,scikit-learn,docs,free,
 Agile,agile methodology; scrum; kanban,The Scrum Guide,https://scrumguides.org/scrum-guide.html,Scrum.org / Scrum Inc.,docs,free,
 Agile,agile methodology; scrum; kanban,Agile tutorials,https://www.atlassian.com/agile/tutorials,Atlassian,tutorial,free,

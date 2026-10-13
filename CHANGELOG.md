@@ -4,6 +4,8 @@ What changed, when, and in which commit. Newest first. Built from `git log` (ful
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
 ## 13 Oct 2026 — Learning plan PDF: no more black squares
+- The 3 blocked links (Linux Journey, Kaggle, Tableau) opened by hand on 13 Oct: marked in `checked_by_hand`; Linux
+  Journey's address updated to where it moved (labex.io/linuxjourney). All 49 resources can now be shown.
 - Her first real PDF showed "data■heavy", "step■by■step": the AI writes non-breaking hyphens and thin spaces, which
   the PDF's built-in font can't draw. They (and ≥, ≤, →) are swapped for plain characters before printing. Test added.
 

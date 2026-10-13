@@ -398,14 +398,14 @@
    "resources": [
     {
      "name": "Linux Journey",
-     "url": "https://linuxjourney.com/",
-     "provider": "Linux Journey",
+     "url": "https://labex.io/linuxjourney",
+     "provider": "Linux Journey (LabEx)",
      "kind": "course",
      "cost": "free",
-     "checked": "2026-10-13",
+     "checked": null,
      "ok": null,
-     "page_title": "Just a moment...",
-     "checked_by_hand": null
+     "page_title": null,
+     "checked_by_hand": "2026-10-13"
     },
     {
      "name": "The Linux command line for beginners",
@@ -472,7 +472,7 @@
      "checked": "2026-10-13",
      "ok": null,
      "page_title": "Access Denied",
-     "checked_by_hand": null
+     "checked_by_hand": "2026-10-13"
     }
    ]
   },
@@ -492,7 +492,7 @@
      "checked": "2026-10-13",
      "ok": null,
      "page_title": "Checking your browser - reCAPTCHA",
-     "checked_by_hand": null
+     "checked_by_hand": "2026-10-13"
     },
     {
      "name": "pandas: Getting started",
@@ -522,7 +522,7 @@
      "checked": "2026-10-13",
      "ok": null,
      "page_title": "Checking your browser - reCAPTCHA",
-     "checked_by_hand": null
+     "checked_by_hand": "2026-10-13"
     },
     {
      "name": "scikit-learn: Getting Started",
