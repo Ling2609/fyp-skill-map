@@ -17,9 +17,11 @@ const MODES = [
           d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
       </svg>
     ),
-    description: 'Explore career paths and get personalised direction based on your skills and goals.',
-    placeholder: 'Ask about your career direction, work style, or which roles suit you…',
-    greeting: "👋 Hi! I'm your Career Counsellor. I can help you explore career paths that suit your skills and personality. What kind of work environment do you thrive in — fast-paced startups, structured corporations, or something else?",
+    description: 'Choose a career direction, turn your projects into CV points and practise interview questions.',
+    placeholder: 'Ask about roles that suit you, your CV, or interview practice…',
+    greeting: "👋 Hi! I'm your Career Counsellor. I can help you find roles that suit your skills, turn your projects into CV points, or practise interview questions for the job you want. Where would you like to start?",
+    // 13 Oct (IR Sprint 4: resume tips, interview preparation): the three things it does, one tap each
+    starters: ['Which roles suit me?', 'Turn my projects into CV points', 'Practise interview questions with me'],
   },
   {
     key: 'skill_development',
@@ -611,6 +613,14 @@ export default function Chatbot() {
         {/* Input */}
         <div className="bg-white border-t border-slate-200 px-3 sm:px-6 py-4 shrink-0">
           {pdfError && <p role="alert" className="text-xs text-rose-700 mb-2">{pdfError}</p>}
+          {!loading && messages.length === 1 && currentMode.starters && !input && (
+            <div className="flex flex-wrap gap-2 mb-3" aria-label="Ways to start">
+              {currentMode.starters.map(f => (
+                <button key={f} type="button" onClick={() => sendText(f)}
+                  className="text-xs text-blue-700 bg-white border border-blue-200 rounded-full px-3 py-1.5 hover:bg-blue-50">{f}</button>
+              ))}
+            </div>
+          )}
           {!loading && messages.length > 0 && isPlan(messages[messages.length - 1]) && !input && (
             <div className="flex flex-wrap gap-2 mb-3" aria-label="Suggested follow-ups">
               {FOLLOW_UPS.map(f => (

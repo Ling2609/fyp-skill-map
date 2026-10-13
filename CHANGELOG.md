@@ -3,6 +3,18 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 13 Oct 2026 — AI Assistant: CV points and interview practice
+- The Career Counsellor now helps with the two things the IR's Sprint 4 promised and it didn't cover: "resume tips"
+  and "interview preparation". Three starter buttons under its greeting: Which roles suit me? / Turn my projects into
+  CV points / Practise interview questions with me.
+- CV points are written only from the student's own profile, read from the database (programme, projects with their
+  skills, certifications, awards, modules graded A or A-): action verb + what they did + result (Yale Office of Career
+  Strategy); a number is never invented ("[number?]" asks for the real one); aimed at the target job or goal; says
+  which missing skills not to claim yet.
+- Interview practice asks one question at a time (a skill they have, a skill they miss, a "tell me about a time"
+  question their projects can answer), then gives one good point and one to improve, checking the STAR order for
+  behavioural answers (National Careers Service). Test: `tests/test_counsellor_cv.py`.
+
 ## 13 Oct 2026 — Dashboard: compare careers in the goal picker
 - The goal drop-down is now a list of every career (job category), best fit first, each with a bar and how many of its
   top skills the student has ("8 of 10"); the current goal is marked. Students with a goal see it too (it was only

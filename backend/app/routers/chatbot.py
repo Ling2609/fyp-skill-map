@@ -21,6 +21,10 @@ from app.config import settings
 from app.database import get_db
 from app.models.user import User
 from app.mongo import chat_sessions, history_ok
+from app.models.module import Module
+from app.models.profile import UserAward, UserCertification, UserProject
+from app.models.programme import Programme
+from app.models.user_module import UserModule
 from app.routers.auth import get_current_user
 from app.routers.skillgap import SkillGapRequest, analyse_skill_gap
 from app.services.showcase import grade_letter
@@ -51,10 +55,30 @@ Your role:
 - Use their skill profile and job match data to give personalised career direction advice
 - Suggest specific job roles or career paths that suit them
 - Be encouraging but realistic — if there are skill gaps, address them honestly
-- Keep responses concise (3-5 sentences max per reply) and conversational
+- Keep responses concise (3-5 sentences max per reply) and conversational, except for CV points (below)
 - Reference their actual skills and matched jobs when relevant
 - Focus on the Malaysian market context
 - Never make up URLs, salaries or company facts; say so when you are not sure (links not on SkillMap's checked list are removed)
+
+CV points (when the user asks for help with their CV or resume):
+- Write bullet points only from their own projects, certifications, awards and modules in the user context. Never add a
+  project, tool, skill or result they did not give.
+- Each bullet: a strong action verb, what THEY did and with which tools, then the result ("Built ... using ...,
+  so that ..."). A number makes a result stronger, but never invent one: where a number would help, write [number?]
+  and ask them for the real figure.
+- Aim the bullets at their target job or career goal: lead with the skills that job asks for that they really have.
+- 2-4 bullets per project, under a heading with the project name. Then one line on which missing skills they should
+  NOT claim yet.
+- If they have no projects on SkillMap, say so and offer to help them describe one they have done.
+
+Interview practice (when the user wants to practise interview questions):
+- Use their target job, else their career goal; if neither is known, ask which role first.
+- Ask ONE question at a time and wait for the answer. Mix: a technical question on a skill the job asks for that they
+  have, a question about a skill they are missing (how they would learn it), and a behavioural question ("Tell me
+  about a time...") that one of their own projects can answer.
+- After each answer: one thing that was good, one thing to improve, then the next question. For behavioural answers,
+  check the STAR order: Situation, Task, Action (what THEY did), Result (what happened and what they learnt).
+- Do not give a model answer before they try, unless they ask for one.
 
 Tone: Professional but warm, like a trusted mentor."""
 
@@ -187,6 +211,38 @@ def build_context_block(req: ChatRequest, gap: dict | None = None, goal: str | N
         if req.target_skill and not any(learning_resources.find_skills(req.target_skill)):
             lines.append(learning_resources.search_line(req.target_skill))   # a skill not on the list (13 Oct)
     return "\n".join(lines) if lines else ""
+
+
+def cv_lines(user: User, db: Session) -> list[str]:
+    """The student's own material for CV points and interview answers (13 Oct, IR Sprint 4 "resume tips, interview
+    preparation"): programme, projects with their skills, certifications, awards and strongest modules. Read from
+    the database, not sent by the browser, so the assistant can only write about what is on their profile."""
+    lines = []
+    if user.programme_id:
+        prog = db.get(Programme, user.programme_id)
+        if prog:
+            lines.append(f"Programme: {prog.name}")
+    if user.headline:
+        lines.append(f"Their headline: {user.headline}")
+    for p in db.query(UserProject).filter(UserProject.user_id == user.id).order_by(UserProject.id).limit(6):
+        about = " ".join((p.description or "").split())
+        lines.append(f"Project: {p.name}. {about[:400]}{'...' if len(about) > 400 else ''}"
+                     + (f" Skills: {', '.join(p.extracted_skills[:10])}" if p.extracted_skills else ""))
+    certs = db.query(UserCertification).filter(UserCertification.user_id == user.id).limit(6).all()
+    if certs:
+        lines.append("Certifications: " + "; ".join(f"{c.cert_name} ({c.issuer})" for c in certs))
+    awards = db.query(UserAward).filter(UserAward.user_id == user.id).limit(4).all()
+    if awards:
+        lines.append("Awards: " + "; ".join(f"{a.title} ({a.issuer}{', ' + a.award_date if a.award_date else ''})"
+                                            for a in awards))
+    best = (db.query(Module.name, UserModule.grade).join(Module, Module.code == UserModule.module_code)
+            .filter(UserModule.user_id == user.id, UserModule.grade >= 3.7)
+            .order_by(UserModule.grade.desc(), Module.name).limit(5).all())
+    if best:
+        lines.append("Strongest modules: " + ", ".join(f"{name} ({grade_letter(g)})" for name, g in best))
+    if not any(l.startswith("Project:") for l in lines):
+        lines.append("Projects on SkillMap: none yet")
+    return lines
 
 
 def ensure_profile_step(reply: str) -> str:
@@ -325,6 +381,8 @@ def chat(req: ChatRequest, current_user: User = Depends(get_current_user), db: S
         except HTTPException:
             gap = None
     context = build_context_block(req, gap, current_user.target_category)
+    if req.mode == "career_counsellor":       # CV points and interview practice use their own projects (13 Oct)
+        context = "\n".join(x for x in (context, *cv_lines(current_user, db)) if x)
     if context:
         groq_messages.append({
             "role": "system",
