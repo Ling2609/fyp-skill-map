@@ -3,6 +3,10 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 13 Oct 2026 — Learning plan PDF: no more black squares
+- Her first real PDF showed "data■heavy", "step■by■step": the AI writes non-breaking hyphens and thin spaces, which
+  the PDF's built-in font can't draw. They (and ≥, ≤, →) are swapped for plain characters before printing. Test added.
+
 ## 13 Oct 2026 — AI Assistant asks for the hours a week in the chat
 - The "Hours a week 3 5 10" buttons above the chat are gone (her review: unclear). Before the first plan in a chat the
   assistant asks "how many hours a week can you spend learning this?" with 3 / 5 / 10 / 15+ hours as buttons (or a

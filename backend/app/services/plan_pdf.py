@@ -160,9 +160,24 @@ def plan_flowables(markdown: str, width: float, skip_title: bool = True) -> list
     return out
 
 
+# 13 Oct (her first real PDF showed "data■heavy", "step■by■step"): the model writes non-breaking hyphens and thin
+# spaces, which the PDF's built-in Helvetica can't draw. They are swapped for plain ones before printing.
+_PLAIN = str.maketrans({"\u2010": "-", "\u2011": "-", "\u2012": "-", "\u2212": "-", "\u00ad": "",
+                        "\u00a0": " ", "\u2007": " ", "\u2009": " ", "\u200a": " ", "\u202f": " ",
+                        "\u200b": "", "\u2060": "", "\ufeff": "", "\u2264": "<=", "\u2265": ">=",
+                        "\u2192": "->", "\u2190": "<-", "\u2713": "v", "\u2714": "v"})
+
+
+def plain_text(text: str) -> str:
+    return (text or "").translate(_PLAIN)
+
+
 def build_pdf(markdown: str, *, student: str, goal: str | None, job: str | None, have: list[str],
               missing: list[str], skill: str | None, today: date | None = None) -> bytes:
     today = today or date.today()
+    markdown, student, skill = plain_text(markdown), plain_text(student), plain_text(skill) if skill else skill
+    goal, job = plain_text(goal) if goal else goal, plain_text(job) if job else job
+    have, missing = [plain_text(x) for x in have], [plain_text(x) for x in missing]
     buf = BytesIO()
     doc = SimpleDocTemplate(buf, pagesize=A4, leftMargin=18 * mm, rightMargin=18 * mm, topMargin=16 * mm,
                             bottomMargin=18 * mm, title=f"Learning plan: {skill or 'your skill'}", author="SkillMap")

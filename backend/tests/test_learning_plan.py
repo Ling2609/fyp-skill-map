@@ -140,3 +140,9 @@ def test_a_long_plan_prints_on_several_pages():
         "| Step | What to do | Time | Done when |\n|---|---|---|---|\n" + rows
     pdf = build_pdf(md, student="Wei Ling", goal=None, job=None, have=[], missing=[], skill="Docker <script>")
     assert pdf.startswith(b"%PDF") and pdf.count(b"/Type /Page\n") + pdf.count(b"/Type /Page ") >= 2
+
+
+def test_pdf_text_uses_characters_the_pdf_font_can_draw():
+    from app.services.plan_pdf import plain_text
+    # non-breaking hyphen, narrow no-break space, >= sign, as the model writes them
+    assert plain_text("data‑heavy, 30 %, ≥30") == "data-heavy, 30 %, >=30"
