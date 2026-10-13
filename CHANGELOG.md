@@ -3,6 +3,16 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 13 Oct 2026 — Dashboard: compare careers in the goal picker
+- The goal drop-down is now a list of every career (job category), best fit first, each with a bar and how many of its
+  top skills the student has ("8 of 10"); the current goal is marked. Students with a goal see it too (it was only
+  shown before a goal was set), so they can check whether another career fits them better before switching.
+- Replaces the planned separate market page (decided 13 Oct: a page used once, mostly repeating the goal card). The
+  numbers come from the live jobs, the same ones the goal card counts. `GET /recommend/fit`, asked for only when the
+  list is opened, so the Dashboard is no slower. Test: `tests/test_career_fit.py`.
+- Phone fix: "Still to learn" rows with "+N more jobs you'd fit" overlapped the skill name on narrow screens; the line
+  now goes under the skill.
+
 ## 13 Oct 2026 — Fixes from the 13 Oct audit
 - Students can delete their account (Account settings → Security → Delete account…): the password is asked again,
   then their profile, grades, projects, certificates, awards, applications, invitations, codes and AI Assistant chats

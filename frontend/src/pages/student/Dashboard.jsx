@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import api from '../../api'
 import { cached, ALL_MATCHES } from '../../pageCache'
@@ -53,23 +53,85 @@ function Card({ title, sub, action, className = '', children }) {
   )
 }
 
-// The goal drop-down at the top of the goal card: changing it saves straight away
+// The goal picker at the top of the goal card (13 Oct, replaces the separate market page; references.md "Market
+// page and student sidebar"): every career, best fit first, each with how many of its 10 most-asked skills she has, so
+// she can compare careers when she picks or changes a goal. A plain <select> can't draw the bars, so it is a button and
+// a list. With no goal the fit comes with /recommend/goal; with a goal it is asked for (/recommend/fit) only when the
+// list is opened, so the Dashboard doesn't get slower.
+// "Developers/Programmers" may break after the slash on a phone, not in the middle of a word
+const slashBreaks = (text) => text.split('/').flatMap((part, i) => i ? ['/', <wbr key={i} />, part] : [part])
+
 function GoalPicker({ goal, categories, fit, busy, onChange }) {
-  // No goal yet: every category, best fit first, each with how many of its top skills she has (9 Oct, her review:
-  // the 5 radios are only the best fits, so the drop-down shows the full choice in the same order)
-  const fitOf = Object.fromEntries((fit || []).map(b => [b.category, b]))
-  const ordered = fit ? [...(fit.map(b => categories.find(c => c.name === b.category)).filter(Boolean)),
-    ...categories.filter(c => !fitOf[c.name])] : categories
-  const label = (c) => fitOf[c.name] ? `${c.name} · ${fitOf[c.name].have} of ${fitOf[c.name].of} skills` : `${c.name} (${c.jobs})`
+  const [open, setOpen] = useState(false)
+  const [loaded, setLoaded] = useState(null)        // { categories, best_fit } from /recommend/fit
+  const [failed, setFailed] = useState(false)
+  const box = useRef(null)
+  const bestFit = fit || loaded?.best_fit
+  const cats = loaded?.categories || categories
+
+  useEffect(() => {
+    if (!open || fit || loaded) return
+    cached('/recommend/fit').then(setLoaded).catch(() => setFailed(true))
+  }, [open, fit, loaded])
+
+  // Closes on Escape (focus back on the button) or a click outside
+  useEffect(() => {
+    if (!open) return
+    const onKey = (e) => { if (e.key === 'Escape') { setOpen(false); box.current?.querySelector('button')?.focus() } }
+    const onClick = (e) => { if (!box.current?.contains(e.target)) setOpen(false) }
+    document.addEventListener('keydown', onKey)
+    document.addEventListener('mousedown', onClick)
+    return () => { document.removeEventListener('keydown', onKey); document.removeEventListener('mousedown', onClick) }
+  }, [open])
+
+  const current = goal || ''                        // '' = Open to all ICT roles
+  const pick = (name) => { setOpen(false); if (name !== current) onChange(name || null) }
+  const fitOf = Object.fromEntries((bestFit || []).map(b => [b.category, b]))
+  // careers with too few live jobs to compare go last, with their job count
+  const rest = cats.filter(c => !fitOf[c.name])
+  const row = (name, right, label = name) => (
+    <li key={name || 'all'}>
+      <button type="button" onClick={() => pick(name)} aria-current={name === current ? 'true' : undefined}
+        className={`w-full flex items-center gap-3 text-left px-3 py-2 rounded-lg text-sm hover:bg-slate-50 focus-visible:outline-none focus-visible:bg-slate-100 ${name === current ? 'bg-blue-50 hover:bg-blue-50' : ''}`}>
+        <span className="flex-1 min-w-0 break-words text-slate-800">
+          {slashBreaks(label)}{name && name === current && <span className="text-xs font-semibold text-blue-700"> · your goal</span>}
+        </span>
+        {right}
+      </button>
+    </li>
+  )
+
   return (
-    <label className="flex flex-wrap items-center gap-2 text-sm text-slate-500">
+    <div ref={box} className="relative flex flex-wrap items-center gap-2 text-sm text-slate-500">
       Your goal
-      <select value={goal || ''} disabled={busy} onChange={e => onChange(e.target.value || null)}
-        className="text-sm font-semibold text-slate-900 bg-white border border-slate-300 rounded-lg pl-3 py-1.5 max-w-full sm:max-w-md min-w-0 focus:outline-none focus:ring-2 focus:ring-blue-500">
-        <option value="">Open to all ICT roles</option>
-        {ordered.map(c => <option key={c.name} value={c.name}>{label(c)}</option>)}
-      </select>
-    </label>
+      <button type="button" disabled={busy} onClick={() => setOpen(o => !o)} aria-expanded={open} aria-haspopup="true"
+        className="text-sm font-semibold text-slate-900 bg-white border border-slate-300 rounded-lg px-3 py-1.5 max-w-full sm:max-w-md min-w-0 truncate hover:border-blue-300 disabled:opacity-60 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500">
+        {goal || 'Open to all ICT roles'} <span aria-hidden="true" className="text-slate-500">▾</span>
+      </button>
+      {open && (
+        <div className="absolute left-0 top-full mt-1.5 z-20 w-full sm:w-[30rem] bg-white border border-slate-300 rounded-xl shadow-lg p-1.5">
+          <p className="px-3 pt-1.5 pb-1 text-xs text-slate-500">
+            {failed ? "Couldn't compare careers just now. You can still pick one." : "How many of each career's top skills you have"}
+          </p>
+          <ul className="max-h-80 overflow-y-auto">
+            {!bestFit && !failed ? [0, 1, 2, 3, 4].map(i => (
+              <li key={i} className="flex items-center gap-3 px-3 py-2.5"><Bar className="h-3.5 flex-1" /><Bar className="h-1.5 w-20" /><Bar className="h-3 w-12" /></li>
+            )) : (<>
+              {(bestFit || []).map(b => row(b.category, (<>
+                <span aria-hidden="true" className="hidden sm:block w-20 h-1.5 rounded-full bg-slate-200 overflow-hidden shrink-0">
+                  <span className="block h-full bg-blue-700" style={{ width: `${(b.have / b.of) * 100}%` }} />
+                </span>
+                <span className="w-14 text-right text-xs text-slate-500 tabular-nums">{b.have} of {b.of}</span>
+              </>)))}
+              {rest.map(c => row(c.name, <span className="text-xs text-slate-400 tabular-nums">{c.jobs} {c.jobs === 1 ? 'job' : 'jobs'}</span>))}
+            </>)}
+          </ul>
+          <ul className="border-t border-slate-100 mt-1 pt-1">
+            {row('', null, 'Open to all ICT roles')}
+          </ul>
+        </div>
+      )}
+    </div>
   )
 }
 
@@ -137,17 +199,18 @@ function GoalCard({ data, busy, onGoal, onPlan, onJobs }) {
             <ul className="mt-1 min-h-0 lg:overflow-y-auto pr-3">
               {missing.map((r, i) => (
                 <li key={r.skill} className="border-t border-slate-200 first:border-t-0">
-                  <div className="flex items-center gap-3">
-                    <label className="flex-1 min-w-0 flex items-center gap-3 py-2 cursor-pointer">
+                  {/* wraps on a phone: the "+N more jobs" line goes under the skill instead of over it */}
+                  <div className="flex flex-wrap items-center gap-x-3">
+                    <label className="flex-1 min-w-40 flex items-center gap-3 py-2 cursor-pointer">
                       <input type="checkbox" checked={picked.includes(r.skill)} onChange={() => toggle(r.skill)} className="w-4 h-4 accent-blue-700" />
                       <span className="flex-1 text-sm text-slate-800">{skillName(r.skill)}</span>
                     </label>
                     {/* 13 Oct, small what-if: what this one skill would do for her, not just how common it is */}
-                    {r.opens_count > 0 ? (<>
-                      <span className="text-xs font-semibold text-emerald-700 tabular-nums">+{r.opens_count} more {r.opens_count === 1 ? 'job' : 'jobs'} you'd fit</span>
+                    {r.opens_count > 0 ? (<span className="flex items-center gap-3 pl-7 pb-2 sm:pl-0 sm:pb-0">
+                      <span className="text-xs font-semibold text-emerald-700 tabular-nums whitespace-nowrap">+{r.opens_count} more {r.opens_count === 1 ? 'job' : 'jobs'} you'd fit</span>
                       <button type="button" onClick={() => setOpen(o => o === r.skill ? null : r.skill)} aria-expanded={open === r.skill}
                         className="text-xs text-blue-700 hover:underline whitespace-nowrap">What opens up {open === r.skill ? '▴' : '▾'}</button>
-                    </>) : (
+                    </span>) : (
                       <span className="text-xs text-slate-500 tabular-nums">{i === 0 ? `asked by ${pct(r.share)} of these jobs` : pct(r.share)}</span>
                     )}
                   </div>

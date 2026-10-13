@@ -14,8 +14,8 @@ Module grades (strength of academic evidence, never "has it") ──────
 Live jobs (JSearch) + jobs posted on SkillMap ──► skill extraction with quotes ──► matching: same skill, else
                                                   (employers check theirs)        SBERT + relationship model
                                                                                          │
-2024 JobStreet postings ──► market data only (skill demand), never shown as vacancies   ▼
-                       Job Matches · Skill Gap · Dashboard (goal + "what opens up") · AI Assistant (learning plans)
+2024 JobStreet postings ──► build + test the models, pick live-job searches (not shown)  ▼
+          Job Matches · Skill Gap · Dashboard (goal, career comparison, "what opens up") · AI Assistant (learning plans)
 ```
 
 | Part | Technology |
@@ -197,7 +197,7 @@ From `backend/` with the venv active, run `python -m pytest`. It uses the server
 
 - Job skills and module skills are read by a language model; employers and the career office check them, and a quote from the ad or description backs each one, but a skill can still be missed or misread (scores in `docs/evidence/`).
 - "Fit" (half or more of a job's required skills) and the match counts compare skills only, not experience, degree or interview performance.
-- Live jobs are as fresh as the last JSearch fetch (each card shows how long ago the job was posted); the 2024 JobStreet postings are market data only.
+- Live jobs are as fresh as the last JSearch fetch (each card shows how long ago the job was posted); the 2024 JobStreet postings are used to build and test the models and to choose live-job searches, not shown to students (they can't be applied to).
 - Learning-plan links are checked to open, not reviewed in full; Coursera / YouTube links are searches.
 - The login token is kept in the browser's local storage (common for single-page apps; a cross-site scripting bug could expose it); sessions end after `ACCESS_TOKEN_EXPIRE_MINUTES`.
 - Changing an email asks for a code sent to the new address; there is no email check at sign-up.

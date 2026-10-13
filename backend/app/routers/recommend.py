@@ -471,37 +471,45 @@ def _wanted(jobs, profile, grad, spellings, spelling_keys, owner):
             for k, n in count.most_common(WANTED_SHOWN)]
 
 
-@router.get("/goal")
-def goal_summary(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
-    """Everything the Dashboard's goal card needs, in one request."""
-    started = time.perf_counter()
-    profile = build_skill_profile(current_user.id, db)
+def _best_fit(jobs, categories, grad, spellings, spelling_keys, owner) -> list[dict]:
+    """How close she is to each category: of its GOAL_TOP most-asked skills, how many she has; best first. Every
+    category with enough jobs (MIN_CATEGORY_JOBS), so the goal picker can list them all in this order with their fit."""
+    out = []
+    for cat in categories:
+        if cat["jobs"] < MIN_CATEGORY_JOBS:
+            continue
+        ready = _readiness([(j, c) for j, c in jobs if c.get("subcategory") == cat["name"]],
+                           grad, spellings, spelling_keys, owner)
+        if ready:
+            out.append({"category": cat["name"], "jobs": cat["jobs"],
+                        "have": sum(r["has"] for r in ready), "of": len(ready)})
+    out.sort(key=lambda b: (-b["have"] / b["of"], -b["jobs"]))
+    return out
+
+
+def _profile_vectors(user, db):
+    """Her skill profile as (spellings, keys, owner, vectors), with the job cache ready; 400 if the profile is empty."""
+    profile = build_skill_profile(user.id, db)
     if not profile:
         raise HTTPException(status_code=400, detail=EMPTY_PROFILE_MESSAGE)
     build_job_cache()
     spellings, spelling_keys, owner = profile_spellings(profile)
     grad = normalise_rows(embedder.embed_cached(spellings)) if spellings else np.array([])
+    return profile, spellings, spelling_keys, owner, grad
 
+
+@router.get("/goal")
+def goal_summary(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    """Everything the Dashboard's goal card needs, in one request."""
+    started = time.perf_counter()
+    profile, spellings, spelling_keys, owner, grad = _profile_vectors(current_user, db)
     jobs = live_jobs()
     categories = goal_categories()
     known = {c["name"] for c in categories}
     goal = current_user.target_category if current_user.target_category in known else None
     scope = [(j, c) for j, c in jobs if c.get("subcategory") == goal] if goal else jobs
 
-    best_fit = []
-    if not goal:   # no goal: how close she is to each category, best first
-        for cat in categories:
-            if cat["jobs"] < MIN_CATEGORY_JOBS:
-                continue
-            ready = _readiness([(j, c) for j, c in jobs if c.get("subcategory") == cat["name"]],
-                               grad, spellings, spelling_keys, owner)
-            if ready:
-                best_fit.append({"category": cat["name"], "jobs": cat["jobs"],
-                                 "have": sum(r["has"] for r in ready), "of": len(ready)})
-        best_fit.sort(key=lambda b: (-b["have"] / b["of"], -b["jobs"]))
-        # Every category with enough jobs, best first: the first BEST_FIT_SHOWN are the radios, and the goal
-        # drop-down lists them all in this order with their fit
-
+    best_fit = _best_fit(jobs, categories, grad, spellings, spelling_keys, owner) if not goal else []
     readiness = _readiness(scope, grad, spellings, spelling_keys, owner) if goal else []
     opens = _opens(scope, [r for r in readiness if not r["has"]], grad, spellings, spelling_keys, owner)
     for r in readiness:
@@ -520,6 +528,20 @@ def goal_summary(db: Session = Depends(get_db), current_user: User = Depends(get
         "best_fit_shown": BEST_FIT_SHOWN,
     }
     print(f"[goal] {time.perf_counter() - started:.2f} s for user {current_user.id}")
+    return out
+
+
+@router.get("/fit")
+def career_fit(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    """The goal picker's comparison (13 Oct, replaces the separate market page; references.md "Market page"): every
+    career (job category) with how many of its 10 most-asked skills she has, best first. Asked for only when she
+    opens the picker with a goal set, so the Dashboard doesn't get slower; with no goal, /goal already sends it."""
+    started = time.perf_counter()
+    _, spellings, spelling_keys, owner, grad = _profile_vectors(current_user, db)
+    categories = goal_categories()
+    out = {"categories": categories,
+           "best_fit": _best_fit(live_jobs(), categories, grad, spellings, spelling_keys, owner)}
+    print(f"[fit] {time.perf_counter() - started:.2f} s for user {current_user.id}")
     return out
 
 
