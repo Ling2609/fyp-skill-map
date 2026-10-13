@@ -14,8 +14,9 @@
      "provider": "Python.org",
      "kind": "docs",
      "cost": "free",
-     "checked": null,
-     "ok": null
+     "checked": "2026-10-13",
+     "ok": true,
+     "page_title": "The Python Tutorial — Python 3.15.0 documentation"
     },
     {
      "name": "Python for Everybody",
@@ -23,8 +24,9 @@
      "provider": "Dr Chuck (University of Michigan)",
      "kind": "course",
      "cost": "free",
-     "checked": null,
-     "ok": null
+     "checked": "2026-10-13",
+     "ok": true,
+     "page_title": "PY4E - Python for Everybody"
     }
    ]
   },
@@ -40,8 +42,9 @@
      "provider": "SQLBolt",
      "kind": "practice",
      "cost": "free",
-     "checked": null,
-     "ok": null
+     "checked": "2026-10-13",
+     "ok": true,
+     "page_title": "SQLBolt - Learn SQL - Introduction to SQL"
     },
     {
      "name": "PostgreSQL Tutorial (SQL language)",
@@ -49,8 +52,9 @@
      "provider": "PostgreSQL",
      "kind": "docs",
      "cost": "free",
-     "checked": null,
-     "ok": null
+     "checked": "2026-10-13",
+     "ok": true,
+     "page_title": "PostgreSQL: Documentation: 18: Part I. Tutorial"
     }
    ]
   },
@@ -67,8 +71,9 @@
      "provider": "Oracle (dev.java)",
      "kind": "docs",
      "cost": "free",
-     "checked": null,
-     "ok": null
+     "checked": "2026-10-13",
+     "ok": true,
+     "page_title": "Learn Java - Dev.java"
     }
    ]
   },
@@ -85,8 +90,9 @@
      "provider": "MDN Web Docs",
      "kind": "docs",
      "cost": "free",
-     "checked": null,
-     "ok": null
+     "checked": "2026-10-13",
+     "ok": true,
+     "page_title": "JavaScript Guide - JavaScript | MDN"
     },
     {
      "name": "The Modern JavaScript Tutorial",
@@ -94,8 +100,9 @@
      "provider": "javascript.info",
      "kind": "tutorial",
      "cost": "free",
-     "checked": null,
-     "ok": null
+     "checked": "2026-10-13",
+     "ok": true,
+     "page_title": "The Modern JavaScript Tutorial"
     }
    ]
   },
@@ -111,8 +118,9 @@
      "provider": "TypeScript",
      "kind": "docs",
      "cost": "free",
-     "checked": null,
-     "ok": null
+     "checked": "2026-10-13",
+     "ok": true,
+     "page_title": "TypeScript: Handbook - The TypeScript Handbook"
     }
    ]
   },
@@ -128,8 +136,9 @@
      "provider": "MDN Web Docs",
      "kind": "course",
      "cost": "free",
-     "checked": null,
-     "ok": null
+     "checked": "2026-10-13",
+     "ok": true,
+     "page_title": "Learn web development | MDN"
     }
    ]
   },
@@ -145,8 +154,9 @@
      "provider": "web.dev (Google)",
      "kind": "course",
      "cost": "free",
-     "checked": null,
-     "ok": null
+     "checked": "2026-10-13",
+     "ok": true,
+     "page_title": "Learn CSS | web.dev"
     },
     {
      "name": "Learn web development",
@@ -154,8 +164,9 @@
      "provider": "MDN Web Docs",
      "kind": "course",
      "cost": "free",
-     "checked": null,
-     "ok": null
+     "checked": "2026-10-13",
+     "ok": true,
+     "page_title": "Learn web development | MDN"
     }
    ]
   },
@@ -172,8 +183,9 @@
      "provider": "React",
      "kind": "docs",
      "cost": "free",
-     "checked": null,
-     "ok": null
+     "checked": "2026-10-13",
+     "ok": true,
+     "page_title": "Quick Start – React"
     }
    ]
   },
@@ -190,8 +202,9 @@
      "provider": "Node.js",
      "kind": "docs",
      "cost": "free",
-     "checked": null,
-     "ok": null
+     "checked": "2026-10-13",
+     "ok": true,
+     "page_title": "Learn Node.js | Node.js Learn"
     }
    ]
   },
@@ -209,8 +222,9 @@
      "provider": "git-scm.com",
      "kind": "book",
      "cost": "free",
-     "checked": null,
-     "ok": null
+     "checked": "2026-10-13",
+     "ok": true,
+     "page_title": "Git"
     },
     {
      "name": "Learn Git Branching",
@@ -218,8 +232,9 @@
      "provider": "Learn Git Branching",
      "kind": "practice",
      "cost": "free",
-     "checked": null,
-     "ok": null
+     "checked": "2026-10-13",
+     "ok": true,
+     "page_title": "Learn Git Branching"
     }
    ]
   },
@@ -238,8 +253,9 @@
      "provider": "Docker",
      "kind": "docs",
      "cost": "free",
-     "checked": null,
-     "ok": null
+     "checked": "2026-10-13",
+     "ok": true,
+     "page_title": "Get started | Docker Docs"
     }
    ]
   },
@@ -255,8 +271,9 @@
      "provider": "Kubernetes",
      "kind": "tutorial",
      "cost": "free",
-     "checked": null,
-     "ok": null
+     "checked": "2026-10-13",
+     "ok": true,
+     "page_title": "Learn Kubernetes Basics | Kubernetes"
     }
    ]
   },
@@ -272,8 +289,9 @@
      "provider": "Amazon Web Services",
      "kind": "course",
      "cost": "free and paid",
-     "checked": null,
-     "ok": null
+     "checked": "2026-10-13",
+     "ok": true,
+     "page_title": "AWS Skill Builder"
     },
     {
      "name": "Getting Started on AWS",
@@ -281,8 +299,9 @@
      "provider": "Amazon Web Services",
      "kind": "tutorial",
      "cost": "free",
-     "checked": null,
-     "ok": null
+     "checked": "2026-10-13",
+     "ok": true,
+     "page_title": "Getting Started - Cloud Computing Tutorials for Building on AWS"
     }
    ]
   },
@@ -298,8 +317,9 @@
      "provider": "Microsoft Learn",
      "kind": "course",
      "cost": "free",
-     "checked": null,
-     "ok": null
+     "checked": "2026-10-13",
+     "ok": true,
+     "page_title": "Training for Azure | Microsoft Learn"
     }
    ]
   },
@@ -318,8 +338,9 @@
      "provider": "MDN Web Docs",
      "kind": "docs",
      "cost": "free",
-     "checked": null,
-     "ok": null
+     "checked": "2026-10-13",
+     "ok": true,
+     "page_title": "HTTP: Hypertext Transfer Protocol | MDN"
     },
     {
      "name": "FastAPI Tutorial",
@@ -327,8 +348,9 @@
      "provider": "FastAPI",
      "kind": "tutorial",
      "cost": "free",
-     "checked": null,
-     "ok": null
+     "checked": "2026-10-13",
+     "ok": true,
+     "page_title": "Tutorial - User Guide - FastAPI"
     },
     {
      "name": "Building a RESTful Web Service (Spring)",
@@ -336,8 +358,9 @@
      "provider": "Spring",
      "kind": "tutorial",
      "cost": "free",
-     "checked": null,
-     "ok": null
+     "checked": "2026-10-13",
+     "ok": true,
+     "page_title": ""
     }
    ]
   },
@@ -356,8 +379,9 @@
      "provider": "Linux Journey",
      "kind": "course",
      "cost": "free",
-     "checked": null,
-     "ok": null
+     "checked": "2026-10-13",
+     "ok": false,
+     "page_title": "Just a moment..."
     },
     {
      "name": "The Linux command line for beginners",
@@ -365,8 +389,9 @@
      "provider": "Ubuntu",
      "kind": "tutorial",
      "cost": "free",
-     "checked": null,
-     "ok": null
+     "checked": "2026-10-13",
+     "ok": true,
+     "page_title": "The Linux command line for beginners | Ubuntu"
     }
    ]
   },
@@ -382,8 +407,9 @@
      "provider": "PostgreSQL",
      "kind": "docs",
      "cost": "free",
-     "checked": null,
-     "ok": null
+     "checked": "2026-10-13",
+     "ok": true,
+     "page_title": "PostgreSQL: Documentation: 18: Part I. Tutorial"
     }
    ]
   },
@@ -400,8 +426,9 @@
      "provider": "Microsoft Learn",
      "kind": "docs",
      "cost": "free",
-     "checked": null,
-     "ok": null
+     "checked": "2026-10-13",
+     "ok": true,
+     "page_title": "Power BI documentation - Power BI | Microsoft Learn"
     }
    ]
   },
@@ -415,8 +442,9 @@
      "provider": "Tableau",
      "kind": "course",
      "cost": "free",
-     "checked": null,
-     "ok": null
+     "checked": "2026-10-13",
+     "ok": false,
+     "page_title": "Access Denied"
     }
    ]
   },
@@ -433,8 +461,9 @@
      "provider": "Kaggle",
      "kind": "course",
      "cost": "free",
-     "checked": null,
-     "ok": null
+     "checked": "2026-10-13",
+     "ok": true,
+     "page_title": "Checking your browser - reCAPTCHA"
     },
     {
      "name": "pandas: Getting started",
@@ -442,8 +471,9 @@
      "provider": "pandas",
      "kind": "docs",
      "cost": "free",
-     "checked": null,
-     "ok": null
+     "checked": "2026-10-13",
+     "ok": true,
+     "page_title": "Getting started — pandas 3.0.6 documentation"
     }
    ]
   },
@@ -459,8 +489,9 @@
      "provider": "Kaggle",
      "kind": "course",
      "cost": "free",
-     "checked": null,
-     "ok": null
+     "checked": "2026-10-13",
+     "ok": true,
+     "page_title": "Checking your browser - reCAPTCHA"
     },
     {
      "name": "scikit-learn tutorials",
@@ -468,8 +499,9 @@
      "provider": "scikit-learn",
      "kind": "docs",
      "cost": "free",
-     "checked": null,
-     "ok": null
+     "checked": "2026-10-13",
+     "ok": false,
+     "page_title": "Page not found · GitHub Pages"
     }
    ]
   },
@@ -487,8 +519,9 @@
      "provider": "Scrum.org / Scrum Inc.",
      "kind": "docs",
      "cost": "free",
-     "checked": null,
-     "ok": null
+     "checked": "2026-10-13",
+     "ok": true,
+     "page_title": "Scrum Guide | Scrum Guides"
     },
     {
      "name": "Agile tutorials",
@@ -496,8 +529,9 @@
      "provider": "Atlassian",
      "kind": "tutorial",
      "cost": "free",
-     "checked": null,
-     "ok": null
+     "checked": "2026-10-13",
+     "ok": true,
+     "page_title": "Jira Tutorials: Learn Agile With Jira | Atlassian"
     }
    ]
   },
@@ -511,8 +545,9 @@
      "provider": "Atlassian",
      "kind": "tutorial",
      "cost": "free",
-     "checked": null,
-     "ok": null
+     "checked": "2026-10-13",
+     "ok": true,
+     "page_title": "Jira Tutorials: Learn Agile With Jira | Atlassian"
     }
    ]
   },
@@ -530,8 +565,9 @@
      "provider": "GitHub",
      "kind": "docs",
      "cost": "free",
-     "checked": null,
-     "ok": null
+     "checked": "2026-10-13",
+     "ok": true,
+     "page_title": "GitHub Actions documentation - GitHub Docs"
     }
    ]
   },
@@ -545,8 +581,9 @@
      "provider": "Jenkins",
      "kind": "tutorial",
      "cost": "free",
-     "checked": null,
-     "ok": null
+     "checked": "2026-10-13",
+     "ok": true,
+     "page_title": "Tutorials overview"
     }
    ]
   },
@@ -565,8 +602,9 @@
      "provider": "pytest",
      "kind": "docs",
      "cost": "free",
-     "checked": null,
-     "ok": null
+     "checked": "2026-10-13",
+     "ok": true,
+     "page_title": "Get Started - pytest documentation"
     },
     {
      "name": "JUnit 5 User Guide",
@@ -574,8 +612,9 @@
      "provider": "JUnit",
      "kind": "docs",
      "cost": "free",
-     "checked": null,
-     "ok": null
+     "checked": "2026-10-13",
+     "ok": true,
+     "page_title": "Overview :: JUnit User Guide"
     }
    ]
   },
@@ -591,8 +630,9 @@
      "provider": "HashiCorp",
      "kind": "tutorial",
      "cost": "free",
-     "checked": null,
-     "ok": null
+     "checked": "2026-10-13",
+     "ok": true,
+     "page_title": "Tutorials | Terraform | HashiCorp Developer"
     }
    ]
   },
@@ -606,8 +646,9 @@
      "provider": "Ansible",
      "kind": "docs",
      "cost": "free",
-     "checked": null,
-     "ok": null
+     "checked": "2026-10-13",
+     "ok": true,
+     "page_title": "Getting started with Ansible — Ansible Community Documentation"
     }
    ]
   },
@@ -624,8 +665,9 @@
      "provider": "Microsoft Learn",
      "kind": "docs",
      "cost": "free",
-     "checked": null,
-     "ok": null
+     "checked": "2026-10-13",
+     "ok": true,
+     "page_title": "C# Guide - .NET managed language - C# | Microsoft Learn"
     }
    ]
   },
@@ -641,8 +683,9 @@
      "provider": "LearnCpp.com",
      "kind": "tutorial",
      "cost": "free",
-     "checked": null,
-     "ok": null
+     "checked": "2026-10-13",
+     "ok": true,
+     "page_title": "Learn C++ - Skill up with our free tutorials"
     }
    ]
   },
@@ -664,8 +707,9 @@
      "provider": "Cisco",
      "kind": "course",
      "cost": "free and paid",
-     "checked": null,
-     "ok": null
+     "checked": "2026-10-13",
+     "ok": true,
+     "page_title": "Cisco Networking Academy: Learn Cybersecurity, Python & More"
     },
     {
      "name": "Professor Messer (CompTIA Network+ videos)",
@@ -673,8 +717,9 @@
      "provider": "Professor Messer",
      "kind": "course",
      "cost": "free",
-     "checked": null,
-     "ok": null
+     "checked": "2026-10-13",
+     "ok": true,
+     "page_title": "Home - Professor Messer IT Certification Training - CompTIA A+, Network+, Security+"
     }
    ]
   },
@@ -693,8 +738,9 @@
      "provider": "Cisco",
      "kind": "course",
      "cost": "free and paid",
-     "checked": null,
-     "ok": null
+     "checked": "2026-10-13",
+     "ok": true,
+     "page_title": "Cisco Networking Academy: Learn Cybersecurity, Python & More"
     },
     {
      "name": "Professor Messer (CompTIA Security+ videos)",
@@ -702,8 +748,9 @@
      "provider": "Professor Messer",
      "kind": "course",
      "cost": "free",
-     "checked": null,
-     "ok": null
+     "checked": "2026-10-13",
+     "ok": true,
+     "page_title": "Home - Professor Messer IT Certification Training - CompTIA A+, Network+, Security+"
     }
    ]
   },
@@ -721,8 +768,9 @@
      "provider": "DAIR.AI",
      "kind": "docs",
      "cost": "free",
-     "checked": null,
-     "ok": null
+     "checked": "2026-10-13",
+     "ok": true,
+     "page_title": "Prompt Engineering Guide | Prompt Engineering Guide<!-- -->"
     }
    ]
   },
@@ -738,8 +786,9 @@
      "provider": "roadmap.sh",
      "kind": "docs",
      "cost": "free",
-     "checked": null,
-     "ok": null
+     "checked": "2026-10-13",
+     "ok": true,
+     "page_title": "Developer Roadmaps - roadmap.sh"
     }
    ]
   }
