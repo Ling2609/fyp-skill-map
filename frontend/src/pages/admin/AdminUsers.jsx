@@ -123,9 +123,9 @@ export default function AdminUsers() {
   const menuFor = (u) => {
     const self = u.id === me?.id
     const items = []
-    if (u.is_active && u.role === 'employer' && u.employer_status !== 'approved') items.push({ label: 'Approve', onSelect: () => act(u.id, 'approve') })
+    if (u.is_active && u.role === 'employer' && u.employer_status !== 'approved') items.push({ label: 'Approve', success: true, onSelect: () => act(u.id, 'approve') })
     if (u.is_active && u.role === 'employer' && u.employer_status === 'pending') items.push({ label: 'Reject…', onSelect: () => ask(u, 'reject') })
-    if (!self && !u.is_active) items.push({ label: 'Reactivate account…', onSelect: () => ask(u, 'reactivate') })
+    if (!self && !u.is_active) items.push({ label: 'Reactivate account…', success: true, onSelect: () => ask(u, 'reactivate') })
     items.push({ label: 'View history', onSelect: () => setHistory(u) })
     if (!self && u.role !== 'admin' && u.is_active) items.push({ label: 'Deactivate account…', danger: true, onSelect: () => ask(u, 'deactivate') })
     return items

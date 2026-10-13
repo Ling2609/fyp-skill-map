@@ -15,6 +15,7 @@ Planning, reasoning and research behind each decision are in the project roadmap
   the counter turns red and the employer is asked to shorten it.
 - ⋯ menu: the first item no longer looks greyed out when the menu is opened with the mouse (the grey band now
   shows only when moving through the menu with the keyboard).
+- Admin Users ⋯ menu: Approve and Reactivate account are green text (Deactivate stays red), like Reopen job.
 
 ## 13 Oct 2026 — Employer: edit a posted job
 
