@@ -3,6 +3,14 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 14 Oct 2026 — Privacy notice: same look as the other pages, every version kept
+- The header follows the app's detail pages: a grey "← Back to SkillMap" above the title on the left (to the
+  Dashboard when signed in, else to sign-in), the title and date, and a blue Bahasa Malaysia / English button on the
+  right. Only the content scrolls; the header stays, and the contents list stays beside the sections.
+- Every version of the notice is kept (`privacyText.js`, `VERSIONS`, newest first, each with a summary of what
+  changed). "Changes to this notice" lists them and opens an earlier one at `/privacy?version=<date>`, with a note
+  that it isn't the current version. `users.privacy_accepted_at` tells which version a person accepted.
+
 ## 14 Oct 2026 — Personal data: privacy notice, contact after shortlisting, Download my data
 - Sign-up needs "I have read and agree to the Privacy notice" ticked (the notice is a blue link, as on most sign-up
   forms); the time is kept (`users.privacy_accepted_at`). The notice is a public page, `/privacy`, in English

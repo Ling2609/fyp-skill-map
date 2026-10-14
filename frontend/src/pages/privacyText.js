@@ -4,9 +4,7 @@
 // isn't given; in the national language and English (references.md "Privacy notice"). Facts: docs/data_flow.md.
 // The Bahasa Malaysia text is a draft translation to be proofread before release.
 
-export const UPDATED = { en: 'Last updated 14 October 2026', ms: 'Kemas kini terakhir 14 Oktober 2026' }
-
-export const IN_SHORT = {
+const IN_SHORT = {
   en: {
     title: 'In short',
     lines: [
@@ -30,7 +28,7 @@ export const IN_SHORT = {
 }
 
 // The table in section 2: [what, required or optional, why]
-export const DATA_TABLE = {
+const DATA_TABLE = {
   en: {
     head: ['Information', 'Required?', 'Why we need it'],
     rows: [
@@ -60,7 +58,7 @@ export const DATA_TABLE = {
 }
 
 // Sections: [id, title, bullet points]. Section 2 also shows DATA_TABLE.
-export const SECTIONS = {
+const SECTIONS = {
   en: [
     ['who', 'Who we are and how to contact us', [
       'SkillMap is a career platform that maps a student\'s academic record and projects to the skills employers ask for.',
@@ -107,9 +105,6 @@ export const SECTIONS = {
     ['complain', 'How to complain', [
       'Email the **career office** first at {contact}; they will reply and correct any mistake.',
       'If you are not satisfied, you may complain to the **Personal Data Protection Commissioner** of Malaysia.',
-    ]],
-    ['changes', 'Changes to this notice', [
-      'If this notice changes, the date at the top of this page changes and the main changes are listed here.',
     ]],
   ],
   ms: [
@@ -159,8 +154,18 @@ export const SECTIONS = {
       'E-mel **pejabat kerjaya** terlebih dahulu di {contact}; mereka akan menjawab dan membetulkan sebarang kesilapan.',
       'Jika anda tidak berpuas hati, anda boleh membuat aduan kepada **Pesuruhjaya Perlindungan Data Peribadi** Malaysia.',
     ]],
-    ['changes', 'Perubahan kepada notis ini', [
-      'Jika notis ini berubah, tarikh di bahagian atas halaman ini akan berubah dan perubahan utama akan disenaraikan di sini.',
-    ]],
   ],
 }
+
+// Every version of the notice, newest first (14 Oct, her question: are old versions kept and can they be seen?).
+// A change adds a new entry on top with a short summary of what changed; older entries keep their own text, so
+// /privacy?version=<date> still shows exactly what someone agreed to. users.privacy_accepted_at tells which version
+// a person accepted (the newest one dated on or before that day).
+export const VERSIONS = [
+  {
+    date: '2026-10-14',
+    label: { en: '14 October 2026', ms: '14 Oktober 2026' },
+    changes: { en: 'First version.', ms: 'Versi pertama.' },
+    text: { inShort: IN_SHORT, table: DATA_TABLE, sections: SECTIONS },
+  },
+]
