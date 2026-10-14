@@ -1,10 +1,11 @@
 """
-Run once to load all computing programmes (10 Oct). Running it twice changes nothing.
+Run once to load all computing programmes (10 Oct). Running it again changes nothing: a programme that already
+has modules is left as the career office keeps it (14 Oct fix).
   - programme_modules.kind: a module's kind (common / specialised / elective) now belongs to the programme, since the
     same module can be common in one programme and specialised or elective in another
   - modules missing from the database are added from data/modules.json (with their descriptions, "To review")
   - the 17 programmes of APU's July 2026 Computing brochure are added from data/programmes.json, with each module's
-    year and kind in that programme. Links an admin added later are kept; nothing is deleted
+    year and kind in that programme. Only programmes with no modules yet are filled; nothing is deleted
 Skills for the new modules are found afterwards with: python scripts/pipeline/extract_module_skills.py
 Usage (from backend/): python migrations/migrate_all_programmes.py
 """
@@ -36,9 +37,19 @@ with engine.connect() as conn:
     conn.execute(text("UPDATE modules SET institution = :i WHERE institution IS NULL "
                       "OR institution = 'Representative SE Programme'"), {"i": INSTITUTION})
 
+    # 14 Oct fix (found by rerunning every migration on a full database): a programme's list is filled only when it
+    # has no modules yet (first install, or a programme new in data/programmes.json). A rerun used to put back every
+    # module and link the career office had removed. Modules are added only when a list being filled needs them.
+    def has_modules(prog_id):
+        return prog_id is not None and conn.execute(text(
+            "SELECT 1 FROM programme_modules WHERE programme_id = :p"), {"p": prog_id}).scalar()
+    to_fill = [p for p in programmes if not has_modules(conn.execute(text(
+        "SELECT id FROM programmes WHERE code = :c"), {"c": p["code"]}).scalar())]
+    needed = {pm["code"] for p in to_fill for pm in p["modules"]}
+
     added = 0
     for m in catalogue:
-        if conn.execute(text("SELECT 1 FROM modules WHERE code = :c"), {"c": m["code"]}).scalar():
+        if m["code"] not in needed or conn.execute(text("SELECT 1 FROM modules WHERE code = :c"), {"c": m["code"]}).scalar():
             continue
         conn.execute(text("INSERT INTO modules (code, name, level, type, institution, description) "
                           "VALUES (:c, :n, :l, :t, :i, :d)"),
@@ -47,7 +58,7 @@ with engine.connect() as conn:
         added += 1
 
     new_progs = linked = 0
-    for p in programmes:
+    for p in to_fill:
         prog_id = conn.execute(text("SELECT id FROM programmes WHERE code = :c"), {"c": p["code"]}).scalar()
         if prog_id is None:
             prog_id = conn.execute(text("INSERT INTO programmes (code, name) VALUES (:c, :n) RETURNING id"),
@@ -55,8 +66,6 @@ with engine.connect() as conn:
             new_progs += 1
         for pm in p["modules"]:
             mod_id = conn.execute(text("SELECT id FROM modules WHERE code = :c"), {"c": pm["code"]}).scalar()
-            if mod_id is None:      # removed by an admin since: left out
-                continue
             linked += conn.execute(text(
                 "INSERT INTO programme_modules (programme_id, module_id, year, kind) VALUES (:p, :m, :y, :k) "
                 "ON CONFLICT ON CONSTRAINT uq_programme_module DO NOTHING"),

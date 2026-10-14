@@ -133,6 +133,7 @@ Run every script from `backend/` with the venv active, e.g. `python scripts/tool
 | `live_jobs/fetch_live_jobs.py` | Fetches live jobs for those queries (non-ICT titles skipped) and extracts their skills. `--dry-run`, `--use-cache`, `--new-only` | JSearch, Groq |
 | `pipeline/build_learning_resources.py` | Builds `data/learning_resources.json` from `data/learning_resources_curated.csv` and the most-asked skills in real ads (`--from-db`: your live jobs); saves the ranking to `docs/evidence/` | – |
 | `tools/check_learning_links.py` | Opens every link in `data/learning_resources.json` and marks it ok / not ok; the AI Assistant only gives students links marked ok. `--coverage` lists the most-asked job skills with no resources yet | Internet |
+| `tools/count_rows.py` | Prints the number of rows in every table. Run before and after an upgrade and compare, to show nothing was lost | — |
 | `tools/compare_profile_extraction.py` | Before/after check for project and certificate skills: old prompts vs the new quote-checked extraction on 6 sample projects (hand-written gold lists) and 4 certificates; precision, recall, unsupported skills → `docs/evidence/profile_extraction_before_after.csv` | Groq |
 | `tools/check_skill_profile.py` | Read-only: a student's skill count, sources and near-duplicates. `--no-sbert` | – |
 | `tools/compare_scoring.py` | Read-only (step 2): a student's coverage under different rules for which matched skills count, sensitivity table, and a random sample of related pairs for labelling (`docs/evidence/`) | – |
@@ -173,7 +174,18 @@ Groq's free tier allows about 200,000 tokens a day (≈ 100 jobs). Don't run two
 
 A **new, empty** database gets its tables from `app/models/` when the API starts (the 12 Oct tables `application_events` and `job_invitations` too), but three of these scripts also load **data** a new install needs, so after the first start run, in this order: `migrate_admin_structure.py`, `migrate_all_programmes.py`, `migrate_intake_modules.py` (17 programmes, 198 modules, demo intakes), then `python scripts/pipeline/extract_module_skills.py` (module skills, Groq) and `python scripts/tools/create_admin.py` (the career-office account). Checked by `tests/test_install.py` on a brand-new database. Post a job lists the job categories already in the database, so load the JobStreet data (or fetch live jobs) before employers post. To apply one: `python migrations/<file>.py` from `backend/`.
 
-**Upgrading an existing database** (e.g. after a `git pull`): run the scripts you haven't run yet, **top to bottom in the table** (it is in date order). If unsure which, run them all in that order: every script is safe to run again (`tests/test_install.py` runs them all twice). If one is missing, the API refuses to start and names the script to run; `tests/test_audit_fixes.py` checks that for the newest one. A new database change gets a new `migrate_<what_it_does>.py` and a row in this table.
+**Upgrading an existing database** (e.g. after a `git pull`): run the scripts you haven't run yet, **top to bottom in the table** (it is in date order). If unsure which, run them all in that order: every script is safe to run again: `tests/test_install.py` runs them all again on a database in use and checks that no row in any table changes and that modules the career office removed stay removed (until 14 Oct, `migrate_admin_structure.py` and `migrate_all_programmes.py` put them back on a rerun; fixed). The data scripts only fill a programme's module list when it has none yet. If one is missing, the API refuses to start and names the script to run; `tests/test_audit_fixes.py` checks that for the newest one. To prove an upgrade on real data without risking it, try it on a copy first (Git Bash; adjust the PostgreSQL path and database name):
+```
+PG="/c/Program Files/PostgreSQL/16/bin"
+"$PG/pg_dump" -U postgres -Fc -f skillmap_backup.dump <your database>          # 1. back up
+"$PG/createdb" -U postgres -O <app user> skillmap_upgrade                      # 2. an empty copy
+"$PG/pg_restore" -U postgres -d skillmap_upgrade --no-owner --role=<app user> skillmap_backup.dump
+DATABASE_URL=postgresql://<app user>:<password>@localhost:5432/skillmap_upgrade python scripts/tools/count_rows.py > before.txt
+DATABASE_URL=...skillmap_upgrade python migrations/<each script not run yet>.py  # 3. upgrade the copy
+DATABASE_URL=...skillmap_upgrade python scripts/tools/count_rows.py > after.txt
+diff before.txt after.txt                                                       # 4. same rows (new tables may appear)
+```
+Then start the API on the copy and sign in. The backup file also lets you go back if anything goes wrong. A new database change gets a new `migrate_<what_it_does>.py` and a row in this table.
 
 ## Tests
 

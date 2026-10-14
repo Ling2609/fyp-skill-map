@@ -1,0 +1,58 @@
+== migrate_add_formatted_description
+Migration complete: formatted_description column added.
+== migrate_phase1
+Phase 1 migration complete.
+== migrate_add_live_job_columns
+Migration complete: source, source_url, publisher, listing_date, country added.
+  employer MY: 1 jobs
+  live     SG: 38 jobs
+  live     MY: 176 jobs
+  dataset  MY: 2446 jobs
+== migrate_drop_user_skills_cache
+Migration complete: user_skills_cache dropped (if it existed).
+== migrate_add_job_skill_evidence
+Migration complete: evidence_quote, level, skill_type, match_score, alternative_group added; index on job_id.
+  job_skills rows: 34069, with evidence: 6215
+== migrate_account_security
+Migration complete.
+  users.password_changed_at: yes
+  password_reset_otps purpose + new_email: 2/2
+  login_throttle dropped: yes | login_attempts present: yes
+== migrate_profile_skill_evidence
+Migration complete.
+  skill_quotes, skills_source, added_skills, credly_url: 4/4
+== migrate_add_job_gone_at
+Migration complete: gone_at column added to jobs.
+== migrate_admin_structure
+Migration complete: programme SE (id 1); 0 module(s) linked to it; 0 module description(s) filled; 0 existing employer(s) marked approved.
+== migrate_admin_actions
+Migration complete: admin_actions table ready.
+== migrate_profile_showcase
+users.headline: ok
+users.about: ok
+users.linkedin_url: ok
+users.portfolio_url: ok
+users.github_url: ok
+users.show_grades_to_employers: ok
+user_awards table: ok
+Done. Start the backend again.
+== migrate_career_goal
+users.target_category: ok
+Done. Start the backend again.
+== migrate_all_programmes
+Migration complete: 0 module(s) added, 0 programme(s) added, 0 programme module link(s) added. Next: python scripts/pipeline/extract_module_skills.py (finds skills for modules that have none).
+== migrate_intake_modules
+Migration complete: 0 demo intake(s) added; 0 intake module row(s) copied from the programme lists.
+== migrate_employer_jobs
+Migration complete: closed_at column added to jobs.
+== migrate_applications
+Migration complete: applications table ready.
+== migrate_privacy_contact
+users.phone, city, available_from, privacy_accepted_at: ok
+Done. Start the backend again.
+== migrate_transparency
+jobs and applications columns: ok; 0 existing posts given a decision date 30 days after posting
+Done. Start the backend again.
+== migrate_record_keeping
+jobs, applications and users columns: ok; 0 users marked as accepting the 14 Oct 2026 notice
+Done. Start the backend again.

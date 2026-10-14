@@ -47,9 +47,60 @@ def test_on_time_record_is_shown_from_three_judged_jobs(client, users, db):
         app_ids.append(_apply(client, users, student, job))
         client.patch(f"/employer/applications/{app_ids[-1]}", headers=users.h(employer), json={"status": "rejected"})
         sql(db, "update jobs set decide_by=:t where id=:i", t=past, i=job["id"])
-        sql(db, "update applications set status_changed_at=:t where id=:i", t=past - timedelta(days=1), i=app_ids[-1])
+        _decided_at(db, app_ids[-1], past - timedelta(days=1))
         rec = _mine(client, users, student, app_ids[-1])["employer_record"]
         assert rec == {"on_time": n + 1, "of": n + 1, "shown": n == 2}
+
+
+def _decided_at(db, app_id, t):
+    """Move an application's decision (its status history and last change) to time t."""
+    sql(db, "update applications set status_changed_at=:t where id=:i", t=t, i=app_id)
+    sql(db, "update application_events set created_at=:t where application_id=:i and kind='status'", t=t, i=app_id)
+
+
+def _judged_job(client, users, db, employer, student, decided_offset=None, due_offset=timedelta(minutes=-1)):
+    """A job with one applicant, its date `due_offset` from now; decided `decided_offset` relative to the date."""
+    job = _post(client, users, employer).json()
+    app_id = _apply(client, users, student, job)
+    due = datetime.now(timezone.utc) + due_offset
+    if decided_offset is not None:
+        client.patch(f"/employer/applications/{app_id}", headers=users.h(employer), json={"status": "rejected"})
+        _decided_at(db, app_id, due + decided_offset)
+    sql(db, "update jobs set decide_by=:t where id=:i", t=due, i=job["id"])
+    return job, app_id, due
+
+
+def test_on_time_boundaries(client, users, db):
+    """Exactly on the date is on time; a second late is late; a correction after the date keeps the first answer;
+    closing before the date judges it at once (on time); closing after the date is late."""
+    from app.services.transparency import employer_record
+    student = users.student()
+    cases = []
+    e = users.employer(); job, a, due = _judged_job(client, users, db, e, student, decided_offset=timedelta(0))
+    cases.append((e, 1, "decided exactly on the date"))
+    e = users.employer(); job, a, due = _judged_job(client, users, db, e, student, decided_offset=timedelta(seconds=1))
+    cases.append((e, 0, "decided a second after the date"))
+    e = users.employer(); job, a, due = _judged_job(client, users, db, e, student, decided_offset=-timedelta(days=1))
+    client.patch(f"/employer/applications/{a}", headers=users.h(e), json={"status": "accepted"})   # corrected now
+    cases.append((e, 1, "Not selected on time, corrected to Accepted after the date"))
+    e = users.employer(); job, a, due = _judged_job(client, users, db, e, student, due_offset=timedelta(days=10))
+    client.patch(f"/employer/jobs/{job['id']}", headers=users.h(e), json={"closed": True, "reason": "not_filling"})
+    cases.append((e, 1, "closed before the date: everyone told at once"))
+    e = users.employer(); job, a, due = _judged_job(client, users, db, e, student)
+    client.patch(f"/employer/jobs/{job['id']}", headers=users.h(e), json={"closed": True, "reason": "not_filling"})
+    cases.append((e, 0, "closed after the date"))
+    for e, expected, what in cases:
+        assert employer_record(users.ids[e], db) == {"on_time": expected, "of": 1, "shown": False}, what
+
+
+def test_an_undone_decision_does_not_count(client, users, db):
+    """Not selected on time, then undone: no answer stands, so after the date the job is late."""
+    from app.services.transparency import employer_record
+    e, student = users.employer(), users.student()
+    job, a, due = _judged_job(client, users, db, e, student, decided_offset=-timedelta(days=1))
+    r = client.patch(f"/employer/applications/{a}", headers=users.h(e), json={"status": "rejected", "undo": True})
+    assert r.status_code == 200 and r.json()["status"] == "applied"
+    assert employer_record(users.ids[e], db) == {"on_time": 0, "of": 1, "shown": False}
 
 
 def test_sign_up_stores_the_notice_version_the_page_shows(client, users, db):

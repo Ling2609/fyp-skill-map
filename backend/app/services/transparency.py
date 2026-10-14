@@ -13,7 +13,7 @@ from datetime import datetime, timedelta, timezone
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
 
-from app.models.application import Application
+from app.models.application import Application, ApplicationEvent
 from app.models.job import Job
 
 DECIDE_DAYS = (14, 28, 30, 42)      # 2 weeks, 4 weeks, 30 days (default; DfE: decide within 30 working days), 6 weeks
@@ -76,15 +76,32 @@ def job_stats(job_ids: list[int], db: Session) -> dict[int, dict]:
     return out
 
 
+def first_decisions(app_ids: list[int], db: Session) -> dict[int, datetime]:
+    """When each application FIRST got an outcome (Accepted or Not selected), from its status history. A later
+    correction (e.g. Not selected -> Accepted) doesn't move this; an undone decision is removed from the history
+    (employer.py undo), so it never counts."""
+    out = {}
+    if app_ids:
+        for app_id, at in (db.query(ApplicationEvent.application_id, ApplicationEvent.created_at)
+                           .filter(ApplicationEvent.application_id.in_(app_ids), ApplicationEvent.kind == "status",
+                                   ApplicationEvent.status.in_(DECIDED))
+                           .order_by(ApplicationEvent.created_at)):
+            out.setdefault(app_id, _aware(at))
+    return out
+
+
 def employer_record(employer_id: int, db: Session, now: datetime | None = None) -> dict:
     """The employer's record of deciding by their own date ("decided on time for X of Y jobs"). Definition (14 Oct
-    audit, also in docs/transparency.md):
-    - judged: a job with at least one applicant whose decision date has passed, or that was closed (closing early
+    audits, also in docs/transparency.md):
+    - judged: a job with at least one applicant whose decision date has passed, or that is closed (closing early
       judges it at once); jobs with no applicants, or still before their date and open, are not judged yet;
-    - on time: every applicant had an outcome (Accepted or Not selected, including by closing the job) at or before
-      the decision date in force, i.e. the moved date when the employer used their one extension;
+    - on time: every applicant has an outcome now (Accepted or Not selected, including by closing the job), and got
+      their FIRST outcome at or before the decision date in force (the moved date if the employer used their one
+      extension). A correction after the date (e.g. Not selected -> Accepted) doesn't make it late: the student
+      had an answer in time;
     - closing after the date counts as late, because the applicants still waited past the promise;
-    - shown only from RECORD_MIN_JOBS judged jobs (`shown`), so one late job can't define a new employer."""
+    - shown only from RECORD_MIN_JOBS judged jobs (`shown`), so one late job can't define a new employer.
+    It measures whether students got an answer by the promised date, not how good the employer's decisions are."""
     now = now or datetime.now(timezone.utc)
     jobs = db.query(Job).filter(Job.posted_by_user_id == employer_id, Job.decide_by.isnot(None)).all()
     due = on_time = 0
@@ -94,9 +111,15 @@ def employer_record(employer_id: int, db: Session, now: datetime | None = None) 
         if not apps or (now <= deadline and not job.closed_at):
             continue                                   # nothing to judge yet
         due += 1
-        on_time += all(a.status in DECIDED and a.status_changed_at and _aware(a.status_changed_at) <= deadline
+        first = first_decisions([a.id for a in apps], db)
+        on_time += all(a.status in DECIDED and _decided_at(a, first) is not None and _decided_at(a, first) <= deadline
                        for a in apps)
     return {"on_time": on_time, "of": due, "shown": due >= RECORD_MIN_JOBS}
+
+
+def _decided_at(a: Application, first: dict[int, datetime]) -> datetime | None:
+    """The first outcome's time; for applications decided before status history was kept (12 Oct), the last change."""
+    return first.get(a.id) or _aware(a.status_changed_at)
 
 
 def stale(a: Application, now: datetime | None = None) -> bool:

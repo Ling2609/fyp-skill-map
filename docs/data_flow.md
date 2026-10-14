@@ -19,7 +19,7 @@ Checked in the code before adding anything new to MongoDB. Each store has one pu
 
 | Collection | What | Personal? | Kept until |
 |---|---|---|---|
-| `chat_sessions` | One AI Assistant conversation per document (messages, mode, context) | Yes | 18 months after its last message (TTL index on `updated_at`, `CHAT_KEEP_DAYS` in `app/mongo.py`), or when the student deletes the chat or the account |
+| `chat_sessions` | One AI Assistant conversation per document (messages, mode, context) | Yes | 18 months after its last message (TTL index on `updated_at`, `CHAT_KEEP_DAYS` in `app/mongo.py`), or when the student deletes the chat or the account. MongoDB removes expired documents in a background task about once a minute, so deletion happens shortly after the 18 months, not at the exact second; the index is made the first time the chat collection is used |
 
 ## Files on the server (not in git)
 
@@ -48,7 +48,7 @@ Checked in the code before adding anything new to MongoDB. Each store has one pu
 
 ## Deleting and downloading
 
-- **Download my data** (`GET /auth/me/export`): every table above for that user, as JSON, without the password hash, codes or sign-in counters. If MongoDB can't be reached, the file says chats couldn't be included rather than leaving them out silently.
+- **Download my data** (`GET /auth/me/export`): every column of every row about that user, as JSON: account, grades, projects, certifications, awards, applications (with reason, note, missing skills, skill counts and history), invitations (including dismissed), the career office's decisions about the account (without which staff member), and every field of each chat. Left out: the password hash, reset codes and sign-in counters (security data) and the ids that only link tables (`EXPORT_SKIP` in `app/routers/auth.py`). A test compares the export with the tables' columns, so a column added later is included or the test fails. If MongoDB can't be reached, the file says chats couldn't be included rather than leaving them out silently.
 - **Delete my account**: not one transaction, because two databases are involved. Order: chats in MongoDB first, then every PostgreSQL row in one transaction.
   - MongoDB down: nothing is deleted; the student is told to try later.
   - PostgreSQL fails after the chats went: the PostgreSQL part is rolled back, the student is told the chats were deleted and to try again; trying again finishes it. Worst case: chats gone, account still there, never the other way round.

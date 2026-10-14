@@ -1,0 +1,43 @@
+
+> frontend@0.0.0 build
+> vite build
+
+[36mvite v8.2.2 [32mbuilding client environment for production...[36m[39m
+transforming...
+✓ 383 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                             0.54 kB │ gzip:  0.32 kB
+dist/assets/index-M2zVdOZc.css             54.56 kB │ gzip: 10.85 kB
+dist/assets/PageHeader-DQ9PiZJY.js          0.21 kB │ gzip:  0.19 kB
+dist/assets/EmployerJobs-g1kX3UF0.js        0.22 kB │ gzip:  0.19 kB
+dist/assets/skillName-BBKpE7ym.js           0.26 kB │ gzip:  0.21 kB
+dist/assets/LevelTag-BDK93_0U.js            0.53 kB │ gzip:  0.31 kB
+dist/assets/pageCache-CpiBcqbl.js           0.80 kB │ gzip:  0.49 kB
+dist/assets/ApplicationSteps-BRsO8gu5.js    1.15 kB │ gzip:  0.62 kB
+dist/assets/Skeleton-Bb_PZ413.js            1.81 kB │ gzip:  0.66 kB
+dist/assets/profileUtils-BpbtA8_v.js        1.86 kB │ gzip:  0.98 kB
+dist/assets/RowMenu-CuOHZDXt.js             2.35 kB │ gzip:  1.11 kB
+dist/assets/decisions-bN5z8EH_.js           3.12 kB │ gzip:  1.42 kB
+dist/assets/StudySetup-BVpZHwGz.js          4.90 kB │ gzip:  1.70 kB
+dist/assets/statusChange-Cibu4CaO.js        6.22 kB │ gzip:  2.56 kB
+dist/assets/Applicants-Cq6r-RbP.js          7.68 kB │ gzip:  2.75 kB
+dist/assets/AdminDashboard-PVUNMAdZ.js      8.30 kB │ gzip:  2.79 kB
+dist/assets/ApplicantProfile-BOg9txpU.js    9.12 kB │ gzip:  2.84 kB
+dist/assets/AccountSettings-VM2W2Gzf.js    10.90 kB │ gzip:  3.32 kB
+dist/assets/PostJob-BdMM0qXb.js            11.35 kB │ gzip:  4.00 kB
+dist/assets/AdminUsers-0kmdy8M3.js         11.95 kB │ gzip:  4.07 kB
+dist/assets/MyApplications-0rqdWXRi.js     12.92 kB │ gzip:  4.06 kB
+dist/assets/Privacy-Ga5zCkL0.js            17.04 kB │ gzip:  6.41 kB
+dist/assets/JobDetail-Dmq3ni59.js          17.80 kB │ gzip:  5.31 kB
+dist/assets/Recommend-ClPKxfmB.js          18.94 kB │ gzip:  6.10 kB
+dist/assets/Dashboard-DVbqtoWD.js          23.82 kB │ gzip:  7.00 kB
+dist/assets/EmployerHome-lqV-B0UP.js       28.15 kB │ gzip:  7.48 kB
+dist/assets/profileForms-CCpihpT-.js       29.22 kB │ gzip:  7.85 kB
+dist/assets/MyProfile-Bik9dUuz.js          33.77 kB │ gzip:  9.11 kB
+dist/assets/AdminAcademic-CtY9AiAc.js      40.18 kB │ gzip:  9.91 kB
+dist/assets/jsx-runtime-BDl3M0Og.js        48.62 kB │ gzip: 17.36 kB
+dist/assets/Chatbot-Wrw17amw.js           176.73 kB │ gzip: 53.00 kB
+dist/assets/index-Cr1xa1vg.js             279.46 kB │ gzip: 86.72 kB
+
+[32m✓ built in 697ms[39m

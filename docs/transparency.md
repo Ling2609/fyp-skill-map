@@ -18,7 +18,10 @@ What students are shown about an employer's job, and exactly how each number is 
 "Decided on time for X of Y jobs."
 
 - **Judged jobs (Y):** jobs with at least one applicant whose decision date has passed, or that were closed. Jobs with no applicants, or still open before their date, are not judged yet.
-- **On time (X):** every applicant had an outcome (Accepted or Not selected, including by closing the job) at or before the decision date in force. If the date was moved, the moved date counts, since applicants were told.
+- **On time (X):** every applicant has an outcome now (Accepted or Not selected, including by closing the job), and got their **first** outcome at or before the decision date in force. If the date was moved, the moved date counts, since applicants were told.
+- The first outcome's time comes from the status history (`application_events`). A correction after the date (Not selected → Accepted) doesn't make the job late: the student had an answer in time. An undone decision is removed from the history, so it never counts.
+- It measures whether students got an answer by the promised date, not how good the employer's decisions are.
+- Edge cases tested (`tests/test_audit_fixes.py`): decided exactly on the date (on time), one second after (late), corrected after the date (on time), undone (late), closed before the date (on time), closed after it (late).
 - Closing a job **after** its date counts as late: the applicants still waited past the promise.
 - **Shown from 3 judged jobs.** Below that, students see "Too few decisions … to show a record yet", because one late job would define a new employer. The 3 is a judgement call, in the same spirit as platforms holding back a rating until there are enough reviews.
 

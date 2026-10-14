@@ -125,7 +125,9 @@ def test_employer_record_of_deciding_on_time(client, users, db):
     assert m["employer_record"] == {"on_time": 0, "of": 0, "shown": False}       # nothing due yet
     client.patch(f"/employer/applications/{a1}", headers=users.h(employer), json={"status": "rejected"})
     sql(db, "update jobs set decide_by=:t where id=:i", t=datetime.now(timezone.utc) - timedelta(minutes=1), i=job["id"])
-    sql(db, "update applications set status_changed_at=:t where id=:i", t=datetime.now(timezone.utc) - timedelta(days=1), i=a1)
+    yesterday = datetime.now(timezone.utc) - timedelta(days=1)
+    sql(db, "update applications set status_changed_at=:t where id=:i", t=yesterday, i=a1)
+    sql(db, "update application_events set created_at=:t where application_id=:i and kind='status'", t=yesterday, i=a1)
     m2 = _mine(client, users, s2, a2)
     assert m2["employer_record"] == {"on_time": 0, "of": 1, "shown": False}      # s2 was never decided by the date
     assert m2["progress"]["nudge"] == "no_decision"

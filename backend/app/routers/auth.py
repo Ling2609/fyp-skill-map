@@ -245,18 +245,38 @@ def delete_student_data(user: User, db: Session):
     db.delete(user)
 
 
+def _plain(row, skip=()) -> dict:
+    """Every column of one row as a plain dict (dates as ISO text), except the columns in `skip`."""
+    d = {}
+    for c in row.__table__.columns:
+        if c.name in skip:
+            continue
+        v = getattr(row, c.name)
+        d[c.name] = v.isoformat() if hasattr(v, "isoformat") else getattr(v, "value", v)
+    return d
+
+
 def _rows(model, column, user_id, db, skip=("user_id",)):
     """Every row of one table for this user, as plain dicts (dates as ISO text)."""
-    out = []
-    for row in db.query(model).filter(column == user_id).all():
-        d = {}
-        for c in row.__table__.columns:
-            if c.name in skip:
-                continue
-            v = getattr(row, c.name)
-            d[c.name] = v.isoformat() if hasattr(v, "isoformat") else v
-        out.append(d)
-    return out
+    return [_plain(row, skip) for row in db.query(model).filter(column == user_id).all()]
+
+
+def _iso(v):
+    """MongoDB values as JSON: dates as ISO text, inside lists and dicts too."""
+    if hasattr(v, "isoformat"):
+        return v.isoformat()
+    if isinstance(v, dict):
+        return {k: _iso(x) for k, x in v.items()}
+    if isinstance(v, list):
+        return [_iso(x) for x in v]
+    return v
+
+
+# Left out of the export on purpose (14 Oct): the password hash (security data) and the row ids that only link
+# tables together. Everything else in these tables is exported, so a column added later is included without
+# changing this code (tests/test_personal_data.py compares the export with the tables' columns).
+EXPORT_SKIP = {"users": ("hashed_password",), "applications": ("student_id",), "job_invitations": ("student_id",),
+               "application_events": ("application_id",)}
 
 
 @router.get("/me/export")
@@ -268,30 +288,30 @@ def export_my_data(db: Session = Depends(get_db), current_user: User = Depends(g
     from app.models.job import Job
     from app.models.profile import UserAward, UserCertification, UserProject
     from app.models.user_module import UserModule
+    from app.models.programme import AdminAction
     u = current_user
-    account = {c.name: getattr(u, c.name) for c in u.__table__.columns if c.name not in ("hashed_password",)}
-    account = {k: (v.isoformat() if hasattr(v, "isoformat") else getattr(v, "value", v)) for k, v in account.items()}
+    account = _plain(u, EXPORT_SKIP["users"])
     applications = []
     for a, job in (db.query(Application, Job).join(Job, Job.id == Application.job_id)
                    .filter(Application.student_id == u.id).order_by(Application.id)):
-        events = [{"kind": e.kind, "status": e.status, "at": e.created_at.isoformat()}
+        events = [_plain(e, EXPORT_SKIP["application_events"])
                   for e in db.query(ApplicationEvent).filter(ApplicationEvent.application_id == a.id)
                   .order_by(ApplicationEvent.id)]
-        applications.append({"job": job.job_title, "company": job.company, "status": a.status,
-                             "applied_at": a.created_at.isoformat() if a.created_at else None, "events": events})
-    invitations = [{"job": job.job_title, "company": job.company,
-                    "at": i.created_at.isoformat() if getattr(i, "created_at", None) else None}
+        applications.append({"job": job.job_title, "company": job.company,
+                             **_plain(a, EXPORT_SKIP["applications"]), "events": events})
+    invitations = [{"job": job.job_title, "company": job.company, **_plain(i, EXPORT_SKIP["job_invitations"])}
                    for i, job in db.query(JobInvitation, Job).join(Job, Job.id == JobInvitation.job_id)
-                   .filter(JobInvitation.student_id == u.id)]
+                   .filter(JobInvitation.student_id == u.id).order_by(JobInvitation.id)]
+    # decisions the career office made about this account (approve / deactivate ... with the reason given);
+    # which staff member made them is left out (their personal data, not the student's)
+    office = [{"action": x.action, "reason": x.reason, "at": x.created_at.isoformat() if x.created_at else None}
+              for x in db.query(AdminAction).filter(AdminAction.target_user_id == u.id).order_by(AdminAction.id)]
     from pymongo.errors import PyMongoError
     from app.mongo import chat_sessions
     try:
-        chats = [{"title": d.get("title"), "mode": d.get("mode"), "created_at": d.get("created_at"),
-                  "messages": [{"role": m["role"], "content": m["content"], "at": m.get("at")} for m in d.get("messages", [])]}
+        # every field of each conversation (title, mode, context, dates, messages) except the internal ids
+        chats = [_iso({k: v for k, v in d.items() if k not in ("_id", "user_id")})
                  for d in chat_sessions().find({"user_id": u.id}).sort("created_at", 1)]
-        chats = [{**c, "created_at": c["created_at"].isoformat() if c["created_at"] else None,
-                  "messages": [{**m, "at": m["at"].isoformat() if m["at"] else None} for m in c["messages"]]}
-                 for c in chats]
     except PyMongoError:
         chats = "Chat history couldn't be reached when this file was made. Please try again later."
     data = {
@@ -305,6 +325,7 @@ def export_my_data(db: Session = Depends(get_db), current_user: User = Depends(g
         "awards": _rows(UserAward, UserAward.user_id, u.id, db),
         "applications": applications,
         "invitations": invitations,
+        "career_office_decisions": office,
         "ai_assistant_chats": chats,
     }
     return Response(content=json.dumps(data, indent=2, ensure_ascii=False, default=str),

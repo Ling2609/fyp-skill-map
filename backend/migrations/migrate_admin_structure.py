@@ -1,5 +1,6 @@
 """
-Run once for the Admin + Employer flows (7 Oct). Running it twice changes nothing.
+Run once for the Admin + Employer flows (7 Oct). Running it again changes nothing, and keeps the career office's
+changes to the SE module list (14 Oct fix).
   - new tables: programmes, intakes, programme_modules
   - modules: description (filled from data/modules.json where empty), skills_reviewed_at
   - users: programme_id, intake_id (students), company_name, employer_status (employers)
@@ -53,11 +54,14 @@ with engine.connect() as conn:
     if prog_id is None:
         prog_id = conn.execute(text("INSERT INTO programmes (code, name) VALUES (:c, :n) RETURNING id"),
                                {"c": PROGRAMME_CODE, "n": PROGRAMME_NAME}).scalar()
-    linked = conn.execute(text(
-        "INSERT INTO programme_modules (programme_id, module_id, year) "
-        "SELECT :p, m.id, m.level FROM modules m "
-        "WHERE NOT EXISTS (SELECT 1 FROM programme_modules pm WHERE pm.programme_id = :p AND pm.module_id = m.id)"),
-        {"p": prog_id}).rowcount
+    # Only when the programme has no modules yet (14 Oct fix, found by rerunning every migration on a full
+    # database): a rerun used to link EVERY module in the database to SE (all 198 once the other programmes were
+    # loaded) and put back modules the career office had taken out of the list
+    linked = 0
+    if not conn.execute(text("SELECT 1 FROM programme_modules WHERE programme_id = :p"), {"p": prog_id}).scalar():
+        linked = conn.execute(text(
+            "INSERT INTO programme_modules (programme_id, module_id, year) "
+            "SELECT :p, m.id, m.level FROM modules m"), {"p": prog_id}).rowcount
 
     approved = conn.execute(text(
         "UPDATE users SET employer_status = 'approved' WHERE role = 'employer' AND employer_status IS NULL")).rowcount
