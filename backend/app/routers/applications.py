@@ -54,12 +54,15 @@ def apply(data: ApplyIn, student: User = Depends(require_student), db: Session =
         raise HTTPException(status_code=404, detail="Only jobs posted on SkillMap can be applied for here.")
     if not _job_open(job):
         raise HTTPException(status_code=400, detail="This job is closed.")
+    if job.applications_stopped_at:          # 14 Oct: the employer stopped new applications (still deciding)
+        raise HTTPException(status_code=400, detail="This job isn't taking new applications.")
     if db.query(Application).filter(Application.job_id == job.id, Application.student_id == student.id).first():
         raise HTTPException(status_code=409, detail="You already applied for this job.")
     from app.services.skill_profile import EMPTY_PROFILE_MESSAGE, build_skill_profile
     if not build_skill_profile(student.id, db):
         raise HTTPException(status_code=400, detail=EMPTY_PROFILE_MESSAGE)
     a = Application(job_id=job.id, student_id=student.id)
+    _snapshot(a, student, job, db)
     db.add(a)
     try:
         db.commit()
@@ -70,14 +73,45 @@ def apply(data: ApplyIn, student: User = Depends(require_student), db: Session =
     return _mine(a, job)
 
 
-def _mine(a: Application, job: Job, match: str | None = None, events=None, usually_days: int | None = None) -> dict:
+def _snapshot(a: Application, student: User, job: Job, db: Session) -> dict | None:
+    """The applicant's required skills for the job, kept on the application for "where you stand" (14 Oct)."""
+    from app.routers.skillgap import skill_gap_for
+    try:
+        s = skill_gap_for(student, job.job_id, db)["summary"]
+    except HTTPException:
+        return None
+    a.match_have, a.match_total = s["matched_skills"], s["matched_skills"] + s["missing_skills"]
+    return s
+
+
+def _mine(a: Application, job: Job, match: str | None = None, events=None, usually_days: int | None = None,
+          extra: dict | None = None) -> dict:
     from app.services.application_progress import progress
     return {"id": a.id, "job_ref": job.job_id, "title": job.job_title, "company": job.company,
             "status": a.status, "status_label": STUDENT_STATUS[a.status], "applied_at": a.created_at,
             "status_changed_at": a.status_changed_at, "job_closed": not _job_open(job), "match": match,
-            # 12 Oct: Applied -> Viewed -> Shortlisted -> Decision with dates, and a nudge after a quiet spell
-            "progress": progress(a, events or [], _job_open(job)),
-            "employer_usually_days": usually_days}
+            # 12 Oct: Applied -> Viewed -> Shortlisted -> Decision with dates, and a nudge after a quiet spell;
+            # 14 Oct: "no_decision" once the employer's own date has passed
+            "progress": progress(a, events or [], _job_open(job), decide_by=job.decide_by),
+            "employer_usually_days": usually_days,
+            # 14 Oct (transparency flow): the employer's date, whether the job still takes applications, why it
+            # closed, and why this application wasn't selected (reason, note, the missing skills then)
+            "decide_by": job.decide_by, "decide_extended_reason": job.decide_extended_reason,
+            "taking_applications": _job_open(job) and not job.applications_stopped_at,
+            "close_reason": job.close_reason, "category": job.subcategory,
+            "reason": a.reason, "note": a.note, "reason_skills": a.reason_skills or [],
+            **(extra or {})}
+
+
+@router.get("/job/{job_ref}/open")
+def job_open_now(job_ref: str, student: User = Depends(require_student), db: Session = Depends(get_db)):
+    """14 Oct: is this SkillMap job taking applications right now, and its decision date. Always fresh: Job Detail
+    keeps the skill gap for 15 minutes, so a job stopped or reopened since then would show the wrong button."""
+    job = db.query(Job).filter(Job.job_id == job_ref).first()
+    if not job:
+        raise HTTPException(status_code=404, detail="Job not found.")
+    return {"closed": not _job_open(job), "taking_applications": _job_open(job) and not job.applications_stopped_at,
+            "decide_by": job.decide_by}
 
 
 @router.get("/job/{job_ref}")
@@ -93,23 +127,34 @@ def for_job(job_ref: str, student: User = Depends(require_student), db: Session 
 
 @router.get("/mine")
 def mine(student: User = Depends(require_student), db: Session = Depends(get_db)):
-    """My applications, newest first, each with the student's match for that job ("4 of 4 required")."""
-    from app.routers.skillgap import skill_gap_for
+    """My applications, newest first, each with the student's match for that job ("4 of 4 required") and, 14 Oct,
+    what is happening on the job (applied / shortlisted / decided), where the student stands among the applicants
+    (5 or more, required skills only) and the employer's record of deciding by their own date."""
     from app.services.application_progress import employer_review_days, events_for
+    from app.services.transparency import employer_record, job_stats, stand
     rows = (db.query(Application, Job).join(Job, Job.id == Application.job_id)
             .filter(Application.student_id == student.id).order_by(Application.created_at.desc()).all())
     events = events_for([a.id for a, _ in rows], db)
-    usually = {}
+    stats = job_stats([job.id for _, job in rows], db)
+    usually, records = {}, {}
     out = []
     for a, job in rows:
-        if job.posted_by_user_id not in usually:
-            usually[job.posted_by_user_id] = employer_review_days(job.posted_by_user_id, db) if job.posted_by_user_id else None
-        try:
-            s = skill_gap_for(student, job.job_id, db)["summary"]
-            match = f"{s['matched_skills']} of {s['matched_skills'] + s['missing_skills']} required"
-        except HTTPException:
-            match = None
-        out.append(_mine(a, job, match, events[a.id], usually[job.posted_by_user_id]))
+        emp = job.posted_by_user_id
+        if emp not in usually:
+            usually[emp] = employer_review_days(emp, db) if emp else None
+            records[emp] = employer_record(emp, db) if emp else None
+        s = _snapshot(a, student, job, db)           # her own count, fresh
+        match = f"{s['matched_skills']} of {s['matched_skills'] + s['missing_skills']} required" if s else None
+        everyone = db.query(Application).filter(Application.job_id == job.id).all()
+        if len(everyone) >= 5:                        # fill in counts missing from older applications, once
+            for other in everyone:
+                if other.match_have is None and other.id != a.id:
+                    person = db.get(User, other.student_id)
+                    if person:
+                        _snapshot(other, person, job, db)
+        out.append(_mine(a, job, match, events[a.id], usually[emp],
+                         {"job_stats": stats[job.id], "stand": stand(a, everyone), "employer_record": records[emp]}))
+    db.commit()                                       # the refreshed counts
     return out
 
 

@@ -62,6 +62,8 @@ export default function PostJob() {
   const [readFor, setReadFor] = useState(null) // the title + description the skills were read from
   const [reading, setReading] = useState(false)
   const [publishing, setPublishing] = useState(false)
+  // 14 Oct (transparency flow): the date the employer promises a decision by; students see it before applying
+  const [decideDays, setDecideDays] = useState(30)
   const [error, setError] = useState('')
   const skillsRef = useRef(null)
   const [justRead, setJustRead] = useState(false)   // first read on a new post: bring the skills into view
@@ -135,7 +137,7 @@ export default function PostJob() {
     setPublishing(true); setError('')
     const req = editing
       ? api.put(`/employer/jobs/${jobId}`, { description: ad.description, salary: ad.salary, skills, soft })
-      : api.post('/employer/jobs', { ...ad, skills, soft })
+      : api.post('/employer/jobs', { ...ad, skills, soft, decide_days: decideDays })
     req.then(res => navigate('/employer/jobs', { state: editing ? { saved: ad.title.trim() } : { posted: ad.title.trim(), fit: res.data.graduates_fit } }))
       .catch(err => { setError(errText(err, editing ? "Couldn't save the changes. Try again." : "Couldn't publish the job. Try again.")); setPublishing(false) })
   }
@@ -189,6 +191,19 @@ export default function PostJob() {
             </select>
             {editing && <p className="text-xs text-slate-500 mt-1.5">Title, location and category can't change once a job is posted. To change them, close this job and post a new one.</p>}
           </div>
+          {!editing && (
+            <div>
+              <p className={label} id="pj-decide">Decide by</p>
+              <div role="radiogroup" aria-labelledby="pj-decide" className="flex flex-wrap gap-2">
+                {[[14, '2 weeks'], [28, '4 weeks'], [30, '30 days'], [42, '6 weeks']].map(([d, text]) => (
+                  <button key={d} type="button" role="radio" aria-checked={decideDays === d} onClick={() => setDecideDays(d)}
+                    className={`text-sm font-medium rounded-full px-3.5 py-1.5 border ${decideDays === d
+                      ? 'bg-blue-600 border-blue-600 text-white' : 'bg-white border-slate-300 text-slate-700 hover:border-blue-300'}`}>{text}</button>
+                ))}
+              </div>
+              <p className="text-xs text-slate-500 mt-1.5">Students see this date before applying. Applications without a decision by then close automatically and count in your record.</p>
+            </div>
+          )}
           <div className={read ? '' : 'flex-1 min-h-0 flex flex-col'}>
             <label htmlFor="pj-description" className={label}>Description</label>
             <textarea id="pj-description" rows={read ? 10 : undefined} value={ad.description} onChange={set('description')}

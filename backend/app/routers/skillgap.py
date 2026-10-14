@@ -131,6 +131,9 @@ def skill_gap_for(student: User, job_ref: str, db: Session) -> dict:
             "country": job.country,
             # 11 Oct: a SkillMap post its employer closed (or Admin hid) can still be opened, e.g. from My applications
             "closed": bool(job.closed_at or job.hidden_by_admin_at),
+            # 14 Oct: before applying, the student sees the employer's decision date; a stopped job can't be applied to
+            "decide_by": job.decide_by.isoformat() if job.decide_by else None,
+            "taking_applications": not (job.closed_at or job.hidden_by_admin_at or job.applications_stopped_at),
         },
         "summary": {
             "job_skills_total": sc["total"],

@@ -508,12 +508,19 @@ export default function AdminAcademic() {
   }, [modules, q, onlyToReview])
   const years = [...new Set(shown.map(m => m.year))]
 
-  // Nothing chosen yet: open the first module to review (or the first one)
+  // Nothing chosen yet: open the first module to review (or the first one).
+  // 14 Oct (her report): the open module is kept in the address, so after switching programme or intake, or turning
+  // on "To review", a module that isn't in the list any more (e.g. a reviewed one shared by many programmes) stayed
+  // open. Now the first module shown in the list opens instead (not while searching, so typing doesn't jump).
+  const firstShown = years.length ? shown.find(m => m.year === years[0]) : null
   useEffect(() => {
-    if (tab === 'modules' && !selected && modules.length) {
-      set({ m: String((modules.find(m => !m.reviewed) || modules[0]).id) })
+    if (tab !== 'modules' || !modules.length) return
+    if (!selected) {
+      set({ m: String((firstShown || modules.find(m => !m.reviewed) || modules[0]).id) })
+    } else if (!q.trim() && firstShown && !shown.some(m => m.id === selected)) {
+      set({ m: String(firstShown.id) })
     }
-  }, [tab, selected, modules, set])
+  }, [tab, selected, modules, shown, firstShown, q, set])
 
   const onChanged = (d) => {
     setData(old => {

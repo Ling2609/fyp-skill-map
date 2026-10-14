@@ -9,7 +9,7 @@ def test_another_employer_cannot_reach_my_jobs_or_applicants(client, users, post
     assert client.get(f"/employer/jobs/{job['id']}/applicants", headers=h).status_code == 404
     assert client.get(f"/employer/applications/{app_id}", headers=h).status_code == 404
     assert client.patch(f"/employer/applications/{app_id}", headers=h, json={"status": "rejected"}).status_code == 404
-    assert client.patch(f"/employer/jobs/{job['id']}", headers=h, json={"closed": True}).status_code == 404
+    assert client.patch(f"/employer/jobs/{job['id']}", headers=h, json={"closed": True, "reason": "not_filling"}).status_code == 404
     assert client.get(f"/employer/graduates/{users.ids[student]}", params={"job_id": job["id"]}, headers=h).status_code == 404
     assert client.post("/employer/invitations", headers=h, json={"job_id": job["id"], "student_id": users.ids[student]}).status_code == 404
 

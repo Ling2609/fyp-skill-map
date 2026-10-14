@@ -33,9 +33,9 @@ export function useStatusChange(onSaved) {
     setToast(t)
     timer.current = setTimeout(() => setToast(null), t.undo ? 8000 : 5000)
   }
-  const save = (app, status, undo = false) => {
+  const save = (app, status, undo = false, why = {}) => {
     setBusy(app.id)
-    return api.patch(`/employer/applications/${app.id}`, { status, undo })
+    return api.patch(`/employer/applications/${app.id}`, { status, undo, ...why })
       .then(res => { onSaved(app.id, res.data); window.dispatchEvent(new Event(ADMIN_COUNTS_CHANGED)); return res.data })
       .catch(err => { show({ text: errText(err, "Couldn't change the status. Try again."), error: true }); throw err })
       .finally(() => setBusy(null))
@@ -46,9 +46,9 @@ export function useStatusChange(onSaved) {
     const prev = app.status
     save(app, next).then(() => show({ text: DONE[next](app.name), undo: { app: { ...app, status: next }, prev } })).catch(() => {})
   }
-  const confirm = () => {
+  const confirm = (why) => {
     const { app, next } = ask
-    save(app, next).then(() => { setAsk(null); show({ text: DONE[next](app.name) }) }).catch(() => setAsk(null))
+    save(app, next, false, next === 'rejected' ? why : {}).then(() => { setAsk(null); show({ text: DONE[next](app.name) }) }).catch(() => setAsk(null))
   }
   const undo = () => {
     const { app, prev } = toast.undo

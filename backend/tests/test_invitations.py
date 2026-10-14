@@ -40,7 +40,7 @@ def test_cannot_invite_hidden_or_already_applied_or_to_a_closed_job(client, user
     applied = users.student(visible=True)
     client.post("/applications", headers=users.h(applied), json={"job_id": job["job_ref"]})
     assert client.post("/employer/invitations", headers=users.h(employer), json={"job_id": job["id"], "student_id": users.ids[applied]}).status_code == 409
-    client.patch(f"/employer/jobs/{job['id']}", headers=users.h(employer), json={"closed": True})
+    client.patch(f"/employer/jobs/{job['id']}", headers=users.h(employer), json={"closed": True, "reason": "not_filling"})
     other = users.student(visible=True)
     assert client.post("/employer/invitations", headers=users.h(employer), json={"job_id": job["id"], "student_id": users.ids[other]}).status_code == 400
 

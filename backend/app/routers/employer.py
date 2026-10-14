@@ -31,6 +31,8 @@ from app.models.job import Job, JobSkill
 from app.models.user import User, UserRole
 from app.routers.auth import get_current_user
 from app.services.job_skill_store import check_job_skills, skill_key
+from app.services.transparency import (CLOSE_REASONS, DEFAULT_DECIDE_DAYS, EXTEND_DAYS, WAITING, clear_reason,
+                                       decide_by_from, past_date, set_reason)
 
 router = APIRouter(prefix="/employer", tags=["employer"])
 
@@ -64,7 +66,12 @@ def _row(job: Job, skills: list[JobSkill], statuses: list[str] = ()) -> dict:
             "preferred": sum(1 for s in hard if s.level == "preferred"),
             "applicants": len(statuses), "new_applicants": sum(1 for st in statuses if st == "applied"),
             # 12 Oct: still waiting for a decision (closing the job asks what to tell them)
-            "waiting": sum(1 for st in statuses if st in ("applied", "shortlisted"))}
+            "waiting": sum(1 for st in statuses if st in ("applied", "shortlisted")),
+            # 14 Oct (transparency flow): the promised decision date, whether it was extended (once), whether new
+            # applications are stopped, why the job closed
+            "decide_by": job.decide_by, "decide_extended": job.decide_extended_reason is not None,
+            "decide_extended_reason": job.decide_extended_reason, "past_date": past_date(job),
+            "stopped": job.applications_stopped_at is not None, "close_reason": job.close_reason}
 
 
 def _statuses(job_ids: list[int], db: Session) -> dict[int, list[str]]:
@@ -93,21 +100,62 @@ def my_jobs(employer: User = Depends(require_employer), db: Session = Depends(ge
 
 
 class CloseIn(BaseModel):
-    closed: bool
-    not_selected_waiting: bool = False   # 12 Oct: when closing, tell applicants still waiting "Not selected"
+    closed: bool | None = None
+    reason: str | None = None          # 14 Oct: closing needs one: filled_skillmap / filled_other / not_filling
+    stopped: bool | None = None        # 14 Oct: "Stop new applications" (True) / "Take applications again" (False)
 
 
 @router.patch("/jobs/{job_id}")
 def close_or_reopen(job_id: int, data: CloseIn, employer: User = Depends(require_employer),
                     db: Session = Depends(get_db)):
+    """Close (hiring finished), reopen, or stop / restart new applications.
+    14 Oct (her design; Homerun, Indeed, CareerPlug in references.md): two different actions. Stopping new
+    applications takes the job off Job Matches while the employer keeps deciding by their date. Closing needs a
+    reason, and every applicant still waiting is told the outcome with that reason (no silent close)."""
     job = _own_job(job_id, employer, db)
     now = datetime.now(timezone.utc)
-    job.closed_at = now if data.closed else None
-    if data.closed and data.not_selected_waiting:
-        # 12 Oct: close the loop: applicants still waiting are told "Not selected" instead of "closed without a decision"
-        for a in db.query(Application).filter(Application.job_id == job.id, Application.status.in_(("applied", "shortlisted"))):
+    if data.stopped is not None and not job.closed_at:
+        job.applications_stopped_at = now if data.stopped else None
+    if data.closed is True and not job.closed_at:
+        if data.reason not in CLOSE_REASONS:
+            raise HTTPException(status_code=400, detail="Say why you are closing the job.")
+        if data.reason == "filled_skillmap" and not db.query(Application).filter(
+                Application.job_id == job.id, Application.status == "accepted").first():
+            raise HTTPException(status_code=400, detail="Mark the person you hired as Accepted first.")
+        job.closed_at, job.close_reason = now, data.reason
+        for a in db.query(Application).filter(Application.job_id == job.id, Application.status.in_(WAITING)):
             a.status, a.status_changed_at = "rejected", now
+            clear_reason(a)
+            a.reason = CLOSE_REASONS[data.reason]          # job_filled / job_cancelled: the student sees why
             db.add(ApplicationEvent(application_id=a.id, kind="status", status="rejected", created_at=now))
+    elif data.closed is False:
+        job.closed_at, job.close_reason = None, None
+    db.commit()
+    return _row(job, db.query(JobSkill).filter(JobSkill.job_id == job.id).all(), _statuses([job.id], db).get(job.id, []))
+
+
+class ExtendIn(BaseModel):
+    days: int
+    reason: str = Field(max_length=200)
+
+
+@router.post("/jobs/{job_id}/extend")
+def extend_decision_date(job_id: int, data: ExtendIn, employer: User = Depends(require_employer),
+                         db: Session = Depends(get_db)):
+    """14 Oct: move the decision date once, by 1 or 2 weeks, with a reason the applicants see."""
+    job = _own_job(job_id, employer, db)
+    if job.closed_at:
+        raise HTTPException(status_code=400, detail="This job is closed.")
+    if job.decide_extended_reason is not None:
+        raise HTTPException(status_code=400, detail="The decision date can be moved once only.")
+    if data.days not in EXTEND_DAYS:
+        raise HTTPException(status_code=400, detail="Move it by 1 or 2 weeks.")
+    reason = " ".join(data.reason.split())
+    if len(reason) < 5:
+        raise HTTPException(status_code=400, detail="Tell applicants why, in a few words.")
+    from datetime import timedelta
+    job.decide_by = (job.decide_by or datetime.now(timezone.utc)) + timedelta(days=data.days)
+    job.decide_extended_reason = reason
     db.commit()
     return _row(job, db.query(JobSkill).filter(JobSkill.job_id == job.id).all(), _statuses([job.id], db).get(job.id, []))
 
@@ -170,6 +218,7 @@ class JobIn(AdIn):
     category: str = Field(max_length=80)
     skills: list[SkillIn]
     soft: list[SoftIn] = []
+    decide_days: int = DEFAULT_DECIDE_DAYS     # 14 Oct: "Decide by": 14, 28, 30 or 42 days from posting
 
 
 def _checked_skills(data) -> tuple[list, set]:
@@ -223,7 +272,8 @@ def publish(data: JobIn, employer: User = Depends(require_employer), db: Session
     job = Job(job_id=f"skillmap-{uuid.uuid4().hex[:12]}", job_title=data.title.strip(), company=employer.company_name,
               location=data.location.strip(), category="Information & Communication Technology",
               subcategory=data.category.strip(), salary=data.salary.strip() or None, description=data.description,
-              source="employer", listing_date=now, country="MY", posted_by_user_id=employer.id)
+              source="employer", listing_date=now, country="MY", posted_by_user_id=employer.id,
+              decide_by=decide_by_from(data.decide_days, now))
     db.add(job)
     db.flush()
     rows = _skill_rows(job, data, skills, seen)
@@ -303,6 +353,8 @@ def _applicant(a: Application, student: User, job: Job, db: Session) -> dict:
     gap = _fit(student, job, db)
     have = len(gap["matched_skills"]) if gap else 0
     total = have + len(gap["missing_skills"]) if gap else 0
+    if gap:
+        a.match_have, a.match_total = have, total      # 14 Oct: kept for the students' "where you stand"
     from app.services.application_progress import first_seen
     events = db.query(ApplicationEvent).filter(ApplicationEvent.application_id == a.id).all()
     return {"id": a.id, "name": f"{student.first_name} {student.last_name}", "programme": _programme(student, db),
@@ -311,7 +363,8 @@ def _applicant(a: Application, student: User, job: Job, db: Session) -> dict:
             "invited": db.query(JobInvitation).filter(JobInvitation.job_id == job.id,
                                                       JobInvitation.student_id == student.id).first() is not None,
             "status": a.status, "applied_at": a.created_at, "status_changed_at": a.status_changed_at,
-            "have": have, "total": total, "missing": [m["job_skill"] for m in gap["missing_skills"]] if gap else []}
+            "have": have, "total": total, "missing": [m["job_skill"] for m in gap["missing_skills"]] if gap else [],
+            "reason": a.reason, "note": a.note}
 
 
 @router.get("/jobs/{job_id}/applicants")
@@ -322,6 +375,7 @@ def applicants(job_id: int, employer: User = Depends(require_employer), db: Sess
     rows = (db.query(Application, User).join(User, User.id == Application.student_id)
             .filter(Application.job_id == job.id).all())
     people = [_applicant(a, u, job, db) for a, u in rows]
+    db.commit()                                   # the refreshed counts
     people.sort(key=lambda p: (-(p["have"] / p["total"] if p["total"] else 0), p["applied_at"]))
     return {"job": {**_row(job, skills, [a.status for a, _ in rows]),
                     "required_names": [s.skill_name for s in skills if s.skill_type == "hard"
@@ -341,6 +395,26 @@ def _own_application(app_id: int, employer: User, db: Session) -> tuple[Applicat
 class StatusIn(BaseModel):
     status: str
     undo: bool = False       # 12 Oct: the Undo in the "Shortlisted" toast puts the previous status back
+    # 14 Oct: why "Not selected" (optional; "other" needs the note), shown to the student
+    reason: str | None = None
+    note: str | None = Field(default=None, max_length=400)
+
+
+def _change_status(a: Application, job: Job, student: User, data: "StatusIn", db: Session):
+    """One status change with its event; "rejected" keeps the reason, note and (for missing skills) the student's
+    missing required skills at that moment; any other status clears them."""
+    if data.status == "rejected":
+        missing = None
+        if data.reason == "missing_skills":
+            gap = _fit(student, job, db)
+            missing = [m["job_skill"] for m in gap["missing_skills"]] if gap else []
+        set_reason(a, data.reason, data.note, missing)
+    else:
+        clear_reason(a)
+    if a.status != data.status:
+        a.status = data.status
+        a.status_changed_at = datetime.now(timezone.utc)
+        db.add(ApplicationEvent(application_id=a.id, kind="status", status=data.status, created_at=a.status_changed_at))
 
 
 @router.patch("/applications/{app_id}")
@@ -367,13 +441,34 @@ def set_status(app_id: int, data: StatusIn, employer: User = Depends(require_emp
             # audit's edge-case tests: an undo could set any status)
             a.status = before.status if before else "applied"
             a.status_changed_at = before.created_at if before else None
+            if a.status != "rejected":
+                clear_reason(a)
             db.commit()
-    elif a.status != data.status:
-        a.status = data.status
-        a.status_changed_at = datetime.now(timezone.utc)
-        db.add(ApplicationEvent(application_id=a.id, kind="status", status=data.status, created_at=a.status_changed_at))
+    elif a.status != data.status or data.status == "rejected":
+        _change_status(a, job, student, data, db)
         db.commit()
-    return {"id": a.id, "status": a.status, "status_changed_at": a.status_changed_at}
+    return {"id": a.id, "status": a.status, "status_changed_at": a.status_changed_at, "reason": a.reason, "note": a.note}
+
+
+class BulkIn(BaseModel):
+    ids: list[int] = Field(min_length=1, max_length=200)
+    status: str = "rejected"
+    reason: str | None = None
+    note: str | None = Field(default=None, max_length=400)
+
+
+@router.post("/applications/bulk")
+def set_status_many(data: BulkIn, employer: User = Depends(require_employer), db: Session = Depends(get_db)):
+    """14 Oct: tick several applicants -> Not selected, with one optional reason (each student sees their own missing
+    skills for "missing skills"). All or nothing: every id must be one of this employer's applications."""
+    if data.status != "rejected":
+        raise HTTPException(status_code=400, detail="Only Not selected can be given to several applicants at once.")
+    rows = [_own_application(i, employer, db) for i in dict.fromkeys(data.ids)]
+    one = StatusIn(status="rejected", reason=data.reason, note=data.note)
+    for a, job, student in rows:
+        _change_status(a, job, student, one, db)
+    db.commit()
+    return {"updated": len(rows)}
 
 
 CONTACT_STATUSES = ("shortlisted", "accepted")    # contact details are shared from Shortlisted on (14 Oct)
@@ -506,7 +601,13 @@ def _attention(employer: User, open_jobs: list[Job], db: Session) -> dict:
     quiet = [{"job_id": j.id, "title": j.job_title, "fit": len(_graduates_who_fit([j], db, limit=None))}
              for j in open_jobs if j.id not in has_apps and j.listing_date
              and now - _aware(j.listing_date) >= timedelta(days=QUIET_JOB_DAYS)]
-    return {"waiting_long": sorted(waiting, key=lambda w: -w["days"]), "quiet_jobs": quiet,
+    # 14 Oct: open jobs whose decision date has passed with applicants still waiting (students now see "no decision")
+    waiting_by_job = {}
+    for a, _, j in rows:
+        waiting_by_job[j.id] = waiting_by_job.get(j.id, 0) + 1
+    overdue = [{"job_id": j.id, "title": j.job_title, "decide_by": j.decide_by, "waiting": waiting_by_job[j.id]}
+               for j in open_jobs if past_date(j, now) and waiting_by_job.get(j.id)]
+    return {"waiting_long": sorted(waiting, key=lambda w: -w["days"]), "quiet_jobs": quiet, "past_date": overdue,
             "review_days": employer_review_days(employer.id, db)}
 
 

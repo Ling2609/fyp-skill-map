@@ -6,6 +6,7 @@ import { ADMIN_COUNTS_CHANGED } from '../../components/Sidebar'
 import { errText } from './profileUtils'
 import ApplicationSteps from '../../components/ApplicationSteps'
 import { Bar, LoadingLabel } from '../../components/Skeleton'
+import InfoTip from '../../components/InfoTip'
 
 // My applications (11 Oct, Employer flow batch 2; mock-up board 6): every job the student applied for on SkillMap.
 // 12 Oct (her request; mock-up P2): one card per application with its progress, Applied -> Viewed -> Shortlisted ->
@@ -18,11 +19,80 @@ const PILL = {
   applied: 'bg-slate-100 text-slate-700', viewed: 'bg-slate-100 text-slate-700', shortlisted: 'bg-blue-50 text-blue-700',
   accepted: 'bg-emerald-50 text-emerald-700', rejected: 'bg-rose-50 text-rose-700', closed: 'bg-slate-100 text-slate-500',
 }
+// 14 Oct (transparency flow): every outcome says why. Reasons the employer picked, or why the job closed.
+const REASON_TEXT = {
+  missing_skills: 'missing required skills', position_filled: 'position filled', experience: 'more experience needed',
+}
+
+// While waiting: what is happening on the job, where you stand among the applicants (skills only, from 5 applicants),
+// and the employer's record of deciding by their own date (research: references.md "Employer replies, ghosting")
+function Facts({ r }) {
+  const st = r.job_stats, me = r.stand, rec = r.employer_record
+  return (
+    <div className="mt-4 space-y-2.5">
+      <div className="grid grid-cols-3 gap-2">
+        {[[st?.applied, 'applied'], [st?.shortlisted, 'shortlisted'], [r.decide_by ? fmtDay(r.decide_by) : '—', 'decision by']].map(([v, k]) => (
+          <div key={k} className="rounded-lg bg-slate-50 px-3 py-2">
+            <p className="text-lg font-semibold text-slate-900 tabular-nums leading-tight">{v ?? '—'}</p>
+            <p className="text-xs text-slate-500">{k}</p>
+          </div>
+        ))}
+      </div>
+      {r.decide_extended_reason && <p className="text-xs text-slate-600">Decision date moved once: “{r.decide_extended_reason}”</p>}
+      {!r.taking_applications && <p className="text-xs text-slate-600">Not taking new applications. {r.company} is still deciding.</p>}
+      {me && (
+        <div>
+          <p className="text-sm text-slate-700">Skills: <b className="font-semibold text-slate-900">{me.have} of {me.total} required</b> · ahead of {me.ahead_of} of {me.others} applicants
+            <InfoTip label="About this comparison">Compared on skills only. Employers also look at experience and interviews.</InfoTip></p>
+          <div className="mt-1.5 h-1.5 rounded-full bg-slate-200 overflow-hidden" aria-hidden="true">
+            <div className="h-full bg-blue-700" style={{ width: `${me.others ? (me.ahead_of / me.others) * 100 : 0}%` }} />
+          </div>
+        </div>
+      )}
+      {rec && rec.of > 0 && <p className="text-xs text-slate-600">{r.company} decided on time for {rec.on_time} of its {rec.of} {rec.of === 1 ? 'job' : 'jobs'}.</p>}
+      {rec && rec.of === 0 && <p className="text-xs text-slate-500">{r.company} has no decision record on SkillMap yet.</p>}
+    </div>
+  )
+}
+
+const similar = (r) => { try { sessionStorage.setItem('lastActiveCategory', r.category || '') } catch { /* storage blocked */ } }
+
+function Outcome({ r }) {
+  const why = r.reason === 'job_filled' ? <><b className="font-semibold">Position filled{r.close_reason === 'filled_other' ? ' another way' : ''}.</b> You were not selected.</>
+    : r.reason === 'job_cancelled' ? <><b className="font-semibold">The job was closed without being filled.</b> No one was selected.</>
+    : r.reason === 'other' ? <><b className="font-semibold">Reason from {r.company}:</b> “{r.note}”</>
+    : r.reason ? <><b className="font-semibold">Reason from {r.company}:</b> {REASON_TEXT[r.reason]}</>
+    : <>{r.company} gave no reason.</>
+  return (
+    <div className="mt-4 text-sm text-slate-700 space-y-2">
+      <p>{why}</p>
+      {r.reason !== 'other' && r.note && <p><b className="font-semibold">Note from {r.company}:</b> “{r.note}”</p>}
+      {r.reason_skills.length > 0 && (
+        <div className="flex flex-wrap items-center gap-1.5">
+          {r.reason_skills.map(k => <span key={k} className="text-xs rounded-full px-2.5 py-0.5 border border-dashed border-slate-400 text-slate-700">{k}</span>)}
+          <Link to={`/chatbot?skill=${encodeURIComponent(r.reason_skills.join(', '))}&job=${encodeURIComponent(r.title)}`}
+            className="ml-1 text-xs font-medium text-blue-700 border border-blue-200 rounded-lg px-2.5 py-1 hover:bg-blue-50">Plan these</Link>
+        </div>
+      )}
+      <p className="text-sm">
+        <Link to={`/jobs/${encodeURIComponent(r.job_ref)}`} className="text-blue-700 hover:underline">See your skill gap for this job</Link>
+        {' · '}<Link to="/recommend" onClick={() => similar(r)} className="text-blue-700 hover:underline">Similar jobs</Link>
+      </p>
+    </div>
+  )
+}
+
 const TABS = [['all', 'All'], ['waiting', 'Waiting'], ['accepted', 'Accepted'], ['rejected', 'Not selected']]
 const inTab = (r, t) => t === 'all' || (t === 'waiting' ? !['accepted', 'rejected'].includes(r.status) : r.status === t)
 
 function Note({ r }) {
   const p = r.progress
+  // 14 Oct: the employer's own date passed with no decision (B1 wording, her pick): not a rejection
+  if (p.nudge === 'no_decision') return (
+    <p className="mt-4 text-sm text-amber-900 bg-amber-50 rounded-lg px-3.5 py-2.5">
+      <b>{r.company} missed its decision date ({fmtDay(r.decide_by)}).</b> Focus on other jobs; any reply will still appear here.
+    </p>
+  )
   if (p.nudge === 'move_on') return (
     <p className="mt-4 text-sm text-amber-900 bg-amber-50 rounded-lg px-3.5 py-2.5">
       <b>No update for {p.quiet_days} days.</b> Employers who are interested usually reply within a month, so treat this one as
@@ -35,12 +105,7 @@ function Note({ r }) {
     </p>
   )
   if (p.closed_without_decision) return <p className="mt-4 text-sm text-slate-600">The employer closed this job without a decision.</p>
-  if (r.status === 'rejected') return (
-    <p className="mt-4 text-sm text-slate-600">
-      Not selected this time. <Link to={`/jobs/${encodeURIComponent(r.job_ref)}`} className="text-blue-700 hover:underline">See what you were missing</Link>
-      {' · '}<Link to="/recommend" className="text-blue-700 hover:underline">Find other jobs</Link>
-    </p>
-  )
+  if (r.status === 'rejected') return <Outcome r={r} />
   if (r.status === 'accepted') return <p className="mt-4 text-sm text-slate-600">{r.company} has your email and will contact you about the next step.</p>
   if (r.employer_usually_days) return (
     <p className="mt-4 text-sm text-slate-500">{r.company} usually views applications within {r.employer_usually_days} day{r.employer_usually_days === 1 ? '' : 's'}.</p>
@@ -50,6 +115,7 @@ function Note({ r }) {
 
 function pill(r) {
   if (r.progress.closed_without_decision) return ['closed', 'Job closed']
+  if (r.progress.nudge === 'no_decision') return ['closed', 'No decision']
   if (r.status === 'accepted' || r.status === 'rejected' || r.status === 'shortlisted') return [r.status, r.status_label]
   return [r.progress.stage, r.progress.stage === 'viewed' ? 'Viewed' : 'Applied']
 }
@@ -144,6 +210,7 @@ export default function MyApplications() {
                       <span className={`shrink-0 text-xs font-semibold rounded-full px-2.5 py-0.5 ${PILL[key]}`}>{label}</span>
                     </div>
                     <ApplicationSteps steps={r.progress.steps} decided={['accepted', 'rejected'].includes(r.status)} />
+                    {!['accepted', 'rejected'].includes(r.status) && !r.job_closed && <Facts r={r} />}
                     <Note r={r} />
                   </article>
                 )

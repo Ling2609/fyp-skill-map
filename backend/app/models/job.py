@@ -29,6 +29,11 @@ class Job(Base):
     posted_by_user_id = Column(Integer, ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
     hidden_by_admin_at = Column(DateTime(timezone=True), nullable=True)
     closed_at = Column(DateTime(timezone=True), nullable=True)   # employer closed their post (11 Oct); reopen = NULL
+    # 14 Oct, transparency flow (references.md "Employer replies, ghosting and transparency"):
+    decide_by = Column(DateTime(timezone=True), nullable=True)            # the employer's promised decision date
+    decide_extended_reason = Column(String(200), nullable=True)           # set once, when the date is extended
+    applications_stopped_at = Column(DateTime(timezone=True), nullable=True)   # "Stop new applications" (still deciding)
+    close_reason = Column(String(20), nullable=True)   # filled_skillmap / filled_other / not_filling
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
 

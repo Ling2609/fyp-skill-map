@@ -28,7 +28,8 @@ def check_jobs_schema():
     from sqlalchemy import inspect
     from app.database import engine
     columns = {c["name"] for c in inspect(engine).get_columns("jobs")}
-    for column, script in (("gone_at", "migrate_add_job_gone_at.py"), ("closed_at", "migrate_employer_jobs.py")):
+    for column, script in (("gone_at", "migrate_add_job_gone_at.py"), ("closed_at", "migrate_employer_jobs.py"),
+                           ("decide_by", "migrate_transparency.py")):
         if column not in columns:
             raise RuntimeError(f"Database not updated: run  python migrations/{script}  "
                                "from the backend folder, then start the backend again.")
@@ -41,7 +42,7 @@ CURRENT_SOURCES = ("live", "employer")
 
 def current_jobs_filter(q):
     return q.filter(Job.source.in_(CURRENT_SOURCES), Job.gone_at.is_(None), Job.closed_at.is_(None),
-                    Job.hidden_by_admin_at.is_(None))
+                    Job.hidden_by_admin_at.is_(None), Job.applications_stopped_at.is_(None))
 
 
 def get_extractor():

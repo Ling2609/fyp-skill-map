@@ -1,4 +1,4 @@
-from sqlalchemy import Column, DateTime, ForeignKey, Integer, String, UniqueConstraint
+from sqlalchemy import JSON, Column, DateTime, ForeignKey, Integer, String, UniqueConstraint
 from sqlalchemy.sql import func
 
 from app.database import Base
@@ -18,6 +18,15 @@ class Application(Base):
     status = Column(String(12), nullable=False, default="applied", server_default="applied")
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     status_changed_at = Column(DateTime(timezone=True), nullable=True)   # the employer's last status change
+    # 14 Oct: why "Not selected" (missing_skills / position_filled / experience / other, or job_filled / job_cancelled
+    # when the job was closed), the employer's own note, and the missing skills at that moment
+    reason = Column(String(20), nullable=True)
+    note = Column(String(300), nullable=True)
+    reason_skills = Column(JSON, nullable=True)
+    # 14 Oct: this applicant's required skills for the job (have / total), kept so "where you stand" compares
+    # applicants without working out every applicant's match each time; refreshed whenever it is worked out
+    match_have = Column(Integer, nullable=True)
+    match_total = Column(Integer, nullable=True)
 
 
 class ApplicationEvent(Base):

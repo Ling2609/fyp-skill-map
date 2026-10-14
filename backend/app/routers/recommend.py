@@ -119,7 +119,8 @@ def _sync_job_cache():
         # every request, so a sync shows without restarting uvicorn
         # The same for posts their employer closed or Admin hid (11 Oct)
         db_ids -= {row[0] for row in db.query(Job.id).filter(
-            Job.gone_at.isnot(None) | Job.closed_at.isnot(None) | Job.hidden_by_admin_at.isnot(None))}
+            Job.gone_at.isnot(None) | Job.closed_at.isnot(None) | Job.hidden_by_admin_at.isnot(None)
+            | Job.applications_stopped_at.isnot(None))}       # 14 Oct: "Stop new applications" leaves Job Matches
         for gone in set(_job_cache) - db_ids:
             del _job_cache[gone]
         new_ids = db_ids - set(_job_cache)

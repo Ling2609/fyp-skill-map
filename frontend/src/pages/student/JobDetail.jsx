@@ -40,12 +40,14 @@ const OUTCOME = { rejected: 'text-rose-700 bg-rose-50 border-rose-200', accepted
 function useSkillMapApplication(jobRef, onSkillMap) {
   const [app, setApp] = useState(undefined)       // undefined = loading, null = not applied
   const [invite, setInvite] = useState(null)
+  const [now, setNow] = useState(null)            // 14 Oct: { closed, taking_applications, decide_by }, always fresh
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
   useEffect(() => {
     if (!jobRef || !onSkillMap) return
     api.get(`/applications/job/${encodeURIComponent(jobRef)}`).then(res => setApp(res.data)).catch(() => setApp(null))
     api.get('/applications/invitations').then(res => setInvite(res.data.find(i => i.job_ref === jobRef) || null)).catch(() => {})
+    api.get(`/applications/job/${encodeURIComponent(jobRef)}/open`).then(res => setNow(res.data)).catch(() => {})
   }, [jobRef, onSkillMap])
   const apply = () => {
     setBusy(true); setError('')
@@ -54,11 +56,16 @@ function useSkillMapApplication(jobRef, onSkillMap) {
       .catch(err => setError(errText(err, "Couldn't send your application. Try again.")))
       .finally(() => setBusy(false))
   }
-  return { app, invite, busy, error, apply }
+  return { app, invite, busy, error, apply, now }
 }
 
-function ApplyAction({ a, company, closed }) {
-  const { app, busy, error, apply } = a
+// 14 Oct (transparency flow): the employer's decision date is shown before applying; a job that stopped taking
+// applications (or closed) can't be applied to ("Applications closed", as Homerun's closed jobs)
+function ApplyAction({ a, company, closed: closedCached, taking: takingCached, decideBy: dateCached }) {
+  const { app, busy, error, apply, now } = a
+  const closed = now ? now.closed : closedCached
+  const taking = now ? now.taking_applications : takingCached
+  const decideBy = now ? now.decide_by : dateCached
   if (app === undefined) return null
   return (
     <div className="shrink-0 flex flex-col items-end gap-1 max-w-64 text-right">
@@ -70,6 +77,8 @@ function ApplyAction({ a, company, closed }) {
         </>
       ) : closed ? (
         <span className="text-sm text-slate-500 bg-slate-100 px-4 py-2 rounded-lg">This job is closed</span>
+      ) : taking === false ? (
+        <span className="text-sm text-slate-500 bg-slate-100 px-4 py-2 rounded-lg">Applications closed</span>
       ) : (
         <>
           <button onClick={apply} disabled={busy}
@@ -77,6 +86,7 @@ function ApplyAction({ a, company, closed }) {
             {busy ? 'Applying…' : 'Apply with my SkillMap profile'}
           </button>
           <p className="text-xs text-slate-500">{company || 'The employer'} sees your profile and your match. Your contact details only if they shortlist you.</p>
+          {decideBy && <p className="text-xs font-medium text-slate-700">Decision by {fmtDay(decideBy)}</p>}
         </>
       )}
       {error && <p role="alert" className="text-xs text-rose-600">{error}</p>}
@@ -96,7 +106,9 @@ function ApplicationProgress({ a, company }) {
   return (
     <div className="mt-2 border-t border-gray-100">
       <ApplicationSteps steps={p.steps} decided={['accepted', 'rejected'].includes(app.status)} />
-      {p.nudge && <p className="mt-3 text-sm text-amber-900 bg-amber-50 rounded-lg px-3.5 py-2">
+      {p.nudge === 'no_decision' ? <p className="mt-3 text-sm text-amber-900 bg-amber-50 rounded-lg px-3.5 py-2">
+        <b>{company} missed its decision date ({fmtDay(app.decide_by)}).</b> Focus on other jobs; any reply will still appear here.
+      </p> : p.nudge && <p className="mt-3 text-sm text-amber-900 bg-amber-50 rounded-lg px-3.5 py-2">
         <b>No update for {p.quiet_days} days.</b> {p.nudge === 'move_on' ? 'Treat this one as unlikely and put your time into other jobs.' : 'Keep applying to other jobs while you wait.'}
       </p>}
       {/* 12 Oct (her review): no sentence about the gap (the score row and the Skill Gap tab, opened for a rejected
@@ -265,7 +277,8 @@ export default function JobDetail() {
                     : ' · Past posting from JobStreet (2024)'}
               </p>
             </div>
-            {gap?.job?.source === 'employer' && <ApplyAction a={skillmapApp} company={gap.job.company} closed={gap.job.closed} />}
+            {gap?.job?.source === 'employer' && <ApplyAction a={skillmapApp} company={gap.job.company} closed={gap.job.closed}
+              taking={gap.job.taking_applications} decideBy={gap.job.decide_by} />}
             {gap?.job?.source === 'live' && gap.job.source_url && (
               <div className="shrink-0 flex flex-col items-end gap-1">
               <a

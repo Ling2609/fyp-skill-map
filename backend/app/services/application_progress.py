@@ -62,7 +62,8 @@ def _shortlisted_at(a: Application, events: list[ApplicationEvent]):
     return at
 
 
-def progress(a: Application, events: list[ApplicationEvent], job_open: bool, now: datetime | None = None) -> dict:
+def progress(a: Application, events: list[ApplicationEvent], job_open: bool, now: datetime | None = None,
+             decide_by: datetime | None = None) -> dict:
     now = now or datetime.now(timezone.utc)
     applied = _aware(a.created_at)
     seen = first_seen(a, events)
@@ -81,7 +82,14 @@ def progress(a: Application, events: list[ApplicationEvent], job_open: bool, now
     waiting = a.status not in DECIDED
     nudge = None
     if waiting and job_open:
-        nudge = "move_on" if quiet >= MOVE_ON_DAYS else "keep_applying" if quiet >= NUDGE_DAYS else None
+        # 14 Oct: the employer's own decision date replaces the 30-day guess: once it passes with no decision, the
+        # student is told so ("no_decision"); before it, the 14-day "keep applying" still shows
+        if decide_by and now > _aware(decide_by):
+            nudge = "no_decision"
+        elif not decide_by and quiet >= MOVE_ON_DAYS:
+            nudge = "move_on"
+        elif quiet >= NUDGE_DAYS:
+            nudge = "keep_applying"
     return {"steps": steps, "stage": stage, "last_update": last, "quiet_days": quiet, "nudge": nudge,
             "closed_without_decision": waiting and not job_open}
 

@@ -45,7 +45,7 @@ def test_simultaneous_applies_give_one_application_no_server_error(client, users
 def test_cannot_apply_to_closed_or_gone_or_live_jobs(client, users, post_job, db):
     employer, student = users.employer(), users.student()
     closed = post_job(employer, title="Closed job")
-    client.patch(f"/employer/jobs/{closed['id']}", headers=users.h(employer), json={"closed": True})
+    client.patch(f"/employer/jobs/{closed['id']}", headers=users.h(employer), json={"closed": True, "reason": "not_filling"})
     assert apply(client, users, student, closed).status_code == 400
     gone = post_job(employer, title="Gone job")
     sql(db, "update jobs set gone_at=now() where id=:i", i=gone["id"])
@@ -104,14 +104,15 @@ def test_undo_restores_the_previous_status_from_history(client, users, post_job,
     assert client.patch(f"/employer/applications/{app_id}", headers=users.h(employer), json={"status": "maybe"}).status_code == 400
 
 
-def test_quiet_applications_get_the_14_and_30_day_notes(client, users, post_job, db):
+def test_quiet_applications_get_the_14_day_note_then_no_decision_at_the_date(client, users, post_job, db):
+    """14 Oct: the employer's own decision date replaces the 30-day guess."""
     employer, student = users.employer(), users.student()
     job = post_job(employer)
     app_id = apply(client, users, student, job).json()["id"]
     sql(db, "update applications set created_at=:t where id=:i", t=datetime.now(timezone.utc) - timedelta(days=15), i=app_id)
     assert mine(client, users, student, app_id)["progress"]["nudge"] == "keep_applying"
-    sql(db, "update applications set created_at=:t where id=:i", t=datetime.now(timezone.utc) - timedelta(days=31), i=app_id)
-    assert mine(client, users, student, app_id)["progress"]["nudge"] == "move_on"
+    sql(db, "update jobs set decide_by=:t where id=:i", t=datetime.now(timezone.utc) - timedelta(days=1), i=job["id"])
+    assert mine(client, users, student, app_id)["progress"]["nudge"] == "no_decision"
     client.patch(f"/employer/applications/{app_id}", headers=users.h(employer), json={"status": "rejected"})
     assert mine(client, users, student, app_id)["progress"]["nudge"] is None
 
@@ -125,24 +126,26 @@ def test_closing_a_job_with_waiting_applicants(client, users, post_job, db):
     client.patch(f"/employer/applications/{a2}", headers=users.h(employer), json={"status": "accepted"})
     row = next(j for j in client.get("/employer/jobs", headers=users.h(employer)).json() if j["id"] == job["id"])
     assert row["waiting"] == 1
-    r = client.patch(f"/employer/jobs/{job['id']}", headers=users.h(employer), json={"closed": True, "not_selected_waiting": True}).json()
+    r = client.patch(f"/employer/jobs/{job['id']}", headers=users.h(employer), json={"closed": True, "reason": "filled_skillmap"}).json()
     assert r["status"] == "closed" and r["waiting"] == 0
     assert mine(client, users, waiting, a1)["status_label"] == "Not selected"
     assert mine(client, users, accepted, a2)["status_label"] == "Accepted"
     n = sql(db, "select count(*) from application_events").scalar()
-    client.patch(f"/employer/jobs/{job['id']}", headers=users.h(employer), json={"closed": True, "not_selected_waiting": True})
+    client.patch(f"/employer/jobs/{job['id']}", headers=users.h(employer), json={"closed": True, "reason": "filled_skillmap"})
     assert sql(db, "select count(*) from application_events").scalar() == n, "closing twice added events"
     client.patch(f"/employer/jobs/{job['id']}", headers=users.h(employer), json={"closed": False})
     assert mine(client, users, waiting, a1)["status_label"] == "Not selected", "reopening reversed a decision"
 
 
-def test_closing_only_leaves_them_waiting_with_a_note(client, users, post_job):
+def test_closing_needs_a_reason_and_tells_everyone_waiting(client, users, post_job):
+    """14 Oct: no silent close. A reason is required; applicants still waiting get "Not selected" with it."""
     employer, student = users.employer(), users.student()
     job = post_job(employer)
     app_id = apply(client, users, student, job).json()["id"]
-    client.patch(f"/employer/jobs/{job['id']}", headers=users.h(employer), json={"closed": True})
+    assert client.patch(f"/employer/jobs/{job['id']}", headers=users.h(employer), json={"closed": True}).status_code == 400
+    client.patch(f"/employer/jobs/{job['id']}", headers=users.h(employer), json={"closed": True, "reason": "not_filling"})
     m = mine(client, users, student, app_id)
-    assert m["status_label"] == "Applied" and m["progress"]["closed_without_decision"] and m["progress"]["nudge"] is None
+    assert m["status_label"] == "Not selected" and m["reason"] == "job_cancelled" and m["close_reason"] == "not_filling"
 
 
 def test_employer_dashboard_and_counts(client, users, post_job):
@@ -152,6 +155,6 @@ def test_employer_dashboard_and_counts(client, users, post_job):
     d = client.get("/employer/dashboard", headers=users.h(employer)).json()
     assert d["summary"]["new"] == 1 and d["to_review"][0]["id"] == app_id and d["to_review"][0]["opened"] is False
     assert client.get("/employer/counts", headers=users.h(employer)).json()["new_applicants"] == 1
-    assert set(d["attention"]) == {"waiting_long", "quiet_jobs", "review_days"}
+    assert set(d["attention"]) == {"waiting_long", "quiet_jobs", "review_days", "past_date"}
     client.patch(f"/employer/applications/{app_id}", headers=users.h(employer), json={"status": "shortlisted"})
     assert client.get("/employer/counts", headers=users.h(employer)).json()["new_applicants"] == 0

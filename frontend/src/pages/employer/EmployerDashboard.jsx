@@ -149,8 +149,15 @@ export default function EmployerDashboard() {
                 <h2 id="review-h" className="text-base font-semibold text-slate-900">Needs your attention</h2>
                 {data.attention.review_days && <span className="text-xs text-slate-500">You view applications within {data.attention.review_days} day{data.attention.review_days === 1 ? '' : 's'} on average · students see this</span>}
               </div>
-              {(data.attention.waiting_long.length > 0 || data.attention.quiet_jobs.length > 0) && (
+              {(data.attention.waiting_long.length > 0 || data.attention.quiet_jobs.length > 0 || data.attention.past_date?.length > 0) && (
                 <ul className="shrink-0 border-t border-slate-100 divide-y divide-slate-100">
+                  {/* 14 Oct (transparency flow): the employer's own decision date passed with applicants still waiting */}
+                  {(data.attention.past_date || []).map(p => (
+                    <li key={`d${p.job_id}`} className="px-5 py-2.5 flex items-center gap-3 bg-rose-50 text-sm text-rose-900">
+                      <span className="flex-1 min-w-0"><b>{p.title}: your decision date has passed</b> with {p.waiting} applicant{p.waiting === 1 ? '' : 's'} waiting. They now see "No decision".</span>
+                      <Link to={`/employer/jobs/${p.job_id}`} className="shrink-0 font-medium text-blue-700 hover:underline">Decide</Link>
+                    </li>
+                  ))}
                   {data.attention.waiting_long.map(w => (
                     <li key={w.application_id} className="px-5 py-2.5 flex items-center gap-3 bg-amber-50 text-sm text-amber-900">
                       <span className="flex-1 min-w-0"><b>{w.name} has waited {w.days} days</b> for {w.job_title}. Students are told to look elsewhere after 14 days.</span>

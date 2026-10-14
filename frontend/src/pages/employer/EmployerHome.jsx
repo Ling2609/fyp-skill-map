@@ -11,6 +11,8 @@ import { CardSkeleton, LoadingLabel } from '../../components/Skeleton'
 // Employer home (11 Oct; mock-up 9 Oct board 1). An employer the career office hasn't approved yet (or has rejected)
 // sees only where they stand. An approved one sees the Dashboard (12 Oct, EmployerDashboard.jsx); My jobs moved to
 // /employer/jobs: their posts, open or closed, with applicant counts, View applicants and a ⋯ menu (Edit job, Close / Reopen; 13 Oct).
+// 14 Oct (transparency flow): each open job shows its decision date; the menu adds Stop new applications / Take
+// applications again and Move decision date (once); Close job asks why.
 const fmtDate = (iso) => iso ? new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : ''
 
 function Waiting({ status, company }) {
@@ -41,29 +43,71 @@ function StatusPill({ status }) {
   return <span className={`text-xs font-medium border rounded-full px-2.5 py-0.5 ${cls}`}>{text}</span>
 }
 
-// Closing a job with applicants still waiting (12 Oct, flow review): they would otherwise only see "closed without a
-// decision". Telling them "Not selected" closes the loop (Talent Board: nearly half of candidates never hear back).
-function CloseDialog({ job, busy, onCancel, onClose }) {
-  const n = job.waiting
+// Closing a job (14 Oct, transparency flow; CareerPlug asks "Why are you closing this job?" with the same three
+// answers): a reason is required, and every applicant still waiting is told the outcome with it. No silent close.
+const CLOSE_REASONS = [
+  ['filled_skillmap', 'Filled through SkillMap', 'You marked the person you hired as Accepted'],
+  ['filled_other', 'Filled another way', 'You hired someone who did not apply here'],
+  ['not_filling', 'Not filling now', 'On hold or cancelled'],
+]
+function Dialog({ title, busy, onCancel, children, action, onAction, disabled }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/30" onMouseDown={() => { if (!busy) onCancel() }}>
-      <div role="alertdialog" aria-modal="true" aria-labelledby="close-title" onMouseDown={e => e.stopPropagation()} className="bg-white rounded-2xl shadow-xl w-full max-w-md">
+      <div role="dialog" aria-modal="true" aria-labelledby="dlg-title" onMouseDown={e => e.stopPropagation()} className="bg-white rounded-2xl shadow-xl w-full max-w-md">
         <div className="px-6 pt-5 pb-4">
-          <h2 id="close-title" className="text-base font-semibold text-slate-900">Close "{job.title}"?</h2>
-          <p className="text-sm text-slate-600 mt-1.5 leading-relaxed">
-            {n} applicant{n === 1 ? ' is' : 's are'} still waiting for a decision. Tell them "Not selected", or close it and they
-            see "The employer closed this job without a decision".
-          </p>
+          <h2 id="dlg-title" className="text-base font-semibold text-slate-900">{title}</h2>
+          {children}
         </div>
-        <div className="flex flex-wrap justify-end gap-2 px-6 py-4 bg-slate-50 border-t border-slate-100 rounded-b-2xl">
+        <div className="flex justify-end gap-2 px-6 py-4 bg-slate-50 border-t border-slate-100 rounded-b-2xl">
           <button type="button" onClick={onCancel} disabled={busy} className="px-4 py-2 text-sm font-medium rounded-lg border border-slate-200 bg-white text-slate-700 hover:bg-slate-50">Cancel</button>
-          <button type="button" onClick={() => onClose(false)} disabled={busy} className="px-4 py-2 text-sm font-medium rounded-lg border border-slate-200 bg-white text-slate-700 hover:bg-slate-50">Close only</button>
-          <button type="button" autoFocus onClick={() => onClose(true)} disabled={busy} className="px-4 py-2 text-sm font-medium rounded-lg bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-40">
-            {busy ? 'Closing…' : `Close and tell ${n === 1 ? 'them' : `all ${n}`} "Not selected"`}
+          <button type="button" onClick={onAction} disabled={busy || disabled} className="px-4 py-2 text-sm font-medium rounded-lg bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-40">
+            {busy ? 'Saving…' : action}
           </button>
         </div>
       </div>
     </div>
+  )
+}
+
+function CloseDialog({ job, busy, onCancel, onClose }) {
+  const [reason, setReason] = useState('')
+  const n = job.waiting
+  return (
+    <Dialog title={`Why are you closing "${job.title}"?`} busy={busy} onCancel={onCancel} action="Close job"
+      onAction={() => onClose(reason)} disabled={!reason}>
+      <div role="radiogroup" aria-label="Reason" className="mt-3 grid gap-2">
+        {CLOSE_REASONS.map(([key, label, hint]) => (
+          <label key={key} className={`flex items-start gap-3 border rounded-xl px-3.5 py-2.5 cursor-pointer ${reason === key ? 'border-blue-600 bg-blue-50' : 'border-slate-200 hover:border-blue-300'}`}>
+            <input type="radio" name="close-reason" checked={reason === key} onChange={() => setReason(key)} className="mt-1 accent-blue-700" />
+            <span><span className="block text-sm font-medium text-slate-900">{label}</span><span className="block text-xs text-slate-500">{hint}</span></span>
+          </label>
+        ))}
+      </div>
+      <p className="text-sm text-slate-600 mt-3">{n > 0 ? `The ${n} applicant${n === 1 ? '' : 's'} still waiting will see "Not selected" with this reason.` : 'Students will no longer see this job.'}</p>
+    </Dialog>
+  )
+}
+
+// Moving the decision date (14 Oct): once, by 1 or 2 weeks, with a reason the applicants see
+function ExtendDialog({ job, busy, onCancel, onExtend }) {
+  const [days, setDays] = useState(7)
+  const [reason, setReason] = useState('')
+  return (
+    <Dialog title={`Move the decision date for "${job.title}"?`} busy={busy} onCancel={onCancel} action="Move the date"
+      onAction={() => onExtend(days, reason)} disabled={reason.trim().length < 5}>
+      <p className="text-sm text-slate-600 mt-1.5">Now {fmtDate(job.decide_by)}. You can move it once.</p>
+      <div className="mt-3 flex gap-2">
+        {[[7, '1 week later'], [14, '2 weeks later']].map(([d, label]) => (
+          <button key={d} type="button" aria-pressed={days === d} onClick={() => setDays(d)}
+            className={`text-sm font-medium rounded-full px-3.5 py-1.5 border ${days === d ? 'bg-blue-600 border-blue-600 text-white' : 'bg-white border-slate-300 text-slate-700 hover:border-blue-300'}`}>{label}</button>
+        ))}
+      </div>
+      <label className="block mt-3">
+        <span className="text-xs text-slate-500">Why (applicants see this)</span>
+        <input value={reason} maxLength={200} onChange={e => setReason(e.target.value)} placeholder="e.g. Interviews are taking longer than planned"
+          className="mt-1 w-full text-sm border border-slate-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+      </label>
+    </Dialog>
   )
 }
 
@@ -78,26 +122,34 @@ export function MyJobs() {
     : state?.saved ? `Changes to "${state.saved}" are saved. Students see them in Job Matches now.` : '')
   // 12 Oct (flow review): after publishing, how many visible graduates already fit, so the next step is clear
   const [fitNote] = useState(state?.posted && state.fit > 0 ? state.fit : 0)
-  const [askClose, setAskClose] = useState(null)       // a job with applicants still waiting
+  const [askClose, setAskClose] = useState(null)       // the job being closed (a reason is asked)
+  const [askExtend, setAskExtend] = useState(null)     // the job whose decision date is being moved
 
   useEffect(() => {
     if (state?.posted || state?.saved) window.history.replaceState({}, '')     // the "is live" note shows once, not after a reload
     api.get('/employer/jobs').then(res => setJobs(res.data)).catch(err => setError(errText(err, "Couldn't load your jobs.")))
   }, [state?.posted, state?.saved])
 
-  const toggle = (job, notSelected = null) => {
-    const closing = job.status === 'open'
-    // 12 Oct (flow review): closing with applicants still waiting asks what to tell them first
-    if (closing && job.waiting > 0 && notSelected === null) { setAskClose(job); return }
-    setAskClose(null)
+  // 14 Oct: one call for every change to a job's state, with the message that says what students now see
+  const change = (job, body, done) => {
     setBusy(job.id); setError(''); setNotice('')
-    api.patch(`/employer/jobs/${job.id}`, { closed: closing, not_selected_waiting: !!notSelected })
-      .then(res => {
-        setJobs(prev => prev.map(j => j.id === job.id ? res.data : j))
-        setNotice(closing ? `"${job.title}" is closed. Students no longer see it.${notSelected ? ` ${job.waiting} waiting applicant${job.waiting === 1 ? ' sees' : 's see'} "Not selected".` : ''}`
-          : `"${job.title}" is open again.`)
-      })
+    return api.patch(`/employer/jobs/${job.id}`, body)
+      .then(res => { setJobs(prev => prev.map(j => j.id === job.id ? res.data : j)); setNotice(done); setAskClose(null) })
       .catch(err => setError(errText(err, "Couldn't change the job. Try again.")))
+      .finally(() => setBusy(null))
+  }
+  const close = (job, reason) => change(job, { closed: true, reason },
+    `"${job.title}" is closed.${job.waiting ? ` ${job.waiting} waiting applicant${job.waiting === 1 ? ' sees' : 's see'} "Not selected" with your reason.` : ''}`)
+  const reopen = (job) => change(job, { closed: false }, `"${job.title}" is open again.`)
+  const stop = (job, stopped) => change(job, { stopped }, stopped
+    ? `"${job.title}" no longer takes new applications. Applicants are still waiting for your decision by ${fmtDate(job.decide_by)}.`
+    : `"${job.title}" takes applications again.`)
+  const extend = (job, days, reason) => {
+    setBusy(job.id); setError(''); setNotice('')
+    api.post(`/employer/jobs/${job.id}/extend`, { days, reason })
+      .then(res => { setJobs(prev => prev.map(j => j.id === job.id ? res.data : j)); setAskExtend(null)
+        setNotice(`New decision date for "${job.title}": ${fmtDate(res.data.decide_by)}. Applicants see it with your reason.`) })
+      .catch(err => { setAskExtend(null); setError(errText(err, "Couldn't move the date. Try again.")) })
       .finally(() => setBusy(null))
   }
   const open = (jobs || []).filter(j => j.status === 'open')
@@ -121,7 +173,9 @@ export function MyJobs() {
           {fitNote > 0 && notice.includes('is live') && <> {fitNote} visible graduate{fitNote === 1 ? '' : 's'} already fit it (at least half of its required skills). <Link to="/dashboard" className="font-semibold underline">Invite them from your Dashboard</Link></>}
         </p>}
         {askClose && <CloseDialog job={askClose} busy={busy === askClose.id} onCancel={() => setAskClose(null)}
-          onClose={(notSelected) => toggle(askClose, notSelected)} />}
+          onClose={(reason) => close(askClose, reason)} />}
+        {askExtend && <ExtendDialog job={askExtend} busy={busy === askExtend.id} onCancel={() => setAskExtend(null)}
+          onExtend={(days, reason) => extend(askExtend, days, reason)} />}
         {error && <p role="alert" className="text-sm text-rose-700 bg-rose-50 border border-rose-200 rounded-lg px-4 py-2.5">{error}</p>}
         {jobs === null && !error && <><LoadingLabel>Loading your jobs…</LoadingLabel><CardSkeleton rows={5} /></>}
         {jobs?.length === 0 && (
@@ -160,8 +214,14 @@ export function MyJobs() {
                       <td className="px-5 py-3.5">
                         <p className="font-medium text-slate-900 truncate">{j.title}</p>
                         <p className="text-xs text-slate-500 mt-0.5">{[j.location, j.category, `posted ${fmtDate(j.posted_at)}`].filter(Boolean).join(' · ')}</p>
+                        {/* 14 Oct: the promised decision date, red once it has passed with applicants waiting */}
+                        {j.status === 'open' && j.decide_by && <p className={`text-xs mt-0.5 ${j.past_date && j.waiting ? 'text-rose-700 font-medium' : 'text-slate-600'}`}>
+                          {j.past_date && j.waiting ? `Decision date passed (${fmtDate(j.decide_by)})` : `Decide by ${fmtDate(j.decide_by)}`}{j.decide_extended ? ' · moved once' : ''}
+                        </p>}
                       </td>
-                      <td className="px-5 py-3.5"><StatusPill status={j.status} /></td>
+                      <td className="px-5 py-3.5"><StatusPill status={j.status} />
+                        {j.status === 'open' && j.stopped && <p className="text-[11px] text-slate-500 mt-1">Not taking new applications</p>}
+                      </td>
                       {/* 12 Oct: "1 · 1 new" read as a puzzle; now the total, and how many still wait for a status */}
                       <td className="px-5 py-3.5 text-slate-600">
                         {j.applicants}
@@ -176,7 +236,12 @@ export function MyJobs() {
                           {j.status !== 'hidden' && (
                             <RowMenu label={`Actions for ${j.title}`} disabled={busy === j.id} items={[
                               { label: 'Edit job', onSelect: () => navigate(`/employer/jobs/${j.id}/edit`) },
-                              j.status === 'open' ? { label: 'Close job', danger: true, onSelect: () => toggle(j) } : { label: 'Reopen job', success: true, onSelect: () => toggle(j) },
+                              ...(j.status === 'open' ? [
+                                j.stopped ? { label: 'Take applications again', onSelect: () => stop(j, false) }
+                                  : { label: 'Stop new applications', onSelect: () => stop(j, true) },
+                                ...(!j.decide_extended ? [{ label: 'Move decision date', onSelect: () => setAskExtend(j) }] : []),
+                                { label: 'Close job', danger: true, onSelect: () => setAskClose(j) },
+                              ] : [{ label: 'Reopen job', success: true, onSelect: () => reopen(j) }]),
                             ]} />
                           )}
                         </div>

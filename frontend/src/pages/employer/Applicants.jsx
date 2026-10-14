@@ -5,21 +5,44 @@ import PageHeader from '../../components/PageHeader'
 import { errText } from '../student/profileUtils'
 import { STATUSES, STATUS_CLS, fmtDay } from './statuses'
 import { useStatusChange } from './statusChange'
+import ConfirmDecision from './ConfirmDecision'
+import { ADMIN_COUNTS_CHANGED } from '../../components/Sidebar'
 import { CardSkeleton, LoadingLabel } from '../../components/Skeleton'
 
 // Employer > one job's applicants (11 Oct, batch 2; her pick 3A "applicants as a list"). Best match first: the
 // share of the job's required skills each student has, the same match the student sees. Changing a status shows on
 // the student's My applications page.
+// 14 Oct (transparency flow): tick several -> Not selected with one optional reason (each student sees their own
+// missing skills for "missing skills"); the decision date and the numbers students see are in the header; contact
+// details appear only after shortlisting.
+const WAITING = ['applied', 'shortlisted']
+
 export default function Applicants() {
   const { jobId } = useParams()
   const navigate = useNavigate()
   const [data, setData] = useState(null)
   const [tab, setTab] = useState('all')
   const [error, setError] = useState('')
+  const [picked, setPicked] = useState([])          // application ids ticked
+  const [askMany, setAskMany] = useState(false)
+  const [savingMany, setSavingMany] = useState(false)
+  const [notice, setNotice] = useState('')
 
-  useEffect(() => {
-    api.get(`/employer/jobs/${jobId}/applicants`).then(res => setData(res.data)).catch(err => setError(errText(err, "Couldn't load the applicants.")))
-  }, [jobId])
+  const load = () => api.get(`/employer/jobs/${jobId}/applicants`).then(res => setData(res.data))
+    .catch(err => setError(errText(err, "Couldn't load the applicants.")))
+  useEffect(() => { load() }, [jobId])   // eslint-disable-line react-hooks/exhaustive-deps
+
+  const toggle = (id) => setPicked(p => p.includes(id) ? p.filter(x => x !== id) : [...p, id])
+  const notSelectedMany = (why) => {
+    setSavingMany(true)
+    api.post('/employer/applications/bulk', { ids: picked, status: 'rejected', ...why })
+      .then(() => {
+        setNotice(`${picked.length} marked Not selected. They see it on My applications${why.reason ? ', with your reason' : ''}.`)
+        setPicked([]); setAskMany(false); load(); window.dispatchEvent(new Event(ADMIN_COUNTS_CHANGED))
+      })
+      .catch(err => { setAskMany(false); setError(errText(err, "Couldn't save. Try again.")) })
+      .finally(() => setSavingMany(false))
+  }
 
   // 12 Oct: Rejected / Accepted ask first; Shortlisted / Applied change at once with Undo (statusChange.jsx)
   const status = useStatusChange((id, res) =>
@@ -44,6 +67,10 @@ export default function Applicants() {
             {[job.location, `posted ${fmtDay(job.posted_at)}`].filter(Boolean).join(' · ')}
             {job.required_names?.length > 0 && ` · requires ${job.required_names.join(', ')}`}
           </p>}
+          {job?.decide_by && <p className={`text-sm mt-1 ${job.past_date ? 'text-rose-700 font-medium' : 'text-slate-700'}`}>
+            {job.past_date ? `Your decision date (${fmtDay(job.decide_by)}) has passed: applicants still waiting see "No decision".`
+              : `Decide by ${fmtDay(job.decide_by)}`}{job.stopped && ' · Not taking new applications'}
+          </p>}
         </div>
       </PageHeader>
 
@@ -56,6 +83,7 @@ export default function Applicants() {
             <p className="text-sm text-slate-500 mt-1">Students see this job in Job Matches, marked "Posted on SkillMap", and apply with their SkillMap profile.</p>
           </div>
         )}
+        {notice && <p role="status" className="text-sm text-emerald-800 bg-emerald-50 border border-emerald-200 rounded-lg px-4 py-2.5">{notice}</p>}
         {people.length > 0 && (
           <>
             <div role="tablist" className="flex flex-wrap gap-2">
@@ -65,10 +93,18 @@ export default function Applicants() {
                     ? 'bg-blue-600 border-blue-600 text-white' : 'bg-white border-slate-200 text-slate-600 hover:border-blue-300'}`}>{text} {count(key)}</button>
               ))}
             </div>
+            {picked.length > 0 && (
+              <div className="flex items-center gap-3 bg-blue-50 border border-blue-200 rounded-xl px-4 py-2.5 text-sm">
+                <span className="font-medium text-slate-800">{picked.length} selected</span>
+                <button type="button" onClick={() => setAskMany(true)}
+                  className="ml-auto text-sm font-medium px-3.5 py-1.5 rounded-lg bg-rose-600 text-white hover:bg-rose-700">Mark as Not selected</button>
+                <button type="button" onClick={() => setPicked([])} className="text-sm text-slate-600 hover:text-slate-900">Clear</button>
+              </div>
+            )}
             <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden">
               <table className="w-full text-sm">
                 <thead className="bg-slate-50 text-left text-xs font-semibold text-slate-500">
-                  <tr><th className="px-5 py-3">Student</th><th className="px-5 py-3">Required skills they have</th>
+                  <tr><th className="pl-5 py-3 w-8"><span className="sr-only">Select</span></th><th className="px-5 py-3">Student</th><th className="px-5 py-3">Required skills they have</th>
                     <th className="px-5 py-3">Applied</th><th className="px-5 py-3">Status</th></tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100">
@@ -76,6 +112,12 @@ export default function Applicants() {
                     const full = p.total > 0 && p.have === p.total
                     return (
                       <tr key={p.id} onClick={() => navigate(`/employer/applications/${p.id}`)} className="cursor-pointer hover:bg-blue-50/40">
+                        <td className="pl-5 py-3.5" onClick={e => e.stopPropagation()}>
+                          {WAITING.includes(p.status) && (
+                            <input type="checkbox" aria-label={`Select ${p.name}`} checked={picked.includes(p.id)} onChange={() => toggle(p.id)}
+                              className="w-4 h-4 accent-blue-700" />
+                          )}
+                        </td>
                         <td className="px-5 py-3.5">
                           {/* 12 Oct: an application not opened yet reads bold with "Not opened", like an unread email
                               (DfE design history: a bold row for messages not viewed) */}
@@ -103,15 +145,19 @@ export default function Applicants() {
                       </tr>
                     )
                   })}
-                  {shown.length === 0 && <tr><td colSpan={4} className="px-5 py-8 text-center text-sm text-slate-400">None here.</td></tr>}
+                  {shown.length === 0 && <tr><td colSpan={5} className="px-5 py-8 text-center text-sm text-slate-400">None here.</td></tr>}
                 </tbody>
               </table>
             </div>
-            <p className="text-xs text-slate-500">Best match first. The student sees each status on their "My applications" page (Rejected shows as "Not selected").</p>
+            <p className="text-xs text-slate-500">Best match first. The student sees each status on their "My applications" page (Rejected shows as "Not selected"). Email and phone appear after you shortlist someone.</p>
           </>
         )}
       </div>
       {status.ui}
+      {askMany && <ConfirmDecision d={{ action: 'Mark as Not selected', danger: true }} busy={savingMany}
+        title={`Mark ${picked.length} ${picked.length === 1 ? 'applicant' : 'applicants'} as Not selected?`}
+        text={<>They will see <b>"Not selected"</b> for {job.title} on their My applications page straight away.</>}
+        onConfirm={notSelectedMany} onCancel={() => setAskMany(false)} />}
     </div>
   )
 }

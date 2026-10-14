@@ -3,6 +3,33 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 14 Oct 2026 — Transparency between employers and students
+Why: a student could wait weeks and then see a job close with no reason; SkillMap can't force an employer to reply,
+so it asks for a promise up front, ends the wait at that date, asks for a reason with every outcome, and shows
+students what it already knows (research: references.md "Employer replies, ghosting and transparency").
+- **Decision date.** Posting a job asks "Decide by" (2 weeks, 4 weeks, 30 days, 6 weeks). Students see it before
+  applying and on My applications. The employer can move it once, by 1 or 2 weeks, with a reason students see.
+  Existing posts get 30 days from posting.
+- **When the date passes with no decision** the student sees "<Company> missed its decision date. Focus on other
+  jobs; any reply will still appear here." It is not a rejection in the employer's name (the UK teacher-training
+  service removed automatic rejection as the worst experience for candidates). The employer's Dashboard and My jobs
+  show the passed date in red.
+- **Stop new applications vs Close job.** Stopping takes the job off Job Matches (Apply shows "Applications closed")
+  while the employer keeps deciding. Closing needs a reason (filled through SkillMap, filled another way, not filling
+  now) and every applicant still waiting gets "Not selected" with it. No silent close.
+- **Reasons for Not selected:** Missing required skills (each student sees their own missing skills, with "Plan
+  these"), Position filled, More experience needed, or Other with a written note (300 characters). Several
+  applicants can be marked at once from the applicants list. A student whose application closed without a reason
+  sees "<Company> gave no reason".
+- **What students see while waiting:** how many applied and were shortlisted, the decision date, where they stand on
+  required skills ("ahead of 7 of 11 applicants", from 5 applicants, with an ⓘ that says it is skills only), and the
+  employer's record ("decided on time for 3 of its 4 jobs").
+- Job Detail checks fresh whether a SkillMap job still takes applications (the skill gap is kept for 15 minutes).
+- Admin Academics: with "To review" on, or after changing programme or intake, the first module in the list opens;
+  the module open before stayed open even when it wasn't in the list.
+- Migration `migrate_transparency.py`. Tests: `tests/test_transparency.py` (8), closing and nudges updated in
+  `tests/test_applications.py`.
+
 ## 14 Oct 2026 — Privacy notice reads as one document
 - Compared with JobStreet's and Monzo's notices: one white document with headed sections and thin rules instead of a
   card per section on grey; the "In short" summary is the only box, and the text column is narrower for reading.
