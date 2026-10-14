@@ -70,7 +70,8 @@ def _row(job: Job, skills: list[JobSkill], statuses: list[str] = ()) -> dict:
             # 14 Oct (transparency flow): the promised decision date, whether it was extended (once), whether new
             # applications are stopped, why the job closed
             "decide_by": job.decide_by, "decide_extended": job.decide_extended_reason is not None,
-            "decide_extended_reason": job.decide_extended_reason, "past_date": past_date(job),
+            "decide_extended_reason": job.decide_extended_reason, "decide_by_original": job.decide_by_original,
+            "past_date": past_date(job),
             "stopped": job.applications_stopped_at is not None, "close_reason": job.close_reason}
 
 
@@ -154,6 +155,7 @@ def extend_decision_date(job_id: int, data: ExtendIn, employer: User = Depends(r
     if len(reason) < 5:
         raise HTTPException(status_code=400, detail="Tell applicants why, in a few words.")
     from datetime import timedelta
+    job.decide_by_original = job.decide_by           # 14 Oct audit: the first promise stays on record
     job.decide_by = (job.decide_by or datetime.now(timezone.utc)) + timedelta(days=data.days)
     job.decide_extended_reason = reason
     db.commit()
@@ -355,6 +357,7 @@ def _applicant(a: Application, student: User, job: Job, db: Session) -> dict:
     total = have + len(gap["missing_skills"]) if gap else 0
     if gap:
         a.match_have, a.match_total = have, total      # 14 Oct: kept for the students' "where you stand"
+        a.match_at = datetime.now(timezone.utc)
     from app.services.application_progress import first_seen
     events = db.query(ApplicationEvent).filter(ApplicationEvent.application_id == a.id).all()
     return {"id": a.id, "name": f"{student.first_name} {student.last_name}", "programme": _programme(student, db),

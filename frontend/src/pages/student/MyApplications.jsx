@@ -38,19 +38,21 @@ function Facts({ r }) {
           </div>
         ))}
       </div>
-      {r.decide_extended_reason && <p className="text-xs text-slate-600">Decision date moved once: “{r.decide_extended_reason}”</p>}
+      {r.decide_extended_reason && <p className="text-xs text-slate-600">Decision date moved{r.decide_by_original ? ` from ${fmtDay(r.decide_by_original)}` : ''}: “{r.decide_extended_reason}”</p>}
       {!r.taking_applications && <p className="text-xs text-slate-600">Not taking new applications. {r.company} is still deciding.</p>}
       {me && (
         <div>
           <p className="text-sm text-slate-700">Skills: <b className="font-semibold text-slate-900">{me.have} of {me.total} required</b> · ahead of {me.ahead_of} of {me.others} applicants
-            <InfoTip label="About this comparison">Compared on skills only. Employers also look at experience and interviews.</InfoTip></p>
+            <InfoTip label="About this comparison">Compared on skills only, using everyone's profile from the last day. Employers also look at experience and interviews.</InfoTip></p>
           <div className="mt-1.5 h-1.5 rounded-full bg-slate-200 overflow-hidden" aria-hidden="true">
             <div className="h-full bg-blue-700" style={{ width: `${me.others ? (me.ahead_of / me.others) * 100 : 0}%` }} />
           </div>
         </div>
       )}
-      {rec && rec.of > 0 && <p className="text-xs text-slate-600">{r.company} decided on time for {rec.on_time} of its {rec.of} {rec.of === 1 ? 'job' : 'jobs'}.</p>}
-      {rec && rec.of === 0 && <p className="text-xs text-slate-500">{r.company} has no decision record on SkillMap yet.</p>}
+      {/* shown from 3 judged jobs (audit, 14 Oct): below that one late job would define the employer */}
+      {rec && rec.shown && <p className="text-xs text-slate-600">{r.company} decided on time for {rec.on_time} of its {rec.of} jobs.
+        <InfoTip label="About this record">On time means every applicant had an outcome by the decision date. Counted for jobs whose date has passed or that are closed.</InfoTip></p>}
+      {rec && !rec.shown && <p className="text-xs text-slate-500">Too few decisions by {r.company} on SkillMap to show a record yet.</p>}
     </div>
   )
 }

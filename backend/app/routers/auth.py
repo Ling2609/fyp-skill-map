@@ -214,6 +214,11 @@ def change_password(payload: PasswordChange, background: BackgroundTasks, db: Se
     return {"access_token": _login_token(current_user), "token_type": "bearer"}
 
 
+# The privacy notice a new user accepts: the date of the newest entry in frontend/src/pages/privacyText.js VERSIONS
+# (tests/test_audit_fixes.py checks the two agree). Change both when the notice changes.
+PRIVACY_VERSION = "2026-10-14"
+
+
 # ── Delete my account (13 Oct; audit: grades and profiles are personal data, Malaysia's PDPA 2010) ─────────────────
 class DeleteAccountIn(BaseModel):
     password: str = Field(max_length=200)
@@ -324,8 +329,16 @@ def delete_my_account(payload: DeleteAccountIn, db: Session = Depends(get_db),
     except PyMongoError:
         raise HTTPException(status_code=503, detail="Your chat history can't be reached right now, so nothing was "
                                                     "deleted. Please try again later.")
-    delete_student_data(current_user, db)
-    db.commit()
+    # 14 Oct audit: the two databases can't be deleted from in one transaction. Chats go first (above); if PostgreSQL
+    # then fails, nothing in it is deleted (rollback) and the student is told to try again, which finishes the job
+    # (deleting chats that are already gone does nothing). So the worst case is "chats gone, account still there".
+    try:
+        delete_student_data(current_user, db)
+        db.commit()
+    except Exception:
+        db.rollback()
+        raise HTTPException(status_code=500, detail="Your AI Assistant chats were deleted, but the rest of your account "
+                                                    "couldn't be. Please try again.")
 
 
 @router.get("/common-passwords", response_class=PlainTextResponse)
@@ -388,6 +401,7 @@ def register(payload: UserRegister, db: Session = Depends(get_db)):
         hashed_password=hash_password(payload.password),
         role=UserRole(payload.role),
         privacy_accepted_at=datetime.now(timezone.utc),
+        privacy_version=PRIVACY_VERSION,
     )
     if payload.role == "employer":   # Admin approves employers before they can post jobs (7 Oct)
         user.employer_status = "pending"

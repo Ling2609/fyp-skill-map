@@ -27,6 +27,7 @@ class Application(Base):
     # applicants without working out every applicant's match each time; refreshed whenever it is worked out
     match_have = Column(Integer, nullable=True)
     match_total = Column(Integer, nullable=True)
+    match_at = Column(DateTime(timezone=True), nullable=True)   # 14 Oct audit: when the counts were worked out
 
 
 class ApplicationEvent(Base):

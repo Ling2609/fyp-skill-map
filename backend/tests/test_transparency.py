@@ -122,12 +122,12 @@ def test_employer_record_of_deciding_on_time(client, users, db):
     job = _post(client, users, employer).json()
     a1, a2 = _apply(client, users, s1, job), _apply(client, users, s2, job)
     m = _mine(client, users, s1, a1)
-    assert m["employer_record"] == {"on_time": 0, "of": 0}                       # nothing due yet
+    assert m["employer_record"] == {"on_time": 0, "of": 0, "shown": False}       # nothing due yet
     client.patch(f"/employer/applications/{a1}", headers=users.h(employer), json={"status": "rejected"})
     sql(db, "update jobs set decide_by=:t where id=:i", t=datetime.now(timezone.utc) - timedelta(minutes=1), i=job["id"])
     sql(db, "update applications set status_changed_at=:t where id=:i", t=datetime.now(timezone.utc) - timedelta(days=1), i=a1)
     m2 = _mine(client, users, s2, a2)
-    assert m2["employer_record"] == {"on_time": 0, "of": 1}                      # s2 was never decided by the date
+    assert m2["employer_record"] == {"on_time": 0, "of": 1, "shown": False}      # s2 was never decided by the date
     assert m2["progress"]["nudge"] == "no_decision"
     attention = client.get("/employer/dashboard", headers=users.h(employer)).json()["attention"]
     assert [p["waiting"] for p in attention["past_date"]] == [1]

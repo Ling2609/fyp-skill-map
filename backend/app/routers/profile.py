@@ -324,6 +324,9 @@ def check_profile_schema():
     if "privacy_accepted_at" not in users:
         raise RuntimeError("Database not updated: run  python migrations/migrate_privacy_contact.py  "
                            "from the backend folder, then start the backend again.")
+    if "privacy_version" not in users:
+        raise RuntimeError("Database not updated: run  python migrations/migrate_record_keeping.py  "
+                           "from the backend folder, then start the backend again.")
 
 
 # ── Endpoints ─────────────────────────────────────────────────────────────────

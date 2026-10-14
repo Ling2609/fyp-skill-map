@@ -26,7 +26,8 @@ def test_every_migration_is_safe_to_run_again(client, db):
                  "migrate_drop_user_skills_cache", "migrate_add_job_skill_evidence", "migrate_account_security",
                  "migrate_profile_skill_evidence", "migrate_add_job_gone_at", "migrate_admin_structure",
                  "migrate_admin_actions", "migrate_profile_showcase", "migrate_career_goal", "migrate_all_programmes",
-                 "migrate_intake_modules", "migrate_employer_jobs", "migrate_applications", "migrate_privacy_contact", "migrate_transparency"):
+                 "migrate_intake_modules", "migrate_employer_jobs", "migrate_applications", "migrate_privacy_contact", "migrate_transparency",
+                 "migrate_record_keeping"):
         run_migration(name)
     after = sql(db, "select (select count(*) from programmes), (select count(*) from modules), "
                     "(select count(*) from intake_modules)").one()

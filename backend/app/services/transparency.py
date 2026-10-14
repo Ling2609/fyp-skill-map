@@ -20,6 +20,8 @@ DECIDE_DAYS = (14, 28, 30, 42)      # 2 weeks, 4 weeks, 30 days (default; DfE: d
 DEFAULT_DECIDE_DAYS = 30
 EXTEND_DAYS = (7, 14)                # one extension, with a reason students see
 STAND_MIN_APPLICANTS = 5             # "where you stand" only from 5 applicants, so no one can be singled out
+STAND_FRESH = timedelta(hours=24)    # other applicants' counts older than this are worked out again before comparing
+RECORD_MIN_JOBS = 3                  # the on-time record is shown from 3 judged jobs; below that one late job decides it
 NOTE_MAX = 300
 
 # Reasons for "Not selected" an employer can pick (or "other" with a note). Student-facing words on the frontend.
@@ -75,8 +77,14 @@ def job_stats(job_ids: list[int], db: Session) -> dict[int, dict]:
 
 
 def employer_record(employer_id: int, db: Session, now: datetime | None = None) -> dict:
-    """"Decided on time for X of Y jobs": jobs with applicants whose date has passed or that are closed; on time =
-    every applicant had an outcome (accepted / not selected, also by closing the job) by the employer's date."""
+    """The employer's record of deciding by their own date ("decided on time for X of Y jobs"). Definition (14 Oct
+    audit, also in docs/transparency.md):
+    - judged: a job with at least one applicant whose decision date has passed, or that was closed (closing early
+      judges it at once); jobs with no applicants, or still before their date and open, are not judged yet;
+    - on time: every applicant had an outcome (Accepted or Not selected, including by closing the job) at or before
+      the decision date in force, i.e. the moved date when the employer used their one extension;
+    - closing after the date counts as late, because the applicants still waited past the promise;
+    - shown only from RECORD_MIN_JOBS judged jobs (`shown`), so one late job can't define a new employer."""
     now = now or datetime.now(timezone.utc)
     jobs = db.query(Job).filter(Job.posted_by_user_id == employer_id, Job.decide_by.isnot(None)).all()
     due = on_time = 0
@@ -88,7 +96,12 @@ def employer_record(employer_id: int, db: Session, now: datetime | None = None) 
         due += 1
         on_time += all(a.status in DECIDED and a.status_changed_at and _aware(a.status_changed_at) <= deadline
                        for a in apps)
-    return {"on_time": on_time, "of": due}
+    return {"on_time": on_time, "of": due, "shown": due >= RECORD_MIN_JOBS}
+
+
+def stale(a: Application, now: datetime | None = None) -> bool:
+    """This application's skill counts are missing or older than STAND_FRESH."""
+    return a.match_have is None or not a.match_at or (now or datetime.now(timezone.utc)) - _aware(a.match_at) > STAND_FRESH
 
 
 def stand(mine: Application, all_apps: list[Application]) -> dict | None:

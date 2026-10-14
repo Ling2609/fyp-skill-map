@@ -1,0 +1,14 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.7, pytest-8.4.2, pluggy-1.6.0 -- C:\Users\Ling\Desktop\fyp-skill-map\backend\venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\Ling\Desktop\fyp-skill-map\backend
+configfile: pytest.ini
+plugins: anyio-4.15.1, platformdirs-4.12.2
+collecting ... collected 72 items
+
+tests/test_admin.py::test_approve_moves_employer_out_of_waiting PASSED   [  1%]
+tests/test_admin.py::test_deactivate_needs_a_reason PASSED               [  2%]
+tests/test_admin.py::test_admin_cannot_deactivate_themselves PASSED      [  4%]
+tests/test_applications.py::test_apply_once_with_progress PASSED         [  5%]
+tests/test_applications.py::test_student_without_skills_cannot_apply PASSED [  6%]
+tests/test_applications.py::test_simultaneous_applies_give_one_application_no_server_error 

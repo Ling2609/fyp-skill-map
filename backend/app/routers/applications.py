@@ -6,6 +6,8 @@ their SkillMap profile: the employer then sees that profile and the student's ma
 My applications lists every application with its status; the employer sets the status, and "rejected" is shown
 to the student as "Not selected" (her 9 Oct mock-up, board 6).
 """
+from datetime import datetime, timezone
+
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 from sqlalchemy import inspect
@@ -81,6 +83,7 @@ def _snapshot(a: Application, student: User, job: Job, db: Session) -> dict | No
     except HTTPException:
         return None
     a.match_have, a.match_total = s["matched_skills"], s["matched_skills"] + s["missing_skills"]
+    a.match_at = datetime.now(timezone.utc)
     return s
 
 
@@ -97,6 +100,7 @@ def _mine(a: Application, job: Job, match: str | None = None, events=None, usual
             # 14 Oct (transparency flow): the employer's date, whether the job still takes applications, why it
             # closed, and why this application wasn't selected (reason, note, the missing skills then)
             "decide_by": job.decide_by, "decide_extended_reason": job.decide_extended_reason,
+            "decide_by_original": job.decide_by_original,
             "taking_applications": _job_open(job) and not job.applications_stopped_at,
             "close_reason": job.close_reason, "category": job.subcategory,
             "reason": a.reason, "note": a.note, "reason_skills": a.reason_skills or [],
@@ -131,7 +135,7 @@ def mine(student: User = Depends(require_student), db: Session = Depends(get_db)
     what is happening on the job (applied / shortlisted / decided), where the student stands among the applicants
     (5 or more, required skills only) and the employer's record of deciding by their own date."""
     from app.services.application_progress import employer_review_days, events_for
-    from app.services.transparency import employer_record, job_stats, stand
+    from app.services.transparency import employer_record, job_stats, stale, stand
     rows = (db.query(Application, Job).join(Job, Job.id == Application.job_id)
             .filter(Application.student_id == student.id).order_by(Application.created_at.desc()).all())
     events = events_for([a.id for a, _ in rows], db)
@@ -146,9 +150,11 @@ def mine(student: User = Depends(require_student), db: Session = Depends(get_db)
         s = _snapshot(a, student, job, db)           # her own count, fresh
         match = f"{s['matched_skills']} of {s['matched_skills'] + s['missing_skills']} required" if s else None
         everyone = db.query(Application).filter(Application.job_id == job.id).all()
-        if len(everyone) >= 5:                        # fill in counts missing from older applications, once
+        # Others' counts: worked out again when missing or over a day old (14 Oct audit: a profile can change after
+        # applying, so a stored count can go stale). Only from 5 applicants, when "where you stand" is shown.
+        if len(everyone) >= 5:
             for other in everyone:
-                if other.match_have is None and other.id != a.id:
+                if other.id != a.id and stale(other):
                     person = db.get(User, other.student_id)
                     if person:
                         _snapshot(other, person, job, db)

@@ -89,6 +89,7 @@ const SECTIONS = {
     ]],
     ['keep', 'How long we keep it', [
       'Your data is kept **while your account exists**.',
+      'An AI Assistant conversation is deleted automatically **18 months after its last message**.',
       'When you **delete your account**, your profile, grades, projects, certifications, awards, applications, invitations and AI Assistant conversations are deleted.',
       'One-time codes are deleted once used or expired.',
     ]],
@@ -137,6 +138,7 @@ const SECTIONS = {
     ]],
     ['keep', 'Berapa lama kami menyimpannya', [
       'Data anda disimpan **selagi akaun anda wujud**.',
+      'Perbualan Pembantu AI dipadam secara automatik **18 bulan selepas mesej terakhirnya**.',
       'Apabila anda **memadam akaun**, profil, gred, projek, pensijilan, anugerah, permohonan, jemputan dan perbualan Pembantu AI anda dipadam.',
       'Kod sekali guna dipadam sebaik sahaja digunakan atau tamat tempoh.',
     ]],
@@ -159,8 +161,8 @@ const SECTIONS = {
 
 // Every version of the notice, newest first (14 Oct, her question: are old versions kept and can they be seen?).
 // A change adds a new entry on top with a short summary of what changed; older entries keep their own text, so
-// /privacy?version=<date> still shows exactly what someone agreed to. users.privacy_accepted_at tells which version
-// a person accepted (the newest one dated on or before that day).
+// /privacy?version=<date> still shows exactly what someone agreed to. users.privacy_version stores the date of the
+// version a person accepted; backend/app/routers/auth.py PRIVACY_VERSION must equal VERSIONS[0].date (a test checks).
 export const VERSIONS = [
   {
     date: '2026-10-14',

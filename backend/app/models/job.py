@@ -32,6 +32,7 @@ class Job(Base):
     # 14 Oct, transparency flow (references.md "Employer replies, ghosting and transparency"):
     decide_by = Column(DateTime(timezone=True), nullable=True)            # the employer's promised decision date
     decide_extended_reason = Column(String(200), nullable=True)           # set once, when the date is extended
+    decide_by_original = Column(DateTime(timezone=True), nullable=True)   # 14 Oct audit: the first promise, kept on extending
     applications_stopped_at = Column(DateTime(timezone=True), nullable=True)   # "Stop new applications" (still deciding)
     close_reason = Column(String(20), nullable=True)   # filled_skillmap / filled_other / not_filling
     created_at = Column(DateTime(timezone=True), server_default=func.now())

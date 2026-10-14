@@ -45,6 +45,7 @@ class User(Base):
     city           = Column(String(80), nullable=True)
     available_from = Column(String(7), nullable=True)    # "2027-01" (month and year)
     privacy_accepted_at = Column(DateTime(timezone=True), nullable=True)   # ticked the privacy notice at sign-up
+    privacy_version = Column(String(10), nullable=True)   # 14 Oct audit: which notice (its date, privacyText.js VERSIONS)
 
 # Load the tables users point at (programmes, intakes), so any script that saves a User works on its own (7 Oct)
 from app.models import programme  # noqa: E402,F401
