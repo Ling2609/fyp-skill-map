@@ -61,7 +61,11 @@ def _project(client, users, student, url):
     return r.json()
 
 
-def test_not_set_up_says_so(client, users):
+def test_not_set_up_says_so(client, users, monkeypatch):
+    # 15 Oct: blank the app's id and secret here, so the test doesn't depend on whether backend/.env has them
+    from app.config import settings
+    monkeypatch.setattr(settings, "github_client_id", "")
+    monkeypatch.setattr(settings, "github_client_secret", "")
     student = users.student(skills=())
     r = client.get("/profile/github/connect-url", headers=users.h(student))
     assert r.status_code == 503 and "GITHUB_CLIENT_ID" in r.json()["detail"]
