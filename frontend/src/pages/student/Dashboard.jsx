@@ -161,7 +161,11 @@ function OpensUp({ r, goal, jobs }) {
 function GoalCard({ data, busy, onGoal, onPlan, onJobs }) {
   const have = data.readiness.filter(r => r.has)
   const missing = data.readiness.filter(r => !r.has)
-  const [picked, setPicked] = useState(() => missing.slice(0, 1).map(r => r.skill))
+  // Option C (her pick, 13 Oct; built 14 Oct): two labelled groups, so each number sits under its own meaning.
+  // Quickest wins = skills that alone would make her fit more jobs (most first); then the rest by how often asked.
+  const quick = missing.filter(r => r.opens_count > 0).sort((a, b) => b.opens_count - a.opens_count)
+  const often = missing.filter(r => !(r.opens_count > 0))
+  const [picked, setPicked] = useState(() => [...quick, ...often].slice(0, 1).map(r => r.skill))
   const toggle = (skill) => setPicked(p => p.includes(skill) ? p.filter(s => s !== skill) : [...p, skill])
   const [open, setOpen] = useState(null)        // the skill whose "What opens up" is open
   const total = data.readiness.length
@@ -195,29 +199,36 @@ function GoalCard({ data, busy, onGoal, onPlan, onJobs }) {
         {missing.length > 0 && (
           <div className="mt-4 min-h-0 flex flex-col">
             <p className="shrink-0 text-sm font-semibold text-slate-700">Still to learn <span className="font-normal text-slate-500">· tick the ones you want a plan for</span></p>
-            {/* pr-3: the % keeps a little space from the scroll bar */}
-            <ul className="mt-1 min-h-0 lg:overflow-y-auto pr-3">
-              {missing.map((r, i) => (
-                <li key={r.skill} className="border-t border-slate-200 first:border-t-0">
-                  {/* wraps on a phone: the "+N more jobs" line goes under the skill instead of over it */}
-                  <div className="flex flex-wrap items-center gap-x-3">
-                    <label className="flex-1 min-w-40 flex items-center gap-3 py-2 cursor-pointer">
-                      <input type="checkbox" checked={picked.includes(r.skill)} onChange={() => toggle(r.skill)} className="w-4 h-4 accent-blue-700" />
-                      <span className="flex-1 text-sm text-slate-800">{skillName(r.skill)}</span>
-                    </label>
-                    {/* 13 Oct, small what-if: what this one skill would do for her, not just how common it is */}
-                    {r.opens_count > 0 ? (<span className="flex items-center gap-3 pl-7 pb-2 sm:pl-0 sm:pb-0">
-                      <span className="text-xs font-semibold text-emerald-700 tabular-nums whitespace-nowrap">+{r.opens_count} more {r.opens_count === 1 ? 'job' : 'jobs'} you'd fit</span>
-                      <button type="button" onClick={() => setOpen(o => o === r.skill ? null : r.skill)} aria-expanded={open === r.skill}
-                        className="text-xs text-blue-700 hover:underline whitespace-nowrap">What opens up {open === r.skill ? '▴' : '▾'}</button>
-                    </span>) : (
-                      <span className="text-xs text-slate-500 tabular-nums">{i === 0 ? `asked by ${pct(r.share)} of these jobs` : pct(r.share)}</span>
-                    )}
-                  </div>
-                  {open === r.skill && <OpensUp r={r} goal={data.goal} jobs={data.jobs} />}
-                </li>
+            {/* pr-3: the numbers keep a little space from the scroll bar */}
+            <div className="mt-1 min-h-0 lg:overflow-y-auto pr-3">
+              {[[quick, 'Quickest wins', 'each would make you fit more jobs'], [often, quick.length ? 'Also asked for often' : 'Asked for most often', 'share of these jobs that ask for it']]
+                .filter(([rows]) => rows.length).map(([rows, title, hint]) => (
+                <section key={title} className="mt-2 first:mt-1">
+                  <p className="text-xs font-semibold text-slate-600">{title} <span className="font-normal text-slate-400">· {hint}</span></p>
+                  <ul>
+                    {rows.map(r => (
+                      <li key={r.skill} className="border-t border-slate-200 first:border-t-0">
+                        {/* wraps on a phone: the number goes under the skill instead of over it */}
+                        <div className="flex flex-wrap items-center gap-x-3">
+                          <label className="flex-1 min-w-40 flex items-center gap-3 py-2 cursor-pointer">
+                            <input type="checkbox" checked={picked.includes(r.skill)} onChange={() => toggle(r.skill)} className="w-4 h-4 accent-blue-700" />
+                            <span className="flex-1 text-sm text-slate-800">{skillName(r.skill)}</span>
+                          </label>
+                          {r.opens_count > 0 ? (<span className="flex items-center gap-3 pl-7 pb-2 sm:pl-0 sm:pb-0">
+                            <span className="text-xs font-semibold text-emerald-700 tabular-nums whitespace-nowrap">+{r.opens_count} {r.opens_count === 1 ? 'job' : 'jobs'} you'd fit</span>
+                            <button type="button" onClick={() => setOpen(o => o === r.skill ? null : r.skill)} aria-expanded={open === r.skill}
+                              className="text-xs text-blue-700 hover:underline whitespace-nowrap">What opens up {open === r.skill ? '▴' : '▾'}</button>
+                          </span>) : (
+                            <span className="text-xs text-slate-500 tabular-nums">{pct(r.share)}</span>
+                          )}
+                        </div>
+                        {open === r.skill && <OpensUp r={r} goal={data.goal} jobs={data.jobs} />}
+                      </li>
+                    ))}
+                  </ul>
+                </section>
               ))}
-            </ul>
+            </div>
             {/* The ticks only choose what to plan; a skill counts once the profile shows it */}
             <p className="shrink-0 text-xs text-slate-500 mt-2">
               Learnt one? Add the project, certificate or grade that shows it in <Link to="/profile" className="text-blue-700 hover:underline">My Profile</Link> and it counts here.

@@ -51,7 +51,7 @@ function Facts({ r }) {
       )}
       {/* shown from 3 judged jobs (audit, 14 Oct): below that one late job would define the employer */}
       {rec && rec.shown && <p className="text-xs text-slate-600">{r.company} decided on time for {rec.on_time} of its {rec.of} jobs.
-        <InfoTip label="About this record">On time means every applicant had an outcome by the decision date. Counted for jobs whose date has passed or that are closed.</InfoTip></p>}
+        <InfoTip label="About this record">On time means every applicant got an answer by the decision date. Counted for jobs whose date has passed or that are closed. It isn't a rating of the employer.</InfoTip></p>}
       {rec && !rec.shown && <p className="text-xs text-slate-500">Too few decisions by {r.company} on SkillMap to show a record yet.</p>}
     </div>
   )
