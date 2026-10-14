@@ -30,6 +30,8 @@ def github(monkeypatch):
                        "lingwl-apu": [{"name": "uni-lab", "html_url": "https://github.com/lingwl-apu/uni-lab"}]}}
 
     def fake_get(url, **params):
+        if world.get("down"):                       # GitHub unreachable / over its limit
+            return Reply(503, {})
         path = urlparse(url).path.strip("/").split("/")
         if path[0] == "repos" and path[-1] == "contributors":
             people = world["contributors"].get(f"{path[1]}/{path[2]}")
@@ -154,3 +156,31 @@ def test_export_and_delete_include_connected_accounts(client, users, github, mon
     sid = users.ids[student]
     assert client.post("/auth/me/delete", headers=users.h(student), json={"password": PASSWORD}).status_code == 204
     assert sql(users.db, "select count(*) from github_accounts where user_id=:i", i=sid).scalar() == 0
+
+
+def test_github_down_never_shows_an_old_badge_on_a_new_link(client, users, github):
+    """15 Oct (outside audit): when GitHub can't answer, a result is kept only for the same repo and while the account
+    that proved it is still connected; otherwise no badge (unknown), never an old "yours"."""
+    student = users.student(skills=())
+    _connect(client, users, student, github, "Ling2609", 401)
+    _connect(client, users, student, github, "lingwl-apu", 402)
+    team = _project(client, users, student, "https://github.com/team/capstone")
+    assert team["repo_check"] == "yours"
+    github["down"] = True
+    # same link, GitHub down: kept
+    body = {"name": "capstone", "description": "A project built with Python and Flask, edited.",
+            "github_url": "https://github.com/team/capstone", "skills": {"Python": "Added by you"}}
+    assert client.put(f"/profile/projects/{team['id']}", headers=users.h(student), json=body).json()["repo_check"] == "yours"
+    # another link, GitHub down: unknown, not the old "yours"
+    body["github_url"] = "https://github.com/someone/weather-app"
+    r = client.put(f"/profile/projects/{team['id']}", headers=users.h(student), json=body).json()
+    assert (r["repo_check"], r["repo_check_as"]) == (None, None)
+    # the account that proved it is disconnected while GitHub is down: the badge goes
+    body["github_url"] = "https://github.com/team/capstone"
+    github["down"] = False
+    assert client.put(f"/profile/projects/{team['id']}", headers=users.h(student), json=body).json()["repo_check_as"] == "Ling2609"
+    github["down"] = True
+    acc = [a for a in client.get("/profile/github/accounts", headers=users.h(student)).json()["accounts"] if a["login"] == "Ling2609"][0]
+    client.delete(f"/profile/github/accounts/{acc['id']}", headers=users.h(student))
+    p = [x for x in client.get("/profile/projects", headers=users.h(student)).json() if x["id"] == team["id"]][0]
+    assert p["repo_check"] is None

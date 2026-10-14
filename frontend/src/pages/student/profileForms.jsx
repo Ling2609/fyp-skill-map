@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react'
 import GithubAccounts, { DoneBadge, IconTile } from './GithubAccounts'
 import api from '../../api'
-import { DuplicateAsk, Field, FormButtons, SkillChecker, SkillChip, Spinner, Toggle } from './profileParts'
+import { DuplicateAsk, Field, FormButtons, SkillChecker, SkillChip, Toggle } from './profileParts'
 import { MIN_DESCRIPTION, aboutBody, errText, inputCls, mergeFound, projectChips, projectKey, splitSkills, studyComplete } from './profileUtils'
+import { Busy } from '../../components/Spinner'
+import { FieldSkeleton, LoadingLabel } from '../../components/Skeleton'
 
 // Every pop-up form on My Profile (8-9 Oct). Each one is opened by a button on the page and closes itself through
 // onDone / onCancel; onDirty tells the pop-up there is something typed, so a stray click outside asks first.
@@ -130,7 +132,7 @@ export function ProjectForm({ project, onDone, onCancel, onDirty }) {
           {!stale && (
             <button type="button" onClick={find} disabled={!ready || !!busy}
               className="mt-2 text-xs font-medium text-blue-700 hover:underline disabled:text-gray-300 disabled:no-underline">
-              {busy === 'find' ? 'Finding skills…' : 'Find skills again'}
+              {busy === 'find' ? <Busy>Finding skills…</Busy> : 'Find skills again'}
             </button>
           )}
         </div>
@@ -228,7 +230,7 @@ export function CertForm({ cert, onDone, onCancel, onDirty }) {
           {!needsSuggest && (
             <button type="button" onClick={suggest} disabled={!canSuggest || busy !== ''}
               className="text-xs font-medium text-blue-700 hover:underline disabled:text-gray-300 disabled:no-underline">
-              {busy === 'suggest' ? 'Finding skills…' : suggested ? 'Suggest more' : 'Suggest skills'}
+              {busy === 'suggest' ? <Busy>Finding skills…</Busy> : suggested ? 'Suggest more' : 'Suggest skills'}
             </button>
           )}
         </div>
@@ -354,7 +356,7 @@ export function AwardForm({ award, onDone, onCancel, onDirty }) {
           {!needsSuggest && (
             <button type="button" onClick={suggest} disabled={!canSuggest || busy !== ''}
               className="text-xs font-medium text-blue-700 hover:underline disabled:text-gray-300 disabled:no-underline">
-              {busy === 'suggest' ? 'Finding skills…' : 'Suggest skills'}
+              {busy === 'suggest' ? <Busy>Finding skills…</Busy> : 'Suggest skills'}
             </button>
           )}
         </div>
@@ -451,7 +453,7 @@ export function StudyForm({ onDone, onCancel, onDirty }) {
     <form onSubmit={save} className="space-y-4">
       <p className="text-xs text-gray-500">Your modules follow your programme and intake. Grades you already entered are kept.</p>
       {options ? <StudyFields options={options} value={study} onChange={setStudy} />
-        : !error && <div className="flex justify-center py-4 text-blue-600"><Spinner /></div>}
+        : !error && <><LoadingLabel>Loading programmes…</LoadingLabel><FieldSkeleton n={2} /></>}
       {error && <p className="text-xs text-red-500 bg-red-50 rounded-lg px-3 py-2">{error}</p>}
       <FormButtons loading={busy} busyText="Saving…" label="Save" onCancel={onCancel}
         disabled={!options || !studyComplete(options, study) || !changed} />

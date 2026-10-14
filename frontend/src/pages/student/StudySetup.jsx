@@ -6,6 +6,7 @@ import { useAuth } from '../../context/useAuth'
 import { Spinner } from './profileParts'
 import { StudyFields } from './profileForms'
 import { errText, studyComplete } from './profileUtils'
+import { ChoiceRowsSkeleton, FieldSkeleton, LoadingLabel } from '../../components/Skeleton'
 
 // First sign-in setup (8 Oct; decided 7 Oct, references.md "Programme + intake"). Step 1: two drop-downs, before
 // anything else. A student without a programme is sent here by the route guard in App.jsx; this also catches
@@ -77,7 +78,7 @@ export default function StudySetup() {
           <p className="text-sm text-amber-800 bg-amber-50 rounded-lg px-3 py-2">The career office hasn't added any programmes yet. Please try again later.</p>
         )}
         {options && options.programmes.length > 0 && <StudyFields options={options} value={study} onChange={setStudy} />}
-        {!options && !error && <div className="flex justify-center py-4 text-blue-600"><Spinner /></div>}
+        {!options && !error && <><LoadingLabel>Loading programmes…</LoadingLabel><FieldSkeleton n={2} /></>}
         {error && <p role="alert" className="text-sm text-red-600 bg-red-50 rounded-lg px-3 py-2">{error}</p>}
         <div className="flex items-center justify-between pt-1">
           <button type="button" onClick={logout} className="text-sm text-slate-500 hover:text-slate-800">Sign out</button>
@@ -94,7 +95,7 @@ export default function StudySetup() {
           <h1 className="text-xl font-semibold text-slate-900">What kind of job are you working towards?</h1>
           <p className="text-sm text-slate-500 mt-1">Your Dashboard and Job Matches start from it. Not sure yet? Keep "Open to all ICT roles". You can change it any time.</p>
         </div>
-        {!categories && <div className="flex justify-center py-4 text-blue-600"><Spinner /></div>}
+        {!categories && <><LoadingLabel>Loading careers…</LoadingLabel><ChoiceRowsSkeleton rows={4} box={false} /></>}
         {categories && (
           <div role="radiogroup" aria-label="Career goal" className="grid gap-1.5 max-h-72 overflow-y-auto -mx-1 px-1">
             {[{ value: '', label: 'Open to all ICT roles' }, ...categories.map(c => ({ value: c, label: c }))].map(o => (

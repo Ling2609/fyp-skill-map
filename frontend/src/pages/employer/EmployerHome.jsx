@@ -7,6 +7,7 @@ import EmployerDashboard from './EmployerDashboard'
 import { errText } from '../student/profileUtils'
 import RowMenu from '../admin/RowMenu'
 import { CardSkeleton, LoadingLabel } from '../../components/Skeleton'
+import { Busy } from '../../components/Spinner'
 
 // Employer home (11 Oct; mock-up 9 Oct board 1). An employer the career office hasn't approved yet (or has rejected)
 // sees only where they stand. An approved one sees the Dashboard (12 Oct, EmployerDashboard.jsx); My jobs moved to
@@ -61,7 +62,7 @@ function Dialog({ title, busy, onCancel, children, action, onAction, disabled })
         <div className="flex justify-end gap-2 px-6 py-4 bg-slate-50 border-t border-slate-100 rounded-b-2xl">
           <button type="button" onClick={onCancel} disabled={busy} className="px-4 py-2 text-sm font-medium rounded-lg border border-slate-200 bg-white text-slate-700 hover:bg-slate-50">Cancel</button>
           <button type="button" onClick={onAction} disabled={busy || disabled} className="px-4 py-2 text-sm font-medium rounded-lg bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-40">
-            {busy ? 'Saving…' : action}
+            {busy ? <Busy>Saving…</Busy> : action}
           </button>
         </div>
       </div>

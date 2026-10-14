@@ -7,6 +7,7 @@ import { RepoCheck } from '../student/profileSections'
 import { STATUSES, STATUS_CLS, fmtDay } from './statuses'
 import { useStatusChange } from './statusChange'
 import { CardSkeleton, LoadingLabel } from '../../components/Skeleton'
+import { Busy } from '../../components/Spinner'
 
 // Employer > one applicant (11 Oct, batch 2; mock-up board 4). Their match for this job, each required skill with
 // where it comes from (module, project, certificate), then the showcase: projects, strongest modules (grades only if
@@ -92,7 +93,7 @@ export default function ApplicantProfile() {
               ? <span className="shrink-0 text-sm font-medium text-blue-700 bg-blue-50 border border-blue-200 rounded-lg px-3.5 py-2">Invited {fmtDay(data.invited_at)}</span>
               : <button onClick={invite} disabled={inviting}
                   className="shrink-0 px-4 py-2 text-sm font-medium rounded-lg bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-40">
-                  {inviting ? 'Inviting…' : 'Invite to apply'}
+                  {inviting ? <Busy>Inviting…</Busy> : 'Invite to apply'}
                 </button>)}
         </div>
       </PageHeader>

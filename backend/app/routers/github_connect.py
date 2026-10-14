@@ -51,10 +51,15 @@ def recheck_projects(user: User, db: Session) -> int:
     """Work out again, for every project of hers with a repo, whether a connected account owns or contributed to it
     (after connecting or disconnecting an account). The profile's GitHub link follows the first connected account."""
     logins = [a.login for a in accounts_of(user.id, db)]
+    connected = {x.lower() for x in logins}
     for p in db.query(UserProject).filter(UserProject.user_id == user.id, UserProject.github_url.isnot(None)):
         result, as_login = check_repo_owner(p.github_url, logins)
-        if result is not None or not logins:
-            p.repo_check, p.repo_check_as = result or "not_linked", as_login
+        if result is not None:
+            p.repo_check, p.repo_check_as = result, as_login
+        # 15 Oct (outside audit): GitHub couldn't answer. Keep "yours" only while the account that proved it is still
+        # connected; anything else may be out of date now the accounts changed, so it shows no badge (unknown)
+        elif not (p.repo_check == "yours" and (p.repo_check_as or "").lower() in connected):
+            p.repo_check = p.repo_check_as = None
     user.github_url = f"https://github.com/{logins[0]}" if logins else None
     db.commit()
     return db.query(UserProject).filter(UserProject.user_id == user.id, UserProject.repo_check == "yours").count()

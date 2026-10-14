@@ -4,6 +4,8 @@ import { FormButtons, Modal, SkillChecker, SkillChip, Spinner } from './profileP
 import { ADDED_BY_YOU, MIN_DESCRIPTION, errText, inputCls, mergeFound, projectKey } from './profileUtils'
 import { startGithubConnect } from './githubConnect'
 import { IconTile } from './GithubAccounts'
+import { Busy } from '../../components/Spinner'
+import { ChoiceRowsSkeleton } from '../../components/Skeleton'
 
 // Import from GitHub (8 Oct, her choice: alongside "+ Add", not instead of it).
 // 10 Oct (her review: repos were saved first and had to be edited afterwards): two steps, check before adding
@@ -136,7 +138,13 @@ export default function GithubImport({ onClose, onDone }) {
           </div>
         )}
 
-        {listing && <div className="flex justify-center py-6 text-blue-600"><Spinner /></div>}
+        {/* 15 Oct (her review): grey rows in the shape of the list, and what is happening, instead of a lone spinner */}
+        {listing && (
+          <div>
+            <p role="status" className="text-xs text-gray-500 mb-2">Getting your repositories from GitHub…</p>
+            <ChoiceRowsSkeleton rows={3} />
+          </div>
+        )}
         {error && <p role="alert" className="text-xs text-red-500 bg-red-50 rounded-lg px-3 py-2">{error}</p>}
 
         {repos && !listing && (repos.length === 0
@@ -239,7 +247,7 @@ function CheckCard({ it, update, find, onRemove }) {
           <div className="flex justify-end">
             <button type="button" onClick={() => find(it)} disabled={length < MIN_DESCRIPTION || it.busy}
               className="text-sm font-medium text-blue-700 border border-blue-200 bg-white rounded-lg px-3 py-1.5 hover:bg-blue-50 disabled:opacity-40">
-              {it.busy ? 'Finding skills…' : found && !stale && length >= MIN_DESCRIPTION ? 'Find skills again' : 'Find skills'}
+              {it.busy ? <Busy>Finding skills…</Busy> : found && !stale && length >= MIN_DESCRIPTION ? 'Find skills again' : 'Find skills'}
             </button>
           </div>
         </div>

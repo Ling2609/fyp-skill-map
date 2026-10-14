@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import ReasonPicker from './ReasonPicker'
 import { reasonOk } from './reasons'
+import { Busy } from '../../components/Spinner'
 
 // The "are you sure" for Accepted / Rejected (statusChange.jsx): says what the student will see; Esc or a click
 // outside cancels; the action button names the action (as ReasonDialog.jsx, Primer).
@@ -29,7 +30,7 @@ export default function ConfirmDecision({ app, d, busy, onConfirm, onCancel, tit
             className="px-4 py-2 text-sm font-medium rounded-lg border border-slate-200 bg-white text-slate-700 hover:bg-slate-50">Cancel</button>
           <button type="button" autoFocus={!d.danger} onClick={() => onConfirm(why)} disabled={busy || !reasonOk(why)}
             className={`px-4 py-2 text-sm font-medium rounded-lg text-white disabled:opacity-40 ${d.danger ? 'bg-rose-600 hover:bg-rose-700' : 'bg-blue-600 hover:bg-blue-700'}`}>
-            {busy ? 'Saving…' : d.action}
+            {busy ? <Busy>Saving…</Busy> : d.action}
           </button>
         </div>
       </div>

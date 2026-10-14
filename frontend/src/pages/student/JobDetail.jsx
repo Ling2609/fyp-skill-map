@@ -6,7 +6,8 @@ import { skillName } from '../../skillName'
 import { SELF_DECLARED_TIP, errText, sourcePillCls } from './profileUtils'
 import ApplicationSteps from '../../components/ApplicationSteps'
 import { ADMIN_COUNTS_CHANGED } from '../../components/Sidebar'
-import { Bar, RowSkeleton, LoadingLabel } from '../../components/Skeleton'
+import { Bar, RowSkeleton, LoadingLabel, TextSkeleton } from '../../components/Skeleton'
+import { Busy } from '../../components/Spinner'
 
 // The grade itself, not its weight: the weight is the same for C+ and C, so a C showed as "C+" (5 Oct)
 const GRADE_LETTERS = { '4.0': 'A', '3.7': 'A-', '3.3': 'B+', '3.0': 'B', '2.7': 'B-', '2.3': 'C+', '2.0': 'C' }
@@ -86,7 +87,7 @@ function ApplyAction({ a, company, closed: closedCached, taking: takingCached, d
         <>
           <button onClick={apply} disabled={busy}
             className="text-sm font-semibold text-white bg-blue-700 hover:bg-blue-800 px-4 py-2 rounded-lg transition disabled:opacity-50">
-            {busy ? 'Applying…' : 'Apply with my SkillMap profile'}
+            {busy ? <Busy>Applying…</Busy> : 'Apply with my SkillMap profile'}
           </button>
           <p className="text-xs text-slate-500">{company || 'The employer'} sees your profile and your match. Your contact details only if they shortlist you.</p>
           {decideBy && <p className="text-xs font-medium text-slate-700">Decision by {fmtDay(decideBy)}</p>}
@@ -344,9 +345,9 @@ export default function JobDetail() {
         {activeTab === 'description' && (
           <div className="bg-white rounded-xl p-6 border border-gray-100 shadow-sm">
             {bulletsLoading ? (
-              <div className="flex items-center gap-2 text-gray-400 text-sm py-4">
-                <div className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
-                Formatting description...
+              <div>
+                <p role="status" className="text-xs text-gray-500 mb-4">Tidying the job description into points. This takes a few seconds.</p>
+                <TextSkeleton lines={7} />
               </div>
             ) : bullets?.length > 0 ? (
               <ul className="space-y-2">

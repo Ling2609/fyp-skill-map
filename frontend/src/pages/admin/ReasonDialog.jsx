@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Busy } from '../../components/Spinner'
 
 // Pop-up for an admin decision that needs a "why" (7 Oct, her review: the in-row box was cramped). Research
 // (references.md "Admin decision pop-up"): Carbon uses a danger modal for destructive actions and allows form
@@ -47,7 +48,7 @@ export default function ReasonDialog({ decision, name, busy, error, onConfirm, o
           <button type="submit" disabled={!ready || busy}
             className={`px-4 py-2 text-sm font-medium rounded-lg text-white disabled:opacity-40 ${
               danger ? 'bg-rose-600 hover:bg-rose-700' : 'bg-blue-600 hover:bg-blue-700'}`}>
-            {busy ? 'Saving…' : action}
+            {busy ? <Busy>Saving…</Busy> : action}
           </button>
         </div>
       </form>

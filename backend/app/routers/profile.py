@@ -489,9 +489,10 @@ def _checked_project_skills(data: ProjectIn) -> dict[str, str]:
     return out
 
 
-def _set_repo_check(project: UserProject, user: User, db: Session):
+def _set_repo_check(project: UserProject, user: User, db: Session, old_url: str | None = None):
     """14 Oct (Connect GitHub): is the project's repo owned or contributed to by one of her connected accounts?
-    Kept as it was if GitHub can't be asked right now; never blocks saving."""
+    Never blocks saving. If GitHub can't be asked right now, the old result is kept only for the same repo
+    (15 Oct, outside audit: a new link used to inherit the old link's "yours"); a new link shows no badge (unknown)."""
     if not project.github_url:
         project.repo_check = project.repo_check_as = None
         return
@@ -500,6 +501,8 @@ def _set_repo_check(project: UserProject, user: User, db: Session):
     result, as_login = check_repo_owner(project.github_url, [a.login for a in accounts_of(user.id, db)])
     if result is not None:
         project.repo_check, project.repo_check_as = result, as_login
+    elif project.github_url != old_url:
+        project.repo_check = project.repo_check_as = None
 
 
 def _review_project(data: ProjectIn, quotes: dict[str, str], project: UserProject, user: User):
@@ -571,9 +574,10 @@ def edit_project(project_id: int, data: ProjectIn, current_user: User = Depends(
         if not data.name.strip() or not data.description.strip():
             raise HTTPException(status_code=400, detail="Project name and description are required")
         quotes = _checked_project_skills(data)
+        old_url = project.github_url
         project.name, project.description, project.github_url = data.name.strip(), data.description.strip(), github
         project.extracted_skills, project.skill_quotes = list(quotes), quotes
-        _set_repo_check(project, current_user, db)
+        _set_repo_check(project, current_user, db, old_url)
         db.commit()
         db.refresh(project)
         _review_project(data, quotes, project, current_user)
@@ -587,9 +591,10 @@ def edit_project(project_id: int, data: ProjectIn, current_user: User = Depends(
     if changed or nothing_read or no_languages:
         added = {k: v for k, v in (project.skill_quotes or {}).items() if v == ADDED_BY_YOU}
         quotes, github_note, skills_note = _project_skills(data, added, current_user.id)
+        old_url = project.github_url
         project.name, project.description, project.github_url = data.name.strip(), data.description.strip(), github
         project.extracted_skills, project.skill_quotes = list(quotes), quotes
-        _set_repo_check(project, current_user, db)
+        _set_repo_check(project, current_user, db, old_url)
         db.commit()
         db.refresh(project)
     out = ProjectOut.model_validate(project)

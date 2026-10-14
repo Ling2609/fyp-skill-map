@@ -5,6 +5,7 @@ import PageHeader from '../../components/PageHeader'
 import { useAuth } from '../../context/useAuth'
 import { errText } from '../student/profileUtils'
 import { CardSkeleton, LoadingLabel } from '../../components/Skeleton'
+import { Busy } from '../../components/Spinner'
 
 // Employer dashboard (12 Oct, her pick E after mock-ups A-E; references.md "Employer dashboard layout"; left column
 // changed the same day to option B of mock-ups A-C (my proposal; her pick pending): to review sized to its rows + recent activity, so one application isn't a blank card).
@@ -275,7 +276,7 @@ export default function EmployerDashboard() {
                         ? <span className="shrink-0 text-xs font-semibold text-blue-700 bg-blue-50 rounded-full px-2.5 py-1">Invited {ago(g.invited_at)}</span>
                         : <button onClick={() => invite(g)} disabled={inviting === g.student_id}
                             className="shrink-0 text-sm font-medium text-blue-700 border border-blue-200 rounded-lg px-3 py-1 hover:bg-blue-50 disabled:opacity-40">
-                            {inviting === g.student_id ? 'Inviting…' : 'Invite'}
+                            {inviting === g.student_id ? <Busy>Inviting…</Busy> : 'Invite'}
                           </button>}
 
                     </li>

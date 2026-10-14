@@ -4,6 +4,7 @@ import api from '../api'
 import PageHeader from '../components/PageHeader'
 import PasswordStrength from '../components/PasswordStrength'
 import { useAuth } from '../context/useAuth'
+import { Busy } from '../components/Spinner'
 
 // Account settings (4 Oct): login and account details, separate from the Skill Profile (references.md
 // "Personal details page"). Two sections, Account information and Security; each row opens its own small form.
@@ -56,7 +57,7 @@ function FormButtons({ saving, onCancel, label }) {
     <div className="flex items-center gap-2 pt-1">
       <button type="submit" disabled={saving}
         className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition disabled:opacity-50">
-        {saving ? 'Saving…' : label}
+        {saving ? <Busy>Saving…</Busy> : label}
       </button>
       <button type="button" onClick={onCancel} className="px-3 py-2 text-sm text-slate-500 hover:text-slate-800">Cancel</button>
     </div>
@@ -239,7 +240,7 @@ export default function AccountSettings() {
                 <div className="flex items-center gap-2 pt-1">
                   <button type="submit" disabled={saving || (form.code || '').length !== 6}
                     className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition disabled:opacity-50">
-                    {saving ? 'Checking…' : 'Verify'}
+                    {saving ? <Busy>Checking…</Busy> : 'Verify'}
                   </button>
                   <button type="button" onClick={cancel} className="px-3 py-2 text-sm text-slate-500 hover:text-slate-800">Cancel</button>
                   <span className="ml-auto text-sm">
@@ -275,7 +276,7 @@ export default function AccountSettings() {
         <section className="bg-white border border-slate-200 rounded-xl px-6 py-2">
           <h2 className="text-sm font-semibold text-slate-800 pt-4 pb-1">Privacy and data</h2>
           {/* 14 Oct (PDPA access principle, 2024 data portability): everything SkillMap holds, as one JSON file */}
-          <Row label="Your data" value="Everything SkillMap holds about you, in one file" action={downloading ? 'Preparing…' : 'Download my data'}
+          <Row label="Your data" value="Everything SkillMap holds about you, in one file" action={downloading ? <Busy>Preparing…</Busy> : 'Download my data'}
             onAction={downloadData} />
           {downloadError && <p role="alert" className="text-xs text-rose-700 -mt-2 pb-3">{downloadError}</p>}
           {/* 14 Oct: the privacy notice beside the data controls (NN/g: in Settings when there is no footer) */}
@@ -292,7 +293,7 @@ export default function AccountSettings() {
                 <div className="flex items-center gap-2 pt-1">
                   <button type="submit" disabled={saving || !form.current_password}
                     className="bg-rose-700 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-rose-800 transition disabled:opacity-50">
-                    {saving ? 'Deleting…' : 'Delete my account'}
+                    {saving ? <Busy>Deleting…</Busy> : 'Delete my account'}
                   </button>
                   <button type="button" onClick={cancel} className="px-3 py-2 text-sm text-slate-500 hover:text-slate-800">Cancel</button>
                 </div>

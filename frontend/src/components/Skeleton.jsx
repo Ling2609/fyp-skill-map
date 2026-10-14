@@ -57,3 +57,41 @@ export function StatsSkeleton({ n = 4, className = 'grid grid-cols-2 lg:grid-col
     </div>
   )
 }
+
+// 15 Oct (her review: a lone spinner in "Add projects from GitHub"): the same rule inside pop-ups and forms. Content
+// that is loading gets grey bars in its own shape; a spinner is only for an action, next to words saying what it does.
+
+// A form field: its label, then the box (drop-downs while their choices load)
+export function FieldSkeleton({ n = 1 }) {
+  return (
+    <div aria-hidden="true" className="space-y-4">
+      {[...Array(n)].map((_, i) => (
+        <div key={i} className="space-y-2"><Bar className="h-3 w-24" /><Bar className="h-10 w-full rounded-lg" /></div>
+      ))}
+    </div>
+  )
+}
+
+// Choices to tick or pick, each in its own bordered row (repositories to import, career goals)
+export function ChoiceRowsSkeleton({ rows = 3, box = true }) {
+  return (
+    <div aria-hidden="true" className="space-y-2">
+      {[...Array(rows)].map((_, i) => (
+        <div key={i} className="flex gap-3 border border-slate-200 rounded-xl p-3">
+          {box && <Bar className="w-4 h-4 rounded" />}
+          <div className="flex-1 space-y-2"><Bar className={`h-3.5 ${i % 2 ? 'w-1/3' : 'w-2/5'}`} /><Bar className="h-3 w-3/4" /></div>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+// Paragraph lines (text the AI is still tidying, e.g. a job description)
+export function TextSkeleton({ lines = 6 }) {
+  const widths = ['w-1/3', 'w-11/12', 'w-4/5', 'w-5/6', 'w-2/3', 'w-3/4']
+  return (
+    <div aria-hidden="true" className="space-y-3">
+      {[...Array(lines)].map((_, i) => <Bar key={i} className={`${i === 0 ? 'h-4' : 'h-3.5'} ${widths[i % widths.length]}`} />)}
+    </div>
+  )
+}

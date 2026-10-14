@@ -7,6 +7,7 @@ import PageHeader from '../../components/PageHeader'
 import LevelTag from '../../components/LevelTag'
 import { Bar, LoadingLabel } from '../../components/Skeleton'
 import { skillName } from '../../skillName'
+import { Busy } from '../../components/Spinner'
 
 const LOADING_STEPS = [
   'Building your skill profile...',
@@ -346,7 +347,7 @@ export default function Recommend() {
   const searchButton = (
     <button onClick={handleFindJobs} disabled={loading}
       className="shrink-0 bg-blue-600 text-white px-4 sm:px-5 rounded-lg text-sm font-medium hover:bg-blue-700 transition disabled:opacity-50">
-      {loading ? 'Searching…' : 'Search'}
+      {loading ? <Busy>Searching…</Busy> : 'Search'}
     </button>
   )
   // Sort shows plain text with the browser's list invisibly on top (same as the filter buttons), so it is only as

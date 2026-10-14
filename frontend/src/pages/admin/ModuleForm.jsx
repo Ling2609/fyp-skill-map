@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import api from '../../api'
 import { errText } from '../student/profileUtils'
+import { Busy } from '../../components/Spinner'
 
 // Pop-up to add a new module to the list being looked at, or edit a module's name, year and type (7 Oct).
 // Adding (10 Oct, her flow, the same as a student's certificate): fill in the details, "Find skills" in the
@@ -82,8 +83,8 @@ export default function ModuleForm({ module, scopeLabel, busy, error, onSave, on
     if (canAdd) onSave({ code, name, year: Number(year), type, description, skills: finalSkills(), record_id: recordId })
   }
   const field = 'w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500'
-  const mainLabel = editing ? (busy ? 'Saving…' : 'Save')
-    : finding ? 'Finding skills…' : busy ? 'Adding…' : !found ? 'Find skills' : stale ? 'Find skills again' : 'Add module'
+  const mainLabel = editing ? (busy ? <Busy>Saving…</Busy> : 'Save')
+    : finding ? <Busy>Finding skills…</Busy> : busy ? <Busy>Adding…</Busy> : !found ? 'Find skills' : stale ? 'Find skills again' : 'Add module'
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/30" onMouseDown={() => { if (!working) onCancel() }}>

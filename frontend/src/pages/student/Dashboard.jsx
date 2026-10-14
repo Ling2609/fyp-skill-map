@@ -482,7 +482,7 @@ export default function Dashboard() {
                   <p className="text-sm min-w-0 truncate">
                     <span className="font-semibold text-slate-800">Continue a chat</span>
                     <span className="text-slate-500">
-                      {chats === null ? ' · loading…' : chat
+                      {chats === null ? <span aria-hidden="true" className="inline-block align-middle ml-2 h-3 w-40 rounded bg-slate-200 motion-safe:animate-pulse" /> : chat
                         ? ` · ${chat.context?.target_skill ? `Learn ${chat.context.target_skill}` : chat.title} · ${chatDay(chat.updated_at)}`
                         : ` · ${chatNote || 'no chats yet'}`}
                     </span>

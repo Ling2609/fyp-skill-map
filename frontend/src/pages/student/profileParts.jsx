@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { skillName } from '../../skillName'
 import { ADDED_BY_YOU, errText } from './profileUtils'
+import Spinner from '../../components/Spinner'
 
 // Pieces shared by the My Profile cards and pop-ups (moved out of the old Profile.jsx on 8 Oct, so every card
 // and pop-up uses exactly the same chips, pop-ups and buttons).
@@ -39,10 +40,8 @@ export function EmptyState({ icon, title, subtitle }) {
   )
 }
 
-export function Spinner({ size = 'md' }) {
-  const sz = size === 'sm' ? 'w-3.5 h-3.5 border-2' : 'w-5 h-5 border-2'
-  return <div className={`${sz} border-current border-t-transparent rounded-full animate-spin`} />
-}
+// 15 Oct: moved to components/Spinner.jsx so employer and admin pages use the same one
+export { Spinner }
 
 
 // ── Projects and certificates (4 Oct, her review) ─────────────────────────────

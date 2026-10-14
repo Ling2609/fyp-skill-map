@@ -3,6 +3,8 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 import api from '../../api'
 import PageHeader from '../../components/PageHeader'
 import { errText } from '../student/profileUtils'
+import { Busy } from '../../components/Spinner'
+import { Bar, FieldSkeleton, LoadingLabel } from '../../components/Skeleton'
 
 // Employer > Post a job (11 Oct; mock-up 9 Oct board 2; one form since 13 Oct). "Read the skills" adds what SkillMap
 // found under the ad (the same extractor and quote check as live jobs). The employer removes what
@@ -148,6 +150,7 @@ export default function PostJob() {
     skillsRef.current?.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' })
     setJustRead(false)    // eslint-disable-line react-hooks/set-state-in-effect
   }, [justRead])
+  const loadingJob = editing && !editJob && !error
   const byLevel = useMemo(() => Object.fromEntries(BOXES.map(b => [b.level, skills.filter(s => s.level === b.level)])), [skills])
 
   return (
@@ -168,7 +171,16 @@ export default function PostJob() {
           the skills under it in the same form, then Cancel / Publish at the end. Before reading, the description box
           takes the height left so the form shows without scrolling (12 Oct); after reading, the page scrolls. */}
       <div className="flex-1 min-h-0 overflow-y-auto px-8 py-6 flex flex-col">
-        <section className={`bg-white border border-slate-200 rounded-2xl p-6 flex flex-col gap-4 ${read ? '' : 'flex-1'}`}>
+        {/* 15 Oct (her review: loading for all): editing a job, the saved ad is fetched first; grey bars in the form's
+            shape until it arrives, instead of empty boxes that fill in a moment later */}
+        {loadingJob && (
+          <section className="bg-white border border-slate-200 rounded-2xl p-6 space-y-5">
+            <LoadingLabel>Loading the job…</LoadingLabel>
+            <FieldSkeleton n={3} />
+            <div aria-hidden="true" className="space-y-2"><Bar className="h-3 w-24" /><Bar className="h-48 w-full rounded-lg" /></div>
+          </section>
+        )}
+        <section className={`bg-white border border-slate-200 rounded-2xl p-6 flex flex-col gap-4 ${read ? '' : 'flex-1'} ${loadingJob ? 'hidden' : ''}`}>
           <div>
             <label htmlFor="pj-title" className={label}>Job title</label>
             <input id="pj-title" value={ad.title} onChange={set('title')} maxLength={120} placeholder="e.g. Junior Backend Developer"
@@ -223,7 +235,7 @@ export default function PostJob() {
               <Link to="/employer/jobs" className="text-sm text-slate-600 hover:underline">Cancel</Link>
               <button type="button" onClick={readSkills} disabled={reading || cantRead}
                 className="px-4 py-2 text-sm font-medium rounded-lg bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-40">
-                {reading ? 'Reading the skills…' : 'Read the skills'}
+                {reading ? <Busy>Reading the skills…</Busy> : 'Read the skills'}
               </button>
             </div>
           )}
@@ -235,7 +247,7 @@ export default function PostJob() {
                 <h2 className="text-[15px] font-semibold text-slate-900">Skills students are matched on</h2>
                 <button type="button" onClick={readSkills} disabled={reading || cantRead}
                   className="text-sm font-medium text-blue-700 hover:underline disabled:text-slate-300 disabled:no-underline">
-                  {reading ? 'Reading the skills…' : 'Read the skills again'}
+                  {reading ? <Busy>Reading the skills…</Busy> : 'Read the skills again'}
                 </button>
               </div>
               {stale && (
@@ -255,7 +267,7 @@ export default function PostJob() {
                   )}
                   <button type="button" onClick={publish} disabled={!canPublish}
                     className="px-4 py-2 text-sm font-medium rounded-lg bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-40">
-                    {editing ? (publishing ? 'Saving…' : 'Save changes') : publishing ? 'Publishing…' : 'Publish job'}
+                    {editing ? (publishing ? <Busy>Saving…</Busy> : 'Save changes') : publishing ? <Busy>Publishing…</Busy> : 'Publish job'}
                   </button>
                 </div>
               </div>

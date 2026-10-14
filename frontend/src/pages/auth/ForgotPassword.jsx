@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import api from '../../api'
 import PasswordStrength from '../../components/PasswordStrength'
+import { Busy } from '../../components/Spinner'
 
 // Forgot password (4 Oct; OWASP Forgot Password Cheat Sheet + OTP screen patterns, references.md).
 // Step 1: username or email -> a 6-digit code is emailed. Step 2: the code is checked. Step 3: new password.
@@ -117,7 +118,7 @@ export default function ForgotPassword() {
               </div>
               <button type="submit" disabled={loading}
                 className="w-full bg-blue-700 text-white py-2.5 rounded-lg font-medium hover:bg-blue-800 transition disabled:opacity-50">
-                {loading ? 'Sending…' : 'Send code'}
+                {loading ? <Busy>Sending…</Busy> : 'Send code'}
               </button>
             </form>
           </>
@@ -141,7 +142,7 @@ export default function ForgotPassword() {
               </div>
               <button type="submit" disabled={loading || form.code.length !== 6}
                 className="w-full bg-blue-700 text-white py-2.5 rounded-lg font-medium hover:bg-blue-800 transition disabled:opacity-50">
-                {loading ? 'Checking…' : 'Verify'}
+                {loading ? <Busy>Checking…</Busy> : 'Verify'}
               </button>
             </form>
             <p className="text-sm text-center mt-4">
@@ -170,7 +171,7 @@ export default function ForgotPassword() {
               </div>
               <button type="submit" disabled={loading}
                 className="w-full bg-blue-700 text-white py-2.5 rounded-lg font-medium hover:bg-blue-800 transition disabled:opacity-50">
-                {loading ? 'Saving…' : 'Change password'}
+                {loading ? <Busy>Saving…</Busy> : 'Change password'}
               </button>
             </form>
           </>

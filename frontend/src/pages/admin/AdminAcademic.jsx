@@ -6,6 +6,7 @@ import { ADMIN_COUNTS_CHANGED } from '../../components/Sidebar'
 import ModuleForm from './ModuleForm'
 import RowMenu from './RowMenu'
 import { Bar, RowSkeleton, LoadingLabel } from '../../components/Skeleton'
+import { Busy } from '../../components/Spinner'
 
 // Admin > Academic structure (7 Oct, her pick A; references.md "Admin Academic structure layout"). Modules: a list on
 // the left (by year, "To review" / "Reviewed") and the chosen module on the right, so the career office can work
@@ -168,7 +169,7 @@ function ModuleDetails({ id, programmeId, row, onChanged, onReviewed, onEdit, on
             <button type="button" disabled={!!busy}
               onClick={() => run('save', () => api.put(`/admin/modules/${id}/description`, { description: draft }))}
               className="px-3 py-1.5 text-sm font-medium rounded-lg bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50">
-              {busy === 'save' ? 'Saving…' : 'Save description'}
+              {busy === 'save' ? <Busy>Saving…</Busy> : 'Save description'}
             </button>
           </div>
         )}
@@ -221,7 +222,7 @@ function ModuleDetails({ id, programmeId, row, onChanged, onReviewed, onEdit, on
           title={dirty ? 'Save the description first' : undefined}
           onClick={() => run('extract', () => api.post(`/admin/modules/${id}/extract`))}
           className="px-3.5 py-2 text-sm font-medium rounded-lg border border-slate-200 text-slate-700 hover:bg-slate-50 disabled:opacity-50">
-          {busy === 'extract' ? 'Finding skills…' : 'Find skills again'}
+          {busy === 'extract' ? <Busy>Finding skills…</Busy> : 'Find skills again'}
         </button>
         {reviewed ? (
           <button type="button" disabled={!!busy}
@@ -233,7 +234,7 @@ function ModuleDetails({ id, programmeId, row, onChanged, onReviewed, onEdit, on
           <button type="button" disabled={!!busy || dirty || mod.skills.length === 0}
             onClick={() => run('review', () => api.post(`/admin/modules/${id}/review`, { reviewed: true }), onReviewed)}
             className="px-3.5 py-2 text-sm font-medium rounded-lg bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50">
-            {busy === 'review' ? 'Saving…' : 'Mark as reviewed'}
+            {busy === 'review' ? <Busy>Saving…</Busy> : 'Mark as reviewed'}
           </button>
         )}
       </div>
@@ -688,7 +689,7 @@ export default function AdminAcademic() {
                 className="px-4 py-2 text-sm font-medium rounded-lg border border-slate-200 bg-white text-slate-700 hover:bg-slate-50">Cancel</button>
               <button type="button" onClick={confirmRemove} disabled={formBusy}
                 className="px-4 py-2 text-sm font-medium rounded-lg bg-rose-600 text-white hover:bg-rose-700 disabled:opacity-40">
-                {formBusy ? 'Removing…' : 'Remove from list'}
+                {formBusy ? <Busy>Removing…</Busy> : 'Remove from list'}
               </button>
             </div>
           </div>

@@ -3,6 +3,8 @@ import api from '../../api'
 import { Spinner } from './profileParts'
 import { errText } from './profileUtils'
 import { startGithubConnect } from './githubConnect'
+import { Busy } from '../../components/Spinner'
+import { Bar, LoadingLabel } from '../../components/Skeleton'
 
 // Connect GitHub (14 Oct; her design after research, references.md "Verifying GitHub and LinkedIn accounts"): the
 // GitHub link is proved by signing in to GitHub, not typed, so a repo can show it is really hers. Several accounts
@@ -62,7 +64,9 @@ export default function GithubAccounts({ blocked }) {
           <div className="flex-1 min-w-0">
             <p className="text-sm font-semibold text-gray-900">GitHub
               {connected && <DoneBadge>Connected</DoneBadge>}</p>
-            <p className="text-xs text-gray-500 mt-0.5">{accounts === null ? 'Loading…' : status}</p>
+            {accounts === null
+              ? <><LoadingLabel>Loading your GitHub accounts…</LoadingLabel><Bar className="h-3 w-56 mt-1.5" /></>
+              : <p className="text-xs text-gray-500 mt-0.5">{status}</p>}
           </div>
           {accounts !== null && !connected && (
             <button type="button" onClick={connect} disabled={cantConnect}
@@ -79,7 +83,7 @@ export default function GithubAccounts({ blocked }) {
                   github.com/<b className="font-semibold">{a.login}</b> <span className="text-blue-700">↗</span>
                 </a>
                 <button type="button" onClick={() => disconnect(a)} disabled={!!busy}
-                  className="text-xs text-gray-500 hover:text-red-600 disabled:opacity-40">{busy === String(a.id) ? 'Disconnecting…' : 'Disconnect'}</button>
+                  className="text-xs text-gray-500 hover:text-red-600 disabled:opacity-40">{busy === String(a.id) ? <Busy>Disconnecting…</Busy> : 'Disconnect'}</button>
               </li>
             ))}
             <li className="pr-4 py-2.5 pl-[4.5rem]">
