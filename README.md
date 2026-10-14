@@ -91,28 +91,9 @@ python -m venv venv
 source venv/Scripts/activate        # PowerShell: venv\Scripts\activate
 pip install -r requirements.txt
 ```
-Create `backend/.env` (never commit it):
+Copy `backend/.env.example` to `backend/.env` and fill in your values (never commit `.env`; it is in `.gitignore`). The example lists every setting with a comment. The API starts with only `DATABASE_URL` and `SECRET_KEY`; `GROQ_API_KEY` is needed for reading skills and the AI Assistant:
 ```
-DATABASE_URL=postgresql://<user>:<password>@localhost:5432/<database>
-SECRET_KEY=<long random string>
-GROQ_API_KEY=<key>
-GEMINI_API_KEY=<key>
-JSEARCH_KEY=<RapidAPI key>
-# optional
-GEMINI_MODEL=gemini-3.1-flash-lite
-ACCESS_TOKEN_EXPIRE_MINUTES=480
-# optional: emails for Forgot password (Gmail needs 2-Step Verification and an app password)
-SMTP_USER=<gmail address>
-SMTP_PASSWORD=<16-character app password>
-SMTP_HOST=smtp.gmail.com            # default
-SMTP_PORT=587                       # default, STARTTLS
-# optional: chat history (default mongodb://localhost:27017, database "skillmap")
-MONGODB_URL=mongodb://localhost:27017
-# optional: the skill relationship model (folder unzipped from the training run); empty = cosine similarity only
-RELATION_MODEL_DIR=<folder under backend/>
-RELATION_CUTOFF=0.6
-# optional: websites allowed to call the API, comma-separated (default http://localhost:5173)
-CORS_ORIGINS=http://localhost:5173
+cp .env.example .env
 ```
 Without `SMTP_USER` and `SMTP_PASSWORD`, no email is sent: the reset code is printed in the backend console instead, so Forgot password still works on a local machine.
 Start the API: `uvicorn app.main:app --reload` (http://localhost:8000, docs at /docs). On an empty database the tables are created automatically at start-up.
@@ -124,7 +105,7 @@ npm install
 npm run dev                          # http://localhost:5173
 ```
 
-Optional `frontend/.env`: `VITE_API_URL` (default http://localhost:8000) and `VITE_PRIVACY_CONTACT`, the email of the career office that runs SkillMap, shown in the privacy notice for questions and complaints (PDPA). Without it the notice shows the demo address careers@university.example.
+Optional `frontend/.env` (copy `frontend/.env.example`): `VITE_API_URL` (default http://localhost:8000) and `VITE_PRIVACY_CONTACT`, the email of the career office that runs SkillMap, shown in the privacy notice for questions and complaints (PDPA). Without it the notice shows the demo address careers@university.example.
 
 ## Scripts
 
