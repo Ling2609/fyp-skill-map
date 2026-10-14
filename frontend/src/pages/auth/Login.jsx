@@ -158,6 +158,10 @@ export default function Login() {
           Don't have an account?{' '}
           <Link to="/register" className="text-blue-700 font-medium hover:underline">Create account</Link>
         </p>
+        {/* 14 Oct: the notice can be read at any time, not only at sign-up (NN/g: a link on every entry page) */}
+        <p className="text-xs text-center mt-3">
+          <Link to="/privacy" className="text-gray-500 hover:text-blue-700 hover:underline">Privacy notice</Link>
+        </p>
       </div>
     </div>
   )

@@ -10,7 +10,7 @@ export default function PrivacySummary({ accepted, onChange, showError }) {
         <input type="checkbox" checked={accepted} onChange={e => onChange(e.target.checked)}
           className="mt-0.5 w-4 h-4 accent-blue-700" />
         <span>I have read and agree to the{' '}
-          <Link to="/privacy" target="_blank" rel="noopener" className="text-blue-700 hover:underline">Privacy notice</Link>.</span>
+          <Link to="/privacy?from=signup" target="_blank" rel="noopener" className="text-blue-700 hover:underline">Privacy notice</Link>.</span>
       </label>
       {showError && !accepted && <p className="text-xs text-red-500 mt-1">Please accept the privacy notice to create an account.</p>}
     </div>

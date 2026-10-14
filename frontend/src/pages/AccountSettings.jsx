@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import api from '../api'
 import PageHeader from '../components/PageHeader'
 import PasswordStrength from '../components/PasswordStrength'
@@ -64,6 +65,7 @@ function FormButtons({ saving, onCancel, label }) {
 
 export default function AccountSettings() {
   const { user, setUser, logout } = useAuth()
+  const navigate = useNavigate()
   const [open, setOpen] = useState('')          // 'name' | 'email' | 'password' | ''
   const [form, setForm] = useState({})
   const [error, setError] = useState('')
@@ -267,10 +269,18 @@ export default function AccountSettings() {
             </form>
           </Row>
 
+        </section>
+
+        {/* 14 Oct: your data, the notice and deleting the account together, apart from sign-in security */}
+        <section className="bg-white border border-slate-200 rounded-xl px-6 py-2">
+          <h2 className="text-sm font-semibold text-slate-800 pt-4 pb-1">Privacy and data</h2>
           {/* 14 Oct (PDPA access principle, 2024 data portability): everything SkillMap holds, as one JSON file */}
           <Row label="Your data" value="Everything SkillMap holds about you, in one file" action={downloading ? 'Preparing…' : 'Download my data'}
             onAction={downloadData} />
           {downloadError && <p role="alert" className="text-xs text-rose-700 -mt-2 pb-3">{downloadError}</p>}
+          {/* 14 Oct: the privacy notice beside the data controls (NN/g: in Settings when there is no footer) */}
+          <Row label="Privacy notice" value="What SkillMap keeps, why, who sees it and your rights" action="Read"
+            onAction={() => navigate('/privacy?from=account')} />
 
           {user?.role === 'student' && (
             <Row label="Delete account" value="Remove your account and your data" action="Delete account…" danger

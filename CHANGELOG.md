@@ -3,6 +3,17 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 14 Oct 2026 — Privacy notice reads as one document
+- Compared with JobStreet's and Monzo's notices: one white document with headed sections and thin rules instead of a
+  card per section on grey; the "In short" summary is the only box, and the text column is narrower for reading.
+- The back link is blue (underlined on hover or tap) and says where it goes: "Back to sign-up" when the notice was
+  opened from the sign-up form (it closes the notice's tab, so the half-filled form is kept), "Back to SkillMap"
+  when signed in, "Back to sign in" otherwise. "this version" in the change list is a blue tag.
+- The notice can be read at any time, not only at sign-up: a "Privacy notice" link under the sign-in form, and a
+  row in Account settings (back link: "Back to Account settings"). Account settings now has a "Privacy and data"
+  section (Download my data, Privacy notice, Delete account) apart from Security (password). (NN/g: link the policy
+  on every entry page, or in Settings when there is no footer.)
+
 ## 14 Oct 2026 — Privacy notice: same look as the other pages, every version kept
 - The header follows the app's detail pages: a grey "← Back to SkillMap" above the title on the left (to the
   Dashboard when signed in, else to sign-in), the title and date, and a blue Bahasa Malaysia / English button on the
