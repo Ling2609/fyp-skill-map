@@ -61,7 +61,7 @@ function useSkillMapApplication(jobRef, onSkillMap) {
 
 // 14 Oct (transparency flow): the employer's decision date is shown before applying; a job that stopped taking
 // applications (or closed) can't be applied to ("Applications closed", as Homerun's closed jobs)
-function ApplyAction({ a, company, closed: closedCached, taking: takingCached, decideBy: dateCached }) {
+function ApplyAction({ a, company, closed: closedCached, taking: takingCached, decideBy: dateCached, fromApps }) {
   const { app, busy, error, apply, now } = a
   const closed = now ? now.closed : closedCached
   const taking = now ? now.taking_applications : takingCached
@@ -74,6 +74,9 @@ function ApplyAction({ a, company, closed: closedCached, taking: takingCached, d
           <span className={`text-sm font-semibold border px-4 py-2 rounded-lg ${OUTCOME[app.status] || 'text-slate-700 bg-slate-50 border-slate-200'}`}>
             {['accepted', 'rejected'].includes(app.status) ? `${app.status_label} · ${fmtDay(app.status_changed_at)}` : `Applied · ${fmtDay(app.applied_at)}`}
           </span>
+          {/* 14 Oct (her review): the way to all applications sits under the status it belongs to; not shown when
+              the back link already goes there */}
+          {!fromApps && <Link to="/applications" className="text-xs text-blue-700 hover:underline">View in My applications</Link>}
         </>
       ) : closed ? (
         <span className="text-sm text-slate-500 bg-slate-100 px-4 py-2 rounded-lg">This job is closed</span>
@@ -112,8 +115,7 @@ function ApplicationProgress({ a, company }) {
         <b>No update for {p.quiet_days} days.</b> {p.nudge === 'move_on' ? 'Treat this one as unlikely and put your time into other jobs.' : 'Keep applying to other jobs while you wait.'}
       </p>}
       {/* 12 Oct (her review): no sentence about the gap (the score row and the Skill Gap tab, opened for a rejected
-          application, already say it); the way to all applications sits with the progress it belongs to */}
-      <div className="mt-2 text-right"><Link to="/applications" className="text-xs font-medium text-blue-700 hover:underline">All your applications →</Link></div>
+          application, already say it). 14 Oct: the link to all applications moved under the status pill */}
     </div>
   )
 }
@@ -124,8 +126,10 @@ export default function JobDetail() {
   const { jobId } = useParams()
   // Back to the page the job was opened from (Job Matches or Dashboard). history.back() keeps that page's
   // place; a job opened in a new tab has nothing to go back to, so it goes to Job Matches
+  // 14 Oct (her review; GOV.UK back link: name where it goes): the label says the page it was opened from
   const backLabel = location.state?.from || 'Job Matches'
-  const goBack = () => (window.history.state?.idx > 0 ? navigate(-1) : navigate('/recommend'))
+  const BACK_PATHS = { 'Job Matches': '/recommend', Dashboard: '/dashboard', 'My applications': '/applications' }
+  const goBack = () => (window.history.state?.idx > 0 ? navigate(-1) : navigate(BACK_PATHS[backLabel] || '/recommend'))
   // The chatbot's "Back to <job>" returns here on the same tab: remember it in this history entry first
   // The job's id goes too (E3, 9 Oct): the chatbot reads this job's skill gap itself (what she has, what is missing,
   // the ad's words), so its plan uses the same numbers as this page. (The old &reason= was never read.)
@@ -277,7 +281,7 @@ export default function JobDetail() {
                     : ' · Past posting from JobStreet (2024)'}
               </p>
             </div>
-            {gap?.job?.source === 'employer' && <ApplyAction a={skillmapApp} company={gap.job.company} closed={gap.job.closed}
+            {gap?.job?.source === 'employer' && <ApplyAction a={skillmapApp} fromApps={backLabel === 'My applications'} company={gap.job.company} closed={gap.job.closed}
               taking={gap.job.taking_applications} decideBy={gap.job.decide_by} />}
             {gap?.job?.source === 'live' && gap.job.source_url && (
               <div className="shrink-0 flex flex-col items-end gap-1">

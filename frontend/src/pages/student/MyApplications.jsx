@@ -77,7 +77,7 @@ function Outcome({ r }) {
         </div>
       )}
       <p className="text-sm">
-        <Link to={`/jobs/${encodeURIComponent(r.job_ref)}`} className="text-blue-700 hover:underline">See your skill gap for this job</Link>
+        <Link to={`/jobs/${encodeURIComponent(r.job_ref)}`} state={{ from: 'My applications' }} className="text-blue-700 hover:underline">See your skill gap for this job</Link>
         {' · '}<Link to="/recommend" onClick={() => similar(r)} className="text-blue-700 hover:underline">Similar jobs</Link>
       </p>
     </div>
@@ -175,7 +175,7 @@ export default function MyApplications() {
               <h2 className="text-[15px] font-semibold text-slate-900">{inv.company} invited you to apply</h2>
               <p className="text-sm text-slate-600">{inv.title}{inv.match && ` · you have ${inv.match} skills`} · {fmtDay(inv.invited_at)}</p>
             </div>
-            <Link to={`/jobs/${encodeURIComponent(inv.job_ref)}`} className="text-sm font-medium text-violet-800 bg-white border border-violet-200 rounded-lg px-3.5 py-1.5 hover:bg-violet-100">View job</Link>
+            <Link to={`/jobs/${encodeURIComponent(inv.job_ref)}`} state={{ from: 'My applications' }} className="text-sm font-medium text-violet-800 bg-white border border-violet-200 rounded-lg px-3.5 py-1.5 hover:bg-violet-100">View job</Link>
             <button onClick={() => dismiss(inv)} className="text-sm text-slate-500 hover:text-slate-800">Not interested</button>
           </section>
         ))}
@@ -206,7 +206,7 @@ export default function MyApplications() {
                   <article key={r.id} className="bg-white border border-slate-200 rounded-2xl px-5 py-4">
                     <div className="flex items-start justify-between gap-3">
                       <div className="min-w-0">
-                        <Link to={`/jobs/${encodeURIComponent(r.job_ref)}`} className="text-[15px] font-semibold text-slate-900 hover:text-blue-700">{r.title}</Link>
+                        <Link to={`/jobs/${encodeURIComponent(r.job_ref)}`} state={{ from: 'My applications' }} className="text-[15px] font-semibold text-slate-900 hover:text-blue-700">{r.title}</Link>
                         <p className="text-xs text-slate-500 mt-0.5">{r.company}{r.match && ` · your match ${r.match}`}</p>
                       </div>
                       <span className={`shrink-0 text-xs font-semibold rounded-full px-2.5 py-0.5 ${PILL[key]}`}>{label}</span>

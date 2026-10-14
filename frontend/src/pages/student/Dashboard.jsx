@@ -146,7 +146,7 @@ function OpensUp({ r, goal, jobs }) {
       <ul className="mt-1 space-y-0.5">
         {r.opens.map(o => (
           <li key={o.job_ref} className="text-slate-700">
-            <Link to={`/jobs/${encodeURIComponent(o.job_ref)}`} className="hover:text-blue-700 hover:underline">{o.title}</Link>
+            <Link to={`/jobs/${encodeURIComponent(o.job_ref)}`} state={{ from: 'Dashboard' }} className="hover:text-blue-700 hover:underline">{o.title}</Link>
             <span className="text-slate-500">{o.company ? ` · ${o.company}` : ''}</span>
             {' — '}<span className="tabular-nums"><b className="font-semibold">{o.before} → {o.after}</b> of {o.total} required skills</span>
           </li>
@@ -199,26 +199,32 @@ function GoalCard({ data, busy, onGoal, onPlan, onJobs }) {
         {missing.length > 0 && (
           <div className="mt-4 min-h-0 flex flex-col">
             <p className="shrink-0 text-sm font-semibold text-slate-700">Still to learn <span className="font-normal text-slate-500">· tick the ones you want a plan for</span></p>
-            {/* pr-3: the numbers keep a little space from the scroll bar */}
-            <div className="mt-1 min-h-0 lg:overflow-y-auto pr-3">
-              {[[quick, 'Quickest wins', 'each would make you fit more jobs'], [often, quick.length ? 'Also asked for often' : 'Asked for most often', 'share of these jobs that ask for it']]
-                .filter(([rows]) => rows.length).map(([rows, title, hint]) => (
-                <section key={title} className="mt-2 first:mt-1">
-                  <p className="text-xs font-semibold text-slate-600">{title} <span className="font-normal text-slate-400">· {hint}</span></p>
-                  <ul>
+            {/* 14 Oct (her review, option A): the same pinned grey bands as Admin Academics' years (Material list
+                subheaders stay pinned until the next one; NN/g: sticky headers small and opaque). The band's right side says
+                what each row's number means; no count on the band, which read as "4 more jobs" (her review). */}
+            <div className="mt-2 min-h-0 lg:overflow-y-auto rounded-lg border border-slate-200">
+              {[[quick, 'Quickest wins', 'more jobs you\'d fit'], [often, quick.length ? 'Also asked for often' : 'Asked for most often', 'of jobs ask']]
+                .filter(([rows]) => rows.length).map(([rows, title, column]) => (
+                <section key={title}>
+                  <p className="sticky top-0 z-10 flex justify-between gap-3 px-3 py-1.5 text-xs font-semibold text-slate-600 bg-slate-100 border-b border-slate-200 [section+section_&]:border-t">
+                    <span>{title}</span>
+                    <span className="font-normal text-slate-500">{column}</span>
+                  </p>
+                  <ul className="px-3">
                     {rows.map(r => (
-                      <li key={r.skill} className="border-t border-slate-200 first:border-t-0">
-                        {/* wraps on a phone: the number goes under the skill instead of over it */}
-                        <div className="flex flex-wrap items-center gap-x-3">
-                          <label className="flex-1 min-w-40 flex items-center gap-3 py-2 cursor-pointer">
+                      <li key={r.skill} className="border-t border-slate-100 first:border-t-0">
+                        <div className="flex items-center gap-3">
+                          <label className="flex-1 min-w-0 flex items-center gap-3 py-2 cursor-pointer">
                             <input type="checkbox" checked={picked.includes(r.skill)} onChange={() => toggle(r.skill)} className="w-4 h-4 accent-blue-700" />
                             <span className="flex-1 text-sm text-slate-800">{skillName(r.skill)}</span>
                           </label>
-                          {r.opens_count > 0 ? (<span className="flex items-center gap-3 pl-7 pb-2 sm:pl-0 sm:pb-0">
-                            <span className="text-xs font-semibold text-emerald-700 tabular-nums whitespace-nowrap">+{r.opens_count} {r.opens_count === 1 ? 'job' : 'jobs'} you'd fit</span>
+                          {r.opens_count > 0 ? (
                             <button type="button" onClick={() => setOpen(o => o === r.skill ? null : r.skill)} aria-expanded={open === r.skill}
-                              className="text-xs text-blue-700 hover:underline whitespace-nowrap">What opens up {open === r.skill ? '▴' : '▾'}</button>
-                          </span>) : (
+                              aria-label={`What opens up with ${skillName(r.skill)}: ${r.opens_count} more ${r.opens_count === 1 ? 'job' : 'jobs'} you'd fit`}
+                              className="text-xs font-semibold text-emerald-700 tabular-nums whitespace-nowrap hover:underline">
+                              +{r.opens_count} {r.opens_count === 1 ? 'job' : 'jobs'} {open === r.skill ? '▴' : '▾'}
+                            </button>
+                          ) : (
                             <span className="text-xs text-slate-500 tabular-nums">{pct(r.share)}</span>
                           )}
                         </div>
