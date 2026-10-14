@@ -43,6 +43,7 @@ from sqlalchemy import text as sql
 
 from app.database import SessionLocal
 from app.models.job import Job, JobSkill
+from app.services.extraction_records import record      # 14 Oct: kept in MongoDB for the evaluation
 from app.services.job_skill_store import MIN_HARD, check_job_skills, replace_job_skills
 from app.services.skill_names import canonical_key
 
@@ -227,6 +228,7 @@ def main():
                     len({k["alternative_group"].lower() for k in kept if k["type"] == "hard" and k["alternative_group"]})
                 if groups:
                     print(f"  either-or groups: {', '.join(sorted(groups))}")
+                outcome = "dry_run"                           # 14 Oct: kept in MongoDB extraction_records
                 if args.save:
                     hard = checked.hard
                     # Few hard skills is only a failure sign when sentences were skipped. When every sentence was
@@ -236,12 +238,16 @@ def main():
                     if hard < MIN_HARD and not (n_sent and done == n_sent):
                         totals["kept_old"] += 1
                         print(f"  NOT SAVED: only {hard} hard skills and {n_sent - done} sentences unread; old skills kept")
+                        outcome = "too_few"
                     else:
                         if hard < MIN_HARD:
                             print(f"  Every sentence read; the ad names only {hard} hard skills")
                         n_saved = save_skills(db, job, kept, JOB_EVIDENCE_VERSION)
                         totals["saved"] += 1
+                        outcome = "saved"
                         print(f"  SAVED {n_saved} skills (old ones backed up in {BACKUP})")
+                record("job_ad", source=job.job_id, model=extractor.model, prompt_version=JOB_EVIDENCE_VERSION,
+                       proposed=items, kept=kept, rejected=rejected, tidy=checked.tidy, outcome=outcome)
                 for k in kept + rejected:
                     w.writerow([date.today().isoformat(), job.job_id, job.source, job.job_title, k["skill"],
                                 "keep" if k in kept else "reject: " + k["reason"], k.get("type"), k.get("level"),

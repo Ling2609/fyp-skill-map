@@ -22,7 +22,7 @@ Live jobs (JSearch) + jobs posted on SkillMap ──► skill extraction with qu
 |---|---|
 | Frontend | React 19, Vite, Tailwind CSS v4 (pages load on first use) |
 | Backend | FastAPI (Python 3.13), SQLAlchemy, JWT (python-jose), bcrypt |
-| Databases | PostgreSQL 16 (all app data); MongoDB (AI Assistant chat history only; the chat still works without it) |
+| Databases | PostgreSQL 16 (all app data); MongoDB (AI Assistant chat history, and a record of every AI skill reading with what people changed afterwards; SkillMap still works without it) |
 | Skill extraction + AI Assistant | gpt-oss-120b via the Groq API (gpt-oss-20b when its daily limit is reached) |
 | Job description formatting (display only) | Gemini (`gemini-3.1-flash-lite`) |
 | Matching | SBERT `all-MiniLM-L6-v2` (pre-trained) + a fine-tuned DeBERTa relationship model ("does skill A cover job skill B?") when `RELATION_MODEL_DIR` is set; without it, cosine similarity only. The backend prints which one is in use at start-up |
@@ -49,7 +49,7 @@ fyp-skill-map/
 │   ├── app/                the API (runs as the web server)
 │   │   ├── main.py         start-up, CORS, creates tables
 │   │   ├── config.py       settings read from backend/.env
-│   │   ├── database.py     PostgreSQL connection; mongo.py: MongoDB (chat history)
+│   │   ├── database.py     PostgreSQL connection; mongo.py: MongoDB (chat history; services/extraction_records.py: AI skill readings)
 │   │   ├── routers/        HTTP endpoints by feature: auth, profile, modules, jobs, recommend, skillgap,
 │   │   │                   applications, chatbot, employer, admin, admin_academic
 │   │   ├── services/       skill_profile.py (the Graduate Skill Profile + matching), skill_relation.py
@@ -134,6 +134,7 @@ Run every script from `backend/` with the venv active, e.g. `python scripts/tool
 | `pipeline/build_learning_resources.py` | Builds `data/learning_resources.json` from `data/learning_resources_curated.csv` and the most-asked skills in real ads (`--from-db`: your live jobs); saves the ranking to `docs/evidence/` | – |
 | `tools/check_learning_links.py` | Opens every link in `data/learning_resources.json` and marks it ok / not ok; the AI Assistant only gives students links marked ok. `--coverage` lists the most-asked job skills with no resources yet | Internet |
 | `tools/count_rows.py` | Prints the number of rows in every table. Run before and after an upgrade and compare, to show nothing was lost | — |
+| `tools/extraction_report.py` | From MongoDB `extraction_records`: per source (job ads, modules, student projects) and prompt version, how many skills the AI proposed, how many the checks rejected and why, and how often people removed, added or re-levelled skills afterwards. `--since`, `--csv` | MongoDB |
 | `tools/compare_profile_extraction.py` | Before/after check for project and certificate skills: old prompts vs the new quote-checked extraction on 6 sample projects (hand-written gold lists) and 4 certificates; precision, recall, unsupported skills → `docs/evidence/profile_extraction_before_after.csv` | Groq |
 | `tools/check_skill_profile.py` | Read-only: a student's skill count, sources and near-duplicates. `--no-sbert` | – |
 | `tools/compare_scoring.py` | Read-only (step 2): a student's coverage under different rules for which matched skills count, sensitivity table, and a random sample of related pairs for labelling (`docs/evidence/`) | – |

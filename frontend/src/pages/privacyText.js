@@ -70,6 +70,7 @@ const SECTIONS = {
       'Module names and descriptions come **from the university**; skills in them are found by our AI and checked by the career office.',
       'If you import a GitHub repository, we read that **public** repository only.',
       'We also keep your **applications and their progress**, invitations to apply, your **AI Assistant conversations**, and security records (failed sign-ins, one-time codes that expire).',
+      'When our AI suggests skills for your project, we keep **what it suggested and which skills you kept**, to measure and improve how accurate it is. The project text itself is not copied.',
       'We **do not ask** for your identity card number, date of birth, gender, race, religion or a photograph.',
     ]],
     ['why', 'Why we use it', [
@@ -90,7 +91,7 @@ const SECTIONS = {
     ['keep', 'How long we keep it', [
       'Your data is kept **while your account exists**.',
       'An AI Assistant conversation is deleted automatically **18 months after its last message**.',
-      'When you **delete your account**, your profile, grades, projects, certifications, awards, applications, invitations and AI Assistant conversations are deleted.',
+      'When you **delete your account**, your profile, grades, projects, certifications, awards, applications, invitations, AI Assistant conversations and the records of skills suggested for your projects are deleted.',
       'One-time codes are deleted once used or expired.',
     ]],
     ['choices', 'Your choices', [
@@ -119,6 +120,7 @@ const SECTIONS = {
       'Nama dan penerangan modul datang **daripada universiti**; kemahiran di dalamnya dikenal pasti oleh AI kami dan disemak oleh pejabat kerjaya.',
       'Jika anda mengimport repositori GitHub, kami hanya membaca repositori **awam** tersebut.',
       'Kami juga menyimpan **permohonan anda dan kemajuannya**, jemputan untuk memohon, **perbualan Pembantu AI** anda, dan rekod keselamatan (log masuk yang gagal, kod sekali guna yang tamat tempoh).',
+      'Apabila AI kami mencadangkan kemahiran untuk projek anda, kami menyimpan **apa yang dicadangkan dan kemahiran yang anda kekalkan**, untuk mengukur dan meningkatkan ketepatannya. Teks projek itu sendiri tidak disalin.',
       'Kami **tidak meminta** nombor kad pengenalan, tarikh lahir, jantina, kaum, agama atau gambar anda.',
     ]],
     ['why', 'Mengapa kami menggunakannya', [
@@ -139,7 +141,7 @@ const SECTIONS = {
     ['keep', 'Berapa lama kami menyimpannya', [
       'Data anda disimpan **selagi akaun anda wujud**.',
       'Perbualan Pembantu AI dipadam secara automatik **18 bulan selepas mesej terakhirnya**.',
-      'Apabila anda **memadam akaun**, profil, gred, projek, pensijilan, anugerah, permohonan, jemputan dan perbualan Pembantu AI anda dipadam.',
+      'Apabila anda **memadam akaun**, profil, gred, projek, pensijilan, anugerah, permohonan, jemputan, perbualan Pembantu AI dan rekod kemahiran yang dicadangkan untuk projek anda dipadam.',
       'Kod sekali guna dipadam sebaik sahaja digunakan atau tamat tempoh.',
     ]],
     ['choices', 'Pilihan anda', [

@@ -22,7 +22,7 @@ import json
 import re
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from groq import Groq
 
 from app.database import get_db
@@ -60,6 +60,7 @@ class ProjectIn(BaseModel):
     # 10 Oct (her flow, as certificates): the skills the student checked in the pop-up, {skill: evidence} in order;
     # evidence = her own words, "GitHub: N% of the code" or "Added by you". None = found on save (older callers).
     skills: dict[str, str] | None = None
+    record_id: str | None = Field(default=None, max_length=40)   # 14 Oct: the AI's suggestion this list came from
 
 
 class ProjectSuggestIn(BaseModel):
@@ -241,13 +242,22 @@ Return ONLY a JSON array of objects with the keys "skill" and "quote"."""
 SKILLS_NOT_READ = "Skills couldn't be read right now. Add them yourself, or edit the project later to try again."
 
 
-def _extract_project(name: str, description: str) -> tuple[dict[str, str], bool]:
-    """({skill: quote} the student's own words support, True if the AI call failed: limit reached, network...)."""
+PROJECT_PROMPT_VERSION = "project-v1"     # project_prompt() above; change it when the prompt changes
+
+
+def _extract_project(name: str, description: str, user_id: int | None = None) -> tuple[dict[str, str], bool, str | None]:
+    """({skill: quote} the student's own words support, True if the AI call failed: limit reached, network...,
+    the id of the extraction record kept in MongoDB, or None)."""
+    from app.services.extraction_records import record
     answer = _ask_json(project_prompt(name, description), "project skills")
     kept, rejected = verify_project_skills(answer, f"{name}\n{description}")
     for r in rejected:
         print(f"[project skills] dropped {r['skill']!r}: {r['reason']} ({r['quote']!r})")
-    return kept, answer is None
+    # 14 Oct: what the AI proposed, what the check kept and dropped (docs/data_flow.md, extraction_records)
+    rid = record("project", model=MODEL, prompt_version=PROJECT_PROMPT_VERSION, user_id=user_id,
+                 proposed=answer if isinstance(answer, list) else [], kept=[{"skill": k, "quote": q} for k, q in kept.items()],
+                 rejected=rejected, outcome="ai_failed" if answer is None else "suggested")
+    return kept, answer is None, rid
 
 
 def extract_skills_from_project(name: str, description: str) -> dict[str, str]:
@@ -410,11 +420,11 @@ def _check_cert(data: CertIn, user: User, db: Session, current: UserCertificatio
                                                         f"Are you sure you want to {ask}?")
 
 
-def _project_skills(data: ProjectIn, keep: dict[str, str]) -> tuple[dict[str, str], str | None, str | None]:
+def _project_skills(data: ProjectIn, keep: dict[str, str], user_id: int | None = None) -> tuple[dict[str, str], str | None, str | None]:
     """{skill: evidence} from the text + GitHub, plus the student's own additions in `keep`; and the GitHub note."""
     if not data.name.strip() or not data.description.strip():
         raise HTTPException(status_code=400, detail="Project name and description are required")
-    quotes, failed = _extract_project(data.name.strip(), data.description.strip())
+    quotes, failed, _ = _extract_project(data.name.strip(), data.description.strip(), user_id)
     github_note = None
     if (data.github_url or "").strip():
         languages, github_note = repo_languages(data.github_url)
@@ -473,6 +483,16 @@ def _checked_project_skills(data: ProjectIn) -> dict[str, str]:
     return out
 
 
+def _review_project(data: ProjectIn, quotes: dict[str, str], project: UserProject, user: User):
+    """14 Oct: what the student kept, removed or added compared with the AI's suggestion (her own record only).
+    Skills from GitHub's language list aren't the AI's, so they are left out of the comparison."""
+    if data.skills is None or not data.record_id:
+        return
+    from app.services.extraction_records import review_against
+    mine = [k for k, v in quotes.items() if not _GITHUB_EVIDENCE.fullmatch(str(v))]
+    review_against(data.record_id, "student", mine, source=project.id, user_id=user.id)
+
+
 @router.post("/projects/suggest")
 def suggest_project_skills(data: ProjectSuggestIn, current_user: User = Depends(get_current_user)):
     """A project's skills for the pop-up, nothing saved: the AI reads the student's words (if there is at least a
@@ -482,9 +502,9 @@ def suggest_project_skills(data: ProjectSuggestIn, current_user: User = Depends(
     name, description = " ".join(data.name.split()), data.description.strip()
     if not name:
         raise HTTPException(status_code=400, detail="Type the project name first.")
-    quotes, failed = ({}, False)
+    quotes, failed, record_id = ({}, False, None)
     if len(description) >= MIN_DESCRIPTION:
-        quotes, failed = _extract_project(name, description)
+        quotes, failed, record_id = _extract_project(name, description, current_user.id)
     github_note = None
     if (data.github_url or "").strip():
         languages, github_note = repo_languages(data.github_url)
@@ -493,7 +513,8 @@ def suggest_project_skills(data: ProjectSuggestIn, current_user: User = Depends(
             if canonical_key(lang) not in have:
                 quotes[lang] = f"GitHub: {pct}% of the code"
     return {"skills": [{"name": k, "evidence": v} for k, v in quotes.items()],
-            "github_note": github_note, "skills_note": SKILLS_NOT_READ if failed else None}
+            "github_note": github_note, "skills_note": SKILLS_NOT_READ if failed else None,
+            "record_id": record_id}      # sent back on save, so what she kept is compared with what the AI found
 
 
 @router.post("/projects", response_model=ProjectOut, status_code=201)
@@ -504,13 +525,14 @@ def add_project(data: ProjectIn, current_user: User = Depends(get_current_user),
             raise HTTPException(status_code=400, detail="Project name and description are required")
         quotes, github_note, skills_note = _checked_project_skills(data), None, None
     else:
-        quotes, github_note, skills_note = _project_skills(data, {})
+        quotes, github_note, skills_note = _project_skills(data, {}, current_user.id)
     project = UserProject(user_id=current_user.id, name=data.name.strip(), description=data.description.strip(),
                           github_url=(data.github_url or "").strip() or None,
                           extracted_skills=list(quotes), skill_quotes=quotes)
     db.add(project)
     db.commit()
     db.refresh(project)
+    _review_project(data, quotes, project, current_user)
     out = ProjectOut.model_validate(project)
     out.github_note = github_note
     out.skills_note = skills_note
@@ -533,6 +555,7 @@ def edit_project(project_id: int, data: ProjectIn, current_user: User = Depends(
         project.extracted_skills, project.skill_quotes = list(quotes), quotes
         db.commit()
         db.refresh(project)
+        _review_project(data, quotes, project, current_user)
         return ProjectOut.model_validate(project)
     changed = (data.name.strip(), data.description.strip(), github) != (project.name, project.description, project.github_url)
     # also when it has no skills from its text yet (e.g. the AI call failed last time): "edit later to try again"
@@ -542,7 +565,7 @@ def edit_project(project_id: int, data: ProjectIn, current_user: User = Depends(
     no_languages = bool(github) and not any(str(v).startswith("GitHub:") for v in (project.skill_quotes or {}).values())
     if changed or nothing_read or no_languages:
         added = {k: v for k, v in (project.skill_quotes or {}).items() if v == ADDED_BY_YOU}
-        quotes, github_note, skills_note = _project_skills(data, added)
+        quotes, github_note, skills_note = _project_skills(data, added, current_user.id)
         project.name, project.description, project.github_url = data.name.strip(), data.description.strip(), github
         project.extracted_skills, project.skill_quotes = list(quotes), quotes
         db.commit()

@@ -314,6 +314,11 @@ def export_my_data(db: Session = Depends(get_db), current_user: User = Depends(g
                  for d in chat_sessions().find({"user_id": u.id}).sort("created_at", 1)]
     except PyMongoError:
         chats = "Chat history couldn't be reached when this file was made. Please try again later."
+    from app.services.extraction_records import for_user
+    try:                    # what the AI suggested for her projects, what the checks dropped, what she kept (14 Oct)
+        suggestions = [_iso(d) for d in for_user(u.id)]
+    except PyMongoError:
+        suggestions = "These records couldn't be reached when this file was made. Please try again later."
     data = {
         "about": "Everything SkillMap holds about you, as of the date below. Security data (your password hash, "
                  "reset codes, sign-in counters) is not included.",
@@ -327,6 +332,7 @@ def export_my_data(db: Session = Depends(get_db), current_user: User = Depends(g
         "invitations": invitations,
         "career_office_decisions": office,
         "ai_assistant_chats": chats,
+        "project_skill_suggestions": suggestions,
     }
     return Response(content=json.dumps(data, indent=2, ensure_ascii=False, default=str),
                     media_type="application/json",
@@ -345,8 +351,11 @@ def delete_my_account(payload: DeleteAccountIn, db: Session = Depends(get_db),
     from pymongo.errors import PyMongoError
     from app.mongo import chat_sessions
     try:
-        # chats first: if MongoDB can't be reached, nothing is deleted, so no half-deleted account is left behind
+        # MongoDB first (chats, then the AI's skill suggestions for her projects): if it can't be reached, nothing is
+        # deleted, so no half-deleted account is left behind
+        from app.services.extraction_records import delete_for_user
         chat_sessions().delete_many({"user_id": current_user.id})
+        delete_for_user(current_user.id)
     except PyMongoError:
         raise HTTPException(status_code=503, detail="Your chat history can't be reached right now, so nothing was "
                                                     "deleted. Please try again later.")

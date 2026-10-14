@@ -59,6 +59,7 @@ export default function PostJob() {
   const [categories, setCategories] = useState([])
   const [skills, setSkills] = useState([])     // [{ name, level, quote, group }]
   const [soft, setSoft] = useState([])
+  const [recordId, setRecordId] = useState(null)
   const [readFor, setReadFor] = useState(null) // the title + description the skills were read from
   const [reading, setReading] = useState(false)
   const [publishing, setPublishing] = useState(false)
@@ -113,6 +114,7 @@ export default function PostJob() {
           return [...res.data.skills.filter(s => !have.has(s.name.toLowerCase())), ...mine]
         })
         setSoft(res.data.soft)
+        setRecordId(res.data.record_id || null)    // 14 Oct: sent back on publish (what you changed vs SkillMap's reading)
         if (!read) setJustRead(true)
         setReadFor(adKey)
       })
@@ -136,8 +138,8 @@ export default function PostJob() {
   const publish = () => {
     setPublishing(true); setError('')
     const req = editing
-      ? api.put(`/employer/jobs/${jobId}`, { description: ad.description, salary: ad.salary, skills, soft })
-      : api.post('/employer/jobs', { ...ad, skills, soft, decide_days: decideDays })
+      ? api.put(`/employer/jobs/${jobId}`, { description: ad.description, salary: ad.salary, skills, soft, record_id: recordId })
+      : api.post('/employer/jobs', { ...ad, skills, soft, decide_days: decideDays, record_id: recordId })
     req.then(res => navigate('/employer/jobs', { state: editing ? { saved: ad.title.trim() } : { posted: ad.title.trim(), fit: res.data.graduates_fit } }))
       .catch(err => { setError(errText(err, editing ? "Couldn't save the changes. Try again." : "Couldn't publish the job. Try again.")); setPublishing(false) })
   }

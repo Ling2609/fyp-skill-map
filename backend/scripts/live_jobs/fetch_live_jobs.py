@@ -58,6 +58,7 @@ from app.config import settings
 from app.database import SessionLocal
 from app.models.job import Job, JobSkill
 from app.services.job_keys import job_key
+from app.services.extraction_records import record
 from app.services.job_skill_store import MIN_HARD, check_job_skills, job_skill_rows
 from app.services.job_titles import is_ict_title
 from app.nlp.skill_extractor import JOB_EVIDENCE_VERSION, SkillExtractor
@@ -405,6 +406,10 @@ def run(dry_run: bool, use_cache: bool, new_only: bool, sync_only: bool = False)
                     raise
                 checked = check_job_skills(mentions, desc)
                 stats["rejected"] += len(checked.rejected)
+                # 14 Oct: what the AI proposed and what the checks kept / rejected, kept in MongoDB for the evaluation
+                record("job_ad", source=job_ref, model=extractor.model, prompt_version=JOB_EVIDENCE_VERSION,
+                       proposed=mentions, kept=checked.kept, rejected=checked.rejected, tidy=checked.tidy,
+                       outcome="too_few" if checked.hard < MIN_HARD else "saved")
                 if checked.hard < MIN_HARD:
                     print(f"    only {checked.hard} checked hard skills, not saved (will retry next run)")
                     stats["no_skills"] += 1

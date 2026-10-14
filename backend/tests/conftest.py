@@ -210,3 +210,57 @@ def post_job(client, users):
         assert r.status_code == 200, r.text
         return r.json()
     return make
+
+
+class FakeCollection:
+    """Just enough of a MongoDB collection for extraction_records (14 Oct): the tests need no MongoDB server."""
+    def __init__(self):
+        self.docs = []
+
+    def create_index(self, *a, **k):
+        pass
+
+    @staticmethod
+    def _match(doc, query):
+        return all(doc.get(k) == v for k, v in query.items())
+
+    def insert_one(self, doc):
+        import bson
+        bson.encode(doc)                 # fails as real MongoDB would on a value it can't store (sets, objects...)
+        self.docs.append(dict(doc))
+        return type("R", (), {"inserted_id": doc["_id"]})()
+
+    def find_one(self, query, sort=None, projection=None):
+        found = [d for d in self.docs if self._match(d, query)]
+        if sort:
+            key, direction = sort[0]
+            found.sort(key=lambda d: d.get(key), reverse=direction < 0)
+        return found[0] if found else None
+
+    def find(self, query, projection=None):
+        hide = [k for k, v in (projection or {}).items() if not v]
+        rows = [{k: v for k, v in d.items() if k not in hide} for d in self.docs if self._match(d, query)]
+        return type("Cursor", (list,), {"sort": lambda self, k, d: sorted(self, key=lambda x: x.get(k), reverse=d < 0)})(rows)
+
+    def update_one(self, query, update):
+        doc = next((d for d in self.docs if self._match(d, query)), None)
+        if doc:
+            import bson
+            bson.encode({"u": update})
+            for k, v in update.get("$push", {}).items():
+                doc.setdefault(k, []).append(v)
+            doc.update(update.get("$set", {}))
+        return type("R", (), {"matched_count": 1 if doc else 0})()
+
+    def delete_many(self, query):
+        self.docs = [d for d in self.docs if not self._match(d, query)]
+
+
+@pytest.fixture(autouse=True)
+def records(monkeypatch):
+    """Every test gets an empty in-memory extraction_records collection (app/services/extraction_records.py)."""
+    import app.services.extraction_records as er
+    col = FakeCollection()
+    monkeypatch.setattr(er, "_col", lambda: col)
+    monkeypatch.setitem(er._state, "down_until", 0.0)
+    return col

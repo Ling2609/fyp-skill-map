@@ -19,6 +19,7 @@ export default function ModuleForm({ module, scopeLabel, busy, error, onSave, on
   const [description, setDescription] = useState('')
   const [skills, setSkills] = useState([])          // [{ name, added_by_admin }]
   const [foundFor, setFoundFor] = useState(null)    // the description the skills were found in
+  const [recordId, setRecordId] = useState(null)   // 14 Oct: the AI's suggestion (MongoDB extraction_records)
   const [draft, setDraft] = useState('')
   const [finding, setFinding] = useState(false)
   const [findError, setFindError] = useState('')
@@ -60,6 +61,7 @@ export default function ModuleForm({ module, scopeLabel, busy, error, onSave, on
           const have = new Set(mine.map(s => s.name.toLowerCase()))
           return [...res.data.skills.filter(n => !have.has(n.toLowerCase())).map(n => ({ name: n, added_by_admin: false })), ...mine]
         })
+        setRecordId(res.data.record_id || null)   // 14 Oct: sent back on save (what the admin changed vs the AI)
         setFoundFor(description.trim())
       })
       .catch(err => { setFindError(errText(err, "Couldn't find skills. Try again, or type them yourself.")); setFoundFor(description.trim()) })
@@ -77,7 +79,7 @@ export default function ModuleForm({ module, scopeLabel, busy, error, onSave, on
     if (working || !detailsReady) return
     if (editing) return onSave({ name, year: Number(year), type })
     if (!found || stale) return findSkills()           // the main button finds skills first
-    if (canAdd) onSave({ code, name, year: Number(year), type, description, skills: finalSkills() })
+    if (canAdd) onSave({ code, name, year: Number(year), type, description, skills: finalSkills(), record_id: recordId })
   }
   const field = 'w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500'
   const mainLabel = editing ? (busy ? 'Saving…' : 'Save')

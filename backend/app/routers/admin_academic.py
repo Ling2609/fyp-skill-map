@@ -240,6 +240,7 @@ class NewModule(ModuleFields):
     # 10 Oct (her flow, like certificates on the student side): skills found and checked BEFORE saving. Given = saved
     # as they are and the module counts as reviewed; not given = found after saving, "To review" (older callers)
     skills: list[SkillIn] | None = Field(default=None, max_length=40)
+    record_id: str | None = Field(default=None, max_length=40)   # 14 Oct: the AI suggestion these skills came from
 
 
 class SuggestIn(BaseModel):
@@ -253,11 +254,11 @@ def suggest_skills(body: SuggestIn, admin: User = Depends(require_admin)):
     text = " ".join(body.description.split())
     if len(text) < 20:
         raise HTTPException(status_code=400, detail="Please write at least a sentence: skills are found in this text.")
-    skills = _find_skills(" ".join(body.name.split()), text)
+    skills, record_id = _find_skills(" ".join(body.name.split()), text)
     if not skills:
         raise HTTPException(status_code=503, detail="The AI service didn't answer (often its daily limit). "
                                                     "Try again later, or add the skills yourself.")
-    return {"skills": skills}
+    return {"skills": skills, "record_id": record_id}   # sent back with the new module: what the admin changed
 
 
 def _check_fields(body: ModuleFields) -> str:
@@ -269,10 +270,14 @@ def _check_fields(body: ModuleFields) -> str:
     return name
 
 
-def _find_skills(name: str, description: str, level: int = 1, kind: str = "common") -> list[str]:
-    """Skills in a module's description (one Groq call), de-duplicated; [] if the AI gave nothing."""
-    from app.nlp.skill_extractor import SkillExtractor
-    found = SkillExtractor().extract_from_module(
+def _find_skills(name: str, description: str, level: int = 1, kind: str = "common",
+                 code: str | None = None) -> tuple[list[str], str | None]:
+    """Skills in a module's description (one Groq call), de-duplicated ([] if the AI gave nothing), and the id of
+    the extraction record kept in MongoDB (14 Oct; what the career office changes later is added to it)."""
+    from app.nlp.skill_extractor import MODULE_EXTRACTED_BY, SkillExtractor
+    from app.services.extraction_records import record
+    extractor = SkillExtractor()
+    found = extractor.extract_from_module(
         {"code": "", "name": name, "level": level, "type": kind, "description": description})
     seen, skills = set(), []
     for s in found["extracted_skills"]:
@@ -280,13 +285,15 @@ def _find_skills(name: str, description: str, level: int = 1, kind: str = "commo
         if s and s.lower() not in seen:
             seen.add(s.lower())
             skills.append(s)
-    return skills
+    rid = record("module", source=code, model=extractor.model, prompt_version=MODULE_EXTRACTED_BY,
+                 proposed=found["extracted_skills"], kept=skills, outcome="saved" if skills else "ai_failed")
+    return skills, rid
 
 
 def _extract_into(db: Session, mod: Module) -> bool:
     """Skills from the description (one Groq call); admin-added skills kept. False if the AI gave nothing."""
     from app.nlp.skill_extractor import MODULE_EXTRACTED_BY
-    skills = _find_skills(mod.name, mod.description, mod.level, mod.type)
+    skills, _ = _find_skills(mod.name, mod.description, mod.level, mod.type, mod.code)
     if not skills:
         return False
     kept = {s["name"].lower() for s in _skills(db, mod) if s["added_by_admin"]}
@@ -342,6 +349,9 @@ def add_module(body: NewModule, db: Session = Depends(get_db), admin: User = Dep
                                extracted_by=ADDED_BY_ADMIN if by_admin else MODULE_EXTRACTED_BY))
         mod.skills_reviewed_at = datetime.now(timezone.utc)
         _changed(db, mod)
+        if body.record_id:          # 14 Oct: what the admin kept, removed or added before adding the module
+            from app.services.extraction_records import review_against
+            review_against(body.record_id, "career_office", [sk for sk, _ in checked.values()], source=mod.code)
         return {**_detail(db, mod), "warning": None}
     found = _extract_into(db, mod)
     _changed(db, mod, unreview=True)
@@ -479,6 +489,8 @@ def add_skill(module_id: int, body: SkillName, db: Session = Depends(get_db), ad
         raise HTTPException(status_code=400, detail=f"{name} is already listed.")
     db.add(ModuleSkill(module_id=mod.id, module_code=mod.code, skill_name=name, extracted_by=ADDED_BY_ADMIN))
     _changed(db, mod)
+    from app.services.extraction_records import review_latest
+    review_latest("module", mod.code, "career_office", {"added": [name], "removed": [], "level_changed": []})
     return _detail(db, mod)
 
 
@@ -491,6 +503,9 @@ def remove_skill(module_id: int, body: SkillName, db: Session = Depends(get_db),
     if not removed:
         raise HTTPException(status_code=404, detail="That skill isn't listed for this module.")
     _changed(db, mod)
+    from app.services.extraction_records import review_latest
+    review_latest("module", mod.code, "career_office", {"added": [], "removed": [" ".join(body.name.split())],
+                                                         "level_changed": []})
     return _detail(db, mod)
 
 

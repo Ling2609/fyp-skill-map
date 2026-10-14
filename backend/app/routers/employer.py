@@ -187,11 +187,18 @@ def read_skills(data: AdIn, employer: User = Depends(require_employer)):
         raise HTTPException(status_code=503, detail="SkillMap couldn't read the skills just now. Try again in a "
                                                     "few minutes, or add the skills yourself.")
     checked = check_job_skills(mentions, data.description)
+    # 14 Oct: what the AI proposed and what the checks kept / rejected (MongoDB extraction_records); what the employer
+    # then changes before publishing is added to the same record
+    from app.nlp.skill_extractor import JOB_EVIDENCE_VERSION
+    from app.services.extraction_records import record
+    record_id = record("job_ad", model=get_extractor().model, prompt_version=JOB_EVIDENCE_VERSION, user_id=employer.id,
+                       proposed=mentions, kept=checked.kept, rejected=checked.rejected, tidy=checked.tidy,
+                       outcome="suggested")
     hard = [{"name": k["skill"].strip(), "level": _level(k.get("level")), "quote": k.get("evidence_quote") or "",
              "group": k.get("alternative_group") or ""} for k in checked.kept if k.get("type") == "hard"]
     soft = [{"name": k["skill"].strip(), "level": k.get("level") or "unspecified",
              "quote": k.get("evidence_quote") or ""} for k in checked.kept if k.get("type") == "soft"]
-    return {"skills": hard, "soft": soft}
+    return {"skills": hard, "soft": soft, "record_id": record_id}
 
 
 def _level(level: str | None) -> str:
@@ -221,6 +228,7 @@ class JobIn(AdIn):
     skills: list[SkillIn]
     soft: list[SoftIn] = []
     decide_days: int = DEFAULT_DECIDE_DAYS     # 14 Oct: "Decide by": 14, 28, 30 or 42 days from posting
+    record_id: str | None = Field(default=None, max_length=40)   # 14 Oct: the "Read skills" these came from
 
 
 def _checked_skills(data) -> tuple[list, set]:
@@ -281,6 +289,7 @@ def publish(data: JobIn, employer: User = Depends(require_employer), db: Session
     rows = _skill_rows(job, data, skills, seen)
     db.add_all(rows)
     db.commit()
+    _review_job(data, job, employer)
     # 12 Oct: say straight away how many visible graduates fit the new job, so the employer can invite them
     return {**_row(job, rows), "graduates_fit": len(_graduates_who_fit([job], db, limit=None))}
 
@@ -310,6 +319,17 @@ class EditIn(BaseModel):
     salary: str = Field(default="", max_length=60)
     skills: list[SkillIn]
     soft: list[SoftIn] = []
+    record_id: str | None = Field(default=None, max_length=40)   # set when the skills were read again
+
+
+def _review_job(data, job: Job, employer: User):
+    """14 Oct: what the employer kept, removed, added or moved to another level, against SkillMap's reading."""
+    if not getattr(data, "record_id", None):
+        return
+    from app.services.extraction_records import review_against
+    final = {" ".join(x.name.split()): x.level for x in [*data.skills, *data.soft] if x.name.strip()}
+    review_against(data.record_id, "employer", list(final), source=job.job_id, user_id=employer.id,
+                   levels_after=final)
 
 
 @router.put("/jobs/{job_id}")
@@ -326,6 +346,7 @@ def save_edit(job_id: int, data: EditIn, employer: User = Depends(require_employ
     rows = _skill_rows(job, data, skills, seen)
     db.add_all(rows)
     db.commit()
+    _review_job(data, job, employer)
     from app.routers.recommend import forget_job
     forget_job(job.id)                        # Job Matches rebuilds this job from the saved skills
     return _row(job, rows, _statuses([job.id], db).get(job.id, []))

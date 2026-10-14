@@ -25,6 +25,7 @@ from sqlalchemy import func
 from app.database import SessionLocal
 from app.models.module import Module, ModuleSkill
 from app.nlp.skill_extractor import MODULE_EXTRACTED_BY, SkillExtractor
+from app.services.extraction_records import record      # 14 Oct: kept in MongoDB for the evaluation
 
 
 def dedupe(skills: list[str]) -> list[str]:
@@ -58,6 +59,8 @@ def main():
                 {"code": mod.code, "name": mod.name, "level": mod.level, "type": mod.type,
                  "description": mod.description})
             skills = dedupe(found["extracted_skills"])
+            record("module", source=mod.code, model=extractor.model, prompt_version=MODULE_EXTRACTED_BY,
+                   proposed=found["extracted_skills"], kept=skills, outcome="saved" if skills else "ai_failed")
             if not skills:
                 print(f"\nGroq returned no skills for {mod.code} (usually the daily token limit).")
                 print("Stopped. Run again later: modules that have skills are skipped.")

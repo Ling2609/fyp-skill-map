@@ -46,6 +46,7 @@ export default function GithubImport({ githubLink, onClose, onDone }) {
     try {
       const res = await api.post('/profile/projects/suggest', { name: it.name, description: it.description.trim(), github_url: it.url })
       update(it.url, cur => ({ skills: mergeFound(cur.skills, res.data.skills), foundFor: keyOf(it), busy: false,
+        record_id: res.data.record_id || null,
         notes: [res.data.skills_note, res.data.github_note].filter(Boolean) }))
     } catch (err) {
       update(it.url, { busy: false, foundFor: keyOf(it), notes: [errText(err, "Couldn't find skills right now. Type them yourself.")] })
@@ -80,7 +81,7 @@ export default function GithubImport({ githubLink, onClose, onDone }) {
       setAdding(`Adding ${i + 1} of ${ready.length}…`)
       try {
         await api.post('/profile/projects', { name: it.name, description: it.description.trim(), github_url: it.url,
-          skills: Object.fromEntries(it.skills.map(s => [s.name, s.evidence])) })
+          skills: Object.fromEntries(it.skills.map(s => [s.name, s.evidence])), record_id: it.record_id || null })
       } catch (err) {
         failed.push(`${it.name} wasn't added: ${errText(err, 'please try again.')}`)
       }

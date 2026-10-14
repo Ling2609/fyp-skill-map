@@ -20,6 +20,7 @@ Checked in the code before adding anything new to MongoDB. Each store has one pu
 | Collection | What | Personal? | Kept until |
 |---|---|---|---|
 | `chat_sessions` | One AI Assistant conversation per document (messages, mode, context) | Yes | 18 months after its last message (TTL index on `updated_at`, `CHAT_KEEP_DAYS` in `app/mongo.py`), or when the student deletes the chat or the account. MongoDB removes expired documents in a background task about once a minute, so deletion happens shortly after the 18 months, not at the exact second; the index is made the first time the chat collection is used |
+| `extraction_records` | One per time the AI read skills (job ads, Post a job, modules, student projects): what it proposed, what the checks kept and rejected with the reason, the model and prompt version, and what a person changed afterwards (employer, career office, student). The text read is not copied | Project records only (a student's skills and short quotes, `user_id`) | Project records: deleted with the account, in Download my data. Job and module records: kept for the evaluation (company and university data) |
 
 ## Files on the server (not in git)
 
@@ -58,7 +59,7 @@ Checked in the code before adding anything new to MongoDB. Each store has one pu
 
 | # | Gap | Status |
 |---|---|---|
-| 1 | What the AI proposed is not kept: only accepted skills are stored; skills the quote check rejected, and what the career office changed, are lost | Open → MongoDB `extraction_records`, planned with the evaluation |
+| 1 | What the AI proposed is not kept: only accepted skills are stored; skills the quote check rejected, and what the career office changed, are lost | **Done 14 Oct**: MongoDB `extraction_records` (`app/services/extraction_records.py`); `scripts/tools/extraction_report.py` gives rejected rates and correction rates per source and prompt version. If MongoDB is down, extraction carries on and the record isn't saved |
 | 2 | No privacy notice and no copy of your data (PDPA 2010 notice and access principles) | **Done 14 Oct**: notice at sign-up and on its own page (English and Bahasa Malaysia, every version kept), accepted version stored, Download my data |
 | 3 | Employers got the student's email on application | **Done 14 Oct**: contact details only after shortlisting |
 | 4 | Evaluation runs are not stored | Open → MongoDB `evaluation_runs` during the evaluation phase |

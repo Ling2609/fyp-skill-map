@@ -22,6 +22,7 @@ export function ProjectForm({ project, onDone, onCancel, onDirty }) {
   const [skills, setSkills] = useState(() => projectChips(project))
   const [foundFor, setFoundFor] = useState(() => (editing ? projectKey(initial) : null))
   const [notes, setNotes] = useState([])
+  const [recordId, setRecordId] = useState(null)  // 14 Oct: the AI's suggestion (MongoDB extraction_records)
   const [busy, setBusy] = useState('')            // '' | 'find' | 'save'
   const [error, setError] = useState('')
   const [dupe, setDupe] = useState('')            // "you already have one called ..." question
@@ -42,6 +43,7 @@ export function ProjectForm({ project, onDone, onCancel, onDirty }) {
       const res = await api.post('/profile/projects/suggest', { name: form.name.trim(), description: form.description.trim(),
         github_url: form.github_url.trim() || null })
       setSkills(prev => mergeFound(prev, res.data.skills))
+      setRecordId(res.data.record_id || null)    // 14 Oct: sent back on save (what you kept vs the AI's suggestion)
       setNotes([res.data.skills_note, res.data.github_note].filter(Boolean))
       setFoundFor(projectKey(form))
     } catch (err) {
@@ -52,7 +54,8 @@ export function ProjectForm({ project, onDone, onCancel, onDirty }) {
   const save = async (allowDuplicate = false) => {
     setBusy('save'); setError('')
     const body = { name: form.name.trim(), description: form.description.trim(), github_url: form.github_url.trim() || null,
-                   skills: Object.fromEntries(skills.map(s => [s.name, s.evidence])), allow_duplicate: allowDuplicate }
+                   skills: Object.fromEntries(skills.map(s => [s.name, s.evidence])), allow_duplicate: allowDuplicate,
+                   record_id: recordId }
     try {
       const res = editing ? await api.put(`/profile/projects/${project.id}`, body) : await api.post('/profile/projects', body)
       onDone(res.data)
