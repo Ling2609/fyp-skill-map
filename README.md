@@ -95,6 +95,14 @@ Copy `backend/.env.example` to `backend/.env` and fill in your values (never com
 ```
 cp .env.example .env
 ```
+**Connect GitHub (optional, 5 minutes).** Students prove which GitHub accounts are theirs by signing in to GitHub, so a project's repo can show as their own and Import from GitHub lists only their repos. It needs a free GitHub OAuth app:
+1. GitHub → Settings → Developer settings → OAuth Apps → **New OAuth App**.
+2. Application name `SkillMap (local)`; Homepage URL `http://localhost:5173`; Authorization callback URL `http://localhost:5173/github/callback`. Register.
+3. Copy the **Client ID**; **Generate a new client secret** and copy it (shown once).
+4. In `backend/.env`: `GITHUB_CLIENT_ID=...` and `GITHUB_CLIENT_SECRET=...`, then restart the backend.
+
+No permissions are asked for (public information only), and GitHub's access key is used once to read the username, then dropped. For a deployment, register another app with the deployed address and set `FRONTEND_URL` to it. Without the app, everything else works; projects with a repo show "Not linked to your GitHub".
+
 Without `SMTP_USER` and `SMTP_PASSWORD`, no email is sent: the reset code is printed in the backend console instead, so Forgot password still works on a local machine.
 Start the API: `uvicorn app.main:app --reload` (http://localhost:8000, docs at /docs). On an empty database the tables are created automatically at start-up.
 
@@ -172,6 +180,7 @@ Groq's free tier allows about 200,000 tokens a day (≈ 100 jobs). Don't run two
 | `migrate_privacy_contact.py` | 14 Oct 2026 | adds `users.phone`, `city`, `available_from` (optional contact details, shown to an employer only after shortlisting) and `privacy_accepted_at` (when the privacy notice was accepted at sign-up). The API refuses to start until this has run |
 | `migrate_transparency.py` | 14 Oct 2026 | adds `jobs.decide_by` (existing posts: 30 days after posting), `decide_extended_reason`, `applications_stopped_at`, `close_reason`; `applications.reason`, `note`, `reason_skills`, `match_have`, `match_total`. The API refuses to start until this has run |
 | `migrate_record_keeping.py` | 14 Oct 2026 | audit fixes: adds `jobs.decide_by_original` (the first decision date, kept when it is moved), `applications.match_at` (when the skill counts for "where you stand" were worked out) and `users.privacy_version` (which notice was accepted; existing users get `2026-10-14`, the only version so far). The API refuses to start until this has run |
+| `migrate_github_accounts.py` | 14 Oct 2026 | new table `github_accounts` (GitHub accounts a student connected); `user_projects.repo_check`, `repo_check_as` (is the repo hers). The API refuses to start until this has run |
 
 A **new, empty** database gets its tables from `app/models/` when the API starts (the 12 Oct tables `application_events` and `job_invitations` too), but three of these scripts also load **data** a new install needs, so after the first start run, in this order: `migrate_admin_structure.py`, `migrate_all_programmes.py`, `migrate_intake_modules.py` (17 programmes, 198 modules, demo intakes), then `python scripts/pipeline/extract_module_skills.py` (module skills, Groq) and `python scripts/tools/create_admin.py` (the career-office account). Checked by `tests/test_install.py` on a brand-new database. Post a job lists the job categories already in the database, so load the JobStreet data (or fetch live jobs) before employers post. To apply one: `python migrations/<file>.py` from `backend/`.
 
@@ -203,6 +212,7 @@ From `backend/` with the venv active, run `python -m pytest`. It uses the server
 - The login token is kept in the browser's local storage (common for single-page apps; a cross-site scripting bug could expose it); sessions end after `ACCESS_TOKEN_EXPIRE_MINUTES`.
 - Changing an email asks for a code sent to the new address; there is no email check at sign-up.
 - Students can delete their account themselves; employers and admins ask the career office (their jobs and decisions involve other people). Deleting spans two databases, so it is not one transaction: chats go first, and a failure after that is safe to retry (`docs/data_flow.md`).
+- GitHub ownership is proved by signing in; LinkedIn and portfolio links are typed (LinkedIn's sign-in doesn't return the profile address). A repo counts as the student's if a connected account owns it or is among its first 100 contributors.
 - The privacy notice is a draft for the university that deploys SkillMap: its data-user name, contact address and Malay text must be checked by that university.
 - Tests use a stand-in embedding model with the relationship model off: they check behaviour, not matching quality (that is the evaluation, `docs/evidence/`).
 

@@ -3,6 +3,7 @@ import { Link, useParams, useSearchParams } from 'react-router-dom'
 import api from '../../api'
 import PageHeader from '../../components/PageHeader'
 import { errText } from '../student/profileUtils'
+import { RepoCheck } from '../student/profileSections'
 import { STATUSES, STATUS_CLS, fmtDay } from './statuses'
 import { useStatusChange } from './statusChange'
 import { CardSkeleton, LoadingLabel } from '../../components/Skeleton'
@@ -144,7 +145,9 @@ export default function ApplicantProfile() {
                   {s.projects.map(p => (
                     <li key={p.name}>
                       <p className="text-sm font-medium text-slate-900">{p.name}
-                        {p.github_url && <a href={p.github_url} target="_blank" rel="noopener noreferrer" className="ml-2 text-xs font-normal text-blue-700 hover:underline">GitHub ↗</a>}</p>
+                        {p.github_url && <a href={p.github_url} target="_blank" rel="noopener noreferrer" className="ml-2 text-xs font-normal text-blue-700 hover:underline">GitHub ↗</a>}
+                        {/* 14 Oct (Connect GitHub): is the repo the student's own? */}
+                        {p.github_url && <span className="ml-2"><RepoCheck project={p} who="the student's" /></span>}</p>
                       {p.skills.length > 0 && <p className="text-xs text-slate-500 mt-0.5">{p.skills.join(' · ')}</p>}
                     </li>
                   ))}

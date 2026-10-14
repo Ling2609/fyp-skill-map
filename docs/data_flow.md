@@ -8,7 +8,8 @@ Checked in the code before adding anything new to MongoDB. Each store has one pu
 |---|---|---|---|
 | Accounts and roles | `users` (name, username, email, password hash, programme, intake, headline, about, links, visibility, goal; optional phone, city and start month for employers; when and which privacy notice was accepted: `privacy_accepted_at`, `privacy_version`) | Yes | Account deleted (`POST /auth/me/delete`) |
 | Academic record | `user_modules` (module code + grade) | Yes | Account deleted |
-| Self-declared evidence | `user_projects`, `user_certifications`, `user_awards` (with the skills and quotes) | Yes | Account deleted |
+| Self-declared evidence | `user_projects` (with `repo_check`: is the repo hers), `user_certifications`, `user_awards` (with the skills and quotes) | Yes | Account deleted |
+| Connected GitHub accounts | `github_accounts` (GitHub id and username only; GitHub's access key is used once and not kept) | Yes | Disconnected, or account deleted |
 | Modules, programmes, intakes | `modules`, `module_skills`, `programmes`, `intakes`, `programme_modules`, `intake_modules` | No | Changed by the career office |
 | Jobs and their skills | `jobs` (with the employer's decision date, the first date if it was moved, stop/close reasons), `job_skills` (skill, quote from the ad, level, extractor model) | No (company data) | Live jobs: until they expire or go; employer posts: until closed |
 | Applications | `applications` (status, reason and note for Not selected, the applicant's skill counts and when they were worked out), `application_events` (viewed, status changes), `job_invitations` | Yes (links a student to a job) | Account deleted |
@@ -20,7 +21,7 @@ Checked in the code before adding anything new to MongoDB. Each store has one pu
 | Collection | What | Personal? | Kept until |
 |---|---|---|---|
 | `chat_sessions` | One AI Assistant conversation per document (messages, mode, context) | Yes | 18 months after its last message (TTL index on `updated_at`, `CHAT_KEEP_DAYS` in `app/mongo.py`), or when the student deletes the chat or the account. MongoDB removes expired documents in a background task about once a minute, so deletion happens shortly after the 18 months, not at the exact second; the index is made the first time the chat collection is used |
-| `extraction_records` | One per time the AI read skills (job ads, Post a job, modules, student projects): what it proposed, what the checks kept and rejected with the reason, the model and prompt version, and what a person changed afterwards (employer, career office, student). The text read is not copied | Project records only (a student's skills and short quotes, `user_id`) | Project records: deleted with the account, in Download my data. Job and module records: kept for the evaluation (company and university data) |
+| `extraction_records` | One per time the AI read skills (job ads, Post a job, modules, student projects): what it proposed, what the checks kept and rejected with the reason, the model and prompt version, and what a person changed afterwards (employer, career office, student). The text read is not copied | Project records only (a student's skills and short quotes, `user_id`) | Project records: deleted 18 months after they were made (partial TTL index), or with the account; in Download my data. Job and module records: kept for the evaluation (company and university data) |
 
 ## Files on the server (not in git)
 
@@ -38,7 +39,7 @@ Checked in the code before adding anything new to MongoDB. Each store has one pu
 | Groq (US) | Project, certificate and award text for skill reading; chat messages with profile context; module descriptions and job ads | Yes (student text). Not kept by default; may be logged up to 30 days for error and abuse checks unless Zero Data Retention is on |
 | Gemini | Job ad text, to format it for display | No |
 | JSearch (RapidAPI) | Search queries | No |
-| GitHub API | Public repository the student names | Public data |
+| GitHub API | Public repository the student names; with Connect GitHub, a one-time sign-in that returns the account's id and username (no scope: public data only) | Public data; the username is kept |
 | Email (SMTP) | Address and message for codes and notices | Yes |
 
 ## Who sees what

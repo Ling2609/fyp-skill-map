@@ -1,4 +1,4 @@
-from sqlalchemy import JSON, Column, Integer, String, Text, ForeignKey, DateTime
+from sqlalchemy import JSON, BigInteger, Column, Integer, String, Text, ForeignKey, DateTime
 from sqlalchemy.dialects.postgresql import ARRAY
 from sqlalchemy.sql import func
 from app.database import Base
@@ -19,6 +19,23 @@ class UserProject(Base):
     # Projects added before have {} (no quotes shown).
     skill_quotes = Column(JSON, nullable=False, default=dict, server_default='{}')
     created_at = Column(DateTime(timezone=True), server_default=func.now())
+    # 14 Oct (Connect GitHub): is the linked repo the student's own? "yours" = one of her connected GitHub accounts
+    # owns it or contributed to it (repo_check_as = which); "not_linked" = none did; NULL = no repo, or GitHub
+    # couldn't be asked. Employers see it next to the repo link. Never blocks saving.
+    repo_check = Column(String(12), nullable=True)
+    repo_check_as = Column(String(40), nullable=True)
+
+
+class GithubAccount(Base):
+    """A GitHub account the student proved is hers by signing in to GitHub (14 Oct). Several are allowed (personal,
+    school). One GitHub account can belong to one SkillMap account only. GitHub's token is not kept."""
+    __tablename__ = "github_accounts"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
+    github_id = Column(BigInteger, nullable=False, unique=True)
+    login = Column(String(40), nullable=False)
+    connected_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
 
 
 class UserCertification(Base):

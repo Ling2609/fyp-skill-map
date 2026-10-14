@@ -16,7 +16,7 @@ PostgreSQL already (jobs.description, modules.description, user_projects.descrip
 Never in the way: if MongoDB can't be reached, extraction works exactly as before and the log says "not saved". After
 a failure, writes are skipped for DOWN_PAUSE seconds, so a bulk run with MongoDB off isn't slowed by 2 s per job.
 Privacy: project records hold a student's skills and short quotes; deleted with the account, included in Download my
-data, said in the privacy notice.
+data, deleted by MongoDB 18 months after they were made (TTL index), said in the privacy notice.
 """
 import time
 import uuid
@@ -34,6 +34,11 @@ def _col():
     if not _state["indexes"]:
         col.create_index([("kind", ASCENDING), ("source", ASCENDING), ("at", DESCENDING)])
         col.create_index("user_id", sparse=True)
+        # 14 Oct (her decision): a student's project records expire 18 months after they were made, like chats
+        # (app/mongo.py CHAT_KEEP_DAYS); job ad and module records have no personal data and are kept
+        from app.mongo import CHAT_KEEP_DAYS
+        col.create_index("at", name="project_expiry", expireAfterSeconds=CHAT_KEEP_DAYS * 24 * 3600,
+                         partialFilterExpression={"kind": "project"})
         _state["indexes"] = True
     return col
 

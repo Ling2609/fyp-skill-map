@@ -2,11 +2,13 @@ import { useState, useEffect, useCallback, useRef } from 'react'
 import api from '../../api'
 import { FormButtons, Modal, SkillChecker, SkillChip, Spinner } from './profileParts'
 import { ADDED_BY_YOU, MIN_DESCRIPTION, errText, inputCls, mergeFound, projectKey } from './profileUtils'
+import { startGithubConnect } from './githubConnect'
 
 // Import from GitHub (8 Oct, her choice: alongside "+ Add", not instead of it).
 // 10 Oct (her review: repos were saved first and had to be edited afterwards): two steps, check before adding
 // (references.md "Projects tab and GitHub import": check answers; Microsoft wizard guidance, smart defaults).
-//  1. Pick: her public repos (GET /profile/github/repos, one GitHub call); ones already added are greyed out.
+//  1. Pick: the public repos of her CONNECTED GitHub accounts (GET /profile/github/repos; 14 Oct, Connect GitHub);
+//     ones already added are greyed out. Not connected yet: a Connect GitHub button instead.
 //  2. Check: every picked repo gets a description (GitHub's, else the README's first paragraph, GET
 //     /profile/github/readme) and its skills (POST /profile/projects/suggest: her words + the repo's languages), all
 //     at once. Each card says Ready or what it needs; she glances at the ready ones and fixes only the rest. One button
@@ -16,22 +18,28 @@ const keyOf = (it) => projectKey({ name: it.name, description: it.description, g
 const isReady = (it) => it.description.trim().length >= MIN_DESCRIPTION && it.skills.length > 0
   && it.foundFor === keyOf(it) && !it.busy
 
-export default function GithubImport({ githubLink, onClose, onDone }) {
-  const [account, setAccount] = useState(githubLink || '')
+export default function GithubImport({ onClose, onDone }) {
+  // 14 Oct (Connect GitHub): the repos of HER connected GitHub accounts only, listed as soon as this opens
   const [repos, setRepos] = useState(null)        // null = not listed yet
   const [picked, setPicked] = useState([])        // repo urls ticked
-  const [listing, setListing] = useState(!!githubLink)   // the GitHub link is known: listing starts at once
+  const [listing, setListing] = useState(true)
+  const [needsConnect, setNeedsConnect] = useState(false)
   const [items, setItems] = useState(null)        // step 2: the picked repos being checked
   const [adding, setAdding] = useState('')        // "Adding 2 of 3…"
   const [error, setError] = useState('')
 
-  // Ask the backend for the account's public repos; state changes only when the answer comes back
-  const fetchRepos = useCallback((name) => api.get('/profile/github/repos', { params: { account: name } })
+  const fetchRepos = useCallback(() => api.get('/profile/github/repos')
     .then(res => setRepos(res.data.repos))
-    .catch(err => { setRepos(null); setError(errText(err, "Couldn't list the repositories. Please try again.")) })
+    .catch(err => {
+      setRepos(null)
+      if (err.response?.status === 400 && /connect/i.test(err.response.data?.detail || '')) setNeedsConnect(true)
+      else setError(errText(err, "Couldn't list the repositories. Please try again."))
+    })
     .finally(() => setListing(false)), [])
-  const list = (name) => { setListing(true); setError(''); setPicked([]); fetchRepos(name) }
-  useEffect(() => { if (githubLink) fetchRepos(githubLink) }, [githubLink, fetchRepos])
+  const list = () => { setListing(true); setError(''); setPicked([]); fetchRepos() }
+  useEffect(() => { fetchRepos() }, [fetchRepos])
+  const connect = () => startGithubConnect('/profile?tab=projects&open=import')
+    .catch(err => setError(errText(err, "Couldn't start connecting to GitHub. Please try again.")))
   const toggle = (url) => setPicked(prev => prev.includes(url) ? prev.filter(u => u !== url) : [...prev, url])
 
   const update = (url, changes) => setItems(prev => prev.map(it => (it.url === url
@@ -111,24 +119,29 @@ export default function GithubImport({ githubLink, onClose, onDone }) {
   )
 
   const busy = listing
+  const manyAccounts = new Set((repos || []).map(r => r.account)).size > 1
   return (
     <Modal title="Add projects from GitHub" onClose={onClose} dirty={dirty}>
       <form onSubmit={e => { e.preventDefault(); if (picked.length) check() }} className="space-y-4">
-        <div className="flex gap-2">
-          <input aria-label="GitHub username or profile link" value={account} onChange={e => setAccount(e.target.value)}
-            placeholder="GitHub username or https://github.com/your-name" className={inputCls} disabled={busy}
-            onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); if (account.trim()) list(account) } }} />
-          <button type="button" onClick={() => list(account)} disabled={busy || !account.trim()}
-            className="shrink-0 px-4 text-sm font-medium text-blue-700 border border-blue-200 rounded-xl hover:bg-blue-50 disabled:opacity-40">
-            {repos ? 'Refresh' : 'List'}
-          </button>
-        </div>
+        {needsConnect && (
+          <div className="text-sm text-gray-700 border border-dashed border-gray-200 rounded-xl px-4 py-5 text-center">
+            <p>Connect your GitHub account first. Only repositories of accounts you connect can be imported, so they are
+              shown to employers as your own.</p>
+            <button type="button" onClick={connect}
+              className="mt-3 text-sm font-medium px-4 py-2 rounded-xl bg-blue-700 text-white hover:bg-blue-800">Connect GitHub</button>
+          </div>
+        )}
+        {repos && (
+          <div className="flex justify-end">
+            <button type="button" onClick={list} disabled={busy} className="text-xs font-medium text-blue-700 hover:underline disabled:opacity-40">Refresh</button>
+          </div>
+        )}
 
         {listing && <div className="flex justify-center py-6 text-blue-600"><Spinner /></div>}
         {error && <p role="alert" className="text-xs text-red-500 bg-red-50 rounded-lg px-3 py-2">{error}</p>}
 
         {repos && !listing && (repos.length === 0
-          ? <p className="text-sm text-gray-500">No public repositories of your own on this account.</p>
+          ? <p className="text-sm text-gray-500">No public repositories of your own on your connected GitHub {repos.length === 1 ? 'account' : 'accounts'}.</p>
           : (
             <div>
               <p className="text-xs text-gray-500 mb-2">{repos.length} public {repos.length === 1 ? 'repository' : 'repositories'}. Tick the ones to add; you check each one next.</p>
@@ -141,6 +154,7 @@ export default function GithubImport({ githubLink, onClose, onDone }) {
                       <span className="min-w-0">
                         <span className="text-sm font-medium text-gray-800">{r.name}</span>
                         {r.added && <span className="text-xs text-gray-500 ml-2">already added</span>}
+                        {manyAccounts && <span className="text-xs text-gray-400 ml-2">{r.account}</span>}
                         <span className="block text-xs text-gray-500 mt-0.5 truncate">
                           {[r.language, r.description || 'No description on GitHub'].filter(Boolean).join(' · ')}
                         </span>

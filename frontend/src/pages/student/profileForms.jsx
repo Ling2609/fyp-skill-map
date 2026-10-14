@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import GithubAccounts, { IconTile } from './GithubAccounts'
 import api from '../../api'
 import { DuplicateAsk, Field, FormButtons, SkillChecker, SkillChip, Spinner, Toggle } from './profileParts'
 import { MIN_DESCRIPTION, aboutBody, errText, inputCls, mergeFound, projectChips, projectKey, splitSkills, studyComplete } from './profileUtils'
@@ -23,6 +24,16 @@ export function ProjectForm({ project, onDone, onCancel, onDirty }) {
   const [foundFor, setFoundFor] = useState(() => (editing ? projectKey(initial) : null))
   const [notes, setNotes] = useState([])
   const [recordId, setRecordId] = useState(null)  // 14 Oct: the AI's suggestion (MongoDB extraction_records)
+  const [repoCheck, setRepoCheck] = useState(null)   // 14 Oct: {url, status: 'yours' | 'not_linked' | null, as, connected}
+  const checkRepo = () => {
+    const url = form.github_url.trim()
+    if (!url || repoCheck?.url === url) return
+    api.post('/profile/github/check', { url })
+      .then(res => setRepoCheck({ url, ...res.data }))
+      .catch(() => setRepoCheck(null))
+  }
+  // Editing a project that has a repo: check it once when the form opens
+  useEffect(() => { if (project?.github_url) checkRepo() }, [])   // eslint-disable-line react-hooks/exhaustive-deps
   const [busy, setBusy] = useState('')            // '' | 'find' | 'save'
   const [error, setError] = useState('')
   const [dupe, setDupe] = useState('')            // "you already have one called ..." question
@@ -80,18 +91,36 @@ export function ProjectForm({ project, onDone, onCancel, onDirty }) {
       <div>
         <Field label="What you built and the tools you used">
           <textarea value={form.description} onChange={set('description')}
-            placeholder="e.g. A booking app for the campus library in React, with a FastAPI backend and PostgreSQL" rows={4}
+            placeholder="e.g. A booking app for the campus library in React, with a FastAPI backend and PostgreSQL" rows={6}
             className={`${inputCls} resize-none`} maxLength={3000} required />
         </Field>
         <p className="flex justify-between text-xs mt-1.5">
-          <span className="text-amber-700">{descLength < MIN_DESCRIPTION ? `Write at least ${MIN_DESCRIPTION} characters so skills can be found.` : ''}</span>
+          {/* 14 Oct (her FYP project found no skills: its description said what it does, not what it's built with) */}
+          <span className={descLength < MIN_DESCRIPTION ? 'text-amber-700' : 'text-gray-500'}>{descLength < MIN_DESCRIPTION
+            ? `Write at least ${MIN_DESCRIPTION} characters so skills can be found.`
+            : 'Name the tools you used (the language, framework, database) so SkillMap can find them in your words.'}</span>
           <span className="text-gray-400 tabular-nums shrink-0 ml-3">{form.description.length} / 3000</span>
         </p>
       </div>
-      <Field label="GitHub link" optional hint="The repo's main languages are added as skills (public repos only).">
-        <input type="url" value={form.github_url} onChange={set('github_url')}
-          placeholder="https://github.com/username/repo" className={inputCls} maxLength={500} />
-      </Field>
+      <div>
+        <Field label="GitHub link" optional hint="The repo's main languages are added as skills (public repos only).">
+          <input type="url" value={form.github_url} onChange={set('github_url')} onBlur={checkRepo}
+            placeholder="https://github.com/username/repo" className={inputCls} maxLength={500} />
+        </Field>
+        {/* 14 Oct (Connect GitHub): is this repo hers? Never blocks saving (people have several accounts) */}
+        {repoCheck?.url === form.github_url.trim() && repoCheck.status === 'yours' && (
+          <p className="text-xs font-medium text-emerald-700 mt-1.5">✓ You contributed to this repository (as {repoCheck.as})</p>
+        )}
+        {repoCheck?.url === form.github_url.trim() && repoCheck.status === 'not_linked' && (
+          <p className="text-xs text-amber-900 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2 mt-1.5">
+            {repoCheck.connected
+              ? "This repository isn't linked to your connected GitHub. If it's yours on another account, connect that account in Links & visibility. "
+              : "Connect your GitHub in Links & visibility to show this repository is yours. "}
+            You can still save it; employers will see <i>Not linked to your GitHub</i>.
+          </p>
+        )}
+        <p className="text-xs text-gray-500 mt-1.5">Only add repositories you built or contributed to.</p>
+      </div>
       {found ? (
         <div>
           <SkillChecker id="project-skills" skills={skills} onChange={setSkills} />
@@ -433,10 +462,15 @@ export function StudyForm({ onDone, onCancel, onDirty }) {
 // One PUT /profile/about, which takes every About field; headline and About are no longer shown (9 Oct design) but
 // are sent back unchanged so nothing saved before is lost. Group names follow Handshake ("Profile visibility").
 
+// 14 Oct: GitHub is connected (signed in), not typed: GithubAccounts. LinkedIn stays typed (its sign-in doesn't give
+// the profile link, so it couldn't prove the link is hers; references.md "Verifying GitHub and LinkedIn accounts").
+// Neutral icons (a person, a globe), not the sites' logos
+const svg = (d) => <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d={d} /></svg>
 const LINKS = [
-  { key: 'linkedin_url', label: 'LinkedIn', placeholder: 'https://www.linkedin.com/in/your-name' },
-  { key: 'github_url', label: 'GitHub', placeholder: 'https://github.com/your-name' },
-  { key: 'portfolio_url', label: 'Portfolio or website', placeholder: 'https://your-site.com' },
+  { key: 'linkedin_url', label: 'LinkedIn', placeholder: 'https://www.linkedin.com/in/your-name',
+    hint: 'Paste the link to your profile', icon: svg('M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z') },
+  { key: 'portfolio_url', label: 'Portfolio or website', placeholder: 'https://your-site.com',
+    hint: 'A site that shows your work', icon: svg('M21 12a9 9 0 11-18 0 9 9 0 0118 0zM3.6 9h16.8M3.6 15h16.8M12 3a15 15 0 010 18M12 3a15 15 0 000 18') },
 ]
 
 export function ProfileForm({ data, onDone, onCancel, onDirty }) {
@@ -460,12 +494,23 @@ export function ProfileForm({ data, onDone, onCancel, onDirty }) {
     <form onSubmit={save} className="space-y-6">
       <fieldset className="space-y-3">
         <legend className="text-sm font-semibold text-gray-800 mb-2">Your other profiles</legend>
-        {LINKS.map((l, i) => (
-          <Field key={l.key} label={l.label} optional>
-            <input type="url" value={form[l.key]} maxLength={300} className={inputCls} placeholder={l.placeholder} autoFocus={i === 0}
-              onChange={e => set(l.key, e.target.value)} />
-          </Field>
-        ))}
+        {/* 14 Oct (her review): one card, the same row for each: icon, name, one line, then the action or the link */}
+        <div className="rounded-xl border border-gray-200 divide-y divide-gray-100">
+          <GithubAccounts blocked={changed} />
+          {LINKS.map(l => (
+            <div key={l.key} className="p-4">
+              <div className="flex items-center gap-4">
+                <IconTile on={!!form[l.key].trim()}>{l.icon}</IconTile>
+                <div className="min-w-0">
+                  <label htmlFor={`link-${l.key}`} className="text-sm font-semibold text-gray-900">{l.label} <span className="font-normal text-gray-400">(optional)</span></label>
+                  <p className="text-xs text-gray-500 mt-0.5">{l.hint}</p>
+                </div>
+              </div>
+              <input id={`link-${l.key}`} type="url" value={form[l.key]} maxLength={300} placeholder={l.placeholder}
+                className={`${inputCls} mt-2.5 sm:ml-14 sm:w-[calc(100%-3.5rem)]`} onChange={e => set(l.key, e.target.value)} />
+            </div>
+          ))}
+        </div>
       </fieldset>
       {/* 14 Oct (PDPA, her rule): optional; an employer gets these and the email only after shortlisting you.
           Just-in-time line under the fields (ICO). No IC number, date of birth, gender, race, religion or photo. */}

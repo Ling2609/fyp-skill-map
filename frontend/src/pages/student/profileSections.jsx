@@ -88,7 +88,7 @@ export function ModulesTab({ onUnsavedChange, onSaved }) {
 
 // ── Projects ──────────────────────────────────────────────────────────────────
 
-export function ProjectsTab({ projects, onRefresh, onImport, importNote, onImportNoteClose }) {
+export function ProjectsTab({ projects, onRefresh, onImport, importNote, onImportNoteClose, githubConnected }) {
   const s = useItems('/profile/projects', onRefresh)
   const done = (saved) => {
     s.close()
@@ -105,7 +105,8 @@ export function ProjectsTab({ projects, onRefresh, onImport, importNote, onImpor
         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M12 4v11m0 0l-4-4m4 4l4-4" />
         </svg>
-        Import from GitHub
+        {/* 14 Oct (Connect GitHub): only her connected accounts' repos can be imported */}
+        {githubConnected ? 'Import from GitHub' : 'Connect GitHub to import'}
       </button>{addButton}
     </>}>
       <Note text={importNote} onClose={onImportNoteClose} />
@@ -121,6 +122,7 @@ export function ProjectsTab({ projects, onRefresh, onImport, importNote, onImpor
                   <div className="flex items-baseline gap-2 flex-wrap">
                     <p className="text-sm font-semibold text-slate-800">{p.name}</p>
                     {p.github_url && <a href={p.github_url} target="_blank" rel="noopener noreferrer" className="text-xs text-blue-600 hover:underline">GitHub ↗</a>}
+                    <RepoCheck project={p} who="your" />
                   </div>
                   <p className="text-sm text-slate-600 mt-0.5 line-clamp-2">{p.description}</p>
                 </div>
@@ -139,7 +141,7 @@ export function ProjectsTab({ projects, onRefresh, onImport, importNote, onImpor
       )}
       {s.deleting && <ConfirmDelete name={s.deleting.name} onCancel={() => s.setDeleting(null)} onDelete={() => s.remove(s.deleting.id)} />}
       {s.editing && (
-        <Modal title={s.editing === 'new' ? 'Add a project' : 'Edit project'} dirty={s.dirty} onClose={s.close}>
+        <Modal title={s.editing === 'new' ? 'Add a project' : 'Edit project'} dirty={s.dirty} onClose={s.close} size="form">
           <ProjectForm project={s.editing === 'new' ? null : s.editing} onDone={done} onDirty={s.setDirty} onCancel={s.close} />
         </Modal>
       )}
@@ -199,7 +201,7 @@ export function CertsTab({ certs, onRefresh }) {
       )}
       {s.deleting && <ConfirmDelete name={s.deleting.cert_name} onCancel={() => s.setDeleting(null)} onDelete={() => s.remove(s.deleting.id)} />}
       {s.editing && (
-        <Modal title={s.editing === 'new' ? 'Add a certificate' : 'Edit certificate'} dirty={s.dirty} onClose={s.close}>
+        <Modal title={s.editing === 'new' ? 'Add a certificate' : 'Edit certificate'} dirty={s.dirty} onClose={s.close} size="form">
           <CertForm cert={s.editing === 'new' ? null : s.editing} onDirty={s.setDirty}
             onDone={() => { s.close(); onRefresh() }} onCancel={s.close} />
         </Modal>
@@ -246,11 +248,21 @@ export function AwardsTab({ awards, onRefresh }) {
       )}
       {s.deleting && <ConfirmDelete name={s.deleting.title} onCancel={() => s.setDeleting(null)} onDelete={() => s.remove(s.deleting.id)} />}
       {s.editing && (
-        <Modal title={s.editing === 'new' ? 'Add an award' : 'Edit award'} dirty={s.dirty} onClose={s.close}>
+        <Modal title={s.editing === 'new' ? 'Add an award' : 'Edit award'} dirty={s.dirty} onClose={s.close} size="form">
           <AwardForm award={s.editing === 'new' ? null : s.editing} onDirty={s.setDirty}
             onDone={() => { s.close(); onRefresh() }} onCancel={s.close} />
         </Modal>
       )}
     </Panel>
   )
+}
+
+
+// 14 Oct (Connect GitHub): is the repo hers? The same words for her and (with who="the student's") for employers
+export function RepoCheck({ project, who }) {
+  if (!project.github_url || !project.repo_check) return null
+  return project.repo_check === 'yours'
+    ? <span className="text-xs font-semibold text-emerald-700 bg-emerald-50 rounded-full px-2 py-0.5"
+        title={project.repo_check_as ? `Owned or contributed to by ${project.repo_check_as}` : undefined}>✓ {who === 'your' ? 'Your GitHub' : "Student's own GitHub"}</span>
+    : <span className="text-xs text-slate-600 bg-slate-100 rounded-full px-2 py-0.5">Not linked to {who} GitHub</span>
 }

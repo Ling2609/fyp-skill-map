@@ -229,7 +229,7 @@ def delete_student_data(user: User, db: Session):
     because databases made by older migrations may not have every cascade rule. Jobs, modules and other students'
     data are untouched. Commits nothing: the caller does, after MongoDB."""
     from app.models.application import Application, ApplicationEvent, JobInvitation
-    from app.models.profile import UserAward, UserCertification, UserProject
+    from app.models.profile import GithubAccount, UserAward, UserCertification, UserProject
     from app.models.programme import AdminAction
     from app.models.user_module import UserModule
     app_ids = [a for (a,) in db.query(Application.id).filter(Application.student_id == user.id)]
@@ -238,7 +238,8 @@ def delete_student_data(user: User, db: Session):
     for model, column in ((Application, Application.student_id), (JobInvitation, JobInvitation.student_id),
                           (UserProject, UserProject.user_id), (UserCertification, UserCertification.user_id),
                           (UserAward, UserAward.user_id), (UserModule, UserModule.user_id),
-                          (PasswordResetOTP, PasswordResetOTP.user_id), (AdminAction, AdminAction.target_user_id)):
+                          (PasswordResetOTP, PasswordResetOTP.user_id), (AdminAction, AdminAction.target_user_id),
+                          (GithubAccount, GithubAccount.user_id)):
         db.query(model).filter(column == user.id).delete(synchronize_session=False)
     names = [x.lower() for x in (user.username, user.email) if x]
     db.query(LoginThrottle).filter(LoginThrottle.identifier.in_(names)).delete(synchronize_session=False)
@@ -286,7 +287,7 @@ def export_my_data(db: Session = Depends(get_db), current_user: User = Depends(g
     security data and are left out. Chats come from MongoDB; if it can't be reached the file says so."""
     from app.models.application import Application, ApplicationEvent, JobInvitation
     from app.models.job import Job
-    from app.models.profile import UserAward, UserCertification, UserProject
+    from app.models.profile import GithubAccount, UserAward, UserCertification, UserProject
     from app.models.user_module import UserModule
     from app.models.programme import AdminAction
     u = current_user
@@ -328,6 +329,7 @@ def export_my_data(db: Session = Depends(get_db), current_user: User = Depends(g
         "projects": _rows(UserProject, UserProject.user_id, u.id, db),
         "certifications": _rows(UserCertification, UserCertification.user_id, u.id, db),
         "awards": _rows(UserAward, UserAward.user_id, u.id, db),
+        "github_accounts": _rows(GithubAccount, GithubAccount.user_id, u.id, db),
         "applications": applications,
         "invitations": invitations,
         "career_office_decisions": office,

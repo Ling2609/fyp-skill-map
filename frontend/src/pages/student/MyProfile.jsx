@@ -38,18 +38,31 @@ export default function MyProfile() {
   const [error, setError] = useState('')
   // ?tab=projects opens that tab (first sign-in and the old /modules address use ?tab=modules)
   const [tab, setTab] = useState(() => TABS.some(t => t.key === searchParams.get('tab')) ? searchParams.get('tab') : 'modules')
-  const [open, setOpen] = useState(null)   // the pop-up open now: 'profile' | 'study' | 'github'
+  // ?open=links / ?open=import: back from GitHub's sign-in (14 Oct, Connect GitHub) to the pop-up it started from
+  const [open, setOpen] = useState(() => ({ links: 'profile', import: 'github' })[searchParams.get('open')] || null)
+  const [githubNote, setGithubNote] = useState(searchParams.get('github') || '')   // "GitHub connected as …"
+  const [githubLinked] = useState(() => Number(searchParams.get('linked') || 0))   // projects now shown as hers (said only if > 0); kept after the address is tidied
+  const [githubAccounts, setGithubAccounts] = useState(0)
   const [gradesUnsaved, setGradesUnsaved] = useState(false)   // the Modules tab has grades not saved yet
   const [dirty, setDirty] = useState(false)
   const [importNote, setImportNote] = useState('')
 
   const load = useCallback(() => Promise.all([
     api.get('/profile/showcase'), api.get('/profile/projects'), api.get('/profile/certifications'), api.get('/profile/awards'),
-  ]).then(([show, proj, cert, award]) => {
+    api.get('/profile/github/accounts').catch(() => ({ data: { accounts: [] } })),
+  ]).then(([show, proj, cert, award, gh]) => {
     setData(show.data); setProjects(proj.data); setCerts(cert.data); setAwards(award.data); setError('')
+    setGithubAccounts(gh.data.accounts.length)
   }).catch(() => setError("Couldn't load your profile. Please refresh the page.")), [])
 
   useEffect(() => { load() }, [load])
+  // The return address from GitHub isn't kept: a refresh mustn't open the pop-up again
+  useEffect(() => {
+    if (searchParams.get('open') || searchParams.get('github') || searchParams.get('linked')) {
+      const keep = searchParams.get('tab')
+      setSearchParams(keep ? { tab: keep } : {}, { replace: true })
+    }
+  }, [searchParams, setSearchParams])
 
   const close = () => { setOpen(null); setDirty(false) }
 
@@ -130,11 +143,17 @@ export default function MyProfile() {
       </PageHeader>
 
       <div className="flex-1 min-h-0 px-4 sm:px-8 py-6">
+        {githubNote && (
+          <p role="status" className="mb-4 text-sm text-emerald-800 bg-emerald-50 border border-emerald-200 rounded-xl px-4 py-2.5 flex justify-between gap-3">
+            <span>GitHub connected as <b>{githubNote}</b>.{githubLinked > 0 && ` ${githubLinked} ${githubLinked === 1 ? 'project now shows' : 'projects now show'} as yours.`}</span>
+            <button type="button" onClick={() => setGithubNote('')} aria-label="Close" className="text-emerald-700">×</button>
+          </p>
+        )}
         {tab === 'modules' && (
           <ModulesTab onUnsavedChange={setGradesUnsaved} onSaved={load} />
         )}
         {tab === 'projects' && (
-          <ProjectsTab projects={projects} onRefresh={load} onImport={() => setOpen('github')}
+          <ProjectsTab projects={projects} onRefresh={load} onImport={() => setOpen('github')} githubConnected={githubAccounts > 0}
             importNote={importNote} onImportNoteClose={() => setImportNote('')} />
         )}
         {tab === 'certs' && <CertsTab certs={certs} onRefresh={load} />}
@@ -142,8 +161,8 @@ export default function MyProfile() {
       </div>
 
       {open === 'profile' && (
-        <Modal title="Links & visibility" dirty={dirty} onClose={close}>
-          <ProfileForm data={data} onDirty={setDirty} onCancel={close} onDone={saved} />
+        <Modal title="Links & visibility" dirty={dirty} onClose={() => { close(); load() }}>
+          <ProfileForm data={data} onDirty={setDirty} onCancel={() => { close(); load() }} onDone={saved} />
         </Modal>
       )}
       {open === 'study' && (
@@ -153,7 +172,7 @@ export default function MyProfile() {
         </Modal>
       )}
       {open === 'github' && (
-        <GithubImport githubLink={links.github} onClose={close}
+        <GithubImport onClose={close}
           onDone={(note) => { setImportNote(note); saved() }} />
       )}
     </div>

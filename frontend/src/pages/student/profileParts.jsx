@@ -52,7 +52,8 @@ export function Spinner({ size = 'md' }) {
 
 // dirty = something has been typed: clicking outside, Esc or the corner ✕ then asks before throwing it away
 // (5 Oct: a stray click outside lost a long description). The form's own Cancel closes straight away.
-export function Modal({ title, onClose, dirty = false, wide = false, children }) {
+// size: 'form' (14 Oct, her review: project / certificate / award pop-ups felt crowded) = wider, still one column
+export function Modal({ title, onClose, dirty = false, wide = false, size, children }) {
   const [asking, setAsking] = useState(false)
   const tryClose = useCallback(() => { if (dirty) setAsking(true); else onClose() }, [dirty, onClose])
   useEffect(() => {
@@ -63,7 +64,7 @@ export function Modal({ title, onClose, dirty = false, wide = false, children })
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/30" onMouseDown={tryClose}>
       <div role="dialog" aria-modal="true" aria-label={title} onMouseDown={e => e.stopPropagation()}
-        className={`bg-white rounded-2xl shadow-xl w-full ${wide ? 'max-w-2xl' : 'max-w-lg'} max-h-[90vh] overflow-y-auto`}>
+        className={`bg-white rounded-2xl shadow-xl w-full ${size === 'form' ? 'max-w-[46rem]' : wide ? 'max-w-2xl' : 'max-w-lg'} max-h-[90vh] overflow-y-auto`}>
         <div className="flex items-center justify-between px-6 pt-5 pb-1">
           <h3 className="text-base font-semibold text-gray-800">{title}</h3>
           <button type="button" onClick={tryClose} aria-label="Close" className="text-gray-400 hover:text-gray-700 p-1 rounded-lg hover:bg-gray-100">

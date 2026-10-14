@@ -28,6 +28,12 @@ class Settings(BaseSettings):
     # Websites allowed to call the API (13 Oct audit): comma-separated, e.g. for a Docker / demo address
     # CORS_ORIGINS=http://localhost:5173,http://192.168.1.20:5173
     cors_origins: str = "http://localhost:5173"
+    # Connect GitHub (14 Oct): a GitHub OAuth app proves which GitHub accounts are a student's own. Empty = not set up:
+    # students can't connect, repos are still read but can't be checked as theirs. README "Connect GitHub".
+    github_client_id: str = ""
+    github_client_secret: str = ""
+    # Where the frontend runs: GitHub sends the student back to <frontend_url>/github/callback after connecting
+    frontend_url: str = "http://localhost:5173"
 
     class Config:
         env_file = ".env"

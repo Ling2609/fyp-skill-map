@@ -101,6 +101,8 @@ class ProjectOut(BaseModel):
     github_url: str | None
     extracted_skills: list[str]
     skill_quotes: dict[str, str] | None = None
+    repo_check: str | None = None       # 14 Oct: "yours" / "not_linked" / None (no repo, or GitHub couldn't say)
+    repo_check_as: str | None = None    # which of her connected GitHub accounts owns or contributed to it
     github_note: str | None = None      # only in the reply to "add": why the repo's languages couldn't be read
     skills_note: str | None = None      # only in the reply to "add"/"edit": the AI call failed (limit, network)
 
@@ -337,6 +339,10 @@ def check_profile_schema():
     if "privacy_version" not in users:
         raise RuntimeError("Database not updated: run  python migrations/migrate_record_keeping.py  "
                            "from the backend folder, then start the backend again.")
+    projects = {c["name"] for c in inspect(engine).get_columns("user_projects")}
+    if "repo_check" not in projects or not inspect(engine).has_table("github_accounts"):
+        raise RuntimeError("Database not updated: run  python migrations/migrate_github_accounts.py  "
+                           "from the backend folder, then start the backend again.")
 
 
 # ── Endpoints ─────────────────────────────────────────────────────────────────
@@ -483,6 +489,19 @@ def _checked_project_skills(data: ProjectIn) -> dict[str, str]:
     return out
 
 
+def _set_repo_check(project: UserProject, user: User, db: Session):
+    """14 Oct (Connect GitHub): is the project's repo owned or contributed to by one of her connected accounts?
+    Kept as it was if GitHub can't be asked right now; never blocks saving."""
+    if not project.github_url:
+        project.repo_check = project.repo_check_as = None
+        return
+    from app.routers.github_connect import accounts_of
+    from app.services.github_repo import check_repo_owner
+    result, as_login = check_repo_owner(project.github_url, [a.login for a in accounts_of(user.id, db)])
+    if result is not None:
+        project.repo_check, project.repo_check_as = result, as_login
+
+
 def _review_project(data: ProjectIn, quotes: dict[str, str], project: UserProject, user: User):
     """14 Oct: what the student kept, removed or added compared with the AI's suggestion (her own record only).
     Skills from GitHub's language list aren't the AI's, so they are left out of the comparison."""
@@ -529,6 +548,7 @@ def add_project(data: ProjectIn, current_user: User = Depends(get_current_user),
     project = UserProject(user_id=current_user.id, name=data.name.strip(), description=data.description.strip(),
                           github_url=(data.github_url or "").strip() or None,
                           extracted_skills=list(quotes), skill_quotes=quotes)
+    _set_repo_check(project, current_user, db)
     db.add(project)
     db.commit()
     db.refresh(project)
@@ -553,6 +573,7 @@ def edit_project(project_id: int, data: ProjectIn, current_user: User = Depends(
         quotes = _checked_project_skills(data)
         project.name, project.description, project.github_url = data.name.strip(), data.description.strip(), github
         project.extracted_skills, project.skill_quotes = list(quotes), quotes
+        _set_repo_check(project, current_user, db)
         db.commit()
         db.refresh(project)
         _review_project(data, quotes, project, current_user)
@@ -568,6 +589,7 @@ def edit_project(project_id: int, data: ProjectIn, current_user: User = Depends(
         quotes, github_note, skills_note = _project_skills(data, added, current_user.id)
         project.name, project.description, project.github_url = data.name.strip(), data.description.strip(), github
         project.extracted_skills, project.skill_quotes = list(quotes), quotes
+        _set_repo_check(project, current_user, db)
         db.commit()
         db.refresh(project)
     out = ProjectOut.model_validate(project)
@@ -958,12 +980,12 @@ def get_about(current_user: User = Depends(get_current_user)):
 def save_about(data: AboutIn, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     _check_length("Headline", data.headline)
     _check_length("About", data.about)
-    links = {field: _check_link(field, getattr(data, field)) for field in LINK_RULES}   # all checked before saving
+    links = {field: _check_link(field, getattr(data, field)) for field in LINK_RULES if field != "github_url"}
     current_user.phone, current_user.city, current_user.available_from = _contact(data)
     current_user.headline = " ".join(data.headline.split()) or None
     current_user.about = data.about.strip() or None
-    current_user.linkedin_url, current_user.portfolio_url, current_user.github_url = (
-        links["linkedin_url"], links["portfolio_url"], links["github_url"])
+    # 14 Oct: the GitHub link comes from Connect GitHub (github_connect.py), no longer typed here
+    current_user.linkedin_url, current_user.portfolio_url = links["linkedin_url"], links["portfolio_url"]
     current_user.is_visible_to_employers = data.visible_to_employers
     current_user.show_grades_to_employers = data.show_grades_to_employers
     db.commit()
@@ -1106,10 +1128,19 @@ def save_study(data: StudyIn, current_user: User = Depends(get_current_user), db
 # an ordinary project (same skill extraction, same languages rule, editable). references.md "Showcase profile".
 
 @router.get("/github/repos")
-def list_github_repos(account: str, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
-    repos, note = public_repos(account)
-    if note:
-        raise HTTPException(status_code=400, detail=note)
+def list_github_repos(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    """14 Oct (Connect GitHub): the repos of HER connected accounts only, so another person's repos can't be imported
+    as hers. Each repo says which account it is from."""
+    from app.routers.github_connect import accounts_of
+    accounts = accounts_of(current_user.id, db)
+    if not accounts:
+        raise HTTPException(status_code=400, detail="Connect your GitHub account first.")
+    repos = []
+    for a in accounts:
+        found, note = public_repos(a.login)
+        if note:
+            raise HTTPException(status_code=400, detail=note)
+        repos += [{**r, "account": a.login} for r in found]
     links = [p.github_url for p in db.query(UserProject).filter(UserProject.user_id == current_user.id)]
     for r in repos:
         r["added"] = any(same_repo(r["url"], link) for link in links)

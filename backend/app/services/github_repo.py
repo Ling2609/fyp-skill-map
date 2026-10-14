@@ -36,8 +36,7 @@ def repo_languages(url: str) -> tuple[dict[str, int], str | None]:
     if not repo:
         return {}, NOT_GITHUB
     try:
-        resp = requests.get(f"https://api.github.com/repos/{repo[0]}/{repo[1]}/languages", timeout=TIMEOUT,
-                            headers={"Accept": "application/vnd.github+json", "User-Agent": "SkillMap-FYP"})
+        resp = _get(f"https://api.github.com/repos/{repo[0]}/{repo[1]}/languages")
     except requests.RequestException as e:
         print(f"[github] {url}: {e}")
         return {}, UNREACHABLE
@@ -95,9 +94,7 @@ def public_repos(account: str) -> tuple[list[dict], str | None]:
     if not username:
         return [], NOT_ACCOUNT
     try:
-        resp = requests.get(f"https://api.github.com/users/{username}/repos", timeout=TIMEOUT,
-                            params={"per_page": 100, "sort": "updated", "type": "owner"},
-                            headers={"Accept": "application/vnd.github+json", "User-Agent": "SkillMap-FYP"})
+        resp = _get(f"https://api.github.com/users/{username}/repos", per_page=100, sort="updated", type="owner")
     except requests.RequestException as e:
         print(f"[github] repos of {username}: {e}")
         return [], LIST_UNREACHABLE
@@ -182,3 +179,69 @@ def repo_readme(url: str) -> tuple[str, str | None]:
             return "", LIST_RATE_LIMITED
         return "", LIST_UNREACHABLE
     return readme_summary(resp.text), None
+
+
+# ── Connect GitHub and "is this repo hers?" (14 Oct; references.md "Verifying GitHub and LinkedIn accounts") ─────
+# A GitHub OAuth app with NO scope: GitHub's sign-in proves the account is hers and gives read-only access to public
+# information only. GitHub's token is used once to read her login and then dropped; repo checks use the app's own
+# client id and secret, which also lifts the limit from 60 to 5,000 calls an hour.
+# https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/authorizing-oauth-apps
+
+def _app_auth():
+    from app.config import settings
+    return (settings.github_client_id, settings.github_client_secret) if settings.github_client_id else None
+
+
+def _get(url: str, **params):
+    return requests.get(url, timeout=TIMEOUT, params=params or None, auth=_app_auth(),
+                        headers={"Accept": "application/vnd.github+json", "User-Agent": "SkillMap-FYP"})
+
+
+def exchange_code(code: str, redirect_uri: str) -> dict:
+    """GitHub's sign-in code -> {"id", "login"} of the account that signed in. Raises ValueError with a message for
+    the student if GitHub says no or can't be reached."""
+    from app.config import settings
+    try:
+        token = requests.post("https://github.com/login/oauth/access_token", timeout=TIMEOUT,
+                              headers={"Accept": "application/json", "User-Agent": "SkillMap-FYP"},
+                              data={"client_id": settings.github_client_id, "client_secret": settings.github_client_secret,
+                                    "code": code, "redirect_uri": redirect_uri}).json().get("access_token")
+        if not token:
+            raise ValueError("GitHub didn't confirm the sign-in (the link may have expired). Please try again.")
+        me = requests.get("https://api.github.com/user", timeout=TIMEOUT,
+                          headers={"Authorization": f"Bearer {token}", "Accept": "application/vnd.github+json",
+                                   "User-Agent": "SkillMap-FYP"}).json()
+    except requests.RequestException as e:
+        print(f"[github] sign-in: {e}")
+        raise ValueError("Couldn't reach GitHub. Please try again.") from e
+    if not me.get("id") or not me.get("login"):
+        raise ValueError("GitHub didn't say which account signed in. Please try again.")
+    return {"id": int(me["id"]), "login": str(me["login"])}
+
+
+def check_repo_owner(url: str, logins: list[str]) -> tuple[str | None, str | None]:
+    """("yours", login) when one of her connected accounts owns the repo or is among its contributors;
+    ("not_linked", None) when none is; (None, None) when it can't be told (not a repo link, private, GitHub down).
+    Owner first (no call); then GitHub's contributors list (one call, first 100: enough for a student project)."""
+    repo = parse_repo(url)
+    if not repo:
+        return None, None
+    mine = {login.lower(): login for login in logins}
+    if not mine:
+        return "not_linked", None
+    if repo[0].lower() in mine:
+        return "yours", mine[repo[0].lower()]
+    try:
+        resp = _get(f"https://api.github.com/repos/{repo[0]}/{repo[1]}/contributors", per_page=100)
+    except requests.RequestException as e:
+        print(f"[github] contributors of {url}: {e}")
+        return None, None
+    if resp.status_code != 200:
+        print(f"[github] contributors of {url}: HTTP {resp.status_code}")
+        return None, None
+    people = resp.json() if isinstance(resp.json(), list) else []
+    for p in people:
+        login = str((p or {}).get("login") or "").lower()
+        if login in mine:
+            return "yours", mine[login]
+    return "not_linked", None

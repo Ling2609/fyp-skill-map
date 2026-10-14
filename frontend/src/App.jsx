@@ -12,6 +12,7 @@ const Dashboard = lazy(() => import('./pages/student/Dashboard'))
 const Recommend = lazy(() => import('./pages/student/Recommend'))
 const JobDetail = lazy(() => import('./pages/student/JobDetail'))
 const Chatbot = lazy(() => import('./pages/student/Chatbot'))
+const GithubCallback = lazy(() => import('./pages/student/GithubCallback'))
 const MyProfile = lazy(() => import('./pages/student/MyProfile'))
 const StudySetup = lazy(() => import('./pages/student/StudySetup'))
 const AccountSettings = lazy(() => import('./pages/AccountSettings'))
@@ -101,6 +102,7 @@ function AppRoutes() {
       {/* 8 Oct: My Profile and Skill Profile are one page; the old /my-profile address still works */}
       <Route path="/profile" element={<RoleRoute roles={['student']}><Layout><MyProfile /></Layout></RoleRoute>} />
       <Route path="/my-profile" element={<Navigate to="/profile" replace />} />
+      <Route path="/github/callback" element={<RoleRoute roles={['student']}><GithubCallback /></RoleRoute>} />
       <Route path="/account" element={<RoleRoute><Layout><AccountSettings /></Layout></RoleRoute>} />
     </Routes>
     </Suspense>

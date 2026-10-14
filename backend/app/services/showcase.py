@@ -78,6 +78,12 @@ def _top_skills(user_id: int, db: Session, show_grades: bool) -> tuple[list[dict
     return top, len(profile)
 
 
+def _github_link(user_id: int, db: Session) -> str | None:
+    from app.models.profile import GithubAccount
+    first = db.query(GithubAccount).filter(GithubAccount.user_id == user_id).order_by(GithubAccount.id).first()
+    return f"https://github.com/{first.login}" if first else None
+
+
 def build_showcase(user: User, db: Session, for_employer: bool = False) -> dict:
     """Everything My Profile shows, in one reply. for_employer=True hides grades unless the student allows them."""
     show_grades = (not for_employer) or user.show_grades_to_employers
@@ -102,7 +108,8 @@ def build_showcase(user: User, db: Session, for_employer: bool = False) -> dict:
         "name": f"{user.first_name} {user.last_name}",
         "headline": user.headline or "",
         "about": user.about or "",
-        "links": {"linkedin": user.linkedin_url, "portfolio": user.portfolio_url, "github": user.github_url},
+        # 14 Oct: GitHub only from a connected (proved) account, never a typed link; LinkedIn and portfolio are typed
+        "links": {"linkedin": user.linkedin_url, "portfolio": user.portfolio_url, "github": _github_link(user.id, db)},
         "visible_to_employers": user.is_visible_to_employers,
         "show_grades_to_employers": user.show_grades_to_employers,
         # 14 Oct: the student's own contact details, for her own view only; employers get them from
@@ -116,7 +123,9 @@ def build_showcase(user: User, db: Session, for_employer: bool = False) -> dict:
                               for name, grade in strongest.items()],
         "top_skills": top_skills,
         "total_skills": total,
+        # repo_check (14 Oct, Connect GitHub): "yours" / "not_linked" / None, shown next to the repo link
         "projects": [{"name": p.name, "description": p.description, "github_url": p.github_url,
+                      "repo_check": p.repo_check if p.github_url else None,
                       "skills": list(p.extracted_skills or [])[:6]} for p in projects],
         "certifications": [{"name": c.cert_name, "issuer": c.issuer, "credly_url": c.credly_url} for c in certs],
         "awards": [{"title": a.title, "issuer": a.issuer, "date": a.award_date, "description": a.description or ""}
