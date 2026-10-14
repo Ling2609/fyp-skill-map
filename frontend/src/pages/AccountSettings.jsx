@@ -72,6 +72,22 @@ export default function AccountSettings() {
   const [emailStep, setEmailStep] = useState('form')   // 'form' | 'code'
   const [resendAt, setResendAt] = useState(0)
   const [now, setNow] = useState(() => Date.now())
+  const [downloading, setDownloading] = useState(false)
+  const [downloadError, setDownloadError] = useState('')
+  const downloadData = async () => {
+    if (downloading) return
+    setDownloading(true); setDownloadError('')
+    try {
+      const res = await api.get('/auth/me/export', { responseType: 'blob' })
+      const link = document.createElement('a')
+      link.href = URL.createObjectURL(res.data)
+      link.download = `skillmap-data-${user?.username || 'me'}.json`
+      link.click()
+      URL.revokeObjectURL(link.href)
+    } catch {
+      setDownloadError("Couldn't prepare your data. Please try again.")
+    } finally { setDownloading(false) }
+  }
 
   // Resend countdown from a fixed end time (same as Forgot password)
   useEffect(() => {
@@ -250,6 +266,11 @@ export default function AccountSettings() {
               <FormButtons saving={saving} onCancel={cancel} label="Change password" />
             </form>
           </Row>
+
+          {/* 14 Oct (PDPA access principle, 2024 data portability): everything SkillMap holds, as one JSON file */}
+          <Row label="Your data" value="Everything SkillMap holds about you, in one file" action={downloading ? 'Preparing…' : 'Download my data'}
+            onAction={downloadData} />
+          {downloadError && <p role="alert" className="text-xs text-rose-700 -mt-2 pb-3">{downloadError}</p>}
 
           {user?.role === 'student' && (
             <Row label="Delete account" value="Remove your account and your data" action="Delete account…" danger

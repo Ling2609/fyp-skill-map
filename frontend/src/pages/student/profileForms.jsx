@@ -464,12 +464,32 @@ export function ProfileForm({ data, onDone, onCancel, onDirty }) {
           </Field>
         ))}
       </fieldset>
+      {/* 14 Oct (PDPA, her rule): optional; an employer gets these and the email only after shortlisting you.
+          Just-in-time line under the fields (ICO). No IC number, date of birth, gender, race, religion or photo. */}
+      <fieldset className="space-y-3">
+        <legend className="text-sm font-semibold text-gray-800 mb-2">Contact for employers</legend>
+        <div className="grid sm:grid-cols-3 gap-3">
+          <Field label="Phone" optional>
+            <input type="tel" value={form.phone} maxLength={30} className={inputCls} placeholder="012-345 6789"
+              onChange={e => set('phone', e.target.value)} />
+          </Field>
+          <Field label="City" optional>
+            <input value={form.city} maxLength={80} className={inputCls} placeholder="Kuala Lumpur"
+              onChange={e => set('city', e.target.value)} />
+          </Field>
+          <Field label="Available from" optional>
+            <input type="month" value={form.available_from} className={inputCls}
+              onChange={e => set('available_from', e.target.value)} />
+          </Field>
+        </div>
+        <p className="text-xs text-gray-500">Shared with an employer, with your email, only after they shortlist you.</p>
+      </fieldset>
       <fieldset className="space-y-3">
         <legend className="text-sm font-semibold text-gray-800 mb-2">Profile visibility</legend>
         <Toggle id="flag-visible" checked={form.visible_to_employers} onChange={v => set('visible_to_employers', v)}
           label="Visible to employers" hint={form.visible_to_employers
-            ? 'Employers whose jobs fit you can find your profile (not your email).'
-            : "Employers can't find you. A job you apply for still shares your profile and email with that employer."} />
+            ? 'Approved employers whose jobs fit you can find your profile and invite you to apply. They cannot see your contact details.'
+            : "Employers can't find you. A job you apply for still shares your profile with that employer; contact details only if they shortlist you."} />
         <Toggle id="flag-grades" checked={form.show_grades_to_employers} onChange={v => set('show_grades_to_employers', v)}
           label="Show grades" hint={form.show_grades_to_employers
             ? 'Employers see your grade for each module.'

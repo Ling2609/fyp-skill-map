@@ -45,13 +45,21 @@ def test_cannot_invite_hidden_or_already_applied_or_to_a_closed_job(client, user
     assert client.post("/employer/invitations", headers=users.h(employer), json={"job_id": job["id"], "student_id": users.ids[other]}).status_code == 400
 
 
-def test_graduate_profile_never_shows_the_email(client, users, post_job):
+def test_contact_details_only_after_shortlisting(client, users, post_job):
+    """14 Oct (her rule): a visible graduate's profile and a new application show no contact details; shortlisting
+    shows the email, phone, city and start month."""
     employer, student = users.employer(), users.student(visible=True)
+    client.put("/profile/about", headers=users.h(student), json={"visible_to_employers": True, "phone": "012-345 6789",
+                                                                "city": "Kuala Lumpur", "available_from": "2027-01"})
     job = post_job(employer)
     g = client.get(f"/employer/graduates/{users.ids[student]}", params={"job_id": job["id"]}, headers=users.h(employer)).json()
-    assert g["student"]["email"] is None and student not in str(g)
+    assert g["student"]["contact"] is None and student not in str(g) and "345 6789" not in str(g)
     app_id = client.post("/applications", headers=users.h(student), json={"job_id": job["job_ref"]}).json()["id"]
-    assert client.get(f"/employer/applications/{app_id}", headers=users.h(employer)).json()["student"]["email"] == student
+    a = client.get(f"/employer/applications/{app_id}", headers=users.h(employer)).json()
+    assert a["student"]["contact"] is None and student not in str(a)              # applied: still no contact
+    client.patch(f"/employer/applications/{app_id}", headers=users.h(employer), json={"status": "shortlisted"})
+    c = client.get(f"/employer/applications/{app_id}", headers=users.h(employer)).json()["student"]["contact"]
+    assert c == {"email": student, "phone": "012-345 6789", "city": "Kuala Lumpur", "available_from": "2027-01"}
 
 
 def test_deactivated_student_leaves_graduates_who_fit(client, users, post_job, db):

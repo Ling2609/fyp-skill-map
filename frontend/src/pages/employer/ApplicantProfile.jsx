@@ -11,8 +11,11 @@ import { CardSkeleton, LoadingLabel } from '../../components/Skeleton'
 // where it comes from (module, project, certificate), then the showcase: projects, strongest modules (grades only if
 // the student allows it), certificates and awards.
 // 12 Oct: also a graduate who fits one of the employer's jobs but hasn't applied (/employer/graduates/:studentId?job=):
-// the same page without the status menu and without the email (only applying shares it).
+// the same page without the status menu.
+// 14 Oct (her rule; references.md "Contact details"): email, phone, city and start month only once the employer
+// shortlists the applicant, so contacting someone always shows on SkillMap as a shortlist.
 const card = 'bg-white border border-slate-200 rounded-2xl p-5'
+const monthName = (ym) => new Date(`${ym}-01T00:00:00`).toLocaleDateString('en-GB', { month: 'short', year: 'numeric' })
 
 export default function ApplicantProfile() {
   const { appId, studentId } = useParams()
@@ -22,13 +25,17 @@ export default function ApplicantProfile() {
   const [error, setError] = useState('')
   const [inviting, setInviting] = useState(false)
 
+  const url = appId ? `/employer/applications/${appId}` : `/employer/graduates/${studentId}?job_id=${jobId}`
   useEffect(() => {
-    const url = appId ? `/employer/applications/${appId}` : `/employer/graduates/${studentId}?job_id=${jobId}`
     api.get(url).then(res => setData(res.data)).catch(err => setError(errText(err, "Couldn't load this profile.")))
-  }, [appId, studentId, jobId])
+  }, [url])
 
-  // 12 Oct: Rejected / Accepted ask first; Shortlisted / Applied change at once with Undo (statusChange.jsx)
-  const status = useStatusChange((id, res) => setData(d => ({ ...d, application: { ...d.application, status: res.status } })))
+  // 12 Oct: Rejected / Accepted ask first; Shortlisted / Applied change at once with Undo (statusChange.jsx).
+  // 14 Oct: reloaded after a change, because shortlisting shows the contact details (and undoing hides them)
+  const status = useStatusChange((id, res) => {
+    setData(d => ({ ...d, application: { ...d.application, status: res.status } }))
+    api.get(url).then(r => setData(r.data)).catch(() => {})
+  })
   // 12 Oct (her supervisor's point): a graduate who fits can be invited to apply; they decide, their email stays private
   const invite = () => {
     setInviting(true); setError('')
@@ -51,11 +58,17 @@ export default function ApplicantProfile() {
             {s && <p className="text-sm text-slate-500 mt-1">
               {s.programme_line}
               {links.map(([label, url]) => <span key={label}> · <a href={url} target="_blank" rel="noopener noreferrer" className="text-blue-700 hover:underline">{label} ↗</a></span>)}
-              {s.email && <> · <a href={`mailto:${s.email}`} className="text-blue-700 hover:underline">{s.email}</a></>}
             </p>}
+            {s?.contact && <p className="text-sm text-slate-700 mt-1">
+              <a href={`mailto:${s.contact.email}`} className="text-blue-700 hover:underline">{s.contact.email}</a>
+              {s.contact.phone && <> · {s.contact.phone}</>}
+              {s.contact.city && <> · {s.contact.city}</>}
+              {s.contact.available_from && <> · available from {monthName(s.contact.available_from)}</>}
+            </p>}
+            {data?.application && !s?.contact && <p className="text-xs text-slate-500 mt-2">Email and phone appear after you shortlist this applicant.</p>}
             {s?.headline && <p className="text-sm text-slate-700 mt-1">{s.headline}</p>}
             {data && !data.application && <p className="text-xs text-slate-500 mt-2">
-              They haven't applied, so their email isn't shared. Invite them to apply: if they do, you see their email here.
+              They haven't applied. Invite them to apply; their contact details appear only if you shortlist them.
             </p>}
           </div>
           {data?.application && (

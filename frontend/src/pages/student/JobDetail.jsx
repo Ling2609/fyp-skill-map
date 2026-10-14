@@ -76,7 +76,7 @@ function ApplyAction({ a, company, closed }) {
             className="text-sm font-semibold text-white bg-blue-700 hover:bg-blue-800 px-4 py-2 rounded-lg transition disabled:opacity-50">
             {busy ? 'Applying…' : 'Apply with my SkillMap profile'}
           </button>
-          <p className="text-xs text-slate-500">{company || 'The employer'} sees your profile and your match for this job.</p>
+          <p className="text-xs text-slate-500">{company || 'The employer'} sees your profile and your match. Your contact details only if they shortlist you.</p>
         </>
       )}
       {error && <p role="alert" className="text-xs text-rose-600">{error}</p>}

@@ -39,6 +39,12 @@ class User(Base):
     show_grades_to_employers = Column(Boolean, default=False, nullable=False, server_default="false")
     # Career goal (9 Oct, migrations/migrate_career_goal.py): a job category, empty = open to all ICT roles
     target_category = Column(String(80), nullable=True)
+    # 14 Oct (PDPA 2010, data minimisation): contact details an employer gets only after shortlisting the student;
+    # all optional. No IC number, date of birth, gender, race, religion or photo: matching doesn't need them.
+    phone          = Column(String(30), nullable=True)
+    city           = Column(String(80), nullable=True)
+    available_from = Column(String(7), nullable=True)    # "2027-01" (month and year)
+    privacy_accepted_at = Column(DateTime(timezone=True), nullable=True)   # ticked the privacy notice at sign-up
 
 # Load the tables users point at (programmes, intakes), so any script that saves a User works on its own (7 Oct)
 from app.models import programme  # noqa: E402,F401

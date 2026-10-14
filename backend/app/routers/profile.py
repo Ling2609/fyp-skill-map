@@ -156,6 +156,10 @@ class AboutIn(BaseModel):
     github_url: str = ""
     visible_to_employers: bool = False
     show_grades_to_employers: bool = False
+    # 14 Oct: contact details, shown to an employer only after they shortlist the student (all optional)
+    phone: str = ""
+    city: str = ""
+    available_from: str = ""      # "YYYY-MM"
 
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
@@ -316,6 +320,9 @@ def check_profile_schema():
                            "from the backend folder, then start the backend again.")
     if "target_category" not in users:
         raise RuntimeError("Database not updated: run  python migrations/migrate_career_goal.py  "
+                           "from the backend folder, then start the backend again.")
+    if "privacy_accepted_at" not in users:
+        raise RuntimeError("Database not updated: run  python migrations/migrate_privacy_contact.py  "
                            "from the backend folder, then start the backend again.")
 
 
@@ -896,7 +903,24 @@ def _about_out(user: User) -> dict:
     return {"headline": user.headline or "", "about": user.about or "", "linkedin_url": user.linkedin_url or "",
             "portfolio_url": user.portfolio_url or "", "github_url": user.github_url or "",
             "visible_to_employers": user.is_visible_to_employers,
-            "show_grades_to_employers": user.show_grades_to_employers}
+            "show_grades_to_employers": user.show_grades_to_employers,
+            "phone": user.phone or "", "city": user.city or "", "available_from": user.available_from or ""}
+
+
+PHONE = re.compile(r"^\+?[0-9][0-9 \-]{6,18}[0-9]$")      # 012-345 6789, +60 12 345 6789
+
+
+def _contact(data: "AboutIn") -> tuple[str | None, str | None, str | None]:
+    phone = " ".join(data.phone.split())
+    if phone and not PHONE.match(phone):
+        raise HTTPException(status_code=400, detail="Phone: use digits, spaces or dashes, e.g. 012-345 6789")
+    city = " ".join(data.city.split())
+    if len(city) > 80:
+        raise HTTPException(status_code=400, detail="City: 80 characters at most")
+    month = data.available_from.strip()
+    if month and not MONTH.match(month):
+        raise HTTPException(status_code=400, detail="Available from: pick a month and year")
+    return phone or None, city or None, month or None
 
 
 @router.get("/about")
@@ -909,6 +933,7 @@ def save_about(data: AboutIn, current_user: User = Depends(get_current_user), db
     _check_length("Headline", data.headline)
     _check_length("About", data.about)
     links = {field: _check_link(field, getattr(data, field)) for field in LINK_RULES}   # all checked before saving
+    current_user.phone, current_user.city, current_user.available_from = _contact(data)
     current_user.headline = " ".join(data.headline.split()) or None
     current_user.about = data.about.strip() or None
     current_user.linkedin_url, current_user.portfolio_url, current_user.github_url = (

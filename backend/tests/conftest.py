@@ -153,7 +153,7 @@ class Users:
         self.n += 1
         email = f"{role}{self.n}@example.com"
         body = {"username": f"{role}{self.n}", "first_name": role.title(), "last_name": f"No{self.n}", "email": email,
-                "password": PASSWORD, "role": role}
+                "password": PASSWORD, "role": role, "accept_privacy": True}
         if company:
             body["company_name"] = company
         r = self.client.post("/auth/register", json=body)

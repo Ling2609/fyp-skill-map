@@ -3,6 +3,27 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 14 Oct 2026 — Personal data: privacy notice, contact after shortlisting, Download my data
+- Sign-up needs "I have read and agree to the Privacy notice" ticked (the notice is a blue link, as on most sign-up
+  forms); the time is kept (`users.privacy_accepted_at`). The notice is a public page, `/privacy`, in English
+  and Bahasa Malaysia (PDPA s.7(3)): an "In short" summary on top, a numbered table of contents in a left rail, then
+  ten sections covering everything PDPA s.7 asks for (what, why, where it comes from, required vs optional with a
+  table, who it is shared with, data sent outside Malaysia, how long it is kept, your choices, your rights, how to
+  complain). Layout after NN/g on privacy pages; the Malay text is a draft to proofread.
+  The university's career office is named as responsible for the data (the PDPA "data user"), with its email for
+  questions and complaints from `VITE_PRIVACY_CONTACT` (demo: careers@university.example).
+- Students can add an optional phone, city and "available from" month (My Profile → Edit profile). No IC number,
+  date of birth, gender, race, religion or photo: matching doesn't need them.
+- **Contact details only after shortlisting.** An employer sees a student's email, phone, city and start month only
+  once they shortlist them on SkillMap (before: the email on applying). Visible graduates are findable and can be
+  invited, but never show contact details. So contacting someone always shows on SkillMap as a shortlist.
+- Account settings → **Download my data**: one JSON file with everything SkillMap holds about you (account, grades,
+  projects, certificates, awards, applications with their history, invitations, AI Assistant chats); the password
+  hash and security records are left out (PDPA access principle; 2024 data portability).
+- `docs/data_flow.md`: what PostgreSQL, MongoDB, the cache files and outside services hold, and the gaps found.
+- Migration `migrate_privacy_contact.py`. Tests: `tests/test_personal_data.py`, the contact rule in
+  `tests/test_invitations.py`, the notice in `tests/test_auth.py`.
+
 ## 13 Oct 2026 — AI Assistant: the message box keeps the cursor
 - The box was switched off while a reply loaded, which took the cursor away, so each answer needed a click on the box
   before typing. It now stays active (the next message can be typed while waiting; sending waits for the reply), and

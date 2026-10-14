@@ -24,6 +24,7 @@ const PostJob = lazy(() => import('./pages/employer/PostJob'))
 const Applicants = lazy(() => import('./pages/employer/Applicants'))
 const ApplicantProfile = lazy(() => import('./pages/employer/ApplicantProfile'))
 const MyApplications = lazy(() => import('./pages/student/MyApplications'))
+const Privacy = lazy(() => import('./pages/Privacy'))
 
 function RoleRoute({ children, roles }) {
   const { user, loading, serverDown } = useAuth()
@@ -81,6 +82,7 @@ function AppRoutes() {
       <Route path="/register" element={<Register />} />
       <Route path="/login" element={<Login />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route path="/privacy" element={<Privacy />} />
       <Route path="/dashboard" element={<RoleRoute><Layout><Home /></Layout></RoleRoute>} />
       <Route path="/admin/users" element={<RoleRoute roles={['admin']}><Layout><AdminUsers /></Layout></RoleRoute>} />
       <Route path="/admin/academic" element={<RoleRoute roles={['admin']}><Layout><AdminAcademic /></Layout></RoleRoute>} />

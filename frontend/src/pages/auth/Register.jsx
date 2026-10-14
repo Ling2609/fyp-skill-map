@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import api from '../../api'
 import PasswordStrength from '../../components/PasswordStrength'
+import PrivacySummary from '../../components/PrivacySummary'
 
 
 const validateName = (name) => {
@@ -28,6 +29,7 @@ export default function Register() {
     username: '', first_name: '', last_name: '',
     email: '', password: '', confirm_password: '', role: 'student', company_name: ''
   })
+  const [accepted, setAccepted] = useState(false)     // 14 Oct: privacy notice (PDPA)
   const [errors, setErrors] = useState({})
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
@@ -107,7 +109,8 @@ export default function Register() {
       form.email.length > 0 &&
       form.password.length >= 8 &&
       form.password === form.confirm_password &&
-      (form.role !== 'employer' || form.company_name.trim().length >= 2)
+      (form.role !== 'employer' || form.company_name.trim().length >= 2) &&
+      accepted
   }
 
   const handleBlur = (field) => {
@@ -141,6 +144,7 @@ export default function Register() {
         password: form.password,
         role: form.role,
         company_name: form.role === 'employer' ? form.company_name.trim() : null,
+        accept_privacy: accepted,
       })
       navigate('/login', { state: { message: 'Account created successfully! Please sign in.' } })
     } catch (err) {
@@ -356,6 +360,8 @@ export default function Register() {
                 : <p className="text-xs text-gray-500 mt-1">The university's career office approves your company before you can post jobs.</p>}
             </div>
           )}
+
+          <PrivacySummary accepted={accepted} onChange={setAccepted} showError={attemptedSubmit} />
 
           <button
             type="submit"

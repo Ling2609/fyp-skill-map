@@ -37,6 +37,7 @@ class UserRegister(BaseModel):
     # Only these two can be chosen at sign-up. Admin accounts are created by the seed script.
     role: Literal["student", "employer"] = "student"
     company_name: str | None = Field(default=None, max_length=120)   # employers (7 Oct)
+    accept_privacy: bool = False     # 14 Oct: the privacy notice must be accepted to sign up (PDPA notice and choice)
 
     @field_validator("password")
     @classmethod

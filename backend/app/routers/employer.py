@@ -376,9 +376,14 @@ def set_status(app_id: int, data: StatusIn, employer: User = Depends(require_emp
     return {"id": a.id, "status": a.status, "status_changed_at": a.status_changed_at}
 
 
+CONTACT_STATUSES = ("shortlisted", "accepted")    # contact details are shared from Shortlisted on (14 Oct)
+
+
 def _profile_for(student: User, job: Job, db: Session, contact: bool) -> dict:
     """A student's match for one of the employer's jobs (each required skill with where it comes from) and their
-    showcase profile. Grades only if the student allows employers to see them; the email only for applicants."""
+    showcase profile. Grades only if the student allows employers to see them. Contact details (email, phone, city,
+    available from) only once the employer has shortlisted them (14 Oct, her rule; references.md "Contact details"):
+    contacting someone then always shows on SkillMap as a shortlist, which the other applicants can see."""
     from app.services.showcase import build_showcase, grade_letter
     show_grades = bool(student.show_grades_to_employers)
     gap = _fit(student, job, db)
@@ -393,8 +398,9 @@ def _profile_for(student: User, job: Job, db: Session, contact: bool) -> dict:
                "missing": [m["job_skill"] for m in gap["missing_skills"]],
                "nice_missing": [n["job_skill"] for n in gap["nice_to_have"] if not n["has"]]}
     return {"job": {"id": job.id, "title": job.job_title},
-            "student": {**build_showcase(student, db, for_employer=True), "email": student.email if contact else None,
-                        "programme_line": _programme(student, db)},
+            "student": {**build_showcase(student, db, for_employer=True), "programme_line": _programme(student, db),
+                        "contact": {"email": student.email, "phone": student.phone, "city": student.city,
+                                    "available_from": student.available_from} if contact else None},
             "fit": fit}
 
 
@@ -411,7 +417,7 @@ def applicant_profile(app_id: int, employer: User = Depends(require_employer), d
            .order_by(Application.created_at).first())
     return {"application": {"id": a.id, "status": a.status, "applied_at": a.created_at},
             "next_to_review": {"id": nxt[0].id, "name": f"{nxt[1].first_name} {nxt[1].last_name}"} if nxt else None,
-            **_profile_for(student, job, db, contact=True)}
+            **_profile_for(student, job, db, contact=a.status in CONTACT_STATUSES)}
 
 
 # ── Dashboard (12 Oct; her pick E after mock-ups A-E, references.md "Employer dashboard layout") ──────────────────

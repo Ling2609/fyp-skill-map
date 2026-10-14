@@ -19,6 +19,7 @@ export const aboutBody = (d) => ({
   headline: d.headline || '', about: d.about || '',
   linkedin_url: d.links?.linkedin || '', portfolio_url: d.links?.portfolio || '', github_url: d.links?.github || '',
   visible_to_employers: !!d.visible_to_employers, show_grades_to_employers: !!d.show_grades_to_employers,
+  phone: d.own_contact?.phone || '', city: d.own_contact?.city || '', available_from: d.own_contact?.available_from || '',
 })
 
 // A programme picked, and an intake too whenever that programme has intakes

@@ -105,6 +105,10 @@ def build_showcase(user: User, db: Session, for_employer: bool = False) -> dict:
         "links": {"linkedin": user.linkedin_url, "portfolio": user.portfolio_url, "github": user.github_url},
         "visible_to_employers": user.is_visible_to_employers,
         "show_grades_to_employers": user.show_grades_to_employers,
+        # 14 Oct: the student's own contact details, for her own view only; employers get them from
+        # employer._profile_for, and only after shortlisting
+        "own_contact": None if for_employer else {"phone": user.phone or "", "city": user.city or "",
+                                                  "available_from": user.available_from or ""},
         "programme": programme.name if programme else None,
         "intake": intake.code if intake else None,
         "module_count": len(modules),     # modules with a grade (the profile checklist and the Education card)

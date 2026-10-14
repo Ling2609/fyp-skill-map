@@ -1,10 +1,11 @@
 import hashlib
 import hmac
+import json
 import re
 import secrets
 from datetime import datetime, timedelta, timezone
 
-from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Request
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Request, Response
 from fastapi.responses import PlainTextResponse
 from fastapi.security import OAuth2PasswordBearer
 from pydantic import BaseModel, Field
@@ -239,6 +240,73 @@ def delete_student_data(user: User, db: Session):
     db.delete(user)
 
 
+def _rows(model, column, user_id, db, skip=("user_id",)):
+    """Every row of one table for this user, as plain dicts (dates as ISO text)."""
+    out = []
+    for row in db.query(model).filter(column == user_id).all():
+        d = {}
+        for c in row.__table__.columns:
+            if c.name in skip:
+                continue
+            v = getattr(row, c.name)
+            d[c.name] = v.isoformat() if hasattr(v, "isoformat") else v
+        out.append(d)
+    return out
+
+
+@router.get("/me/export")
+def export_my_data(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    """Download my data (14 Oct; PDPA 2010 access principle and the 2024 data-portability change): everything
+    SkillMap holds about the signed-in user, as one JSON file. The password hash, reset codes and sign-in counters are
+    security data and are left out. Chats come from MongoDB; if it can't be reached the file says so."""
+    from app.models.application import Application, ApplicationEvent, JobInvitation
+    from app.models.job import Job
+    from app.models.profile import UserAward, UserCertification, UserProject
+    from app.models.user_module import UserModule
+    u = current_user
+    account = {c.name: getattr(u, c.name) for c in u.__table__.columns if c.name not in ("hashed_password",)}
+    account = {k: (v.isoformat() if hasattr(v, "isoformat") else getattr(v, "value", v)) for k, v in account.items()}
+    applications = []
+    for a, job in (db.query(Application, Job).join(Job, Job.id == Application.job_id)
+                   .filter(Application.student_id == u.id).order_by(Application.id)):
+        events = [{"kind": e.kind, "status": e.status, "at": e.created_at.isoformat()}
+                  for e in db.query(ApplicationEvent).filter(ApplicationEvent.application_id == a.id)
+                  .order_by(ApplicationEvent.id)]
+        applications.append({"job": job.job_title, "company": job.company, "status": a.status,
+                             "applied_at": a.created_at.isoformat() if a.created_at else None, "events": events})
+    invitations = [{"job": job.job_title, "company": job.company,
+                    "at": i.created_at.isoformat() if getattr(i, "created_at", None) else None}
+                   for i, job in db.query(JobInvitation, Job).join(Job, Job.id == JobInvitation.job_id)
+                   .filter(JobInvitation.student_id == u.id)]
+    from pymongo.errors import PyMongoError
+    from app.mongo import chat_sessions
+    try:
+        chats = [{"title": d.get("title"), "mode": d.get("mode"), "created_at": d.get("created_at"),
+                  "messages": [{"role": m["role"], "content": m["content"], "at": m.get("at")} for m in d.get("messages", [])]}
+                 for d in chat_sessions().find({"user_id": u.id}).sort("created_at", 1)]
+        chats = [{**c, "created_at": c["created_at"].isoformat() if c["created_at"] else None,
+                  "messages": [{**m, "at": m["at"].isoformat() if m["at"] else None} for m in c["messages"]]}
+                 for c in chats]
+    except PyMongoError:
+        chats = "Chat history couldn't be reached when this file was made. Please try again later."
+    data = {
+        "about": "Everything SkillMap holds about you, as of the date below. Security data (your password hash, "
+                 "reset codes, sign-in counters) is not included.",
+        "exported_at": datetime.now(timezone.utc).isoformat(),
+        "account": account,
+        "module_grades": _rows(UserModule, UserModule.user_id, u.id, db),
+        "projects": _rows(UserProject, UserProject.user_id, u.id, db),
+        "certifications": _rows(UserCertification, UserCertification.user_id, u.id, db),
+        "awards": _rows(UserAward, UserAward.user_id, u.id, db),
+        "applications": applications,
+        "invitations": invitations,
+        "ai_assistant_chats": chats,
+    }
+    return Response(content=json.dumps(data, indent=2, ensure_ascii=False, default=str),
+                    media_type="application/json",
+                    headers={"Content-Disposition": f'attachment; filename="skillmap-data-{u.username}.json"'})
+
+
 @router.post("/me/delete", status_code=204)
 def delete_my_account(payload: DeleteAccountIn, db: Session = Depends(get_db),
                       current_user: User = Depends(get_current_user)):
@@ -290,6 +358,8 @@ def check_username(username: str, db: Session = Depends(get_db)):
 
 @router.post("/register", response_model=UserOut, status_code=201)
 def register(payload: UserRegister, db: Session = Depends(get_db)):
+    if not payload.accept_privacy:
+        raise HTTPException(status_code=400, detail="Please read and accept the privacy notice to create an account.")
     # Validate username format
     is_valid, error = validate_username_format(payload.username)
     if not is_valid:
@@ -317,6 +387,7 @@ def register(payload: UserRegister, db: Session = Depends(get_db)):
         email=email,
         hashed_password=hash_password(payload.password),
         role=UserRole(payload.role),
+        privacy_accepted_at=datetime.now(timezone.utc),
     )
     if payload.role == "employer":   # Admin approves employers before they can post jobs (7 Oct)
         user.employer_status = "pending"
