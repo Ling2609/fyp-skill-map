@@ -11,11 +11,14 @@ import { startGithubConnect } from './githubConnect'
 // does, and the action on the right; connected accounts listed inside the same card. The icon is a neutral </>, not
 // GitHub's logo (their trademark).
 
-export const IconTile = ({ on, children }) => (
-  <span aria-hidden="true" className={`w-10 h-10 shrink-0 rounded-lg flex items-center justify-center ${on ? 'bg-emerald-50 text-emerald-700' : 'bg-gray-100 text-gray-600'}`}>{children}</span>
+// 14 Oct (her review): each profile has its own colour, always shown, so the three rows look like one set;
+// whether it's filled in is said by the badge (✓ Connected / ✓ Added), not by greying the icon
+const TONES = { slate: 'bg-slate-800 text-white', blue: 'bg-blue-100 text-blue-700', violet: 'bg-violet-100 text-violet-700' }
+export const IconTile = ({ tone = 'slate', children }) => (
+  <span aria-hidden="true" className={`w-10 h-10 shrink-0 rounded-lg flex items-center justify-center ${TONES[tone]}`}>{children}</span>
 )
-const CodeIcon = ({ on }) => (
-  <span aria-hidden="true" className={`w-10 h-10 shrink-0 rounded-lg flex items-center justify-center font-mono text-sm ${on ? 'bg-emerald-50 text-emerald-700' : 'bg-gray-100 text-gray-600'}`}>&lt;/&gt;</span>
+export const DoneBadge = ({ children }) => (
+  <span className="ml-2 text-xs font-semibold text-emerald-700 bg-emerald-50 rounded-full px-2 py-0.5">✓ {children}</span>
 )
 
 export default function GithubAccounts({ blocked }) {
@@ -36,7 +39,7 @@ export default function GithubAccounts({ blocked }) {
     catch (err) { setError(errText(err, "Couldn't start connecting to GitHub. Please try again.")); setBusy('') }
   }
   const disconnect = async (a) => {
-    if (!window.confirm(`Disconnect ${a.login}? Projects from its repositories will show as not linked to your GitHub.`)) return
+    if (!window.confirm(`Disconnect ${a.login}? Projects from its repositories will lose the ✓ GitHub badge.`)) return
     setBusy(String(a.id)); setError('')
     try { setAccounts((await api.delete(`/profile/github/accounts/${a.id}`)).data.accounts) }
     catch (err) { setError(errText(err, "Couldn't disconnect. Please try again.")) }
@@ -55,10 +58,10 @@ export default function GithubAccounts({ blocked }) {
     <div>
       <div>
         <div className="p-4 flex items-center gap-4">
-          <CodeIcon on={connected} />
+          <IconTile tone="slate"><span className="font-mono text-sm">&lt;/&gt;</span></IconTile>
           <div className="flex-1 min-w-0">
             <p className="text-sm font-semibold text-gray-900">GitHub
-              {connected && <span className="ml-2 text-xs font-semibold text-emerald-700 bg-emerald-50 rounded-full px-2 py-0.5">✓ Connected</span>}</p>
+              {connected && <DoneBadge>Connected</DoneBadge>}</p>
             <p className="text-xs text-gray-500 mt-0.5">{accounts === null ? 'Loading…' : status}</p>
           </div>
           {accounts !== null && !connected && (

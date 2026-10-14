@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import GithubAccounts, { IconTile } from './GithubAccounts'
+import GithubAccounts, { DoneBadge, IconTile } from './GithubAccounts'
 import api from '../../api'
 import { DuplicateAsk, Field, FormButtons, SkillChecker, SkillChip, Spinner, Toggle } from './profileParts'
 import { MIN_DESCRIPTION, aboutBody, errText, inputCls, mergeFound, projectChips, projectKey, splitSkills, studyComplete } from './profileUtils'
@@ -32,6 +32,7 @@ export function ProjectForm({ project, onDone, onCancel, onDirty }) {
       .then(res => setRepoCheck({ url, ...res.data }))
       .catch(() => setRepoCheck(null))
   }
+  const repoState = repoCheck?.url === form.github_url.trim() ? repoCheck.status : null
   // Editing a project that has a repo: check it once when the form opens
   useEffect(() => { if (project?.github_url) checkRepo() }, [])   // eslint-disable-line react-hooks/exhaustive-deps
   const [busy, setBusy] = useState('')            // '' | 'find' | 'save'
@@ -103,23 +104,23 @@ export function ProjectForm({ project, onDone, onCancel, onDirty }) {
         </p>
       </div>
       <div>
-        <Field label="GitHub link" optional hint="The repo's main languages are added as skills (public repos only).">
+        <Field label="GitHub link" optional>
           <input type="url" value={form.github_url} onChange={set('github_url')} onBlur={checkRepo}
             placeholder="https://github.com/username/repo" className={inputCls} maxLength={500} />
         </Field>
-        {/* 14 Oct (Connect GitHub): is this repo hers? Never blocks saving (people have several accounts) */}
-        {repoCheck?.url === form.github_url.trim() && repoCheck.status === 'yours' && (
-          <p className="text-xs font-medium text-emerald-700 mt-1.5">✓ You contributed to this repository (as {repoCheck.as})</p>
-        )}
-        {repoCheck?.url === form.github_url.trim() && repoCheck.status === 'not_linked' && (
+        {/* 14 Oct (her review: three lines were repetitive): ONE line under the link, by situation. The check never
+            blocks saving (people have several accounts) */}
+        {repoState === 'yours' ? (
+          <p className="text-xs mt-1.5"><span className="font-medium text-emerald-700">✓ Yours (as {repoCheck.as}).</span>
+            <span className="text-gray-500"> Its main languages are added as skills.</span></p>
+        ) : repoState === 'not_linked' ? (
           <p className="text-xs text-amber-900 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2 mt-1.5">
-            {repoCheck.connected
-              ? "This repository isn't linked to your connected GitHub. If it's yours on another account, connect that account in Links & visibility. "
-              : "Connect your GitHub in Links & visibility to show this repository is yours. "}
-            You can still save it; employers will see <i>Not linked to your GitHub</i>.
+            Not linked to {repoCheck.connected ? 'a GitHub account you connected' : 'your GitHub yet'}. If it's yours,
+            connect that account in Links &amp; visibility. You can still save; employers just won’t see the ✓ GitHub badge.
           </p>
+        ) : (
+          <p className="text-xs text-gray-500 mt-1.5">Only add repositories you built or contributed to. Their main languages are added as skills (public repos only).</p>
         )}
-        <p className="text-xs text-gray-500 mt-1.5">Only add repositories you built or contributed to.</p>
       </div>
       {found ? (
         <div>
@@ -468,9 +469,9 @@ export function StudyForm({ onDone, onCancel, onDirty }) {
 const svg = (d) => <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d={d} /></svg>
 const LINKS = [
   { key: 'linkedin_url', label: 'LinkedIn', placeholder: 'https://www.linkedin.com/in/your-name',
-    hint: 'Paste the link to your profile', icon: svg('M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z') },
+    tone: 'blue', hint: 'Paste the link to your profile', icon: svg('M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z') },
   { key: 'portfolio_url', label: 'Portfolio or website', placeholder: 'https://your-site.com',
-    hint: 'A site that shows your work', icon: svg('M21 12a9 9 0 11-18 0 9 9 0 0118 0zM3.6 9h16.8M3.6 15h16.8M12 3a15 15 0 010 18M12 3a15 15 0 000 18') },
+    tone: 'violet', hint: 'A site that shows your work', icon: svg('M21 12a9 9 0 11-18 0 9 9 0 0118 0zM3.6 9h16.8M3.6 15h16.8M12 3a15 15 0 010 18M12 3a15 15 0 000 18') },
 ]
 
 export function ProfileForm({ data, onDone, onCancel, onDirty }) {
@@ -500,9 +501,10 @@ export function ProfileForm({ data, onDone, onCancel, onDirty }) {
           {LINKS.map(l => (
             <div key={l.key} className="p-4">
               <div className="flex items-center gap-4">
-                <IconTile on={!!form[l.key].trim()}>{l.icon}</IconTile>
+                <IconTile tone={l.tone}>{l.icon}</IconTile>
                 <div className="min-w-0">
-                  <label htmlFor={`link-${l.key}`} className="text-sm font-semibold text-gray-900">{l.label} <span className="font-normal text-gray-400">(optional)</span></label>
+                  <label htmlFor={`link-${l.key}`} className="text-sm font-semibold text-gray-900">{l.label}
+                    {form[l.key].trim() ? <DoneBadge>Added</DoneBadge> : <span className="font-normal text-gray-400"> (optional)</span>}</label>
                   <p className="text-xs text-gray-500 mt-0.5">{l.hint}</p>
                 </div>
               </div>

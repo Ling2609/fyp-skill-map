@@ -84,6 +84,14 @@ def _github_link(user_id: int, db: Session) -> str | None:
     return f"https://github.com/{first.login}" if first else None
 
 
+def _repo_check(project, for_employer: bool):
+    if not project.github_url:
+        return None
+    if for_employer and project.repo_check != "yours":
+        return None
+    return project.repo_check
+
+
 def build_showcase(user: User, db: Session, for_employer: bool = False) -> dict:
     """Everything My Profile shows, in one reply. for_employer=True hides grades unless the student allows them."""
     show_grades = (not for_employer) or user.show_grades_to_employers
@@ -123,9 +131,11 @@ def build_showcase(user: User, db: Session, for_employer: bool = False) -> dict:
                               for name, grade in strongest.items()],
         "top_skills": top_skills,
         "total_skills": total,
-        # repo_check (14 Oct, Connect GitHub): "yours" / "not_linked" / None, shown next to the repo link
+        # repo_check (14 Oct, Connect GitHub): "yours" / "not_linked" / None, shown next to the repo link.
+        # 15 Oct (her decision, references.md): employers get only the positive "yours"; "not linked" can just mean
+        # she hasn't connected that account, so it's for her own eyes (as GitHub shows no badge on unsigned commits)
         "projects": [{"name": p.name, "description": p.description, "github_url": p.github_url,
-                      "repo_check": p.repo_check if p.github_url else None,
+                      "repo_check": _repo_check(p, for_employer),
                       "skills": list(p.extracted_skills or [])[:6]} for p in projects],
         "certifications": [{"name": c.cert_name, "issuer": c.issuer, "credly_url": c.credly_url} for c in certs],
         "awards": [{"title": a.title, "issuer": a.issuer, "date": a.award_date, "description": a.description or ""}

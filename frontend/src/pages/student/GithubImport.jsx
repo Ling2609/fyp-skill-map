@@ -3,6 +3,7 @@ import api from '../../api'
 import { FormButtons, Modal, SkillChecker, SkillChip, Spinner } from './profileParts'
 import { ADDED_BY_YOU, MIN_DESCRIPTION, errText, inputCls, mergeFound, projectKey } from './profileUtils'
 import { startGithubConnect } from './githubConnect'
+import { IconTile } from './GithubAccounts'
 
 // Import from GitHub (8 Oct, her choice: alongside "+ Add", not instead of it).
 // 10 Oct (her review: repos were saved first and had to be edited afterwards): two steps, check before adding
@@ -124,16 +125,14 @@ export default function GithubImport({ onClose, onDone }) {
     <Modal title="Add projects from GitHub" onClose={onClose} dirty={dirty}>
       <form onSubmit={e => { e.preventDefault(); if (picked.length) check() }} className="space-y-4">
         {needsConnect && (
-          <div className="text-sm text-gray-700 border border-dashed border-gray-200 rounded-xl px-4 py-5 text-center">
-            <p>Connect your GitHub account first. Only repositories of accounts you connect can be imported, so they are
-              shown to employers as your own.</p>
+          <div className="rounded-xl border border-gray-200 p-4 flex items-center gap-4">
+            <IconTile tone="slate"><span className="font-mono text-sm">&lt;/&gt;</span></IconTile>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-semibold text-gray-900">Connect your GitHub first</p>
+              <p className="text-xs text-gray-500 mt-0.5">You can import repositories only from accounts you've connected, so employers know they're yours.</p>
+            </div>
             <button type="button" onClick={connect}
-              className="mt-3 text-sm font-medium px-4 py-2 rounded-xl bg-blue-700 text-white hover:bg-blue-800">Connect GitHub</button>
-          </div>
-        )}
-        {repos && (
-          <div className="flex justify-end">
-            <button type="button" onClick={list} disabled={busy} className="text-xs font-medium text-blue-700 hover:underline disabled:opacity-40">Refresh</button>
+              className="shrink-0 text-sm font-medium text-white bg-blue-700 hover:bg-blue-800 rounded-lg px-4 py-2">Connect</button>
           </div>
         )}
 
@@ -144,7 +143,10 @@ export default function GithubImport({ onClose, onDone }) {
           ? <p className="text-sm text-gray-500">No public repositories of your own on your connected GitHub {repos.length === 1 ? 'account' : 'accounts'}.</p>
           : (
             <div>
-              <p className="text-xs text-gray-500 mb-2">{repos.length} public {repos.length === 1 ? 'repository' : 'repositories'}. Tick the ones to add; you check each one next.</p>
+              <div className="flex items-baseline justify-between gap-3 mb-2">
+                <p className="text-xs text-gray-500">{repos.length} public {repos.length === 1 ? 'repository' : 'repositories'}. Tick the ones to add; you check each one next.</p>
+                <button type="button" onClick={list} disabled={busy} className="shrink-0 text-xs font-medium text-blue-700 hover:underline disabled:opacity-40">Refresh</button>
+              </div>
               <ul className="space-y-2 max-h-80 overflow-y-auto -mx-1 px-1">
                 {repos.map(r => (
                   <li key={r.url}>
@@ -218,7 +220,7 @@ function CheckCard({ it, update, find, onRemove }) {
         <div className="mt-3 space-y-3">
           <div>
             <label htmlFor={`desc-${it.url}`} className="block text-xs font-medium text-gray-600 mb-1.5">What you built and the tools you used</label>
-            <textarea id={`desc-${it.url}`} rows={3} value={it.description} maxLength={3000}
+            <textarea id={`desc-${it.url}`} rows={6} value={it.description} maxLength={3000}
               onChange={e => update(it.url, { description: e.target.value })}
               onBlur={() => { if (canFind) find(it) }}
               placeholder="e.g. REST API for a fitness app in FastAPI with PostgreSQL"

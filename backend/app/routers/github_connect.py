@@ -3,7 +3,7 @@ Connect GitHub (14 Oct; her design after research, references.md "Verifying GitH
 
 Why: a student could paste anyone's public repo and its languages would count as her skills. Signing in to GitHub
 proves which accounts are hers; a repo then shows "Student's own GitHub" when one of them owns it or contributed to
-it, else "Not linked to the student's GitHub". It never blocks saving (people have several accounts: she can connect
+it, else the student alone sees "Not linked to your GitHub" (15 Oct: employers see only the positive badge). It never blocks saving (people have several accounts: she can connect
 them all). LinkedIn stays a typed link: LinkedIn's sign-in returns name, email and picture but not the profile URL,
 so it couldn't prove the link is hers.
 

@@ -101,7 +101,7 @@ cp .env.example .env
 3. Copy the **Client ID**; **Generate a new client secret** and copy it (shown once).
 4. In `backend/.env`: `GITHUB_CLIENT_ID=...` and `GITHUB_CLIENT_SECRET=...`, then restart the backend.
 
-No permissions are asked for (public information only), and GitHub's access key is used once to read the username, then dropped. For a deployment, register another app with the deployed address and set `FRONTEND_URL` to it. Without the app, everything else works; projects with a repo show "Not linked to your GitHub".
+No permissions are asked for (public information only), and GitHub's access key is used once to read the username, then dropped. For a deployment, register another app with the deployed address and set `FRONTEND_URL` to it. Without the app, everything else works; students see "Not linked to your GitHub" on projects with a repo, and employers see no badge.
 
 Without `SMTP_USER` and `SMTP_PASSWORD`, no email is sent: the reset code is printed in the backend console instead, so Forgot password still works on a local machine.
 Start the API: `uvicorn app.main:app --reload` (http://localhost:8000, docs at /docs). On an empty database the tables are created automatically at start-up.

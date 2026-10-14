@@ -258,11 +258,13 @@ export function AwardsTab({ awards, onRefresh }) {
 }
 
 
-// 14 Oct (Connect GitHub): is the repo hers? The same words for her and (with who="the student's") for employers
+// 14 Oct (Connect GitHub): is the repo hers? 15 Oct (her decision): employers see only the positive badge;
+// "Not linked to your GitHub" is shown to the student alone (the backend doesn't send it to employers either)
 export function RepoCheck({ project, who }) {
   if (!project.github_url || !project.repo_check) return null
-  return project.repo_check === 'yours'
-    ? <span className="text-xs font-semibold text-emerald-700 bg-emerald-50 rounded-full px-2 py-0.5"
-        title={project.repo_check_as ? `Owned or contributed to by ${project.repo_check_as}` : undefined}>✓ {who === 'your' ? 'Your GitHub' : "Student's own GitHub"}</span>
-    : <span className="text-xs text-slate-600 bg-slate-100 rounded-full px-2 py-0.5">Not linked to {who} GitHub</span>
+  if (project.repo_check === 'yours') {
+    return <span className="text-xs font-semibold text-emerald-700 bg-emerald-50 rounded-full px-2 py-0.5"
+      title={project.repo_check_as ? `Owned or contributed to by ${project.repo_check_as}` : undefined}>✓ {who === 'your' ? 'Your GitHub' : "Student's own GitHub"}</span>
+  }
+  return who === 'your' ? <span className="text-xs text-slate-600 bg-slate-100 rounded-full px-2 py-0.5">Not linked to your GitHub</span> : null
 }
