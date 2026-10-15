@@ -70,7 +70,11 @@ def apply():
     if not os.path.exists(SUGGESTIONS_CSV):
         sys.exit(f"No {SUGGESTIONS_CSV} yet: run the script without --apply first.")
     with open(SUGGESTIONS_CSV, encoding="utf-8-sig") as f:
-        rows = [r for r in csv.DictReader(f) if (r.get("add") or "").strip().lower() in ("yes", "y")]
+        reader = csv.DictReader(f)
+        if "add" not in (reader.fieldnames or []):
+            # 15 Oct: a file started by an older version of this script has a 4-column header over 7-column rows
+            sys.exit(f"{SUGGESTIONS_CSV} has no 'add' column in its first line. Its header is: {reader.fieldnames}")
+        rows = [r for r in reader if (r.get("add") or "").strip().lower() in ("yes", "y")]
     db = SessionLocal()
     added = 0
     try:
