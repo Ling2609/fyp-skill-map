@@ -1,0 +1,113 @@
+﻿code,module,missed (in answer key),extra (extractor),category
+GD-L3-002,Game Development Final Year Project,Portfolio,portfolio presentation,"same skill, different wording"
+GD-L3-002,Game Development Final Year Project,Game engine,,named tool or language missed
+GD-L3-002,Game Development Final Year Project,,game prototyping,extra skill not in the answer key
+GD-L3-002,Game Development Final Year Project,,game design documentation,extra skill not in the answer key
+MM-L2-001,Multimedia Applications,Multimedia application development,Multimedia development,"same skill, different wording"
+MM-L2-001,Multimedia Applications,Animation,,other skill missed
+MM-L2-001,Multimedia Applications,,Interactive multimedia creation,extra skill not in the answer key
+MM-L2-001,Multimedia Applications,,Multimedia content integration,extra skill not in the answer key
+GD-L2-003,Game Development Team Project 3,Game development,,module's name as a skill (guide: leave out)
+GD-L2-003,Game Development Team Project 3,,game testing,extra skill not in the answer key
+GD-L2-003,Game Development Team Project 3,,team collaboration,extra skill not in the answer key
+CS-L2-005,Computing Theory,Regular languages,regular language analysis,"same skill, different wording"
+CS-L2-005,Computing Theory,Context-free grammars,context-free grammar parsing,"same skill, different wording"
+CS-L2-005,Computing Theory,Turing machines,Turing machine modeling,"same skill, different wording"
+CS-L2-005,Computing Theory,Computational complexity,complexity analysis,"same skill, different wording"
+CS-L2-005,Computing Theory,Theory of computation,,module's name as a skill (guide: leave out)
+CS-L2-005,Computing Theory,Computability,,other skill missed
+CY-L3-009,Cyberpsychology,Social engineering,social engineering awareness,"same skill, different wording"
+CY-L3-009,Cyberpsychology,Cyberpsychology,,module's name as a skill (guide: leave out)
+MM-L3-007,VR/AR Design Project,Prototyping,VR/AR prototyping,"same skill, different wording"
+MM-L3-007,VR/AR Design Project,,Concept development,extra skill not in the answer key
+CS-L2-002,Probability and Statistical Modelling,R,,named tool or language missed
+CS-L2-002,Probability and Statistical Modelling,Python,,named tool or language missed
+QC-L3-004,Project in Quantum Computing,Qiskit,,named tool or language missed
+QC-L3-004,Project in Quantum Computing,Quantum computing,,module's name as a skill (guide: leave out)
+QC-L3-004,Project in Quantum Computing,Classical computing,comparative analysis,broader / narrower wording
+QC-L3-004,Project in Quantum Computing,,quantum circuit implementation,extra skill not in the answer key
+QC-L3-004,Project in Quantum Computing,,problem formulation,extra skill not in the answer key
+CY-L3-010,Investigations in Digital Forensics,Forensic tools,Forensic tool review,"same skill, different wording"
+CY-L3-010,Investigations in Digital Forensics,Evidence handling,Test evidence handling,"same skill, different wording"
+CY-L3-010,Investigations in Digital Forensics,Legal rules on evidence,Legal evidence analysis,"same skill, different wording"
+CY-L3-010,Investigations in Digital Forensics,Digital forensics,,module's name as a skill (guide: leave out)
+CY-L3-010,Investigations in Digital Forensics,Technical report writing,,other skill missed
+CY-L3-010,Investigations in Digital Forensics,,Problem identification,extra skill not in the answer key
+MM-L2-007,"Intellectual Property, Ethics and Legal Issues",Copyright,Copyright law,"same skill, different wording"
+MM-L2-007,"Intellectual Property, Ethics and Legal Issues",Trademarks,Trademark law,"same skill, different wording"
+MM-L2-007,"Intellectual Property, Ethics and Legal Issues",Media industry ethics,Media ethics,"same skill, different wording"
+MM-L2-007,"Intellectual Property, Ethics and Legal Issues",Intellectual property,,module's name as a skill (guide: leave out)
+MM-L2-007,"Intellectual Property, Ethics and Legal Issues",,Media legal compliance,extra skill not in the answer key
+SE-L1-001,Introduction to Networking,TCP/IP protocols,TCP/IP fundamentals,"same skill, different wording"
+SE-L1-001,Introduction to Networking,Network configuration,,other skill missed
+CY-L2-004,Social Psychology,Social influence,social influence analysis,"same skill, different wording"
+CY-L2-004,Social Psychology,Persuasion,persuasion techniques,"same skill, different wording"
+CY-L2-004,Social Psychology,Group behaviour,group behavior analysis,"same skill, different wording"
+CY-L2-004,Social Psychology,Cyber security,human factors evaluation,broader / narrower wording
+CY-L2-004,Social Psychology,Social psychology,,module's name as a skill (guide: leave out)
+CY-L2-004,Social Psychology,,attitude assessment,extra skill not in the answer key
+GD-L1-007,Introduction to 3D Modelling,Topology,basic topology,"same skill, different wording"
+GD-L1-007,Introduction to 3D Modelling,3D modelling,,module's name as a skill (guide: leave out)
+GD-L1-007,Introduction to 3D Modelling,Autodesk Maya,,named tool or language missed
+GD-L1-007,Introduction to 3D Modelling,Blender,,named tool or language missed
+GD-L1-007,Introduction to 3D Modelling,,exporting for game engines,extra skill not in the answer key
+IT-L3-027,Information Systems Development Trends,Low-code platforms,Low-code development,"same skill, different wording"
+IT-L3-027,Information Systems Development Trends,Cloud-based systems,Cloud-based development,"same skill, different wording"
+IT-L3-027,Information Systems Development Trends,Automation,Process automation,"same skill, different wording"
+GD-L3-009,Game Level Design,Level design,,module's name as a skill (guide: leave out)
+SE-L1-002,Systems Software and Computing Concepts,Operating systems,,other skill missed
+IT-L1-001,Introduction to Security and Forensic Technologies,Digital forensics,digital forensic investigation,"same skill, different wording"
+IT-L1-001,Introduction to Security and Forensic Technologies,,malware identification,extra skill not in the answer key
+IT-L1-001,Introduction to Security and Forensic Technologies,,phishing recognition,extra skill not in the answer key
+IT-L3-021,Investigations in Internet of Things,Sensor selection,technology evaluation,broader / narrower wording
+IT-L3-021,Investigations in Internet of Things,Internet of Things,,module's name as a skill (guide: leave out)
+IT-L3-021,Investigations in Internet of Things,Field testing,,other skill missed
+IT-L3-021,Investigations in Internet of Things,Communication protocols,,other skill missed
+IT-L3-021,Investigations in Internet of Things,,problem definition,extra skill not in the answer key
+IT-L3-010,Penetration Testing,Nmap,Nmap scanning,"same skill, different wording"
+IT-L3-010,Penetration Testing,Metasploit,Metasploit exploitation,"same skill, different wording"
+IT-L3-010,Penetration Testing,Burp Suite,Burp Suite testing,"same skill, different wording"
+IT-L3-010,Penetration Testing,Penetration testing,,module's name as a skill (guide: leave out)
+IT-L3-010,Penetration Testing,,web application penetration testing,extra skill not in the answer key
+IT-L3-010,Penetration Testing,,penetration test planning,extra skill not in the answer key
+DA-L3-003,Behavioural Science and Marketing Analytics,Consumer behaviour,consumer behaviour analysis,"same skill, different wording"
+DA-L3-003,Behavioural Science and Marketing Analytics,Marketing metrics,marketing metrics evaluation,"same skill, different wording"
+DA-L3-003,Behavioural Science and Marketing Analytics,Behavioural science,,module's name as a skill (guide: leave out)
+DA-L3-003,Behavioural Science and Marketing Analytics,Marketing analytics,,module's name as a skill (guide: leave out)
+IT-L3-031,Social and Collaborative Computing,Online communities,online community management,"same skill, different wording"
+IT-L3-031,Social and Collaborative Computing,Teamwork,teamwork facilitation,"same skill, different wording"
+IT-L3-031,Social and Collaborative Computing,Social media platforms,social media analysis,broader / narrower wording
+IT-L3-031,Social and Collaborative Computing,,organizational communication planning,extra skill not in the answer key
+AI-L3-001,Investigations in Artificial Intelligence,Dataset selection,dataset identification,"same skill, different wording"
+AI-L3-001,Investigations in Artificial Intelligence,Evaluation measures,evaluation measure selection,"same skill, different wording"
+AI-L3-001,Investigations in Artificial Intelligence,Technical report writing,,other skill missed
+AI-L3-001,Investigations in Artificial Intelligence,,AI problem definition,extra skill not in the answer key
+AI-L3-001,Investigations in Artificial Intelligence,,bias and fairness assessment,extra skill not in the answer key
+QC-L3-001,Quantum Algorithms,Quantum algorithms,Quantum algorithm implementation,"same skill, different wording"
+QC-L3-001,Quantum Algorithms,,Grover's search algorithm understanding,extra skill not in the answer key
+IT-L3-007,Internet of Things: Concepts and Applications,Sensors,sensor integration,"same skill, different wording"
+IT-L3-007,Internet of Things: Concepts and Applications,Actuators,actuator control,"same skill, different wording"
+IT-L3-007,Internet of Things: Concepts and Applications,MQTT,MQTT protocol usage,"same skill, different wording"
+IT-L3-007,Internet of Things: Concepts and Applications,IoT application development,simple IoT application development,"same skill, different wording"
+DA-L3-001,Investigations in Data Analytics,Technical report writing,Investigation report writing,"same skill, different wording"
+DA-L3-001,Investigations in Data Analytics,Data analytics,,module's name as a skill (guide: leave out)
+DA-L3-001,Investigations in Data Analytics,,Analytics problem formulation,extra skill not in the answer key
+DA-L3-001,Investigations in Data Analytics,,Data source identification,extra skill not in the answer key
+DA-L3-001,Investigations in Data Analytics,,Data access compliance,extra skill not in the answer key
+MM-L3-005,Investigations in Multimedia Technology,Production scheduling,,other skill missed
+MM-L3-005,Investigations in Multimedia Technology,Immersive applications,,other skill missed
+MM-L3-005,Investigations in Multimedia Technology,Technical report writing,,other skill missed
+MM-L3-005,Investigations in Multimedia Technology,,problem identification,extra skill not in the answer key
+MM-L3-005,Investigations in Multimedia Technology,,user research,extra skill not in the answer key
+MM-L3-005,Investigations in Multimedia Technology,,requirements analysis,extra skill not in the answer key
+MM-L3-005,Investigations in Multimedia Technology,,multimedia application design,extra skill not in the answer key
+GD-L1-002,Principles of Game Design,Game mechanics,Game mechanics design,"same skill, different wording"
+GD-L1-002,Principles of Game Design,Level design,Basic level design,"same skill, different wording"
+GD-L1-002,Principles of Game Design,Prototyping,Game prototyping,"same skill, different wording"
+GD-L1-002,Principles of Game Design,Game design documents,Game design documentation,"same skill, different wording"
+GD-L1-002,Principles of Game Design,Game design,,module's name as a skill (guide: leave out)
+GD-L1-002,Principles of Game Design,,Rule creation,extra skill not in the answer key
+SE-L3-009,Designing and Developing Applications on Cloud,Docker,Docker containers,"same skill, different wording"
+SE-L3-009,Designing and Developing Applications on Cloud,AWS,,named tool or language missed
+SE-L3-009,Designing and Developing Applications on Cloud,Azure,,named tool or language missed
+SE-L3-009,Designing and Developing Applications on Cloud,Cloud application development,,module's name as a skill (guide: leave out)

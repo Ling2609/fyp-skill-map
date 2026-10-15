@@ -53,6 +53,27 @@ List between 3 and 10 skills this module teaches. Fewer is better than guessing.
 
 Return ONLY a JSON array, example: ["SQL querying", "entity-relationship modelling", "database normalisation"]"""
 
+# v2 (15 Oct, evaluation step 3's error analysis, docs/evidence/module_skill_extraction/error_analysis.txt): v1 left
+# out the module's main subject ("Penetration testing", "3D modelling": the words employers search for), dropped
+# tools written as alternatives ("R or Python", "AWS or Azure") and added words to plain skill names ("Nmap
+# scanning", "Copyright law"). NOT used by the app until it passes the test on 30 new modules
+# (scripts/evaluation/evaluate_module_prompt_v2.py).
+MODULE_EXTRACTED_BY_V2 = "gpt-oss-120b:descriptor-v2"
+
+MODULE_PROMPT_V2 = """Module: {module_name}
+Description: {description}
+
+List between 3 and 12 skills this module teaches. Each skill must:
+- Come from the description (stated, or directly implied by a stated topic); never add a tool or topic it does not name
+- Include the module's main subject as one skill (e.g. "Penetration testing", "3D modelling", "Operating systems"), unless it is only a general word ("Programming", "Computing")
+- Name every tool, language, platform or product the description names as its own skill, in its plain name ("Python", "AWS", "Blender", "Nmap"); when it says "X or Y", list both
+- Use the description's own words for a topic; don't add words such as "fundamentals", "basics", "analysis", "usage", "understanding" or "law" to a topic the description names plainly
+- Keep the level the description states: an introductory or "basic" topic stays basic (e.g. "basic object-oriented programming", not "object-oriented design")
+- Be concise (1-4 words)
+- Not repeat another skill in different words
+
+Return ONLY a JSON array, example: ["Database systems", "SQL querying", "Database normalisation", "MySQL"]"""
+
 JOB_SKILLS_SYSTEM = "You are a job requirements analyser. Extract specific technical and professional skills from job descriptions. Return ONLY a valid JSON array of skill strings, no explanation, no markdown. Extract between 5 and 15 skills depending on the job complexity."
 
 JOB_SKILLS_PROMPT = """Job Title: {title}
@@ -320,13 +341,13 @@ class SkillExtractor:
                     time.sleep(5)
         return []
 
-    def extract_from_module(self, module: dict) -> dict:
-        """Extract skills from a module dict."""
+    def extract_from_module(self, module: dict, version: str = "v1") -> dict:
+        """Extract skills from a module dict. version "v2" = MODULE_PROMPT_V2 (evaluation only until it passes)."""
         name = module.get("name", "")
         description = (module.get("description") or "").strip()
         if not description:
             raise ValueError(f"Module {module.get('code')} has no description: skills must come from the descriptor")
-        prompt = MODULE_PROMPT.format(module_name=name, description=description)
+        prompt = (MODULE_PROMPT_V2 if version == "v2" else MODULE_PROMPT).format(module_name=name, description=description)
         skills = self._call_groq(MODULE_SYSTEM, prompt)
 
         return {

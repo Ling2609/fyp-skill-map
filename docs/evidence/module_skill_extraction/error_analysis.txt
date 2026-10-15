@@ -1,0 +1,34 @@
+E1 module extraction: error analysis (15 Oct, after the score; does NOT change the score)
+Score (rules fixed before the result): P 0.530, R 0.515, F1 0.523 (30 modules, TP 87, FP 77, FN 82), run at 94a8278.
+
+Every miss and extra in errors.csv was sorted by hand (Claude, one of the three labellers; every row is in
+error_analysis.csv so it can be checked). A pair = one miss and one extra in the same module that name the same idea.
+
+Misses (82):
+  same skill, different wording (paired with an extra)    43   e.g. "Nmap" / "Nmap scanning", "Copyright" / "Copyright law", "MQTT" / "MQTT protocol usage"
+  broader / narrower wording (paired with an extra)       4   e.g. "Social media platforms" / "social media analysis"
+  module's name as a skill                                16   e.g. "Penetration testing" (module Penetration Testing), "3D modelling", "Cyberpsychology"
+  named tool or language missed                           8   R, Python, AWS, Azure, Autodesk Maya, Blender, Qiskit, game engine (6 of 8 written "X or Y")
+  other skill missed                                      11   e.g. "Operating systems", "Animation", "Network configuration", "Technical report writing"
+Extras not paired with a miss (30): skills the description supports but the majority vote did not list
+  (e.g. "web application penetration testing", "Grover's search algorithm", "bias and fairness assessment"),
+  and a few vaguer ones ("Concept development", "Rule creation", "team collaboration").
+
+The labelling guide said NOT to list "the module's name repeated as a skill when the description names more
+specific skills". In 16 modules at least 2 of the 3 labellers listed it anyway, so these 16 "misses" are the
+extractor following the guide and the answer key not; they are counted as misses because the scoring rules were
+fixed before the result. The rule itself was a mistake for SkillMap: employers ask for exactly these words
+("Penetration testing", "3D modelling"), so a student who passed the module should have them. Prompt v2 and the
+v2 test guide include the module's main subject (decided 15 Oct, before any v2 result).
+
+Sensitivity (NOT the result, computed after seeing the errors): counting the 43 same-skill pairs as matches gives
+P 0.793 / R 0.769 / F1 0.781; with the 4 broader/narrower pairs too, F1 0.805.
+
+Reading:
+  - About half of the misses are wording: the extractor adds a word to a skill ("analysis", "usage", "law",
+    "fundamentals"), which the strict name match counts as one miss and one extra.
+  - Real weaknesses for SkillMap: (1) it leaves out the module's main subject (as the guide asked, but employers
+    search for it), and (2) it drops tools written as alternatives ("R or Python", "AWS or Azure", "Maya or
+    Blender"), probably because the prompt says "fewer is better than guessing".
+  - In SkillMap these module skills are suggestions the career office reviews in Admin; prompt v2 is tested on 30
+    new modules (option B, 15 Oct).
