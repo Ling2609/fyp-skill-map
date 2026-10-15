@@ -1,12 +1,12 @@
 [
  {
-  "_id": "ea915ef852004e29b34ff430de5729af",
+  "_id": "71e8b4edc06740feb403c8a721017373",
   "name": "E1b job-ad extraction",
   "objective": 1,
-  "at": "2026-10-15T04:27:30.928000+00:00",
+  "at": "2026-10-15T04:31:02.750000+00:00",
   "git": {
-   "commit": "a82a13e",
-   "dirty": true
+   "commit": "b42c2ab",
+   "dirty": false
   },
   "setup": {
    "relation_model": "relation_model_esco_onet_v1_skillmap_v2_soft_skillmap_v3_soft_nli-deberta-v3-base_rw3x20_noextend",
@@ -66,13 +66,13 @@
   ]
  },
  {
-  "_id": "691f989912dd48c5a0b6d9c9d41398ba",
+  "_id": "eeec88bf9157479f81934197535a39a9",
   "name": "E1b job-ad extraction + checker",
   "objective": 1,
-  "at": "2026-10-15T04:27:33.795000+00:00",
+  "at": "2026-10-15T04:31:05.805000+00:00",
   "git": {
-   "commit": "a82a13e",
-   "dirty": true
+   "commit": "b42c2ab",
+   "dirty": false
   },
   "setup": {
    "relation_model": "relation_model_esco_onet_v1_skillmap_v2_soft_skillmap_v3_soft_nli-deberta-v3-base_rw3x20_noextend",
@@ -136,13 +136,13 @@
   ]
  },
  {
-  "_id": "5c05e1dbe8c441009f4b7d942cb8a43f",
+  "_id": "52dd345e1241483eaddb857a3708fc2f",
   "name": "Relation model on reference_pairs_v4.csv",
   "objective": 2,
-  "at": "2026-10-15T04:27:35.403000+00:00",
+  "at": "2026-10-15T04:31:07.332000+00:00",
   "git": {
-   "commit": "a82a13e",
-   "dirty": true
+   "commit": "b42c2ab",
+   "dirty": false
   },
   "setup": null,
   "method": "model vs cosine (and a baseline model) on reference skill pairs labelled by 3 judges; 'has it' precision / recall / F1, population-weighted over similarity bands >= 0.55",
