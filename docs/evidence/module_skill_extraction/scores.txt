@@ -1,0 +1,7 @@
+E1 module extraction vs answer key: 30 modules, 169 answer-key skills, 164 extracted skills
+TP 87  FP 77  FN 82
+Precision 0.530  (95% CI 0.424-0.639, bootstrap over modules)
+Recall    0.515  (95% CI 0.419-0.612, bootstrap over modules)
+F1        0.523  (95% CI 0.423-0.623, bootstrap over modules)
+Modules whose answer key has more than 10 skills (the extractor's cap): 0 of 30
+Answer-key check by the author (5 modules): 22 of 22 agreed skills correct (100%); 0 skills all three labellers missed

@@ -1,0 +1,316 @@
+{
+ "SE-L1-007": {
+  "skills": [
+   "computer architecture fundamentals",
+   "assembly language programming",
+   "input/output systems",
+   "embedded computing basics"
+  ],
+  "extracted_by": "gpt-oss-120b:descriptor-v1"
+ },
+ "GD-L3-002": {
+  "skills": [
+   "game prototyping",
+   "game design documentation",
+   "playtesting",
+   "portfolio presentation"
+  ],
+  "extracted_by": "gpt-oss-120b:descriptor-v1"
+ },
+ "MM-L2-001": {
+  "skills": [
+   "Multimedia application design",
+   "Multimedia development",
+   "Authoring tool usage",
+   "Interactive multimedia creation",
+   "Multimedia content integration"
+  ],
+  "extracted_by": "gpt-oss-120b:descriptor-v1"
+ },
+ "GD-L2-003": {
+  "skills": [
+   "production management",
+   "game testing",
+   "iterative development",
+   "team collaboration"
+  ],
+  "extracted_by": "gpt-oss-120b:descriptor-v1"
+ },
+ "CS-L2-005": {
+  "skills": [
+   "automata theory",
+   "regular language analysis",
+   "context-free grammar parsing",
+   "Turing machine modeling",
+   "complexity analysis"
+  ],
+  "extracted_by": "gpt-oss-120b:descriptor-v1"
+ },
+ "CY-L3-009": {
+  "skills": [
+   "online behaviour analysis",
+   "social engineering awareness",
+   "cybercrime psychology",
+   "human factors in cybersecurity"
+  ],
+  "extracted_by": "gpt-oss-120b:descriptor-v1"
+ },
+ "MM-L3-007": {
+  "skills": [
+   "Unity development",
+   "VR/AR prototyping",
+   "User testing",
+   "Concept development"
+  ],
+  "extracted_by": "gpt-oss-120b:descriptor-v1"
+ },
+ "CS-L2-002": {
+  "skills": [
+   "Probability theory",
+   "Probability distributions",
+   "Hypothesis testing",
+   "Regression analysis",
+   "Statistical modelling"
+  ],
+  "extracted_by": "gpt-oss-120b:descriptor-v1"
+ },
+ "SE-L2-009": {
+  "skills": [
+   "unit testing",
+   "integration testing",
+   "system testing",
+   "acceptance testing",
+   "test-driven development",
+   "automated testing",
+   "quality assurance"
+  ],
+  "extracted_by": "gpt-oss-120b:descriptor-v1"
+ },
+ "QC-L3-004": {
+  "skills": [
+   "problem formulation",
+   "quantum circuit implementation",
+   "quantum simulation",
+   "comparative analysis",
+   "technical report writing"
+  ],
+  "extracted_by": "gpt-oss-120b:descriptor-v1"
+ },
+ "CY-L3-010": {
+  "skills": [
+   "Problem identification",
+   "Literature review",
+   "Forensic tool review",
+   "Legal evidence analysis",
+   "Test evidence handling",
+   "Project planning"
+  ],
+  "extracted_by": "gpt-oss-120b:descriptor-v1"
+ },
+ "MM-L2-007": {
+  "skills": [
+   "Copyright law",
+   "Trademark law",
+   "Digital content licensing",
+   "Media ethics",
+   "Media legal compliance"
+  ],
+  "extracted_by": "gpt-oss-120b:descriptor-v1"
+ },
+ "SE-L1-001": {
+  "skills": [
+   "OSI model fundamentals",
+   "TCP/IP fundamentals",
+   "Network topology fundamentals",
+   "IP addressing",
+   "Subnetting",
+   "Routing",
+   "Network troubleshooting"
+  ],
+  "extracted_by": "gpt-oss-120b:descriptor-v1"
+ },
+ "CY-L2-004": {
+  "skills": [
+   "social influence analysis",
+   "persuasion techniques",
+   "group behavior analysis",
+   "attitude assessment",
+   "human factors evaluation"
+  ],
+  "extracted_by": "gpt-oss-120b:descriptor-v1"
+ },
+ "GD-L1-007": {
+  "skills": [
+   "polygon modelling",
+   "prop modelling",
+   "environment modelling",
+   "basic topology",
+   "exporting for game engines"
+  ],
+  "extracted_by": "gpt-oss-120b:descriptor-v1"
+ },
+ "IT-L3-027": {
+  "skills": [
+   "Low-code development",
+   "Cloud-based development",
+   "Agile delivery",
+   "Process automation",
+   "Digital transformation"
+  ],
+  "extracted_by": "gpt-oss-120b:descriptor-v1"
+ },
+ "GD-L3-009": {
+  "skills": [
+   "Level layout",
+   "Pacing",
+   "Player guidance",
+   "Gameplay balancing",
+   "Level building",
+   "Playtesting"
+  ],
+  "extracted_by": "gpt-oss-120b:descriptor-v1"
+ },
+ "SE-L1-002": {
+  "skills": [
+   "process management",
+   "memory management",
+   "file systems",
+   "concurrency",
+   "computer architecture",
+   "CPU organisation",
+   "system-level programming"
+  ],
+  "extracted_by": "gpt-oss-120b:descriptor-v1"
+ },
+ "IT-L1-001": {
+  "skills": [
+   "information security fundamentals",
+   "malware identification",
+   "phishing recognition",
+   "basic cryptography",
+   "user authentication",
+   "access control",
+   "digital forensic investigation"
+  ],
+  "extracted_by": "gpt-oss-120b:descriptor-v1"
+ },
+ "IT-L3-021": {
+  "skills": [
+   "problem definition",
+   "literature review",
+   "requirements gathering",
+   "technology evaluation",
+   "project planning",
+   "technical report writing"
+  ],
+  "extracted_by": "gpt-oss-120b:descriptor-v1"
+ },
+ "IT-L3-010": {
+  "skills": [
+   "penetration test planning",
+   "network penetration testing",
+   "web application penetration testing",
+   "Nmap scanning",
+   "Metasploit exploitation",
+   "Burp Suite testing",
+   "penetration test reporting"
+  ],
+  "extracted_by": "gpt-oss-120b:descriptor-v1"
+ },
+ "DA-L3-003": {
+  "skills": [
+   "customer segmentation",
+   "consumer behaviour analysis",
+   "campaign analysis",
+   "marketing metrics evaluation"
+  ],
+  "extracted_by": "gpt-oss-120b:descriptor-v1"
+ },
+ "IT-L3-031": {
+  "skills": [
+   "social media analysis",
+   "online community management",
+   "collaboration tool usage",
+   "organizational communication planning",
+   "teamwork facilitation"
+  ],
+  "extracted_by": "gpt-oss-120b:descriptor-v1"
+ },
+ "AI-L3-001": {
+  "skills": [
+   "AI problem definition",
+   "literature review",
+   "dataset identification",
+   "evaluation measure selection",
+   "bias and fairness assessment",
+   "project planning"
+  ],
+  "extracted_by": "gpt-oss-120b:descriptor-v1"
+ },
+ "QC-L3-001": {
+  "skills": [
+   "Quantum algorithm implementation",
+   "Qiskit programming",
+   "Deutsch-Jozsa algorithm understanding",
+   "Grover's search algorithm understanding",
+   "Quantum Fourier transform understanding",
+   "Shor's algorithm understanding"
+  ],
+  "extracted_by": "gpt-oss-120b:descriptor-v1"
+ },
+ "IT-L3-007": {
+  "skills": [
+   "IoT architecture fundamentals",
+   "sensor integration",
+   "actuator control",
+   "microcontroller programming",
+   "MQTT protocol usage",
+   "simple IoT application development"
+  ],
+  "extracted_by": "gpt-oss-120b:descriptor-v1"
+ },
+ "DA-L3-001": {
+  "skills": [
+   "Analytics problem formulation",
+   "Literature review",
+   "Data source identification",
+   "Data access compliance",
+   "Analysis method selection",
+   "Project planning",
+   "Investigation report writing"
+  ],
+  "extracted_by": "gpt-oss-120b:descriptor-v1"
+ },
+ "MM-L3-005": {
+  "skills": [
+   "problem identification",
+   "literature review",
+   "user research",
+   "requirements analysis",
+   "project planning",
+   "multimedia application design"
+  ],
+  "extracted_by": "gpt-oss-120b:descriptor-v1"
+ },
+ "GD-L1-002": {
+  "skills": [
+   "Game mechanics design",
+   "Rule creation",
+   "Player experience design",
+   "Basic level design",
+   "Game prototyping",
+   "Game design documentation"
+  ],
+  "extracted_by": "gpt-oss-120b:descriptor-v1"
+ },
+ "SE-L3-009": {
+  "skills": [
+   "serverless computing",
+   "cloud-native architecture",
+   "microservices deployment",
+   "Docker containers",
+   "cloud security"
+  ],
+  "extracted_by": "gpt-oss-120b:descriptor-v1"
+ }
+}

@@ -1,0 +1,240 @@
+{
+ "SE-L1-007": [
+  "Computer architecture",
+  "Assembly language",
+  "Input/output systems",
+  "Embedded computing"
+ ],
+ "GD-L3-002": [
+  "Game engine",
+  "Game design document",
+  "Playtesting",
+  "Portfolio"
+ ],
+ "MM-L2-001": [
+  "Multimedia application design",
+  "Multimedia application development",
+  "Text integration",
+  "Graphics integration",
+  "Audio integration",
+  "Video integration",
+  "Animation integration",
+  "Authoring tools",
+  "Interactivity"
+ ],
+ "GD-L2-003": [
+  "Production management",
+  "Testing",
+  "Iteration",
+  "Game development"
+ ],
+ "CS-L2-005": [
+  "Theory of computation",
+  "Automata",
+  "Regular languages",
+  "Context-free grammars",
+  "Turing machines",
+  "Computability",
+  "Computational complexity"
+ ],
+ "CY-L3-009": [
+  "Cyberpsychology",
+  "Social engineering",
+  "Cybercrime psychology",
+  "Human factors in cyber security"
+ ],
+ "MM-L3-007": [
+  "Unity",
+  "Virtual reality",
+  "Augmented reality",
+  "Prototyping",
+  "User testing"
+ ],
+ "CS-L2-002": [
+  "Probability theory",
+  "Probability distributions",
+  "Hypothesis testing",
+  "Regression analysis",
+  "Statistical modelling",
+  "R",
+  "Python"
+ ],
+ "SE-L2-009": [
+  "Unit testing",
+  "Integration testing",
+  "System testing",
+  "Acceptance testing",
+  "Test-driven development",
+  "Automated testing",
+  "Quality assurance"
+ ],
+ "QC-L3-004": [
+  "Quantum computing",
+  "Qiskit",
+  "Quantum circuit design",
+  "Quantum simulation",
+  "Classical computing",
+  "Technical report writing"
+ ],
+ "CY-L3-010": [
+  "Digital forensics",
+  "Literature review",
+  "Legal rules on evidence",
+  "Privacy",
+  "Evidence handling",
+  "Project planning",
+  "Technical report writing"
+ ],
+ "MM-L2-007": [
+  "Intellectual property",
+  "Copyright",
+  "Trademarks",
+  "Digital content licensing",
+  "Media industry ethics",
+  "Media industry legal issues"
+ ],
+ "SE-L1-001": [
+  "OSI model",
+  "TCP/IP protocols",
+  "Network topologies",
+  "IP addressing",
+  "Subnetting",
+  "Routing",
+  "Network configuration",
+  "Network troubleshooting"
+ ],
+ "CY-L2-004": [
+  "Social psychology",
+  "Social influence",
+  "Persuasion",
+  "Group behaviour",
+  "Attitudes",
+  "Cyber security"
+ ],
+ "GD-L1-007": [
+  "3D modelling",
+  "Polygon modelling",
+  "Modelling props and environments",
+  "Topology",
+  "Exporting models",
+  "Game engines",
+  "Autodesk Maya",
+  "Blender"
+ ],
+ "IT-L3-027": [
+  "Low-code platforms",
+  "Cloud-based systems",
+  "Agile delivery",
+  "Automation",
+  "Digital transformation"
+ ],
+ "GD-L3-009": [
+  "Level design",
+  "Level layout",
+  "Pacing",
+  "Player guidance",
+  "Gameplay balancing",
+  "Level building",
+  "Playtesting"
+ ],
+ "SE-L1-002": [
+  "Operating systems",
+  "Process management",
+  "Memory management",
+  "File systems",
+  "Concurrency",
+  "Computer architecture",
+  "CPU organisation",
+  "System-level programming"
+ ],
+ "IT-L1-001": [
+  "Information security",
+  "Cryptography",
+  "User authentication",
+  "Access control",
+  "Digital forensics"
+ ],
+ "IT-L3-021": [
+  "Internet of Things",
+  "Literature review",
+  "Requirements gathering",
+  "Sensor selection",
+  "Communication protocols",
+  "Project planning",
+  "Technical report writing"
+ ],
+ "IT-L3-010": [
+  "Penetration testing",
+  "Network security",
+  "Web application security",
+  "Nmap",
+  "Metasploit",
+  "Burp Suite",
+  "Technical report writing"
+ ],
+ "DA-L3-003": [
+  "Behavioural science",
+  "Marketing analytics",
+  "Customer segmentation",
+  "Consumer behaviour",
+  "Campaign analysis",
+  "Marketing metrics"
+ ],
+ "IT-L3-031": [
+  "Social media platforms",
+  "Online communities",
+  "Collaboration tools",
+  "Teamwork"
+ ],
+ "AI-L3-001": [
+  "Literature review",
+  "Data set selection",
+  "Evaluation measures",
+  "Bias and fairness",
+  "Project planning",
+  "Technical report writing"
+ ],
+ "QC-L3-001": [
+  "Quantum algorithms",
+  "Qiskit"
+ ],
+ "IT-L3-007": [
+  "IoT architecture",
+  "Sensors",
+  "Actuators",
+  "Microcontrollers",
+  "MQTT",
+  "IoT application development"
+ ],
+ "DA-L3-001": [
+  "Data analytics",
+  "Literature review",
+  "Data source identification",
+  "Data permission management",
+  "Analysis method selection",
+  "Project planning",
+  "Technical report writing"
+ ],
+ "MM-L3-005": [
+  "Literature review",
+  "User research",
+  "Project planning",
+  "Technical report writing"
+ ],
+ "GD-L1-002": [
+  "Game design",
+  "Game mechanics",
+  "Level design",
+  "Prototyping",
+  "Game design documents"
+ ],
+ "SE-L3-009": [
+  "AWS",
+  "Azure",
+  "Serverless computing",
+  "Cloud-native architecture",
+  "Microservices deployment",
+  "Docker",
+  "Cloud security"
+ ]
+}

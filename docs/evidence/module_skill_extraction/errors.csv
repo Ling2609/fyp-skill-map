@@ -1,0 +1,160 @@
+﻿code,module,error,skill
+GD-L3-002,Game Development Final Year Project,extra (not in answer key),game prototyping
+GD-L3-002,Game Development Final Year Project,extra (not in answer key),game design documentation
+GD-L3-002,Game Development Final Year Project,extra (not in answer key),portfolio presentation
+GD-L3-002,Game Development Final Year Project,missed (in answer key),Game engine
+GD-L3-002,Game Development Final Year Project,missed (in answer key),Portfolio
+MM-L2-001,Multimedia Applications,extra (not in answer key),Multimedia development
+MM-L2-001,Multimedia Applications,extra (not in answer key),Interactive multimedia creation
+MM-L2-001,Multimedia Applications,extra (not in answer key),Multimedia content integration
+MM-L2-001,Multimedia Applications,missed (in answer key),Multimedia application development
+MM-L2-001,Multimedia Applications,missed (in answer key),Animation
+GD-L2-003,Game Development Team Project 3,extra (not in answer key),game testing
+GD-L2-003,Game Development Team Project 3,extra (not in answer key),team collaboration
+GD-L2-003,Game Development Team Project 3,missed (in answer key),Game development
+CS-L2-005,Computing Theory,extra (not in answer key),regular language analysis
+CS-L2-005,Computing Theory,extra (not in answer key),context-free grammar parsing
+CS-L2-005,Computing Theory,extra (not in answer key),Turing machine modeling
+CS-L2-005,Computing Theory,extra (not in answer key),complexity analysis
+CS-L2-005,Computing Theory,missed (in answer key),Theory of computation
+CS-L2-005,Computing Theory,missed (in answer key),Regular languages
+CS-L2-005,Computing Theory,missed (in answer key),Context-free grammars
+CS-L2-005,Computing Theory,missed (in answer key),Turing machines
+CS-L2-005,Computing Theory,missed (in answer key),Computability
+CS-L2-005,Computing Theory,missed (in answer key),Computational complexity
+CY-L3-009,Cyberpsychology,extra (not in answer key),social engineering awareness
+CY-L3-009,Cyberpsychology,missed (in answer key),Cyberpsychology
+CY-L3-009,Cyberpsychology,missed (in answer key),Social engineering
+MM-L3-007,VR/AR Design Project,extra (not in answer key),VR/AR prototyping
+MM-L3-007,VR/AR Design Project,extra (not in answer key),Concept development
+MM-L3-007,VR/AR Design Project,missed (in answer key),Prototyping
+CS-L2-002,Probability and Statistical Modelling,missed (in answer key),R
+CS-L2-002,Probability and Statistical Modelling,missed (in answer key),Python
+QC-L3-004,Project in Quantum Computing,extra (not in answer key),problem formulation
+QC-L3-004,Project in Quantum Computing,extra (not in answer key),quantum circuit implementation
+QC-L3-004,Project in Quantum Computing,extra (not in answer key),comparative analysis
+QC-L3-004,Project in Quantum Computing,missed (in answer key),Qiskit
+QC-L3-004,Project in Quantum Computing,missed (in answer key),Quantum computing
+QC-L3-004,Project in Quantum Computing,missed (in answer key),Classical computing
+CY-L3-010,Investigations in Digital Forensics,extra (not in answer key),Problem identification
+CY-L3-010,Investigations in Digital Forensics,extra (not in answer key),Forensic tool review
+CY-L3-010,Investigations in Digital Forensics,extra (not in answer key),Legal evidence analysis
+CY-L3-010,Investigations in Digital Forensics,extra (not in answer key),Test evidence handling
+CY-L3-010,Investigations in Digital Forensics,missed (in answer key),Digital forensics
+CY-L3-010,Investigations in Digital Forensics,missed (in answer key),Forensic tools
+CY-L3-010,Investigations in Digital Forensics,missed (in answer key),Legal rules on evidence
+CY-L3-010,Investigations in Digital Forensics,missed (in answer key),Evidence handling
+CY-L3-010,Investigations in Digital Forensics,missed (in answer key),Technical report writing
+MM-L2-007,"Intellectual Property, Ethics and Legal Issues",extra (not in answer key),Copyright law
+MM-L2-007,"Intellectual Property, Ethics and Legal Issues",extra (not in answer key),Trademark law
+MM-L2-007,"Intellectual Property, Ethics and Legal Issues",extra (not in answer key),Media ethics
+MM-L2-007,"Intellectual Property, Ethics and Legal Issues",extra (not in answer key),Media legal compliance
+MM-L2-007,"Intellectual Property, Ethics and Legal Issues",missed (in answer key),Intellectual property
+MM-L2-007,"Intellectual Property, Ethics and Legal Issues",missed (in answer key),Copyright
+MM-L2-007,"Intellectual Property, Ethics and Legal Issues",missed (in answer key),Trademarks
+MM-L2-007,"Intellectual Property, Ethics and Legal Issues",missed (in answer key),Media industry ethics
+SE-L1-001,Introduction to Networking,extra (not in answer key),TCP/IP fundamentals
+SE-L1-001,Introduction to Networking,missed (in answer key),Network configuration
+SE-L1-001,Introduction to Networking,missed (in answer key),TCP/IP protocols
+CY-L2-004,Social Psychology,extra (not in answer key),social influence analysis
+CY-L2-004,Social Psychology,extra (not in answer key),persuasion techniques
+CY-L2-004,Social Psychology,extra (not in answer key),group behavior analysis
+CY-L2-004,Social Psychology,extra (not in answer key),attitude assessment
+CY-L2-004,Social Psychology,extra (not in answer key),human factors evaluation
+CY-L2-004,Social Psychology,missed (in answer key),Social psychology
+CY-L2-004,Social Psychology,missed (in answer key),Social influence
+CY-L2-004,Social Psychology,missed (in answer key),Persuasion
+CY-L2-004,Social Psychology,missed (in answer key),Group behaviour
+CY-L2-004,Social Psychology,missed (in answer key),Cyber security
+GD-L1-007,Introduction to 3D Modelling,extra (not in answer key),basic topology
+GD-L1-007,Introduction to 3D Modelling,extra (not in answer key),exporting for game engines
+GD-L1-007,Introduction to 3D Modelling,missed (in answer key),3D modelling
+GD-L1-007,Introduction to 3D Modelling,missed (in answer key),Autodesk Maya
+GD-L1-007,Introduction to 3D Modelling,missed (in answer key),Blender
+GD-L1-007,Introduction to 3D Modelling,missed (in answer key),Topology
+IT-L3-027,Information Systems Development Trends,extra (not in answer key),Low-code development
+IT-L3-027,Information Systems Development Trends,extra (not in answer key),Cloud-based development
+IT-L3-027,Information Systems Development Trends,extra (not in answer key),Process automation
+IT-L3-027,Information Systems Development Trends,missed (in answer key),Low-code platforms
+IT-L3-027,Information Systems Development Trends,missed (in answer key),Cloud-based systems
+IT-L3-027,Information Systems Development Trends,missed (in answer key),Automation
+GD-L3-009,Game Level Design,missed (in answer key),Level design
+SE-L1-002,Systems Software and Computing Concepts,missed (in answer key),Operating systems
+IT-L1-001,Introduction to Security and Forensic Technologies,extra (not in answer key),malware identification
+IT-L1-001,Introduction to Security and Forensic Technologies,extra (not in answer key),phishing recognition
+IT-L1-001,Introduction to Security and Forensic Technologies,extra (not in answer key),digital forensic investigation
+IT-L1-001,Introduction to Security and Forensic Technologies,missed (in answer key),Digital forensics
+IT-L3-021,Investigations in Internet of Things,extra (not in answer key),problem definition
+IT-L3-021,Investigations in Internet of Things,extra (not in answer key),technology evaluation
+IT-L3-021,Investigations in Internet of Things,missed (in answer key),Internet of Things
+IT-L3-021,Investigations in Internet of Things,missed (in answer key),Field testing
+IT-L3-021,Investigations in Internet of Things,missed (in answer key),Sensor selection
+IT-L3-021,Investigations in Internet of Things,missed (in answer key),Communication protocols
+IT-L3-010,Penetration Testing,extra (not in answer key),penetration test planning
+IT-L3-010,Penetration Testing,extra (not in answer key),web application penetration testing
+IT-L3-010,Penetration Testing,extra (not in answer key),Nmap scanning
+IT-L3-010,Penetration Testing,extra (not in answer key),Metasploit exploitation
+IT-L3-010,Penetration Testing,extra (not in answer key),Burp Suite testing
+IT-L3-010,Penetration Testing,missed (in answer key),Penetration testing
+IT-L3-010,Penetration Testing,missed (in answer key),Nmap
+IT-L3-010,Penetration Testing,missed (in answer key),Metasploit
+IT-L3-010,Penetration Testing,missed (in answer key),Burp Suite
+DA-L3-003,Behavioural Science and Marketing Analytics,extra (not in answer key),consumer behaviour analysis
+DA-L3-003,Behavioural Science and Marketing Analytics,extra (not in answer key),marketing metrics evaluation
+DA-L3-003,Behavioural Science and Marketing Analytics,missed (in answer key),Behavioural science
+DA-L3-003,Behavioural Science and Marketing Analytics,missed (in answer key),Marketing analytics
+DA-L3-003,Behavioural Science and Marketing Analytics,missed (in answer key),Consumer behaviour
+DA-L3-003,Behavioural Science and Marketing Analytics,missed (in answer key),Marketing metrics
+IT-L3-031,Social and Collaborative Computing,extra (not in answer key),social media analysis
+IT-L3-031,Social and Collaborative Computing,extra (not in answer key),online community management
+IT-L3-031,Social and Collaborative Computing,extra (not in answer key),organizational communication planning
+IT-L3-031,Social and Collaborative Computing,extra (not in answer key),teamwork facilitation
+IT-L3-031,Social and Collaborative Computing,missed (in answer key),Social media platforms
+IT-L3-031,Social and Collaborative Computing,missed (in answer key),Online communities
+IT-L3-031,Social and Collaborative Computing,missed (in answer key),Teamwork
+AI-L3-001,Investigations in Artificial Intelligence,extra (not in answer key),AI problem definition
+AI-L3-001,Investigations in Artificial Intelligence,extra (not in answer key),dataset identification
+AI-L3-001,Investigations in Artificial Intelligence,extra (not in answer key),evaluation measure selection
+AI-L3-001,Investigations in Artificial Intelligence,extra (not in answer key),bias and fairness assessment
+AI-L3-001,Investigations in Artificial Intelligence,missed (in answer key),Dataset selection
+AI-L3-001,Investigations in Artificial Intelligence,missed (in answer key),Evaluation measures
+AI-L3-001,Investigations in Artificial Intelligence,missed (in answer key),Technical report writing
+QC-L3-001,Quantum Algorithms,extra (not in answer key),Quantum algorithm implementation
+QC-L3-001,Quantum Algorithms,extra (not in answer key),Grover's search algorithm understanding
+QC-L3-001,Quantum Algorithms,missed (in answer key),Quantum algorithms
+IT-L3-007,Internet of Things: Concepts and Applications,extra (not in answer key),sensor integration
+IT-L3-007,Internet of Things: Concepts and Applications,extra (not in answer key),actuator control
+IT-L3-007,Internet of Things: Concepts and Applications,extra (not in answer key),MQTT protocol usage
+IT-L3-007,Internet of Things: Concepts and Applications,extra (not in answer key),simple IoT application development
+IT-L3-007,Internet of Things: Concepts and Applications,missed (in answer key),Sensors
+IT-L3-007,Internet of Things: Concepts and Applications,missed (in answer key),Actuators
+IT-L3-007,Internet of Things: Concepts and Applications,missed (in answer key),MQTT
+IT-L3-007,Internet of Things: Concepts and Applications,missed (in answer key),IoT application development
+DA-L3-001,Investigations in Data Analytics,extra (not in answer key),Analytics problem formulation
+DA-L3-001,Investigations in Data Analytics,extra (not in answer key),Data source identification
+DA-L3-001,Investigations in Data Analytics,extra (not in answer key),Data access compliance
+DA-L3-001,Investigations in Data Analytics,extra (not in answer key),Investigation report writing
+DA-L3-001,Investigations in Data Analytics,missed (in answer key),Data analytics
+DA-L3-001,Investigations in Data Analytics,missed (in answer key),Technical report writing
+MM-L3-005,Investigations in Multimedia Technology,extra (not in answer key),problem identification
+MM-L3-005,Investigations in Multimedia Technology,extra (not in answer key),user research
+MM-L3-005,Investigations in Multimedia Technology,extra (not in answer key),requirements analysis
+MM-L3-005,Investigations in Multimedia Technology,extra (not in answer key),multimedia application design
+MM-L3-005,Investigations in Multimedia Technology,missed (in answer key),Production scheduling
+MM-L3-005,Investigations in Multimedia Technology,missed (in answer key),Immersive applications
+MM-L3-005,Investigations in Multimedia Technology,missed (in answer key),Technical report writing
+GD-L1-002,Principles of Game Design,extra (not in answer key),Game mechanics design
+GD-L1-002,Principles of Game Design,extra (not in answer key),Rule creation
+GD-L1-002,Principles of Game Design,extra (not in answer key),Basic level design
+GD-L1-002,Principles of Game Design,extra (not in answer key),Game prototyping
+GD-L1-002,Principles of Game Design,extra (not in answer key),Game design documentation
+GD-L1-002,Principles of Game Design,missed (in answer key),Game design
+GD-L1-002,Principles of Game Design,missed (in answer key),Game mechanics
+GD-L1-002,Principles of Game Design,missed (in answer key),Level design
+GD-L1-002,Principles of Game Design,missed (in answer key),Prototyping
+GD-L1-002,Principles of Game Design,missed (in answer key),Game design documents
+SE-L3-009,Designing and Developing Applications on Cloud,extra (not in answer key),Docker containers
+SE-L3-009,Designing and Developing Applications on Cloud,missed (in answer key),Cloud application development
+SE-L3-009,Designing and Developing Applications on Cloud,missed (in answer key),AWS
+SE-L3-009,Designing and Developing Applications on Cloud,missed (in answer key),Azure
+SE-L3-009,Designing and Developing Applications on Cloud,missed (in answer key),Docker

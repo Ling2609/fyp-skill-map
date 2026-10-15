@@ -1,0 +1,31 @@
+﻿code,module,family,answer_key,extracted,tp,fp,fn
+SE-L1-007,Integrated Computer Systems,SE,4,4,4,0,0
+GD-L3-002,Game Development Final Year Project,GD,3,4,1,3,2
+MM-L2-001,Multimedia Applications,MM,4,5,2,3,2
+GD-L2-003,Game Development Team Project 3,GD,3,4,2,2,1
+CS-L2-005,Computing Theory,CS,7,5,1,4,6
+CY-L3-009,Cyberpsychology,CY,5,4,3,1,2
+MM-L3-007,VR/AR Design Project,MM,3,4,2,2,1
+CS-L2-002,Probability and Statistical Modelling,CS,7,5,5,0,2
+SE-L2-009,Software Testing,SE,7,7,7,0,0
+QC-L3-004,Project in Quantum Computing,QC,5,5,2,3,3
+CY-L3-010,Investigations in Digital Forensics,CY,7,6,2,4,5
+MM-L2-007,"Intellectual Property, Ethics and Legal Issues",MM,5,5,1,4,4
+SE-L1-001,Introduction to Networking,SE,8,7,6,1,2
+CY-L2-004,Social Psychology,CY,5,5,0,5,5
+GD-L1-007,Introduction to 3D Modelling,GD,7,5,3,2,4
+IT-L3-027,Information Systems Development Trends,IT,5,5,2,3,3
+GD-L3-009,Game Level Design,GD,7,6,6,0,1
+SE-L1-002,Systems Software and Computing Concepts,SE,8,7,7,0,1
+IT-L1-001,Introduction to Security and Forensic Technologies,IT,5,7,4,3,1
+IT-L3-021,Investigations in Internet of Things,IT,8,6,4,2,4
+IT-L3-010,Penetration Testing,IT,6,7,2,5,4
+DA-L3-003,Behavioural Science and Marketing Analytics,DA,6,4,2,2,4
+IT-L3-031,Social and Collaborative Computing,IT,4,5,1,4,3
+AI-L3-001,Investigations in Artificial Intelligence,AI,5,6,2,4,3
+QC-L3-001,Quantum Algorithms,QC,5,6,4,2,1
+IT-L3-007,Internet of Things: Concepts and Applications,IT,6,6,2,4,4
+DA-L3-001,Investigations in Data Analytics,DA,5,7,3,4,2
+MM-L3-005,Investigations in Multimedia Technology,MM,5,6,2,4,3
+GD-L1-002,Principles of Game Design,GD,6,6,1,5,5
+SE-L3-009,Designing and Developing Applications on Cloud,SE,8,5,4,1,4

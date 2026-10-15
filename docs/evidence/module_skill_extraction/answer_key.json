@@ -1,0 +1,231 @@
+{
+ "SE-L1-007": [
+  "Computer architecture",
+  "Assembly language",
+  "Input/output systems",
+  "Embedded computing"
+ ],
+ "GD-L3-002": [
+  "Playtesting",
+  "Game engine",
+  "Portfolio"
+ ],
+ "MM-L2-001": [
+  "Multimedia application development",
+  "Animation",
+  "Multimedia application design",
+  "Authoring tools"
+ ],
+ "GD-L2-003": [
+  "Game development",
+  "Iterative development",
+  "Production management"
+ ],
+ "CS-L2-005": [
+  "Theory of computation",
+  "Automata theory",
+  "Regular languages",
+  "Context-free grammars",
+  "Turing machines",
+  "Computability",
+  "Computational complexity"
+ ],
+ "CY-L3-009": [
+  "Cyberpsychology",
+  "Online behaviour analysis",
+  "Social engineering",
+  "Cybercrime psychology",
+  "Human factors in cyber security"
+ ],
+ "MM-L3-007": [
+  "Unity",
+  "Prototyping",
+  "User testing"
+ ],
+ "CS-L2-002": [
+  "Probability theory",
+  "Probability distributions",
+  "Hypothesis testing",
+  "Regression analysis",
+  "Statistical modelling",
+  "R",
+  "Python"
+ ],
+ "SE-L2-009": [
+  "Unit testing",
+  "Integration testing",
+  "System testing",
+  "Acceptance testing",
+  "Test-driven development",
+  "Automated testing",
+  "Quality assurance"
+ ],
+ "QC-L3-004": [
+  "Qiskit",
+  "Technical report writing",
+  "Quantum computing",
+  "Quantum simulation",
+  "Classical computing"
+ ],
+ "CY-L3-010": [
+  "Digital forensics",
+  "Literature review",
+  "Forensic tools",
+  "Project planning",
+  "Legal rules on evidence",
+  "Evidence handling",
+  "Technical report writing"
+ ],
+ "MM-L2-007": [
+  "Intellectual property",
+  "Copyright",
+  "Trademarks",
+  "Digital content licensing",
+  "Media industry ethics"
+ ],
+ "SE-L1-001": [
+  "OSI model",
+  "Network topologies",
+  "IP addressing",
+  "Subnetting",
+  "Routing",
+  "Network configuration",
+  "Network troubleshooting",
+  "TCP/IP protocols"
+ ],
+ "CY-L2-004": [
+  "Social psychology",
+  "Social influence",
+  "Persuasion",
+  "Group behaviour",
+  "Cyber security"
+ ],
+ "GD-L1-007": [
+  "3D modelling",
+  "Polygon modelling",
+  "Prop modelling",
+  "Environment modelling",
+  "Autodesk Maya",
+  "Blender",
+  "Topology"
+ ],
+ "IT-L3-027": [
+  "Low-code platforms",
+  "Cloud-based systems",
+  "Agile delivery",
+  "Automation",
+  "Digital transformation"
+ ],
+ "GD-L3-009": [
+  "Level design",
+  "Level layout",
+  "Pacing",
+  "Player guidance",
+  "Gameplay balancing",
+  "Playtesting",
+  "Level building"
+ ],
+ "SE-L1-002": [
+  "Operating systems",
+  "Process management",
+  "Memory management",
+  "File systems",
+  "Concurrency",
+  "Computer architecture",
+  "CPU organisation",
+  "System-level programming"
+ ],
+ "IT-L1-001": [
+  "Information security",
+  "Basic cryptography",
+  "User authentication",
+  "Access control",
+  "Digital forensics"
+ ],
+ "IT-L3-021": [
+  "Internet of Things",
+  "Literature review",
+  "Requirements gathering",
+  "Field testing",
+  "Project planning",
+  "Sensor selection",
+  "Communication protocols",
+  "Technical report writing"
+ ],
+ "IT-L3-010": [
+  "Penetration testing",
+  "Network penetration testing",
+  "Nmap",
+  "Metasploit",
+  "Burp Suite",
+  "Penetration test reporting"
+ ],
+ "DA-L3-003": [
+  "Behavioural science",
+  "Marketing analytics",
+  "Customer segmentation",
+  "Consumer behaviour",
+  "Campaign analysis",
+  "Marketing metrics"
+ ],
+ "IT-L3-031": [
+  "Social media platforms",
+  "Online communities",
+  "Collaboration tools",
+  "Teamwork"
+ ],
+ "AI-L3-001": [
+  "Literature review",
+  "Dataset selection",
+  "Project planning",
+  "Evaluation measures",
+  "Technical report writing"
+ ],
+ "QC-L3-001": [
+  "Quantum algorithms",
+  "Deutsch-Jozsa algorithm",
+  "Quantum Fourier transform",
+  "Shor's algorithm",
+  "Qiskit"
+ ],
+ "IT-L3-007": [
+  "IoT architecture",
+  "Sensors",
+  "Actuators",
+  "Microcontrollers",
+  "MQTT",
+  "IoT application development"
+ ],
+ "DA-L3-001": [
+  "Literature review",
+  "Analysis method selection",
+  "Project planning",
+  "Data analytics",
+  "Technical report writing"
+ ],
+ "MM-L3-005": [
+  "Literature review",
+  "Production scheduling",
+  "Immersive applications",
+  "Project planning",
+  "Technical report writing"
+ ],
+ "GD-L1-002": [
+  "Game design",
+  "Game mechanics",
+  "Player experience design",
+  "Level design",
+  "Prototyping",
+  "Game design documents"
+ ],
+ "SE-L3-009": [
+  "Cloud application development",
+  "AWS",
+  "Azure",
+  "Serverless computing",
+  "Cloud-native architecture",
+  "Microservices deployment",
+  "Docker",
+  "Cloud security"
+ ]
+}

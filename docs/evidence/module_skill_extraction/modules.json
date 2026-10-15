@@ -1,0 +1,212 @@
+[
+ {
+  "job_ref": "SE-L1-007",
+  "title": "Integrated Computer Systems",
+  "subcategory": "SE",
+  "level": 1,
+  "text": "Explores hardware and software integration including computer architecture, assembly language basics, input/output systems and embedded computing concepts."
+ },
+ {
+  "job_ref": "GD-L3-002",
+  "title": "Game Development Final Year Project",
+  "subcategory": "GD",
+  "level": 3,
+  "text": "Final year project: students build a game prototype in a game engine for their chosen specialism, write a game design document, run playtesting and present the prototype in a portfolio."
+ },
+ {
+  "job_ref": "MM-L2-001",
+  "title": "Multimedia Applications",
+  "subcategory": "MM",
+  "level": 2,
+  "text": "Covers designing and developing multimedia applications combining text, graphics, audio, video and animation, including authoring tools and interactivity."
+ },
+ {
+  "job_ref": "GD-L2-003",
+  "title": "Game Development Team Project 3",
+  "subcategory": "GD",
+  "level": 2,
+  "text": "A team project where students produce a polished game, focusing on production management, testing, iteration and delivering a workable game product."
+ },
+ {
+  "job_ref": "CS-L2-005",
+  "title": "Computing Theory",
+  "subcategory": "CS",
+  "level": 2,
+  "text": "Covers the theory of computation including automata, regular languages, context-free grammars, Turing machines, computability and complexity."
+ },
+ {
+  "job_ref": "CY-L3-009",
+  "title": "Cyberpsychology",
+  "subcategory": "CY",
+  "level": 3,
+  "text": "Examines human behaviour in cyberspace including online behaviour, social engineering, cybercrime psychology and human factors in cyber security."
+ },
+ {
+  "job_ref": "MM-L3-007",
+  "title": "VR/AR Design Project",
+  "subcategory": "MM",
+  "level": 3,
+  "text": "A project module where students design and build a virtual or augmented reality application using Unity, from concept and prototyping to user testing."
+ },
+ {
+  "job_ref": "CS-L2-002",
+  "title": "Probability and Statistical Modelling",
+  "subcategory": "CS",
+  "level": 2,
+  "text": "Covers probability theory, probability distributions, hypothesis testing, regression analysis and statistical modelling of data using R or Python."
+ },
+ {
+  "job_ref": "SE-L2-009",
+  "title": "Software Testing",
+  "subcategory": "SE",
+  "level": 2,
+  "text": "Covers software testing strategies including unit testing, integration testing, system testing and acceptance testing. Topics include test-driven development, automated testing and quality assurance."
+ },
+ {
+  "job_ref": "QC-L3-004",
+  "title": "Project in Quantum Computing",
+  "subcategory": "QC",
+  "level": 3,
+  "text": "Final year project: students formulate a real-world problem for a quantum computer, implement quantum circuits in Qiskit, run them on simulators, compare the results with a classical approach and present them in a technical report."
+ },
+ {
+  "job_ref": "CY-L3-010",
+  "title": "Investigations in Digital Forensics",
+  "subcategory": "CY",
+  "level": 3,
+  "text": "The investigation phase of the final year project: students identify a digital forensics problem, review literature and forensic tools, consider the legal rules on evidence and privacy, define how test evidence will be created and handled, and plan the project. The output is an Investigation Report with the aims, objectives, requirements and project plan for the final year project."
+ },
+ {
+  "job_ref": "MM-L2-007",
+  "title": "Intellectual Property, Ethics and Legal Issues",
+  "subcategory": "MM",
+  "level": 2,
+  "text": "Covers intellectual property including copyright, trademarks, licensing of digital content, and ethical and legal issues in the media industry."
+ },
+ {
+  "job_ref": "SE-L1-001",
+  "title": "Introduction to Networking",
+  "subcategory": "SE",
+  "level": 1,
+  "text": "Covers fundamental networking concepts including OSI model, TCP/IP protocols, network topologies, IP addressing, subnetting, routing and basic network configuration and troubleshooting."
+ },
+ {
+  "job_ref": "CY-L2-004",
+  "title": "Social Psychology",
+  "subcategory": "CY",
+  "level": 2,
+  "text": "Introduces social psychology including social influence, persuasion, group behaviour and attitudes, and how they relate to human factors in cyber security."
+ },
+ {
+  "job_ref": "GD-L1-007",
+  "title": "Introduction to 3D Modelling",
+  "subcategory": "GD",
+  "level": 1,
+  "text": "Introduces 3D modelling including polygon modelling, modelling props and environments, topology and exporting models for game engines using Autodesk Maya or Blender."
+ },
+ {
+  "job_ref": "IT-L3-027",
+  "title": "Information Systems Development Trends",
+  "subcategory": "IT",
+  "level": 3,
+  "text": "Examines current trends in information systems development including low-code platforms, cloud-based systems, agile delivery, automation and digital transformation."
+ },
+ {
+  "job_ref": "GD-L3-009",
+  "title": "Game Level Design",
+  "subcategory": "GD",
+  "level": 3,
+  "text": "Covers level design including level layout, pacing, player guidance, gameplay balancing and building and playtesting levels."
+ },
+ {
+  "job_ref": "SE-L1-002",
+  "title": "Systems Software and Computing Concepts",
+  "subcategory": "SE",
+  "level": 1,
+  "text": "Introduces operating systems concepts including process management, memory management, file systems, concurrency and computer architecture. Covers CPU organisation and system-level programming."
+ },
+ {
+  "job_ref": "IT-L1-001",
+  "title": "Introduction to Security and Forensic Technologies",
+  "subcategory": "IT",
+  "level": 1,
+  "text": "Introduces information security principles including confidentiality, integrity and availability, common types of cyber attack such as malware and phishing, basic cryptography, user authentication, access control and the steps of a digital forensic investigation."
+ },
+ {
+  "job_ref": "IT-L3-021",
+  "title": "Investigations in Internet of Things",
+  "subcategory": "IT",
+  "level": 3,
+  "text": "The investigation phase of the final year project: students identify a problem an IoT system can address, review literature and existing devices, gather requirements from users, compare sensors, boards and communication options, and plan the prototype and its field test. The output is an Investigation Report with the aims, objectives, requirements and project plan for the final year project."
+ },
+ {
+  "job_ref": "IT-L3-010",
+  "title": "Penetration Testing",
+  "subcategory": "IT",
+  "level": 3,
+  "text": "Covers planning and performing penetration tests on networks and web applications using tools such as Nmap, Metasploit and Burp Suite, and writing penetration test reports."
+ },
+ {
+  "job_ref": "DA-L3-003",
+  "title": "Behavioural Science and Marketing Analytics",
+  "subcategory": "DA",
+  "level": 3,
+  "text": "Applies behavioural science and analytics to marketing including customer segmentation, consumer behaviour, campaign analysis and marketing metrics."
+ },
+ {
+  "job_ref": "IT-L3-031",
+  "title": "Social and Collaborative Computing",
+  "subcategory": "IT",
+  "level": 3,
+  "text": "Examines social media platforms, online communities and collaboration tools, and how organisations use social and collaborative computing for communication and teamwork."
+ },
+ {
+  "job_ref": "AI-L3-001",
+  "title": "Investigations in Artificial Intelligence",
+  "subcategory": "AI",
+  "level": 3,
+  "text": "The investigation phase of the final year project: students define a problem an AI model can solve, review literature and existing models, identify a suitable data set, choose evaluation measures, consider bias and fairness, and plan the project. The output is an Investigation Report with the aims, objectives, requirements and project plan for the final year project."
+ },
+ {
+  "job_ref": "QC-L3-001",
+  "title": "Quantum Algorithms",
+  "subcategory": "QC",
+  "level": 3,
+  "text": "Covers quantum algorithms including Deutsch-Jozsa, Grover's search, the quantum Fourier transform and Shor's algorithm, implemented with Qiskit."
+ },
+ {
+  "job_ref": "IT-L3-007",
+  "title": "Internet of Things: Concepts and Applications",
+  "subcategory": "IT",
+  "level": 3,
+  "text": "Introduces IoT architecture, sensors and actuators, microcontrollers, IoT communication protocols such as MQTT, and building simple IoT applications."
+ },
+ {
+  "job_ref": "DA-L3-001",
+  "title": "Investigations in Data Analytics",
+  "subcategory": "DA",
+  "level": 3,
+  "text": "The investigation phase of the final year project: students define an analytics question for a real organisation or domain, review literature and similar studies, identify data sources and permission to use the data, choose analysis methods and plan the project. The output is an Investigation Report with the aims, objectives, requirements and project plan for the final year project."
+ },
+ {
+  "job_ref": "MM-L3-005",
+  "title": "Investigations in Multimedia Technology",
+  "subcategory": "MM",
+  "level": 3,
+  "text": "The investigation phase of the final year project: students identify a problem a multimedia or immersive application can address, review literature and similar applications, survey the target audience, and plan the content, tools and production schedule. The output is an Investigation Report with the aims, objectives, requirements and project plan for the final year project."
+ },
+ {
+  "job_ref": "GD-L1-002",
+  "title": "Principles of Game Design",
+  "subcategory": "GD",
+  "level": 1,
+  "text": "Introduces game design including game mechanics, rules, player experience, level design basics, prototyping and game design documents."
+ },
+ {
+  "job_ref": "SE-L3-009",
+  "title": "Designing and Developing Applications on Cloud",
+  "subcategory": "SE",
+  "level": 3,
+  "text": "Covers cloud application development using AWS or Azure. Topics include serverless computing, cloud-native architecture, microservices deployment, Docker containers and cloud security."
+ }
+]
