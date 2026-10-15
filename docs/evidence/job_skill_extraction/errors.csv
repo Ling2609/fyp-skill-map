@@ -215,8 +215,6 @@ live_eca71c72e724fbb4,Cybersecurity Consultant - Penetration Testing,missed (in 
 live_eca71c72e724fbb4,Cybersecurity Consultant - Penetration Testing,missed (in answer key),Red teaming
 live_eca71c72e724fbb4,Cybersecurity Consultant - Penetration Testing,missed (in answer key),Cloud security
 live_eca71c72e724fbb4,Cybersecurity Consultant - Penetration Testing,missed (in answer key),IoT security
-live_4aef39a395a09b3c,Back End Developer,extra (not in answer key),Risk
-live_4aef39a395a09b3c,Back End Developer,extra (not in answer key),Fraud
 live_4aef39a395a09b3c,Back End Developer,extra (not in answer key),APIs
 live_4aef39a395a09b3c,Back End Developer,extra (not in answer key),Workflows
 live_4aef39a395a09b3c,Back End Developer,extra (not in answer key),Onboarding
@@ -243,6 +241,8 @@ live_4aef39a395a09b3c,Back End Developer,extra (not in answer key),Correctness
 live_4aef39a395a09b3c,Back End Developer,extra (not in answer key),Scalability
 live_4aef39a395a09b3c,Back End Developer,extra (not in answer key),Maintainability
 live_4aef39a395a09b3c,Back End Developer,extra (not in answer key),Wallet
+live_4aef39a395a09b3c,Back End Developer,extra (not in answer key),Fraud
+live_4aef39a395a09b3c,Back End Developer,extra (not in answer key),Risk
 live_4aef39a395a09b3c,Back End Developer,extra (not in answer key),English
 live_4aef39a395a09b3c,Back End Developer,missed (in answer key),API development
 live_4aef39a395a09b3c,Back End Developer,missed (in answer key),Message queues

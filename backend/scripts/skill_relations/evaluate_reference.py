@@ -208,6 +208,9 @@ def main():
     json.dump({"model": model_dir, "baseline": args.baseline, "cutoff": args.cutoff,
                "baseline_cutoff": args.baseline_cutoff, "pairs": PAIRS_CSV, **result}, open(out_json, "w"), indent=1)
     print(f"\nSaved predictions to {pred_csv} and the summary to {out_json}")
+    # 15 Oct: also kept in MongoDB evaluation_runs (git commit + file hashes); MongoDB off = only "not saved"
+    from app.services.evaluation_runs import reference_run
+    reference_run(out_json)
 
 
 if __name__ == "__main__":

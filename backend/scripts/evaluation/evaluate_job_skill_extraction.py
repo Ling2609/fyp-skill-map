@@ -451,9 +451,11 @@ def score(with_checker: bool = False):
     lines = [f"E1b extraction vs answer key: {len(per_ad)} ads, {tot(per_ad, 'answer_key')} answer-key skills, "
              f"{tot(per_ad, 'predicted')} extracted hard skills",
              f"TP {tot(per_ad, 'tp')}  FP {tot(per_ad, 'fp')}  FN {tot(per_ad, 'fn')}"]
+    metrics = {"tp": tot(per_ad, "tp"), "fp": tot(per_ad, "fp"), "fn": tot(per_ad, "fn")}
     for name, i, v in (("Precision", 0, P), ("Recall", 1, R), ("F1", 2, F)):
         lo, hi = ci(i)
         lines.append(f"{name:<9} {v:.3f}  (95% CI {lo:.3f}-{hi:.3f}, bootstrap over ads)")
+        metrics[name.lower()] = {"value": round(v, 3), "ci95": [round(lo, 3), round(hi, 3)]}
     spot = read_csv("spot_check.csv")
     checked = [r for r in spot if r["kind"] == "agreed" and (r["your_check"] or "").strip().lower() in ("correct", "wrong")]
     if checked:
@@ -474,6 +476,16 @@ def score(with_checker: bool = False):
             w.writeheader()
             w.writerows(rows)
     print("\n".join(lines))
+    # 15 Oct: every scored run is also kept in MongoDB evaluation_runs with the setup and the git commit
+    from app.services.evaluation_runs import record
+    record("E1b job-ad extraction" + (" + checker" if with_checker else ""), objective=1,
+           method="extracted hard skills vs answer key (2 of 3 labellers: Claude, Qwen, Gemini), canonical skill key, "
+                  "micro P/R/F1, 95% bootstrap over ads (10,000, seed 0)",
+           dataset={"ads": len(per_ad), "answer_key_skills": tot(per_ad, "answer_key"),
+                    "extracted": tot(per_ad, "predicted"), "sample": "30 live ads, stratified by subcategory, seed 1"},
+           metrics=metrics, verdict=next((l.split("-> ")[-1] for l in lines if l.startswith("Rule (")), None),
+           files=[path("ads.json"), path("answer_key.json"), path("spot_check.csv")]
+                 + ([path("checked_skills.json")] if with_checker else []))
     print(f"Written scores{end}.txt, per_ad{end}.csv and errors{end}.csv"
           + (" and checker_log.csv (every drop / rename, and whether the answer key had it)." if with_checker
              else " (every extra and missed skill, for the error analysis)."))

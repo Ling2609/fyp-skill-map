@@ -22,6 +22,7 @@ Checked in the code before adding anything new to MongoDB. Each store has one pu
 |---|---|---|---|
 | `chat_sessions` | One AI Assistant conversation per document (messages, mode, context) | Yes | 18 months after its last message (TTL index on `updated_at`, `CHAT_KEEP_DAYS` in `app/mongo.py`), or when the student deletes the chat or the account. MongoDB removes expired documents in a background task about once a minute, so deletion happens shortly after the 18 months, not at the exact second; the index is made the first time the chat collection is used |
 | `extraction_records` | One per time the AI read skills (job ads, Post a job, modules, student projects): what it proposed, what the checks kept and rejected with the reason, the model and prompt version, and what a person changed afterwards (employer, career office, student). The text read is not copied | Project records only (a student's skills and short quotes, `user_id`) | Project records: deleted 18 months after they were made (partial TTL index), or with the account; in Download my data. Job and module records: kept for the evaluation (company and university data) |
+| `evaluation_runs` | One per evaluation run (15 Oct): name, IR objective, git commit (and whether files had changed), the app setup (relation model, seeds, cut-off, embedder, extractor), method, dataset size, metrics, verdict, and the SHA-256 of every file it read (answer key, labels) | None (no student data) | Kept; exported to `docs/evidence/evaluation_runs.json` for the report |
 
 ## Files on the server (not in git)
 

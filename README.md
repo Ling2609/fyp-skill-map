@@ -49,7 +49,7 @@ fyp-skill-map/
 │   ├── app/                the API (runs as the web server)
 │   │   ├── main.py         start-up, CORS, creates tables
 │   │   ├── config.py       settings read from backend/.env
-│   │   ├── database.py     PostgreSQL connection; mongo.py: MongoDB (chat history; services/extraction_records.py: AI skill readings)
+│   │   ├── database.py     PostgreSQL connection; mongo.py: MongoDB (chat history; services/extraction_records.py: AI skill readings; services/evaluation_runs.py: evaluation runs)
 │   │   ├── routers/        HTTP endpoints by feature: auth, profile, modules, jobs, recommend, skillgap,
 │   │   │                   applications, chatbot, employer, admin, admin_academic
 │   │   ├── services/       skill_profile.py (the Graduate Skill Profile + matching), skill_relation.py
@@ -143,6 +143,7 @@ Run every script from `backend/` with the venv active, e.g. `python scripts/tool
 | `tools/check_learning_links.py` | Opens every link in `data/learning_resources.json` and marks it ok / not ok; the AI Assistant only gives students links marked ok. `--coverage` lists the most-asked job skills with no resources yet | Internet |
 | `tools/count_rows.py` | Prints the number of rows in every table. Run before and after an upgrade and compare, to show nothing was lost | — |
 | `tools/extraction_report.py` | From MongoDB `extraction_records`: per source (job ads, modules, student projects) and prompt version, how many skills the AI proposed, how many the checks rejected and why, and how often people removed, added or re-levelled skills afterwards. `--since`, `--csv` | MongoDB |
+| `tools/evaluation_runs.py` | MongoDB `evaluation_runs`: `list` every run (date, commit, main numbers), `export` to `docs/evidence/evaluation_runs.json`, `add-reference <summary.json>` for an earlier relation-model check. Scoring an evaluation records its run automatically | MongoDB |
 | `tools/compare_profile_extraction.py` | Before/after check for project and certificate skills: old prompts vs the new quote-checked extraction on 6 sample projects (hand-written gold lists) and 4 certificates; precision, recall, unsupported skills → `docs/evidence/profile_extraction_before_after.csv` | Groq |
 | `tools/check_skill_profile.py` | Read-only: a student's skill count, sources and near-duplicates. `--no-sbert` | – |
 | `tools/compare_scoring.py` | Read-only (step 2): a student's coverage under different rules for which matched skills count, sensitivity table, and a random sample of related pairs for labelling (`docs/evidence/`) | – |

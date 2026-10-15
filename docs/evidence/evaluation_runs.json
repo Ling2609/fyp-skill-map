@@ -1,0 +1,292 @@
+[
+ {
+  "_id": "ea915ef852004e29b34ff430de5729af",
+  "name": "E1b job-ad extraction",
+  "objective": 1,
+  "at": "2026-10-15T04:27:30.928000+00:00",
+  "git": {
+   "commit": "a82a13e",
+   "dirty": true
+  },
+  "setup": {
+   "relation_model": "relation_model_esco_onet_v1_skillmap_v2_soft_skillmap_v3_soft_nli-deberta-v3-base_rw3x20_noextend",
+   "relation_seeds": 3,
+   "relation_cutoff": 0.6,
+   "embedder": "all-MiniLM-L6-v2",
+   "extractor": "openai/gpt-oss-120b",
+   "python": "3.13.7"
+  },
+  "method": "extracted hard skills vs answer key (2 of 3 labellers: Claude, Qwen, Gemini), canonical skill key, micro P/R/F1, 95% bootstrap over ads (10,000, seed 0)",
+  "dataset": {
+   "ads": 30,
+   "answer_key_skills": 522,
+   "extracted": 690,
+   "sample": "30 live ads, stratified by subcategory, seed 1"
+  },
+  "metrics": {
+   "tp": 421,
+   "fp": 269,
+   "fn": 101,
+   "precision": {
+    "value": 0.61,
+    "ci95": [
+     0.529,
+     0.688
+    ]
+   },
+   "recall": {
+    "value": 0.807,
+    "ci95": [
+     0.747,
+     0.864
+    ]
+   },
+   "f1": {
+    "value": 0.695,
+    "ci95": [
+     0.63,
+     0.751
+    ]
+   }
+  },
+  "verdict": null,
+  "files": [
+   {
+    "path": "docs/evidence/job_skill_extraction/ads.json",
+    "sha256": "c5536bd65566316db161fa5ad12753288136e6ad620e68bd9662ec6edb5f8502"
+   },
+   {
+    "path": "docs/evidence/job_skill_extraction/answer_key.json",
+    "sha256": "f55e6dcd1f9d5e45b01605b07c4e60f539b656adc302b28c9df2620b67bdb021"
+   },
+   {
+    "path": "docs/evidence/job_skill_extraction/spot_check.csv",
+    "sha256": "f112df69f43bb190b26e66f7fe7f83082fdc6dabbdb4820f2a83ba37ec9a5a75"
+   }
+  ]
+ },
+ {
+  "_id": "691f989912dd48c5a0b6d9c9d41398ba",
+  "name": "E1b job-ad extraction + checker",
+  "objective": 1,
+  "at": "2026-10-15T04:27:33.795000+00:00",
+  "git": {
+   "commit": "a82a13e",
+   "dirty": true
+  },
+  "setup": {
+   "relation_model": "relation_model_esco_onet_v1_skillmap_v2_soft_skillmap_v3_soft_nli-deberta-v3-base_rw3x20_noextend",
+   "relation_seeds": 3,
+   "relation_cutoff": 0.6,
+   "embedder": "all-MiniLM-L6-v2",
+   "extractor": "openai/gpt-oss-120b",
+   "python": "3.13.7"
+  },
+  "method": "extracted hard skills vs answer key (2 of 3 labellers: Claude, Qwen, Gemini), canonical skill key, micro P/R/F1, 95% bootstrap over ads (10,000, seed 0)",
+  "dataset": {
+   "ads": 30,
+   "answer_key_skills": 522,
+   "extracted": 610,
+   "sample": "30 live ads, stratified by subcategory, seed 1"
+  },
+  "metrics": {
+   "tp": 406,
+   "fp": 204,
+   "fn": 116,
+   "precision": {
+    "value": 0.666,
+    "ci95": [
+     0.586,
+     0.74
+    ]
+   },
+   "recall": {
+    "value": 0.778,
+    "ci95": [
+     0.709,
+     0.842
+    ]
+   },
+   "f1": {
+    "value": 0.717,
+    "ci95": [
+     0.654,
+     0.771
+    ]
+   }
+  },
+  "verdict": "FAIL at the 0.03 gate",
+  "files": [
+   {
+    "path": "docs/evidence/job_skill_extraction/ads.json",
+    "sha256": "c5536bd65566316db161fa5ad12753288136e6ad620e68bd9662ec6edb5f8502"
+   },
+   {
+    "path": "docs/evidence/job_skill_extraction/answer_key.json",
+    "sha256": "f55e6dcd1f9d5e45b01605b07c4e60f539b656adc302b28c9df2620b67bdb021"
+   },
+   {
+    "path": "docs/evidence/job_skill_extraction/spot_check.csv",
+    "sha256": "f112df69f43bb190b26e66f7fe7f83082fdc6dabbdb4820f2a83ba37ec9a5a75"
+   },
+   {
+    "path": "docs/evidence/job_skill_extraction/checked_skills.json",
+    "sha256": "02385ee99e52a1a43942ead9b988b7b4cbbf48d69e316a2e44259b1ab8f7b004"
+   }
+  ]
+ },
+ {
+  "_id": "5c05e1dbe8c441009f4b7d942cb8a43f",
+  "name": "Relation model on reference_pairs_v4.csv",
+  "objective": 2,
+  "at": "2026-10-15T04:27:35.403000+00:00",
+  "git": {
+   "commit": "a82a13e",
+   "dirty": true
+  },
+  "setup": null,
+  "method": "model vs cosine (and a baseline model) on reference skill pairs labelled by 3 judges; 'has it' precision / recall / F1, population-weighted over similarity bands >= 0.55",
+  "dataset": {
+   "pairs": "data/skill_relations/reference_pairs_v4.csv",
+   "model": "relation_model_esco_onet_v1_skillmap_v2_soft_skillmap_v3_soft_nli-deberta-v3-base_rw3x20_noextend",
+   "cutoff": 0.6,
+   "baseline": "data/relation_model_esco_onet_v1_skillmap_v2_nli_rw3x20",
+   "baseline_cutoff": 0.8
+  },
+  "metrics": {
+   "unanimous": {
+    "cosine": {
+     "n": 91,
+     "macro_f1": 0.593,
+     "accuracy": 0.582,
+     "has_precision": 0.353,
+     "has_recall": 0.667,
+     "false_has": 22
+    },
+    "model": {
+     "n": 91,
+     "macro_f1": 0.815,
+     "accuracy": 0.824,
+     "has_precision": 0.609,
+     "has_recall": 0.778,
+     "false_has": 9
+    },
+    "weighted_accuracy": {
+     "cosine": 0.458,
+     "model": 0.8
+    },
+    "per_band": {
+     "0.75-0.85": {
+      "n": 24,
+      "cosine": 0.458,
+      "model": 0.708
+     },
+     "0.65-0.75": {
+      "n": 34,
+      "cosine": 0.588,
+      "model": 0.853
+     },
+     "0.55-0.65": {
+      "n": 19,
+      "cosine": 0.421,
+      "model": 0.789
+     },
+     "<0.55": {
+      "n": 14,
+      "cosine": 1.0,
+      "model": 1.0
+     }
+    },
+    "weighted_has": {
+     "cosine >= 0.7": {
+      "precision": 0.236,
+      "recall": 0.187,
+      "f1": 0.209
+     },
+     "model p >= 0.6": {
+      "precision": 0.691,
+      "recall": 0.913,
+      "f1": 0.787
+     },
+     "baseline p >= 0.8": {
+      "precision": 0.532,
+      "recall": 0.21,
+      "f1": 0.301
+     }
+    }
+   },
+   "majority": {
+    "cosine": {
+     "n": 132,
+     "macro_f1": 0.516,
+     "accuracy": 0.515,
+     "has_precision": 0.375,
+     "has_recall": 0.6,
+     "false_has": 30
+    },
+    "model": {
+     "n": 132,
+     "macro_f1": 0.667,
+     "accuracy": 0.689,
+     "has_precision": 0.5,
+     "has_recall": 0.633,
+     "false_has": 19
+    },
+    "weighted_accuracy": {
+     "cosine": 0.391,
+     "model": 0.578
+    },
+    "per_band": {
+     "0.75-0.85": {
+      "n": 35,
+      "cosine": 0.457,
+      "model": 0.657
+     },
+     "0.65-0.75": {
+      "n": 43,
+      "cosine": 0.581,
+      "model": 0.791
+     },
+     "0.55-0.65": {
+      "n": 39,
+      "cosine": 0.333,
+      "model": 0.513
+     },
+     "<0.55": {
+      "n": 15,
+      "cosine": 0.933,
+      "model": 0.933
+     }
+    },
+    "weighted_has": {
+     "cosine >= 0.7": {
+      "precision": 0.267,
+      "recall": 0.148,
+      "f1": 0.19
+     },
+     "model p >= 0.6": {
+      "precision": 0.454,
+      "recall": 0.5,
+      "f1": 0.476
+     },
+     "baseline p >= 0.8": {
+      "precision": 0.518,
+      "recall": 0.333,
+      "f1": 0.405
+     }
+    }
+   }
+  },
+  "verdict": "PASS: use the new model",
+  "files": [
+   {
+    "path": "docs/evidence/relation_model/reference_eval_esco_onet_v1_skillmap_v2_soft_skillmap_v3_soft_nli-deberta-v3-base_rw3x20_noextend_set4.json",
+    "sha256": "da5618c2d8395fdb892d89c3fa896d2dbad464cbe6db23ca113a85933fa039ec"
+   },
+   {
+    "path": "backend/data/skill_relations/reference_pairs_v4.csv",
+    "sha256": "81866e56d19352378f1aa1a871d0c9f17d08d36e0f6f57389061bf20cd427e05"
+   }
+  ]
+ }
+]
