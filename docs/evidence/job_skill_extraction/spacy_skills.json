@@ -1,0 +1,449 @@
+{
+ "S1 IR design (463-skill taxonomy)": {
+  "live_aff472a6bd39f9ae": [
+   "operating systems",
+   "Linux",
+   "networking"
+  ],
+  "live_fa6a8ad82db6e431": [
+   "system integration",
+   "networking",
+   "Python",
+   "C++",
+   "Computer Science",
+   "Linux",
+   "CI/CD"
+  ],
+  "live_7fdb8e26f07560f7": [
+   "Android",
+   "CI/CD",
+   "iOS",
+   "Systems Thinking"
+  ],
+  "live_bcc0de4d2d69a8e6": [
+   "SAP"
+  ],
+  "live_9ac6e5a328f45fb8": [
+   "Python",
+   "SQL",
+   "data models"
+  ],
+  "live_80d6f269f676b931": [
+   "data warehouse",
+   "ETL",
+   "Data Modelling",
+   "SQL",
+   "SSIS",
+   "Azure",
+   "Database",
+   "DevOps",
+   "C++",
+   "C#",
+   "Python",
+   "data mining",
+   "SQL Server"
+  ],
+  "live_319eb8479a356b7d": [
+   "Information Architecture"
+  ],
+  "live_ad730103a35257d4": [
+   "SQL",
+   "Python",
+   "data warehouse",
+   "ETL",
+   "Computer Science",
+   "Java",
+   "Azure",
+   "DevOps",
+   "cloud technologies"
+  ],
+  "live_a3f1ad0df4156bd7": [
+   "SAP"
+  ],
+  "live_ec0c6a5aa725ffa0": [
+   "Computer Science"
+  ],
+  "live_5d1161b174527a2d": [
+   "Cisco",
+   "networking",
+   "Python",
+   "Computer Science"
+  ],
+  "live_64c8c310a608d5e7": [
+   "Java",
+   "MySQL",
+   "microservices",
+   "Computer Science",
+   "RESTful API",
+   "version control",
+   "agile development",
+   "AWS",
+   "Azure"
+  ],
+  "live_e62712dd30350df3": [
+   "information architecture"
+  ],
+  "live_e40ae1cf3c0026f3": [
+   "REST",
+   "Android",
+   "iOS",
+   "Selenium",
+   "Python",
+   "PHP",
+   "JavaScript",
+   "Computer Science",
+   "SQL",
+   "GIT"
+  ],
+  "live_eca71c72e724fbb4": [
+   "computer science",
+   "operating systems",
+   "cloud security",
+   "blockchain security"
+  ],
+  "live_4aef39a395a09b3c": [],
+  "live_2ec2feca24d1a38b": [
+   "system integration"
+  ],
+  "live_67e5d581c8e82b12": [
+   "knowledge base"
+  ],
+  "live_d28433cc84f332be": [
+   "Computer Science",
+   "operating systems",
+   "networking",
+   "DNS"
+  ],
+  "live_ca39fceedf53e6f6": [
+   "NOC",
+   "Cisco",
+   "wireshark",
+   "Azure",
+   "networking"
+  ],
+  "live_a92c87273c2955a9": [],
+  "live_f94d7e50bcca80e3": [
+   "Linux",
+   "networking"
+  ],
+  "live_143b3f50af14b124": [
+   "Computer Science"
+  ],
+  "live_2ea7c3f21a77d6d9": [
+   "Machine Learning",
+   "unstructured data",
+   "Computer Science",
+   "algorithms",
+   "deep learning",
+   "Python",
+   "SQL",
+   "Azure",
+   "ETL"
+  ],
+  "live_050af1c8591bfa5e": [
+   "C#",
+   ".NET",
+   "database",
+   "SQL",
+   "SQL Server",
+   "PostgreSQL",
+   "Docker",
+   "AWS",
+   "Computer Science",
+   "microservices",
+   "Networking",
+   "RESTful API",
+   "version control",
+   "Azure",
+   "CI/CD",
+   "Jenkins"
+  ],
+  "live_b9cbf9ab9987a49a": [],
+  "live_471d55a57402522b": [
+   "microservices"
+  ],
+  "live_2dfd1835617b539e": [
+   "Computer Science"
+  ],
+  "live_a5d058f47165ecb8": [
+   "Computer Science",
+   "Python",
+   "Java",
+   "C++"
+  ],
+  "live_94383f47e31bbf09": [
+   "SaaS",
+   "React",
+   "ETL",
+   "TypeScript",
+   "PostgreSQL",
+   "AWS",
+   "Computer Science",
+   "SQL",
+   "database",
+   "REST",
+   "Python"
+  ]
+ },
+ "S2 public dictionary (ESCO digital + O*NET software)": {
+  "live_aff472a6bd39f9ae": [
+   "Information Technology",
+   "SPE",
+   "operating systems",
+   "Linux"
+  ],
+  "live_fa6a8ad82db6e431": [
+   "Robotics",
+   "sensors",
+   "system integration",
+   "encoders",
+   "collect data",
+   "Python",
+   "C++",
+   "Computer Engineering",
+   "Computer Science",
+   "Linux",
+   "Ubuntu",
+   "electronics"
+  ],
+  "live_7fdb8e26f07560f7": [
+   "Android",
+   "Kotlin",
+   "iOS",
+   "Systems Thinking"
+  ],
+  "live_bcc0de4d2d69a8e6": [
+   "SAP",
+   "Monitor system performance",
+   "IT security",
+   "disaster recovery",
+   "IT"
+  ],
+  "live_9ac6e5a328f45fb8": [
+   "Python",
+   "SQL",
+   "data processing",
+   "Data Engineering",
+   "digital media",
+   "data models",
+   "BI"
+  ],
+  "live_80d6f269f676b931": [
+   "data warehouse",
+   "ETL",
+   "Data Modelling",
+   "Data Engineering",
+   "Business Intelligence",
+   "SQL",
+   "SSIS",
+   "Database",
+   "DevOps",
+   "ServiceNow",
+   "Tableau",
+   "C++",
+   "C#",
+   "Python",
+   "data mining",
+   "SQL Server",
+   "Agile"
+  ],
+  "live_319eb8479a356b7d": [
+   "UX",
+   "Analyze",
+   "Information Architecture",
+   "component libraries",
+   "Agile"
+  ],
+  "live_ad730103a35257d4": [
+   "Data Engineering",
+   "SQL",
+   "Python",
+   "Snowflake",
+   "Google",
+   "BigQuery",
+   "Agile",
+   "data warehouse",
+   "ETL",
+   "Computer Science",
+   "Information Technology",
+   "Java",
+   "programming languages",
+   "DevOps",
+   "Microsoft Excel",
+   "BI",
+   "cloud technologies"
+  ],
+  "live_a3f1ad0df4156bd7": [
+   "SAP",
+   "SuccessFactors"
+  ],
+  "live_ec0c6a5aa725ffa0": [
+   "it",
+   "Agile",
+   "Computer Science"
+  ],
+  "live_5d1161b174527a2d": [
+   "Cisco",
+   "reduce",
+   "Python",
+   "Computer Science",
+   "IT"
+  ],
+  "live_64c8c310a608d5e7": [
+   "Java",
+   "MySQL",
+   "microservices architecture",
+   "Computer Science",
+   "Information Technology",
+   "RESTful API",
+   "control systems",
+   "Git",
+   "agile development"
+  ],
+  "live_e62712dd30350df3": [
+   "UX",
+   "information architecture",
+   "Human-Computer Interaction",
+   "Figma",
+   "visual design",
+   "it"
+  ],
+  "live_e40ae1cf3c0026f3": [
+   "Analyze",
+   "Android",
+   "iOS",
+   "Selenium",
+   "Python",
+   "PHP",
+   "JavaScript",
+   "Computer Science",
+   "SQL",
+   "source",
+   "GIT",
+   "Agile"
+  ],
+  "live_eca71c72e724fbb4": [
+   "cybersecurity",
+   "IoT",
+   "source",
+   "computer science",
+   "operating systems",
+   "go",
+   "cloud security",
+   "blockchain security"
+  ],
+  "live_4aef39a395a09b3c": [
+   "Online assessment"
+  ],
+  "live_2ec2feca24d1a38b": [
+   "system integration"
+  ],
+  "live_67e5d581c8e82b12": [
+   "knowledge base"
+  ],
+  "live_d28433cc84f332be": [
+   "IT",
+   "email",
+   "OneDrive",
+   "IT security",
+   "Computer Science",
+   "operating systems",
+   "DNS"
+  ],
+  "live_ca39fceedf53e6f6": [
+   "NOC",
+   "SSL",
+   "it",
+   "Cisco",
+   "wireshark",
+   "McAfee",
+   "sensors"
+  ],
+  "live_a92c87273c2955a9": [
+   "cybersecurity"
+  ],
+  "live_f94d7e50bcca80e3": [
+   "IT",
+   "Linux",
+   "VMware",
+   "whatsapp"
+  ],
+  "live_143b3f50af14b124": [
+   "agile",
+   "Computer Science"
+  ],
+  "live_2ea7c3f21a77d6d9": [
+   "Information Technology",
+   "Machine Learning",
+   "IoT",
+   "unstructured data",
+   "Analyze",
+   "Computer Science",
+   "Data Science",
+   "algorithms",
+   "Python",
+   "SQL",
+   "LangChain",
+   "data engineering",
+   "ETL",
+   "source"
+  ],
+  "live_050af1c8591bfa5e": [
+   "C#",
+   ".NET",
+   "Node.js",
+   "database",
+   "SQL",
+   "SQL Server",
+   "PostgreSQL",
+   "Docker",
+   "resolve technical issues",
+   "Computer Science",
+   "RESTful API",
+   "control systems",
+   "Git",
+   "Google",
+   "Jenkins",
+   "GitLab",
+   "microservices architecture",
+   "Agile"
+  ],
+  "live_b9cbf9ab9987a49a": [
+   "IT",
+   "resolve technical issues"
+  ],
+  "live_471d55a57402522b": [
+   "Analyze",
+   "agile",
+   "source"
+  ],
+  "live_2dfd1835617b539e": [
+   "automation technologies",
+   "IT",
+   "Computer Science",
+   "agile"
+  ],
+  "live_a5d058f47165ecb8": [
+   "Computer Science",
+   "programming languages",
+   "Python",
+   "Java",
+   "C++",
+   "software development methodologies"
+  ],
+  "live_94383f47e31bbf09": [
+   "SaaS",
+   "React",
+   "ETL",
+   "GraphQL",
+   "TypeScript",
+   "PostgreSQL",
+   "MongoDB",
+   "Computer Science",
+   "Node.js",
+   "SQL",
+   "database",
+   "Python"
+  ]
+ }
+}

@@ -288,5 +288,181 @@
     "sha256": "81866e56d19352378f1aa1a871d0c9f17d08d36e0f6f57389061bf20cd427e05"
    }
   ]
+ },
+ {
+  "_id": "ce36f79b3fdc4606b5462e65aa2dc7b3",
+  "name": "E1 spaCy baseline S1",
+  "objective": 1,
+  "at": "2026-10-15T04:38:08.982000+00:00",
+  "git": {
+   "commit": "70c0562",
+   "dirty": false
+  },
+  "setup": {
+   "relation_model": "relation_model_esco_onet_v1_skillmap_v2_soft_skillmap_v3_soft_nli-deberta-v3-base_rw3x20_noextend",
+   "relation_seeds": 3,
+   "relation_cutoff": 0.6,
+   "embedder": "all-MiniLM-L6-v2",
+   "extractor": "openai/gpt-oss-120b",
+   "python": "3.13.7"
+  },
+  "method": "spaCy PhraseMatcher (LOWER, blank English tokeniser, longest match, ad's own words) vs the same answer key and grouping as E1b; micro P/R/F1, 95% bootstrap over ads; LLM vs baseline paired",
+  "dataset": {
+   "ads": 30,
+   "dictionary": "S1 IR design (463-skill taxonomy)",
+   "terms": 1704,
+   "found": 127
+  },
+  "metrics": {
+   "precision": {
+    "value": 0.638,
+    "ci95": [
+     0.542,
+     0.71
+    ]
+   },
+   "recall": {
+    "value": 0.155,
+    "ci95": [
+     0.102,
+     0.211
+    ]
+   },
+   "f1": {
+    "value": 0.25,
+    "ci95": [
+     0.172,
+     0.324
+    ]
+   },
+   "llm_minus_baseline": {
+    "precision": {
+     "diff": -0.028,
+     "ci95": [
+      -0.142,
+      0.095
+     ]
+    },
+    "recall": {
+     "diff": 0.651,
+     "ci95": [
+      0.59,
+      0.714
+     ]
+    },
+    "f1": {
+     "diff": 0.445,
+     "ci95": [
+      0.369,
+      0.521
+     ]
+    }
+   }
+  },
+  "verdict": "LLM F1 higher by +0.445 (CI +0.369 to +0.521): change justified",
+  "files": [
+   {
+    "path": "docs/evidence/job_skill_extraction/ads.json",
+    "sha256": "c5536bd65566316db161fa5ad12753288136e6ad620e68bd9662ec6edb5f8502"
+   },
+   {
+    "path": "docs/evidence/job_skill_extraction/answer_key.json",
+    "sha256": "f55e6dcd1f9d5e45b01605b07c4e60f539b656adc302b28c9df2620b67bdb021"
+   },
+   {
+    "path": "backend/data/skill_taxonomy.json",
+    "sha256": "0473377cf1824f15fadd960d405f7a2c8f749e6fd6c7e96a79804c0a912f0d60"
+   }
+  ]
+ },
+ {
+  "_id": "99a57c3738f845a48fb76eccdd8d424c",
+  "name": "E1 spaCy baseline S2",
+  "objective": 1,
+  "at": "2026-10-15T04:38:09.074000+00:00",
+  "git": {
+   "commit": "70c0562",
+   "dirty": false
+  },
+  "setup": {
+   "relation_model": "relation_model_esco_onet_v1_skillmap_v2_soft_skillmap_v3_soft_nli-deberta-v3-base_rw3x20_noextend",
+   "relation_seeds": 3,
+   "relation_cutoff": 0.6,
+   "embedder": "all-MiniLM-L6-v2",
+   "extractor": "openai/gpt-oss-120b",
+   "python": "3.13.7"
+  },
+  "method": "spaCy PhraseMatcher (LOWER, blank English tokeniser, longest match, ad's own words) vs the same answer key and grouping as E1b; micro P/R/F1, 95% bootstrap over ads; LLM vs baseline paired",
+  "dataset": {
+   "ads": 30,
+   "dictionary": "S2 public dictionary (ESCO digital + O*NET software)",
+   "terms": 16046,
+   "found": 199
+  },
+  "metrics": {
+   "precision": {
+    "value": 0.487,
+    "ci95": [
+     0.389,
+     0.567
+    ]
+   },
+   "recall": {
+    "value": 0.186,
+    "ci95": [
+     0.127,
+     0.248
+    ]
+   },
+   "f1": {
+    "value": 0.269,
+    "ci95": [
+     0.192,
+     0.343
+    ]
+   },
+   "llm_minus_baseline": {
+    "precision": {
+     "diff": 0.123,
+     "ci95": [
+      0.02,
+      0.235
+     ]
+    },
+    "recall": {
+     "diff": 0.621,
+     "ci95": [
+      0.558,
+      0.686
+     ]
+    },
+    "f1": {
+     "diff": 0.426,
+     "ci95": [
+      0.345,
+      0.504
+     ]
+    }
+   }
+  },
+  "verdict": "LLM F1 higher by +0.426 (CI +0.345 to +0.504): change justified",
+  "files": [
+   {
+    "path": "docs/evidence/job_skill_extraction/ads.json",
+    "sha256": "c5536bd65566316db161fa5ad12753288136e6ad620e68bd9662ec6edb5f8502"
+   },
+   {
+    "path": "docs/evidence/job_skill_extraction/answer_key.json",
+    "sha256": "f55e6dcd1f9d5e45b01605b07c4e60f539b656adc302b28c9df2620b67bdb021"
+   },
+   {
+    "path": "backend/data/external/esco/digitalSkillsCollection_en.csv",
+    "sha256": "9f2ee9179f0720826cbfc65627bd3642926ba4dfb3bf29250f22cb232c225b1e"
+   },
+   {
+    "path": "backend/data/external/onet_software_skills.csv",
+    "sha256": "6aabb96b464288db849580e6510530efff3f80e25dde2bb23f1fc36bb526b016"
+   }
+  ]
  }
 ]

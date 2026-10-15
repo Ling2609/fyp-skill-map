@@ -1,0 +1,19 @@
+spaCy dictionary baseline vs the LLM extractor: same 30 ads, same answer key (522 skills) and scoring as E1b
+
+                                                                   precision                recall                    F1
+LLM extractor (gpt-oss-120b, as in the app)               0.610 (0.529-0.688)   0.807 (0.747-0.864)   0.695 (0.630-0.751)
+S1 IR design (463-skill taxonomy)                         0.638 (0.542-0.710)   0.155 (0.102-0.211)   0.250 (0.172-0.324)
+S2 public dictionary (ESCO digital + O*NET software)      0.487 (0.389-0.567)   0.186 (0.127-0.248)   0.269 (0.192-0.343)
+(95% CI, bootstrap over ads)
+
+LLM minus S1 (1,704 dictionary terms; 127 skills found), paired 95% CI over ads:
+  precision -0.028  (CI -0.142 to +0.095)
+  recall    +0.651  (CI +0.590 to +0.714)
+  f1        +0.445  (CI +0.369 to +0.521)
+  -> LLM F1 higher by +0.445 (CI +0.369 to +0.521): change justified
+
+LLM minus S2 (16,046 dictionary terms; 199 skills found), paired 95% CI over ads:
+  precision +0.123  (CI +0.020 to +0.235)
+  recall    +0.621  (CI +0.558 to +0.686)
+  f1        +0.426  (CI +0.345 to +0.504)
+  -> LLM F1 higher by +0.426 (CI +0.345 to +0.504): change justified

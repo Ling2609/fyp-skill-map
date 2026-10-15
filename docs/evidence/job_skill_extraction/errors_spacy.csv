@@ -1,0 +1,1015 @@
+﻿dictionary,job_ref,title,error,skill
+S1,live_aff472a6bd39f9ae,VMWare Admin (Windows),extra (not in answer key),operating systems
+S1,live_aff472a6bd39f9ae,VMWare Admin (Windows),missed (in answer key),Windows Server
+S1,live_aff472a6bd39f9ae,VMWare Admin (Windows),missed (in answer key),Windows OS
+S1,live_aff472a6bd39f9ae,VMWare Admin (Windows),missed (in answer key),Infrastructure service management
+S1,live_aff472a6bd39f9ae,VMWare Admin (Windows),missed (in answer key),End-point security management
+S1,live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",extra (not in answer key),system integration
+S1,live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",extra (not in answer key),Computer Science
+S1,live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",missed (in answer key),ROS1
+S1,live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",missed (in answer key),ROS2
+S1,live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",missed (in answer key),SLAM
+S1,live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",missed (in answer key),Localization
+S1,live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",missed (in answer key),Navigation
+S1,live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",missed (in answer key),Path planning
+S1,live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",missed (in answer key),Autonomous control
+S1,live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",missed (in answer key),Sensor fusion
+S1,live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",missed (in answer key),LiDAR
+S1,live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",missed (in answer key),GNSS
+S1,live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",missed (in answer key),IMUs
+S1,live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",missed (in answer key),Ubuntu
+S1,live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",missed (in answer key),Vision-language-action models
+S1,live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",missed (in answer key),Vision-language models
+S1,live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",missed (in answer key),Embodied AI
+S1,live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",missed (in answer key),Multimodal perception
+S1,live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",missed (in answer key),Imitation learning
+S1,live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",missed (in answer key),Object detection
+S1,live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",missed (in answer key),Object tracking
+S1,live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",missed (in answer key),Containers
+S1,live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",missed (in answer key),Profiling
+S1,live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",missed (in answer key),Time synchronization
+S1,live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",missed (in answer key),Hardware integration
+S1,live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",missed (in answer key),Electronics debugging
+S1,live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",missed (in answer key),AI-assisted coding tools
+S1,live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",missed (in answer key),Perception
+S1,live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",missed (in answer key),Cameras
+S1,live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",missed (in answer key),Encoders
+S1,live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",missed (in answer key),Learned planning
+S1,live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",missed (in answer key),Segmentation
+S1,live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",missed (in answer key),Prediction
+S1,live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",missed (in answer key),Calibration
+S1,live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",missed (in answer key),Fleet deployment
+S1,live_7fdb8e26f07560f7,Senior Android Platform Engineer,extra (not in answer key),iOS
+S1,live_7fdb8e26f07560f7,Senior Android Platform Engineer,extra (not in answer key),Systems Thinking
+S1,live_7fdb8e26f07560f7,Senior Android Platform Engineer,missed (in answer key),Kotlin
+S1,live_7fdb8e26f07560f7,Senior Android Platform Engineer,missed (in answer key),Jetpack Compose
+S1,live_7fdb8e26f07560f7,Senior Android Platform Engineer,missed (in answer key),Android SDK
+S1,live_7fdb8e26f07560f7,Senior Android Platform Engineer,missed (in answer key),Android Studio
+S1,live_7fdb8e26f07560f7,Senior Android Platform Engineer,missed (in answer key),Modularisation
+S1,live_7fdb8e26f07560f7,Senior Android Platform Engineer,missed (in answer key),Dependency management
+S1,live_7fdb8e26f07560f7,Senior Android Platform Engineer,missed (in answer key),Application security
+S1,live_7fdb8e26f07560f7,Senior Android Platform Engineer,missed (in answer key),Performance optimisation
+S1,live_7fdb8e26f07560f7,Senior Android Platform Engineer,missed (in answer key),Observability
+S1,live_7fdb8e26f07560f7,Senior Android Platform Engineer,missed (in answer key),AI integration
+S1,live_7fdb8e26f07560f7,Senior Android Platform Engineer,missed (in answer key),XML
+S1,live_bcc0de4d2d69a8e6,SAP Basis Consultant,extra (not in answer key),SAP
+S1,live_bcc0de4d2d69a8e6,SAP Basis Consultant,missed (in answer key),SAP Basis
+S1,live_bcc0de4d2d69a8e6,SAP Basis Consultant,missed (in answer key),SAP ERP
+S1,live_bcc0de4d2d69a8e6,SAP Basis Consultant,missed (in answer key),SAP S/4HANA
+S1,live_bcc0de4d2d69a8e6,SAP Basis Consultant,missed (in answer key),SAP BW
+S1,live_bcc0de4d2d69a8e6,SAP Basis Consultant,missed (in answer key),SAP authorizations
+S1,live_bcc0de4d2d69a8e6,SAP Basis Consultant,missed (in answer key),Disaster recovery
+S1,live_bcc0de4d2d69a8e6,SAP Basis Consultant,missed (in answer key),System integration
+S1,live_bcc0de4d2d69a8e6,SAP Basis Consultant,missed (in answer key),Backup strategies
+S1,live_9ac6e5a328f45fb8,Data Engineer (Regional Role),extra (not in answer key),data models
+S1,live_9ac6e5a328f45fb8,Data Engineer (Regional Role),missed (in answer key),Data pipelines
+S1,live_9ac6e5a328f45fb8,Data Engineer (Regional Role),missed (in answer key),Data warehousing
+S1,live_9ac6e5a328f45fb8,Data Engineer (Regional Role),missed (in answer key),Data modeling
+S1,live_9ac6e5a328f45fb8,Data Engineer (Regional Role),missed (in answer key),Data integration
+S1,live_9ac6e5a328f45fb8,Data Engineer (Regional Role),missed (in answer key),Data cleaning
+S1,live_9ac6e5a328f45fb8,Data Engineer (Regional Role),missed (in answer key),Query optimisation
+S1,live_9ac6e5a328f45fb8,Data Engineer (Regional Role),missed (in answer key),Master data management
+S1,live_9ac6e5a328f45fb8,Data Engineer (Regional Role),missed (in answer key),Data migration
+S1,live_9ac6e5a328f45fb8,Data Engineer (Regional Role),missed (in answer key),Data governance
+S1,live_9ac6e5a328f45fb8,Data Engineer (Regional Role),missed (in answer key),ERP systems
+S1,live_9ac6e5a328f45fb8,Data Engineer (Regional Role),missed (in answer key),CRM systems
+S1,live_9ac6e5a328f45fb8,Data Engineer (Regional Role),missed (in answer key),AI
+S1,live_9ac6e5a328f45fb8,Data Engineer (Regional Role),missed (in answer key),Data security
+S1,live_9ac6e5a328f45fb8,Data Engineer (Regional Role),missed (in answer key),Cloud environments
+S1,live_9ac6e5a328f45fb8,Data Engineer (Regional Role),missed (in answer key),On-premise environments
+S1,live_80d6f269f676b931,Data Engineer,extra (not in answer key),data warehouse
+S1,live_80d6f269f676b931,Data Engineer,extra (not in answer key),Azure
+S1,live_80d6f269f676b931,Data Engineer,extra (not in answer key),Database
+S1,live_80d6f269f676b931,Data Engineer,extra (not in answer key),DevOps
+S1,live_80d6f269f676b931,Data Engineer,missed (in answer key),Data Warehousing
+S1,live_80d6f269f676b931,Data Engineer,missed (in answer key),Data integration
+S1,live_80d6f269f676b931,Data Engineer,missed (in answer key),Performance tuning
+S1,live_80d6f269f676b931,Data Engineer,missed (in answer key),Data governance
+S1,live_80d6f269f676b931,Data Engineer,missed (in answer key),Data security
+S1,live_80d6f269f676b931,Data Engineer,missed (in answer key),Access control
+S1,live_80d6f269f676b931,Data Engineer,missed (in answer key),Data lineage
+S1,live_80d6f269f676b931,Data Engineer,missed (in answer key),Dashboard development
+S1,live_80d6f269f676b931,Data Engineer,missed (in answer key),Data visualisation
+S1,live_80d6f269f676b931,Data Engineer,missed (in answer key),Data quality checks
+S1,live_80d6f269f676b931,Data Engineer,missed (in answer key),Azure Data Factory
+S1,live_80d6f269f676b931,Data Engineer,missed (in answer key),Azure DevOps
+S1,live_80d6f269f676b931,Data Engineer,missed (in answer key),Power BI
+S1,live_80d6f269f676b931,Data Engineer,missed (in answer key),ServiceNow
+S1,live_80d6f269f676b931,Data Engineer,missed (in answer key),Qlik
+S1,live_80d6f269f676b931,Data Engineer,missed (in answer key),Tableau
+S1,live_80d6f269f676b931,Data Engineer,missed (in answer key),C
+S1,live_80d6f269f676b931,Data Engineer,missed (in answer key),R
+S1,live_80d6f269f676b931,Data Engineer,missed (in answer key),Data segmentation
+S1,live_80d6f269f676b931,Data Engineer,missed (in answer key),Business intelligence
+S1,live_80d6f269f676b931,Data Engineer,missed (in answer key),Azure Data Platform
+S1,live_80d6f269f676b931,Data Engineer,missed (in answer key),Agile
+S1,live_80d6f269f676b931,Data Engineer,missed (in answer key),Scrum
+S1,live_80d6f269f676b931,Data Engineer,missed (in answer key),Ralph Kimball methodologies
+S1,live_319eb8479a356b7d,UI/UX Analyst,missed (in answer key),Interaction design
+S1,live_319eb8479a356b7d,UI/UX Analyst,missed (in answer key),Wireframing
+S1,live_319eb8479a356b7d,UI/UX Analyst,missed (in answer key),Prototyping
+S1,live_319eb8479a356b7d,UI/UX Analyst,missed (in answer key),UI design
+S1,live_319eb8479a356b7d,UI/UX Analyst,missed (in answer key),Responsive design
+S1,live_319eb8479a356b7d,UI/UX Analyst,missed (in answer key),Design systems
+S1,live_319eb8479a356b7d,UI/UX Analyst,missed (in answer key),Component libraries
+S1,live_319eb8479a356b7d,UI/UX Analyst,missed (in answer key),Style guides
+S1,live_319eb8479a356b7d,UI/UX Analyst,missed (in answer key),Usability testing
+S1,live_319eb8479a356b7d,UI/UX Analyst,missed (in answer key),Agile
+S1,live_319eb8479a356b7d,UI/UX Analyst,missed (in answer key),User acceptance testing
+S1,live_319eb8479a356b7d,UI/UX Analyst,missed (in answer key),User Research
+S1,live_ad730103a35257d4,Data Engineering & Integration Operations Manager,extra (not in answer key),data warehouse
+S1,live_ad730103a35257d4,Data Engineering & Integration Operations Manager,extra (not in answer key),Computer Science
+S1,live_ad730103a35257d4,Data Engineering & Integration Operations Manager,extra (not in answer key),Azure
+S1,live_ad730103a35257d4,Data Engineering & Integration Operations Manager,extra (not in answer key),DevOps
+S1,live_ad730103a35257d4,Data Engineering & Integration Operations Manager,missed (in answer key),Data integration
+S1,live_ad730103a35257d4,Data Engineering & Integration Operations Manager,missed (in answer key),Snowflake
+S1,live_ad730103a35257d4,Data Engineering & Integration Operations Manager,missed (in answer key),Google BigQuery
+S1,live_ad730103a35257d4,Data Engineering & Integration Operations Manager,missed (in answer key),Databricks
+S1,live_ad730103a35257d4,Data Engineering & Integration Operations Manager,missed (in answer key),Agile
+S1,live_ad730103a35257d4,Data Engineering & Integration Operations Manager,missed (in answer key),Data warehousing
+S1,live_ad730103a35257d4,Data Engineering & Integration Operations Manager,missed (in answer key),JSON
+S1,live_ad730103a35257d4,Data Engineering & Integration Operations Manager,missed (in answer key),XML
+S1,live_ad730103a35257d4,Data Engineering & Integration Operations Manager,missed (in answer key),Azure DevOps
+S1,live_ad730103a35257d4,Data Engineering & Integration Operations Manager,missed (in answer key),Splunk
+S1,live_ad730103a35257d4,Data Engineering & Integration Operations Manager,missed (in answer key),Salesforce
+S1,live_ad730103a35257d4,Data Engineering & Integration Operations Manager,missed (in answer key),Microsoft Excel
+S1,live_ad730103a35257d4,Data Engineering & Integration Operations Manager,missed (in answer key),Power BI
+S1,live_ad730103a35257d4,Data Engineering & Integration Operations Manager,missed (in answer key),Operational monitoring
+S1,live_ad730103a35257d4,Data Engineering & Integration Operations Manager,missed (in answer key),Scripting
+S1,live_ad730103a35257d4,Data Engineering & Integration Operations Manager,missed (in answer key),APIs
+S1,live_ad730103a35257d4,Data Engineering & Integration Operations Manager,missed (in answer key),ELT
+S1,live_a3f1ad0df4156bd7,SAP Implementation Consultant/Lead (KUL),missed (in answer key),SAP MM
+S1,live_a3f1ad0df4156bd7,SAP Implementation Consultant/Lead (KUL),missed (in answer key),SAP FICO
+S1,live_a3f1ad0df4156bd7,SAP Implementation Consultant/Lead (KUL),missed (in answer key),SAP SD
+S1,live_a3f1ad0df4156bd7,SAP Implementation Consultant/Lead (KUL),missed (in answer key),SAP SuccessFactors
+S1,live_a3f1ad0df4156bd7,SAP Implementation Consultant/Lead (KUL),missed (in answer key),SAP PP
+S1,live_a3f1ad0df4156bd7,SAP Implementation Consultant/Lead (KUL),missed (in answer key),SAP QM
+S1,live_a3f1ad0df4156bd7,SAP Implementation Consultant/Lead (KUL),missed (in answer key),SAP Basis
+S1,live_a3f1ad0df4156bd7,SAP Implementation Consultant/Lead (KUL),missed (in answer key),SAP EWM
+S1,live_a3f1ad0df4156bd7,SAP Implementation Consultant/Lead (KUL),missed (in answer key),SAP WM
+S1,live_a3f1ad0df4156bd7,SAP Implementation Consultant/Lead (KUL),missed (in answer key),SAP Ariba
+S1,live_a3f1ad0df4156bd7,SAP Implementation Consultant/Lead (KUL),missed (in answer key),SAP PaPM
+S1,live_a3f1ad0df4156bd7,SAP Implementation Consultant/Lead (KUL),missed (in answer key),Data migration
+S1,live_a3f1ad0df4156bd7,SAP Implementation Consultant/Lead (KUL),missed (in answer key),Functional specifications
+S1,live_a3f1ad0df4156bd7,SAP Implementation Consultant/Lead (KUL),missed (in answer key),FRICEW
+S1,live_a3f1ad0df4156bd7,SAP Implementation Consultant/Lead (KUL),missed (in answer key),User acceptance testing
+S1,live_a3f1ad0df4156bd7,SAP Implementation Consultant/Lead (KUL),missed (in answer key),System cutover
+S1,live_a3f1ad0df4156bd7,SAP Implementation Consultant/Lead (KUL),missed (in answer key),SAP certification
+S1,live_ec0c6a5aa725ffa0,Senior Business Analyst,extra (not in answer key),Computer Science
+S1,live_ec0c6a5aa725ffa0,Senior Business Analyst,missed (in answer key),Business analysis
+S1,live_ec0c6a5aa725ffa0,Senior Business Analyst,missed (in answer key),Requirement Gathering
+S1,live_ec0c6a5aa725ffa0,Senior Business Analyst,missed (in answer key),Agile
+S1,live_ec0c6a5aa725ffa0,Senior Business Analyst,missed (in answer key),ERP implementation
+S1,live_ec0c6a5aa725ffa0,Senior Business Analyst,missed (in answer key),ERP finance modules
+S1,live_ec0c6a5aa725ffa0,Senior Business Analyst,missed (in answer key),Product Lifecycle
+S1,live_5d1161b174527a2d,"Technical Consulting Engineer, Networking (Japanese Speaker)",extra (not in answer key),Cisco
+S1,live_5d1161b174527a2d,"Technical Consulting Engineer, Networking (Japanese Speaker)",extra (not in answer key),networking
+S1,live_5d1161b174527a2d,"Technical Consulting Engineer, Networking (Japanese Speaker)",extra (not in answer key),Computer Science
+S1,live_5d1161b174527a2d,"Technical Consulting Engineer, Networking (Japanese Speaker)",missed (in answer key),Cisco networking
+S1,live_5d1161b174527a2d,"Technical Consulting Engineer, Networking (Japanese Speaker)",missed (in answer key),Enterprise networking
+S1,live_5d1161b174527a2d,"Technical Consulting Engineer, Networking (Japanese Speaker)",missed (in answer key),Routing and switching
+S1,live_5d1161b174527a2d,"Technical Consulting Engineer, Networking (Japanese Speaker)",missed (in answer key),SD-WAN
+S1,live_5d1161b174527a2d,"Technical Consulting Engineer, Networking (Japanese Speaker)",missed (in answer key),Cisco Nexus
+S1,live_5d1161b174527a2d,"Technical Consulting Engineer, Networking (Japanese Speaker)",missed (in answer key),Cisco ACI
+S1,live_5d1161b174527a2d,"Technical Consulting Engineer, Networking (Japanese Speaker)",missed (in answer key),Network design
+S1,live_5d1161b174527a2d,"Technical Consulting Engineer, Networking (Japanese Speaker)",missed (in answer key),Network automation
+S1,live_5d1161b174527a2d,"Technical Consulting Engineer, Networking (Japanese Speaker)",missed (in answer key),Scripting
+S1,live_5d1161b174527a2d,"Technical Consulting Engineer, Networking (Japanese Speaker)",missed (in answer key),APIs
+S1,live_5d1161b174527a2d,"Technical Consulting Engineer, Networking (Japanese Speaker)",missed (in answer key),NETCONF
+S1,live_5d1161b174527a2d,"Technical Consulting Engineer, Networking (Japanese Speaker)",missed (in answer key),RESTCONF
+S1,live_5d1161b174527a2d,"Technical Consulting Engineer, Networking (Japanese Speaker)",missed (in answer key),YANG
+S1,live_5d1161b174527a2d,"Technical Consulting Engineer, Networking (Japanese Speaker)",missed (in answer key),CCNA
+S1,live_5d1161b174527a2d,"Technical Consulting Engineer, Networking (Japanese Speaker)",missed (in answer key),CCNP Enterprise
+S1,live_5d1161b174527a2d,"Technical Consulting Engineer, Networking (Japanese Speaker)",missed (in answer key),CCIE Enterprise
+S1,live_5d1161b174527a2d,"Technical Consulting Engineer, Networking (Japanese Speaker)",missed (in answer key),SDA
+S1,live_5d1161b174527a2d,"Technical Consulting Engineer, Networking (Japanese Speaker)",missed (in answer key),Catalyst Centre
+S1,live_5d1161b174527a2d,"Technical Consulting Engineer, Networking (Japanese Speaker)",missed (in answer key),ASR9K
+S1,live_5d1161b174527a2d,"Technical Consulting Engineer, Networking (Japanese Speaker)",missed (in answer key),NCS5K
+S1,live_64c8c310a608d5e7,Software Engineer - Core Banking,extra (not in answer key),Computer Science
+S1,live_64c8c310a608d5e7,Software Engineer - Core Banking,extra (not in answer key),version control
+S1,live_64c8c310a608d5e7,Software Engineer - Core Banking,missed (in answer key),SpringBoot
+S1,live_64c8c310a608d5e7,Software Engineer - Core Banking,missed (in answer key),Kafka
+S1,live_64c8c310a608d5e7,Software Engineer - Core Banking,missed (in answer key),Git
+S1,live_64c8c310a608d5e7,Software Engineer - Core Banking,missed (in answer key),Mambu
+S1,live_64c8c310a608d5e7,Software Engineer - Core Banking,missed (in answer key),GCP
+S1,live_64c8c310a608d5e7,Software Engineer - Core Banking,missed (in answer key),Splunk
+S1,live_64c8c310a608d5e7,Software Engineer - Core Banking,missed (in answer key),Cursor
+S1,live_64c8c310a608d5e7,Software Engineer - Core Banking,missed (in answer key),Claude Code
+S1,live_64c8c310a608d5e7,Software Engineer - Core Banking,missed (in answer key),Security
+S1,live_e62712dd30350df3,Senior UI/UX Design Expert,missed (in answer key),UX research
+S1,live_e62712dd30350df3,Senior UI/UX Design Expert,missed (in answer key),UI/UX design
+S1,live_e62712dd30350df3,Senior UI/UX Design Expert,missed (in answer key),Typography
+S1,live_e62712dd30350df3,Senior UI/UX Design Expert,missed (in answer key),Design systems
+S1,live_e62712dd30350df3,Senior UI/UX Design Expert,missed (in answer key),Claude Design
+S1,live_e62712dd30350df3,Senior UI/UX Design Expert,missed (in answer key),Design thinking
+S1,live_e62712dd30350df3,Senior UI/UX Design Expert,missed (in answer key),Visual hierarchy
+S1,live_e62712dd30350df3,Senior UI/UX Design Expert,missed (in answer key),AI-powered design tools
+S1,live_e62712dd30350df3,Senior UI/UX Design Expert,missed (in answer key),Figma AI
+S1,live_e62712dd30350df3,Senior UI/UX Design Expert,missed (in answer key),Product thinking
+S1,live_e40ae1cf3c0026f3,Senior Software QA Engineer (Automation),extra (not in answer key),Computer Science
+S1,live_e40ae1cf3c0026f3,Senior Software QA Engineer (Automation),missed (in answer key),Automation frameworks
+S1,live_e40ae1cf3c0026f3,Senior Software QA Engineer (Automation),missed (in answer key),UI Automation
+S1,live_e40ae1cf3c0026f3,Senior Software QA Engineer (Automation),missed (in answer key),Cucumber
+S1,live_e40ae1cf3c0026f3,Senior Software QA Engineer (Automation),missed (in answer key),Katalon Studio
+S1,live_e40ae1cf3c0026f3,Senior Software QA Engineer (Automation),missed (in answer key),Web security
+S1,live_e40ae1cf3c0026f3,Senior Software QA Engineer (Automation),missed (in answer key),Agile
+S1,live_e40ae1cf3c0026f3,Senior Software QA Engineer (Automation),missed (in answer key),Scrum
+S1,live_e40ae1cf3c0026f3,Senior Software QA Engineer (Automation),missed (in answer key),ClickUp
+S1,live_e40ae1cf3c0026f3,Senior Software QA Engineer (Automation),missed (in answer key),Jira
+S1,live_e40ae1cf3c0026f3,Senior Software QA Engineer (Automation),missed (in answer key),Mobile Automation
+S1,live_e40ae1cf3c0026f3,Senior Software QA Engineer (Automation),missed (in answer key),Shell
+S1,live_eca71c72e724fbb4,Cybersecurity Consultant - Penetration Testing,extra (not in answer key),computer science
+S1,live_eca71c72e724fbb4,Cybersecurity Consultant - Penetration Testing,missed (in answer key),Penetration testing
+S1,live_eca71c72e724fbb4,Cybersecurity Consultant - Penetration Testing,missed (in answer key),Vulnerability assessment
+S1,live_eca71c72e724fbb4,Cybersecurity Consultant - Penetration Testing,missed (in answer key),Web application penetration testing
+S1,live_eca71c72e724fbb4,Cybersecurity Consultant - Penetration Testing,missed (in answer key),Mobile application penetration testing
+S1,live_eca71c72e724fbb4,Cybersecurity Consultant - Penetration Testing,missed (in answer key),Network penetration testing
+S1,live_eca71c72e724fbb4,Cybersecurity Consultant - Penetration Testing,missed (in answer key),Source code review
+S1,live_eca71c72e724fbb4,Cybersecurity Consultant - Penetration Testing,missed (in answer key),Red teaming
+S1,live_eca71c72e724fbb4,Cybersecurity Consultant - Penetration Testing,missed (in answer key),Social engineering
+S1,live_eca71c72e724fbb4,Cybersecurity Consultant - Penetration Testing,missed (in answer key),Security controls
+S1,live_eca71c72e724fbb4,Cybersecurity Consultant - Penetration Testing,missed (in answer key),OSCP
+S1,live_eca71c72e724fbb4,Cybersecurity Consultant - Penetration Testing,missed (in answer key),CREST CRT
+S1,live_eca71c72e724fbb4,Cybersecurity Consultant - Penetration Testing,missed (in answer key),Threat hunting
+S1,live_eca71c72e724fbb4,Cybersecurity Consultant - Penetration Testing,missed (in answer key),IoT security
+S1,live_4aef39a395a09b3c,Back End Developer,missed (in answer key),Backend engineering
+S1,live_4aef39a395a09b3c,Back End Developer,missed (in answer key),API development
+S1,live_4aef39a395a09b3c,Back End Developer,missed (in answer key),Databases
+S1,live_4aef39a395a09b3c,Back End Developer,missed (in answer key),Authentication
+S1,live_4aef39a395a09b3c,Back End Developer,missed (in answer key),Authorization
+S1,live_4aef39a395a09b3c,Back End Developer,missed (in answer key),Message queues
+S1,live_4aef39a395a09b3c,Back End Developer,missed (in answer key),Background jobs
+S1,live_4aef39a395a09b3c,Back End Developer,missed (in answer key),Event-driven architecture
+S1,live_4aef39a395a09b3c,Back End Developer,missed (in answer key),System integration
+S1,live_4aef39a395a09b3c,Back End Developer,missed (in answer key),Observability
+S1,live_4aef39a395a09b3c,Back End Developer,missed (in answer key),Incident management
+S1,live_4aef39a395a09b3c,Back End Developer,missed (in answer key),Payment systems
+S1,live_4aef39a395a09b3c,Back End Developer,missed (in answer key),KYC
+S1,live_4aef39a395a09b3c,Back End Developer,missed (in answer key),Fraud detection
+S1,live_4aef39a395a09b3c,Back End Developer,missed (in answer key),Fintech
+S1,live_4aef39a395a09b3c,Back End Developer,missed (in answer key),Security
+S1,live_4aef39a395a09b3c,Back End Developer,missed (in answer key),Data integrity
+S1,live_4aef39a395a09b3c,Back End Developer,missed (in answer key),Risk management
+S1,live_4aef39a395a09b3c,Back End Developer,missed (in answer key),Banking
+S1,live_2ec2feca24d1a38b,"Senior Specialist, Software Quality Assurance",extra (not in answer key),system integration
+S1,live_2ec2feca24d1a38b,"Senior Specialist, Software Quality Assurance",missed (in answer key),QA processes
+S1,live_2ec2feca24d1a38b,"Senior Specialist, Software Quality Assurance",missed (in answer key),Test planning
+S1,live_2ec2feca24d1a38b,"Senior Specialist, Software Quality Assurance",missed (in answer key),Functional testing
+S1,live_2ec2feca24d1a38b,"Senior Specialist, Software Quality Assurance",missed (in answer key),Non-functional testing
+S1,live_2ec2feca24d1a38b,"Senior Specialist, Software Quality Assurance",missed (in answer key),Performance testing
+S1,live_2ec2feca24d1a38b,"Senior Specialist, Software Quality Assurance",missed (in answer key),Usability testing
+S1,live_2ec2feca24d1a38b,"Senior Specialist, Software Quality Assurance",missed (in answer key),Test case development
+S1,live_2ec2feca24d1a38b,"Senior Specialist, Software Quality Assurance",missed (in answer key),Regression testing
+S1,live_2ec2feca24d1a38b,"Senior Specialist, Software Quality Assurance",missed (in answer key),Sanity testing
+S1,live_2ec2feca24d1a38b,"Senior Specialist, Software Quality Assurance",missed (in answer key),Smoke testing
+S1,live_2ec2feca24d1a38b,"Senior Specialist, Software Quality Assurance",missed (in answer key),API testing
+S1,live_2ec2feca24d1a38b,"Senior Specialist, Software Quality Assurance",missed (in answer key),Compatibility testing
+S1,live_2ec2feca24d1a38b,"Senior Specialist, Software Quality Assurance",missed (in answer key),System integration testing
+S1,live_2ec2feca24d1a38b,"Senior Specialist, Software Quality Assurance",missed (in answer key),Mobile testing
+S1,live_2ec2feca24d1a38b,"Senior Specialist, Software Quality Assurance",missed (in answer key),Web testing
+S1,live_2ec2feca24d1a38b,"Senior Specialist, Software Quality Assurance",missed (in answer key),Test automation
+S1,live_2ec2feca24d1a38b,"Senior Specialist, Software Quality Assurance",missed (in answer key),Defect management
+S1,live_67e5d581c8e82b12,IT Operations Analyst,extra (not in answer key),knowledge base
+S1,live_67e5d581c8e82b12,IT Operations Analyst,missed (in answer key),Public cloud
+S1,live_67e5d581c8e82b12,IT Operations Analyst,missed (in answer key),SLA management
+S1,live_d28433cc84f332be,"Senior Executive, IT (Contract)",extra (not in answer key),Computer Science
+S1,live_d28433cc84f332be,"Senior Executive, IT (Contract)",extra (not in answer key),operating systems
+S1,live_d28433cc84f332be,"Senior Executive, IT (Contract)",extra (not in answer key),networking
+S1,live_d28433cc84f332be,"Senior Executive, IT (Contract)",missed (in answer key),Hardware troubleshooting
+S1,live_d28433cc84f332be,"Senior Executive, IT (Contract)",missed (in answer key),Network troubleshooting
+S1,live_d28433cc84f332be,"Senior Executive, IT (Contract)",missed (in answer key),Windows
+S1,live_d28433cc84f332be,"Senior Executive, IT (Contract)",missed (in answer key),Software deployment
+S1,live_d28433cc84f332be,"Senior Executive, IT (Contract)",missed (in answer key),IT asset management
+S1,live_d28433cc84f332be,"Senior Executive, IT (Contract)",missed (in answer key),Endpoint security
+S1,live_d28433cc84f332be,"Senior Executive, IT (Contract)",missed (in answer key),Antivirus
+S1,live_d28433cc84f332be,"Senior Executive, IT (Contract)",missed (in answer key),Microsoft 365
+S1,live_d28433cc84f332be,"Senior Executive, IT (Contract)",missed (in answer key),Outlook
+S1,live_d28433cc84f332be,"Senior Executive, IT (Contract)",missed (in answer key),Teams
+S1,live_d28433cc84f332be,"Senior Executive, IT (Contract)",missed (in answer key),OneDrive
+S1,live_d28433cc84f332be,"Senior Executive, IT (Contract)",missed (in answer key),SharePoint
+S1,live_d28433cc84f332be,"Senior Executive, IT (Contract)",missed (in answer key),LAN
+S1,live_d28433cc84f332be,"Senior Executive, IT (Contract)",missed (in answer key),Wi-Fi
+S1,live_d28433cc84f332be,"Senior Executive, IT (Contract)",missed (in answer key),VPN
+S1,live_d28433cc84f332be,"Senior Executive, IT (Contract)",missed (in answer key),Backup
+S1,live_d28433cc84f332be,"Senior Executive, IT (Contract)",missed (in answer key),IT procurement
+S1,live_d28433cc84f332be,"Senior Executive, IT (Contract)",missed (in answer key),Inventory management
+S1,live_d28433cc84f332be,"Senior Executive, IT (Contract)",missed (in answer key),TCP/IP
+S1,live_d28433cc84f332be,"Senior Executive, IT (Contract)",missed (in answer key),DHCP
+S1,live_d28433cc84f332be,"Senior Executive, IT (Contract)",missed (in answer key),macOS
+S1,live_d28433cc84f332be,"Senior Executive, IT (Contract)",missed (in answer key),Software troubleshooting
+S1,live_d28433cc84f332be,"Senior Executive, IT (Contract)",missed (in answer key),Office applications
+S1,live_d28433cc84f332be,"Senior Executive, IT (Contract)",missed (in answer key),Patching
+S1,live_ca39fceedf53e6f6,Network Engineer,extra (not in answer key),NOC
+S1,live_ca39fceedf53e6f6,Network Engineer,extra (not in answer key),Cisco
+S1,live_ca39fceedf53e6f6,Network Engineer,extra (not in answer key),Azure
+S1,live_ca39fceedf53e6f6,Network Engineer,extra (not in answer key),networking
+S1,live_ca39fceedf53e6f6,Network Engineer,missed (in answer key),Network operations
+S1,live_ca39fceedf53e6f6,Network Engineer,missed (in answer key),Network security
+S1,live_ca39fceedf53e6f6,Network Engineer,missed (in answer key),CheckPoint Firewalls
+S1,live_ca39fceedf53e6f6,Network Engineer,missed (in answer key),NAT
+S1,live_ca39fceedf53e6f6,Network Engineer,missed (in answer key),URL filtering
+S1,live_ca39fceedf53e6f6,Network Engineer,missed (in answer key),IPS
+S1,live_ca39fceedf53e6f6,Network Engineer,missed (in answer key),Zscaler Internet Access
+S1,live_ca39fceedf53e6f6,Network Engineer,missed (in answer key),Bluecoat ProxySG
+S1,live_ca39fceedf53e6f6,Network Engineer,missed (in answer key),SSL interception
+S1,live_ca39fceedf53e6f6,Network Engineer,missed (in answer key),F5 APM
+S1,live_ca39fceedf53e6f6,Network Engineer,missed (in answer key),F5 LTM
+S1,live_ca39fceedf53e6f6,Network Engineer,missed (in answer key),F5 GTM
+S1,live_ca39fceedf53e6f6,Network Engineer,missed (in answer key),Routing
+S1,live_ca39fceedf53e6f6,Network Engineer,missed (in answer key),BGP
+S1,live_ca39fceedf53e6f6,Network Engineer,missed (in answer key),EIGRP
+S1,live_ca39fceedf53e6f6,Network Engineer,missed (in answer key),OSPF
+S1,live_ca39fceedf53e6f6,Network Engineer,missed (in answer key),PIM
+S1,live_ca39fceedf53e6f6,Network Engineer,missed (in answer key),GRE
+S1,live_ca39fceedf53e6f6,Network Engineer,missed (in answer key),VRF
+S1,live_ca39fceedf53e6f6,Network Engineer,missed (in answer key),Switching
+S1,live_ca39fceedf53e6f6,Network Engineer,missed (in answer key),VPC
+S1,live_ca39fceedf53e6f6,Network Engineer,missed (in answer key),STP
+S1,live_ca39fceedf53e6f6,Network Engineer,missed (in answer key),Etherchannel
+S1,live_ca39fceedf53e6f6,Network Engineer,missed (in answer key),VPN
+S1,live_ca39fceedf53e6f6,Network Engineer,missed (in answer key),IPSec
+S1,live_ca39fceedf53e6f6,Network Engineer,missed (in answer key),Cisco Nexus
+S1,live_ca39fceedf53e6f6,Network Engineer,missed (in answer key),Wireless LAN
+S1,live_ca39fceedf53e6f6,Network Engineer,missed (in answer key),Cisco Wireless LAN
+S1,live_ca39fceedf53e6f6,Network Engineer,missed (in answer key),McAfee NSM
+S1,live_ca39fceedf53e6f6,Network Engineer,missed (in answer key),HP Network Automation
+S1,live_ca39fceedf53e6f6,Network Engineer,missed (in answer key),Cisco ISE
+S1,live_ca39fceedf53e6f6,Network Engineer,missed (in answer key),Cisco ACS
+S1,live_ca39fceedf53e6f6,Network Engineer,missed (in answer key),Azure networking
+S1,live_ca39fceedf53e6f6,Network Engineer,missed (in answer key),VNET peering
+S1,live_ca39fceedf53e6f6,Network Engineer,missed (in answer key),ExpressRoute
+S1,live_ca39fceedf53e6f6,Network Engineer,missed (in answer key),Application filtering
+S1,live_ca39fceedf53e6f6,Network Engineer,missed (in answer key),Aruba Wireless LAN
+S1,live_ca39fceedf53e6f6,Network Engineer,missed (in answer key),IPS sensors
+S1,live_ca39fceedf53e6f6,Network Engineer,missed (in answer key),NSG
+S1,live_a92c87273c2955a9,Cybersecurity SOC,missed (in answer key),CrowdStrike
+S1,live_a92c87273c2955a9,Cybersecurity SOC,missed (in answer key),Microsoft Defender
+S1,live_a92c87273c2955a9,Cybersecurity SOC,missed (in answer key),SIEM
+S1,live_f94d7e50bcca80e3,Network Support Engineer,extra (not in answer key),networking
+S1,live_f94d7e50bcca80e3,Network Support Engineer,missed (in answer key),Windows
+S1,live_f94d7e50bcca80e3,Network Support Engineer,missed (in answer key),Microsoft 365
+S1,live_f94d7e50bcca80e3,Network Support Engineer,missed (in answer key),IT asset management
+S1,live_f94d7e50bcca80e3,Network Support Engineer,missed (in answer key),LAN
+S1,live_f94d7e50bcca80e3,Network Support Engineer,missed (in answer key),WAN
+S1,live_f94d7e50bcca80e3,Network Support Engineer,missed (in answer key),WLAN
+S1,live_f94d7e50bcca80e3,Network Support Engineer,missed (in answer key),Routers
+S1,live_f94d7e50bcca80e3,Network Support Engineer,missed (in answer key),Firewall
+S1,live_f94d7e50bcca80e3,Network Support Engineer,missed (in answer key),Windows Server
+S1,live_f94d7e50bcca80e3,Network Support Engineer,missed (in answer key),Linux servers
+S1,live_f94d7e50bcca80e3,Network Support Engineer,missed (in answer key),System monitoring
+S1,live_f94d7e50bcca80e3,Network Support Engineer,missed (in answer key),VMware
+S1,live_f94d7e50bcca80e3,Network Support Engineer,missed (in answer key),Backup
+S1,live_f94d7e50bcca80e3,Network Support Engineer,missed (in answer key),Storage
+S1,live_f94d7e50bcca80e3,Network Support Engineer,missed (in answer key),VPN
+S1,live_f94d7e50bcca80e3,Network Support Engineer,missed (in answer key),Switches
+S1,live_143b3f50af14b124,Software Engineering & AI Internships,missed (in answer key),Software engineering
+S1,live_143b3f50af14b124,Software Engineering & AI Internships,missed (in answer key),AI
+S1,live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",extra (not in answer key),unstructured data
+S1,live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",extra (not in answer key),Computer Science
+S1,live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",extra (not in answer key),algorithms
+S1,live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",extra (not in answer key),Azure
+S1,live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",missed (in answer key),Generative AI
+S1,live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",missed (in answer key),AI agents
+S1,live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",missed (in answer key),Retrieval-Augmented Generation
+S1,live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",missed (in answer key),Vector databases
+S1,live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",missed (in answer key),Prompt engineering
+S1,live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",missed (in answer key),LLM evaluation
+S1,live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",missed (in answer key),Large Language Models
+S1,live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",missed (in answer key),Data preprocessing
+S1,live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",missed (in answer key),Feature engineering
+S1,live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",missed (in answer key),Data analysis
+S1,live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",missed (in answer key),Predictive modelling
+S1,live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",missed (in answer key),Recommendation systems
+S1,live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",missed (in answer key),Data visualization
+S1,live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",missed (in answer key),APIs
+S1,live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",missed (in answer key),JSON
+S1,live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",missed (in answer key),OpenAI
+S1,live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",missed (in answer key),Azure OpenAI
+S1,live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",missed (in answer key),LangChain
+S1,live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",missed (in answer key),Function calling
+S1,live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",missed (in answer key),Embeddings
+S1,live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",missed (in answer key),Data pipelines
+S1,live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",missed (in answer key),Knowledge management
+S1,live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",missed (in answer key),Responsible AI
+S1,live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",missed (in answer key),Artificial Intelligence
+S1,live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",missed (in answer key),Industry 4.0
+S1,live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",missed (in answer key),IoT
+S1,live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",missed (in answer key),Big Data
+S1,live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",missed (in answer key),Analytics
+S1,live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",missed (in answer key),Tool calling
+S1,live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",missed (in answer key),Vector search
+S1,live_050af1c8591bfa5e,Backend Developer,extra (not in answer key),database
+S1,live_050af1c8591bfa5e,Backend Developer,extra (not in answer key),Computer Science
+S1,live_050af1c8591bfa5e,Backend Developer,extra (not in answer key),Networking
+S1,live_050af1c8591bfa5e,Backend Developer,extra (not in answer key),version control
+S1,live_050af1c8591bfa5e,Backend Developer,missed (in answer key),Node.js
+S1,live_050af1c8591bfa5e,Backend Developer,missed (in answer key),Database design
+S1,live_050af1c8591bfa5e,Backend Developer,missed (in answer key),EC2
+S1,live_050af1c8591bfa5e,Backend Developer,missed (in answer key),AWS Lambda
+S1,live_050af1c8591bfa5e,Backend Developer,missed (in answer key),Amazon S3
+S1,live_050af1c8591bfa5e,Backend Developer,missed (in answer key),Amazon RDS
+S1,live_050af1c8591bfa5e,Backend Developer,missed (in answer key),API Gateway
+S1,live_050af1c8591bfa5e,Backend Developer,missed (in answer key),Amazon SQS
+S1,live_050af1c8591bfa5e,Backend Developer,missed (in answer key),Amazon SNS
+S1,live_050af1c8591bfa5e,Backend Developer,missed (in answer key),Amazon VPC
+S1,live_050af1c8591bfa5e,Backend Developer,missed (in answer key),CloudWatch
+S1,live_050af1c8591bfa5e,Backend Developer,missed (in answer key),Git
+S1,live_050af1c8591bfa5e,Backend Developer,missed (in answer key),Google Cloud
+S1,live_050af1c8591bfa5e,Backend Developer,missed (in answer key),GitLab CI
+S1,live_050af1c8591bfa5e,Backend Developer,missed (in answer key),AWS Code Pipeline
+S1,live_050af1c8591bfa5e,Backend Developer,missed (in answer key),Unit testing
+S1,live_050af1c8591bfa5e,Backend Developer,missed (in answer key),Integration testing
+S1,live_050af1c8591bfa5e,Backend Developer,missed (in answer key),Mocking frameworks
+S1,live_050af1c8591bfa5e,Backend Developer,missed (in answer key),Web security
+S1,live_050af1c8591bfa5e,Backend Developer,missed (in answer key),Agile
+S1,live_050af1c8591bfa5e,Backend Developer,missed (in answer key),Scrum
+S1,live_050af1c8591bfa5e,Backend Developer,missed (in answer key),Terraform
+S1,live_050af1c8591bfa5e,Backend Developer,missed (in answer key),Infrastructure as Code
+S1,live_050af1c8591bfa5e,Backend Developer,missed (in answer key),.NET Core
+S1,live_b9cbf9ab9987a49a,Service Desk Specialist I,missed (in answer key),Hardware troubleshooting
+S1,live_b9cbf9ab9987a49a,Service Desk Specialist I,missed (in answer key),Software troubleshooting
+S1,live_b9cbf9ab9987a49a,Service Desk Specialist I,missed (in answer key),Network troubleshooting
+S1,live_b9cbf9ab9987a49a,Service Desk Specialist I,missed (in answer key),Computer imaging
+S1,live_b9cbf9ab9987a49a,Service Desk Specialist I,missed (in answer key),Ticketing systems
+S1,live_b9cbf9ab9987a49a,Service Desk Specialist I,missed (in answer key),RMA processing
+S1,live_b9cbf9ab9987a49a,Service Desk Specialist I,missed (in answer key),VPN
+S1,live_b9cbf9ab9987a49a,Service Desk Specialist I,missed (in answer key),Wireless networking
+S1,live_b9cbf9ab9987a49a,Service Desk Specialist I,missed (in answer key),Software installation
+S1,live_471d55a57402522b,"Business Architect / Business Analyst, Technology Solutions (Cards)",missed (in answer key),Business analysis
+S1,live_471d55a57402522b,"Business Architect / Business Analyst, Technology Solutions (Cards)",missed (in answer key),Business architecture
+S1,live_471d55a57402522b,"Business Architect / Business Analyst, Technology Solutions (Cards)",missed (in answer key),Card issuing
+S1,live_471d55a57402522b,"Business Architect / Business Analyst, Technology Solutions (Cards)",missed (in answer key),Merchant acquiring
+S1,live_471d55a57402522b,"Business Architect / Business Analyst, Technology Solutions (Cards)",missed (in answer key),Business process modeling
+S1,live_471d55a57402522b,"Business Architect / Business Analyst, Technology Solutions (Cards)",missed (in answer key),System integration
+S1,live_471d55a57402522b,"Business Architect / Business Analyst, Technology Solutions (Cards)",missed (in answer key),User stories
+S1,live_471d55a57402522b,"Business Architect / Business Analyst, Technology Solutions (Cards)",missed (in answer key),Functional specifications
+S1,live_471d55a57402522b,"Business Architect / Business Analyst, Technology Solutions (Cards)",missed (in answer key),Impact analysis
+S1,live_471d55a57402522b,"Business Architect / Business Analyst, Technology Solutions (Cards)",missed (in answer key),Feasibility studies
+S1,live_471d55a57402522b,"Business Architect / Business Analyst, Technology Solutions (Cards)",missed (in answer key),Digital banking
+S1,live_471d55a57402522b,"Business Architect / Business Analyst, Technology Solutions (Cards)",missed (in answer key),Business process reengineering
+S1,live_471d55a57402522b,"Business Architect / Business Analyst, Technology Solutions (Cards)",missed (in answer key),Agile
+S1,live_471d55a57402522b,"Business Architect / Business Analyst, Technology Solutions (Cards)",missed (in answer key),SCRUM
+S1,live_471d55a57402522b,"Business Architect / Business Analyst, Technology Solutions (Cards)",missed (in answer key),SDLC
+S1,live_471d55a57402522b,"Business Architect / Business Analyst, Technology Solutions (Cards)",missed (in answer key),APIs
+S1,live_471d55a57402522b,"Business Architect / Business Analyst, Technology Solutions (Cards)",missed (in answer key),System architecture
+S1,live_471d55a57402522b,"Business Architect / Business Analyst, Technology Solutions (Cards)",missed (in answer key),Cloud
+S1,live_2dfd1835617b539e,Software Project Manager,extra (not in answer key),Computer Science
+S1,live_2dfd1835617b539e,Software Project Manager,missed (in answer key),Warehouse Management Systems
+S1,live_2dfd1835617b539e,Software Project Manager,missed (in answer key),Intralogistics automation
+S1,live_2dfd1835617b539e,Software Project Manager,missed (in answer key),AutoStore
+S1,live_2dfd1835617b539e,Software Project Manager,missed (in answer key),Software development lifecycle
+S1,live_2dfd1835617b539e,Software Project Manager,missed (in answer key),Agile methodologies
+S1,live_2dfd1835617b539e,Software Project Manager,missed (in answer key),Project management
+S1,live_2dfd1835617b539e,Software Project Manager,missed (in answer key),PMP
+S1,live_2dfd1835617b539e,Software Project Manager,missed (in answer key),Agile Scrum Master
+S1,live_a5d058f47165ecb8,Software Engineer,extra (not in answer key),Computer Science
+S1,live_a5d058f47165ecb8,Software Engineer,missed (in answer key),Software development
+S1,live_a5d058f47165ecb8,Software Engineer,missed (in answer key),C#
+S1,live_a5d058f47165ecb8,Software Engineer,missed (in answer key),Agile
+S1,live_a5d058f47165ecb8,Software Engineer,missed (in answer key),Scrum
+S1,live_94383f47e31bbf09,Full-Stack Engineer,extra (not in answer key),SaaS
+S1,live_94383f47e31bbf09,Full-Stack Engineer,extra (not in answer key),Computer Science
+S1,live_94383f47e31bbf09,Full-Stack Engineer,extra (not in answer key),database
+S1,live_94383f47e31bbf09,Full-Stack Engineer,missed (in answer key),Node.js
+S1,live_94383f47e31bbf09,Full-Stack Engineer,missed (in answer key),GraphQL
+S1,live_94383f47e31bbf09,Full-Stack Engineer,missed (in answer key),TimescaleDB
+S1,live_94383f47e31bbf09,Full-Stack Engineer,missed (in answer key),MongoDB
+S1,live_94383f47e31bbf09,Full-Stack Engineer,missed (in answer key),Amazon SP API
+S1,live_94383f47e31bbf09,Full-Stack Engineer,missed (in answer key),Data Kiosk
+S1,live_94383f47e31bbf09,Full-Stack Engineer,missed (in answer key),CloudWatch
+S1,live_94383f47e31bbf09,Full-Stack Engineer,missed (in answer key),Shopify
+S1,live_94383f47e31bbf09,Full-Stack Engineer,missed (in answer key),WooCommerce
+S1,live_94383f47e31bbf09,Full-Stack Engineer,missed (in answer key),Cloudflare
+S1,live_94383f47e31bbf09,Full-Stack Engineer,missed (in answer key),MCP servers
+S1,live_94383f47e31bbf09,Full-Stack Engineer,missed (in answer key),AI coding assistants
+S1,live_94383f47e31bbf09,Full-Stack Engineer,missed (in answer key),Cursor
+S1,live_94383f47e31bbf09,Full-Stack Engineer,missed (in answer key),Claude
+S1,live_94383f47e31bbf09,Full-Stack Engineer,missed (in answer key),Data modelling
+S1,live_94383f47e31bbf09,Full-Stack Engineer,missed (in answer key),Walmart API
+S2,live_aff472a6bd39f9ae,VMWare Admin (Windows),extra (not in answer key),Information Technology
+S2,live_aff472a6bd39f9ae,VMWare Admin (Windows),extra (not in answer key),SPE
+S2,live_aff472a6bd39f9ae,VMWare Admin (Windows),extra (not in answer key),operating systems
+S2,live_aff472a6bd39f9ae,VMWare Admin (Windows),missed (in answer key),Windows Server
+S2,live_aff472a6bd39f9ae,VMWare Admin (Windows),missed (in answer key),Windows OS
+S2,live_aff472a6bd39f9ae,VMWare Admin (Windows),missed (in answer key),Networking
+S2,live_aff472a6bd39f9ae,VMWare Admin (Windows),missed (in answer key),Infrastructure service management
+S2,live_aff472a6bd39f9ae,VMWare Admin (Windows),missed (in answer key),End-point security management
+S2,live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",extra (not in answer key),Robotics
+S2,live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",extra (not in answer key),sensors
+S2,live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",extra (not in answer key),system integration
+S2,live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",extra (not in answer key),collect data
+S2,live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",extra (not in answer key),Computer Engineering
+S2,live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",extra (not in answer key),Computer Science
+S2,live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",extra (not in answer key),electronics
+S2,live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",missed (in answer key),ROS1
+S2,live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",missed (in answer key),ROS2
+S2,live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",missed (in answer key),SLAM
+S2,live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",missed (in answer key),Localization
+S2,live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",missed (in answer key),Navigation
+S2,live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",missed (in answer key),Path planning
+S2,live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",missed (in answer key),Autonomous control
+S2,live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",missed (in answer key),Sensor fusion
+S2,live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",missed (in answer key),LiDAR
+S2,live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",missed (in answer key),GNSS
+S2,live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",missed (in answer key),IMUs
+S2,live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",missed (in answer key),Vision-language-action models
+S2,live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",missed (in answer key),Vision-language models
+S2,live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",missed (in answer key),Embodied AI
+S2,live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",missed (in answer key),Multimodal perception
+S2,live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",missed (in answer key),Imitation learning
+S2,live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",missed (in answer key),Object detection
+S2,live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",missed (in answer key),Object tracking
+S2,live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",missed (in answer key),Containers
+S2,live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",missed (in answer key),Networking
+S2,live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",missed (in answer key),CI/CD
+S2,live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",missed (in answer key),Profiling
+S2,live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",missed (in answer key),Time synchronization
+S2,live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",missed (in answer key),Hardware integration
+S2,live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",missed (in answer key),Electronics debugging
+S2,live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",missed (in answer key),AI-assisted coding tools
+S2,live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",missed (in answer key),Perception
+S2,live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",missed (in answer key),Cameras
+S2,live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",missed (in answer key),Learned planning
+S2,live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",missed (in answer key),Segmentation
+S2,live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",missed (in answer key),Prediction
+S2,live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",missed (in answer key),Calibration
+S2,live_fa6a8ad82db6e431,"Autonomous Driving, Robotics & Physical AI Engineer",missed (in answer key),Fleet deployment
+S2,live_7fdb8e26f07560f7,Senior Android Platform Engineer,extra (not in answer key),iOS
+S2,live_7fdb8e26f07560f7,Senior Android Platform Engineer,extra (not in answer key),Systems Thinking
+S2,live_7fdb8e26f07560f7,Senior Android Platform Engineer,missed (in answer key),Jetpack Compose
+S2,live_7fdb8e26f07560f7,Senior Android Platform Engineer,missed (in answer key),Android SDK
+S2,live_7fdb8e26f07560f7,Senior Android Platform Engineer,missed (in answer key),Android Studio
+S2,live_7fdb8e26f07560f7,Senior Android Platform Engineer,missed (in answer key),Modularisation
+S2,live_7fdb8e26f07560f7,Senior Android Platform Engineer,missed (in answer key),Dependency management
+S2,live_7fdb8e26f07560f7,Senior Android Platform Engineer,missed (in answer key),CI/CD
+S2,live_7fdb8e26f07560f7,Senior Android Platform Engineer,missed (in answer key),Application security
+S2,live_7fdb8e26f07560f7,Senior Android Platform Engineer,missed (in answer key),Performance optimisation
+S2,live_7fdb8e26f07560f7,Senior Android Platform Engineer,missed (in answer key),Observability
+S2,live_7fdb8e26f07560f7,Senior Android Platform Engineer,missed (in answer key),AI integration
+S2,live_7fdb8e26f07560f7,Senior Android Platform Engineer,missed (in answer key),XML
+S2,live_bcc0de4d2d69a8e6,SAP Basis Consultant,extra (not in answer key),SAP
+S2,live_bcc0de4d2d69a8e6,SAP Basis Consultant,extra (not in answer key),Monitor system performance
+S2,live_bcc0de4d2d69a8e6,SAP Basis Consultant,extra (not in answer key),IT security
+S2,live_bcc0de4d2d69a8e6,SAP Basis Consultant,extra (not in answer key),IT
+S2,live_bcc0de4d2d69a8e6,SAP Basis Consultant,missed (in answer key),SAP Basis
+S2,live_bcc0de4d2d69a8e6,SAP Basis Consultant,missed (in answer key),SAP ERP
+S2,live_bcc0de4d2d69a8e6,SAP Basis Consultant,missed (in answer key),SAP S/4HANA
+S2,live_bcc0de4d2d69a8e6,SAP Basis Consultant,missed (in answer key),SAP BW
+S2,live_bcc0de4d2d69a8e6,SAP Basis Consultant,missed (in answer key),SAP authorizations
+S2,live_bcc0de4d2d69a8e6,SAP Basis Consultant,missed (in answer key),System integration
+S2,live_bcc0de4d2d69a8e6,SAP Basis Consultant,missed (in answer key),Backup strategies
+S2,live_9ac6e5a328f45fb8,Data Engineer (Regional Role),extra (not in answer key),data processing
+S2,live_9ac6e5a328f45fb8,Data Engineer (Regional Role),extra (not in answer key),Data Engineering
+S2,live_9ac6e5a328f45fb8,Data Engineer (Regional Role),extra (not in answer key),digital media
+S2,live_9ac6e5a328f45fb8,Data Engineer (Regional Role),extra (not in answer key),data models
+S2,live_9ac6e5a328f45fb8,Data Engineer (Regional Role),extra (not in answer key),BI
+S2,live_9ac6e5a328f45fb8,Data Engineer (Regional Role),missed (in answer key),Data pipelines
+S2,live_9ac6e5a328f45fb8,Data Engineer (Regional Role),missed (in answer key),Data warehousing
+S2,live_9ac6e5a328f45fb8,Data Engineer (Regional Role),missed (in answer key),Data modeling
+S2,live_9ac6e5a328f45fb8,Data Engineer (Regional Role),missed (in answer key),Data integration
+S2,live_9ac6e5a328f45fb8,Data Engineer (Regional Role),missed (in answer key),Data cleaning
+S2,live_9ac6e5a328f45fb8,Data Engineer (Regional Role),missed (in answer key),Query optimisation
+S2,live_9ac6e5a328f45fb8,Data Engineer (Regional Role),missed (in answer key),Master data management
+S2,live_9ac6e5a328f45fb8,Data Engineer (Regional Role),missed (in answer key),Data migration
+S2,live_9ac6e5a328f45fb8,Data Engineer (Regional Role),missed (in answer key),Data governance
+S2,live_9ac6e5a328f45fb8,Data Engineer (Regional Role),missed (in answer key),ERP systems
+S2,live_9ac6e5a328f45fb8,Data Engineer (Regional Role),missed (in answer key),CRM systems
+S2,live_9ac6e5a328f45fb8,Data Engineer (Regional Role),missed (in answer key),AI
+S2,live_9ac6e5a328f45fb8,Data Engineer (Regional Role),missed (in answer key),Data security
+S2,live_9ac6e5a328f45fb8,Data Engineer (Regional Role),missed (in answer key),Cloud environments
+S2,live_9ac6e5a328f45fb8,Data Engineer (Regional Role),missed (in answer key),On-premise environments
+S2,live_80d6f269f676b931,Data Engineer,extra (not in answer key),data warehouse
+S2,live_80d6f269f676b931,Data Engineer,extra (not in answer key),Data Engineering
+S2,live_80d6f269f676b931,Data Engineer,extra (not in answer key),Database
+S2,live_80d6f269f676b931,Data Engineer,extra (not in answer key),DevOps
+S2,live_80d6f269f676b931,Data Engineer,missed (in answer key),Data Warehousing
+S2,live_80d6f269f676b931,Data Engineer,missed (in answer key),Data integration
+S2,live_80d6f269f676b931,Data Engineer,missed (in answer key),Performance tuning
+S2,live_80d6f269f676b931,Data Engineer,missed (in answer key),Data governance
+S2,live_80d6f269f676b931,Data Engineer,missed (in answer key),Data security
+S2,live_80d6f269f676b931,Data Engineer,missed (in answer key),Access control
+S2,live_80d6f269f676b931,Data Engineer,missed (in answer key),Data lineage
+S2,live_80d6f269f676b931,Data Engineer,missed (in answer key),Dashboard development
+S2,live_80d6f269f676b931,Data Engineer,missed (in answer key),Data visualisation
+S2,live_80d6f269f676b931,Data Engineer,missed (in answer key),Data quality checks
+S2,live_80d6f269f676b931,Data Engineer,missed (in answer key),Azure Data Factory
+S2,live_80d6f269f676b931,Data Engineer,missed (in answer key),Azure DevOps
+S2,live_80d6f269f676b931,Data Engineer,missed (in answer key),Power BI
+S2,live_80d6f269f676b931,Data Engineer,missed (in answer key),Qlik
+S2,live_80d6f269f676b931,Data Engineer,missed (in answer key),C
+S2,live_80d6f269f676b931,Data Engineer,missed (in answer key),R
+S2,live_80d6f269f676b931,Data Engineer,missed (in answer key),Data segmentation
+S2,live_80d6f269f676b931,Data Engineer,missed (in answer key),Azure Data Platform
+S2,live_80d6f269f676b931,Data Engineer,missed (in answer key),Scrum
+S2,live_80d6f269f676b931,Data Engineer,missed (in answer key),Ralph Kimball methodologies
+S2,live_319eb8479a356b7d,UI/UX Analyst,extra (not in answer key),UX
+S2,live_319eb8479a356b7d,UI/UX Analyst,extra (not in answer key),Analyze
+S2,live_319eb8479a356b7d,UI/UX Analyst,missed (in answer key),Interaction design
+S2,live_319eb8479a356b7d,UI/UX Analyst,missed (in answer key),Wireframing
+S2,live_319eb8479a356b7d,UI/UX Analyst,missed (in answer key),Prototyping
+S2,live_319eb8479a356b7d,UI/UX Analyst,missed (in answer key),UI design
+S2,live_319eb8479a356b7d,UI/UX Analyst,missed (in answer key),Responsive design
+S2,live_319eb8479a356b7d,UI/UX Analyst,missed (in answer key),Design systems
+S2,live_319eb8479a356b7d,UI/UX Analyst,missed (in answer key),Style guides
+S2,live_319eb8479a356b7d,UI/UX Analyst,missed (in answer key),Usability testing
+S2,live_319eb8479a356b7d,UI/UX Analyst,missed (in answer key),User acceptance testing
+S2,live_319eb8479a356b7d,UI/UX Analyst,missed (in answer key),User Research
+S2,live_ad730103a35257d4,Data Engineering & Integration Operations Manager,extra (not in answer key),Data Engineering
+S2,live_ad730103a35257d4,Data Engineering & Integration Operations Manager,extra (not in answer key),Google
+S2,live_ad730103a35257d4,Data Engineering & Integration Operations Manager,extra (not in answer key),data warehouse
+S2,live_ad730103a35257d4,Data Engineering & Integration Operations Manager,extra (not in answer key),Computer Science
+S2,live_ad730103a35257d4,Data Engineering & Integration Operations Manager,extra (not in answer key),Information Technology
+S2,live_ad730103a35257d4,Data Engineering & Integration Operations Manager,extra (not in answer key),programming languages
+S2,live_ad730103a35257d4,Data Engineering & Integration Operations Manager,extra (not in answer key),DevOps
+S2,live_ad730103a35257d4,Data Engineering & Integration Operations Manager,extra (not in answer key),BI
+S2,live_ad730103a35257d4,Data Engineering & Integration Operations Manager,missed (in answer key),Data integration
+S2,live_ad730103a35257d4,Data Engineering & Integration Operations Manager,missed (in answer key),Databricks
+S2,live_ad730103a35257d4,Data Engineering & Integration Operations Manager,missed (in answer key),Data warehousing
+S2,live_ad730103a35257d4,Data Engineering & Integration Operations Manager,missed (in answer key),JSON
+S2,live_ad730103a35257d4,Data Engineering & Integration Operations Manager,missed (in answer key),XML
+S2,live_ad730103a35257d4,Data Engineering & Integration Operations Manager,missed (in answer key),Azure DevOps
+S2,live_ad730103a35257d4,Data Engineering & Integration Operations Manager,missed (in answer key),Splunk
+S2,live_ad730103a35257d4,Data Engineering & Integration Operations Manager,missed (in answer key),Salesforce
+S2,live_ad730103a35257d4,Data Engineering & Integration Operations Manager,missed (in answer key),Power BI
+S2,live_ad730103a35257d4,Data Engineering & Integration Operations Manager,missed (in answer key),Operational monitoring
+S2,live_ad730103a35257d4,Data Engineering & Integration Operations Manager,missed (in answer key),Scripting
+S2,live_ad730103a35257d4,Data Engineering & Integration Operations Manager,missed (in answer key),APIs
+S2,live_ad730103a35257d4,Data Engineering & Integration Operations Manager,missed (in answer key),ELT
+S2,live_a3f1ad0df4156bd7,SAP Implementation Consultant/Lead (KUL),extra (not in answer key),SuccessFactors
+S2,live_a3f1ad0df4156bd7,SAP Implementation Consultant/Lead (KUL),missed (in answer key),SAP MM
+S2,live_a3f1ad0df4156bd7,SAP Implementation Consultant/Lead (KUL),missed (in answer key),SAP FICO
+S2,live_a3f1ad0df4156bd7,SAP Implementation Consultant/Lead (KUL),missed (in answer key),SAP SD
+S2,live_a3f1ad0df4156bd7,SAP Implementation Consultant/Lead (KUL),missed (in answer key),SAP SuccessFactors
+S2,live_a3f1ad0df4156bd7,SAP Implementation Consultant/Lead (KUL),missed (in answer key),SAP PP
+S2,live_a3f1ad0df4156bd7,SAP Implementation Consultant/Lead (KUL),missed (in answer key),SAP QM
+S2,live_a3f1ad0df4156bd7,SAP Implementation Consultant/Lead (KUL),missed (in answer key),SAP Basis
+S2,live_a3f1ad0df4156bd7,SAP Implementation Consultant/Lead (KUL),missed (in answer key),SAP EWM
+S2,live_a3f1ad0df4156bd7,SAP Implementation Consultant/Lead (KUL),missed (in answer key),SAP WM
+S2,live_a3f1ad0df4156bd7,SAP Implementation Consultant/Lead (KUL),missed (in answer key),SAP Ariba
+S2,live_a3f1ad0df4156bd7,SAP Implementation Consultant/Lead (KUL),missed (in answer key),SAP PaPM
+S2,live_a3f1ad0df4156bd7,SAP Implementation Consultant/Lead (KUL),missed (in answer key),Data migration
+S2,live_a3f1ad0df4156bd7,SAP Implementation Consultant/Lead (KUL),missed (in answer key),Functional specifications
+S2,live_a3f1ad0df4156bd7,SAP Implementation Consultant/Lead (KUL),missed (in answer key),FRICEW
+S2,live_a3f1ad0df4156bd7,SAP Implementation Consultant/Lead (KUL),missed (in answer key),User acceptance testing
+S2,live_a3f1ad0df4156bd7,SAP Implementation Consultant/Lead (KUL),missed (in answer key),System cutover
+S2,live_a3f1ad0df4156bd7,SAP Implementation Consultant/Lead (KUL),missed (in answer key),SAP certification
+S2,live_ec0c6a5aa725ffa0,Senior Business Analyst,extra (not in answer key),it
+S2,live_ec0c6a5aa725ffa0,Senior Business Analyst,extra (not in answer key),Computer Science
+S2,live_ec0c6a5aa725ffa0,Senior Business Analyst,missed (in answer key),Business analysis
+S2,live_ec0c6a5aa725ffa0,Senior Business Analyst,missed (in answer key),Requirement Gathering
+S2,live_ec0c6a5aa725ffa0,Senior Business Analyst,missed (in answer key),ERP implementation
+S2,live_ec0c6a5aa725ffa0,Senior Business Analyst,missed (in answer key),ERP finance modules
+S2,live_ec0c6a5aa725ffa0,Senior Business Analyst,missed (in answer key),Product Lifecycle
+S2,live_5d1161b174527a2d,"Technical Consulting Engineer, Networking (Japanese Speaker)",extra (not in answer key),Cisco
+S2,live_5d1161b174527a2d,"Technical Consulting Engineer, Networking (Japanese Speaker)",extra (not in answer key),reduce
+S2,live_5d1161b174527a2d,"Technical Consulting Engineer, Networking (Japanese Speaker)",extra (not in answer key),Computer Science
+S2,live_5d1161b174527a2d,"Technical Consulting Engineer, Networking (Japanese Speaker)",extra (not in answer key),IT
+S2,live_5d1161b174527a2d,"Technical Consulting Engineer, Networking (Japanese Speaker)",missed (in answer key),Cisco networking
+S2,live_5d1161b174527a2d,"Technical Consulting Engineer, Networking (Japanese Speaker)",missed (in answer key),Enterprise networking
+S2,live_5d1161b174527a2d,"Technical Consulting Engineer, Networking (Japanese Speaker)",missed (in answer key),Routing and switching
+S2,live_5d1161b174527a2d,"Technical Consulting Engineer, Networking (Japanese Speaker)",missed (in answer key),SD-WAN
+S2,live_5d1161b174527a2d,"Technical Consulting Engineer, Networking (Japanese Speaker)",missed (in answer key),Cisco Nexus
+S2,live_5d1161b174527a2d,"Technical Consulting Engineer, Networking (Japanese Speaker)",missed (in answer key),Cisco ACI
+S2,live_5d1161b174527a2d,"Technical Consulting Engineer, Networking (Japanese Speaker)",missed (in answer key),Network design
+S2,live_5d1161b174527a2d,"Technical Consulting Engineer, Networking (Japanese Speaker)",missed (in answer key),Network automation
+S2,live_5d1161b174527a2d,"Technical Consulting Engineer, Networking (Japanese Speaker)",missed (in answer key),Scripting
+S2,live_5d1161b174527a2d,"Technical Consulting Engineer, Networking (Japanese Speaker)",missed (in answer key),APIs
+S2,live_5d1161b174527a2d,"Technical Consulting Engineer, Networking (Japanese Speaker)",missed (in answer key),NETCONF
+S2,live_5d1161b174527a2d,"Technical Consulting Engineer, Networking (Japanese Speaker)",missed (in answer key),RESTCONF
+S2,live_5d1161b174527a2d,"Technical Consulting Engineer, Networking (Japanese Speaker)",missed (in answer key),YANG
+S2,live_5d1161b174527a2d,"Technical Consulting Engineer, Networking (Japanese Speaker)",missed (in answer key),CCNA
+S2,live_5d1161b174527a2d,"Technical Consulting Engineer, Networking (Japanese Speaker)",missed (in answer key),CCNP Enterprise
+S2,live_5d1161b174527a2d,"Technical Consulting Engineer, Networking (Japanese Speaker)",missed (in answer key),CCIE Enterprise
+S2,live_5d1161b174527a2d,"Technical Consulting Engineer, Networking (Japanese Speaker)",missed (in answer key),SDA
+S2,live_5d1161b174527a2d,"Technical Consulting Engineer, Networking (Japanese Speaker)",missed (in answer key),Catalyst Centre
+S2,live_5d1161b174527a2d,"Technical Consulting Engineer, Networking (Japanese Speaker)",missed (in answer key),ASR9K
+S2,live_5d1161b174527a2d,"Technical Consulting Engineer, Networking (Japanese Speaker)",missed (in answer key),NCS5K
+S2,live_64c8c310a608d5e7,Software Engineer - Core Banking,extra (not in answer key),Computer Science
+S2,live_64c8c310a608d5e7,Software Engineer - Core Banking,extra (not in answer key),Information Technology
+S2,live_64c8c310a608d5e7,Software Engineer - Core Banking,extra (not in answer key),control systems
+S2,live_64c8c310a608d5e7,Software Engineer - Core Banking,missed (in answer key),SpringBoot
+S2,live_64c8c310a608d5e7,Software Engineer - Core Banking,missed (in answer key),Kafka
+S2,live_64c8c310a608d5e7,Software Engineer - Core Banking,missed (in answer key),Mambu
+S2,live_64c8c310a608d5e7,Software Engineer - Core Banking,missed (in answer key),AWS
+S2,live_64c8c310a608d5e7,Software Engineer - Core Banking,missed (in answer key),Azure
+S2,live_64c8c310a608d5e7,Software Engineer - Core Banking,missed (in answer key),GCP
+S2,live_64c8c310a608d5e7,Software Engineer - Core Banking,missed (in answer key),Splunk
+S2,live_64c8c310a608d5e7,Software Engineer - Core Banking,missed (in answer key),Cursor
+S2,live_64c8c310a608d5e7,Software Engineer - Core Banking,missed (in answer key),Claude Code
+S2,live_64c8c310a608d5e7,Software Engineer - Core Banking,missed (in answer key),Security
+S2,live_e62712dd30350df3,Senior UI/UX Design Expert,extra (not in answer key),UX
+S2,live_e62712dd30350df3,Senior UI/UX Design Expert,extra (not in answer key),Human-Computer Interaction
+S2,live_e62712dd30350df3,Senior UI/UX Design Expert,extra (not in answer key),Figma
+S2,live_e62712dd30350df3,Senior UI/UX Design Expert,extra (not in answer key),visual design
+S2,live_e62712dd30350df3,Senior UI/UX Design Expert,extra (not in answer key),it
+S2,live_e62712dd30350df3,Senior UI/UX Design Expert,missed (in answer key),UX research
+S2,live_e62712dd30350df3,Senior UI/UX Design Expert,missed (in answer key),UI/UX design
+S2,live_e62712dd30350df3,Senior UI/UX Design Expert,missed (in answer key),Typography
+S2,live_e62712dd30350df3,Senior UI/UX Design Expert,missed (in answer key),Design systems
+S2,live_e62712dd30350df3,Senior UI/UX Design Expert,missed (in answer key),Claude Design
+S2,live_e62712dd30350df3,Senior UI/UX Design Expert,missed (in answer key),Design thinking
+S2,live_e62712dd30350df3,Senior UI/UX Design Expert,missed (in answer key),Visual hierarchy
+S2,live_e62712dd30350df3,Senior UI/UX Design Expert,missed (in answer key),AI-powered design tools
+S2,live_e62712dd30350df3,Senior UI/UX Design Expert,missed (in answer key),Figma AI
+S2,live_e62712dd30350df3,Senior UI/UX Design Expert,missed (in answer key),Product thinking
+S2,live_e40ae1cf3c0026f3,Senior Software QA Engineer (Automation),extra (not in answer key),Analyze
+S2,live_e40ae1cf3c0026f3,Senior Software QA Engineer (Automation),extra (not in answer key),Computer Science
+S2,live_e40ae1cf3c0026f3,Senior Software QA Engineer (Automation),extra (not in answer key),source
+S2,live_e40ae1cf3c0026f3,Senior Software QA Engineer (Automation),missed (in answer key),Automation frameworks
+S2,live_e40ae1cf3c0026f3,Senior Software QA Engineer (Automation),missed (in answer key),UI Automation
+S2,live_e40ae1cf3c0026f3,Senior Software QA Engineer (Automation),missed (in answer key),Cucumber
+S2,live_e40ae1cf3c0026f3,Senior Software QA Engineer (Automation),missed (in answer key),Katalon Studio
+S2,live_e40ae1cf3c0026f3,Senior Software QA Engineer (Automation),missed (in answer key),Web security
+S2,live_e40ae1cf3c0026f3,Senior Software QA Engineer (Automation),missed (in answer key),Scrum
+S2,live_e40ae1cf3c0026f3,Senior Software QA Engineer (Automation),missed (in answer key),ClickUp
+S2,live_e40ae1cf3c0026f3,Senior Software QA Engineer (Automation),missed (in answer key),Jira
+S2,live_e40ae1cf3c0026f3,Senior Software QA Engineer (Automation),missed (in answer key),REST APIs
+S2,live_e40ae1cf3c0026f3,Senior Software QA Engineer (Automation),missed (in answer key),Mobile Automation
+S2,live_e40ae1cf3c0026f3,Senior Software QA Engineer (Automation),missed (in answer key),Shell
+S2,live_eca71c72e724fbb4,Cybersecurity Consultant - Penetration Testing,extra (not in answer key),cybersecurity
+S2,live_eca71c72e724fbb4,Cybersecurity Consultant - Penetration Testing,extra (not in answer key),IoT
+S2,live_eca71c72e724fbb4,Cybersecurity Consultant - Penetration Testing,extra (not in answer key),source
+S2,live_eca71c72e724fbb4,Cybersecurity Consultant - Penetration Testing,extra (not in answer key),computer science
+S2,live_eca71c72e724fbb4,Cybersecurity Consultant - Penetration Testing,extra (not in answer key),go
+S2,live_eca71c72e724fbb4,Cybersecurity Consultant - Penetration Testing,missed (in answer key),Penetration testing
+S2,live_eca71c72e724fbb4,Cybersecurity Consultant - Penetration Testing,missed (in answer key),Vulnerability assessment
+S2,live_eca71c72e724fbb4,Cybersecurity Consultant - Penetration Testing,missed (in answer key),Web application penetration testing
+S2,live_eca71c72e724fbb4,Cybersecurity Consultant - Penetration Testing,missed (in answer key),Mobile application penetration testing
+S2,live_eca71c72e724fbb4,Cybersecurity Consultant - Penetration Testing,missed (in answer key),Network penetration testing
+S2,live_eca71c72e724fbb4,Cybersecurity Consultant - Penetration Testing,missed (in answer key),Source code review
+S2,live_eca71c72e724fbb4,Cybersecurity Consultant - Penetration Testing,missed (in answer key),Red teaming
+S2,live_eca71c72e724fbb4,Cybersecurity Consultant - Penetration Testing,missed (in answer key),Social engineering
+S2,live_eca71c72e724fbb4,Cybersecurity Consultant - Penetration Testing,missed (in answer key),Security controls
+S2,live_eca71c72e724fbb4,Cybersecurity Consultant - Penetration Testing,missed (in answer key),OSCP
+S2,live_eca71c72e724fbb4,Cybersecurity Consultant - Penetration Testing,missed (in answer key),CREST CRT
+S2,live_eca71c72e724fbb4,Cybersecurity Consultant - Penetration Testing,missed (in answer key),Threat hunting
+S2,live_eca71c72e724fbb4,Cybersecurity Consultant - Penetration Testing,missed (in answer key),IoT security
+S2,live_4aef39a395a09b3c,Back End Developer,extra (not in answer key),Online assessment
+S2,live_4aef39a395a09b3c,Back End Developer,missed (in answer key),Backend engineering
+S2,live_4aef39a395a09b3c,Back End Developer,missed (in answer key),API development
+S2,live_4aef39a395a09b3c,Back End Developer,missed (in answer key),Databases
+S2,live_4aef39a395a09b3c,Back End Developer,missed (in answer key),Authentication
+S2,live_4aef39a395a09b3c,Back End Developer,missed (in answer key),Authorization
+S2,live_4aef39a395a09b3c,Back End Developer,missed (in answer key),Message queues
+S2,live_4aef39a395a09b3c,Back End Developer,missed (in answer key),Background jobs
+S2,live_4aef39a395a09b3c,Back End Developer,missed (in answer key),Event-driven architecture
+S2,live_4aef39a395a09b3c,Back End Developer,missed (in answer key),System integration
+S2,live_4aef39a395a09b3c,Back End Developer,missed (in answer key),Observability
+S2,live_4aef39a395a09b3c,Back End Developer,missed (in answer key),Incident management
+S2,live_4aef39a395a09b3c,Back End Developer,missed (in answer key),Payment systems
+S2,live_4aef39a395a09b3c,Back End Developer,missed (in answer key),KYC
+S2,live_4aef39a395a09b3c,Back End Developer,missed (in answer key),Fraud detection
+S2,live_4aef39a395a09b3c,Back End Developer,missed (in answer key),Fintech
+S2,live_4aef39a395a09b3c,Back End Developer,missed (in answer key),Security
+S2,live_4aef39a395a09b3c,Back End Developer,missed (in answer key),Data integrity
+S2,live_4aef39a395a09b3c,Back End Developer,missed (in answer key),Risk management
+S2,live_4aef39a395a09b3c,Back End Developer,missed (in answer key),Banking
+S2,live_2ec2feca24d1a38b,"Senior Specialist, Software Quality Assurance",extra (not in answer key),system integration
+S2,live_2ec2feca24d1a38b,"Senior Specialist, Software Quality Assurance",missed (in answer key),QA processes
+S2,live_2ec2feca24d1a38b,"Senior Specialist, Software Quality Assurance",missed (in answer key),Test planning
+S2,live_2ec2feca24d1a38b,"Senior Specialist, Software Quality Assurance",missed (in answer key),Functional testing
+S2,live_2ec2feca24d1a38b,"Senior Specialist, Software Quality Assurance",missed (in answer key),Non-functional testing
+S2,live_2ec2feca24d1a38b,"Senior Specialist, Software Quality Assurance",missed (in answer key),Performance testing
+S2,live_2ec2feca24d1a38b,"Senior Specialist, Software Quality Assurance",missed (in answer key),Usability testing
+S2,live_2ec2feca24d1a38b,"Senior Specialist, Software Quality Assurance",missed (in answer key),Test case development
+S2,live_2ec2feca24d1a38b,"Senior Specialist, Software Quality Assurance",missed (in answer key),Regression testing
+S2,live_2ec2feca24d1a38b,"Senior Specialist, Software Quality Assurance",missed (in answer key),Sanity testing
+S2,live_2ec2feca24d1a38b,"Senior Specialist, Software Quality Assurance",missed (in answer key),Smoke testing
+S2,live_2ec2feca24d1a38b,"Senior Specialist, Software Quality Assurance",missed (in answer key),API testing
+S2,live_2ec2feca24d1a38b,"Senior Specialist, Software Quality Assurance",missed (in answer key),Compatibility testing
+S2,live_2ec2feca24d1a38b,"Senior Specialist, Software Quality Assurance",missed (in answer key),System integration testing
+S2,live_2ec2feca24d1a38b,"Senior Specialist, Software Quality Assurance",missed (in answer key),Mobile testing
+S2,live_2ec2feca24d1a38b,"Senior Specialist, Software Quality Assurance",missed (in answer key),Web testing
+S2,live_2ec2feca24d1a38b,"Senior Specialist, Software Quality Assurance",missed (in answer key),Test automation
+S2,live_2ec2feca24d1a38b,"Senior Specialist, Software Quality Assurance",missed (in answer key),Defect management
+S2,live_67e5d581c8e82b12,IT Operations Analyst,extra (not in answer key),knowledge base
+S2,live_67e5d581c8e82b12,IT Operations Analyst,missed (in answer key),Public cloud
+S2,live_67e5d581c8e82b12,IT Operations Analyst,missed (in answer key),SLA management
+S2,live_d28433cc84f332be,"Senior Executive, IT (Contract)",extra (not in answer key),IT
+S2,live_d28433cc84f332be,"Senior Executive, IT (Contract)",extra (not in answer key),email
+S2,live_d28433cc84f332be,"Senior Executive, IT (Contract)",extra (not in answer key),IT security
+S2,live_d28433cc84f332be,"Senior Executive, IT (Contract)",extra (not in answer key),Computer Science
+S2,live_d28433cc84f332be,"Senior Executive, IT (Contract)",extra (not in answer key),operating systems
+S2,live_d28433cc84f332be,"Senior Executive, IT (Contract)",missed (in answer key),Hardware troubleshooting
+S2,live_d28433cc84f332be,"Senior Executive, IT (Contract)",missed (in answer key),Network troubleshooting
+S2,live_d28433cc84f332be,"Senior Executive, IT (Contract)",missed (in answer key),Windows
+S2,live_d28433cc84f332be,"Senior Executive, IT (Contract)",missed (in answer key),Software deployment
+S2,live_d28433cc84f332be,"Senior Executive, IT (Contract)",missed (in answer key),IT asset management
+S2,live_d28433cc84f332be,"Senior Executive, IT (Contract)",missed (in answer key),Endpoint security
+S2,live_d28433cc84f332be,"Senior Executive, IT (Contract)",missed (in answer key),Antivirus
+S2,live_d28433cc84f332be,"Senior Executive, IT (Contract)",missed (in answer key),Microsoft 365
+S2,live_d28433cc84f332be,"Senior Executive, IT (Contract)",missed (in answer key),Outlook
+S2,live_d28433cc84f332be,"Senior Executive, IT (Contract)",missed (in answer key),Teams
+S2,live_d28433cc84f332be,"Senior Executive, IT (Contract)",missed (in answer key),SharePoint
+S2,live_d28433cc84f332be,"Senior Executive, IT (Contract)",missed (in answer key),LAN
+S2,live_d28433cc84f332be,"Senior Executive, IT (Contract)",missed (in answer key),Wi-Fi
+S2,live_d28433cc84f332be,"Senior Executive, IT (Contract)",missed (in answer key),VPN
+S2,live_d28433cc84f332be,"Senior Executive, IT (Contract)",missed (in answer key),Backup
+S2,live_d28433cc84f332be,"Senior Executive, IT (Contract)",missed (in answer key),IT procurement
+S2,live_d28433cc84f332be,"Senior Executive, IT (Contract)",missed (in answer key),Inventory management
+S2,live_d28433cc84f332be,"Senior Executive, IT (Contract)",missed (in answer key),TCP/IP
+S2,live_d28433cc84f332be,"Senior Executive, IT (Contract)",missed (in answer key),DHCP
+S2,live_d28433cc84f332be,"Senior Executive, IT (Contract)",missed (in answer key),macOS
+S2,live_d28433cc84f332be,"Senior Executive, IT (Contract)",missed (in answer key),Software troubleshooting
+S2,live_d28433cc84f332be,"Senior Executive, IT (Contract)",missed (in answer key),Office applications
+S2,live_d28433cc84f332be,"Senior Executive, IT (Contract)",missed (in answer key),Patching
+S2,live_ca39fceedf53e6f6,Network Engineer,extra (not in answer key),NOC
+S2,live_ca39fceedf53e6f6,Network Engineer,extra (not in answer key),SSL
+S2,live_ca39fceedf53e6f6,Network Engineer,extra (not in answer key),it
+S2,live_ca39fceedf53e6f6,Network Engineer,extra (not in answer key),Cisco
+S2,live_ca39fceedf53e6f6,Network Engineer,extra (not in answer key),McAfee
+S2,live_ca39fceedf53e6f6,Network Engineer,extra (not in answer key),sensors
+S2,live_ca39fceedf53e6f6,Network Engineer,missed (in answer key),Network operations
+S2,live_ca39fceedf53e6f6,Network Engineer,missed (in answer key),Network security
+S2,live_ca39fceedf53e6f6,Network Engineer,missed (in answer key),CheckPoint Firewalls
+S2,live_ca39fceedf53e6f6,Network Engineer,missed (in answer key),NAT
+S2,live_ca39fceedf53e6f6,Network Engineer,missed (in answer key),URL filtering
+S2,live_ca39fceedf53e6f6,Network Engineer,missed (in answer key),IPS
+S2,live_ca39fceedf53e6f6,Network Engineer,missed (in answer key),Zscaler Internet Access
+S2,live_ca39fceedf53e6f6,Network Engineer,missed (in answer key),Bluecoat ProxySG
+S2,live_ca39fceedf53e6f6,Network Engineer,missed (in answer key),SSL interception
+S2,live_ca39fceedf53e6f6,Network Engineer,missed (in answer key),F5 APM
+S2,live_ca39fceedf53e6f6,Network Engineer,missed (in answer key),F5 LTM
+S2,live_ca39fceedf53e6f6,Network Engineer,missed (in answer key),F5 GTM
+S2,live_ca39fceedf53e6f6,Network Engineer,missed (in answer key),Routing
+S2,live_ca39fceedf53e6f6,Network Engineer,missed (in answer key),BGP
+S2,live_ca39fceedf53e6f6,Network Engineer,missed (in answer key),EIGRP
+S2,live_ca39fceedf53e6f6,Network Engineer,missed (in answer key),OSPF
+S2,live_ca39fceedf53e6f6,Network Engineer,missed (in answer key),PIM
+S2,live_ca39fceedf53e6f6,Network Engineer,missed (in answer key),GRE
+S2,live_ca39fceedf53e6f6,Network Engineer,missed (in answer key),VRF
+S2,live_ca39fceedf53e6f6,Network Engineer,missed (in answer key),Switching
+S2,live_ca39fceedf53e6f6,Network Engineer,missed (in answer key),VPC
+S2,live_ca39fceedf53e6f6,Network Engineer,missed (in answer key),STP
+S2,live_ca39fceedf53e6f6,Network Engineer,missed (in answer key),Etherchannel
+S2,live_ca39fceedf53e6f6,Network Engineer,missed (in answer key),VPN
+S2,live_ca39fceedf53e6f6,Network Engineer,missed (in answer key),IPSec
+S2,live_ca39fceedf53e6f6,Network Engineer,missed (in answer key),Cisco Nexus
+S2,live_ca39fceedf53e6f6,Network Engineer,missed (in answer key),Wireless LAN
+S2,live_ca39fceedf53e6f6,Network Engineer,missed (in answer key),Cisco Wireless LAN
+S2,live_ca39fceedf53e6f6,Network Engineer,missed (in answer key),McAfee NSM
+S2,live_ca39fceedf53e6f6,Network Engineer,missed (in answer key),HP Network Automation
+S2,live_ca39fceedf53e6f6,Network Engineer,missed (in answer key),Cisco ISE
+S2,live_ca39fceedf53e6f6,Network Engineer,missed (in answer key),Cisco ACS
+S2,live_ca39fceedf53e6f6,Network Engineer,missed (in answer key),Azure networking
+S2,live_ca39fceedf53e6f6,Network Engineer,missed (in answer key),VNET peering
+S2,live_ca39fceedf53e6f6,Network Engineer,missed (in answer key),ExpressRoute
+S2,live_ca39fceedf53e6f6,Network Engineer,missed (in answer key),Application filtering
+S2,live_ca39fceedf53e6f6,Network Engineer,missed (in answer key),Aruba Wireless LAN
+S2,live_ca39fceedf53e6f6,Network Engineer,missed (in answer key),IPS sensors
+S2,live_ca39fceedf53e6f6,Network Engineer,missed (in answer key),NSG
+S2,live_a92c87273c2955a9,Cybersecurity SOC,extra (not in answer key),cybersecurity
+S2,live_a92c87273c2955a9,Cybersecurity SOC,missed (in answer key),CrowdStrike
+S2,live_a92c87273c2955a9,Cybersecurity SOC,missed (in answer key),Microsoft Defender
+S2,live_a92c87273c2955a9,Cybersecurity SOC,missed (in answer key),SIEM
+S2,live_f94d7e50bcca80e3,Network Support Engineer,extra (not in answer key),IT
+S2,live_f94d7e50bcca80e3,Network Support Engineer,extra (not in answer key),whatsapp
+S2,live_f94d7e50bcca80e3,Network Support Engineer,missed (in answer key),Windows
+S2,live_f94d7e50bcca80e3,Network Support Engineer,missed (in answer key),Microsoft 365
+S2,live_f94d7e50bcca80e3,Network Support Engineer,missed (in answer key),IT asset management
+S2,live_f94d7e50bcca80e3,Network Support Engineer,missed (in answer key),LAN
+S2,live_f94d7e50bcca80e3,Network Support Engineer,missed (in answer key),WAN
+S2,live_f94d7e50bcca80e3,Network Support Engineer,missed (in answer key),WLAN
+S2,live_f94d7e50bcca80e3,Network Support Engineer,missed (in answer key),Routers
+S2,live_f94d7e50bcca80e3,Network Support Engineer,missed (in answer key),Firewall
+S2,live_f94d7e50bcca80e3,Network Support Engineer,missed (in answer key),Windows Server
+S2,live_f94d7e50bcca80e3,Network Support Engineer,missed (in answer key),Linux servers
+S2,live_f94d7e50bcca80e3,Network Support Engineer,missed (in answer key),System monitoring
+S2,live_f94d7e50bcca80e3,Network Support Engineer,missed (in answer key),Backup
+S2,live_f94d7e50bcca80e3,Network Support Engineer,missed (in answer key),Storage
+S2,live_f94d7e50bcca80e3,Network Support Engineer,missed (in answer key),VPN
+S2,live_f94d7e50bcca80e3,Network Support Engineer,missed (in answer key),Switches
+S2,live_143b3f50af14b124,Software Engineering & AI Internships,extra (not in answer key),agile
+S2,live_143b3f50af14b124,Software Engineering & AI Internships,missed (in answer key),Software engineering
+S2,live_143b3f50af14b124,Software Engineering & AI Internships,missed (in answer key),AI
+S2,live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",extra (not in answer key),Information Technology
+S2,live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",extra (not in answer key),unstructured data
+S2,live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",extra (not in answer key),Analyze
+S2,live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",extra (not in answer key),Computer Science
+S2,live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",extra (not in answer key),Data Science
+S2,live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",extra (not in answer key),algorithms
+S2,live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",extra (not in answer key),data engineering
+S2,live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",extra (not in answer key),source
+S2,live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",missed (in answer key),Generative AI
+S2,live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",missed (in answer key),AI agents
+S2,live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",missed (in answer key),Retrieval-Augmented Generation
+S2,live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",missed (in answer key),Vector databases
+S2,live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",missed (in answer key),Prompt engineering
+S2,live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",missed (in answer key),LLM evaluation
+S2,live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",missed (in answer key),Large Language Models
+S2,live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",missed (in answer key),Data preprocessing
+S2,live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",missed (in answer key),Feature engineering
+S2,live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",missed (in answer key),Data analysis
+S2,live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",missed (in answer key),Predictive modelling
+S2,live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",missed (in answer key),Recommendation systems
+S2,live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",missed (in answer key),Data visualization
+S2,live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",missed (in answer key),APIs
+S2,live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",missed (in answer key),JSON
+S2,live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",missed (in answer key),OpenAI
+S2,live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",missed (in answer key),Azure OpenAI
+S2,live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",missed (in answer key),Function calling
+S2,live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",missed (in answer key),Embeddings
+S2,live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",missed (in answer key),Data pipelines
+S2,live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",missed (in answer key),Knowledge management
+S2,live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",missed (in answer key),Deep learning
+S2,live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",missed (in answer key),Responsible AI
+S2,live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",missed (in answer key),Artificial Intelligence
+S2,live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",missed (in answer key),Industry 4.0
+S2,live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",missed (in answer key),Big Data
+S2,live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",missed (in answer key),Analytics
+S2,live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",missed (in answer key),Tool calling
+S2,live_2ea7c3f21a77d6d9,"AI/ML, GenAI Intern",missed (in answer key),Vector search
+S2,live_050af1c8591bfa5e,Backend Developer,extra (not in answer key),database
+S2,live_050af1c8591bfa5e,Backend Developer,extra (not in answer key),resolve technical issues
+S2,live_050af1c8591bfa5e,Backend Developer,extra (not in answer key),Computer Science
+S2,live_050af1c8591bfa5e,Backend Developer,extra (not in answer key),control systems
+S2,live_050af1c8591bfa5e,Backend Developer,extra (not in answer key),Google
+S2,live_050af1c8591bfa5e,Backend Developer,extra (not in answer key),GitLab
+S2,live_050af1c8591bfa5e,Backend Developer,missed (in answer key),Database design
+S2,live_050af1c8591bfa5e,Backend Developer,missed (in answer key),AWS
+S2,live_050af1c8591bfa5e,Backend Developer,missed (in answer key),EC2
+S2,live_050af1c8591bfa5e,Backend Developer,missed (in answer key),AWS Lambda
+S2,live_050af1c8591bfa5e,Backend Developer,missed (in answer key),Amazon S3
+S2,live_050af1c8591bfa5e,Backend Developer,missed (in answer key),Amazon RDS
+S2,live_050af1c8591bfa5e,Backend Developer,missed (in answer key),API Gateway
+S2,live_050af1c8591bfa5e,Backend Developer,missed (in answer key),Amazon SQS
+S2,live_050af1c8591bfa5e,Backend Developer,missed (in answer key),Amazon SNS
+S2,live_050af1c8591bfa5e,Backend Developer,missed (in answer key),Amazon VPC
+S2,live_050af1c8591bfa5e,Backend Developer,missed (in answer key),CloudWatch
+S2,live_050af1c8591bfa5e,Backend Developer,missed (in answer key),Azure
+S2,live_050af1c8591bfa5e,Backend Developer,missed (in answer key),Google Cloud
+S2,live_050af1c8591bfa5e,Backend Developer,missed (in answer key),CI/CD
+S2,live_050af1c8591bfa5e,Backend Developer,missed (in answer key),GitLab CI
+S2,live_050af1c8591bfa5e,Backend Developer,missed (in answer key),AWS Code Pipeline
+S2,live_050af1c8591bfa5e,Backend Developer,missed (in answer key),Unit testing
+S2,live_050af1c8591bfa5e,Backend Developer,missed (in answer key),Integration testing
+S2,live_050af1c8591bfa5e,Backend Developer,missed (in answer key),Mocking frameworks
+S2,live_050af1c8591bfa5e,Backend Developer,missed (in answer key),Web security
+S2,live_050af1c8591bfa5e,Backend Developer,missed (in answer key),Scrum
+S2,live_050af1c8591bfa5e,Backend Developer,missed (in answer key),Terraform
+S2,live_050af1c8591bfa5e,Backend Developer,missed (in answer key),Infrastructure as Code
+S2,live_050af1c8591bfa5e,Backend Developer,missed (in answer key),.NET Core
+S2,live_b9cbf9ab9987a49a,Service Desk Specialist I,extra (not in answer key),IT
+S2,live_b9cbf9ab9987a49a,Service Desk Specialist I,extra (not in answer key),resolve technical issues
+S2,live_b9cbf9ab9987a49a,Service Desk Specialist I,missed (in answer key),Hardware troubleshooting
+S2,live_b9cbf9ab9987a49a,Service Desk Specialist I,missed (in answer key),Software troubleshooting
+S2,live_b9cbf9ab9987a49a,Service Desk Specialist I,missed (in answer key),Network troubleshooting
+S2,live_b9cbf9ab9987a49a,Service Desk Specialist I,missed (in answer key),Computer imaging
+S2,live_b9cbf9ab9987a49a,Service Desk Specialist I,missed (in answer key),Ticketing systems
+S2,live_b9cbf9ab9987a49a,Service Desk Specialist I,missed (in answer key),RMA processing
+S2,live_b9cbf9ab9987a49a,Service Desk Specialist I,missed (in answer key),VPN
+S2,live_b9cbf9ab9987a49a,Service Desk Specialist I,missed (in answer key),Wireless networking
+S2,live_b9cbf9ab9987a49a,Service Desk Specialist I,missed (in answer key),Software installation
+S2,live_471d55a57402522b,"Business Architect / Business Analyst, Technology Solutions (Cards)",extra (not in answer key),Analyze
+S2,live_471d55a57402522b,"Business Architect / Business Analyst, Technology Solutions (Cards)",extra (not in answer key),source
+S2,live_471d55a57402522b,"Business Architect / Business Analyst, Technology Solutions (Cards)",missed (in answer key),Business analysis
+S2,live_471d55a57402522b,"Business Architect / Business Analyst, Technology Solutions (Cards)",missed (in answer key),Business architecture
+S2,live_471d55a57402522b,"Business Architect / Business Analyst, Technology Solutions (Cards)",missed (in answer key),Card issuing
+S2,live_471d55a57402522b,"Business Architect / Business Analyst, Technology Solutions (Cards)",missed (in answer key),Merchant acquiring
+S2,live_471d55a57402522b,"Business Architect / Business Analyst, Technology Solutions (Cards)",missed (in answer key),Business process modeling
+S2,live_471d55a57402522b,"Business Architect / Business Analyst, Technology Solutions (Cards)",missed (in answer key),System integration
+S2,live_471d55a57402522b,"Business Architect / Business Analyst, Technology Solutions (Cards)",missed (in answer key),User stories
+S2,live_471d55a57402522b,"Business Architect / Business Analyst, Technology Solutions (Cards)",missed (in answer key),Functional specifications
+S2,live_471d55a57402522b,"Business Architect / Business Analyst, Technology Solutions (Cards)",missed (in answer key),Impact analysis
+S2,live_471d55a57402522b,"Business Architect / Business Analyst, Technology Solutions (Cards)",missed (in answer key),Feasibility studies
+S2,live_471d55a57402522b,"Business Architect / Business Analyst, Technology Solutions (Cards)",missed (in answer key),Digital banking
+S2,live_471d55a57402522b,"Business Architect / Business Analyst, Technology Solutions (Cards)",missed (in answer key),Business process reengineering
+S2,live_471d55a57402522b,"Business Architect / Business Analyst, Technology Solutions (Cards)",missed (in answer key),SCRUM
+S2,live_471d55a57402522b,"Business Architect / Business Analyst, Technology Solutions (Cards)",missed (in answer key),SDLC
+S2,live_471d55a57402522b,"Business Architect / Business Analyst, Technology Solutions (Cards)",missed (in answer key),Microservices
+S2,live_471d55a57402522b,"Business Architect / Business Analyst, Technology Solutions (Cards)",missed (in answer key),APIs
+S2,live_471d55a57402522b,"Business Architect / Business Analyst, Technology Solutions (Cards)",missed (in answer key),System architecture
+S2,live_471d55a57402522b,"Business Architect / Business Analyst, Technology Solutions (Cards)",missed (in answer key),Cloud
+S2,live_2dfd1835617b539e,Software Project Manager,extra (not in answer key),automation technologies
+S2,live_2dfd1835617b539e,Software Project Manager,extra (not in answer key),IT
+S2,live_2dfd1835617b539e,Software Project Manager,extra (not in answer key),Computer Science
+S2,live_2dfd1835617b539e,Software Project Manager,missed (in answer key),Warehouse Management Systems
+S2,live_2dfd1835617b539e,Software Project Manager,missed (in answer key),Intralogistics automation
+S2,live_2dfd1835617b539e,Software Project Manager,missed (in answer key),AutoStore
+S2,live_2dfd1835617b539e,Software Project Manager,missed (in answer key),Software development lifecycle
+S2,live_2dfd1835617b539e,Software Project Manager,missed (in answer key),Project management
+S2,live_2dfd1835617b539e,Software Project Manager,missed (in answer key),PMP
+S2,live_2dfd1835617b539e,Software Project Manager,missed (in answer key),Agile Scrum Master
+S2,live_a5d058f47165ecb8,Software Engineer,extra (not in answer key),Computer Science
+S2,live_a5d058f47165ecb8,Software Engineer,extra (not in answer key),programming languages
+S2,live_a5d058f47165ecb8,Software Engineer,missed (in answer key),C#
+S2,live_a5d058f47165ecb8,Software Engineer,missed (in answer key),Agile
+S2,live_a5d058f47165ecb8,Software Engineer,missed (in answer key),Scrum
+S2,live_94383f47e31bbf09,Full-Stack Engineer,extra (not in answer key),SaaS
+S2,live_94383f47e31bbf09,Full-Stack Engineer,extra (not in answer key),Computer Science
+S2,live_94383f47e31bbf09,Full-Stack Engineer,extra (not in answer key),database
+S2,live_94383f47e31bbf09,Full-Stack Engineer,missed (in answer key),TimescaleDB
+S2,live_94383f47e31bbf09,Full-Stack Engineer,missed (in answer key),REST APIs
+S2,live_94383f47e31bbf09,Full-Stack Engineer,missed (in answer key),Amazon SP API
+S2,live_94383f47e31bbf09,Full-Stack Engineer,missed (in answer key),Data Kiosk
+S2,live_94383f47e31bbf09,Full-Stack Engineer,missed (in answer key),AWS
+S2,live_94383f47e31bbf09,Full-Stack Engineer,missed (in answer key),CloudWatch
+S2,live_94383f47e31bbf09,Full-Stack Engineer,missed (in answer key),Shopify
+S2,live_94383f47e31bbf09,Full-Stack Engineer,missed (in answer key),WooCommerce
+S2,live_94383f47e31bbf09,Full-Stack Engineer,missed (in answer key),Cloudflare
+S2,live_94383f47e31bbf09,Full-Stack Engineer,missed (in answer key),MCP servers
+S2,live_94383f47e31bbf09,Full-Stack Engineer,missed (in answer key),AI coding assistants
+S2,live_94383f47e31bbf09,Full-Stack Engineer,missed (in answer key),Cursor
+S2,live_94383f47e31bbf09,Full-Stack Engineer,missed (in answer key),Claude
+S2,live_94383f47e31bbf09,Full-Stack Engineer,missed (in answer key),Data modelling
+S2,live_94383f47e31bbf09,Full-Stack Engineer,missed (in answer key),Walmart API
