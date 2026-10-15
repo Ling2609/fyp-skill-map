@@ -6,12 +6,15 @@ brings the modules that already have skills up to v2 WITHOUT undoing the career 
   - modules NOT reviewed yet: the AI's skills are replaced by v2's; skills the career office added are kept. They
     stay "To review" in Admin > Academic structure
   - modules ALREADY reviewed: nothing is changed. The skills v2 finds that the module doesn't have yet are listed in
-    data/module_v2_suggestions.csv, to add in Admin if they are right (review decisions stay human)
+    data/module_v2_suggestions.csv with the description sentence that names each one. The career office types yes
+    in the "add" column for the right ones, and --apply adds those (review decisions stay human; 15 Oct: 159 of her
+    198 modules are reviewed, too many to add one by one in Admin)
   - modules already on v2: skipped, so the script can be run again after a stop (Groq's daily limit)
 
 Usage (from backend/, venv active):
   python scripts/pipeline/upgrade_module_skills_v2.py --dry-run    # counts only, no Groq calls, no changes
   python scripts/pipeline/upgrade_module_skills_v2.py              # one Groq call per module still on v1
+  python scripts/pipeline/upgrade_module_skills_v2.py --apply      # adds the suggestions marked yes (no Groq calls)
 """
 import csv
 import json
@@ -26,6 +29,9 @@ from app.models.module import Module, ModuleSkill
 from app.nlp.skill_extractor import MODULE_EXTRACTED_BY, SkillExtractor
 from app.services.extraction_records import record
 from app.services.skill_names import canonical_key
+
+sys.path.append("scripts/evaluation")
+from evaluate_job_skill_extraction import where_in_ad      # noqa: E402  (the sentence naming a skill; plain search)
 
 ADDED_BY_ADMIN = "admin"                                   # app/routers/admin_academic.py
 SUGGESTIONS_CSV = "data/module_v2_suggestions.csv"
@@ -59,7 +65,34 @@ def plan(db) -> dict[str, list]:
     return out
 
 
+def apply():
+    """Add the suggestions marked yes to their (reviewed) modules. Safe to run again: a skill already there is skipped."""
+    if not os.path.exists(SUGGESTIONS_CSV):
+        sys.exit(f"No {SUGGESTIONS_CSV} yet: run the script without --apply first.")
+    with open(SUGGESTIONS_CSV, encoding="utf-8-sig") as f:
+        rows = [r for r in csv.DictReader(f) if (r.get("add") or "").strip().lower() in ("yes", "y")]
+    db = SessionLocal()
+    added = 0
+    try:
+        for r in rows:
+            m = db.query(Module).filter(Module.code == r["code"]).first()
+            name = " ".join(r["suggested skill (prompt v2)"].split())
+            if not m or not name:
+                continue
+            have = {canonical_key(s.skill_name) for s in db.query(ModuleSkill).filter(ModuleSkill.module_id == m.id)}
+            if canonical_key(name) in have:
+                continue
+            db.add(ModuleSkill(module_id=m.id, module_code=m.code, skill_name=name, extracted_by=MODULE_EXTRACTED_BY))
+            added += 1
+        db.commit()
+    finally:
+        db.close()
+    print(f"{len(rows)} suggestion(s) marked yes; {added} added (the rest were already there). The modules stay reviewed.")
+
+
 def main():
+    if "--apply" in sys.argv:
+        return apply()
     dry = "--dry-run" in sys.argv
     db = SessionLocal()
     try:
@@ -74,7 +107,8 @@ def main():
         with open(SUGGESTIONS_CSV, "a", newline="", encoding="utf-8-sig") as f:
             w = csv.writer(f)
             if new_file:
-                w.writerow(["code", "module", "suggested skill (prompt v2)", "already has"])
+                w.writerow(["code", "module", "suggested skill (prompt v2)", "in description", "description sentence",
+                            "already has", "add"])
             for i, m in enumerate(todo["replace"] + todo["suggest"], 1):
                 found = ex.extract_from_module({"code": m.code, "name": m.name, "level": m.level, "type": m.type,
                                                 "description": m.description})
@@ -87,7 +121,8 @@ def main():
                     have = {canonical_key(s.skill_name) for s in rows}
                     new = [s for s in skills if canonical_key(s) not in have]
                     for s in new:
-                        w.writerow([m.code, m.name, s, "; ".join(r.skill_name for r in rows)])
+                        found_in, sentence = where_in_ad(s, m.description)
+                        w.writerow([m.code, m.name, s, found_in, sentence, "; ".join(r.skill_name for r in rows), ""])
                     f.flush()
                     done_reviewed.append(m.code)
                     with open(SUGGESTIONS_DONE, "w", encoding="utf-8") as d:
@@ -109,7 +144,7 @@ def main():
                 time.sleep(2)
         left = plan(db)
         print(f"\nLeft: {len(left['replace'])} to update, {len(left['suggest'])} to suggest for. Suggestions for reviewed "
-              f"modules: {SUGGESTIONS_CSV} (add the right ones in Admin > Academic structure).")
+              f"modules: {SUGGESTIONS_CSV}: type yes in the add column for the right ones, then run with --apply.")
     finally:
         db.close()
 

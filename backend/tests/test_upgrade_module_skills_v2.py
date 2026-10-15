@@ -50,5 +50,18 @@ def test_unreviewed_replaced_reviewed_only_suggested(client, db, tmp_path, monke
     assert names(b) == [("Nmap", "gpt-oss-120b:descriptor-v1")]                 # reviewed: unchanged
     rows = list(csv.DictReader(open(tmp_path / "s.csv", encoding="utf-8-sig")))
     assert sorted(r["suggested skill (prompt v2)"] for r in rows) == ["Metasploit", "Penetration testing"]
+    assert {r["in description"] for r in rows} <= {"found", "words found"} and all(r["description sentence"] for r in rows)
     up.main()                                                                   # run again: nothing asked twice
     assert sorted(calls) == ["ZZ-V2-001", "ZZ-V2-002"]
+    # the career office accepts one suggestion; --apply adds it, the module stays reviewed; running again adds nothing
+    for r in rows:
+        r["add"] = "yes" if r["suggested skill (prompt v2)"] == "Metasploit" else ""
+    with open(tmp_path / "s.csv", "w", newline="", encoding="utf-8-sig") as f:
+        w = csv.DictWriter(f, fieldnames=list(rows[0]))
+        w.writeheader()
+        w.writerows(rows)
+    monkeypatch.setattr(sys, "argv", ["x", "--apply"])
+    up.main(); up.main()
+    db.expire_all()
+    assert names(b) == [("Metasploit", up.MODULE_EXTRACTED_BY), ("Nmap", "gpt-oss-120b:descriptor-v1")]
+    assert db.get(Module, b.id).skills_reviewed_at is not None
