@@ -1,5 +1,5 @@
 """Module prompt v2 test round (15 Oct): new modules only, v1 and v2 extracted fresh, v2b adds O*NET tool names,
-paired comparison with the pass rule fixed before results; the app keeps v1 until v2 passes."""
+paired comparison with the pass rule fixed before results; v2 passed on 15 Oct and is the app default."""
 import os
 import sys
 
@@ -10,16 +10,17 @@ pytest.importorskip("spacy")
 import evaluate_module_prompt_v2 as v2  # noqa: E402
 
 
-def test_app_still_uses_v1_and_v2_is_a_switch(monkeypatch):
+def test_app_uses_v2_and_v1_is_kept_for_the_evaluations(monkeypatch):
     from app.nlp import skill_extractor as se
     sent = []
     monkeypatch.setattr(se.SkillExtractor, "__init__", lambda self: None)
     monkeypatch.setattr(se.SkillExtractor, "_call_groq", lambda self, system, prompt: sent.append(prompt) or ["x"])
     ex = se.SkillExtractor()
     mod = {"code": "X", "name": "Penetration Testing", "description": "Nmap or Metasploit."}
-    ex.extract_from_module(mod)
-    ex.extract_from_module(mod, version="v2")
+    ex.extract_from_module(mod, version="v1")
+    ex.extract_from_module(mod)                          # 15 Oct: v2 passed its test, so it is the default
     assert "Fewer is better" in sent[0] and "main subject" in sent[1] and "list both" in sent[1]
+    assert se.MODULE_EXTRACTED_BY == se.MODULE_EXTRACTED_BY_V2
 
 
 def test_new_round_extracts_both_and_scores_v1_v2_v2b(tmp_path, monkeypatch):

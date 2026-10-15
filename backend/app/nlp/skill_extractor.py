@@ -37,7 +37,7 @@ def _gemini():
 # Module skills are extracted from the module DESCRIPTOR (name + description), not the
 # name alone. Name-only extraction guessed skills from the title and padded towards the
 # maximum (e.g. NumPy / Pandas for an intro Python module that teaches neither).
-MODULE_EXTRACTED_BY = "gpt-oss-120b:descriptor-v1"   # stored in module_skills.extracted_by
+MODULE_EXTRACTED_BY_V1 = "gpt-oss-120b:descriptor-v1"
 
 MODULE_SYSTEM = "You are an academic skill analyser. Given a university module descriptor, list the technical and professional skills the module actually teaches, based only on its description. Never add tools, frameworks or topics the description does not mention or directly imply. Return ONLY a valid JSON array of skill strings, no explanation, no markdown."
 
@@ -56,9 +56,11 @@ Return ONLY a JSON array, example: ["SQL querying", "entity-relationship modelli
 # v2 (15 Oct, evaluation step 3's error analysis, docs/evidence/module_skill_extraction/error_analysis.txt): v1 left
 # out the module's main subject ("Penetration testing", "3D modelling": the words employers search for), dropped
 # tools written as alternatives ("R or Python", "AWS or Azure") and added words to plain skill names ("Nmap
-# scanning", "Copyright law"). NOT used by the app until it passes the test on 30 new modules
-# (scripts/evaluation/evaluate_module_prompt_v2.py).
+# scanning", "Copyright law"). Tested on 30 NEW modules (scripts/evaluation/evaluate_module_prompt_v2.py, 15 Oct, run at
+# a18a731): F1 0.581 -> 0.746, paired 95% CI of the gain +0.048 to +0.283 -> PASS by the rule fixed beforehand, so the
+# app uses v2 from 15 Oct (v1 kept only to repeat the evaluations).
 MODULE_EXTRACTED_BY_V2 = "gpt-oss-120b:descriptor-v2"
+MODULE_EXTRACTED_BY = MODULE_EXTRACTED_BY_V2          # stored in module_skills.extracted_by
 
 MODULE_PROMPT_V2 = """Module: {module_name}
 Description: {description}
@@ -341,8 +343,8 @@ class SkillExtractor:
                     time.sleep(5)
         return []
 
-    def extract_from_module(self, module: dict, version: str = "v1") -> dict:
-        """Extract skills from a module dict. version "v2" = MODULE_PROMPT_V2 (evaluation only until it passes)."""
+    def extract_from_module(self, module: dict, version: str = "v2") -> dict:
+        """Extract skills from a module dict. version "v1" = the first prompt, kept to repeat the evaluations."""
         name = module.get("name", "")
         description = (module.get("description") or "").strip()
         if not description:

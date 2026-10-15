@@ -3,6 +3,24 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 15 Oct 2026 — Evaluation, and module skills with prompt v2
+Why: features are frozen; the evaluation measures each part against fixed rules written before the results
+(research and numbers: references.md; every run in MongoDB `evaluation_runs`, exported to
+docs/evidence/evaluation_runs.json).
+- **Evaluation runs.** Every evaluation is saved with its git commit, the app setup (relation model, cut-off,
+  embedder, extractor) and a fingerprint of each file it read (`app/services/evaluation_runs.py`,
+  `scripts/tools/evaluation_runs.py list | export`).
+- **spaCy baseline** on the 30 job ads of E1b: the LLM extractor's F1 is 0.43-0.45 higher than spaCy dictionary
+  matching (Sprint 2 dictionary or ESCO + O*NET), from recall; precision is no better (the IR's spaCy deviation).
+- **Module skills (step 3):** 30 modules, F1 0.523. Error analysis: half the misses were wording; the prompt left
+  out the module's main subject and dropped tools written "X or Y".
+- **Prompt v2** (main subject, every named tool by its plain name, no added words) tested on 30 NEW modules:
+  F1 0.581 -> 0.746 (paired 95% CI of the gain +0.048 to +0.283), passing the rule set beforehand. The app now
+  extracts module skills with v2. O*NET tool names on top of v2 added nothing (v2b = v2).
+- **Bringing existing modules to v2:** `scripts/pipeline/upgrade_module_skills_v2.py`. Modules not reviewed yet get
+  v2's skills (career-office additions kept); reviewed modules are never changed, their new suggestions go to
+  `data/module_v2_suggestions.csv` to add in Admin.
+
 ## 14 Oct 2026 — Transparency between employers and students
 Why: a student could wait weeks and then see a job close with no reason; SkillMap can't force an employer to reply,
 so it asks for a promise up front, ends the wait at that date, asks for a reason with every outcome, and shows

@@ -124,7 +124,7 @@ def sample(n: int, seed: int):
 
 # ── 2. the extractor, fresh ──────────────────────────────────────────────────────────────────────────────────────
 def extract(pause: float):
-    from app.nlp.skill_extractor import MODULE_EXTRACTED_BY, SkillExtractor
+    from app.nlp.skill_extractor import MODULE_EXTRACTED_BY_V1 as MODULE_EXTRACTED_BY, SkillExtractor  # step 3 tested v1
     sys.path.append("scripts/pipeline")
     from extract_module_skills import dedupe      # the same tidy-up the pipeline applies before saving
     mods, name = e1.load("modules.json"), "module_extractions.json"
@@ -134,7 +134,7 @@ def extract(pause: float):
         if m["job_ref"] in done:
             continue
         found = ex.extract_from_module({"code": m["job_ref"], "name": m["title"], "level": m.get("level"),
-                                        "description": m["text"]})
+                                        "description": m["text"]}, version="v1")
         skills = dedupe(found["extracted_skills"])
         if not skills:
             print(f"Stopped at module {i}: no skills back (usually Groq's daily limit). Run extract again later.")

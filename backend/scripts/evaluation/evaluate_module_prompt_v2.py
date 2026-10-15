@@ -94,13 +94,13 @@ def sample(n: int, seed: int):
 
 # ── 2. v1 and v2, fresh ──────────────────────────────────────────────────────────────────────────────────────────
 def extract(pause: float):
-    from app.nlp.skill_extractor import MODULE_EXTRACTED_BY, MODULE_EXTRACTED_BY_V2, SkillExtractor
+    from app.nlp.skill_extractor import MODULE_EXTRACTED_BY_V1, MODULE_EXTRACTED_BY_V2, SkillExtractor
     sys.path.append("scripts/pipeline")
     from extract_module_skills import dedupe
     mods, name = e1.load("modules.json"), "module_extractions.json"
     done = e1.load(name) if os.path.exists(e1.path(name)) else {}
     ex = SkillExtractor()
-    labels = {"v1": MODULE_EXTRACTED_BY, "v2": MODULE_EXTRACTED_BY_V2}
+    labels = {"v1": MODULE_EXTRACTED_BY_V1, "v2": MODULE_EXTRACTED_BY_V2}
     for i, m in enumerate(mods, 1):
         row = done.setdefault(m["job_ref"], {})
         for v in ("v1", "v2"):
