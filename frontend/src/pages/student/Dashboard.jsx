@@ -93,7 +93,7 @@ function GoalPicker({ goal, categories, fit, busy, onChange }) {
     <li key={name || 'all'}>
       <button type="button" onClick={() => pick(name)} aria-current={name === current ? 'true' : undefined}
         className={`w-full flex items-center gap-3 text-left px-3 py-2 rounded-lg text-sm hover:bg-slate-50 focus-visible:outline-none focus-visible:bg-slate-100 ${name === current ? 'bg-blue-50 hover:bg-blue-50' : ''}`}>
-        <span className="flex-1 min-w-0 break-words text-slate-800">
+        <span className="flex-1 min-w-0 wrap-break-word text-slate-800">
           {slashBreaks(label)}{name && name === current && <span className="text-xs font-semibold text-blue-700"> · your goal</span>}
         </span>
         {right}
@@ -109,7 +109,7 @@ function GoalPicker({ goal, categories, fit, busy, onChange }) {
         {goal || 'Open to all ICT roles'} <span aria-hidden="true" className="text-slate-500">▾</span>
       </button>
       {open && (
-        <div className="absolute left-0 top-full mt-1.5 z-20 w-full sm:w-[30rem] bg-white border border-slate-300 rounded-xl shadow-lg p-1.5">
+        <div className="absolute left-0 top-full mt-1.5 z-20 w-full sm:w-120 bg-white border border-slate-300 rounded-xl shadow-lg p-1.5">
           <p className="px-3 pt-1.5 pb-1 text-xs text-slate-500">
             {failed ? "Couldn't compare careers just now. You can still pick one." : "How many of each career's top skills you have"}
           </p>
