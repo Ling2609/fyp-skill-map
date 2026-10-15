@@ -1,0 +1,22 @@
+Module prompt v1 vs v2 on 30 NEW modules (205 answer-key skills)
+
+        found             precision                recall                    F1
+v1        170    0.641 (0.537-0.741)   0.532 (0.438-0.624)   0.581 (0.484-0.675)
+v2        224    0.714 (0.613-0.812)   0.780 (0.686-0.869)   0.746 (0.649-0.838)
+v2b       224    0.714 (0.613-0.812)   0.780 (0.686-0.869)   0.746 (0.649-0.838)
+(95% CI, bootstrap over modules)
+
+v2 minus v1, paired 95% CI over modules:
+  precision +0.073  (CI -0.043 to +0.189)
+  recall    +0.249  (CI +0.129 to +0.369)
+  f1        +0.165  (CI +0.048 to +0.283)
+  -> v2 F1 +0.165 vs v1 (CI +0.048 to +0.283): PASS
+
+v2b minus v2, paired 95% CI over modules:
+  precision +0.000  (CI +0.000 to +0.000)
+  recall    +0.000  (CI +0.000 to +0.000)
+  f1        +0.000  (CI +0.000 to +0.000)
+  -> v2b F1 +0.000 vs v2 (CI +0.000 to +0.000): FAIL
+
+Decision by the rule fixed before the result: use v2
+Answer-key check by the author (5 modules): 34 of 34 agreed skills correct; 0 missed by all three

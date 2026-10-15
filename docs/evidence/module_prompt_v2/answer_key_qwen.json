@@ -1,0 +1,254 @@
+{
+ "CY-L3-001": [
+  "Deep learning",
+  "Intrusion detection",
+  "Network traffic analysis",
+  "Anomaly detection",
+  "Neural networks",
+  "Cyber attack detection"
+ ],
+ "MM-L2-011": [
+  "Computer simulation",
+  "Data visualisation",
+  "3D visualisation",
+  "Simulation modelling",
+  "Virtual reality"
+ ],
+ "CS-L2-001": [
+  "C programming",
+  "Pointers",
+  "Memory management",
+  "Assembly language",
+  "System calls",
+  "Operating system interaction",
+  "Hardware interaction"
+ ],
+ "IT-L2-009": [
+  "Switching",
+  "Routing",
+  "VLANs",
+  "Spanning Tree",
+  "Static routing",
+  "Dynamic routing",
+  "OSPF",
+  "Cisco routers",
+  "Cisco switches"
+ ],
+ "IT-L3-028": [
+  "Business process modelling",
+  "Requirements gathering",
+  "Stakeholder interviewing",
+  "Literature review",
+  "Project planning",
+  "Technical report writing"
+ ],
+ "SE-L3-002": [
+  "DevOps",
+  "CI/CD pipelines",
+  "Docker",
+  "Infrastructure as code",
+  "Terraform",
+  "Monitoring",
+  "Cloud deployment",
+  "AWS",
+  "Azure"
+ ],
+ "GD-L1-009": [
+  "C++",
+  "Data types",
+  "Control structures",
+  "Functions",
+  "Classes",
+  "Pointers",
+  "Memory management"
+ ],
+ "IT-L3-008": [
+  "Knowledge discovery",
+  "Data preprocessing",
+  "Data mining",
+  "Hadoop",
+  "Spark",
+  "Big data analytics"
+ ],
+ "GD-L3-003": [
+  "Gameplay animation",
+  "Motion capture",
+  "Animation blending",
+  "State machines",
+  "Character animation",
+  "Game engines"
+ ],
+ "DA-L2-002": [
+  "Data mining",
+  "Predictive modelling",
+  "Classification",
+  "Regression",
+  "Clustering",
+  "Association rules",
+  "Model evaluation",
+  "SAS",
+  "Python"
+ ],
+ "MM-L2-002": [
+  "Interactive content development",
+  "Interaction design",
+  "Scripting",
+  "Unity"
+ ],
+ "CS-L3-004": [
+  "Digital image processing",
+  "Feature extraction",
+  "Object detection",
+  "Image classification",
+  "Pattern recognition",
+  "OpenCV",
+  "Python"
+ ],
+ "IT-L3-013": [
+  "Information system security",
+  "Literature review",
+  "Security standards",
+  "Risk assessment",
+  "Requirements gathering",
+  "Project planning",
+  "Technical report writing"
+ ],
+ "IT-L3-020": [
+  "Human Computer Interaction",
+  "Interaction design",
+  "Usability engineering",
+  "User research",
+  "Prototyping",
+  "Usability testing",
+  "Heuristic evaluation",
+  "Accessibility"
+ ],
+ "GD-L2-012": [
+  "C++",
+  "Real-time rendering",
+  "Graphics pipeline",
+  "OpenGL",
+  "DirectX",
+  "Shaders",
+  "Rendering performance"
+ ],
+ "GD-L2-011": [
+  "Game optimization",
+  "Profiling",
+  "Frame rate optimization",
+  "Memory optimization",
+  "CPU optimization",
+  "Level of detail",
+  "Rendering optimization"
+ ],
+ "SE-L2-013": [
+  "React",
+  "REST API design",
+  "Authentication",
+  "State management",
+  "Full-stack application development",
+  "JavaScript",
+  "CSS"
+ ],
+ "CY-L3-011": [
+  "Cyber law",
+  "Computer crime legislation",
+  "Data protection laws",
+  "Digital evidence admissibility",
+  "Intellectual property",
+  "Professional ethics"
+ ],
+ "MM-L2-009": [
+  "VR/AR Design",
+  "Virtual Reality",
+  "Augmented Reality",
+  "Spatial Interaction",
+  "VR/AR User Experience"
+ ],
+ "GD-L1-003": [
+  "Game engines",
+  "Game loop",
+  "Rendering",
+  "Physics",
+  "Scripting",
+  "Unity"
+ ],
+ "QC-L2-001": [
+  "Quantum computing",
+  "Qiskit"
+ ],
+ "AI-L2-001": [
+  "Digital imaging",
+  "Visual special effects",
+  "Image manipulation",
+  "Compositing",
+  "Colour correction"
+ ],
+ "MM-L1-002": [
+  "Virtual reality",
+  "Augmented reality",
+  "Metaverse",
+  "3D scene building",
+  "VR interaction",
+  "AR interaction",
+  "Immersive technology"
+ ],
+ "DA-L3-004": [
+  "Data collection",
+  "Data cleaning",
+  "Data exploration",
+  "Predictive modeling",
+  "Model evaluation",
+  "Data visualization",
+  "Dashboarding",
+  "Technical report writing"
+ ],
+ "SE-L3-008": [
+  "Software engineering",
+  "Project management"
+ ],
+ "IT-L3-018": [
+  "Cloud engineering",
+  "Literature review",
+  "Requirements gathering",
+  "Cloud provider comparison",
+  "Cloud architecture planning",
+  "Deployment planning",
+  "Technical report writing",
+  "Project planning"
+ ],
+ "CY-L2-003": [
+  "Secure systems design",
+  "Secure coding",
+  "Authentication",
+  "Cryptography",
+  "Threat modelling",
+  "Security testing"
+ ],
+ "IT-L3-011": [
+  "Database security",
+  "Access control",
+  "SQL injection prevention",
+  "Encryption",
+  "Auditing",
+  "Backup and recovery",
+  "Database security policies"
+ ],
+ "SE-L3-006": [
+  "Software quality engineering",
+  "Software quality metrics",
+  "Static analysis",
+  "Code reviews",
+  "Test automation",
+  "Performance testing",
+  "Continuous quality improvement"
+ ],
+ "SE-L3-003": [
+  "Software engineering",
+  "Literature review",
+  "Requirements gathering",
+  "Agile Scrum",
+  "Project planning",
+  "Technical report writing"
+ ]
+}

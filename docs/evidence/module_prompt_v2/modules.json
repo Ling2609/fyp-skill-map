@@ -1,0 +1,212 @@
+[
+ {
+  "job_ref": "CY-L3-001",
+  "title": "Deep Learning for Intrusion Detection",
+  "subcategory": "CY",
+  "level": 3,
+  "text": "Applies deep learning to intrusion detection including network traffic analysis, anomaly detection and neural network models for detecting cyber attacks."
+ },
+ {
+  "job_ref": "MM-L2-011",
+  "title": "Simulation, Visualisation and Virtual Reality",
+  "subcategory": "MM",
+  "level": 2,
+  "text": "Covers computer simulation and data visualisation in virtual environments including 3D visualisation, simulation modelling and VR training applications."
+ },
+ {
+  "job_ref": "CS-L2-001",
+  "title": "Computer Systems Low Level Technique",
+  "subcategory": "CS",
+  "level": 2,
+  "text": "Covers low-level programming including C programming, pointers, memory management, assembly language, system calls and interaction with operating system and hardware."
+ },
+ {
+  "job_ref": "IT-L2-009",
+  "title": "Switching and Routing Essentials",
+  "subcategory": "IT",
+  "level": 2,
+  "text": "Covers switching and routing including VLANs, spanning tree, static and dynamic routing protocols such as OSPF, and configuring Cisco routers and switches."
+ },
+ {
+  "job_ref": "IT-L3-028",
+  "title": "Investigations in Business Information Systems",
+  "subcategory": "IT",
+  "level": 3,
+  "text": "The investigation phase of the final year project: students identify a business problem, review literature and existing information systems, interview stakeholders and model the current business process, gather requirements and plan the development. The output is an Investigation Report with the aims, objectives, requirements and project plan for the final year project."
+ },
+ {
+  "job_ref": "SE-L3-002",
+  "title": "Development and Operations",
+  "subcategory": "SE",
+  "level": 3,
+  "text": "Covers DevOps practices including CI/CD pipelines, containerisation with Docker, infrastructure as code using Terraform, monitoring and cloud deployment on AWS or Azure."
+ },
+ {
+  "job_ref": "GD-L1-009",
+  "title": "Introduction to C++ Programming",
+  "subcategory": "GD",
+  "level": 1,
+  "text": "Introduces programming in C++ including data types, control structures, functions, classes, pointers and memory management."
+ },
+ {
+  "job_ref": "IT-L3-008",
+  "title": "Knowledge Discovery and Big Data Analytics",
+  "subcategory": "IT",
+  "level": 3,
+  "text": "Covers the knowledge discovery process, data preprocessing, data mining techniques, big data platforms such as Hadoop and Spark, and analysing large data sets."
+ },
+ {
+  "job_ref": "GD-L3-003",
+  "title": "Advanced Gameplay Animation",
+  "subcategory": "GD",
+  "level": 3,
+  "text": "Covers advanced animation for games including motion capture, animation blending, state machines and character animation in game engines."
+ },
+ {
+  "job_ref": "DA-L2-002",
+  "title": "Data Mining and Predictive Modelling",
+  "subcategory": "DA",
+  "level": 2,
+  "text": "Covers data mining and predictive modelling including classification, regression, clustering, association rules, model evaluation and tools such as SAS and Python."
+ },
+ {
+  "job_ref": "MM-L2-002",
+  "title": "Interactive Content Development",
+  "subcategory": "MM",
+  "level": 2,
+  "text": "Covers developing interactive digital content including interaction design, scripting interactivity and building interactive experiences with Unity."
+ },
+ {
+  "job_ref": "CS-L3-004",
+  "title": "Image Processing, Computer Vision and Pattern Recognition",
+  "subcategory": "CS",
+  "level": 3,
+  "text": "Covers digital image processing, feature extraction, object detection, image classification and pattern recognition techniques using OpenCV and Python."
+ },
+ {
+  "job_ref": "IT-L3-013",
+  "title": "Investigations in Information System Security",
+  "subcategory": "IT",
+  "level": 3,
+  "text": "The investigation phase of the final year project: students identify an information security problem, review literature and security standards, assess the risks of the system they will protect, gather security requirements and plan how the solution will be tested safely and ethically. The output is an Investigation Report with the aims, objectives, requirements and project plan for the final year project."
+ },
+ {
+  "job_ref": "IT-L3-020",
+  "title": "Human Computer Interaction and Usability",
+  "subcategory": "IT",
+  "level": 3,
+  "text": "Covers interaction design and usability engineering including user research, prototyping, usability testing, heuristic evaluation and accessibility."
+ },
+ {
+  "job_ref": "GD-L2-012",
+  "title": "Performant Rendering with C++",
+  "subcategory": "GD",
+  "level": 2,
+  "text": "Covers real-time rendering programming in C++ including the graphics pipeline, OpenGL or DirectX, shaders and rendering performance."
+ },
+ {
+  "job_ref": "GD-L2-011",
+  "title": "Game Optimization and Performance",
+  "subcategory": "GD",
+  "level": 2,
+  "text": "Covers optimising games including profiling, frame rate, memory and CPU optimisation, level of detail and optimising rendering in game engines."
+ },
+ {
+  "job_ref": "SE-L2-013",
+  "title": "Further Web Design and Development",
+  "subcategory": "SE",
+  "level": 2,
+  "text": "Advanced web development covering React, REST API design, authentication, state management and full-stack application development using JavaScript and CSS frameworks."
+ },
+ {
+  "job_ref": "CY-L3-011",
+  "title": "Legal and Professional Practice in the Cyber World",
+  "subcategory": "CY",
+  "level": 3,
+  "text": "Covers cyber law and professional practice including computer crime legislation, data protection laws, digital evidence admissibility, intellectual property and professional ethics."
+ },
+ {
+  "job_ref": "MM-L2-009",
+  "title": "VR/AR Design Principles",
+  "subcategory": "MM",
+  "level": 2,
+  "text": "Covers design principles for virtual and augmented reality including immersion, presence, spatial interaction, user comfort and VR/AR user experience."
+ },
+ {
+  "job_ref": "GD-L1-003",
+  "title": "Principles of Game Technology",
+  "subcategory": "GD",
+  "level": 1,
+  "text": "Introduces the technology behind games including game engines, the game loop, rendering, physics and scripting with Unity."
+ },
+ {
+  "job_ref": "QC-L2-001",
+  "title": "Fundamentals of Quantum Computing",
+  "subcategory": "QC",
+  "level": 2,
+  "text": "Introduces quantum computing concepts including qubits, superposition, entanglement, quantum gates and circuits, and writing simple quantum programs with Qiskit."
+ },
+ {
+  "job_ref": "AI-L2-001",
+  "title": "Imaging and Special Effects",
+  "subcategory": "AI",
+  "level": 2,
+  "text": "Covers digital imaging and visual special effects including image manipulation, compositing, colour correction and generating visual effects."
+ },
+ {
+  "job_ref": "MM-L1-002",
+  "title": "Introduction to VR/AR and Metaverse",
+  "subcategory": "MM",
+  "level": 1,
+  "text": "Introduces virtual reality, augmented reality and the metaverse including VR headsets and AR devices, building simple 3D scenes, interaction in VR and AR, and uses of immersive technology in education, retail and entertainment."
+ },
+ {
+  "job_ref": "DA-L3-004",
+  "title": "Project in Data Analytics",
+  "subcategory": "DA",
+  "level": 3,
+  "text": "Final year project: students collect and clean a real data set, explore it, build and evaluate predictive models, visualise the findings in a dashboard and present them in a technical report."
+ },
+ {
+  "job_ref": "SE-L3-008",
+  "title": "Project in Software Engineering",
+  "subcategory": "SE",
+  "level": 3,
+  "text": "Final year project requiring students to design, develop and evaluate a software engineering solution for a real-world problem demonstrating technical, analytical and project management skills."
+ },
+ {
+  "job_ref": "IT-L3-018",
+  "title": "Investigations in Cloud Engineering",
+  "subcategory": "IT",
+  "level": 3,
+  "text": "The investigation phase of the final year project: students identify a problem suited to the cloud, review literature and existing cloud services, gather requirements, compare cloud providers and services on cost and features, and plan the architecture and deployment. The output is an Investigation Report with the aims, objectives, requirements and project plan for the final year project."
+ },
+ {
+  "job_ref": "CY-L2-003",
+  "title": "Implementation of Secure Systems",
+  "subcategory": "CY",
+  "level": 2,
+  "text": "Covers designing and implementing secure systems including secure coding, authentication, cryptography in applications, threat modelling and security testing."
+ },
+ {
+  "job_ref": "IT-L3-011",
+  "title": "Database Security",
+  "subcategory": "IT",
+  "level": 3,
+  "text": "Covers securing database systems including access control, SQL injection prevention, encryption, auditing, backup and recovery, and database security policies."
+ },
+ {
+  "job_ref": "SE-L3-006",
+  "title": "Software Quality Engineering",
+  "subcategory": "SE",
+  "level": 3,
+  "text": "Covers software quality metrics, static analysis, code reviews, test automation frameworks, performance testing and continuous quality improvement in software development."
+ },
+ {
+  "job_ref": "SE-L3-003",
+  "title": "Investigations in Software Engineering",
+  "subcategory": "SE",
+  "level": 3,
+  "text": "The investigation phase of the final year project: students define a software problem, review literature and similar systems, gather functional and non-functional requirements from target users through a survey or interviews, choose a development methodology such as Agile Scrum and plan the sprints. The output is an Investigation Report with the aims, objectives, requirements and project plan for the final year project."
+ }
+]

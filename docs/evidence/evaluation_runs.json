@@ -464,5 +464,323 @@
     "sha256": "6aabb96b464288db849580e6510530efff3f80e25dde2bb23f1fc36bb526b016"
    }
   ]
+ },
+ {
+  "_id": "0379086d17fe4393be26b888271ba3e5",
+  "name": "E1 module extraction",
+  "objective": 1,
+  "at": "2026-10-15T06:19:47.112000+00:00",
+  "git": {
+   "commit": "94a8278",
+   "dirty": false
+  },
+  "setup": {
+   "relation_model": "relation_model_esco_onet_v1_skillmap_v2_soft_skillmap_v3_soft_nli-deberta-v3-base_rw3x20_noextend",
+   "relation_seeds": 3,
+   "relation_cutoff": 0.6,
+   "embedder": "all-MiniLM-L6-v2",
+   "extractor": "openai/gpt-oss-120b",
+   "python": "3.13.7"
+  },
+  "method": "extractor run fresh (MODULE_PROMPT, 3-10 skills) vs answer key (2 of 3 labellers: Claude, Qwen, Gemini), canonical skill key, micro P/R/F1, 95% bootstrap over modules (10,000, seed 0)",
+  "dataset": {
+   "modules": 30,
+   "answer_key_skills": 169,
+   "extracted": 164,
+   "sample": "30 modules with a description, stratified by family, seed 1",
+   "extracted_by": "gpt-oss-120b:descriptor-v1"
+  },
+  "metrics": {
+   "tp": 87,
+   "fp": 77,
+   "fn": 82,
+   "precision": {
+    "value": 0.53,
+    "ci95": [
+     0.424,
+     0.639
+    ]
+   },
+   "recall": {
+    "value": 0.515,
+    "ci95": [
+     0.419,
+     0.612
+    ]
+   },
+   "f1": {
+    "value": 0.523,
+    "ci95": [
+     0.423,
+     0.623
+    ]
+   }
+  },
+  "verdict": null,
+  "files": [
+   {
+    "path": "docs/evidence/module_skill_extraction/modules.json",
+    "sha256": "b080fd526eeac95038368a37d7bc28248ce6720775644a3ea05c1272e03aa50b"
+   },
+   {
+    "path": "docs/evidence/module_skill_extraction/answer_key.json",
+    "sha256": "a29ab2d0fea3ce7a68319c3fef4610e1e3d6d21cf88f65b2c015d63fc51c7509"
+   },
+   {
+    "path": "docs/evidence/module_skill_extraction/module_extractions.json",
+    "sha256": "83bfe1bedd28aa4102c77cb63a322cec3591f086ea4a02f855448e90c873cd0f"
+   },
+   {
+    "path": "docs/evidence/module_skill_extraction/spot_check.csv",
+    "sha256": "be1096484e2547015b42698fa87a105e06badb45b8242dd11d0aa0ae641d4c80"
+   }
+  ]
+ },
+ {
+  "_id": "5bd46522c5a042bba42cb3d613c39b97",
+  "name": "E1 module prompt v1 (new modules)",
+  "objective": 1,
+  "at": "2026-10-15T12:11:15.276000+00:00",
+  "git": {
+   "commit": "a18a731",
+   "dirty": false
+  },
+  "setup": {
+   "relation_model": "relation_model_esco_onet_v1_skillmap_v2_soft_skillmap_v3_soft_nli-deberta-v3-base_rw3x20_noextend",
+   "relation_seeds": 3,
+   "relation_cutoff": 0.6,
+   "embedder": "all-MiniLM-L6-v2",
+   "extractor": "openai/gpt-oss-120b",
+   "python": "3.13.7"
+  },
+  "method": "fresh extraction vs answer key (2 of 3 labellers, main subject listed), canonical key, micro P/R/F1, 95% bootstrap over modules; paired comparison v1 -> v2 -> v2b; rule fixed before results",
+  "dataset": {
+   "modules": 30,
+   "sample": "30 modules not in step 3, stratified by family, seed 2",
+   "variant": "v1",
+   "found": 170
+  },
+  "metrics": {
+   "precision": {
+    "value": 0.641,
+    "ci95": [
+     0.537,
+     0.741
+    ]
+   },
+   "recall": {
+    "value": 0.532,
+    "ci95": [
+     0.438,
+     0.624
+    ]
+   },
+   "f1": {
+    "value": 0.581,
+    "ci95": [
+     0.484,
+     0.675
+    ]
+   }
+  },
+  "verdict": "decision: use v2",
+  "files": [
+   {
+    "path": "docs/evidence/module_prompt_v2/modules.json",
+    "sha256": "0f3463d06605ea363988160a1b472f2d3ab438fb87f38a190582b8f5982ed387"
+   },
+   {
+    "path": "docs/evidence/module_prompt_v2/answer_key.json",
+    "sha256": "7c0dfc3d98933621770ce4f98d8b59826f369f0aec1a10909d67bafd6b28ed62"
+   },
+   {
+    "path": "docs/evidence/module_prompt_v2/module_extractions.json",
+    "sha256": "591de9d6cf2c217684b54c52c43671b19df133c32b1550c4bdfd1e1280d5b144"
+   },
+   {
+    "path": "docs/evidence/module_prompt_v2/spot_check.csv",
+    "sha256": "6f66384fe4304f91b30a16e21ad7b5f6c20e7080782618da4cfa04b88b53a114"
+   }
+  ]
+ },
+ {
+  "_id": "7a3800d5d7024d7490a1e9317c0a0864",
+  "name": "E1 module prompt v2 (new modules)",
+  "objective": 1,
+  "at": "2026-10-15T12:11:15.400000+00:00",
+  "git": {
+   "commit": "a18a731",
+   "dirty": false
+  },
+  "setup": {
+   "relation_model": "relation_model_esco_onet_v1_skillmap_v2_soft_skillmap_v3_soft_nli-deberta-v3-base_rw3x20_noextend",
+   "relation_seeds": 3,
+   "relation_cutoff": 0.6,
+   "embedder": "all-MiniLM-L6-v2",
+   "extractor": "openai/gpt-oss-120b",
+   "python": "3.13.7"
+  },
+  "method": "fresh extraction vs answer key (2 of 3 labellers, main subject listed), canonical key, micro P/R/F1, 95% bootstrap over modules; paired comparison v1 -> v2 -> v2b; rule fixed before results",
+  "dataset": {
+   "modules": 30,
+   "sample": "30 modules not in step 3, stratified by family, seed 2",
+   "variant": "v2",
+   "found": 224
+  },
+  "metrics": {
+   "precision": {
+    "value": 0.714,
+    "ci95": [
+     0.613,
+     0.812
+    ]
+   },
+   "recall": {
+    "value": 0.78,
+    "ci95": [
+     0.686,
+     0.869
+    ]
+   },
+   "f1": {
+    "value": 0.746,
+    "ci95": [
+     0.649,
+     0.838
+    ]
+   },
+   "minus_v1": {
+    "precision": {
+     "diff": 0.073,
+     "ci95": [
+      -0.043,
+      0.189
+     ]
+    },
+    "recall": {
+     "diff": 0.249,
+     "ci95": [
+      0.129,
+      0.369
+     ]
+    },
+    "f1": {
+     "diff": 0.165,
+     "ci95": [
+      0.048,
+      0.283
+     ]
+    }
+   }
+  },
+  "verdict": "v2 F1 +0.165 vs v1 (CI +0.048 to +0.283): PASS",
+  "files": [
+   {
+    "path": "docs/evidence/module_prompt_v2/modules.json",
+    "sha256": "0f3463d06605ea363988160a1b472f2d3ab438fb87f38a190582b8f5982ed387"
+   },
+   {
+    "path": "docs/evidence/module_prompt_v2/answer_key.json",
+    "sha256": "7c0dfc3d98933621770ce4f98d8b59826f369f0aec1a10909d67bafd6b28ed62"
+   },
+   {
+    "path": "docs/evidence/module_prompt_v2/module_extractions.json",
+    "sha256": "591de9d6cf2c217684b54c52c43671b19df133c32b1550c4bdfd1e1280d5b144"
+   },
+   {
+    "path": "docs/evidence/module_prompt_v2/spot_check.csv",
+    "sha256": "6f66384fe4304f91b30a16e21ad7b5f6c20e7080782618da4cfa04b88b53a114"
+   }
+  ]
+ },
+ {
+  "_id": "bcfd8c498f9b4eecaf34cb6d25717444",
+  "name": "E1 module prompt v2b (new modules)",
+  "objective": 1,
+  "at": "2026-10-15T12:11:15.492000+00:00",
+  "git": {
+   "commit": "a18a731",
+   "dirty": false
+  },
+  "setup": {
+   "relation_model": "relation_model_esco_onet_v1_skillmap_v2_soft_skillmap_v3_soft_nli-deberta-v3-base_rw3x20_noextend",
+   "relation_seeds": 3,
+   "relation_cutoff": 0.6,
+   "embedder": "all-MiniLM-L6-v2",
+   "extractor": "openai/gpt-oss-120b",
+   "python": "3.13.7"
+  },
+  "method": "fresh extraction vs answer key (2 of 3 labellers, main subject listed), canonical key, micro P/R/F1, 95% bootstrap over modules; paired comparison v1 -> v2 -> v2b; rule fixed before results",
+  "dataset": {
+   "modules": 30,
+   "sample": "30 modules not in step 3, stratified by family, seed 2",
+   "variant": "v2b",
+   "found": 224
+  },
+  "metrics": {
+   "precision": {
+    "value": 0.714,
+    "ci95": [
+     0.613,
+     0.812
+    ]
+   },
+   "recall": {
+    "value": 0.78,
+    "ci95": [
+     0.686,
+     0.869
+    ]
+   },
+   "f1": {
+    "value": 0.746,
+    "ci95": [
+     0.649,
+     0.838
+    ]
+   },
+   "minus_v2": {
+    "precision": {
+     "diff": 0.0,
+     "ci95": [
+      0.0,
+      0.0
+     ]
+    },
+    "recall": {
+     "diff": 0.0,
+     "ci95": [
+      0.0,
+      0.0
+     ]
+    },
+    "f1": {
+     "diff": 0.0,
+     "ci95": [
+      0.0,
+      0.0
+     ]
+    }
+   }
+  },
+  "verdict": "v2b F1 +0.000 vs v2 (CI +0.000 to +0.000): FAIL",
+  "files": [
+   {
+    "path": "docs/evidence/module_prompt_v2/modules.json",
+    "sha256": "0f3463d06605ea363988160a1b472f2d3ab438fb87f38a190582b8f5982ed387"
+   },
+   {
+    "path": "docs/evidence/module_prompt_v2/answer_key.json",
+    "sha256": "7c0dfc3d98933621770ce4f98d8b59826f369f0aec1a10909d67bafd6b28ed62"
+   },
+   {
+    "path": "docs/evidence/module_prompt_v2/module_extractions.json",
+    "sha256": "591de9d6cf2c217684b54c52c43671b19df133c32b1550c4bdfd1e1280d5b144"
+   },
+   {
+    "path": "docs/evidence/module_prompt_v2/spot_check.csv",
+    "sha256": "6f66384fe4304f91b30a16e21ad7b5f6c20e7080782618da4cfa04b88b53a114"
+   }
+  ]
  }
 ]

@@ -1,0 +1,286 @@
+{
+ "CY-L3-001": [
+  "Intrusion detection",
+  "Deep learning",
+  "Network traffic analysis",
+  "Anomaly detection",
+  "Neural network models",
+  "detecting cyber attacks"
+ ],
+ "MM-L2-011": [
+  "computer simulation",
+  "data visualisation",
+  "virtual environments",
+  "3D visualisation",
+  "simulation modelling",
+  "VR training applications"
+ ],
+ "CS-L2-001": [
+  "Low-level programming",
+  "C programming",
+  "pointers",
+  "memory management",
+  "assembly language",
+  "system calls",
+  "operating system interaction",
+  "hardware interaction"
+ ],
+ "IT-L2-009": [
+  "Switching and routing",
+  "VLANs",
+  "spanning tree",
+  "static routing",
+  "dynamic routing protocols",
+  "OSPF",
+  "Cisco routers",
+  "Cisco switches",
+  "configuring Cisco routers",
+  "configuring Cisco switches"
+ ],
+ "IT-L3-028": [
+  "Business Information Systems",
+  "Identify business problem",
+  "Review literature",
+  "Existing information systems",
+  "Interview stakeholders",
+  "Model current business process",
+  "Gather requirements",
+  "Plan development",
+  "Investigation Report"
+ ],
+ "SE-L3-002": [
+  "Development and Operations",
+  "CI/CD pipelines",
+  "containerisation",
+  "Docker",
+  "infrastructure as code",
+  "Terraform",
+  "monitoring",
+  "cloud deployment",
+  "AWS",
+  "Azure"
+ ],
+ "GD-L1-009": [
+  "C++ programming",
+  "data types",
+  "control structures",
+  "functions",
+  "classes",
+  "pointers",
+  "memory management"
+ ],
+ "IT-L3-008": [
+  "Big data analytics",
+  "knowledge discovery process",
+  "data preprocessing",
+  "data mining techniques",
+  "Hadoop",
+  "Spark",
+  "analysing large data sets"
+ ],
+ "GD-L3-003": [
+  "Advanced Gameplay Animation",
+  "motion capture",
+  "animation blending",
+  "state machines",
+  "character animation",
+  "game engines"
+ ],
+ "DA-L2-002": [
+  "Data mining",
+  "Predictive modelling",
+  "Classification",
+  "Regression",
+  "Clustering",
+  "Association rules",
+  "Model evaluation",
+  "SAS",
+  "Python"
+ ],
+ "MM-L2-002": [
+  "Interactive content development",
+  "Interaction design",
+  "Scripting interactivity",
+  "Interactive experiences",
+  "Unity"
+ ],
+ "CS-L3-004": [
+  "Image Processing",
+  "digital image processing",
+  "feature extraction",
+  "object detection",
+  "image classification",
+  "pattern recognition",
+  "OpenCV",
+  "Python"
+ ],
+ "IT-L3-013": [
+  "Information system security",
+  "Identifying security problem",
+  "Literature review",
+  "Security standards review",
+  "Risk assessment",
+  "Security requirements gathering",
+  "Safe ethical testing"
+ ],
+ "IT-L3-020": [
+  "Human Computer Interaction",
+  "Interaction design",
+  "Usability engineering",
+  "User research",
+  "Prototyping",
+  "Usability testing",
+  "Heuristic evaluation",
+  "Accessibility"
+ ],
+ "GD-L2-012": [
+  "real-time rendering programming",
+  "C++",
+  "OpenGL",
+  "DirectX",
+  "graphics pipeline",
+  "shaders",
+  "rendering performance"
+ ],
+ "GD-L2-011": [
+  "optimising games",
+  "profiling",
+  "frame rate",
+  "memory optimisation",
+  "CPU optimisation",
+  "level of detail",
+  "optimising rendering",
+  "game engines"
+ ],
+ "SE-L2-013": [
+  "Web development",
+  "React",
+  "REST API design",
+  "authentication",
+  "state management",
+  "full-stack application development",
+  "JavaScript",
+  "CSS frameworks"
+ ],
+ "CY-L3-011": [
+  "Cyber law",
+  "Computer crime legislation",
+  "Data protection laws",
+  "Digital evidence admissibility",
+  "Intellectual property",
+  "Professional ethics",
+  "Professional practice"
+ ],
+ "MM-L2-009": [
+  "VR/AR design principles",
+  "immersion",
+  "presence",
+  "spatial interaction",
+  "user comfort",
+  "VR/AR user experience"
+ ],
+ "GD-L1-003": [
+  "Game technology",
+  "game engines",
+  "game loop",
+  "rendering",
+  "physics",
+  "scripting",
+  "Unity"
+ ],
+ "QC-L2-001": [
+  "Quantum computing",
+  "Qubits",
+  "Superposition",
+  "Entanglement",
+  "Quantum gates",
+  "Quantum circuits",
+  "Simple quantum programs",
+  "Qiskit"
+ ],
+ "AI-L2-001": [
+  "digital imaging",
+  "visual special effects",
+  "image manipulation",
+  "compositing",
+  "colour correction",
+  "generating visual effects"
+ ],
+ "MM-L1-002": [
+  "Virtual reality",
+  "Augmented reality",
+  "Metaverse",
+  "VR headsets",
+  "AR devices",
+  "Building simple 3D scenes",
+  "Interaction in VR",
+  "Interaction in AR",
+  "Immersive technology in education",
+  "Immersive technology in retail",
+  "Immersive technology in entertainment"
+ ],
+ "DA-L3-004": [
+  "Data Analytics",
+  "Data collection",
+  "Data cleaning",
+  "Data exploration",
+  "Predictive models",
+  "Dashboard visualisation",
+  "Technical report"
+ ],
+ "SE-L3-008": [
+  "Software Engineering",
+  "Design",
+  "Develop",
+  "Evaluate",
+  "Technical skills",
+  "Analytical skills",
+  "Project management skills"
+ ],
+ "IT-L3-018": [
+  "Cloud engineering",
+  "Problem identification",
+  "Literature review",
+  "Requirements gathering",
+  "Cloud provider comparison",
+  "Architecture planning",
+  "Deployment planning"
+ ],
+ "CY-L2-003": [
+  "Secure systems",
+  "Secure coding",
+  "Authentication",
+  "Cryptography",
+  "Threat modelling",
+  "Security testing"
+ ],
+ "IT-L3-011": [
+  "Database security",
+  "Access control",
+  "SQL injection prevention",
+  "Encryption",
+  "Auditing",
+  "Backup and recovery",
+  "Database security policies"
+ ],
+ "SE-L3-006": [
+  "Software Quality Engineering",
+  "software quality metrics",
+  "static analysis",
+  "code reviews",
+  "test automation frameworks",
+  "performance testing",
+  "continuous quality improvement"
+ ],
+ "SE-L3-003": [
+  "Software engineering",
+  "Software problem definition",
+  "Literature review",
+  "Functional requirements gathering",
+  "Non-functional requirements gathering",
+  "Survey",
+  "Interviews",
+  "Agile Scrum",
+  "Sprint planning"
+ ]
+}

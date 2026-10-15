@@ -1,0 +1,756 @@
+{
+ "CY-L3-001": {
+  "v1": {
+   "skills": [
+    "network traffic analysis",
+    "anomaly detection",
+    "neural network modeling",
+    "intrusion detection",
+    "deep learning application"
+   ],
+   "extracted_by": "gpt-oss-120b:descriptor-v1"
+  },
+  "v2": {
+   "skills": [
+    "Intrusion detection",
+    "Deep learning",
+    "Network traffic analysis",
+    "Anomaly detection",
+    "Neural network models",
+    "detecting cyber attacks"
+   ],
+   "extracted_by": "gpt-oss-120b:descriptor-v2"
+  }
+ },
+ "MM-L2-011": {
+  "v1": {
+   "skills": [
+    "computer simulation",
+    "data visualisation",
+    "3D visualisation",
+    "simulation modelling",
+    "VR training applications"
+   ],
+   "extracted_by": "gpt-oss-120b:descriptor-v1"
+  },
+  "v2": {
+   "skills": [
+    "computer simulation",
+    "data visualisation",
+    "virtual environments",
+    "3D visualisation",
+    "simulation modelling",
+    "VR training applications"
+   ],
+   "extracted_by": "gpt-oss-120b:descriptor-v2"
+  }
+ },
+ "CS-L2-001": {
+  "v1": {
+   "skills": [
+    "C programming",
+    "pointer manipulation",
+    "memory management",
+    "assembly programming",
+    "system call usage",
+    "hardware interaction"
+   ],
+   "extracted_by": "gpt-oss-120b:descriptor-v1"
+  },
+  "v2": {
+   "skills": [
+    "Low-level programming",
+    "C programming",
+    "pointers",
+    "memory management",
+    "assembly language",
+    "system calls",
+    "operating system interaction",
+    "hardware interaction"
+   ],
+   "extracted_by": "gpt-oss-120b:descriptor-v2"
+  }
+ },
+ "IT-L2-009": {
+  "v1": {
+   "skills": [
+    "VLAN configuration",
+    "Spanning Tree configuration",
+    "Static routing",
+    "Dynamic routing",
+    "OSPF configuration",
+    "Cisco router configuration",
+    "Cisco switch configuration"
+   ],
+   "extracted_by": "gpt-oss-120b:descriptor-v1"
+  },
+  "v2": {
+   "skills": [
+    "Switching and routing",
+    "VLANs",
+    "spanning tree",
+    "static routing",
+    "dynamic routing protocols",
+    "OSPF",
+    "Cisco routers",
+    "Cisco switches",
+    "configuring Cisco routers",
+    "configuring Cisco switches"
+   ],
+   "extracted_by": "gpt-oss-120b:descriptor-v2"
+  }
+ },
+ "IT-L3-028": {
+  "v1": {
+   "skills": [
+    "business problem identification",
+    "literature review",
+    "stakeholder interviewing",
+    "business process modelling",
+    "requirements gathering",
+    "project planning"
+   ],
+   "extracted_by": "gpt-oss-120b:descriptor-v1"
+  },
+  "v2": {
+   "skills": [
+    "Business Information Systems",
+    "Identify business problem",
+    "Review literature",
+    "Existing information systems",
+    "Interview stakeholders",
+    "Model current business process",
+    "Gather requirements",
+    "Plan development",
+    "Investigation Report"
+   ],
+   "extracted_by": "gpt-oss-120b:descriptor-v2"
+  }
+ },
+ "SE-L3-002": {
+  "v1": {
+   "skills": [
+    "CI/CD pipeline implementation",
+    "Docker containerisation",
+    "Terraform infrastructure as code",
+    "system monitoring",
+    "AWS/Azure deployment"
+   ],
+   "extracted_by": "gpt-oss-120b:descriptor-v1"
+  },
+  "v2": {
+   "skills": [
+    "Development and Operations",
+    "CI/CD pipelines",
+    "containerisation",
+    "Docker",
+    "infrastructure as code",
+    "Terraform",
+    "monitoring",
+    "cloud deployment",
+    "AWS",
+    "Azure"
+   ],
+   "extracted_by": "gpt-oss-120b:descriptor-v2"
+  }
+ },
+ "GD-L1-009": {
+  "v1": {
+   "skills": [
+    "C++ programming",
+    "basic data types",
+    "control structures",
+    "function implementation",
+    "basic object-oriented programming",
+    "pointer usage"
+   ],
+   "extracted_by": "gpt-oss-120b:descriptor-v1"
+  },
+  "v2": {
+   "skills": [
+    "C++ programming",
+    "data types",
+    "control structures",
+    "functions",
+    "classes",
+    "pointers",
+    "memory management"
+   ],
+   "extracted_by": "gpt-oss-120b:descriptor-v2"
+  }
+ },
+ "IT-L3-008": {
+  "v1": {
+   "skills": [
+    "knowledge discovery",
+    "data preprocessing",
+    "data mining",
+    "Hadoop usage",
+    "Spark usage",
+    "large dataset analysis"
+   ],
+   "extracted_by": "gpt-oss-120b:descriptor-v1"
+  },
+  "v2": {
+   "skills": [
+    "Big data analytics",
+    "knowledge discovery process",
+    "data preprocessing",
+    "data mining techniques",
+    "Hadoop",
+    "Spark",
+    "analysing large data sets"
+   ],
+   "extracted_by": "gpt-oss-120b:descriptor-v2"
+  }
+ },
+ "GD-L3-003": {
+  "v1": {
+   "skills": [
+    "motion capture",
+    "animation blending",
+    "state machine design",
+    "character animation in game engines"
+   ],
+   "extracted_by": "gpt-oss-120b:descriptor-v1"
+  },
+  "v2": {
+   "skills": [
+    "Advanced Gameplay Animation",
+    "motion capture",
+    "animation blending",
+    "state machines",
+    "character animation",
+    "game engines"
+   ],
+   "extracted_by": "gpt-oss-120b:descriptor-v2"
+  }
+ },
+ "DA-L2-002": {
+  "v1": {
+   "skills": [
+    "data mining",
+    "predictive modelling",
+    "classification",
+    "regression",
+    "clustering",
+    "association rule mining",
+    "model evaluation",
+    "SAS programming",
+    "Python programming"
+   ],
+   "extracted_by": "gpt-oss-120b:descriptor-v1"
+  },
+  "v2": {
+   "skills": [
+    "Data mining",
+    "Predictive modelling",
+    "Classification",
+    "Regression",
+    "Clustering",
+    "Association rules",
+    "Model evaluation",
+    "SAS",
+    "Python"
+   ],
+   "extracted_by": "gpt-oss-120b:descriptor-v2"
+  }
+ },
+ "MM-L2-002": {
+  "v1": {
+   "skills": [
+    "Interaction design",
+    "Interactive scripting",
+    "Unity development"
+   ],
+   "extracted_by": "gpt-oss-120b:descriptor-v1"
+  },
+  "v2": {
+   "skills": [
+    "Interactive content development",
+    "Interaction design",
+    "Scripting interactivity",
+    "Interactive experiences",
+    "Unity"
+   ],
+   "extracted_by": "gpt-oss-120b:descriptor-v2"
+  }
+ },
+ "CS-L3-004": {
+  "v1": {
+   "skills": [
+    "digital image processing",
+    "feature extraction",
+    "object detection",
+    "image classification",
+    "pattern recognition"
+   ],
+   "extracted_by": "gpt-oss-120b:descriptor-v1"
+  },
+  "v2": {
+   "skills": [
+    "Image Processing",
+    "digital image processing",
+    "feature extraction",
+    "object detection",
+    "image classification",
+    "pattern recognition",
+    "OpenCV",
+    "Python"
+   ],
+   "extracted_by": "gpt-oss-120b:descriptor-v2"
+  }
+ },
+ "IT-L3-013": {
+  "v1": {
+   "skills": [
+    "Security problem identification",
+    "Security standards review",
+    "Risk assessment",
+    "Security requirements gathering",
+    "Ethical test planning",
+    "Project planning"
+   ],
+   "extracted_by": "gpt-oss-120b:descriptor-v1"
+  },
+  "v2": {
+   "skills": [
+    "Information system security",
+    "Identifying security problem",
+    "Literature review",
+    "Security standards review",
+    "Risk assessment",
+    "Security requirements gathering",
+    "Safe ethical testing"
+   ],
+   "extracted_by": "gpt-oss-120b:descriptor-v2"
+  }
+ },
+ "IT-L3-020": {
+  "v1": {
+   "skills": [
+    "interaction design",
+    "usability engineering",
+    "user research",
+    "prototyping",
+    "usability testing",
+    "heuristic evaluation",
+    "accessibility assessment"
+   ],
+   "extracted_by": "gpt-oss-120b:descriptor-v1"
+  },
+  "v2": {
+   "skills": [
+    "Human Computer Interaction",
+    "Interaction design",
+    "Usability engineering",
+    "User research",
+    "Prototyping",
+    "Usability testing",
+    "Heuristic evaluation",
+    "Accessibility"
+   ],
+   "extracted_by": "gpt-oss-120b:descriptor-v2"
+  }
+ },
+ "GD-L2-012": {
+  "v1": {
+   "skills": [
+    "real-time rendering programming",
+    "C++ rendering programming",
+    "graphics pipeline implementation",
+    "shader programming",
+    "rendering performance optimization"
+   ],
+   "extracted_by": "gpt-oss-120b:descriptor-v1"
+  },
+  "v2": {
+   "skills": [
+    "real-time rendering programming",
+    "C++",
+    "OpenGL",
+    "DirectX",
+    "graphics pipeline",
+    "shaders",
+    "rendering performance"
+   ],
+   "extracted_by": "gpt-oss-120b:descriptor-v2"
+  }
+ },
+ "GD-L2-011": {
+  "v1": {
+   "skills": [
+    "game profiling",
+    "frame rate optimization",
+    "memory optimization",
+    "CPU optimization",
+    "level of detail optimization",
+    "rendering optimization"
+   ],
+   "extracted_by": "gpt-oss-120b:descriptor-v1"
+  },
+  "v2": {
+   "skills": [
+    "optimising games",
+    "profiling",
+    "frame rate",
+    "memory optimisation",
+    "CPU optimisation",
+    "level of detail",
+    "optimising rendering",
+    "game engines"
+   ],
+   "extracted_by": "gpt-oss-120b:descriptor-v2"
+  }
+ },
+ "SE-L2-013": {
+  "v1": {
+   "skills": [
+    "React development",
+    "REST API design",
+    "authentication implementation",
+    "state management",
+    "full-stack development"
+   ],
+   "extracted_by": "gpt-oss-120b:descriptor-v1"
+  },
+  "v2": {
+   "skills": [
+    "Web development",
+    "React",
+    "REST API design",
+    "authentication",
+    "state management",
+    "full-stack application development",
+    "JavaScript",
+    "CSS frameworks"
+   ],
+   "extracted_by": "gpt-oss-120b:descriptor-v2"
+  }
+ },
+ "CY-L3-011": {
+  "v1": {
+   "skills": [
+    "Cyber law fundamentals",
+    "Computer crime compliance",
+    "Data protection compliance",
+    "Digital evidence assessment",
+    "Intellectual property management",
+    "Professional ethics"
+   ],
+   "extracted_by": "gpt-oss-120b:descriptor-v1"
+  },
+  "v2": {
+   "skills": [
+    "Cyber law",
+    "Computer crime legislation",
+    "Data protection laws",
+    "Digital evidence admissibility",
+    "Intellectual property",
+    "Professional ethics",
+    "Professional practice"
+   ],
+   "extracted_by": "gpt-oss-120b:descriptor-v2"
+  }
+ },
+ "MM-L2-009": {
+  "v1": {
+   "skills": [
+    "Immersion design",
+    "Presence design",
+    "Spatial interaction design",
+    "User comfort design",
+    "VR/AR UX design"
+   ],
+   "extracted_by": "gpt-oss-120b:descriptor-v1"
+  },
+  "v2": {
+   "skills": [
+    "VR/AR design principles",
+    "immersion",
+    "presence",
+    "spatial interaction",
+    "user comfort",
+    "VR/AR user experience"
+   ],
+   "extracted_by": "gpt-oss-120b:descriptor-v2"
+  }
+ },
+ "GD-L1-003": {
+  "v1": {
+   "skills": [
+    "game engine fundamentals",
+    "game loop programming",
+    "real-time rendering",
+    "game physics basics",
+    "Unity scripting"
+   ],
+   "extracted_by": "gpt-oss-120b:descriptor-v1"
+  },
+  "v2": {
+   "skills": [
+    "Game technology",
+    "game engines",
+    "game loop",
+    "rendering",
+    "physics",
+    "scripting",
+    "Unity"
+   ],
+   "extracted_by": "gpt-oss-120b:descriptor-v2"
+  }
+ },
+ "QC-L2-001": {
+  "v1": {
+   "skills": [
+    "Quantum computing fundamentals",
+    "Qubit concepts",
+    "Superposition basics",
+    "Entanglement basics",
+    "Quantum circuit design",
+    "Qiskit programming"
+   ],
+   "extracted_by": "gpt-oss-120b:descriptor-v1"
+  },
+  "v2": {
+   "skills": [
+    "Quantum computing",
+    "Qubits",
+    "Superposition",
+    "Entanglement",
+    "Quantum gates",
+    "Quantum circuits",
+    "Simple quantum programs",
+    "Qiskit"
+   ],
+   "extracted_by": "gpt-oss-120b:descriptor-v2"
+  }
+ },
+ "AI-L2-001": {
+  "v1": {
+   "skills": [
+    "image manipulation",
+    "compositing",
+    "colour correction",
+    "visual effects generation"
+   ],
+   "extracted_by": "gpt-oss-120b:descriptor-v1"
+  },
+  "v2": {
+   "skills": [
+    "digital imaging",
+    "visual special effects",
+    "image manipulation",
+    "compositing",
+    "colour correction",
+    "generating visual effects"
+   ],
+   "extracted_by": "gpt-oss-120b:descriptor-v2"
+  }
+ },
+ "MM-L1-002": {
+  "v1": {
+   "skills": [
+    "VR headset operation",
+    "AR device usage",
+    "Simple 3D scene creation",
+    "VR/AR interaction design",
+    "Immersive tech application"
+   ],
+   "extracted_by": "gpt-oss-120b:descriptor-v1"
+  },
+  "v2": {
+   "skills": [
+    "Virtual reality",
+    "Augmented reality",
+    "Metaverse",
+    "VR headsets",
+    "AR devices",
+    "Building simple 3D scenes",
+    "Interaction in VR",
+    "Interaction in AR",
+    "Immersive technology in education",
+    "Immersive technology in retail",
+    "Immersive technology in entertainment"
+   ],
+   "extracted_by": "gpt-oss-120b:descriptor-v2"
+  }
+ },
+ "DA-L3-004": {
+  "v1": {
+   "skills": [
+    "data collection",
+    "data cleaning",
+    "data exploration",
+    "predictive modeling",
+    "model evaluation",
+    "dashboard visualisation",
+    "technical report writing",
+    "presentation skills"
+   ],
+   "extracted_by": "gpt-oss-120b:descriptor-v1"
+  },
+  "v2": {
+   "skills": [
+    "Data Analytics",
+    "Data collection",
+    "Data cleaning",
+    "Data exploration",
+    "Predictive models",
+    "Dashboard visualisation",
+    "Technical report"
+   ],
+   "extracted_by": "gpt-oss-120b:descriptor-v2"
+  }
+ },
+ "SE-L3-008": {
+  "v1": {
+   "skills": [
+    "Software design",
+    "Software development",
+    "Software evaluation",
+    "Technical analysis",
+    "Project management"
+   ],
+   "extracted_by": "gpt-oss-120b:descriptor-v1"
+  },
+  "v2": {
+   "skills": [
+    "Software Engineering",
+    "Design",
+    "Develop",
+    "Evaluate",
+    "Technical skills",
+    "Analytical skills",
+    "Project management skills"
+   ],
+   "extracted_by": "gpt-oss-120b:descriptor-v2"
+  }
+ },
+ "IT-L3-018": {
+  "v1": {
+   "skills": [
+    "cloud problem identification",
+    "literature review",
+    "requirements gathering",
+    "cloud provider evaluation",
+    "cloud architecture planning",
+    "project planning"
+   ],
+   "extracted_by": "gpt-oss-120b:descriptor-v1"
+  },
+  "v2": {
+   "skills": [
+    "Cloud engineering",
+    "Problem identification",
+    "Literature review",
+    "Requirements gathering",
+    "Cloud provider comparison",
+    "Architecture planning",
+    "Deployment planning"
+   ],
+   "extracted_by": "gpt-oss-120b:descriptor-v2"
+  }
+ },
+ "CY-L2-003": {
+  "v1": {
+   "skills": [
+    "Secure coding",
+    "Authentication",
+    "Cryptography",
+    "Threat modelling",
+    "Security testing"
+   ],
+   "extracted_by": "gpt-oss-120b:descriptor-v1"
+  },
+  "v2": {
+   "skills": [
+    "Secure systems",
+    "Secure coding",
+    "Authentication",
+    "Cryptography",
+    "Threat modelling",
+    "Security testing"
+   ],
+   "extracted_by": "gpt-oss-120b:descriptor-v2"
+  }
+ },
+ "IT-L3-011": {
+  "v1": {
+   "skills": [
+    "Access control",
+    "SQL injection prevention",
+    "Encryption",
+    "Auditing",
+    "Backup and recovery",
+    "Database security policies"
+   ],
+   "extracted_by": "gpt-oss-120b:descriptor-v1"
+  },
+  "v2": {
+   "skills": [
+    "Database security",
+    "Access control",
+    "SQL injection prevention",
+    "Encryption",
+    "Auditing",
+    "Backup and recovery",
+    "Database security policies"
+   ],
+   "extracted_by": "gpt-oss-120b:descriptor-v2"
+  }
+ },
+ "SE-L3-006": {
+  "v1": {
+   "skills": [
+    "software quality metrics",
+    "static analysis",
+    "code review",
+    "test automation",
+    "performance testing",
+    "continuous quality improvement"
+   ],
+   "extracted_by": "gpt-oss-120b:descriptor-v1"
+  },
+  "v2": {
+   "skills": [
+    "Software Quality Engineering",
+    "software quality metrics",
+    "static analysis",
+    "code reviews",
+    "test automation frameworks",
+    "performance testing",
+    "continuous quality improvement"
+   ],
+   "extracted_by": "gpt-oss-120b:descriptor-v2"
+  }
+ },
+ "SE-L3-003": {
+  "v1": {
+   "skills": [
+    "software problem definition",
+    "literature review",
+    "requirements gathering",
+    "Agile Scrum planning",
+    "sprint planning",
+    "user interviewing",
+    "project planning"
+   ],
+   "extracted_by": "gpt-oss-120b:descriptor-v1"
+  },
+  "v2": {
+   "skills": [
+    "Software engineering",
+    "Software problem definition",
+    "Literature review",
+    "Functional requirements gathering",
+    "Non-functional requirements gathering",
+    "Survey",
+    "Interviews",
+    "Agile Scrum",
+    "Sprint planning"
+   ],
+   "extracted_by": "gpt-oss-120b:descriptor-v2"
+  }
+ }
+}

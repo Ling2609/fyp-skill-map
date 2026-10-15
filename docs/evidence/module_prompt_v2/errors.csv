@@ -1,0 +1,376 @@
+﻿variant,code,module,error,skill
+v1,CY-L3-001,Deep Learning for Intrusion Detection,extra (not in answer key),neural network modeling
+v1,CY-L3-001,Deep Learning for Intrusion Detection,extra (not in answer key),deep learning application
+v1,CY-L3-001,Deep Learning for Intrusion Detection,missed (in answer key),Deep learning
+v1,CY-L3-001,Deep Learning for Intrusion Detection,missed (in answer key),Neural networks
+v1,CY-L3-001,Deep Learning for Intrusion Detection,missed (in answer key),Cyber attack detection
+v1,MM-L2-011,"Simulation, Visualisation and Virtual Reality",missed (in answer key),Virtual reality
+v1,CS-L2-001,Computer Systems Low Level Technique,extra (not in answer key),pointer manipulation
+v1,CS-L2-001,Computer Systems Low Level Technique,missed (in answer key),Low-level programming
+v1,CS-L2-001,Computer Systems Low Level Technique,missed (in answer key),Pointers
+v1,CS-L2-001,Computer Systems Low Level Technique,missed (in answer key),Operating system interaction
+v1,IT-L2-009,Switching and Routing Essentials,extra (not in answer key),VLAN configuration
+v1,IT-L2-009,Switching and Routing Essentials,extra (not in answer key),Spanning Tree configuration
+v1,IT-L2-009,Switching and Routing Essentials,extra (not in answer key),Dynamic routing
+v1,IT-L2-009,Switching and Routing Essentials,extra (not in answer key),OSPF configuration
+v1,IT-L2-009,Switching and Routing Essentials,extra (not in answer key),Cisco router configuration
+v1,IT-L2-009,Switching and Routing Essentials,extra (not in answer key),Cisco switch configuration
+v1,IT-L2-009,Switching and Routing Essentials,missed (in answer key),Switching
+v1,IT-L2-009,Switching and Routing Essentials,missed (in answer key),Routing
+v1,IT-L2-009,Switching and Routing Essentials,missed (in answer key),VLANs
+v1,IT-L2-009,Switching and Routing Essentials,missed (in answer key),Spanning Tree Protocol
+v1,IT-L2-009,Switching and Routing Essentials,missed (in answer key),Dynamic routing protocols
+v1,IT-L2-009,Switching and Routing Essentials,missed (in answer key),OSPF
+v1,IT-L3-028,Investigations in Business Information Systems,extra (not in answer key),business problem identification
+v1,IT-L3-028,Investigations in Business Information Systems,missed (in answer key),Business information systems
+v1,IT-L3-028,Investigations in Business Information Systems,missed (in answer key),Technical report writing
+v1,SE-L3-002,Development and Operations,extra (not in answer key),CI/CD pipeline implementation
+v1,SE-L3-002,Development and Operations,extra (not in answer key),Docker containerisation
+v1,SE-L3-002,Development and Operations,extra (not in answer key),Terraform infrastructure as code
+v1,SE-L3-002,Development and Operations,extra (not in answer key),AWS/Azure deployment
+v1,SE-L3-002,Development and Operations,missed (in answer key),DevOps
+v1,SE-L3-002,Development and Operations,missed (in answer key),CI/CD pipelines
+v1,SE-L3-002,Development and Operations,missed (in answer key),Docker
+v1,SE-L3-002,Development and Operations,missed (in answer key),Containerisation
+v1,SE-L3-002,Development and Operations,missed (in answer key),Infrastructure as code
+v1,SE-L3-002,Development and Operations,missed (in answer key),Terraform
+v1,SE-L3-002,Development and Operations,missed (in answer key),Cloud deployment
+v1,SE-L3-002,Development and Operations,missed (in answer key),AWS
+v1,SE-L3-002,Development and Operations,missed (in answer key),Azure
+v1,GD-L1-009,Introduction to C++ Programming,extra (not in answer key),basic data types
+v1,GD-L1-009,Introduction to C++ Programming,extra (not in answer key),function implementation
+v1,GD-L1-009,Introduction to C++ Programming,extra (not in answer key),basic object-oriented programming
+v1,GD-L1-009,Introduction to C++ Programming,missed (in answer key),Data types
+v1,GD-L1-009,Introduction to C++ Programming,missed (in answer key),Functions
+v1,GD-L1-009,Introduction to C++ Programming,missed (in answer key),Classes
+v1,GD-L1-009,Introduction to C++ Programming,missed (in answer key),Memory management
+v1,IT-L3-008,Knowledge Discovery and Big Data Analytics,extra (not in answer key),large dataset analysis
+v1,IT-L3-008,Knowledge Discovery and Big Data Analytics,missed (in answer key),Big data analytics
+v1,GD-L3-003,Advanced Gameplay Animation,extra (not in answer key),state machine design
+v1,GD-L3-003,Advanced Gameplay Animation,extra (not in answer key),character animation in game engines
+v1,GD-L3-003,Advanced Gameplay Animation,missed (in answer key),Gameplay animation
+v1,GD-L3-003,Advanced Gameplay Animation,missed (in answer key),Character animation
+v1,GD-L3-003,Advanced Gameplay Animation,missed (in answer key),Game engines
+v1,GD-L3-003,Advanced Gameplay Animation,missed (in answer key),State machines
+v1,DA-L2-002,Data Mining and Predictive Modelling,extra (not in answer key),association rule mining
+v1,DA-L2-002,Data Mining and Predictive Modelling,missed (in answer key),Association rules
+v1,MM-L2-002,Interactive Content Development,extra (not in answer key),Interactive scripting
+v1,MM-L2-002,Interactive Content Development,missed (in answer key),Interactive content development
+v1,MM-L2-002,Interactive Content Development,missed (in answer key),Scripting
+v1,CS-L3-004,"Image Processing, Computer Vision and Pattern Recognition",missed (in answer key),OpenCV
+v1,CS-L3-004,"Image Processing, Computer Vision and Pattern Recognition",missed (in answer key),Python
+v1,IT-L3-013,Investigations in Information System Security,extra (not in answer key),Security problem identification
+v1,IT-L3-013,Investigations in Information System Security,extra (not in answer key),Security standards review
+v1,IT-L3-013,Investigations in Information System Security,extra (not in answer key),Security requirements gathering
+v1,IT-L3-013,Investigations in Information System Security,extra (not in answer key),Ethical test planning
+v1,IT-L3-013,Investigations in Information System Security,missed (in answer key),Information security
+v1,IT-L3-013,Investigations in Information System Security,missed (in answer key),Literature review
+v1,IT-L3-013,Investigations in Information System Security,missed (in answer key),Security standards
+v1,IT-L3-013,Investigations in Information System Security,missed (in answer key),Technical report writing
+v1,IT-L3-020,Human Computer Interaction and Usability,extra (not in answer key),accessibility assessment
+v1,IT-L3-020,Human Computer Interaction and Usability,missed (in answer key),Human-computer interaction
+v1,IT-L3-020,Human Computer Interaction and Usability,missed (in answer key),Accessibility
+v1,GD-L2-012,Performant Rendering with C++,extra (not in answer key),C++ rendering programming
+v1,GD-L2-012,Performant Rendering with C++,extra (not in answer key),graphics pipeline implementation
+v1,GD-L2-012,Performant Rendering with C++,extra (not in answer key),rendering performance optimization
+v1,GD-L2-012,Performant Rendering with C++,missed (in answer key),C++
+v1,GD-L2-012,Performant Rendering with C++,missed (in answer key),Graphics pipeline
+v1,GD-L2-012,Performant Rendering with C++,missed (in answer key),OpenGL
+v1,GD-L2-012,Performant Rendering with C++,missed (in answer key),DirectX
+v1,GD-L2-012,Performant Rendering with C++,missed (in answer key),Rendering performance
+v1,GD-L2-011,Game Optimization and Performance,extra (not in answer key),game profiling
+v1,GD-L2-011,Game Optimization and Performance,extra (not in answer key),level of detail optimization
+v1,GD-L2-011,Game Optimization and Performance,missed (in answer key),Game optimization
+v1,GD-L2-011,Game Optimization and Performance,missed (in answer key),Profiling
+v1,GD-L2-011,Game Optimization and Performance,missed (in answer key),Level of detail
+v1,GD-L2-011,Game Optimization and Performance,missed (in answer key),Game engines
+v1,SE-L2-013,Further Web Design and Development,extra (not in answer key),authentication implementation
+v1,SE-L2-013,Further Web Design and Development,missed (in answer key),Authentication
+v1,SE-L2-013,Further Web Design and Development,missed (in answer key),JavaScript
+v1,SE-L2-013,Further Web Design and Development,missed (in answer key),CSS frameworks
+v1,CY-L3-011,Legal and Professional Practice in the Cyber World,extra (not in answer key),Computer crime compliance
+v1,CY-L3-011,Legal and Professional Practice in the Cyber World,extra (not in answer key),Data protection compliance
+v1,CY-L3-011,Legal and Professional Practice in the Cyber World,extra (not in answer key),Digital evidence assessment
+v1,CY-L3-011,Legal and Professional Practice in the Cyber World,extra (not in answer key),Intellectual property management
+v1,CY-L3-011,Legal and Professional Practice in the Cyber World,missed (in answer key),Professional practice
+v1,CY-L3-011,Legal and Professional Practice in the Cyber World,missed (in answer key),Computer crime legislation
+v1,CY-L3-011,Legal and Professional Practice in the Cyber World,missed (in answer key),Data protection laws
+v1,CY-L3-011,Legal and Professional Practice in the Cyber World,missed (in answer key),Digital evidence admissibility
+v1,CY-L3-011,Legal and Professional Practice in the Cyber World,missed (in answer key),Intellectual property
+v1,MM-L2-009,VR/AR Design Principles,extra (not in answer key),Immersion design
+v1,MM-L2-009,VR/AR Design Principles,extra (not in answer key),Presence design
+v1,MM-L2-009,VR/AR Design Principles,extra (not in answer key),Spatial interaction design
+v1,MM-L2-009,VR/AR Design Principles,extra (not in answer key),User comfort design
+v1,MM-L2-009,VR/AR Design Principles,extra (not in answer key),VR/AR UX design
+v1,MM-L2-009,VR/AR Design Principles,missed (in answer key),VR/AR design
+v1,MM-L2-009,VR/AR Design Principles,missed (in answer key),Spatial interaction
+v1,MM-L2-009,VR/AR Design Principles,missed (in answer key),User comfort
+v1,MM-L2-009,VR/AR Design Principles,missed (in answer key),VR/AR user experience
+v1,GD-L1-003,Principles of Game Technology,extra (not in answer key),real-time rendering
+v1,GD-L1-003,Principles of Game Technology,extra (not in answer key),game physics basics
+v1,GD-L1-003,Principles of Game Technology,extra (not in answer key),Unity scripting
+v1,GD-L1-003,Principles of Game Technology,missed (in answer key),Game technology
+v1,GD-L1-003,Principles of Game Technology,missed (in answer key),Rendering
+v1,GD-L1-003,Principles of Game Technology,missed (in answer key),Scripting
+v1,GD-L1-003,Principles of Game Technology,missed (in answer key),Unity
+v1,QC-L2-001,Fundamentals of Quantum Computing,extra (not in answer key),Quantum circuit design
+v1,QC-L2-001,Fundamentals of Quantum Computing,missed (in answer key),Quantum gates
+v1,QC-L2-001,Fundamentals of Quantum Computing,missed (in answer key),Quantum circuits
+v1,AI-L2-001,Imaging and Special Effects,extra (not in answer key),visual effects generation
+v1,AI-L2-001,Imaging and Special Effects,missed (in answer key),Digital imaging
+v1,AI-L2-001,Imaging and Special Effects,missed (in answer key),Visual special effects
+v1,MM-L1-002,Introduction to VR/AR and Metaverse,extra (not in answer key),VR headset operation
+v1,MM-L1-002,Introduction to VR/AR and Metaverse,extra (not in answer key),Simple 3D scene creation
+v1,MM-L1-002,Introduction to VR/AR and Metaverse,extra (not in answer key),VR/AR interaction design
+v1,MM-L1-002,Introduction to VR/AR and Metaverse,extra (not in answer key),Immersive tech application
+v1,MM-L1-002,Introduction to VR/AR and Metaverse,missed (in answer key),Virtual reality
+v1,MM-L1-002,Introduction to VR/AR and Metaverse,missed (in answer key),Augmented reality
+v1,MM-L1-002,Introduction to VR/AR and Metaverse,missed (in answer key),Metaverse
+v1,MM-L1-002,Introduction to VR/AR and Metaverse,missed (in answer key),VR headsets
+v1,MM-L1-002,Introduction to VR/AR and Metaverse,missed (in answer key),3D scene building
+v1,MM-L1-002,Introduction to VR/AR and Metaverse,missed (in answer key),Immersive technology
+v1,MM-L1-002,Introduction to VR/AR and Metaverse,missed (in answer key),VR interaction
+v1,MM-L1-002,Introduction to VR/AR and Metaverse,missed (in answer key),AR interaction
+v1,DA-L3-004,Project in Data Analytics,extra (not in answer key),data exploration
+v1,DA-L3-004,Project in Data Analytics,extra (not in answer key),dashboard visualisation
+v1,DA-L3-004,Project in Data Analytics,extra (not in answer key),presentation skills
+v1,DA-L3-004,Project in Data Analytics,missed (in answer key),Data analytics
+v1,DA-L3-004,Project in Data Analytics,missed (in answer key),Exploratory data analysis
+v1,DA-L3-004,Project in Data Analytics,missed (in answer key),Data visualisation
+v1,DA-L3-004,Project in Data Analytics,missed (in answer key),Dashboards
+v1,SE-L3-008,Project in Software Engineering,extra (not in answer key),Technical analysis
+v1,SE-L3-008,Project in Software Engineering,missed (in answer key),Software engineering
+v1,IT-L3-018,Investigations in Cloud Engineering,extra (not in answer key),cloud problem identification
+v1,IT-L3-018,Investigations in Cloud Engineering,extra (not in answer key),cloud provider evaluation
+v1,IT-L3-018,Investigations in Cloud Engineering,missed (in answer key),Cloud engineering
+v1,IT-L3-018,Investigations in Cloud Engineering,missed (in answer key),Cloud provider comparison
+v1,IT-L3-018,Investigations in Cloud Engineering,missed (in answer key),Deployment planning
+v1,IT-L3-018,Investigations in Cloud Engineering,missed (in answer key),Technical report writing
+v1,CY-L2-003,Implementation of Secure Systems,missed (in answer key),Secure systems design
+v1,IT-L3-011,Database Security,missed (in answer key),Database security
+v1,SE-L3-006,Software Quality Engineering,missed (in answer key),Software quality engineering
+v1,SE-L3-003,Investigations in Software Engineering,extra (not in answer key),software problem definition
+v1,SE-L3-003,Investigations in Software Engineering,extra (not in answer key),Agile Scrum planning
+v1,SE-L3-003,Investigations in Software Engineering,extra (not in answer key),sprint planning
+v1,SE-L3-003,Investigations in Software Engineering,extra (not in answer key),user interviewing
+v1,SE-L3-003,Investigations in Software Engineering,missed (in answer key),Software engineering
+v1,SE-L3-003,Investigations in Software Engineering,missed (in answer key),Agile Scrum
+v1,SE-L3-003,Investigations in Software Engineering,missed (in answer key),Technical report writing
+v2,CY-L3-001,Deep Learning for Intrusion Detection,extra (not in answer key),Neural network models
+v2,CY-L3-001,Deep Learning for Intrusion Detection,extra (not in answer key),detecting cyber attacks
+v2,CY-L3-001,Deep Learning for Intrusion Detection,missed (in answer key),Neural networks
+v2,CY-L3-001,Deep Learning for Intrusion Detection,missed (in answer key),Cyber attack detection
+v2,MM-L2-011,"Simulation, Visualisation and Virtual Reality",extra (not in answer key),virtual environments
+v2,MM-L2-011,"Simulation, Visualisation and Virtual Reality",missed (in answer key),Virtual reality
+v2,IT-L2-009,Switching and Routing Essentials,extra (not in answer key),Switching and routing
+v2,IT-L2-009,Switching and Routing Essentials,extra (not in answer key),spanning tree
+v2,IT-L2-009,Switching and Routing Essentials,extra (not in answer key),Cisco routers
+v2,IT-L2-009,Switching and Routing Essentials,extra (not in answer key),Cisco switches
+v2,IT-L2-009,Switching and Routing Essentials,extra (not in answer key),configuring Cisco routers
+v2,IT-L2-009,Switching and Routing Essentials,extra (not in answer key),configuring Cisco switches
+v2,IT-L2-009,Switching and Routing Essentials,missed (in answer key),Switching
+v2,IT-L2-009,Switching and Routing Essentials,missed (in answer key),Routing
+v2,IT-L2-009,Switching and Routing Essentials,missed (in answer key),Spanning Tree Protocol
+v2,IT-L3-028,Investigations in Business Information Systems,extra (not in answer key),Identify business problem
+v2,IT-L3-028,Investigations in Business Information Systems,extra (not in answer key),Review literature
+v2,IT-L3-028,Investigations in Business Information Systems,extra (not in answer key),Existing information systems
+v2,IT-L3-028,Investigations in Business Information Systems,extra (not in answer key),Interview stakeholders
+v2,IT-L3-028,Investigations in Business Information Systems,extra (not in answer key),Model current business process
+v2,IT-L3-028,Investigations in Business Information Systems,extra (not in answer key),Gather requirements
+v2,IT-L3-028,Investigations in Business Information Systems,extra (not in answer key),Plan development
+v2,IT-L3-028,Investigations in Business Information Systems,extra (not in answer key),Investigation Report
+v2,IT-L3-028,Investigations in Business Information Systems,missed (in answer key),Literature review
+v2,IT-L3-028,Investigations in Business Information Systems,missed (in answer key),Stakeholder interviewing
+v2,IT-L3-028,Investigations in Business Information Systems,missed (in answer key),Business process modelling
+v2,IT-L3-028,Investigations in Business Information Systems,missed (in answer key),Requirements gathering
+v2,IT-L3-028,Investigations in Business Information Systems,missed (in answer key),Project planning
+v2,IT-L3-028,Investigations in Business Information Systems,missed (in answer key),Technical report writing
+v2,SE-L3-002,Development and Operations,extra (not in answer key),Development and Operations
+v2,SE-L3-002,Development and Operations,missed (in answer key),DevOps
+v2,IT-L3-008,Knowledge Discovery and Big Data Analytics,extra (not in answer key),knowledge discovery process
+v2,IT-L3-008,Knowledge Discovery and Big Data Analytics,extra (not in answer key),data mining techniques
+v2,IT-L3-008,Knowledge Discovery and Big Data Analytics,extra (not in answer key),analysing large data sets
+v2,IT-L3-008,Knowledge Discovery and Big Data Analytics,missed (in answer key),Knowledge discovery
+v2,IT-L3-008,Knowledge Discovery and Big Data Analytics,missed (in answer key),Data mining
+v2,GD-L3-003,Advanced Gameplay Animation,extra (not in answer key),Advanced Gameplay Animation
+v2,GD-L3-003,Advanced Gameplay Animation,missed (in answer key),Gameplay animation
+v2,MM-L2-002,Interactive Content Development,extra (not in answer key),Scripting interactivity
+v2,MM-L2-002,Interactive Content Development,extra (not in answer key),Interactive experiences
+v2,MM-L2-002,Interactive Content Development,missed (in answer key),Scripting
+v2,CS-L3-004,"Image Processing, Computer Vision and Pattern Recognition",extra (not in answer key),Image Processing
+v2,IT-L3-013,Investigations in Information System Security,extra (not in answer key),Information system security
+v2,IT-L3-013,Investigations in Information System Security,extra (not in answer key),Identifying security problem
+v2,IT-L3-013,Investigations in Information System Security,extra (not in answer key),Security standards review
+v2,IT-L3-013,Investigations in Information System Security,extra (not in answer key),Security requirements gathering
+v2,IT-L3-013,Investigations in Information System Security,extra (not in answer key),Safe ethical testing
+v2,IT-L3-013,Investigations in Information System Security,missed (in answer key),Information security
+v2,IT-L3-013,Investigations in Information System Security,missed (in answer key),Security standards
+v2,IT-L3-013,Investigations in Information System Security,missed (in answer key),Project planning
+v2,IT-L3-013,Investigations in Information System Security,missed (in answer key),Technical report writing
+v2,GD-L2-011,Game Optimization and Performance,extra (not in answer key),optimising games
+v2,GD-L2-011,Game Optimization and Performance,extra (not in answer key),frame rate
+v2,GD-L2-011,Game Optimization and Performance,extra (not in answer key),optimising rendering
+v2,GD-L2-011,Game Optimization and Performance,missed (in answer key),Game optimization
+v2,GD-L2-011,Game Optimization and Performance,missed (in answer key),Frame rate optimization
+v2,GD-L2-011,Game Optimization and Performance,missed (in answer key),Rendering optimization
+v2,SE-L2-013,Further Web Design and Development,extra (not in answer key),Web development
+v2,SE-L2-013,Further Web Design and Development,extra (not in answer key),full-stack application development
+v2,SE-L2-013,Further Web Design and Development,missed (in answer key),Full-stack development
+v2,MM-L2-009,VR/AR Design Principles,extra (not in answer key),immersion
+v2,MM-L2-009,VR/AR Design Principles,extra (not in answer key),presence
+v2,GD-L1-003,Principles of Game Technology,extra (not in answer key),physics
+v2,QC-L2-001,Fundamentals of Quantum Computing,extra (not in answer key),Simple quantum programs
+v2,AI-L2-001,Imaging and Special Effects,extra (not in answer key),generating visual effects
+v2,MM-L1-002,Introduction to VR/AR and Metaverse,extra (not in answer key),Building simple 3D scenes
+v2,MM-L1-002,Introduction to VR/AR and Metaverse,extra (not in answer key),Interaction in VR
+v2,MM-L1-002,Introduction to VR/AR and Metaverse,extra (not in answer key),Interaction in AR
+v2,MM-L1-002,Introduction to VR/AR and Metaverse,extra (not in answer key),Immersive technology in education
+v2,MM-L1-002,Introduction to VR/AR and Metaverse,extra (not in answer key),Immersive technology in retail
+v2,MM-L1-002,Introduction to VR/AR and Metaverse,extra (not in answer key),Immersive technology in entertainment
+v2,MM-L1-002,Introduction to VR/AR and Metaverse,missed (in answer key),3D scene building
+v2,MM-L1-002,Introduction to VR/AR and Metaverse,missed (in answer key),Immersive technology
+v2,MM-L1-002,Introduction to VR/AR and Metaverse,missed (in answer key),VR interaction
+v2,MM-L1-002,Introduction to VR/AR and Metaverse,missed (in answer key),AR interaction
+v2,DA-L3-004,Project in Data Analytics,extra (not in answer key),Data exploration
+v2,DA-L3-004,Project in Data Analytics,extra (not in answer key),Predictive models
+v2,DA-L3-004,Project in Data Analytics,extra (not in answer key),Dashboard visualisation
+v2,DA-L3-004,Project in Data Analytics,extra (not in answer key),Technical report
+v2,DA-L3-004,Project in Data Analytics,missed (in answer key),Exploratory data analysis
+v2,DA-L3-004,Project in Data Analytics,missed (in answer key),Predictive modelling
+v2,DA-L3-004,Project in Data Analytics,missed (in answer key),Model evaluation
+v2,DA-L3-004,Project in Data Analytics,missed (in answer key),Data visualisation
+v2,DA-L3-004,Project in Data Analytics,missed (in answer key),Dashboards
+v2,DA-L3-004,Project in Data Analytics,missed (in answer key),Technical report writing
+v2,SE-L3-008,Project in Software Engineering,extra (not in answer key),Design
+v2,SE-L3-008,Project in Software Engineering,extra (not in answer key),Develop
+v2,SE-L3-008,Project in Software Engineering,extra (not in answer key),Evaluate
+v2,SE-L3-008,Project in Software Engineering,extra (not in answer key),Technical skills
+v2,SE-L3-008,Project in Software Engineering,extra (not in answer key),Analytical skills
+v2,SE-L3-008,Project in Software Engineering,missed (in answer key),Software design
+v2,SE-L3-008,Project in Software Engineering,missed (in answer key),Software development
+v2,SE-L3-008,Project in Software Engineering,missed (in answer key),Software evaluation
+v2,IT-L3-018,Investigations in Cloud Engineering,extra (not in answer key),Problem identification
+v2,IT-L3-018,Investigations in Cloud Engineering,extra (not in answer key),Architecture planning
+v2,IT-L3-018,Investigations in Cloud Engineering,missed (in answer key),Cloud architecture planning
+v2,IT-L3-018,Investigations in Cloud Engineering,missed (in answer key),Project planning
+v2,IT-L3-018,Investigations in Cloud Engineering,missed (in answer key),Technical report writing
+v2,CY-L2-003,Implementation of Secure Systems,extra (not in answer key),Secure systems
+v2,CY-L2-003,Implementation of Secure Systems,missed (in answer key),Secure systems design
+v2,SE-L3-003,Investigations in Software Engineering,extra (not in answer key),Software problem definition
+v2,SE-L3-003,Investigations in Software Engineering,extra (not in answer key),Functional requirements gathering
+v2,SE-L3-003,Investigations in Software Engineering,extra (not in answer key),Non-functional requirements gathering
+v2,SE-L3-003,Investigations in Software Engineering,extra (not in answer key),Survey
+v2,SE-L3-003,Investigations in Software Engineering,extra (not in answer key),Interviews
+v2,SE-L3-003,Investigations in Software Engineering,extra (not in answer key),Sprint planning
+v2,SE-L3-003,Investigations in Software Engineering,missed (in answer key),Requirements gathering
+v2,SE-L3-003,Investigations in Software Engineering,missed (in answer key),Project planning
+v2,SE-L3-003,Investigations in Software Engineering,missed (in answer key),Technical report writing
+v2b,CY-L3-001,Deep Learning for Intrusion Detection,extra (not in answer key),Neural network models
+v2b,CY-L3-001,Deep Learning for Intrusion Detection,extra (not in answer key),detecting cyber attacks
+v2b,CY-L3-001,Deep Learning for Intrusion Detection,missed (in answer key),Neural networks
+v2b,CY-L3-001,Deep Learning for Intrusion Detection,missed (in answer key),Cyber attack detection
+v2b,MM-L2-011,"Simulation, Visualisation and Virtual Reality",extra (not in answer key),virtual environments
+v2b,MM-L2-011,"Simulation, Visualisation and Virtual Reality",missed (in answer key),Virtual reality
+v2b,IT-L2-009,Switching and Routing Essentials,extra (not in answer key),Switching and routing
+v2b,IT-L2-009,Switching and Routing Essentials,extra (not in answer key),spanning tree
+v2b,IT-L2-009,Switching and Routing Essentials,extra (not in answer key),Cisco routers
+v2b,IT-L2-009,Switching and Routing Essentials,extra (not in answer key),Cisco switches
+v2b,IT-L2-009,Switching and Routing Essentials,extra (not in answer key),configuring Cisco routers
+v2b,IT-L2-009,Switching and Routing Essentials,extra (not in answer key),configuring Cisco switches
+v2b,IT-L2-009,Switching and Routing Essentials,missed (in answer key),Switching
+v2b,IT-L2-009,Switching and Routing Essentials,missed (in answer key),Routing
+v2b,IT-L2-009,Switching and Routing Essentials,missed (in answer key),Spanning Tree Protocol
+v2b,IT-L3-028,Investigations in Business Information Systems,extra (not in answer key),Identify business problem
+v2b,IT-L3-028,Investigations in Business Information Systems,extra (not in answer key),Review literature
+v2b,IT-L3-028,Investigations in Business Information Systems,extra (not in answer key),Existing information systems
+v2b,IT-L3-028,Investigations in Business Information Systems,extra (not in answer key),Interview stakeholders
+v2b,IT-L3-028,Investigations in Business Information Systems,extra (not in answer key),Model current business process
+v2b,IT-L3-028,Investigations in Business Information Systems,extra (not in answer key),Gather requirements
+v2b,IT-L3-028,Investigations in Business Information Systems,extra (not in answer key),Plan development
+v2b,IT-L3-028,Investigations in Business Information Systems,extra (not in answer key),Investigation Report
+v2b,IT-L3-028,Investigations in Business Information Systems,missed (in answer key),Literature review
+v2b,IT-L3-028,Investigations in Business Information Systems,missed (in answer key),Stakeholder interviewing
+v2b,IT-L3-028,Investigations in Business Information Systems,missed (in answer key),Business process modelling
+v2b,IT-L3-028,Investigations in Business Information Systems,missed (in answer key),Requirements gathering
+v2b,IT-L3-028,Investigations in Business Information Systems,missed (in answer key),Project planning
+v2b,IT-L3-028,Investigations in Business Information Systems,missed (in answer key),Technical report writing
+v2b,SE-L3-002,Development and Operations,extra (not in answer key),Development and Operations
+v2b,SE-L3-002,Development and Operations,missed (in answer key),DevOps
+v2b,IT-L3-008,Knowledge Discovery and Big Data Analytics,extra (not in answer key),knowledge discovery process
+v2b,IT-L3-008,Knowledge Discovery and Big Data Analytics,extra (not in answer key),data mining techniques
+v2b,IT-L3-008,Knowledge Discovery and Big Data Analytics,extra (not in answer key),analysing large data sets
+v2b,IT-L3-008,Knowledge Discovery and Big Data Analytics,missed (in answer key),Knowledge discovery
+v2b,IT-L3-008,Knowledge Discovery and Big Data Analytics,missed (in answer key),Data mining
+v2b,GD-L3-003,Advanced Gameplay Animation,extra (not in answer key),Advanced Gameplay Animation
+v2b,GD-L3-003,Advanced Gameplay Animation,missed (in answer key),Gameplay animation
+v2b,MM-L2-002,Interactive Content Development,extra (not in answer key),Scripting interactivity
+v2b,MM-L2-002,Interactive Content Development,extra (not in answer key),Interactive experiences
+v2b,MM-L2-002,Interactive Content Development,missed (in answer key),Scripting
+v2b,CS-L3-004,"Image Processing, Computer Vision and Pattern Recognition",extra (not in answer key),Image Processing
+v2b,IT-L3-013,Investigations in Information System Security,extra (not in answer key),Information system security
+v2b,IT-L3-013,Investigations in Information System Security,extra (not in answer key),Identifying security problem
+v2b,IT-L3-013,Investigations in Information System Security,extra (not in answer key),Security standards review
+v2b,IT-L3-013,Investigations in Information System Security,extra (not in answer key),Security requirements gathering
+v2b,IT-L3-013,Investigations in Information System Security,extra (not in answer key),Safe ethical testing
+v2b,IT-L3-013,Investigations in Information System Security,missed (in answer key),Information security
+v2b,IT-L3-013,Investigations in Information System Security,missed (in answer key),Security standards
+v2b,IT-L3-013,Investigations in Information System Security,missed (in answer key),Project planning
+v2b,IT-L3-013,Investigations in Information System Security,missed (in answer key),Technical report writing
+v2b,GD-L2-011,Game Optimization and Performance,extra (not in answer key),optimising games
+v2b,GD-L2-011,Game Optimization and Performance,extra (not in answer key),frame rate
+v2b,GD-L2-011,Game Optimization and Performance,extra (not in answer key),optimising rendering
+v2b,GD-L2-011,Game Optimization and Performance,missed (in answer key),Game optimization
+v2b,GD-L2-011,Game Optimization and Performance,missed (in answer key),Frame rate optimization
+v2b,GD-L2-011,Game Optimization and Performance,missed (in answer key),Rendering optimization
+v2b,SE-L2-013,Further Web Design and Development,extra (not in answer key),Web development
+v2b,SE-L2-013,Further Web Design and Development,extra (not in answer key),full-stack application development
+v2b,SE-L2-013,Further Web Design and Development,missed (in answer key),Full-stack development
+v2b,MM-L2-009,VR/AR Design Principles,extra (not in answer key),immersion
+v2b,MM-L2-009,VR/AR Design Principles,extra (not in answer key),presence
+v2b,GD-L1-003,Principles of Game Technology,extra (not in answer key),physics
+v2b,QC-L2-001,Fundamentals of Quantum Computing,extra (not in answer key),Simple quantum programs
+v2b,AI-L2-001,Imaging and Special Effects,extra (not in answer key),generating visual effects
+v2b,MM-L1-002,Introduction to VR/AR and Metaverse,extra (not in answer key),Building simple 3D scenes
+v2b,MM-L1-002,Introduction to VR/AR and Metaverse,extra (not in answer key),Interaction in VR
+v2b,MM-L1-002,Introduction to VR/AR and Metaverse,extra (not in answer key),Interaction in AR
+v2b,MM-L1-002,Introduction to VR/AR and Metaverse,extra (not in answer key),Immersive technology in education
+v2b,MM-L1-002,Introduction to VR/AR and Metaverse,extra (not in answer key),Immersive technology in retail
+v2b,MM-L1-002,Introduction to VR/AR and Metaverse,extra (not in answer key),Immersive technology in entertainment
+v2b,MM-L1-002,Introduction to VR/AR and Metaverse,missed (in answer key),3D scene building
+v2b,MM-L1-002,Introduction to VR/AR and Metaverse,missed (in answer key),Immersive technology
+v2b,MM-L1-002,Introduction to VR/AR and Metaverse,missed (in answer key),VR interaction
+v2b,MM-L1-002,Introduction to VR/AR and Metaverse,missed (in answer key),AR interaction
+v2b,DA-L3-004,Project in Data Analytics,extra (not in answer key),Data exploration
+v2b,DA-L3-004,Project in Data Analytics,extra (not in answer key),Predictive models
+v2b,DA-L3-004,Project in Data Analytics,extra (not in answer key),Dashboard visualisation
+v2b,DA-L3-004,Project in Data Analytics,extra (not in answer key),Technical report
+v2b,DA-L3-004,Project in Data Analytics,missed (in answer key),Exploratory data analysis
+v2b,DA-L3-004,Project in Data Analytics,missed (in answer key),Predictive modelling
+v2b,DA-L3-004,Project in Data Analytics,missed (in answer key),Model evaluation
+v2b,DA-L3-004,Project in Data Analytics,missed (in answer key),Data visualisation
+v2b,DA-L3-004,Project in Data Analytics,missed (in answer key),Dashboards
+v2b,DA-L3-004,Project in Data Analytics,missed (in answer key),Technical report writing
+v2b,SE-L3-008,Project in Software Engineering,extra (not in answer key),Design
+v2b,SE-L3-008,Project in Software Engineering,extra (not in answer key),Develop
+v2b,SE-L3-008,Project in Software Engineering,extra (not in answer key),Evaluate
+v2b,SE-L3-008,Project in Software Engineering,extra (not in answer key),Technical skills
+v2b,SE-L3-008,Project in Software Engineering,extra (not in answer key),Analytical skills
+v2b,SE-L3-008,Project in Software Engineering,missed (in answer key),Software design
+v2b,SE-L3-008,Project in Software Engineering,missed (in answer key),Software development
+v2b,SE-L3-008,Project in Software Engineering,missed (in answer key),Software evaluation
+v2b,IT-L3-018,Investigations in Cloud Engineering,extra (not in answer key),Problem identification
+v2b,IT-L3-018,Investigations in Cloud Engineering,extra (not in answer key),Architecture planning
+v2b,IT-L3-018,Investigations in Cloud Engineering,missed (in answer key),Cloud architecture planning
+v2b,IT-L3-018,Investigations in Cloud Engineering,missed (in answer key),Project planning
+v2b,IT-L3-018,Investigations in Cloud Engineering,missed (in answer key),Technical report writing
+v2b,CY-L2-003,Implementation of Secure Systems,extra (not in answer key),Secure systems
+v2b,CY-L2-003,Implementation of Secure Systems,missed (in answer key),Secure systems design
+v2b,SE-L3-003,Investigations in Software Engineering,extra (not in answer key),Software problem definition
+v2b,SE-L3-003,Investigations in Software Engineering,extra (not in answer key),Functional requirements gathering
+v2b,SE-L3-003,Investigations in Software Engineering,extra (not in answer key),Non-functional requirements gathering
+v2b,SE-L3-003,Investigations in Software Engineering,extra (not in answer key),Survey
+v2b,SE-L3-003,Investigations in Software Engineering,extra (not in answer key),Interviews
+v2b,SE-L3-003,Investigations in Software Engineering,extra (not in answer key),Sprint planning
+v2b,SE-L3-003,Investigations in Software Engineering,missed (in answer key),Requirements gathering
+v2b,SE-L3-003,Investigations in Software Engineering,missed (in answer key),Project planning
+v2b,SE-L3-003,Investigations in Software Engineering,missed (in answer key),Technical report writing
