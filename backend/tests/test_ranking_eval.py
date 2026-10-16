@@ -33,6 +33,18 @@ def test_rank_judge_merge_score(client, users, db, tmp_path, monkeypatch):
     monkeypatch.setattr(er, "PROGRAMMES", ("SE", "IT"))
     er.rank()
     assert sql(db, "select count(*) from users").scalar() == before          # the temporary students were rolled back
+    # 16 Oct: refresh-ads rewrites the ad text from the database (same pairs) and moves earlier grades to old_900/
+    first = json.loads((tmp_path / "judging.json").read_text())
+    first["ad_chars"] = 900
+    for x in first["pairs"]:
+        x["ad"] = x["ad"][:20]
+    (tmp_path / "judging.json").write_text(json.dumps(first))
+    (tmp_path / "grades_claude.json").write_text("{}")
+    er.refresh_ads()
+    again = json.loads((tmp_path / "judging.json").read_text())
+    assert [x["pair"] for x in again["pairs"]] == [x["pair"] for x in first["pairs"]]
+    assert again["ad_chars"] == er.AD_CHARS and all(len(x["ad"]) > 20 for x in again["pairs"])
+    assert (tmp_path / "old_900" / "grades_claude.json").exists() and not (tmp_path / "grades_claude.json").exists()
     ranks = json.loads((tmp_path / "rankings.json").read_text())
     se = ranks["orders"]["SE"]
     assert set(se) == {"S", "B1", "B2", "R"}

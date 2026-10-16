@@ -16,6 +16,12 @@ Plan, fixed on 15 Oct BEFORE any result was seen (research: references.md "Ranki
     from the programme and module names (not SkillMap's skill list, so the judges don't share its view); final grade
     = median of the three (Thomas et al. 2024: LLM labels about as accurate as human labellers, prompt-sensitive ->
     one fixed prompt, three judges, the author's spot-check of one profile, seed 2)
+  - ad text (changed 16 Oct, BEFORE any score was computed): the judges see the title and the first AD_CHARS = 3,000
+    characters of the ad (whitespace collapsed). The first run cut ads at 900: many ads spend those on the company
+    introduction, so a grade could rest on the title alone (found by the author during the spot-check). TREC tells
+    assessors a document is relevant if ANY part of it is (trec.nist.gov/data/qrels_noneng), which needs the
+    requirements in view. The 900-character grades are kept in old_900/ and not used. Pairs, orders and the pass
+    rule are unchanged
   - metrics: nDCG@10 (gain = grade; ideal = the profile's best judged jobs; Jarvelin & Kekalainen) and P@10 (share of
     grade 2 in the top 10); 95% paired bootstrap over profiles (10,000, seed 0)
   - pass rule: SkillMap beats keyword matching if its nDCG@10 is higher than B1's and the paired 95% interval of the
@@ -24,6 +30,8 @@ Plan, fixed on 15 Oct BEFORE any result was seen (research: references.md "Ranki
 Steps (from backend/, venv active; files go to ../docs/evidence/ranking/):
   python scripts/evaluation/evaluate_ranking.py rank      # 1. profiles, the four orders, judging.json (+ .md)
      -> upload judging.json to Claude, who grades blind -> save as grades_claude.json
+  python scripts/evaluation/evaluate_ranking.py refresh-ads   # 16 Oct, once: longer ad text in judging.json (same pairs);
+                                                             # old grades -> old_900/, so every judge grades again
   python scripts/evaluation/evaluate_ranking.py qwen      # 2. Qwen grades (Groq; one call per profile chunk)
   python scripts/evaluation/evaluate_ranking.py gemini    # 3. Gemini grades
   python scripts/evaluation/evaluate_ranking.py merge     # 4. grades.json (median) + spot_check.csv
@@ -46,7 +54,8 @@ sys.path.append(".")
 OUT = "../docs/evidence/ranking"
 PROGRAMMES = ("SE", "CS", "CS-DA", "CS-AI", "CS-CY", "IT", "IT-CE", "IT-BIS", "GD", "IMIT")
 GRADES = ((4.0, 20), (3.7, 15), (3.3, 25), (3.0, 20), (2.7, 10), (2.3, 7), (2.0, 3))   # grade, weight (%)
-SEED, SPOT_SEED, K, CHUNK = 1, 2, 10, 12
+SEED, SPOT_SEED, K, CHUNK = 1, 2, 10, 4    # 4 pairs per judge call: longer ads (16 Oct; was 12 at 900 characters)
+AD_CHARS = 3000                              # characters of each ad the judges see (16 Oct; was 900)
 SYSTEMS = ("S", "B1", "B2", "R")
 JUDGES = ("claude", "qwen", "gemini")
 
@@ -172,19 +181,64 @@ def rank():
         for ref in pool:
             c = info[ref]
             pairs.append({"pair": f"{p['id']}|{ref}", "profile": p["id"], "job_ref": ref, "title": c["job_title"],
-                          "company": c["company"] or "", "ad": " ".join(texts.get(ref, "").split())[:900]})
+                          "company": c["company"] or "", "ad": " ".join(texts.get(ref, "").split())[:AD_CHARS]})
     save("profiles.json", profs)
     save("rankings.json", {"snapshot": snapshot, "orders": {p: {s: o[:50] for s, o in v.items()} for p, v in orders.items()}})
-    save("judging.json", {"guide": JUDGE_GUIDE,
-                          "profiles": {p["id"]: {"programme": p["programme"], "modules": [m["name"] for m in p["modules"]]} for p in profs},
-                          "pairs": pairs})
-    with open(path("judging.md"), "w", encoding="utf-8") as f:
-        f.write(JUDGE_GUIDE + "\n")
-        for p in profs:
-            f.write(f"\n## {p['programme']}\nModules: {', '.join(m['name'] for m in p['modules'])}\n\n")
-            for x in (x for x in pairs if x["profile"] == p["id"]):
-                f.write(f"- pair {x['pair']}: {x['title']}\n  {x['ad'][:500]}\n")
+    data = {"guide": JUDGE_GUIDE, "ad_chars": AD_CHARS,
+            "profiles": {p["id"]: {"programme": p["programme"], "modules": [m["name"] for m in p["modules"]]} for p in profs},
+            "pairs": pairs}
+    save("judging.json", data)
+    write_judging_md(data)
     print(f"{len(pairs)} pairs to judge (pooled top {K} of S, B1, B2, R). Written {path('judging.json')}: upload it to Claude.")
+
+
+def write_judging_md(data):
+    with open(path("judging.md"), "w", encoding="utf-8") as f:
+        f.write(data["guide"] + "\n")
+        for pid, prof in data["profiles"].items():
+            f.write(f"\n## {prof['programme']}\nModules: {', '.join(prof['modules'])}\n\n")
+            for x in (x for x in data["pairs"] if x["profile"] == pid):
+                f.write(f"- pair {x['pair']}: {x['title']}\n  {x['ad']}\n")
+
+
+OLD_RUN_FILES = ("grades_claude.json", "grades_qwen.json", "grades_gemini.json", "grades.json", "spot_check.csv",
+                 "scores.txt", "per_profile.csv")
+
+
+def refresh_ads():
+    """16 Oct: give the judges AD_CHARS of each ad instead of 900 (same pairs, same order, same rankings). The grades
+    made on the short text move to old_900/ (kept, not used), so all three judges and the spot-check start again."""
+    data = load("judging.json")
+    if data.get("ad_chars") == AD_CHARS:
+        sys.exit(f"judging.json already has {AD_CHARS}-character ads: nothing to do.")
+    from app.database import SessionLocal
+    from app.models.job import Job
+    refs = sorted({x["job_ref"] for x in data["pairs"]})
+    db = SessionLocal()
+    try:
+        texts = {j.job_id: (j.description or "") for j in db.query(Job).filter(Job.job_id.in_(refs))}
+    finally:
+        db.close()
+    missing = [r for r in refs if r not in texts]
+    if missing:                                    # a job deleted since rank: its pairs keep the short text
+        print(f"{len(missing)} job(s) no longer in the database, kept as they were: {', '.join(missing[:3])}")
+    longer = 0
+    for x in data["pairs"]:
+        if x["job_ref"] in texts:
+            ad = " ".join(texts[x["job_ref"]].split())[:AD_CHARS]
+            longer += len(ad) > len(x["ad"])
+            x["ad"] = ad
+    data["ad_chars"] = AD_CHARS
+    moved = []
+    for name in OLD_RUN_FILES:
+        if os.path.exists(path(name)):
+            os.makedirs(path("old_900"), exist_ok=True)
+            os.replace(path(name), os.path.join(path("old_900"), name))
+            moved.append(name)
+    save("judging.json", data)
+    write_judging_md(data)
+    print(f"{len(data['pairs'])} pairs, {longer} with a longer ad now (up to {AD_CHARS} characters). "
+          f"Moved to old_900/: {', '.join(moved) or 'nothing'}. Upload judging.json to Claude, then run qwen and gemini.")
 
 
 # ── 2-3. Qwen and Gemini ─────────────────────────────────────────────────────────────────────────────────────────
@@ -280,7 +334,7 @@ def merge():
     old = {r["pair"]: r for r in read_csv("spot_check.csv")}
     rows = [{"pair": x["pair"], "programme": data["profiles"][x["profile"]]["programme"], "job": x["title"],
              "grade (median of 3)": final[x["pair"]], "your_check": old.get(x["pair"], {}).get("your_check", ""),
-             "ad (start)": x["ad"][:300]} for x in data["pairs"] if x["profile"] == spot_profile]
+             "ad (as the judges saw it)": x["ad"]} for x in data["pairs"] if x["profile"] == spot_profile]
     write_csv("spot_check.csv", rows)
     print(f"{len(final)} pairs graded; all three judges agree on {agree} ({agree / len(final):.0%}). "
           f"Spot-check: the {len(rows)} jobs of profile {spot_profile} in {path('spot_check.csv')} "
@@ -363,8 +417,8 @@ def score():
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("step", choices=["rank", "qwen", "gemini", "merge", "score"])
+    ap.add_argument("step", choices=["rank", "refresh-ads", "qwen", "gemini", "merge", "score"])
     ap.add_argument("--pause", type=float, default=3.0)
     a = ap.parse_args()
-    {"rank": rank, "qwen": lambda: judge("qwen", a.pause), "gemini": lambda: judge("gemini", a.pause),
+    {"rank": rank, "refresh-ads": refresh_ads, "qwen": lambda: judge("qwen", a.pause), "gemini": lambda: judge("gemini", a.pause),
      "merge": merge, "score": score}[a.step]()
