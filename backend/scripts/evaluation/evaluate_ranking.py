@@ -184,7 +184,7 @@ def rank():
             f.write(f"\n## {p['programme']}\nModules: {', '.join(m['name'] for m in p['modules'])}\n\n")
             for x in (x for x in pairs if x["profile"] == p["id"]):
                 f.write(f"- pair {x['pair']}: {x['title']}\n  {x['ad'][:500]}\n")
-    print(f"{len(pairs)} pairs to judge (pooled top {K} of S, B1, B2, R). Written {path('judging.json')}")
+    print(f"{len(pairs)} pairs to judge (pooled top {K} of S, B1, B2, R). Written {path('judging.json')}: upload it to Claude.")
 
 
 # ── 2-3. Qwen and Gemini ─────────────────────────────────────────────────────────────────────────────────────────
@@ -199,7 +199,16 @@ def judge(who: str, pause: float):
             jobs = "\n\n".join(f"[{x['pair']}] {x['title']}\n{x['ad']}" for x in chunk)
             prompt = JUDGE_PROMPT.format(programme=prof["programme"], modules="; ".join(prof["modules"]), jobs=jobs)
             try:
-                got = ask_grades(who, prompt)
+                got, reply = ask_grades(who, prompt)
+                # 16 Oct: a judge sometimes leaves a few pairs out of a group, again on every run -> ask for those one by one
+                for x in [x for x in chunk if got.get(x["pair"]) not in (0, 1, 2)] if len(chunk) > 1 else []:
+                    time.sleep(pause)
+                    one = JUDGE_PROMPT.format(programme=prof["programme"], modules="; ".join(prof["modules"]),
+                                              jobs=f"[{x['pair']}] {x['title']}\n{x['ad']}")
+                    g1, reply = ask_grades(who, one)
+                    got.update(g1)
+                    if g1.get(x["pair"]) not in (0, 1, 2):
+                        print(f"    no grade for {x['pair']} ({x['title']}). The judge replied: {(reply or '(nothing)')[:300]!r}")
             except Exception as e:                     # daily limit or network: keep what is done, run again later
                 save(name, done)
                 sys.exit(f"Stopped at {pid}: {type(e).__name__}: {e}. Run {who} again later to continue.")
@@ -210,12 +219,13 @@ def judge(who: str, pause: float):
             save(name, done)
             print(f"  {pid}: {sum(1 for x in chunk if x['pair'] in done)}/{len(chunk)} graded")
             time.sleep(pause)
-    left = sum(1 for x in data["pairs"] if x["pair"] not in done)
-    print(f"{who.capitalize()} graded {len(done)} of {len(data['pairs'])} pairs" + (f" ({left} missing: run again)" if left else "."))
+    graded = sum(1 for x in data["pairs"] if x["pair"] in done)    # pairs of the current judging.json only
+    left = len(data["pairs"]) - graded
+    print(f"{who.capitalize()} graded {graded} of {len(data['pairs'])} pairs" + (f" ({left} missing: run again)" if left else "."))
 
 
-def ask_grades(who: str, prompt: str) -> dict:
-    """One judge call; the grades as {pair id: 0/1/2}. Reuses the E1b clients' settings (models, keys)."""
+def ask_grades(who: str, prompt: str) -> tuple[dict, str]:
+    """One judge call: ({pair id: 0/1/2}, the raw reply). Reuses the E1b clients' settings (models, keys)."""
     from app.config import settings
     if who == "qwen":
         from groq import Groq
@@ -233,8 +243,13 @@ def ask_grades(who: str, prompt: str) -> dict:
         text = client.models.generate_content(model=model, contents=prompt, config=types.GenerateContentConfig(
             temperature=0, response_mime_type="application/json",
             automatic_function_calling=types.AutomaticFunctionCallingConfig(disable=True))).text
-    grades = json.loads(text or "{}").get("grades", {})
-    return {k: int(v) for k, v in grades.items() if str(v).strip() in ("0", "1", "2")}
+    try:
+        grades = json.loads(text or "{}").get("grades", {})
+    except (ValueError, AttributeError):          # not JSON or not an object: no grades, the caller shows the reply
+        grades = {}
+    if not isinstance(grades, dict):
+        grades = {}
+    return {str(k).strip(): int(v) for k, v in grades.items() if str(v).strip() in ("0", "1", "2")}, text
 
 
 # ── 4. merge ─────────────────────────────────────────────────────────────────────────────────────────────────────
