@@ -184,7 +184,7 @@ def rank():
             f.write(f"\n## {p['programme']}\nModules: {', '.join(m['name'] for m in p['modules'])}\n\n")
             for x in (x for x in pairs if x["profile"] == p["id"]):
                 f.write(f"- pair {x['pair']}: {x['title']}\n  {x['ad'][:500]}\n")
-    print(f"{len(pairs)} pairs to judge (pooled top {K} of S, B1, B2, R). Written {path('judging.json')}: upload it to Claude.")
+    print(f"{len(pairs)} pairs to judge (pooled top {K} of S, B1, B2, R). Written {path('judging.json')}")
 
 
 # ── 2-3. Qwen and Gemini ─────────────────────────────────────────────────────────────────────────────────────────
