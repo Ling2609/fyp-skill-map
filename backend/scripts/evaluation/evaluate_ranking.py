@@ -200,12 +200,14 @@ def judge(who: str, pause: float):
             prompt = JUDGE_PROMPT.format(programme=prof["programme"], modules="; ".join(prof["modules"]), jobs=jobs)
             try:
                 got, reply = ask_grades(who, prompt)
+                got = by_pair(got, chunk)
                 # 16 Oct: a judge sometimes leaves a few pairs out of a group, again on every run -> ask for those one by one
                 for x in [x for x in chunk if got.get(x["pair"]) not in (0, 1, 2)] if len(chunk) > 1 else []:
                     time.sleep(pause)
                     one = JUDGE_PROMPT.format(programme=prof["programme"], modules="; ".join(prof["modules"]),
                                               jobs=f"[{x['pair']}] {x['title']}\n{x['ad']}")
                     g1, reply = ask_grades(who, one)
+                    g1 = by_pair(g1, [x])
                     got.update(g1)
                     if g1.get(x["pair"]) not in (0, 1, 2):
                         print(f"    no grade for {x['pair']} ({x['title']}). The judge replied: {(reply or '(nothing)')[:300]!r}")
@@ -222,6 +224,16 @@ def judge(who: str, pause: float):
     graded = sum(1 for x in data["pairs"] if x["pair"] in done)    # pairs of the current judging.json only
     left = len(data["pairs"]) - graded
     print(f"{who.capitalize()} graded {graded} of {len(data['pairs'])} pairs" + (f" ({left} missing: run again)" if left else "."))
+
+
+def by_pair(got: dict, chunk: list) -> dict:
+    """The grades keyed by pair id. 16 Oct: Gemini sometimes writes the job id without the profile ("live_x" for
+    "CS-AI|live_x"); one prompt holds one profile's jobs, so the job id names the pair without doubt."""
+    out = dict(got)
+    for x in chunk:
+        if x["pair"] not in out and x["job_ref"] in got:
+            out[x["pair"]] = got[x["job_ref"]]
+    return out
 
 
 def ask_grades(who: str, prompt: str) -> tuple[dict, str]:
