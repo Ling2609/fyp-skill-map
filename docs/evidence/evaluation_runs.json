@@ -900,5 +900,380 @@
     "sha256": "afee99e74661870fe0d7d9c4526ad866a1bad8fbd883f6f8e0bf901bcd9677d6"
    }
   ]
+ },
+ {
+  "_id": "620b3ecd2c5342ae86b5ad6c49d6af4b",
+  "name": "E5 response times",
+  "objective": 2,
+  "at": "2026-10-18T09:30:07.529000+00:00",
+  "git": {
+   "commit": "d673ecc",
+   "dirty": true
+  },
+  "setup": {
+   "relation_model": "relation_model_esco_onet_v1_skillmap_v2_soft_skillmap_v3_soft_nli-deberta-v3-base_rw3x20_noextend",
+   "relation_seeds": 3,
+   "relation_cutoff": 0.6,
+   "embedder": "all-MiniLM-L6-v2",
+   "extractor": "openai/gpt-oss-120b",
+   "python": "3.13.7"
+  },
+  "method": "uvicorn started by the script 3 times; each call once cold, then 20 warm calls per start; SE test student; client on the same machine; Gemini first views reported apart",
+  "dataset": {
+   "rounds": 3,
+   "warm_per_round": 20,
+   "jobs_opened": 5,
+   "machine": {
+    "os": "Windows-11-10.0.26300-SP0",
+    "cpu": "Intel64 Family 6 Model 170 Stepping 4, GenuineIntel",
+    "cores": 22,
+    "python": "3.13.7",
+    "gpu": "none (CPU)"
+   }
+  },
+  "metrics": {
+   "startup_s": [
+    40.0,
+    28.4,
+    27.9
+   ],
+   "calls": {
+    "POST /recommend/": {
+     "cold": [
+      11.6134,
+      9.8239,
+      9.4139
+     ],
+     "warm_median": 2.511,
+     "warm_p95": 2.783,
+     "warm_max": 3.163,
+     "first_view_gemini": []
+    },
+    "GET /profile/skills": {
+     "cold": [
+      0.0392,
+      0.043,
+      0.0421
+     ],
+     "warm_median": 0.013,
+     "warm_p95": 0.018,
+     "warm_max": 0.027,
+     "first_view_gemini": []
+    },
+    "GET /jobs/subcategories": {
+     "cold": [
+      0.0091,
+      0.0099,
+      0.0096
+     ],
+     "warm_median": 0.006,
+     "warm_p95": 0.007,
+     "warm_max": 0.008,
+     "first_view_gemini": []
+    },
+    "POST /skillgap/": {
+     "cold": [
+      0.0341,
+      0.0354,
+      0.0545
+     ],
+     "warm_median": 0.033,
+     "warm_p95": 0.073,
+     "warm_max": 0.1,
+     "first_view_gemini": []
+    },
+    "GET /jobs/{id}/description": {
+     "cold": [
+      0.0082,
+      0.0082,
+      0.0069
+     ],
+     "warm_median": 0.007,
+     "warm_p95": 0.009,
+     "warm_max": 0.01,
+     "first_view_gemini": [
+      5.5743,
+      1.5062
+     ]
+    },
+    "GET /recommend/goal": {
+     "cold": [
+      2.4266,
+      2.2451,
+      2.1844
+     ],
+     "warm_median": 2.17,
+     "warm_p95": 2.327,
+     "warm_max": 2.41,
+     "first_view_gemini": []
+    },
+    "GET /recommend/fit": {
+     "cold": [
+      0.1591,
+      0.1638,
+      0.1331
+     ],
+     "warm_median": 0.126,
+     "warm_p95": 0.229,
+     "warm_max": 0.253,
+     "first_view_gemini": []
+    }
+   }
+  },
+  "verdict": "FAIL: at least one call over the limit (warm p95 1 s, cold 10 s)",
+  "files": [
+   {
+    "path": "docs/evidence/performance/response_times.csv",
+    "sha256": "d2aadfe121455e93c5f0b8b6bc4459b3984b17efedcf939256c473d5424d8be9"
+   }
+  ]
+ },
+ {
+  "_id": "5b798f6f54804e9293ab1434aa74c53c",
+  "name": "E5 response times",
+  "objective": 2,
+  "at": "2026-10-18T11:58:49.407000+00:00",
+  "git": {
+   "commit": "becb8b8",
+   "dirty": true
+  },
+  "setup": {
+   "relation_model": "relation_model_esco_onet_v1_skillmap_v2_soft_skillmap_v3_soft_nli-deberta-v3-base_rw3x20_noextend",
+   "relation_seeds": 3,
+   "relation_cutoff": 0.6,
+   "embedder": "all-MiniLM-L6-v2",
+   "extractor": "openai/gpt-oss-120b",
+   "python": "3.13.7"
+  },
+  "method": "uvicorn started by the script 3 times; each call once cold, then 20 warm calls per start; SE test student; client on the same machine; Gemini first views reported apart",
+  "dataset": {
+   "rounds": 3,
+   "warm_per_round": 20,
+   "jobs_opened": 5,
+   "machine": {
+    "os": "Windows-11-10.0.26300-SP0",
+    "cpu": "Intel64 Family 6 Model 170 Stepping 4, GenuineIntel",
+    "cores": 22,
+    "python": "3.13.7",
+    "gpu": "none (CPU)"
+   }
+  },
+  "metrics": {
+   "startup_s": [
+    16.9,
+    17.3,
+    17.4
+   ],
+   "calls": {
+    "POST /recommend/": {
+     "cold": [
+      5.3256,
+      4.9301,
+      4.356
+     ],
+     "warm_median": 1.241,
+     "warm_p95": 1.625,
+     "warm_max": 2.6,
+     "first_view_gemini": []
+    },
+    "GET /profile/skills": {
+     "cold": [
+      0.0241,
+      0.0329,
+      0.0241
+     ],
+     "warm_median": 0.009,
+     "warm_p95": 0.012,
+     "warm_max": 0.014,
+     "first_view_gemini": []
+    },
+    "GET /jobs/subcategories": {
+     "cold": [
+      0.0069,
+      0.0075,
+      0.0061
+     ],
+     "warm_median": 0.004,
+     "warm_p95": 0.005,
+     "warm_max": 0.006,
+     "first_view_gemini": []
+    },
+    "POST /skillgap/": {
+     "cold": [
+      0.0119,
+      0.0207,
+      0.0133
+     ],
+     "warm_median": 0.01,
+     "warm_p95": 0.219,
+     "warm_max": 0.476,
+     "first_view_gemini": []
+    },
+    "GET /jobs/{id}/description": {
+     "cold": [
+      0.0044,
+      0.0077,
+      0.0049
+     ],
+     "warm_median": 0.003,
+     "warm_p95": 0.004,
+     "warm_max": 0.004,
+     "first_view_gemini": []
+    },
+    "GET /recommend/goal": {
+     "cold": [
+      0.8116,
+      0.8252,
+      0.9783
+     ],
+     "warm_median": 0.725,
+     "warm_p95": 1.148,
+     "warm_max": 1.669,
+     "first_view_gemini": []
+    },
+    "GET /recommend/fit": {
+     "cold": [
+      0.0227,
+      0.0307,
+      0.0244
+     ],
+     "warm_median": 0.027,
+     "warm_p95": 0.059,
+     "warm_max": 0.111,
+     "first_view_gemini": []
+    }
+   }
+  },
+  "verdict": "FAIL: at least one call over the limit (warm p95 1 s, cold 10 s)",
+  "files": [
+   {
+    "path": "docs/evidence/performance/response_times.csv",
+    "sha256": "59eabafaeb4acbb6d17ecf2244b63f745a82e2ef6b5818b4b6eebd5ec274e2a8"
+   }
+  ]
+ },
+ {
+  "_id": "bfadc5d66a594219b716193f236e4041",
+  "name": "E5 response times",
+  "objective": 2,
+  "at": "2026-10-18T12:09:41.562000+00:00",
+  "git": {
+   "commit": "a0d8f2a",
+   "dirty": true
+  },
+  "setup": {
+   "relation_model": "relation_model_esco_onet_v1_skillmap_v2_soft_skillmap_v3_soft_nli-deberta-v3-base_rw3x20_noextend",
+   "relation_seeds": 3,
+   "relation_cutoff": 0.6,
+   "embedder": "all-MiniLM-L6-v2",
+   "extractor": "openai/gpt-oss-120b",
+   "python": "3.13.7"
+  },
+  "method": "uvicorn started by the script 3 times; each call once cold, then 20 warm calls per start; SE test student; client on the same machine; Gemini first views reported apart",
+  "dataset": {
+   "rounds": 3,
+   "warm_per_round": 20,
+   "jobs_opened": 5,
+   "machine": {
+    "os": "Windows-11-10.0.26300-SP0",
+    "cpu": "Intel64 Family 6 Model 170 Stepping 4, GenuineIntel",
+    "cores": 22,
+    "python": "3.13.7",
+    "gpu": "none (CPU)"
+   }
+  },
+  "metrics": {
+   "startup_s": [
+    17.6,
+    16.7,
+    17.2
+   ],
+   "calls": {
+    "POST /recommend/": {
+     "cold": [
+      3.7642,
+      3.8388,
+      3.9537
+     ],
+     "warm_median": 0.175,
+     "warm_p95": 0.475,
+     "warm_max": 1.321,
+     "first_view_gemini": []
+    },
+    "GET /profile/skills": {
+     "cold": [
+      0.0212,
+      0.0202,
+      0.0237
+     ],
+     "warm_median": 0.007,
+     "warm_p95": 0.01,
+     "warm_max": 0.011,
+     "first_view_gemini": []
+    },
+    "GET /jobs/subcategories": {
+     "cold": [
+      0.0044,
+      0.0042,
+      0.0049
+     ],
+     "warm_median": 0.003,
+     "warm_p95": 0.005,
+     "warm_max": 0.006,
+     "first_view_gemini": []
+    },
+    "POST /skillgap/": {
+     "cold": [
+      0.0108,
+      0.0119,
+      0.0108
+     ],
+     "warm_median": 0.009,
+     "warm_p95": 0.014,
+     "warm_max": 0.017,
+     "first_view_gemini": []
+    },
+    "GET /jobs/{id}/description": {
+     "cold": [
+      0.0039,
+      0.004,
+      0.0038
+     ],
+     "warm_median": 0.003,
+     "warm_p95": 0.005,
+     "warm_max": 0.014,
+     "first_view_gemini": []
+    },
+    "GET /recommend/goal": {
+     "cold": [
+      0.1018,
+      0.0929,
+      0.0932
+     ],
+     "warm_median": 0.094,
+     "warm_p95": 0.146,
+     "warm_max": 0.202,
+     "first_view_gemini": []
+    },
+    "GET /recommend/fit": {
+     "cold": [
+      0.0311,
+      0.0265,
+      0.0271
+     ],
+     "warm_median": 0.026,
+     "warm_p95": 0.031,
+     "warm_max": 0.033,
+     "first_view_gemini": []
+    }
+   }
+  },
+  "verdict": "PASS: every warm p95 under 1 s and every cold call under 10 s",
+  "files": [
+   {
+    "path": "docs/evidence/performance/response_times.csv",
+    "sha256": "767af94220fec5bb1db8cef8ca870473cba1c81b14225844f34875feb1f3806c"
+   }
+  ]
  }
 ]

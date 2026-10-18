@@ -1,0 +1,16 @@
+E5 response times: server answer times seen by a client on the same machine (seconds)
+3 server starts; cold = first call after each start; warm = 20 calls per round, pooled
+
+Server start until the API answers: 17.6, 16.7, 17.2 s
+
+Page / call                                 cold (each start)      warm median  warm p95  warm max
+Job Matches · POST /recommend/              3.76, 3.84, 3.95             0.175     0.475     1.321
+Job Matches · GET /profile/skills           0.02, 0.02, 0.02             0.007     0.010     0.011
+Job Matches · GET /jobs/subcategories       0.00, 0.00, 0.00             0.003     0.005     0.006
+Job Detail · POST /skillgap/                0.01, 0.01, 0.01             0.009     0.014     0.017
+Job Detail · GET /jobs/{id}/description     0.00, 0.00, 0.00             0.003     0.005     0.014
+Dashboard · GET /recommend/goal             0.10, 0.09, 0.09             0.094     0.146     0.202
+Dashboard · GET /recommend/fit              0.03, 0.03, 0.03             0.026     0.031     0.033
+
+PASS: every warm p95 under 1 s and every cold call under 10 s (the rule fixed beforehand)
+Machine: os Windows-11-10.0.26300-SP0, cpu Intel64 Family 6 Model 170 Stepping 4, GenuineIntel, cores 22, python 3.13.7, gpu none (CPU)
