@@ -142,6 +142,22 @@ def normalise_rows(vecs: np.ndarray) -> np.ndarray:
     return vecs / (np.linalg.norm(vecs, axis=1, keepdims=True) + 1e-8)
 
 
+BLAS_THREADS = 1
+
+
+def limit_blas_threads(n: int = BLAS_THREADS):
+    """numpy's maths library (OpenBLAS) may use every core for each matrix product. SkillMap's products are small
+    (one job's ~20 skills x the student's spellings), and waking 22 cores for each cost more than the sum: on her
+    laptop Job Matches took 1.3 s with all cores and 0.29 s with one (18 Oct, E5 run 2 + profiler). Called at
+    start-up (app/main.py). Only numpy's BLAS is limited; PyTorch (SBERT, relationship model) keeps its own threads.
+    Same answers either way (scripts/evaluation/check_blas_threads.py)."""
+    try:
+        from threadpoolctl import threadpool_limits
+        threadpool_limits(limits=n, user_api="blas")
+    except Exception as e:                      # never stop the app over a speed setting
+        print(f"[blas] could not limit maths threads: {e}")
+
+
 def _same_key(job_keys: list[str], spelling_keys: list[str]) -> np.ndarray:
     """same[j, s] = job skill j and spelling s are the same canonical skill (A8). 18 Oct (E5 response times): the keys
     become numbers once and are compared in one numpy step; comparing them as Python strings, job by job, was most

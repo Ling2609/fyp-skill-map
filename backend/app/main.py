@@ -10,6 +10,8 @@ from app.models import profile as profile_model  # noqa: F401 — registers tabl
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    from app.services.skill_profile import limit_blas_threads
+    limit_blas_threads()     # 18 Oct (E5): small matrix products are faster on one core
     from app.routers.auth import check_account_schema, delete_old_codes
     check_account_schema()   # stops with a clear message if migrate_account_security.py hasn't been run
     from app.routers.profile import check_profile_schema

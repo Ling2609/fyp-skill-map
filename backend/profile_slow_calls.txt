@@ -1,79 +1,79 @@
-===== POST /recommend/: 2.75 s per call (5 calls, profiled) =====
-         2761707 function calls (2708411 primitive calls) in 15.914 seconds
+===== POST /recommend/: 0.34 s per call (5 calls, profiled) =====
+         2946057 function calls (2892864 primitive calls) in 1.724 seconds
 
    Ordered by: internal time
-   List reduced from 1437 to 30 due to restriction <30>
+   List reduced from 1301 to 30 due to restriction <30>
 
    ncalls  tottime  percall  cumtime  percall filename:lineno(function)
-      960    7.212    0.008    8.434    0.009 C:\Users\Ling\Desktop\fyp-skill-map\backend\app\services\skill_profile.py:163(match_matrix)
-        5    1.958    0.392   13.707    2.741 C:\Users\Ling\Desktop\fyp-skill-map\backend\venv\Lib\site-packages\httpx2\_client.py:949(send)
-     52/0    1.610    0.031    0.000          {built-in method time.sleep}
-    31/28    1.300    0.042    1.313    0.047 {built-in method select.select}
-        5    0.912    0.182    1.035    0.207 C:\Users\Ling\Desktop\fyp-skill-map\backend\app\services\skill_profile.py:197(prefetch_relations)
-   384965    0.629    0.000    0.629    0.000 {method 'reduce' of 'numpy.ufunc' objects}
-    42/37    0.279    0.007    0.001    0.000 C:\Users\Ling\AppData\Local\Programs\Python\Python313\Lib\threading.py:327(wait)
-      110    0.255    0.002   11.783    0.107 C:\Users\Ling\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py:1970(_run_once)
-      185    0.136    0.001    0.136    0.001 {built-in method torch._C._nn.linear}
-   192960    0.117    0.000    0.491    0.000 {method 'any' of 'numpy.ndarray' objects}
-  48275/5    0.117    0.000    0.205    0.041 C:\Users\Ling\Desktop\fyp-skill-map\backend\venv\Lib\site-packages\fastapi\encoders.py:129(jsonable_encoder)
-   192000    0.113    0.000    0.499    0.000 {method 'max' of 'numpy.ndarray' objects}
-   101660    0.095    0.000    0.162    0.000 C:\Users\Ling\Desktop\fyp-skill-map\backend\app\services\skill_relation.py:94(_key)
-      965    0.073    0.000    0.262    0.000 C:\Users\Ling\Desktop\fyp-skill-map\backend\app\services\skill_relation.py:138(p_satisfies)
-   192960    0.067    0.000    0.374    0.000 C:\Users\Ling\Desktop\fyp-skill-map\backend\venv\Lib\site-packages\numpy\_core\_methods.py:55(_any)
-   192000    0.064    0.000    0.386    0.000 C:\Users\Ling\Desktop\fyp-skill-map\backend\venv\Lib\site-packages\numpy\_core\_methods.py:39(_amax)
-       40    0.056    0.001    0.056    0.001 {method 'execute' of 'psycopg2.extensions.cursor' objects}
-282583/281333    0.051    0.000    0.053    0.000 {built-in method builtins.isinstance}
-     1920    0.039    0.000    0.039    0.000 {method 'nonzero' of 'numpy.ndarray' objects}
-   208816    0.039    0.000    0.039    0.000 {method 'lower' of 'str' objects}
-     6735    0.037    0.000    0.037    0.000 {built-in method numpy.asarray}
-   141120    0.035    0.000    0.035    0.000 C:\Users\Ling\Desktop\fyp-skill-map\backend\app\services\job_requirements.py:46(tier)
-   212320    0.032    0.000    0.032    0.000 {method 'strip' of 'str' objects}
-    48275    0.028    0.000    0.042    0.000 C:\Users\Ling\AppData\Local\Programs\Python\Python313\Lib\dataclasses.py:1331(is_dataclass)
-      960    0.027    0.000    0.104    0.000 C:\Users\Ling\Desktop\fyp-skill-map\backend\app\services\job_requirements.py:103(score_job)
-      960    0.027    0.000    0.038    0.000 C:\Users\Ling\Desktop\fyp-skill-map\backend\app\routers\recommend.py:35(card_skills)
-        5    0.026    0.005    5.904    1.181 C:\Users\Ling\Desktop\fyp-skill-map\backend\app\routers\recommend.py:186(recommend_jobs)
-       30    0.025    0.001    0.025    0.001 {built-in method torch._C._nn.scaled_dot_product_attention}
-     1980    0.024    0.000    0.044    0.000 C:\Users\Ling\Desktop\fyp-skill-map\backend\app\services\job_requirements.py:75(units)
-    31/28    0.023    0.001    2.617    0.093 C:\Users\Ling\Desktop\fyp-skill-map\backend\venv\Lib\site-packages\pymongo\socket_checker.py:43(select)
+      185    0.267    0.001    0.267    0.001 {built-in method torch._C._nn.linear}
+   395520    0.117    0.000    0.200    0.000 C:\Users\Ling\Desktop\fyp-skill-map\backend\app\services\skill_profile.py:150(<genexpr>)
+      960    0.115    0.000    0.487    0.001 C:\Users\Ling\Desktop\fyp-skill-map\backend\app\services\skill_profile.py:190(match_matrix)
+  48275/5    0.080    0.000    0.143    0.029 C:\Users\Ling\Desktop\fyp-skill-map\backend\venv\Lib\site-packages\fastapi\encoders.py:129(jsonable_encoder)
+        5    0.072    0.014    0.288    0.058 C:\Users\Ling\Desktop\fyp-skill-map\backend\app\services\skill_profile.py:217(prefetch_relations)
+   158/15    0.069    0.000    0.000    0.000 {method 'acquire' of '_thread.lock' objects}
+   101660    0.062    0.000    0.105    0.000 C:\Users\Ling\Desktop\fyp-skill-map\backend\app\services\skill_relation.py:94(_key)
+     3840    0.057    0.000    0.276    0.000 {built-in method numpy.fromiter}
+   398395    0.056    0.000    0.056    0.000 {method 'setdefault' of 'dict' objects}
+       30    0.050    0.002    0.050    0.002 {built-in method torch._C._nn.scaled_dot_product_attention}
+      965    0.038    0.000    0.158    0.000 C:\Users\Ling\Desktop\fyp-skill-map\backend\app\services\skill_relation.py:138(p_satisfies)
+282575/281325    0.037    0.000    0.038    0.000 {built-in method builtins.isinstance}
+     1920    0.036    0.000    0.036    0.000 {method 'reduceat' of 'numpy.ufunc' objects}
+        5    0.035    0.007    1.245    0.249 C:\Users\Ling\Desktop\fyp-skill-map\backend\app\routers\recommend.py:186(recommend_jobs)
+       40    0.034    0.001    0.035    0.001 {method 'execute' of 'psycopg2.extensions.cursor' objects}
+426595/426575    0.032    0.000    0.032    0.000 {built-in method builtins.len}
+     1920    0.026    0.000    0.303    0.000 C:\Users\Ling\Desktop\fyp-skill-map\backend\app\services\skill_profile.py:145(_same_key)
+   208815    0.025    0.000    0.025    0.000 {method 'lower' of 'str' objects}
+     1920    0.024    0.000    0.024    0.000 {method 'nonzero' of 'numpy.ndarray' objects}
+      960    0.022    0.000    0.104    0.000 C:\Users\Ling\Desktop\fyp-skill-map\backend\app\services\skill_profile.py:155(_per_skill)
+   141120    0.022    0.000    0.022    0.000 C:\Users\Ling\Desktop\fyp-skill-map\backend\app\services\job_requirements.py:46(tier)
+   212320    0.021    0.000    0.021    0.000 {method 'strip' of 'str' objects}
+    48275    0.019    0.000    0.029    0.000 C:\Users\Ling\AppData\Local\Programs\Python\Python313\Lib\dataclasses.py:1331(is_dataclass)
+      960    0.016    0.000    0.023    0.000 C:\Users\Ling\Desktop\fyp-skill-map\backend\app\routers\recommend.py:35(card_skills)
+   109950    0.016    0.000    0.016    0.000 {method 'get' of 'dict' objects}
+      960    0.016    0.000    0.064    0.000 C:\Users\Ling\Desktop\fyp-skill-map\backend\app\services\job_requirements.py:103(score_job)
+     1980    0.015    0.000    0.028    0.000 C:\Users\Ling\Desktop\fyp-skill-map\backend\app\services\job_requirements.py:75(units)
+    55910    0.013    0.000    0.020    0.000 C:\Users\Ling\Desktop\fyp-skill-map\backend\app\services\skill_profile.py:151(<genexpr>)
+        5    0.011    0.002    0.011    0.002 {method 'encode_batch' of 'tokenizers.Tokenizer' objects}
+       30    0.010    0.000    0.010    0.000 {built-in method torch._C._nn.gelu}
 
 
 
-===== GET /recommend/goal: 1.95 s per call (5 calls, profiled) =====
-         1918984 function calls (1916790 primitive calls) in 10.596 seconds
+===== GET /recommend/goal: 0.20 s per call (5 calls, profiled) =====
+         2061194 function calls (2059070 primitive calls) in 0.993 seconds
 
    Ordered by: internal time
-   List reduced from 1029 to 30 due to restriction <30>
+   List reduced from 945 to 30 due to restriction <30>
 
    ncalls  tottime  percall  cumtime  percall filename:lineno(function)
-     1000    5.388    0.005    6.647    0.007 C:\Users\Ling\Desktop\fyp-skill-map\backend\app\services\skill_profile.py:163(match_matrix)
-    21/18    1.137    0.054    1.157    0.064 {built-in method select.select}
-  180/160    0.849    0.005    9.640    0.060 {method 'run' of '_contextvars.Context' objects}
-     38/0    0.767    0.020    0.000          {built-in method time.sleep}
-   401005    0.687    0.000    0.687    0.000 {method 'reduce' of 'numpy.ufunc' objects}
-       70    0.440    0.006    0.518    0.007 C:\Users\Ling\Desktop\fyp-skill-map\backend\app\services\skill_profile.py:197(prefetch_relations)
-        5    0.223    0.045    6.888    1.378 C:\Users\Ling\Desktop\fyp-skill-map\backend\app\routers\recommend.py:502(goal_summary)
-   201000    0.128    0.000    0.534    0.000 {method 'any' of 'numpy.ndarray' objects}
-   200000    0.123    0.000    0.546    0.000 {method 'max' of 'numpy.ndarray' objects}
-   201000    0.072    0.000    0.407    0.000 C:\Users\Ling\Desktop\fyp-skill-map\backend\venv\Lib\site-packages\numpy\_core\_methods.py:55(_any)
-   200000    0.071    0.000    0.423    0.000 C:\Users\Ling\Desktop\fyp-skill-map\backend\venv\Lib\site-packages\numpy\_core\_methods.py:39(_amax)
-    56260    0.058    0.000    0.099    0.000 C:\Users\Ling\Desktop\fyp-skill-map\backend\app\services\skill_relation.py:94(_key)
-       35    0.051    0.001    0.051    0.001 {method 'execute' of 'psycopg2.extensions.cursor' objects}
-    21/18    0.050    0.002    7.021    0.390 C:\Users\Ling\Desktop\fyp-skill-map\backend\venv\Lib\site-packages\pymongo\socket_checker.py:43(select)
-     1070    0.050    0.000    0.182    0.000 C:\Users\Ling\Desktop\fyp-skill-map\backend\app\services\skill_relation.py:138(p_satisfies)
-     5075    0.038    0.000    0.038    0.000 {built-in method numpy.asarray}
-       65    0.037    0.001    0.056    0.001 C:\Users\Ling\Desktop\fyp-skill-map\backend\app\routers\recommend.py:384(_asked)
-     2000    0.028    0.000    0.028    0.000 {method 'nonzero' of 'numpy.ndarray' objects}
-   115851    0.023    0.000    0.023    0.000 {method 'lower' of 'str' objects}
-   121600    0.021    0.000    0.021    0.000 {method 'strip' of 'str' objects}
-    15985    0.020    0.000    0.024    0.000 C:\Users\Ling\AppData\Local\Programs\Python\Python313\Lib\collections\__init__.py:599(__init__)
-    55910    0.017    0.000    0.017    0.000 C:\Users\Ling\Desktop\fyp-skill-map\backend\app\services\job_requirements.py:46(tier)
-    34205    0.013    0.000    0.013    0.000 {method 'setdefault' of 'dict' objects}
-     1070    0.013    0.000    0.017    0.000 <frozen ntpath>:222(split)
-    48217    0.012    0.000    0.012    0.000 {method 'get' of 'dict' objects}
-    15065    0.011    0.000    0.011    0.000 C:\Users\Ling\Desktop\fyp-skill-map\backend\app\services\skill_profile.py:214(<genexpr>)
-       10    0.010    0.001    0.030    0.003 C:\Users\Ling\Desktop\fyp-skill-map\backend\app\routers\recommend.py:373(live_jobs)
-    25560    0.009    0.000    0.014    0.000 C:\Users\Ling\Desktop\fyp-skill-map\backend\app\routers\recommend.py:79(is_current)
-        5    0.008    0.002    1.264    0.253 C:\Users\Ling\Desktop\fyp-skill-map\backend\app\routers\recommend.py:450(_wanted)
-     1095    0.008    0.000    0.020    0.000 C:\Users\Ling\Desktop\fyp-skill-map\backend\app\services\skill_names.py:54(skill_key)
+   412000    0.127    0.000    0.215    0.000 C:\Users\Ling\Desktop\fyp-skill-map\backend\app\services\skill_profile.py:150(<genexpr>)
+     1000    0.095    0.000    0.429    0.000 C:\Users\Ling\Desktop\fyp-skill-map\backend\app\services\skill_profile.py:190(match_matrix)
+   446205    0.065    0.000    0.065    0.000 {method 'setdefault' of 'dict' objects}
+       70    0.064    0.001    0.256    0.004 C:\Users\Ling\Desktop\fyp-skill-map\backend\app\services\skill_profile.py:217(prefetch_relations)
+     4000    0.060    0.000    0.287    0.000 {built-in method numpy.fromiter}
+        5    0.058    0.012    0.726    0.145 C:\Users\Ling\Desktop\fyp-skill-map\backend\app\routers\recommend.py:450(_wanted)
+    56260    0.038    0.000    0.065    0.000 C:\Users\Ling\Desktop\fyp-skill-map\backend\app\services\skill_relation.py:94(_key)
+   431608    0.034    0.000    0.034    0.000 {built-in method builtins.len}
+       35    0.033    0.001    0.034    0.001 {method 'execute' of 'psycopg2.extensions.cursor' objects}
+     1070    0.026    0.000    0.108    0.000 C:\Users\Ling\Desktop\fyp-skill-map\backend\app\services\skill_relation.py:138(p_satisfies)
+     2000    0.023    0.000    0.023    0.000 {method 'reduceat' of 'numpy.ufunc' objects}
+     1000    0.021    0.000    0.095    0.000 C:\Users\Ling\Desktop\fyp-skill-map\backend\app\services\skill_profile.py:155(_per_skill)
+       65    0.020    0.000    0.031    0.000 C:\Users\Ling\Desktop\fyp-skill-map\backend\app\routers\recommend.py:384(_asked)
+     2000    0.018    0.000    0.305    0.000 C:\Users\Ling\Desktop\fyp-skill-map\backend\app\services\skill_profile.py:145(_same_key)
+     2000    0.017    0.000    0.017    0.000 {method 'nonzero' of 'numpy.ndarray' objects}
+   115850    0.016    0.000    0.016    0.000 {method 'lower' of 'str' objects}
+   121600    0.013    0.000    0.013    0.000 {method 'strip' of 'str' objects}
+    15985    0.012    0.000    0.015    0.000 C:\Users\Ling\AppData\Local\Programs\Python\Python313\Lib\collections\__init__.py:599(__init__)
+    81325    0.011    0.000    0.012    0.000 {method 'get' of 'dict' objects}
+     1000    0.011    0.000    0.011    0.000 {built-in method numpy._core._multiarray_umath._unique_hash}
+    55910    0.009    0.000    0.009    0.000 C:\Users\Ling\Desktop\fyp-skill-map\backend\app\services\job_requirements.py:46(tier)
+    33120    0.008    0.000    0.012    0.000 C:\Users\Ling\Desktop\fyp-skill-map\backend\app\services\skill_profile.py:151(<genexpr>)
+     3005    0.008    0.000    0.008    0.000 {built-in method numpy.asarray}
+     1095    0.007    0.000    0.018    0.000 C:\Users\Ling\Desktop\fyp-skill-map\backend\app\services\skill_names.py:54(skill_key)
+       10    0.007    0.001    0.021    0.002 C:\Users\Ling\Desktop\fyp-skill-map\backend\app\routers\recommend.py:373(live_jobs)
+     1070    0.007    0.000    0.009    0.000 <frozen ntpath>:222(split)
+    25560    0.005    0.000    0.008    0.000 C:\Users\Ling\Desktop\fyp-skill-map\backend\app\routers\recommend.py:79(is_current)
+    15065    0.005    0.000    0.005    0.000 C:\Users\Ling\Desktop\fyp-skill-map\backend\app\services\skill_profile.py:233(<genexpr>)
+     2005    0.005    0.000    0.005    0.000 {method 'reduce' of 'numpy.ufunc' objects}
+       65    0.004    0.000    0.010    0.000 C:\Users\Ling\Desktop\fyp-skill-map\backend\venv\Lib\site-packages\sqlalchemy\orm\loading.py:208(chunks)
 
 
