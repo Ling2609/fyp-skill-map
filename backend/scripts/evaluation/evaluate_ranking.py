@@ -238,7 +238,7 @@ def refresh_ads():
     save("judging.json", data)
     write_judging_md(data)
     print(f"{len(data['pairs'])} pairs, {longer} with a longer ad now (up to {AD_CHARS} characters). "
-          f"Moved to old_900/: {', '.join(moved) or 'nothing'}. Upload judging.json,run qwen and gemini.")
+          f"Moved to old_900/: {', '.join(moved) or 'nothing'}. Upload judging.json, run qwen and gemini.")
 
 
 # ── 2-3. Qwen and Gemini ─────────────────────────────────────────────────────────────────────────────────────────
