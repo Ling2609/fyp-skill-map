@@ -189,7 +189,7 @@ def rank():
             "pairs": pairs}
     save("judging.json", data)
     write_judging_md(data)
-    print(f"{len(pairs)} pairs to judge (pooled top {K} of S, B1, B2, R). Written {path('judging.json')}: upload it to Claude.")
+    print(f"{len(pairs)} pairs to judge (pooled top {K} of S, B1, B2, R). Written {path('judging.json')}.")
 
 
 def write_judging_md(data):
@@ -238,7 +238,7 @@ def refresh_ads():
     save("judging.json", data)
     write_judging_md(data)
     print(f"{len(data['pairs'])} pairs, {longer} with a longer ad now (up to {AD_CHARS} characters). "
-          f"Moved to old_900/: {', '.join(moved) or 'nothing'}. Upload judging.json to Claude, then run qwen and gemini.")
+          f"Moved to old_900/: {', '.join(moved) or 'nothing'}. Upload judging.json,run qwen and gemini.")
 
 
 # ── 2-3. Qwen and Gemini ─────────────────────────────────────────────────────────────────────────────────────────

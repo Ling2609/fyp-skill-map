@@ -84,7 +84,7 @@ def main():
         print("  IDENTICAL: every job, score, matched skill and gap is the same")
     with open("check_blas_threads.txt", "w", encoding="utf-8") as f:
         json.dump({"identical": not bad, "differences": bad, "answers_compared": len(one)}, f, indent=1)
-    print("Written check_blas_threads.txt: send the lines above to Claude.")
+    print("Written check_blas_threads.txt.")
 
 
 if __name__ == "__main__":

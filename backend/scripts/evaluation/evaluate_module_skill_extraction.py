@@ -119,7 +119,7 @@ def sample(n: int, seed: int):
     print(f"{len(picked)} modules from {len(mods)} with a description, {len(take)} families:")
     for g in sorted(take, key=lambda g: -take[g]):
         print(f"  {take[g]:>2}  {g} (of {len(groups[g])})")
-    print(f"Written {e1.path('modules.json')}, modules.md and labelling_guide.md. Next: upload modules.json to Claude.")
+    print(f"Written {e1.path('modules.json')}, modules.md and labelling_guide.md.")
 
 
 # ── 2. the extractor, fresh ──────────────────────────────────────────────────────────────────────────────────────
