@@ -1,0 +1,107 @@
+Saved job descriptions checked against their advert (18 Oct): 48
+Failing (any bullet with under 60% of its words in the ad): 27
+By source: dataset 20, employer 1, live 6
+Cleared 27: Job Detail rebuilds them (checked) on the next view.
+
+75419863.0 | dataset | VIP | OLA TECHNOLOGIES SDN BHD: 1 of 1 bullets not found in the ad
+   0.00  Work hours are from 1300 to 2100.
+
+72345327.0 | dataset | .Net Developer | Company Confidential: 1 of 11 bullets not found in the ad
+   0.50  Proficient in VB.Net and SQL, which are mandatory.
+
+74173826.0 | dataset | TECHNICIAN WIRING | WINTECH BUSINESS SYSTEMS: 8 of 8 bullets not found in the ad
+   0.25  Perform wiring tasks as required.
+   0.00  Collaborate effectively within a team environment.
+   0.00  Maintain responsibility and accountability for assigned work.
+
+74362257.0 | dataset | System analyst | YULON CAPITAL SDN. BHD.: 2 of 13 bullets not found in the ad
+   0.57  At least three years of relevant work experience in information technology.
+   0.50  Demonstrated success in IT‑related projects.
+
+76226973.0 | dataset | SAP SD Senior Analyst | Accenture TCM: 2 of 15 bullets not found in the ad
+   0.50  Facilitate the implementation and ongoing support of SAP Sales and Distribution (SD) modules.
+   0.50  Lead workshops to gather and clarify business requirements.
+
+74565783.0 | dataset | MCTF 2024 at Mid Valley Exhibition Centre (30-31 March 2024) | Hong Leong Assurance Berhad: 3 of 5 bullets not found in the ad
+   0.57  Our booth number is 267; you can also visit https://careerfair.asia/ for additional details.
+   0.56  Please bring an up‑to‑date resume and drop it off at our booth or submit it online.
+   0.29  We will keep your resume on file and contact you when a suitable job opportunity arises.
+
+live_f7541359e59a9c40 | live | System Engineer (Network & Integrated Building Systems) | $3500 to $5500 #5252 | PERSOL OUTSOURCING SINGAPORE PTE. LTD.: 1 of 20 bullets not found in the ad
+   0.57  Be capable of working independently and contributing effectively as part of a project team.
+
+76305908.0 | dataset | Senior Executive, Hadoop Admin | Malayan Banking Berhad (Maybank): 3 of 13 bullets not found in the ad
+   0.50  Remediate server vulnerabilities to maintain security compliance.
+   0.43  Minimum 6–10 years of experience with Unix/Linux operating systems.
+   0.50  Demonstrated experience in the banking sector.
+
+75584559.0 | dataset | Application Support Engineer | Tentacle Tech: 1 of 10 bullets not found in the ad
+   0.57  Have 2 to 3 years of relevant experience in application support or a similar role.
+
+74226857.0 | dataset | Content Writer ( ArcGIS, Geospatial) | EPS Malaysia: 3 of 13 bullets not found in the ad
+   0.50  The first two weeks involve training with working hours from 6 PM to 3 AM.
+   0.50  After training, regular working hours are from 7 AM to 4:30 PM.
+   0.33  The monthly salary ranges from RM 2,800 to RM 3,200.
+
+74211644.0 | dataset | Full Stack Developer | IQI Holdings Sdn Bhd: 1 of 21 bullets not found in the ad
+   0.50  Be comfortable using GitHub for version control.
+
+74385663.0 | dataset | Network Engineer (Team Lead) | Career International FOS Pte Ltd: 1 of 10 bullets not found in the ad
+   0.58  Demonstrated ability to work at junior, mid‑level, and senior capacities, including leading service delivery teams and mentoring others.
+
+74382311.0 | dataset | Project Manager | Private Advertiser: 1 of 23 bullets not found in the ad
+   0.25  Participate in presales activities as needed.
+
+74588466.0 | dataset | Frontend Software Developer | MC INFO TECH SDN.BHD: 1 of 19 bullets not found in the ad
+   0.50  Have at least four years of relevant professional experience.
+
+76154504.0 | dataset | C++ Software Engineer (Senior or Mid-level) | CONFINEX TECHNOLOGIES SDN. BHD.: 1 of 20 bullets not found in the ad
+   0.40  Statutory contributions to EPF, SOCSO, and EIS.
+
+76402568.0 | dataset | Internship - Admin / Service Desk Engineer | GCIS SDN BHD: 1 of 11 bullets not found in the ad
+   0.57  Possesses effective time‑management skills and meets deadlines.
+
+live_9ac6e5a328f45fb8 | live | Data Engineer (Regional Role) | Randstad Singapore: 2 of 18 bullets not found in the ad
+   0.57  Possess at least 3 years of professional experience in data engineering.
+   0.20  Receive a competitive monthly salary ranging from $7,000 to $8,000.
+
+live_0b3863804eaff65b | live | Software QA Engineer | Hytech: 1 of 22 bullets not found in the ad
+   0.56  Gain exposure to exciting projects that foster long-term career growth.
+
+74081963.0 | dataset | Site Acquisition Coordinator (NFP Telecommunications) | BINASAT COMMUNICATION BERHAD: 2 of 9 bullets not found in the ad
+   0.50  Work effectively under high pressure both independently and as part of a team.
+   0.38  Demonstrated ability to handle high‑pressure situations and collaborate with teams.
+
+skillmap-b5976d188ce7 | employer | Graduate Software Engineer | Kayu Digital Sdn Bhd: 22 of 22 bullets not found in the ad
+   0.00  Design, develop, and maintain high-quality software solutions as part of an agile engineering team.
+   0.00  Collaborate with cross-functional teams to identify and resolve complex technical challenges.
+   0.00  Participate in the full software development lifecycle, including requirements analysis, system design, coding, and testing.
+
+74583723.0 | dataset | Client Solution Consultant | Openwave Computing (M) Sdn Bhd: 6 of 11 bullets not found in the ad
+   0.46  Serve as the primary liaison between client senior leadership (CIO, CTO, etc.) and technical delivery teams.
+   0.38  Ensure project deliverables meet quality standards and are completed on schedule.
+   0.40  Provide strategic guidance to clients, helping them align technology initiatives with business objectives.
+
+74769327.0 | dataset | IT Specialist (Infrastucture) | Popular Book Co. (Malaysia) Sdn. Bhd.: 1 of 10 bullets not found in the ad
+   0.57  Relevant work experience in a similar industry or field is considered an advantage.
+
+76643467.0 | dataset | IT Support | Infinity Consulting Technology Sdn Bhd: 4 of 24 bullets not found in the ad
+   0.14  Understand service level agreements (SLAs) and ensure they are met.
+   0.50  The company provides dental and optical coverage.
+   0.50  Company insurance is included.
+
+74075087.0 | dataset | Internship for Software Engineering | PS TECH SOLUTION SDN. BHD.: 4 of 7 bullets not found in the ad
+   0.36  You will work with senior executives from banks, telecommunications firms, and multinational corporations, gaining exposure to multiple industries.
+   0.55  The experience and achievements earned during the internship can be highlighted on your résumé to enhance future career prospects.
+   0.56  The company promotes a culture where happiness drives productivity, hiring talent with a positive attitude.
+
+live_25e104ca53b91d3a | live | Cloud & DevOps | Randstad: 1 of 6 bullets not found in the ad
+   0.45  Submit a CV to receive personalized outreach from the recruitment team regarding positions that align with your experience and career aspirations.
+
+live_148f68aed0d22576 | live | Network Engineer Graduate Program | Nokia: 1 of 19 bullets not found in the ad
+   0.43  Obtain industry-recognized certifications to enhance professional credentials.
+
+live_143b3f50af14b124 | live | Software Engineering & AI Internships | Lava X Technologies Sdn Bhd: 3 of 13 bullets not found in the ad
+   0.38  Applicants without a formal technical background are encouraged to submit a statement detailing why their capabilities warrant consideration.
+   0.50  The internship duration is between three and six months.
+   0.25  The position operates on a hybrid basis.

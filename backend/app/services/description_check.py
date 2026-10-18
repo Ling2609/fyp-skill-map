@@ -21,8 +21,19 @@ must should would could may might shall very good strong excellent new one two v
 """.split())
 
 
+NUMBER_WORDS = {"one": "1", "two": "2", "three": "3", "four": "4", "five": "5", "six": "6", "seven": "7",
+                "eight": "8", "nine": "9", "ten": "10", "twelve": "12"}
+
+
 def _content_words(text: str) -> list[str]:
     return [w for w in re.findall(r"[a-z][a-z0-9+#.]*", text.lower()) if len(w) >= 3 and w not in STOPWORDS]
+
+
+def _found(word: str, src: str, squashed: str) -> bool:
+    """18 Oct (her report): "three to six months" must match an advert's "3-6 months"."""
+    if word in NUMBER_WORDS and re.search(rf"(?<!\d){NUMBER_WORDS[word]}(?!\d)", src):
+        return True
+    return word[:STEM] in src or word[:STEM] in squashed
 
 
 def grounded_share(bullet: str, source: str) -> float:
@@ -31,7 +42,7 @@ def grounded_share(bullet: str, source: str) -> float:
         return 1.0
     src = re.sub(r"\s+", " ", source.lower())
     squashed = src.replace(" ", "")          # run-together words in scraped ads
-    found = sum(1 for w in words if w[:STEM] in src or w[:STEM] in squashed)
+    found = sum(1 for w in words if _found(w, src, squashed))
     return found / len(words)
 
 

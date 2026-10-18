@@ -19,6 +19,7 @@ def test_the_check():
     tidy = ["## Requirements", "Degree in Computer Science.", "Strong SQL and Python skills.", "Teamwork and communication."]
     assert ungrounded(tidy, ad) == []                                    # the ad's own words (spacing fixed) pass
     assert grounded_share("Free gym membership and dental insurance.", ad) == 0
+    assert ungrounded(["The internship lasts three to six months."], "Internship: 3-6 months, hybrid.") == []
 
 
 class Boom:
