@@ -56,7 +56,7 @@ def main():
     print(text)
     with open("profile_slow_calls.txt", "w", encoding="utf-8") as f:
         f.write(text)
-    print("Written profile_slow_calls.txt: send it to Claude.")
+    print("Written profile_slow_calls.txt.")
 
 
 if __name__ == "__main__":
