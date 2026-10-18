@@ -154,6 +154,9 @@ def limit_blas_threads(n: int = BLAS_THREADS):
     try:
         from threadpoolctl import threadpool_limits
         threadpool_limits(limits=n, user_api="blas")
+        from threadpoolctl import threadpool_info
+        libs = [lib for lib in threadpool_info() if lib["user_api"] == "blas"]
+        print(f"[blas] numpy maths threads: {', '.join(str(lib['num_threads']) for lib in libs) or 'no BLAS library found'}")
     except Exception as e:                      # never stop the app over a speed setting
         print(f"[blas] could not limit maths threads: {e}")
 
