@@ -35,7 +35,7 @@ const fmtDay = (iso) => iso ? new Date(iso).toLocaleDateString('en-GB', { day: '
 
 // Apply on a job posted on SkillMap (11 Oct, Employer flow batch 2; mock-up board 5). There is no outside site,
 // so the student applies with their SkillMap profile; the employer then sees it and the match for this job.
-// 12 Oct (flow review, mock-up M3): after applying, the same progress steps as My applications (no more green
+// 12 Oct (flow review, mock-up M3): after applying, the same progress steps as My Applications (no more green
 // "Applied" when the answer was Not selected); before applying, an employer's invitation is shown above Apply.
 const OUTCOME = { rejected: 'text-rose-700 bg-rose-50 border-rose-200', accepted: 'text-emerald-800 bg-emerald-50 border-emerald-200' }
 
@@ -94,7 +94,7 @@ function ApplyAction({ a, closed: closedCached, taking: takingCached, fromApps }
           </span>
           {/* 14 Oct (her review): the way to all applications sits under the status it belongs to; not shown when
               the back link already goes there */}
-          {!fromApps && <Link to="/applications" className="text-xs text-blue-700 hover:underline">View in My applications</Link>}
+          {!fromApps && <Link to="/applications" className="text-xs text-blue-700 hover:underline">View in My Applications</Link>}
         </>
       ) : closed ? (
         <span className="text-sm text-slate-500 bg-slate-100 px-4 py-2 rounded-lg">This job is closed</span>
@@ -145,7 +145,7 @@ export default function JobDetail() {
   // place; a job opened in a new tab has nothing to go back to, so it goes to Job Matches
   // 14 Oct (her review; GOV.UK back link: name where it goes): the label says the page it was opened from
   const backLabel = location.state?.from || 'Job Matches'
-  const BACK_PATHS = { 'Job Matches': '/recommend', Dashboard: '/dashboard', 'My applications': '/applications' }
+  const BACK_PATHS = { 'Job Matches': '/recommend', Dashboard: '/dashboard', 'My Applications': '/applications' }
   const goBack = () => (window.history.state?.idx > 0 ? navigate(-1) : navigate(BACK_PATHS[backLabel] || '/recommend'))
   // The chatbot's "Back to <job>" returns here on the same tab: remember it in this history entry first
   // The job's id goes too (E3, 9 Oct): the chatbot reads this job's skill gap itself (what she has, what is missing,
@@ -298,7 +298,7 @@ export default function JobDetail() {
                     : ' · Past posting from JobStreet (2024)'}
               </p>
             </div>
-            {gap?.job?.source === 'employer' && <ApplyAction a={skillmapApp} fromApps={backLabel === 'My applications'} closed={gap.job.closed}
+            {gap?.job?.source === 'employer' && <ApplyAction a={skillmapApp} fromApps={backLabel === 'My Applications'} closed={gap.job.closed}
               taking={gap.job.taking_applications} />}
             {gap?.job?.source === 'live' && gap.job.source_url && (
               <div className="shrink-0 flex flex-col items-end gap-1">

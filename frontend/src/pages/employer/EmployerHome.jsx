@@ -10,7 +10,7 @@ import { CardSkeleton, LoadingLabel } from '../../components/Skeleton'
 import { Busy } from '../../components/Spinner'
 
 // Employer home (11 Oct; mock-up 9 Oct board 1). An employer the career office hasn't approved yet (or has rejected)
-// sees only where they stand. An approved one sees the Dashboard (12 Oct, EmployerDashboard.jsx); My jobs moved to
+// sees only where they stand. An approved one sees the Dashboard (12 Oct, EmployerDashboard.jsx); My Jobs moved to
 // /employer/jobs: their posts, open or closed, with applicant counts, View applicants and a ⋯ menu (Edit job, Close / Reopen; 13 Oct).
 // 14 Oct (transparency flow): each open job shows its decision date; the menu adds Stop new applications / Take
 // applications again and Move decision date (once); Close job asks why.
@@ -160,11 +160,11 @@ export function MyJobs() {
   return (
     <>
       <PageHeader>
-        {/* 12 Oct (her review): same header as the other pages (eyebrow, title, one line); Post a job lives in the sidebar */}
+        {/* 12 Oct (her review): same header as the other pages (eyebrow, title, one line); Post a Job lives in the sidebar */}
         <div className="pb-5">
-          <p className="text-[11px] font-semibold text-blue-600 uppercase tracking-widest mb-2">My jobs</p>
+          <p className="text-[11px] font-semibold text-blue-600 uppercase tracking-widest mb-2">My Jobs</p>
           <h1 className="text-2xl font-semibold tracking-tight text-slate-900">Your job posts</h1>
-          <p className="text-sm text-slate-500 mt-1">Posted jobs appear in students' Job Matches straight away, marked "Posted on SkillMap".</p>
+          <p className="text-sm text-slate-500 mt-1">Posted jobs appear in students' Job Matches straight away, marked "Apply on SkillMap".</p>
         </div>
       </PageHeader>
 

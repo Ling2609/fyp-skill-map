@@ -2,7 +2,7 @@ import InfoTip from './InfoTip'
 
 // 18 Oct (improvement #1, wording W1; research: references.md "#1 wording research"): the employer's own promised
 // reply date and whether it kept it on past jobs, in plain words and "x of y" (not a %). One component, so Job Detail
-// (before applying) and My applications (after) always say the same thing. SkillMap posts only: on a job from
+// (before applying) and My Applications (after) always say the same thing. SkillMap posts only: on a job from
 // another site SkillMap never sees the replies, so record is null and nothing is shown.
 export const RECORD_TIP = "Counted for jobs whose reply date has passed or that are closed, once there are 3 such jobs. It's the employer's own promise, not a SkillMap rating."
 

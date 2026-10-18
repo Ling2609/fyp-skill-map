@@ -15,9 +15,9 @@ const DECISION = {
 }
 const DONE = {
   applied: (n) => `${n} is back to Applied.`,
-  shortlisted: (n) => `${n} shortlisted. They see "Shortlisted" on My applications.`,
-  accepted: (n) => `${n} marked Accepted. They see "Accepted" on My applications.`,
-  rejected: (n) => `${n} marked Rejected. They see "Not selected" on My applications.`,
+  shortlisted: (n) => `${n} shortlisted. They see "Shortlisted" on My Applications.`,
+  accepted: (n) => `${n} marked Accepted. They see "Accepted" on My Applications.`,
+  rejected: (n) => `${n} marked Rejected. They see "Not selected" on My Applications.`,
 }
 
 // app: { id, name, status, job_title }; onSaved(id, { status, status_changed_at })

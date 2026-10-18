@@ -484,7 +484,9 @@ export default function Chatbot() {
           <div>
             <p className="text-[11px] font-semibold text-blue-600 uppercase tracking-widest mb-2">AI Assistant</p>
             <h1 className="text-2xl font-semibold tracking-tight text-slate-900">{currentMode.label}</h1>
-            <p className="text-xs text-slate-400 mt-1">Powered by Groq · Context-aware</p>
+            {/* 19 Oct (design review, her pick 3): what this mode does, as every page's one line under the title; the
+                developer wording "Powered by Groq · Context-aware" is gone */}
+            <p className="text-sm text-slate-500 mt-1">{currentMode.description}</p>
           </div>
           {/* Mode switcher */}
           <div className="flex gap-1 bg-slate-100 rounded-lg p-1 mt-1">
@@ -506,7 +508,9 @@ export default function Chatbot() {
           </div>
         </div>
 
-        <div className="pb-3">
+        {/* The grey bar only when there is something to add: opened from a job (6 Oct, her choice B). Without it, it only
+            repeated the welcome message (19 Oct, her pick 3) */}
+        {((chatCtx.target_skill && mode === 'skill_development') || fromJob) && <div className="pb-3">
           {/* Opened from a job (6 Oct, her choice B): say which job the plan is for, with the way back beside it */}
           <div className="flex items-center justify-between gap-3 text-xs text-slate-500 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2">
             {chatCtx.target_skill && mode === 'skill_development' ? (
@@ -524,7 +528,7 @@ export default function Chatbot() {
               </button>
             )}
           </div>
-        </div>
+        </div>}
       </PageHeader>
 
       <div className="relative flex flex-1 min-h-0">

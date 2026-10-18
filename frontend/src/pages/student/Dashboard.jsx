@@ -8,6 +8,7 @@ import LevelTag from '../../components/LevelTag'
 import { Bar, RowSkeleton, LoadingLabel } from '../../components/Skeleton'
 import { skillName } from '../../skillName'
 import { ADMIN_COUNTS_CHANGED } from '../../components/Sidebar'
+import { greeting } from '../../greeting'
 
 // Dashboard (9 Oct redesign, her choice after the "Dashboard on One Screen" mock-ups). A dashboard tells the student
 // what she doesn't know yet (NN/g: "communicating critical information"), so:
@@ -23,12 +24,6 @@ const chatDay = (iso) => {
     : d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })
 }
 
-const getGreeting = () => {
-  const hour = new Date().getHours()
-  if (hour < 12) return 'Good morning'
-  if (hour < 17) return 'Good afternoon'
-  return 'Good evening'
-}
 
 const pct = (share) => `${Math.round(share * 100)}%`
 const listAnd = (items) => items.length < 2 ? items.join('') : `${items.slice(0, -1).join(', ')} and ${items.at(-1)}`
@@ -447,7 +442,7 @@ export default function Dashboard() {
       <PageHeader>
         <div className="pb-5 pt-1">
           <p className="text-[11px] font-semibold text-blue-600 uppercase tracking-widest mb-2">Dashboard</p>
-          <h1 className="text-2xl font-semibold tracking-tight text-slate-900">{getGreeting()}, {firstName} 👋</h1>
+          <h1 className="text-2xl font-semibold tracking-tight text-slate-900">{greeting(firstName)} 👋</h1>
         </div>
       </PageHeader>
 
@@ -465,7 +460,7 @@ export default function Dashboard() {
                 <button onClick={() => dismissInvite(inv)} className="text-sm text-slate-500 hover:text-slate-800">Not interested</button>
               </div>
             ))}
-            {invites.length > 3 && <Link to="/applications" className="block px-5 py-2.5 text-sm font-medium text-violet-800 hover:underline">See all {invites.length} in My applications</Link>}
+            {invites.length > 3 && <Link to="/applications" className="block px-5 py-2.5 text-sm font-medium text-violet-800 hover:underline">See all {invites.length} in My Applications</Link>}
           </section>
         )}
 

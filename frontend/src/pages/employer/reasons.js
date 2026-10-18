@@ -1,5 +1,5 @@
 // Why "Not selected" (14 Oct, transparency flow; her design: preset reasons, and "Other" opens a box to write one).
-// Students read these on My applications. "Missing required skills" shows each student their own missing skills.
+// Students read these on My Applications. "Missing required skills" shows each student their own missing skills.
 export const REASONS = [
   ['missing_skills', 'Missing required skills'],
   ['position_filled', 'Position filled'],

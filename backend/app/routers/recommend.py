@@ -162,6 +162,7 @@ def _sync_job_cache():
                 "subcategory": job.subcategory,
                 "salary": job.salary,
                 "source": job.source,
+                "publisher": job.publisher,       # 19 Oct: the card says where to apply ("Apply on LinkedIn")
                 "country": job.country,
                 "level": job_level(job.job_title, job.description or ""),   # title, else years asked for
                 "listing_date": job.listing_date,
@@ -304,6 +305,7 @@ def recommend_jobs(
             "subcategory": cached["subcategory"],
             "salary": cached["salary"],
             "source": cached["source"],
+            "publisher": cached.get("publisher"),
             "country": cached["country"],
             "match_score": hybrid,
             "match_percent": hybrid_percent,      # ranking score (kept for sorting / debugging)

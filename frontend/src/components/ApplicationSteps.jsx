@@ -1,5 +1,5 @@
 // An application's progress, Applied -> Viewed -> Shortlisted -> Decision, each with its date (12 Oct). Used on
-// My applications and Job Detail. A step passed over (not selected without a shortlist) is an empty circle with "—"
+// My Applications and Job Detail. A step passed over (not selected without a shortlist) is an empty circle with "—"
 // (12 Oct, her review: "Shortlisted: skipped" read oddly).
 const fmtDay = (iso) => iso ? new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }) : ''
 

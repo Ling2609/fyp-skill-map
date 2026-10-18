@@ -8,6 +8,7 @@ import { useAuth } from '../../context/useAuth'
 import ReasonDialog from './ReasonDialog'
 import { DECISIONS } from './decisions'
 import { Bar as SkBar, CardSkeleton, StatsSkeleton, LoadingLabel } from '../../components/Skeleton'
+import { greeting } from '../../greeting'
 
 // Admin home, layout D (7 Oct, her pick; references.md "Admin layout"): what needs action first and most visible
 // (NN/g: "make important information visually salient"), then glanceable counts, then two panels the career office
@@ -22,10 +23,6 @@ const ago = (iso) => {
   return days <= 0 ? 'today' : days === 1 ? 'yesterday' : `${days} days ago`
 }
 
-const getGreeting = () => {
-  const hour = new Date().getHours()
-  return hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening'
-}
 
 function Bar({ value, max }) {
   const pct = max ? Math.round((value / max) * 100) : 0
@@ -78,7 +75,7 @@ export default function AdminDashboard() {
         <div className="pb-5">
           <p className="text-[11px] font-semibold text-blue-600 uppercase tracking-widest mb-2">Dashboard</p>
           <h1 className="text-2xl font-semibold tracking-tight text-slate-900">
-            {getGreeting()}, {user?.first_name || 'there'} 👋
+            {greeting(user?.first_name)} 👋
           </h1>
           <p className="text-sm text-slate-500 mt-1">
             {!data ? (error ? '' : <SkBar className="h-4 w-56 mt-1.5" />) : actions ? `${actions} thing${actions > 1 ? 's' : ''} need${actions > 1 ? '' : 's'} you today.` : 'Nothing needs you right now.'}

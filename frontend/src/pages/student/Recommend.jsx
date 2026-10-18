@@ -224,7 +224,7 @@ export default function Recommend() {
       <PageHeader>
         <div className="pt-1 pb-4">
           <p className="text-[11px] font-semibold text-blue-600 uppercase tracking-widest mb-2">Job Matches</p>
-          <h1 className="text-2xl font-semibold tracking-tight text-slate-900">Explore Your Career Fit</h1>
+          <h1 className="text-2xl font-semibold tracking-tight text-slate-900">Explore your career fit</h1>
           <Bar className="h-3.5 w-72 mt-2" />
           <Bar className="h-11 w-full rounded-xl mt-4" />
           <div className="flex gap-2 mt-3">{['w-28', 'w-36', 'w-36'].map((w, i) => <Bar key={i} className={`h-9 ${w} rounded-full`} />)}</div>
@@ -377,7 +377,7 @@ export default function Recommend() {
           <div className="flex items-start justify-between mb-4 pt-1">
             <div>
               <p className="text-[11px] font-semibold text-blue-600 uppercase tracking-widest mb-2">Job Matches</p>
-              <h1 className="text-2xl font-semibold tracking-tight text-slate-900">Explore Your Career Fit</h1>
+              <h1 className="text-2xl font-semibold tracking-tight text-slate-900">Explore your career fit</h1>
               <p className="text-sm text-slate-500 mt-1">
                 Matched from your full skill profile
                 {results && ` · ${results.total_jobs_compared} current openings compared`}
@@ -480,14 +480,17 @@ export default function Recommend() {
                     <div className="flex-1 px-4 py-3.5 min-w-0">
                       <div className="flex items-center justify-between gap-3">
                         <div className="flex items-center gap-2.5 min-w-0">
-                          <span className="text-xs text-slate-300 font-medium tabular-nums shrink-0 w-4">{idx + 1}</span>
+                          <span className="text-xs text-slate-500 font-medium tabular-nums shrink-0 w-4">{idx + 1}</span>
                           <div className="min-w-0">
                             {/* 12 Oct (her review): the pill sat inside the truncated title line, so its bottom was cut off;
                                 now the title truncates on its own and the pills sit beside it */}
                             <div className="flex items-center gap-2 min-w-0">
                               <p className="font-semibold text-slate-800 text-sm truncate group-hover:text-blue-700 transition leading-snug">{job.job_title}</p>
                               {/* 11 Oct: a post by one of the university's partner employers, applied for on SkillMap */}
-                              {job.source === 'employer' && <span className="shrink-0 text-[11px] font-medium text-blue-700 bg-blue-50 border border-blue-200 rounded-full px-2 py-0.5">Posted on SkillMap</span>}
+                              {/* 19 Oct (her pick 5, option B; Indeed labels its own-apply jobs by the action, references.md "Job source on
+                                  cards"): every card says how to apply, before clicking */}
+                              {job.source === 'employer' && <span className="shrink-0 text-[11px] font-medium text-blue-700 bg-blue-50 border border-blue-200 rounded-full px-2 py-0.5">Apply on SkillMap</span>}
+                              {job.source === 'live' && <span className="shrink-0 text-[11px] font-medium text-slate-600 bg-slate-50 border border-slate-200 rounded-full px-2 py-0.5">Apply on {job.publisher || 'employer site'} ↗</span>}
                               {mine[job.job_id]?.applied && <span className="shrink-0 text-[11px] font-medium text-slate-700 bg-slate-100 border border-slate-200 rounded-full px-2 py-0.5">You applied · {mine[job.job_id].status_label}</span>}
                               {mine[job.job_id]?.invited && <span className="shrink-0 text-[11px] font-medium text-violet-700 bg-violet-50 border border-violet-200 rounded-full px-2 py-0.5">Invited to apply</span>}
                             </div>

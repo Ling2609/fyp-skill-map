@@ -11,7 +11,7 @@ import { CardSkeleton, LoadingLabel } from '../../components/Skeleton'
 
 // Employer > one job's applicants (11 Oct, batch 2; her pick 3A "applicants as a list"). Best match first: the
 // share of the job's required skills each student has, the same match the student sees. Changing a status shows on
-// the student's My applications page.
+// the student's My Applications page.
 // 14 Oct (transparency flow): tick several -> Not selected with one optional reason (each student sees their own
 // missing skills for "missing skills"); the decision date and the numbers students see are in the header; contact
 // details appear only after shortlisting.
@@ -37,7 +37,7 @@ export default function Applicants() {
     setSavingMany(true)
     api.post('/employer/applications/bulk', { ids: picked, status: 'rejected', ...why })
       .then(() => {
-        setNotice(`${picked.length} marked Not selected. They see it on My applications${why.reason ? ', with your reason' : ''}.`)
+        setNotice(`${picked.length} marked Not selected. They see it on My Applications${why.reason ? ', with your reason' : ''}.`)
         setPicked([]); setAskMany(false); load(); window.dispatchEvent(new Event(ADMIN_COUNTS_CHANGED))
       })
       .catch(err => { setAskMany(false); setError(errText(err, "Couldn't save. Try again.")) })
@@ -57,7 +57,7 @@ export default function Applicants() {
     <div className="flex flex-col h-screen">
       <PageHeader>
         <div className="pb-5">
-          <Link to="/employer/jobs" className="text-sm text-slate-500 hover:text-blue-700">← My jobs</Link>
+          <Link to="/employer/jobs" className="text-sm text-slate-500 hover:text-blue-700">← My Jobs</Link>
           <div className="flex items-center gap-3 mt-2">
             <h1 className="text-2xl font-semibold tracking-tight text-slate-900">{job?.title || 'Applicants'}</h1>
             {job && <span className={`text-xs font-medium border rounded-full px-2.5 py-0.5 ${job.status === 'open'
@@ -80,7 +80,7 @@ export default function Applicants() {
         {data && people.length === 0 && (
           <div className="bg-white border border-slate-200 rounded-2xl p-8 text-center">
             <h2 className="text-base font-semibold text-slate-900">No applicants yet</h2>
-            <p className="text-sm text-slate-500 mt-1">Students see this job in Job Matches, marked "Posted on SkillMap", and apply with their SkillMap profile.</p>
+            <p className="text-sm text-slate-500 mt-1">Students see this job in Job Matches, marked "Apply on SkillMap", and apply with their SkillMap profile.</p>
           </div>
         )}
         {notice && <p role="status" className="text-sm text-emerald-800 bg-emerald-50 border border-emerald-200 rounded-lg px-4 py-2.5">{notice}</p>}
@@ -149,14 +149,14 @@ export default function Applicants() {
                 </tbody>
               </table>
             </div>
-            <p className="text-xs text-slate-500">Best match first. The student sees each status on their "My applications" page (Rejected shows as "Not selected"). Email and phone appear after you shortlist someone.</p>
+            <p className="text-xs text-slate-500">Best match first. The student sees each status on their "My Applications" page (Rejected shows as "Not selected"). Email and phone appear after you shortlist someone.</p>
           </>
         )}
       </div>
       {status.ui}
       {askMany && <ConfirmDecision d={{ action: 'Mark as Not selected', danger: true }} busy={savingMany}
         title={`Mark ${picked.length} ${picked.length === 1 ? 'applicant' : 'applicants'} as Not selected?`}
-        text={<>They will see <b>"Not selected"</b> for {job.title} on their My applications page straight away.</>}
+        text={<>They will see <b>"Not selected"</b> for {job.title} on their My Applications page straight away.</>}
         onConfirm={notSelectedMany} onCancel={() => setAskMany(false)} />}
     </div>
   )

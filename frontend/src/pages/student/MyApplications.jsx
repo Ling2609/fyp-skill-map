@@ -9,7 +9,7 @@ import { Bar, LoadingLabel } from '../../components/Skeleton'
 import InfoTip from '../../components/InfoTip'
 import EmployerRecord from '../../components/EmployerRecord'
 
-// My applications (11 Oct, Employer flow batch 2; mock-up board 6): every job the student applied for on SkillMap.
+// My Applications (11 Oct, Employer flow batch 2; mock-up board 6): every job the student applied for on SkillMap.
 // 12 Oct (her request; mock-up P2): one card per application with its progress, Applied -> Viewed -> Shortlisted ->
 // Decision, each with its date, so the student isn't left waiting in silence (LinkedIn shows "Application viewed";
 // Talent Board: nearly half of candidates never get a status update). After 14 quiet days the card says to keep
@@ -76,7 +76,7 @@ function Outcome({ r }) {
         </div>
       )}
       <p className="text-sm">
-        <Link to={`/jobs/${encodeURIComponent(r.job_ref)}`} state={{ from: 'My applications' }} className="text-blue-700 hover:underline">See your skill gap for this job</Link>
+        <Link to={`/jobs/${encodeURIComponent(r.job_ref)}`} state={{ from: 'My Applications' }} className="text-blue-700 hover:underline">See your skill gap for this job</Link>
         {' · '}<Link to="/recommend" onClick={() => similar(r)} className="text-blue-700 hover:underline">Similar jobs</Link>
       </p>
     </div>
@@ -160,7 +160,7 @@ export default function MyApplications() {
     <div className="flex flex-col h-screen">
       <PageHeader>
         <div className="pb-5">
-          <p className="text-[11px] font-semibold text-blue-600 uppercase tracking-widest mb-2">My applications</p>
+          <p className="text-[11px] font-semibold text-blue-600 uppercase tracking-widest mb-2">My Applications</p>
           <h1 className="text-2xl font-semibold tracking-tight text-slate-900">Where your applications stand</h1>
           <p className="text-sm text-slate-500 mt-1">Jobs you applied for on SkillMap, newest update first: Applied, Viewed by the employer, Shortlisted, then their decision.</p>
         </div>
@@ -174,7 +174,7 @@ export default function MyApplications() {
               <h2 className="text-[15px] font-semibold text-slate-900">{inv.company} invited you to apply</h2>
               <p className="text-sm text-slate-600">{inv.title}{inv.match && ` · you have ${inv.match} skills`} · {fmtDay(inv.invited_at)}</p>
             </div>
-            <Link to={`/jobs/${encodeURIComponent(inv.job_ref)}`} state={{ from: 'My applications' }} className="text-sm font-medium text-violet-800 bg-white border border-violet-200 rounded-lg px-3.5 py-1.5 hover:bg-violet-100">View job</Link>
+            <Link to={`/jobs/${encodeURIComponent(inv.job_ref)}`} state={{ from: 'My Applications' }} className="text-sm font-medium text-violet-800 bg-white border border-violet-200 rounded-lg px-3.5 py-1.5 hover:bg-violet-100">View job</Link>
             <button onClick={() => dismiss(inv)} className="text-sm text-slate-500 hover:text-slate-800">Not interested</button>
           </section>
         ))}
@@ -183,7 +183,7 @@ export default function MyApplications() {
         {rows?.length === 0 && (
           <div className="bg-white border border-slate-200 rounded-2xl p-8 text-center">
             <h2 className="text-base font-semibold text-slate-900">No applications yet</h2>
-            <p className="text-sm text-slate-500 mt-1">Jobs marked "Posted on SkillMap" in Job Matches can be applied for here with your profile.</p>
+            <p className="text-sm text-slate-500 mt-1">Jobs marked "Apply on SkillMap" in Job Matches can be applied for here with your profile.</p>
             <Link to="/recommend" className="inline-block mt-4 px-4 py-2 text-sm font-medium rounded-lg bg-blue-600 text-white hover:bg-blue-700">Go to Job Matches</Link>
           </div>
         )}
@@ -205,7 +205,7 @@ export default function MyApplications() {
                   <article key={r.id} className="bg-white border border-slate-200 rounded-2xl px-5 py-4">
                     <div className="flex items-start justify-between gap-3">
                       <div className="min-w-0">
-                        <Link to={`/jobs/${encodeURIComponent(r.job_ref)}`} state={{ from: 'My applications' }} className="text-[15px] font-semibold text-slate-900 hover:text-blue-700">{r.title}</Link>
+                        <Link to={`/jobs/${encodeURIComponent(r.job_ref)}`} state={{ from: 'My Applications' }} className="text-[15px] font-semibold text-slate-900 hover:text-blue-700">{r.title}</Link>
                         <p className="text-xs text-slate-500 mt-0.5">{r.company}{r.match && ` · your match ${r.match}`}</p>
                       </div>
                       <span className={`shrink-0 text-xs font-semibold rounded-full px-2.5 py-0.5 ${PILL[key]}`}>{label}</span>

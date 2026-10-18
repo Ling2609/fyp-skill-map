@@ -37,7 +37,7 @@ const NAV_ITEMS = [
   {
     // 11 Oct (Employer flow batch 2): jobs applied for on SkillMap and their status
     to: '/applications',
-    label: 'My applications',
+    label: 'My Applications',
     badge: 'invitations',            // 12 Oct: employers' invitations to apply, waiting for an answer
     badgeLabel: 'invitations',
     icon: (
@@ -85,14 +85,14 @@ const ADMIN_ITEMS = [
   },
 ]
 
-// Employer (11 Oct, batch 1; 12 Oct dashboard E): Dashboard is their home (/dashboard), My jobs carries a badge for
-// new applications, Post a job. Not approved yet: home only (it shows where they stand)
+// Employer (11 Oct, batch 1; 12 Oct dashboard E): Dashboard is their home (/dashboard), My Jobs carries a badge for
+// new applications, Post a Job. Not approved yet: home only (it shows where they stand)
 const EMPLOYER_ITEMS = [
   NAV_ITEMS[0],
-  { ...NAV_ITEMS[2], to: '/employer/jobs', label: 'My jobs', badge: 'new_applicants', badgeLabel: 'new' },
+  { ...NAV_ITEMS[2], to: '/employer/jobs', label: 'My Jobs', badge: 'new_applicants', badgeLabel: 'new' },
   {
     to: '/employer/post',
-    label: 'Post a job',
+    label: 'Post a Job',
     icon: (
       <svg className="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M12 4v16m8-8H4" />
@@ -123,7 +123,7 @@ export default function Sidebar() {
     window.addEventListener(ADMIN_COUNTS_CHANGED, bump)
     return () => window.removeEventListener(ADMIN_COUNTS_CHANGED, bump)
   }, [])
-  // Approved employers get the same: new applications ("applied") on My jobs; students: invitations to apply (12 Oct)
+  // Approved employers get the same: new applications ("applied") on My Jobs; students: invitations to apply (12 Oct)
   const countsUrl = isAdmin ? '/admin/counts'
     : user?.role === 'employer' && user.employer_status === 'approved' ? '/employer/counts'
     : user?.role === 'student' ? '/applications/counts' : null

@@ -21,7 +21,7 @@ export default function ConfirmDecision({ app, d, busy, onConfirm, onCancel, tit
         <div className="px-6 pt-5 pb-4">
           <h2 id="decide-title" className="text-base font-semibold text-slate-900">{title || `${d.action.replace('Mark as', `Mark ${app.name} as`)}?`}</h2>
           <p id="decide-text" className="text-sm text-slate-600 mt-1.5 leading-relaxed">
-            {text || <>They will see <b>"{d.see}"</b> for {app.job_title} on their My applications page straight away.{d.extra || ''}</>}
+            {text || <>They will see <b>"{d.see}"</b> for {app.job_title} on their My Applications page straight away.{d.extra || ''}</>}
           </p>
           {d.danger && <div className="mt-4"><ReasonPicker value={why} onChange={setWhy} /></div>}
         </div>

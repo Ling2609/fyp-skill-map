@@ -6,7 +6,7 @@ import { errText } from '../student/profileUtils'
 import { Busy } from '../../components/Spinner'
 import { Bar, FieldSkeleton, LoadingLabel } from '../../components/Skeleton'
 
-// Employer > Post a job (11 Oct; mock-up 9 Oct board 2; one form since 13 Oct). "Read the skills" adds what SkillMap
+// Employer > Post a Job (11 Oct; mock-up 9 Oct board 2; one form since 13 Oct). "Read the skills" adds what SkillMap
 // found under the ad (the same extractor and quote check as live jobs). The employer removes what
 // is wrong, adds what is missing, moves nothing they don't want to, then publishes. If the ad changes after reading,
 // the skills must be read again before publishing (the same rule as Admin's "Find skills" for modules).
@@ -157,7 +157,7 @@ export default function PostJob() {
     <div className="flex flex-col h-screen">
       <PageHeader>
         <div className="pb-5">
-          <p className="text-[11px] font-semibold text-blue-600 uppercase tracking-widest mb-2">{editing ? 'My jobs' : 'Post a job'}</p>
+          <p className="text-[11px] font-semibold text-blue-600 uppercase tracking-widest mb-2">{editing ? 'My Jobs' : 'Post a Job'}</p>
           <h1 className="text-2xl font-semibold tracking-tight text-slate-900">{editing ? `Edit ${editJob?.title || 'job'}` : read ? 'Check the skills SkillMap read from your ad' : 'Write your job ad'}</h1>
           <p className="text-sm text-slate-500 mt-1">{editing
             ? (editJob ? `${editJob.applicants ? `${editJob.applicants} applicant${editJob.applicants === 1 ? '' : 's'} · their match updates when you save` : 'Changes show in Job Matches when you save'} · posted date stays the same` : '')

@@ -6,6 +6,7 @@ import { useAuth } from '../../context/useAuth'
 import { errText } from '../student/profileUtils'
 import { CardSkeleton, LoadingLabel } from '../../components/Skeleton'
 import { Busy } from '../../components/Spinner'
+import { greeting } from '../../greeting'
 
 // Employer dashboard (12 Oct, her pick E after mock-ups A-E; references.md "Employer dashboard layout"; left column
 // changed the same day to option B of mock-ups A-C (my proposal; her pick pending): to review sized to its rows + recent activity, so one application isn't a blank card).
@@ -21,7 +22,6 @@ const ago = (iso) => {
   const days = Math.floor((Date.now() - new Date(iso).getTime()) / 86400000)
   return days <= 0 ? 'today' : days === 1 ? 'yesterday' : days < 14 ? `${days} days ago` : new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })
 }
-const greeting = () => { const h = new Date().getHours(); return h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening' }
 const card = 'bg-white border border-slate-200 rounded-2xl flex flex-col min-h-0 overflow-hidden'
 
 function Avatar({ name, small }) {
@@ -100,11 +100,11 @@ export default function EmployerDashboard() {
   return (
     <div className="flex flex-col h-screen">
       {/* 12 Oct (her review): the same header as the student and admin dashboards (eyebrow, greeting, one line);
-          Post a job lives in the sidebar */}
+          Post a Job lives in the sidebar */}
       <PageHeader>
         <div className="pb-5 pt-1">
           <p className="text-[11px] font-semibold text-blue-600 uppercase tracking-widest mb-2">Dashboard</p>
-          <h1 className="text-2xl font-semibold tracking-tight text-slate-900">{greeting()}, {user?.first_name || 'there'} 👋</h1>
+          <h1 className="text-2xl font-semibold tracking-tight text-slate-900">{greeting(user?.first_name)} 👋</h1>
           <p className="text-sm text-slate-500 mt-1">
             {user?.company_name}
             {sum && (noJobs ? ' · post a job to start receiving applications' : <>
@@ -126,15 +126,26 @@ export default function EmployerDashboard() {
 
       {noJobs && (
         <div className="flex-1 px-8 py-6">
-          <div className="bg-white border border-slate-200 rounded-2xl p-10 max-w-2xl">
+          {/* 19 Oct (her review: "make it fit screen"): the card fills the width; the three steps sit side by side
+              (they are a real sequence, so they keep their numbers) and stack on a narrow screen */}
+          <div className="bg-white border border-slate-200 rounded-2xl p-8">
             <h2 className="text-lg font-semibold text-slate-900">Welcome, {user?.first_name}</h2>
             <p className="text-sm text-slate-600 mt-1">Three steps to your first graduate hire on SkillMap:</p>
-            <ol className="mt-4 flex flex-col gap-2 text-sm text-slate-700 list-decimal pl-5">
-              <li>Write your job ad. SkillMap reads the skills it asks for.</li>
-              <li>Check the skills: they decide which graduates match.</li>
-              <li>Publish. Students see it in Job Matches and apply with their SkillMap profile.</li>
+            <ol className="mt-5 grid gap-4 md:grid-cols-3">
+              {[['Write your job ad', 'SkillMap reads the skills it asks for.'],
+                ['Check the skills', 'They decide which graduates match.'],
+                ['Publish', 'Students see it in Job Matches and apply with their SkillMap profile.']].map(([t, d], i) => (
+                <li key={t} className="rounded-xl border border-slate-200 bg-slate-50 p-4">
+                  <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-blue-100 text-blue-700 text-sm font-semibold">{i + 1}</span>
+                  <p className="mt-3 text-sm font-semibold text-slate-900">{t}</p>
+                  <p className="mt-1 text-sm text-slate-600">{d}</p>
+                </li>
+              ))}
             </ol>
-            <Link to="/employer/post" className="inline-block mt-6 px-4 py-2 text-sm font-medium rounded-lg bg-blue-600 text-white hover:bg-blue-700">Post your first job</Link>
+            {/* 19 Oct (her review): the next step sits at the end of the steps, on the right */}
+            <div className="mt-6 flex justify-end">
+              <Link to="/employer/post" className="px-4 py-2 text-sm font-medium rounded-lg bg-blue-700 text-white hover:bg-blue-800">Post your first job</Link>
+            </div>
           </div>
         </div>
       )}
@@ -226,7 +237,7 @@ export default function EmployerDashboard() {
                 )}
               </div>
               {data.open_jobs.length === 0
-                ? <p className="px-5 pb-4 text-sm text-slate-500">No open jobs. Reopen one in My jobs, or post a new one.</p>
+                ? <p className="px-5 pb-4 text-sm text-slate-500">No open jobs. Reopen one in My Jobs, or post a new one.</p>
                 : (
                   <ul className="max-h-[17rem] overflow-y-auto divide-y divide-slate-100 border-t border-slate-100">
                     {data.open_jobs.map(j => {
@@ -250,7 +261,7 @@ export default function EmployerDashboard() {
                   </ul>
                 )}
               {data.open_jobs.length > 3 && (
-                <Link to="/employer/jobs" className="px-5 py-3 border-t border-slate-100 text-sm font-medium text-blue-700 hover:underline">See all {data.open_jobs.length} in My jobs</Link>
+                <Link to="/employer/jobs" className="px-5 py-3 border-t border-slate-100 text-sm font-medium text-blue-700 hover:underline">See all {data.open_jobs.length} in My Jobs</Link>
               )}
             </section>
 
@@ -258,7 +269,7 @@ export default function EmployerDashboard() {
             <section className={`${card} flex-1 max-h-[28rem] lg:max-h-none`} aria-labelledby="fit-h">
               <div className="px-5 pt-4 pb-3">
                 <h2 id="fit-h" className="text-base font-semibold text-slate-900">Graduates who fit your jobs</h2>
-                <p className="text-xs text-slate-500 mt-1">Visible students who haven't applied, best match first. Invite them to apply: they see it on My applications.</p>
+                <p className="text-xs text-slate-500 mt-1">Visible students who haven't applied, best match first. Invite them to apply: they see it on My Applications.</p>
               </div>
               {data.graduates.length === 0 ? (
                 <Empty title="No matches yet" text={data.open_jobs.length ? 'No visible graduate has at least half of your required skills yet. New profiles are matched as students add them.' : 'Open a job to see graduates who fit it.'} />

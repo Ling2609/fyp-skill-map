@@ -9,7 +9,7 @@ An employer is one of the university's industry partners. They register with a c
     the job; remove, add), then publishes. The employer's check is the human review of the extraction (Amershi et
     al. 2019, references.md "Reviewing AI-suggested skills"), as Admin does for module skills.
 
-A published post is source "employer": Job Matches shows it like a live job (marked "Posted on SkillMap") until
+A published post is source "employer": Job Matches shows it like a live job (marked "Apply on SkillMap") until
 the employer closes it; it never expires by age.
 
 Batch 2 (11 Oct; mock-ups boards 3A and 4): the applicants of each post as a list, best match first, with a status

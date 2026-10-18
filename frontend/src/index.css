@@ -23,3 +23,18 @@ select {
   padding-right: 2.5rem;
 }
 select:disabled { opacity: 0.6; cursor: not-allowed; }
+
+/* Scrollbars (19 Oct, her pick 1): one look everywhere, only the look changes (her rule stays: each card scrolls on
+   its own, the page doesn't). Thin, rounded, light grey, darker on hover, no arrow buttons. Chrome/Edge use the
+   ::-webkit-scrollbar rules; Firefox, which has none, uses the standard properties. Space is kept for the bar in every
+   scrolling card (scrollbar-gutter), so numbers on the right never sit under it (her 9 Oct rule). */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; border: 2px solid transparent; background-clip: padding-box; }
+::-webkit-scrollbar-thumb:hover { background: #94a3b8; background-clip: padding-box; }
+::-webkit-scrollbar-button { display: none; width: 0; height: 0; }
+::-webkit-scrollbar-corner { background: transparent; }
+@supports not selector(::-webkit-scrollbar) {
+  * { scrollbar-width: thin; scrollbar-color: #cbd5e1 transparent; }
+}
+[class*="overflow-y-auto"], [class*="overflow-auto"] { scrollbar-gutter: stable; }
