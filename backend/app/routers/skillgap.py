@@ -17,6 +17,13 @@ router = APIRouter(prefix="/skillgap", tags=["skill-gap"])
 embedder = get_embedder()
 
 
+def _record(job: Job, db: Session) -> dict | None:
+    if job.source != "employer" or not job.posted_by_user_id:
+        return None
+    from app.services.transparency import employer_record
+    return employer_record(job.posted_by_user_id, db)
+
+
 class SkillGapRequest(BaseModel):
     job_id: str
 
@@ -134,6 +141,9 @@ def skill_gap_for(student: User, job_ref: str, db: Session) -> dict:
             # 14 Oct: before applying, the student sees the employer's decision date; a stopped job can't be applied to
             "decide_by": job.decide_by.isoformat() if job.decide_by else None,
             "taking_applications": not (job.closed_at or job.hidden_by_admin_at or job.applications_stopped_at),
+            # 18 Oct (improvement #1): the employer's on-time record BEFORE applying (it was only in My applications);
+            # SkillMap posts only: for a job on another site SkillMap never sees the replies
+            "employer_record": _record(job, db),
         },
         "summary": {
             "job_skills_total": sc["total"],

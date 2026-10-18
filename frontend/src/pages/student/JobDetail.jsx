@@ -8,6 +8,7 @@ import ApplicationSteps from '../../components/ApplicationSteps'
 import { ADMIN_COUNTS_CHANGED } from '../../components/Sidebar'
 import { Bar, RowSkeleton, LoadingLabel, TextSkeleton } from '../../components/Skeleton'
 import { Busy } from '../../components/Spinner'
+import EmployerRecord, { PromisedDate } from '../../components/EmployerRecord'
 
 // The grade itself, not its weight: the weight is the same for C+ and C, so a C showed as "C+" (5 Oct)
 const GRADE_LETTERS = { '4.0': 'A', '3.7': 'A-', '3.3': 'B+', '3.0': 'B', '2.7': 'B-', '2.3': 'C+', '2.0': 'C' }
@@ -62,7 +63,7 @@ function useSkillMapApplication(jobRef, onSkillMap) {
 
 // 14 Oct (transparency flow): the employer's decision date is shown before applying; a job that stopped taking
 // applications (or closed) can't be applied to ("Applications closed", as Homerun's closed jobs)
-function ApplyAction({ a, company, closed: closedCached, taking: takingCached, decideBy: dateCached, fromApps }) {
+function ApplyAction({ a, company, closed: closedCached, taking: takingCached, decideBy: dateCached, record, fromApps }) {
   const { app, busy, error, apply, now } = a
   const closed = now ? now.closed : closedCached
   const taking = now ? now.taking_applications : takingCached
@@ -90,7 +91,8 @@ function ApplyAction({ a, company, closed: closedCached, taking: takingCached, d
             {busy ? <Busy>Applying…</Busy> : 'Apply with my SkillMap profile'}
           </button>
           <p className="text-xs text-slate-500">{company || 'The employer'} sees your profile and your match. Your contact details only if they shortlist you.</p>
-          {decideBy && <p className="text-xs font-medium text-slate-700">Decision by {fmtDay(decideBy)}</p>}
+          {decideBy && <PromisedDate company={company} date={fmtDay(decideBy)} />}
+          <EmployerRecord company={company} record={record} />
         </>
       )}
       {error && <p role="alert" className="text-xs text-rose-600">{error}</p>}
@@ -111,7 +113,7 @@ function ApplicationProgress({ a, company }) {
     <div className="mt-2 border-t border-gray-100">
       <ApplicationSteps steps={p.steps} decided={['accepted', 'rejected'].includes(app.status)} />
       {p.nudge === 'no_decision' ? <p className="mt-3 text-sm text-amber-900 bg-amber-50 rounded-lg px-3.5 py-2">
-        <b>{company} missed its decision date ({fmtDay(app.decide_by)}).</b> Focus on other jobs; any reply will still appear here.
+        <b>{company} missed its promised reply date ({fmtDay(app.decide_by)}).</b> Focus on other jobs; any reply will still appear here.
       </p> : p.nudge && <p className="mt-3 text-sm text-amber-900 bg-amber-50 rounded-lg px-3.5 py-2">
         <b>No update for {p.quiet_days} days.</b> {p.nudge === 'move_on' ? 'Treat this one as unlikely and put your time into other jobs.' : 'Keep applying to other jobs while you wait.'}
       </p>}
@@ -283,7 +285,7 @@ export default function JobDetail() {
               </p>
             </div>
             {gap?.job?.source === 'employer' && <ApplyAction a={skillmapApp} fromApps={backLabel === 'My applications'} company={gap.job.company} closed={gap.job.closed}
-              taking={gap.job.taking_applications} decideBy={gap.job.decide_by} />}
+              taking={gap.job.taking_applications} decideBy={gap.job.decide_by} record={gap.job.employer_record} />}
             {gap?.job?.source === 'live' && gap.job.source_url && (
               <div className="shrink-0 flex flex-col items-end gap-1">
               <a

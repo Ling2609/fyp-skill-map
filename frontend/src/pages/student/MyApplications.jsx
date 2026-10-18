@@ -7,6 +7,7 @@ import { errText } from './profileUtils'
 import ApplicationSteps from '../../components/ApplicationSteps'
 import { Bar, LoadingLabel } from '../../components/Skeleton'
 import InfoTip from '../../components/InfoTip'
+import EmployerRecord from '../../components/EmployerRecord'
 
 // My applications (11 Oct, Employer flow batch 2; mock-up board 6): every job the student applied for on SkillMap.
 // 12 Oct (her request; mock-up P2): one card per application with its progress, Applied -> Viewed -> Shortlisted ->
@@ -31,14 +32,14 @@ function Facts({ r }) {
   return (
     <div className="mt-4 space-y-2.5">
       <div className="grid grid-cols-3 gap-2">
-        {[[st?.applied, 'applied'], [st?.shortlisted, 'shortlisted'], [r.decide_by ? fmtDay(r.decide_by) : '—', 'decision by']].map(([v, k]) => (
+        {[[st?.applied, 'applied'], [st?.shortlisted, 'shortlisted'], [r.decide_by ? fmtDay(r.decide_by) : '—', 'promised reply by']].map(([v, k]) => (
           <div key={k} className="rounded-lg bg-slate-50 px-3 py-2">
             <p className="text-lg font-semibold text-slate-900 tabular-nums leading-tight">{v ?? '—'}</p>
             <p className="text-xs text-slate-500">{k}</p>
           </div>
         ))}
       </div>
-      {r.decide_extended_reason && <p className="text-xs text-slate-600">Decision date moved{r.decide_by_original ? ` from ${fmtDay(r.decide_by_original)}` : ''}: “{r.decide_extended_reason}”</p>}
+      {r.decide_extended_reason && <p className="text-xs text-slate-600">Reply date moved{r.decide_by_original ? ` from ${fmtDay(r.decide_by_original)}` : ''}: “{r.decide_extended_reason}”</p>}
       {!r.taking_applications && <p className="text-xs text-slate-600">Not taking new applications. {r.company} is still deciding.</p>}
       {me && (
         <div>
@@ -50,9 +51,7 @@ function Facts({ r }) {
         </div>
       )}
       {/* shown from 3 judged jobs (audit, 14 Oct): below that one late job would define the employer */}
-      {rec && rec.shown && <p className="text-xs text-slate-600">{r.company} decided on time for {rec.on_time} of its {rec.of} jobs.
-        <InfoTip label="About this record">On time means every applicant got an answer by the decision date. Counted for jobs whose date has passed or that are closed. It isn't a rating of the employer.</InfoTip></p>}
-      {rec && !rec.shown && <p className="text-xs text-slate-500">Too few decisions by {r.company} on SkillMap to show a record yet.</p>}
+      <EmployerRecord company={r.company} record={rec} />
     </div>
   )
 }
@@ -92,7 +91,7 @@ function Note({ r }) {
   // 14 Oct: the employer's own date passed with no decision (B1 wording, her pick): not a rejection
   if (p.nudge === 'no_decision') return (
     <p className="mt-4 text-sm text-amber-900 bg-amber-50 rounded-lg px-3.5 py-2.5">
-      <b>{r.company} missed its decision date ({fmtDay(r.decide_by)}).</b> Focus on other jobs; any reply will still appear here.
+      <b>{r.company} missed its promised reply date ({fmtDay(r.decide_by)}).</b> Focus on other jobs; any reply will still appear here.
     </p>
   )
   if (p.nudge === 'move_on') return (

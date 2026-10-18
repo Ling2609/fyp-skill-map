@@ -131,5 +131,10 @@ def test_employer_record_of_deciding_on_time(client, users, db):
     m2 = _mine(client, users, s2, a2)
     assert m2["employer_record"] == {"on_time": 0, "of": 1, "shown": False}      # s2 was never decided by the date
     assert m2["progress"]["nudge"] == "no_decision"
+    # 18 Oct (improvement #1): the same record on Job Detail, before applying
+    s3 = users.student()
+    gap = client.post("/skillgap/", headers=users.h(s3), json={"job_id": job["job_ref"]})
+    assert gap.status_code == 200, gap.text
+    assert gap.json()["job"]["employer_record"] == {"on_time": 0, "of": 1, "shown": False}
     attention = client.get("/employer/dashboard", headers=users.h(employer)).json()["attention"]
     assert [p["waiting"] for p in attention["past_date"]] == [1]

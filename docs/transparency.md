@@ -15,7 +15,7 @@ What students are shown about an employer's job, and exactly how each number is 
 
 ## Employer's on-time record
 
-"Decided on time for X of Y jobs."
+"[Company] replied to every applicant by its promised date on X of its Y past jobs." Shown on Job Detail before applying (SkillMap posts only) and in My applications, from one component (`frontend/src/components/EmployerRecord.jsx`; wording chosen 18 Oct, references.md "#1 wording research"). The job's own date reads "[Company] promises to reply by [date]".
 
 - **Judged jobs (Y):** jobs with at least one applicant whose decision date has passed, or that were closed. Jobs with no applicants, or still open before their date, are not judged yet.
 - **On time (X):** every applicant has an outcome now (Accepted or Not selected, including by closing the job), and got their **first** outcome at or before the decision date in force. If the date was moved, the moved date counts, since applicants were told.
@@ -23,7 +23,7 @@ What students are shown about an employer's job, and exactly how each number is 
 - It measures whether students got an answer by the promised date, not how good the employer's decisions are.
 - Edge cases tested (`tests/test_audit_fixes.py`): decided exactly on the date (on time), one second after (late), corrected after the date (on time), undone (late), closed before the date (on time), closed after it (late).
 - Closing a job **after** its date counts as late: the applicants still waited past the promise.
-- **Shown from 3 judged jobs.** Below that, students see "Too few decisions … to show a record yet", because one late job would define a new employer. The 3 is a judgement call, in the same spirit as platforms holding back a rating until there are enough reviews.
+- **Shown from 3 judged jobs.** Below that, students see "New on SkillMap: no reply record yet", because one late job would define a new employer. The 3 is a judgement call, in the same spirit as platforms holding back a rating until there are enough reviews.
 
 ## Where you stand
 
