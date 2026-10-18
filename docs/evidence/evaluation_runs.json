@@ -782,5 +782,123 @@
     "sha256": "6f66384fe4304f91b30a16e21ad7b5f6c20e7080782618da4cfa04b88b53a114"
    }
   ]
+ },
+ {
+  "_id": "c4bac46a2139471f90a383412b2b03d6",
+  "name": "E2 ranking vs keyword baseline",
+  "objective": 2,
+  "at": "2026-10-18T07:40:21.108000+00:00",
+  "git": {
+   "commit": "ace38b5",
+   "dirty": true
+  },
+  "setup": {
+   "relation_model": "relation_model_esco_onet_v1_skillmap_v2_soft_skillmap_v3_soft_nli-deberta-v3-base_rw3x20_noextend",
+   "relation_seeds": 3,
+   "relation_cutoff": 0.6,
+   "embedder": "all-MiniLM-L6-v2",
+   "extractor": "openai/gpt-oss-120b",
+   "python": "3.13.7"
+  },
+  "method": "10 programme profiles; SkillMap vs keyword overlap (B1), keyword + level penalty (B2), random; pooled top 10 judged 0/1/2 by 3 LLM judges (median); nDCG@10, P@10, paired bootstrap over profiles",
+  "dataset": {
+   "profiles": 10,
+   "pairs": 278,
+   "jobs": 209
+  },
+  "metrics": {
+   "S": {
+    "ndcg10": 0.796,
+    "ndcg10_ci95": [
+     0.743,
+     0.85
+    ],
+    "p10": 0.44,
+    "p10_ci95": [
+     0.31,
+     0.56
+    ]
+   },
+   "B1": {
+    "ndcg10": 0.526,
+    "ndcg10_ci95": [
+     0.446,
+     0.599
+    ],
+    "p10": 0.23,
+    "p10_ci95": [
+     0.14,
+     0.32
+    ]
+   },
+   "B2": {
+    "ndcg10": 0.7,
+    "ndcg10_ci95": [
+     0.628,
+     0.769
+    ],
+    "p10": 0.38,
+    "p10_ci95": [
+     0.24,
+     0.51
+    ]
+   },
+   "R": {
+    "ndcg10": 0.349,
+    "ndcg10_ci95": [
+     0.28,
+     0.417
+    ],
+    "p10": 0.12,
+    "p10_ci95": [
+     0.04,
+     0.2
+    ]
+   },
+   "S_minus_B1": {
+    "diff": 0.27,
+    "ci95": [
+     0.213,
+     0.323
+    ]
+   },
+   "S_minus_B2": {
+    "diff": 0.097,
+    "ci95": [
+     0.055,
+     0.14
+    ]
+   },
+   "S_minus_R": {
+    "diff": 0.447,
+    "ci95": [
+     0.356,
+     0.538
+    ]
+   }
+  },
+  "verdict": "PASS: SkillMap beats keyword matching",
+  "files": [
+   {
+    "path": "docs/evidence/ranking/profiles.json",
+    "sha256": "c2d55a48073486f29b4374046e65c1f6498bb88e131daa79bd38a667d851ae79"
+   },
+   {
+    "path": "docs/evidence/ranking/rankings.json",
+    "sha256": "bd9601b0724e71e7b3650c76cd441b43942dd001db3bda98fda98f36052183e4"
+   },
+   {
+    "path": "docs/evidence/ranking/judging.json",
+    "sha256": "8f6e9a9f1c3629a74664b6e170eaec41348da0c1aad216facc42bf44c270ce4c"
+   },
+   {
+    "path": "docs/evidence/ranking/grades.json",
+    "sha256": "e5cabcfc1b9ccd91aac280b64933526cc1355eb0a026d03121ca691907e4207c"
+   },
+   {
+    "path": "docs/evidence/ranking/spot_check.csv",
+    "sha256": "afee99e74661870fe0d7d9c4526ad866a1bad8fbd883f6f8e0bf901bcd9677d6"
+   }
+  ]
  }
 ]

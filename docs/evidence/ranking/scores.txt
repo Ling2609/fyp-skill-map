@@ -1,0 +1,16 @@
+E2 ranking: 10 graduate profiles, pooled top 10 judged 0/1/2 (median of Claude, Qwen, Gemini)
+
+                                                nDCG@10        P@10 (good fit)
+SkillMap (Job Matches)              0.796 (0.743-0.850)    0.440 (0.310-0.560)
+Keyword match                       0.526 (0.446-0.599)    0.230 (0.140-0.320)
+Keyword match + level penalty       0.700 (0.628-0.769)    0.380 (0.240-0.510)
+Random order                        0.349 (0.280-0.417)    0.120 (0.040-0.200)
+(95% CI, bootstrap over profiles)
+
+SkillMap minus Keyword match: nDCG@10 +0.270 (paired 95% CI +0.213 to +0.323) -> PASS (the rule fixed beforehand)
+
+SkillMap minus Keyword match + level penalty: nDCG@10 +0.097 (paired 95% CI +0.055 to +0.140)
+
+SkillMap minus Random order: nDCG@10 +0.447 (paired 95% CI +0.356 to +0.538)
+
+Grades checked by the author (1 profile): 26 of 27 correct
