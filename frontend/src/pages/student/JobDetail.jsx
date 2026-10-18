@@ -63,11 +63,27 @@ function useSkillMapApplication(jobRef, onSkillMap) {
 
 // 14 Oct (transparency flow): the employer's decision date is shown before applying; a job that stopped taking
 // applications (or closed) can't be applied to ("Applications closed", as Homerun's closed jobs)
-function ApplyAction({ a, company, closed: closedCached, taking: takingCached, decideBy: dateCached, record, fromApps }) {
-  const { app, busy, error, apply, now } = a
+// 19 Oct (her pick of the mock-up): before applying, the employer's promised reply date, its reply record and who
+// sees what sit in one left-aligned box under the title (beside the button they wrapped badly: "reply by 17 / Nov")
+function ApplyInfo({ a, company, closed: closedCached, taking: takingCached, decideBy: dateCached, record }) {
+  const { app, now } = a
   const closed = now ? now.closed : closedCached
   const taking = now ? now.taking_applications : takingCached
   const decideBy = now ? now.decide_by : dateCached
+  if (app !== null || closed || taking === false) return null      // loading, applied, or can't apply: nothing to say
+  return (
+    <div className="mt-4 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5 space-y-1">
+      {decideBy && <PromisedDate company={company} date={fmtDay(decideBy)} className="text-sm font-medium text-slate-800" />}
+      <EmployerRecord company={company} record={record} className="text-sm text-slate-700" />
+      <p className="text-xs text-slate-500">{company || 'The employer'} sees your profile and your match. Your contact details only if they shortlist you.</p>
+    </div>
+  )
+}
+
+function ApplyAction({ a, closed: closedCached, taking: takingCached, fromApps }) {
+  const { app, busy, error, apply, now } = a
+  const closed = now ? now.closed : closedCached
+  const taking = now ? now.taking_applications : takingCached
   if (app === undefined) return null
   return (
     <div className="shrink-0 flex flex-col items-end gap-1 max-w-64 text-right">
@@ -90,9 +106,7 @@ function ApplyAction({ a, company, closed: closedCached, taking: takingCached, d
             className="text-sm font-semibold text-white bg-blue-700 hover:bg-blue-800 px-4 py-2 rounded-lg transition disabled:opacity-50">
             {busy ? <Busy>Applying…</Busy> : 'Apply with my SkillMap profile'}
           </button>
-          <p className="text-xs text-slate-500">{company || 'The employer'} sees your profile and your match. Your contact details only if they shortlist you.</p>
-          {decideBy && <PromisedDate company={company} date={fmtDay(decideBy)} />}
-          <EmployerRecord company={company} record={record} />
+          {/* 19 Oct (her pick): what to know before applying moved under the title (ApplyInfo) */}
         </>
       )}
       {error && <p role="alert" className="text-xs text-rose-600">{error}</p>}
@@ -284,8 +298,8 @@ export default function JobDetail() {
                     : ' · Past posting from JobStreet (2024)'}
               </p>
             </div>
-            {gap?.job?.source === 'employer' && <ApplyAction a={skillmapApp} fromApps={backLabel === 'My applications'} company={gap.job.company} closed={gap.job.closed}
-              taking={gap.job.taking_applications} decideBy={gap.job.decide_by} record={gap.job.employer_record} />}
+            {gap?.job?.source === 'employer' && <ApplyAction a={skillmapApp} fromApps={backLabel === 'My applications'} closed={gap.job.closed}
+              taking={gap.job.taking_applications} />}
             {gap?.job?.source === 'live' && gap.job.source_url && (
               <div className="shrink-0 flex flex-col items-end gap-1">
               <a
@@ -304,6 +318,8 @@ export default function JobDetail() {
             )}
           </div>
 
+          {gap?.job?.source === 'employer' && <ApplyInfo a={skillmapApp} company={gap.job.company} closed={gap.job.closed}
+            taking={gap.job.taking_applications} decideBy={gap.job.decide_by} record={gap.job.employer_record} />}
           {gap?.job?.source === 'employer' && <ApplicationProgress a={skillmapApp} company={gap.job.company} />}
 
           {/* Score: one number, one bar (they say the same thing) */}
