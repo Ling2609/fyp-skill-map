@@ -229,15 +229,15 @@ JOB_EVIDENCE_SCHEMA = {
 }
 SENTENCES_PER_CALL = 45     # long ads go in batches, so no single answer gets too long
 
-JOB_FORMAT_SYSTEM = """You are a professional job description writer. Your task is to read, understand, and rewrite a raw job description into clean structured bullet points.
-
-IMPORTANT: You are REWRITING, not copying. Read the full content, understand what it means, then write it properly.
+JOB_FORMAT_SYSTEM = """You tidy a job advert into structured bullet points for students. You do NOT write or add content.
 
 RULES:
-1. REWRITE each point in clear, professional English — do not copy broken or run-together text
-2. Fix ALL spacing errors, broken words, and formatting issues
-3. Keep ALL the original information and meaning — nothing important should be lost
-4. Organise into sections with ## headers:
+1. Use the advert's own words. Only fix spacing, broken or run-together words, and split long text into one point per
+   bullet. Never add a duty, requirement, benefit, condition or detail that the advert does not state.
+   (18 Oct: an advert that said only "test" was turned into a full invented job ad; every answer is now checked
+   word by word against the advert and rejected if anything was added.)
+2. If the text is not a real job advert (placeholder, test text, a few random words), return [] (an empty array).
+3. Organise into sections with ## headers:
    - ## Responsibilities
    - ## Requirements
    - ## Nice to have
@@ -249,20 +249,18 @@ RULES:
    Do not move a single item out of its section because it mentions "a plus" or "valued".
    (5 Oct: Meta's "Preferred Qualifications" were merged into Requirements; then Motorola's "Understanding of
    vector databases" was moved out of its Requirements, so the page and the skill gap seemed to disagree.)
-5. Each bullet is one clear, complete sentence
-6. Remove company promotional text and duplicate points
-7. Do NOT add dashes or bullet characters before items — just write the text
-8. Return ONLY a JSON array of strings, no markdown outside the array"""
+4. You may leave out company promotional text and exact duplicates.
+5. Do NOT add dashes or bullet characters before items — just write the text
+6. Return ONLY a JSON array of strings, no markdown outside the array"""
 
-JOB_FORMAT_PROMPT = """Read and rewrite this job description professionally.
+JOB_FORMAT_PROMPT = """Tidy this job advert into bullet points, keeping its own words.
 
 Job Title: {title}
 
-Raw Description (may contain formatting errors, run-together words, broken text):
+Advert (may contain formatting errors, run-together words, broken text):
 {description}
 
-Rewrite it as clean bullet points. Fix any broken text. Keep all important information.
-Return a JSON array of strings with ## section headers."""
+Return a JSON array of strings with ## section headers, or [] if this is not a real job advert."""
 
 
 def extract_json_array(text: str) -> list:

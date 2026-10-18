@@ -83,7 +83,11 @@ def process_all(db, extractor, reset=False):
         try:
             bullets = extractor.format_job_description(job.job_title, job.description)
 
-            if bullets and len(bullets) >= 2:
+            from app.services.description_check import ungrounded
+            if bullets and ungrounded(bullets, job.description):     # 18 Oct: never save text that isn't in the ad
+                print("  ✗ Gemini added text not in the ad — skipping (Job Detail shows the ad's own text)")
+                failed += 1
+            elif bullets and len(bullets) >= 2:
                 job.formatted_description = json.dumps(bullets)
                 db.commit()
                 processed += 1

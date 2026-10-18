@@ -1,10 +1,12 @@
 import json
+import re
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from app.database import get_db
 from app.models.job import Job, JobSkill
 from app.models.user import User
 from app.routers.auth import get_current_user
+from app.services.description_check import ungrounded
 
 router = APIRouter(prefix="/jobs", tags=["jobs"])
 
@@ -65,10 +67,12 @@ def is_section_header(text: str) -> bool:
 
 
 def format_description_rules(text: str) -> list[str]:
-    """Format using deterministic rules — fast fallback."""
+    """Format using deterministic rules — fast fallback. Splits on line breaks (an employer's own post, 18 Oct) and on
+    the double spaces scraped ads use between parts; never changes a word."""
     if not text:
         return []
-    raw_parts = [p.strip() for p in text.split('  ') if p.strip() and len(p.strip()) > 3]
+    raw_parts = [p.strip().lstrip("•-*·").strip() for p in re.split(r"\n|  ", text)]
+    raw_parts = [p for p in raw_parts if len(p) > 3]
     if len(raw_parts) <= 1:
         return [text.strip()]
     result = []
@@ -123,6 +127,11 @@ def get_job_description(
     if not job:
         raise HTTPException(status_code=404, detail="Job not found")
 
+    # 18 Oct: an employer's own post is shown as the employer wrote it (line breaks and headings only), never
+    # rewritten by an AI: Gemini turned a post that said only "test ttttt..." into a full invented advert
+    if job.source == "employer":
+        return {"bullets": format_description_rules(job.description or ""), "cached": True}
+
     # Return cached version only if it looks well-formatted
     if job.formatted_description:
         try:
@@ -143,7 +152,12 @@ def get_job_description(
     try:
         extractor = get_extractor()
         llm_bullets = extractor.format_job_description(job.job_title, job.description)   # Gemini
-        if llm_bullets and len(llm_bullets) >= 3:
+        # 18 Oct: every bullet must be found in the advert (app/services/description_check.py); one invented
+        # line and the whole answer is dropped for the advert's own text
+        bad = ungrounded(llm_bullets or [], job.description)
+        if bad:
+            print(f"Description for {job.job_id}: Gemini added text not in the ad ({len(bad)} bullets), using the ad's own text")
+        elif llm_bullets and len(llm_bullets) >= 3:
             bullets = llm_bullets
     except Exception as e:
         print(f"Description formatting failed: {e}")
