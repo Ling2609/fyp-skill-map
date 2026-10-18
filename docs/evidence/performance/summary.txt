@@ -1,0 +1,17 @@
+E5 response times: server answer times seen by a client on the same machine (seconds)
+3 server starts; cold = first call after each start; warm = 20 calls per round, pooled
+
+Server start until the API answers: 40.0, 28.4, 27.9 s
+
+Page / call                                 cold (each start)      warm median  warm p95  warm max
+Job Matches · POST /recommend/              11.61, 9.82, 9.41            2.511     2.783     3.163   <- over the limit
+Job Matches · GET /profile/skills           0.04, 0.04, 0.04             0.013     0.018     0.027
+Job Matches · GET /jobs/subcategories       0.01, 0.01, 0.01             0.006     0.007     0.008
+Job Detail · POST /skillgap/                0.03, 0.04, 0.05             0.033     0.073     0.100
+Job Detail · GET /jobs/{id}/description     0.01, 0.01, 0.01             0.007     0.009     0.010
+                                            first view of an untidied description (calls Gemini): 5.57, 1.51 s (not in the rule)
+Dashboard · GET /recommend/goal             2.43, 2.25, 2.18             2.170     2.327     2.410   <- over the limit
+Dashboard · GET /recommend/fit              0.16, 0.16, 0.13             0.126     0.229     0.253
+
+FAIL: at least one call over the limit (warm p95 1 s, cold 10 s) (the rule fixed beforehand)
+Machine: os Windows-11-10.0.26300-SP0, cpu Intel64 Family 6 Model 170 Stepping 4, GenuineIntel, cores 22, python 3.13.7, gpu none (CPU)
