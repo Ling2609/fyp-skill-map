@@ -1,6 +1,5 @@
 import json
 from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy import distinct
 from sqlalchemy.orm import Session
 from app.database import get_db
 from app.models.job import Job, JobSkill
@@ -97,7 +96,7 @@ def get_job_stats(db: Session = Depends(get_db)):
 def get_subcategories(include_past: bool = False, db: Session = Depends(get_db)):
     """Category chips for Job Matches. By default only categories that have current openings,
     so no chip leads to an empty list."""
-    q = db.query(distinct(Job.subcategory)).filter(Job.subcategory != None)
+    q = db.query(Job.subcategory).filter(Job.subcategory != None).distinct()   # SQLAlchemy 2.1: distinct() on the query
     if not include_past:
         q = current_jobs_filter(q)
     subcats = q.all()
