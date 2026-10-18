@@ -142,6 +142,37 @@ def normalise_rows(vecs: np.ndarray) -> np.ndarray:
     return vecs / (np.linalg.norm(vecs, axis=1, keepdims=True) + 1e-8)
 
 
+def _same_key(job_keys: list[str], spelling_keys: list[str]) -> np.ndarray:
+    """same[j, s] = job skill j and spelling s are the same canonical skill (A8). 18 Oct (E5 response times): the keys
+    become numbers once and are compared in one numpy step; comparing them as Python strings, job by job, was most
+    of the time of Job Matches and the Dashboard goal. Same answer as before (tests/test_match_speed.py)."""
+    ids: dict = {}
+    s = np.fromiter((ids.setdefault(k, len(ids)) for k in spelling_keys), dtype=np.int64, count=len(spelling_keys))
+    j = np.fromiter((ids.get(k, -1) for k in job_keys), dtype=np.int64, count=len(job_keys))
+    return j[:, None] == s[None, :]
+
+
+def _per_skill(rows: np.ndarray, has_rows, owner, n_grad: int):
+    """Columns (spellings) -> one column per graduate skill: the best similarity and "any spelling covers it", for all
+    skills in one grouped numpy step (18 Oct; before: a Python loop over every skill, for every job)."""
+    owner = np.asarray(owner)
+    order = np.argsort(owner, kind="stable")
+    grouped = owner[order]
+    if n_grad == 0 or not np.array_equal(np.unique(grouped), np.arange(n_grad)):   # a skill without spellings: old way
+        sims = np.full((rows.shape[0], n_grad), -1.0)
+        has = np.zeros((rows.shape[0], n_grad), dtype=bool)
+        for g in range(n_grad):
+            cols = owner == g
+            sims[:, g] = rows[:, cols].max(axis=1)
+            if has_rows is not None:
+                has[:, g] = has_rows[:, cols].any(axis=1)
+        return sims, has
+    starts = np.searchsorted(grouped, np.arange(n_grad))
+    sims = np.maximum.reduceat(rows[:, order], starts, axis=1)
+    has = np.logical_or.reduceat(has_rows[:, order], starts, axis=1) if has_rows is not None else None
+    return sims, has
+
+
 def similarity_matrix(job_vecs_normed: np.ndarray, spelling_vecs_normed: np.ndarray,
                       job_keys: list[str], spelling_keys: list[str], owner: list[int]) -> np.ndarray:
     """sims[j, g] = how close job skill j is to graduate skill g: the best of g's spellings
@@ -153,11 +184,7 @@ def similarity_matrix(job_vecs_normed: np.ndarray, spelling_vecs_normed: np.ndar
         r = key_row.get(k)
         if r is not None:
             rows[j, r] = 1.0
-    owner = np.asarray(owner)
-    sims = np.full((rows.shape[0], owner.max() + 1), -1.0)
-    for g in range(sims.shape[1]):
-        sims[:, g] = rows[:, owner == g].max(axis=1)
-    return sims
+    return _per_skill(rows, None, owner, int(np.asarray(owner).max()) + 1)[0]
 
 
 def match_matrix(job_vecs_normed: np.ndarray, spelling_vecs_normed: np.ndarray, job_names: list[str],
@@ -174,7 +201,7 @@ def match_matrix(job_vecs_normed: np.ndarray, spelling_vecs_normed: np.ndarray, 
         shape = (len(job_vecs_normed), n_grad)
         return np.full(shape, -1.0), np.zeros(shape, dtype=bool)
     rows = job_vecs_normed @ spelling_vecs_normed.T                          # (job skills, spellings)
-    same = np.asarray(job_keys, dtype=object)[:, None] == np.asarray(spelling_keys, dtype=object)[None, :]
+    same = _same_key(job_keys, spelling_keys)
     rows[same] = 1.0
     if skill_relation.enabled():
         js, ss = np.nonzero((rows >= skill_relation.CANDIDATE_FLOOR) & ~same)
@@ -184,14 +211,7 @@ def match_matrix(job_vecs_normed: np.ndarray, spelling_vecs_normed: np.ndarray, 
         has_rows[js[ok], ss[ok]] = True
     else:
         has_rows = rows >= MATCH_THRESHOLD
-    owner = np.asarray(owner)
-    sims = np.full((rows.shape[0], n_grad), -1.0)
-    has = np.zeros((rows.shape[0], n_grad), dtype=bool)
-    for g in range(n_grad):
-        cols = owner == g
-        sims[:, g] = rows[:, cols].max(axis=1)
-        has[:, g] = has_rows[:, cols].any(axis=1)
-    return sims, has
+    return _per_skill(rows, has_rows, owner, n_grad)
 
 
 def prefetch_relations(spelling_vecs_normed: np.ndarray, spellings: list[str], spelling_keys: list[str],
@@ -203,13 +223,12 @@ def prefetch_relations(spelling_vecs_normed: np.ndarray, spellings: list[str], s
     match_matrix (cosine >= CANDIDATE_FLOOR, not the same skill)."""
     if not skill_relation.enabled() or not len(spelling_vecs_normed):
         return
-    spelling_keys_arr = np.asarray(spelling_keys, dtype=object)
     pairs = []
     for vecs, keys, names in jobs:
         if not len(vecs):
             continue
         rows = vecs @ spelling_vecs_normed.T
-        same = np.asarray(keys, dtype=object)[:, None] == spelling_keys_arr[None, :]
+        same = _same_key(keys, spelling_keys)
         js, ss = np.nonzero((rows >= skill_relation.CANDIDATE_FLOOR) & ~same)
         pairs.extend((spellings[s], names[j]) for j, s in zip(js, ss))
     if pairs:
