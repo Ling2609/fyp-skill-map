@@ -1,36 +1,9 @@
-C:\Users\Ling\AppData\Local\Programs\Python\Python313\python.exe: No module named pytest.Traceback (most recent call last):
-  File "<frozen runpy>", line 198, in _run_module_as_main
-  File "<frozen runpy>", line 88, in _run_code
-  File "C:\Users\Ling\Desktop\fyp-skill-map\backend\venv\Lib\site-packages\pytest\__main__.py", line 9, in <module>
-    raise SystemExit(pytest.console_main())
-  File "C:\Users\Ling\Desktop\fyp-skill-map\backend\venv\Lib\site-packages\_pytest\config\__init__.py", line 201, in console_main
-    code = main()
-  File "C:\Users\Ling\Desktop\fyp-skill-map\backend\venv\Lib\site-packages\_pytest\config\__init__.py", line 175, in main
-object address  : 0000020ABE8A77C0
-object refcount : 6
-object type     : 00007FFBA5A3D380
-object type name: KeyboardInterrupt
-object repr     : KeyboardInterrupt()
-lost sys.stderr
-Exception ignored in atexit callback <function _shutdown_resources at 0x0000020AB0BE1BC0>:
-Traceback (most recent call last):
-  File "C:\Users\Ling\Desktop\fyp-skill-map\backend\venv\Lib\site-packages\pymongo\synchronous\monitor.py", line 488, in _shutdown_resources
-    shutdown()
-  File "C:\Users\Ling\Desktop\fyp-skill-map\backend\venv\Lib\site-packages\pymongo\periodic_executor.py", line 295, in _shutdown_executors
-    executor.join(1)
-  File "C:\Users\Ling\Desktop\fyp-skill-map\backend\venv\Lib\site-packages\pymongo\periodic_executor.py", line 212, in join
-    self._thread.join(timeout)
-  File "C:\Users\Ling\AppData\Local\Programs\Python\Python313\Lib\threading.py", line 1094, in join
-    self._handle.join(timeout)
-KeyboardInterrupt: 
-
+........................................................................ [ 72%]
+...........................                                              [100%]
 ============================== warnings summary ===============================
 venv\Lib\site-packages\fastapi\testclient.py:1
   C:\Users\Ling\Desktop\fyp-skill-map\backend\venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
     from starlette.testclient import TestClient as TestClient  # noqa
 
 -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! KeyboardInterrupt !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-C:\Users\Ling\Desktop\fyp-skill-map\backend\app\auth\utils.py:7: KeyboardInterrupt
-(to show a full traceback on KeyboardInterrupt use --full-trace)
-80 passed, 1 warning in 219.95s (0:03:39)
+99 passed, 1 warning in 234.92s (0:03:54)
