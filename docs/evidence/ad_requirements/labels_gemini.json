@@ -1,0 +1,234 @@
+{
+ "A01": {
+  "qualification": "none",
+  "field": "digital, visual, web, UI/UX, or related",
+  "languages": [],
+  "citizenship": false,
+  "salary": null
+ },
+ "A02": {
+  "qualification": "none",
+  "field": null,
+  "languages": [],
+  "citizenship": false,
+  "salary": null
+ },
+ "A03": {
+  "qualification": "none",
+  "field": "IT or related",
+  "languages": [],
+  "citizenship": true,
+  "salary": null
+ },
+ "A04": {
+  "qualification": "none",
+  "field": null,
+  "languages": [],
+  "citizenship": false,
+  "salary": null
+ },
+ "A05": {
+  "qualification": "bachelor",
+  "field": "Computer Science, Engineering, IT",
+  "languages": [
+   "Japanese"
+  ],
+  "citizenship": false,
+  "salary": null
+ },
+ "A06": {
+  "qualification": "none",
+  "field": null,
+  "languages": [],
+  "citizenship": false,
+  "salary": null
+ },
+ "A07": {
+  "qualification": "none",
+  "field": null,
+  "languages": [],
+  "citizenship": false,
+  "salary": null
+ },
+ "A08": {
+  "qualification": "none",
+  "field": null,
+  "languages": [],
+  "citizenship": false,
+  "salary": null
+ },
+ "A09": {
+  "qualification": "none",
+  "field": null,
+  "languages": [],
+  "citizenship": false,
+  "salary": null
+ },
+ "A10": {
+  "qualification": "none",
+  "field": null,
+  "languages": [
+   "English"
+  ],
+  "citizenship": true,
+  "salary": null
+ },
+ "A11": {
+  "qualification": "diploma",
+  "field": "Information Technology, Computer Science, or related field",
+  "languages": [],
+  "citizenship": false,
+  "salary": null
+ },
+ "A12": {
+  "qualification": "none",
+  "field": "Information Technology, Computer Science, Business Administration or a related discipline",
+  "languages": [
+   "English",
+   "Bahasa Malaysia"
+  ],
+  "citizenship": false,
+  "salary": null
+ },
+ "A13": {
+  "qualification": "none",
+  "field": null,
+  "languages": [],
+  "citizenship": false,
+  "salary": "RM2,000.00 - RM3,000.00 per month"
+ },
+ "A14": {
+  "qualification": "bachelor",
+  "field": "Computer Science, Communications, Electronics, or related fields",
+  "languages": [
+   "English",
+   "Mandarin"
+  ],
+  "citizenship": true,
+  "salary": null
+ },
+ "A15": {
+  "qualification": "none",
+  "field": "IT, Computer Science, Engineering or a related field",
+  "languages": [],
+  "citizenship": false,
+  "salary": null
+ },
+ "A16": {
+  "qualification": "none",
+  "field": null,
+  "languages": [],
+  "citizenship": true,
+  "salary": null
+ },
+ "A17": {
+  "qualification": "bachelor",
+  "field": "Computer Science/Engineering, Software Engineering, Electronics, Automation, Mechatronics, or a related technical field",
+  "languages": [],
+  "citizenship": false,
+  "salary": null
+ },
+ "A18": {
+  "qualification": "bachelor",
+  "field": "Computer/ Telecommunication Engineering/Information Technology or equivalent",
+  "languages": [
+   "English"
+  ],
+  "citizenship": false,
+  "salary": null
+ },
+ "A19": {
+  "qualification": "bachelor",
+  "field": "Data Science, Analytics, Statistics, Computer Science, Business Analytics, or a health-related discipline",
+  "languages": [],
+  "citizenship": false,
+  "salary": null
+ },
+ "A20": {
+  "qualification": "none",
+  "field": null,
+  "languages": [],
+  "citizenship": false,
+  "salary": null
+ },
+ "A21": {
+  "qualification": "bachelor",
+  "field": "Sustainability, Environmental Science, Data Science, Finance or a related discipline",
+  "languages": [],
+  "citizenship": false,
+  "salary": "MYR 108000 - MYR 144000"
+ },
+ "A22": {
+  "qualification": "bachelor",
+  "field": "Engineering, Physics or related fields",
+  "languages": [],
+  "citizenship": false,
+  "salary": null
+ },
+ "A23": {
+  "qualification": "none",
+  "field": null,
+  "languages": [
+   "Mandarin",
+   "Cantonese"
+  ],
+  "citizenship": false,
+  "salary": null
+ },
+ "A24": {
+  "qualification": "diploma",
+  "field": "Electrical, Mechanical, Facilities Management, IT, Telecommunications or a related discipline",
+  "languages": [],
+  "citizenship": false,
+  "salary": null
+ },
+ "A25": {
+  "qualification": "none",
+  "field": null,
+  "languages": [
+   "English",
+   "Chinese"
+  ],
+  "citizenship": false,
+  "salary": null
+ },
+ "A26": {
+  "qualification": "diploma",
+  "field": "Multimedia Technology, Graphic/Web Design, Human-Computer Interaction, Design or equivalent",
+  "languages": [
+   "English"
+  ],
+  "citizenship": false,
+  "salary": null
+ },
+ "A27": {
+  "qualification": "diploma",
+  "field": "IT or Computer Engineering related discipline",
+  "languages": [],
+  "citizenship": false,
+  "salary": null
+ },
+ "A28": {
+  "qualification": "bachelor",
+  "field": "Computer Science, Information Technology, Finance, Business or a related discipline",
+  "languages": [],
+  "citizenship": false,
+  "salary": null
+ },
+ "A29": {
+  "qualification": "none",
+  "field": null,
+  "languages": [],
+  "citizenship": false,
+  "salary": null
+ },
+ "A30": {
+  "qualification": "none",
+  "field": null,
+  "languages": [
+   "English"
+  ],
+  "citizenship": true,
+  "salary": null
+ }
+}

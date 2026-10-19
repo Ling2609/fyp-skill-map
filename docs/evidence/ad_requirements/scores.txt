@@ -1,0 +1,12 @@
+E6 other requirements: reading rules vs the author's labels (30 live ads not used to write the rules)
+Sample: seed 1, 30 of 101 live ads; 113 step-4 ads left out
+
+part             rules right     bar  verdict    claude      qwen    gemini
+qualification   28/30    93%    90%  PASS         100%      100%       93%
+field           29/30    97%    80%  PASS         100%       93%       90%
+languages       29/30    97%    90%  PASS         100%      100%      100%
+citizenship     28/30    93%    90%  PASS          93%       97%       90%
+salary          30/30   100%    90%  PASS         100%      100%      100%
+
+Judge columns: how often each AI judge agreed with the author (a cross-check of how hard each part is).
+Shown to students: qualification, field, languages, citizenship, salary

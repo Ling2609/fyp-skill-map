@@ -1,0 +1,31 @@
+﻿id,title,salary_field,qualification,field,languages,citizenship,salary,notes
+A01,"Senior Digital Designer (Web, UX & Social Design Focus)",(empty),None,None,None,None,None,None
+A02,Alteryx Automation Data Analyst,(empty),None,None,None,None,None,None
+A03,Senior IT Business Analyst ( Manufacturing Execution System ),(empty),None,IT or related,None,None,None,None
+A04,"Director, WRB Business Finance, Products Business Analyst",(empty),None,None,None,None,None,None
+A05,"Technical Consulting Engineer, Networking (Japanese Speaker)",(empty),Bachelor’s degree,"Computer Science, Engineering, IT or equivalent",Japanese,None,None,CCNA required or equivalent experience
+A06,ERP Transformation Consultant,(empty),None,None,None,None,None,None
+A07,AI Solutions Engineer,(empty),None,None,None,None,None,None
+A08,Business Analyst (IT),(empty),None,IT,None,None,None,None
+A09,Cybersecurity SOC,(empty),None,cybersecurity,None,None,None,None
+A10,Senior Data Engineer - Databricks,(empty),None,None,None,None,None,permanent residency in Malaysia
+A11,System and Network Engineer (IT Infrastructure),(empty),Diploma or Degree,"Information Technology, Computer Science, or related field",None,None,None,None
+A12,IT Admin Cum Coordinator,(empty),Diploma/Degree,"Information Technology, Computer Science, Business Administration or a related discipline",English and Bahasa Malaysia,None,None,None
+A13,IT Technician,(empty),None,IT or related,None,None,"RM2,000.00 - RM3,000.00 per month",None
+A14,Software Test Engineer,(empty),Bachelor’s degree or higher,"Computer Science, Communications, Electronics, or related fields","English, Mandarin",None,None,None
+A15,[LTA-ITCD] PRINCIPAL / SENIOR FULL-STACK SOFTWARE ENGINEER (GIS/AI),(empty),None,"IT, Computer Science, Engineering or a related field",None,None,None,None
+A16,Java developer,(empty),None,None,None,Malaysian,None,None
+A17,"Automation Software Engineer, Central Maintenance",(empty),Bachelor’s degree,"Computer Science/Engineering, Software Engineering, Electronics, Automation, Mechatronics, or a related technical field",None,None,None,None
+A18,Technical Support Engineer,(empty),Degree,Computer/ Telecommunication Engineering/Information Technology or equivalent,English,None,None,None
+A19,"Data Analyst (Executive / Senior Executive), Insight, PHCC (2-Year Contract)",(empty),Bachelor's degree,"Data Science, Analytics, Statistics, Computer Science, Business Analytics, or a health-related discipline",None,None,None,None
+A20,Database Administrator (Asia),(empty),University,University/University of Applied Sciences or equivalent professional experience,None,None,None,None
+A21,ESG Data Analyst,(empty),Bachelor's Degree,"Sustainability, Environmental Science, Data Science, Finance or a related discipline",None,None,Annual salary ranging from MYR 108000 to MYR 144000,Count salary monthly for consistency.
+A22,Automation System Engineer,(empty),B.S,"Engineering, Physics or related fields.",None,None,None,Check what B.S. is for qualification.
+A23,"Automation Tester / Manager (Selenium, Appium)",(empty),None,None,None,None,None,None
+A24,Network Operations Center Engineer,(empty),ITE / Higher Nitec / Diploma,"Electrical, Mechanical, Facilities Management, IT, Telecommunications or a related discipline.",None,None,None,None
+A25,IT Infrastructure Ops Lead,(empty),None,None,None,None,None,None
+A26,Senior UI/UX Design Expert,(empty),"at least a Diploma, Advanced/Higher/Graduate Diploma, Bachelor's Degree, Post Graduate Diploma, Professional Degree, Master's Degree","Multimedia Technology, Graphic/Web Design, Human-Computer Interaction, Design or equivalent.",None,None,None,None
+A27,Network Engineer - LAN/WAN Implementation,(empty),Diploma/Degree,IT or Computer Engineering related discipline,None,None,None,None
+A28,"Senior Business Analyst (Temenos, Murex, SWIFT, Sophis, Intellimatch, MOXO, JIRA, Confluence)",(empty),Bachelor's degree,"Computer Science, Information Technology, Finance, Business or a related discipline.",None,None,None,None
+A29,Software Engineer – Java / React,(empty),None,None,None,None,None,None
+A30,Network Engineer,(empty),None,None,English,None,None,None

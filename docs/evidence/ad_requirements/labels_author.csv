@@ -1,0 +1,31 @@
+﻿id,title,salary_field,qualification,field,languages,citizenship,salary,notes
+A01,"Senior Digital Designer (Web, UX & Social Design Focus)",(empty),none,none,none,no,none,
+A02,Alteryx Automation Data Analyst,(empty),none,none,none,no,none,
+A03,Senior IT Business Analyst ( Manufacturing Execution System ),(empty),none,none,none,no,none,US E-Verify boilerplate checks employment authorisation after hiring; does not limit who may apply: citizenship no
+A04,"Director, WRB Business Finance, Products Business Analyst",(empty),none,none,none,no,none,
+A05,"Technical Consulting Engineer, Networking (Japanese Speaker)",(empty),bachelor,"Computer Science, Engineering, IT or equivalent",Japanese,no,none,CCNA required or equivalent experience
+A06,ERP Transformation Consultant,(empty),none,none,none,no,none,
+A07,AI Solutions Engineer,(empty),none,none,none,no,none,
+A08,Business Analyst (IT),(empty),none,none,none,no,none,
+A09,Cybersecurity SOC,(empty),none,none,none,no,none,
+A10,Senior Data Engineer - Databricks,(empty),none,none,English,yes,none,Permanent residency in Malaysia required
+A11,System and Network Engineer (IT Infrastructure),(empty),diploma,"Information Technology, Computer Science, or related field",none,no,none,
+A12,IT Admin Cum Coordinator,(empty),diploma,"Information Technology, Computer Science, Business Administration or a related discipline","English, Bahasa Malaysia",no,none,
+A13,IT Technician,(empty),none,none,none,no,"RM2,000.00 - RM3,000.00 per month",
+A14,Software Test Engineer,(empty),bachelor,"Computer Science, Communications, Electronics, or related fields","English, Mandarin",no,none,"'Living in Malaysia for a long time' is a location line, not citizenship/PR/work pass: citizenship no"
+A15,[LTA-ITCD] PRINCIPAL / SENIOR FULL-STACK SOFTWARE ENGINEER (GIS/AI),(empty),none,none,none,no,none,"'Knowledge in IT, CS, Engineering' names no degree, so no field of study"
+A16,Java developer,(empty),none,none,none,yes,none,
+A17,"Automation Software Engineer, Central Maintenance",(empty),bachelor,"Computer Science/Engineering, Software Engineering, Electronics, Automation, Mechatronics, or a related technical field",none,no,none,
+A18,Technical Support Engineer,(empty),bachelor,Computer/ Telecommunication Engineering/Information Technology or equivalent,English,no,none,
+A19,"Data Analyst (Executive / Senior Executive), Insight, PHCC (2-Year Contract)",(empty),bachelor,"Data Science, Analytics, Statistics, Computer Science, Business Analytics, or a health-related discipline",none,no,none,
+A20,Database Administrator (Asia),(empty),bachelor,none,none,no,none,University / University of Applied Sciences = degree level; 'or equivalent experience' treated like A05
+A21,ESG Data Analyst,(empty),bachelor,"Sustainability, Environmental Science, Data Science, Finance or a related discipline",none,no,"MYR 108,000 - 144,000 per year","Ad gives a yearly amount; kept as written (about RM 9,000 - 12,000 a month)"
+A22,Automation System Engineer,(empty),bachelor,"Engineering, Physics or related fields",none,no,none,Check what B.S. is for qualification.
+A23,"Automation Tester / Manager (Selenium, Appium)",(empty),none,none,"Mandarin, Cantonese",no,none,Mandarin or Cantonese needed for the Manager version of the role
+A24,Network Operations Center Engineer,(empty),diploma,"Electrical, Mechanical, Facilities Management, IT, Telecommunications or a related discipline",none,no,none,"Lowest named is ITE / Higher Nitec (below diploma); our scale has no lower level, so diploma = lowest on our scale"
+A25,IT Infrastructure Ops Lead,(empty),none,none,"English, Chinese",no,none,"Chinese is 'advantageous' (should), counted"
+A26,Senior UI/UX Design Expert,(empty),diploma,"Multimedia Technology, Graphic/Web Design, Human-Computer Interaction, Design or equivalent",English,no,none,
+A27,Network Engineer - LAN/WAN Implementation,(empty),diploma,IT or Computer Engineering related discipline,none,no,none,
+A28,"Senior Business Analyst (Temenos, Murex, SWIFT, Sophis, Intellimatch, MOXO, JIRA, Confluence)",(empty),bachelor,"Computer Science, Information Technology, Finance, Business or a related discipline",none,no,none,
+A29,Software Engineer – Java / React,(empty),none,none,none,no,none,
+A30,Network Engineer,(empty),none,none,English,no,none,"'Must be located within Malaysia' is a location line, not citizenship/PR/work pass: citizenship no"

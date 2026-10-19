@@ -1,0 +1,31 @@
+﻿id,title,citizenship (author),citizenship (rules),citizenship ok,field (author),field (rules),field ok,languages (author),languages (rules),languages ok,qualification (author),qualification (rules),qualification ok,salary (author),salary (rules),salary ok
+A01,"Senior Digital Designer (Web, UX & Social Design Focus)",False,False,yes,[],[],yes,[],[],yes,none,none,yes,,,yes
+A02,Alteryx Automation Data Analyst,False,False,yes,[],[],yes,[],[],yes,none,none,yes,,,yes
+A03,Senior IT Business Analyst ( Manufacturing Execution System ),False,False,yes,[],[],yes,[],[],yes,none,none,yes,,,yes
+A04,"Director, WRB Business Finance, Products Business Analyst",False,False,yes,[],[],yes,[],[],yes,none,none,yes,,,yes
+A05,"Technical Consulting Engineer, Networking (Japanese Speaker)",False,False,yes,"['computer', 'engineering', 'it', 'science']","['computer', 'engineering', 'it', 'science']",yes,['japanese'],['japanese'],yes,bachelor,bachelor,yes,,,yes
+A06,ERP Transformation Consultant,False,False,yes,[],[],yes,[],[],yes,none,none,yes,,,yes
+A07,AI Solutions Engineer,False,False,yes,[],[],yes,[],[],yes,none,none,yes,,,yes
+A08,Business Analyst (IT),False,False,yes,[],[],yes,[],[],yes,none,none,yes,,,yes
+A09,Cybersecurity SOC,False,False,yes,[],[],yes,[],[],yes,none,none,yes,,,yes
+A10,Senior Data Engineer - Databricks,True,False,NO,[],[],yes,['english'],['english'],yes,none,none,yes,,,yes
+A11,System and Network Engineer (IT Infrastructure),False,False,yes,"['computer', 'information', 'science', 'technology']","['computer', 'information', 'science', 'technology']",yes,[],[],yes,diploma,diploma,yes,,,yes
+A12,IT Admin Cum Coordinator,False,False,yes,"['administration', 'business', 'computer', 'information', 'science', 'technology']","['administration', 'business', 'computer', 'information', 'science', 'technology']",yes,"['english', 'malay']","['english', 'malay']",yes,diploma,diploma,yes,,,yes
+A13,IT Technician,False,False,yes,[],[],yes,[],[],yes,none,none,yes,2000,2000,yes
+A14,Software Test Engineer,False,False,yes,"['communications', 'computer', 'electronics', 'science']","['communications', 'computer', 'electronics', 'science']",yes,"['english', 'mandarin']","['english', 'mandarin']",yes,bachelor,bachelor,yes,,,yes
+A15,[LTA-ITCD] PRINCIPAL / SENIOR FULL-STACK SOFTWARE ENGINEER (GIS/AI),False,False,yes,[],[],yes,[],[],yes,none,none,yes,,,yes
+A16,Java developer,True,False,NO,[],[],yes,[],[],yes,none,none,yes,,,yes
+A17,"Automation Software Engineer, Central Maintenance",False,False,yes,"['automation', 'computer', 'electronics', 'engineering', 'mechatronics', 'science', 'software', 'technical']","['automation', 'computer', 'electronics', 'engineering', 'mechatronics', 'rela', 'science', 'software']",yes,[],[],yes,bachelor,bachelor,yes,,,yes
+A18,Technical Support Engineer,False,False,yes,"['computer', 'engineering', 'information', 'technology', 'telecommunication']","['computer', 'engineering', 'information', 'technology', 'telecommunication']",yes,['english'],['english'],yes,bachelor,bachelor,yes,,,yes
+A19,"Data Analyst (Executive / Senior Executive), Insight, PHCC (2-Year Contract)",False,False,yes,"['analytics', 'business', 'computer', 'data', 'health', 'science', 'statistics']","['analytics', 'business', 'computer', 'data', 'disci', 'health', 'science', 'statistics']",yes,[],[],yes,bachelor,bachelor,yes,,,yes
+A20,Database Administrator (Asia),False,False,yes,[],[],yes,[],[],yes,bachelor,none,NO,,,yes
+A21,ESG Data Analyst,False,False,yes,"['data', 'environmental', 'finance', 'science', 'sustainability']","['data', 'environmental', 'finance', 'science', 'sustainability']",yes,[],[],yes,bachelor,bachelor,yes,108000,108000,yes
+A22,Automation System Engineer,False,False,yes,"['engineering', 'physics']",[],NO,[],[],yes,bachelor,none,NO,,,yes
+A23,"Automation Tester / Manager (Selenium, Appium)",False,False,yes,[],[],yes,"['cantonese', 'mandarin']","['cantonese', 'mandarin']",yes,none,none,yes,,,yes
+A24,Network Operations Center Engineer,False,False,yes,"['electrical', 'facilities', 'it', 'management', 'mechanical', 'telecommunications']","['electrical', 'facilities', 'it', 'management', 'mechanical', 'telecommunications']",yes,[],[],yes,diploma,diploma,yes,,,yes
+A25,IT Infrastructure Ops Lead,False,False,yes,[],[],yes,"['english', 'mandarin']",['english'],NO,none,none,yes,,,yes
+A26,Senior UI/UX Design Expert,False,False,yes,"['computer', 'design', 'graphic', 'human', 'interaction', 'multimedia', 'technology', 'web']","['computer', 'design', 'graphic', 'human', 'interaction', 'multimedia', 'technology', 'web']",yes,['english'],['english'],yes,diploma,diploma,yes,,,yes
+A27,Network Engineer - LAN/WAN Implementation,False,False,yes,"['computer', 'engineering', 'it']","['computer', 'engineering', 'it']",yes,[],[],yes,diploma,diploma,yes,,,yes
+A28,"Senior Business Analyst (Temenos, Murex, SWIFT, Sophis, Intellimatch, MOXO, JIRA, Confluence)",False,False,yes,"['business', 'computer', 'finance', 'information', 'science', 'technology']","['business', 'computer', 'finance', 'information', 'science', 'technology']",yes,[],[],yes,bachelor,bachelor,yes,,,yes
+A29,Software Engineer – Java / React,False,False,yes,[],[],yes,[],[],yes,none,none,yes,,,yes
+A30,Network Engineer,False,False,yes,[],[],yes,['english'],['english'],yes,none,none,yes,,,yes
