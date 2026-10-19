@@ -71,7 +71,7 @@ function Outcome({ r }) {
       {r.reason_skills.length > 0 && (
         <div className="flex flex-wrap items-center gap-1.5">
           {r.reason_skills.map(k => <span key={k} className="text-xs rounded-full px-2.5 py-0.5 border border-dashed border-slate-400 text-slate-700">{k}</span>)}
-          <Link to={`/chatbot?skill=${encodeURIComponent(r.reason_skills.join(', '))}&job=${encodeURIComponent(r.title)}`}
+          <Link to={`/chatbot?skill=${encodeURIComponent(r.reason_skills.join(', '))}&job=${encodeURIComponent(r.title)}`} state={{ from: 'My Applications' }}
             className="ml-1 text-xs font-medium text-blue-700 border border-blue-200 rounded-lg px-2.5 py-1 hover:bg-blue-50">Plan these</Link>
         </div>
       )}

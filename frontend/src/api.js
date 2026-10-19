@@ -18,11 +18,15 @@ api.interceptors.request.use((config) => {
 // Pages keep slow answers for a short while (pageCache.js), so moving between pages does not reload them (6 Oct).
 // Any change to the profile (grades, projects, certificates) makes them out of date: drop them straight away.
 export const PAGE_CACHE = 'pageCache'
+// 19 Oct (her report: coming back from the AI Assistant, the job page loaded again): the same answers are also kept
+// in memory while the app is open, because sessionStorage has a size limit and is wiped whole when it is full.
+// Each entry remembers whose token it was saved under, so another user signing in never sees it.
+export const memoryCache = new Map()
 
 api.interceptors.response.use(
   (response) => {
     const method = (response.config?.method || 'get').toLowerCase()
-    if (method !== 'get' && response.config?.url?.startsWith('/profile')) sessionStorage.removeItem(PAGE_CACHE)
+    if (method !== 'get' && response.config?.url?.startsWith('/profile')) { sessionStorage.removeItem(PAGE_CACHE); memoryCache.clear() }
     return response
   },
   (error) => {

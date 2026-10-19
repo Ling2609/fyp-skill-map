@@ -154,7 +154,7 @@ export default function JobDetail() {
   const openChat = (skill) => {
     navigate(location.pathname, { replace: true, state: { ...location.state, tab: activeTab } })
     navigate(`/chatbot?skill=${encodeURIComponent(skill)}&job=${encodeURIComponent(gap?.job?.job_title || '')}`
-      + `&job_id=${encodeURIComponent(gap?.job?.job_id || '')}`, { state: { fromJob: gap?.job?.job_title } })
+      + `&job_id=${encodeURIComponent(gap?.job?.job_id || '')}`, { state: { from: gap?.job?.job_title || 'job' } })
   }
   const [gap, setGap] = useState(() => peek('/skillgap/', { job_id: decodeURIComponent(jobId) }))
   const skillmapApp = useSkillMapApplication(gap?.job?.job_id, gap?.job?.source === 'employer')

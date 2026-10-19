@@ -158,7 +158,10 @@ function MessageBubble({ msg, onDownload, downloading, onChoose }) {
 export default function Chatbot() {
   const location = useLocation()
   const navigate = useNavigate()
-  const fromJob = location.state?.fromJob   // opened from a job's skill gap: offer the way back to it
+  // 19 Oct (her report + research, references.md "Back from the AI Assistant"): every way in from another page passes
+  // where it came from; one back link at the top left, above the title, names that page and returns to it as it was.
+  // The sidebar's AI Assistant passes nothing: a main page has no back link.
+  const backTo = location.state?.from || (location.state?.fromJob ? location.state.fromJob : null)
   const params = new URLSearchParams(location.search)
   const preloadSkill = params.get('skill')
   const preloadJob = params.get('job')
@@ -183,6 +186,9 @@ export default function Chatbot() {
   const inputRef = useRef(null)
   const INPUT_MAX = 168   // about 7 lines
   const hasAutoSent = useRef(false)
+  // 19 Oct (her report: Learn again started a new chat): opened for a skill, first look for her earlier chat about
+  // the same skill (and job) and continue it; only if there is none is "I want to learn X" sent in a new chat
+  const resumeCheck = useRef(Boolean(preloadSkill))
   const askUsed = useRef(false)          // the counsellor's pre-filled question is offered once
 
   // Saved chats (MongoDB, 6 Oct). sessionId = the chat being shown; null = a new chat, saved on its first reply
@@ -345,7 +351,7 @@ export default function Chatbot() {
     if (pendingChat.current) {
       initMessages.push(...pendingChat.current)
       pendingChat.current = null
-    } else if (chatCtx.target_skill && mode === 'skill_development' && !hasAutoSent.current) {
+    } else if (chatCtx.target_skill && mode === 'skill_development' && !hasAutoSent.current && !resumeCheck.current) {
       initMessages.push({ role: 'user', content: `I want to learn ${chatCtx.target_skill}. Can you give me a learning plan?` })
       shouldAutoSend = true
     }
@@ -448,6 +454,18 @@ export default function Chatbot() {
     }
   }
 
+  // The resume check (above): once the past chats are loaded, open the matching one, or start the new chat
+  useEffect(() => {
+    if (!sessionsLoaded || !resumeCheck.current) return
+    resumeCheck.current = false
+    const same = (a, b) => (a || '') === (b || '')
+    const match = location.state?.openSession ? null : sessions.find(s => s.mode === 'skill_development'
+      && same(s.context?.target_skill, preloadSkill) && same(s.context?.job_id, preloadJobId)
+      && same(s.context?.job_title, preloadJob))
+    const timer = setTimeout(() => (match ? openSession(match.id) : setChatKey(k => k + 1)), 0)
+    return () => clearTimeout(timer)
+  }, [sessionsLoaded]) // eslint-disable-line react-hooks/exhaustive-deps
+
   // Opened from the Dashboard's "Continue a chat": open that chat straight away
   const startSession = location.state?.openSession
   useEffect(() => {
@@ -479,6 +497,16 @@ export default function Chatbot() {
   return (
     <div className="flex flex-col h-screen">
 
+      {/* Same look and place as Job Detail's "← Back to Job Matches" */}
+      {backTo && (
+        <div className="bg-white border-b border-slate-200 px-4 sm:px-8 py-3">
+          <button onClick={() => navigate(-1)} className="flex items-center gap-1 text-xs text-slate-500 hover:text-blue-600 transition">
+            <span aria-hidden="true">←</span>
+            <span>Back to {backTo}</span>
+          </button>
+        </div>
+      )}
+
       <PageHeader>
         <div className="flex flex-wrap items-start justify-between gap-3 pb-4 pt-1">
           <div>
@@ -508,26 +536,13 @@ export default function Chatbot() {
           </div>
         </div>
 
-        {/* The grey bar only when there is something to add: opened from a job (6 Oct, her choice B). Without it, it only
-            repeated the welcome message (19 Oct, her pick 3) */}
-        {((chatCtx.target_skill && mode === 'skill_development') || fromJob) && <div className="pb-3">
-          {/* Opened from a job (6 Oct, her choice B): say which job the plan is for, with the way back beside it */}
-          <div className="flex items-center justify-between gap-3 text-xs text-slate-500 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2">
-            {chatCtx.target_skill && mode === 'skill_development' ? (
-              <p className="min-w-0 truncate">
-                Learning <span className="font-medium text-blue-600">{chatCtx.target_skill}</span>
-                {chatCtx.job_title && <> for <span className="font-medium text-slate-700">{chatCtx.job_title}</span></>}
-              </p>
-            ) : (
-              <p className="min-w-0">{currentMode.description}</p>
-            )}
-            {fromJob && (
-              <button onClick={() => navigate(-1)} title={`Back to ${fromJob}`}
-                className="shrink-0 font-medium text-blue-600 hover:text-blue-700 hover:underline">
-                ← Back to job
-              </button>
-            )}
-          </div>
+        {/* The grey bar only when there is something to add: what the chat is learning, and for which job (6 Oct, her
+            choice B). 19 Oct: the way back moved to the top bar (it was easy to miss here) */}
+        {chatCtx.target_skill && mode === 'skill_development' && <div className="pb-3">
+          <p className="text-xs text-slate-500 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 truncate">
+            Learning <span className="font-medium text-blue-600">{chatCtx.target_skill}</span>
+            {chatCtx.job_title && <> for <span className="font-medium text-slate-700">{chatCtx.job_title}</span></>}
+          </p>
         </div>}
       </PageHeader>
 

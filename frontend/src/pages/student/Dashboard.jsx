@@ -357,6 +357,9 @@ function StartCard({ onGo }) {
   )
 }
 
+
+// 19 Oct: every way into the AI Assistant says where it came from, for its "← Back to …" link
+const FROM_DASHBOARD = { from: 'Dashboard' }
 export default function Dashboard() {
   const navigate = useNavigate()
   const { user, setUser } = useAuth()
@@ -420,7 +423,7 @@ export default function Dashboard() {
   }
 
   const plan = (skills) => navigate(`/chatbot?skill=${encodeURIComponent(listAnd(skills))}`
-    + (goalData?.goal ? `&job=${encodeURIComponent(goalData.goal)}` : ''))
+    + (goalData?.goal ? `&job=${encodeURIComponent(goalData.goal)}` : ''), { state: FROM_DASHBOARD })
   // The counsellor chat opens with this message in the box, not sent: she can change it first (9 Oct)
   const counsellor = () => {
     const strong = (goalData?.wanted || []).slice(0, 3).map(w => skillName(w.skill))
@@ -429,7 +432,7 @@ export default function Dashboard() {
       + (strong.length ? ` My strongest skills are ${listAnd(strong)}` : '')
       + (fits.length ? `${strong.length ? ', and' : ''} the job categories that fit me best are ${listAnd(fits)}.` : strong.length ? '.' : '')
       + ' Can you help me choose?'
-    navigate(`/chatbot?mode=career_counsellor&ask=${encodeURIComponent(ask)}`)
+    navigate(`/chatbot?mode=career_counsellor&ask=${encodeURIComponent(ask)}`, { state: FROM_DASHBOARD })
   }
 
   const firstName = user?.first_name || 'there'
@@ -482,7 +485,7 @@ export default function Dashboard() {
                         : ` · ${chatNote || 'no chats yet'}`}
                     </span>
                   </p>
-                  <button type="button" onClick={() => navigate('/chatbot', chat ? { state: { openSession: chat.id } } : undefined)}
+                  <button type="button" onClick={() => navigate('/chatbot', { state: chat ? { ...FROM_DASHBOARD, openSession: chat.id } : FROM_DASHBOARD })}
                     className="text-sm font-medium text-blue-700 hover:underline shrink-0">{chat ? 'Open' : 'New chat'}</button>
                 </div>
               </Card>
