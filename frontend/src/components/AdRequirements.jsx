@@ -5,7 +5,9 @@
 
 const FIELD_MAX = 100
 
-const pillCls = 'text-xs text-slate-700 bg-slate-50 border border-gray-200 px-2.5 py-1 rounded-full'
+// 19 Oct (her review, mock-up C2-blue A): a faint blue tint so the row is seen at a glance, but dark text, round ends
+// and no arrow, so it doesn't look like the clickable chips (blue text, white, "→")
+const pillCls = 'text-xs text-slate-800 bg-blue-50 border border-blue-100 px-2.5 py-1 rounded-full'
 
 export function AdRequirementPills({ req }) {
   if (!req) return null
@@ -19,7 +21,7 @@ export function AdRequirementPills({ req }) {
   if (pills.length === 0) return null
   return (
     <div className="flex flex-wrap items-center gap-1.5 mt-4 pt-4 border-t border-gray-100">
-      <span className="text-xs text-gray-500 mr-1">The ad asks for</span>
+      <span className="text-xs font-medium text-slate-700 mr-1">The ad asks for</span>
       {pills.map(p => (
         <span key={p.key} className={pillCls} title={p.quote ? `From the ad: “${p.quote}”` : undefined}>{p.text}</span>
       ))}
