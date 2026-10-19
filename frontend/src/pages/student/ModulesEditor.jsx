@@ -63,6 +63,10 @@ export default function ModulesEditor({ onUnsavedChange, onSaved }) {
     Object.fromEntries(Object.entries(s).filter(([, v]) => v !== '' && v !== undefined))
 
   const hasUnsaved = JSON.stringify(gradedSelections(selections)) !== JSON.stringify(gradedSelections(savedSelections))
+  // 19 Oct (her pick S2): which modules differ from what is saved, for the save bar's count and the row highlight
+  const now = gradedSelections(selections), was = gradedSelections(savedSelections)
+  const changed = new Set([...Object.keys(now), ...Object.keys(was)].filter(c => now[c] !== was[c]))
+  const undo = () => { setSelections(savedSelections); setSaveStatus('') }
 
   // Notify parent of unsaved state changes
   useEffect(() => {
@@ -156,37 +160,14 @@ export default function ModulesEditor({ onUnsavedChange, onSaved }) {
           <span className={`${sourcePillCls} ml-1`} title={PROGRAMME_TIP}>Skills set by your programme</span>
         </div>
 
-        {/* Right side: status text + always-visible Save Grades button */}
-        <div className="flex items-center gap-3">
-          {hasUnsaved && (
-            <div className="flex items-center gap-1.5 text-amber-600">
-              <svg className="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
-              </svg>
-              <span className="text-xs font-medium">Unsaved changes</span>
-            </div>
-          )}
-          {!hasUnsaved && saveStatus === 'saved' && (
-            <span className="text-xs text-green-600 font-medium flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-green-500 inline-block" />
-              Saved
-            </span>
-          )}
-          {!hasUnsaved && saveStatus === 'error' && (
-            <span className="text-xs text-red-500 font-medium">Failed to save — try again</span>
-          )}
-          <button
-            onClick={saveGrades}
-            disabled={!hasUnsaved || saving}
-            className={`px-4 py-2 rounded-xl text-sm font-medium border transition flex items-center gap-2 ${
-              hasUnsaved
-                ? 'bg-blue-700 text-white border-blue-700 hover:bg-blue-800'
-                : 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed'
-            }`}
-          >
-            {saving ? <><Spinner size="sm" />Saving…</> : 'Save Grades'}
-          </button>
-        </div>
+        {/* 19 Oct (her pick S2): saving moved to a bar under the module cards that appears only when a grade changed;
+            here only the short "Saved" confirmation after saving */}
+        {!hasUnsaved && saveStatus === 'saved' && (
+          <span role="status" className="text-xs text-green-700 font-medium flex items-center gap-1.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-green-500 inline-block" />
+            Grades saved
+          </span>
+        )}
       </div>
 
       {/* Split panels */}
@@ -203,7 +184,7 @@ export default function ModulesEditor({ onUnsavedChange, onSaved }) {
           <div key={`c${selectedYear}`} tabIndex={0} aria-label="Compulsory modules"
             className="px-4 sm:px-6 py-2 divide-y divide-gray-200 lg:flex-1 lg:overflow-y-auto focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-300">
             {compulsory.map(mod => (
-              <div key={mod.code} className="py-3">
+              <div key={mod.code} className={`py-3 ${changed.has(mod.code) ? 'bg-amber-50 -mx-4 sm:-mx-6 px-4 sm:px-6' : ''}`}>
                 {/* A phone has no room for name and grade side by side: the grade box drops under the name */}
                 <div className="flex flex-wrap items-start justify-between gap-x-4 gap-y-2">
                   <div className="flex items-start gap-3 min-w-48 flex-1">
@@ -238,7 +219,7 @@ export default function ModulesEditor({ onUnsavedChange, onSaved }) {
             {electives.length === 0 ? (
               <p className="text-sm text-gray-400 py-6 text-center">No electives for Year {selectedYear}</p>
             ) : electives.map(mod => (
-              <div key={mod.code} className="py-3">
+              <div key={mod.code} className={`py-3 ${changed.has(mod.code) ? 'bg-amber-50 -mx-6 px-6' : ''}`}>
                 <div className="flex items-start gap-3">
                   <input type="checkbox" checked={selections[mod.code] !== undefined}
                     onChange={() => toggleElective(mod.code)}
@@ -261,6 +242,26 @@ export default function ModulesEditor({ onUnsavedChange, onSaved }) {
           </div>
         </div>
       </div>
+
+      {/* 19 Oct (her pick S2 of the mock-up): the save bar shows only when something changed, says how many, and can
+          undo; it sits right under the cards, where the grades were just picked */}
+      {hasUnsaved && (
+        <div role="region" aria-label="Unsaved grades"
+          className="shrink-0 flex flex-wrap items-center justify-end gap-3 px-4 py-2.5 rounded-xl bg-blue-50 border border-blue-200">
+          <p className="mr-auto text-sm font-medium text-blue-900">
+            {changed.size} {changed.size === 1 ? 'grade' : 'grades'} changed
+            {saveStatus === 'error' && <span role="alert" className="ml-2 font-normal text-rose-600">Couldn't save. Try again.</span>}
+          </p>
+          <button type="button" onClick={undo} disabled={saving}
+            className="px-3.5 py-2 rounded-xl text-sm font-medium border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 disabled:opacity-50">
+            Undo
+          </button>
+          <button type="button" onClick={saveGrades} disabled={saving}
+            className="px-4 py-2 rounded-xl text-sm font-medium border border-blue-700 bg-blue-700 text-white hover:bg-blue-800 flex items-center gap-2 disabled:opacity-70">
+            {saving ? <><Spinner size="sm" />Saving…</> : 'Save grades'}
+          </button>
+        </div>
+      )}
 
     </div>
   )
