@@ -9,6 +9,7 @@ import { ADMIN_COUNTS_CHANGED } from '../../components/Sidebar'
 import { Bar, RowSkeleton, LoadingLabel, TextSkeleton } from '../../components/Skeleton'
 import { Busy } from '../../components/Spinner'
 import EmployerRecord, { PromisedDate } from '../../components/EmployerRecord'
+import { AdRequirementPills, SalaryFromAd } from '../../components/AdRequirements'
 
 // The grade itself, not its weight: the weight is the same for C+ and C, so a C showed as "C+" (5 Oct)
 const GRADE_LETTERS = { '4.0': 'A', '3.7': 'A-', '3.3': 'B+', '3.0': 'B', '2.7': 'B-', '2.3': 'C+', '2.0': 'C' }
@@ -283,14 +284,17 @@ export default function JobDetail() {
 
         {/* Job header: info + action on top, one score row underneath */}
         <div className="bg-white rounded-xl p-6 border border-gray-100 shadow-sm">
-          <div className="flex items-start justify-between gap-6">
+          {/* 19 Oct: on a phone the button goes under the title (the title was squeezed into a narrow column) */}
+          <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 sm:gap-6">
             <div className="flex-1 min-w-0">
               <h1 className="text-xl font-bold text-gray-800">{gap?.job?.job_title}</h1>
               <p className="text-sm text-gray-500 mt-1">{gap?.job?.company} · {gap?.job?.location}</p>
               <p className="text-xs text-gray-400 mt-1.5">
                 {gap?.job?.salary && gap.job.salary !== 'nan'
                   ? <span className="text-green-700 font-medium">{gap.job.salary}</span>
-                  : 'Salary not disclosed'}
+                  : gap?.job?.requirements?.salary
+                    ? <SalaryFromAd salary={gap.job.requirements.salary} />
+                    : 'Salary not disclosed'}
                 {gap?.job?.source === 'live'
                   ? (postedAgo(gap.job.listing_date) ? ` · Posted ${postedAgo(gap.job.listing_date)}` : '')
                   : gap?.job?.source === 'employer'
@@ -301,7 +305,7 @@ export default function JobDetail() {
             {gap?.job?.source === 'employer' && <ApplyAction a={skillmapApp} fromApps={backLabel === 'My Applications'} closed={gap.job.closed}
               taking={gap.job.taking_applications} />}
             {gap?.job?.source === 'live' && gap.job.source_url && (
-              <div className="shrink-0 flex flex-col items-end gap-1">
+              <div className="shrink-0 flex flex-col items-start sm:items-end gap-1">
               <a
                 href={gap.job.source_url}
                 target="_blank"
@@ -317,6 +321,8 @@ export default function JobDetail() {
               </div>
             )}
           </div>
+
+          <AdRequirementPills req={gap?.job?.requirements} />
 
           {gap?.job?.source === 'employer' && <ApplyInfo a={skillmapApp} company={gap.job.company} closed={gap.job.closed}
             taking={gap.job.taking_applications} decideBy={gap.job.decide_by} record={gap.job.employer_record} />}

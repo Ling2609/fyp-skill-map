@@ -13,7 +13,9 @@ LEVELS = ["diploma", "bachelor", "master", "phd"]          # lowest to highest
 LEVEL_NAMES = {"diploma": "Diploma", "bachelor": "Bachelor's degree", "master": "Master's degree", "phd": "PhD"}
 _LEVEL_RX = {
     "diploma": r"\bdiplomas?\b",
-    "bachelor": r"\b(bachelor'?s?|bachelors|b\.?\s?sc|b\.?\s?eng|b\.?\s?tech|undergraduate degree|degree)\b",
+    # after E6 (19 Oct, not re-measured): "B.S" (A22) and "University / University of Applied Sciences" (A20)
+    "bachelor": r"\b(bachelor'?s?|bachelors|b\.?\s?sc|b\.\s?s\b\.?|b\.?\s?eng|b\.?\s?tech|undergraduate degree|degree|"
+                r"university\s*(?:degree|graduate|qualification|/)|university\s+or\s+equivalent)",
     "master": r"\b(master'?s|masters|master degree|master of|m\.?\s?sc|mba|postgraduate)\b",
     "phd": r"\b(ph\.?\s?d|doctorate|doctoral)\b",
 }
@@ -33,7 +35,8 @@ LANGUAGES = {
     "Indonesian": r"\b(indonesian|bahasa\s+indonesia)\b",
 }
 # a language counts only in a sentence about speaking/writing it, not "Chinese New Year" or "English-speaking clients"
-_LANG_CONTEXT = r"(speak|spoken|speaker|writ|read|fluen|proficien|command|language|communicat|conversant|bilingual|multilingual|native|verbal|oral)"
+_LANG_CONTEXT = r"(speak|spoken|speaker|writ|read|fluen|proficien|command|language|communicat|conversant|bilingual|multilingual|native|verbal|oral|capabilit)"
+# "capabilit" added after E6 (19 Oct, not re-measured): "Chinese capability is advantageous" (A25)
 
 _CITIZEN = (r"(malaysians?\s+(citizens?\s+)?only|only\s+malaysians?|malaysian\s+citizens?|citizens?\s+only|"
             r"singapore(an)?\s+(citizens?|pr)\b|singaporeans?\s+only|permanent\s+residen(t|ce)|\bpr\s+(holder|only)|"
@@ -67,7 +70,7 @@ def qualification(text: str) -> dict | None:
     return best
 
 
-_FIELD_RX = re.compile(r"\b(?:degree|diploma|bachelor'?s?|master'?s?|graduate|qualification|major(?:ing)?|studies)\b"
+_FIELD_RX = re.compile(r"(?:\b(?:degree|diploma|bachelor'?s?|master'?s?|graduate|qualification|major(?:ing)?|studies)\b|\bb\.\s?s\b\.?)"
                        r"[^.;•\n]{0,30}?\b(?:in|of)\s+([A-Za-z][^.;•\n()]{2,120})", re.I)
 
 
@@ -130,8 +133,20 @@ def salary_in_ad(text: str) -> dict | None:
         if m2 and re.search(r"\d{3,}|\d+\s?k\b", m2.group(1), re.I):
             amount = f"{amount} – {m2.group(1).strip()}"
         start = max(0, first.start() - 40)
-        return {"salary": re.sub(r"\s+", " ", amount), "quote": window[start: first.end() + 40].strip()}
+        quote = window[start: first.end() + 40].strip()
+        # per year or per month, so the page can also show a yearly amount per month (19 Oct)
+        period = ("year" if re.search(r"annual|annum|yearly|per\s+year|a\s+year|p\.\s?a\.", quote, re.I)
+                  else "month" if re.search(r"month", quote, re.I) else None)
+        return {"salary": re.sub(r"\s+", " ", amount), "period": period, "quote": quote}
     return None
+
+
+def shown(text: str, salary_field: str | None = None) -> dict:
+    """What Job Detail shows (19 Oct, E6 result): qualification, field, languages and salary passed; citizenship is
+    left out (it found 0 of the 2 real cases, references.md "E6 RESULT"). Display only: no effect on rank or %."""
+    r = read_ad(text, salary_field)
+    r.pop("citizenship")
+    return r
 
 
 def read_ad(text: str, salary_field: str | None = None) -> dict:

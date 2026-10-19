@@ -69,3 +69,37 @@ def test_sample_and_score(db, tmp_path, monkeypatch):
     assert len(lang_wrong) == 1                                              # only the deliberate difference
     assert all(p["qualification ok"] == "yes" for p in per)
     assert len(per) == n
+
+
+def test_fixes_after_e6():
+    """Misses found in E6 and fixed afterwards (19 Oct). Not re-measured: E6's numbers are for the frozen rules."""
+    assert read_ad("B.S in Engineering, Physics or related fields.")["qualification"]["level"] == "bachelor"   # A22
+    assert "Physics" in read_ad("B.S in Engineering, Physics or related fields.")["field"]["field"]
+    assert read_ad("University/University of Applied Sciences or equivalent experience")["qualification"]["level"] == "bachelor"
+    assert read_ad("Our clients include BS Group.")["qualification"] is None             # "BS" alone is not a degree
+    assert read_ad("Graduated from the National University of Singapore.")["qualification"] is None
+    langs = read_ad("Clear communication in English; Chinese capability is advantageous.")["languages"]["languages"]
+    assert langs == ["English", "Mandarin"]                                                 # A25
+    year = read_ad("Annual salary ranging from MYR 108000 to MYR 144000.")["salary"]
+    assert year["period"] == "year" and year["salary"] == "MYR 108000 – MYR 144000"
+    assert read_ad("Pay: RM2,000.00 - RM3,000.00 per month")["salary"]["period"] == "month"
+
+
+def test_job_detail_shows_requirements_without_citizenship(client, users):
+    employer, student = users.employer(), users.student()
+    cats = client.get("/jobs/subcategories", params={"include_past": True}, headers=users.h(employer)).json()
+    text = ("Build REST APIs in Python and write SQL every day. Requirements: Diploma or Degree in Computer Science. "
+            "Good command of English and Bahasa Malaysia. Malaysians only. Salary: RM 3,000 - RM 3,800 per month.")
+    body = {"title": "Graduate Engineer", "location": "Kuala Lumpur", "salary": "",
+            "category": cats[0] if cats else "Developers/Programmers", "description": text,
+            "skills": [{"name": s, "level": "required", "quote": "", "group": ""} for s in ("Python", "SQL")], "soft": []}
+    job = client.post("/employer/jobs", headers=users.h(employer), json=body)
+    assert job.status_code == 200, job.text
+    gap = client.post("/skillgap/", headers=users.h(student), json={"job_id": job.json()["job_ref"]})
+    assert gap.status_code == 200, gap.text
+    req = gap.json()["job"]["requirements"]
+    assert req["qualification"]["level"] == "diploma"
+    assert "Computer Science" in req["field"]["field"]
+    assert req["languages"]["languages"] == ["English", "Malay"]
+    assert req["salary"]["salary"] == "RM 3,000 – RM 3,800" and req["salary"]["period"] == "month"
+    assert "citizenship" not in req                                                  # E6: not shown
