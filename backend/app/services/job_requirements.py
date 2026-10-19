@@ -9,7 +9,7 @@ requirement on its own. So nothing changes until a job is re-extracted.
   core      = hard skills that are required                 -> the displayed coverage %
   duty      = hard skills that are unspecified (mostly from the duties) -> used only if the ad requires nothing
   bonus     = hard skills that are preferred               -> "nice to have" box + small ranking bonus
-  learn     = skills the role will teach (trained)          -> never a gap, not shown
+  learn     = skills gained in the role (trained)           -> never a gap; shown as "Skills you'll gain in this role" (19 Oct)
   soft      = soft skills                                   -> not in the %, not shown (they are in the description)
 An either-or group counts as one requirement, met if the student has any member.
 Fallback when an ad lists no required hard skill: score on its unspecified skills (basis "unspecified"),

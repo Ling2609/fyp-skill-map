@@ -264,9 +264,12 @@ export default function JobDetail() {
   // What the % counts: required skills; if the ad requires none, the skills it lists without a level, else its preferred ones
   const basisWord = { preferred: 'preferred', unspecified: 'listed' }[gap?.summary?.coverage_basis] || 'required'
   const BasisWord = basisWord[0].toUpperCase() + basisWord.slice(1)
-  // Nice-to-have skills: shown apart, never in the %. (Skills the role will teach and soft skills are left
-  // out of the % too, but not listed here: the first reads oddly to a student, the second is in the description.)
+  // Nice-to-have skills: shown apart, never in the %. Soft skills are left out of the % too and not listed (they are in
+  // the description).
   const niceToHave = gap?.nice_to_have || []
+  // 19 Oct (her T1 + wording G1, research in references.md): skills gained by doing the job ("you will learn",
+  // "exposure to"): never a gap; shown as a card after Nice-to-have, with the other skills (they are skills)
+  const gainInRole = gap?.learn_on_job || []
 
   return (
     <div className="min-h-screen">
@@ -550,6 +553,36 @@ export default function JobDetail() {
               </div>
             )}
 
+
+            {/* 4. Gained in the role: not expected before starting, never in the % */}
+            {gainInRole.length > 0 && (
+              <div className="bg-white rounded-xl border border-gray-100 shadow-sm">
+                <div className="px-5 py-4 border-b border-gray-100">
+                  <h2 className="text-sm font-semibold text-gray-700">
+                    Skills you'll gain in this role <span className="text-green-700">({gainInRole.filter(g => g.has).length} of {gainInRole.length})</span>
+                    <span className="ml-2 font-normal text-xs text-gray-400">not expected before you start · not counted in the %</span>
+                  </h2>
+                </div>
+                {/* Her review 19 Oct: like Nice-to-have: the ones you already have ticked first, the others open the AI
+                    Assistant (you can get a head start) */}
+                <div className="flex flex-wrap gap-1.5 px-5 py-4">
+                  {[...gainInRole].sort((x, y) => Number(y.has) - Number(x.has)).map((item, idx) => item.has ? (
+                    <span key={idx} title={item.ad_quote ? `From the ad: “${item.ad_quote}”` : undefined}
+                      className="inline-flex items-center gap-1.5 text-xs text-gray-700 bg-slate-50 border border-gray-200 px-2.5 py-1 rounded-lg">
+                      <span className="text-green-600 font-bold">✓</span>
+                      {skillName(item.job_skill)}
+                    </span>
+                  ) : (
+                    <button key={idx} type="button"
+                      title={item.ad_quote ? `From the ad: “${item.ad_quote}” · Learn more` : 'Learn more'}
+                      onClick={() => openChat(item.job_skill)}
+                      className="inline-flex items-center gap-1 text-xs text-blue-700 bg-white border border-blue-200 hover:bg-blue-50 px-2.5 py-1 rounded-lg transition">
+                      {skillName(item.job_skill)} <span aria-hidden="true">→</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         )}
       </div>

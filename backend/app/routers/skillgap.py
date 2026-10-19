@@ -166,6 +166,9 @@ def skill_gap_for(student: User, job_ref: str, db: Session) -> dict:
         "matched_skills": matched,
         "missing_skills": missing,
         "nice_to_have": nice_to_have,           # [{job_skill, has, ad_quote}]
-        "learn_on_job": sc["learn"],            # skills the role will teach: never a gap
+        # gained in the role (19 Oct, her T1 + G1): never a gap, never in the %; "has" says whether the student
+        # already has it (same match as every other skill), so the page can tick it or offer "Learn"
+        "learn_on_job": [{"job_skill": it.name, "has": bool(has[i]), "ad_quote": unit_quote(items, [i])}
+                         for i, it in enumerate(items) if it.tier == "learn"],
         "soft_skills": sc["soft"],              # listed apart, not in the %
     }

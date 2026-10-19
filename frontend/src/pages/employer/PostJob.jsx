@@ -15,7 +15,8 @@ const MAX_DESCRIPTION = 12000
 const BOXES = [
   { level: 'required', title: 'Required', hint: "Counted in each student's match. Hover a skill to see the words in your ad it came from." },
   { level: 'preferred', title: 'Nice to have', hint: 'Shown to students, not counted in the match %.' },
-  { level: 'trained', title: 'Taught on the job', hint: "Not expected from graduates; shown so they know what they'll learn." },
+  // 19 Oct (her wording G1): the ad's "you will learn / exposure to" skills are gained by doing the job, not taught
+  { level: 'trained', title: 'Gained in the role', hint: 'Not expected before starting; graduates build these by doing the job. Students see them; not counted in the match.' },
 ]
 const field = 'w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500'
 const label = 'block text-sm font-medium text-slate-700 mb-1'

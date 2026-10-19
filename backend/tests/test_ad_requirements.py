@@ -154,3 +154,23 @@ def test_no_requirements_on_past_postings(client, users, db):
     gap = client.post("/skillgap/", headers=users.h(student), json={"job_id": "js_e6_past"})
     assert gap.status_code == 200, gap.text
     assert gap.json()["job"]["requirements"] is None
+
+
+def test_skills_gained_in_the_role_are_listed_not_counted(client, users):
+    """19 Oct (her T1, wording G1): a skill the employer puts under "Gained in the role" is sent to Job Detail for its
+    own card and never counts in the %."""
+    employer, student = users.employer(), users.student(skills=("Python", "Jira"))
+    cats = client.get("/jobs/subcategories", params={"include_past": True}, headers=users.h(employer)).json()
+    body = {"title": "Graduate Engineer", "location": "Kuala Lumpur", "salary": "",
+            "category": cats[0] if cats else "Developers/Programmers",
+            "description": "Build REST APIs in Python every day. You will learn our SAP setup and Jira on the job. " * 2,
+            "skills": [{"name": "Python", "level": "required", "quote": "", "group": ""},
+                       {"name": "SAP", "level": "trained", "quote": "", "group": ""},
+                       {"name": "Jira", "level": "trained", "quote": "", "group": ""}], "soft": []}
+    job = client.post("/employer/jobs", headers=users.h(employer), json=body)
+    assert job.status_code == 200, job.text
+    gap = client.post("/skillgap/", headers=users.h(student), json={"job_id": job.json()["job_ref"]}).json()
+    # her review (19 Oct): checked like every other skill: Jira she has (ticked), SAP she doesn't (Learn)
+    assert {g["job_skill"]: g["has"] for g in gap["learn_on_job"]} == {"SAP": False, "Jira": True}
+    assert gap["summary"]["job_skills_total"] == 1                                   # only Python counts
+    assert not {"SAP", "Jira"} & {m["job_skill"] for m in gap["missing_skills"] + gap["matched_skills"]}
