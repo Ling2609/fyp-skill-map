@@ -103,3 +103,15 @@ def test_job_detail_shows_requirements_without_citizenship(client, users):
     assert req["languages"]["languages"] == ["English", "Malay"]
     assert req["salary"]["salary"] == "RM 3,000 – RM 3,800" and req["salary"]["period"] == "month"
     assert "citizenship" not in req                                                  # E6: not shown
+
+
+def test_no_requirements_on_past_postings(client, users, db):
+    """2024 JobStreet past postings are market data, not jobs to apply to: no pills (her call, 19 Oct)."""
+    student = users.student()
+    sql(db, "insert into jobs (job_id, job_title, company, location, description, source, salary) "
+            "values ('js_e6_past', 'Dev', 'Acme', 'KL', 'Degree in Computer Science. Fluent English.', 'jobstreet', '')")
+    jid = sql(db, "select id from jobs where job_id='js_e6_past'").scalar()
+    sql(db, "insert into job_skills (job_id, job_ref, skill_name) values (:j, 'js_e6_past', 'Python')", j=jid)
+    gap = client.post("/skillgap/", headers=users.h(student), json={"job_id": "js_e6_past"})
+    assert gap.status_code == 200, gap.text
+    assert gap.json()["job"]["requirements"] is None

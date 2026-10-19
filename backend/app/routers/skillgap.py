@@ -148,7 +148,10 @@ def skill_gap_for(student: User, job_ref: str, db: Session) -> dict:
             # 19 Oct (E6): what the ad asks besides skills, read by fixed rules, shown as pills under the title.
             # Qualification, field, languages and a salary written in the text (when the salary field is empty);
             # citizenship left out (found 0 of 2 in E6). Display only: not part of the % or the ranking.
-            "requirements": ad_requirements.shown(job.description or "", job.salary),
+            # Only for jobs a student can apply to (her call, 19 Oct): live jobs (measured in E6) and SkillMap
+            # posts (not measured: no real ones yet); none for the 2024 JobStreet past postings (market data).
+            "requirements": (ad_requirements.shown(job.description or "", job.salary)
+                             if job.source in ("live", "employer") else None),
         },
         "summary": {
             "job_skills_total": sc["total"],

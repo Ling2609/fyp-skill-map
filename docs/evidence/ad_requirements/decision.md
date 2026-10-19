@@ -19,3 +19,8 @@ very few real cases.
 Fixed after E6, not re-measured (the numbers above are for the frozen rules at e8aa4ca):
 "B.S" and "University / University of Applied Sciences" as bachelor level, "<language> capability" as a language
 line, salary per year or per month. Tests: backend/tests/test_ad_requirements.py (test_fixes_after_e6).
+
+Where the pills appear (author's call, 19 Oct): on every job a student can apply to, i.e. live jobs (measured
+here) and SkillMap employer posts (same rules, not measured: there are no real employer posts yet, only test
+posts). Not on the 2024 JobStreet past postings, which are market data. On a phone the pill's ad quote (a hover
+tooltip) is not shown; kept that way on purpose so the header stays uncluttered; the full text is in the description.
