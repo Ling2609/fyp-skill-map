@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Float, DateTime, ForeignKey
+from sqlalchemy import JSON, Column, Integer, String, Float, DateTime, ForeignKey
 from sqlalchemy.sql import func
 from app.database import Base
 
@@ -35,6 +35,11 @@ class Job(Base):
     decide_by_original = Column(DateTime(timezone=True), nullable=True)   # 14 Oct audit: the first promise, kept on extending
     applications_stopped_at = Column(DateTime(timezone=True), nullable=True)   # "Stop new applications" (still deciding)
     close_reason = Column(String(20), nullable=True)   # filled_skillmap / filled_other / not_filling
+    # 19 Oct (E6, option F): what a SkillMap post asks for besides skills, chosen by the employer in Post a Job
+    # (not read from the text, so nothing to measure). Empty on live and 2024 jobs.
+    min_qualification = Column(String(80), nullable=True)   # certificate .. phd, or the employer's own words ("Other")
+    study_field = Column(String(200), nullable=True)         # e.g. "Computer Science, IT or related"
+    languages = Column(JSON, nullable=True)                  # e.g. ["English", "Mandarin", "Hokkien"] (any typed under "Other")
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
 

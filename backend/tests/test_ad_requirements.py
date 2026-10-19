@@ -85,24 +85,63 @@ def test_fixes_after_e6():
     assert read_ad("Pay: RM2,000.00 - RM3,000.00 per month")["salary"]["period"] == "month"
 
 
-def test_job_detail_shows_requirements_without_citizenship(client, users):
-    employer, student = users.employer(), users.student()
-    cats = client.get("/jobs/subcategories", params={"include_past": True}, headers=users.h(employer)).json()
+def _gap(client, users, student, ref):
+    r = client.post("/skillgap/", headers=users.h(student), json={"job_id": ref})
+    assert r.status_code == 200, r.text
+    return r.json()["job"]["requirements"]
+
+
+def test_live_job_requirements_read_by_the_rules_without_citizenship(client, users, db):
+    student = users.student()
     text = ("Build REST APIs in Python and write SQL every day. Requirements: Diploma or Degree in Computer Science. "
             "Good command of English and Bahasa Malaysia. Malaysians only. Salary: RM 3,000 - RM 3,800 per month.")
-    body = {"title": "Graduate Engineer", "location": "Kuala Lumpur", "salary": "",
-            "category": cats[0] if cats else "Developers/Programmers", "description": text,
-            "skills": [{"name": s, "level": "required", "quote": "", "group": ""} for s in ("Python", "SQL")], "soft": []}
-    job = client.post("/employer/jobs", headers=users.h(employer), json=body)
-    assert job.status_code == 200, job.text
-    gap = client.post("/skillgap/", headers=users.h(student), json={"job_id": job.json()["job_ref"]})
-    assert gap.status_code == 200, gap.text
-    req = gap.json()["job"]["requirements"]
+    sql(db, "insert into jobs (job_id, job_title, company, location, description, source, salary) "
+            "values ('live_e6_show', 'Dev', 'Acme', 'KL', :d, 'live', '')", d=text)
+    jid = sql(db, "select id from jobs where job_id='live_e6_show'").scalar()
+    sql(db, "insert into job_skills (job_id, job_ref, skill_name) values (:j, 'live_e6_show', 'Python')", j=jid)
+    req = _gap(client, users, student, "live_e6_show")
     assert req["qualification"]["level"] == "diploma"
     assert "Computer Science" in req["field"]["field"]
     assert req["languages"]["languages"] == ["English", "Malay"]
     assert req["salary"]["salary"] == "RM 3,000 – RM 3,800" and req["salary"]["period"] == "month"
     assert "citizenship" not in req                                                  # E6: not shown
+
+
+def test_skillmap_post_requirements_come_from_the_employers_fields(client, users):
+    """Option F (19 Oct): a SkillMap post shows only what the employer chose, never what the rules read."""
+    employer, student = users.employer(), users.student()
+    cats = client.get("/jobs/subcategories", params={"include_past": True}, headers=users.h(employer)).json()
+    body = {"title": "Graduate Engineer", "location": "Kuala Lumpur", "salary": "",
+            "category": cats[0] if cats else "Developers/Programmers",
+            "description": "Build REST APIs in Python and write SQL. Master's degree in Physics. Fluent Japanese. " * 2,
+            "skills": [{"name": s, "level": "required", "quote": "", "group": ""} for s in ("Python", "SQL")], "soft": []}
+    job = client.post("/employer/jobs", headers=users.h(employer), json=body).json()
+    req = _gap(client, users, student, job["job_ref"])
+    assert all(v is None for v in req.values())                     # nothing chosen: no pills, the text isn't read
+    assert client.post("/employer/jobs", headers=users.h(employer),
+                       json={**body, "min_qualification": "x" * 41}).status_code == 400
+    assert client.post("/employer/jobs", headers=users.h(employer),
+                       json={**body, "languages": ["12345"]}).status_code == 400
+    # "Other" (her rule): a qualification and a language in the employer's own words
+    other = client.post("/employer/jobs", headers=users.h(employer),
+                        json={**body, "min_qualification": "SPM with credit in English", "languages": ["hokkien", "english"]})
+    assert other.status_code == 200, other.text
+    req = _gap(client, users, student, other.json()["job_ref"])
+    assert req["qualification"] == {"level": "other", "name": "SPM with credit in English", "quote": None}
+    assert req["languages"]["languages"] == ["English", "hokkien"]
+    edit = {"description": body["description"], "salary": "", "skills": body["skills"], "soft": [],
+            "min_qualification": "advanced_diploma", "study_field": "  Computer Science,  IT or related ",
+            "languages": ["Mandarin", "English", "Mandarin"]}
+    r = client.put(f"/employer/jobs/{job['id']}", headers=users.h(employer), json=edit)
+    assert r.status_code == 200, r.text
+    saved = client.get(f"/employer/jobs/{job['id']}/edit", headers=users.h(employer)).json()
+    assert (saved["min_qualification"], saved["study_field"], saved["languages"]) == (
+        "advanced_diploma", "Computer Science, IT or related", ["English", "Mandarin"])
+    req = _gap(client, users, student, job["job_ref"])
+    assert req["qualification"] == {"level": "advanced_diploma", "name": "Advanced Diploma", "quote": None}
+    assert req["field"]["field"] == "Computer Science, IT or related"
+    assert req["languages"]["languages"] == ["English", "Mandarin"]
+    assert req["salary"] is None
 
 
 def test_no_requirements_on_past_postings(client, users, db):

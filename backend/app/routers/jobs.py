@@ -31,7 +31,8 @@ def check_jobs_schema():
     columns = {c["name"] for c in inspect(engine).get_columns("jobs")}
     for column, script in (("gone_at", "migrate_add_job_gone_at.py"), ("closed_at", "migrate_employer_jobs.py"),
                            ("decide_by", "migrate_transparency.py"),
-                           ("decide_by_original", "migrate_record_keeping.py")):
+                           ("decide_by_original", "migrate_record_keeping.py"),
+                           ("min_qualification", "migrate_job_requirements.py")):
         if column not in columns:
             raise RuntimeError(f"Database not updated: run  python migrations/{script}  "
                                "from the backend folder, then start the backend again.")

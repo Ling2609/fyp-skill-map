@@ -17,6 +17,7 @@ per applicant (Applied / Shortlisted / Accepted / Rejected), and one applicant's
 with the evidence for each required skill, projects, strongest modules (grades only if the student allows it),
 certificates and awards. An employer sees only students who applied to one of their own posts.
 """
+import re
 import uuid
 from datetime import datetime, timezone
 
@@ -221,7 +222,38 @@ class SoftIn(BaseModel):
     quote: str = Field(default="", max_length=600)
 
 
-class JobIn(AdIn):
+class RequirementsIn(BaseModel):
+    """19 Oct (option F): optional, chosen by the employer; students see them as pills on Job Detail. "Other" is
+    always possible: a qualification or languages in the employer's own words (her rule, 19 Oct)."""
+    min_qualification: str = Field(default="", max_length=80)    # a POST_LEVELS key, own words, or "" = not required
+    study_field: str = Field(default="", max_length=200)
+    languages: list[str] = Field(default=[], max_length=12)
+
+
+MAX_TYPED = 40          # a language or qualification typed under "Other"
+
+
+def _set_requirements(job: Job, data: RequirementsIn):
+    from app.services.ad_requirements import LANGUAGE_NAMES
+    qual = " ".join(data.min_qualification.split())
+    if len(qual) > MAX_TYPED:
+        raise HTTPException(status_code=400, detail=f"Keep the qualification to {MAX_TYPED} characters.")
+    langs, seen = [], set()
+    for x in data.languages:
+        name = " ".join(x.split())
+        if not name or name.lower() in seen:
+            continue
+        if len(name) > MAX_TYPED or not re.fullmatch(r"[^\W\d_][\w '()-]*", name):
+            raise HTTPException(status_code=400, detail=f'"{name[:20]}" doesn\'t look like a language.')
+        seen.add(name.lower())
+        langs.append(next((n for n in LANGUAGE_NAMES if n.lower() == name.lower()), name))   # list spelling
+    job.min_qualification = qual or None
+    job.study_field = " ".join(data.study_field.split()) or None
+    # list languages first (in list order), then the ones typed under "Other"
+    job.languages = ([n for n in LANGUAGE_NAMES if n in langs] + [n for n in langs if n not in LANGUAGE_NAMES]) or None
+
+
+class JobIn(AdIn, RequirementsIn):
     location: str = Field(max_length=120)
     salary: str = Field(default="", max_length=60)
     category: str = Field(max_length=80)
@@ -284,6 +316,7 @@ def publish(data: JobIn, employer: User = Depends(require_employer), db: Session
               subcategory=data.category.strip(), salary=data.salary.strip() or None, description=data.description,
               source="employer", listing_date=now, country="MY", posted_by_user_id=employer.id,
               decide_by=decide_by_from(data.decide_days, now))
+    _set_requirements(job, data)
     db.add(job)
     db.flush()
     rows = _skill_rows(job, data, skills, seen)
@@ -308,13 +341,15 @@ def job_for_edit(job_id: int, employer: User = Depends(require_employer), db: Se
     hard = [r for r in rows if r.skill_type == "hard"]
     return {**_row(job, hard, _statuses([job.id], db).get(job.id, [])),
             "description": job.description or "",
+            "min_qualification": job.min_qualification or "", "study_field": job.study_field or "",
+            "languages": job.languages or [],
             "skills": [{"name": r.skill_name, "level": r.level if r.level in LEVELS else "required",
                         "quote": r.evidence_quote or "", "group": r.alternative_group or ""} for r in hard],
             "soft": [{"name": r.skill_name, "level": r.level or "unspecified", "quote": r.evidence_quote or ""}
                      for r in rows if r.skill_type == "soft"]}
 
 
-class EditIn(BaseModel):
+class EditIn(RequirementsIn):
     description: str = Field(max_length=MAX_DESCRIPTION)
     salary: str = Field(default="", max_length=60)
     skills: list[SkillIn]
@@ -341,6 +376,7 @@ def save_edit(job_id: int, data: EditIn, employer: User = Depends(require_employ
     skills, seen = _checked_skills(data)
     job.description = data.description
     job.salary = data.salary.strip() or None
+    _set_requirements(job, data)
     job.formatted_description = None          # the students' bullet-point version is made again from the new text
     db.query(JobSkill).filter(JobSkill.job_id == job.id).delete()
     rows = _skill_rows(job, data, skills, seen)

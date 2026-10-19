@@ -154,3 +154,23 @@ def read_ad(text: str, salary_field: str | None = None) -> dict:
     has_salary = bool(salary_field and str(salary_field).strip().lower() not in ("", "nan", "none"))
     return {"qualification": qualification(text), "field": field(text), "languages": languages(text),
             "citizenship": citizenship(text), "salary": None if has_salary else salary_in_ad(text)}
+
+
+# ── SkillMap posts: what the employer chose in Post a Job (19 Oct, option F; references.md "Employer posts") ────────
+# Malaysian Qualifications Framework names (level 3 to 8). Not read from text, so not part of E6.
+POST_LEVELS = {"certificate": "Certificate", "diploma": "Diploma", "advanced_diploma": "Advanced Diploma",
+               "bachelor": "Bachelor's degree", "master": "Master's degree", "phd": "PhD"}
+LANGUAGE_NAMES = list(LANGUAGES)
+
+
+def from_post(min_qualification: str | None, study_field: str | None, languages: list | None) -> dict:
+    """The same shape as shown(), from the employer's own fields (no quote: the employer stated it). A qualification
+    typed under "Other" is shown in the employer's words (level "other")."""
+    q = (min_qualification or "").strip()
+    qual = ({"level": q, "name": POST_LEVELS[q], "quote": None} if q in POST_LEVELS
+            else {"level": "other", "name": q, "quote": None} if q else None)
+    langs = [x for x in (languages or []) if isinstance(x, str) and x.strip()]
+    return {"qualification": qual,
+            "field": {"field": study_field.strip(), "quote": None} if study_field and study_field.strip() else None,
+            "languages": {"languages": langs, "quote": None} if langs else None,
+            "salary": None}         # a SkillMap post has its own salary field

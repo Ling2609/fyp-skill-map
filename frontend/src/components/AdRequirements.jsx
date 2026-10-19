@@ -10,7 +10,7 @@ const pillCls = 'text-xs text-slate-700 bg-slate-50 border border-gray-200 px-2.
 export function AdRequirementPills({ req }) {
   if (!req) return null
   const pills = []
-  if (req.qualification) pills.push({ key: 'q', text: req.qualification.level === 'phd' ? 'PhD' : `${req.qualification.name} or above`, quote: req.qualification.quote })
+  if (req.qualification) pills.push({ key: 'q', text: req.qualification.level === 'phd' ? 'PhD' : req.qualification.level === 'other' ? req.qualification.name : `${req.qualification.name} or above`, quote: req.qualification.quote })
   if (req.field) {
     const f = req.field.field
     pills.push({ key: 'f', text: f.length > FIELD_MAX ? `${f.slice(0, FIELD_MAX).replace(/[\s,]+\S*$/, '')}…` : f, quote: req.field.quote })

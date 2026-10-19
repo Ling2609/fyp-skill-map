@@ -52,6 +52,79 @@ function ChipBox({ box, skills, onRemove, onAdd }) {
 // "Editing a published job"). Title, location and category are locked once published; the rest works as here.
 const lockedCls = 'bg-slate-50 text-slate-500 cursor-not-allowed'
 
+// 19 Oct (E6, option F; references.md "Employer posts"): minimum qualification (Malaysian Qualifications Framework
+// names), field of study and languages. Optional; students see them as pills under the job title.
+const QUALIFICATIONS = [['', 'Not required'], ['certificate', 'Certificate'], ['diploma', 'Diploma'],
+  ['advanced_diploma', 'Advanced Diploma'], ['bachelor', "Bachelor's degree"], ['master', "Master's degree"], ['phd', 'PhD']]
+const LANGUAGES = ['English', 'Malay', 'Mandarin', 'Cantonese', 'Tamil', 'Japanese', 'Korean', 'Thai', 'Vietnamese', 'Indonesian']
+
+// "Other" is always there (her rule, 19 Oct): a qualification or languages in the employer's own words
+const KNOWN_QUALS = QUALIFICATIONS.map(([v]) => v)
+
+function OtherRequirements({ reqs, setReqs }) {
+  const known = KNOWN_QUALS.includes(reqs.min_qualification)
+  const [qualOther, setQualOther] = useState(!known)
+  const typedLangs = reqs.languages.filter(l => !LANGUAGES.includes(l))
+  const [langOther, setLangOther] = useState(typedLangs.length > 0)
+  const [langText, setLangText] = useState(typedLangs.join(', '))
+  const listed = reqs.languages.filter(l => LANGUAGES.includes(l))
+  const setLangs = (picked, text) => setReqs(r => ({ ...r, languages: [...picked,
+    ...text.split(',').map(x => x.trim()).filter(Boolean)] }))
+  const toggle = (lang) => setLangs(listed.includes(lang) ? listed.filter(x => x !== lang) : [...listed, lang], langOther ? langText : '')
+  const pill = (on) => `text-sm font-medium rounded-full px-3.5 py-1.5 border ${on
+    ? 'bg-blue-600 border-blue-600 text-white' : 'bg-white border-slate-300 text-slate-700 hover:border-blue-300'}`
+  return (
+    <div className="pt-5 border-t border-slate-200 flex flex-col gap-4">
+      <div>
+        <h2 className="text-[15px] font-semibold text-slate-900">Other requirements <span className="font-normal text-sm text-slate-400">(optional)</span></h2>
+        <p className="text-xs text-slate-500 mt-1">Students see these under the job title. They don't change the match.</p>
+      </div>
+      <div className="flex flex-wrap gap-3">
+        <div className="flex-1 basis-48 flex flex-col gap-2">
+          <div>
+            <label htmlFor="pj-qual" className={label}>Minimum qualification</label>
+            <select id="pj-qual" value={qualOther ? 'other' : reqs.min_qualification} className={field}
+              onChange={e => {
+                const v = e.target.value
+                setQualOther(v === 'other')
+                setReqs(r => ({ ...r, min_qualification: v === 'other' ? '' : v }))
+              }}>
+              {QUALIFICATIONS.map(([v, text]) => <option key={v} value={v}>{text}</option>)}
+              <option value="other">Other…</option>
+            </select>
+          </div>
+          {qualOther && (
+            <input aria-label="Other qualification" value={reqs.min_qualification} maxLength={40}
+              placeholder="e.g. SPM, professional certificate" className={field}
+              onChange={e => setReqs(r => ({ ...r, min_qualification: e.target.value }))} />
+          )}
+        </div>
+        <div className="flex-[2] basis-64">
+          <label htmlFor="pj-field" className={label}>Field of study</label>
+          <input id="pj-field" value={reqs.study_field} maxLength={200} placeholder="e.g. Computer Science, IT or related"
+            onChange={e => setReqs(r => ({ ...r, study_field: e.target.value }))} className={field} />
+        </div>
+      </div>
+      <div className="flex flex-col gap-2">
+        <p className={label} id="pj-langs">Languages</p>
+        <div role="group" aria-labelledby="pj-langs" className="flex flex-wrap gap-2">
+          {LANGUAGES.map(lang => (
+            <button key={lang} type="button" aria-pressed={listed.includes(lang)} onClick={() => toggle(lang)}
+              className={pill(listed.includes(lang))}>{lang}</button>
+          ))}
+          <button type="button" aria-pressed={langOther} className={pill(langOther)}
+            onClick={() => { setLangOther(!langOther); setLangs(listed, langOther ? '' : langText) }}>Other…</button>
+        </div>
+        {langOther && (
+          <input aria-label="Other languages" value={langText} maxLength={120}
+            placeholder="e.g. Hokkien, French (separate with commas)" className={field}
+            onChange={e => { setLangText(e.target.value); setLangs(listed, e.target.value) }} />
+        )}
+      </div>
+    </div>
+  )
+}
+
 export default function PostJob() {
   const navigate = useNavigate()
   const { jobId } = useParams()
@@ -67,6 +140,9 @@ export default function PostJob() {
   const [publishing, setPublishing] = useState(false)
   // 14 Oct (transparency flow): the date the employer promises a decision by; students see it before applying
   const [decideDays, setDecideDays] = useState(30)
+  // 19 Oct (E6, option F): what the job asks for besides skills, chosen here (not read from the ad); students see them
+  // as pills on Job Detail. All optional.
+  const [reqs, setReqs] = useState({ min_qualification: '', study_field: '', languages: [] })
   const [error, setError] = useState('')
   const skillsRef = useRef(null)
   const [justRead, setJustRead] = useState(false)   // first read on a new post: bring the skills into view
@@ -81,6 +157,7 @@ export default function PostJob() {
       setEditJob(j)
       setAd({ title: j.title, location: j.location || '', salary: j.salary || '', category: j.category || '', description: j.description })
       setSkills(j.skills); setSoft(j.soft)
+      setReqs({ min_qualification: j.min_qualification || '', study_field: j.study_field || '', languages: j.languages || [] })
       setReadFor(`${j.title.trim()}\n${j.description.trim()}`)     // the saved skills belong to the saved ad
     }).catch(err => setError(errText(err, "Couldn't load this job.")))
   }, [editing, jobId])
@@ -140,8 +217,8 @@ export default function PostJob() {
   const publish = () => {
     setPublishing(true); setError('')
     const req = editing
-      ? api.put(`/employer/jobs/${jobId}`, { description: ad.description, salary: ad.salary, skills, soft, record_id: recordId })
-      : api.post('/employer/jobs', { ...ad, skills, soft, decide_days: decideDays, record_id: recordId })
+      ? api.put(`/employer/jobs/${jobId}`, { description: ad.description, salary: ad.salary, skills, soft, record_id: recordId, ...reqs })
+      : api.post('/employer/jobs', { ...ad, skills, soft, decide_days: decideDays, record_id: recordId, ...reqs })
     req.then(res => navigate('/employer/jobs', { state: editing ? { saved: ad.title.trim() } : { posted: ad.title.trim(), fit: res.data.graduates_fit } }))
       .catch(err => { setError(errText(err, editing ? "Couldn't save the changes. Try again." : "Couldn't publish the job. Try again.")); setPublishing(false) })
   }
@@ -256,6 +333,7 @@ export default function PostJob() {
                 </p>
               )}
               {BOXES.map(b => <ChipBox key={b.level} box={b} skills={byLevel[b.level]} onRemove={remove} onAdd={add(b.level)} />)}
+              <OtherRequirements key={editJob ? `edit-${editJob.id}` : 'new'} reqs={reqs} setReqs={setReqs} />
               {error && <p role="alert" className="text-sm text-rose-600">{error}</p>}
               <div className="pt-4 border-t border-slate-200 flex flex-wrap items-center justify-between gap-3">
                 <Link to="/employer/jobs" className="text-sm text-slate-600 hover:underline">Cancel</Link>
