@@ -4,7 +4,6 @@ import api from '../../api'
 import PageHeader from '../../components/PageHeader'
 import { ADMIN_COUNTS_CHANGED } from '../../components/Sidebar'
 import { errText } from './profileUtils'
-import ApplicationSteps from '../../components/ApplicationSteps'
 import { Bar, LoadingLabel } from '../../components/Skeleton'
 import InfoTip from '../../components/InfoTip'
 import EmployerRecord from '../../components/EmployerRecord'
@@ -32,10 +31,10 @@ function Facts({ r }) {
   const st = r.job_stats, me = r.stand, rec = r.employer_record
   return (
     <div className="mt-4 space-y-2.5">
-      <div className="grid grid-cols-3 gap-2">
-        {/* 20 Oct (her review): "1 applied" read like her own count; now says it's everyone who applied */}
-        {[[st?.applied, st?.applied === 1 ? 'person applied' : 'people applied'], [st?.shortlisted, 'shortlisted so far'],
-          [r.decide_by ? fmtDay(r.decide_by) : '—', 'reply promised by']].map(([v, k]) => (
+      <div className="grid grid-cols-2 gap-2">
+        {/* 20 Oct (her review): "1 applied" read like her own count; now says it's everyone who applied. The reply
+            date is in the row itself ("Reply by …"), so it is no longer a third box */}
+        {[[st?.applied, st?.applied === 1 ? 'person applied' : 'people applied'], [st?.shortlisted, 'shortlisted so far']].map(([v, k]) => (
           <div key={k} className="rounded-lg bg-slate-50 px-3 py-2">
             <p className="text-lg font-semibold text-slate-900 tabular-nums leading-tight">{v ?? '—'}</p>
             <p className="text-xs text-slate-500">{k}</p>
@@ -130,6 +129,98 @@ function pill(r) {
   return [r.progress.stage, r.progress.stage === 'viewed' ? 'Viewed' : 'Applied']
 }
 
+// 20 Oct (her review of 10 + 10 applications: four screens long; research: references.md "My Applications with many
+// applications"): progressive disclosure, one level. Each SkillMap card shows by default what is needed every visit
+// (stage, reply date, status); "Show details" opens the full steps and numbers as before. A card that needs her
+// attention opens by itself. Each section shows its newest 5, then "Show all N (x more)", so "On other sites" is
+// reached without scrolling past every SkillMap card.
+const FIRST = 3
+// 20 Oct (her review of 10 + 10: still long): each section shows 3, and "Show all" opens the rest in a box that
+// scrolls on its own (her rule: cards scroll, not the page), so the page stays about one screen whatever the count
+const SCROLL = 'max-h-[60vh] overflow-y-auto'
+// 20 Oct (her review: the gaps between cards looked odd): each section is one card with a line between applications
+const LIST = 'bg-white border border-slate-200 rounded-2xl divide-y divide-slate-200'
+// 20 Oct (her review: no large blank space below): with only a few SkillMap applications every card opens, as before
+const FEW = 3
+// 20 Oct (her review: big empty middle): one row = job | progress | reply date or site | status, as columns on laptops
+const ROW = 'grid gap-x-6 gap-y-2 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,2.4fr)_7rem_12rem] lg:items-center'
+const RECENT_DAYS = 14
+const daysSinceIso = (iso) => iso ? (Date.now() - new Date(iso).getTime()) / 86400000 : Infinity
+const needsAttention = (r) => !!r.progress.nudge || (['accepted', 'rejected'].includes(r.status) && daysSinceIso(r.status_changed_at) <= RECENT_DAYS)
+
+function MiniSteps({ steps }) {
+  // 20 Oct (her review: big empty middle in each row): every step that happened shows its date, so this one line
+  // replaces the large step circles; it fills the middle column of the row
+  const last = steps.findLastIndex(x => x.at)
+  return (
+    <ol className="flex flex-wrap items-center gap-x-2 gap-y-1" aria-label="Progress">
+      {steps.map((s, i) => (
+        <li key={s.key} className="flex items-center gap-2">
+          {i > 0 && <span aria-hidden="true" className={`w-4 h-px ${s.at ? 'bg-blue-500' : 'bg-slate-300'}`} />}
+          <span className={`flex items-center gap-1 text-xs whitespace-nowrap ${i === last ? 'font-semibold text-slate-900' : s.at ? 'text-slate-600' : 'text-slate-400'}`}>
+            <span aria-hidden="true" className={`w-2 h-2 rounded-full ${s.at ? 'bg-blue-600' : 'bg-slate-300'}`} />
+            {s.label}{s.date ?? (s.at && s.at !== true ? fmtDay(s.at) : '') ? <span className="font-normal text-slate-500"> {s.date ?? fmtDay(s.at)}</span> : null}
+            <span className="sr-only">{s.at ? ' done' : ' not yet'}</span>
+          </span>
+        </li>
+      ))}
+    </ol>
+  )
+}
+
+// 20 Oct (her review): "Show all" sits on the section title's line, so it is seen before the list, not after it
+function SectionHead({ id, title, note, more }) {
+  return (
+    <div className="flex flex-wrap items-end justify-between gap-x-4 gap-y-1">
+      <div>
+        <h2 id={id} className="text-base font-semibold text-slate-900">{title}</h2>
+        <p className="text-sm text-slate-500">{note}</p>
+      </div>
+      {more}
+    </div>
+  )
+}
+
+function MoreButton({ total, open, onClick }) {
+  if (total <= FIRST) return null
+  return (
+    <button type="button" onClick={onClick} className="shrink-0 text-sm font-medium text-blue-700 hover:underline">
+      {open ? 'Show fewer' : `Show all ${total} (${total - FIRST} more)`}
+    </button>
+  )
+}
+
+function AppCard({ r, openAll }) {
+  const [open, setOpen] = useState(openAll || needsAttention(r))
+  const [key, label] = pill(r)
+  const decided = ['accepted', 'rejected'].includes(r.status)
+  const when = decided ? '' : r.decide_by && !r.job_closed ? `Reply by ${fmtDay(r.decide_by)}` : ''
+  const details = (!decided && !r.job_closed) || r.progress.nudge || decided || r.employer_usually_days
+  return (
+    <article className="px-5 py-3.5">
+      <div className={ROW}>
+        <div className="min-w-0">
+          <Link to={`/jobs/${encodeURIComponent(r.job_ref)}`} state={{ from: 'My Applications' }} className={TITLE}>{r.title}</Link>
+          <p className="text-xs text-slate-500 mt-0.5">{r.company}{r.match && ` · your match ${r.match}`}</p>
+        </div>
+        <MiniSteps steps={r.progress.steps} />
+        <p className="text-xs font-medium text-slate-700">{when}</p>
+        <div className="flex items-center gap-3 lg:justify-end">
+          <span className={`shrink-0 text-xs font-semibold rounded-full px-2.5 py-0.5 ${PILL[key]}`}>{label}</span>
+          {details && <button type="button" onClick={() => setOpen(o => !o)} aria-expanded={open}
+            className="text-xs font-medium text-blue-700 hover:underline whitespace-nowrap">{open ? 'Hide ▴' : 'Details ▾'}</button>}
+        </div>
+      </div>
+      {open && (
+        <div className="lg:pr-[13rem]">
+          {!decided && !r.job_closed && <Facts r={r} />}
+          <Note r={r} />
+        </div>
+      )}
+    </article>
+  )
+}
+
 // While it loads: two application cards in grey bars, with the four progress steps (13 Oct, same as other pages)
 function AppsSkeleton() {
   return (
@@ -151,16 +242,26 @@ function AppsSkeleton() {
 // 20 Oct (her review): titles in blue, since they open the job again (Job Description and Skill Gap Analysis)
 const TITLE = 'text-[15px] font-semibold text-blue-700 hover:underline underline-offset-2'
 const OUTSIDE = [['applied', 'Applied'], ['interviewing', 'Interviewing'], ['offer', 'Offer'], ['not_selected', 'Not selected'], ['withdrew', 'Withdrew']]
+// 20 Oct (her review): the same columns as the SkillMap rows: job | progress | site | status
+const OUT_STEPS = ['applied', 'interviewing', 'offer']
+function outsideSteps(o) {
+  const at = OUT_STEPS.indexOf(o.status)
+  if (at === -1) return [{ key: 'applied', label: 'Applied', at: o.created_at },
+    { key: o.status, label: o.status_label, at: o.status_changed_at || true }]
+  return OUT_STEPS.map((k, i) => ({ key: k, label: OUTSIDE.find(x => x[0] === k)[1],
+    at: i === 0 ? o.created_at : i < at ? true : i === at ? (o.status_changed_at || true) : null }))
+}
 function OutsideCard({ o, onStatus, onRemove }) {
   return (
-    <article className="bg-white border border-slate-200 rounded-2xl px-5 py-4">
-      <div className="flex flex-wrap items-start justify-between gap-3">
+    <article className="px-5 py-3.5">
+      <div className={ROW}>
         <div className="min-w-0">
           <Link to={`/jobs/${encodeURIComponent(o.job_ref)}`} state={{ from: 'My Applications' }} className={TITLE}>{o.title}</Link>
-          <p className="text-xs text-slate-500 mt-0.5">{o.company} · applied on {o.publisher || 'another site'} · {fmtDay(o.created_at)}
-            {o.listed === false && <span className="text-slate-400"> · ad no longer listed</span>}</p>
+          <p className="text-xs text-slate-500 mt-0.5">{o.company}{o.listed === false && <span className="text-slate-400"> · ad no longer listed</span>}</p>
         </div>
-        <div className="flex items-center gap-3">
+        <MiniSteps steps={outsideSteps(o)} />
+        <p className="text-xs text-slate-600">on {o.publisher || 'another site'}</p>
+        <div className="flex items-center gap-3 lg:justify-end">
           <label className="sr-only" htmlFor={`os-${o.id}`}>Status of {o.title}</label>
           <select id={`os-${o.id}`} value={o.status} onChange={e => onStatus(o, e.target.value)}
             className="text-sm font-medium text-slate-800 border border-slate-300 rounded-lg px-2 py-1 bg-white">
@@ -179,6 +280,8 @@ export default function MyApplications() {
   const [tab, setTab] = useState('all')
   const [error, setError] = useState('')
   const [outside, setOutside] = useState([])
+  const [allApps, setAllApps] = useState(false)          // "Show all N (x more)", per section
+  const [allOutside, setAllOutside] = useState(false)
   const toast = useToast()
   useEffect(() => {
     api.get('/applications/mine').then(res => setRows(res.data)).catch(err => setError(errText(err, "Couldn't load your applications.")))
@@ -253,42 +356,32 @@ export default function MyApplications() {
           <>
             <div role="tablist" className="flex flex-wrap gap-2">
               {TABS.map(([t, text]) => (
-                <button key={t} role="tab" aria-selected={tab === t} onClick={() => setTab(t)}
+                <button key={t} role="tab" aria-selected={tab === t} onClick={() => { setTab(t); setAllApps(false); setAllOutside(false) }}
                   className={`text-sm font-medium px-3.5 py-1.5 rounded-full border ${tab === t
                     ? 'bg-blue-600 border-blue-600 text-white' : 'bg-white border-slate-200 text-slate-600 hover:border-blue-300'}`}>
                   {text} {count(t)}
                 </button>
               ))}
             </div>
-            <div className="flex flex-col gap-4">
-              {shown.map(r => {
-                const [key, label] = pill(r)
-                return (
-                  <article key={r.id} className="bg-white border border-slate-200 rounded-2xl px-5 py-4">
-                    <div className="flex items-start justify-between gap-3">
-                      <div className="min-w-0">
-                        <Link to={`/jobs/${encodeURIComponent(r.job_ref)}`} state={{ from: 'My Applications' }} className={TITLE}>{r.title}</Link>
-                        <p className="text-xs text-slate-500 mt-0.5">{r.company}{r.match && ` · your match ${r.match}`}</p>
-                      </div>
-                      <span className={`shrink-0 text-xs font-semibold rounded-full px-2.5 py-0.5 ${PILL[key]}`}>{label}</span>
-                    </div>
-                    <ApplicationSteps steps={r.progress.steps} decided={['accepted', 'rejected'].includes(r.status)} />
-                    {!['accepted', 'rejected'].includes(r.status) && !r.job_closed && <Facts r={r} />}
-                    <Note r={r} />
-                  </article>
-                )
-              })}
-              {shown.length === 0 && outsideShown.length === 0 && <p className="text-sm text-slate-400">None here.</p>}
-            </div>
+            {shown.length > 0 && (
+              <section aria-labelledby="skillmap-h" className="flex flex-col gap-3">
+                <SectionHead id="skillmap-h" title="On SkillMap" note="The employer updates these as they act."
+                  more={<MoreButton total={shown.length} open={allApps} onClick={() => setAllApps(v => !v)} />} />
+                <div className={`${LIST} ${allApps ? SCROLL : ''}`}>
+                  {(allApps ? shown : shown.slice(0, FIRST)).map(r => <AppCard key={r.id} r={r} openAll={shown.length <= FEW} />)}
+                </div>
+              </section>
+            )}
+            {shown.length === 0 && outsideShown.length === 0 && <p className="text-sm text-slate-400">None here.</p>}
           </>
         )}
         {outsideShown.length > 0 && (
-          <section aria-labelledby="outside-h" className="flex flex-col gap-4 mt-2">
-            <div>
-              <h2 id="outside-h" className="text-base font-semibold text-slate-900">On other sites</h2>
-              <p className="text-sm text-slate-500">Jobs you applied for through “Apply on …”, newest first. Their employers won't see these, so you update the status.</p>
+          <section aria-labelledby="outside-h" className="flex flex-col gap-3 mt-2">
+            <SectionHead id="outside-h" title="On other sites" note="Jobs you applied for through “Apply on …”. Their employers won't see these, so you update the status."
+              more={<MoreButton total={outsideShown.length} open={allOutside} onClick={() => setAllOutside(v => !v)} />} />
+            <div className={`${LIST} ${allOutside ? SCROLL : ''}`}>
+              {(allOutside ? outsideShown : outsideShown.slice(0, FIRST)).map(o => <OutsideCard key={o.id} o={o} onStatus={setStatus} onRemove={remove} />)}
             </div>
-            {outsideShown.map(o => <OutsideCard key={o.id} o={o} onStatus={setStatus} onRemove={remove} />)}
           </section>
         )}
       </div></div>

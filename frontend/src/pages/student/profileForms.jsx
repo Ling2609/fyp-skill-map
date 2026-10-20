@@ -426,6 +426,8 @@ export function StudyFields({ options, value, onChange }) {
 
 // ── Programme and intake, changed from the Modules tab (9 Oct) ─────────────
 
+const GRADE_LETTER = { '4.0': 'A', '3.7': 'A-', '3.3': 'B+', '3.0': 'B', '2.7': 'B-', '2.3': 'C+', '2.0': 'C' }
+
 export function StudyForm({ onDone, onCancel, onDirty }) {
   const [options, setOptions] = useState(null)      // the programmes and intakes to pick from
   const [study, setStudy] = useState(null)          // what is picked: { programme_id, intake_id }
@@ -441,22 +443,53 @@ export function StudyForm({ onDone, onCancel, onDirty }) {
   const changed = !!options && (study.programme_id !== options.programme_id || study.intake_id !== options.intake_id)
   useEffect(() => { onDirty?.(changed) }, [changed, onDirty])
 
-  const save = async (e) => {
-    e.preventDefault()
+  // 20 Oct (her bug report, her pick A): grades of modules that aren't in the new programme/intake are removed, after
+  // she has seen which ones. The first save answers 409 with the list; she confirms here, in the form (her pop-up
+  // guide: a confirm for what can't be undone, with buttons that say what they do).
+  const [leaving, setLeaving] = useState(null)      // { message, modules: [{ code, name, grade }] }
+  const save = async (e, removeGrades = false) => {
+    e?.preventDefault()
     setBusy(true); setError('')
-    try { await api.put('/profile/study', study); onDone(study) }
-    catch (err) { setError(errText(err, "Couldn't save. Please try again.")) }
+    try { await api.put('/profile/study', { ...study, remove_grades: removeGrades }); onDone(study) }
+    catch (err) {
+      if (err.response?.status === 409 && err.response.data?.detail?.modules) setLeaving(err.response.data.detail)
+      else setError(errText(err, "Couldn't save. Please try again."))
+    }
     finally { setBusy(false) }
   }
 
   return (
     <form onSubmit={save} className="space-y-4">
-      <p className="text-xs text-gray-500">Your modules follow your programme and intake. Grades you already entered are kept.</p>
-      {options ? <StudyFields options={options} value={study} onChange={setStudy} />
+      <p className="text-xs text-gray-500">Your modules follow your programme and intake. Grades for modules in both lists are kept.</p>
+      {options ? <StudyFields options={options} value={study} onChange={v => { setStudy(v); setLeaving(null) }} />
         : !error && <><LoadingLabel>Loading programmes…</LoadingLabel><FieldSkeleton n={2} /></>}
       {error && <p className="text-xs text-red-500 bg-red-50 rounded-lg px-3 py-2">{error}</p>}
-      <FormButtons loading={busy} busyText="Saving…" label="Save" onCancel={onCancel}
-        disabled={!options || !studyComplete(options, study) || !changed} />
+      {leaving ? (
+        <div role="alert" className="bg-amber-50 border border-amber-200 rounded-xl p-3.5">
+          <p className="text-sm font-medium text-amber-900">{leaving.message} Their grades will be removed from your profile:</p>
+          {/* 20 Oct (her review: crowded): a small table, module | code | grade, in the wider pop-up */}
+          <table className="mt-2.5 w-full text-sm text-slate-700 bg-white rounded-lg border border-amber-100">
+            <thead><tr className="text-xs text-slate-500 text-left">
+              <th className="font-medium px-3 py-1.5">Module</th><th className="font-medium px-3 py-1.5">Code</th><th className="font-medium px-3 py-1.5 text-right">Grade</th>
+            </tr></thead>
+            <tbody className="divide-y divide-amber-50">
+              {leaving.modules.map(m => (
+                <tr key={m.code}><td className="px-3 py-1.5">{m.name}</td><td className="px-3 py-1.5 text-slate-500 whitespace-nowrap">{m.code}</td>
+                  <td className="px-3 py-1.5 text-right font-medium">{GRADE_LETTER[String(Number(m.grade).toFixed(1))] || m.grade}</td></tr>
+              ))}
+            </tbody>
+          </table>
+          <div className="mt-3 flex flex-wrap justify-end gap-2">
+            <button type="button" onClick={onCancel} autoFocus
+              className="text-sm font-medium text-slate-700 border border-slate-300 bg-white rounded-lg px-3 py-1.5 hover:bg-slate-50">Keep my programme</button>
+            <button type="button" disabled={busy} onClick={() => save(null, true)}
+              className="text-sm font-medium text-white bg-rose-600 hover:bg-rose-700 rounded-lg px-3 py-1.5 disabled:opacity-60">{busy ? 'Saving…' : 'Change and remove grades'}</button>
+          </div>
+        </div>
+      ) : (
+        <FormButtons loading={busy} busyText="Saving…" label="Save" onCancel={onCancel}
+          disabled={!options || !studyComplete(options, study) || !changed} />
+      )}
     </form>
   )
 }

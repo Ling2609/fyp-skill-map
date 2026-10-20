@@ -31,6 +31,8 @@ function VisibilityPill({ on }) {
 
 export default function MyProfile() {
   const { setUser } = useAuth()
+  // 20 Oct (her bug report): bumped after a programme/intake change so the module grid loads the new list
+  const [studyVersion, setStudyVersion] = useState(0)
   const [searchParams, setSearchParams] = useSearchParams()
   const [data, setData] = useState(null)          // GET /profile/showcase: name, links, programme, counts
   const [projects, setProjects] = useState([])
@@ -159,7 +161,7 @@ export default function MyProfile() {
           </p>
         )}
         {tab === 'modules' && (
-          <ModulesTab onUnsavedChange={setGradesUnsaved} onSaved={load} />
+          <ModulesTab key={studyVersion} onUnsavedChange={setGradesUnsaved} onSaved={load} />
         )}
         {tab === 'projects' && (
           <ProjectsTab projects={projects} onRefresh={load} onImport={() => setOpen('github')} githubConnected={githubAccounts > 0}
@@ -175,9 +177,9 @@ export default function MyProfile() {
         </Modal>
       )}
       {open === 'study' && (
-        <Modal title="Change programme" dirty={dirty} onClose={close}>
+        <Modal title="Change programme" dirty={dirty} onClose={close} size="form">
           <StudyForm onDirty={setDirty} onCancel={close}
-            onDone={(study) => { setUser(u => ({ ...u, ...study, needs_study: false })); saved() }} />
+            onDone={(study) => { setUser(u => ({ ...u, ...study, needs_study: false })); setStudyVersion(v => v + 1); saved() }} />
         </Modal>
       )}
       {open === 'github' && (

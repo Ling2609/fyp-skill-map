@@ -28,6 +28,18 @@ def _row(mod: Module, skills: list[str], level: int, kind: str) -> dict:
             "institution": mod.institution, "skills": skills, "skill_count": len(skills)}
 
 
+def module_codes_for(db: Session, programme_id: int | None, intake_id: int | None) -> set[str] | None:
+    """20 Oct: the module codes a student with this programme and intake sees (the same rule as GET /modules/):
+    the intake's own list when it has one, else the programme's. None = no list (no programme)."""
+    if intake_id and db.query(IntakeModule).filter(IntakeModule.intake_id == intake_id).first():
+        return {c for (c,) in db.query(Module.code).join(IntakeModule, IntakeModule.module_id == Module.id)
+                .filter(IntakeModule.intake_id == intake_id)}
+    if programme_id:
+        return {c for (c,) in db.query(Module.code).join(ProgrammeModule, ProgrammeModule.module_id == Module.id)
+                .filter(ProgrammeModule.programme_id == programme_id)}
+    return None
+
+
 @router.get("/")
 def get_modules(db: Session = Depends(get_db), user: User = Depends(get_current_user)):
     """Modules with their extracted skills: the student's programme only, once they have picked one."""

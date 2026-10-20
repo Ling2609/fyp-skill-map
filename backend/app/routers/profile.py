@@ -1089,6 +1089,9 @@ def get_module_grades(
 class StudyIn(BaseModel):
     programme_id: int
     intake_id: int | None = None     # may stay empty only while the programme has no intakes yet
+    # 20 Oct (her bug report, her pick A): grades of modules that aren't in the new programme/intake are removed, but
+    # only once she has seen the list and agreed (the first save without this answers 409 with the list)
+    remove_grades: bool = False
 
 
 def _study_out(user: User, db: Session) -> dict:
@@ -1121,6 +1124,21 @@ def save_study(data: StudyIn, current_user: User = Depends(get_current_user), db
         raise HTTPException(status_code=400, detail="Please pick your intake")
     if intake is not None and intake.programme_id != programme.id:
         raise HTTPException(status_code=400, detail="That intake belongs to another programme")
+    # 20 Oct (her bug report): a saved grade counts towards her skills whatever her programme, so after a change the
+    # old programme's modules kept shaping Job Matches. Grades of modules the new list doesn't have are removed
+    # after she confirms; a module in both lists keeps its grade.
+    from app.models.module import Module
+    from app.routers.modules import module_codes_for
+    keep = module_codes_for(db, programme.id, intake.id if intake else None) or set()
+    leaving = (db.query(UserModule, Module.name).outerjoin(Module, Module.code == UserModule.module_code)
+               .filter(UserModule.user_id == current_user.id, UserModule.module_code.notin_(keep))
+               .order_by(UserModule.module_code).all())
+    if leaving and not data.remove_grades:
+        raise HTTPException(status_code=409, detail={
+            "message": f"{len(leaving)} graded module{' is' if len(leaving) == 1 else 's are'}n't in {programme.name}.",
+            "modules": [{"code": um.module_code, "name": name or um.module_code, "grade": um.grade} for um, name in leaving]})
+    for um, _ in leaving:
+        db.delete(um)
     current_user.programme_id, current_user.intake_id = programme.id, intake.id if intake else None
     db.commit()
     db.refresh(current_user)
