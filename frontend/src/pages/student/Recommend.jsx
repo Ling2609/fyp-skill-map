@@ -88,6 +88,15 @@ const searchBody = (role, category) => ({
   category: category === 'all' ? '' : category,   // chip and typed search both apply
 })
 
+// 20 Oct (her pick P1+P2): the tag on a job already applied for. Green while it's going; grey once it has ended.
+const ENDED = ['rejected', 'not_selected', 'withdrew']
+function AppliedPill({ m }) {
+  const ended = ENDED.includes(m.status)
+  const text = `✓ Applied${m.site ? ` on ${m.site}` : ''}${m.status !== 'applied' ? ` · ${m.status_label}` : ''}`
+  return <span className={`shrink-0 text-[11px] font-medium border rounded-full px-2 py-0.5 ${ended
+    ? 'text-slate-600 bg-slate-50 border-slate-200' : 'text-green-800 bg-green-50 border-green-200'}`}>{text}</span>
+}
+
 export default function Recommend() {
   const navigate = useNavigate()
   const { user } = useAuth()
@@ -489,9 +498,12 @@ export default function Recommend() {
                               {/* 11 Oct: a post by one of the university's partner employers, applied for on SkillMap */}
                               {/* 19 Oct (her pick 5, option B; Indeed labels its own-apply jobs by the action, references.md "Job source on
                                   cards"): every card says how to apply, before clicking */}
-                              {job.source === 'employer' && <span className="shrink-0 text-[11px] font-medium text-blue-700 bg-blue-50 border border-blue-200 rounded-full px-2 py-0.5">Apply on SkillMap</span>}
-                              {job.source === 'live' && <span className="shrink-0 text-[11px] font-medium text-slate-600 bg-slate-50 border border-slate-200 rounded-full px-2 py-0.5">Apply on {job.publisher || 'employer site'} ↗</span>}
-                              {mine[job.job_id]?.applied && <span className="shrink-0 text-[11px] font-medium text-slate-700 bg-slate-100 border border-slate-200 rounded-full px-2 py-0.5">You applied · {mine[job.job_id].status_label}</span>}
+                              {/* 20 Oct (her pick P1+P2): once applied, one pill replaces "Apply on…": "✓ Applied", the site for
+                                  a job on another site, and the stage once it moves past Applied */}
+                              {mine[job.job_id]?.applied ? <AppliedPill m={mine[job.job_id]} />
+                                : job.source === 'employer' ? <span className="shrink-0 text-[11px] font-medium text-blue-700 bg-blue-50 border border-blue-200 rounded-full px-2 py-0.5">Apply on SkillMap</span>
+                                : job.source === 'live' ? <span className="shrink-0 text-[11px] font-medium text-slate-600 bg-slate-50 border border-slate-200 rounded-full px-2 py-0.5">Apply on {job.publisher || 'employer site'} ↗</span>
+                                : null}
                               {mine[job.job_id]?.invited && <span className="shrink-0 text-[11px] font-medium text-violet-700 bg-violet-50 border border-violet-200 rounded-full px-2 py-0.5">Invited to apply</span>}
                             </div>
                             <p className="text-xs text-slate-400 mt-0.5 truncate">

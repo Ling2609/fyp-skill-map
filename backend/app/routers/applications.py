@@ -177,6 +177,11 @@ def invitations(student: User = Depends(require_student), db: Session = Depends(
     """Employers who invited this student to apply (12 Oct), still open, not applied for, not dismissed."""
     from app.routers.skillgap import skill_gap_for
     out = []
+    # 20 Oct (her pick P1+P2): jobs she recorded applying for on another site get the same tag, with the site
+    for o, job in (db.query(OutsideApplication, Job).join(Job, Job.id == OutsideApplication.job_id)
+                   .filter(OutsideApplication.student_id == student.id)):
+        out[job.job_id] = {"applied": True, "status": o.status, "status_label": OUTSIDE_STATUS.get(o.status, o.status),
+                           "site": job.publisher or "another site"}
     for i, job in _open_invitations(student, db):
         try:
             sm = skill_gap_for(student, job.job_id, db)["summary"]
@@ -210,7 +215,7 @@ def refs(student: User = Depends(require_student), db: Session = Depends(get_db)
     the open invitations, by job reference."""
     out = {}
     for a, job in db.query(Application, Job).join(Job, Job.id == Application.job_id).filter(Application.student_id == student.id):
-        out[job.job_id] = {"applied": True, "status_label": STUDENT_STATUS[a.status]}
+        out[job.job_id] = {"applied": True, "status": a.status, "status_label": STUDENT_STATUS[a.status]}
     for i, job in _open_invitations(student, db):
         out[job.job_id] = {"applied": False, "invited": True, "company": job.company}
     return out
@@ -233,7 +238,9 @@ def _outside(o: OutsideApplication, job: Job) -> dict:
     return {"id": o.id, "job_ref": job.job_id, "title": job.job_title, "company": job.company,
             "location": job.location, "publisher": job.publisher, "source_url": job.source_url,
             "status": o.status, "status_label": OUTSIDE_STATUS.get(o.status, o.status),
-            "created_at": o.created_at, "status_changed_at": o.status_changed_at}
+            "created_at": o.created_at, "status_changed_at": o.status_changed_at,
+            # 20 Oct: False once the latest job search no longer returns the ad (hidden, not deleted)
+            "listed": job.gone_at is None}
 
 
 class OutsideIn(BaseModel):

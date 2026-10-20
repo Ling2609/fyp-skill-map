@@ -33,7 +33,9 @@ function Facts({ r }) {
   return (
     <div className="mt-4 space-y-2.5">
       <div className="grid grid-cols-3 gap-2">
-        {[[st?.applied, 'applied'], [st?.shortlisted, 'shortlisted'], [r.decide_by ? fmtDay(r.decide_by) : '—', 'promised reply by']].map(([v, k]) => (
+        {/* 20 Oct (her review): "1 applied" read like her own count; now says it's everyone who applied */}
+        {[[st?.applied, st?.applied === 1 ? 'person applied' : 'people applied'], [st?.shortlisted, 'shortlisted so far'],
+          [r.decide_by ? fmtDay(r.decide_by) : '—', 'reply promised by']].map(([v, k]) => (
           <div key={k} className="rounded-lg bg-slate-50 px-3 py-2">
             <p className="text-lg font-semibold text-slate-900 tabular-nums leading-tight">{v ?? '—'}</p>
             <p className="text-xs text-slate-500">{k}</p>
@@ -84,8 +86,14 @@ function Outcome({ r }) {
   )
 }
 
-const TABS = [['all', 'All'], ['waiting', 'Waiting'], ['accepted', 'Accepted'], ['rejected', 'Not selected']]
-const inTab = (r, t) => t === 'all' || (t === 'waiting' ? !['accepted', 'rejected'].includes(r.status) : r.status === t)
+// 20 Oct (her review; Indeed's My Jobs keeps jobs applied for elsewhere in the same lists, references.md "My
+// Applications: one list or two?"): the filters count both SkillMap applications and ones on other sites, so the
+// names fit both: In progress, Offer (accepted on SkillMap), Ended (not selected, withdrew, closed without a decision)
+const TABS = [['all', 'All'], ['progress', 'In progress'], ['offer', 'Offer'], ['ended', 'Ended']]
+const groupOf = (r) => r.status === 'accepted' ? 'offer' : r.status === 'rejected' || r.progress.closed_without_decision ? 'ended' : 'progress'
+const outsideGroup = (o) => o.status === 'offer' ? 'offer' : ['not_selected', 'withdrew'].includes(o.status) ? 'ended' : 'progress'
+const inTab = (r, t) => t === 'all' || groupOf(r) === t
+const outsideInTab = (o, t) => t === 'all' || outsideGroup(o) === t
 
 function Note({ r }) {
   const p = r.progress
@@ -140,14 +148,17 @@ function AppsSkeleton() {
 // 20 Oct (her idea; mock-up 9): jobs she applied for on other sites, recorded by her. SkillMap can't see those
 // employers' replies, so she sets the status; no reply date or employer record. Statuses as in the research (Indeed,
 // Huntr). Removing is undone with Undo (her guide on pop-ups: no "Are you sure?" for what can be taken back).
+// 20 Oct (her review): titles in blue, since they open the job again (Job Description and Skill Gap Analysis)
+const TITLE = 'text-[15px] font-semibold text-blue-700 hover:underline underline-offset-2'
 const OUTSIDE = [['applied', 'Applied'], ['interviewing', 'Interviewing'], ['offer', 'Offer'], ['not_selected', 'Not selected'], ['withdrew', 'Withdrew']]
 function OutsideCard({ o, onStatus, onRemove }) {
   return (
     <article className="bg-white border border-slate-200 rounded-2xl px-5 py-4">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="min-w-0">
-          <Link to={`/jobs/${encodeURIComponent(o.job_ref)}`} state={{ from: 'My Applications' }} className="text-[15px] font-semibold text-slate-900 hover:text-blue-700">{o.title}</Link>
-          <p className="text-xs text-slate-500 mt-0.5">{o.company} · applied on {o.publisher || 'another site'} · {fmtDay(o.created_at)} · <i>recorded by you</i></p>
+          <Link to={`/jobs/${encodeURIComponent(o.job_ref)}`} state={{ from: 'My Applications' }} className={TITLE}>{o.title}</Link>
+          <p className="text-xs text-slate-500 mt-0.5">{o.company} · applied on {o.publisher || 'another site'} · {fmtDay(o.created_at)}
+            {o.listed === false && <span className="text-slate-400"> · ad no longer listed</span>}</p>
         </div>
         <div className="flex items-center gap-3">
           <label className="sr-only" htmlFor={`os-${o.id}`}>Status of {o.title}</label>
@@ -158,7 +169,6 @@ function OutsideCard({ o, onStatus, onRemove }) {
           <button type="button" onClick={() => onRemove(o)} className="text-sm text-slate-500 hover:text-rose-700">Remove</button>
         </div>
       </div>
-      <p className="text-xs text-slate-500 mt-2">{o.company || 'The employer'} won't see this, so you update the status yourself.</p>
     </article>
   )
 }
@@ -201,7 +211,8 @@ export default function MyApplications() {
       })
       .catch(err => toast.show(errText(err, "Couldn't remove it. Try again."), null, true))
   }
-  const count = (t) => (rows || []).filter(r => inTab(r, t)).length
+  const count = (t) => (rows || []).filter(r => inTab(r, t)).length + outside.filter(o => outsideInTab(o, t)).length
+  const outsideShown = outside.filter(o => outsideInTab(o, tab))
   // 12 Oct (her review): one column, the application with the newest update first
   const shown = (rows || []).filter(r => inTab(r, tab))
     .sort((a, b) => new Date(b.progress.last_update) - new Date(a.progress.last_update))
@@ -212,10 +223,11 @@ export default function MyApplications() {
         <div className="pb-5">
           <p className="text-[11px] font-semibold text-blue-600 uppercase tracking-widest mb-2">My Applications</p>
           <h1 className="text-2xl font-semibold tracking-tight text-slate-900">Where your applications stand</h1>
-          <p className="text-sm text-slate-500 mt-1">Jobs you applied for on SkillMap, newest update first: Applied, Viewed by the employer, Shortlisted, then their decision. Jobs you applied for on other sites are listed below them.</p>
+          <p className="text-sm text-slate-500 mt-1">Newest update first. Jobs on SkillMap update as the employer acts; jobs on other sites you update yourself.</p>
         </div>
       </PageHeader>
-      <div className="flex-1 min-h-0 overflow-y-auto px-8 py-6"><div className="flex flex-col gap-4">
+      {/* 20 Oct (her review): full screen width, no blank strip on the right */}
+      <div className="flex-1 min-h-0 overflow-y-auto px-4 sm:px-8 py-6"><div className="flex flex-col gap-4">
         {error && <p role="alert" className="text-sm text-rose-700 bg-rose-50 border border-rose-200 rounded-lg px-4 py-2.5">{error}</p>}
 
         {invites.map(inv => (
@@ -237,7 +249,7 @@ export default function MyApplications() {
             <Link to="/recommend" className="inline-block mt-4 px-4 py-2 text-sm font-medium rounded-lg bg-blue-600 text-white hover:bg-blue-700">Go to Job Matches</Link>
           </div>
         )}
-        {rows?.length > 0 && (
+        {(rows?.length > 0 || outside.length > 0) && (
           <>
             <div role="tablist" className="flex flex-wrap gap-2">
               {TABS.map(([t, text]) => (
@@ -255,7 +267,7 @@ export default function MyApplications() {
                   <article key={r.id} className="bg-white border border-slate-200 rounded-2xl px-5 py-4">
                     <div className="flex items-start justify-between gap-3">
                       <div className="min-w-0">
-                        <Link to={`/jobs/${encodeURIComponent(r.job_ref)}`} state={{ from: 'My Applications' }} className="text-[15px] font-semibold text-slate-900 hover:text-blue-700">{r.title}</Link>
+                        <Link to={`/jobs/${encodeURIComponent(r.job_ref)}`} state={{ from: 'My Applications' }} className={TITLE}>{r.title}</Link>
                         <p className="text-xs text-slate-500 mt-0.5">{r.company}{r.match && ` · your match ${r.match}`}</p>
                       </div>
                       <span className={`shrink-0 text-xs font-semibold rounded-full px-2.5 py-0.5 ${PILL[key]}`}>{label}</span>
@@ -266,17 +278,17 @@ export default function MyApplications() {
                   </article>
                 )
               })}
-              {shown.length === 0 && <p className="text-sm text-slate-400">None here.</p>}
+              {shown.length === 0 && outsideShown.length === 0 && <p className="text-sm text-slate-400">None here.</p>}
             </div>
           </>
         )}
-        {outside.length > 0 && (
+        {outsideShown.length > 0 && (
           <section aria-labelledby="outside-h" className="flex flex-col gap-4 mt-2">
             <div>
               <h2 id="outside-h" className="text-base font-semibold text-slate-900">On other sites</h2>
-              <p className="text-sm text-slate-500">Jobs you applied for through "Apply on …", newest first. You keep these up to date.</p>
+              <p className="text-sm text-slate-500">Jobs you applied for through “Apply on …”, newest first. Their employers won't see these, so you update the status.</p>
             </div>
-            {outside.map(o => <OutsideCard key={o.id} o={o} onStatus={setStatus} onRemove={remove} />)}
+            {outsideShown.map(o => <OutsideCard key={o.id} o={o} onStatus={setStatus} onRemove={remove} />)}
           </section>
         )}
       </div></div>

@@ -52,7 +52,10 @@ def test_rank_judge_merge_score(client, users, db, tmp_path, monkeypatch):
     assert "S" not in json.dumps(judging["pairs"][0]) or "system" not in judging["pairs"][0]    # blind
     pairs = [x["pair"] for x in judging["pairs"]]
     py, java = refs["Graduate Python Developer"], refs["Senior Java Architect"]
-    assert se["B1"].index(py) < se["B1"].index(java)                          # keyword match: Python job above Java for SE
+    # keyword match: Python job above Java for SE. 20 Oct: rankings.json keeps the top 50, and jobs with the same
+    # score are ordered by their random job_ref, so with the other tests' jobs the Java job (score 0) can fall
+    # outside the 50 (it failed 2 of 3 runs): then it is below the Python job anyway
+    assert py in se["B1"] and (java not in se["B1"] or se["B1"].index(py) < se["B1"].index(java))
     python_job = [f"SE|{py}"]
     for who in er.JUDGES:                                                      # three judges agree: only the Python job fits SE
         (tmp_path / f"grades_{who}.json").write_text(json.dumps({p: (2 if p in python_job else 0) for p in pairs}))

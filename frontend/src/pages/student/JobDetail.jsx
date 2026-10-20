@@ -303,12 +303,21 @@ export default function JobDetail() {
                   : gap?.job?.source === 'employer'
                     ? ` · Posted on SkillMap${postedAgo(gap.job.listing_date) ? ` ${postedAgo(gap.job.listing_date)}` : ''}`
                     : ' · Past posting from JobStreet (2024)'}
+                {/* F8: most postings close within about a month (references.md); SkillMap can't check without credits.
+                    20 Oct (her pick H1): the warning sits next to the date it is about, not under the Apply button */}
+                {gap?.job?.source === 'live' && !gap.job.gone && daysSince(gap.job.listing_date) > 30 && (
+                  <span className="text-amber-700"> · it may have closed</span>
+                )}
               </p>
             </div>
             {gap?.job?.source === 'employer' && <ApplyAction a={skillmapApp} fromApps={backLabel === 'My Applications'} closed={gap.job.closed}
               taking={gap.job.taking_applications} />}
             {gap?.job?.source === 'live' && gap.job.source_url && (
               <div className="shrink-0 flex flex-col items-start sm:items-end gap-1">
+              {/* 20 Oct: the latest job search no longer returns this ad, so its link may be dead (opened from My Applications) */}
+              {gap.job.gone ? (
+                <span className="text-sm text-slate-500 bg-slate-100 px-4 py-2 rounded-lg">This ad is no longer listed</span>
+              ) : (
               <a
                 href={gap.job.source_url}
                 target="_blank"
@@ -318,11 +327,8 @@ export default function JobDetail() {
               >
                 Apply on {gap.job.publisher || 'employer site'} ↗
               </a>
-              <OutsideStatus o={outside} />
-              {/* F8: most postings close within about a month (references.md); SkillMap can't check without credits */}
-              {daysSince(gap.job.listing_date) > 30 && (
-                <p className="text-xs text-amber-600">Posted over a month ago · it may have closed</p>
               )}
+              <OutsideStatus o={outside} />
               </div>
             )}
           </div>

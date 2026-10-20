@@ -12,7 +12,7 @@ export function PromisedDate({ company, date, className = 'text-xs font-medium t
 
 export default function EmployerRecord({ company, record, className = 'text-xs text-slate-600' }) {
   if (!record) return null
-  if (!record.shown) return <p className="text-xs text-slate-500">New on SkillMap: no reply record yet.</p>
+  if (!record.shown) return <p className="text-xs text-slate-500">{company || 'This employer'} is new on SkillMap, so there's no record yet of replying on time.</p>
   return (
     <p className={className}>
       {company ? `${company} replied` : 'It replied'} to every applicant by its promised date on {record.on_time} of its {record.of} past jobs.
