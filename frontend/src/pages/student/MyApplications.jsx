@@ -84,8 +84,9 @@ function DetailSteps({ steps, decided }) {
         const skipped = !done && decided && s.key !== 'decision'
         return (
           <li key={s.key} className="flex-1 flex flex-col items-center relative">
-            {i > 0 && <span aria-hidden="true" className={`absolute top-[13px] right-1/2 w-full h-0.5 ${done || skipped ? 'bg-blue-500' : 'bg-slate-200'}`} />}
-            <span aria-hidden="true" className={`relative mt-[2px] w-6 h-6 rounded-full border-2 flex items-center justify-center text-[11px] text-white ${
+            {i > 0 && <span aria-hidden="true" className={`absolute z-0 top-[13px] right-1/2 w-full h-0.5 ${done || skipped ? 'bg-blue-500' : 'bg-slate-200'}`} />}
+            {/* 20 Oct (her review): the circle is drawn above the line, not under it */}
+            <span aria-hidden="true" className={`relative z-10 mt-[2px] w-6 h-6 rounded-full border-2 flex items-center justify-center text-[11px] leading-none text-white ${
               done ? 'bg-blue-600 border-blue-600' : 'bg-white border-slate-300'}`}>{done ? '✓' : ''}</span>
             <span className={`text-xs leading-4 mt-[6px] whitespace-nowrap ${i === last ? 'font-semibold text-slate-900' : done ? 'text-slate-600' : 'text-slate-400'}`}>
               {s.label}{done ? ` · ${fmtDay(s.at)}` : skipped ? ' · —' : ''}
