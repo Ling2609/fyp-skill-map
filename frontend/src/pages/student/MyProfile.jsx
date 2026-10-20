@@ -9,6 +9,7 @@ import { softBtnCls } from './profileUtils'
 import { AwardsTab, CertsTab, ModulesTab, ProjectsTab } from './profileSections'
 import GithubImport from './GithubImport'
 import { Bar, RowSkeleton, LoadingLabel } from '../../components/Skeleton'
+import Popconfirm from '../../components/Popconfirm'
 
 // My Profile (9 Oct, her design): the page where a student puts things in. Four tabs, the four places her skills come
 // from: Modules, Projects, Certificates, Awards. What SkillMap works out from them (matches, skills to learn) is on the
@@ -67,9 +68,13 @@ export default function MyProfile() {
   const close = () => { setOpen(null); setDirty(false) }
 
   // Leaving the Modules tab, or the page, with grades not saved asks first (as the old Skill Profile did, 4 Oct)
-  const chooseTab = (key) => {
+  // 20 Oct (her guide on pop-ups): asked in SkillMap's own small confirm beside the tabs, not the browser's grey box.
+  // (Closing or reloading the browser tab still uses the browser's own warning: browsers allow no other.)
+  const [leaveTo, setLeaveTo] = useState(null)
+  const chooseTab = (key, sure = false) => {
     if (key === tab) return
-    if (gradesUnsaved && !window.confirm('You have unsaved grade changes. Leave without saving?')) return
+    if (gradesUnsaved && !sure) { setLeaveTo(key); return }
+    setLeaveTo(null)
     setGradesUnsaved(false)
     setTab(key)
     setSearchParams(key === 'modules' ? {} : { tab: key }, { replace: true })
@@ -125,6 +130,9 @@ export default function MyProfile() {
           </div>
         </div>
         {/* Tabs wrap onto a second line on a narrow window: never a sideways scrollbar (her request 8 Oct) */}
+        <div className="relative">
+        {leaveTo && <Popconfirm text="You have grade changes that aren't saved." confirmLabel="Leave without saving"
+          cancelLabel="Stay and save" danger onConfirm={() => chooseTab(leaveTo, true)} onCancel={() => setLeaveTo(null)} />}
         <div role="tablist" aria-label="Profile sections" className="flex flex-wrap gap-x-6 border-t border-slate-200 -mx-4 sm:-mx-8 px-4 sm:px-8">
           {TABS.map(t => {
             const active = tab === t.key
@@ -139,6 +147,7 @@ export default function MyProfile() {
               </button>
             )
           })}
+        </div>
         </div>
       </PageHeader>
 

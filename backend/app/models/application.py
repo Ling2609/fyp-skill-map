@@ -56,3 +56,19 @@ class JobInvitation(Base):
     student_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
     dismissed_at = Column(DateTime(timezone=True), nullable=True)
+
+
+class OutsideApplication(Base):
+    """A student's own record of applying for a job on another site (20 Oct, her idea; research in references.md
+    "Recording applications to outside jobs"). SkillMap can't see that employer's replies, so the student sets the
+    status; nobody else sees it. Kept apart from `applications` so employer counts, records and "where you stand"
+    are untouched. New table: main.py's create_all makes it."""
+    __tablename__ = "outside_applications"
+    __table_args__ = (UniqueConstraint("job_id", "student_id", name="uq_outside_job_student"),)
+
+    id = Column(Integer, primary_key=True, index=True)
+    job_id = Column(Integer, ForeignKey("jobs.id", ondelete="CASCADE"), nullable=False, index=True)
+    student_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
+    status = Column(String(14), nullable=False, default="applied", server_default="applied")
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    status_changed_at = Column(DateTime(timezone=True), nullable=True)

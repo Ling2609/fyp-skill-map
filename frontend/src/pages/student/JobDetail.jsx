@@ -10,6 +10,8 @@ import { Bar, RowSkeleton, LoadingLabel, TextSkeleton } from '../../components/S
 import { Busy } from '../../components/Spinner'
 import EmployerRecord, { PromisedDate } from '../../components/EmployerRecord'
 import BackLink from '../../components/BackLink'
+import { OutsideBanner, OutsideStatus } from '../../components/OutsideApply'
+import { useOutsideApplication } from '../../components/useOutsideApplication'
 import { AdRequirementPills, SalaryFromAd } from '../../components/AdRequirements'
 
 // The grade itself, not its weight: the weight is the same for C+ and C, so a C showed as "C+" (5 Oct)
@@ -159,6 +161,8 @@ export default function JobDetail() {
   }
   const [gap, setGap] = useState(() => peek('/skillgap/', { job_id: decodeURIComponent(jobId) }))
   const skillmapApp = useSkillMapApplication(gap?.job?.job_id, gap?.job?.source === 'employer')
+  // 20 Oct: a job on another site: did she apply there? (recorded by her, shown only to her)
+  const outside = useOutsideApplication(gap?.job?.job_id, gap?.job?.source === 'live')
   const [loading, setLoading] = useState(() => !gap)
   const [error, setError] = useState('')
   // 12 Oct (her review): a rejected application opens on Skill Gap Analysis (what to work on next) unless the
@@ -277,6 +281,7 @@ export default function JobDetail() {
 
       {/* Top nav: same left edge as the other pages' headings (PageHeader: px-8); the shared back link (20 Oct) */}
       <BackLink label={backLabel} onClick={goBack} />
+      {outside.toastUi}
 
       <div className="px-4 sm:px-6 py-5 max-w-4xl mx-auto space-y-4">
 
@@ -308,10 +313,12 @@ export default function JobDetail() {
                 href={gap.job.source_url}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={outside.leaving}
                 className="shrink-0 text-sm font-semibold text-white bg-blue-700 hover:bg-blue-800 px-4 py-2 rounded-lg transition"
               >
                 Apply on {gap.job.publisher || 'employer site'} ↗
               </a>
+              <OutsideStatus o={outside} />
               {/* F8: most postings close within about a month (references.md); SkillMap can't check without credits */}
               {daysSince(gap.job.listing_date) > 30 && (
                 <p className="text-xs text-amber-600">Posted over a month ago · it may have closed</p>
@@ -320,6 +327,7 @@ export default function JobDetail() {
             )}
           </div>
 
+          {gap?.job?.source === 'live' && <OutsideBanner o={outside} site={gap.job.publisher} company={gap.job.company} />}
           <AdRequirementPills req={gap?.job?.requirements} />
 
           {gap?.job?.source === 'employer' && <ApplyInfo a={skillmapApp} company={gap.job.company} closed={gap.job.closed}

@@ -228,7 +228,7 @@ def delete_student_data(user: User, db: Session):
     """Every row about this student, child rows first. Written out table by table (not left to ON DELETE CASCADE),
     because databases made by older migrations may not have every cascade rule. Jobs, modules and other students'
     data are untouched. Commits nothing: the caller does, after MongoDB."""
-    from app.models.application import Application, ApplicationEvent, JobInvitation
+    from app.models.application import Application, ApplicationEvent, JobInvitation, OutsideApplication
     from app.models.profile import GithubAccount, UserAward, UserCertification, UserProject
     from app.models.programme import AdminAction
     from app.models.user_module import UserModule
@@ -236,6 +236,7 @@ def delete_student_data(user: User, db: Session):
     if app_ids:
         db.query(ApplicationEvent).filter(ApplicationEvent.application_id.in_(app_ids)).delete(synchronize_session=False)
     for model, column in ((Application, Application.student_id), (JobInvitation, JobInvitation.student_id),
+                          (OutsideApplication, OutsideApplication.student_id),
                           (UserProject, UserProject.user_id), (UserCertification, UserCertification.user_id),
                           (UserAward, UserAward.user_id), (UserModule, UserModule.user_id),
                           (PasswordResetOTP, PasswordResetOTP.user_id), (AdminAction, AdminAction.target_user_id),
@@ -277,6 +278,7 @@ def _iso(v):
 # tables together. Everything else in these tables is exported, so a column added later is included without
 # changing this code (tests/test_personal_data.py compares the export with the tables' columns).
 EXPORT_SKIP = {"users": ("hashed_password",), "applications": ("student_id",), "job_invitations": ("student_id",),
+               "outside_applications": ("student_id",),
                "application_events": ("application_id",)}
 
 
@@ -300,6 +302,11 @@ def export_my_data(db: Session = Depends(get_db), current_user: User = Depends(g
                   .order_by(ApplicationEvent.id)]
         applications.append({"job": job.job_title, "company": job.company,
                              **_plain(a, EXPORT_SKIP["applications"]), "events": events})
+    from app.models.application import OutsideApplication
+    outside = [{"job": job.job_title, "company": job.company, "site": job.publisher,
+                **_plain(o, EXPORT_SKIP["outside_applications"])}
+               for o, job in db.query(OutsideApplication, Job).join(Job, Job.id == OutsideApplication.job_id)
+               .filter(OutsideApplication.student_id == u.id).order_by(OutsideApplication.id)]
     invitations = [{"job": job.job_title, "company": job.company, **_plain(i, EXPORT_SKIP["job_invitations"])}
                    for i, job in db.query(JobInvitation, Job).join(Job, Job.id == JobInvitation.job_id)
                    .filter(JobInvitation.student_id == u.id).order_by(JobInvitation.id)]
@@ -332,6 +339,7 @@ def export_my_data(db: Session = Depends(get_db), current_user: User = Depends(g
         "github_accounts": _rows(GithubAccount, GithubAccount.user_id, u.id, db),
         "applications": applications,
         "invitations": invitations,
+        "applications_on_other_sites": outside,
         "career_office_decisions": office,
         "ai_assistant_chats": chats,
         "project_skill_suggestions": suggestions,

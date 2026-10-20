@@ -7,6 +7,7 @@ import { errText } from '../student/profileUtils'
 import { CardSkeleton, LoadingLabel } from '../../components/Skeleton'
 import { Busy } from '../../components/Spinner'
 import { greeting } from '../../greeting'
+import FitList from '../../components/FitList'
 import InfoTip from '../../components/InfoTip'
 import { RECORD_TIP } from '../../components/EmployerRecord'
 
@@ -77,7 +78,7 @@ function ActivityRow({ e }) {
     <li>
       <Link to={to} className="px-5 py-2.5 flex items-start gap-3 text-sm text-slate-600 hover:bg-slate-50">
         <span aria-hidden="true" className={`mt-1.5 w-2 h-2 rounded-full shrink-0 ${DOT[e.status || e.kind]}`} />
-        <span className="flex-1 min-w-0">{activityText(e)}</span>
+        <span className="flex-1 min-w-0 truncate">{activityText(e)}</span>
         <span className="shrink-0 text-xs text-slate-400">{ago(e.at)}</span>
       </Link>
     </li>
@@ -166,7 +167,7 @@ export default function EmployerDashboard() {
         // 20 Oct (her review: "fit screen size", no page scroll, no blank space at the bottom): on a laptop the three rows
         // share the screen height exactly; a card with more than fits scrolls inside itself. Phones keep one column.
         <div className="flex-1 min-h-0 overflow-y-auto lg:overflow-hidden px-8 py-6">
-          <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1.55fr)_minmax(0,1fr)] lg:grid-rows-[minmax(0,1.25fr)_minmax(0,1fr)_minmax(0,0.85fr)] lg:h-full gap-5">
+          <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1.55fr)_minmax(0,1fr)] lg:grid-rows-[minmax(0,1.45fr)_minmax(0,1fr)_minmax(0,0.8fr)] lg:h-full gap-5">
             {/* Row 1, left: applications to review, problems, then next steps (12 Oct, flow review M1) */}
             <section className={card} aria-labelledby="review-h">
               <div className="px-5 py-4 flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
@@ -202,8 +203,8 @@ export default function EmployerDashboard() {
                   {sum.applicants ? 'All caught up: every application has a status.' : 'No applications yet. Your jobs are in students\' Job Matches, marked "Apply on SkillMap".'}
                 </p>
               ) : (
-                <ul className="max-h-72 lg:max-h-none lg:flex-1 min-h-0 overflow-y-auto divide-y divide-slate-100 border-t border-slate-100">
-                  {data.to_review.map(a => (
+                <FitList className="border-t border-slate-100" items={data.to_review} renderItem={a => (
+
                     <li key={a.id} className="px-5 py-3.5 flex items-center gap-3.5">
                       <Avatar name={a.name} />
                       <div className="flex-1 min-w-0">
@@ -216,8 +217,8 @@ export default function EmployerDashboard() {
                       <Match have={a.have} total={a.total} />
                       <Link to={`/employer/applications/${a.id}`} className="shrink-0 text-sm font-medium text-blue-700 border border-blue-200 rounded-lg px-3.5 py-1.5 hover:bg-blue-50">Review</Link>
                     </li>
-                  ))}
-                </ul>
+                  )} />
+
               )}
               {steps.length > 0 && (
                 <div className="border-t border-slate-100 px-5 py-3">
@@ -252,8 +253,8 @@ export default function EmployerDashboard() {
               {data.open_jobs.length === 0
                 ? <p className="px-5 pb-4 text-sm text-slate-500">No open jobs. Reopen one in My Jobs, or post a new one.</p>
                 : (
-                  <ul className="max-h-72 lg:max-h-none lg:flex-1 min-h-0 overflow-y-auto divide-y divide-slate-100 border-t border-slate-100">
-                    {data.open_jobs.map(j => {
+                  <FitList className="border-t border-slate-100" items={data.open_jobs} renderItem={j => {
+
                       const total = Object.values(j.counts).reduce((x, y) => x + y, 0)
                       const days = j.decide_by ? daysUntil(j.decide_by) : null
                       return (
@@ -267,6 +268,8 @@ export default function EmployerDashboard() {
                             {j.counts.applied > 0 && <> · <span className="font-semibold text-blue-700">{j.counts.applied} to review</span></>}
                             {j.decide_by && <> · decide by {fmtDay(j.decide_by)} ({days > 0 ? `${days} day${days === 1 ? '' : 's'} left` : days === 0 ? 'today' : 'passed'})</>}
                           </p>
+                          {/* every row the same height (FitList counts whole rows): no applicants keeps the bar's space, empty */}
+                          {total === 0 && <div aria-hidden="true" className="mt-2.5 h-2.5" />}
                           {total > 0 && (
                             <div className="mt-2.5 h-2.5 rounded-full bg-slate-100 flex overflow-hidden" role="img"
                               aria-label={BAR.map(([k, label]) => `${j.counts[k]} ${label.toLowerCase()}`).join(', ')}>
@@ -275,8 +278,8 @@ export default function EmployerDashboard() {
                           )}
                         </li>
                       )
-                    })}
-                  </ul>
+                    }} />
+
                 )}
             </section>
 
@@ -288,12 +291,10 @@ export default function EmployerDashboard() {
               </div>
               {data.activity.length === 0
                 ? <p className="px-5 pb-4 text-sm text-slate-500">Nothing in the last 14 days. Applications, your status changes and invitations will be listed here.</p>
-                : (
-                  <ul className="max-h-64 lg:max-h-none lg:flex-1 min-h-0 overflow-y-auto border-t border-slate-100 py-1.5">
-                    {data.activity.map((e, i) => <ActivityRow key={i} e={e} />)}
-                    {data.activity.length < 3 && <li className="px-5 py-2 text-xs text-slate-400">New applications and status changes appear here.</li>}
-                  </ul>
-                )}
+                : (<>
+                  <FitList className="border-t border-slate-100" items={data.activity} renderItem={(e, i) => <ActivityRow key={i} e={e} />} />
+                  {data.activity.length < 3 && <p className="px-5 pb-3 text-xs text-slate-400">New applications and status changes appear here.</p>}
+                </>)}
             </section>
 
             {/* Row 2, right (20 Oct, mock-up E3): what students see about this employer (improvement #1), kept short */}
@@ -322,8 +323,8 @@ export default function EmployerDashboard() {
               {data.graduates.length === 0 ? (
                 <p className="px-5 pb-4 text-sm text-slate-500">{data.open_jobs.length ? 'No visible graduate has at least half of your required skills yet. New profiles are matched as students add them.' : 'Open a job to see graduates who fit it.'}</p>
               ) : (
-                <ul className="max-h-72 lg:max-h-none lg:flex-1 min-h-0 overflow-y-auto divide-y divide-slate-100 border-t border-slate-100">
-                  {data.graduates.map(g => (
+                <FitList className="border-t border-slate-100" items={data.graduates} renderItem={g => (
+
                     <li key={g.student_id} className="px-5 py-3 flex items-center gap-3">
                       <Avatar name={g.name} small />
                       <div className="flex-1 min-w-0">
@@ -338,8 +339,8 @@ export default function EmployerDashboard() {
                             {inviting === g.student_id ? <Busy>Inviting…</Busy> : 'Invite'}
                           </button>}
                     </li>
-                  ))}
-                </ul>
+                  )} />
+
               )}
             </section>
           </div>

@@ -8,6 +8,7 @@ import ApplicationSteps from '../../components/ApplicationSteps'
 import { Bar, LoadingLabel } from '../../components/Skeleton'
 import InfoTip from '../../components/InfoTip'
 import EmployerRecord from '../../components/EmployerRecord'
+import { useToast } from '../../components/Toast'
 
 // My Applications (11 Oct, Employer flow batch 2; mock-up board 6): every job the student applied for on SkillMap.
 // 12 Oct (her request; mock-up P2): one card per application with its progress, Applied -> Viewed -> Shortlisted ->
@@ -136,13 +137,42 @@ function AppsSkeleton() {
   )
 }
 
+// 20 Oct (her idea; mock-up 9): jobs she applied for on other sites, recorded by her. SkillMap can't see those
+// employers' replies, so she sets the status; no reply date or employer record. Statuses as in the research (Indeed,
+// Huntr). Removing is undone with Undo (her guide on pop-ups: no "Are you sure?" for what can be taken back).
+const OUTSIDE = [['applied', 'Applied'], ['interviewing', 'Interviewing'], ['offer', 'Offer'], ['not_selected', 'Not selected'], ['withdrew', 'Withdrew']]
+function OutsideCard({ o, onStatus, onRemove }) {
+  return (
+    <article className="bg-white border border-slate-200 rounded-2xl px-5 py-4">
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div className="min-w-0">
+          <Link to={`/jobs/${encodeURIComponent(o.job_ref)}`} state={{ from: 'My Applications' }} className="text-[15px] font-semibold text-slate-900 hover:text-blue-700">{o.title}</Link>
+          <p className="text-xs text-slate-500 mt-0.5">{o.company} · applied on {o.publisher || 'another site'} · {fmtDay(o.created_at)} · <i>recorded by you</i></p>
+        </div>
+        <div className="flex items-center gap-3">
+          <label className="sr-only" htmlFor={`os-${o.id}`}>Status of {o.title}</label>
+          <select id={`os-${o.id}`} value={o.status} onChange={e => onStatus(o, e.target.value)}
+            className="text-sm font-medium text-slate-800 border border-slate-300 rounded-lg px-2 py-1 bg-white">
+            {OUTSIDE.map(([k, l]) => <option key={k} value={k}>{l}</option>)}
+          </select>
+          <button type="button" onClick={() => onRemove(o)} className="text-sm text-slate-500 hover:text-rose-700">Remove</button>
+        </div>
+      </div>
+      <p className="text-xs text-slate-500 mt-2">You update this one. Only you see it: {o.company || 'the employer'} won't see or update it.</p>
+    </article>
+  )
+}
+
 export default function MyApplications() {
   const [rows, setRows] = useState(null)
   const [invites, setInvites] = useState([])
   const [tab, setTab] = useState('all')
   const [error, setError] = useState('')
+  const [outside, setOutside] = useState([])
+  const toast = useToast()
   useEffect(() => {
     api.get('/applications/mine').then(res => setRows(res.data)).catch(err => setError(errText(err, "Couldn't load your applications.")))
+    api.get('/applications/outside').then(res => setOutside(res.data)).catch(() => {})
     api.get('/applications/invitations').then(res => setInvites(res.data)).catch(() => {})
   }, [])
   const dismiss = (inv) => {
@@ -150,6 +180,26 @@ export default function MyApplications() {
     api.patch(`/applications/invitations/${inv.id}`, { dismissed: true })
       .then(() => window.dispatchEvent(new Event(ADMIN_COUNTS_CHANGED)))
       .catch(err => { setInvites(list => [inv, ...list]); setError(errText(err, "Couldn't update the invitation. Try again.")) })
+  }
+  const setStatus = (o, status) => {
+    const prev = o.status
+    api.patch(`/applications/outside/${o.id}`, { status })
+      .then(res => {
+        setOutside(list => list.map(x => x.id === o.id ? res.data : x))
+        toast.show(`Status changed to ${res.data.status_label}.`, () => setStatus(res.data, prev))
+      })
+      .catch(err => toast.show(errText(err, "Couldn't change the status. Try again."), null, true))
+  }
+  const remove = (o) => {
+    api.delete(`/applications/outside/${o.id}`)
+      .then(() => {
+        setOutside(list => list.filter(x => x.id !== o.id))
+        toast.show(`Removed ${o.title}.`, () => api.post('/applications/outside', { job_id: o.job_ref })
+          .then(res => o.status === 'applied' ? res : api.patch(`/applications/outside/${res.data.id}`, { status: o.status }))
+          .then(res => setOutside(list => [res.data, ...list]))
+          .catch(() => toast.show("Couldn't undo.", null, true)))
+      })
+      .catch(err => toast.show(errText(err, "Couldn't remove it. Try again."), null, true))
   }
   const count = (t) => (rows || []).filter(r => inTab(r, t)).length
   // 12 Oct (her review): one column, the application with the newest update first
@@ -162,7 +212,7 @@ export default function MyApplications() {
         <div className="pb-5">
           <p className="text-[11px] font-semibold text-blue-600 uppercase tracking-widest mb-2">My Applications</p>
           <h1 className="text-2xl font-semibold tracking-tight text-slate-900">Where your applications stand</h1>
-          <p className="text-sm text-slate-500 mt-1">Jobs you applied for on SkillMap, newest update first: Applied, Viewed by the employer, Shortlisted, then their decision.</p>
+          <p className="text-sm text-slate-500 mt-1">Jobs you applied for on SkillMap, newest update first: Applied, Viewed by the employer, Shortlisted, then their decision. Jobs you applied for on other sites are listed below them.</p>
         </div>
       </PageHeader>
       <div className="flex-1 min-h-0 overflow-y-auto px-8 py-6"><div className="flex flex-col gap-4">
@@ -180,7 +230,7 @@ export default function MyApplications() {
         ))}
 
         {rows === null && !error && <AppsSkeleton />}
-        {rows?.length === 0 && (
+        {rows?.length === 0 && outside.length === 0 && (
           <div className="bg-white border border-slate-200 rounded-2xl p-8 text-center">
             <h2 className="text-base font-semibold text-slate-900">No applications yet</h2>
             <p className="text-sm text-slate-500 mt-1">Jobs marked "Apply on SkillMap" in Job Matches can be applied for here with your profile.</p>
@@ -220,7 +270,17 @@ export default function MyApplications() {
             </div>
           </>
         )}
+        {outside.length > 0 && (
+          <section aria-labelledby="outside-h" className="flex flex-col gap-4 mt-2">
+            <div>
+              <h2 id="outside-h" className="text-base font-semibold text-slate-900">On other sites</h2>
+              <p className="text-sm text-slate-500">Jobs you applied for through "Apply on …", newest first. You keep these up to date.</p>
+            </div>
+            {outside.map(o => <OutsideCard key={o.id} o={o} onStatus={setStatus} onRemove={remove} />)}
+          </section>
+        )}
       </div></div>
+      {toast.ui}
     </div>
   )
 }

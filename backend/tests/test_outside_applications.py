@@ -1,0 +1,62 @@
+"""Jobs applied for on other sites (20 Oct, her idea): the student records them, sets the status, can undo; only
+live jobs; only the student sees them; included in "Download my data" and removed with the account."""
+import json
+
+from conftest import sql
+
+
+import pytest
+
+
+@pytest.fixture(autouse=True)
+def _remove_test_jobs(db):
+    """The live jobs made here are removed afterwards, so later tests that rank every live job aren't affected."""
+    yield
+    sql(db, "delete from jobs where job_id like 'live_outside_%'")
+
+
+def _live_job(db, ref):
+    sql(db, "insert into jobs (job_id, job_title, company, location, description, source, publisher, source_url) "
+            "values (:j, 'QA Engineer', 'Tec D', 'KL', 'Test software.', 'live', 'LinkedIn', 'https://example.com/x')", j=ref)
+    return ref
+
+
+def test_record_update_undo(client, users, db, post_job):
+    student, other = users.student(), users.student()
+    ref = _live_job(db, "live_outside_1")
+    h = users.h(student)
+    assert client.get(f"/applications/outside/job/{ref}", headers=h).json() is None
+    r = client.post("/applications/outside", headers=h, json={"job_id": ref})
+    assert r.status_code == 200 and r.json()["status"] == "applied" and r.json()["publisher"] == "LinkedIn"
+    again = client.post("/applications/outside", headers=h, json={"job_id": ref}).json()
+    assert again["id"] == r.json()["id"]                                         # recording twice: one record
+    oid = r.json()["id"]
+    assert client.patch(f"/applications/outside/{oid}", headers=h, json={"status": "hired"}).status_code == 400
+    up = client.patch(f"/applications/outside/{oid}", headers=h, json={"status": "interviewing"}).json()
+    assert up["status_label"] == "Interviewing" and up["status_changed_at"]
+    # nobody else sees or changes it
+    assert client.patch(f"/applications/outside/{oid}", headers=users.h(other), json={"status": "offer"}).status_code == 404
+    assert client.get("/applications/outside", headers=users.h(other)).json() == []
+    assert [x["id"] for x in client.get("/applications/outside", headers=h).json()] == [oid]
+    # a SkillMap post is applied for on SkillMap, not recorded here
+    job = post_job(users.employer())
+    assert client.post("/applications/outside", headers=h, json={"job_id": job["job_ref"]}).status_code == 404
+    # undo
+    assert client.delete(f"/applications/outside/{oid}", headers=h).status_code == 204
+    assert client.get(f"/applications/outside/job/{ref}", headers=h).json() is None
+
+
+def test_in_my_data_and_removed_with_the_account(client, users, db):
+    from app.models.application import OutsideApplication
+    from app.models.user import User
+    from app.routers.auth import delete_student_data
+    student = users.student()
+    ref = _live_job(db, "live_outside_2")
+    client.post("/applications/outside", headers=users.h(student), json={"job_id": ref})
+    data = json.loads(client.get("/auth/me/export", headers=users.h(student)).content)
+    row = data["applications_on_other_sites"][0]
+    assert row["site"] == "LinkedIn" and row["status"] == "applied" and "student_id" not in row
+    user = db.get(User, users.ids[student])
+    delete_student_data(user, db)
+    db.commit()
+    assert db.query(OutsideApplication).filter(OutsideApplication.student_id == user.id).count() == 0

@@ -5,6 +5,7 @@ import { errText } from './profileUtils'
 import { startGithubConnect } from './githubConnect'
 import { Busy } from '../../components/Spinner'
 import { Bar, LoadingLabel } from '../../components/Skeleton'
+import Popconfirm from '../../components/Popconfirm'
 
 // Connect GitHub (14 Oct; her design after research, references.md "Verifying GitHub and LinkedIn accounts"): the
 // GitHub link is proved by signing in to GitHub, not typed, so a repo can show it is really hers. Several accounts
@@ -40,8 +41,10 @@ export default function GithubAccounts({ blocked }) {
     try { await startGithubConnect('/profile?open=links') }      // the page leaves for GitHub; busy stays on
     catch (err) { setError(errText(err, "Couldn't start connecting to GitHub. Please try again.")); setBusy('') }
   }
+  // 20 Oct (her guide on pop-ups): SkillMap's own small confirm beside the button, not the browser's grey box
+  const [askDisconnect, setAskDisconnect] = useState(null)
   const disconnect = async (a) => {
-    if (!window.confirm(`Disconnect ${a.login}? Projects from its repositories will lose the ✓ GitHub badge.`)) return
+    setAskDisconnect(null)
     setBusy(String(a.id)); setError('')
     try { setAccounts((await api.delete(`/profile/github/accounts/${a.id}`)).data.accounts) }
     catch (err) { setError(errText(err, "Couldn't disconnect. Please try again.")) }
@@ -82,8 +85,13 @@ export default function GithubAccounts({ blocked }) {
                 <a href={a.url} target="_blank" rel="noopener noreferrer" className="flex-1 min-w-0 truncate text-sm text-gray-800 hover:text-blue-700">
                   github.com/<b className="font-semibold">{a.login}</b> <span className="text-blue-700">↗</span>
                 </a>
-                <button type="button" onClick={() => disconnect(a)} disabled={!!busy}
-                  className="text-xs text-gray-500 hover:text-red-600 disabled:opacity-40">{busy === String(a.id) ? <Busy>Disconnecting…</Busy> : 'Disconnect'}</button>
+                <span className="relative">
+                  <button type="button" onClick={() => setAskDisconnect(a.id)} disabled={!!busy}
+                    className="text-xs text-gray-500 hover:text-red-600 disabled:opacity-40">{busy === String(a.id) ? <Busy>Disconnecting…</Busy> : 'Disconnect'}</button>
+                  {askDisconnect === a.id && <Popconfirm align="right" danger
+                    text={`Disconnect ${a.login}? Projects from its repositories will lose the ✓ GitHub badge.`}
+                    confirmLabel="Disconnect" cancelLabel="Keep it" onConfirm={() => disconnect(a)} onCancel={() => setAskDisconnect(null)} />}
+                </span>
               </li>
             ))}
             <li className="pr-4 py-2.5 pl-[4.5rem]">

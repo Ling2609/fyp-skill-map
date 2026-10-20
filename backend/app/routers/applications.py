@@ -15,7 +15,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from app.database import engine, get_db
-from app.models.application import Application, JobInvitation
+from app.models.application import Application, JobInvitation, OutsideApplication
 from app.models.job import Job
 from app.models.user import User, UserRole
 from app.routers.auth import get_current_user
@@ -220,3 +220,89 @@ def refs(student: User = Depends(require_student), db: Session = Depends(get_db)
 def counts(student: User = Depends(require_student), db: Session = Depends(get_db)):
     """The sidebar badge on My applications: open invitations to apply."""
     return {"invitations": len(_open_invitations(student, db))}
+
+
+# ── Jobs applied for on other sites (20 Oct) ─────────────────────────────────────────────────────────────────────
+# Statuses from the trackers in the research (Indeed: Interviewing / Offer received / Not selected; Huntr: Applied,
+# Interviewing, Offer, Rejected), worded as the student would say them
+OUTSIDE_STATUS = {"applied": "Applied", "interviewing": "Interviewing", "offer": "Offer", "not_selected": "Not selected",
+                  "withdrew": "Withdrew"}
+
+
+def _outside(o: OutsideApplication, job: Job) -> dict:
+    return {"id": o.id, "job_ref": job.job_id, "title": job.job_title, "company": job.company,
+            "location": job.location, "publisher": job.publisher, "source_url": job.source_url,
+            "status": o.status, "status_label": OUTSIDE_STATUS.get(o.status, o.status),
+            "created_at": o.created_at, "status_changed_at": o.status_changed_at}
+
+
+class OutsideIn(BaseModel):
+    job_id: str
+
+
+@router.post("/outside")
+def record_outside(data: OutsideIn, student: User = Depends(require_student), db: Session = Depends(get_db)):
+    """"Yes, I applied" on a job from another site. Recording twice returns the same record."""
+    job = db.query(Job).filter(Job.job_id == data.job_id).first()
+    if not job or job.source != "live":
+        raise HTTPException(status_code=404, detail="Only jobs on other sites can be recorded here.")
+    o = db.query(OutsideApplication).filter(OutsideApplication.job_id == job.id,
+                                            OutsideApplication.student_id == student.id).first()
+    if not o:
+        o = OutsideApplication(job_id=job.id, student_id=student.id, status="applied")
+        db.add(o)
+        try:
+            db.commit()
+        except IntegrityError:                       # recorded in another tab at the same moment
+            db.rollback()
+            o = db.query(OutsideApplication).filter(OutsideApplication.job_id == job.id,
+                                                    OutsideApplication.student_id == student.id).first()
+        db.refresh(o)
+    return _outside(o, job)
+
+
+def _own_outside(oid: int, student: User, db: Session) -> tuple[OutsideApplication, Job]:
+    row = (db.query(OutsideApplication, Job).join(Job, Job.id == OutsideApplication.job_id)
+           .filter(OutsideApplication.id == oid, OutsideApplication.student_id == student.id).first())
+    if not row:
+        raise HTTPException(status_code=404, detail="Record not found.")
+    return row
+
+
+class OutsideStatusIn(BaseModel):
+    status: str
+
+
+@router.patch("/outside/{oid}")
+def update_outside(oid: int, data: OutsideStatusIn, student: User = Depends(require_student),
+                   db: Session = Depends(get_db)):
+    o, job = _own_outside(oid, student, db)
+    if data.status not in OUTSIDE_STATUS:
+        raise HTTPException(status_code=400, detail="Pick a status from the list.")
+    if data.status != o.status:
+        o.status, o.status_changed_at = data.status, datetime.now(timezone.utc)
+        db.commit()
+    return _outside(o, job)
+
+
+@router.delete("/outside/{oid}", status_code=204)
+def delete_outside(oid: int, student: User = Depends(require_student), db: Session = Depends(get_db)):
+    """Undo, or removing a record the student no longer wants (nothing else depends on it)."""
+    o, _ = _own_outside(oid, student, db)
+    db.delete(o)
+    db.commit()
+
+
+@router.get("/outside")
+def my_outside(student: User = Depends(require_student), db: Session = Depends(get_db)):
+    rows = (db.query(OutsideApplication, Job).join(Job, Job.id == OutsideApplication.job_id)
+            .filter(OutsideApplication.student_id == student.id).order_by(OutsideApplication.created_at.desc()).all())
+    return [_outside(o, j) for o, j in rows]
+
+
+@router.get("/outside/job/{job_ref}")
+def outside_for_job(job_ref: str, student: User = Depends(require_student), db: Session = Depends(get_db)):
+    """Has the student recorded applying for this job? (Job Detail)"""
+    row = (db.query(OutsideApplication, Job).join(Job, Job.id == OutsideApplication.job_id)
+           .filter(Job.job_id == job_ref, OutsideApplication.student_id == student.id).first())
+    return _outside(*row) if row else None
