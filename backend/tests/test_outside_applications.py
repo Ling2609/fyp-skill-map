@@ -12,6 +12,7 @@ import pytest
 def _remove_test_jobs(db):
     """The live jobs made here are removed afterwards, so later tests that rank every live job aren't affected."""
     yield
+    sql(db, "delete from job_skills where job_ref like 'live_outside_%'")
     sql(db, "delete from jobs where job_id like 'live_outside_%'")
 
 
@@ -72,3 +73,16 @@ def test_refs_and_invitations_with_an_outside_record(client, users, db):
     assert client.get("/applications/invitations", headers=h).status_code == 200
     r = client.get("/applications/refs", headers=h)
     assert r.status_code == 200 and r.json()["live_outside_refs"]["site"] == "LinkedIn"
+
+
+def test_my_outside_list_has_the_match(client, users, db):
+    """20 Oct (her review): other-site rows show 'your match X of Y required', like SkillMap applications."""
+    student = users.student(skills=("Python", "SQL"))
+    h = users.h(student)
+    _live_job(db, "live_outside_match")
+    jid = sql(db, "select id from jobs where job_id = 'live_outside_match'").scalar()
+    for skill in ("Python", "Kubernetes"):
+        sql(db, "insert into job_skills (job_id, job_ref, skill_name) values (:j, 'live_outside_match', :s)", j=jid, s=skill)
+    assert client.post("/applications/outside", headers=h, json={"job_id": "live_outside_match"}).status_code == 200
+    row = next(x for x in client.get("/applications/outside", headers=h).json() if x["job_ref"] == "live_outside_match")
+    assert row["match"] == "1 of 2 required"

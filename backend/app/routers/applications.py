@@ -304,7 +304,17 @@ def delete_outside(oid: int, student: User = Depends(require_student), db: Sessi
 def my_outside(student: User = Depends(require_student), db: Session = Depends(get_db)):
     rows = (db.query(OutsideApplication, Job).join(Job, Job.id == OutsideApplication.job_id)
             .filter(OutsideApplication.student_id == student.id).order_by(OutsideApplication.created_at.desc()).all())
-    return [_outside(o, j) for o, j in rows]
+    # 20 Oct (her review): her match for each job, as on SkillMap applications ("3 of 5 required"), worked out now
+    from app.routers.skillgap import skill_gap_for
+    out = []
+    for o, j in rows:
+        try:
+            sm = skill_gap_for(student, j.job_id, db)["summary"]
+            match = f"{sm['matched_skills']} of {sm['matched_skills'] + sm['missing_skills']} required"
+        except HTTPException:
+            match = None
+        out.append({**_outside(o, j), "match": match})
+    return out
 
 
 @router.get("/outside/job/{job_ref}")

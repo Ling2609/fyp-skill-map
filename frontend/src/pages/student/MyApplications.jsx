@@ -1,14 +1,14 @@
-import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useEffect, useRef, useState } from 'react'
+import { Link, useSearchParams } from 'react-router-dom'
 import api from '../../api'
 import PageHeader from '../../components/PageHeader'
 import { ADMIN_COUNTS_CHANGED } from '../../components/Sidebar'
 import { errText } from './profileUtils'
-import ApplicationSteps from '../../components/ApplicationSteps'
 import { Bar, LoadingLabel } from '../../components/Skeleton'
 import InfoTip from '../../components/InfoTip'
 import EmployerRecord from '../../components/EmployerRecord'
 import { useToast } from '../../components/Toast'
+import BackLink from '../../components/BackLink'
 
 // My Applications (11 Oct, Employer flow batch 2; mock-up board 6): every job the student applied for on SkillMap.
 // 12 Oct (her request; mock-up P2): one card per application with its progress, Applied -> Viewed -> Shortlisted ->
@@ -17,9 +17,13 @@ import { useToast } from '../../components/Toast'
 // applying elsewhere, after 30 that this one is unlikely (MyCareersFuture: follow up after 1-2 weeks, move on after
 // about a month). Employers' invitations to apply sit on top. One column across the page width, newest update first (her review, 12 Oct). References: references.md "Application progress".
 const fmtDay = (iso) => iso ? new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }) : ''
+// 20 Oct (her review; blue is kept for things to click): grey = waiting, violet = moving forward, green = good news,
+// red = not selected. Statuses on other sites use the same colours (their select).
 const PILL = {
-  applied: 'bg-slate-100 text-slate-700', viewed: 'bg-slate-100 text-slate-700', shortlisted: 'bg-blue-50 text-blue-700',
-  accepted: 'bg-emerald-50 text-emerald-700', rejected: 'bg-rose-50 text-rose-700', closed: 'bg-slate-100 text-slate-500',
+  applied: 'bg-slate-100 text-slate-700', viewed: 'bg-slate-100 text-slate-700', shortlisted: 'bg-violet-50 text-violet-800',
+  accepted: 'bg-green-50 text-green-800', rejected: 'bg-rose-50 text-rose-700', closed: 'bg-slate-100 text-slate-500',
+  interviewing: 'bg-violet-50 text-violet-800', offer: 'bg-green-50 text-green-800', not_selected: 'bg-rose-50 text-rose-700',
+  withdrew: 'bg-slate-50 text-slate-500 border border-slate-200',
 }
 // 14 Oct (transparency flow): every outcome says why. Reasons the employer picked, or why the job closed.
 const REASON_TEXT = {
@@ -28,20 +32,30 @@ const REASON_TEXT = {
 
 // While waiting: what is happening on the job, where you stand among the applicants (skills only, from 5 applicants),
 // and the employer's record of deciding by their own date (research: references.md "Employer replies, ghosting")
-function Facts({ r }) {
-  const st = r.job_stats, me = r.stand, rec = r.employer_record
+// 20 Oct (her pick S4): the three numbers are boxes exactly as tall as the steps beside them: the number on the
+// circles' line, the caption on the step names' line
+function Numbers({ r }) {
+  const st = r.job_stats
   return (
-    <div className="mt-4 space-y-2.5">
-      <div className="grid grid-cols-3 gap-2">
-        {/* 20 Oct (her review): "1 applied" read like her own count; now says it's everyone who applied */}
-        {[[st?.applied, st?.applied === 1 ? 'person applied' : 'people applied'], [st?.shortlisted, 'shortlisted so far'],
-          [r.decide_by ? fmtDay(r.decide_by) : '—', 'reply promised by']].map(([v, k]) => (
-          <div key={k} className="rounded-lg bg-slate-50 px-3 py-2">
-            <p className="text-lg font-semibold text-slate-900 tabular-nums leading-tight">{v ?? '—'}</p>
-            <p className="text-xs text-slate-500">{k}</p>
-          </div>
-        ))}
-      </div>
+    <div className="grid grid-cols-3 gap-2">
+      {/* 20 Oct (her review): "1 applied" read like her own count; now says it's everyone who applied */}
+      {[[st?.applied, st?.applied === 1 ? 'person applied' : 'people applied'], [st?.shortlisted, 'shortlisted so far'],
+        [r.decide_by ? fmtDay(r.decide_by) : '—', 'reply promised by']].map(([v, k]) => (
+        <div key={k} className="rounded-lg bg-slate-50 h-[52px] px-3 flex flex-col justify-center">
+          <p className="text-[15px] font-semibold text-slate-900 tabular-nums leading-6">{v ?? '—'}</p>
+          <p className="text-xs leading-4 text-slate-500">{k}</p>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+// What is happening on the job, where you stand among the applicants (skills only, from 5 applicants), and the
+// employer's record of deciding by their own date (research: references.md "Employer replies, ghosting")
+function Facts({ r }) {
+  const me = r.stand
+  return (
+    <div className="mt-3 space-y-2.5">
       {r.decide_extended_reason && <p className="text-xs text-slate-600">Reply date moved{r.decide_by_original ? ` from ${fmtDay(r.decide_by_original)}` : ''}: “{r.decide_extended_reason}”</p>}
       {!r.taking_applications && <p className="text-xs text-slate-600">Not taking new applications. {r.company} is still deciding.</p>}
       {me && (
@@ -54,8 +68,33 @@ function Facts({ r }) {
         </div>
       )}
       {/* shown from 3 judged jobs (audit, 14 Oct): below that one late job would define the employer */}
-      <EmployerRecord company={r.company} record={rec} />
+      <EmployerRecord company={r.company} record={r.employer_record} />
     </div>
+  )
+}
+
+// 20 Oct (her pick F1): the steps in Details, a band as tall as the number boxes beside them: circles joined by a
+// line through their middle, each step's name under its circle with the date of a step that happened
+function DetailSteps({ steps, decided }) {
+  const last = steps.findLastIndex(x => x.at)
+  return (
+    <ol className="flex h-[52px]" aria-label="Progress">
+      {steps.map((s, i) => {
+        const done = !!s.at
+        const skipped = !done && decided && s.key !== 'decision'
+        return (
+          <li key={s.key} className="flex-1 flex flex-col items-center relative">
+            {i > 0 && <span aria-hidden="true" className={`absolute top-[13px] right-1/2 w-full h-0.5 ${done || skipped ? 'bg-blue-500' : 'bg-slate-200'}`} />}
+            <span aria-hidden="true" className={`relative mt-[2px] w-6 h-6 rounded-full border-2 flex items-center justify-center text-[11px] text-white ${
+              done ? 'bg-blue-600 border-blue-600' : 'bg-white border-slate-300'}`}>{done ? '✓' : ''}</span>
+            <span className={`text-xs leading-4 mt-[6px] whitespace-nowrap ${i === last ? 'font-semibold text-slate-900' : done ? 'text-slate-600' : 'text-slate-400'}`}>
+              {s.label}{done ? ` · ${fmtDay(s.at)}` : skipped ? ' · —' : ''}
+            </span>
+            <span className="sr-only">{done ? 'done' : skipped ? 'skipped' : 'not yet'}</span>
+          </li>
+        )
+      })}
+    </ol>
   )
 }
 
@@ -132,23 +171,14 @@ function pill(r) {
 
 // 20 Oct (her review of 10 + 10 applications: four screens long; research: references.md "My Applications with many
 // applications"): progressive disclosure, one level. Each SkillMap card shows by default what is needed every visit
-// (stage, reply date, status); "Show details" opens the full steps and numbers as before. A card that needs her
-// attention opens by itself. Each section shows its newest 5, then "Show all N (x more)", so "On other sites" is
-// reached without scrolling past every SkillMap card.
+// (stage, reply date, status); "Details" opens the steps with their dates and the numbers. Each section shows its
+// newest 3, then "See all N" (later 20 Oct changes: see the components below).
 const FIRST = 3
-// 20 Oct (her review of 10 + 10: still long): each section shows 3, and "Show all" opens the rest in a box that
-// scrolls on its own (her rule: cards scroll, not the page), so the page stays about one screen whatever the count
-const SCROLL = 'max-h-[60vh] overflow-y-auto'
 // 20 Oct (her review: the gaps between cards looked odd): each section is one card with a line between applications
 const LIST = 'bg-white border border-slate-200 rounded-2xl divide-y divide-slate-200'
-// 20 Oct (her review: no large blank space below): with only a few SkillMap applications every card opens, as before
-const FEW = 3
 // 20 Oct (her review: big empty middle): one row = job | progress | reply date or site | status, as columns on laptops
 // One line per row from 1024 px (her review: consistency); the progress column never wraps and starts at the same place
 const ROW = 'grid gap-x-4 gap-y-2 lg:grid-cols-[minmax(0,1fr)_11.5rem_8.5rem_10.5rem] xl:grid-cols-[minmax(0,1fr)_24rem_8.5rem_10.5rem] lg:items-center lg:min-h-12'
-const RECENT_DAYS = 14
-const daysSinceIso = (iso) => iso ? (Date.now() - new Date(iso).getTime()) / 86400000 : Infinity
-const needsAttention = (r) => !!r.progress.nudge || (['accepted', 'rejected'].includes(r.status) && daysSinceIso(r.status_changed_at) <= RECENT_DAYS)
 
 function MiniSteps({ steps }) {
   // 20 Oct (her review): always ONE line. Laptops: every step named, the date on the latest one (all dates are in
@@ -205,44 +235,54 @@ function Labelled({ label, value }) {
   return <p className="text-[13px] text-slate-500 whitespace-nowrap">{label} <b className="font-semibold text-slate-900">{value}</b></p>
 }
 
-function MoreButton({ total, open, onClick }) {
+// 20 Oct (her review: "Show all" growing one section while the other stays short looked odd; research:
+// references.md "See all"): "See all N" opens that section on its own, as a normal list the page scrolls
+function MoreButton({ total, onClick }) {
   if (total <= FIRST) return null
   return (
     <button type="button" onClick={onClick} className="shrink-0 text-sm font-medium text-blue-700 hover:underline">
-      {open ? 'Show fewer' : `Show all ${total} (${total - FIRST} more)`}
+      See all {total} →
     </button>
   )
 }
 
-function AppCard({ r, openAll }) {
-  const [open, setOpen] = useState(openAll || needsAttention(r))
+function AppCard({ r, open, onToggle }) {
+  // 20 Oct (her review): every row starts as one line (none opens by itself) and only one is open at a time; what
+  // needs her attention shows in the row instead: the pill's colour, and an amber note where "Reply by" sits
+  const ref = useRef(null)
+  useEffect(() => { if (open) ref.current?.scrollIntoView({ block: 'nearest', behavior: 'smooth' }) }, [open])
   const [key, label] = pill(r)
   const decided = ['accepted', 'rejected'].includes(r.status)
-  const when = decided ? '' : r.decide_by && !r.job_closed ? `Reply by ${fmtDay(r.decide_by)}` : ''
-  const details = (!decided && !r.job_closed) || r.progress.nudge || decided || r.employer_usually_days
+  const steps = r.progress.steps.map(s => s.key === 'decision' && decided ? { ...s, label: r.status_label } : s)
+  const p = r.progress
+  const warn = p.nudge === 'no_decision' ? ['Reply date', 'passed'] : p.nudge ? ['No update for', `${p.quiet_days} days`] : null
+  const when = decided || r.job_closed ? '' : r.decide_by ? fmtDay(r.decide_by) : ''
+  const numbers = !decided && !r.job_closed
   return (
-    <article className="px-5 py-3.5">
+    <article ref={ref} className="px-5 py-3.5 scroll-mt-4">
       <div className={ROW}>
         <div className="min-w-0">
           <Link to={`/jobs/${encodeURIComponent(r.job_ref)}`} state={{ from: 'My Applications' }} className={`${TITLE} ${ONE}`} title={r.title}>{r.title}</Link>
-          <p className={`text-xs text-slate-500 mt-0.5 ${ONE}`}>{r.company}{r.match && ` · your match ${r.match}`}</p>
+          <p className={`text-xs text-slate-500 mt-0.5 ${ONE}`}>{r.company}{r.match && ` · ${short(r.match)}`}</p>
         </div>
-        {/* 20 Oct (her review): opened, the large steps and the "reply promised by" box below say these, so the
-            row doesn't repeat them */}
-        {open ? <span className="hidden lg:block" /> : <MiniSteps steps={r.progress.steps} />}
-        {/* 20 Oct (her review: too small to notice): a label over a larger value */}
-        <Labelled label={!open && when ? 'Reply by' : ''} value={open ? '' : when.replace('Reply by ', '')} />
+        {/* opened, the steps and the numbers below say these, so the row doesn't repeat them */}
+        {open ? <span className="hidden lg:block" /> : <MiniSteps steps={steps} />}
+        {open ? <span className="hidden lg:block" />
+          : warn ? <p className="text-[13px] text-amber-700 whitespace-nowrap">{warn[0]} <b className="font-semibold">{warn[1]}</b></p>
+          : <Labelled label="Reply by" value={when} />}
         <div className="flex items-center gap-3 lg:justify-end">
           <span className={`shrink-0 text-xs font-semibold rounded-full px-2.5 py-0.5 ${PILL[key]}`}>{label}</span>
-          {details && <button type="button" onClick={() => setOpen(o => !o)} aria-expanded={open}
-            className="text-xs font-medium text-blue-700 hover:underline whitespace-nowrap">{open ? 'Hide ▴' : 'Details ▾'}</button>}
+          <button type="button" onClick={onToggle} aria-expanded={open}
+            className="text-xs font-medium text-blue-700 hover:underline whitespace-nowrap">{open ? 'Hide ▴' : 'Details ▾'}</button>
         </div>
       </div>
-      {/* 20 Oct (her pick): the details look as before: the large steps with their dates, then the numbers */}
       {open && (
-        <div className="mt-1 pb-1">
-          <ApplicationSteps steps={r.progress.steps} decided={decided} />
-          {!decided && !r.job_closed && <Facts r={r} />}
+        <div className="pb-1">
+          <div className={`mt-3 ${numbers ? 'grid lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)] gap-x-6 gap-y-3 items-start' : ''}`}>
+            <DetailSteps steps={steps} decided={decided} />
+            {numbers && <Numbers r={r} />}
+          </div>
+          {numbers && <Facts r={r} />}
           <Note r={r} />
         </div>
       )}
@@ -272,6 +312,8 @@ function AppsSkeleton() {
 const TITLE = 'text-[15px] font-semibold text-blue-700 hover:underline underline-offset-2'
 // 20 Oct (her review: one line each): in rows, the title and the line under it don't wrap (full text on hover)
 const ONE = 'lg:block lg:truncate'
+// "3 of 5 required" -> "3/5 required", as on Job Matches, so the line under the title fits on one line
+const short = (m) => m.replace(' of ', '/')
 const OUTSIDE = [['applied', 'Applied'], ['interviewing', 'Interviewing'], ['offer', 'Offer'], ['not_selected', 'Not selected'], ['withdrew', 'Withdrew']]
 // 20 Oct (her review): the same columns as the SkillMap rows: job | progress | site | status
 const OUT_STEPS = ['applied', 'interviewing', 'offer']
@@ -288,14 +330,14 @@ function OutsideCard({ o, onStatus, onRemove }) {
       <div className={ROW}>
         <div className="min-w-0">
           <Link to={`/jobs/${encodeURIComponent(o.job_ref)}`} state={{ from: 'My Applications' }} className={`${TITLE} ${ONE}`} title={o.title}>{o.title}</Link>
-          <p className={`text-xs text-slate-500 mt-0.5 ${ONE}`}>{o.company}{o.listed === false && <span className="text-slate-400"> · ad no longer listed</span>}</p>
+          <p className={`text-xs text-slate-500 mt-0.5 ${ONE}`}>{o.company}{o.match && ` · ${short(o.match)}`}{o.listed === false && <span className="text-slate-400"> · ad no longer listed</span>}</p>
         </div>
         <MiniSteps steps={outsideSteps(o)} />
         <Labelled label="Applied via" value={o.publisher || 'another site'} />
         <div className="flex items-center gap-3 lg:justify-end">
           <label className="sr-only" htmlFor={`os-${o.id}`}>Status of {o.title}</label>
           <select id={`os-${o.id}`} value={o.status} onChange={e => onStatus(o, e.target.value)}
-            className="text-xs font-medium text-slate-800 border border-slate-300 rounded-lg pl-2 pr-1 py-1 bg-white">
+            className={`text-xs font-semibold rounded-lg pl-2 pr-1 py-1 border border-transparent ${PILL[o.status] || 'bg-white border-slate-300'}`}>
             {OUTSIDE.map(([k, l]) => <option key={k} value={k}>{l}</option>)}
           </select>
           <button type="button" onClick={() => onRemove(o)} className="text-xs font-medium text-slate-500 hover:text-rose-700 hover:underline">Remove</button>
@@ -311,8 +353,11 @@ export default function MyApplications() {
   const [tab, setTab] = useState('all')
   const [error, setError] = useState('')
   const [outside, setOutside] = useState([])
-  const [allApps, setAllApps] = useState(false)          // "Show all N (x more)", per section
-  const [allOutside, setAllOutside] = useState(false)
+  // "See all": one section on its own (?see=skillmap / ?see=other), so the browser's Back returns to both
+  const [openId, setOpenId] = useState(null)       // 20 Oct (her pick F1): one SkillMap row open at a time
+  const [params, setParams] = useSearchParams()
+  const see = params.get('see')
+  const seeAll = (which) => setParams(which ? { see: which } : {})
   const toast = useToast()
   useEffect(() => {
     api.get('/applications/mine').then(res => setRows(res.data)).catch(err => setError(errText(err, "Couldn't load your applications.")))
@@ -345,7 +390,9 @@ export default function MyApplications() {
       })
       .catch(err => toast.show(errText(err, "Couldn't remove it. Try again."), null, true))
   }
-  const count = (t) => (rows || []).filter(r => inTab(r, t)).length + outside.filter(o => outsideInTab(o, t)).length
+  // 20 Oct (her review): in "See all" the filter counts are for that section only
+  const count = (t) => (see === 'other' ? 0 : (rows || []).filter(r => inTab(r, t)).length)
+    + (see === 'skillmap' ? 0 : outside.filter(o => outsideInTab(o, t)).length)
   const outsideShown = outside.filter(o => outsideInTab(o, tab))
   // 12 Oct (her review): one column, the application with the newest update first
   const shown = (rows || []).filter(r => inTab(r, tab))
@@ -360,11 +407,13 @@ export default function MyApplications() {
           <p className="text-sm text-slate-500 mt-1">Newest update first. Jobs on SkillMap update as the employer acts; jobs on other sites you update yourself.</p>
         </div>
       </PageHeader>
+      {see && <BackLink label="all applications" onClick={() => seeAll(null)} />}
       {/* 20 Oct (her review): full screen width, no blank strip on the right */}
-      <div className="flex-1 min-h-0 overflow-y-auto px-4 sm:px-8 py-6"><div className="flex flex-col gap-4">
+      {/* 20 Oct (her review): in "See all" only the list of records scrolls; the filters and the section title stay */}
+      <div className={`flex-1 min-h-0 px-4 sm:px-8 py-4 ${see ? 'flex flex-col' : 'overflow-y-auto'}`}><div className={`flex flex-col gap-3.5 ${see ? 'flex-1 min-h-0' : ''}`}>
         {error && <p role="alert" className="text-sm text-rose-700 bg-rose-50 border border-rose-200 rounded-lg px-4 py-2.5">{error}</p>}
 
-        {invites.map(inv => (
+        {!see && invites.map(inv => (
           <section key={inv.id} className="bg-violet-50 border border-violet-200 rounded-2xl px-5 py-4 flex flex-wrap items-center gap-x-5 gap-y-2">
             <div className="flex-1 min-w-60">
               <h2 className="text-[15px] font-semibold text-slate-900">{inv.company} invited you to apply</h2>
@@ -376,6 +425,17 @@ export default function MyApplications() {
         ))}
 
         {rows === null && !error && <AppsSkeleton />}
+        {(rows?.length > 0 || outside.length > 0) && (
+          <div role="tablist" className="flex flex-wrap gap-2 shrink-0">
+            {TABS.map(([t, text]) => (
+              <button key={t} role="tab" aria-selected={tab === t} onClick={() => setTab(t)}
+                className={`text-sm font-medium px-3.5 py-1.5 rounded-full border ${tab === t
+                  ? 'bg-blue-600 border-blue-600 text-white' : 'bg-white border-slate-200 text-slate-600 hover:border-blue-300'}`}>
+                {text} {count(t)}
+              </button>
+            ))}
+          </div>
+        )}
         {rows?.length === 0 && outside.length === 0 && (
           <div className="bg-white border border-slate-200 rounded-2xl p-8 text-center">
             <h2 className="text-base font-semibold text-slate-900">No applications yet</h2>
@@ -383,38 +443,27 @@ export default function MyApplications() {
             <Link to="/recommend" className="inline-block mt-4 px-4 py-2 text-sm font-medium rounded-lg bg-blue-600 text-white hover:bg-blue-700">Go to Job Matches</Link>
           </div>
         )}
-        {(rows?.length > 0 || outside.length > 0) && (
-          <>
-            <div role="tablist" className="flex flex-wrap gap-2">
-              {TABS.map(([t, text]) => (
-                <button key={t} role="tab" aria-selected={tab === t} onClick={() => { setTab(t); setAllApps(false); setAllOutside(false) }}
-                  className={`text-sm font-medium px-3.5 py-1.5 rounded-full border ${tab === t
-                    ? 'bg-blue-600 border-blue-600 text-white' : 'bg-white border-slate-200 text-slate-600 hover:border-blue-300'}`}>
-                  {text} {count(t)}
-                </button>
-              ))}
-            </div>
-            {shown.length > 0 && (
-              <section aria-labelledby="skillmap-h" className="flex flex-col gap-3">
-                <SectionHead id="skillmap-h" title="On SkillMap" note="The employer updates these as they act."
-                  more={<MoreButton total={shown.length} open={allApps} onClick={() => setAllApps(v => !v)} />} />
-                <div className={`${LIST} ${allApps ? SCROLL : ''}`}>
-                  {(allApps ? shown : shown.slice(0, FIRST)).map(r => <AppCard key={r.id} r={r} openAll={shown.length <= FEW} />)}
-                </div>
-              </section>
-            )}
-            {shown.length === 0 && outsideShown.length === 0 && <p className="text-sm text-slate-400">None here.</p>}
-          </>
-        )}
-        {outsideShown.length > 0 && (
-          <section aria-labelledby="outside-h" className="flex flex-col gap-3 mt-2">
-            <SectionHead id="outside-h" title="On other sites" note="Jobs you applied for through “Apply on …”. Their employers won't see these, so you update the status."
-              more={<MoreButton total={outsideShown.length} open={allOutside} onClick={() => setAllOutside(v => !v)} />} />
-            <div className={`${LIST} ${allOutside ? SCROLL : ''}`}>
-              {(allOutside ? outsideShown : outsideShown.slice(0, FIRST)).map(o => <OutsideCard key={o.id} o={o} onStatus={setStatus} onRemove={remove} />)}
+        {see !== 'other' && shown.length > 0 && (
+          <section aria-labelledby="skillmap-h" className={`flex flex-col gap-3 ${see ? 'min-h-0' : ''}`}>
+            <SectionHead id="skillmap-h" title={see ? `On SkillMap · ${shown.length}` : 'On SkillMap'} note="The employer updates these as they act."
+              more={!see && <MoreButton total={shown.length} onClick={() => seeAll('skillmap')} />} />
+            <div className={`${LIST} ${see ? 'min-h-0 overflow-y-auto' : ''}`}>
+              {(see ? shown : shown.slice(0, FIRST)).map(r => <AppCard key={r.id} r={r} open={openId === r.id} onToggle={() => setOpenId(id => id === r.id ? null : r.id)} />)}
             </div>
           </section>
         )}
+        {see !== 'skillmap' && outsideShown.length > 0 && (
+          <section aria-labelledby="outside-h" className={`flex flex-col gap-3 ${see ? 'min-h-0' : 'mt-1'}`}>
+            <SectionHead id="outside-h" title={see ? `On other sites · ${outsideShown.length}` : 'On other sites'}
+              note="Jobs you applied for through “Apply on …”. Their employers won't see these, so you update the status."
+              more={!see && <MoreButton total={outsideShown.length} onClick={() => seeAll('other')} />} />
+            <div className={`${LIST} ${see ? 'min-h-0 overflow-y-auto' : ''}`}>
+              {(see ? outsideShown : outsideShown.slice(0, FIRST)).map(o => <OutsideCard key={o.id} o={o} onStatus={setStatus} onRemove={remove} />)}
+            </div>
+          </section>
+        )}
+        {(rows?.length > 0 || outside.length > 0) && (see === 'skillmap' ? shown : see === 'other' ? outsideShown : [...shown, ...outsideShown]).length === 0
+          && <p className="text-sm text-slate-400">None here.</p>}
       </div></div>
       {toast.ui}
     </div>
