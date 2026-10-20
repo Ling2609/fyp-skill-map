@@ -158,7 +158,7 @@ function OutsideCard({ o, onStatus, onRemove }) {
           <button type="button" onClick={() => onRemove(o)} className="text-sm text-slate-500 hover:text-rose-700">Remove</button>
         </div>
       </div>
-      <p className="text-xs text-slate-500 mt-2">You update this one. Only you see it: {o.company || 'the employer'} won't see or update it.</p>
+      <p className="text-xs text-slate-500 mt-2">{o.company || 'The employer'} won't see this, so you update the status yourself.</p>
     </article>
   )
 }

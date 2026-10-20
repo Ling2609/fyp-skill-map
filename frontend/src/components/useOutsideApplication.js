@@ -7,10 +7,17 @@ import { useToast } from './Toast'
 // "Apply on <site> ↗": an inline banner (not a pop-up that blocks the page; her guide on pop-ups), buttons named by
 // what they do, and Undo instead of "Are you sure?". A small "I applied" link stays for later. Only the student sees
 // the record; the outside employer doesn't see or update it.
+// 20 Oct (her pick): the "Already applied? Record it" line shows only on jobs she has clicked "Apply on …" for. The
+// clicks are remembered in this browser only (localStorage), never sent to the server; a cleared browser just hides
+// the line until the next click.
+const CLICKED_KEY = 'applyClicked'
+const readClicked = () => { try { return JSON.parse(localStorage.getItem(CLICKED_KEY)) || [] } catch { return [] } }
 const ASK_KEY = 'askApplied'            // sessionStorage: the job she left to apply for (survives a reload of this tab)
 
 export function useOutsideApplication(jobRef, live) {
   const [rec, setRec] = useState(null)
+  const [clickedNow, setClicked] = useState(false)
+  const clicked = clickedNow || (jobRef ? readClicked().includes(jobRef) : false)   // jobRef arrives after loading
   const [asking, setAsking] = useState(false)
   const [busy, setBusy] = useState(false)
   const left = useRef(false)
@@ -46,6 +53,11 @@ export function useOutsideApplication(jobRef, live) {
 
   const forget = () => { try { sessionStorage.removeItem(ASK_KEY) } catch { /* fine */ } }
   const leaving = () => {
+    try {
+      const list = readClicked().filter(r => r !== jobRef)
+      localStorage.setItem(CLICKED_KEY, JSON.stringify([jobRef, ...list].slice(0, 200)))
+    } catch { /* storage blocked: the line just stays hidden */ }
+    setClicked(true)
     if (recRef.current) return
     left.current = true
     try { sessionStorage.setItem(ASK_KEY, jobRef) } catch { /* fine */ }
@@ -65,5 +77,5 @@ export function useOutsideApplication(jobRef, live) {
       .finally(() => setBusy(false))
   }
   const notYet = () => { setAsking(false); forget() }
-  return { rec, asking, busy, leaving, record, notYet, toastUi: toast.ui }
+  return { rec, asking, busy, clicked, leaving, record, notYet, toastUi: toast.ui }
 }

@@ -12,7 +12,7 @@ export function OutsideStatus({ o }) {
   }
   // 20 Oct (her review): not while the question is showing (it asked the same thing twice), and worded so it reads as
   // a way to record an earlier application, not as a second button next to Apply
-  if (o.asking) return null
+  if (o.asking || !o.clicked) return null      // her pick: only after she has clicked "Apply on …" for this job
   return (
     <button type="button" onClick={o.record} disabled={o.busy}
       className="text-xs text-slate-500 hover:text-blue-700 disabled:opacity-40">
@@ -35,7 +35,7 @@ export function OutsideBanner({ o, site, company }) {
             className="text-sm font-medium text-slate-700 bg-white border border-slate-300 hover:bg-slate-50 rounded-lg px-3 py-1.5">Not yet</button>
         </div>
       </div>
-      <p className="text-xs text-slate-500 mt-1.5">It goes in your My Applications. Only you see it: {company || 'the employer'} won't see or update it.</p>
+      <p className="text-xs text-slate-500 mt-1.5">Saved to My Applications so you can keep track. {company || 'The employer'} won't see it, so you update the status yourself.</p>
     </div>
   )
 }
