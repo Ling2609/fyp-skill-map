@@ -175,11 +175,22 @@ function pill(r) {
 // (stage, reply date, status); "Details" opens the steps with their dates and the numbers. Each section shows its
 // newest 3, then "See all N" (later 20 Oct changes: see the components below).
 const FIRST = 3
+// 20 Oct (her review: one section short, the other cut at 3): the main view has room for 6 rows; each section gets
+// up to 3, and rows one section doesn't need go to the other (1 SkillMap + 4 other sites shows all 5)
+const ROOM = 6
+function share(a, b) {
+  const x = Math.min(a, FIRST), y = Math.min(b, FIRST)
+  let spare = ROOM - Math.max(x, 1) - Math.max(y, 1)      // an empty section still takes one line ("None …")
+  const ax = Math.min(a - x, spare); spare -= ax
+  return [x + ax, y + Math.min(b - y, spare)]
+}
 // 20 Oct (her review: the gaps between cards looked odd): each section is one card with a line between applications
 const LIST = 'bg-white border border-slate-200 rounded-2xl divide-y divide-slate-200'
 // 20 Oct (her review: big empty middle): one row = job | progress | reply date or site | status, as columns on laptops
 // One line per row from 1024 px (her review: consistency); the progress column never wraps and starts at the same place
-const ROW = 'grid gap-x-4 gap-y-2 lg:grid-cols-[minmax(0,1fr)_11.5rem_8.5rem_10.5rem] xl:grid-cols-[minmax(0,1fr)_24rem_8.5rem_10.5rem] lg:items-center lg:min-h-12'
+// 20 Oct (her review: big gap after the job name): the job column grows only to 22rem; any spare width is shared
+// equally between the four columns (space-between), so the gaps match
+const ROW = 'grid gap-x-4 gap-y-2 lg:grid-cols-[minmax(0,22rem)_11.5rem_8.5rem_10.5rem] xl:grid-cols-[minmax(0,22rem)_24rem_8.5rem_10.5rem] 2xl:grid-cols-[minmax(0,22rem)_24rem_10.5rem_10.5rem] lg:justify-between lg:items-center lg:min-h-12'
 
 function MiniSteps({ steps }) {
   // 20 Oct (her review): always ONE line. Laptops: every step named, the date on the latest one (all dates are in
@@ -233,13 +244,18 @@ function SectionHead({ id, title, note, more }) {
 function Labelled({ label, value }) {
   // 20 Oct (her review: keep things on one line): "Reply by 9 Nov", the value darker and bold so it is noticed
   if (!value) return <span className="hidden lg:block" />
-  return <p className="text-[13px] text-slate-500 whitespace-nowrap">{label} <b className="font-semibold text-slate-900">{value}</b></p>
+  // a long site name ("Randstad Singapore") ends in "…" inside its column instead of running under the select
+  return <p className="text-[13px] text-slate-500 whitespace-nowrap min-w-0 truncate" title={`${label} ${value}`}>{label} <b className="font-semibold text-slate-900">{value}</b></p>
 }
 
 // 20 Oct (her review: "Show all" growing one section while the other stays short looked odd; research:
 // references.md "See all"): "See all N" opens that section on its own, as a normal list the page scrolls
-function MoreButton({ total, onClick }) {
-  if (total <= FIRST) return null
+function Empty({ children }) {
+  return <p className="px-5 py-3.5 text-sm text-slate-500">{children}</p>
+}
+
+function MoreButton({ total, shown, onClick }) {
+  if (total <= shown) return null
   return (
     <button type="button" onClick={onClick} className="shrink-0 text-sm font-medium text-blue-700 hover:underline">
       See all {total} →
@@ -398,6 +414,8 @@ export default function MyApplications() {
   // 12 Oct (her review): one column, the application with the newest update first
   const shown = (rows || []).filter(r => inTab(r, tab))
     .sort((a, b) => new Date(b.progress.last_update) - new Date(a.progress.last_update))
+  const [nApps, nOut] = share(shown.length, outsideShown.length)
+  const hasAny = rows !== null && (rows.length > 0 || outside.length > 0)
 
   return (
     <div className="flex flex-col h-screen">
@@ -444,27 +462,34 @@ export default function MyApplications() {
             <Link to="/recommend" className="inline-block mt-4 px-4 py-2 text-sm font-medium rounded-lg bg-blue-600 text-white hover:bg-blue-700">Go to Job Matches</Link>
           </div>
         )}
-        {see !== 'other' && shown.length > 0 && (
+        {/* 20 Oct (her review): both sections always show, so the page keeps its shape; an empty one says why in one line */}
+        {see !== 'other' && hasAny && (
           <section aria-labelledby="skillmap-h" className={`flex flex-col gap-3 ${see ? 'min-h-0' : ''}`}>
             <SectionHead id="skillmap-h" title={see ? `On SkillMap · ${shown.length}` : 'On SkillMap'} note="The employer updates these as they act."
-              more={!see && <MoreButton total={shown.length} onClick={() => seeAll('skillmap')} />} />
+              more={!see && <MoreButton total={shown.length} shown={nApps} onClick={() => seeAll('skillmap')} />} />
             <div className={`${LIST} ${see ? 'min-h-0 overflow-y-auto' : ''}`}>
-              {(see ? shown : shown.slice(0, FIRST)).map(r => <AppCard key={r.id} r={r} open={openId === r.id} onToggle={() => setOpenId(id => id === r.id ? null : r.id)} />)}
+              {(see ? shown : shown.slice(0, nApps)).map(r => <AppCard key={r.id} r={r} open={openId === r.id} onToggle={() => setOpenId(id => id === r.id ? null : r.id)} />)}
+              {shown.length === 0 && (rows?.length
+                ? <Empty>None {tab === 'all' ? 'here' : `with “${TABS.find(t => t[0] === tab)[1]}”`}.</Empty>
+                : <Empty>No applications on SkillMap yet. Jobs marked “Apply on SkillMap” are applied for with your profile.{' '}
+                    <Link to="/recommend" className="font-medium text-blue-700 hover:underline">Go to Job Matches</Link></Empty>)}
             </div>
           </section>
         )}
-        {see !== 'skillmap' && outsideShown.length > 0 && (
+        {see !== 'skillmap' && hasAny && (
           <section aria-labelledby="outside-h" className={`flex flex-col gap-3 ${see ? 'min-h-0' : 'mt-1'}`}>
             <SectionHead id="outside-h" title={see ? `On other sites · ${outsideShown.length}` : 'On other sites'}
               note="Jobs you applied for through “Apply on …”. Their employers won't see these, so you update the status."
-              more={!see && <MoreButton total={outsideShown.length} onClick={() => seeAll('other')} />} />
+              more={!see && <MoreButton total={outsideShown.length} shown={nOut} onClick={() => seeAll('other')} />} />
             <div className={`${LIST} ${see ? 'min-h-0 overflow-y-auto' : ''}`}>
-              {(see ? outsideShown : outsideShown.slice(0, FIRST)).map(o => <OutsideCard key={o.id} o={o} onStatus={setStatus} onRemove={remove} />)}
+              {(see ? outsideShown : outsideShown.slice(0, nOut)).map(o => <OutsideCard key={o.id} o={o} onStatus={setStatus} onRemove={remove} />)}
+              {outsideShown.length === 0 && (outside.length
+                ? <Empty>None {tab === 'all' ? 'here' : `with “${TABS.find(t => t[0] === tab)[1]}”`}.</Empty>
+                : <Empty>None yet. After you apply on another site through “Apply on …”, answer “Yes, I applied” on the job and it shows here.</Empty>)}
             </div>
           </section>
         )}
-        {(rows?.length > 0 || outside.length > 0) && (see === 'skillmap' ? shown : see === 'other' ? outsideShown : [...shown, ...outsideShown]).length === 0
-          && <p className="text-sm text-slate-400">None here.</p>}
+
       </div></div>
       {toast.ui}
     </div>
