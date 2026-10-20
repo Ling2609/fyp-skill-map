@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import api from '../../api'
 import PageHeader from '../../components/PageHeader'
@@ -175,10 +175,10 @@ function pill(r) {
 // (stage, reply date, status); "Details" opens the steps with their dates and the numbers. Each section shows its
 // newest 3, then "See all N" (later 20 Oct changes: see the components below).
 const FIRST = 3
-// 20 Oct (her review: one section short, the other cut at 3): the main view has room for 6 rows; each section gets
-// up to 3, and rows one section doesn't need go to the other (1 SkillMap + 4 other sites shows all 5)
-const ROOM = 6
-function share(a, b) {
+// 20 Oct (her review: one section short, the other cut at 3): the main view has room for `room` rows; each section
+// gets up to 3, and rows one section doesn't need go to the other (1 SkillMap + 4 other sites shows all 5).
+// `room` is measured on her screen (her review: 6 rows started scrolling on her laptop), see MyApplications.
+function share(a, b, ROOM) {
   const x = Math.min(a, FIRST), y = Math.min(b, FIRST)
   let spare = ROOM - Math.max(x, 1) - Math.max(y, 1)      // an empty section still takes one line ("None …")
   const ax = Math.min(a - x, spare); spare -= ax
@@ -251,7 +251,7 @@ function Labelled({ label, value }) {
 // 20 Oct (her review: "Show all" growing one section while the other stays short looked odd; research:
 // references.md "See all"): "See all N" opens that section on its own, as a normal list the page scrolls
 function Empty({ children }) {
-  return <p className="px-5 py-3.5 text-sm text-slate-500">{children}</p>
+  return <p data-row className="px-5 py-3.5 text-sm text-slate-500">{children}</p>
 }
 
 function MoreButton({ total, shown, onClick }) {
@@ -276,7 +276,7 @@ function AppCard({ r, open, onToggle }) {
   const when = decided || r.job_closed ? '' : r.decide_by ? fmtDay(r.decide_by) : ''
   const numbers = !decided && !r.job_closed
   return (
-    <article ref={ref} className="px-5 py-3.5 scroll-mt-4">
+    <article ref={ref} data-row className="px-5 py-3.5 scroll-mt-4">
       <div className={ROW}>
         <div className="min-w-0">
           <Link to={`/jobs/${encodeURIComponent(r.job_ref)}`} state={{ from: 'My Applications' }} className={`${TITLE} ${ONE}`} title={r.title}>{r.title}</Link>
@@ -343,7 +343,7 @@ function outsideSteps(o) {
 }
 function OutsideCard({ o, onStatus, onRemove }) {
   return (
-    <article className="px-5 py-3.5">
+    <article data-row className="px-5 py-3.5">
       <div className={ROW}>
         <div className="min-w-0">
           <Link to={`/jobs/${encodeURIComponent(o.job_ref)}`} state={{ from: 'My Applications' }} className={`${TITLE} ${ONE}`} title={o.title}>{o.title}</Link>
@@ -372,6 +372,11 @@ export default function MyApplications() {
   const [outside, setOutside] = useState([])
   // "See all": one section on its own (?see=skillmap / ?see=other), so the browser's Back returns to both
   const [openId, setOpenId] = useState(null)       // 20 Oct (her pick F1): one SkillMap row open at a time
+  // 20 Oct (her review: 6 rows scrolled on her laptop): how many closed rows fit this screen, measured: the rows
+  // shown now, plus or minus the rows the spare (or missing) height holds. Not while a row is open (opening one
+  // shouldn't hide others) or in "See all". At least one row per section.
+  const scrollBox = useRef(null)
+  const [room, setRoom] = useState(6)
   const [params, setParams] = useSearchParams()
   const see = params.get('see')
   const seeAll = (which) => setParams(which ? { see: which } : {})
@@ -414,8 +419,28 @@ export default function MyApplications() {
   // 12 Oct (her review): one column, the application with the newest update first
   const shown = (rows || []).filter(r => inTab(r, tab))
     .sort((a, b) => new Date(b.progress.last_update) - new Date(a.progress.last_update))
-  const [nApps, nOut] = share(shown.length, outsideShown.length)
+  const [nApps, nOut] = share(shown.length, outsideShown.length, room)
   const hasAny = rows !== null && (rows.length > 0 || outside.length > 0)
+  useLayoutEffect(() => {
+    const el = scrollBox.current
+    if (!el || see || openId !== null || !hasAny) return
+    const measure = () => {
+      const rowsNow = el.querySelectorAll('[data-row]')
+      const rowH = rowsNow[0]?.getBoundingClientRect().height
+      if (!rowH) return
+      const cs = getComputedStyle(el)
+      const used = el.firstElementChild.getBoundingClientRect().height + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom)
+      const fit = rowsNow.length + Math.floor((el.clientHeight - used) / rowH)
+      setRoom(r => {
+        const next = Math.max(2, Math.min(12, fit))
+        return next === r ? r : next
+      })
+    }
+    measure()
+    const ro = new ResizeObserver(measure)
+    ro.observe(el)
+    return () => ro.disconnect()
+  }, [see, openId, hasAny, tab, rows, outside])
 
   return (
     <div className="flex flex-col h-screen">
@@ -429,7 +454,7 @@ export default function MyApplications() {
       {see && <BackLink label="all applications" onClick={() => seeAll(null)} />}
       {/* 20 Oct (her review): full screen width, no blank strip on the right */}
       {/* 20 Oct (her review): in "See all" only the list of records scrolls; the filters and the section title stay */}
-      <div className={`flex-1 min-h-0 px-4 sm:px-8 py-4 ${see ? 'flex flex-col' : 'overflow-y-auto'}`}><div className={`flex flex-col gap-3.5 ${see ? 'flex-1 min-h-0' : ''}`}>
+      <div ref={scrollBox} className={`flex-1 min-h-0 px-4 sm:px-8 py-4 ${see ? 'flex flex-col' : 'overflow-y-auto'}`}><div className={`flex flex-col gap-3.5 ${see ? 'flex-1 min-h-0' : ''}`}>
         {error && <p role="alert" className="text-sm text-rose-700 bg-rose-50 border border-rose-200 rounded-lg px-4 py-2.5">{error}</p>}
 
         {!see && invites.map(inv => (
