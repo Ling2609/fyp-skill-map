@@ -9,6 +9,7 @@ import { ADMIN_COUNTS_CHANGED } from '../../components/Sidebar'
 import { Bar, RowSkeleton, LoadingLabel, TextSkeleton } from '../../components/Skeleton'
 import { Busy } from '../../components/Spinner'
 import EmployerRecord, { PromisedDate } from '../../components/EmployerRecord'
+import BackLink from '../../components/BackLink'
 import { AdRequirementPills, SalaryFromAd } from '../../components/AdRequirements'
 
 // The grade itself, not its weight: the weight is the same for C+ and C, so a C showed as "C+" (5 Oct)
@@ -274,14 +275,8 @@ export default function JobDetail() {
   return (
     <div className="min-h-screen">
 
-      {/* Top nav */}
-      {/* Same left edge as the other pages' headings (PageHeader: px-8) */}
-      <div className="bg-white border-b border-slate-200 px-4 sm:px-8 py-3">
-        <button onClick={goBack} className="flex items-center gap-1 text-xs text-slate-500 hover:text-blue-600 transition">
-          <span>←</span>
-          <span>Back to {backLabel}</span>
-        </button>
-      </div>
+      {/* Top nav: same left edge as the other pages' headings (PageHeader: px-8); the shared back link (20 Oct) */}
+      <BackLink label={backLabel} onClick={goBack} />
 
       <div className="px-4 sm:px-6 py-5 max-w-4xl mx-auto space-y-4">
 

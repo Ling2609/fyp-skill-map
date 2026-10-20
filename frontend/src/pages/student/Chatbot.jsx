@@ -6,6 +6,7 @@ import api from '../../api'
 import { Bar, LoadingLabel } from '../../components/Skeleton'
 import { cached, ALL_MATCHES } from '../../pageCache'
 import PageHeader from '../../components/PageHeader'
+import BackLink from '../../components/BackLink'
 import { Busy } from '../../components/Spinner'
 
 const MODES = [
@@ -497,15 +498,8 @@ export default function Chatbot() {
   return (
     <div className="flex flex-col h-screen">
 
-      {/* Same look and place as Job Detail's "← Back to Job Matches" */}
-      {backTo && (
-        <div className="bg-white border-b border-slate-200 px-4 sm:px-8 py-3">
-          <button onClick={() => navigate(-1)} className="flex items-center gap-1 text-xs text-slate-500 hover:text-blue-600 transition">
-            <span aria-hidden="true">←</span>
-            <span>Back to {backTo}</span>
-          </button>
-        </div>
-      )}
+      {/* The shared back link, same as Job Detail's (20 Oct) */}
+      {backTo && <BackLink label={backTo} onClick={() => navigate(-1)} />}
 
       <PageHeader>
         <div className="flex flex-wrap items-start justify-between gap-3 pb-4 pt-1">

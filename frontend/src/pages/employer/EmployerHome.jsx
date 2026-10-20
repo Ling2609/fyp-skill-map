@@ -37,11 +37,30 @@ function Waiting({ status, company }) {
   )
 }
 
-function StatusPill({ status }) {
-  const cls = { open: 'bg-emerald-50 text-emerald-700 border-emerald-200', closed: 'bg-slate-100 text-slate-600 border-slate-200',
-    hidden: 'bg-amber-50 text-amber-800 border-amber-200' }[status]
-  const text = { open: 'Open', closed: 'Closed', hidden: 'Hidden by the career office' }[status]
-  return <span className={`text-xs font-medium border rounded-full px-2.5 py-0.5 ${cls}`}>{text}</span>
+const daysUntil = (iso) => Math.ceil((new Date(iso).getTime() - Date.now()) / 86400000)
+
+// 20 Oct (T2): only the states the tab doesn't already say
+function SpecialBadge({ children }) {
+  return <span className="shrink-0 text-[11px] font-medium text-amber-800 bg-amber-50 border border-amber-200 rounded-full px-2 py-0.5">{children}</span>
+}
+
+// The promised decision date with the days left (red once it has passed with applicants waiting); for a closed job,
+// when and why it closed
+function DecideCell({ j }) {
+  if (j.status !== 'open') {
+    const why = CLOSE_REASONS.find(([k]) => k === j.close_reason)?.[1]
+    return <p className="text-slate-600">{j.closed_at ? fmtDate(j.closed_at) : '–'}{why && <span className="block text-xs text-slate-500">{why}</span>}</p>
+  }
+  if (!j.decide_by) return <span className="text-slate-400">–</span>
+  const days = daysUntil(j.decide_by)
+  const late = j.past_date && j.waiting
+  return (
+    <p className={late ? 'text-rose-700 font-medium' : 'text-slate-800'}>
+      {fmtDate(j.decide_by)}
+      <span className={`text-xs ${late ? '' : 'text-slate-500'}`}> · {late ? 'passed' : days <= 0 ? 'today' : `${days} day${days === 1 ? '' : 's'} left`}</span>
+      {j.decide_extended && <span className="block text-xs text-slate-500">moved once</span>}
+    </p>
+  )
 }
 
 // Closing a job (14 Oct, transparency flow; CareerPlug asks "Why are you closing this job?" with the same three
@@ -197,42 +216,42 @@ export function MyJobs() {
             </div>
             <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden">
               {/* 12 Oct (her review): the Job column takes the spare width; the others are fixed, so no wide gaps; every
-                  column left-aligned (Actions was right-aligned) and the actions are buttons */}
+                  column left-aligned and the actions are buttons. 20 Oct (her pick T2): no Status column (the tab already
+                  says Open / Closed; a badge beside the title only for the special states); the decision date is its own
+                  column with the days left (closed tab: when and why it closed); applicants show "to review" in blue */}
               <table className="w-full text-sm table-fixed">
-                <colgroup><col /><col className="w-28" /><col className="w-36" /><col className="w-56" /><col className="w-52" /></colgroup>
+                <colgroup><col /><col className="w-36" /><col className="w-48" /><col className="w-48" /><col className="w-52" /></colgroup>
                 <thead className="bg-slate-50 text-left text-xs font-semibold text-slate-500">
                   <tr>
                     <th className="px-5 py-3">Job</th>
-                    <th className="px-5 py-3">Status</th>
                     <th className="px-5 py-3">Applicants</th>
+                    <th className="px-5 py-3">{tab === 'open' ? 'Decide by' : 'Closed'}</th>
                     <th className="px-5 py-3">Skills</th>
-                    <th className="px-5 py-3">Actions</th>
+                    <th className="px-5 py-3"><span className="sr-only">Actions</span></th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100">
                   {shown.map(j => (
                     <tr key={j.id} className="hover:bg-blue-50/40">
                       <td className="px-5 py-3.5">
-                        <p className="font-medium text-slate-900 truncate">{j.title}</p>
+                        <div className="flex items-center gap-2 min-w-0">
+                          <p className="font-medium text-slate-900 truncate">{j.title}</p>
+                          {j.status === 'hidden' && <SpecialBadge>Hidden by the career office</SpecialBadge>}
+                          {j.status === 'open' && j.stopped && <SpecialBadge>Not taking applications</SpecialBadge>}
+                        </div>
                         <p className="text-xs text-slate-500 mt-0.5">{[j.location, j.category, `posted ${fmtDate(j.posted_at)}`].filter(Boolean).join(' · ')}</p>
-                        {/* 14 Oct: the promised decision date, red once it has passed with applicants waiting */}
-                        {j.status === 'open' && j.decide_by && <p className={`text-xs mt-0.5 ${j.past_date && j.waiting ? 'text-rose-700 font-medium' : 'text-slate-600'}`}>
-                          {j.past_date && j.waiting ? `Decision date passed (${fmtDate(j.decide_by)})` : `Decide by ${fmtDate(j.decide_by)}`}{j.decide_extended ? ' · moved once' : ''}
-                        </p>}
                       </td>
-                      <td className="px-5 py-3.5"><StatusPill status={j.status} />
-                        {j.status === 'open' && j.stopped && <p className="text-[11px] text-slate-500 mt-1">Not taking new applications</p>}
-                      </td>
-                      {/* 12 Oct: "1 · 1 new" read as a puzzle; now the total, and how many still wait for a status */}
+                      {/* 12 Oct: the total, and how many still wait for a status */}
                       <td className="px-5 py-3.5 text-slate-600">
-                        {j.applicants}
-                        {j.new_applicants > 0 && <p className="text-xs font-semibold text-blue-700 mt-0.5">{j.new_applicants} to review</p>}
+                        {j.applicants ? <span className="font-medium text-slate-800">{j.applicants}</span> : <span className="text-slate-500">None yet</span>}
+                        {j.new_applicants > 0 && <span className="text-xs font-semibold text-blue-700"> · {j.new_applicants} to review</span>}
                       </td>
-                      <td className="px-5 py-3.5 text-slate-600 whitespace-nowrap">{j.required} required{j.preferred ? ` · ${j.preferred} nice to have` : ''}</td>
+                      <td className="px-5 py-3.5"><DecideCell j={j} /></td>
+                      <td className="px-5 py-3.5 text-xs text-slate-600 whitespace-nowrap">{j.required} required{j.preferred ? ` · ${j.preferred} nice to have` : ''}</td>
                       <td className="px-5 py-3.5 whitespace-nowrap">
                         {/* 13 Oct (her pick after research, references.md "Editing a published job"): the row's main action,
                             then a ⋯ menu beside it, like Indeed's menu beside each job */}
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center justify-end gap-2">
                           <Link to={`/employer/jobs/${j.id}`} className="inline-block text-sm font-medium text-blue-700 border border-blue-300 bg-blue-50 rounded-lg px-3 py-1 hover:bg-blue-100">View applicants</Link>
                           {j.status !== 'hidden' && (
                             <RowMenu label={`Actions for ${j.title}`} disabled={busy === j.id} items={[
