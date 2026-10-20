@@ -10,9 +10,14 @@ export function OutsideStatus({ o }) {
       </p>
     )
   }
+  // 20 Oct (her review): not while the question is showing (it asked the same thing twice), and worded so it reads as
+  // a way to record an earlier application, not as a second button next to Apply
+  if (o.asking) return null
   return (
     <button type="button" onClick={o.record} disabled={o.busy}
-      className="text-xs font-medium text-blue-700 underline underline-offset-2 hover:text-blue-800 disabled:opacity-40">I applied</button>
+      className="text-xs text-slate-500 hover:text-blue-700 disabled:opacity-40">
+      Already applied? <span className="font-medium text-blue-700 underline underline-offset-2">Record it</span>
+    </button>
   )
 }
 
