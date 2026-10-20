@@ -60,3 +60,15 @@ def test_in_my_data_and_removed_with_the_account(client, users, db):
     delete_student_data(user, db)
     db.commit()
     assert db.query(OutsideApplication).filter(OutsideApplication.student_id == user.id).count() == 0
+
+
+def test_refs_and_invitations_with_an_outside_record(client, users, db):
+    """20 Oct (500 on her machine): the outside-record tag was added to /invitations instead of /refs. Both must work
+    for a student with a record, and /refs must tag the job with its site."""
+    student = users.student()
+    h = users.h(student)
+    _live_job(db, 'live_outside_refs')
+    assert client.post("/applications/outside", headers=h, json={"job_id": "live_outside_refs"}).status_code == 200
+    assert client.get("/applications/invitations", headers=h).status_code == 200
+    r = client.get("/applications/refs", headers=h)
+    assert r.status_code == 200 and r.json()["live_outside_refs"]["site"] == "LinkedIn"

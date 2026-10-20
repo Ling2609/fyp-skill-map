@@ -4,6 +4,7 @@ import api from '../../api'
 import PageHeader from '../../components/PageHeader'
 import { ADMIN_COUNTS_CHANGED } from '../../components/Sidebar'
 import { errText } from './profileUtils'
+import ApplicationSteps from '../../components/ApplicationSteps'
 import { Bar, LoadingLabel } from '../../components/Skeleton'
 import InfoTip from '../../components/InfoTip'
 import EmployerRecord from '../../components/EmployerRecord'
@@ -31,10 +32,10 @@ function Facts({ r }) {
   const st = r.job_stats, me = r.stand, rec = r.employer_record
   return (
     <div className="mt-4 space-y-2.5">
-      <div className="grid grid-cols-2 gap-2">
-        {/* 20 Oct (her review): "1 applied" read like her own count; now says it's everyone who applied. The reply
-            date is in the row itself ("Reply by …"), so it is no longer a third box */}
-        {[[st?.applied, st?.applied === 1 ? 'person applied' : 'people applied'], [st?.shortlisted, 'shortlisted so far']].map(([v, k]) => (
+      <div className="grid grid-cols-3 gap-2">
+        {/* 20 Oct (her review): "1 applied" read like her own count; now says it's everyone who applied */}
+        {[[st?.applied, st?.applied === 1 ? 'person applied' : 'people applied'], [st?.shortlisted, 'shortlisted so far'],
+          [r.decide_by ? fmtDay(r.decide_by) : '—', 'reply promised by']].map(([v, k]) => (
           <div key={k} className="rounded-lg bg-slate-50 px-3 py-2">
             <p className="text-lg font-semibold text-slate-900 tabular-nums leading-tight">{v ?? '—'}</p>
             <p className="text-xs text-slate-500">{k}</p>
@@ -143,28 +144,45 @@ const LIST = 'bg-white border border-slate-200 rounded-2xl divide-y divide-slate
 // 20 Oct (her review: no large blank space below): with only a few SkillMap applications every card opens, as before
 const FEW = 3
 // 20 Oct (her review: big empty middle): one row = job | progress | reply date or site | status, as columns on laptops
-const ROW = 'grid gap-x-6 gap-y-2 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,2.4fr)_7rem_12rem] lg:items-center'
+// One line per row from 1024 px (her review: consistency); the progress column never wraps and starts at the same place
+const ROW = 'grid gap-x-4 gap-y-2 lg:grid-cols-[minmax(0,1fr)_11.5rem_8.5rem_10.5rem] xl:grid-cols-[minmax(0,1fr)_24rem_8.5rem_10.5rem] lg:items-center lg:min-h-12'
 const RECENT_DAYS = 14
 const daysSinceIso = (iso) => iso ? (Date.now() - new Date(iso).getTime()) / 86400000 : Infinity
 const needsAttention = (r) => !!r.progress.nudge || (['accepted', 'rejected'].includes(r.status) && daysSinceIso(r.status_changed_at) <= RECENT_DAYS)
 
 function MiniSteps({ steps }) {
-  // 20 Oct (her review: big empty middle in each row): every step that happened shows its date, so this one line
-  // replaces the large step circles; it fills the middle column of the row
+  // 20 Oct (her review): always ONE line. Laptops: every step named, the date on the latest one (all dates are in
+  // Details). Narrower screens (phones, small laptops): dots joined by lines and only the latest step named.
   const last = steps.findLastIndex(x => x.at)
+  const cur = steps[last]
+  const date = (s) => (s?.at && s.at !== true ? fmtDay(s.at) : '')
   return (
-    <ol className="flex flex-wrap items-center gap-x-2 gap-y-1" aria-label="Progress">
-      {steps.map((s, i) => (
-        <li key={s.key} className="flex items-center gap-2">
-          {i > 0 && <span aria-hidden="true" className={`w-4 h-px ${s.at ? 'bg-blue-500' : 'bg-slate-300'}`} />}
-          <span className={`flex items-center gap-1 text-xs whitespace-nowrap ${i === last ? 'font-semibold text-slate-900' : s.at ? 'text-slate-600' : 'text-slate-400'}`}>
-            <span aria-hidden="true" className={`w-2 h-2 rounded-full ${s.at ? 'bg-blue-600' : 'bg-slate-300'}`} />
-            {s.label}{s.date ?? (s.at && s.at !== true ? fmtDay(s.at) : '') ? <span className="font-normal text-slate-500"> {s.date ?? fmtDay(s.at)}</span> : null}
-            <span className="sr-only">{s.at ? ' done' : ' not yet'}</span>
-          </span>
-        </li>
-      ))}
-    </ol>
+    <div aria-label="Progress">
+      <ol className="hidden xl:flex flex-nowrap items-center gap-2 whitespace-nowrap">
+        {steps.map((s, i) => (
+          <li key={s.key} className="flex items-center gap-2">
+            {i > 0 && <span aria-hidden="true" className={`w-3 h-px ${s.at ? 'bg-blue-500' : 'bg-slate-300'}`} />}
+            <span className={`flex items-center gap-1 text-[13px] ${i === last ? 'font-semibold text-slate-900' : s.at ? 'text-slate-600' : 'text-slate-400'}`}>
+              <span aria-hidden="true" className={`w-2 h-2 rounded-full ${s.at ? 'bg-blue-600' : 'bg-slate-300'}`} />
+              {s.label}{i === last && date(s) && <span className="font-normal text-slate-500"> {date(s)}</span>}
+              <span className="sr-only">{s.at ? ' done' : ' not yet'}</span>
+            </span>
+          </li>
+        ))}
+      </ol>
+      <p className="xl:hidden flex items-center gap-2 whitespace-nowrap text-[13px]">
+        <span aria-hidden="true" className="flex items-center">
+          {steps.map((s, i) => (
+            <span key={s.key} className="flex items-center">
+              {i > 0 && <span className={`w-2.5 h-px ${s.at ? 'bg-blue-500' : 'bg-slate-300'}`} />}
+              <span className={`w-2 h-2 rounded-full ${s.at ? 'bg-blue-600' : 'bg-slate-300'}`} />
+            </span>
+          ))}
+        </span>
+        <span className="font-semibold text-slate-900">{cur?.label}</span>
+        {date(cur) && <span className="text-slate-500">{date(cur)}</span>}
+      </p>
+    </div>
   )
 }
 
@@ -179,6 +197,12 @@ function SectionHead({ id, title, note, more }) {
       {more}
     </div>
   )
+}
+
+function Labelled({ label, value }) {
+  // 20 Oct (her review: keep things on one line): "Reply by 9 Nov", the value darker and bold so it is noticed
+  if (!value) return <span className="hidden lg:block" />
+  return <p className="text-[13px] text-slate-500 whitespace-nowrap">{label} <b className="font-semibold text-slate-900">{value}</b></p>
 }
 
 function MoreButton({ total, open, onClick }) {
@@ -200,19 +224,24 @@ function AppCard({ r, openAll }) {
     <article className="px-5 py-3.5">
       <div className={ROW}>
         <div className="min-w-0">
-          <Link to={`/jobs/${encodeURIComponent(r.job_ref)}`} state={{ from: 'My Applications' }} className={TITLE}>{r.title}</Link>
-          <p className="text-xs text-slate-500 mt-0.5">{r.company}{r.match && ` · your match ${r.match}`}</p>
+          <Link to={`/jobs/${encodeURIComponent(r.job_ref)}`} state={{ from: 'My Applications' }} className={`${TITLE} ${ONE}`} title={r.title}>{r.title}</Link>
+          <p className={`text-xs text-slate-500 mt-0.5 ${ONE}`}>{r.company}{r.match && ` · your match ${r.match}`}</p>
         </div>
-        <MiniSteps steps={r.progress.steps} />
-        <p className="text-xs font-medium text-slate-700">{when}</p>
+        {/* 20 Oct (her review): opened, the large steps and the "reply promised by" box below say these, so the
+            row doesn't repeat them */}
+        {open ? <span className="hidden lg:block" /> : <MiniSteps steps={r.progress.steps} />}
+        {/* 20 Oct (her review: too small to notice): a label over a larger value */}
+        <Labelled label={!open && when ? 'Reply by' : ''} value={open ? '' : when.replace('Reply by ', '')} />
         <div className="flex items-center gap-3 lg:justify-end">
           <span className={`shrink-0 text-xs font-semibold rounded-full px-2.5 py-0.5 ${PILL[key]}`}>{label}</span>
           {details && <button type="button" onClick={() => setOpen(o => !o)} aria-expanded={open}
             className="text-xs font-medium text-blue-700 hover:underline whitespace-nowrap">{open ? 'Hide ▴' : 'Details ▾'}</button>}
         </div>
       </div>
+      {/* 20 Oct (her pick): the details look as before: the large steps with their dates, then the numbers */}
       {open && (
-        <div className="lg:pr-[13rem]">
+        <div className="mt-1 pb-1">
+          <ApplicationSteps steps={r.progress.steps} decided={decided} />
           {!decided && !r.job_closed && <Facts r={r} />}
           <Note r={r} />
         </div>
@@ -241,6 +270,8 @@ function AppsSkeleton() {
 // Huntr). Removing is undone with Undo (her guide on pop-ups: no "Are you sure?" for what can be taken back).
 // 20 Oct (her review): titles in blue, since they open the job again (Job Description and Skill Gap Analysis)
 const TITLE = 'text-[15px] font-semibold text-blue-700 hover:underline underline-offset-2'
+// 20 Oct (her review: one line each): in rows, the title and the line under it don't wrap (full text on hover)
+const ONE = 'lg:block lg:truncate'
 const OUTSIDE = [['applied', 'Applied'], ['interviewing', 'Interviewing'], ['offer', 'Offer'], ['not_selected', 'Not selected'], ['withdrew', 'Withdrew']]
 // 20 Oct (her review): the same columns as the SkillMap rows: job | progress | site | status
 const OUT_STEPS = ['applied', 'interviewing', 'offer']
@@ -256,18 +287,18 @@ function OutsideCard({ o, onStatus, onRemove }) {
     <article className="px-5 py-3.5">
       <div className={ROW}>
         <div className="min-w-0">
-          <Link to={`/jobs/${encodeURIComponent(o.job_ref)}`} state={{ from: 'My Applications' }} className={TITLE}>{o.title}</Link>
-          <p className="text-xs text-slate-500 mt-0.5">{o.company}{o.listed === false && <span className="text-slate-400"> · ad no longer listed</span>}</p>
+          <Link to={`/jobs/${encodeURIComponent(o.job_ref)}`} state={{ from: 'My Applications' }} className={`${TITLE} ${ONE}`} title={o.title}>{o.title}</Link>
+          <p className={`text-xs text-slate-500 mt-0.5 ${ONE}`}>{o.company}{o.listed === false && <span className="text-slate-400"> · ad no longer listed</span>}</p>
         </div>
         <MiniSteps steps={outsideSteps(o)} />
-        <p className="text-xs text-slate-600">on {o.publisher || 'another site'}</p>
+        <Labelled label="Applied via" value={o.publisher || 'another site'} />
         <div className="flex items-center gap-3 lg:justify-end">
           <label className="sr-only" htmlFor={`os-${o.id}`}>Status of {o.title}</label>
           <select id={`os-${o.id}`} value={o.status} onChange={e => onStatus(o, e.target.value)}
-            className="text-sm font-medium text-slate-800 border border-slate-300 rounded-lg px-2 py-1 bg-white">
+            className="text-xs font-medium text-slate-800 border border-slate-300 rounded-lg pl-2 pr-1 py-1 bg-white">
             {OUTSIDE.map(([k, l]) => <option key={k} value={k}>{l}</option>)}
           </select>
-          <button type="button" onClick={() => onRemove(o)} className="text-sm text-slate-500 hover:text-rose-700">Remove</button>
+          <button type="button" onClick={() => onRemove(o)} className="text-xs font-medium text-slate-500 hover:text-rose-700 hover:underline">Remove</button>
         </div>
       </div>
     </article>
