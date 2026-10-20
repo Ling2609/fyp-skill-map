@@ -41,7 +41,7 @@ function Numbers({ r }) {
       {/* 20 Oct (her review): "1 applied" read like her own count; now says it's everyone who applied */}
       {[[st?.applied, st?.applied === 1 ? 'person applied' : 'people applied'], [st?.shortlisted, 'shortlisted so far'],
         [r.decide_by ? fmtDay(r.decide_by) : '—', 'reply promised by']].map(([v, k]) => (
-        <div key={k} className="rounded-lg bg-slate-50 h-[52px] px-3 flex flex-col justify-center">
+        <div key={k} className="rounded-lg bg-slate-50 h-13 px-3 flex flex-col justify-center">
           <p className="text-[15px] font-semibold text-slate-900 tabular-nums leading-6">{v ?? '—'}</p>
           <p className="text-xs leading-4 text-slate-500">{k}</p>
         </div>
@@ -78,17 +78,17 @@ function Facts({ r }) {
 function DetailSteps({ steps, decided }) {
   const last = steps.findLastIndex(x => x.at)
   return (
-    <ol className="flex h-[52px]" aria-label="Progress">
+    <ol className="flex h-13" aria-label="Progress">
       {steps.map((s, i) => {
         const done = !!s.at
         const skipped = !done && decided && s.key !== 'decision'
         return (
           <li key={s.key} className="flex-1 flex flex-col items-center relative">
-            {i > 0 && <span aria-hidden="true" className={`absolute z-0 top-[13px] right-1/2 w-full h-0.5 ${done || skipped ? 'bg-blue-500' : 'bg-slate-200'}`} />}
+            {i > 0 && <span aria-hidden="true" className={`absolute z-0 top-3.25 right-1/2 w-full h-0.5 ${done || skipped ? 'bg-blue-500' : 'bg-slate-200'}`} />}
             {/* 20 Oct (her review): the circle is drawn above the line, not under it */}
-            <span aria-hidden="true" className={`relative z-10 mt-[2px] w-6 h-6 rounded-full border-2 flex items-center justify-center text-[11px] leading-none text-white ${
+            <span aria-hidden="true" className={`relative z-10 mt-0.5 w-6 h-6 rounded-full border-2 flex items-center justify-center text-[11px] leading-none text-white ${
               done ? 'bg-blue-600 border-blue-600' : 'bg-white border-slate-300'}`}>{done ? '✓' : ''}</span>
-            <span className={`text-xs leading-4 mt-[6px] whitespace-nowrap ${i === last ? 'font-semibold text-slate-900' : done ? 'text-slate-600' : 'text-slate-400'}`}>
+            <span className={`text-xs leading-4 mt-1.5 whitespace-nowrap ${i === last ? 'font-semibold text-slate-900' : done ? 'text-slate-600' : 'text-slate-400'}`}>
               {s.label}{done ? ` · ${fmtDay(s.at)}` : skipped ? ' · —' : ''}
             </span>
             <span className="sr-only">{done ? 'done' : skipped ? 'skipped' : 'not yet'}</span>
