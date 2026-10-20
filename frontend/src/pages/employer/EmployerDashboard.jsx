@@ -7,6 +7,8 @@ import { errText } from '../student/profileUtils'
 import { CardSkeleton, LoadingLabel } from '../../components/Skeleton'
 import { Busy } from '../../components/Spinner'
 import { greeting } from '../../greeting'
+import InfoTip from '../../components/InfoTip'
+import { RECORD_TIP } from '../../components/EmployerRecord'
 
 // Employer dashboard (12 Oct, her pick E after mock-ups A-E; references.md "Employer dashboard layout"; left column
 // changed the same day to option B of mock-ups A-C (my proposal; her pick pending): to review sized to its rows + recent activity, so one application isn't a blank card).
@@ -23,6 +25,22 @@ const ago = (iso) => {
   return days <= 0 ? 'today' : days === 1 ? 'yesterday' : days < 14 ? `${days} days ago` : new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })
 }
 const card = 'bg-white border border-slate-200 rounded-2xl flex flex-col min-h-0 overflow-hidden'
+const daysUntil = (iso) => Math.ceil((new Date(iso).getTime() - Date.now()) / 86400000)
+const fmtDay = (iso) => new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })
+const FEW_SKILLS = 3      // a job with fewer required skills than this: matching has little to go on
+
+// 20 Oct (her review, mock-up E3): next steps that apply to this employer now, from data SkillMap already has; the
+// list shrinks as they are done, so a busy employer sees their real lists instead
+function nextSteps(data) {
+  const steps = []
+  const notInvited = data.graduates.filter(g => !g.invited_at).length
+  if (notInvited) steps.push({ key: 'fit', text: <>{notInvited} graduate{notInvited === 1 ? ' fits' : 's fit'} your jobs and {notInvited === 1 ? "hasn't" : "haven't"} been invited</>, to: '#fit-h', action: 'Invite' })
+  for (const j of data.open_jobs) {
+    if (j.required < FEW_SKILLS) steps.push({ key: `s${j.id}`, text: <><b className="font-semibold">{j.title}</b> lists {j.required} required skill{j.required === 1 ? '' : 's'}: graduates are matched on them</>, to: `/employer/jobs/${j.id}/edit`, action: 'Add skills' })
+    if (!j.has_requirements) steps.push({ key: `r${j.id}`, text: <><b className="font-semibold">{j.title}</b>: no qualification or languages set</>, to: `/employer/jobs/${j.id}/edit`, action: 'Edit job' })
+  }
+  return steps.slice(0, 4)
+}
 
 function Avatar({ name, small }) {
   return <span aria-hidden="true" className={`${small ? 'w-8 h-8 text-xs' : 'w-10 h-10 text-sm'} shrink-0 rounded-full text-white font-semibold flex items-center justify-center ${avatarCls(name)}`}>{initials(name)}</span>
@@ -36,16 +54,6 @@ function Match({ have, total, short }) {
       className={`text-xs font-semibold rounded-full px-2.5 py-1 whitespace-nowrap ${full ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-800'}`}>
       {have} of {total}{short ? '' : ' required'}
     </span>
-  )
-}
-
-function Empty({ title, text, action }) {
-  return (
-    <div className="flex-1 flex flex-col items-center justify-center text-center px-8 py-10 border-t border-slate-100">
-      <p className="text-[15px] font-semibold text-slate-900">{title}</p>
-      <p className="text-sm text-slate-500 mt-1 max-w-sm">{text}</p>
-      {action}
-    </div>
   )
 }
 
@@ -96,6 +104,8 @@ export default function EmployerDashboard() {
   }
   const sum = data?.summary
   const noJobs = sum && sum.jobs === 0
+  const steps = data ? nextSteps(data) : []
+  const anyApplicants = data?.open_jobs.some(j => Object.values(j.counts).some(n => n > 0))
 
   return (
     <div className="flex flex-col h-screen">
@@ -151,12 +161,14 @@ export default function EmployerDashboard() {
       )}
 
       {data && !noJobs && (
-        <div className="flex-1 min-h-0 overflow-y-auto lg:overflow-hidden px-8 py-6 grid grid-cols-1 lg:grid-cols-[minmax(0,1.55fr)_minmax(0,1fr)] gap-5">
-          {/* Left (12 Oct, option B): to review, sized to its rows; recent activity takes the rest of the column */}
-          <div className="flex flex-col gap-5 min-h-0 min-w-0">
-            {/* 12 Oct (flow review, mock-up M1): "Needs your attention" = applications to review, plus applicants waiting
-                14+ days (the day students are told to keep applying elsewhere) and week-old jobs with no applicants */}
-            <section className={`${card} shrink-0 lg:max-h-[60%]`} aria-labelledby="review-h">
+        // 20 Oct (her review: "neat", layout N2): rows, so cards side by side are the same height, top and bottom;
+        // graduates who fit runs full width underneath
+        // 20 Oct (her review: "fit screen size", no page scroll, no blank space at the bottom): on a laptop the three rows
+        // share the screen height exactly; a card with more than fits scrolls inside itself. Phones keep one column.
+        <div className="flex-1 min-h-0 overflow-y-auto lg:overflow-hidden px-8 py-6">
+          <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1.55fr)_minmax(0,1fr)] lg:grid-rows-[minmax(0,1.25fr)_minmax(0,1fr)_minmax(0,0.85fr)] lg:h-full gap-5">
+            {/* Row 1, left: applications to review, problems, then next steps (12 Oct, flow review M1) */}
+            <section className={card} aria-labelledby="review-h">
               <div className="px-5 py-4 flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
                 <h2 id="review-h" className="text-base font-semibold text-slate-900">Needs your attention</h2>
                 {data.attention.review_days && <span className="text-xs text-slate-500">You view applications within {data.attention.review_days} day{data.attention.review_days === 1 ? '' : 's'} on average · students see this</span>}
@@ -187,11 +199,10 @@ export default function EmployerDashboard() {
               {data.to_review.length > 0 && <p className="px-5 pt-3 pb-1.5 text-xs font-semibold text-slate-500 border-t border-slate-100">To review ({sum.new}) · across all your jobs, newest first</p>}
               {data.to_review.length === 0 ? (
                 <p className="px-5 pb-4 text-sm text-slate-500">
-                  {sum.applicants ? 'All caught up: every application has a status.' : 'No applications yet. Your jobs are in students\' Job Matches, marked "Posted on SkillMap".'}
-                  {data.graduates.some(g => !g.invited_at) && <> <a href="#fit-h" className="text-blue-700 hover:underline">Invite graduates who fit</a></>}
+                  {sum.applicants ? 'All caught up: every application has a status.' : 'No applications yet. Your jobs are in students\' Job Matches, marked "Apply on SkillMap".'}
                 </p>
               ) : (
-                <ul className="min-h-0 overflow-y-auto divide-y divide-slate-100 border-t border-slate-100">
+                <ul className="max-h-72 lg:max-h-none lg:flex-1 min-h-0 overflow-y-auto divide-y divide-slate-100 border-t border-slate-100">
                   {data.to_review.map(a => (
                     <li key={a.id} className="px-5 py-3.5 flex items-center gap-3.5">
                       <Avatar name={a.name} />
@@ -208,29 +219,31 @@ export default function EmployerDashboard() {
                   ))}
                 </ul>
               )}
-            </section>
-
-            <section className={`${card} flex-1 max-h-[28rem] lg:max-h-none`} aria-labelledby="activity-h">
-              <div className="px-5 py-4 flex items-baseline justify-between gap-3">
-                <h2 id="activity-h" className="text-base font-semibold text-slate-900">Recent activity</h2>
-                <span className="text-xs text-slate-500">Last 14 days</span>
-              </div>
-              {data.activity.length === 0
-                ? <Empty title="Nothing in the last 14 days" text="Applications, your status changes and invitations will be listed here." />
-                : (
-                  <ul className="flex-1 min-h-0 overflow-y-auto border-t border-slate-100 py-1.5">
-                    {data.activity.map((e, i) => <ActivityRow key={i} e={e} />)}
+              {steps.length > 0 && (
+                <div className="border-t border-slate-100 px-5 py-3">
+                  <p className="text-xs font-semibold text-slate-500">What you can do now</p>
+                  <ul className="mt-1.5 space-y-1.5">
+                    {steps.map(s => (
+                      <li key={s.key} className="flex items-start justify-between gap-3 text-sm text-slate-700">
+                        <span className="min-w-0">{s.text}</span>
+                        {s.to.startsWith('#')
+                          ? <a href={s.to} className="shrink-0 font-medium text-blue-700 hover:underline">{s.action}</a>
+                          : <Link to={s.to} className="shrink-0 font-medium text-blue-700 hover:underline">{s.action}</Link>}
+                      </li>
+                    ))}
                   </ul>
-                )}
+                </div>
+              )}
             </section>
-          </div>
 
-          <div className="flex flex-col gap-5 min-h-0 min-w-0">
-            {/* Open jobs: grows to 3, then scrolls */}
-            <section className={`${card} shrink-0`} aria-labelledby="jobs-h">
+            {/* Row 1, right: open jobs with their status bar (Workable's pipeline) and decision date */}
+            <section className={card} aria-labelledby="jobs-h">
               <div className="px-5 pt-4 pb-3">
-                <h2 id="jobs-h" className="text-base font-semibold text-slate-900">Your open jobs</h2>
-                {data.open_jobs.length > 0 && (
+                <div className="flex items-baseline justify-between gap-3">
+                  <h2 id="jobs-h" className="text-base font-semibold text-slate-900">Your open jobs</h2>
+                  <Link to="/employer/jobs" className="text-sm font-medium text-blue-700 hover:underline">My Jobs</Link>
+                </div>
+                {anyApplicants && (
                   <div className="flex flex-wrap gap-x-3 gap-y-1 mt-2 text-xs text-slate-500">
                     {BAR.map(([k, label, cls]) => <span key={k} className="inline-flex items-center gap-1.5"><span className={`w-2.5 h-2.5 rounded-sm ${cls}`} />{label}</span>)}
                   </div>
@@ -239,9 +252,10 @@ export default function EmployerDashboard() {
               {data.open_jobs.length === 0
                 ? <p className="px-5 pb-4 text-sm text-slate-500">No open jobs. Reopen one in My Jobs, or post a new one.</p>
                 : (
-                  <ul className="max-h-[17rem] overflow-y-auto divide-y divide-slate-100 border-t border-slate-100">
+                  <ul className="max-h-72 lg:max-h-none lg:flex-1 min-h-0 overflow-y-auto divide-y divide-slate-100 border-t border-slate-100">
                     {data.open_jobs.map(j => {
                       const total = Object.values(j.counts).reduce((x, y) => x + y, 0)
+                      const days = j.decide_by ? daysUntil(j.decide_by) : null
                       return (
                         <li key={j.id} className="px-5 py-3.5">
                           <div className="flex items-baseline justify-between gap-3">
@@ -249,32 +263,66 @@ export default function EmployerDashboard() {
                             <Link to={`/employer/jobs/${j.id}`} className="shrink-0 text-sm font-medium text-blue-700 hover:underline">View</Link>
                           </div>
                           <p className="text-xs text-slate-500 mt-0.5">
-                            {total} applicant{total === 1 ? '' : 's'}{j.counts.applied > 0 && <> · <span className="font-semibold text-blue-700">{j.counts.applied} to review</span></>} · posted {ago(j.posted_at)}
+                            {total ? `${total} applicant${total === 1 ? '' : 's'}` : 'No applicants yet'}
+                            {j.counts.applied > 0 && <> · <span className="font-semibold text-blue-700">{j.counts.applied} to review</span></>}
+                            {j.decide_by && <> · decide by {fmtDay(j.decide_by)} ({days > 0 ? `${days} day${days === 1 ? '' : 's'} left` : days === 0 ? 'today' : 'passed'})</>}
                           </p>
-                          <div className="mt-2.5 h-2.5 rounded-full bg-slate-100 flex overflow-hidden" role="img"
-                            aria-label={BAR.map(([k, label]) => `${j.counts[k]} ${label.toLowerCase()}`).join(', ')}>
-                            {total > 0 && BAR.map(([k, , cls]) => j.counts[k] > 0 && <span key={k} className={cls} style={{ width: `${(j.counts[k] / total) * 100}%` }} />)}
-                          </div>
+                          {total > 0 && (
+                            <div className="mt-2.5 h-2.5 rounded-full bg-slate-100 flex overflow-hidden" role="img"
+                              aria-label={BAR.map(([k, label]) => `${j.counts[k]} ${label.toLowerCase()}`).join(', ')}>
+                              {BAR.map(([k, , cls]) => j.counts[k] > 0 && <span key={k} className={cls} style={{ width: `${(j.counts[k] / total) * 100}%` }} />)}
+                            </div>
+                          )}
                         </li>
                       )
                     })}
                   </ul>
                 )}
-              {data.open_jobs.length > 3 && (
-                <Link to="/employer/jobs" className="px-5 py-3 border-t border-slate-100 text-sm font-medium text-blue-700 hover:underline">See all {data.open_jobs.length} in My Jobs</Link>
-              )}
             </section>
 
-            {/* Graduates who fit: takes the rest of the column */}
-            <section className={`${card} flex-1 max-h-[28rem] lg:max-h-none`} aria-labelledby="fit-h">
+            {/* Row 2, left */}
+            <section className={card} aria-labelledby="activity-h">
+              <div className="px-5 py-4 flex items-baseline justify-between gap-3">
+                <h2 id="activity-h" className="text-base font-semibold text-slate-900">Recent activity</h2>
+                <span className="text-xs text-slate-500">Last 14 days</span>
+              </div>
+              {data.activity.length === 0
+                ? <p className="px-5 pb-4 text-sm text-slate-500">Nothing in the last 14 days. Applications, your status changes and invitations will be listed here.</p>
+                : (
+                  <ul className="max-h-64 lg:max-h-none lg:flex-1 min-h-0 overflow-y-auto border-t border-slate-100 py-1.5">
+                    {data.activity.map((e, i) => <ActivityRow key={i} e={e} />)}
+                    {data.activity.length < 3 && <li className="px-5 py-2 text-xs text-slate-400">New applications and status changes appear here.</li>}
+                  </ul>
+                )}
+            </section>
+
+            {/* Row 2, right (20 Oct, mock-up E3): what students see about this employer (improvement #1), kept short */}
+            <section className={card} aria-labelledby="record-h">
+              <div className="px-5 py-4">
+                <h2 id="record-h" className="text-base font-semibold text-slate-900">
+                  Your reply record <InfoTip label="How the record is counted">{RECORD_TIP}</InfoTip>
+                </h2>
+                {data.record?.shown ? (
+                  <p className="text-sm text-slate-700 mt-1.5">You replied to every applicant by your promised date on <b>{data.record.on_time} of {data.record.of}</b> past jobs. Students see this before applying.</p>
+                ) : (
+                  <>
+                    <p className="text-sm text-slate-700 mt-1.5">Students see: "New on SkillMap: no reply record yet."</p>
+                    <p className="text-xs text-slate-500 mt-1">It appears after 3 of your jobs pass their decision date{data.record?.of ? ` (${data.record.of} so far)` : ''}.</p>
+                  </>
+                )}
+              </div>
+            </section>
+
+            {/* Row 3, full width: graduates who fit (visible students who haven't applied, best match first) */}
+            <section className={`${card} lg:col-span-2`} aria-labelledby="fit-h">
               <div className="px-5 pt-4 pb-3">
                 <h2 id="fit-h" className="text-base font-semibold text-slate-900">Graduates who fit your jobs</h2>
                 <p className="text-xs text-slate-500 mt-1">Visible students who haven't applied, best match first. Invite them to apply: they see it on My Applications.</p>
               </div>
               {data.graduates.length === 0 ? (
-                <Empty title="No matches yet" text={data.open_jobs.length ? 'No visible graduate has at least half of your required skills yet. New profiles are matched as students add them.' : 'Open a job to see graduates who fit it.'} />
+                <p className="px-5 pb-4 text-sm text-slate-500">{data.open_jobs.length ? 'No visible graduate has at least half of your required skills yet. New profiles are matched as students add them.' : 'Open a job to see graduates who fit it.'}</p>
               ) : (
-                <ul className="flex-1 min-h-0 overflow-y-auto divide-y divide-slate-100 border-t border-slate-100">
+                <ul className="max-h-72 lg:max-h-none lg:flex-1 min-h-0 overflow-y-auto divide-y divide-slate-100 border-t border-slate-100">
                   {data.graduates.map(g => (
                     <li key={g.student_id} className="px-5 py-3 flex items-center gap-3">
                       <Avatar name={g.name} small />
@@ -289,12 +337,8 @@ export default function EmployerDashboard() {
                             className="shrink-0 text-sm font-medium text-blue-700 border border-blue-200 rounded-lg px-3 py-1 hover:bg-blue-50 disabled:opacity-40">
                             {inviting === g.student_id ? <Busy>Inviting…</Busy> : 'Invite'}
                           </button>}
-
                     </li>
                   ))}
-                  {data.graduates.length < 3 && (
-                    <li className="px-5 py-3 text-xs text-slate-400">Only {data.graduates.length} visible graduate{data.graduates.length === 1 ? '' : 's'} fit{data.graduates.length === 1 ? 's' : ''} so far.</li>
-                  )}
                 </ul>
               )}
             </section>

@@ -156,5 +156,9 @@ def test_employer_dashboard_and_counts(client, users, post_job):
     assert d["summary"]["new"] == 1 and d["to_review"][0]["id"] == app_id and d["to_review"][0]["opened"] is False
     assert client.get("/employer/counts", headers=users.h(employer)).json()["new_applicants"] == 1
     assert set(d["attention"]) == {"waiting_long", "quiet_jobs", "review_days", "past_date"}
+    # 20 Oct (layout N2): what "What you can do now" and "Your reply record" use
+    row = next(j for j in d["open_jobs"] if j["id"] == job["id"])
+    assert row["required"] == 2 and row["has_requirements"] is False and row["decide_by"]
+    assert d["record"] == {"on_time": 0, "of": 0, "shown": False}
     client.patch(f"/employer/applications/{app_id}", headers=users.h(employer), json={"status": "shortlisted"})
     assert client.get("/employer/counts", headers=users.h(employer)).json()["new_applicants"] == 0

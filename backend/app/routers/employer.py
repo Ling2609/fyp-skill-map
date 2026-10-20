@@ -622,12 +622,23 @@ def dashboard(employer: User = Depends(require_employer), db: Session = Depends(
            .order_by(Application.created_at.desc()).all())
     to_review = [{**_applicant(a, u, j, db), "job_id": j.id, "job_title": j.job_title} for a, u, j in new[:REVIEW_SHOWN]]
     all_statuses = [st for sts in statuses.values() for st in sts]
+    required = {}
+    for s in db.query(JobSkill).filter(JobSkill.job_id.in_([j.id for j in open_jobs]), JobSkill.skill_type == "hard",
+                                       JobSkill.level.in_(("required", "unspecified"))):
+        required[s.job_id] = required.get(s.job_id, 0) + 1
+    from app.services.transparency import employer_record
     return {
         "summary": {"jobs": len(jobs), "open_jobs": len(open_jobs), "applicants": len(all_statuses),
                     "new": sum(1 for st in all_statuses if st == "applied")},
         "to_review": to_review,
-        "open_jobs": [{"id": j.id, "title": j.job_title, "posted_at": j.listing_date,
-                       "counts": {st: statuses.get(j.id, []).count(st) for st in STATUSES}} for j in open_jobs],
+        # 20 Oct (her review, layout N2): the decision date, and what the dashboard's "What you can do now" needs
+        # (a job with very few required skills; no qualification / languages set in Post a Job)
+        "open_jobs": [{"id": j.id, "title": j.job_title, "posted_at": j.listing_date, "decide_by": j.decide_by,
+                       "counts": {st: statuses.get(j.id, []).count(st) for st in STATUSES},
+                       "required": required.get(j.id, 0),
+                       "has_requirements": bool(j.min_qualification or j.languages)} for j in open_jobs],
+        # what students see about this employer (improvement #1), shown on the employer's own dashboard
+        "record": employer_record(employer.id, db),
         "graduates": _graduates_who_fit(open_jobs, db) if open_jobs else [],
         "activity": _activity(jobs, db),
         "attention": _attention(employer, open_jobs, db),
