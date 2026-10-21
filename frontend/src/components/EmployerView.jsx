@@ -241,7 +241,7 @@ export function ApplicantCards({ s, fit, withFit = true, you, aside }) {
           )} />
       </div>
       {/* the right panel scrolls on its own and stays in view */}
-      <aside className="lg:w-[23rem] shrink-0 lg:overflow-y-auto border-t lg:border-t-0 lg:border-l border-slate-200 bg-slate-50/60 px-4 sm:px-5 py-5">
+      <aside className="lg:w-92 shrink-0 lg:overflow-y-auto border-t lg:border-t-0 lg:border-l border-slate-200 bg-slate-50/60 px-4 sm:px-5 py-5">
         {/* 21 Oct (her review: blank space under the match): with a job, the skills beyond the job follow the match
             here, so the panel holds every skill and the left column the CV */}
         {withFit ? <><MatchPanel fit={fit} you={you} />
