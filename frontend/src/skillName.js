@@ -6,7 +6,7 @@
 //   - a word that already has capitals is kept: "UI/UX", "iOS", "ISTQB", "JavaScript"
 //   - brands written in lower case on purpose are kept (the only 2 among 2,611 live job skill names, 6 Oct)
 const SMALL_WORDS = new Set(['a', 'an', 'and', 'as', 'at', 'by', 'for', 'in', 'of', 'on', 'or', 'the', 'to', 'with'])
-const KEEP_AS_WRITTEN = new Set(['dbt', 'shadcn/ui'])
+const KEEP_AS_WRITTEN = new Set(['dbt', 'shadcn/ui', 'pytest'])   // pytest: 21 Oct (its own spelling)
 
 export const skillName = (text) => {
   if (!text) return text

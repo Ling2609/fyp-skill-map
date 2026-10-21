@@ -21,7 +21,7 @@ from app.services.skill_names import canonical_key
 from app.services.skill_profile import build_skill_profile
 
 TOP_SKILLS = 8          # how many skills the "Top skills" card shows
-STRONG_MODULES = 4      # how many modules the "Education" card names
+STRONG_MODULES = 12     # how many modules the "Strongest modules" card can list (it shows what fits, then "See all")
 GRADE_LETTERS = {4.0: "A", 3.7: "A-", 3.3: "B+", 3.0: "B", 2.7: "B-", 2.3: "C+", 2.0: "C"}
 
 
@@ -115,14 +115,26 @@ def build_showcase(user: User, db: Session, for_employer: bool = False, job_skil
     programme = db.get(Programme, user.programme_id) if user.programme_id else None
     intake = db.get(Intake, user.intake_id) if user.intake_id else None
 
-    modules = (db.query(Module.name, UserModule.grade)
+    modules = (db.query(Module.id, Module.name, UserModule.grade)
                .join(UserModule, UserModule.module_code == Module.code)
-               .filter(UserModule.user_id == user.id)
-               .order_by(UserModule.grade.desc(), Module.name).all())
-    strongest = {}      # module name -> best grade; the catalogue can hold two modules with one name (different codes)
-    for name, grade in modules:
+               .filter(UserModule.user_id == user.id).all())
+    # 21 Oct (her review: 4 modules, the first four A's in A-Z order, said nothing): the order is now meaningful.
+    # With a job: the modules that teach the job's skills first (those skills listed, ticked on the page); then the
+    # better grade; then the module with more skills (more to show). The catalogue can hold two modules with one name
+    # (different codes): the best one is kept.
+    skills_of: dict[int, list[str]] = {}
+    for mid, skill in db.query(ModuleSkill.module_id, ModuleSkill.skill_name).filter(
+            ModuleSkill.module_id.in_([m[0] for m in modules] or [0])):
+        skills_of.setdefault(mid, []).append(skill)
+    ranked = []
+    for mid, name, grade in modules:
+        skills = skills_of.get(mid, [])
+        relevant = [k for k in skills if job_keys and canonical_key(k) in job_keys]
+        ranked.append(((-len(relevant), -(grade or 0), -len(skills), name), name, grade, relevant))
+    strongest = {}
+    for _, name, grade, relevant in sorted(ranked):
         if name not in strongest and len(strongest) < STRONG_MODULES:
-            strongest[name] = grade
+            strongest[name] = (grade, relevant)
     top_skills, total = _top_skills(user.id, db, show_grades)
 
     projects = db.query(UserProject).filter(UserProject.user_id == user.id).order_by(UserProject.id.desc()).all()
@@ -166,8 +178,8 @@ def build_showcase(user: User, db: Session, for_employer: bool = False, job_skil
         "programme": programme.name if programme else None,
         "intake": intake.code if intake else None,
         "module_count": len(modules),     # modules with a grade (the profile checklist and the Education card)
-        "strongest_modules": [{"name": name, "grade": grade_letter(grade) if show_grades else ""}
-                              for name, grade in strongest.items()],
+        "strongest_modules": [{"name": name, "grade": grade_letter(grade) if show_grades else "", "relevant": relevant}
+                              for name, (grade, relevant) in strongest.items()],
         "top_skills": top_skills,
         "total_skills": total,
         # repo_check (14 Oct, Connect GitHub): "yours" / "not_linked" / None, shown next to the repo link.

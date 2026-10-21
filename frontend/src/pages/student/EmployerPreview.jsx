@@ -4,7 +4,7 @@ import api from '../../api'
 import PageHeader from '../../components/PageHeader'
 import BackLink from '../../components/BackLink'
 import { ADMIN_COUNTS_CHANGED } from '../../components/Sidebar'
-import { ApplicantCards, ApplicantHeading } from '../../components/EmployerView'
+import { ApplicantCards, ApplicantHeading, NotShownYet } from '../../components/EmployerView'
 import { CardSkeleton, LoadingLabel } from '../../components/Skeleton'
 import { Busy } from '../../components/Spinner'
 import { errText } from './profileUtils'
@@ -65,7 +65,8 @@ export default function EmployerPreview() {
         {error && <p role="alert" className="shrink-0 text-sm text-rose-700 bg-rose-50 border border-rose-200 rounded-lg px-4 py-2.5">{error}</p>}
         {!data && !error && (<><LoadingLabel>Loading the preview…</LoadingLabel>
           <div className="grid lg:grid-cols-3 gap-4"><CardSkeleton rows={5} /><CardSkeleton rows={4} /><CardSkeleton rows={4} /></div></>)}
-        {s && <div className="flex-1 min-h-0"><ApplicantCards s={s} fit={data.fit} withFit={!!jobId} /></div>}
+        {s && <div className="flex-1 min-h-0"><ApplicantCards s={s} fit={data.fit} withFit={!!jobId} stretch /></div>}
+        {s && <NotShownYet s={s} />}
       </div>
     </div>
   )

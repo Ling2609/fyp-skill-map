@@ -223,7 +223,7 @@ export function AwardsTab({ awards, onRefresh }) {
     <Panel title="Your awards" actions={<button type="button" onClick={() => s.setEditing('new')} className={btnBlueCls}>+ Add award</button>}>
       <Note text={s.note} onClose={() => s.setNote('')} />
       {awards.length === 0 ? (
-        <Empty icon="🏆" title="No awards yet" text="Add competition wins, scholarships or a dean's list. SkillMap suggests the skills each one shows." />
+        <Empty icon="🏆" title="No awards yet" text="Add prizes (such as a hackathon win), scholarships or a dean's list. Taking part without a prize goes under Experience." />
       ) : (
         <ul className="flex flex-col gap-3">
           {awards.map(a => {

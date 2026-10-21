@@ -617,6 +617,10 @@ export function ExperienceForm({ item, kind: newKind, onDone, onCancel, onDirty 
             placeholder={work ? 'e.g. Software Engineering Intern' : 'e.g. Vice President, Participant, Volunteer'} />
         </Field>
       </div>
+      {/* 21 Oct (her point): taking part is experience; a prize is an award */}
+      {['hackathon', 'competition'].includes(form.category) && (
+        <p className="-mt-2 text-xs text-slate-500">Add it here for taking part, win or not. If you won a prize, add that under Awards too.</p>
+      )}
       <Field label={work ? 'Company' : 'Club, event or organisation'}>
         <input value={form.organisation} onChange={set('organisation')} maxLength={120} required className={inputCls}
           placeholder={work ? 'e.g. NTT DATA Payment Services' : 'e.g. APU Google Developer Student Club'} />

@@ -148,3 +148,24 @@ def test_someone_on_the_old_notice_can_agree_to_the_new_one(client, users, db):
     assert client.post("/auth/me/privacy", headers=h, json={"version": "2026-10-14"}).status_code == 409
     r = client.post("/auth/me/privacy", headers=h, json={"version": PRIVACY_VERSION})
     assert r.status_code == 200 and r.json()["privacy_version"] == PRIVACY_VERSION == "2026-10-21"
+
+
+def test_strongest_modules_put_the_jobs_skills_first(client, users, post_job, db):
+    """21 Oct (her review): the module card's order means something: with a job, the modules that teach its skills."""
+    from conftest import sql
+    student, employer = users.student(skills=()), users.employer()
+    sql(db, "insert into modules (code, name, level, type) values ('ZZ-1','Aaa Art',1,'common'),('ZZ-2','Zzz Databases',1,'common')")
+    try:
+        ids = dict(db.execute(__import__('sqlalchemy').text("select code, id from modules where code in ('ZZ-1','ZZ-2')")).all())
+        sql(db, "insert into module_skills (module_id, module_code, skill_name) values (:a,'ZZ-1','Drawing'),(:b,'ZZ-2','SQL')", a=ids['ZZ-1'], b=ids['ZZ-2'])
+        sql(db, "insert into user_modules (user_id, module_code, grade) values (:u,'ZZ-1',4.0),(:u,'ZZ-2',3.7)", u=users.ids[student])
+        h = users.h(student)
+        plain = client.get("/profile/preview", headers=h).json()["student"]["strongest_modules"]
+        assert [m["name"] for m in plain][:2] == ["Aaa Art", "Zzz Databases"]           # better grade first
+        job = post_job(employer, required=("SQL",))
+        for_job = client.get(f"/applications/job/{job['job_ref']}/preview", headers=h).json()["student"]["strongest_modules"]
+        assert for_job[0]["name"] == "Zzz Databases" and for_job[0]["relevant"] == ["SQL"]
+    finally:
+        sql(db, "delete from user_modules where module_code in ('ZZ-1','ZZ-2')")
+        sql(db, "delete from module_skills where module_id in (select id from modules where code in ('ZZ-1','ZZ-2'))")
+        sql(db, "delete from modules where code in ('ZZ-1','ZZ-2')")
