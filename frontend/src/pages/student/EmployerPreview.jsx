@@ -42,17 +42,17 @@ export default function EmployerPreview() {
     <div className="flex flex-col h-screen">
       <BackLink label={jobId ? (data?.job?.title || 'the job') : 'My Profile'} onClick={back} />
       {/* the student's bar: what this page is, and the actions; everything under it is the employer's page */}
-      {/* 21 Oct: a solid blue strip, so it can't be mistaken for the employer's heading under it */}
-      <div className="shrink-0 bg-blue-700 px-4 sm:px-8 py-2.5 flex flex-wrap items-center justify-between gap-3">
-        <p className="text-sm text-white"><b className="font-semibold">Preview:</b>{' '}
+      {/* 21 Oct (her review: the solid blue was too strong): a light strip with dark text; blue only on what you can click */}
+      <div className="shrink-0 bg-blue-50 border-b border-blue-200 px-4 sm:px-8 py-2.5 flex flex-wrap items-center justify-between gap-3">
+        <p className="text-sm text-slate-800"><b className="font-semibold">Preview:</b>{' '}
           {jobId ? `this is exactly what ${company} sees when you apply.` : 'this is what employers see. When you apply for a job, they also see your match for it.'}</p>
         {s && (
           <div className="flex items-center gap-2.5">
-            <Link to="/profile" className="text-sm font-medium text-white border border-white/50 rounded-lg px-3.5 py-1.5 hover:bg-white/10">Edit my profile</Link>
+            <Link to="/profile" className="text-sm font-medium text-blue-700 bg-white border border-blue-300 rounded-lg px-3.5 py-1.5 hover:bg-blue-100">Edit my profile</Link>
             {jobId && (data.applied
-              ? <span className="text-sm text-blue-100 border border-white/30 px-3.5 py-1.5 rounded-lg">Already applied</span>
+              ? <span className="text-sm text-slate-500 border border-slate-300 bg-white px-3.5 py-1.5 rounded-lg">Already applied</span>
               : <button type="button" onClick={send} disabled={sending}
-                  className="text-sm font-semibold text-blue-800 bg-white hover:bg-blue-50 px-4 py-1.5 rounded-lg disabled:opacity-50">
+                  className="text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 px-4 py-1.5 rounded-lg disabled:opacity-50">
                   {sending ? <Busy>Sending…</Busy> : 'Send application'}</button>)}
           </div>
         )}

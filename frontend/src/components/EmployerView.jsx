@@ -33,7 +33,7 @@ export function ApplicantHeading({ s, note }) {
         {s.headline && <p className="text-sm text-slate-500">{s.headline}</p>}
       </div>
       {s.about && <p className="text-sm text-slate-700 mt-1.5 whitespace-pre-line">{s.about}</p>}
-      <div className="mt-3 pt-3 border-t border-slate-100 flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1 text-sm">
+      <div className="mt-3 pt-3 border-t border-slate-300 flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1 text-sm">
         <p className="text-slate-600 min-w-0">{facts.map((f, i) => <span key={i}>{i > 0 && ' · '}{f}</span>)}</p>
         {links.length > 0 && <p className="flex gap-4 shrink-0">{links.map(([label, url]) =>
           <a key={label} href={url} target="_blank" rel="noopener noreferrer" className="text-blue-700 hover:underline">{label} ↗</a>)}</p>}
@@ -90,7 +90,7 @@ function Section({ title, sub, items, first, render, cols = 1, empty }) {
   const limit = items.length - first === 1 ? items.length : first     // never "Show 1 more": just show it
   const shown = all ? items : items.slice(0, limit)
   return (
-    <section className="py-5 border-b border-slate-100 last:border-0">
+    <section className="py-5 border-b border-slate-300 last:border-0">
       {/* 21 Oct (her review: titles and content ran together): a larger title with a short blue mark, and more room
           before the items */}
       <h2 className="flex items-center gap-2 text-base font-semibold text-slate-900"><span aria-hidden="true" className="w-1 h-4 rounded-full bg-blue-600" />{title}</h2>
@@ -126,7 +126,7 @@ function ShowMore({ items, first, render }) {
 function Group({ title, note, children, count }) {
   // 21 Oct (her review: green titles looked odd): every title in the same dark text; only the chips carry colour
   return (
-    <div className="pt-5 mt-5 border-t border-slate-200 first:pt-0 first:mt-0 first:border-0">
+    <div className="pt-5 mt-5 border-t border-slate-300 first:pt-0 first:mt-0 first:border-0">
       <p className="text-base font-semibold text-slate-900">{title} <span className="font-normal text-slate-400 tabular-nums">{count}</span></p>
       {note && <p className="text-xs text-slate-500 mt-0.5">{note}</p>}
       <div className="mt-2.5">{children}</div>
@@ -249,7 +249,7 @@ export function ApplicantCards({ s, fit, withFit = true, you, aside }) {
             here, so the panel holds every skill and the left column the CV */}
         {withFit ? <><MatchPanel fit={fit} you={you} />
           {strengths.length > 0 && (
-            <div className="pt-5 mt-5 border-t border-slate-200">
+            <div className="pt-5 mt-5 border-t border-slate-300">
               <Group title="Also brings" count={strengths.length} note="Other skills with the most evidence, beyond this job.">
                 <ShowMore items={strengths} first={4} render={strengthRow} />
               </Group>
