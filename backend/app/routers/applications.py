@@ -51,7 +51,9 @@ class ApplyIn(BaseModel):
 
 @router.post("")
 def apply(data: ApplyIn, student: User = Depends(require_student), db: Session = Depends(get_db)):
-    job = db.query(Job).filter(Job.job_id == data.job_id).first()
+    # 21 Oct (outside audit: a timing race with an employer's edit): the job's row is locked until this application is
+    # saved, so an edit saved at the same moment waits and then sees it (employer.save_edit locks the same row)
+    job = db.query(Job).filter(Job.job_id == data.job_id).with_for_update().first()
     if not job or job.source != "employer":
         raise HTTPException(status_code=404, detail="Only jobs posted on SkillMap can be applied for here.")
     if not _job_open(job):

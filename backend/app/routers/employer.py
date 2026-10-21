@@ -400,6 +400,9 @@ def save_edit(job_id: int, data: EditIn, employer: User = Depends(require_employ
         raise HTTPException(status_code=400, detail="The career office hid this job, so it can't be edited.")
     _check_ad(job.job_title, data.description)
     skills, seen = _checked_skills(data)
+    # 21 Oct (outside audit): lock the job's row so an application made at the same moment is either counted here or
+    # waits for this edit (applications.apply locks the same row); held until the commit below
+    db.query(Job).filter(Job.id == job.id).with_for_update().one()
     more = _asks_for_more(job, data, skills, db)
     if more:
         raise HTTPException(status_code=409, detail=(

@@ -74,3 +74,23 @@ def test_only_the_owner_can_edit(client, users, post_job):
             "salary": "", "skills": [{"name": "Python", "level": "required", "quote": "", "group": ""}], "soft": []}
     assert client.put(f"/employer/jobs/{job['id']}", headers=users.h(other), json=body).status_code == 404
     assert client.put(f"/employer/jobs/{job['id']}", headers=users.h(users.student()), json=body).status_code == 403
+
+
+def test_an_edit_and_an_application_at_the_same_moment_take_turns(client, users, post_job):
+    """21 Oct (outside audit: a timing race): saving an edit and applying both lock the job's row, so while one holds
+    it the other has to wait; an edit can't miss an application made at the same moment."""
+    import pytest
+    from sqlalchemy.exc import OperationalError
+    from app.database import SessionLocal
+    from app.models.job import Job
+    job = post_job(users.employer())
+    first, second = SessionLocal(), SessionLocal()           # two separate connections, as two requests would be
+    try:
+        first.query(Job).filter(Job.id == job["id"]).with_for_update().one()      # e.g. the employer's save, mid-way
+        with pytest.raises(OperationalError):                 # the student's apply can't take the row meanwhile
+            second.query(Job).filter(Job.id == job["id"]).with_for_update(nowait=True).one()
+        second.rollback()
+        first.commit()                                        # the edit is saved: the row is free again
+        assert second.query(Job).filter(Job.id == job["id"]).with_for_update(nowait=True).one().id == job["id"]
+    finally:
+        second.rollback(); first.close(); second.close()

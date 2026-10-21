@@ -3,6 +3,67 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 21 Oct 2026 — Fuller profiles, what employers see, fairness after applying, one look everywhere
+Why: graduate recruiters weigh work experience, activities and languages, not only modules; employers should see the
+application as it was sent; and an employer must not change the rules after students applied (research:
+references.md "What employers look for in graduates", "After applying", "Changing a job's requirements after
+people applied", "Actions on several applicants at once").
+- **Profile evidence** (`cd46ac2`): work experience and activities (AI suggests skills only if quoted from her own
+  words), project role/team/outcome/demo link, languages, CGPA shown only if she switches it on; a Profile & privacy
+  page; updated privacy notice (21 Oct) with a pop-up and a Dashboard reminder until agreed. Needs
+  `migrate_profile_more_evidence.py`.
+- **Apply pop-up** (`af0194e`): one tip from the ad (missing required skills, or a language it asks for).
+- **Employer's applicant page and the student's preview** (`f630cec`, `a6dc983`, `515aec3`, `5b2a942`): the same
+  page for both; a CV column and a match panel, each scrolling on its own; the job's skills first; no repo-ownership
+  mark for employers; links beside the name (`bc1112c`).
+- **Application copy** (`729ae86`): each application keeps what the employer was shown when the student applied
+  (no contact details); employers see that copy first with "See latest". Needs `migrate_application_copy.py`.
+- **Profile checklist** (`1fd12a3`): "Your profile · N of 5 done" on My Profile's tab row; hidden when empty or
+  complete. Job-ad evidence for what ads ask for besides skills: `docs/evidence/profile_items_in_ads.csv`
+  (`5e8f87a`, `3737f89`).
+- **Bulk Shortlist** (`f830be3`): next to Not selected; only applications at Applied move; Accepted stays one at a
+  time.
+- **Ask for less, not more, after anyone applies** (`a96f64e`): an edit can fix the ad or drop requirements; adding a
+  required skill, a higher qualification, a field or a language is refused with "Post a new job with these
+  changes"; students see what the job no longer requires and their old and new match. The job's row is locked
+  while an edit or an application is saved, so the two can't cross (after an outside audit).
+- **Employer dashboard** (`3a008df`, `b54a691`): no row cut in half on shorter screens; "Nothing urgent" with the
+  next decision date; "Needs your attention" amber while something waits.
+- **One look everywhere** (`7cfea32`, `d231f11`, `a929af2`): the same line greys, grey table titles (blue means
+  clickable), card corners and titles on student, employer and admin pages; fixed column titles on scrolling tables;
+  narrow windows stack or scroll sideways instead of cutting content; square logo in the collapsed sidebar.
+- **Test evidence** (`a050903`): 136 passed on her laptop, lint clean, build fine (`docs/evidence/tests/`).
+
+## 20 Oct 2026 — Applications on other sites, My Applications, employer dashboard
+- **Applications on other sites** (`111d09a`, `f367cef`): after "Apply on …", SkillMap asks on return whether she
+  applied and keeps it in My Applications with a stage she updates; in-app confirms instead of browser pop-ups.
+- **My Applications** (`dda85da` to `60bf0e8`): one section each for SkillMap and other sites, filters across both,
+  one row open at a time with steps, numbers and status colours; rows fit the screen.
+- **Employer dashboard** (`eb739e3`): rows that fill the screen, "What you can do now", decision dates.
+- **Fix** (`ed09bbb`): 500 error on `/applications/invitations` for students with an outside record.
+
+## 19 Oct 2026 — What the ad asks for besides skills (E6), and Job Detail
+- **E6 rules** (`e8aa4ca`, `b7d978f`): qualification, field, languages and salary read from the ad text by fixed
+  rules, scored on 30 unseen live ads against bars set beforehand; citizenship found 0 of 2 real cases, so not shown.
+- **Job Detail** (`313b6dc`, `2ee4e7c`, `fcc4878`): the reply date and the employer's record in one box under the
+  title; requirement pills (live ads: the E6 rules; SkillMap posts: the employer's own fields).
+- **AI Assistant** (`f8648d6`): "Back to <page>" for every way in; Learn reopens the earlier chat for that skill.
+- **Design fixes** (`18ada59`, `6101103`): one thin scrollbar, one capital style, a save bar only when grades changed.
+
+## 18 Oct 2026 — Ranking and response-time evaluations, faster matching, honest descriptions
+- **Ranking vs keyword baseline (step 4)** (`3a13a88`): nDCG@10 0.796 vs 0.526, PASS (3 judges, 3,000-character ads,
+  her spot-check 26 of 27).
+- **Response times (E5)** (`eca17c8`, `5334e36`): PASS on run 3 after two fixes that keep the answers identical
+  (`ea1c669` faster `match_matrix`; `a0d8f2a` one numpy thread); runs 1 and 2 kept as evidence.
+- **Invented job descriptions fixed** (`ae94eab`, `73bb9d6`): employer posts shown as written; AI-formatted ads keep
+  the ad's words and every answer is checked against the ad (3 of 48 saved descriptions had invented text, none live).
+- **Employer's reply record on Job Detail** (`fc649a5`) before a student applies.
+- Test log: 105 passed (`49be164`).
+
+## 16 Oct 2026 — Ranking evaluation set-up
+- Judges see 3,000 characters of each ad; missed pairs asked one by one; only current pairs counted
+  (`2aa0e0a`, `09e24a4`, `ace38b5`). Roadmap and references added to the repo (`1f4216e`).
+
 ## 15 Oct 2026 — Evaluation, and module skills with prompt v2
 Why: features are frozen; the evaluation measures each part against fixed rules written before the results
 (research and numbers: references.md; every run in MongoDB `evaluation_runs`, exported to
