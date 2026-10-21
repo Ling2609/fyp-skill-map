@@ -1050,3 +1050,8 @@ Her request: show the student a clear process (instead of silence then a sudden 
 ## Telling parts of the applicant page apart: colour or lines? (21 Oct, opened; her pick D)
 - NN/g, "The Principle of Common Region" (https://www.nngroup.com/articles/common-region/): background colour and borders both group content; "too many borders and colored boxes that exist purely for decoration add clutter"; whitespace first where it works; contrasting full-width blocks on long pages can create "false floors".
 - Mocked A–C (tinted heading/panel) and D–E (lines). She found the tints odd; picked D: all white, a thicker grey line under the heading and down the side of the skills panel.
+
+## What real ads ask for besides skills (21 Oct, her run of scripts/evaluation/profile_items_in_ads.py; docs/evidence/profile_items_in_ads.csv)
+- 2,622 Malaysian ICT ads (2024 JobStreet + live), word rules (rough: "experience in Java" counts as experience). Share mentioning: work experience/internship 78%, degree/diploma 65%, English 24%, certification 20%, leadership 13%, Mandarin/Chinese 12%, fresh graduates 9%, portfolio/GitHub 8%, Malay 5%, CGPA 1%.
+- By category: certification Security 50%, Architects 40%, Networks 31%, Developers 10%; leadership Team Leaders 43%, Project Mgmt 32%, Developers 7%; English Help Desk 40%, Sales 39%; Malay Sales 22%, Help Desk 14%.
+- Used for: CGPA stays optional and is never pushed (1%); experience and languages are worth having on the profile. A "Make your profile stronger" reminder built on it was dropped (her review: banners spoil the design; a generic "X% mention a certificate" is not informative). Specific guidance stays with the skill gap and learning plan.
