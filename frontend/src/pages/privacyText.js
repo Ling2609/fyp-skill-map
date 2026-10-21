@@ -163,11 +163,45 @@ const SECTIONS = {
   ],
 }
 
+// 21 Oct 2026 version: work experience and activities, languages and an optional CGPA (references.md "What employers
+// look for in graduates"). Made from the 14 Oct text by replacing the lines that changed, so the 14 Oct entry below
+// keeps exactly what people agreed to then.
+const revise = (sections, lang, swaps) => ({ ...sections, [lang]: sections[lang].map(([id, title, items]) =>
+  [id, title, items.map(t => swaps.reduce((acc, [a, b]) => acc.replace(a, b), t))]) })
+const DATA_TABLE_1021 = {
+  en: { ...DATA_TABLE.en, rows: DATA_TABLE.en.rows.flatMap(r => r[0] === 'Projects, certifications, awards'
+    ? [['Projects, work experience, activities, certifications, awards', 'Optional', 'Find skills beyond your modules'],
+       ['Languages, CGPA', 'Optional', 'Show employers; CGPA only if you switch it on']] : [r]) },
+  ms: { ...DATA_TABLE.ms, rows: DATA_TABLE.ms.rows.flatMap(r => r[0] === 'Projek, pensijilan, anugerah'
+    ? [['Projek, pengalaman kerja, aktiviti, pensijilan, anugerah', 'Pilihan', 'Mengenal pasti kemahiran selain daripada modul anda'],
+       ['Bahasa, PNGK', 'Pilihan', 'Ditunjukkan kepada majikan; PNGK hanya jika anda menghidupkannya']] : [r]) },
+}
+const SECTIONS_1021 = revise(revise(SECTIONS, 'en', [
+  ['Your grades only if you allow it.', 'Your grades and CGPA only if you allow it.'],
+  ['The text of your projects, certifications, awards', 'The text of your projects, work experience, activities, certifications, awards'],
+  ['your profile, grades, projects, certifications, awards,', 'your profile, grades, projects, work experience, activities, certifications, awards,'],
+  ['Turn **"Visible to employers"** off, and **"Show grades"** off, in My Profile.', 'Turn **"Visible to employers"**, **"Show my CGPA"** and **"Show my module grades"** off in Profile & privacy.'],
+  ['Delete single projects, certificates, awards', 'Delete single projects, experience, certificates, awards'],
+]), 'ms', [
+  ['Gred anda hanya jika anda membenarkannya.', 'Gred dan PNGK anda hanya jika anda membenarkannya.'],
+  ['Teks projek, pensijilan, anugerah', 'Teks projek, pengalaman kerja, aktiviti, pensijilan, anugerah'],
+  ['profil, gred, projek, pensijilan, anugerah,', 'profil, gred, projek, pengalaman kerja, aktiviti, pensijilan, anugerah,'],
+  ['Matikan **"Kelihatan kepada majikan"** dan **"Tunjukkan gred"** dalam Profil Saya.', 'Matikan **"Kelihatan kepada majikan"**, **"Tunjukkan PNGK"** dan **"Tunjukkan gred modul"** dalam Profil & privasi.'],
+  ['Padam projek, sijil, anugerah', 'Padam projek, pengalaman, sijil, anugerah'],
+])
+
 // Every version of the notice, newest first (14 Oct, her question: are old versions kept and can they be seen?).
 // A change adds a new entry on top with a short summary of what changed; older entries keep their own text, so
 // /privacy?version=<date> still shows exactly what someone agreed to. users.privacy_version stores the date of the
 // version a person accepted; backend/app/routers/auth.py PRIVACY_VERSION must equal VERSIONS[0].date (a test checks).
 export const VERSIONS = [
+  {
+    date: '2026-10-21',
+    label: { en: '21 October 2026', ms: '21 Oktober 2026' },
+    changes: { en: 'Added work experience, activities, languages and an optional CGPA (shown to employers only if you switch it on).',
+               ms: 'Ditambah pengalaman kerja, aktiviti, bahasa dan PNGK pilihan (ditunjukkan kepada majikan hanya jika anda menghidupkannya).' },
+    text: { inShort: IN_SHORT, table: DATA_TABLE_1021, sections: SECTIONS_1021 },
+  },
   {
     date: '2026-10-14',
     label: { en: '14 October 2026', ms: '14 Oktober 2026' },

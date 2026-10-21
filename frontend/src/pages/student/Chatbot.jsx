@@ -167,6 +167,7 @@ export default function Chatbot() {
   const preloadSkill = params.get('skill')
   const preloadJob = params.get('job')
   const preloadJobId = params.get('job_id')   // from "Learn →" on a job: the backend reads that job's skill gap (E3)
+  const preloadPurpose = params.get('purpose') // 21 Oct: 'interview' from a shortlisted application (the job's ad goes in)
   // From the Dashboard's "Talk to the counsellor" (9 Oct): a first message written from her profile, put in the box
   // but NOT sent, so she can change it first
   const preloadAsk = params.get('ask')
@@ -214,7 +215,7 @@ export default function Chatbot() {
   const [chatKey, setChatKey] = useState(0)            // bumped to start or open a chat
   const pendingChat = useRef(null)                     // messages of a chat being opened
   // What the chat is about: from "Learn →" on a job, or from the saved chat being continued
-  const [chatCtx, setChatCtx] = useState({ target_skill: preloadSkill, job_title: preloadJob, job_id: preloadJobId })
+  const [chatCtx, setChatCtx] = useState({ target_skill: preloadSkill, job_title: preloadJob, job_id: preloadJobId, purpose: preloadPurpose })
 
   const currentMode = MODES.find(m => m.key === mode)
 
@@ -286,6 +287,7 @@ export default function Chatbot() {
     if (chatCtx.job_title) ctx.job_title = chatCtx.job_title
     if (chatCtx.target_skill) ctx.target_skill = chatCtx.target_skill
     if (chatCtx.job_id) ctx.job_id = chatCtx.job_id
+    if (chatCtx.purpose) ctx.purpose = chatCtx.purpose
     return ctx
   }, [chatCtx])
 
@@ -425,7 +427,7 @@ export default function Chatbot() {
     hours.current = null; pendingPlan.current = null     // each chat asks for its own hours
     sessionRef.current = null
     setSessionId(null)
-    setChatCtx({ target_skill: null, job_title: null, job_id: null })
+    setChatCtx({ target_skill: null, job_title: null, job_id: null, purpose: null })
     setMode(newMode)
     setChatKey(k => k + 1)
     if (narrow()) setListOpen(false)
@@ -446,7 +448,7 @@ export default function Chatbot() {
       sessionRef.current = id
       setSessionId(id)
       setChatCtx({ target_skill: res.data.context?.target_skill || null, job_title: res.data.context?.job_title || null,
-        job_id: res.data.context?.job_id || null })
+        job_id: res.data.context?.job_id || null, purpose: res.data.context?.purpose || null })
       setMode(res.data.mode)
       setChatKey(k => k + 1)
       if (narrow()) setListOpen(false)          // on a phone the list covers the chat: close it once one is chosen

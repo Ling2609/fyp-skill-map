@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 import api from '../../api'
 import { cached, peek } from '../../pageCache'
@@ -84,13 +84,49 @@ function ApplyInfo({ a, company, closed: closedCached, taking: takingCached, dec
   )
 }
 
-function ApplyAction({ a, closed: closedCached, taking: takingCached, fromApps }) {
+// 21 Oct (her idea; research: references.md "Checking what the employer sees before applying"): Apply asks first, in
+// a small pop-up beside the button. A SkillMap application can't be taken back and shares her profile, so a confirm
+// is justified (NN/g); the buttons say what they do. "Check what they'll see" opens /jobs/:jobId/check.
+function ApplyConfirm({ job, summary, onApply, onClose }) {
+  const box = useRef(null)
+  const navigate = useNavigate()
+  useEffect(() => {
+    const close = (e) => { if (box.current && !box.current.contains(e.target)) onClose() }
+    const esc = (e) => { if (e.key === 'Escape') onClose() }
+    document.addEventListener('mousedown', close)
+    document.addEventListener('keydown', esc)
+    return () => { document.removeEventListener('mousedown', close); document.removeEventListener('keydown', esc) }
+  }, [onClose])
+  return (
+    <div ref={box} role="dialog" aria-label={`Apply to ${job.company}?`}
+      className="absolute right-0 top-full mt-2 z-40 w-[22rem] bg-white border border-slate-200 rounded-xl shadow-lg p-4 text-left">
+      {/* 21 Oct (her review): × in the top right corner, level with the title */}
+      <div className="flex items-start justify-between gap-3">
+        <p className="text-sm font-semibold text-slate-900 leading-5">Apply to {job.company}?</p>
+        <button type="button" onClick={onClose} aria-label="Close"
+          className="-mt-1 -mr-1.5 w-6 h-6 flex items-center justify-center rounded text-lg leading-none text-slate-400 hover:text-slate-700 hover:bg-slate-100">×</button>
+      </div>
+      <p className="text-sm text-slate-600 mt-1">They'll see your SkillMap profile and your match for {job.job_title}
+        {summary ? `: ${summary.matched_skills} of ${summary.job_skills_total} required skills` : ''}. Your email, phone and other
+        contact details only if they shortlist you. You can't take an application back once sent.</p>
+      <div className="mt-3 flex justify-end gap-2">
+        <button type="button" onClick={() => navigate(`/jobs/${encodeURIComponent(job.job_id)}/check`)}
+          className="text-sm font-medium text-slate-700 border border-slate-300 rounded-lg px-3 py-1.5 hover:bg-slate-50">Check what they'll see</button>
+        <button type="button" onClick={() => { onClose(); onApply() }} autoFocus
+          className="text-sm font-medium text-white bg-blue-700 hover:bg-blue-800 rounded-lg px-3 py-1.5">Apply now</button>
+      </div>
+    </div>
+  )
+}
+
+function ApplyAction({ a, closed: closedCached, taking: takingCached, fromApps, job, summary }) {
   const { app, busy, error, apply, now } = a
+  const [asking, setAsking] = useState(false)
   const closed = now ? now.closed : closedCached
   const taking = now ? now.taking_applications : takingCached
   if (app === undefined) return null
   return (
-    <div className="shrink-0 flex flex-col items-end gap-1 max-w-64 text-right">
+    <div className="relative shrink-0 flex flex-col items-end gap-1 max-w-64 text-right">
       {app ? (
         <>
           <span className={`text-sm font-semibold border px-4 py-2 rounded-lg ${OUTCOME[app.status] || 'text-slate-700 bg-slate-50 border-slate-200'}`}>
@@ -106,10 +142,11 @@ function ApplyAction({ a, closed: closedCached, taking: takingCached, fromApps }
         <span className="text-sm text-slate-500 bg-slate-100 px-4 py-2 rounded-lg">Applications closed</span>
       ) : (
         <>
-          <button onClick={apply} disabled={busy}
+          <button onClick={() => setAsking(v => !v)} disabled={busy} aria-expanded={asking}
             className="text-sm font-semibold text-white bg-blue-700 hover:bg-blue-800 px-4 py-2 rounded-lg transition disabled:opacity-50">
             {busy ? <Busy>Applying…</Busy> : 'Apply with my SkillMap profile'}
           </button>
+          {asking && job && <ApplyConfirm job={job} summary={summary} onApply={apply} onClose={() => setAsking(false)} />}
           {/* 19 Oct (her pick): what to know before applying moved under the title (ApplyInfo) */}
         </>
       )}
@@ -310,7 +347,7 @@ export default function JobDetail() {
                 )}
               </p>
             </div>
-            {gap?.job?.source === 'employer' && <ApplyAction a={skillmapApp} fromApps={backLabel === 'My Applications'} closed={gap.job.closed}
+            {gap?.job?.source === 'employer' && <ApplyAction a={skillmapApp} job={gap.job} summary={gap.summary} fromApps={backLabel === 'My Applications'} closed={gap.job.closed}
               taking={gap.job.taking_applications} />}
             {gap?.job?.source === 'live' && gap.job.source_url && (
               <div className="shrink-0 flex flex-col items-start sm:items-end gap-1">

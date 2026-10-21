@@ -20,6 +20,9 @@ export const aboutBody = (d) => ({
   linkedin_url: d.links?.linkedin || '', portfolio_url: d.links?.portfolio || '', github_url: d.links?.github || '',
   visible_to_employers: !!d.visible_to_employers, show_grades_to_employers: !!d.show_grades_to_employers,
   phone: d.own_contact?.phone || '', city: d.own_contact?.city || '', available_from: d.own_contact?.available_from || '',
+  // 21 Oct: languages and the CGPA (typed as text so "3.7" can be edited freely; sent as a number)
+  languages: (d.languages || []).map(l => ({ language: l.language, level: l.level, test: l.test || '' })),
+  cgpa: d.cgpa != null ? Number(d.cgpa).toFixed(2) : '', show_cgpa: !!d.show_cgpa,
 })
 
 // A programme picked, and an intake too whenever that programme has intakes
@@ -53,4 +56,10 @@ export const mergeFound = (current, found) => {
   const mine = current.filter(s => s.evidence === ADDED_BY_YOU)
   const have = new Set(mine.map(s => s.name.toLowerCase()))
   return [...found.filter(s => !have.has(s.name.toLowerCase())), ...mine]
+}
+
+// 21 Oct: "Front-end developer · team of 4 · used by 120 members" (each part only when given)
+export const projectContext = (p) => {
+  const text = [p.role, p.team_size && (p.team_size === 1 ? 'solo project' : `team of ${p.team_size}`), p.outcome].filter(Boolean).join(' · ')
+  return text && text[0].toUpperCase() + text.slice(1)
 }

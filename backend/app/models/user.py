@@ -1,5 +1,5 @@
 import enum
-from sqlalchemy import Column, Integer, String, Enum, DateTime, Boolean, JSON, ForeignKey, Text
+from sqlalchemy import Column, Integer, String, Enum, DateTime, Boolean, JSON, ForeignKey, Numeric, Text
 from sqlalchemy.sql import func
 from app.database import Base
 
@@ -46,6 +46,12 @@ class User(Base):
     available_from = Column(String(7), nullable=True)    # "2027-01" (month and year)
     privacy_accepted_at = Column(DateTime(timezone=True), nullable=True)   # ticked the privacy notice at sign-up
     privacy_version = Column(String(10), nullable=True)   # 14 Oct audit: which notice (its date, privacyText.js VERSIONS)
+    # 21 Oct (references.md "What employers look for in graduates", migrations/migrate_profile_more_evidence.py):
+    # languages as [{"language": "English", "level": "professional", "test": "MUET Band 5"}], and the CGPA the
+    # student types from her transcript, shown to employers only if she switches it on
+    languages = Column(JSON, nullable=False, default=list, server_default='[]')
+    cgpa = Column(Numeric(3, 2), nullable=True)
+    show_cgpa = Column(Boolean, default=False, nullable=False, server_default="false")
 
 # Load the tables users point at (programmes, intakes), so any script that saves a User works on its own (7 Oct)
 from app.models import programme  # noqa: E402,F401

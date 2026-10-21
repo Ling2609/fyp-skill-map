@@ -22,7 +22,7 @@ from app.database import get_db
 from app.models.user import User
 from app.mongo import chat_sessions, history_ok
 from app.models.module import Module
-from app.models.profile import UserAward, UserCertification, UserProject
+from app.models.profile import UserAward, UserCertification, UserExperience, UserProject
 from app.models.programme import Programme
 from app.models.user_module import UserModule
 from app.routers.auth import get_current_user
@@ -134,6 +134,9 @@ class ChatRequest(BaseModel):
     job_title: str | None = None
     # "Learn →" on a job (E3, 9 Oct): the backend reads that job's skill gap itself, the same numbers Job Detail shows
     job_id: str | None = Field(default=None, max_length=200)
+    # 21 Oct (her review): "Prepare for the interview" from a shortlisted application: the chat gets the job's own ad
+    # (responsibilities, requirements) so practice questions are about THIS job, not general ones
+    purpose: str | None = Field(default=None, pattern="^interview$")
     session_id: str | None = Field(default=None, max_length=64)   # continue a saved chat; None = start a new one
     hours_per_week: int | None = Field(default=None, ge=1, le=40)   # 13 Oct: the plan's times fit this
 
@@ -166,6 +169,9 @@ def job_gap_lines(gap: dict, target_skill: str | None) -> list[str]:
     nice = [n["job_skill"] for n in gap.get("nice_to_have", []) if not n["has"]]
     if nice:
         lines.append("Nice to have, not yet: " + ", ".join(nice[:6]))
+    nice_have = [n["job_skill"] for n in gap.get("nice_to_have", []) if n["has"]]
+    if nice_have:      # 21 Oct: extra selling points the ad would welcome
+        lines.append("Nice to have, and already has: " + ", ".join(nice_have[:6]))
     if target_skill:
         t = target_skill.lower()
         for kind, rows in (("requires", gap["missing_skills"]), ("lists as nice to have", gap.get("nice_to_have", []))):
@@ -177,10 +183,42 @@ def job_gap_lines(gap: dict, target_skill: str | None) -> list[str]:
     return lines
 
 
+AD_CHARS_FOR_INTERVIEW = 2000      # enough for the responsibilities and requirements of a typical ad
+
+
+def interview_lines(gap: dict) -> list[str]:
+    """21 Oct: for interview preparation, what the student was shortlisted for and the ad itself."""
+    job = gap["job"]
+    ad = " ".join((job.get("description") or "").split())
+    # 21 Oct (her review: preparing means knowing the company, the role's responsibilities and how one's own projects,
+    # awards, certifications and modules show the ability, as stories): a fixed order for the preparation
+    lines = [f"Purpose: the user has been SHORTLISTED for {job['job_title']} at {job['company']} and wants to prepare "
+             "for the interview. Everything must be specific to this company and this ad; no generic advice that would "
+             "fit any job. Prepare them in this order, briefly, and offer to go deeper on any part: "
+             "(1) The company: what the ad says about it; you cannot look the company up, so list 3-4 specific things "
+             "to check on its website or LinkedIn before the interview (what it does, products or clients, recent news) "
+             "and why each matters for this role. "
+             "(2) The role: the ad's main responsibilities in plain words. "
+             "(3) Their evidence for each responsibility and required skill: match it to THEIR OWN projects, modules, "
+             "certifications and awards (named, from the context), and turn the 2-3 strongest into short STAR stories "
+             "(Situation, Task, Action, Result) they can tell, using only facts from their profile and asking them for "
+             "missing details (numbers, their own part) instead of inventing any. "
+             "(4) Selling points beyond the required skills: nice-to-haves they already have and other strong evidence. "
+             "(5) Gaps: for each required skill they lack, an honest way to answer (related experience, what they are "
+             "doing to learn it). "
+             "(6) 5-6 questions this interviewer is likely to ask for this ad, then offer a mock interview one question "
+             "at a time with feedback."]
+    if ad:
+        lines.append("The job ad (excerpt): " + ad[:AD_CHARS_FOR_INTERVIEW] + ("…" if len(ad) > AD_CHARS_FOR_INTERVIEW else ""))
+    return lines
+
+
 def build_context_block(req: ChatRequest, gap: dict | None = None, goal: str | None = None) -> str:
     lines = []
     if gap:
         lines += job_gap_lines(gap, req.target_skill)
+        if req.purpose == "interview":
+            lines += interview_lines(gap)
     elif req.job_title:
         lines.append(f"Target job: {req.job_title}")
     if goal:
@@ -224,10 +262,25 @@ def cv_lines(user: User, db: Session) -> list[str]:
             lines.append(f"Programme: {prog.name}")
     if user.headline:
         lines.append(f"Their headline: {user.headline}")
+    if user.about:      # 21 Oct: "About you" (what role they want, what they enjoy)
+        lines.append(f"About them, in their words: {' '.join(user.about.split())[:300]}")
     for p in db.query(UserProject).filter(UserProject.user_id == user.id).order_by(UserProject.id).limit(6):
         about = " ".join((p.description or "").split())
-        lines.append(f"Project: {p.name}. {about[:400]}{'...' if len(about) > 400 else ''}"
+        context = ", ".join(x for x in (p.role and f"role: {p.role}",
+                                        p.team_size and ("on their own" if p.team_size == 1 else f"team of {p.team_size}"),
+                                        p.outcome and f"outcome: {p.outcome}") if x)
+        lines.append(f"Project: {p.name}{f' ({context})' if context else ''}. {about[:400]}{'...' if len(about) > 400 else ''}"
                      + (f" Skills: {', '.join(p.extracted_skills[:10])}" if p.extracted_skills else ""))
+    # 21 Oct: work experience and activities (internships, clubs, hackathons), newest first
+    from app.routers.experience import _newest_first, evidence_label
+    for e in _newest_first(db.query(UserExperience).filter(UserExperience.user_id == user.id)).limit(6):
+        did = " ".join((e.description or "").split())
+        lines.append(f"{'Work' if e.kind == 'work' else 'Activity'}: {evidence_label(e).split(': ', 1)[1]} "
+                     f"({e.start_month} to {e.end_month or 'now'}). {did[:300]}{'...' if len(did) > 300 else ''}"
+                     + (f" Skills: {', '.join(e.mapped_skills[:8])}" if e.mapped_skills else ""))
+    if user.languages:
+        lines.append("Languages: " + "; ".join(f"{l['language']} ({l['level'].replace('_', ' ')}"
+                                               f"{', ' + l['test'] if l.get('test') else ''})" for l in user.languages))
     certs = db.query(UserCertification).filter(UserCertification.user_id == user.id).limit(6).all()
     if certs:
         lines.append("Certifications: " + "; ".join(f"{c.cert_name} ({c.issuer})" for c in certs))
@@ -320,7 +373,8 @@ def save_exchange(req: ChatRequest, user: User, reply: str) -> str | None:
         title = " ".join(question.split())
         col.insert_one({"_id": session_id, "user_id": user.id, "mode": req.mode,
                         "title": title[:TITLE_CHARS] + ("…" if len(title) > TITLE_CHARS else ""),
-                        "context": {"target_skill": req.target_skill, "job_title": req.job_title, "job_id": req.job_id},
+                        "context": {"target_skill": req.target_skill, "job_title": req.job_title, "job_id": req.job_id,
+                                    "purpose": req.purpose},
                         "created_at": now, "updated_at": now, "messages": turn})
         return session_id
     except PyMongoError as e:

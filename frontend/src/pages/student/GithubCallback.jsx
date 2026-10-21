@@ -39,7 +39,7 @@ export default function GithubCallback() {
   useEffect(() => {
     if (sent.current || refused) return
     sent.current = true
-    let back = '/profile?open=links'
+    let back = '/profile/settings'
     try { back = sessionStorage.getItem('githubReturn') || back; sessionStorage.removeItem('githubReturn') } catch { /* blocked */ }
     api.get('/profile/github/accounts').then(res => setWithProjects(res.data.repo_projects > 0)).catch(() => {})
     api.post('/profile/github/connect', { code: params.get('code') || '', state: params.get('state') || '' })
@@ -51,7 +51,7 @@ export default function GithubCallback() {
       .catch(err => setFailed(errText(err, "Couldn't connect GitHub. Please try again.")))
   }, [params, navigate, refused])
 
-  const retry = () => startGithubConnect('/profile?open=links')
+  const retry = () => startGithubConnect('/profile/settings')
     .catch(err => setFailed(errText(err, "Couldn't start connecting to GitHub. Please try again.")))
 
   return (
@@ -63,7 +63,7 @@ export default function GithubCallback() {
             <p className="mt-4 text-base font-semibold text-slate-900">GitHub wasn't connected</p>
             <p className="mt-2 text-sm text-slate-600">{error}</p>
             <div className="mt-5 flex justify-center items-center gap-3">
-              <Link to="/profile?open=links" className="text-sm text-slate-600 hover:text-slate-900 px-3 py-2">Back to My Profile</Link>
+              <Link to="/profile/settings" className="text-sm text-slate-600 hover:text-slate-900 px-3 py-2">Back to Profile &amp; privacy</Link>
               <button type="button" onClick={retry} className="text-sm font-medium text-white bg-blue-700 hover:bg-blue-800 rounded-lg px-4 py-2">Try again</button>
             </div>
           </>

@@ -107,6 +107,20 @@ def _mine(a: Application, job: Job, match: str | None = None, events=None, usual
             **(extra or {})}
 
 
+@router.get("/job/{job_ref}/preview")
+def preview_for_job(job_ref: str, student: User = Depends(require_student), db: Session = Depends(get_db)):
+    """21 Oct (her idea): before applying, what this employer will see, built by the SAME function as the employer's
+    applicant page (employer._profile_for), so the two can't differ. Contact details are never in it: the employer gets
+    them only after shortlisting."""
+    job = db.query(Job).filter(Job.job_id == job_ref).first()
+    if not job or job.source != "employer":
+        raise HTTPException(status_code=404, detail="Only jobs posted on SkillMap can be applied for here.")
+    from app.routers.employer import _profile_for
+    applied = db.query(Application).filter(Application.job_id == job.id, Application.student_id == student.id).first()
+    return {**_profile_for(student, job, db, contact=False), "company": job.company, "job_ref": job.job_id,
+            "applied": applied is not None}
+
+
 @router.get("/job/{job_ref}/open")
 def job_open_now(job_ref: str, student: User = Depends(require_student), db: Session = Depends(get_db)):
     """14 Oct: is this SkillMap job taking applications right now, and its decision date. Always fresh: Job Detail

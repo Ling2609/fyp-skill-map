@@ -13,7 +13,7 @@ which hides grades unless the student allows it (Handshake hides GPA the same wa
 from sqlalchemy.orm import Session
 
 from app.models.module import Module, ModuleSkill
-from app.models.profile import UserAward, UserCertification, UserProject
+from app.models.profile import UserAward, UserCertification, UserExperience, UserProject
 from app.models.programme import Intake, Programme
 from app.models.user import User
 from app.models.user_module import UserModule
@@ -55,6 +55,10 @@ def _evidence_by_skill(user_id: int, db: Session) -> dict[str, list[dict]]:
     for a in db.query(UserAward).filter(UserAward.user_id == user_id):
         for skill in a.mapped_skills or []:
             add(skill, "award", a.title)
+    from app.routers.experience import evidence_label
+    for e in db.query(UserExperience).filter(UserExperience.user_id == user_id):
+        for skill in e.mapped_skills or []:
+            add(skill, e.kind, evidence_label(e).split(": ", 1)[1])
     return found
 
 
@@ -92,8 +96,21 @@ def _repo_check(project, for_employer: bool):
     return project.repo_check
 
 
-def build_showcase(user: User, db: Session, for_employer: bool = False) -> dict:
-    """Everything My Profile shows, in one reply. for_employer=True hides grades unless the student allows them."""
+def _for_job(skills: list[str], job_keys: set[str] | None, shown: int = 6) -> tuple[list[str], list[str]]:
+    """(skills to show, the ones this job asks for). 21 Oct (her idea): with a job, its skills come first."""
+    skills = list(skills or [])
+    if not job_keys:
+        return skills[:shown], []
+    relevant = [s for s in skills if canonical_key(s) in job_keys]
+    return (relevant + [s for s in skills if s not in relevant])[:shown], relevant
+
+
+def build_showcase(user: User, db: Session, for_employer: bool = False, job_skills: list[str] | None = None) -> dict:
+    """Everything My Profile shows, in one reply. for_employer=True hides grades unless the student allows them.
+    job_skills (21 Oct, her idea): an employer looking at an applicant for a job sees the projects and experience
+    that use the job's skills first, each with those skills first and listed in "relevant"; the rest keep their
+    order (newest first) after them. Nothing is hidden."""
+    job_keys = {k for k in (canonical_key(s) for s in job_skills or []) if k} or None
     show_grades = (not for_employer) or user.show_grades_to_employers
     programme = db.get(Programme, user.programme_id) if user.programme_id else None
     intake = db.get(Intake, user.intake_id) if user.intake_id else None
@@ -110,8 +127,30 @@ def build_showcase(user: User, db: Session, for_employer: bool = False) -> dict:
 
     projects = db.query(UserProject).filter(UserProject.user_id == user.id).order_by(UserProject.id.desc()).all()
     certs = db.query(UserCertification).filter(UserCertification.user_id == user.id).order_by(UserCertification.id.desc()).all()
+    from app.routers.experience import CATEGORY_LABELS, _newest_first
+    experiences = _newest_first(db.query(UserExperience).filter(UserExperience.user_id == user.id)).all()
     awards = db.query(UserAward).filter(UserAward.user_id == user.id).order_by(UserAward.award_date.desc().nullslast(),
                                                                            UserAward.id.desc()).all()
+    def item_order(items):     # most of the job's skills first; Python's sort keeps the newest-first order on ties
+        return sorted(items, key=lambda x: -len(x["relevant"])) if job_keys else items
+
+    project_rows = []
+    for p in projects:
+        shown, relevant = _for_job(p.extracted_skills, job_keys)
+        project_rows.append({"name": p.name, "description": p.description, "github_url": p.github_url,
+                             "repo_check": _repo_check(p, for_employer), "skills": shown, "relevant": relevant,
+                             # 21 Oct: the project's context (all optional)
+                             "role": p.role or "", "team_size": p.team_size, "outcome": p.outcome or "",
+                             "demo_url": p.demo_url})
+    experience_rows = []
+    for e in experiences:
+        shown, relevant = _for_job(e.mapped_skills, job_keys)
+        experience_rows.append({"kind": e.kind, "category": e.category,
+                                "category_label": CATEGORY_LABELS.get(e.category, "Other"), "role": e.role,
+                                "organisation": e.organisation, "start": e.start_month, "end": e.end_month,
+                                "description": e.description or "", "skills": shown, "relevant": relevant})
+    # work before activities (as a CV lists them), each newest first, unless a job puts the relevant ones first
+    experience_rows.sort(key=lambda x: x["kind"] != "work")
     return {
         "name": f"{user.first_name} {user.last_name}",
         "headline": user.headline or "",
@@ -134,9 +173,13 @@ def build_showcase(user: User, db: Session, for_employer: bool = False) -> dict:
         # repo_check (14 Oct, Connect GitHub): "yours" / "not_linked" / None, shown next to the repo link.
         # 15 Oct (her decision, references.md): employers get only the positive "yours"; "not linked" can just mean
         # she hasn't connected that account, so it's for her own eyes (as GitHub shows no badge on unsigned commits)
-        "projects": [{"name": p.name, "description": p.description, "github_url": p.github_url,
-                      "repo_check": _repo_check(p, for_employer),
-                      "skills": list(p.extracted_skills or [])[:6]} for p in projects],
+        "projects": item_order(project_rows),
+        # 21 Oct (references.md "What employers look for in graduates"): work experience and activities
+        "experiences": item_order(experience_rows),
+        "languages": user.languages or [],
+        # the CGPA she typed from her transcript; employers see it only if she switched it on
+        "cgpa": float(user.cgpa) if user.cgpa is not None and (not for_employer or user.show_cgpa) else None,
+        "show_cgpa": user.show_cgpa,
         "certifications": [{"name": c.cert_name, "issuer": c.issuer, "credly_url": c.credly_url} for c in certs],
         "awards": [{"title": a.title, "issuer": a.issuer, "date": a.award_date, "description": a.description or ""}
                    for a in awards],

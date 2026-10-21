@@ -1,8 +1,9 @@
 import { useState } from 'react'
 import api from '../../api'
 import { AddSkillChip, ConfirmDelete, CrossIcon, IconButton, Modal, PencilIcon, SkillChip } from './profileParts'
-import { AwardForm, CertForm, ProjectForm } from './profileForms'
-import { ADDED_BY_YOU, btnBlueCls, monthLabel, softBtnCls } from './profileUtils'
+import { AwardForm, CertForm, ExperienceForm, ProjectForm } from './profileForms'
+import { categoryLabel } from './experienceKinds'
+import { ADDED_BY_YOU, btnBlueCls, monthLabel, projectContext, softBtnCls } from './profileUtils'
 import ModulesEditor from './ModulesEditor'
 
 // The four tabs of My Profile (9 Oct): Modules, Projects, Certificates, Awards, the places a student's skills come
@@ -122,8 +123,11 @@ export function ProjectsTab({ projects, onRefresh, onImport, importNote, onImpor
                   <div className="flex items-baseline gap-2 flex-wrap">
                     <p className="text-sm font-semibold text-slate-800">{p.name}</p>
                     {p.github_url && <a href={p.github_url} target="_blank" rel="noopener noreferrer" className="text-xs text-blue-600 hover:underline">GitHub ↗</a>}
+                    {p.demo_url && <a href={p.demo_url} target="_blank" rel="noopener noreferrer" className="text-xs text-blue-600 hover:underline">Demo ↗</a>}
                     <RepoCheck project={p} who="your" />
                   </div>
+                  {/* 21 Oct: the project's context, when given */}
+                  {projectContext(p) && <p className="text-xs text-slate-500">{projectContext(p)}</p>}
                   <p className="text-sm text-slate-600 mt-0.5 line-clamp-2">{p.description}</p>
                 </div>
                 <RowActions what="project" onEdit={() => s.setEditing(p)} onDelete={() => s.setDeleting(p)} />
@@ -257,6 +261,70 @@ export function AwardsTab({ awards, onRefresh }) {
   )
 }
 
+
+// ── Experience (21 Oct) ───────────────────────────────────────────────────────
+// Work experience (internship, placement, part-time) and activities (clubs, hackathons, volunteering) in one tab,
+// in two groups, each newest first with the ones still going on top (references.md "What employers look for").
+
+const period = (e) => `${monthLabel(e.start_month)} – ${e.end_month ? monthLabel(e.end_month) : 'now'}`
+
+export function ExperienceTab({ items, onRefresh }) {
+  const s = useItems('/profile/experiences', onRefresh)
+  const groups = [['work', 'Work experience', 'Internships, industrial placement, part-time or freelance work.'],
+                  ['activity', 'Activities', 'Clubs and societies, hackathons, competitions, volunteering, organising events.']]
+  const editingKind = s.editing && (s.editing.kind || s.editing.newKind)
+  return (
+    <Panel title="Your experience" actions={<>
+      <button type="button" onClick={() => s.setEditing({ newKind: 'work' })} className={btnBlueCls}>+ Add work</button>
+      <button type="button" onClick={() => s.setEditing({ newKind: 'activity' })} className={softBtnCls}>+ Add activity</button>
+    </>}>
+      <Note text={s.note} onClose={() => s.setNote('')} />
+      {items.length === 0 ? (
+        <Empty icon="💼" title="No experience yet" text="Add an internship or industrial placement, a part-time job, or a club role or hackathon. SkillMap suggests the skills each one shows, from your own words." />
+      ) : groups.map(([kind, title, hint]) => {
+        const list = items.filter(e => e.kind === kind)
+        return (
+          <div key={kind} className="mb-5 last:mb-0">
+            <h3 className="text-sm font-semibold text-slate-700">{title} <span className="text-slate-400 font-normal tabular-nums">{list.length}</span></h3>
+            {list.length === 0 ? <p className="text-xs text-slate-400 mt-1">{hint}</p> : (
+              <ul className="flex flex-col gap-3 mt-2">
+                {list.map(e => {
+                  const added = e.added_skills || []
+                  return (
+                    <li key={e.id} className={cardCls}>
+                      <div className="flex items-start justify-between gap-3">
+                        <div className="min-w-0">
+                          <p className="text-sm font-semibold text-slate-800">{e.role} <span className="font-normal text-slate-600">· {e.organisation}</span></p>
+                          <p className="text-xs text-slate-500">{categoryLabel(e.kind, e.category)} · {period(e)}</p>
+                          {e.description && <p className="text-sm text-slate-600 mt-1">{e.description}</p>}
+                        </div>
+                        <RowActions what={e.role} onEdit={() => s.setEditing(e)} onDelete={() => s.setDeleting(e)} />
+                      </div>
+                      <div className="flex flex-wrap items-center gap-1.5 mt-2">
+                        {e.mapped_skills.map((sk, i) => (
+                          <SkillChip key={i} skill={sk} added={added.includes(sk)} title={added.includes(sk) ? ADDED_BY_YOU : undefined}
+                            onRemove={() => s.removeSkill(e.id, sk)} />
+                        ))}
+                        <AddSkillChip onAdd={(sk) => s.addSkill(e.id, sk)} />
+                      </div>
+                    </li>
+                  )
+                })}
+              </ul>
+            )}
+          </div>
+        )
+      })}
+      {s.deleting && <ConfirmDelete name={`${s.deleting.role}, ${s.deleting.organisation}`} onCancel={() => s.setDeleting(null)} onDelete={() => s.remove(s.deleting.id)} />}
+      {s.editing && (
+        <Modal title={`${s.editing.id ? 'Edit' : 'Add'} ${editingKind === 'work' ? 'work experience' : 'an activity'}`} dirty={s.dirty} onClose={s.close} size="form">
+          <ExperienceForm item={s.editing.id ? s.editing : null} kind={editingKind} onDirty={s.setDirty}
+            onDone={() => { s.close(); onRefresh() }} onCancel={s.close} />
+        </Modal>
+      )}
+    </Panel>
+  )
+}
 
 // 14 Oct (Connect GitHub): is the repo hers? 15 Oct (her decision): employers see only the positive badge;
 // "Not linked to your GitHub" is shown to the student alone (the backend doesn't send it to employers either)

@@ -14,7 +14,7 @@ import numpy as np
 from sqlalchemy.orm import Session
 
 from app.models.module import Module, ModuleSkill
-from app.models.profile import ADDED_BY_YOU, UserAward, UserCertification, UserProject
+from app.models.profile import ADDED_BY_YOU, UserAward, UserCertification, UserExperience, UserProject
 from app.models.user_module import UserModule
 from app.services import skill_relation
 from app.services.skill_names import canonical_key
@@ -52,7 +52,7 @@ def grade_weight(grade: float) -> float:
 class SkillEvidence:
     name: str               # skill name as stored (first spelling seen)
     weight: float           # grade_weight for modules, SELF_DECLARED_WEIGHT otherwise
-    source: str             # "module" / "project" / "cert" / "award"
+    source: str             # "module" / "project" / "cert" / "award" / "work" / "activity"
     source_name: str        # module name, "Project: X", "Certification: Y" or "Award: Z"
     grade: float | None = None
     spellings: list[str] = field(default_factory=list)   # every spelling of this skill in the profile (A8)
@@ -116,6 +116,13 @@ def build_skill_profile(user_id: int, db: Session) -> dict[str, SkillEvidence]:
         added = set(a.added_skills or [])
         for name in a.mapped_skills or []:
             add_self_declared([name], "award", f"Award: {a.title}{' (added by you)' if name in added else ''}")
+
+    # Work experience and activities (21 Oct): checked by the student before saving, like awards
+    from app.routers.experience import evidence_label
+    for e in db.query(UserExperience).filter(UserExperience.user_id == user_id).order_by(UserExperience.id):
+        added = set(e.added_skills or [])
+        for name in e.mapped_skills or []:
+            add_self_declared([name], e.kind, f"{evidence_label(e)}{' (added by you)' if name in added else ''}")
 
     for key, ev in profile.items():     # the shown name first, then the other spellings
         ev.spellings = [ev.name] + [s for low, s in spellings[key].items() if low != ev.name.lower()]

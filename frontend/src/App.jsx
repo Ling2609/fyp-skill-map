@@ -2,6 +2,7 @@ import { lazy, Suspense } from 'react'
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { SidebarProvider, useSidebar } from './components/SidebarContext'
 import { useAuth } from './context/useAuth'
+import PrivacyUpdate from './components/PrivacyUpdate'
 import Sidebar from './components/Sidebar'
 // 13 Oct (audit: one 759 kB file): each page's code loads when it is first opened, so a student never downloads the
 // admin or employer pages, and the sign-in page opens faster. The sign-in pages stay in the first file.
@@ -25,6 +26,8 @@ const PostJob = lazy(() => import('./pages/employer/PostJob'))
 const Applicants = lazy(() => import('./pages/employer/Applicants'))
 const ApplicantProfile = lazy(() => import('./pages/employer/ApplicantProfile'))
 const MyApplications = lazy(() => import('./pages/student/MyApplications'))
+const EmployerPreview = lazy(() => import('./pages/student/EmployerPreview'))
+const ProfilePrivacy = lazy(() => import('./pages/student/ProfilePrivacy'))
 const Privacy = lazy(() => import('./pages/Privacy'))
 
 function RoleRoute({ children, roles }) {
@@ -64,6 +67,7 @@ function Layout({ children }) {
   return (
     <div className="flex min-h-screen bg-slate-100">
       <Sidebar />
+      <PrivacyUpdate />
       {/* Same width classes and timing as the sidebar (w-14 / w-48, 200 ms; 192px since 9 Oct, was 224px with empty space after the labels); 64px left an 8px gap when collapsed */}
       <main
         className={`flex-1 min-h-screen min-w-0 overflow-x-hidden transition-all duration-200 ${collapsed ? 'ml-14' : 'ml-48'}`}
@@ -98,9 +102,13 @@ function AppRoutes() {
       <Route path="/modules" element={<Navigate to="/profile?tab=modules" replace />} />
       <Route path="/recommend" element={<RoleRoute roles={['student']}><Layout><Recommend /></Layout></RoleRoute>} />
       <Route path="/jobs/:jobId" element={<RoleRoute><Layout><JobDetail /></Layout></RoleRoute>} />
+      {/* 21 Oct: what the employer will see, before applying (/jobs/:jobId/check) and from My Profile (/profile/preview) */}
+      <Route path="/jobs/:jobId/check" element={<RoleRoute roles={['student']}><Layout><EmployerPreview /></Layout></RoleRoute>} />
       <Route path="/chatbot" element={<RoleRoute roles={['student']}><Layout><Chatbot /></Layout></RoleRoute>} />
       {/* 8 Oct: My Profile and Skill Profile are one page; the old /my-profile address still works */}
       <Route path="/profile" element={<RoleRoute roles={['student']}><Layout><MyProfile /></Layout></RoleRoute>} />
+      <Route path="/profile/preview" element={<RoleRoute roles={['student']}><Layout><EmployerPreview /></Layout></RoleRoute>} />
+      <Route path="/profile/settings" element={<RoleRoute roles={['student']}><Layout><ProfilePrivacy /></Layout></RoleRoute>} />
       <Route path="/my-profile" element={<Navigate to="/profile" replace />} />
       <Route path="/github/callback" element={<RoleRoute roles={['student']}><GithubCallback /></RoleRoute>} />
       <Route path="/account" element={<RoleRoute><Layout><AccountSettings /></Layout></RoleRoute>} />

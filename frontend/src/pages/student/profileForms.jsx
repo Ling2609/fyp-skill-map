@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react'
-import GithubAccounts, { DoneBadge, IconTile } from './GithubAccounts'
 import api from '../../api'
-import { DuplicateAsk, Field, FormButtons, SkillChecker, SkillChip, Toggle } from './profileParts'
-import { MIN_DESCRIPTION, aboutBody, errText, inputCls, mergeFound, projectChips, projectKey, splitSkills, studyComplete } from './profileUtils'
+import { DuplicateAsk, Field, FormButtons, SkillChecker, SkillChip } from './profileParts'
+import { MIN_DESCRIPTION, errText, inputCls, mergeFound, projectChips, projectKey, splitSkills, studyComplete } from './profileUtils'
 import { Busy } from '../../components/Spinner'
 import { FieldSkeleton, LoadingLabel } from '../../components/Skeleton'
+import { CATEGORIES } from './experienceKinds'
 
 // Every pop-up form on My Profile (8-9 Oct). Each one is opened by a button on the page and closes itself through
 // onDone / onCancel; onDirty tells the pop-up there is something typed, so a stray click outside asks first.
@@ -21,6 +21,10 @@ export function ProjectForm({ project, onDone, onCancel, onDirty }) {
   const [initial] = useState(() => ({
     name: project?.name || '', description: project?.description || '', github_url: project?.github_url || '',
   }))
+  // 21 Oct: the project's context, all optional; changing it never asks to find the skills again
+  const [initialCtx] = useState(() => ({ role: project?.role || '', team_size: project?.team_size ? String(project.team_size) : '',
+    outcome: project?.outcome || '', demo_url: project?.demo_url || '' }))
+  const [ctx, setCtx] = useState(initialCtx)
   const [form, setForm] = useState(initial)
   const [skills, setSkills] = useState(() => projectChips(project))
   const [foundFor, setFoundFor] = useState(() => (editing ? projectKey(initial) : null))
@@ -41,9 +45,9 @@ export function ProjectForm({ project, onDone, onCancel, onDirty }) {
   const [error, setError] = useState('')
   const [dupe, setDupe] = useState('')            // "you already have one called ..." question
   useEffect(() => {
-    onDirty?.(JSON.stringify(form) !== JSON.stringify(initial)
+    onDirty?.(JSON.stringify(form) !== JSON.stringify(initial) || JSON.stringify(ctx) !== JSON.stringify(initialCtx)
       || JSON.stringify(skills) !== JSON.stringify(projectChips(project)))
-  }, [form, initial, skills, project, onDirty])
+  }, [form, initial, ctx, initialCtx, skills, project, onDirty])
 
   const descLength = form.description.trim().length
   const ready = form.name.trim() && descLength >= MIN_DESCRIPTION
@@ -69,7 +73,8 @@ export function ProjectForm({ project, onDone, onCancel, onDirty }) {
     setBusy('save'); setError('')
     const body = { name: form.name.trim(), description: form.description.trim(), github_url: form.github_url.trim() || null,
                    skills: Object.fromEntries(skills.map(s => [s.name, s.evidence])), allow_duplicate: allowDuplicate,
-                   record_id: recordId }
+                   record_id: recordId, role: ctx.role.trim(), team_size: ctx.team_size ? Number(ctx.team_size) : null,
+                   outcome: ctx.outcome.trim(), demo_url: ctx.demo_url.trim() }
     try {
       const res = editing ? await api.put(`/profile/projects/${project.id}`, body) : await api.post('/profile/projects', body)
       onDone(res.data)
@@ -118,11 +123,32 @@ export function ProjectForm({ project, onDone, onCancel, onDirty }) {
         ) : repoState === 'not_linked' ? (
           <p className="text-xs text-amber-900 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2 mt-1.5">
             Not linked to {repoCheck.connected ? 'a GitHub account you connected' : 'your GitHub yet'}. If it's yours,
-            connect that account in Links &amp; visibility. You can still save; employers just won’t see the ✓ GitHub badge.
+            connect that account in Profile &amp; privacy. You can still save; employers just won’t see the ✓ GitHub badge.
           </p>
         ) : (
           <p className="text-xs text-gray-500 mt-1.5">Only add repositories you built or contributed to. Their main languages are added as skills (public repos only).</p>
         )}
+      </div>
+      {/* 21 Oct (references.md "What employers look for in graduates"): what you did and what came of it */}
+      <div className="grid sm:grid-cols-[1fr_7rem] gap-3">
+        <Field label="Your role" optional>
+          <input value={ctx.role} onChange={e => setCtx(c => ({ ...c, role: e.target.value }))} maxLength={80}
+            placeholder="e.g. Back-end developer, team lead" className={inputCls} />
+        </Field>
+        <Field label="Team size" optional>
+          <input type="number" min={1} max={50} value={ctx.team_size} onChange={e => setCtx(c => ({ ...c, team_size: e.target.value }))}
+            placeholder="1 = solo" className={inputCls} />
+        </Field>
+      </div>
+      <div className="grid sm:grid-cols-2 gap-3">
+        <Field label="Outcome" optional>
+          <input value={ctx.outcome} onChange={e => setCtx(c => ({ ...c, outcome: e.target.value }))} maxLength={300}
+            placeholder="e.g. Used by 120 club members; grade A" className={inputCls} />
+        </Field>
+        <Field label="Demo link" optional>
+          <input type="url" value={ctx.demo_url} onChange={e => setCtx(c => ({ ...c, demo_url: e.target.value }))} maxLength={500}
+            placeholder="A live site or a video" className={inputCls} />
+        </Field>
       </div>
       {found ? (
         <div>
@@ -498,90 +524,142 @@ export function StudyForm({ onDone, onCancel, onDirty }) {
 // One PUT /profile/about, which takes every About field; headline and About are no longer shown (9 Oct design) but
 // are sent back unchanged so nothing saved before is lost. Group names follow Handshake ("Profile visibility").
 
-// 14 Oct: GitHub is connected (signed in), not typed: GithubAccounts. LinkedIn stays typed (its sign-in doesn't give
-// the profile link, so it couldn't prove the link is hers; references.md "Verifying GitHub and LinkedIn accounts").
-// Neutral icons (a person, a globe), not the sites' logos
-const svg = (d) => <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d={d} /></svg>
-const LINKS = [
-  { key: 'linkedin_url', label: 'LinkedIn', placeholder: 'https://www.linkedin.com/in/your-name',
-    tone: 'blue', hint: 'Paste the link to your profile', icon: svg('M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z') },
-  { key: 'portfolio_url', label: 'Portfolio or website', placeholder: 'https://your-site.com',
-    tone: 'violet', hint: 'A site that shows your work', icon: svg('M21 12a9 9 0 11-18 0 9 9 0 0118 0zM3.6 9h16.8M3.6 15h16.8M12 3a15 15 0 010 18M12 3a15 15 0 000 18') },
-]
 
-export function ProfileForm({ data, onDone, onCancel, onDirty }) {
-  const [initial] = useState(() => aboutBody(data))
+// ── Work experience and activities (21 Oct) ───────────────────────────────────
+// references.md "What employers look for in graduates". The same flow as an award: fill in, "Suggest skills" (the AI
+// reads what you did; each skill must be in your words, or it is dropped), check the chips, then add.
+
+const MONTH_NOW = () => new Date().toISOString().slice(0, 7)
+
+export function ExperienceForm({ item, kind: newKind, onDone, onCancel, onDirty }) {
+  const editing = !!item
+  const kind = item?.kind || newKind
+  const [initial] = useState(() => ({ category: item?.category || CATEGORIES[kind][0][0], role: item?.role || '',
+    organisation: item?.organisation || '', start_month: item?.start_month || '', end_month: item?.end_month || '',
+    ongoing: editing ? !item.end_month : false, description: item?.description || '' }))
   const [form, setForm] = useState(initial)
-  const [busy, setBusy] = useState(false)
+  const [skills, setSkills] = useState(item?.mapped_skills || [])
+  const [added, setAdded] = useState(item?.added_skills || [])
+  const [triedSuggest, setTriedSuggest] = useState(editing)
+  const [draft, setDraft] = useState('')
+  const [busy, setBusy] = useState('')
+  const [note, setNote] = useState('')
   const [error, setError] = useState('')
-  const changed = JSON.stringify(form) !== JSON.stringify(initial)
-  useEffect(() => { onDirty?.(changed) }, [changed, onDirty])
-  const set = (key, value) => setForm(f => ({ ...f, [key]: value }))
-
-  const save = async (e) => {
-    e.preventDefault()
-    setBusy(true); setError('')
-    try { await api.put('/profile/about', form); onDone() }
-    catch (err) { setError(errText(err, "Couldn't save. Please try again.")) }
-    finally { setBusy(false) }
+  const [dupe, setDupe] = useState('')
+  const set = (key) => (e) => { setForm(f => ({ ...f, [key]: e.target.value })); setDupe('') }
+  const addChips = (names, typed) => {
+    const have = new Set(skills.map(x => x.toLowerCase()))
+    const fresh = names.filter(n => n.length <= 60 && !have.has(n.toLowerCase()) && have.add(n.toLowerCase()))
+    setSkills(prev => [...prev, ...fresh])
+    if (typed) setAdded(prev => [...prev, ...fresh])
   }
+  const takeDraft = () => { if (draft.trim()) { addChips(splitSkills(draft), true); setDraft('') } }
+  const ready = form.role.trim() && form.organisation.trim()
+  const datesOk = form.start_month && (form.ongoing || form.end_month)
+  const work = kind === 'work'
+
+  useEffect(() => {
+    onDirty?.(JSON.stringify(form) !== JSON.stringify(initial) || draft.trim() !== ''
+      || JSON.stringify(skills) !== JSON.stringify(item?.mapped_skills || []))
+  }, [form, initial, draft, skills, item, onDirty])
+
+  const suggest = async () => {
+    setBusy('suggest'); setError(''); setNote('')
+    try {
+      const res = await api.post('/profile/experiences/suggest', { kind, role: form.role.trim(),
+        organisation: form.organisation.trim(), description: form.description.trim() })
+      const found = (res.data.skills || []).map(x => x.name)
+      if (found.length) addChips(found, false)
+      else if (res.data.too_short) setNote(`Write a sentence about what you did (at least ${MIN_DESCRIPTION} characters) so skills can be suggested, or add them yourself.`)
+      else if (res.data.failed) setNote("Couldn't suggest skills right now. You can add them yourself, or try again later.")
+      else setNote('No skills found in what you wrote. Name the tools you used and what you did, or add skills yourself.')
+      setTriedSuggest(true)
+    } catch (err) {
+      setError(errText(err, "Couldn't suggest skills right now. You can add them yourself."))
+      setTriedSuggest(true)
+    } finally { setBusy('') }
+  }
+  const needsSuggest = !skills.length && !draft.trim() && !triedSuggest
+  const save = async (allowDuplicate = false) => {
+    const extra = draft.trim() ? splitSkills(draft).filter(n => !skills.some(x => x.toLowerCase() === n.toLowerCase())) : []
+    setBusy('save'); setError('')
+    const body = { kind, category: form.category, role: form.role.trim(), organisation: form.organisation.trim(),
+                   start_month: form.start_month, end_month: form.ongoing ? null : form.end_month || null,
+                   description: form.description.trim(), skills: [...skills, ...extra], added: [...added, ...extra],
+                   allow_duplicate: allowDuplicate }
+    try {
+      const res = editing ? await api.put(`/profile/experiences/${item.id}`, body) : await api.post('/profile/experiences', body)
+      onDone(res.data)
+    } catch (err) {
+      if (err.response?.status === 409) setDupe(err.response.data.detail)
+      else setError(errText(err, "Couldn't save. Please try again."))
+    } finally { setBusy('') }
+  }
+  const submit = (e) => { e.preventDefault(); if (!ready || !datesOk || busy) return; if (needsSuggest) suggest(); else save() }
 
   return (
-    <form onSubmit={save} className="space-y-6">
-      <fieldset className="space-y-3">
-        <legend className="text-sm font-semibold text-gray-800 mb-2">Your other profiles</legend>
-        {/* 14 Oct (her review): one card, the same row for each: icon, name, one line, then the action or the link */}
-        <div className="rounded-xl border border-gray-200 divide-y divide-gray-100">
-          <GithubAccounts blocked={changed} />
-          {LINKS.map(l => (
-            <div key={l.key} className="p-4">
-              <div className="flex items-center gap-4">
-                <IconTile tone={l.tone}>{l.icon}</IconTile>
-                <div className="min-w-0">
-                  <label htmlFor={`link-${l.key}`} className="text-sm font-semibold text-gray-900">{l.label}
-                    {form[l.key].trim() ? <DoneBadge>Added</DoneBadge> : <span className="font-normal text-gray-400"> (optional)</span>}</label>
-                  <p className="text-xs text-gray-500 mt-0.5">{l.hint}</p>
-                </div>
-              </div>
-              <input id={`link-${l.key}`} type="url" value={form[l.key]} maxLength={300} placeholder={l.placeholder}
-                className={`${inputCls} mt-2.5 sm:ml-14 sm:w-[calc(100%-3.5rem)]`} onChange={e => set(l.key, e.target.value)} />
-            </div>
-          ))}
+    <form onSubmit={submit} className="space-y-4">
+      <div className="grid sm:grid-cols-[12rem_1fr] gap-3">
+        <Field label="Type">
+          <select value={form.category} onChange={set('category')} className={inputCls}>
+            {CATEGORIES[kind].map(([k, v]) => <option key={k} value={k}>{v}</option>)}
+          </select>
+        </Field>
+        <Field label={work ? 'Job title' : 'Your role'}>
+          <input value={form.role} onChange={set('role')} maxLength={120} required autoFocus className={inputCls}
+            placeholder={work ? 'e.g. Software Engineering Intern' : 'e.g. Vice President, Participant, Volunteer'} />
+        </Field>
+      </div>
+      <Field label={work ? 'Company' : 'Club, event or organisation'}>
+        <input value={form.organisation} onChange={set('organisation')} maxLength={120} required className={inputCls}
+          placeholder={work ? 'e.g. NTT DATA Payment Services' : 'e.g. APU Google Developer Student Club'} />
+      </Field>
+      <div className="flex flex-wrap items-end gap-3">
+        <div className="w-44"><Field label="From">
+          <input type="month" value={form.start_month} max={MONTH_NOW()} onChange={set('start_month')} required className={inputCls} />
+        </Field></div>
+        <div className="w-44"><Field label="To">
+          <input type="month" value={form.ongoing ? '' : form.end_month} min={form.start_month || undefined} disabled={form.ongoing}
+            onChange={set('end_month')} className={`${inputCls} disabled:bg-gray-50`} />
+        </Field></div>
+        <label className="flex items-center gap-2 text-sm text-gray-700 pb-2.5">
+          <input type="checkbox" checked={form.ongoing} onChange={e => setForm(f => ({ ...f, ongoing: e.target.checked }))} />
+          {work ? 'I still work here' : 'I still do this'}
+        </label>
+      </div>
+      <Field label="What you did" optional hint="A sentence or two, naming the tools you used, helps SkillMap suggest the skills it shows.">
+        <textarea value={form.description} onChange={set('description')} rows={3} maxLength={1500} className={`${inputCls} resize-none`}
+          placeholder={work ? 'e.g. Built REST APIs with Spring Boot and wrote unit tests for the payments team' : 'e.g. Ran weekly coding workshops for 60 members and organised the club hackathon'} />
+      </Field>
+      <div>
+        <div className="flex items-baseline justify-between mb-1.5">
+          <label htmlFor="exp-skill-input" className="block text-xs font-medium text-gray-600">Skills it shows</label>
+          {!needsSuggest && (
+            <button type="button" onClick={suggest} disabled={!ready || busy !== ''}
+              className="text-xs font-medium text-blue-700 hover:underline disabled:text-gray-300 disabled:no-underline">
+              {busy === 'suggest' ? <Busy>Finding skills…</Busy> : 'Suggest skills'}
+            </button>
+          )}
         </div>
-      </fieldset>
-      {/* 14 Oct (PDPA, her rule): optional; an employer gets these and the email only after shortlisting you.
-          Just-in-time line under the fields (ICO). No IC number, date of birth, gender, race, religion or photo. */}
-      <fieldset className="space-y-3">
-        <legend className="text-sm font-semibold text-gray-800 mb-2">Contact for employers</legend>
-        <div className="grid sm:grid-cols-3 gap-3">
-          <Field label="Phone" optional>
-            <input type="tel" value={form.phone} maxLength={30} className={inputCls} placeholder="012-345 6789"
-              onChange={e => set('phone', e.target.value)} />
-          </Field>
-          <Field label="City" optional>
-            <input value={form.city} maxLength={80} className={inputCls} placeholder="Kuala Lumpur"
-              onChange={e => set('city', e.target.value)} />
-          </Field>
-          <Field label="Available from" optional>
-            <input type="month" value={form.available_from} className={inputCls}
-              onChange={e => set('available_from', e.target.value)} />
-          </Field>
+        <div className="w-full border border-gray-200 rounded-xl px-3 py-2.5 flex flex-wrap items-center gap-1.5 focus-within:ring-2 focus-within:ring-blue-500">
+          {skills.map(x => <SkillChip key={x} skill={x} added={added.includes(x)} onRemove={() => setSkills(prev => prev.filter(y => y !== x))} />)}
+          <input id="exp-skill-input" value={draft} onChange={e => setDraft(e.target.value)} onBlur={takeDraft}
+            onKeyDown={e => {
+              if (e.key === 'Enter' || e.key === ',') { e.preventDefault(); takeDraft() }
+              if (e.key === 'Backspace' && !draft && skills.length) setSkills(prev => prev.slice(0, -1))
+            }}
+            placeholder={skills.length ? 'Add another' : 'e.g. Spring Boot, Teamwork'}
+            className="flex-1 min-w-40 text-sm py-0.5 placeholder-gray-300 focus:outline-none" />
         </div>
-        <p className="text-xs text-gray-500">Shared with an employer, with your email, only after they shortlist you.</p>
-      </fieldset>
-      <fieldset className="space-y-3">
-        <legend className="text-sm font-semibold text-gray-800 mb-2">Profile visibility</legend>
-        <Toggle id="flag-visible" checked={form.visible_to_employers} onChange={v => set('visible_to_employers', v)}
-          label="Visible to employers" hint={form.visible_to_employers
-            ? 'Approved employers whose jobs fit you can find your profile and invite you to apply. They cannot see your contact details.'
-            : "Employers can't find you. A job you apply for still shares your profile with that employer; contact details only if they shortlist you."} />
-        <Toggle id="flag-grades" checked={form.show_grades_to_employers} onChange={v => set('show_grades_to_employers', v)}
-          label="Show grades" hint={form.show_grades_to_employers
-            ? 'Employers see your grade for each module.'
-            : 'Employers see your modules and skills, but not your grades.'} />
-      </fieldset>
+        <p className="text-xs text-gray-400 mt-1.5">Suggested from your own words only. Remove any that don't fit.</p>
+        {note && <p className="text-xs text-amber-700 bg-amber-50 rounded-lg px-3 py-2 mt-2">{note}</p>}
+      </div>
       {error && <p className="text-xs text-red-500 bg-red-50 rounded-lg px-3 py-2">{error}</p>}
-      <FormButtons loading={busy} busyText="Saving…" label="Save" onCancel={onCancel} disabled={!changed} />
+      {dupe
+        ? <DuplicateAsk message={dupe} yesLabel={editing ? 'Yes, save it' : 'Yes, add it'} busy={busy !== ''}
+            onYes={() => save(true)} onBack={() => setDupe('')} />
+        : <FormButtons loading={busy !== ''} busyText={busy === 'suggest' ? 'Finding skills…' : 'Saving…'}
+            label={needsSuggest ? 'Suggest skills' : editing ? 'Save' : 'Add'} onCancel={onCancel} disabled={!ready || !datesOk} />}
     </form>
   )
 }

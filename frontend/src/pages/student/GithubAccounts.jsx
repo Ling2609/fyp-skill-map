@@ -24,7 +24,7 @@ export const DoneBadge = ({ children }) => (
   <span className="ml-2 text-xs font-semibold text-emerald-700 bg-emerald-50 rounded-full px-2 py-0.5">✓ {children}</span>
 )
 
-export default function GithubAccounts({ blocked }) {
+export default function GithubAccounts({ blocked, compact = false }) {
   const [accounts, setAccounts] = useState(null)
   const [setUp, setSetUp] = useState(true)
   const [busy, setBusy] = useState('')
@@ -38,7 +38,7 @@ export default function GithubAccounts({ blocked }) {
 
   const connect = async () => {
     setBusy('connect'); setError('')
-    try { await startGithubConnect('/profile?open=links') }      // the page leaves for GitHub; busy stays on
+    try { await startGithubConnect('/profile/settings') }      // the page leaves for GitHub; busy stays on
     catch (err) { setError(errText(err, "Couldn't start connecting to GitHub. Please try again.")); setBusy('') }
   }
   // 20 Oct (her guide on pop-ups): SkillMap's own small confirm beside the button, not the browser's grey box
@@ -58,6 +58,38 @@ export default function GithubAccounts({ blocked }) {
     : blocked ? 'Save your other changes first, then connect.'
     : opening ? 'Taking you to GitHub to sign in…'
     : connected ? 'Your repositories show as yours to employers' : 'You sign in on GitHub, so employers see your repositories are yours'
+
+  // 21 Oct (Profile & privacy page, which must fit the screen): the same actions in a few lines, without the tile
+  if (compact) {
+    return (
+      <div className="text-sm">
+        <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+          <p className="font-medium text-slate-800">GitHub{connected && <DoneBadge>Connected</DoneBadge>}</p>
+          {accounts !== null && (
+            <button type="button" onClick={connect} disabled={cantConnect}
+              className="text-sm font-medium text-blue-700 hover:underline disabled:text-gray-400 disabled:no-underline">
+              {opening ? <Busy>Taking you to GitHub…</Busy> : connected ? '+ Connect another' : 'Connect GitHub'}</button>
+          )}
+        </div>
+        {accounts === null ? <Bar className="h-3 w-56 mt-1.5" /> : <p className="text-xs text-slate-500">{status}</p>}
+        {connected && (
+          <ul className="mt-1 flex flex-wrap gap-x-5 gap-y-1">
+            {accounts.map(a => (
+              <li key={a.id} className="relative flex items-baseline gap-2">
+                <a href={a.url} target="_blank" rel="noopener noreferrer" className="text-slate-800 hover:text-blue-700">github.com/<b className="font-semibold">{a.login}</b> <span className="text-blue-700">↗</span></a>
+                <button type="button" onClick={() => setAskDisconnect(a.id)} disabled={!!busy}
+                  className="text-xs text-gray-500 hover:text-red-600 disabled:opacity-40">{busy === String(a.id) ? <Busy>Disconnecting…</Busy> : 'Disconnect'}</button>
+                {askDisconnect === a.id && <Popconfirm above danger
+                  text={`Disconnect ${a.login}? Projects from its repositories will lose the ✓ GitHub badge.`}
+                  confirmLabel="Disconnect" cancelLabel="Keep it" onConfirm={() => disconnect(a)} onCancel={() => setAskDisconnect(null)} />}
+              </li>
+            ))}
+          </ul>
+        )}
+        {error && <p role="alert" className="text-xs text-red-500 bg-red-50 rounded-lg px-3 py-2 mt-2">{error}</p>}
+      </div>
+    )
+  }
 
   return (
     <div>

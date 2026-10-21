@@ -129,6 +129,25 @@ def get_me(current_user: User = Depends(get_current_user), db: Session = Depends
     return current_user
 
 
+class PrivacyAgreeIn(BaseModel):
+    version: str
+
+
+@router.post("/me/privacy", response_model=UserOut)
+def agree_to_privacy_notice(payload: PrivacyAgreeIn, db: Session = Depends(get_db),
+                            current_user: User = Depends(get_current_user)):
+    """21 Oct (her pick, references.md "Telling users the privacy notice changed"): someone who agreed to an older
+    notice sees what changed and clicks "I agree". Only the newest version can be agreed to (the page sends the one it
+    showed, so an out-of-date page can't record a version the person didn't see)."""
+    if payload.version != PRIVACY_VERSION:
+        raise HTTPException(status_code=409, detail="The privacy notice has changed again. Please reload the page.")
+    current_user.privacy_version = PRIVACY_VERSION
+    current_user.privacy_accepted_at = datetime.now(timezone.utc)
+    db.commit()
+    db.refresh(current_user)
+    return get_me(current_user, db)
+
+
 # ── Account settings (4 Oct) ──────────────────────────────────────────────────
 # A wrong current password is a 400, not a 401: the frontend logs the user out on any 401 (api.js).
 # Username is not changeable (it is the login name). Changing the email needs the current password AND a code sent
@@ -216,7 +235,7 @@ def change_password(payload: PasswordChange, background: BackgroundTasks, db: Se
 
 # The privacy notice a new user accepts: the date of the newest entry in frontend/src/pages/privacyText.js VERSIONS
 # (tests/test_audit_fixes.py checks the two agree). Change both when the notice changes.
-PRIVACY_VERSION = "2026-10-14"
+PRIVACY_VERSION = "2026-10-21"
 
 
 # ── Delete my account (13 Oct; audit: grades and profiles are personal data, Malaysia's PDPA 2010) ─────────────────
@@ -229,7 +248,7 @@ def delete_student_data(user: User, db: Session):
     because databases made by older migrations may not have every cascade rule. Jobs, modules and other students'
     data are untouched. Commits nothing: the caller does, after MongoDB."""
     from app.models.application import Application, ApplicationEvent, JobInvitation, OutsideApplication
-    from app.models.profile import GithubAccount, UserAward, UserCertification, UserProject
+    from app.models.profile import GithubAccount, UserAward, UserCertification, UserExperience, UserProject
     from app.models.programme import AdminAction
     from app.models.user_module import UserModule
     app_ids = [a for (a,) in db.query(Application.id).filter(Application.student_id == user.id)]
@@ -238,7 +257,7 @@ def delete_student_data(user: User, db: Session):
     for model, column in ((Application, Application.student_id), (JobInvitation, JobInvitation.student_id),
                           (OutsideApplication, OutsideApplication.student_id),
                           (UserProject, UserProject.user_id), (UserCertification, UserCertification.user_id),
-                          (UserAward, UserAward.user_id), (UserModule, UserModule.user_id),
+                          (UserAward, UserAward.user_id), (UserExperience, UserExperience.user_id), (UserModule, UserModule.user_id),
                           (PasswordResetOTP, PasswordResetOTP.user_id), (AdminAction, AdminAction.target_user_id),
                           (GithubAccount, GithubAccount.user_id)):
         db.query(model).filter(column == user.id).delete(synchronize_session=False)
@@ -289,7 +308,7 @@ def export_my_data(db: Session = Depends(get_db), current_user: User = Depends(g
     security data and are left out. Chats come from MongoDB; if it can't be reached the file says so."""
     from app.models.application import Application, ApplicationEvent, JobInvitation
     from app.models.job import Job
-    from app.models.profile import GithubAccount, UserAward, UserCertification, UserProject
+    from app.models.profile import GithubAccount, UserAward, UserCertification, UserExperience, UserProject
     from app.models.user_module import UserModule
     from app.models.programme import AdminAction
     u = current_user
@@ -336,6 +355,7 @@ def export_my_data(db: Session = Depends(get_db), current_user: User = Depends(g
         "projects": _rows(UserProject, UserProject.user_id, u.id, db),
         "certifications": _rows(UserCertification, UserCertification.user_id, u.id, db),
         "awards": _rows(UserAward, UserAward.user_id, u.id, db),
+        "work_experience_and_activities": _rows(UserExperience, UserExperience.user_id, u.id, db),
         "github_accounts": _rows(GithubAccount, GithubAccount.user_id, u.id, db),
         "applications": applications,
         "invitations": invitations,

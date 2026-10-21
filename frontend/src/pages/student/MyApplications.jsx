@@ -155,6 +155,18 @@ function Note({ r }) {
     </p>
   )
   if (p.closed_without_decision) return <p className="mt-4 text-sm text-slate-600">The employer closed this job without a decision.</p>
+  // 21 Oct (her pick S1; research: references.md "Telling a shortlisted student"): what Shortlisted means and the one
+  // thing to do, with a way to prepare in the AI Assistant (objective 4)
+  if (r.status === 'shortlisted') {
+    const ask = `I've been shortlisted for ${r.title} at ${r.company}. Help me prepare for this interview: what they are likely to ask about this job, and how to answer with my own projects.`
+    return (
+      <div className="mt-4 text-sm text-violet-900 bg-violet-50 rounded-lg px-3.5 py-2.5 flex flex-wrap items-center justify-between gap-x-4 gap-y-1">
+        <p><b>Get ready: {r.company} may contact you soon.</b> Keep an eye on your email and phone.</p>
+        <Link to={`/chatbot?ask=${encodeURIComponent(ask)}&job=${encodeURIComponent(r.title)}&job_id=${encodeURIComponent(r.job_ref)}&purpose=interview`}
+          state={{ from: 'My Applications' }} className="shrink-0 font-medium text-blue-700 hover:underline">Prepare for the interview →</Link>
+      </div>
+    )
+  }
   if (r.status === 'rejected') return <Outcome r={r} />
   if (r.status === 'accepted') return <p className="mt-4 text-sm text-slate-600">{r.company} has your email and will contact you about the next step.</p>
   if (r.employer_usually_days) return (
@@ -286,6 +298,7 @@ function AppCard({ r, open, onToggle }) {
         {open ? <span className="hidden lg:block" /> : <MiniSteps steps={steps} />}
         {open ? <span className="hidden lg:block" />
           : warn ? <p className="text-[13px] text-amber-700 whitespace-nowrap">{warn[0]} <b className="font-semibold">{warn[1]}</b></p>
+          : r.status === 'shortlisted' ? <p className="text-[13px] text-violet-800 whitespace-nowrap"><b className="font-semibold">Get ready</b> · watch your email</p>
           : <Labelled label="Reply by" value={when} />}
         <div className="flex items-center gap-3 lg:justify-end">
           <span className={`shrink-0 text-xs font-semibold rounded-full px-2.5 py-0.5 ${PILL[key]}`}>{label}</span>

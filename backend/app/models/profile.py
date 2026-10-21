@@ -24,6 +24,12 @@ class UserProject(Base):
     # couldn't be asked. Employers see it next to the repo link. Never blocks saving.
     repo_check = Column(String(12), nullable=True)
     repo_check_as = Column(String(40), nullable=True)
+    # 21 Oct (references.md "What employers look for in graduates"): the project's context, all optional.
+    # Recruiters ask what the student did in a team project and what came of it; a demo shows it works
+    role = Column(String(80), nullable=True)          # "Back-end developer", "Team lead"
+    team_size = Column(Integer, nullable=True)        # 1 = on her own
+    outcome = Column(String(300), nullable=True)      # "Used by 120 students in the 2025 club fair", "Grade A"
+    demo_url = Column(String(500), nullable=True)     # a live site or a video
 
 
 class GithubAccount(Base):
@@ -68,3 +74,33 @@ class UserAward(Base):
     mapped_skills = Column(ARRAY(String), nullable=False, default=[])
     added_skills = Column(JSON, nullable=False, default=list, server_default='[]')   # typed in via "+ Add skill"
     created_at = Column(DateTime(timezone=True), server_default=func.now())
+
+
+class UserExperience(Base):
+    """Work experience and activities (21 Oct, references.md "What employers look for in graduates": internships
+    and leadership roles are among what graduate recruiters weigh most). One table, two kinds:
+      - "work": an internship, industrial placement, part-time job or freelance work
+      - "activity": a club or society role, a hackathon, volunteering, organising an event
+    Skills work like awards: the AI suggests them from the student's own description (each must be in her words),
+    she keeps or removes them before saving, so every saved skill was seen by her."""
+    __tablename__ = "user_experiences"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
+    kind = Column(String(10), nullable=False)                   # "work" / "activity"
+    category = Column(String(20), nullable=False)               # internship / placement / ... (EXPERIENCE_CATEGORIES)
+    role = Column(String(120), nullable=False)                  # "Software Engineering Intern", "Vice President"
+    organisation = Column(String(120), nullable=False)          # "Grab", "APU Google Developer Student Club"
+    start_month = Column(String(7), nullable=False)             # "2025-06"
+    end_month = Column(String(7), nullable=True)                # empty = still doing it
+    description = Column(Text, nullable=True)                   # what she did, in her words
+    mapped_skills = Column(ARRAY(String), nullable=False, default=[])
+    added_skills = Column(JSON, nullable=False, default=list, server_default='[]')   # typed in via "+ Add skill"
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+
+
+# "Other" is always offered (her rule). Labels are in the frontend (experienceKinds.js)
+EXPERIENCE_CATEGORIES = {
+    "work": ("internship", "placement", "part_time", "freelance", "other"),
+    "activity": ("club", "hackathon", "competition", "volunteering", "event", "other"),
+}

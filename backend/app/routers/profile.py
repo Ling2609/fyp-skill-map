@@ -61,6 +61,11 @@ class ProjectIn(BaseModel):
     # evidence = her own words, "GitHub: N% of the code" or "Added by you". None = found on save (older callers).
     skills: dict[str, str] | None = None
     record_id: str | None = Field(default=None, max_length=40)   # 14 Oct: the AI's suggestion this list came from
+    # 21 Oct: the project's context, all optional (references.md "What employers look for in graduates")
+    role: str = ""
+    team_size: int | None = None
+    outcome: str = ""
+    demo_url: str = ""
 
 
 class ProjectSuggestIn(BaseModel):
@@ -105,6 +110,10 @@ class ProjectOut(BaseModel):
     repo_check_as: str | None = None    # which of her connected GitHub accounts owns or contributed to it
     github_note: str | None = None      # only in the reply to "add": why the repo's languages couldn't be read
     skills_note: str | None = None      # only in the reply to "add"/"edit": the AI call failed (limit, network)
+    role: str | None = None
+    team_size: int | None = None
+    outcome: str | None = None
+    demo_url: str | None = None
 
     class Config:
         from_attributes = True
@@ -163,6 +172,11 @@ class AboutIn(BaseModel):
     phone: str = ""
     city: str = ""
     available_from: str = ""      # "YYYY-MM"
+    # 21 Oct: languages and the CGPA (shown only if show_cgpa). None = leave as it is (older callers don't send them)
+    languages: list[dict] | None = None
+    cgpa: float | None = None
+    show_cgpa: bool | None = None
+    clear_cgpa: bool = False
 
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
@@ -343,6 +357,10 @@ def check_profile_schema():
     if "repo_check" not in projects or not inspect(engine).has_table("github_accounts"):
         raise RuntimeError("Database not updated: run  python migrations/migrate_github_accounts.py  "
                            "from the backend folder, then start the backend again.")
+    if not {"languages", "cgpa", "show_cgpa"} <= users or "demo_url" not in projects \
+            or not inspect(engine).has_table("user_experiences"):
+        raise RuntimeError("Database not updated: run  python migrations/migrate_profile_more_evidence.py  "
+                           "from the backend folder, then start the backend again.")
 
 
 # ── Endpoints ─────────────────────────────────────────────────────────────────
@@ -378,12 +396,30 @@ def _own_cert(cert_id: int, user: User, db: Session) -> UserCertification:
 LIMITS = {"Project name": 100, "Description": 3000, "GitHub link": 500,
           "Certificate name": 150, "Issuer": 100, "Credly link": 500,
           "Award title": 150, "Given by": 100, "What it was for": 1000,
-          "Headline": 120, "About": 1000, "LinkedIn link": 300, "Portfolio link": 300, "GitHub profile link": 300}
+          "Headline": 120, "About": 1000, "Your role": 80, "Outcome": 300, "Demo link": 500, "LinkedIn link": 300, "Portfolio link": 300, "GitHub profile link": 300}
 
 
 def _check_length(label: str, value: str | None):
     if value and len(value.strip()) > LIMITS[label]:
         raise HTTPException(status_code=400, detail=f"{label} can be up to {LIMITS[label]} characters")
+
+
+def _project_context(data: ProjectIn, project: UserProject | None):
+    """21 Oct: role, team size, outcome and demo link, all optional. project=None only checks them (before the AI
+    call, so a bad link doesn't cost one)."""
+    for label, value in (("Your role", data.role), ("Outcome", data.outcome), ("Demo link", data.demo_url)):
+        _check_length(label, value)
+    if data.team_size is not None and not 1 <= data.team_size <= 50:
+        raise HTTPException(status_code=400, detail="Team size: a number from 1 (on your own) to 50")
+    demo = (data.demo_url or "").strip()
+    if demo and not re.match(r"^https?://[^\s/]+\.[^\s]+$", demo, re.I):
+        raise HTTPException(status_code=400, detail="Demo link: use the full address, e.g. https://your-app.com")
+    if project is None:
+        return
+    project.role = " ".join(data.role.split()) or None
+    project.team_size = data.team_size
+    project.outcome = " ".join(data.outcome.split()) or None
+    project.demo_url = demo or None
 
 
 def _same(a: str, b: str) -> bool:
@@ -542,6 +578,7 @@ def suggest_project_skills(data: ProjectSuggestIn, current_user: User = Depends(
 @router.post("/projects", response_model=ProjectOut, status_code=201)
 def add_project(data: ProjectIn, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     _check_project(data, current_user, db)
+    _project_context(data, None)
     if data.skills is not None:
         if not data.name.strip() or not data.description.strip():
             raise HTTPException(status_code=400, detail="Project name and description are required")
@@ -551,6 +588,7 @@ def add_project(data: ProjectIn, current_user: User = Depends(get_current_user),
     project = UserProject(user_id=current_user.id, name=data.name.strip(), description=data.description.strip(),
                           github_url=(data.github_url or "").strip() or None,
                           extracted_skills=list(quotes), skill_quotes=quotes)
+    _project_context(data, project)
     _set_repo_check(project, current_user, db)
     db.add(project)
     db.commit()
@@ -568,6 +606,7 @@ def edit_project(project_id: int, data: ProjectIn, current_user: User = Depends(
     """Edit: skills are worked out again if the name, description or GitHub link changed, or none were read before."""
     project = _own_project(project_id, current_user, db)
     _check_project(data, current_user, db, project)
+    _project_context(data, project)     # saved with either branch below (21 Oct)
     github = (data.github_url or "").strip() or None
     github_note = skills_note = None
     if data.skills is not None:     # checked in the pop-up (found again there if the text changed)
@@ -595,8 +634,8 @@ def edit_project(project_id: int, data: ProjectIn, current_user: User = Depends(
         project.name, project.description, project.github_url = data.name.strip(), data.description.strip(), github
         project.extracted_skills, project.skill_quotes = list(quotes), quotes
         _set_repo_check(project, current_user, db, old_url)
-        db.commit()
-        db.refresh(project)
+    db.commit()
+    db.refresh(project)
     out = ProjectOut.model_validate(project)
     out.github_note = github_note
     out.skills_note = skills_note
@@ -779,6 +818,7 @@ def get_skill_profile(
         "from_projects": by_source("project"),
         "from_certs": by_source("cert"),
         "from_awards": by_source("award"),
+        "from_experience": by_source("work") + by_source("activity"),
     }
 
 # ── Awards (8 Oct) ─────────────────────────────────────────────────────────────
@@ -957,7 +997,44 @@ def _about_out(user: User) -> dict:
             "portfolio_url": user.portfolio_url or "", "github_url": user.github_url or "",
             "visible_to_employers": user.is_visible_to_employers,
             "show_grades_to_employers": user.show_grades_to_employers,
-            "phone": user.phone or "", "city": user.city or "", "available_from": user.available_from or ""}
+            "phone": user.phone or "", "city": user.city or "", "available_from": user.available_from or "",
+            "languages": user.languages or [], "cgpa": float(user.cgpa) if user.cgpa is not None else None,
+            "show_cgpa": user.show_cgpa}
+
+
+# 21 Oct (references.md "Languages and CGPA"): LinkedIn's five proficiency levels (its profile API values); the test is free text ("MUET Band
+# 5", "IELTS 7.0"), because Malaysian employers ask for MUET and others for IELTS or none
+LANGUAGE_LEVELS = ("native", "full_professional", "professional_working", "limited_working", "elementary")
+MAX_LANGUAGES = 8
+
+
+def _languages(items: list[dict]) -> list[dict]:
+    out, seen = [], set()
+    for item in items[:MAX_LANGUAGES + 1]:
+        name = " ".join(str(item.get("language") or "").split())
+        if not name:
+            continue
+        if len(name) > 40:
+            raise HTTPException(status_code=400, detail="Language: 40 characters at most")
+        level = item.get("level")
+        if level not in LANGUAGE_LEVELS:
+            raise HTTPException(status_code=400, detail=f"Choose how well you speak {name}")
+        test = " ".join(str(item.get("test") or "").split())
+        if len(test) > 40:
+            raise HTTPException(status_code=400, detail="Test and result: 40 characters at most, e.g. MUET Band 5")
+        if name.lower() in seen:
+            raise HTTPException(status_code=400, detail=f"{name} is listed twice")
+        seen.add(name.lower())
+        out.append({"language": name, "level": level, "test": test})
+    if len(out) > MAX_LANGUAGES:
+        raise HTTPException(status_code=400, detail=f"Up to {MAX_LANGUAGES} languages")
+    return out
+
+
+def _cgpa(value: float) -> float:
+    if not 0 <= value <= 4:
+        raise HTTPException(status_code=400, detail="CGPA: a number from 0.00 to 4.00, as on your transcript")
+    return round(value, 2)
 
 
 PHONE = re.compile(r"^\+?[0-9][0-9 \-]{6,18}[0-9]$")      # 012-345 6789, +60 12 345 6789
@@ -985,6 +1062,11 @@ def get_about(current_user: User = Depends(get_current_user)):
 def save_about(data: AboutIn, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     _check_length("Headline", data.headline)
     _check_length("About", data.about)
+    # 21 Oct: everything is checked before anything changes
+    languages = _languages(data.languages) if data.languages is not None else None
+    cgpa = _cgpa(data.cgpa) if data.cgpa is not None else None
+    if data.show_cgpa and not data.clear_cgpa and cgpa is None and current_user.cgpa is None:
+        raise HTTPException(status_code=400, detail="Type your CGPA first, then choose to show it")
     links = {field: _check_link(field, getattr(data, field)) for field in LINK_RULES if field != "github_url"}
     current_user.phone, current_user.city, current_user.available_from = _contact(data)
     current_user.headline = " ".join(data.headline.split()) or None
@@ -993,9 +1075,29 @@ def save_about(data: AboutIn, current_user: User = Depends(get_current_user), db
     current_user.linkedin_url, current_user.portfolio_url = links["linkedin_url"], links["portfolio_url"]
     current_user.is_visible_to_employers = data.visible_to_employers
     current_user.show_grades_to_employers = data.show_grades_to_employers
+    if languages is not None:
+        current_user.languages = languages
+    if data.clear_cgpa:
+        current_user.cgpa, current_user.show_cgpa = None, False
+    else:
+        if cgpa is not None:
+            current_user.cgpa = cgpa
+        if data.show_cgpa is not None:
+            current_user.show_cgpa = data.show_cgpa
     db.commit()
     db.refresh(current_user)
     return _about_out(current_user)
+
+
+@router.get("/preview")
+def employer_preview(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    """21 Oct (her idea): "Preview as employer" on My Profile: the student's part of the employer's applicant page,
+    from the same function (showcase for_employer, with the same programme line), without a job's match."""
+    if current_user.role != "student":
+        raise HTTPException(status_code=403, detail="Only students have an employer preview")
+    from app.routers.employer import _programme
+    return {"student": {**build_showcase(current_user, db, for_employer=True),
+                        "programme_line": _programme(current_user, db), "contact": None}}
 
 
 @router.get("/showcase")

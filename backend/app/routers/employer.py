@@ -551,9 +551,18 @@ def _profile_for(student: User, job: Job, db: Session, contact: bool) -> dict:
                             "grade": grade_letter(m["grade"]) if show_grades and m["evidence_source"] == "module" else ""}
                            for m in gap["matched_skills"]],
                "missing": [m["job_skill"] for m in gap["missing_skills"]],
-               "nice_missing": [n["job_skill"] for n in gap["nice_to_have"] if not n["has"]]}
+               # 21 Oct (her rule: show every strength, never a "no" that isn't required): the ad's nice-to-haves she
+               # HAS, and skills the ad says are learnt on the job that she already has; nice-to-haves she lacks are
+               # not sent to the employer at all
+               "nice_have": [n["job_skill"] for n in gap["nice_to_have"] if n["has"]],
+               "on_job_have": [x["job_skill"] for x in gap.get("learn_on_job", []) if x["has"]]}
+    # 21 Oct (her idea): the projects and experience that use this job's skills come first
+    job_skills = [] if not gap else (
+        [m["job_skill"] for m in gap["matched_skills"]] + [m.get("matched_graduate_skill") or "" for m in gap["matched_skills"]]
+        + [m["job_skill"] for m in gap["missing_skills"]] + [n["job_skill"] for n in gap["nice_to_have"]]
+        + [x["job_skill"] for x in gap.get("learn_on_job", [])])
     return {"job": {"id": job.id, "title": job.job_title},
-            "student": {**build_showcase(student, db, for_employer=True), "programme_line": _programme(student, db),
+            "student": {**build_showcase(student, db, for_employer=True, job_skills=job_skills), "programme_line": _programme(student, db),
                         "contact": {"email": student.email, "phone": student.phone, "city": student.city,
                                     "available_from": student.available_from} if contact else None},
             "fit": fit}

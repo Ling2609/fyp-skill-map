@@ -25,7 +25,7 @@ MIGRATIONS = ("migrate_add_formatted_description", "migrate_phase1", "migrate_ad
               "migrate_admin_actions", "migrate_profile_showcase", "migrate_career_goal", "migrate_all_programmes",
               "migrate_intake_modules", "migrate_employer_jobs", "migrate_applications", "migrate_privacy_contact",
               "migrate_transparency", "migrate_record_keeping",
-              "migrate_github_accounts", "migrate_job_requirements")
+              "migrate_github_accounts", "migrate_job_requirements", "migrate_profile_more_evidence")
 BACKUP = {"modules": "id", "module_skills": "module_id", "programme_modules": "module_id", "intake_modules": "module_id"}
 
 

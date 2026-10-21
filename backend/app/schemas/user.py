@@ -70,6 +70,8 @@ class UserOut(BaseModel):
     target_category: str | None = None    # 9 Oct: career goal (empty = open to all ICT roles)
     # 10 Oct: a student with no programme, or no intake while their programme has intakes, is sent to the setup step
     needs_study: bool = False
+    # 21 Oct: which privacy notice they agreed to (the notice's date); older than the newest -> "We updated" pop-up
+    privacy_version: str | None = None
 
     class Config:
         from_attributes = True

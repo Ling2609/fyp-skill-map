@@ -1,9 +1,9 @@
 // 20 Oct (her guide on pop-ups: a small confirm next to the button, not the browser's grey box): asks once, beside the
 // thing that was clicked; the buttons say what they do. Place it inside a `relative` wrapper.
-export default function Popconfirm({ text, confirmLabel, cancelLabel = 'Cancel', onConfirm, onCancel, danger, align = 'left' }) {
+export default function Popconfirm({ text, confirmLabel, cancelLabel = 'Cancel', onConfirm, onCancel, danger, align = 'left', above = false }) {
   return (
     <div role="alertdialog" aria-label={text}
-      className={`absolute z-40 top-full mt-2 ${align === 'right' ? 'right-0' : 'left-0'} w-72 bg-white border border-slate-200 rounded-xl shadow-lg p-3`}>
+      className={`absolute z-40 ${above ? 'bottom-full mb-2' : 'top-full mt-2'} ${align === 'right' ? 'right-0' : 'left-0'} w-72 bg-white border border-slate-200 rounded-xl shadow-lg p-3`}>
       <p className="text-sm text-slate-700">{text}</p>
       <div className="mt-3 flex justify-end gap-2">
         <button type="button" onClick={onCancel} autoFocus
