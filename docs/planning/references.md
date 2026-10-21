@@ -1024,3 +1024,9 @@ Her request: show the student a clear process (instead of silence then a sudden 
 - Handshake (via [Brandeis Hiatt Career Center](https://www.brandeis.edu/hiatt/resources/handshake)): "Students with a full profile are 5X more likely to be messaged by a recruiter." (Handshake's claim, reported by a university; no Handshake source.)
 - Proposal: a small always-visible strength line on My Profile with the next 1-2 most useful things to add (ordered by the "What employers look for" ranking), each a direct Add button; plus one line in the Apply pop-up naming a missing item. No tour. Her decision pending (mock first).
 - Decided 21 Oct: no lock on the new fields before agreeing to the 21 Oct notice (optional data, just-in-time notes, CGPA switch). Interview hints from past candidates: future work (ethics, references.md above).
+
+## Where "See all" goes on a card (21 Oct, opened; her pick: bottom right)
+- [Quilter design system, List card](https://brand.quilter.com/design-patterns/cards/list-card): the "View all" call to action comes after the list items.
+- [PatternFly, Card design guidelines](https://patternfly.org/components/card/design-guidelines): the footer "contains external links, actions, or static text at the bottom of a card"; the header holds an actions menu.
+- [GitLab growth UX issue 87](https://gitlab.com/gitlab-org/growth/ux/-/work_items/87): a "View all" at the top of a list was "not at the right place at the right time"; people need it "when he/she reaches the end of the list" (one practitioner's experience, no test data).
+- No controlled study found. Decision: "See all N →" at the bottom right of every employer-view card that leaves rows out (the preview uses the same cards). My Applications keeps "See all" in its section heading (a page section, not a card).

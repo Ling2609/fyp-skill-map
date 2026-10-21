@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import api from '../../api'
 import PageHeader from '../../components/PageHeader'
+import BackLink from '../../components/BackLink'
 import { errText } from '../student/profileUtils'
 import { STATUSES, STATUS_CLS, fmtDay } from './statuses'
 import { useStatusChange } from './statusChange'
@@ -55,10 +56,11 @@ export default function Applicants() {
 
   return (
     <div className="flex flex-col h-screen">
+      {/* 21 Oct (her review: every back link the same, near the left edge) */}
+      <BackLink label="My Jobs" onClick={() => navigate('/employer/jobs')} />
       <PageHeader>
         <div className="pb-5">
-          <Link to="/employer/jobs" className="text-sm text-slate-500 hover:text-blue-700">← My Jobs</Link>
-          <div className="flex items-center gap-3 mt-2">
+          <div className="flex items-center gap-3 mt-1">
             <h1 className="text-2xl font-semibold tracking-tight text-slate-900">{job?.title || 'Applicants'}</h1>
             {job && <span className={`text-xs font-medium border rounded-full px-2.5 py-0.5 ${job.status === 'open'
               ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-slate-100 text-slate-600 border-slate-200'}`}>{job.status === 'open' ? 'Open' : 'Closed'}</span>}

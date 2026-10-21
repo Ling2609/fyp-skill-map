@@ -92,13 +92,14 @@ def test_connect_check_repos_and_disconnect(client, users, github):
     showcase = client.get("/profile/showcase", headers=users.h(student)).json()
     assert {p["name"]: p["repo_check"] for p in showcase["projects"]}["weather-app"] == "not_linked"
     assert showcase["links"]["github"] == "https://github.com/Ling2609"
-    # 15 Oct: employers get only the positive badge ("not linked" may just mean an account she hasn't connected)
+    # 21 Oct (her decision): employers get no ownership mark at all ("own repo" was wrong for a repo she only
+    # contributed to); the check stays for her own Projects tab
     from app.models.user import User
     from app.services.showcase import build_showcase
     users.db.expire_all()
     seen = build_showcase(users.db.get(User, users.ids[student]), users.db, for_employer=True)
     assert {p["name"]: p["repo_check"] for p in seen["projects"]} == {
-        "fyp-skill-map": "yours", "capstone": "yours", "weather-app": None}
+        "fyp-skill-map": None, "capstone": None, "weather-app": None}
     # disconnecting: her repos are not linked any more
     acc = client.get("/profile/github/accounts", headers=users.h(student)).json()["accounts"][0]
     client.delete(f"/profile/github/accounts/{acc['id']}", headers=users.h(student))

@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
-import { Link, useParams, useSearchParams } from 'react-router-dom'
+import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import api from '../../api'
 import PageHeader from '../../components/PageHeader'
+import BackLink from '../../components/BackLink'
 import { errText } from '../student/profileUtils'
 import { ApplicantCards, ApplicantHeading } from '../../components/EmployerView'
 import { STATUSES, STATUS_CLS, fmtDay } from './statuses'
@@ -24,6 +25,7 @@ export default function ApplicantProfile() {
   const [data, setData] = useState(null)
   const [error, setError] = useState('')
   const [inviting, setInviting] = useState(false)
+  const navigate = useNavigate()
 
   const url = appId ? `/employer/applications/${appId}` : `/employer/graduates/${studentId}?job_id=${jobId}`
   useEffect(() => {
@@ -48,11 +50,13 @@ export default function ApplicantProfile() {
 
   return (
     <div className="flex flex-col h-screen">
+      {/* 21 Oct (her review: every back link the same, near the left edge) */}
+      {data && (data.application
+        ? <BackLink label={`Applicants for ${data.job.title}`} onClick={() => navigate(`/employer/jobs/${data.job.id}`)} />
+        : <BackLink label={`Dashboard · fits ${data.job.title}`} onClick={() => navigate('/dashboard')} />)}
       <PageHeader>
         <div className="pb-4 flex items-end justify-between gap-4">
           <div className="min-w-0 flex-1">
-            {data?.application && <Link to={`/employer/jobs/${data.job.id}`} className="text-sm text-slate-500 hover:text-blue-700">← Applicants for {data.job.title}</Link>}
-            {data && !data.application && <Link to="/dashboard" className="text-sm text-slate-500 hover:text-blue-700">← Dashboard · fits {data.job.title}</Link>}
             {s ? <ApplicantHeading s={s} note={data.application && !s.contact ? 'Email and phone appear after you shortlist this applicant.' : ''} />
               : <h1 className="text-2xl font-semibold tracking-tight text-slate-900 mt-2">Applicant</h1>}
             {data && !data.application && <p className="text-xs text-slate-500 mt-2">

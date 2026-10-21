@@ -91,7 +91,7 @@ def _github_link(user_id: int, db: Session) -> str | None:
 def _repo_check(project, for_employer: bool):
     if not project.github_url:
         return None
-    if for_employer and project.repo_check != "yours":
+    if for_employer:        # 21 Oct (her decision): employers get no ownership mark (see EmployerView.jsx)
         return None
     return project.repo_check
 

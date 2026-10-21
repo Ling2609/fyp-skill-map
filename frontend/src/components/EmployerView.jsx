@@ -52,11 +52,13 @@ export function ApplicantHeading({ s, note }) {
 
 // ── A card whose list shows only whole rows ───────────────────────────────────
 
+const SEE_ALL_ROOM = 28      // px: the "See all N" line at the bottom of a card
+
 // A list card. The card that fills its column measures how many rows fit whole: all rows are drawn once (before the
 // screen is painted), measured, then the rest are left out. The other cards show their first `limit` rows. In "See
-// all" the card has the whole column and scrolls. 21 Oct (her review: "See all" with blank space under it looked
-// unfinished): "See all N" sits in the card's title row, at the right, as in My Applications' sections.
-function ListCard({ title, sub, items, render, footer, empty, fill, open, onOpen, onClose, limit = 3 }) {
+// all" the card has the whole column and scrolls. 21 Oct (her pick after research, references.md "Where See all goes
+// on a card"): "See all N →" at the bottom right, after the rows, where the reader finishes the list.
+function ListCard({ title, sub, items, render, footer, empty, fill, open, onOpen, onClose, limit = 3, onMeasured }) {
   const box = useRef(null)
   const [fits, setFits] = useState(items.length)
   const [measuring, setMeasuring] = useState(true)
@@ -66,16 +68,26 @@ function ListCard({ title, sub, items, render, footer, empty, fill, open, onOpen
     if (!el) return
     const rows = [...el.querySelectorAll(':scope > ul > [data-row]')]
     const count = (room) => { let n = 0; for (const r of rows) { if (r.offsetTop + r.offsetHeight <= room + 1) n++; else break } return n }
-    setFits(count(el.clientHeight))
+    const all = count(el.clientHeight)
+    // when rows are left out, the "See all" line at the bottom takes room: count again without it
+    const n = all >= rows.length ? all : count(el.clientHeight - SEE_ALL_ROOM)
+    setFits(n)
     setMeasuring(false)
-  }, [fill, open, measuring, items.length])
-  // measured again when the window is resized (a card closing "See all" remounts the column's cards, see Column).
-  // Not on the card's own size: hiding rows can shrink a short profile's cards, which would start it again
+    onMeasured?.(n)
+  }, [fill, open, measuring, items.length, onMeasured])
+  // measured again when the window is resized, when the page's font has loaded (it changes the rows' heights: her
+  // screenshot, 21 Oct, had room for another row) and when the card grows. Not when it shrinks: hiding rows can
+  // shrink a short profile's cards, which would start it again. ("Show less" remounts the cards, see Column.)
   useLayoutEffect(() => {
     if (!fill || open) return
     const again = () => setMeasuring(true)
     window.addEventListener('resize', again)
-    return () => window.removeEventListener('resize', again)
+    document.fonts?.ready.then(again).catch(() => {})
+    const el = box.current
+    let last = el?.clientHeight || 0
+    const ro = el && new ResizeObserver(() => { if (el.clientHeight > last + 1) again(); last = el.clientHeight })
+    if (el) ro.observe(el)
+    return () => { window.removeEventListener('resize', again); ro?.disconnect() }
   }, [fill, open])
   const shown = open ? items.length : fill ? (measuring ? items.length : fits) : Math.min(limit, items.length)
   const hidden = items.length - shown
@@ -83,16 +95,21 @@ function ListCard({ title, sub, items, render, footer, empty, fill, open, onOpen
     <section className={`${card} p-4 flex flex-col min-h-0 ${fill || open ? 'lg:flex-1 lg:min-h-28' : 'shrink-0'}`}>
       <div className="shrink-0 flex items-baseline justify-between gap-3">
         <h2 className="text-[15px] font-semibold text-slate-900">{title}</h2>
-        {open ? <button type="button" onClick={onClose} className="shrink-0 text-xs font-medium text-blue-700 hover:underline">Show less</button>
-          : hidden > 0 && <button type="button" onClick={onOpen} className="shrink-0 text-xs font-medium text-blue-700 hover:underline">
-              {shown === 0 ? 'Show' : 'See all'} {items.length} →</button>}
+        {open && <button type="button" onClick={onClose} className="shrink-0 text-xs font-medium text-blue-700 hover:underline">Show less</button>}
       </div>
       {sub && <p className="shrink-0 text-xs text-slate-500 mt-0.5">{sub}</p>}
       {items.length === 0 ? <p className="text-sm text-slate-400 mt-1">{empty}</p> : (
         <div ref={box} className={`relative min-h-0 ${fill || open ? 'lg:flex-1' : ''} ${open ? 'overflow-y-auto pr-1' : 'overflow-hidden'}`}>
-          <ul className="divide-y divide-slate-100">
-            {items.slice(0, shown).map((it, i) => <li key={i} data-row>{render(it)}</li>)}
+          {/* 21 Oct (her review: blank space under the last row): when rows are left out, the space that is too small
+              for one more row is shared between the rows shown, so the card ends on its last row */}
+          <ul className={`divide-y divide-slate-100 ${hidden > 0 && !measuring ? 'lg:h-full lg:flex lg:flex-col' : ''}`}>
+            {items.slice(0, shown).map((it, i) => <li key={i} data-row className={hidden > 0 && !measuring ? 'lg:flex-1' : ''}>{render(it)}</li>)}
           </ul>
+        </div>
+      )}
+      {!open && hidden > 0 && (
+        <div className="shrink-0 pt-1.5 flex justify-end">
+          <button type="button" onClick={onOpen} className="text-xs font-medium text-blue-700 hover:underline">See all {items.length} →</button>
         </div>
       )}
       {footer && <div className="shrink-0">{footer}</div>}
@@ -104,12 +121,16 @@ function ListCard({ title, sub, items, render, footer, empty, fill, open, onOpen
 function Column({ children }) {
   const [openKey, setOpenKey] = useState(null)
   const [round, setRound] = useState(0)          // bumped on "Show less": the cards start again and measure afresh
+  // 21 Oct: if the last card has no room for even one row, the cards above it show one row fewer (down to one each)
+  const [squeeze, setSqueeze] = useState(0)
   const cards = Children.toArray(children).filter(isValidElement)
   const shown = openKey ? cards.filter(c => c.key === openKey) : cards
   return (
     <div className="min-h-0 flex flex-col gap-4">
       {shown.map((c, i) => cloneElement(c, {
         key: `${c.key}-${round}`, fill: i === shown.length - 1, open: openKey === c.key,
+        limit: Math.max(1, (c.props.limit ?? 3) - squeeze),
+        onMeasured: i === shown.length - 1 && shown.length > 1 ? (n) => { if (n === 0 && squeeze < 3) setSqueeze(q => q + 1) } : undefined,
         onOpen: () => setOpenKey(c.key), onClose: () => { setOpenKey(null); setRound(n => n + 1) },
       }))}
     </div>
@@ -130,23 +151,13 @@ function Evidence({ items }) {
       {Object.entries(groups).map(([kind, names]) => (
         <div key={kind} className="contents">
           <dt className="text-slate-400">{kind}</dt>
-          <dd className="text-slate-600">{names.slice(0, 2).join(', ')}{names.length > 2 && <span className="text-slate-400"> +{names.length - 2} more</span>}</dd>
+          <dd className="text-slate-600">{names.slice(0, 2).join(', ')}{names.length > 2 && <span className="text-slate-400 whitespace-nowrap"> +{names.length - 2} more</span>}</dd>
         </div>
       ))}
     </dl>
   )
 }
 const selfDeclared = <span className="ml-auto shrink-0 text-[11px] text-slate-500 bg-slate-100 rounded-full px-2 py-0.5">Self-declared</span>
-
-function OwnRepo() {
-  return (
-    <span title="SkillMap checked this repository belongs to, or has commits from, a GitHub account the student signed in with"
-      className="inline-flex items-center gap-1 text-xs font-normal text-emerald-700 whitespace-nowrap">
-      <svg className="w-3.5 h-3.5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fillRule="evenodd" d="M10 1.944A11.954 11.954 0 012.166 5C2.056 5.649 2 6.319 2 7c0 5.225 3.34 9.67 8 11.317C14.66 16.67 18 12.225 18 7c0-.682-.057-1.35-.166-2.001A11.954 11.954 0 0110 1.944zM13.707 8.707a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" /></svg>
-      Own repo
-    </span>
-  )
-}
 
 function Skills({ skills, relevant }) {
   if (!skills?.length) return null
@@ -234,8 +245,8 @@ export function ApplicantCards({ s, fit, withFit = true, you, stretch = false })
               <p className="text-sm font-medium text-slate-900 flex flex-wrap items-baseline gap-x-2"><span>{p.name}</span>
                 {p.github_url && <a href={p.github_url} target="_blank" rel="noopener noreferrer" className="text-xs font-normal text-blue-700 hover:underline whitespace-nowrap">GitHub ↗</a>}
                 {p.demo_url && <a href={p.demo_url} target="_blank" rel="noopener noreferrer" className="text-xs font-normal text-blue-700 hover:underline whitespace-nowrap">Demo ↗</a>}
-                {/* 14 Oct (Connect GitHub): is the repo the student's own? 21 Oct (her review): a quiet mark, not a pill */}
-                {p.github_url && p.repo_check === 'yours' && <OwnRepo />}</p>
+                {/* 21 Oct (her decision): no ownership mark for employers. "Own repo" was wrong for a repo she only
+                    contributed to, and the check can go stale; employers open the GitHub link themselves */}</p>
               {projectContext(p) && <p className="text-xs text-slate-600">{projectContext(p)}</p>}
               <Skills skills={p.skills} relevant={p.relevant} />
             </div>
