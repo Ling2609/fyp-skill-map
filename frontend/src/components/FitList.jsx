@@ -7,6 +7,7 @@ export default function FitList({ items, renderItem, className = '', footerCls =
   const box = useRef(null)
   const [fit, setFit] = useState(items.length)
   const [all, setAll] = useState(false)
+  const [minH, setMinH] = useState(0)
 
   useLayoutEffect(() => {
     const el = box.current
@@ -19,6 +20,9 @@ export default function FitList({ items, renderItem, className = '', footerCls =
       const space = el.clientHeight
       const n = Math.floor(space / rowH) >= items.length ? items.length : Math.max(1, Math.floor((space - footerH) / rowH))
       setFit(n)
+      // 21 Oct (her report: a row cut in half on a shorter laptop screen): never smaller than one whole row (and the
+      // "Show all" line when more are hidden), so the card grows and the page scrolls instead of cutting a row
+      setMinH(Math.ceil(rowH) + (items.length > 1 ? footerH : 0))
     }
     measure()
     const ro = new ResizeObserver(measure)
@@ -29,7 +33,10 @@ export default function FitList({ items, renderItem, className = '', footerCls =
   const shown = all ? items : items.slice(0, fit)
   const hidden = items.length - shown.length
   return (
-    <div ref={box} className={`flex-1 min-h-0 flex flex-col ${all ? 'overflow-y-auto' : 'overflow-hidden'} ${className}`}>
+    // contain: size: the list's own length doesn't set the card's height (only minH does), so a long list still
+    // shows whole rows and "Show all" instead of stretching the card
+    <div ref={box} style={{ minHeight: minH, contain: 'size' }}
+      className={`flex-1 flex flex-col ${all ? 'overflow-y-auto' : 'overflow-hidden'} ${className}`}>
       <ul className="divide-y divide-slate-100">{shown.map(renderItem)}</ul>
       {hidden > 0 && (
         <button type="button" onClick={() => setAll(true)}

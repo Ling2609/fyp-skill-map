@@ -302,16 +302,25 @@ function Intakes({ programmeId, intakes, setIntakes, onOpen }) {
         <p className="text-xs text-slate-500">Change the copied list with Edit list; other intakes keep their own lists.</p>
       </form>
       <div className="flex-1 min-w-0 self-stretch flex flex-col">
-      <div className="min-h-0 bg-white border border-slate-200 rounded-xl overflow-y-auto">
-        <table className="w-full text-sm">
-          <thead className="sticky top-0">
-            <tr className="text-left text-xs text-blue-900 bg-blue-100">
-              <th scope="col" className="font-semibold uppercase tracking-wide px-3 py-2.5">Intake</th>
-              <th scope="col" className="font-semibold uppercase tracking-wide px-3 py-2.5">Starts</th>
-              <th scope="col" className="font-semibold uppercase tracking-wide px-3 py-2.5">Module list</th>
-              <th scope="col" className="font-semibold uppercase tracking-wide px-3 py-2.5">Students</th>
-              <th scope="col" className="px-3 py-2.5"><span className="sr-only">Actions</span></th>
-            </tr>
+      {/* 21 Oct (her report): the column titles stay outside the scrolling part, so the scrollbar and the rows start
+          under them (as on Users) */}
+      <div className="min-h-0 flex flex-col bg-white border border-slate-200 rounded-xl overflow-hidden">
+        <div aria-hidden="true" className="shrink-0 overflow-hidden [scrollbar-gutter:stable] bg-blue-100">
+          <table className="w-full table-fixed text-xs">
+            {INTAKE_COLS}
+            <thead>
+              <tr className="text-left text-blue-900">
+                {['Intake', 'Starts', 'Module list', 'Students', ''].map((n, k) => <th key={k} className="font-semibold uppercase tracking-wide px-3 py-2.5">{n}</th>)}
+              </tr>
+            </thead>
+          </table>
+        </div>
+        <div className="min-h-0 overflow-y-auto [scrollbar-gutter:stable]">
+        <table className="w-full table-fixed text-sm">
+          {INTAKE_COLS}
+          {/* real column titles for screen readers; the visible ones are the strip above */}
+          <thead>
+            <tr>{['Intake', 'Starts', 'Module list', 'Students', 'Actions'].map(n => <th key={n} scope="col" className="p-0 h-0"><span className="sr-only">{n}</span></th>)}</tr>
           </thead>
           <tbody className="divide-y divide-slate-100">
             {intakes.length === 0 && <tr><td colSpan={5} className="px-4 py-5 text-slate-500">No intakes yet. Add the first one; it copies the programme's list.</td></tr>}
@@ -340,11 +349,16 @@ function Intakes({ programmeId, intakes, setIntakes, onOpen }) {
             ))}
           </tbody>
         </table>
+        </div>
       </div>
       </div>
     </div>
   )
 }
+
+const INTAKE_COLS = (
+  <colgroup><col className="w-[20%]" /><col className="w-[15%]" /><col className="w-[28%]" /><col className="w-[12%]" /><col className="w-[25%]" /></colgroup>
+)
 
 // ── Add a module to the list: from the catalogue (keeps its description and skills), or a new one ─────────────────
 function AddModule({ scope, scopeLabel, onAdded, onNew, onCancel }) {

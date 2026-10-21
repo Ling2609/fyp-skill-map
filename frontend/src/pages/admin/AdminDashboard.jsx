@@ -70,7 +70,8 @@ export default function AdminDashboard() {
   const p = data?.profiles
 
   return (
-    <div className="min-h-screen flex flex-col">
+    // 21 Oct (her report): the heading stays put and only the content under it scrolls, as on the other dashboards
+    <div className="h-screen flex flex-col">
       <PageHeader>
         <div className="pb-5">
           <p className="text-[11px] font-semibold text-blue-600 uppercase tracking-widest mb-2">Dashboard</p>
@@ -85,7 +86,7 @@ export default function AdminDashboard() {
 
       {/* fills the screen: the two panels stretch to its foot and spread their rows out; with a long to-do list they
           shrink back to their rows and the page scrolls instead */}
-      <div className="flex-1 flex flex-col gap-5 px-8 py-6">
+      <div className="flex-1 min-h-0 overflow-y-auto flex flex-col gap-5 px-8 py-6">
         {error && <p className="text-sm text-rose-600">{error}</p>}
 
         {!data && !error && (<>

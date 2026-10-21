@@ -166,8 +166,10 @@ export default function EmployerDashboard() {
         // graduates who fit runs full width underneath
         // 20 Oct (her review: "fit screen size", no page scroll, no blank space at the bottom): on a laptop the three rows
         // share the screen height exactly; a card with more than fits scrolls inside itself. Phones keep one column.
-        <div className="flex-1 min-h-0 overflow-y-auto lg:overflow-hidden px-8 py-6">
-          <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1.55fr)_minmax(0,1fr)] lg:grid-rows-[minmax(0,1.45fr)_minmax(0,1fr)_minmax(0,0.8fr)] lg:h-full gap-5">
+        // 21 Oct (her report: a row cut in half on a shorter screen): each row is at least its cards' headers plus one
+        // whole row (FitList's minimum); the shares above apply when there is room, and a short screen scrolls instead
+        <div className="flex-1 min-h-0 overflow-y-auto px-8 py-6">
+          <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1.55fr)_minmax(0,1fr)] lg:grid-rows-[minmax(min-content,1.45fr)_minmax(min-content,1fr)_minmax(min-content,0.8fr)] lg:h-full gap-5">
             {/* Row 1, left: applications to review, problems, then next steps (12 Oct, flow review M1) */}
             <section className={card} aria-labelledby="review-h">
               <div className="px-5 py-4 flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
