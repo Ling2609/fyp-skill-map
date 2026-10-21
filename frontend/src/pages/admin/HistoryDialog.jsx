@@ -30,7 +30,7 @@ export default function HistoryDialog({ user, name, onClose }) {
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/30" onMouseDown={onClose}>
       <div role="dialog" aria-modal="true" aria-labelledby="history-title" onMouseDown={e => e.stopPropagation()}
         className="bg-white rounded-2xl shadow-xl w-full max-w-md max-h-[80vh] flex flex-col">
-        <div className="flex items-start justify-between gap-3 px-6 pt-5 pb-4 border-b border-slate-100">
+        <div className="flex items-start justify-between gap-3 px-6 pt-5 pb-4 border-b border-slate-200">
           <div className="min-w-0">
             <h2 id="history-title" className="text-base font-semibold text-slate-900 truncate">History · {name}</h2>
             <p className="text-sm text-slate-500 mt-0.5 truncate">{user.email}</p>

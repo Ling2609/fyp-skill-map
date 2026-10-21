@@ -16,7 +16,7 @@ import ModulesEditor from './ModulesEditor'
 function Panel({ title, actions, children }) {
   return (
     <section className="bg-white rounded-2xl border border-slate-200 shadow-sm flex flex-col lg:h-full min-h-0">
-      <div className="shrink-0 flex flex-wrap items-center justify-between gap-3 px-6 py-4 border-b border-slate-100">
+      <div className="shrink-0 flex flex-wrap items-center justify-between gap-3 px-6 py-4 border-b border-slate-200">
         <h2 className="text-base font-semibold text-slate-800">{title}</h2>
         {actions && <div className="flex flex-wrap items-center gap-2">{actions}</div>}
       </div>

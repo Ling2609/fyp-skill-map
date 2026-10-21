@@ -68,11 +68,11 @@ function ModuleDetailsSkeleton() {
 function AcademicSkeleton() {
   return (
     <div className="flex-1 min-h-0 flex gap-4" aria-busy="true">
-      <section aria-hidden="true" className="w-88 shrink-0 bg-white border border-slate-200 rounded-xl overflow-hidden">
-        <div className="p-3 border-b border-slate-100 space-y-2"><Bar className="h-9 w-full rounded-lg" /><div className="flex justify-between"><Bar className="h-8 w-28 rounded-full" /><Bar className="h-8 w-28 rounded-lg" /></div></div>
+      <section aria-hidden="true" className="w-88 shrink-0 bg-white border border-slate-200 rounded-2xl overflow-hidden">
+        <div className="p-3 border-b border-slate-200 space-y-2"><Bar className="h-9 w-full rounded-lg" /><div className="flex justify-between"><Bar className="h-8 w-28 rounded-full" /><Bar className="h-8 w-28 rounded-lg" /></div></div>
         <div className="px-4 divide-y divide-slate-100">{[0, 1, 2, 3, 4, 5, 6].map(i => <RowSkeleton key={i} />)}</div>
       </section>
-      <section className="flex-1 min-w-0 flex flex-col bg-white border border-slate-200 rounded-xl overflow-hidden"><ModuleDetailsSkeleton /></section>
+      <section className="flex-1 min-w-0 flex flex-col bg-white border border-slate-200 rounded-2xl overflow-hidden"><ModuleDetailsSkeleton /></section>
     </div>
   )
 }
@@ -291,8 +291,8 @@ function Intakes({ programmeId, intakes, setIntakes, onOpen }) {
     // 21 Oct (her report: a narrow window cut the table off): below laptop width the form sits above the table and the
     // page scrolls; the table scrolls sideways if it still doesn't fit (its title strip follows)
     <div className="flex-1 min-h-0 flex flex-col lg:flex-row lg:items-start gap-4 overflow-y-auto lg:overflow-visible">
-      <form onSubmit={add} className="w-full lg:w-[26rem] shrink-0 bg-white border border-slate-200 rounded-xl p-5 flex flex-col gap-3">
-        <h2 className="text-sm font-semibold text-slate-700">Add an intake</h2>
+      <form onSubmit={add} className="w-full lg:w-[26rem] shrink-0 bg-white border border-slate-200 rounded-2xl p-5 flex flex-col gap-3">
+        <h2 className="text-base font-semibold text-slate-900">Add an intake</h2>
         <div>
           <label htmlFor="intake-code" className="block text-xs font-medium text-slate-600 mb-1">Intake code (Year 1)</label>
           <input id="intake-code" value={code} onChange={e => setCode(e.target.value)} placeholder="e.g. APU1F2609CS(DA)" maxLength={30} className={field} />
@@ -320,13 +320,14 @@ function Intakes({ programmeId, intakes, setIntakes, onOpen }) {
       <div className="shrink-0 lg:shrink lg:flex-1 min-w-0 lg:self-stretch flex flex-col">
       {/* 21 Oct (her report): the column titles stay outside the scrolling part, so the scrollbar and the rows start
           under them (as on Users) */}
-      <div className="min-h-0 flex flex-col bg-white border border-slate-200 rounded-xl overflow-hidden">
-        <div ref={strip} aria-hidden="true" className="shrink-0 overflow-hidden [scrollbar-gutter:stable] bg-blue-100">
+      <div className="min-h-0 flex flex-col bg-white border border-slate-200 rounded-2xl overflow-hidden">
+        <div ref={strip} aria-hidden="true" className="shrink-0 overflow-hidden [scrollbar-gutter:stable] bg-slate-50 border-b border-slate-200">
           <table className="w-full min-w-[36rem] table-fixed text-xs" style={widths.length ? { width: widths.reduce((a, b) => a + b, 0) } : undefined}>
             <colgroup>{TITLES.map((n, k) => <col key={k} style={widths[k] ? { width: widths[k] } : undefined} />)}</colgroup>
             <thead>
-              <tr className="text-left text-blue-900">
-                {TITLES.map((n, k) => <th key={k} className="font-semibold uppercase tracking-wide px-3 py-2.5">{n}</th>)}
+              {/* 21 Oct: grey titles on every table, as blue means clickable */}
+              <tr className="text-left text-slate-500">
+                {TITLES.map((n, k) => <th key={k} className="font-semibold px-3 py-3">{n}</th>)}
               </tr>
             </thead>
           </table>
@@ -338,7 +339,7 @@ function Intakes({ programmeId, intakes, setIntakes, onOpen }) {
               width (invisible), so a column is never narrower than its title */}
           <thead>
             <tr>{TITLES.map((n, k) => (
-              <th key={k} scope="col" className="px-3 py-0 h-0 leading-[0] text-xs font-semibold uppercase tracking-wide whitespace-nowrap">
+              <th key={k} scope="col" className="px-3 py-0 h-0 leading-[0] text-xs font-semibold whitespace-nowrap">
                 <span className="invisible" aria-hidden="true">{n}</span><span className="sr-only">{n || 'Actions'}</span></th>
             ))}</tr>
           </thead>
@@ -414,7 +415,7 @@ function AddModule({ scope, scopeLabel, onAdded, onNew, onCancel }) {
     <div className="fixed inset-0 z-50 flex items-start justify-center p-4 pt-16 bg-slate-900/30" onMouseDown={() => { if (!busy) onCancel() }}>
       <div role="dialog" aria-modal="true" aria-labelledby="add-module-title" onMouseDown={e => e.stopPropagation()}
         className="bg-white rounded-2xl shadow-xl w-full max-w-xl max-h-[80vh] flex flex-col">
-        <div className="px-6 pt-5 pb-4 border-b border-slate-100">
+        <div className="px-6 pt-5 pb-4 border-b border-slate-200">
           <h2 id="add-module-title" className="text-base font-semibold text-slate-900">Add a module to {scopeLabel}</h2>
           <p className="text-sm text-slate-500 mt-1">Pick one from the catalogue: it keeps its description and skills.</p>
           <div className="mt-3"><SearchBox value={q} onChange={setQ} label="Search the catalogue" placeholder="Search by name or code" /></div>
@@ -448,7 +449,7 @@ function AddModule({ scope, scopeLabel, onAdded, onNew, onCancel }) {
           ))}
         </ul>
         {error && <p role="alert" className="px-6 text-sm text-rose-600">{error}</p>}
-        <div className="flex justify-between gap-2 px-6 py-4 bg-slate-50 border-t border-slate-100 rounded-b-2xl">
+        <div className="flex justify-between gap-2 px-6 py-4 bg-slate-50 border-t border-slate-200 rounded-b-2xl">
           <button type="button" onClick={onNew} className="text-sm font-medium text-blue-700 hover:underline">Not in the catalogue? Create a new module</button>
           <button type="button" onClick={onCancel} disabled={busy}
             className="px-4 py-2 text-sm font-medium rounded-lg border border-slate-200 bg-white text-slate-700 hover:bg-slate-50">Close</button>
@@ -627,8 +628,8 @@ export default function AdminAcademic() {
         )}
         {data && tab === 'modules' && (
           <div className="flex-1 min-h-0 flex gap-4">
-            <section aria-label="Modules" className="w-88 shrink-0 bg-white border border-slate-200 rounded-xl flex flex-col overflow-hidden">
-              <div className="p-3 flex flex-wrap gap-2 border-b border-slate-100">
+            <section aria-label="Modules" className="w-88 shrink-0 bg-white border border-slate-200 rounded-2xl flex flex-col overflow-hidden">
+              <div className="p-3 flex flex-wrap gap-2 border-b border-slate-200">
                 <div className="basis-full flex"><SearchBox value={q} onChange={setQ} label="Search modules" placeholder="Search modules" /></div>
                 <button type="button" aria-pressed={onlyToReview} onClick={() => set({ show: onlyToReview ? '' : 'todo' })}
                   className={`shrink-0 px-3 py-1.5 text-sm rounded-full border ${onlyToReview
@@ -651,7 +652,7 @@ export default function AdminAcademic() {
                       {shown.filter(m => m.year === y).map(m => (
                         <li key={m.id}>
                           <button type="button" aria-current={m.id === selected ? 'true' : undefined} onClick={() => { setNotice(''); set({ m: String(m.id) }) }}
-                            className={`w-full text-left flex items-center justify-between gap-3 px-4 py-2.5 border-b border-slate-50 ${m.id === selected
+                            className={`w-full text-left flex items-center justify-between gap-3 px-4 py-2.5 border-b border-slate-100 ${m.id === selected
                               ? 'bg-blue-50 shadow-[inset_3px_0_0_#2563eb]' : 'hover:bg-slate-50'}`}>
                             <span className="min-w-0">
                               <span className="block text-sm text-slate-800 line-clamp-2">{m.name}</span>
@@ -675,7 +676,7 @@ export default function AdminAcademic() {
                     </p>
                     <ul>
                       {data.removed.map(m => (
-                        <li key={m.id} className="flex items-center justify-between gap-3 px-4 py-2.5 border-b border-slate-50">
+                        <li key={m.id} className="flex items-center justify-between gap-3 px-4 py-2.5 border-b border-slate-100">
                           <span className="min-w-0 text-slate-400">
                             <span className="block text-sm line-through">{m.name}</span>
                             <span className="block text-xs">{m.code} · Year {m.year} · {m.type}</span>
@@ -688,7 +689,7 @@ export default function AdminAcademic() {
                 )}
               </div>
             </section>
-            <section aria-label="Module details" className="flex-1 min-w-0 flex flex-col bg-white border border-slate-200 rounded-xl overflow-hidden">
+            <section aria-label="Module details" className="flex-1 min-w-0 flex flex-col bg-white border border-slate-200 rounded-2xl overflow-hidden">
               {notice && <p role="status" className="mx-6 mt-5 -mb-1 text-sm text-amber-800 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2">{notice}</p>}
               {selected ? <ModuleDetails key={`${selected}-${tick}`} id={selected} programmeId={programmeId} row={selectedRow} onChanged={onChanged} onReviewed={onReviewed}
                   onEdit={mod => openForm({ mode: 'edit', module: mod })} onRemove={mod => { setFormError(''); setRemoving(mod) }} />
@@ -716,7 +717,7 @@ export default function AdminAcademic() {
               </p>
               {formError && <p role="alert" className="text-sm text-rose-600 mt-3">{formError}</p>}
             </div>
-            <div className="flex justify-end gap-2 px-6 py-4 mt-5 bg-slate-50 border-t border-slate-100 rounded-b-2xl">
+            <div className="flex justify-end gap-2 px-6 py-4 mt-5 bg-slate-50 border-t border-slate-200 rounded-b-2xl">
               <button type="button" autoFocus onClick={() => setRemoving(null)} disabled={formBusy}
                 className="px-4 py-2 text-sm font-medium rounded-lg border border-slate-200 bg-white text-slate-700 hover:bg-slate-50">Cancel</button>
               <button type="button" onClick={confirmRemove} disabled={formBusy}

@@ -122,7 +122,7 @@ function GoalPicker({ goal, categories, fit, busy, onChange }) {
               {rest.map(c => row(c.name, <span className="text-xs text-slate-400 tabular-nums">{c.jobs} {c.jobs === 1 ? 'job' : 'jobs'}</span>))}
             </>)}
           </ul>
-          <ul className="border-t border-slate-100 mt-1 pt-1">
+          <ul className="border-t border-slate-200 mt-1 pt-1">
             {row('', null, 'Open to all ICT roles')}
           </ul>
         </div>
@@ -208,7 +208,7 @@ function GoalCard({ data, busy, onGoal, onPlan, onJobs }) {
                   </p>
                   <ul className="px-3">
                     {rows.map(r => (
-                      <li key={r.skill} className="border-t border-slate-100 first:border-t-0">
+                      <li key={r.skill} className="border-t border-slate-200 first:border-t-0">
                         <div className="flex items-center gap-3">
                           <label className="flex-1 min-w-0 flex items-center gap-3 py-2 cursor-pointer">
                             <input type="checkbox" checked={picked.includes(r.skill)} onChange={() => toggle(r.skill)} className="w-4 h-4 accent-blue-700" />
@@ -504,7 +504,7 @@ export default function Dashboard() {
                   {matches === null ? <div className="divide-y divide-slate-100">{[...Array(4)].map((_, i) => <RowSkeleton key={i} />)}</div>
                     : !matches.length ? <p className="text-sm text-slate-500 py-3">No current openings here yet. Try another goal, or check back after the next job update.</p>
                     : (
-                      <ul className="divide-y divide-slate-200">
+                      <ul className="divide-y divide-slate-100">
                         {matches.slice(0, 6).map(job => (
                           <li key={job.job_id}>
                             <button type="button" onClick={() => navigate(`/jobs/${encodeURIComponent(job.job_id)}`, { state: { from: 'Dashboard' } })}

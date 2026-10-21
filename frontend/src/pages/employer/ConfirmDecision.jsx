@@ -25,7 +25,7 @@ export default function ConfirmDecision({ app, d, busy, onConfirm, onCancel, tit
           </p>
           {d.danger && <div className="mt-4"><ReasonPicker value={why} onChange={setWhy} /></div>}
         </div>
-        <div className="flex justify-end gap-2 px-6 py-4 bg-slate-50 border-t border-slate-100 rounded-b-2xl">
+        <div className="flex justify-end gap-2 px-6 py-4 bg-slate-50 border-t border-slate-200 rounded-b-2xl">
           <button type="button" onClick={onCancel} disabled={busy}
             className="px-4 py-2 text-sm font-medium rounded-lg border border-slate-200 bg-white text-slate-700 hover:bg-slate-50">Cancel</button>
           <button type="button" autoFocus={!d.danger} onClick={() => onConfirm(why)} disabled={busy || !reasonOk(why)}

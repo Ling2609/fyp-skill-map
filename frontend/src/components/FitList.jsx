@@ -40,7 +40,7 @@ export default function FitList({ items, renderItem, className = '', footerCls =
       <ul className="divide-y divide-slate-100">{shown.map(renderItem)}</ul>
       {hidden > 0 && (
         <button type="button" onClick={() => setAll(true)}
-          className={`mt-auto shrink-0 h-10 px-5 text-left text-sm font-medium text-blue-700 hover:underline border-t border-slate-100 ${footerCls}`}>
+          className={`mt-auto shrink-0 h-10 px-5 text-left text-sm font-medium text-blue-700 hover:underline border-t border-slate-200 ${footerCls}`}>
           {more} {items.length} <span className="text-slate-500 font-normal">({hidden} more)</span>
         </button>
       )}

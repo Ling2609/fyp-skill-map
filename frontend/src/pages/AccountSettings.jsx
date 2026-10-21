@@ -34,7 +34,7 @@ function Field({ label, children }) {
 // One line of a section: label, current value, and a button that opens the row's form
 function Row({ label, value, action, onAction, note, open, children, danger }) {
   return (
-    <div className="py-4 border-t border-slate-100 first:border-t-0">
+    <div className="py-4 border-t border-slate-200 first:border-t-0">
       <div className="flex items-center gap-4">
         <p className="w-32 shrink-0 text-sm text-slate-500">{label}</p>
         <p className="flex-1 min-w-0 text-sm text-slate-800 truncate">{value}</p>
@@ -195,7 +195,7 @@ export default function AccountSettings() {
           <p role="status" className="text-sm text-emerald-700 bg-emerald-50 border border-emerald-100 rounded-lg px-4 py-2.5">{done}</p>
         )}
 
-        <section className="bg-white border border-slate-200 rounded-xl px-6 py-2">
+        <section className="bg-white border border-slate-200 rounded-2xl px-6 py-2">
           <h2 className="text-sm font-semibold text-slate-800 pt-4 pb-1">Account information</h2>
 
           <Row label="Name" value={[user?.first_name, user?.last_name].filter(Boolean).join(' ')}
@@ -254,7 +254,7 @@ export default function AccountSettings() {
           </Row>
         </section>
 
-        <section className="bg-white border border-slate-200 rounded-xl px-6 py-2">
+        <section className="bg-white border border-slate-200 rounded-2xl px-6 py-2">
           <h2 className="text-sm font-semibold text-slate-800 pt-4 pb-1">Security</h2>
 
           <Row label="Password" value="••••••••••" action="Change password" onAction={() => start('password')} open={open === 'password'}>
@@ -273,7 +273,7 @@ export default function AccountSettings() {
         </section>
 
         {/* 14 Oct: your data, the notice and deleting the account together, apart from sign-in security */}
-        <section className="bg-white border border-slate-200 rounded-xl px-6 py-2">
+        <section className="bg-white border border-slate-200 rounded-2xl px-6 py-2">
           <h2 className="text-sm font-semibold text-slate-800 pt-4 pb-1">Privacy and data</h2>
           {/* 14 Oct (PDPA access principle, 2024 data portability): everything SkillMap holds, as one JSON file */}
           <Row label="Your data" value="Everything SkillMap holds about you, in one file" action={downloading ? <Busy>Preparing…</Busy> : 'Download my data'}

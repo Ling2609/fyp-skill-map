@@ -95,8 +95,8 @@ export default function AdminDashboard() {
           <div className="flex-1 grid lg:grid-cols-2 gap-4"><CardSkeleton rows={6} /><CardSkeleton rows={3} /></div>
         </>)}
         {data && actions > 0 && (
-          <section className="bg-white rounded-xl border border-amber-300">
-            <h2 className="px-5 py-3 text-sm font-semibold text-amber-800 bg-amber-50 border-b border-amber-100 rounded-t-xl">
+          <section className="bg-white rounded-2xl border border-amber-300">
+            <h2 className="px-5 py-4 text-base font-semibold text-amber-900 bg-amber-50 border-b border-amber-100 rounded-t-2xl">
               Needs your action
             </h2>
             <ul className="divide-y divide-slate-100">
@@ -160,17 +160,17 @@ export default function AdminDashboard() {
                 </>
               )
               return c.to
-                ? <Link key={c.label} to={c.to} className="bg-white rounded-xl border border-slate-200 px-4 py-3.5 hover:border-blue-300 transition">{body}</Link>
-                : <div key={c.label} className="bg-white rounded-xl border border-slate-200 px-4 py-3.5">{body}</div>
+                ? <Link key={c.label} to={c.to} className="bg-white rounded-2xl border border-slate-200 px-4 py-3.5 hover:border-blue-300 transition">{body}</Link>
+                : <div key={c.label} className="bg-white rounded-2xl border border-slate-200 px-4 py-3.5">{body}</div>
             })}
           </div>
         )}
 
         {data && (
           <div className="flex-1 grid lg:grid-cols-2 gap-4">
-            <section className="bg-white rounded-xl border border-slate-200 flex flex-col">
-              <div className="px-5 py-3 border-b border-slate-100">
-                <h2 className="text-sm font-semibold text-slate-700">Most common skill gaps</h2>
+            <section className="bg-white rounded-2xl border border-slate-200 flex flex-col">
+              <div className="px-5 py-3 border-b border-slate-200">
+                <h2 className="text-base font-semibold text-slate-900">Most common skill gaps</h2>
                 <p className="text-xs text-slate-500 mt-0.5">Skills students most often lack in their top job matches</p>
               </div>
               <div className="flex-1 flex flex-col px-5 py-4">
@@ -190,9 +190,9 @@ export default function AdminDashboard() {
               </div>
             </section>
 
-            <section className="bg-white rounded-xl border border-slate-200 flex flex-col">
-              <div className="px-5 py-3 border-b border-slate-100">
-                <h2 className="text-sm font-semibold text-slate-700">Student profiles</h2>
+            <section className="bg-white rounded-2xl border border-slate-200 flex flex-col">
+              <div className="px-5 py-3 border-b border-slate-200">
+                <h2 className="text-base font-semibold text-slate-900">Student profiles</h2>
                 <p className="text-xs text-slate-500 mt-0.5">Matching only works once grades are in</p>
               </div>
               <ul className="flex-1 flex flex-col justify-evenly gap-4 px-5 py-4 text-sm">

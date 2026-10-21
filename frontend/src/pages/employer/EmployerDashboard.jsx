@@ -110,6 +110,8 @@ export default function EmployerDashboard() {
   const noJobs = sum && sum.jobs === 0
   const steps = data ? nextSteps(data) : []
   // 21 Oct: is anything late or waiting long, and which open job decides soonest (for the "Nothing urgent" line)
+  const act = data && (data.to_review.length > 0 || data.attention.waiting_long.length > 0 || data.attention.quiet_jobs.length > 0
+    || data.attention.past_date?.length > 0)
   const urgent = data && (data.attention.waiting_long.length > 0 || data.attention.quiet_jobs.length > 0 || data.attention.past_date?.length > 0)
   const nextDate = data?.open_jobs.filter(j => j.decide_by).map(j => ({ ...j, days: daysUntil(j.decide_by) }))
     .filter(j => j.days >= 0).sort((a, b) => a.days - b.days)[0]
@@ -178,13 +180,14 @@ export default function EmployerDashboard() {
         <div className="flex-1 min-h-0 overflow-y-auto px-8 py-6">
           <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1.55fr)_minmax(0,1fr)] lg:grid-rows-[minmax(min-content,1.45fr)_minmax(min-content,1fr)_minmax(min-content,0.8fr)] lg:h-full gap-5">
             {/* Row 1, left: applications to review, problems, then next steps (12 Oct, flow review M1) */}
-            <section className={card} aria-labelledby="review-h">
-              <div className="px-5 py-4 flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
-                <h2 id="review-h" className="text-base font-semibold text-slate-900">Needs your attention</h2>
+            {/* 21 Oct (her review): amber, like the admin's "Needs your action", while there is something to act on */}
+            <section className={act ? card.replace('border-slate-200', 'border-amber-300') : card} aria-labelledby="review-h">
+              <div className={`px-5 py-4 flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 ${act ? 'bg-amber-50' : ''}`}>
+                <h2 id="review-h" className={`text-base font-semibold ${act ? 'text-amber-900' : 'text-slate-900'}`}>Needs your attention</h2>
                 {data.attention.review_days && <span className="text-xs text-slate-500">You view applications within {data.attention.review_days} day{data.attention.review_days === 1 ? '' : 's'} on average · students see this</span>}
               </div>
               {(data.attention.waiting_long.length > 0 || data.attention.quiet_jobs.length > 0 || data.attention.past_date?.length > 0) && (
-                <ul className="shrink-0 border-t border-slate-100 divide-y divide-slate-100">
+                <ul className="shrink-0 border-t border-slate-200 divide-y divide-slate-100">
                   {/* 14 Oct (transparency flow): the employer's own decision date passed with applicants still waiting */}
                   {(data.attention.past_date || []).map(p => (
                     <li key={`d${p.job_id}`} className="px-5 py-2.5 flex items-center gap-3 bg-rose-50 text-sm text-rose-900">
@@ -206,13 +209,13 @@ export default function EmployerDashboard() {
                   ))}
                 </ul>
               )}
-              {data.to_review.length > 0 && <p className="px-5 pt-3 pb-1.5 text-xs font-semibold text-slate-500 border-t border-slate-100">To review ({sum.new}) · across all your jobs, newest first</p>}
+              {data.to_review.length > 0 && <p className="px-5 pt-3 pb-1.5 text-xs font-semibold text-slate-500 border-t border-slate-200">To review ({sum.new}) · across all your jobs, newest first</p>}
               {data.to_review.length === 0 ? (
                 <p className="px-5 pb-4 text-sm text-slate-500">
                   {sum.applicants ? 'All caught up: every application has a status.' : 'No applications yet. Your jobs are in students\' Job Matches, marked "Apply on SkillMap".'}
                 </p>
               ) : (
-                <FitList className="border-t border-slate-100" items={data.to_review} renderItem={a => (
+                <FitList className="border-t border-slate-200" items={data.to_review} renderItem={a => (
 
                     <li key={a.id} className="px-5 py-3.5 flex items-center gap-3.5">
                       <Avatar name={a.name} />
@@ -232,13 +235,13 @@ export default function EmployerDashboard() {
               {/* 21 Oct (her review: blank space once the tips hide after people apply): when nothing is late or waiting
                   long, say so, with the nearest decision date, so the card reads "on track" rather than empty */}
               {steps.length === 0 && data.to_review.length > 0 && !urgent && nextDate && (
-                <p className="mt-auto border-t border-slate-100 px-5 py-3 text-sm text-slate-600">
+                <p className="mt-auto border-t border-slate-200 px-5 py-3 text-sm text-slate-600">
                   <span className="font-medium text-emerald-700">✓ Nothing urgent.</span> Your next decision date: <b className="font-semibold text-slate-800">{nextDate.title}</b>,{' '}
                   {fmtDay(nextDate.decide_by)} ({nextDate.days === 0 ? 'today' : `${nextDate.days} day${nextDate.days === 1 ? '' : 's'} left`}).
                 </p>
               )}
               {steps.length > 0 && (
-                <div className="border-t border-slate-100 px-5 py-3">
+                <div className="border-t border-slate-200 px-5 py-3">
                   <p className="text-xs font-semibold text-slate-500">What you can do now</p>
                   <ul className="mt-1.5 space-y-1.5">
                     {steps.map(s => (
@@ -270,7 +273,7 @@ export default function EmployerDashboard() {
               {data.open_jobs.length === 0
                 ? <p className="px-5 pb-4 text-sm text-slate-500">No open jobs. Reopen one in My Jobs, or post a new one.</p>
                 : (
-                  <FitList className="border-t border-slate-100" items={data.open_jobs} renderItem={j => {
+                  <FitList className="border-t border-slate-200" items={data.open_jobs} renderItem={j => {
 
                       const total = Object.values(j.counts).reduce((x, y) => x + y, 0)
                       const days = j.decide_by ? daysUntil(j.decide_by) : null
@@ -309,7 +312,7 @@ export default function EmployerDashboard() {
               {data.activity.length === 0
                 ? <p className="px-5 pb-4 text-sm text-slate-500">Nothing in the last 14 days. Applications, your status changes and invitations will be listed here.</p>
                 : (<>
-                  <FitList className="border-t border-slate-100" items={data.activity} renderItem={(e, i) => <ActivityRow key={i} e={e} />} />
+                  <FitList className="border-t border-slate-200" items={data.activity} renderItem={(e, i) => <ActivityRow key={i} e={e} />} />
                   {data.activity.length < 3 && <p className="px-5 pb-3 text-xs text-slate-400">New applications and status changes appear here.</p>}
                 </>)}
             </section>
@@ -340,7 +343,7 @@ export default function EmployerDashboard() {
               {data.graduates.length === 0 ? (
                 <p className="px-5 pb-4 text-sm text-slate-500">{data.open_jobs.length ? 'No visible graduate has at least half of your required skills yet. New profiles are matched as students add them.' : 'Open a job to see graduates who fit it.'}</p>
               ) : (
-                <FitList className="border-t border-slate-100" items={data.graduates} renderItem={g => (
+                <FitList className="border-t border-slate-200" items={data.graduates} renderItem={g => (
 
                     <li key={g.student_id} className="px-5 py-3 flex items-center gap-3">
                       <Avatar name={g.name} small />

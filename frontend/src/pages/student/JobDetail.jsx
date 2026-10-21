@@ -194,7 +194,7 @@ function ApplicationProgress({ a, company }) {
   if (!app?.progress) return null
   const p = app.progress
   return (
-    <div className="mt-2 border-t border-gray-100">
+    <div className="mt-2 border-t border-slate-200">
       <ApplicationSteps steps={p.steps} decided={['accepted', 'rejected'].includes(app.status)} />
       {p.nudge === 'no_decision' ? <p className="mt-3 text-sm text-amber-900 bg-amber-50 rounded-lg px-3.5 py-2">
         <b>{company} missed its promised reply date ({fmtDay(app.decide_by)}).</b> Focus on other jobs; any reply will still appear here.
@@ -275,7 +275,7 @@ export default function JobDetail() {
             <Bar className="h-12 w-20" />
           </div>
           <div className="bg-white rounded-xl border border-slate-200">
-            <div className="px-6 py-3.5 border-b border-slate-100 flex gap-6">{['w-20', 'w-20', 'w-24'].map(w => <Bar key={w} className={`h-4 ${w}`} />)}</div>
+            <div className="px-6 py-3.5 border-b border-slate-200 flex gap-6">{['w-20', 'w-20', 'w-24'].map(w => <Bar key={w} className={`h-4 ${w}`} />)}</div>
             <div className="px-6 divide-y divide-slate-100">{[0, 1, 2, 3, 4].map(i => <RowSkeleton key={i} />)}</div>
           </div>
         </div>
@@ -461,7 +461,7 @@ export default function JobDetail() {
                   if (isMainHeader) {
                     return (
                       <li key={idx} className="pt-4 first:pt-0">
-                        <p className="text-sm font-semibold text-gray-800 uppercase tracking-wide border-b border-gray-100 pb-2">
+                        <p className="text-sm font-semibold text-gray-800 uppercase tracking-wide border-b border-slate-200 pb-2">
                           {displayText}
                         </p>
                       </li>
@@ -500,7 +500,7 @@ export default function JobDetail() {
 
             {/* 1. To learn */}
             <div className="bg-white rounded-xl border border-gray-100 shadow-sm">
-              <div className="px-5 py-4 border-b border-gray-100">
+              <div className="px-5 py-4 border-b border-slate-200">
                 <h2 className="text-sm font-semibold text-gray-700">
                   {BasisWord} skills you're missing <span className="text-red-600">({gapRows.length})</span>
                 </h2>
@@ -508,7 +508,7 @@ export default function JobDetail() {
               {gapRows.length === 0 ? (
                 <p className="text-xs text-gray-500 px-5 py-4">None. You have every {basisWord} skill this job lists.</p>
               ) : (
-                <ul className="divide-y divide-gray-50">
+                <ul className="divide-y divide-slate-100">
                   {gapRows.map((item, idx) => {
                     return (
                       <li key={idx} className="flex items-start gap-3 px-5 py-2.5">
@@ -540,7 +540,7 @@ export default function JobDetail() {
 
             {/* 2. You already have — chips by default, grouped by source on click */}
             <div className="bg-white rounded-xl border border-gray-100 shadow-sm">
-              <div className="flex items-center justify-between gap-3 px-5 py-4 border-b border-gray-100">
+              <div className="flex items-center justify-between gap-3 px-5 py-4 border-b border-slate-200">
                 <h2 className="text-sm font-semibold text-gray-700">
                   {BasisWord} skills you have <span className="text-green-700">({matchedRows.length} of {totalRequired})</span>
                 </h2>
@@ -567,7 +567,7 @@ export default function JobDetail() {
                   ))}
                 </div>
               ) : (
-                <div className="divide-y divide-gray-50">
+                <div className="divide-y divide-slate-100">
                   {sourceGroups.map(([source, group]) => (
                     <div key={source} className="px-5 py-3">
                       <div className="flex items-center gap-1.5 mb-2">
@@ -601,7 +601,7 @@ export default function JobDetail() {
             {/* 3. Nice-to-have skills: a bonus, not counted in the % (only for jobs extracted with levels, Stage 1) */}
             {niceToHave.length > 0 && (
               <div className="bg-white rounded-xl border border-gray-100 shadow-sm">
-                <div className="px-5 py-4 border-b border-gray-100">
+                <div className="px-5 py-4 border-b border-slate-200">
                   <h2 className="text-sm font-semibold text-gray-700">
                     Nice-to-have skills <span className="text-green-700">({niceToHave.filter(n => n.has).length} of {niceToHave.length})</span>
                     <span className="ml-2 font-normal text-xs text-gray-400">bonus · not counted in the %</span>
@@ -632,7 +632,7 @@ export default function JobDetail() {
             {/* 4. Gained in the role: not expected before starting, never in the % */}
             {gainInRole.length > 0 && (
               <div className="bg-white rounded-xl border border-gray-100 shadow-sm">
-                <div className="px-5 py-4 border-b border-gray-100">
+                <div className="px-5 py-4 border-b border-slate-200">
                   <h2 className="text-sm font-semibold text-gray-700">
                     Skills you'll gain in this role <span className="text-green-700">({gainInRole.filter(g => g.has).length} of {gainInRole.length})</span>
                     <span className="ml-2 font-normal text-xs text-gray-400">not expected before you start · not counted in the %</span>

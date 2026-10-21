@@ -116,7 +116,7 @@ export default function Applicants() {
             )}
             <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden">
               <table className="w-full text-sm">
-                <thead className="bg-slate-50 text-left text-xs font-semibold text-slate-500">
+                <thead className="bg-slate-50 text-left text-xs font-semibold text-slate-500 border-b border-slate-200">
                   <tr><th className="pl-5 py-3 w-8"><span className="sr-only">Select</span></th><th className="px-5 py-3">Student</th><th className="px-5 py-3">Required skills they have</th>
                     <th className="px-5 py-3">Applied</th><th className="px-5 py-3">Status</th></tr>
                 </thead>

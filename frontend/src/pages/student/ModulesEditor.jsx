@@ -174,7 +174,7 @@ export default function ModulesEditor({ onUnsavedChange, onSaved }) {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 lg:flex-1 lg:min-h-0">
         <div className="lg:col-span-2 bg-white rounded-2xl border border-gray-200 flex flex-col lg:min-h-0 overflow-hidden">
           {/* Title left, hint right, on one line, so the list gets more room (her requests 9 Oct) */}
-          <div className="shrink-0 px-6 py-3 border-b border-gray-200 flex flex-wrap items-baseline justify-between gap-x-3">
+          <div className="shrink-0 px-6 py-3 border-b border-slate-200 flex flex-wrap items-baseline justify-between gap-x-3">
             <p className="text-sm font-semibold text-gray-800">Compulsory Modules</p>
             {/* Users are final-year students and recent graduates (IR §3.2.2); only completed modules count (IR §1.6.1),
                 so a final-year student leaves current modules blank. No honesty checkbox (Kristal et al. 2020) */}
@@ -182,7 +182,7 @@ export default function ModulesEditor({ onUnsavedChange, onSaved }) {
           </div>
           {/* key = year: a new year opens at the top of its list, not where the last year was scrolled to */}
           <div key={`c${selectedYear}`} tabIndex={0} aria-label="Compulsory modules"
-            className="px-4 sm:px-6 py-2 divide-y divide-gray-200 lg:flex-1 lg:overflow-y-auto focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-300">
+            className="px-4 sm:px-6 py-2 divide-y divide-slate-100 lg:flex-1 lg:overflow-y-auto focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-300">
             {compulsory.map(mod => (
               <div key={mod.code} className={`py-3 ${changed.has(mod.code) ? 'bg-amber-50 -mx-4 sm:-mx-6 px-4 sm:px-6' : ''}`}>
                 {/* A phone has no room for name and grade side by side: the grade box drops under the name */}
@@ -210,12 +210,12 @@ export default function ModulesEditor({ onUnsavedChange, onSaved }) {
         </div>
 
         <div className="bg-white rounded-2xl border border-gray-200 flex flex-col lg:min-h-0 overflow-hidden">
-          <div className="shrink-0 px-6 py-3 border-b border-gray-200 flex flex-wrap items-baseline justify-between gap-x-3">
+          <div className="shrink-0 px-6 py-3 border-b border-slate-200 flex flex-wrap items-baseline justify-between gap-x-3">
             <p className="text-sm font-semibold text-gray-800">Elective Modules</p>
             <p className="text-xs text-gray-400">Tick the ones you took</p>
           </div>
           <div key={`e${selectedYear}`} tabIndex={0} aria-label="Elective modules"
-            className="px-6 py-3 divide-y divide-gray-200 lg:flex-1 lg:overflow-y-auto focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-300">
+            className="px-6 py-3 divide-y divide-slate-100 lg:flex-1 lg:overflow-y-auto focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-300">
             {electives.length === 0 ? (
               <p className="text-sm text-gray-400 py-6 text-center">No electives for Year {selectedYear}</p>
             ) : electives.map(mod => (

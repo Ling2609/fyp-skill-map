@@ -194,7 +194,7 @@ export default function ProfilePrivacy() {
               </div>
               {/* 14 Oct: GitHub is connected by signing in, not typed (GithubAccounts); blocked while other changes
                   aren't saved, because connecting leaves the page for GitHub */}
-              <div className="mt-3 pt-3 border-t border-slate-100"><GithubAccounts blocked={changed} compact /></div>
+              <div className="mt-3 pt-3 border-t border-slate-200"><GithubAccounts blocked={changed} compact /></div>
             </Section>
           </div>
         </div>

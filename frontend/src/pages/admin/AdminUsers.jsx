@@ -183,13 +183,14 @@ export default function AdminUsers() {
         {error && <p className="text-sm text-rose-600">{error}</p>}
         {notice && <p role="status" className="text-sm text-emerald-800 bg-emerald-50 border border-emerald-200 rounded-lg px-4 py-2">{notice}</p>}
 
-        <div className="flex-1 min-h-0 flex flex-col bg-white rounded-xl border border-slate-200 overflow-hidden">
-          <div ref={strip} aria-hidden="true" className="overflow-hidden [scrollbar-gutter:stable] bg-blue-100 border-b border-blue-200">
+        <div className="flex-1 min-h-0 flex flex-col bg-white rounded-2xl border border-slate-200 overflow-hidden">
+          <div ref={strip} aria-hidden="true" className="overflow-hidden [scrollbar-gutter:stable] bg-slate-50 border-b border-slate-200">
             <table className="w-full min-w-190 table-fixed text-xs">
               {colgroup}
               <thead>
-                <tr className="text-left text-blue-900">
-                  {COLS.map(([n]) => <th key={n} className="font-semibold uppercase tracking-wide px-4 py-2.5">{n === 'Actions' ? '' : n}</th>)}
+                {/* 21 Oct (her review: admin blue, employer grey): every table's titles grey, as blue means clickable */}
+                <tr className="text-left text-slate-500">
+                  {COLS.map(([n]) => <th key={n} className="font-semibold px-4 py-3">{n === 'Actions' ? '' : n}</th>)}
                 </tr>
               </thead>
             </table>

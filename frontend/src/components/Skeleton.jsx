@@ -30,7 +30,7 @@ export function LoadingLabel({ children = 'Loading…' }) {
 export function CardSkeleton({ rows = 4, className = '' }) {
   return (
     <section aria-hidden="true" className={`bg-white rounded-2xl border border-slate-200 ${className}`}>
-      <div className="px-5 py-3.5 border-b border-slate-100 space-y-2"><Bar className="h-4 w-40" /><Bar className="h-3 w-56" /></div>
+      <div className="px-5 py-3.5 border-b border-slate-200 space-y-2"><Bar className="h-4 w-40" /><Bar className="h-3 w-56" /></div>
       <div className="px-5 divide-y divide-slate-100">{[...Array(rows)].map((_, i) => <RowSkeleton key={i} />)}</div>
     </section>
   )
@@ -39,7 +39,7 @@ export function CardSkeleton({ rows = 4, className = '' }) {
 // Table rows with a grey bar in each cell (goes inside <tbody>)
 export function TableRowsSkeleton({ cols, rows = 6 }) {
   return [...Array(rows)].map((_, r) => (
-    <tr key={r} aria-hidden="true" className="border-b border-slate-100">
+    <tr key={r} aria-hidden="true" className="border-b border-slate-200">
       {[...Array(cols)].map((_, c) => <td key={c} className="px-4 py-3.5"><Bar className={`h-3.5 ${c === 0 ? 'w-44' : c === cols - 1 ? 'w-8' : 'w-20'}`} /></td>)}
     </tr>
   ))
@@ -50,7 +50,7 @@ export function StatsSkeleton({ n = 4, className = 'grid grid-cols-2 lg:grid-col
   return (
     <div aria-hidden="true" className={className}>
       {[...Array(n)].map((_, i) => (
-        <div key={i} className="bg-white rounded-xl border border-slate-200 px-4 py-3.5 space-y-2.5">
+        <div key={i} className="bg-white rounded-2xl border border-slate-200 px-4 py-3.5 space-y-2.5">
           <Bar className="h-3 w-20" /><Bar className="h-6 w-12" /><Bar className="h-3 w-36" />
         </div>
       ))}

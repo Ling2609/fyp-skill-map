@@ -111,7 +111,7 @@ export default function GithubAccounts({ blocked, compact = false }) {
           )}
         </div>
         {connected && (
-          <ul className="border-t border-gray-100 divide-y divide-gray-100">
+          <ul className="border-t border-slate-200 divide-y divide-slate-100">
             {accounts.map(a => (
               <li key={a.id} className="flex items-center gap-3 pr-4 py-2.5 pl-[4.5rem]">
                 <a href={a.url} target="_blank" rel="noopener noreferrer" className="flex-1 min-w-0 truncate text-sm text-gray-800 hover:text-blue-700">

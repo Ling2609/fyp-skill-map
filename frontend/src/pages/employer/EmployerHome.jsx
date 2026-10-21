@@ -79,7 +79,7 @@ function Dialog({ title, busy, onCancel, children, action, onAction, disabled })
           <h2 id="dlg-title" className="text-base font-semibold text-slate-900">{title}</h2>
           {children}
         </div>
-        <div className="flex justify-end gap-2 px-6 py-4 bg-slate-50 border-t border-slate-100 rounded-b-2xl">
+        <div className="flex justify-end gap-2 px-6 py-4 bg-slate-50 border-t border-slate-200 rounded-b-2xl">
           <button type="button" onClick={onCancel} disabled={busy} className="px-4 py-2 text-sm font-medium rounded-lg border border-slate-200 bg-white text-slate-700 hover:bg-slate-50">Cancel</button>
           <button type="button" onClick={onAction} disabled={busy || disabled} className="px-4 py-2 text-sm font-medium rounded-lg bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-40">
             {busy ? <Busy>Saving…</Busy> : action}
@@ -224,7 +224,7 @@ export function MyJobs() {
                   column left-aligned and the actions are buttons. 20 Oct (her pick T2): no Status column (the tab already
                   says Open / Closed; a badge beside the title only for the special states); the decision date is its own
                   column with the days left (closed tab: when and why it closed); applicants show "to review" in blue */}
-              <div ref={strip} aria-hidden="true" className="shrink-0 overflow-hidden [scrollbar-gutter:stable] bg-slate-50 border-b border-slate-100">
+              <div ref={strip} aria-hidden="true" className="shrink-0 overflow-hidden [scrollbar-gutter:stable] bg-slate-50 border-b border-slate-200">
                 <table className="w-full min-w-[62rem] text-sm table-fixed">
                   {JOB_COLS}
                   <thead className="text-left text-xs font-semibold text-slate-500">

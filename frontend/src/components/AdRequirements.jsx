@@ -20,7 +20,7 @@ export function AdRequirementPills({ req }) {
   if (req.languages) pills.push({ key: 'l', text: req.languages.languages.join(', '), quote: req.languages.quote })
   if (pills.length === 0) return null
   return (
-    <div className="flex flex-wrap items-center gap-1.5 mt-4 pt-4 border-t border-gray-100">
+    <div className="flex flex-wrap items-center gap-1.5 mt-4 pt-4 border-t border-slate-200">
       <span className="text-xs font-medium text-slate-700 mr-1">The ad asks for</span>
       {pills.map(p => (
         <span key={p.key} className={pillCls} title={p.quote ? `From the ad: “${p.quote}”` : undefined}>{p.text}</span>

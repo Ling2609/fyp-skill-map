@@ -232,7 +232,7 @@ export function ApplicantCards({ s, fit, withFit = true, you, aside }) {
             ? (you ? 'Your grades are shown to employers.' : 'Grades shown because the student allows it.')
             : (you ? 'Your grades are hidden from employers.' : "The student doesn't share grades.")}`}
           render={(m) => (
-            <div className="py-1.5 border-b border-slate-50">
+            <div className="py-1.5 border-b border-slate-100">
               <p className="flex justify-between gap-3 text-sm text-slate-700"><span>{m.name}</span>{m.grade && <span className="font-semibold">{m.grade}</span>}</p>
               {m.relevant?.length > 0 && <p className="text-xs text-emerald-700 font-medium">{m.relevant.map(k => `✓ ${skillName(k)}`).join(' · ')}</p>}
             </div>

@@ -159,9 +159,10 @@ export default function Sidebar() {
     <div className={`${collapsed ? 'w-14' : 'w-48'} bg-white border-r border-slate-200 flex flex-col h-screen fixed left-0 top-0 z-10 transition-all duration-200`}>
 
       {/* Logo + collapse */}
-      {/* 21 Oct (her review: collapsed, the logo was squeezed into a rectangle beside the arrow): collapsed, the logo
-          and the expand arrow stack, so the logo keeps its square */}
-      <div className={`px-3 py-4 border-b border-slate-100 flex items-center min-h-15 ${collapsed ? 'flex-col gap-2' : 'justify-between'}`}>
+      {/* 21 Oct (her review: collapsed, the logo was squeezed into a rectangle beside the arrow; then "arrow beside the
+          logo"): collapsed, the logo keeps its square and the expand arrow is a small round button on the sidebar's
+          edge, level with the logo */}
+      <div className={`relative px-3 py-4 border-b border-slate-200 flex items-center min-h-15 ${collapsed ? 'justify-center' : 'justify-between'}`}>
         {!collapsed && (
           <div className="flex items-center gap-2.5 flex-1 min-w-0">
             <div className="w-7 h-7 bg-blue-600 rounded-lg flex items-center justify-center shrink-0">
@@ -183,8 +184,10 @@ export default function Sidebar() {
           </div>
         )}
         <button
-          onClick={() => setCollapsed(!collapsed)}
-          className="p-1.5 rounded-md hover:bg-slate-100 text-slate-400 hover:text-slate-600 transition shrink-0"
+          onClick={() => setCollapsed(!collapsed)} aria-label={collapsed ? 'Expand the sidebar' : 'Collapse the sidebar'}
+          className={collapsed
+            ? 'absolute -right-3 top-1/2 -translate-y-1/2 w-6 h-6 flex items-center justify-center rounded-full bg-white border border-slate-200 shadow-sm text-slate-500 hover:text-slate-800 hover:bg-slate-50 transition'
+            : 'p-1.5 rounded-md hover:bg-slate-100 text-slate-400 hover:text-slate-600 transition shrink-0'}
         >
           {collapsed ? (
             <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -238,12 +241,12 @@ export default function Sidebar() {
       </nav>
 
       {/* User menu */}
-      <div ref={menuRef} className="relative px-2 pb-4 pt-2 border-t border-slate-100">
+      <div ref={menuRef} className="relative px-2 pb-4 pt-2 border-t border-slate-200">
         {menuOpen && (
           <div role="menu"
             className={`absolute z-20 w-52 bg-white border border-slate-200 rounded-xl shadow-lg py-1.5 ${
               collapsed ? 'left-full bottom-3 ml-2' : 'left-2 right-2 w-auto bottom-full mb-1'}`}>
-            <div className="px-3.5 pt-1.5 pb-2.5 border-b border-slate-100 mb-1">
+            <div className="px-3.5 pt-1.5 pb-2.5 border-b border-slate-200 mb-1">
               <p className="text-sm font-medium text-slate-800 truncate">{fullName}</p>
               <p className="text-xs text-slate-400 truncate">{user?.email}</p>
             </div>

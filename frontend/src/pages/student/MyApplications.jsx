@@ -201,7 +201,7 @@ function share(a, b, ROOM) {
   return [x + ax, y + Math.min(b - y, spare)]
 }
 // 20 Oct (her review: the gaps between cards looked odd): each section is one card with a line between applications
-const LIST = 'bg-white border border-slate-200 rounded-2xl divide-y divide-slate-200'
+const LIST = 'bg-white border border-slate-200 rounded-2xl divide-y divide-slate-100'
 // 20 Oct (her review: big empty middle): one row = job | progress | reply date or site | status, as columns on laptops
 // One line per row from 1024 px (her review: consistency); the progress column never wraps and starts at the same place
 // 20 Oct (her review: big gap after the job name): the job column grows only to 22rem; any spare width is shared

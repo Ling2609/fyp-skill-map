@@ -125,7 +125,7 @@ export default function Privacy() {
                         </tr></thead>
                         <tbody>
                           {rows.rows.map(([what, need, why]) => (
-                            <tr key={what} className="border-b border-slate-100 last:border-0">
+                            <tr key={what} className="border-b border-slate-200 last:border-0">
                               <td className="py-2 pr-4 text-slate-800">{what}</td>
                               <td className="py-2 pr-4"><span className={`text-xs font-semibold rounded-full px-2 py-0.5 ${
                                 need === 'Required' || need === 'Wajib' ? 'bg-slate-100 text-slate-700' : 'bg-emerald-50 text-emerald-700'}`}>{need}</span></td>

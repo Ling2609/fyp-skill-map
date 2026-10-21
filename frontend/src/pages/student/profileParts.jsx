@@ -226,7 +226,7 @@ export function SkillChecker({ skills, onChange, label = 'Skills', id = 'skill-c
 
 export function SkillsRow({ children, empty, emptyText }) {
   return (
-    <div className="mt-3 pt-3 border-t border-gray-100">
+    <div className="mt-3 pt-3 border-t border-slate-200">
       {empty && <p className="text-xs text-gray-500 mb-2">{emptyText}</p>}
       <div className="flex flex-wrap items-center gap-1.5">{children}</div>
     </div>

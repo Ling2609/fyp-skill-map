@@ -163,7 +163,7 @@ export default function ModuleForm({ module, scopeLabel, busy, error, onSave, on
           )}
           {error && <p role="alert" className="text-sm text-rose-600">{error}</p>}
         </div>
-        <div className="shrink-0 flex items-center justify-end gap-2 px-6 py-4 mt-5 bg-slate-50 border-t border-slate-100 rounded-b-2xl">
+        <div className="shrink-0 flex items-center justify-end gap-2 px-6 py-4 mt-5 bg-slate-50 border-t border-slate-200 rounded-b-2xl">
           {!editing && found && !stale && (
             <button type="button" onClick={findSkills} disabled={working || !detailsReady}
               className="mr-auto text-sm font-medium text-blue-700 hover:underline disabled:text-slate-300 disabled:no-underline">Find skills again</button>

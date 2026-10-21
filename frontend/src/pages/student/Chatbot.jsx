@@ -79,7 +79,7 @@ const MD = {
   ol: ({ children }) => <ol className="text-sm text-slate-600 leading-relaxed my-1.5 space-y-1 list-decimal pl-5 marker:text-slate-400">{children}</ol>,
   li: ({ children }) => <li className="[&>p]:my-0">{children}</li>,
   input: ({ checked }) => <input type="checkbox" checked={!!checked} readOnly className="mr-1.5 align-middle accent-blue-600" />,
-  hr: () => <hr className="my-3 border-slate-100" />,
+  hr: () => <hr className="my-3 border-slate-200" />,
   code: ({ children }) => <code className="text-[13px] bg-slate-100 text-slate-800 rounded px-1 py-0.5">{children}</code>,
   pre: ({ children }) => <pre className="my-2 bg-slate-50 border border-slate-200 rounded-lg p-3 overflow-x-auto [&>code]:bg-transparent [&>code]:p-0">{children}</pre>,
   table: ({ children }) => (
@@ -89,7 +89,7 @@ const MD = {
   ),
   thead: ({ children }) => <thead className="bg-slate-50 text-slate-500">{children}</thead>,
   th: ({ children }) => <th className="px-3 py-2 font-medium whitespace-nowrap">{children}</th>,
-  td: ({ children }) => <td className="px-3 py-2 align-top text-slate-600 border-t border-slate-100">{children}</td>,
+  td: ({ children }) => <td className="px-3 py-2 align-top text-slate-600 border-t border-slate-200">{children}</td>,
 }
 
 // 13 Oct (learning plan): a reply that starts a plan ("### Learning plan: Docker") gets "Download plan (PDF)" under it,
@@ -141,7 +141,7 @@ function MessageBubble({ msg, onDownload, downloading, onChoose }) {
         )}
         {onChoose && <p className="text-xs text-slate-400 mt-2">Or type a number below.</p>}
         {onDownload && (
-          <div className="mt-3 pt-3 border-t border-slate-100">
+          <div className="mt-3 pt-3 border-t border-slate-200">
             <button type="button" onClick={onDownload} disabled={downloading}
               className="inline-flex items-center gap-1.5 text-xs font-medium text-blue-700 bg-white border border-blue-200 rounded-lg px-3 py-1.5 hover:bg-blue-50 disabled:opacity-50">
               <svg aria-hidden="true" className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

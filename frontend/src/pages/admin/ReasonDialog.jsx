@@ -40,7 +40,7 @@ export default function ReasonDialog({ decision, name, busy, error, onConfirm, o
           </p>
           {error && <p role="alert" className="text-sm text-rose-600 mt-2">{error}</p>}
         </div>
-        <div className="flex justify-end gap-2 px-6 py-4 mt-4 bg-slate-50 border-t border-slate-100 rounded-b-2xl">
+        <div className="flex justify-end gap-2 px-6 py-4 mt-4 bg-slate-50 border-t border-slate-200 rounded-b-2xl">
           <button type="button" onClick={onCancel} disabled={busy}
             className="px-4 py-2 text-sm font-medium rounded-lg border border-slate-200 bg-white text-slate-700 hover:bg-slate-50">
             Cancel
