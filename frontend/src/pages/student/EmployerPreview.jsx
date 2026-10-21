@@ -61,12 +61,13 @@ export default function EmployerPreview() {
             : <h1 className="text-2xl font-semibold tracking-tight text-slate-900 mt-2">{jobId ? `What ${company} will see` : 'Preview as employer'}</h1>}
         </div>
       </PageHeader>
-      <div className="flex-1 min-h-0 overflow-y-auto lg:overflow-hidden px-4 sm:px-8 py-5 flex flex-col gap-4">
-        {error && <p role="alert" className="shrink-0 text-sm text-rose-700 bg-rose-50 border border-rose-200 rounded-lg px-4 py-2.5">{error}</p>}
-        {!data && !error && (<><LoadingLabel>Loading the preview…</LoadingLabel>
-          <div className="grid lg:grid-cols-3 gap-4"><CardSkeleton rows={5} /><CardSkeleton rows={4} /><CardSkeleton rows={4} /></div></>)}
-        {s && <div className="flex-1 min-h-0"><ApplicantCards s={s} fit={data.fit} withFit={!!jobId} stretch /></div>}
-        {s && <NotShownYet s={s} />}
+      {/* 21 Oct (her pick tp.png): two panels, each scrolling on its own; narrow windows: one column, the page scrolls */}
+      <div className="flex-1 min-h-0 overflow-y-auto lg:overflow-hidden flex flex-col">
+        {error && <p role="alert" className="m-4 sm:mx-8 text-sm text-rose-700 bg-rose-50 border border-rose-200 rounded-lg px-4 py-2.5">{error}</p>}
+        {!data && !error && (<div className="px-4 sm:px-8 py-5"><LoadingLabel>Loading the preview…</LoadingLabel>
+          <div className="grid lg:grid-cols-[1fr_23rem] gap-4"><CardSkeleton rows={6} /><CardSkeleton rows={5} /></div></div>)}
+        {s && <div className="lg:flex-1 lg:min-h-0"><ApplicantCards s={s} fit={data.fit} withFit={!!jobId}
+          aside={!jobId && <NotShownYet s={s} />} /></div>}
       </div>
     </div>
   )

@@ -90,13 +90,13 @@ export default function ApplicantProfile() {
 
       {/* 21 Oct (her review): three columns that fill the screen and end on one line; each card shows whole rows only
           (components/EmployerView). Narrow windows: one column and the page scrolls */}
-      <div className="flex-1 min-h-0 overflow-y-auto lg:overflow-hidden px-4 sm:px-8 py-5 flex flex-col gap-4">
-        {error && <p role="alert" className="shrink-0 text-sm text-rose-700 bg-rose-50 border border-rose-200 rounded-lg px-4 py-2.5">{error}</p>}
-        {!data && !error && (<>
+      <div className="flex-1 min-h-0 overflow-y-auto lg:overflow-hidden flex flex-col">
+        {error && <p role="alert" className="m-4 sm:mx-8 text-sm text-rose-700 bg-rose-50 border border-rose-200 rounded-lg px-4 py-2.5">{error}</p>}
+        {!data && !error && (<div className="px-4 sm:px-8 py-5">
           <LoadingLabel>Loading the applicant…</LoadingLabel>
-          <div className="grid lg:grid-cols-3 gap-4"><CardSkeleton rows={5} /><CardSkeleton rows={4} /><CardSkeleton rows={4} /></div>
-        </>)}
-        {data && <div className="flex-1 min-h-0"><ApplicantCards s={s} fit={fit} /></div>}
+          <div className="grid lg:grid-cols-[1fr_23rem] gap-4"><CardSkeleton rows={6} /><CardSkeleton rows={5} /></div>
+        </div>)}
+        {data && <div className="lg:flex-1 lg:min-h-0"><ApplicantCards s={s} fit={fit} /></div>}
       </div>
       {status.ui}
     </div>
