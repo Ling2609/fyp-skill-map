@@ -332,7 +332,7 @@ function Intakes({ programmeId, intakes, setIntakes, onOpen }) {
             </thead>
           </table>
         </div>
-        <div className="min-h-0 overflow-auto [scrollbar-gutter:stable]"
+        <div className="relative min-h-0 overflow-auto [scrollbar-gutter:stable]"
           onScroll={e => { if (strip.current) strip.current.scrollLeft = e.currentTarget.scrollLeft }}>
         <table ref={body} className="w-full min-w-[36rem] text-sm">
           {/* real column titles for screen readers; the visible ones are the strip above. Each holds its title's
@@ -627,8 +627,10 @@ export default function AdminAcademic() {
           </p>
         )}
         {data && tab === 'modules' && (
-          <div className="flex-1 min-h-0 flex gap-4">
-            <section aria-label="Modules" className="w-88 shrink-0 bg-white border border-slate-200 rounded-2xl flex flex-col overflow-hidden">
+          // 21 Oct (her report: a narrow window squeezed the module's details): below laptop width the list sits above
+          // the details (the list scrolls in its own box) and the page scrolls
+          <div className="flex-1 min-h-0 flex flex-col lg:flex-row gap-4 overflow-y-auto lg:overflow-visible">
+            <section aria-label="Modules" className="w-full lg:w-88 shrink-0 max-h-[28rem] lg:max-h-none bg-white border border-slate-200 rounded-2xl flex flex-col overflow-hidden">
               <div className="p-3 flex flex-wrap gap-2 border-b border-slate-200">
                 <div className="basis-full flex"><SearchBox value={q} onChange={setQ} label="Search modules" placeholder="Search modules" /></div>
                 <button type="button" aria-pressed={onlyToReview} onClick={() => set({ show: onlyToReview ? '' : 'todo' })}
@@ -689,7 +691,7 @@ export default function AdminAcademic() {
                 )}
               </div>
             </section>
-            <section aria-label="Module details" className="flex-1 min-w-0 flex flex-col bg-white border border-slate-200 rounded-2xl overflow-hidden">
+            <section aria-label="Module details" className="shrink-0 lg:shrink lg:flex-1 min-w-0 flex flex-col bg-white border border-slate-200 rounded-2xl overflow-hidden">
               {notice && <p role="status" className="mx-6 mt-5 -mb-1 text-sm text-amber-800 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2">{notice}</p>}
               {selected ? <ModuleDetails key={`${selected}-${tick}`} id={selected} programmeId={programmeId} row={selectedRow} onChanged={onChanged} onReviewed={onReviewed}
                   onEdit={mod => openForm({ mode: 'edit', module: mod })} onRemove={mod => { setFormError(''); setRemoving(mod) }} />

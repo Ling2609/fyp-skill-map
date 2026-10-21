@@ -526,7 +526,7 @@ export default function Dashboard() {
                     )}
                 </div>
               </Card>
-              <Card title="Your skills employers want most" sub={`Share of ${goalData.goal ? 'these' : 'all live'} jobs asking for each`} className="lg:flex-1 min-h-56">
+              <Card title="Your skills employers want most" sub={`Skills you have, by the share of ${goalData.goal ? 'these' : 'all live'} jobs that ask for each`} className="lg:flex-1 min-h-56">
                 <div className="pl-6 pr-3 pb-4 min-h-0 lg:overflow-y-auto">
                   {!goalData.wanted.length ? <p className="text-sm text-slate-500 py-3">None of your skills appear in these jobs yet.</p> : (
                     // A table, so the name column is as wide as the longest name (all names in full) and every bar

@@ -238,7 +238,7 @@ export function MyJobs() {
                   </thead>
                 </table>
               </div>
-              <div className="min-h-0 overflow-auto [scrollbar-gutter:stable]"
+              <div className="relative min-h-0 overflow-auto [scrollbar-gutter:stable]"
                 onScroll={e => { if (strip.current) strip.current.scrollLeft = e.currentTarget.scrollLeft }}>
               <table className="w-full min-w-[62rem] text-sm table-fixed">
                 {JOB_COLS}

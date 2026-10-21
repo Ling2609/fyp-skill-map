@@ -195,7 +195,7 @@ export default function AdminUsers() {
               </thead>
             </table>
           </div>
-          <div className="flex-1 min-h-0 overflow-auto [scrollbar-gutter:stable]"
+          <div className="relative flex-1 min-h-0 overflow-auto [scrollbar-gutter:stable]"
             onScroll={e => { if (strip.current) strip.current.scrollLeft = e.currentTarget.scrollLeft }}>
             <table className="w-full text-sm min-w-190 table-fixed">
               {colgroup}
