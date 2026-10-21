@@ -37,6 +37,9 @@ function nextSteps(data) {
   const notInvited = data.graduates.filter(g => !g.invited_at).length
   if (notInvited) steps.push({ key: 'fit', text: <>{notInvited} graduate{notInvited === 1 ? ' fits' : 's fit'} your jobs and {notInvited === 1 ? "hasn't" : "haven't"} been invited</>, to: '#fit-h', action: 'Invite' })
   for (const j of data.open_jobs) {
+    // 21 Oct (her question; references.md "Changing a job's requirements after people applied"): only before anyone
+    // applies; after that the job may ask for less, not more, so these tips would point at changes it can't make
+    if (Object.values(j.counts).some(n => n > 0)) continue
     if (j.required < FEW_SKILLS) steps.push({ key: `s${j.id}`, text: <><b className="font-semibold">{j.title}</b> lists {j.required} required skill{j.required === 1 ? '' : 's'}: graduates are matched on them</>, to: `/employer/jobs/${j.id}/edit`, action: 'Add skills' })
     if (!j.has_requirements) steps.push({ key: `r${j.id}`, text: <><b className="font-semibold">{j.title}</b>: no qualification or languages set</>, to: `/employer/jobs/${j.id}/edit`, action: 'Edit job' })
   }

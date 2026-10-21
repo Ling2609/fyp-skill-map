@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 import api from '../../api'
 import PageHeader from '../../components/PageHeader'
 import { errText } from '../student/profileUtils'
@@ -145,6 +145,7 @@ export default function PostJob() {
   // as pills on Job Detail. All optional.
   const [reqs, setReqs] = useState({ min_qualification: '', study_field: '', languages: [] })
   const [error, setError] = useState('')
+  const [asksMore, setAsksMore] = useState(false)    // 21 Oct: the edit asked for more after people applied (409)
   const skillsRef = useRef(null)
   const [justRead, setJustRead] = useState(false)   // first read on a new post: bring the skills into view
 
@@ -162,6 +163,16 @@ export default function PostJob() {
       setReadFor(`${j.title.trim()}\n${j.description.trim()}`)     // the saved skills belong to the saved ad
     }).catch(err => setError(errText(err, "Couldn't load this job.")))
   }, [editing, jobId])
+
+  // 21 Oct (references.md "Changing a job's requirements after people applied"): "Post a new job" from an edit that
+  // asked for more starts a new post filled in with that edit (the skills count as read for that ad)
+  const copy = useLocation().state?.copy
+  useEffect(() => {
+    if (editing || !copy) return
+    setAd(copy.ad); setSkills(copy.skills); setSoft(copy.soft); setReqs(copy.reqs)  // eslint-disable-line react-hooks/set-state-in-effect
+    setEditJob(null); setError(''); setAsksMore(false); setRecordId(null)       // the same page was showing the edit
+    setReadFor(`${copy.ad.title.trim()}\n${copy.ad.description.trim()}`)
+  }, [editing, copy])
 
   const set = (key) => (e) => setAd(a => ({ ...a, [key]: e.target.value }))
   const adKey = `${ad.title.trim()}\n${ad.description.trim()}`
@@ -216,12 +227,16 @@ export default function PostJob() {
       : [...prev, { name, level, quote: '', group: '' }])
   const remove = (skill) => setSkills(prev => prev.filter(s => s !== skill))
   const publish = () => {
-    setPublishing(true); setError('')
+    setPublishing(true); setError(''); setAsksMore(false)
     const req = editing
       ? api.put(`/employer/jobs/${jobId}`, { description: ad.description, salary: ad.salary, skills, soft, record_id: recordId, ...reqs })
       : api.post('/employer/jobs', { ...ad, skills, soft, decide_days: decideDays, record_id: recordId, ...reqs })
     req.then(res => navigate('/employer/jobs', { state: editing ? { saved: ad.title.trim() } : { posted: ad.title.trim(), fit: res.data.graduates_fit } }))
-      .catch(err => { setError(errText(err, editing ? "Couldn't save the changes. Try again." : "Couldn't publish the job. Try again.")); setPublishing(false) })
+      .catch(err => {
+        setError(errText(err, editing ? "Couldn't save the changes. Try again." : "Couldn't publish the job. Try again."))
+        setAsksMore(editing && err.response?.status === 409)
+        setPublishing(false)
+      })
   }
   useEffect(() => {
     if (!justRead) return
@@ -238,7 +253,9 @@ export default function PostJob() {
           <p className="text-[11px] font-semibold text-blue-600 uppercase tracking-widest mb-2">{editing ? 'My Jobs' : 'Post a Job'}</p>
           <h1 className="text-2xl font-semibold tracking-tight text-slate-900">{editing ? `Edit ${editJob?.title || 'job'}` : read ? 'Check the skills SkillMap read from your ad' : 'Write your job ad'}</h1>
           <p className="text-sm text-slate-500 mt-1">{editing
-            ? (editJob ? `${editJob.applicants ? `${editJob.applicants} applicant${editJob.applicants === 1 ? '' : 's'} · their match updates when you save` : 'Changes show in Job Matches when you save'} · posted date stays the same` : '')
+            // 21 Oct: once people applied, the job can ask for less, not more (references.md "Changing a job's
+            // requirements after people applied")
+            ? (editJob ? `${editJob.applicants ? `${editJob.applicants} applicant${editJob.applicants === 1 ? '' : 's'}: you can fix the ad or ask for less; to ask for more, post a new job` : 'Changes show in Job Matches when you save'} · posted date stays the same` : '')
             : read
               ? 'Students are matched on these. Remove anything wrong, add anything missing, then publish.'
               : 'SkillMap reads the skills from your ad, and you check them before the job goes live.'}</p>
@@ -335,7 +352,13 @@ export default function PostJob() {
               )}
               {BOXES.map(b => <ChipBox key={b.level} box={b} skills={byLevel[b.level]} onRemove={remove} onAdd={add(b.level)} />)}
               <OtherRequirements key={editJob ? `edit-${editJob.id}` : 'new'} reqs={reqs} setReqs={setReqs} />
-              {error && <p role="alert" className="text-sm text-rose-600">{error}</p>}
+              {error && (asksMore ? (
+                <div role="alert" className="text-sm text-amber-900 bg-amber-50 border border-amber-200 rounded-lg px-3.5 py-3">
+                  <p>{error}</p>
+                  <button type="button" onClick={() => navigate('/employer/post', { state: { copy: { ad, skills, soft, reqs } } })}
+                    className="mt-2 font-medium text-blue-700 hover:underline">Post a new job with these changes →</button>
+                </div>
+              ) : <p role="alert" className="text-sm text-rose-600">{error}</p>)}
               <div className="pt-4 border-t border-slate-200 flex flex-wrap items-center justify-between gap-3">
                 <Link to="/employer/jobs" className="text-sm text-slate-600 hover:underline">Cancel</Link>
                 <div className="flex items-center gap-3">

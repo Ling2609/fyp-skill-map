@@ -367,6 +367,32 @@ def _review_job(data, job: Job, employer: User):
                    levels_after=final)
 
 
+QUAL_ORDER = ["certificate", "diploma", "advanced_diploma", "bachelor", "master", "phd"]
+
+
+def _asks_for_more(job: Job, data: "EditIn", skills: list, db: Session) -> list[str]:
+    """21 Oct (her question: unfair to students who already applied? references.md "Changing a job's requirements
+    after people applied"): once anyone has applied, an edit may fix the ad or ask for LESS (remove a required skill,
+    make one nice-to-have, drop a language), but not ask for MORE: Indeed advises a new post for changed requirements;
+    UW-Madison HR needs a new posting to narrow qualifications; "not open to an employer to change the qualifications
+    prescribed in the advertisement midstream" (India's Supreme Court). Returns what would be asked for more."""
+    if not db.query(Application.id).filter(Application.job_id == job.id).first():
+        return []
+    old_req = {skill_key(r.skill_name) for r in db.query(JobSkill).filter(
+        JobSkill.job_id == job.id, JobSkill.skill_type == "hard", JobSkill.level.in_(("required", "unspecified")))}
+    more = [f"{name} as a required skill" for name, sk in skills if sk.level == "required" and skill_key(name) not in old_req]
+    old_q, new_q = (job.min_qualification or "").strip(), " ".join(data.min_qualification.split())
+    if new_q and new_q != old_q and not (old_q in QUAL_ORDER and new_q in QUAL_ORDER
+                                         and QUAL_ORDER.index(new_q) < QUAL_ORDER.index(old_q)):
+        more.append("a higher qualification" if old_q else "a qualification")
+    new_field = " ".join(data.study_field.split())
+    if new_field and new_field.lower() != (job.study_field or "").strip().lower():
+        more.append("a field of study")
+    old_langs = {x.lower() for x in (job.languages or [])}
+    more += [f"{x.strip()} as a language" for x in data.languages if x.strip() and x.strip().lower() not in old_langs]
+    return more
+
+
 @router.put("/jobs/{job_id}")
 def save_edit(job_id: int, data: EditIn, employer: User = Depends(require_employer), db: Session = Depends(get_db)):
     job = _own_job(job_id, employer, db)
@@ -374,6 +400,11 @@ def save_edit(job_id: int, data: EditIn, employer: User = Depends(require_employ
         raise HTTPException(status_code=400, detail="The career office hid this job, so it can't be edited.")
     _check_ad(job.job_title, data.description)
     skills, seen = _checked_skills(data)
+    more = _asks_for_more(job, data, skills, db)
+    if more:
+        raise HTTPException(status_code=409, detail=(
+            f"People have already applied under this job's requirements, so it can't ask for more now "
+            f"({', '.join(more)}). Post a new job for the new requirements, and close this one when you're ready."))
     job.description = data.description
     job.salary = data.salary.strip() or None
     _set_requirements(job, data)

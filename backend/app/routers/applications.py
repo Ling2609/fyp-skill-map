@@ -16,7 +16,7 @@ from sqlalchemy.orm import Session
 
 from app.database import engine, get_db
 from app.models.application import Application, JobInvitation, OutsideApplication
-from app.models.job import Job
+from app.models.job import Job, JobSkill
 from app.models.user import User, UserRole
 from app.routers.auth import get_current_user
 
@@ -179,9 +179,26 @@ def mine(student: User = Depends(require_student), db: Session = Depends(get_db)
                     if person:
                         _snapshot(other, person, job, db)
         out.append(_mine(a, job, match, events[a.id], usually[emp],
-                         {"job_stats": stats[job.id], "stand": stand(a, everyone), "employer_record": records[emp]}))
+                         {"job_stats": stats[job.id], "stand": stand(a, everyone), "employer_record": records[emp],
+                          "job_changed": _job_changed(a, job, db)}))
     db.commit()                                       # the refreshed counts
     return out
+
+
+def _job_changed(a: Application, job: Job, db: Session) -> dict | None:
+    """21 Oct (her question; references.md "Changing a job's requirements after people applied"): the employer may
+    only ask for LESS after people applied, so the student is told which required skills the job no longer asks for
+    (compared with the copy kept when she applied). None when nothing she was matched on changed."""
+    sent = (a.sent_profile or {}).get("job_skills")
+    if not sent:
+        return None
+    from app.services.job_skill_store import skill_key
+    now = db.query(JobSkill).filter(JobSkill.job_id == job.id).all()
+    soft = {skill_key(r.skill_name) for r in now if r.skill_type == "soft"}
+    req_now = {skill_key(r.skill_name) for r in now if r.skill_type == "hard" and r.level in ("required", "unspecified")}
+    dropped = [name for name, level in sent if level in ("required", "unspecified")
+               and skill_key(name) not in soft and skill_key(name) not in req_now]
+    return {"no_longer_required": dropped} if dropped else None
 
 
 def _open_invitations(student: User, db: Session):

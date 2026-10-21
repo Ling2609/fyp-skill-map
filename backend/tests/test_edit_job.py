@@ -10,22 +10,50 @@ def test_edit_changes_skills_and_keeps_locked_fields(client, users, post_job):
 
     e = client.get(f"/employer/jobs/{job['id']}/edit", headers=users.h(employer)).json()
     assert e["title"] == job["title"] and {s["name"] for s in e["skills"]} == {"Python", "Kotlin"} and e["applicants"] == 1
-    r = client.put(f"/employer/jobs/{job['id']}", headers=users.h(employer), json={
-        "title": "Something else", "location": "Penang",                 # ignored: locked once posted
-        "description": e["description"] + " Kotlin was a mistake: it is SQL.", "salary": "RM 4,000",
-        "skills": [{"name": "Python", "level": "required", "quote": "", "group": ""},
-                   {"name": "SQL", "level": "required", "quote": "", "group": ""}], "soft": []})
+    body = {"title": "Something else", "location": "Penang",                 # ignored: locked once posted
+            "description": e["description"] + " Kotlin is no longer needed.", "salary": "RM 4,000",
+            "skills": [{"name": "Python", "level": "required", "quote": "", "group": ""},
+                       {"name": "SQL", "level": "required", "quote": "", "group": ""}], "soft": []}
+    # 21 Oct: someone has applied, so the job can't ask for more (SQL wasn't required when they applied)
+    r = client.put(f"/employer/jobs/{job['id']}", headers=users.h(employer), json=body)
+    assert r.status_code == 409 and "SQL as a required skill" in r.json()["detail"] and "Post a new job" in r.json()["detail"]
+    # asking for less is fine: Kotlin is dropped
+    body["skills"] = body["skills"][:1]
+    r = client.put(f"/employer/jobs/{job['id']}", headers=users.h(employer), json=body)
     assert r.status_code == 200, r.text
     after = client.get(f"/employer/jobs/{job['id']}/edit", headers=users.h(employer)).json()
     assert after["title"] == job["title"] and after["location"] == job["location"] and after["posted_at"] == job["posted_at"]
-    assert after["salary"] == "RM 4,000" and {s["name"] for s in after["skills"]} == {"Python", "SQL"}
+    assert after["salary"] == "RM 4,000" and {s["name"] for s in after["skills"]} == {"Python"}
     seen = client.get(f"/employer/applications/{app_id}", headers=users.h(employer)).json()
     fit = seen["fit"]
-    assert (fit["have"], fit["total"]) == (2, 2), "the applicant's match should follow the new skills"
+    assert (fit["have"], fit["total"]) == (1, 1), "the applicant's match should follow the new skills"
     # 21 Oct: the copy sent when applying was for the old skills, so the latest profile is shown and the page says why
     assert seen["versions"]["job_changed"] is True and seen["versions"]["showing"] == "latest"
     m = client.get("/applications/mine", headers=users.h(student)).json()[0]
-    assert m["match"].startswith("2 of 2")
+    assert m["match"].startswith("1 of 1")
+    assert m["job_changed"] == {"no_longer_required": ["Kotlin"]}      # the student is told what the job dropped
+
+
+def test_after_applying_the_job_cant_ask_for_more_qualification_or_languages(client, users, post_job):
+    """21 Oct (references.md "Changing a job's requirements after people applied")."""
+    employer, student = users.employer(), users.student()
+    job = post_job(employer, required=("Python",))
+    h = users.h(employer)
+    e = client.get(f"/employer/jobs/{job['id']}/edit", headers=h).json()
+    body = {"description": e["description"], "salary": "", "soft": [],
+            "skills": [{"name": "Python", "level": "required", "quote": "", "group": ""}],
+            "min_qualification": "diploma", "study_field": "", "languages": ["English"]}
+    assert client.put(f"/employer/jobs/{job['id']}", headers=h, json=body).status_code == 200      # no one applied yet
+    client.post("/applications", headers=users.h(student), json={"job_id": job["job_ref"]})
+    for change, words in (({"min_qualification": "bachelor"}, "a higher qualification"), ({"languages": ["English", "Malay"]}, "Malay as a language"),
+                          ({"study_field": "Computer Science"}, "a field of study"),
+                          ({"skills": body["skills"] + [{"name": "Docker", "level": "required", "quote": "", "group": ""}]}, "Docker")):
+        r = client.put(f"/employer/jobs/{job['id']}", headers=h, json={**body, **change})
+        assert r.status_code == 409 and words in r.json()["detail"], change
+    # asking for less, or adding only a nice-to-have, is fine
+    less = {**body, "min_qualification": "certificate", "languages": [],
+            "skills": body["skills"] + [{"name": "Docker", "level": "preferred", "quote": "", "group": ""}]}
+    assert client.put(f"/employer/jobs/{job['id']}", headers=h, json=less).status_code == 200
 
 
 def test_edit_needs_a_required_skill_and_a_real_description(client, users, post_job):
