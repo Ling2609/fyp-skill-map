@@ -7,7 +7,7 @@ import { Busy } from './Spinner'
 // 21 Oct (her pick "2+3"; references.md "Telling users the privacy notice changed"): a student who agreed to an older
 // privacy notice is told what changed, once per visit, in a pop-up devoted to the change ("actively brought to the
 // attention of the data subject", WP260). "I agree" records the new version; "Not now" closes it until the next visit,
-// and a small reminder stays in the sidebar (a strip at the top would push every full-height page down a line).
+// and a banner stays in the Dashboard's header until they agree.
 // Not rude on purpose (her review): the new items are optional, so it says so; no "or delete your account".
 const CONTACT = import.meta.env.VITE_PRIVACY_CONTACT || 'careers@university.example'
 const LATEST = VERSIONS[0]
@@ -61,18 +61,16 @@ export default function PrivacyUpdate() {
   )
 }
 
-// The reminder in the sidebar while the new notice isn't agreed to yet (after "Not now")
-export function PrivacyReminder({ collapsed }) {
+// 21 Oct (her review: the sidebar box was easy to miss): after "Not now", a banner in the Dashboard's header, in the
+// empty space to the right of the greeting, so it adds no height and pages still fit the screen
+export function PrivacyBanner() {
   const { user } = useAuth()
   if (!stale(user)) return null
-  const review = () => window.dispatchEvent(new Event(PRIVACY_REVIEW))
-  return collapsed ? (
-    <button type="button" onClick={review} title="Privacy notice updated: review" aria-label="Privacy notice updated: review"
-      className="mx-auto mb-2 w-8 h-8 rounded-lg bg-blue-50 text-blue-700 text-sm font-semibold">i</button>
-  ) : (
-    <div className="mx-2 mb-2 rounded-lg bg-blue-50 border border-blue-200 px-3 py-2">
-      <p className="text-xs text-blue-900"><b className="font-semibold">Privacy notice updated</b> on {LATEST.label.en}.</p>
-      <button type="button" onClick={review} className="text-xs font-medium text-blue-700 hover:underline">Review and agree</button>
+  return (
+    <div role="status" className="flex flex-wrap items-center gap-x-4 gap-y-1 rounded-xl bg-blue-50 border border-blue-200 px-4 py-2.5 text-sm">
+      <p className="text-blue-900"><b className="font-semibold">Privacy notice updated</b> on {LATEST.label.en}: {LATEST.short}</p>
+      <button type="button" onClick={() => window.dispatchEvent(new Event(PRIVACY_REVIEW))}
+        className="font-semibold text-blue-700 hover:underline whitespace-nowrap">Review and agree</button>
     </div>
   )
 }

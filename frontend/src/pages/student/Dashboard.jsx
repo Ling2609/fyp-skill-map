@@ -4,6 +4,7 @@ import api from '../../api'
 import { cached, ALL_MATCHES } from '../../pageCache'
 import { useAuth } from '../../context/useAuth'
 import PageHeader from '../../components/PageHeader'
+import { PrivacyBanner } from '../../components/PrivacyUpdate'
 import LevelTag from '../../components/LevelTag'
 import { Bar, RowSkeleton, LoadingLabel } from '../../components/Skeleton'
 import { skillName } from '../../skillName'
@@ -329,11 +330,12 @@ function DashboardSkeleton() {
   )
 }
 
-// No modules, projects, certificates or awards yet: one clear way forward, not empty cards (NN/g, empty states)
+// No modules, projects, experience, certificates or awards yet: one clear way forward, not empty cards (NN/g, empty states)
 function StartCard({ onGo }) {
   const steps = [
     { tab: 'modules', icon: '📘', title: 'Modules and grades', text: 'The strongest evidence for your skills.' },
     { tab: 'projects', icon: '🗂️', title: 'Projects', text: 'What you built, or import from GitHub.' },
+    { tab: 'experience', icon: '💼', title: 'Experience', text: 'Internships, part-time work, clubs, hackathons.' },
     { tab: 'certs', icon: '🎓', title: 'Certificates', text: 'Courses and badges you earned.' },
     { tab: 'awards', icon: '🏆', title: 'Awards', text: 'Competitions, scholarships, dean\'s list.' },
   ]
@@ -341,8 +343,8 @@ function StartCard({ onGo }) {
     <Card>
       <div className="px-4 sm:px-8 py-8">
         <p className="text-xl font-semibold tracking-tight text-slate-900">Add what you've done to see your matches</p>
-        <p className="text-sm text-slate-500 mt-1">SkillMap turns your modules, projects, certificates and awards into skills, then compares them with live jobs.</p>
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3 mt-6">
+        <p className="text-sm text-slate-500 mt-1">SkillMap turns your modules, projects, experience, certificates and awards into skills, then compares them with live jobs.</p>
+        <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-3 mt-6">
           {steps.map(s => (
             <button key={s.tab} type="button" onClick={() => onGo(s.tab)}
               className="text-left border border-slate-200 rounded-xl p-4 hover:border-blue-300 hover:bg-blue-50/40 transition">
@@ -443,9 +445,13 @@ export default function Dashboard() {
     // Wide screens: fills the window under the header (her request: no blank strip at the bottom)
     <div className="min-h-screen lg:h-screen bg-slate-50 flex flex-col">
       <PageHeader>
-        <div className="pb-5 pt-1">
-          <p className="text-[11px] font-semibold text-blue-600 uppercase tracking-widest mb-2">Dashboard</p>
-          <h1 className="text-2xl font-semibold tracking-tight text-slate-900">{greeting(firstName)} 👋</h1>
+        <div className="pb-5 pt-1 flex flex-wrap items-end justify-between gap-4">
+          <div>
+            <p className="text-[11px] font-semibold text-blue-600 uppercase tracking-widest mb-2">Dashboard</p>
+            <h1 className="text-2xl font-semibold tracking-tight text-slate-900">{greeting(firstName)} 👋</h1>
+          </div>
+          {/* 21 Oct: shown until a student on an older privacy notice agrees to the new one */}
+          <PrivacyBanner />
         </div>
       </PageHeader>
 

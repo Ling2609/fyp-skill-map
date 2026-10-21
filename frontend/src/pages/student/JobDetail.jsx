@@ -87,7 +87,35 @@ function ApplyInfo({ a, company, closed: closedCached, taking: takingCached, dec
 // 21 Oct (her idea; research: references.md "Checking what the employer sees before applying"): Apply asks first, in
 // a small pop-up beside the button. A SkillMap application can't be taken back and shares her profile, so a confirm
 // is justified (NN/g); the buttons say what they do. "Check what they'll see" opens /jobs/:jobId/check.
-function ApplyConfirm({ job, summary, onApply, onClose }) {
+// 21 Oct (her pick, mock tip.png): one tip, only from what THIS ad asks for. First the required skills the profile
+// lacks ("if you've used them", so nobody is pushed to claim a skill), else a language the employer ticked in Post a
+// Job that her profile doesn't list. Posts have no work-experience field, so no experience tip (it would be a guess).
+// Never blocks applying.
+const listOf = (xs) => xs.length <= 2 ? xs.join(' and ') : `${xs.slice(0, -1).join(', ')} and ${xs[xs.length - 1]}`
+
+function ApplyTip({ job, missing }) {
+  const [mine, setMine] = useState(null)        // her languages, from Profile & privacy
+  const asks = job.requirements?.languages?.languages || []
+  useEffect(() => {
+    if (missing.length || !asks.length) return
+    api.get('/profile/about').then(res => setMine(res.data.languages || [])).catch(() => setMine(null))
+  }, [missing.length, asks.length])
+  const cls = 'mt-3 text-sm text-amber-900 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2'
+  if (missing.length) {
+    const names = missing.slice(0, 3)
+    return <p className={cls}><b className="font-semibold">Tip:</b> this ad asks for {listOf(names)}{missing.length > 3 && ` and ${missing.length - 3} more`},
+      {' '}which {missing.length === 1 ? "isn't" : "aren't"} on your profile. If you've used {missing.length === 1 ? 'it' : 'them'} in a project or job,{' '}
+      <Link to="/profile?tab=projects" className="font-medium text-blue-700 underline">add it first</Link>.</p>
+  }
+  if (!mine) return null
+  const have = new Set(mine.map(l => l.language.toLowerCase()))
+  const lacking = asks.filter(l => !have.has(l.toLowerCase()))
+  if (!lacking.length) return null
+  return <p className={cls}><b className="font-semibold">Tip:</b> this ad asks for {listOf(lacking)}, which {lacking.length === 1 ? "isn't" : "aren't"} on
+    your profile. <Link to="/profile/settings" className="font-medium text-blue-700 underline">Add your languages</Link></p>
+}
+
+function ApplyConfirm({ job, summary, missing = [], onApply, onClose }) {
   const box = useRef(null)
   const navigate = useNavigate()
   useEffect(() => {
@@ -99,7 +127,7 @@ function ApplyConfirm({ job, summary, onApply, onClose }) {
   }, [onClose])
   return (
     <div ref={box} role="dialog" aria-label={`Apply to ${job.company}?`}
-      className="absolute right-0 top-full mt-2 z-40 w-[22rem] bg-white border border-slate-200 rounded-xl shadow-lg p-4 text-left">
+      className="absolute right-0 top-full mt-2 z-40 w-[28rem] max-w-[calc(100vw-2rem)] bg-white border border-slate-200 rounded-xl shadow-lg p-4 text-left">
       {/* 21 Oct (her review): × in the top right corner, level with the title */}
       <div className="flex items-start justify-between gap-3">
         <p className="text-sm font-semibold text-slate-900 leading-5">Apply to {job.company}?</p>
@@ -109,6 +137,7 @@ function ApplyConfirm({ job, summary, onApply, onClose }) {
       <p className="text-sm text-slate-600 mt-1">They'll see your SkillMap profile and your match for {job.job_title}
         {summary ? `: ${summary.matched_skills} of ${summary.job_skills_total} required skills` : ''}. Your email, phone and other
         contact details only if they shortlist you. You can't take an application back once sent.</p>
+      <ApplyTip job={job} missing={missing} />
       <div className="mt-3 flex justify-end gap-2">
         <button type="button" onClick={() => navigate(`/jobs/${encodeURIComponent(job.job_id)}/check`)}
           className="text-sm font-medium text-slate-700 border border-slate-300 rounded-lg px-3 py-1.5 hover:bg-slate-50">Check what they'll see</button>
@@ -119,7 +148,7 @@ function ApplyConfirm({ job, summary, onApply, onClose }) {
   )
 }
 
-function ApplyAction({ a, closed: closedCached, taking: takingCached, fromApps, job, summary }) {
+function ApplyAction({ a, closed: closedCached, taking: takingCached, fromApps, job, summary, missing }) {
   const { app, busy, error, apply, now } = a
   const [asking, setAsking] = useState(false)
   const closed = now ? now.closed : closedCached
@@ -146,7 +175,7 @@ function ApplyAction({ a, closed: closedCached, taking: takingCached, fromApps, 
             className="text-sm font-semibold text-white bg-blue-700 hover:bg-blue-800 px-4 py-2 rounded-lg transition disabled:opacity-50">
             {busy ? <Busy>Applying…</Busy> : 'Apply with my SkillMap profile'}
           </button>
-          {asking && job && <ApplyConfirm job={job} summary={summary} onApply={apply} onClose={() => setAsking(false)} />}
+          {asking && job && <ApplyConfirm job={job} summary={summary} missing={missing} onApply={apply} onClose={() => setAsking(false)} />}
           {/* 19 Oct (her pick): what to know before applying moved under the title (ApplyInfo) */}
         </>
       )}
@@ -347,7 +376,7 @@ export default function JobDetail() {
                 )}
               </p>
             </div>
-            {gap?.job?.source === 'employer' && <ApplyAction a={skillmapApp} job={gap.job} summary={gap.summary} fromApps={backLabel === 'My Applications'} closed={gap.job.closed}
+            {gap?.job?.source === 'employer' && <ApplyAction a={skillmapApp} job={gap.job} summary={gap.summary} missing={(gap.missing_skills || []).map(m => skillName(m.job_skill))} fromApps={backLabel === 'My Applications'} closed={gap.job.closed}
               taking={gap.job.taking_applications} />}
             {gap?.job?.source === 'live' && gap.job.source_url && (
               <div className="shrink-0 flex flex-col items-start sm:items-end gap-1">

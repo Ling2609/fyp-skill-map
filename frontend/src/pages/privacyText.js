@@ -198,6 +198,7 @@ export const VERSIONS = [
   {
     date: '2026-10-21',
     label: { en: '21 October 2026', ms: '21 Oktober 2026' },
+    short: 'work experience, languages and CGPA.',
     changes: { en: 'Added work experience, activities, languages and an optional CGPA (shown to employers only if you switch it on).',
                ms: 'Ditambah pengalaman kerja, aktiviti, bahasa dan PNGK pilihan (ditunjukkan kepada majikan hanya jika anda menghidupkannya).' },
     text: { inShort: IN_SHORT, table: DATA_TABLE_1021, sections: SECTIONS_1021 },

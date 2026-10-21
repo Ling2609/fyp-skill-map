@@ -3,7 +3,6 @@ import { NavLink, useLocation, useNavigate } from 'react-router-dom'
 import api from '../api'
 import { useSidebar } from './SidebarContext'
 import { useAuth } from '../context/useAuth'
-import { PrivacyReminder } from './PrivacyUpdate'
 
 const NAV_ITEMS = [
   {
@@ -236,8 +235,6 @@ export default function Sidebar() {
         ))}
       </nav>
 
-      {/* 21 Oct: a newer privacy notice not agreed to yet (components/PrivacyUpdate.jsx) */}
-      <PrivacyReminder collapsed={collapsed} />
       {/* User menu */}
       <div ref={menuRef} className="relative px-2 pb-4 pt-2 border-t border-slate-100">
         {menuOpen && (
