@@ -275,7 +275,7 @@ function Intakes({ programmeId, intakes, setIntakes, onOpen }) {
     // the add form beside the list (same side-by-side layout as Modules), so the page uses its full width
     // only the table scrolls (her 10 Oct): the row fills the space under the header, the table card scrolls inside it
     <div className="flex-1 min-h-0 flex items-start gap-4">
-      <form onSubmit={add} className="w-96 shrink-0 bg-white border border-slate-200 rounded-xl p-5 flex flex-col gap-3">
+      <form onSubmit={add} className="w-[26rem] shrink-0 bg-white border border-slate-200 rounded-xl p-5 flex flex-col gap-3">
         <h2 className="text-sm font-semibold text-slate-700">Add an intake</h2>
         <div>
           <label htmlFor="intake-code" className="block text-xs font-medium text-slate-600 mb-1">Intake code (Year 1)</label>
@@ -356,8 +356,9 @@ function Intakes({ programmeId, intakes, setIntakes, onOpen }) {
   )
 }
 
+// 21 Oct (her review: too wide a gap before the actions): Students and the actions get just the width they need
 const INTAKE_COLS = (
-  <colgroup><col className="w-[20%]" /><col className="w-[15%]" /><col className="w-[28%]" /><col className="w-[12%]" /><col className="w-[25%]" /></colgroup>
+  <colgroup><col className="w-40" /><col className="w-28" /><col /><col className="w-24" /><col className="w-32" /></colgroup>
 )
 
 // ── Add a module to the list: from the catalogue (keeps its description and skills), or a new one ─────────────────
