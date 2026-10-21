@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import api from '../../api'
 import { DuplicateAsk, Field, FormButtons, SkillChecker, SkillChip } from './profileParts'
 import { MIN_DESCRIPTION, errText, inputCls, mergeFound, projectChips, projectKey, splitSkills, studyComplete } from './profileUtils'
@@ -473,6 +473,9 @@ export function StudyForm({ onDone, onCancel, onDirty }) {
   // she has seen which ones. The first save answers 409 with the list; she confirms here, in the form (her pop-up
   // guide: a confirm for what can't be undone, with buttons that say what they do).
   const [leaving, setLeaving] = useState(null)      // { message, modules: [{ code, name, grade }] }
+  const keepBtn = useRef(null)
+  // the safe choice gets the focus, without the browser scrolling the pop-up down to it (21 Oct)
+  useEffect(() => { if (leaving) keepBtn.current?.focus({ preventScroll: true }) }, [leaving])
   const save = async (e, removeGrades = false) => {
     e?.preventDefault()
     setBusy(true); setError('')
@@ -493,9 +496,12 @@ export function StudyForm({ onDone, onCancel, onDirty }) {
       {leaving ? (
         <div role="alert" className="bg-amber-50 border border-amber-200 rounded-xl p-3.5">
           <p className="text-sm font-medium text-amber-900">{leaving.message} Their grades will be removed from your profile:</p>
-          {/* 20 Oct (her review: crowded): a small table, module | code | grade, in the wider pop-up */}
-          <table className="mt-2.5 w-full text-sm text-slate-700 bg-white rounded-lg border border-amber-100">
-            <thead><tr className="text-xs text-slate-500 text-left">
+          {/* 20 Oct (her review: crowded): a small table, module | code | grade, in the wider pop-up.
+              21 Oct (her review: with 15 modules the pop-up opened scrolled to the bottom, the programme out of sight):
+              the table scrolls inside its own box, its header stays, and the pop-up keeps its top in view */}
+          <div className="mt-2.5 max-h-56 overflow-y-auto bg-white rounded-lg border border-amber-100">
+          <table className="w-full text-sm text-slate-700">
+            <thead className="sticky top-0 bg-white"><tr className="text-xs text-slate-500 text-left">
               <th className="font-medium px-3 py-1.5">Module</th><th className="font-medium px-3 py-1.5">Code</th><th className="font-medium px-3 py-1.5 text-right">Grade</th>
             </tr></thead>
             <tbody className="divide-y divide-amber-50">
@@ -505,8 +511,9 @@ export function StudyForm({ onDone, onCancel, onDirty }) {
               ))}
             </tbody>
           </table>
+          </div>
           <div className="mt-3 flex flex-wrap justify-end gap-2">
-            <button type="button" onClick={onCancel} autoFocus
+            <button type="button" onClick={onCancel} ref={keepBtn}
               className="text-sm font-medium text-slate-700 border border-slate-300 bg-white rounded-lg px-3 py-1.5 hover:bg-slate-50">Keep my programme</button>
             <button type="button" disabled={busy} onClick={() => save(null, true)}
               className="text-sm font-medium text-white bg-rose-600 hover:bg-rose-700 rounded-lg px-3 py-1.5 disabled:opacity-60">{busy ? 'Saving…' : 'Change and remove grades'}</button>

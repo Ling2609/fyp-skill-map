@@ -70,14 +70,13 @@ function ListCard({ title, sub, items, render, footer, empty, fill, open, onOpen
     setFits(all >= rows.length ? rows.length : count(el.clientHeight - SEE_ALL_ROOM))
     setMeasuring(false)
   }, [fill, open, measuring, items.length])
-  // measured again whenever the space changes (window resized, a card above opened or closed)
+  // measured again when the window is resized (a card closing "See all" remounts the column's cards, see Column).
+  // Not on the card's own size: hiding rows can shrink a short profile's cards, which would start it again
   useLayoutEffect(() => {
-    const el = box.current
-    if (!el || !fill || open) return
-    let last = el.clientHeight
-    const ro = new ResizeObserver(() => { if (el.clientHeight !== last) { last = el.clientHeight; setMeasuring(true) } })
-    ro.observe(el)
-    return () => ro.disconnect()
+    if (!fill || open) return
+    const again = () => setMeasuring(true)
+    window.addEventListener('resize', again)
+    return () => window.removeEventListener('resize', again)
   }, [fill, open])
   const shown = open ? items.length : fill ? (measuring ? items.length : fits) : Math.min(limit, items.length)
   const hidden = items.length - shown
@@ -107,13 +106,14 @@ function ListCard({ title, sub, items, render, footer, empty, fill, open, onOpen
 // One column: the last card fills to the bottom; "See all" on a card gives it the whole column
 function Column({ children }) {
   const [openKey, setOpenKey] = useState(null)
+  const [round, setRound] = useState(0)          // bumped on "Show less": the cards start again and measure afresh
   const cards = Children.toArray(children).filter(isValidElement)
   const shown = openKey ? cards.filter(c => c.key === openKey) : cards
   return (
     <div className="min-h-0 flex flex-col gap-4">
       {shown.map((c, i) => cloneElement(c, {
-        fill: i === shown.length - 1, open: openKey === c.key,
-        onOpen: () => setOpenKey(c.key), onClose: () => setOpenKey(null),
+        key: `${c.key}-${round}`, fill: i === shown.length - 1, open: openKey === c.key,
+        onOpen: () => setOpenKey(c.key), onClose: () => { setOpenKey(null); setRound(n => n + 1) },
       }))}
     </div>
   )
@@ -159,7 +159,11 @@ export function ApplicantCards({ s, fit, withFit = true, you }) {
   const experiences = s.experiences || []
 
   return (
-    <div className="lg:h-full grid gap-4 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1.2fr)_minmax(0,1fr)]">
+    // 21 Oct (her review of a short profile: big empty cards): the columns are as tall as the longest one's content,
+    // never more than the screen, and still end on one line; only when there is more than fits do the cards measure
+    // whole rows and show "See all"
+    <div className="lg:max-h-full lg:flex lg:flex-col">
+    <div className="lg:min-h-0 grid gap-4 lg:grid-rows-[minmax(0,1fr)] lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1.2fr)_minmax(0,1fr)]">
       <Column>
         {withFit ? (
           <ListCard key="fit" title={fit ? `For this job: ${fit.have} of ${fit.total} required skills` : 'For this job'}
@@ -231,6 +235,7 @@ export function ApplicantCards({ s, fit, withFit = true, you }) {
             unit="skills" render={strengthRow} />
         )}
       </Column>
+    </div>
     </div>
   )
 }
