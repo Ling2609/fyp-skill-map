@@ -109,6 +109,10 @@ export default function EmployerDashboard() {
   const sum = data?.summary
   const noJobs = sum && sum.jobs === 0
   const steps = data ? nextSteps(data) : []
+  // 21 Oct: is anything late or waiting long, and which open job decides soonest (for the "Nothing urgent" line)
+  const urgent = data && (data.attention.waiting_long.length > 0 || data.attention.quiet_jobs.length > 0 || data.attention.past_date?.length > 0)
+  const nextDate = data?.open_jobs.filter(j => j.decide_by).map(j => ({ ...j, days: daysUntil(j.decide_by) }))
+    .filter(j => j.days >= 0).sort((a, b) => a.days - b.days)[0]
   const anyApplicants = data?.open_jobs.some(j => Object.values(j.counts).some(n => n > 0))
 
   return (
@@ -224,6 +228,14 @@ export default function EmployerDashboard() {
                     </li>
                   )} />
 
+              )}
+              {/* 21 Oct (her review: blank space once the tips hide after people apply): when nothing is late or waiting
+                  long, say so, with the nearest decision date, so the card reads "on track" rather than empty */}
+              {steps.length === 0 && data.to_review.length > 0 && !urgent && nextDate && (
+                <p className="mt-auto border-t border-slate-100 px-5 py-3 text-sm text-slate-600">
+                  <span className="font-medium text-emerald-700">✓ Nothing urgent.</span> Your next decision date: <b className="font-semibold text-slate-800">{nextDate.title}</b>,{' '}
+                  {fmtDay(nextDate.decide_by)} ({nextDate.days === 0 ? 'today' : `${nextDate.days} day${nextDate.days === 1 ? '' : 's'} left`}).
+                </p>
               )}
               {steps.length > 0 && (
                 <div className="border-t border-slate-100 px-5 py-3">
