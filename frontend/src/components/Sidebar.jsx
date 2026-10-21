@@ -159,7 +159,9 @@ export default function Sidebar() {
     <div className={`${collapsed ? 'w-14' : 'w-48'} bg-white border-r border-slate-200 flex flex-col h-screen fixed left-0 top-0 z-10 transition-all duration-200`}>
 
       {/* Logo + collapse */}
-      <div className="px-3 py-4 border-b border-slate-100 flex items-center justify-between min-h-15">
+      {/* 21 Oct (her review: collapsed, the logo was squeezed into a rectangle beside the arrow): collapsed, the logo
+          and the expand arrow stack, so the logo keeps its square */}
+      <div className={`px-3 py-4 border-b border-slate-100 flex items-center min-h-15 ${collapsed ? 'flex-col gap-2' : 'justify-between'}`}>
         {!collapsed && (
           <div className="flex items-center gap-2.5 flex-1 min-w-0">
             <div className="w-7 h-7 bg-blue-600 rounded-lg flex items-center justify-center shrink-0">
@@ -174,7 +176,7 @@ export default function Sidebar() {
           </div>
         )}
         {collapsed && (
-          <div className="w-7 h-7 bg-blue-600 rounded-lg flex items-center justify-center mx-auto">
+          <div className="w-7 h-7 bg-blue-600 rounded-lg flex items-center justify-center shrink-0">
             <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
             </svg>
