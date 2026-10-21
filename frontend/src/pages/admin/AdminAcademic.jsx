@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import api from '../../api'
 import PageHeader from '../../components/PageHeader'
@@ -255,6 +255,20 @@ function Intakes({ programmeId, intakes, setIntakes, onOpen }) {
   const [copyFrom, setCopyFrom] = useState(intakes[0]?.id ?? '')
   const [error, setError] = useState('')
   const [busy, setBusy] = useState(false)
+  // 21 Oct (her review: gaps between columns uneven): the rows' table lays its columns out by their content, so spare
+  // width is shared out evenly; the title strip above copies those widths
+  const body = useRef(null)
+  const strip = useRef(null)
+  const [widths, setWidths] = useState([])
+  useLayoutEffect(() => {
+    const t = body.current
+    if (!t) return
+    const read = () => setWidths([...(t.rows[0]?.cells || [])].map(c => c.getBoundingClientRect().width))
+    read()
+    const ro = new ResizeObserver(read)
+    ro.observe(t)
+    return () => ro.disconnect()
+  }, [intakes])
 
   const add = (e) => {
     e.preventDefault(); setBusy(true); setError('')
@@ -274,8 +288,10 @@ function Intakes({ programmeId, intakes, setIntakes, onOpen }) {
   return (
     // the add form beside the list (same side-by-side layout as Modules), so the page uses its full width
     // only the table scrolls (her 10 Oct): the row fills the space under the header, the table card scrolls inside it
-    <div className="flex-1 min-h-0 flex items-start gap-4">
-      <form onSubmit={add} className="w-[26rem] shrink-0 bg-white border border-slate-200 rounded-xl p-5 flex flex-col gap-3">
+    // 21 Oct (her report: a narrow window cut the table off): below laptop width the form sits above the table and the
+    // page scrolls; the table scrolls sideways if it still doesn't fit (its title strip follows)
+    <div className="flex-1 min-h-0 flex flex-col lg:flex-row lg:items-start gap-4 overflow-y-auto lg:overflow-visible">
+      <form onSubmit={add} className="w-full lg:w-[26rem] shrink-0 bg-white border border-slate-200 rounded-xl p-5 flex flex-col gap-3">
         <h2 className="text-sm font-semibold text-slate-700">Add an intake</h2>
         <div>
           <label htmlFor="intake-code" className="block text-xs font-medium text-slate-600 mb-1">Intake code (Year 1)</label>
@@ -301,26 +317,30 @@ function Intakes({ programmeId, intakes, setIntakes, onOpen }) {
           className="px-4 py-2 text-sm font-medium rounded-lg bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-40">Add intake</button>
         <p className="text-xs text-slate-500">Change the copied list with Edit list; other intakes keep their own lists.</p>
       </form>
-      <div className="flex-1 min-w-0 self-stretch flex flex-col">
+      <div className="shrink-0 lg:shrink lg:flex-1 min-w-0 lg:self-stretch flex flex-col">
       {/* 21 Oct (her report): the column titles stay outside the scrolling part, so the scrollbar and the rows start
           under them (as on Users) */}
       <div className="min-h-0 flex flex-col bg-white border border-slate-200 rounded-xl overflow-hidden">
-        <div aria-hidden="true" className="shrink-0 overflow-hidden [scrollbar-gutter:stable] bg-blue-100">
-          <table className="w-full table-fixed text-xs">
-            {INTAKE_COLS}
+        <div ref={strip} aria-hidden="true" className="shrink-0 overflow-hidden [scrollbar-gutter:stable] bg-blue-100">
+          <table className="w-full min-w-[36rem] table-fixed text-xs" style={widths.length ? { width: widths.reduce((a, b) => a + b, 0) } : undefined}>
+            <colgroup>{TITLES.map((n, k) => <col key={k} style={widths[k] ? { width: widths[k] } : undefined} />)}</colgroup>
             <thead>
               <tr className="text-left text-blue-900">
-                {['Intake', 'Starts', 'Module list', 'Students', ''].map((n, k) => <th key={k} className="font-semibold uppercase tracking-wide px-3 py-2.5">{n}</th>)}
+                {TITLES.map((n, k) => <th key={k} className="font-semibold uppercase tracking-wide px-3 py-2.5">{n}</th>)}
               </tr>
             </thead>
           </table>
         </div>
-        <div className="min-h-0 overflow-y-auto [scrollbar-gutter:stable]">
-        <table className="w-full table-fixed text-sm">
-          {INTAKE_COLS}
-          {/* real column titles for screen readers; the visible ones are the strip above */}
+        <div className="min-h-0 overflow-auto [scrollbar-gutter:stable]"
+          onScroll={e => { if (strip.current) strip.current.scrollLeft = e.currentTarget.scrollLeft }}>
+        <table ref={body} className="w-full min-w-[36rem] text-sm">
+          {/* real column titles for screen readers; the visible ones are the strip above. Each holds its title's
+              width (invisible), so a column is never narrower than its title */}
           <thead>
-            <tr>{['Intake', 'Starts', 'Module list', 'Students', 'Actions'].map(n => <th key={n} scope="col" className="p-0 h-0"><span className="sr-only">{n}</span></th>)}</tr>
+            <tr>{TITLES.map((n, k) => (
+              <th key={k} scope="col" className="px-3 py-0 h-0 leading-[0] text-xs font-semibold uppercase tracking-wide whitespace-nowrap">
+                <span className="invisible" aria-hidden="true">{n}</span><span className="sr-only">{n || 'Actions'}</span></th>
+            ))}</tr>
           </thead>
           <tbody className="divide-y divide-slate-100">
             {intakes.length === 0 && <tr><td colSpan={5} className="px-4 py-5 text-slate-500">No intakes yet. Add the first one; it copies the programme's list.</td></tr>}
@@ -339,7 +359,7 @@ function Intakes({ programmeId, intakes, setIntakes, onOpen }) {
                     : 'First intake'}</span>
                 </td>
                 <td className="px-3 py-3 text-slate-700 tabular-nums">{i.students}</td>
-                <td className="px-3 py-3 text-right whitespace-nowrap">
+                <td className="px-3 py-3 whitespace-nowrap">
                   <button type="button" onClick={() => onOpen(i)} className="text-sm text-blue-700 hover:underline">Edit list</button>
                   {i.students === 0 && (
                     <button type="button" onClick={() => remove(i)} className="ml-3 text-sm text-rose-700 hover:underline">Delete</button>
@@ -356,10 +376,7 @@ function Intakes({ programmeId, intakes, setIntakes, onOpen }) {
   )
 }
 
-// 21 Oct (her review: too wide a gap before the actions): Students and the actions get just the width they need
-const INTAKE_COLS = (
-  <colgroup><col className="w-40" /><col className="w-28" /><col /><col className="w-24" /><col className="w-32" /></colgroup>
-)
+const TITLES = ['Intake', 'Starts', 'Module list', 'Students', '']
 
 // ── Add a module to the list: from the catalogue (keeps its description and skills), or a new one ─────────────────
 function AddModule({ scope, scopeLabel, onAdded, onNew, onCancel }) {

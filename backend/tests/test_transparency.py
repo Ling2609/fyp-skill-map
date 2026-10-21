@@ -90,6 +90,21 @@ def test_several_at_once_all_or_nothing(client, users):
     assert client.post("/employer/applications/bulk", headers=h, json={"ids": [a1], "status": "accepted"}).status_code == 400
 
 
+def test_shortlist_several_only_moves_those_at_applied(client, users):
+    """21 Oct (her question): several can be shortlisted at once; one already Accepted isn't moved back."""
+    employer = users.employer()
+    job = _post(client, users, employer).json()
+    a1, a2, a3 = (_apply(client, users, users.student(), job) for _ in range(3))
+    h = users.h(employer)
+    client.patch(f"/employer/applications/{a3}", headers=h, json={"status": "accepted"})
+    r = client.post("/employer/applications/bulk", headers=h, json={"ids": [a1, a2, a3], "status": "shortlisted"})
+    assert r.status_code == 200 and r.json()["updated"] == 2
+    got = dict(sql(users.db, "select id, status from applications where id in (:a, :b, :c)", a=a1, b=a2, c=a3).all())
+    assert got == {a1: "shortlisted", a2: "shortlisted", a3: "accepted"}
+    # shortlisting shares the contact details, as one at a time does
+    assert client.get(f"/employer/applications/{a1}", headers=h).json()["student"]["contact"] is not None
+
+
 def test_closing_filled_through_skillmap_needs_the_hire(client, users):
     employer, student = users.employer(), users.student()
     job = _post(client, users, employer).json()

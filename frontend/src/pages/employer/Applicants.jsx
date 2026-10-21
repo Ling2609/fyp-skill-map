@@ -13,7 +13,7 @@ import { CardSkeleton, LoadingLabel } from '../../components/Skeleton'
 // Employer > one job's applicants (11 Oct, batch 2; her pick 3A "applicants as a list"). Best match first: the
 // share of the job's required skills each student has, the same match the student sees. Changing a status shows on
 // the student's My Applications page.
-// 14 Oct (transparency flow): tick several -> Not selected with one optional reason (each student sees their own
+// 14 Oct (transparency flow): tick several -> Not selected (21 Oct: or Shortlist) with one optional reason (each student sees their own
 // missing skills for "missing skills"); the decision date and the numbers students see are in the header; contact
 // details appear only after shortlisting.
 const WAITING = ['applied', 'shortlisted']
@@ -25,7 +25,7 @@ export default function Applicants() {
   const [tab, setTab] = useState('all')
   const [error, setError] = useState('')
   const [picked, setPicked] = useState([])          // application ids ticked
-  const [askMany, setAskMany] = useState(false)
+  const [askMany, setAskMany] = useState(null)      // 'rejected' | 'shortlisted': the action being confirmed
   const [savingMany, setSavingMany] = useState(false)
   const [notice, setNotice] = useState('')
 
@@ -34,14 +34,21 @@ export default function Applicants() {
   useEffect(() => { load() }, [jobId])   // eslint-disable-line react-hooks/exhaustive-deps
 
   const toggle = (id) => setPicked(p => p.includes(id) ? p.filter(x => x !== id) : [...p, id])
-  const notSelectedMany = (why) => {
+  // 21 Oct (her question): Shortlist several as well as Not selected (references.md "Actions on several applicants
+  // at once"); only those still at Applied are shortlisted, and it asks first because contact details are shared
+  const toShortlist = (data?.applicants || []).filter(p => picked.includes(p.id) && p.status === 'applied').length
+  const many = (why) => {
+    const st = askMany
     setSavingMany(true)
-    api.post('/employer/applications/bulk', { ids: picked, status: 'rejected', ...why })
-      .then(() => {
-        setNotice(`${picked.length} marked Not selected. They see it on My Applications${why.reason ? ', with your reason' : ''}.`)
-        setPicked([]); setAskMany(false); load(); window.dispatchEvent(new Event(ADMIN_COUNTS_CHANGED))
+    api.post('/employer/applications/bulk', { ids: picked, status: st, ...(st === 'rejected' ? why : {}) })
+      .then(res => {
+        const n = res.data.updated
+        setNotice(st === 'rejected'
+          ? `${n} marked Not selected. They see it on My Applications${why.reason ? ', with your reason' : ''}.`
+          : `${n} shortlisted. Their email and phone now show on their profiles.`)
+        setPicked([]); setAskMany(null); load(); window.dispatchEvent(new Event(ADMIN_COUNTS_CHANGED))
       })
-      .catch(err => { setAskMany(false); setError(errText(err, "Couldn't save. Try again.")) })
+      .catch(err => { setAskMany(null); setError(errText(err, "Couldn't save. Try again.")) })
       .finally(() => setSavingMany(false))
   }
 
@@ -98,8 +105,12 @@ export default function Applicants() {
             {picked.length > 0 && (
               <div className="flex items-center gap-3 bg-blue-50 border border-blue-200 rounded-xl px-4 py-2.5 text-sm">
                 <span className="font-medium text-slate-800">{picked.length} selected</span>
-                <button type="button" onClick={() => setAskMany(true)}
-                  className="ml-auto text-sm font-medium px-3.5 py-1.5 rounded-lg bg-rose-600 text-white hover:bg-rose-700">Mark as Not selected</button>
+                {toShortlist > 0 && (
+                  <button type="button" onClick={() => setAskMany('shortlisted')}
+                    className="ml-auto text-sm font-medium px-3.5 py-1.5 rounded-lg bg-blue-600 text-white hover:bg-blue-700">Shortlist{toShortlist < picked.length ? ` ${toShortlist}` : ''}</button>
+                )}
+                <button type="button" onClick={() => setAskMany('rejected')}
+                  className={`${toShortlist > 0 ? '' : 'ml-auto '}text-sm font-medium px-3.5 py-1.5 rounded-lg bg-rose-600 text-white hover:bg-rose-700`}>Mark as Not selected</button>
                 <button type="button" onClick={() => setPicked([])} className="text-sm text-slate-600 hover:text-slate-900">Clear</button>
               </div>
             )}
@@ -156,10 +167,15 @@ export default function Applicants() {
         )}
       </div>
       {status.ui}
-      {askMany && <ConfirmDecision d={{ action: 'Mark as Not selected', danger: true }} busy={savingMany}
+      {askMany === 'rejected' && <ConfirmDecision d={{ action: 'Mark as Not selected', danger: true }} busy={savingMany}
         title={`Mark ${picked.length} ${picked.length === 1 ? 'applicant' : 'applicants'} as Not selected?`}
         text={<>They will see <b>"Not selected"</b> for {job.title} on their My Applications page straight away.</>}
-        onConfirm={notSelectedMany} onCancel={() => setAskMany(false)} />}
+        onConfirm={many} onCancel={() => setAskMany(null)} />}
+      {askMany === 'shortlisted' && <ConfirmDecision d={{ action: 'Shortlist' }} busy={savingMany}
+        title={`Shortlist ${toShortlist} ${toShortlist === 1 ? 'applicant' : 'applicants'}?`}
+        text={<>They will see <b>"Shortlisted"</b> for {job.title} on their My Applications page, and their email and
+          phone will show on their profiles for you.{toShortlist < picked.length ? ' Only the ones still at Applied are shortlisted.' : ''}</>}
+        onConfirm={many} onCancel={() => setAskMany(null)} />}
     </div>
   )
 }

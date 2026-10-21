@@ -520,11 +520,19 @@ class BulkIn(BaseModel):
 @router.post("/applications/bulk")
 def set_status_many(data: BulkIn, employer: User = Depends(require_employer), db: Session = Depends(get_db)):
     """14 Oct: tick several applicants -> Not selected, with one optional reason (each student sees their own missing
-    skills for "missing skills"). All or nothing: every id must be one of this employer's applications."""
-    if data.status != "rejected":
-        raise HTTPException(status_code=400, detail="Only Not selected can be given to several applicants at once.")
+    skills for "missing skills"). All or nothing: every id must be one of this employer's applications.
+    21 Oct (her question; references.md "Actions on several applicants at once"): Shortlisted too, as Greenhouse,
+    Workable, Kula, Homerun and 100Hires move several candidates to a stage at once. Only applications still at Applied
+    are shortlisted (a ticked Accepted one isn't moved back). Accepted stays one at a time: none of those tools hires
+    in bulk, and an offer is a decision about one person."""
+    if data.status not in ("rejected", "shortlisted"):
+        raise HTTPException(status_code=400, detail="Only Shortlisted or Not selected can be given to several applicants at once.")
     rows = [_own_application(i, employer, db) for i in dict.fromkeys(data.ids)]
-    one = StatusIn(status="rejected", reason=data.reason, note=data.note)
+    if data.status == "shortlisted":
+        rows = [r for r in rows if r[0].status == "applied"]
+        one = StatusIn(status="shortlisted")
+    else:
+        one = StatusIn(status="rejected", reason=data.reason, note=data.note)
     for a, job, student in rows:
         _change_status(a, job, student, one, db)
     db.commit()

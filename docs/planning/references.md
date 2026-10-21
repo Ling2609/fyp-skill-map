@@ -1062,3 +1062,10 @@ Her request: show the student a clear process (instead of silence then a sudden 
 - Chameleon, Checklists (chameleon.io/patterns/checklists): about 5 items ("Users are likely to complete ~5 items"); show it open, closed ones go unopened; start with something done; explain each item's value; tick from what was really done.
 - Appcues docs: a reminder elsewhere for users whose checklist is still in progress (optional).
 - Built: "Your profile · 3 of 5 done" at the end of My Profile's tab row (LinkedIn: on the profile page; free space, no height), opening a 5-item checklist with one reason each; hidden with nothing added (the Dashboard start card asks) and once complete (LinkedIn). A Dashboard version was mocked first; she asked whether My Profile was better.
+
+## Actions on several applicants at once (21 Oct, opened; her question "why only Not selected?")
+- Greenhouse, "Move candidates to another stage in bulk" (support.greenhouse.io/hc/en-us/articles/360028064592): "advance or backtrack multiple candidates to the same stage"; all must be on the same job.
+- Workable (help.workable.com/hc/en-us/articles/7698460669463): bulk "Move to the next stage" and "Disqualify/revert candidates"; no bulk hire listed.
+- Kula (support.kula.ai/articles/1333653920): bulk move to stage, reject (with email), send email, tags; "Bulk actions follow the same access as the individual action they represent"; no bulk offer/hire.
+- Homerun (help.homerun.co/en/articles/4957778): move stage, disqualify "in one go", email; no hire. 100Hires: pipeline stages, disqualify with a reason; no hire.
+- Decided and built: bulk Shortlist added next to Not selected (only applications still at Applied move; it asks first and says email and phone will show); Accepted stays one at a time (no tool hires in bulk; an offer is about one person).
