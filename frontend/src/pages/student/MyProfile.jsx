@@ -2,6 +2,8 @@ import { useCallback, useEffect, useState } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import api from '../../api'
 import PageHeader from '../../components/PageHeader'
+import ProfileTracker from '../../components/ProfileTracker'
+import { doneFrom } from '../../components/profileDone'
 import { useAuth } from '../../context/useAuth'
 import { Modal } from './profileParts'
 import { StudyForm } from './profileForms'
@@ -153,7 +155,8 @@ export default function MyProfile() {
         <div className="relative">
         {leaveTo && <Popconfirm text="You have grade changes that aren't saved." confirmLabel="Leave without saving"
           cancelLabel="Stay and save" danger onConfirm={() => chooseTab(leaveTo, true)} onCancel={() => setLeaveTo(null)} />}
-        <div role="tablist" aria-label="Profile sections" className="flex flex-wrap gap-x-6 border-t border-slate-200 -mx-4 sm:-mx-8 px-4 sm:px-8">
+        <div className="flex flex-wrap items-center justify-between gap-x-6 border-t border-slate-200 -mx-4 sm:-mx-8 px-4 sm:px-8">
+        <div role="tablist" aria-label="Profile sections" className="flex flex-wrap gap-x-6">
           {TABS.map(t => {
             const active = tab === t.key
             return (
@@ -167,6 +170,10 @@ export default function MyProfile() {
               </button>
             )
           })}
+        </div>
+        {/* 21 Oct (her pick after research: LinkedIn shows its profile meter on the profile page and hides it once
+            complete): what's left to add, at the end of the tab row */}
+        <ProfileTracker done={doneFrom({ ...data, projects, experiences, certifications: certs, awards })} onGo={chooseTab} />
         </div>
         </div>
       </PageHeader>
