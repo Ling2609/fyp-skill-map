@@ -30,13 +30,14 @@ export function ApplicantHeading({ s, note }) {
     <>
       <div className="flex flex-wrap items-baseline gap-x-3 gap-y-0.5 mt-1">
         <h1 className="text-2xl font-semibold tracking-tight text-slate-900">{s.name}</h1>
+        {/* 21 Oct (her review): the links beside the name, as on My Profile */}
+        {links.map(([label, url]) =>
+          <a key={label} href={url} target="_blank" rel="noopener noreferrer" className="text-sm text-blue-700 hover:underline">{label} ↗</a>)}
         {s.headline && <p className="text-sm text-slate-500">{s.headline}</p>}
       </div>
       {s.about && <p className="text-sm text-slate-700 mt-1.5 whitespace-pre-line">{s.about}</p>}
-      <div className="mt-3 pt-3 border-t border-slate-300 flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1 text-sm">
+      <div className="mt-3 pt-3 border-t border-slate-300 text-sm">
         <p className="text-slate-600 min-w-0">{facts.map((f, i) => <span key={i}>{i > 0 && ' · '}{f}</span>)}</p>
-        {links.length > 0 && <p className="flex gap-4 shrink-0">{links.map(([label, url]) =>
-          <a key={label} href={url} target="_blank" rel="noopener noreferrer" className="text-blue-700 hover:underline">{label} ↗</a>)}</p>}
       </div>
       {s.contact ? (
         <p className="text-sm text-slate-700 mt-1">

@@ -1069,3 +1069,9 @@ Her request: show the student a clear process (instead of silence then a sudden 
 - Kula (support.kula.ai/articles/1333653920): bulk move to stage, reject (with email), send email, tags; "Bulk actions follow the same access as the individual action they represent"; no bulk offer/hire.
 - Homerun (help.homerun.co/en/articles/4957778): move stage, disqualify "in one go", email; no hire. 100Hires: pipeline stages, disqualify with a reason; no hire.
 - Decided and built: bulk Shortlist added next to Not selected (only applications still at Applied move; it asks first and says email and phone will show); Accepted stays one at a time (no tool hires in bulk; an offer is about one person).
+
+## Changing a job's requirements after people applied (21 Oct, opened; her question: is it unfair to those who applied?)
+- Indeed Employer Help, "How to edit a job" (read 12 Oct, above): for "Changes in requirements or responsibilities" create a new post instead of editing.
+- UW–Madison HR, "Job posting revisions guide" (hr.wisc.edu/hr-guides/for-hr-professionals/job-posting-revisions-guide): "may only make minor changes to a job posting"; "Significant changes may require you to cancel and start over"; narrowing education or qualifications needs a cancelled requisition and a new posting, with applicants notified; most allowed edits also need applicants notified and the deadline extended.
+- Circa, "Changing the job title and/or job information after the job has been posted" (ex-OFCCP Director Ellen Shong-Bergman): no rule forbids it, but cancel the original, keep its applicants' records, create a new requisition, "DO NOT 'move' any of the job seekers", invite earlier applicants to reapply.
+- LiveLaw on India's Supreme Court (public recruitment): "it is not open for an employer to change the qualifications prescribed in the advertisement midstream"; the right to be considered under the original advert is fixed when it is published.

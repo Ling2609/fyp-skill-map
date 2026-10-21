@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import api from '../../api'
 import PageHeader from '../../components/PageHeader'
@@ -14,6 +14,7 @@ import { Busy } from '../../components/Spinner'
 // /employer/jobs: their posts, open or closed, with applicant counts, View applicants and a ⋯ menu (Edit job, Close / Reopen; 13 Oct).
 // 14 Oct (transparency flow): each open job shows its decision date; the menu adds Stop new applications / Take
 // applications again and Move decision date (once); Close job asks why.
+const JOB_COLS = <colgroup><col /><col className="w-36" /><col className="w-48" /><col className="w-48" /><col className="w-52" /></colgroup>
 const fmtDate = (iso) => iso ? new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : ''
 
 function Waiting({ status, company }) {
@@ -175,6 +176,7 @@ export function MyJobs() {
   const open = (jobs || []).filter(j => j.status === 'open')
   const closed = (jobs || []).filter(j => j.status !== 'open')
   const shown = tab === 'open' ? open : closed
+  const strip = useRef(null)
 
   return (
     <>
@@ -214,21 +216,36 @@ export function MyJobs() {
                     ? 'bg-blue-600 border-blue-600 text-white' : 'bg-white border-slate-200 text-slate-600 hover:border-blue-300'}`}>{text}</button>
               ))}
             </div>
-            <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden">
+            {/* 21 Oct (her report: in a narrow window the Job column was squeezed to nothing; then "fixed header"): the
+                table keeps a minimum width; the column titles sit in their own strip and only the rows scroll under them,
+                up and down and, in a narrow window, sideways (the strip follows), as on the admin's Users page */}
+            <div className="min-h-0 flex flex-col bg-white border border-slate-200 rounded-2xl overflow-hidden">
               {/* 12 Oct (her review): the Job column takes the spare width; the others are fixed, so no wide gaps; every
                   column left-aligned and the actions are buttons. 20 Oct (her pick T2): no Status column (the tab already
                   says Open / Closed; a badge beside the title only for the special states); the decision date is its own
                   column with the days left (closed tab: when and why it closed); applicants show "to review" in blue */}
-              <table className="w-full text-sm table-fixed">
-                <colgroup><col /><col className="w-36" /><col className="w-48" /><col className="w-48" /><col className="w-52" /></colgroup>
-                <thead className="bg-slate-50 text-left text-xs font-semibold text-slate-500">
-                  <tr>
-                    <th className="px-5 py-3">Job</th>
-                    <th className="px-5 py-3">Applicants</th>
-                    <th className="px-5 py-3">{tab === 'open' ? 'Decide by' : 'Closed'}</th>
-                    <th className="px-5 py-3">Skills</th>
-                    <th className="px-5 py-3"><span className="sr-only">Actions</span></th>
-                  </tr>
+              <div ref={strip} aria-hidden="true" className="shrink-0 overflow-hidden [scrollbar-gutter:stable] bg-slate-50 border-b border-slate-100">
+                <table className="w-full min-w-[62rem] text-sm table-fixed">
+                  {JOB_COLS}
+                  <thead className="text-left text-xs font-semibold text-slate-500">
+                    <tr>
+                      <th className="px-5 py-3">Job</th>
+                      <th className="px-5 py-3">Applicants</th>
+                      <th className="px-5 py-3">{tab === 'open' ? 'Decide by' : 'Closed'}</th>
+                      <th className="px-5 py-3">Skills</th>
+                      <th className="px-5 py-3"></th>
+                    </tr>
+                  </thead>
+                </table>
+              </div>
+              <div className="min-h-0 overflow-auto [scrollbar-gutter:stable]"
+                onScroll={e => { if (strip.current) strip.current.scrollLeft = e.currentTarget.scrollLeft }}>
+              <table className="w-full min-w-[62rem] text-sm table-fixed">
+                {JOB_COLS}
+                {/* real column titles for screen readers; the visible ones are the strip above */}
+                <thead>
+                  <tr>{['Job', 'Applicants', tab === 'open' ? 'Decide by' : 'Closed', 'Skills', 'Actions'].map(n =>
+                    <th key={n} scope="col" className="p-0 h-0"><span className="sr-only">{n}</span></th>)}</tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100">
                   {shown.map(j => (
@@ -275,6 +292,7 @@ export function MyJobs() {
                   )}
                 </tbody>
               </table>
+              </div>
             </div>
           </>
         )}
