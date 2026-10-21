@@ -91,10 +91,12 @@ function Section({ title, sub, items, first, render, cols = 1, empty }) {
   const shown = all ? items : items.slice(0, limit)
   return (
     <section className="py-5 border-b border-slate-100 last:border-0">
-      <h2 className="text-[15px] font-semibold text-slate-900">{title}</h2>
-      {sub && <p className="text-xs text-slate-500 mt-0.5">{sub}</p>}
-      {!items.length ? <p className="text-sm text-slate-400 mt-1">{empty}</p> : (
-        <div className={`mt-2 grid gap-x-8 ${cols === 2 ? 'sm:grid-cols-2' : ''}`}>{shown.map((it, i) => <div key={i}>{render(it)}</div>)}</div>
+      {/* 21 Oct (her review: titles and content ran together): a larger title with a short blue mark, and more room
+          before the items */}
+      <h2 className="flex items-center gap-2 text-base font-semibold text-slate-900"><span aria-hidden="true" className="w-1 h-4 rounded-full bg-blue-600" />{title}</h2>
+      {sub && <p className="text-xs text-slate-500 mt-0.5 ml-3">{sub}</p>}
+      {!items.length ? <p className="text-sm text-slate-400 mt-2">{empty}</p> : (
+        <div className={`mt-3 grid gap-x-8 ${cols === 2 ? 'sm:grid-cols-2' : ''}`}>{shown.map((it, i) => <div key={i}>{render(it)}</div>)}</div>
       )}
       {items.length > limit && (
         <button type="button" onClick={() => setAll(v => !v)} className="mt-1.5 text-xs font-medium text-blue-700 hover:underline">
@@ -104,14 +106,27 @@ function Section({ title, sub, items, first, render, cols = 1, empty }) {
   )
 }
 
-// One group of skills in the match panel, with its own heading and count, so the kinds are easy to tell apart
-function Group({ title, note, tone, children, count }) {
-  const tones = { req: 'text-slate-900', nice: 'text-emerald-800', job: 'text-sky-800' }
+// A plain list with "Show N more ▾" (the panel's Also brings)
+function ShowMore({ items, first, render }) {
+  const [all, setAll] = useState(false)
+  const limit = items.length - first === 1 ? items.length : first
   return (
-    <div className="pt-4 first:pt-0">
-      <p className={`text-sm font-semibold ${tones[tone]}`}>{title} <span className="font-normal text-slate-400 tabular-nums">{count}</span></p>
-      {note && <p className="text-xs text-slate-500">{note}</p>}
-      <div className="mt-1.5">{children}</div>
+    <>
+      <div className="divide-y divide-slate-100">{(all ? items : items.slice(0, limit)).map((it, i) => <div key={i}>{render(it)}</div>)}</div>
+      {items.length > limit && <button type="button" onClick={() => setAll(v => !v)} className="mt-1.5 text-xs font-medium text-blue-700 hover:underline">
+        {all ? 'Show less ▴' : `Show ${items.length - limit} more ▾`}</button>}
+    </>
+  )
+}
+
+// One group of skills in the match panel, with its own heading and count, so the kinds are easy to tell apart
+function Group({ title, note, children, count }) {
+  // 21 Oct (her review: green titles looked odd): every title in the same dark text; only the chips carry colour
+  return (
+    <div className="pt-5 mt-5 border-t border-slate-200 first:pt-0 first:mt-0 first:border-0">
+      <p className="text-base font-semibold text-slate-900">{title} <span className="font-normal text-slate-400 tabular-nums">{count}</span></p>
+      {note && <p className="text-xs text-slate-500 mt-0.5">{note}</p>}
+      <div className="mt-2.5">{children}</div>
     </div>
   )
 }
@@ -127,7 +142,7 @@ function MatchPanel({ fit, you }) {
   if (!fit) return <p className="text-sm text-slate-500">{you ? 'Your' : "This student's"} profile has no skills to compare at the moment.</p>
   return (
     <>
-      <Group title={`${fit.have} of ${fit.total} required skills`} tone="req" note="For this job. Each skill with where it comes from.">
+      <Group title={`${fit.have} of ${fit.total} required skills`} note="For this job. Each skill with where it comes from.">
         <ul className="divide-y divide-slate-100">
           {fit.matched.map(m => (
             <li key={m.skill} className="py-2 flex items-start gap-2.5">
@@ -149,12 +164,12 @@ function MatchPanel({ fit, you }) {
       </Group>
       {/* 21 Oct (her review: make these more obvious): each kind in its own group with a heading, count and colour */}
       {fit.nice_have?.length > 0 && (
-        <Group title="Nice-to-haves they have" tone="nice" count={fit.nice_have.length} note="The ad would welcome these; not needed to apply.">
+        <Group title="Nice-to-have skills" count={fit.nice_have.length} note="The ad lists these as a bonus. This applicant has them.">
           <Chips skills={fit.nice_have} tone="nice" />
         </Group>
       )}
       {fit.on_job_have?.length > 0 && (
-        <Group title="Already has what's taught on the job" tone="job" count={fit.on_job_have.length} note="The ad says these are learnt after starting.">
+        <Group title="Skills taught on the job" count={fit.on_job_have.length} note="The ad says these are learnt after starting. This applicant already has them.">
           <Chips skills={fit.on_job_have} tone="job" />
         </Group>
       )}
@@ -208,7 +223,6 @@ export function ApplicantCards({ s, fit, withFit = true, you, aside }) {
               <Skills skills={p.skills} relevant={p.relevant} />
             </div>
           )} />
-        {withFit && skillsSection}
         <Section title="Strongest modules" first={6} cols={2} items={s.strongest_modules} empty="No module grades yet."
           sub={`${withFit ? "The ones that teach this job's skills first. " : ''}${s.show_grades_to_employers
             ? (you ? 'Your grades are shown to employers.' : 'Grades shown because the student allows it.')
@@ -228,7 +242,16 @@ export function ApplicantCards({ s, fit, withFit = true, you, aside }) {
       </div>
       {/* the right panel scrolls on its own and stays in view */}
       <aside className="lg:w-[23rem] shrink-0 lg:overflow-y-auto border-t lg:border-t-0 lg:border-l border-slate-200 bg-slate-50/60 px-4 sm:px-5 py-5">
-        {withFit ? <MatchPanel fit={fit} you={you} /> : aside}
+        {/* 21 Oct (her review: blank space under the match): with a job, the skills beyond the job follow the match
+            here, so the panel holds every skill and the left column the CV */}
+        {withFit ? <><MatchPanel fit={fit} you={you} />
+          {strengths.length > 0 && (
+            <div className="pt-5 mt-5 border-t border-slate-200">
+              <Group title="Also brings" count={strengths.length} note="Other skills with the most evidence, beyond this job.">
+                <ShowMore items={strengths} first={4} render={strengthRow} />
+              </Group>
+            </div>
+          )}</> : aside}
       </aside>
     </div>
   )
