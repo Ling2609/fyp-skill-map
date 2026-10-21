@@ -58,7 +58,8 @@ function Facts({ r }) {
     <div className="mt-3 space-y-2.5">
       {/* 21 Oct (references.md "Changing a job's requirements after people applied"): after she applied the employer may
           only ask for less; she is told what the job no longer requires, so a changed match count isn't a mystery */}
-      {r.job_changed && <p className="text-xs text-slate-600">{r.company} no longer requires {r.job_changed.no_longer_required.join(', ')} for this job (changed after you applied).</p>}
+      {r.job_changed && <p className="text-xs text-slate-600">{r.company} no longer requires {r.job_changed.no_longer_required.join(', ')} for this job (changed after you applied).
+        {r.match && r.job_changed.was && <> Your match is now {r.match.replace(' required', '')} ({r.job_changed.was} when you applied).</>}</p>}
       {r.decide_extended_reason && <p className="text-xs text-slate-600">Reply date moved{r.decide_by_original ? ` from ${fmtDay(r.decide_by_original)}` : ''}: “{r.decide_extended_reason}”</p>}
       {!r.taking_applications && <p className="text-xs text-slate-600">Not taking new applications. {r.company} is still deciding.</p>}
       {me && (

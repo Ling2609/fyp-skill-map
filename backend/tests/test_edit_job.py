@@ -31,7 +31,7 @@ def test_edit_changes_skills_and_keeps_locked_fields(client, users, post_job):
     assert seen["versions"]["job_changed"] is True and seen["versions"]["showing"] == "latest"
     m = client.get("/applications/mine", headers=users.h(student)).json()[0]
     assert m["match"].startswith("1 of 1")
-    assert m["job_changed"] == {"no_longer_required": ["Kotlin"]}      # the student is told what the job dropped
+    assert m["job_changed"] == {"no_longer_required": ["Kotlin"], "was": "1 of 2"}   # what the job dropped, her old match
 
 
 def test_after_applying_the_job_cant_ask_for_more_qualification_or_languages(client, users, post_job):

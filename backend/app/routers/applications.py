@@ -198,7 +198,9 @@ def _job_changed(a: Application, job: Job, db: Session) -> dict | None:
     req_now = {skill_key(r.skill_name) for r in now if r.skill_type == "hard" and r.level in ("required", "unspecified")}
     dropped = [name for name, level in sent if level in ("required", "unspecified")
                and skill_key(name) not in soft and skill_key(name) not in req_now]
-    return {"no_longer_required": dropped} if dropped else None
+    fit = (a.sent_profile or {}).get("fit") or {}
+    was = f"{fit['have']} of {fit['total']}" if fit.get("total") else None       # her match when she applied
+    return {"no_longer_required": dropped, "was": was} if dropped else None
 
 
 def _open_invitations(student: User, db: Session):
