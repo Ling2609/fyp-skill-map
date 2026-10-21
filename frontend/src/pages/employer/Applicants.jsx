@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import api from '../../api'
 import PageHeader from '../../components/PageHeader'
@@ -17,6 +17,7 @@ import { CardSkeleton, LoadingLabel } from '../../components/Skeleton'
 // missing skills for "missing skills"); the decision date and the numbers students see are in the header; contact
 // details appear only after shortlisting.
 const WAITING = ['applied', 'shortlisted']
+const APP_COLS = <colgroup><col className="w-12" /><col /><col className="w-64" /><col className="w-28" /><col className="w-40" /></colgroup>
 
 export default function Applicants() {
   const { jobId } = useParams()
@@ -28,6 +29,7 @@ export default function Applicants() {
   const [askMany, setAskMany] = useState(null)      // 'rejected' | 'shortlisted': the action being confirmed
   const [savingMany, setSavingMany] = useState(false)
   const [notice, setNotice] = useState('')
+  const strip = useRef(null)
 
   const load = () => api.get(`/employer/jobs/${jobId}/applicants`).then(res => setData(res.data))
     .catch(err => setError(errText(err, "Couldn't load the applicants.")))
@@ -114,11 +116,26 @@ export default function Applicants() {
                 <button type="button" onClick={() => setPicked([])} className="text-sm text-slate-600 hover:text-slate-900">Clear</button>
               </div>
             )}
-            <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden">
-              <table className="w-full text-sm">
-                <thead className="bg-slate-50 text-left text-xs font-semibold text-slate-500 border-b border-slate-200">
-                  <tr><th className="pl-5 py-3 w-8"><span className="sr-only">Select</span></th><th className="px-5 py-3">Student</th><th className="px-5 py-3">Required skills they have</th>
-                    <th className="px-5 py-3">Applied</th><th className="px-5 py-3">Status</th></tr>
+            {/* 21 Oct (her report: not scrollable in a narrow window): as on My Jobs, the table keeps a minimum width, the
+                column titles sit in their own strip and only the rows scroll under them (sideways too; the strip follows) */}
+            <div className="min-h-0 flex flex-col bg-white border border-slate-200 rounded-2xl overflow-hidden">
+              <div ref={strip} aria-hidden="true" className="shrink-0 overflow-hidden [scrollbar-gutter:stable] bg-slate-50 border-b border-slate-200">
+                <table className="w-full min-w-[48rem] table-fixed text-sm">
+                  {APP_COLS}
+                  <thead className="text-left text-xs font-semibold text-slate-500">
+                    <tr><th className="pl-5 py-3"></th><th className="px-5 py-3">Student</th><th className="px-5 py-3">Required skills they have</th>
+                      <th className="px-5 py-3">Applied</th><th className="px-5 py-3">Status</th></tr>
+                  </thead>
+                </table>
+              </div>
+              <div className="relative min-h-0 overflow-auto [scrollbar-gutter:stable]"
+                onScroll={e => { if (strip.current) strip.current.scrollLeft = e.currentTarget.scrollLeft }}>
+              <table className="w-full min-w-[48rem] table-fixed text-sm">
+                {APP_COLS}
+                {/* real column titles for screen readers; the visible ones are the strip above */}
+                <thead>
+                  <tr>{['Select', 'Student', 'Required skills they have', 'Applied', 'Status'].map(n =>
+                    <th key={n} scope="col" className="p-0 h-0"><span className="sr-only">{n}</span></th>)}</tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100">
                   {shown.map(p => {
@@ -161,6 +178,7 @@ export default function Applicants() {
                   {shown.length === 0 && <tr><td colSpan={5} className="px-5 py-8 text-center text-sm text-slate-400">None here.</td></tr>}
                 </tbody>
               </table>
+              </div>
             </div>
             <p className="text-xs text-slate-500">Best match first. The student sees each status on their "My Applications" page (Rejected shows as "Not selected"). Email and phone appear after you shortlist someone.</p>
           </>
