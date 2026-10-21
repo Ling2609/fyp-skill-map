@@ -568,8 +568,43 @@ def _profile_for(student: User, job: Job, db: Session, contact: bool) -> dict:
             "fit": fit}
 
 
+def sent_copy(student: User, job: Job, db: Session) -> dict:
+    """21 Oct: what the employer is shown, as plain JSON, kept on the application when the student applies."""
+    import json
+    view = _profile_for(student, job, db, contact=False)
+    return json.loads(json.dumps({"student": view["student"], "fit": view["fit"], "job_skills": _job_skill_key(job, db)},
+                                 default=str))
+
+
+def _job_skill_key(job: Job, db: Session) -> list:
+    """The job's skills and their levels, to tell whether the employer edited them after someone applied."""
+    return sorted([s.skill_name, s.level or ""] for s in db.query(JobSkill).filter(JobSkill.job_id == job.id))
+
+
+def with_versions(a: Application, live: dict, want: str, job: Job | None = None, db: Session | None = None) -> dict:
+    """21 Oct: the copy sent when applying (default) or the latest profile ("latest"), and whether her profile changed
+    since. Contact details always come from the live view (they depend on the status, not on what was sent)."""
+    if not a.sent_profile:
+        return {**live, "versions": None}
+    import json
+    # the employer edited the job's skills after she applied: the match she was sent is for skills the job no longer
+    # asks for, so the latest profile against the new skills is shown (the edit-job rule: the match follows the job)
+    if job is not None and db is not None and a.sent_profile.get("job_skills") is not None \
+            and a.sent_profile["job_skills"] != _job_skill_key(job, db):
+        return {**live, "versions": {"sent_at": a.sent_at, "changed": True, "showing": "latest", "job_changed": True}}
+    strip = lambda st: {k: v for k, v in st.items() if k not in ("contact", "own_contact", "visible_to_employers")}
+    latest = json.loads(json.dumps(strip(live["student"]), default=str))
+    changed = latest != strip(a.sent_profile["student"]) or json.loads(json.dumps(live["fit"], default=str)) != a.sent_profile["fit"]
+    showing = "latest" if want == "latest" and changed else "sent"
+    view = live if showing == "latest" else {**live, "student": {**a.sent_profile["student"],
+                                                                 "contact": live["student"]["contact"]},
+                                             "fit": a.sent_profile["fit"]}
+    return {**view, "versions": {"sent_at": a.sent_at, "changed": changed, "showing": showing, "job_changed": False}}
+
+
 @router.get("/applications/{app_id}")
-def applicant_profile(app_id: int, employer: User = Depends(require_employer), db: Session = Depends(get_db)):
+def applicant_profile(app_id: int, view: str = "sent", employer: User = Depends(require_employer),
+                      db: Session = Depends(get_db)):
     """One applicant for one of the employer's posts (applying shares the profile and email with this employer)."""
     a, job, student = _own_application(app_id, employer, db)
     from app.services.application_progress import record_view
@@ -581,7 +616,7 @@ def applicant_profile(app_id: int, employer: User = Depends(require_employer), d
            .order_by(Application.created_at).first())
     return {"application": {"id": a.id, "status": a.status, "applied_at": a.created_at},
             "next_to_review": {"id": nxt[0].id, "name": f"{nxt[1].first_name} {nxt[1].last_name}"} if nxt else None,
-            **_profile_for(student, job, db, contact=a.status in CONTACT_STATUSES)}
+            **with_versions(a, _profile_for(student, job, db, contact=a.status in CONTACT_STATUSES), view, job, db)}
 
 
 # ── Dashboard (12 Oct; her pick E after mock-ups A-E, references.md "Employer dashboard layout") ──────────────────

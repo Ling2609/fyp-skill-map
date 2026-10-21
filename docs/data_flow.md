@@ -10,6 +10,7 @@ Checked in the code before adding anything new to MongoDB. Each store has one pu
 | Academic record | `user_modules` (module code + grade) | Yes | Account deleted |
 | Self-declared evidence | `user_projects` (with `repo_check`: is the repo hers; role, team size, outcome, demo link), `user_certifications`, `user_awards`, `user_experiences` (work experience and activities, 21 Oct) (with the skills and quotes) | Yes | Account deleted |
 | Languages and CGPA (21 Oct) | `users.languages`, `users.cgpa`, `users.show_cgpa` (employers see the CGPA only when `show_cgpa` is on) | Yes | Account deleted |
+| What an employer was shown when applying (21 Oct) | `applications.sent_profile`, `sent_at`: a copy of the student's profile and match for that job, no contact details | Yes (with the application) | Account deleted |
 | Connected GitHub accounts | `github_accounts` (GitHub id and username only; GitHub's access key is used once and not kept) | Yes | Disconnected, or account deleted |
 | Modules, programmes, intakes | `modules`, `module_skills`, `programmes`, `intakes`, `programme_modules`, `intake_modules` | No | Changed by the career office |
 | Jobs and their skills | `jobs` (with the employer's decision date, the first date if it was moved, stop/close reasons), `job_skills` (skill, quote from the ad, level, extractor model) | No (company data) | Live jobs: until they expire or go; employer posts: until closed |

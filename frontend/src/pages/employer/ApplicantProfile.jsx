@@ -4,7 +4,7 @@ import api from '../../api'
 import PageHeader from '../../components/PageHeader'
 import BackLink from '../../components/BackLink'
 import { errText } from '../student/profileUtils'
-import { ApplicantCards, ApplicantHeading } from '../../components/EmployerView'
+import { ApplicantCards, ApplicantHeading, VersionBar } from '../../components/EmployerView'
 import { STATUSES, STATUS_CLS, fmtDay } from './statuses'
 import { useStatusChange } from './statusChange'
 import { CardSkeleton, LoadingLabel } from '../../components/Skeleton'
@@ -27,7 +27,8 @@ export default function ApplicantProfile() {
   const [inviting, setInviting] = useState(false)
   const navigate = useNavigate()
 
-  const url = appId ? `/employer/applications/${appId}` : `/employer/graduates/${studentId}?job_id=${jobId}`
+  const [view, setView] = useState('sent')      // 21 Oct: the copy sent when applying, or the latest profile
+  const url = appId ? `/employer/applications/${appId}?view=${view}` : `/employer/graduates/${studentId}?job_id=${jobId}`
   useEffect(() => {
     api.get(url).then(res => setData(res.data)).catch(err => setError(errText(err, "Couldn't load this profile.")))
   }, [url])
@@ -54,7 +55,8 @@ export default function ApplicantProfile() {
       {data && (data.application
         ? <BackLink label={`Applicants for ${data.job.title}`} onClick={() => navigate(`/employer/jobs/${data.job.id}`)} />
         : <BackLink label={`Dashboard · fits ${data.job.title}`} onClick={() => navigate('/dashboard')} />)}
-      <PageHeader>
+      {/* 21 Oct (her pick D): a thicker line, apart from the CV below */}
+      <PageHeader strong>
         <div className="pb-4 flex items-end justify-between gap-4">
           <div className="min-w-0 flex-1">
             {s ? <ApplicantHeading s={s} note={data.application && !s.contact ? 'Email and phone appear after you shortlist this applicant.' : ''} />
@@ -90,6 +92,7 @@ export default function ApplicantProfile() {
 
       {/* 21 Oct (her review): three columns that fill the screen and end on one line; each card shows whole rows only
           (components/EmployerView). Narrow windows: one column and the page scrolls */}
+      {data?.versions && <VersionBar versions={data.versions} onView={setView} name={s?.name} />}
       <div className="flex-1 min-h-0 overflow-y-auto lg:overflow-hidden flex flex-col">
         {error && <p role="alert" className="m-4 sm:mx-8 text-sm text-rose-700 bg-rose-50 border border-rose-200 rounded-lg px-4 py-2.5">{error}</p>}
         {!data && !error && (<div className="px-4 sm:px-8 py-5">

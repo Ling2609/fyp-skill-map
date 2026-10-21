@@ -98,9 +98,12 @@ function Section({ title, sub, items, first, render, cols = 1, empty }) {
       {!items.length ? <p className="text-sm text-slate-400 mt-2">{empty}</p> : (
         <div className={`mt-3 grid gap-x-8 ${cols === 2 ? 'sm:grid-cols-2' : ''}`}>{shown.map((it, i) => <div key={i}>{render(it)}</div>)}</div>
       )}
+      {/* 21 Oct (her review): at the right, where "See all" sat on the cards (references.md "Where See all goes") */}
       {items.length > limit && (
-        <button type="button" onClick={() => setAll(v => !v)} className="mt-1.5 text-xs font-medium text-blue-700 hover:underline">
-          {all ? 'Show less ▴' : `Show ${items.length - limit} more ▾`}</button>
+        <div className="mt-1.5 flex justify-end">
+          <button type="button" onClick={() => setAll(v => !v)} className="text-xs font-medium text-blue-700 hover:underline">
+            {all ? 'Show less ▴' : `Show ${items.length - limit} more ▾`}</button>
+        </div>
       )}
     </section>
   )
@@ -113,8 +116,8 @@ function ShowMore({ items, first, render }) {
   return (
     <>
       <div className="divide-y divide-slate-100">{(all ? items : items.slice(0, limit)).map((it, i) => <div key={i}>{render(it)}</div>)}</div>
-      {items.length > limit && <button type="button" onClick={() => setAll(v => !v)} className="mt-1.5 text-xs font-medium text-blue-700 hover:underline">
-        {all ? 'Show less ▴' : `Show ${items.length - limit} more ▾`}</button>}
+      {items.length > limit && <div className="mt-1.5 flex justify-end"><button type="button" onClick={() => setAll(v => !v)} className="text-xs font-medium text-blue-700 hover:underline">
+        {all ? 'Show less ▴' : `Show ${items.length - limit} more ▾`}</button></div>}
     </>
   )
 }
@@ -241,7 +244,7 @@ export function ApplicantCards({ s, fit, withFit = true, you, aside }) {
           )} />
       </div>
       {/* the right panel scrolls on its own and stays in view */}
-      <aside className="lg:w-92 shrink-0 lg:overflow-y-auto border-t lg:border-t-0 lg:border-l border-slate-200 bg-slate-50/60 px-4 sm:px-5 py-5">
+      <aside className="lg:w-92 shrink-0 lg:overflow-y-auto border-t lg:border-t-0 lg:border-l-2 border-slate-300 bg-white px-4 sm:px-5 py-5">
         {/* 21 Oct (her review: blank space under the match): with a job, the skills beyond the job follow the match
             here, so the panel holds every skill and the left column the CV */}
         {withFit ? <><MatchPanel fit={fit} you={you} />
@@ -278,6 +281,35 @@ export function NotShownYet({ s }) {
           </Link>
         ))}
       </div>
+    </div>
+  )
+}
+
+// 21 Oct (her pick; references.md "After applying"): which version of the profile this is. By default the copy sent
+// when applying; "See latest" when the profile changed since (as Ashby shows a newer CV). Nothing when nothing changed.
+const dayLabel = (iso) => new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })
+export function VersionBar({ versions, onView, you, name }) {
+  if (!versions?.changed) return null
+  const when = dayLabel(versions.sent_at)
+  if (versions.job_changed) {     // the employer edited the job's skills after they applied: latest profile only
+    return (
+      <div role="status" className="shrink-0 bg-amber-50 border-b border-amber-200 px-4 sm:px-8 py-2 text-sm text-amber-900">
+        {you ? `The employer changed this job's skills after you applied on ${when}, so they see your latest profile against the new skills.`
+          : `This job's skills were edited after ${name} applied on ${when}, so this is their latest profile against the new skills.`}
+      </div>
+    )
+  }
+  const sent = versions.showing === 'sent'
+  const text = you
+    ? (sent ? `This is what you sent on ${when}. You've changed your profile since; the employer sees this copy first and can open your latest.`
+            : `This is your latest profile. You applied on ${when} with an earlier version.`)
+    : (sent ? `Showing what ${name} sent on ${when}. Their profile has changed since.`
+            : `Showing ${name}'s latest profile. They applied on ${when} with an earlier version.`)
+  return (
+    <div role="status" className="shrink-0 bg-amber-50 border-b border-amber-200 px-4 sm:px-8 py-2 flex flex-wrap items-center justify-between gap-x-4 gap-y-1 text-sm">
+      <p className="text-amber-900">{text}</p>
+      <button type="button" onClick={() => onView(sent ? 'latest' : 'sent')} className="font-semibold text-blue-700 hover:underline whitespace-nowrap">
+        {sent ? 'See latest' : 'See what was sent'}</button>
     </div>
   )
 }

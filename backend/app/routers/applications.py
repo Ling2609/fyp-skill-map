@@ -65,6 +65,9 @@ def apply(data: ApplyIn, student: User = Depends(require_student), db: Session =
         raise HTTPException(status_code=400, detail=EMPTY_PROFILE_MESSAGE)
     a = Application(job_id=job.id, student_id=student.id)
     _snapshot(a, student, job, db)
+    # 21 Oct: keep exactly what this employer is shown now (references.md "After applying")
+    from app.routers.employer import sent_copy
+    a.sent_profile, a.sent_at = sent_copy(student, job, db), datetime.now(timezone.utc)
     db.add(a)
     try:
         db.commit()
@@ -108,17 +111,20 @@ def _mine(a: Application, job: Job, match: str | None = None, events=None, usual
 
 
 @router.get("/job/{job_ref}/preview")
-def preview_for_job(job_ref: str, student: User = Depends(require_student), db: Session = Depends(get_db)):
+def preview_for_job(job_ref: str, view: str = "sent", student: User = Depends(require_student),
+                    db: Session = Depends(get_db)):
     """21 Oct (her idea): before applying, what this employer will see, built by the SAME function as the employer's
     applicant page (employer._profile_for), so the two can't differ. Contact details are never in it: the employer gets
     them only after shortlisting."""
     job = db.query(Job).filter(Job.job_id == job_ref).first()
     if not job or job.source != "employer":
         raise HTTPException(status_code=404, detail="Only jobs posted on SkillMap can be applied for here.")
-    from app.routers.employer import _profile_for
+    from app.routers.employer import _profile_for, with_versions
     applied = db.query(Application).filter(Application.job_id == job.id, Application.student_id == student.id).first()
-    return {**_profile_for(student, job, db, contact=False), "company": job.company, "job_ref": job.job_id,
-            "applied": applied is not None}
+    live = _profile_for(student, job, db, contact=False)
+    # 21 Oct: once applied, what she sent (as the employer sees it by default), with "see latest" if she changed since
+    shown = with_versions(applied, live, view, job, db) if applied else {**live, "versions": None}
+    return {**shown, "company": job.company, "job_ref": job.job_id, "applied": applied is not None}
 
 
 @router.get("/job/{job_ref}/open")

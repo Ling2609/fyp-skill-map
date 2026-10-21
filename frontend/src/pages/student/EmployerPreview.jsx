@@ -4,7 +4,7 @@ import api from '../../api'
 import PageHeader from '../../components/PageHeader'
 import BackLink from '../../components/BackLink'
 import { ADMIN_COUNTS_CHANGED } from '../../components/Sidebar'
-import { ApplicantCards, ApplicantHeading, NotShownYet } from '../../components/EmployerView'
+import { ApplicantCards, ApplicantHeading, NotShownYet, VersionBar } from '../../components/EmployerView'
 import { CardSkeleton, LoadingLabel } from '../../components/Skeleton'
 import { Busy } from '../../components/Spinner'
 import { errText } from './profileUtils'
@@ -23,10 +23,11 @@ export default function EmployerPreview() {
   const [data, setData] = useState(null)
   const [error, setError] = useState('')
   const [sending, setSending] = useState(false)
+  const [view, setView] = useState('sent')      // 21 Oct: after applying, what she sent or her latest profile
   useEffect(() => {
-    const url = jobId ? `/applications/job/${encodeURIComponent(jobId)}/preview` : '/profile/preview'
+    const url = jobId ? `/applications/job/${encodeURIComponent(jobId)}/preview?view=${view}` : '/profile/preview'
     api.get(url).then(res => setData(res.data)).catch(err => setError(errText(err, "Couldn't load the preview.")))
-  }, [jobId])
+  }, [jobId, view])
   const back = () => (window.history.length > 1 ? navigate(-1) : navigate(jobId ? `/jobs/${encodeURIComponent(jobId)}` : '/profile'))
   const send = () => {
     setSending(true); setError('')
@@ -41,26 +42,29 @@ export default function EmployerPreview() {
     <div className="flex flex-col h-screen">
       <BackLink label={jobId ? (data?.job?.title || 'the job') : 'My Profile'} onClick={back} />
       {/* the student's bar: what this page is, and the actions; everything under it is the employer's page */}
-      <div className="shrink-0 bg-blue-50 border-b border-blue-100 px-4 sm:px-8 py-2.5 flex flex-wrap items-center justify-between gap-3">
-        <p className="text-sm text-blue-900"><b className="font-semibold">Preview:</b>{' '}
+      {/* 21 Oct: a solid blue strip, so it can't be mistaken for the employer's heading under it */}
+      <div className="shrink-0 bg-blue-700 px-4 sm:px-8 py-2.5 flex flex-wrap items-center justify-between gap-3">
+        <p className="text-sm text-white"><b className="font-semibold">Preview:</b>{' '}
           {jobId ? `this is exactly what ${company} sees when you apply.` : 'this is what employers see. When you apply for a job, they also see your match for it.'}</p>
         {s && (
           <div className="flex items-center gap-2.5">
-            <Link to="/profile" className="text-sm font-medium text-slate-700 border border-slate-300 bg-white rounded-lg px-3.5 py-1.5 hover:bg-slate-50">Edit my profile</Link>
+            <Link to="/profile" className="text-sm font-medium text-white border border-white/50 rounded-lg px-3.5 py-1.5 hover:bg-white/10">Edit my profile</Link>
             {jobId && (data.applied
-              ? <span className="text-sm text-slate-500 bg-white border border-slate-200 px-3.5 py-1.5 rounded-lg">Already applied</span>
+              ? <span className="text-sm text-blue-100 border border-white/30 px-3.5 py-1.5 rounded-lg">Already applied</span>
               : <button type="button" onClick={send} disabled={sending}
-                  className="text-sm font-semibold text-white bg-blue-700 hover:bg-blue-800 px-4 py-1.5 rounded-lg disabled:opacity-50">
+                  className="text-sm font-semibold text-blue-800 bg-white hover:bg-blue-50 px-4 py-1.5 rounded-lg disabled:opacity-50">
                   {sending ? <Busy>Sending…</Busy> : 'Send application'}</button>)}
           </div>
         )}
       </div>
-      <PageHeader>
+      {/* 21 Oct (her pick D): a thicker line, apart from the CV below */}
+      <PageHeader strong>
         <div className="pb-4">
           {s ? <ApplicantHeading s={s} note={jobId ? 'Email and phone appear after you shortlist this applicant.' : ''} />
             : <h1 className="text-2xl font-semibold tracking-tight text-slate-900 mt-2">{jobId ? `What ${company} will see` : 'Preview as employer'}</h1>}
         </div>
       </PageHeader>
+      {data?.versions && <VersionBar versions={data.versions} onView={setView} you />}
       {/* 21 Oct (her pick tp.png): two panels, each scrolling on its own; narrow windows: one column, the page scrolls */}
       <div className="flex-1 min-h-0 overflow-y-auto lg:overflow-hidden flex flex-col">
         {error && <p role="alert" className="m-4 sm:mx-8 text-sm text-rose-700 bg-rose-50 border border-rose-200 rounded-lg px-4 py-2.5">{error}</p>}

@@ -74,3 +74,26 @@ def test_employer_sees_nice_to_haves_the_student_has_but_not_the_ones_missing(cl
     fit = client.get(f"/applications/job/{r.json()['job_ref']}/preview", headers=users.h(student)).json()["fit"]
     assert [m["skill"] for m in fit["matched"]] == ["Python"] and fit["missing"] == ["SQL"]
     assert fit["nice_have"] == ["Docker"] and "nice_missing" not in fit and "Kubernetes" not in str(fit)
+
+
+def test_employer_sees_what_was_sent_then_the_latest(client, users, post_job):
+    """21 Oct (her pick): an application keeps what the employer was shown when the student applied; after she
+    changes her profile, the employer still sees that copy by default, is told it changed, and can see the latest."""
+    employer, student = users.employer(), users.student(skills=("Python",))
+    job = post_job(employer, required=("Python", "SQL"))
+    h = users.h(student)
+    app_id = client.post("/applications", headers=h, json={"job_id": job["job_ref"]}).json()["id"]
+    first = client.get(f"/employer/applications/{app_id}", headers=users.h(employer)).json()
+    assert first["versions"]["changed"] is False and first["versions"]["showing"] == "sent"
+    # she adds a project with SQL after applying
+    client.post("/profile/projects", headers=h, json={"name": "Shop DB", "description": "A shop database in SQL.",
+                                                       "skills": {"SQL": "Added by you"}})
+    sent = client.get(f"/employer/applications/{app_id}", headers=users.h(employer)).json()
+    assert sent["versions"]["changed"] is True and sent["versions"]["showing"] == "sent"
+    assert sent["fit"]["have"] == 1 and "Shop DB" not in [p["name"] for p in sent["student"]["projects"]]
+    latest = client.get(f"/employer/applications/{app_id}?view=latest", headers=users.h(employer)).json()
+    assert latest["versions"]["showing"] == "latest" and latest["fit"]["have"] == 2
+    assert "Shop DB" in [p["name"] for p in latest["student"]["projects"]]
+    # her own preview of this job shows the same two versions
+    mine = client.get(f"/applications/job/{job['job_ref']}/preview", headers=h).json()
+    assert mine["applied"] and mine["versions"]["changed"] and mine["fit"]["have"] == 1

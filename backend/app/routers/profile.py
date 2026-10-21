@@ -361,6 +361,9 @@ def check_profile_schema():
             or not inspect(engine).has_table("user_experiences"):
         raise RuntimeError("Database not updated: run  python migrations/migrate_profile_more_evidence.py  "
                            "from the backend folder, then start the backend again.")
+    if "sent_profile" not in {c["name"] for c in inspect(engine).get_columns("applications")}:
+        raise RuntimeError("Database not updated: run  python migrations/migrate_application_copy.py  "
+                           "from the backend folder, then start the backend again.")
 
 
 # ── Endpoints ─────────────────────────────────────────────────────────────────

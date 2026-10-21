@@ -28,6 +28,11 @@ class Application(Base):
     match_have = Column(Integer, nullable=True)
     match_total = Column(Integer, nullable=True)
     match_at = Column(DateTime(timezone=True), nullable=True)   # 14 Oct audit: when the counts were worked out
+    # 21 Oct (her pick; references.md "After applying: profile as it was, or as it is now?"): exactly what the employer
+    # was shown when the student applied (her profile and her match, no contact details). The employer sees this by
+    # default, with "see latest" when her profile has changed since. NULL for applications made before (latest only)
+    sent_profile = Column(JSON, nullable=True)
+    sent_at = Column(DateTime(timezone=True), nullable=True)
 
 
 class ApplicationEvent(Base):
