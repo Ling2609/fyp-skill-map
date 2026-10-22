@@ -1118,3 +1118,11 @@ Her request: show the student a clear process (instead of silence then a sudden 
   `target-size` (show-password button 16x16 px, WCAG 2.2 2.5.8 asks 24x24) and `landmark-one-main` (best practice;
   the report: "Automatic detection can only detect a subset of issues"). Fixed (28 px buttons; <main> on the pages
   outside the app layout; the sidebar an <aside> landmark) and the scan widened to wcag22aa + best-practice tags.
+- Her question "are 4 screens enough?": Lighthouse on 4 pages is the recognised sample; the coverage is the axe-core
+  scan in the browser tests, widened to 30 pages and pop-ups (pop-ups appear only after a click, so a page-load tool
+  never sees them). It found one more problem (Privacy notice links by colour only). Not scanned: study set-up, a chat
+  with messages, GitHub import, experience / certificate forms.
+- Her "should be all pages": Lighthouse 13.4.1 (the DevTools version) by script over all 33 pages of all roles
+  (frontend/scripts/lighthouse_all.mjs: one browser profile shared with Lighthouse, disableStorageReset so the sign-in
+  stays, desktop config). Found a crash (FastAPI 422 `detail` is a list; pages rendered it as text -> blank app),
+  fixed once in api.js; and the form `Field` label not linked to month pickers / lists. Result 33/33 at 100.

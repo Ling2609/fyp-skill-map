@@ -23,3 +23,18 @@ check both.
 Lighthouse also checks WCAG 2.2 and best practices. With those rules added to the scan: `landmark-one-main`
 (Sign in, Register), `region` (content outside landmarks: Sign in 7, Register 12, the sidebar logo on every signed-in
 page), `target-size` (show-password buttons, 16x16 px). Fixed; after: 0 problems on 18 pages (623 checks).
+
+## Third round (her question: are 4 Lighthouse pages enough?)
+The scan was widened from 18 to 30 pages and states: Forgot password, Privacy notice, Account settings, Preview as
+employer, What the employer will see, Edit job, and pop-ups opened by a click (Add project form, Apply pop-up,
+Not selected reason pop-up, admin actions menu, Academics intakes and the edit-a-module-list window). One problem
+found: in-text links on the Privacy notice shown by colour only (`link-in-text-block`); underlined. After: 0 problems,
+1,050 checks.
+
+## Fourth round (her "should be all pages")
+Lighthouse on every page by script (`frontend/scripts/lighthouse_all.mjs`, 33 pages of all roles; reports in
+`docs/evidence/lighthouse/all/`): 32 at 100 and one at 93, the graduate's profile opened without `?job=`, which
+crashed the page (a list of field errors printed as text; fixed in `api.js`). The scan added the Add work,
+Add certificate and Add award forms: 3 fields without linked labels (month pickers, the Type list); fixed in `Field`.
+After: Lighthouse 100 on 33 of 33 pages; axe-core 0 problems on 33 pages and states. Not covered: a chat with
+messages (needs the AI; manual test TC-26) and the GitHub import (needs GitHub).

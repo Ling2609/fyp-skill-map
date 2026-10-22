@@ -8,8 +8,8 @@ The tests live in `frontend/e2e/`:
 | `1-student.spec.js`  | Grades become skills, profile checklist, Job Matches, the skill gap, applying        | TC-01, 10, 11, 16, 28 |
 | `2-employer.spec.js` | Who applied, contact details only after shortlisting, the student sees "Shortlisted" | TC-31, 42, 38         |
 | `3-admin.spec.js`    | A new employer signs up and waits, the career office approves them, adds an intake   | TC-51, 48, 50         |
-| `4-access.spec.js`   | Signed out → sign in; a student can't open employer or career office pages          | TC-54                 |
-| `5-accessibility.spec.js` | 18 pages scanned for WCAG 2.1 AA problems (axe-core); the job and applicant lists used with the keyboard only | TC-66 |
+| `4-access.spec.js`   | Signed out → sign in; a student can't open employer or career office pages; a broken link shows a message, not a blank page | TC-54                 |
+| `5-accessibility.spec.js` | 33 pages, pop-ups and forms of all roles scanned for accessibility problems (axe-core, WCAG 2.2 AA + best practice); the job and applicant lists used with the keyboard only | TC-66 |
 
 They run in this order and build on each other (the employer shortlists the application made in the student test).
 
@@ -71,6 +71,20 @@ npx playwright test          # all tests, no window; prints ✓ or ✘ for each 
 **Before running again:** the tests change the data (a grade is saved, an application is made). So stop the
 backend (Ctrl+C in terminal 1), run `setup_e2e.py` again, then start the backend again. Otherwise TC-01 fails,
 because the grade is already saved and the "Save grades" button never appears.
+
+## Lighthouse on every page
+
+Right after `npx playwright test` (it uses the applications those tests made), with the backend and `npm run dev`
+still running, from `frontend/`:
+
+```bash
+node scripts/lighthouse_all.mjs
+```
+
+It signs in as each role and runs Lighthouse (the same version as Chrome's DevTools, desktop, Accessibility only) on
+every page: 33 in all, including the study set-up a new student sees and the page an employer sees while waiting
+for approval. One report per page and a table of scores go to `docs/evidence/lighthouse/all/`. It ends with
+`33 of 33 pages score 100`, and fails if any page scores less.
 
 ## Test accounts
 

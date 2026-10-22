@@ -31,7 +31,7 @@ const CONTACT = import.meta.env.VITE_PRIVACY_CONTACT || 'careers@university.exam
 const rich = (text) => text.split(/\*\*(.+?)\*\*/g).map((part, i) =>
   i % 2 ? <b key={i} className="font-semibold text-slate-900">{part}</b>
     : part.split('{contact}').flatMap((bit, j) => j
-      ? [<a key={`c${i}${j}`} href={`mailto:${CONTACT}`} className="text-blue-700 hover:underline">{CONTACT}</a>, bit] : [bit]))
+      ? [<a key={`c${i}${j}`} href={`mailto:${CONTACT}`} className="text-blue-700 underline hover:no-underline">{CONTACT}</a>, bit] : [bit]))
 
 // her review: the back link in blue, underlined on hover or tap, so it is easy to see
 const backCls = 'text-sm font-medium text-blue-700 hover:underline focus-visible:underline focus:outline-none'
@@ -81,7 +81,7 @@ export default function Privacy() {
         <div className="max-w-5xl mx-auto px-4 sm:px-6 py-6">
           {!isCurrent && (
             <p role="status" className="mb-5 text-sm text-amber-900 bg-amber-50 border border-amber-200 rounded-xl px-4 py-3">
-              {L.older} {version.label[lang]}. <Link to="/privacy" className="font-medium text-blue-700 hover:underline">{L.current}</Link>
+              {L.older} {version.label[lang]}. <Link to="/privacy" className="font-medium text-blue-700 underline hover:no-underline">{L.current}</Link>
             </p>
           )}
 

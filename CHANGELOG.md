@@ -32,7 +32,15 @@ Planning, reasoning and research behind each decision are in the project roadmap
   are now links, so both lists work with Tab and Enter (checked by two keyboard tests). 16 browser tests.
   After her first Lighthouse run (Sign in 93): show-password buttons 28 px (WCAG 2.2 target size), a main landmark on
   Sign in, Register, Forgot password and Study set-up, the sidebar one landmark; the scan now also uses WCAG 2.2 and
-  best-practice rules (623 checks on 18 pages, 0 problems).
+  best-practice rules (623 checks on 18 pages, 0 problems). Her question "are these enough?": the scan now also opens
+  Forgot password, Privacy notice, Account settings, Preview as employer, What the employer will see, Edit job and the
+  main pop-ups (Add project, Apply, Not selected reason, admin actions menu, edit a module list): 30 pages and states,
+  1,050 checks; it found the Privacy notice's in-text links shown by colour only (now underlined). 0 problems.
+  Then, her "should be all pages": `frontend/scripts/lighthouse_all.mjs` runs Lighthouse on every page of every role
+  (33, 100 each, `docs/evidence/lighthouse/all/`). It found a real bug: an employer link missing its `?job=` made
+  the page print the backend's list of field errors and the whole app went blank; `api.js` now turns such a list
+  into one sentence for every page (new browser test). The scan also opens the Add work / certificate / award forms:
+  their month pickers and lists had no linked labels (`Field` now links its label). 33 states, 0 problems; 17 tests.
 
 ## 21 Oct 2026 — Fuller profiles, what employers see, fairness after applying, one look everywhere
 Why: graduate recruiters weigh work experience, activities and languages, not only modules; employers should see the

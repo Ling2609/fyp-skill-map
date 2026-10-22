@@ -1,4 +1,4 @@
-// Accessibility (TC-66): every main page is scanned with axe-core, the engine behind Chrome Lighthouse's accessibility
+// Accessibility (TC-66): every page (and the main pop-ups and forms) is scanned with axe-core, the engine behind Chrome Lighthouse's accessibility
 // score, against WCAG 2.2 A and AA plus its best-practice rules (contrast, labels, names, landmarks, target size). Any problem fails the test and is listed.
 // A tool can't judge everything, so the keyboard is checked too: the main lists open with Tab and Enter, no mouse.
 import { test, expect } from '@playwright/test'
@@ -17,20 +17,35 @@ async function scan(page, name) {
   return { name, passes: r.passes.length, problems: r.violations.length }
 }
 
-test('TC-66 the main pages of each role have no accessibility problems that axe-core finds (WCAG 2.2 AA + best practice)', async ({ page, browser }) => {
+test('TC-66 the pages and pop-ups of each role have no accessibility problems that axe-core finds (WCAG 2.2 AA + best practice)', async ({ page, browser }) => {
   test.setTimeout(240_000)
   const pages = []
   await page.goto('/login'); pages.push(await scan(page, 'Sign in'))
   await page.goto('/register'); pages.push(await scan(page, 'Register'))
+  await page.goto('/forgot-password'); pages.push(await scan(page, 'Forgot password'))
+  await page.goto('/privacy'); pages.push(await scan(page, 'Privacy notice'))
 
   await signIn(page, STUDENT); pages.push(await scan(page, 'Student Dashboard'))
   for (const [path, name] of [['/profile', 'My Profile'], ['/recommend', 'Job Matches'], ['/applications', 'My Applications'],
-                              ['/chatbot', 'AI Assistant'], ['/profile/settings', 'Profile & privacy']]) {
+                              ['/chatbot', 'AI Assistant'], ['/profile/settings', 'Profile & privacy'],
+                              ['/profile/preview', 'Preview as employer'], ['/account', 'Account settings']]) {
     await page.goto(path); pages.push(await scan(page, name))
   }
   await page.goto('/recommend')
   await page.getByRole('link', { name: 'Graduate Software Engineer' }).click(); pages.push(await scan(page, 'Job Detail'))
   await page.getByRole('tab', { name: 'Skill Gap Analysis' }).click(); pages.push(await scan(page, 'Job Detail: skill gap'))
+  // pop-ups and forms appear only after a click, so each is opened and scanned too (then closed, nothing saved)
+  await page.goto('/profile?tab=projects')
+  await page.getByRole('button', { name: '+ Add project' }).first().click(); pages.push(await scan(page, 'Add project form'))
+  for (const [tab, button, name] of [['experience', '+ Add work', 'Add work form'], ['certs', '+ Add certificate', 'Add certificate form'],
+                                     ['awards', '+ Add award', 'Add award form']]) {
+    await page.goto(`/profile?tab=${tab}`)
+    await page.getByRole('button', { name: button }).first().click(); pages.push(await scan(page, name))
+  }
+  await page.goto('/recommend')
+  await page.getByRole('link', { name: 'Junior Data Analyst' }).click()
+  await page.getByRole('button', { name: 'Apply with my SkillMap profile' }).click(); pages.push(await scan(page, 'Apply pop-up'))
+  await page.getByRole('button', { name: "Check what they'll see" }).click(); pages.push(await scan(page, "What the employer will see"))
 
   const employer = await (await browser.newContext()).newPage()
   await signIn(employer, EMPLOYER); pages.push(await scan(employer, 'Employer Dashboard'))
@@ -39,11 +54,20 @@ test('TC-66 the main pages of each role have no accessibility problems that axe-
   pages.push(await scan(employer, 'Applicants'))
   await employer.getByRole('link', { name: 'Daniel Lim' }).click(); pages.push(await scan(employer, 'Applicant'))
   await employer.goto('/employer/post'); pages.push(await scan(employer, 'Post a Job'))
+  await employer.goto('/employer/jobs'); await employer.getByRole('row', { name: /Graduate Software Engineer/ }).getByRole('link', { name: 'View applicants' }).click()
+  await employer.getByLabel('Status for Aina Rahman').selectOption('rejected'); pages.push(await scan(employer, 'Not selected: reason pop-up'))
+  await employer.keyboard.press('Escape')
+  const jobId = employer.url().split('/').pop()
+  await employer.goto(`/employer/jobs/${jobId}/edit`); pages.push(await scan(employer, 'Edit job'))
 
   const admin = await (await browser.newContext()).newPage()
   await signIn(admin, ADMIN); pages.push(await scan(admin, 'Career office Dashboard'))
   await admin.goto('/admin/users'); pages.push(await scan(admin, 'Users'))
+  await admin.getByRole('button', { name: /^Actions for / }).first().click(); pages.push(await scan(admin, 'Users: actions menu'))
+  await admin.keyboard.press('Escape')
   await admin.goto('/admin/academic'); pages.push(await scan(admin, 'Academics'))
+  await admin.getByRole('tab', { name: /Intakes/ }).click(); pages.push(await scan(admin, 'Academics: intakes'))
+  await admin.getByRole('button', { name: 'Edit list' }).first().click(); pages.push(await scan(admin, 'Academics: edit a module list'))
 
   fs.writeFileSync('../docs/evidence/e2e/accessibility.json', JSON.stringify({ standard: 'WCAG 2.0/2.1/2.2 A + AA and best-practice rules (axe-core)', pages, problems: found }, null, 2))
   expect(found, found.map(f => `${f.page}: ${f.help} (${f.where.length})`).join('\n')).toEqual([])

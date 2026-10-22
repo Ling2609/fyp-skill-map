@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useId, isValidElement, cloneElement } from 'react'
 import { skillName } from '../../skillName'
 import { ADDED_BY_YOU, errText } from './profileUtils'
 import Spinner from '../../components/Spinner'
@@ -108,13 +108,19 @@ export function ConfirmDelete({ name, onCancel, onDelete }) {
   )
 }
 
+// 23 Oct (accessibility scan of the forms): the label is linked to the field inside it (htmlFor + id), so a screen
+// reader names month pickers and lists too; text boxes only had their placeholder as a name before
+const LABELLABLE = new Set(['input', 'select', 'textarea'])
 export function Field({ label, optional, hint, children }) {
+  const autoId = useId()
+  const field = isValidElement(children) && LABELLABLE.has(children.type) ? children : null
+  const id = field ? (field.props.id || autoId) : undefined
   return (
     <div>
-      <label className="block text-xs font-medium text-gray-600 mb-1.5">
+      <label htmlFor={id} className="block text-xs font-medium text-gray-600 mb-1.5">
         {label} {optional ? <span className="text-gray-500 font-normal">(optional)</span> : <span className="text-red-600">*</span>}
       </label>
-      {children}
+      {field ? cloneElement(field, { id }) : children}
       {hint && <p className="text-xs text-gray-500 mt-1.5">{hint}</p>}
     </div>
   )

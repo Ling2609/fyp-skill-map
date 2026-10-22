@@ -30,6 +30,11 @@ api.interceptors.response.use(
     return response
   },
   (error) => {
+    // 23 Oct (found by the Lighthouse run over every page): FastAPI's input checks (422) send `detail` as a LIST of
+    // field errors. Pages show `detail` as text, and React can't draw a list of objects, so the whole page went blank.
+    // Turn it into one plain sentence here, once for every page.
+    const data = error.response?.data
+    if (Array.isArray(data?.detail)) data.detail = "Something in that request wasn't valid. Go back and try again."
     const isLoginCall = error.config?.url?.includes('/auth/login')
     // On public pages (e.g. an old token while opening Register) just drop the token;
     // AuthContext handles that case, no need to reload the page to /login

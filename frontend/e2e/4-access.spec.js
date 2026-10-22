@@ -1,7 +1,7 @@
 // Each role reaches only its own pages, and signed-out visitors are sent to sign in.
 // System test case TC-54 (docs/testing/SkillMap_system_test_cases.xlsx).
 import { test, expect } from '@playwright/test'
-import { signIn, shot, STUDENT } from './helpers'
+import { signIn, shot, STUDENT, EMPLOYER } from './helpers'
 
 test('TC-54 signed out: a private page sends you to sign in', async ({ page }) => {
   await page.goto('/profile')
@@ -19,4 +19,16 @@ test('TC-54 a student cannot open employer or career office pages', async ({ pag
   }
   await expect(page.getByText('Graduate Software Engineer').first()).toBeVisible()   // her Dashboard has drawn, jobs too
   await shot(page, 'TC-54_student_sent_to_dashboard')
+})
+
+test('a broken link shows a message, not a blank page', async ({ page }) => {
+  // 23 Oct (found by the Lighthouse run over every page): a link missing its ?job= made the backend answer with a list
+  // of field errors, which the page tried to print, and the whole app went blank
+  const errors = []
+  page.on('pageerror', e => errors.push(e.message))
+  await signIn(page, EMPLOYER)
+  await page.goto('/employer/graduates/1')          // no ?job=
+  await expect(page.getByRole('alert')).toContainText("wasn't valid")
+  await expect(page.getByRole('link', { name: 'Dashboard' })).toBeVisible()   // the app is still there
+  expect(errors).toEqual([])
 })

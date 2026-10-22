@@ -12,6 +12,16 @@
       "problems": 0
     },
     {
+      "name": "Forgot password",
+      "passes": 23,
+      "problems": 0
+    },
+    {
+      "name": "Privacy notice",
+      "passes": 40,
+      "problems": 0
+    },
+    {
       "name": "Student Dashboard",
       "passes": 37,
       "problems": 0
@@ -42,6 +52,16 @@
       "problems": 0
     },
     {
+      "name": "Preview as employer",
+      "passes": 28,
+      "problems": 0
+    },
+    {
+      "name": "Account settings",
+      "passes": 26,
+      "problems": 0
+    },
+    {
       "name": "Job Detail",
       "passes": 35,
       "problems": 0
@@ -49,6 +69,36 @@
     {
       "name": "Job Detail: skill gap",
       "passes": 35,
+      "problems": 0
+    },
+    {
+      "name": "Add project form",
+      "passes": 39,
+      "problems": 0
+    },
+    {
+      "name": "Add work form",
+      "passes": 39,
+      "problems": 0
+    },
+    {
+      "name": "Add certificate form",
+      "passes": 38,
+      "problems": 0
+    },
+    {
+      "name": "Add award form",
+      "passes": 38,
+      "problems": 0
+    },
+    {
+      "name": "Apply pop-up",
+      "passes": 37,
+      "problems": 0
+    },
+    {
+      "name": "What the employer will see",
+      "passes": 30,
       "problems": 0
     },
     {
@@ -77,6 +127,16 @@
       "problems": 0
     },
     {
+      "name": "Not selected: reason pop-up",
+      "passes": 43,
+      "problems": 0
+    },
+    {
+      "name": "Edit job",
+      "passes": 36,
+      "problems": 0
+    },
+    {
       "name": "Career office Dashboard",
       "passes": 28,
       "problems": 0
@@ -87,7 +147,22 @@
       "problems": 0
     },
     {
+      "name": "Users: actions menu",
+      "passes": 43,
+      "problems": 0
+    },
+    {
       "name": "Academics",
+      "passes": 40,
+      "problems": 0
+    },
+    {
+      "name": "Academics: intakes",
+      "passes": 43,
+      "problems": 0
+    },
+    {
+      "name": "Academics: edit a module list",
       "passes": 40,
       "problems": 0
     }
