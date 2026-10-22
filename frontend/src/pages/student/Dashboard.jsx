@@ -119,7 +119,7 @@ function GoalPicker({ goal, categories, fit, busy, onChange }) {
                 </span>
                 <span className="w-14 text-right text-xs text-slate-500 tabular-nums">{b.have} of {b.of}</span>
               </>)))}
-              {rest.map(c => row(c.name, <span className="text-xs text-slate-400 tabular-nums">{c.jobs} {c.jobs === 1 ? 'job' : 'jobs'}</span>))}
+              {rest.map(c => row(c.name, <span className="text-xs text-slate-500 tabular-nums">{c.jobs} {c.jobs === 1 ? 'job' : 'jobs'}</span>))}
             </>)}
           </ul>
           <ul className="border-t border-slate-200 mt-1 pt-1">
@@ -171,7 +171,7 @@ function GoalCard({ data, busy, onGoal, onPlan, onJobs }) {
         <GoalPicker goal={data.goal} categories={data.categories} busy={busy} onChange={onGoal} />
         <div className="flex flex-wrap items-end gap-x-5 gap-y-2 mt-5">
           <p className="text-5xl font-bold tracking-tight text-slate-900 tabular-nums leading-none">
-            {have.length}<span className="text-slate-300">/{total}</span>
+            {have.length}<span className="text-slate-500">/{total}</span>
           </p>
           <div className="pb-1 min-w-48 flex-1">
             <p className="text-lg font-semibold tracking-tight text-slate-900">of the top skills these jobs ask for</p>
@@ -269,7 +269,7 @@ function NoGoalCard({ data, busy, onGoal, onCounsellor }) {
       <div className="px-5 sm:px-7 pt-6 pb-6 flex flex-col flex-1 min-h-0">
         <GoalPicker goal={null} categories={data.categories} fit={data.best_fit} busy={busy} onChange={onGoal} />
         <p className="text-2xl font-semibold tracking-tight text-slate-900 mt-5 leading-tight">
-          Not sure which role fits you yet?<br /><span className="text-slate-400">That's normal.</span>
+          Not sure which role fits you yet?<br /><span className="text-slate-500">That's normal.</span>
         </p>
         {data.best_fit.length > 0 ? (
           <>
@@ -280,7 +280,7 @@ function NoGoalCard({ data, busy, onGoal, onCounsellor }) {
                   choice === b.category ? 'border-blue-600 bg-blue-50' : 'border-slate-200 hover:border-blue-300'}`}>
                   <input type="radio" name="best-fit" checked={choice === b.category} onChange={() => setChoice(b.category)} className="accent-blue-700" />
                   <span className="flex-1 text-sm text-slate-800">{b.category}</span>
-                  <span className="text-xs text-slate-500 tabular-nums">{b.have} of {b.of} skills</span>
+                  <span className="text-xs text-slate-600 tabular-nums">{b.have} of {b.of} skills</span>
                 </label>
               ))}
             </div>
@@ -456,7 +456,7 @@ export default function Dashboard() {
       </PageHeader>
 
       <div className="flex-1 min-h-0 px-4 sm:px-8 py-6 flex flex-col">
-        {loadError && <p role="alert" className="text-sm text-rose-600 bg-rose-50 rounded-lg px-4 py-3 mb-4">{loadError}</p>}
+        {loadError && <p role="alert" className="text-sm text-rose-700 bg-rose-50 rounded-lg px-4 py-3 mb-4">{loadError}</p>}
         {invites.length > 0 && (
           <section aria-label="Invitations to apply" className="mb-5 bg-violet-50 border border-violet-200 rounded-2xl divide-y divide-violet-100">
             {invites.slice(0, 3).map(inv => (

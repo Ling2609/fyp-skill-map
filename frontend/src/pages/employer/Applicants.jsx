@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import api from '../../api'
 import PageHeader from '../../components/PageHeader'
 import BackLink from '../../components/BackLink'
@@ -152,7 +152,9 @@ export default function Applicants() {
                           {/* 12 Oct: an application not opened yet reads bold with "Not opened", like an unread email
                               (DfE design history: a bold row for messages not viewed) */}
                           <p className={`text-slate-900 ${p.opened ? 'font-medium' : 'font-bold'}`}>
-                            {p.name}
+                            {/* 22 Oct (accessibility check): the name is a real link (Tab + Enter); the row still opens on a click */}
+                            <Link to={`/employer/applications/${p.id}`} onClick={e => e.stopPropagation()}
+                              className="hover:text-blue-700 rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500">{p.name}</Link>
                             {!p.opened && <span className="ml-2 text-[11px] font-semibold text-blue-700">Not opened</span>}
                             {p.invited && <span className="ml-2 text-[11px] font-semibold text-violet-700 bg-violet-50 rounded-full px-2 py-0.5">Invited</span>}
                           </p>
@@ -175,12 +177,12 @@ export default function Applicants() {
                       </tr>
                     )
                   })}
-                  {shown.length === 0 && <tr><td colSpan={5} className="px-5 py-8 text-center text-sm text-slate-400">None here.</td></tr>}
+                  {shown.length === 0 && <tr><td colSpan={5} className="px-5 py-8 text-center text-sm text-slate-500">None here.</td></tr>}
                 </tbody>
               </table>
               </div>
             </div>
-            <p className="text-xs text-slate-500">Best match first. The student sees each status on their "My Applications" page (Rejected shows as "Not selected"). Email and phone appear after you shortlist someone.</p>
+            <p className="text-xs text-slate-600">Best match first. The student sees each status on their "My Applications" page (Rejected shows as "Not selected"). Email and phone appear after you shortlist someone.</p>
           </>
         )}
       </div>

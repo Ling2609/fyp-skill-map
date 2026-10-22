@@ -132,7 +132,7 @@ export default function ProfilePrivacy() {
               <textarea id="pp-about" rows={2} maxLength={ABOUT_MAX} value={form.about} className={`${field} resize-none`}
                 placeholder="e.g. Looking for a backend or data role; I enjoy building APIs and working with databases."
                 onChange={e => set('about', e.target.value)} />
-              <p className="text-[11px] text-slate-400 mt-1 flex justify-between gap-3"><span>What role you want and what you enjoy.</span>
+              <p className="text-[11px] text-slate-500 mt-1 flex justify-between gap-3"><span>What role you want and what you enjoy.</span>
                 <span className="tabular-nums">{form.about.length} / {ABOUT_MAX}</span></p>
             </Section>
             <Section grow title="Languages" sub="Employers in Malaysia often ask for English. Test result is optional, e.g. MUET Band 5 or IELTS 7.0.">
@@ -147,7 +147,7 @@ export default function ProfilePrivacy() {
                     </select>
                     <input aria-label="Test result" value={l.test} maxLength={40} className={field} placeholder="Test result"
                       onChange={e => setLang(i, 'test', e.target.value)} />
-                    <button type="button" aria-label={`Remove ${l.language || 'this language'}`} className="text-slate-400 hover:text-slate-700 text-lg px-1"
+                    <button type="button" aria-label={`Remove ${l.language || 'this language'}`} className="text-slate-500 hover:text-slate-700 text-lg px-1"
                       onClick={() => set('languages', form.languages.filter((_, j) => j !== i))}>×</button>
                   </div>
                 ))}
@@ -164,7 +164,7 @@ export default function ProfilePrivacy() {
                 <label htmlFor="pp-cgpa" className="text-sm font-medium text-slate-800">CGPA</label>
                 <input id="pp-cgpa" inputMode="decimal" value={form.cgpa} maxLength={4} placeholder="3.72"
                   className={`${field} !w-20`} onChange={e => set('cgpa', e.target.value.replace(/[^0-9.]/g, ''))} />
-                <span className="text-xs text-slate-400">as on your transcript</span>
+                <span className="text-xs text-slate-500">as on your transcript</span>
               </div>
               <div className="mt-2 space-y-1">
                 <Toggle id="pp-show-cgpa" checked={cgpaSet && form.show_cgpa} disabled={!cgpaSet} onChange={v => set('show_cgpa', v)}

@@ -9,6 +9,7 @@ The tests live in `frontend/e2e/`:
 | `2-employer.spec.js` | Who applied, contact details only after shortlisting, the student sees "Shortlisted" | TC-31, 42, 38         |
 | `3-admin.spec.js`    | A new employer signs up and waits, the career office approves them, adds an intake   | TC-51, 48, 50         |
 | `4-access.spec.js`   | Signed out → sign in; a student can't open employer or career office pages          | TC-54                 |
+| `5-accessibility.spec.js` | 18 pages scanned for WCAG 2.1 AA problems (axe-core); the job and applicant lists used with the keyboard only | TC-66 |
 
 They run in this order and build on each other (the employer shortlists the application made in the student test).
 

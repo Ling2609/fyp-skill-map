@@ -1,0 +1,75 @@
+// Accessibility (TC-66): every main page is scanned with axe-core, the engine behind Chrome Lighthouse's accessibility
+// score, against WCAG 2.1 A and AA (contrast, labels, names, structure). Any problem fails the test and is listed.
+// A tool can't judge everything, so the keyboard is checked too: the main lists open with Tab and Enter, no mouse.
+import { test, expect } from '@playwright/test'
+import AxeBuilder from '@axe-core/playwright'
+import fs from 'fs'
+import { signIn, STUDENT, EMPLOYER, ADMIN } from './helpers'
+
+const found = []                       // every problem, saved to docs/evidence/e2e/accessibility.json
+
+async function scan(page, name) {
+  await page.waitForLoadState('networkidle')
+  await page.waitForTimeout(500)        // colour fades (0.15-0.2 s) finished, so contrast is measured at the end
+  const r = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']).analyze()
+  for (const v of r.violations) found.push({ page: name, rule: v.id, impact: v.impact, help: v.help,
+                                             where: v.nodes.map(n => n.target.join(' ')) })
+  return { name, passes: r.passes.length, problems: r.violations.length }
+}
+
+test('TC-66 the main pages of each role have no WCAG 2.1 AA problems that axe-core finds', async ({ page, browser }) => {
+  test.setTimeout(240_000)
+  const pages = []
+  await page.goto('/login'); pages.push(await scan(page, 'Sign in'))
+  await page.goto('/register'); pages.push(await scan(page, 'Register'))
+
+  await signIn(page, STUDENT); pages.push(await scan(page, 'Student Dashboard'))
+  for (const [path, name] of [['/profile', 'My Profile'], ['/recommend', 'Job Matches'], ['/applications', 'My Applications'],
+                              ['/chatbot', 'AI Assistant'], ['/profile/settings', 'Profile & privacy']]) {
+    await page.goto(path); pages.push(await scan(page, name))
+  }
+  await page.goto('/recommend')
+  await page.getByRole('link', { name: 'Graduate Software Engineer' }).click(); pages.push(await scan(page, 'Job Detail'))
+  await page.getByRole('tab', { name: 'Skill Gap Analysis' }).click(); pages.push(await scan(page, 'Job Detail: skill gap'))
+
+  const employer = await (await browser.newContext()).newPage()
+  await signIn(employer, EMPLOYER); pages.push(await scan(employer, 'Employer Dashboard'))
+  await employer.goto('/employer/jobs'); pages.push(await scan(employer, 'My Jobs'))
+  await employer.getByRole('row', { name: /Graduate Software Engineer/ }).getByRole('link', { name: 'View applicants' }).click()
+  pages.push(await scan(employer, 'Applicants'))
+  await employer.getByRole('link', { name: 'Daniel Lim' }).click(); pages.push(await scan(employer, 'Applicant'))
+  await employer.goto('/employer/post'); pages.push(await scan(employer, 'Post a Job'))
+
+  const admin = await (await browser.newContext()).newPage()
+  await signIn(admin, ADMIN); pages.push(await scan(admin, 'Career office Dashboard'))
+  await admin.goto('/admin/users'); pages.push(await scan(admin, 'Users'))
+  await admin.goto('/admin/academic'); pages.push(await scan(admin, 'Academics'))
+
+  fs.writeFileSync('../docs/evidence/e2e/accessibility.json', JSON.stringify({ standard: 'WCAG 2.1 A + AA (axe-core)', pages, problems: found }, null, 2))
+  expect(found, found.map(f => `${f.page}: ${f.help} (${f.where.length})`).join('\n')).toEqual([])
+})
+
+test('TC-66 keyboard only: a job opens from Job Matches with Tab and Enter', async ({ page }) => {
+  await signIn(page, STUDENT)
+  await page.goto('/recommend')
+  const title = page.getByRole('link', { name: 'Junior Data Analyst' })
+  await expect(title).toBeVisible()
+  for (let i = 0; i < 40 && !(await title.evaluate(el => el === document.activeElement)); i++) await page.keyboard.press('Tab')
+  await expect(title).toBeFocused()                     // reached with Tab alone
+  await page.keyboard.press('Enter')
+  await page.waitForURL(/\/jobs\//)
+  await expect(page.getByRole('heading', { name: 'Junior Data Analyst' })).toBeVisible()
+})
+
+test('TC-66 keyboard only: an applicant opens from View applicants with Tab and Enter', async ({ page }) => {
+  await signIn(page, EMPLOYER)
+  await page.goto('/employer/jobs')
+  await page.getByRole('row', { name: /Graduate Software Engineer/ }).getByRole('link', { name: 'View applicants' }).click()
+  const name = page.getByRole('link', { name: 'Daniel Lim' })
+  await expect(name).toBeVisible()
+  for (let i = 0; i < 40 && !(await name.evaluate(el => el === document.activeElement)); i++) await page.keyboard.press('Tab')
+  await expect(name).toBeFocused()
+  await page.keyboard.press('Enter')
+  await page.waitForURL(/\/employer\/applications\//)
+  await expect(page.getByRole('heading', { name: 'Daniel Lim' })).toBeVisible()
+})

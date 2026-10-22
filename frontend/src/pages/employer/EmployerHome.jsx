@@ -24,7 +24,7 @@ function Waiting({ status, company }) {
   return (
     <div className="flex-1 flex items-center justify-center px-8 py-16">
       <div className="bg-white border border-slate-200 rounded-2xl px-10 py-9 max-w-2xl text-center">
-        <div className={`mx-auto w-14 h-14 rounded-full flex items-center justify-center mb-4 ${rejected ? 'bg-rose-50 text-rose-600' : 'bg-amber-50 text-amber-600'}`} aria-hidden="true">
+        <div className={`mx-auto w-14 h-14 rounded-full flex items-center justify-center mb-4 ${rejected ? 'bg-rose-50 text-rose-700' : 'bg-amber-50 text-amber-600'}`} aria-hidden="true">
           {rejected
             ? <svg className="w-7 h-7" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" /><path d="M9 9l6 6M15 9l-6 6" strokeLinecap="round" /></svg>
             : <svg className="w-7 h-7" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" strokeLinecap="round" strokeLinejoin="round" /></svg>}
@@ -61,7 +61,7 @@ function DecideCell({ j }) {
     const why = CLOSE_REASONS.find(([k]) => k === j.close_reason)?.[1]
     return <p className="text-slate-600">{j.closed_at ? fmtDate(j.closed_at) : '–'}{why && <span className="block text-xs text-slate-500">{why}</span>}</p>
   }
-  if (!j.decide_by) return <span className="text-slate-400">–</span>
+  if (!j.decide_by) return <span className="text-slate-500">–</span>
   const days = daysUntil(j.decide_by)
   const late = j.past_date && j.waiting
   return (
@@ -295,7 +295,7 @@ export function MyJobs() {
                     </tr>
                   ))}
                   {shown.length === 0 && (
-                    <tr><td colSpan={5} className="px-5 py-8 text-center text-sm text-slate-400">
+                    <tr><td colSpan={5} className="px-5 py-8 text-center text-sm text-slate-500">
                       {tab === 'open' ? 'No open jobs.' : 'No closed jobs.'}
                     </td></tr>
                   )}

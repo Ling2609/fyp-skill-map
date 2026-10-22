@@ -107,7 +107,7 @@ export function ProjectForm({ project, onDone, onCancel, onDirty }) {
           <span className={descLength < MIN_DESCRIPTION ? 'text-amber-700' : 'text-gray-500'}>{descLength < MIN_DESCRIPTION
             ? `Write at least ${MIN_DESCRIPTION} characters so skills can be found.`
             : 'Name the tools you used (the language, framework, database) so SkillMap can find them in your words.'}</span>
-          <span className="text-gray-400 tabular-nums shrink-0 ml-3">{form.description.length} / 3000</span>
+          <span className="text-gray-500 tabular-nums shrink-0 ml-3">{form.description.length} / 3000</span>
         </p>
       </div>
       <div>
@@ -273,7 +273,7 @@ export function CertForm({ cert, onDone, onCancel, onDirty }) {
             placeholder={skills.length ? 'Add another' : 'e.g. Data Analytics, Data Lakes, Data Warehousing'}
             className="flex-1 min-w-40 text-sm py-0.5 placeholder-gray-300 focus:outline-none" />
         </div>
-        <p className="text-xs text-gray-400 mt-1.5">Press Enter after each skill, or paste a list separated by commas.</p>
+        <p className="text-xs text-gray-500 mt-1.5">Press Enter after each skill, or paste a list separated by commas.</p>
         {note && <p className="text-xs text-amber-700 bg-amber-50 rounded-lg px-3 py-2 mt-2">{note}</p>}
       </div>
       <Field label="Credly badge link" optional hint="Adds a link to the badge on your certificate card.">
@@ -397,7 +397,7 @@ export function AwardForm({ award, onDone, onCancel, onDirty }) {
             placeholder={skills.length ? 'Add another' : 'e.g. Teamwork, Mobile App Development'}
             className="flex-1 min-w-40 text-sm py-0.5 placeholder-gray-300 focus:outline-none" />
         </div>
-        <p className="text-xs text-gray-400 mt-1.5">Suggested by AI from the title and description. Remove any that don't fit.</p>
+        <p className="text-xs text-gray-500 mt-1.5">Suggested by AI from the title and description. Remove any that don't fit.</p>
         {note && <p className="text-xs text-amber-700 bg-amber-50 rounded-lg px-3 py-2 mt-2">{note}</p>}
       </div>
       {error && <p className="text-xs text-red-500 bg-red-50 rounded-lg px-3 py-2">{error}</p>}
@@ -442,9 +442,9 @@ export function StudyFields({ options, value, onChange }) {
           <option value="" disabled>{programme && !programme.intakes.length ? 'No intakes yet' : 'Pick your intake'}</option>
           {programme?.intakes.map(i => <option key={i.id} value={i.id}>{intakeLabel(i)}</option>)}
         </select>
-        {programme && !programme.intakes.length && <p className="text-xs text-gray-400 mt-1.5">The career office hasn't added intakes yet. You can pick it later.</p>}
+        {programme && !programme.intakes.length && <p className="text-xs text-gray-500 mt-1.5">The career office hasn't added intakes yet. You can pick it later.</p>}
         {/* 10 Oct: each intake has its own module list, so the intake decides which modules the student sees */}
-        {!!programme?.intakes.length && <p className="text-xs text-gray-400 mt-1.5">As on your timetable, e.g. APU3F2605CS(DA)</p>}
+        {!!programme?.intakes.length && <p className="text-xs text-gray-500 mt-1.5">As on your timetable, e.g. APU3F2605CS(DA)</p>}
       </div>
     </div>
   )
@@ -662,7 +662,7 @@ export function ExperienceForm({ item, kind: newKind, onDone, onCancel, onDirty 
             placeholder={skills.length ? 'Add another' : 'e.g. Spring Boot, Teamwork'}
             className="flex-1 min-w-40 text-sm py-0.5 placeholder-gray-300 focus:outline-none" />
         </div>
-        <p className="text-xs text-gray-400 mt-1.5">Suggested from your own words only. Remove any that don't fit.</p>
+        <p className="text-xs text-gray-500 mt-1.5">Suggested from your own words only. Remove any that don't fit.</p>
         {note && <p className="text-xs text-amber-700 bg-amber-50 rounded-lg px-3 py-2 mt-2">{note}</p>}
       </div>
       {error && <p className="text-xs text-red-500 bg-red-50 rounded-lg px-3 py-2">{error}</p>}

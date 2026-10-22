@@ -28,7 +28,7 @@ const shortDay = (iso) => new Date(iso).toLocaleDateString('en-GB', { day: 'nume
 function SearchBox({ value, onChange, label, placeholder }) {
   return (
     <div className="relative flex-1 min-w-0">
-      <svg aria-hidden="true" className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400"
+      <svg aria-hidden="true" className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500"
         fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
       </svg>
@@ -38,7 +38,7 @@ function SearchBox({ value, onChange, label, placeholder }) {
       {/* Clear the search (her request 10 Oct); Esc does the same */}
       {value && (
         <button type="button" aria-label="Clear search" onClick={() => onChange('')}
-          className="absolute right-2 top-1/2 -translate-y-1/2 w-6 h-6 inline-flex items-center justify-center rounded-full text-slate-400 hover:text-slate-700 hover:bg-slate-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500">
+          className="absolute right-2 top-1/2 -translate-y-1/2 w-6 h-6 inline-flex items-center justify-center rounded-full text-slate-500 hover:text-slate-700 hover:bg-slate-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500">
           <svg aria-hidden="true" className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 6l12 12M18 6L6 18" />
           </svg>
@@ -302,7 +302,7 @@ function Intakes({ programmeId, intakes, setIntakes, onOpen }) {
           <input id="intake-start" type="date" value={start} onChange={e => setStart(e.target.value)} className={field} />
         </div>
         <div>
-          <label htmlFor="intake-others" className="block text-xs font-medium text-slate-600 mb-1">Later codes of this group <span className="font-normal text-slate-400">(optional)</span></label>
+          <label htmlFor="intake-others" className="block text-xs font-medium text-slate-600 mb-1">Later codes of this group <span className="font-normal text-slate-500">(optional)</span></label>
           <input id="intake-others" value={others} onChange={e => setOthers(e.target.value)} placeholder="e.g. APU2F2709CS(DA), APU3F2805CS(DA)" maxLength={200} className={field} />
         </div>
         <div>
@@ -436,7 +436,7 @@ function AddModule({ scope, scopeLabel, onAdded, onNew, onCancel }) {
           {shownResults === null && <li className="text-sm text-slate-500 py-2">Type at least two letters.</li>}
           {shownResults?.length === 0 && <li className="text-sm text-slate-500 py-2">Nothing found. Create it as a new module instead.</li>}
           {shownResults?.map(m => (
-            <li key={m.id} className={`flex items-center justify-between gap-3 px-3 py-2.5 border border-slate-200 rounded-lg ${m.in_list ? 'text-slate-400' : ''}`}>
+            <li key={m.id} className={`flex items-center justify-between gap-3 px-3 py-2.5 border border-slate-200 rounded-lg ${m.in_list ? 'text-slate-500' : ''}`}>
               <span className="min-w-0">
                 <span className="block text-sm font-medium">{m.name}</span>
                 <span className="block text-xs text-slate-500">
@@ -605,9 +605,9 @@ export default function AdminAcademic() {
           )}
           <div role="tablist" className="flex gap-6 mt-4">
             <button role="tab" aria-selected={tab === 'modules'} className={tabCls(tab === 'modules')}
-              onClick={() => set({ tab: '' })}>Modules <span className="text-slate-400 font-normal ml-0.5">{modules.length || ''}</span></button>
+              onClick={() => set({ tab: '' })}>Modules <span className="text-slate-500 font-normal ml-0.5">{modules.length || ''}</span></button>
             <button role="tab" aria-selected={tab === 'intakes'} className={tabCls(tab === 'intakes')}
-              onClick={() => set({ tab: 'intakes' })}>Intakes <span className="text-slate-400 font-normal ml-0.5">{data?.intakes.length ?? ''}</span></button>
+              onClick={() => set({ tab: 'intakes' })}>Intakes <span className="text-slate-500 font-normal ml-0.5">{data?.intakes.length ?? ''}</span></button>
           </div>
         </div>
       </PageHeader>
@@ -648,7 +648,7 @@ export default function AdminAcademic() {
                   <div key={y}>
                     {/* Light grey band (her pick A, 10 Oct): the dark band drew the eye away from the chosen module */}
                     <p className="sticky top-0 z-10 px-4 py-2 text-xs font-semibold text-slate-600 bg-slate-100 border-y border-slate-200">
-                      Year {y} <span className="font-normal text-slate-500">· {shown.filter(m => m.year === y).length} modules</span>
+                      Year {y} <span className="font-normal text-slate-600">· {shown.filter(m => m.year === y).length} modules</span>
                     </p>
                     <ul>
                       {shown.filter(m => m.year === y).map(m => (
@@ -658,7 +658,7 @@ export default function AdminAcademic() {
                               ? 'bg-blue-50 shadow-[inset_3px_0_0_#2563eb]' : 'hover:bg-slate-50'}`}>
                             <span className="min-w-0">
                               <span className="block text-sm text-slate-800 line-clamp-2">{m.name}</span>
-                              <span className="block text-xs text-slate-400">{m.code} · {m.skills} skill{m.skills === 1 ? '' : 's'}
+                              <span className="block text-xs text-slate-600">{m.code} · {m.skills} skill{m.skills === 1 ? '' : 's'}
                                 {m.status === 'new' && <span className="text-emerald-700 font-medium"> · New in this intake</span>}
                                 {m.status === 'changed' && <span className="text-amber-700 font-medium"> · {m.type} here</span>}
                               </span>
@@ -679,7 +679,7 @@ export default function AdminAcademic() {
                     <ul>
                       {data.removed.map(m => (
                         <li key={m.id} className="flex items-center justify-between gap-3 px-4 py-2.5 border-b border-slate-100">
-                          <span className="min-w-0 text-slate-400">
+                          <span className="min-w-0 text-slate-500">
                             <span className="block text-sm line-through">{m.name}</span>
                             <span className="block text-xs">{m.code} · Year {m.year} · {m.type}</span>
                           </span>

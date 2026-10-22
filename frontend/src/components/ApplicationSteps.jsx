@@ -15,10 +15,10 @@ export default function ApplicationSteps({ steps, decided }) {
             {i > 0 && <span aria-hidden="true" className={`absolute top-2.75 right-1/2 w-full h-0.5 ${done || skipped ? 'bg-blue-500' : 'bg-slate-200'}`} />}
             <span aria-hidden="true" className={`relative z-1 w-6 h-6 rounded-full border-2 flex items-center justify-center text-[11px] text-white ${
               done ? 'bg-blue-600 border-blue-600' : skipped ? 'bg-white border-slate-300' : 'bg-white border-slate-300'}`}>{done ? '✓' : ''}</span>
-            <span className={`text-xs mt-1.5 ${last ? 'font-semibold text-slate-900' : done ? 'text-slate-600' : 'text-slate-400'}`}>
+            <span className={`text-xs mt-1.5 ${last ? 'font-semibold text-slate-900' : done ? 'text-slate-600' : 'text-slate-500'}`}>
               {s.label}
             </span>
-            <span className="text-[11px] text-slate-400">{done ? fmtDay(s.at) : skipped ? '—' : ''}</span>
+            <span className="text-[11px] text-slate-500">{done ? fmtDay(s.at) : skipped ? '—' : ''}</span>
             <span className="sr-only">{done ? `done ${fmtDay(s.at)}` : skipped ? 'skipped' : 'not yet'}</span>
           </li>
         )

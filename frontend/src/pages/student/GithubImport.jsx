@@ -164,7 +164,7 @@ export default function GithubImport({ onClose, onDone }) {
                       <span className="min-w-0">
                         <span className="text-sm font-medium text-gray-800">{r.name}</span>
                         {r.added && <span className="text-xs text-gray-500 ml-2">already added</span>}
-                        {manyAccounts && <span className="text-xs text-gray-400 ml-2">{r.account}</span>}
+                        {manyAccounts && <span className="text-xs text-gray-500 ml-2">{r.account}</span>}
                         <span className="block text-xs text-gray-500 mt-0.5 truncate">
                           {[r.language, r.description || 'No description on GitHub'].filter(Boolean).join(' · ')}
                         </span>
@@ -234,12 +234,12 @@ function CheckCard({ it, update, find, onRemove }) {
               placeholder="e.g. REST API for a fitness app in FastAPI with PostgreSQL"
               className={`${inputCls} resize-none bg-white`} />
             <p className="flex justify-between text-xs mt-1">
-              <span className={length < MIN_DESCRIPTION ? 'text-amber-700' : 'text-gray-400'}>
+              <span className={length < MIN_DESCRIPTION ? 'text-amber-700' : 'text-gray-500'}>
                 {length < MIN_DESCRIPTION ? `Write at least ${MIN_DESCRIPTION} characters. Skills are found when you click outside the box.`
                   : it.source === 'readme' ? "Filled in from the repo's README. Change it to say what you did."
                   : it.source === 'github' ? 'From the repo’s description on GitHub.' : ''}
               </span>
-              <span className="text-gray-400 tabular-nums shrink-0 ml-3">{it.description.length} / 3000</span>
+              <span className="text-gray-500 tabular-nums shrink-0 ml-3">{it.description.length} / 3000</span>
             </p>
           </div>
           <SkillChecker id={`skills-${it.url}`} skills={it.skills} onChange={skills => update(it.url, { skills })} />

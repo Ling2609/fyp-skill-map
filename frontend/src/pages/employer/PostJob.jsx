@@ -29,7 +29,7 @@ function ChipBox({ box, skills, onRemove, onAdd }) {
   }
   return (
     <div>
-      <h3 className="text-sm font-semibold text-slate-800">{box.title} <span className="font-normal text-slate-400">({skills.length})</span></h3>
+      <h3 className="text-sm font-semibold text-slate-800">{box.title} <span className="font-normal text-slate-500">({skills.length})</span></h3>
       <p className="text-xs text-slate-500 mt-0.5 mb-2">{box.hint}</p>
       <div className="border border-slate-200 rounded-lg px-2.5 py-2 flex flex-wrap items-center gap-1.5 focus-within:ring-2 focus-within:ring-blue-500">
         {skills.map(s => (
@@ -77,7 +77,7 @@ function OtherRequirements({ reqs, setReqs }) {
   return (
     <div className="pt-5 border-t border-slate-200 flex flex-col gap-4">
       <div>
-        <h2 className="text-[15px] font-semibold text-slate-900">Other requirements <span className="font-normal text-sm text-slate-400">(optional)</span></h2>
+        <h2 className="text-[15px] font-semibold text-slate-900">Other requirements <span className="font-normal text-sm text-slate-500">(optional)</span></h2>
         <p className="text-xs text-slate-500 mt-1">Students see these under the job title. They don't change the match.</p>
       </div>
       <div className="flex flex-wrap gap-3">
@@ -288,7 +288,7 @@ export default function PostJob() {
                 disabled={editing} className={`${field} ${editing ? lockedCls : ''}`} />
             </div>
             <div className="flex-1 basis-48">
-              <label htmlFor="pj-salary" className={label}>Salary <span className="font-normal text-slate-400">(optional)</span></label>
+              <label htmlFor="pj-salary" className={label}>Salary <span className="font-normal text-slate-500">(optional)</span></label>
               <input id="pj-salary" value={ad.salary} onChange={set('salary')} maxLength={60} placeholder="e.g. RM 3,500 - 4,500" className={field} />
             </div>
           </div>
@@ -321,7 +321,7 @@ export default function PostJob() {
             <div className="flex items-start justify-between gap-3 mt-1">
               <p className="text-xs text-amber-800">{tooLong ? `Shorten the description to ${MAX_DESCRIPTION.toLocaleString()} characters to read the skills.`
                 : missing.length > 0 && `To read the skills, add ${missing.join(' and ')}.`}</p>
-              <p className={`text-xs tabular-nums shrink-0 ${tooLong ? 'text-rose-700 font-medium' : 'text-slate-400'}`}>{ad.description.length.toLocaleString()} / {MAX_DESCRIPTION.toLocaleString()}</p>
+              <p className={`text-xs tabular-nums shrink-0 ${tooLong ? 'text-rose-700 font-medium' : 'text-slate-500'}`}>{ad.description.length.toLocaleString()} / {MAX_DESCRIPTION.toLocaleString()}</p>
             </div>
           </div>
 

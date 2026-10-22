@@ -285,8 +285,8 @@ export function ExperienceTab({ items, onRefresh }) {
         const list = items.filter(e => e.kind === kind)
         return (
           <div key={kind} className="mb-5 last:mb-0">
-            <h3 className="text-sm font-semibold text-slate-700">{title} <span className="text-slate-400 font-normal tabular-nums">{list.length}</span></h3>
-            {list.length === 0 ? <p className="text-xs text-slate-400 mt-1">{hint}</p> : (
+            <h3 className="text-sm font-semibold text-slate-700">{title} <span className="text-slate-500 font-normal tabular-nums">{list.length}</span></h3>
+            {list.length === 0 ? <p className="text-xs text-slate-500 mt-1">{hint}</p> : (
               <ul className="flex flex-col gap-3 mt-2">
                 {list.map(e => {
                   const added = e.added_skills || []

@@ -65,7 +65,7 @@ export function useStatusChange(onSaved) {
             toast.error ? 'bg-rose-700 text-white' : 'bg-slate-900 text-white'}`}>
           <span>{toast.text}</span>
           {toast.undo && <button onClick={undo} className="font-semibold text-blue-300 hover:text-blue-200">Undo</button>}
-          <button onClick={() => setToast(null)} aria-label="Close" className="text-slate-400 hover:text-white">×</button>
+          <button onClick={() => setToast(null)} aria-label="Close" className="text-slate-500 hover:text-white">×</button>
         </div>
       )}
     </>

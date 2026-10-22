@@ -45,7 +45,7 @@ function Row({ label, value, action, onAction, note, open, children, danger }) {
             {action}
           </button>
         )}
-        {note && <span className="text-xs text-slate-400">{note}</span>}
+        {note && <span className="text-xs text-slate-500">{note}</span>}
       </div>
       {open && <div className="mt-4 ml-36 max-w-md">{children}</div>}
     </div>
@@ -178,7 +178,7 @@ export default function AccountSettings() {
     }
   }
 
-  const errorBox = error && <p className="text-sm text-rose-600 bg-rose-50 border border-rose-100 rounded-lg px-3 py-2">{error}</p>
+  const errorBox = error && <p className="text-sm text-rose-700 bg-rose-50 border border-rose-100 rounded-lg px-3 py-2">{error}</p>
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -230,7 +230,7 @@ export default function AccountSettings() {
                 <div>
                   <div className="flex items-baseline justify-between mb-1">
                     <span className="text-xs font-medium text-slate-500">Code</span>
-                    <span className="text-xs text-slate-400">Expires in 15 minutes</span>
+                    <span className="text-xs text-slate-500">Expires in 15 minutes</span>
                   </div>
                   <input type="text" inputMode="numeric" autoComplete="one-time-code" maxLength={6} value={form.code || ''}
                     onChange={e => setForm(f => ({ ...f, code: e.target.value.replace(/\D/g, '') }))}
@@ -245,7 +245,7 @@ export default function AccountSettings() {
                   <button type="button" onClick={cancel} className="px-3 py-2 text-sm text-slate-500 hover:text-slate-800">Cancel</button>
                   <span className="ml-auto text-sm">
                     {wait > 0
-                      ? <span className="text-slate-400">Resend code in {countdown}</span>
+                      ? <span className="text-slate-500">Resend code in {countdown}</span>
                       : <button type="button" onClick={sendEmailCode} disabled={saving} className="text-blue-600 font-medium hover:text-blue-800">Resend code</button>}
                   </span>
                 </div>

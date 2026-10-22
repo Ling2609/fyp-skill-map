@@ -64,14 +64,14 @@ function Evidence({ items }) {
     <dl className="mt-0.5 grid grid-cols-[4.75rem_1fr] gap-x-2 gap-y-0.5 text-xs leading-[1.15rem]">
       {Object.entries(groups).map(([kind, names]) => (
         <div key={kind} className="contents">
-          <dt className="text-slate-400">{kind}</dt>
-          <dd className="text-slate-600">{names.slice(0, 2).join(', ')}{names.length > 2 && <span className="text-slate-400 whitespace-nowrap"> +{names.length - 2} more</span>}</dd>
+          <dt className="text-slate-500">{kind}</dt>
+          <dd className="text-slate-600">{names.slice(0, 2).join(', ')}{names.length > 2 && <span className="text-slate-500 whitespace-nowrap"> +{names.length - 2} more</span>}</dd>
         </div>
       ))}
     </dl>
   )
 }
-const selfDeclared = <span className="ml-auto shrink-0 text-[11px] text-slate-500 bg-slate-100 rounded-full px-2 py-0.5">Self-declared</span>
+const selfDeclared = <span className="ml-auto shrink-0 text-[11px] text-slate-600 bg-slate-100 rounded-full px-2 py-0.5">Self-declared</span>
 
 function Skills({ skills, relevant }) {
   if (!skills?.length) return null
@@ -96,7 +96,7 @@ function Section({ title, sub, items, first, render, cols = 1, empty }) {
           before the items */}
       <h2 className="flex items-center gap-2 text-base font-semibold text-slate-900"><span aria-hidden="true" className="w-1 h-4 rounded-full bg-blue-600" />{title}</h2>
       {sub && <p className="text-xs text-slate-500 mt-0.5 ml-3">{sub}</p>}
-      {!items.length ? <p className="text-sm text-slate-400 mt-2">{empty}</p> : (
+      {!items.length ? <p className="text-sm text-slate-500 mt-2">{empty}</p> : (
         <div className={`mt-3 grid gap-x-8 ${cols === 2 ? 'sm:grid-cols-2' : ''}`}>{shown.map((it, i) => <div key={i}>{render(it)}</div>)}</div>
       )}
       {/* 21 Oct (her review): at the right, where "See all" sat on the cards (references.md "Where See all goes") */}
@@ -128,7 +128,7 @@ function Group({ title, note, children, count }) {
   // 21 Oct (her review: green titles looked odd): every title in the same dark text; only the chips carry colour
   return (
     <div className="pt-5 mt-5 border-t border-slate-300 first:pt-0 first:mt-0 first:border-0">
-      <p className="text-base font-semibold text-slate-900">{title} <span className="font-normal text-slate-400 tabular-nums">{count}</span></p>
+      <p className="text-base font-semibold text-slate-900">{title} <span className="font-normal text-slate-500 tabular-nums">{count}</span></p>
       {note && <p className="text-xs text-slate-500 mt-0.5">{note}</p>}
       <div className="mt-2.5">{children}</div>
     </div>
@@ -209,7 +209,7 @@ export function ApplicantCards({ s, fit, withFit = true, you, aside }) {
               <div className="py-2">
                 <div className="flex items-baseline justify-between gap-4">
                   <p className="text-sm font-medium text-slate-900 min-w-0">{e.role} <span className="font-normal text-slate-600">· {e.organisation}</span></p>
-                  <span className="shrink-0 text-xs text-slate-400 whitespace-nowrap">{monthLabel(e.start)} – {e.end ? monthLabel(e.end) : 'now'}</span>
+                  <span className="shrink-0 text-xs text-slate-500 whitespace-nowrap">{monthLabel(e.start)} – {e.end ? monthLabel(e.end) : 'now'}</span>
                 </div>
                 <p className="text-xs leading-5 text-slate-500">{e.category_label}{e.description && ` · ${e.description}`}</p>
                 <Skills skills={e.skills} relevant={e.relevant} />
@@ -241,7 +241,7 @@ export function ApplicantCards({ s, fit, withFit = true, you, aside }) {
           render={(c) => (
             <p className="py-1.5 flex justify-between gap-3 text-sm text-slate-700">
               {c.url ? <a href={c.url} target="_blank" rel="noopener noreferrer" className="text-blue-700 hover:underline">{c.name} ↗</a> : <span>{c.name}</span>}
-              <span className="shrink-0 text-xs text-slate-400">{c.kind}</span></p>
+              <span className="shrink-0 text-xs text-slate-500">{c.kind}</span></p>
           )} />
       </div>
       {/* the right panel scrolls on its own and stays in view */}

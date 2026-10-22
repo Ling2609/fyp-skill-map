@@ -104,7 +104,7 @@ export default function Privacy() {
                 <ol className="space-y-1 text-sm">
                   {toc.map(([id, title], i) => (
                     <li key={id}><a href={`#${id}`} className="flex gap-2 text-slate-700 hover:text-blue-700 py-0.5">
-                      <span className="w-5 shrink-0 text-slate-400 tabular-nums">{i + 1}.</span>{title}</a></li>
+                      <span className="w-5 shrink-0 text-slate-500 tabular-nums">{i + 1}.</span>{title}</a></li>
                   ))}
                 </ol>
               </div>
@@ -113,7 +113,7 @@ export default function Privacy() {
             <div className="space-y-6 max-w-3xl">
               {body.map(([id, title, points], i) => (
                 <section key={id} id={id} className={`scroll-mt-4 ${card}`}>
-                  <h2 className="text-lg font-semibold text-slate-900"><span className="text-slate-400 tabular-nums mr-2">{i + 1}.</span>{title}</h2>
+                  <h2 className="text-lg font-semibold text-slate-900"><span className="text-slate-500 tabular-nums mr-2">{i + 1}.</span>{title}</h2>
                   <ul className="mt-3 space-y-2 text-[15px] text-slate-700 leading-relaxed list-disc pl-5">
                     {points.map(p => <li key={p}>{rich(p)}</li>)}
                   </ul>
@@ -142,7 +142,7 @@ export default function Privacy() {
 
               {/* Every version with what changed; earlier ones can still be opened (NN/g: summarise changes) */}
               <section id="changes" className={`scroll-mt-4 ${card}`}>
-                <h2 className="text-lg font-semibold text-slate-900"><span className="text-slate-400 tabular-nums mr-2">{toc.length}.</span>{L.history}</h2>
+                <h2 className="text-lg font-semibold text-slate-900"><span className="text-slate-500 tabular-nums mr-2">{toc.length}.</span>{L.history}</h2>
                 <ul className="mt-3 divide-y divide-slate-100">
                   {VERSIONS.map(v => (
                     <li key={v.date} className="py-2.5 flex flex-wrap items-baseline gap-x-4 gap-y-1 text-[15px]">

@@ -272,7 +272,7 @@ export default function Recommend() {
     doSearch(roleFilter, 'all')
   }
 
-  const getMatchBgColor = (pct) => pct >= 70 ? 'bg-emerald-50 text-emerald-700' : pct >= 40 ? 'bg-amber-50 text-amber-700' : 'bg-rose-50 text-rose-600'
+  const getMatchBgColor = (pct) => pct >= 70 ? 'bg-emerald-50 text-emerald-700' : pct >= 40 ? 'bg-amber-50 text-amber-700' : 'bg-rose-50 text-rose-700'
   const getAccentColor  = (pct) => pct >= 70 ? 'bg-emerald-400' : pct >= 40 ? 'bg-amber-400' : 'bg-rose-400'
 
   // Displayed number = skill coverage (same as Job Detail). Default order = "best fit" (backend ranking,
@@ -332,7 +332,7 @@ export default function Recommend() {
   )
   const searchInput = (pad) => (
     <div className={`flex-1 flex items-center gap-2 ${pad} pr-3 py-2.5 min-w-0`}>
-      <svg className="w-4 h-4 text-slate-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <svg className="w-4 h-4 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
       </svg>
       <input type="text" value={roleFilter} aria-label="Search jobs"
@@ -349,7 +349,7 @@ export default function Recommend() {
         className="flex-1 min-w-0 bg-transparent text-sm focus:outline-none text-slate-700 placeholder-slate-400" />
       {roleFilter && (
         <button onClick={() => { setRoleFilter(''); doSearch('', activeCategory) }} aria-label="Clear search"
-          className="text-slate-400 hover:text-slate-600 text-xs">✕</button>
+          className="text-slate-500 hover:text-slate-600 text-xs">✕</button>
       )}
     </div>
   )
@@ -365,7 +365,7 @@ export default function Recommend() {
     <span className="relative inline-flex items-center gap-1.5 text-sm text-slate-500 rounded focus-within:ring-2 focus-within:ring-blue-200">
       Sort by
       <span className="text-slate-700 font-medium">{sortBy === 'fit' ? 'Best fit' : 'Most skills matched'}</span>
-      <svg className="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+      <svg className="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
       </svg>
       <select aria-label="Sort by" value={sortBy} onChange={e => { setSortBy(e.target.value); setVisibleCount(10) }}
@@ -448,7 +448,7 @@ export default function Recommend() {
         )}
 
         {error && !loading && (
-          <div className="bg-rose-50 text-rose-600 text-sm px-4 py-3 rounded-lg border border-rose-100 mb-4">{error}</div>
+          <div className="bg-rose-50 text-rose-700 text-sm px-4 py-3 rounded-lg border border-rose-100 mb-4">{error}</div>
         )}
 
         {results && !loading && (
@@ -473,14 +473,14 @@ export default function Recommend() {
             )}
             {placeJobs.length === 0 ? (
               <div className="bg-white rounded-xl p-10 text-center border border-slate-200">
-                <p className="text-slate-400 text-sm">No current openings match this search. Try a broader search, another category or location.</p>
+                <p className="text-slate-500 text-sm">No current openings match this search. Try a broader search, another category or location.</p>
               </div>
             ) : (
               <>
                 {visibleJobs.map((job, idx) => (
                   <Fragment key={job.job_id}>
                   {idx > 0 && titleOf(job) === 0 && titleOf(visibleJobs[idx - 1]) > 0 && (
-                    <p className="text-xs text-slate-400 pt-3 pb-1 px-1">Other openings that fit your profile</p>
+                    <p className="text-xs text-slate-500 pt-3 pb-1 px-1">Other openings that fit your profile</p>
                   )}
                   <div onClick={() => openJob(job.job_id)}
                     className="bg-white rounded-xl border border-slate-200 cursor-pointer hover:border-blue-200 hover:shadow-sm transition group overflow-hidden flex">
@@ -494,7 +494,11 @@ export default function Recommend() {
                             {/* 12 Oct (her review): the pill sat inside the truncated title line, so its bottom was cut off;
                                 now the title truncates on its own and the pills sit beside it */}
                             <div className="flex items-center gap-2 min-w-0">
-                              <p className="font-semibold text-slate-800 text-sm truncate group-hover:text-blue-700 transition leading-snug">{job.job_title}</p>
+                              {/* 22 Oct (accessibility check): the title is a real link, so the card opens with Tab + Enter and
+                                  screen readers announce it; the whole card still opens with a mouse click */}
+                              <a href={`/jobs/${encodeURIComponent(job.job_id)}`}
+                                onClick={e => { e.stopPropagation(); if (e.ctrlKey || e.metaKey || e.shiftKey || e.button) return; e.preventDefault(); openJob(job.job_id) }}
+                                className="font-semibold text-slate-800 text-sm truncate group-hover:text-blue-700 transition leading-snug rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500">{job.job_title}</a>
                               {/* 11 Oct: a post by one of the university's partner employers, applied for on SkillMap */}
                               {/* 19 Oct (her pick 5, option B; Indeed labels its own-apply jobs by the action, references.md "Job source on
                                   cards"): every card says how to apply, before clicking */}
@@ -506,7 +510,7 @@ export default function Recommend() {
                                 : null}
                               {mine[job.job_id]?.invited && <span className="shrink-0 text-[11px] font-medium text-violet-700 bg-violet-50 border border-violet-200 rounded-full px-2 py-0.5">Invited to apply</span>}
                             </div>
-                            <p className="text-xs text-slate-400 mt-0.5 truncate">
+                            <p className="text-xs text-slate-500 mt-0.5 truncate">
                               {job.company} · {job.location}{daysAgo(job.posted_days_ago) && ` · ${daysAgo(job.posted_days_ago)}`}
                             </p>
                           </div>
@@ -523,15 +527,15 @@ export default function Recommend() {
                       </div>
                       <div className="flex gap-1.5 mt-2.5 flex-wrap">
                         <LevelTag level={job.level} />
-                        <span className="text-xs bg-slate-100 text-slate-500 px-2 py-0.5 rounded-md font-medium">{job.subcategory}</span>
+                        <span className="text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded-md font-medium">{job.subcategory}</span>
                         {job.salary && job.salary !== 'nan' && (
-                          <span className="text-xs bg-slate-100 text-slate-500 px-2 py-0.5 rounded-md font-medium">{job.salary}</span>
+                          <span className="text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded-md font-medium">{job.salary}</span>
                         )}
                         {job.top_job_skills?.slice(0, 3).map(skill => (
                           // the skill the search matched comes first and is highlighted: it shows why the job is here
                           <span key={skill} className={skill === job.search_skill
                             ? 'text-xs text-blue-700 bg-blue-50 px-2 py-0.5 rounded-md border border-blue-200 font-medium'
-                            : 'text-xs text-slate-400 px-2 py-0.5 rounded-md border border-slate-200'}>{skillName(skill)}</span>
+                            : 'text-xs text-slate-500 px-2 py-0.5 rounded-md border border-slate-200'}>{skillName(skill)}</span>
                         ))}
                       </div>
                     </div>
@@ -545,7 +549,7 @@ export default function Recommend() {
                   </button>
                 )}
                 {!hasMore && sortedJobs.length > 0 && (
-                  <p className="text-center text-xs text-slate-400 py-3">{sortedJobs.length === 1 ? 'End of list' : `End of list · all ${sortedJobs.length} shown`}</p>
+                  <p className="text-center text-xs text-slate-500 py-3">{sortedJobs.length === 1 ? 'End of list' : `End of list · all ${sortedJobs.length} shown`}</p>
                 )}
               </>
             )}
@@ -557,7 +561,7 @@ export default function Recommend() {
 }
 
 const Chevron = () => (
-  <svg className="w-3.5 h-3.5 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400"
+  <svg className="w-3.5 h-3.5 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none text-slate-500"
     fill="none" stroke="currentColor" viewBox="0 0 24 24">
     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
   </svg>

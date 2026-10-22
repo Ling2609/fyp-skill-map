@@ -146,7 +146,7 @@ export default function MyProfile() {
               <span className="font-medium text-slate-700">{data.total_skills === 1 ? 'skill' : 'skills'}</span> found in your modules, projects, experience, certificates and awards
             </p>
             <p className="text-sm text-slate-600">
-              {data.programme || 'Programme not set'}{data.intake && <span className="text-slate-400"> · Intake {data.intake}</span>}
+              {data.programme || 'Programme not set'}{data.intake && <span className="text-slate-500"> · Intake {data.intake}</span>}
               {' · '}<button type="button" onClick={() => setOpen('study')} className="font-medium text-blue-700 hover:underline">Change</button>
             </p>
           </div>
@@ -164,7 +164,7 @@ export default function MyProfile() {
                 className={`flex items-center gap-2 py-3 text-sm font-medium border-b-2 transition-colors ${active
                   ? 'border-blue-600 text-blue-700' : 'border-transparent text-slate-500 hover:text-slate-800 hover:border-slate-200'}`}>
                 {t.label}
-                <span className={`text-xs px-1.5 py-0.5 rounded-full font-medium tabular-nums ${active ? 'bg-blue-100 text-blue-700' : 'bg-slate-100 text-slate-500'}`}>
+                <span className={`text-xs px-1.5 py-0.5 rounded-full font-medium tabular-nums ${active ? 'bg-blue-100 text-blue-700' : 'bg-slate-100 text-slate-600'}`}>
                   {count[t.key]}
                 </span>
               </button>

@@ -14,7 +14,7 @@ import { startGithubConnect } from './githubConnect'
 
 function Step({ state, children }) {
   return (
-    <li className={`flex items-center gap-2.5 text-sm ${state === 'todo' ? 'text-gray-400' : state === 'busy' ? 'text-gray-900 font-medium' : 'text-gray-700'}`}>
+    <li className={`flex items-center gap-2.5 text-sm ${state === 'todo' ? 'text-gray-500' : state === 'busy' ? 'text-gray-900 font-medium' : 'text-gray-700'}`}>
       {state === 'done'
         ? <span className="w-5 h-5 rounded-full bg-emerald-600 text-white text-xs flex items-center justify-center" aria-hidden="true">✓</span>
         : <span className={`w-5 h-5 flex items-center justify-center ${state === 'busy' ? 'text-blue-700' : 'text-gray-300'}`} aria-hidden="true">
@@ -59,7 +59,7 @@ export default function GithubCallback() {
       <div className="bg-white rounded-2xl border border-slate-200 shadow-sm w-full max-w-sm p-7 text-center" role="status" aria-live="polite">
         {error ? (
           <>
-            <div className="mx-auto w-12 h-12 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center text-xl font-bold" aria-hidden="true">!</div>
+            <div className="mx-auto w-12 h-12 rounded-xl bg-rose-50 text-rose-700 flex items-center justify-center text-xl font-bold" aria-hidden="true">!</div>
             <p className="mt-4 text-base font-semibold text-slate-900">GitHub wasn't connected</p>
             <p className="mt-2 text-sm text-slate-600">{error}</p>
             <div className="mt-5 flex justify-center items-center gap-3">
@@ -80,7 +80,7 @@ export default function GithubCallback() {
               <Step state={done ? 'done' : 'busy'}>Checking the account is yours</Step>
               {withProjects && <Step state={done ? 'done' : 'busy'}>Checking your projects' GitHub links</Step>}
             </ul>
-            <p className="mt-5 text-xs text-slate-400">{done ? 'Going back to My Profile…' : 'This takes a few seconds.'}</p>
+            <p className="mt-5 text-xs text-slate-500">{done ? 'Going back to My Profile…' : 'This takes a few seconds.'}</p>
           </>
         )}
       </div>

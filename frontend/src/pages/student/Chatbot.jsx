@@ -139,7 +139,7 @@ function MessageBubble({ msg, onDownload, downloading, onChoose }) {
             ))}
           </div>
         )}
-        {onChoose && <p className="text-xs text-slate-400 mt-2">Or type a number below.</p>}
+        {onChoose && <p className="text-xs text-slate-500 mt-2">Or type a number below.</p>}
         {onDownload && (
           <div className="mt-3 pt-3 border-t border-slate-200">
             <button type="button" onClick={onDownload} disabled={downloading}
@@ -522,7 +522,7 @@ export default function Chatbot() {
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-all disabled:cursor-not-allowed ${
                   mode === m.key
                     ? 'bg-white text-slate-800 shadow-sm'
-                    : 'text-slate-500 hover:text-slate-700'
+                    : 'text-slate-600 hover:text-slate-800'
                 }`}
               >
                 {m.icon}
@@ -547,7 +547,7 @@ export default function Chatbot() {
         {!listOpen ? (
           <aside className="w-12 shrink-0 bg-white border-r border-slate-200 flex flex-col items-center gap-2 py-3">
             <button onClick={toggleList} title="Show past chats" aria-label="Show past chats"
-              className="p-1.5 rounded-md hover:bg-slate-100 text-slate-400 hover:text-slate-600 transition">
+              className="p-1.5 rounded-md hover:bg-slate-100 text-slate-500 hover:text-slate-600 transition">
               <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 5l7 7-7 7M5 5l7 7-7 7" />
               </svg>
@@ -565,7 +565,7 @@ export default function Chatbot() {
               <span className="text-sm leading-none">+</span> New chat
             </button>
             <button onClick={toggleList} title="Hide past chats" aria-label="Hide past chats"
-              className="p-1.5 rounded-md hover:bg-slate-100 text-slate-400 hover:text-slate-600 transition shrink-0">
+              className="p-1.5 rounded-md hover:bg-slate-100 text-slate-500 hover:text-slate-600 transition shrink-0">
               <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
               </svg>
@@ -580,11 +580,11 @@ export default function Chatbot() {
               </div>
             )}
             {sessionsLoaded && !historyNote && !sessions.length && (
-              <p className="text-[11px] text-slate-400 px-2">Your chats will be saved here.</p>
+              <p className="text-[11px] text-slate-500 px-2">Your chats will be saved here.</p>
             )}
             {groups.map(([label, list]) => (
               <div key={label} className="mb-2">
-                <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider px-2 mt-2 mb-1">{label}</p>
+                <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider px-2 mt-2 mb-1">{label}</p>
                 {list.map(s => (
                   <div key={s.id} className={`group flex items-center rounded-md ${s.id === sessionId ? 'bg-blue-50' : 'hover:bg-slate-50'}`}>
                     {confirmDelete === s.id ? (
@@ -602,7 +602,7 @@ export default function Chatbot() {
                           {chatLabel(s)}
                         </button>
                         <button onClick={() => setConfirmDelete(s.id)} aria-label="Delete chat"
-                          className="shrink-0 px-2 text-slate-300 hover:text-rose-500 opacity-0 group-hover:opacity-100 focus:opacity-100 transition">×</button>
+                          className="shrink-0 px-2 text-slate-500 hover:text-rose-600 opacity-0 group-hover:opacity-100 focus:opacity-100 transition">×</button>
                       </>
                     )}
                   </div>
@@ -673,7 +673,7 @@ export default function Chatbot() {
               </svg>
             </button>
           </div>
-          <p className="text-center text-xs text-slate-300 mt-2">Enter to send · Shift+Enter for new line</p>
+          <p className="text-center text-xs text-slate-500 mt-2">Enter to send · Shift+Enter for new line</p>
         </div>
         </div>
       </div>

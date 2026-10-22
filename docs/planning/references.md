@@ -1102,3 +1102,15 @@ Her request: show the student a clear process (instead of silence then a sudden 
 - Key length: PyJWT warns for HS256 keys under 32 bytes ("32 bytes (256 bits)", RFC 7518 3.2;
   https://pyjwt.readthedocs.io/en/stable/algorithms.html). The API now prints a warning at start-up if SECRET_KEY is
   shorter; the test key was lengthened. `.env.example` already says to make it with secrets.token_urlsafe(48).
+
+## Accessibility check, 22 Oct (opened; system testing step 4)
+- Lighthouse's accessibility score is "a weighted average of all accessibility audits"; each audit is pass or fail and
+  the weights come from axe user impact assessments, each audit linking to an axe rule
+  (https://developer.chrome.com/docs/lighthouse/accessibility/scoring). So the same engine, axe-core 4.13.0, was run on
+  18 pages from the browser tests (WCAG 2.1 A + AA tags) to find problems before her Lighthouse run.
+- Before / after: `docs/evidence/e2e/accessibility_before_2026-10-22.md` (contrast on 17 pages, 2 labels, 1 link) ->
+  `accessibility.json` (0). Contrast fix: one Tailwind step darker for grey text (slate/gray 400 -> 500; on grey or
+  pale-blue backgrounds 500 -> 600). The page's look is kept (captions still lighter than body text).
+- What tools miss: Lighthouse lists manual audits separately as not scored. Checked by hand: keyboard use. Job Matches
+  cards and Applicants rows were mouse-only (a clickable div / tr); now the title / name is a link and the whole card or
+  row still opens with a click.

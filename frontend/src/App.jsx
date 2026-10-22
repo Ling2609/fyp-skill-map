@@ -83,7 +83,7 @@ function NotForYou() {
   return (
     <div role="status" className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-4 bg-slate-900 text-white text-sm rounded-xl px-5 py-3 shadow-lg">
       That page is for {who}, so you're back on your Dashboard.
-      <button type="button" onClick={() => setOpen(false)} aria-label="Close" className="text-slate-400 hover:text-white">×</button>
+      <button type="button" onClick={() => setOpen(false)} aria-label="Close" className="text-slate-500 hover:text-white">×</button>
     </div>
   )
 }

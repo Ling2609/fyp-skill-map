@@ -134,7 +134,7 @@ export default function ForgotPassword() {
               <div>
                 <div className="flex items-baseline justify-between mb-1">
                   <label className="block text-sm font-medium text-gray-700">Code</label>
-                  <span className="text-xs text-gray-400">Expires in 15 minutes</span>
+                  <span className="text-xs text-gray-500">Expires in 15 minutes</span>
                 </div>
                 <input type="text" inputMode="numeric" autoComplete="one-time-code" maxLength={6} value={form.code}
                   onChange={e => setForm(f => ({ ...f, code: e.target.value.replace(/\D/g, '') }))}
@@ -147,7 +147,7 @@ export default function ForgotPassword() {
             </form>
             <p className="text-sm text-center mt-4">
               {wait > 0
-                ? <span className="text-gray-400">Resend code in {countdown}</span>
+                ? <span className="text-gray-500">Resend code in {countdown}</span>
                 : <button type="button" onClick={sendCode} disabled={loading} className="text-blue-700 font-medium hover:underline">Resend code</button>}
             </p>
           </>

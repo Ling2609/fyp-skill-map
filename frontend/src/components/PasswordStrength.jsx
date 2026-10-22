@@ -50,7 +50,7 @@ export default function PasswordStrength({ password, username = '', email = '' }
 
   // Before typing: the rules up front (NN/g "Password creation": show requirements before, not after). Only rules we
   // really have, no forced mixing (NIST).
-  if (!password) return <p className="mt-1.5 text-xs text-gray-400">At least 8 characters. Avoid common passwords and your username.</p>
+  if (!password) return <p className="mt-1.5 text-xs text-gray-500">At least 8 characters. Avoid common passwords and your username.</p>
   const refused = password.length >= 8 ? problemWith(password, common, username || '', email || '') : null
   const level = refused ? REFUSED : [...LEVELS].reverse().find(l => password.length >= l.min)
   return (
@@ -61,7 +61,7 @@ export default function PasswordStrength({ password, username = '', email = '' }
         ))}
       </div>
       <p className={`text-xs ${level.text}`}>
-        {refused || <>{level.label}{level.bars === 2 && <span className="text-gray-400"> · longer is stronger, e.g. a few random words</span>}</>}
+        {refused || <>{level.label}{level.bars === 2 && <span className="text-gray-500"> · longer is stronger, e.g. a few random words</span>}</>}
       </p>
     </div>
   )

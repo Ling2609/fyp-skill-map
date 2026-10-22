@@ -25,7 +25,7 @@ const GRADE_OPTIONS = [
 function SkillsToggle({ mod, open, onToggle }) {
   const n = (mod.skills || []).length
   return (
-    <p className="text-xs text-gray-400">
+    <p className="text-xs text-gray-500">
       {mod.code}
       {n > 0 && (
         <> · <button type="button" onClick={onToggle} aria-expanded={open}
@@ -178,7 +178,7 @@ export default function ModulesEditor({ onUnsavedChange, onSaved }) {
             <p className="text-sm font-semibold text-gray-800">Compulsory Modules</p>
             {/* Users are final-year students and recent graduates (IR §3.2.2); only completed modules count (IR §1.6.1),
                 so a final-year student leaves current modules blank. No honesty checkbox (Kristal et al. 2020) */}
-            <p className="text-xs text-gray-400">{compulsory.length} modules · leave blank if not completed yet</p>
+            <p className="text-xs text-gray-500">{compulsory.length} modules · leave blank if not completed yet</p>
           </div>
           {/* key = year: a new year opens at the top of its list, not where the last year was scrolled to */}
           <div key={`c${selectedYear}`} tabIndex={0} aria-label="Compulsory modules"
@@ -212,17 +212,17 @@ export default function ModulesEditor({ onUnsavedChange, onSaved }) {
         <div className="bg-white rounded-2xl border border-gray-200 flex flex-col lg:min-h-0 overflow-hidden">
           <div className="shrink-0 px-6 py-3 border-b border-slate-200 flex flex-wrap items-baseline justify-between gap-x-3">
             <p className="text-sm font-semibold text-gray-800">Elective Modules</p>
-            <p className="text-xs text-gray-400">Tick the ones you took</p>
+            <p className="text-xs text-gray-500">Tick the ones you took</p>
           </div>
           <div key={`e${selectedYear}`} tabIndex={0} aria-label="Elective modules"
             className="px-6 py-3 divide-y divide-slate-100 lg:flex-1 lg:overflow-y-auto focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-300">
             {electives.length === 0 ? (
-              <p className="text-sm text-gray-400 py-6 text-center">No electives for Year {selectedYear}</p>
+              <p className="text-sm text-gray-500 py-6 text-center">No electives for Year {selectedYear}</p>
             ) : electives.map(mod => (
               <div key={mod.code} className={`py-3 ${changed.has(mod.code) ? 'bg-amber-50 -mx-6 px-6' : ''}`}>
                 <div className="flex items-start gap-3">
                   <input type="checkbox" checked={selections[mod.code] !== undefined}
-                    onChange={() => toggleElective(mod.code)}
+                    onChange={() => toggleElective(mod.code)} aria-label={`I took ${mod.name}`}
                     className="w-4 h-4 mt-0.5 accent-blue-700 shrink-0" />
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium text-gray-800">{mod.name}</p>

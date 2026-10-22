@@ -6,7 +6,7 @@ export default function ReasonPicker({ value, onChange }) {
   const pick = (r) => onChange({ reason: value.reason === r ? null : r, note: r === 'other' ? value.note : '' })
   return (
     <div>
-      <p className="text-xs text-slate-500">Reason <span className="text-slate-400">(optional, the student sees it)</span></p>
+      <p className="text-xs text-slate-500">Reason <span className="text-slate-500">(optional, the student sees it)</span></p>
       <div className="mt-1.5 flex flex-wrap gap-1.5" role="group" aria-label="Reason">
         {REASONS.map(([key, label]) => (
           <button key={key} type="button" aria-pressed={value.reason === key} onClick={() => pick(key)}

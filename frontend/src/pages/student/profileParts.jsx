@@ -34,7 +34,7 @@ export function EmptyState({ icon, title, subtitle }) {
       <span className="text-4xl">{icon}</span>
       <div>
         <p className="text-sm font-medium text-gray-500">{title}</p>
-        {subtitle && <p className="text-xs text-gray-400 mt-1">{subtitle}</p>}
+        {subtitle && <p className="text-xs text-gray-500 mt-1">{subtitle}</p>}
       </div>
     </div>
   )
@@ -66,7 +66,7 @@ export function Modal({ title, onClose, dirty = false, wide = false, size, child
         className={`bg-white rounded-2xl shadow-xl w-full ${size === 'form' ? 'max-w-[46rem]' : wide ? 'max-w-2xl' : 'max-w-lg'} max-h-[90vh] overflow-y-auto`}>
         <div className="flex items-center justify-between px-6 pt-5 pb-1">
           <h3 className="text-base font-semibold text-gray-800">{title}</h3>
-          <button type="button" onClick={tryClose} aria-label="Close" className="text-gray-400 hover:text-gray-700 p-1 rounded-lg hover:bg-gray-100">
+          <button type="button" onClick={tryClose} aria-label="Close" className="text-gray-500 hover:text-gray-700 p-1 rounded-lg hover:bg-gray-100">
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
           </button>
         </div>
@@ -112,10 +112,10 @@ export function Field({ label, optional, hint, children }) {
   return (
     <div>
       <label className="block text-xs font-medium text-gray-600 mb-1.5">
-        {label} {optional ? <span className="text-gray-300 font-normal">(optional)</span> : <span className="text-red-400">*</span>}
+        {label} {optional ? <span className="text-gray-500 font-normal">(optional)</span> : <span className="text-red-600">*</span>}
       </label>
       {children}
-      {hint && <p className="text-xs text-gray-400 mt-1.5">{hint}</p>}
+      {hint && <p className="text-xs text-gray-500 mt-1.5">{hint}</p>}
     </div>
   )
 }
@@ -206,7 +206,7 @@ export function SkillChecker({ skills, onChange, label = 'Skills', id = 'skill-c
     <div>
       <div className="flex items-baseline justify-between mb-1.5">
         <label htmlFor={id} className="text-xs font-medium text-gray-600">{label} ({skills.length})</label>
-        <span className="text-xs text-gray-400">Remove any that don't fit; type to add one</span>
+        <span className="text-xs text-gray-500">Remove any that don't fit; type to add one</span>
       </div>
       <div className="border border-gray-200 rounded-xl px-3 py-2.5 flex flex-wrap items-center gap-1.5 focus-within:ring-2 focus-within:ring-blue-500">
         {skills.map(s => (

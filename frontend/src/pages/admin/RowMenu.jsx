@@ -47,7 +47,7 @@ export default function RowMenu({ label, items, disabled }) {
     <>
       <button ref={button} type="button" aria-label={label} aria-haspopup="menu" aria-expanded={!!pos} disabled={disabled}
         onClick={() => (pos ? close() : open())}
-        className={`w-8 h-8 inline-flex items-center justify-center rounded-lg border border-slate-200 text-slate-500 hover:bg-slate-50 hover:text-slate-800 disabled:opacity-50 ${pos ? 'bg-slate-100' : 'bg-white'}`}>
+        className={`w-8 h-8 inline-flex items-center justify-center rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50 hover:text-slate-800 disabled:opacity-50 ${pos ? 'bg-slate-100' : 'bg-white'}`}>
         <svg aria-hidden="true" className="w-4 h-4" viewBox="0 0 20 20" fill="currentColor">
           <circle cx="4" cy="10" r="1.6" /><circle cx="10" cy="10" r="1.6" /><circle cx="16" cy="10" r="1.6" />
         </svg>

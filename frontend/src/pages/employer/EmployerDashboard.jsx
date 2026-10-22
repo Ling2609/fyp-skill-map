@@ -18,7 +18,7 @@ import { RECORD_TIP } from '../../components/EmployerRecord'
 // haven't applied, best match first). The page fills the screen and each card scrolls on its own (her rule).
 const BAR = [['applied', 'Applied', 'bg-slate-400'], ['shortlisted', 'Shortlisted', 'bg-blue-500'],
   ['accepted', 'Accepted', 'bg-emerald-500'], ['rejected', 'Rejected', 'bg-rose-300']]
-const AVATAR = ['bg-blue-600', 'bg-violet-600', 'bg-cyan-600', 'bg-pink-600', 'bg-orange-600', 'bg-emerald-600', 'bg-indigo-600', 'bg-teal-600']
+const AVATAR = ['bg-blue-700', 'bg-violet-700', 'bg-cyan-700', 'bg-pink-700', 'bg-orange-700', 'bg-emerald-700', 'bg-indigo-700', 'bg-teal-700']   // -700: white initials readable (WCAG 4.5:1)
 const initials = (name) => name.split(/\s+/).map(w => w[0]).join('').slice(0, 2).toUpperCase()
 const avatarCls = (name) => AVATAR[[...name].reduce((n, c) => n + c.charCodeAt(0), 0) % AVATAR.length]
 const ago = (iso) => {
@@ -82,7 +82,7 @@ function ActivityRow({ e }) {
       <Link to={to} className="px-5 py-2.5 flex items-start gap-3 text-sm text-slate-600 hover:bg-slate-50">
         <span aria-hidden="true" className={`mt-1.5 w-2 h-2 rounded-full shrink-0 ${DOT[e.status || e.kind]}`} />
         <span className="flex-1 min-w-0 truncate">{activityText(e)}</span>
-        <span className="shrink-0 text-xs text-slate-400">{ago(e.at)}</span>
+        <span className="shrink-0 text-xs text-slate-500">{ago(e.at)}</span>
       </Link>
     </li>
   )
@@ -313,7 +313,7 @@ export default function EmployerDashboard() {
                 ? <p className="px-5 pb-4 text-sm text-slate-500">Nothing in the last 14 days. Applications, your status changes and invitations will be listed here.</p>
                 : (<>
                   <FitList className="border-t border-slate-200" items={data.activity} renderItem={(e, i) => <ActivityRow key={i} e={e} />} />
-                  {data.activity.length < 3 && <p className="px-5 pb-3 text-xs text-slate-400">New applications and status changes appear here.</p>}
+                  {data.activity.length < 3 && <p className="px-5 pb-3 text-xs text-slate-500">New applications and status changes appear here.</p>}
                 </>)}
             </section>
 

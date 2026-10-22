@@ -132,7 +132,7 @@ function ApplyConfirm({ job, summary, missing = [], onApply, onClose }) {
       <div className="flex items-start justify-between gap-3">
         <p className="text-sm font-semibold text-slate-900 leading-5">Apply to {job.company}?</p>
         <button type="button" onClick={onClose} aria-label="Close"
-          className="-mt-1 -mr-1.5 w-6 h-6 flex items-center justify-center rounded text-lg leading-none text-slate-400 hover:text-slate-700 hover:bg-slate-100">×</button>
+          className="-mt-1 -mr-1.5 w-6 h-6 flex items-center justify-center rounded text-lg leading-none text-slate-500 hover:text-slate-700 hover:bg-slate-100">×</button>
       </div>
       <p className="text-sm text-slate-600 mt-1">They'll see your SkillMap profile and your match for {job.job_title}
         {summary ? `: ${summary.matched_skills} of ${summary.job_skills_total} required skills` : ''}. Your email, phone and other
@@ -166,9 +166,9 @@ function ApplyAction({ a, closed: closedCached, taking: takingCached, fromApps, 
           {!fromApps && <Link to="/applications" className="text-xs text-blue-700 hover:underline">View in My Applications</Link>}
         </>
       ) : closed ? (
-        <span className="text-sm text-slate-500 bg-slate-100 px-4 py-2 rounded-lg">This job is closed</span>
+        <span className="text-sm text-slate-600 bg-slate-100 px-4 py-2 rounded-lg">This job is closed</span>
       ) : taking === false ? (
-        <span className="text-sm text-slate-500 bg-slate-100 px-4 py-2 rounded-lg">Applications closed</span>
+        <span className="text-sm text-slate-600 bg-slate-100 px-4 py-2 rounded-lg">Applications closed</span>
       ) : (
         <>
           <button onClick={() => setAsking(v => !v)} disabled={busy} aria-expanded={asking}
@@ -358,7 +358,7 @@ export default function JobDetail() {
             <div className="flex-1 min-w-0">
               <h1 className="text-xl font-bold text-gray-800">{gap?.job?.job_title}</h1>
               <p className="text-sm text-gray-500 mt-1">{gap?.job?.company} · {gap?.job?.location}</p>
-              <p className="text-xs text-gray-400 mt-1.5">
+              <p className="text-xs text-gray-500 mt-1.5">
                 {gap?.job?.salary && gap.job.salary !== 'nan'
                   ? <span className="text-green-700 font-medium">{gap.job.salary}</span>
                   : gap?.job?.requirements?.salary
@@ -382,7 +382,7 @@ export default function JobDetail() {
               <div className="shrink-0 flex flex-col items-start sm:items-end gap-1">
               {/* 20 Oct: the latest job search no longer returns this ad, so its link may be dead (opened from My Applications) */}
               {gap.job.gone ? (
-                <span className="text-sm text-slate-500 bg-slate-100 px-4 py-2 rounded-lg">This ad is no longer listed</span>
+                <span className="text-sm text-slate-600 bg-slate-100 px-4 py-2 rounded-lg">This ad is no longer listed</span>
               ) : (
               <a
                 href={gap.job.source_url}
@@ -415,7 +415,7 @@ export default function JobDetail() {
                   of {basisWord} skills · you have {gap?.summary?.matched_skills} of {gap?.summary?.job_skills_total}
                 </span>
               </p>
-              <span className="text-xs text-gray-400">{gap?.summary?.missing_skills} to develop</span>
+              <span className="text-xs text-gray-500">{gap?.summary?.missing_skills} to develop</span>
             </div>
             <div className="w-full bg-gray-100 rounded-full h-2">
               <div className={`h-2 rounded-full ${barColor}`} style={{ width: `${coverage}%` }} />
@@ -491,7 +491,7 @@ export default function JobDetail() {
                 {gap.job.description}
               </p>
             ) : (
-              <p className="text-sm text-gray-400">No description available.</p>
+              <p className="text-sm text-gray-500">No description available.</p>
             )}
           </div>
         )}
@@ -557,7 +557,7 @@ export default function JobDetail() {
               </div>
 
               {matchedRows.length === 0 ? (
-                <p className="text-xs text-gray-400 px-5 py-4">None of this job's skills match your record yet.</p>
+                <p className="text-xs text-gray-500 px-5 py-4">None of this job's skills match your record yet.</p>
               ) : !showSources ? (
                 <div className="flex flex-wrap gap-1.5 px-5 py-4">
                   {matchedRows.map((item, idx) => (
@@ -589,7 +589,7 @@ export default function JobDetail() {
                             <span className="text-green-600 font-bold">✓</span>
                             {skillName(item.job_skill)}
                             {item.matched_graduate_skill && item.matched_graduate_skill.toLowerCase() !== item.job_skill.toLowerCase() && (
-                              <span className="text-[10px] text-gray-400">via {skillName(item.matched_graduate_skill)}</span>
+                              <span className="text-[10px] text-gray-500">via {skillName(item.matched_graduate_skill)}</span>
                             )}
                           </span>
                         ))}
@@ -606,7 +606,7 @@ export default function JobDetail() {
                 <div className="px-5 py-4 border-b border-slate-200">
                   <h2 className="text-sm font-semibold text-gray-700">
                     Nice-to-have skills <span className="text-green-700">({niceToHave.filter(n => n.has).length} of {niceToHave.length})</span>
-                    <span className="ml-2 font-normal text-xs text-gray-400">bonus · not counted in the %</span>
+                    <span className="ml-2 font-normal text-xs text-gray-500">bonus · not counted in the %</span>
                   </h2>
                 </div>
                 {/* Her review 5 Oct: the ones you have first, then the ones to learn; those open the AI Assistant like
@@ -637,7 +637,7 @@ export default function JobDetail() {
                 <div className="px-5 py-4 border-b border-slate-200">
                   <h2 className="text-sm font-semibold text-gray-700">
                     Skills you'll gain in this role <span className="text-green-700">({gainInRole.filter(g => g.has).length} of {gainInRole.length})</span>
-                    <span className="ml-2 font-normal text-xs text-gray-400">not expected before you start · not counted in the %</span>
+                    <span className="ml-2 font-normal text-xs text-gray-500">not expected before you start · not counted in the %</span>
                   </h2>
                 </div>
                 {/* Her review 19 Oct: like Nice-to-have: the ones you already have ticked first, the others open the AI

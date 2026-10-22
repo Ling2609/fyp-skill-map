@@ -21,7 +21,7 @@ const fmtDay = (iso) => iso ? new Date(iso).toLocaleDateString('en-GB', { day: '
 // red = not selected. Statuses on other sites use the same colours (their select).
 const PILL = {
   applied: 'bg-slate-100 text-slate-700', viewed: 'bg-slate-100 text-slate-700', shortlisted: 'bg-violet-50 text-violet-800',
-  accepted: 'bg-green-50 text-green-800', rejected: 'bg-rose-50 text-rose-700', closed: 'bg-slate-100 text-slate-500',
+  accepted: 'bg-green-50 text-green-800', rejected: 'bg-rose-50 text-rose-700', closed: 'bg-slate-100 text-slate-600',
   interviewing: 'bg-violet-50 text-violet-800', offer: 'bg-green-50 text-green-800', not_selected: 'bg-rose-50 text-rose-700',
   withdrew: 'bg-slate-50 text-slate-500 border border-slate-200',
 }
@@ -92,7 +92,7 @@ function DetailSteps({ steps, decided }) {
             {/* 20 Oct (her review): the circle is drawn above the line, not under it */}
             <span aria-hidden="true" className={`relative z-10 mt-0.5 w-6 h-6 rounded-full border-2 flex items-center justify-center text-[11px] leading-none text-white ${
               done ? 'bg-blue-600 border-blue-600' : 'bg-white border-slate-300'}`}>{done ? '✓' : ''}</span>
-            <span className={`text-xs leading-4 mt-1.5 whitespace-nowrap ${i === last ? 'font-semibold text-slate-900' : done ? 'text-slate-600' : 'text-slate-400'}`}>
+            <span className={`text-xs leading-4 mt-1.5 whitespace-nowrap ${i === last ? 'font-semibold text-slate-900' : done ? 'text-slate-600' : 'text-slate-500'}`}>
               {s.label}{done ? ` · ${fmtDay(s.at)}` : skipped ? ' · —' : ''}
             </span>
             <span className="sr-only">{done ? 'done' : skipped ? 'skipped' : 'not yet'}</span>
@@ -220,7 +220,7 @@ function MiniSteps({ steps }) {
         {steps.map((s, i) => (
           <li key={s.key} className="flex items-center gap-2">
             {i > 0 && <span aria-hidden="true" className={`w-3 h-px ${s.at ? 'bg-blue-500' : 'bg-slate-300'}`} />}
-            <span className={`flex items-center gap-1 text-[13px] ${i === last ? 'font-semibold text-slate-900' : s.at ? 'text-slate-600' : 'text-slate-400'}`}>
+            <span className={`flex items-center gap-1 text-[13px] ${i === last ? 'font-semibold text-slate-900' : s.at ? 'text-slate-600' : 'text-slate-500'}`}>
               <span aria-hidden="true" className={`w-2 h-2 rounded-full ${s.at ? 'bg-blue-600' : 'bg-slate-300'}`} />
               {s.label}{i === last && date(s) && <span className="font-normal text-slate-500"> {date(s)}</span>}
               <span className="sr-only">{s.at ? ' done' : ' not yet'}</span>
@@ -250,7 +250,7 @@ function SectionHead({ id, title, note, more }) {
     <div className="flex flex-wrap items-end justify-between gap-x-4 gap-y-1">
       <div>
         <h2 id={id} className="text-base font-semibold text-slate-900">{title}</h2>
-        <p className="text-sm text-slate-500">{note}</p>
+        <p className="text-sm text-slate-600">{note}</p>
       </div>
       {more}
     </div>
@@ -364,7 +364,7 @@ function OutsideCard({ o, onStatus, onRemove }) {
       <div className={ROW}>
         <div className="min-w-0">
           <Link to={`/jobs/${encodeURIComponent(o.job_ref)}`} state={{ from: 'My Applications' }} className={`${TITLE} ${ONE}`} title={o.title}>{o.title}</Link>
-          <p className={`text-xs text-slate-500 mt-0.5 ${ONE}`}>{o.company}{o.match && ` · ${short(o.match)}`}{o.listed === false && <span className="text-slate-400"> · ad no longer listed</span>}</p>
+          <p className={`text-xs text-slate-500 mt-0.5 ${ONE}`}>{o.company}{o.match && ` · ${short(o.match)}`}{o.listed === false && <span className="text-slate-500"> · ad no longer listed</span>}</p>
         </div>
         <MiniSteps steps={outsideSteps(o)} />
         <Labelled label="Applied via" value={o.publisher || 'another site'} />

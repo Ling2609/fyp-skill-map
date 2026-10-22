@@ -41,7 +41,7 @@ export default function ProfileTracker({ done, onGo }) {
       {open && (
         <div className="absolute right-0 top-full mt-2 z-30 w-[24rem] bg-white border border-slate-200 rounded-xl shadow-lg p-2">
           {ITEMS.map(i => done[i.key] ? (
-            <p key={i.key} className="flex items-center gap-3 px-3 py-2 text-sm text-slate-400">
+            <p key={i.key} className="flex items-center gap-3 px-3 py-2 text-sm text-slate-500">
               <span className="w-5 text-emerald-600 font-semibold" aria-hidden="true">✓</span>{i.title}
             </p>
           ) : (
