@@ -23,6 +23,9 @@ Planning, reasoning and research behind each decision are in the project roadmap
   backend `pip-audit` 58 advisories in 6 packages -> 0: pillow, urllib3, certifi and pytest upgraded, and python-jose
   (an advisory with no fix) replaced by PyJWT, so ecdsa and rsa are gone too. Existing sign-ins keep working. The API
   warns at start-up if SECRET_KEY is shorter than 32 characters.
+- **Unit tests** (`backend/tests_unit/`, 32): the match and gap counts, grade weights, quotes from the ad, job levels,
+  no made-up links, password rules and the ask-for-less rule, each as a plain function with no database. Each was
+  checked to fail when its rule is broken on purpose. `python -m pytest` now runs 172 tests.
 
 ## 21 Oct 2026 — Fuller profiles, what employers see, fairness after applying, one look everywhere
 Why: graduate recruiters weigh work experience, activities and languages, not only modules; employers should see the
