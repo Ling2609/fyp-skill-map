@@ -194,7 +194,7 @@ export default function ModulesEditor({ onUnsavedChange, onSaved }) {
                       <SkillsToggle mod={mod} open={!!openSkills[mod.code]} onToggle={() => toggleSkills(mod.code)} />
                     </div>
                   </div>
-                  <select
+                  <select aria-label={`Grade for ${mod.name}`}
                     value={selections[mod.code] ?? ''}
                     onChange={e => setGrade(mod.code, e.target.value)}
                     className="max-sm:ml-5 border border-gray-200 rounded-lg px-2 py-1 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 shrink-0"
@@ -229,7 +229,7 @@ export default function ModulesEditor({ onUnsavedChange, onSaved }) {
                     <SkillsToggle mod={mod} open={!!openSkills[mod.code]} onToggle={() => toggleSkills(mod.code)} />
                     {openSkills[mod.code] && <SkillChips mod={mod} />}
                     {selections[mod.code] !== undefined && (
-                      <select value={selections[mod.code] ?? ''} onChange={e => setGrade(mod.code, e.target.value)}
+                      <select aria-label={`Grade for ${mod.name}`} value={selections[mod.code] ?? ''} onChange={e => setGrade(mod.code, e.target.value)}
                         className="mt-2 border border-gray-200 rounded-lg px-2 py-1 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full">
                         <option value="">Not graded yet</option>
                         {GRADE_OPTIONS.map(g => <option key={g.value} value={g.value}>{g.label}</option>)}

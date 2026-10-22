@@ -9,6 +9,11 @@ Planning, reasoning and research behind each decision are in the project roadmap
   first. Both tests fail when the row lock is removed. Also: applications from before 21 Oct (no saved copy) still
   show. 140 tests.
 - System test cases: 67 rows linked to the IR objectives, each with its evidence (`docs/testing/`).
+- **Browser tests (Playwright):** 13 tests click through the real app as a student, an employer and the career office
+  (`frontend/e2e/`), on a separate database filled by `backend/scripts/tools/setup_e2e.py`; how to run:
+  `docs/testing/e2e.md`. Bugs they found, now fixed: on Sign in and Register, filling two fields quickly (as
+  password managers do) emptied one of them; the sign-in fields, the sign-up fields, the grade lists and the
+  show-password buttons had no labels for screen readers; a wrong sign-in is now announced.
 
 ## 21 Oct 2026 — Fuller profiles, what employers see, fairness after applying, one look everywhere
 Why: graduate recruiters weigh work experience, activities and languages, not only modules; employers should see the

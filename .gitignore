@@ -33,3 +33,8 @@ backend/data/relation_cache.json.tmp
 # pytest (backend/tests)
 .pytest_cache/
 backend/profile_slow_calls.txt
+
+# Playwright (browser tests): failure screenshots and reports are not evidence; the passing run is
+docs/evidence/e2e/failures/
+frontend/test-results/
+frontend/playwright-report/

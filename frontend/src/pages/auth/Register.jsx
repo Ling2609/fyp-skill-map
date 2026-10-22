@@ -179,12 +179,14 @@ export default function Register() {
 
           {/* Username */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Username</label>
+            <label htmlFor="reg-username" className="block text-sm font-medium text-gray-700 mb-1">Username</label>
             <div className="relative">
               <input
+                id="reg-username"
+                autoComplete="username"
                 type="text"
                 value={form.username}
-                onChange={e => setForm({ ...form, username: e.target.value })}
+                onChange={e => { const v = e.target.value; setForm(f => ({ ...f, username: v })) }}
                 onFocus={() => setFocused('username')}
                 onBlur={() => setFocused('')}
                 className={`w-full border rounded-lg px-3 py-2 text-sm pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
@@ -216,11 +218,13 @@ export default function Register() {
           {/* First & Last Name */}
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">First Name</label>
+              <label htmlFor="reg-first" className="block text-sm font-medium text-gray-700 mb-1">First Name</label>
               <input
+                id="reg-first"
+                autoComplete="given-name"
                 type="text"
                 value={form.first_name}
-                onChange={e => setForm({ ...form, first_name: e.target.value })}
+                onChange={e => { const v = e.target.value; setForm(f => ({ ...f, first_name: v })) }}
                 onFocus={() => setFocused('first_name')}
                 onBlur={() => handleBlur('first_name')}
                 className={inputClass(errors.first_name)}
@@ -230,11 +234,13 @@ export default function Register() {
               {errors.first_name && <p className="text-xs text-red-500 mt-1">{errors.first_name}</p>}
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
+              <label htmlFor="reg-last" className="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
               <input
+                id="reg-last"
+                autoComplete="family-name"
                 type="text"
                 value={form.last_name}
-                onChange={e => setForm({ ...form, last_name: e.target.value })}
+                onChange={e => { const v = e.target.value; setForm(f => ({ ...f, last_name: v })) }}
                 onFocus={() => setFocused('last_name')}
                 onBlur={() => handleBlur('last_name')}
                 className={inputClass(errors.last_name)}
@@ -247,11 +253,13 @@ export default function Register() {
 
           {/* Email */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+            <label htmlFor="reg-email" className="block text-sm font-medium text-gray-700 mb-1">Email</label>
             <input
+                id="reg-email"
+                autoComplete="email"
               type="email"
               value={form.email}
-              onChange={e => setForm({ ...form, email: e.target.value })}
+              onChange={e => { const v = e.target.value; setForm(f => ({ ...f, email: v })) }}
               onFocus={() => setFocused('email')}
               onBlur={() => setFocused('')}
               className={inputClass(attemptedSubmit && !form.email)}
@@ -265,12 +273,14 @@ export default function Register() {
 
           {/* Password */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
+            <label htmlFor="reg-password" className="block text-sm font-medium text-gray-700 mb-1">Password</label>
             <div className="relative">
               <input
+                id="reg-password"
+                autoComplete="new-password"
                 type={showPassword ? 'text' : 'password'}
                 value={form.password}
-                onChange={e => setForm({ ...form, password: e.target.value })}
+                onChange={e => { const v = e.target.value; setForm(f => ({ ...f, password: v })) }}
                 onFocus={() => setFocused('password')}
                 onBlur={() => setFocused('')}
                 className={`w-full border rounded-lg px-3 py-2 text-sm pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
@@ -282,7 +292,7 @@ export default function Register() {
                 minLength={8}
                 maxLength={72}
               />
-              <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-2.5">
+              <button type="button" onClick={() => setShowPassword(!showPassword)} aria-label={showPassword ? 'Hide password' : 'Show password'} className="absolute right-3 top-2.5">
                 <EyeIcon show={showPassword} />
               </button>
             </div>
@@ -298,12 +308,14 @@ export default function Register() {
 
           {/* Confirm Password */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Confirm Password</label>
+            <label htmlFor="reg-confirm" className="block text-sm font-medium text-gray-700 mb-1">Confirm Password</label>
             <div className="relative">
               <input
+                id="reg-confirm"
+                autoComplete="new-password"
                 type={showConfirm ? 'text' : 'password'}
                 value={form.confirm_password}
-                onChange={e => setForm({ ...form, confirm_password: e.target.value })}
+                onChange={e => { const v = e.target.value; setForm(f => ({ ...f, confirm_password: v })) }}
                 onFocus={() => setFocused('confirm_password')}
                 onBlur={() => setFocused('')}
                 className={`w-full border rounded-lg px-3 py-2 text-sm pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
@@ -315,7 +327,7 @@ export default function Register() {
                 placeholder="••••••••"
                 required
               />
-              <button type="button" onClick={() => setShowConfirm(!showConfirm)} className="absolute right-3 top-2.5">
+              <button type="button" onClick={() => setShowConfirm(!showConfirm)} aria-label={showConfirm ? 'Hide password' : 'Show password'} className="absolute right-3 top-2.5">
                 <EyeIcon show={showConfirm} />
               </button>
             </div>
@@ -332,10 +344,11 @@ export default function Register() {
 
           {/* Role */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Role</label>
+            <label htmlFor="reg-role" className="block text-sm font-medium text-gray-700 mb-1">Role</label>
             <select
+              id="reg-role"
               value={form.role}
-              onChange={e => setForm({ ...form, role: e.target.value })}
+              onChange={e => { const v = e.target.value; setForm(f => ({ ...f, role: v })) }}
               className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               <option value="student">Student</option>
@@ -350,7 +363,7 @@ export default function Register() {
               <input
                 id="reg-company"
                 value={form.company_name}
-                onChange={e => setForm({ ...form, company_name: e.target.value })}
+                onChange={e => { const v = e.target.value; setForm(f => ({ ...f, company_name: v })) }}
                 maxLength={120}
                 className={inputClass(attemptedSubmit && form.company_name.trim().length < 2)}
                 placeholder="e.g. Kayu Digital Sdn Bhd"
