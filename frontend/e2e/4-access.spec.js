@@ -17,6 +17,6 @@ test('TC-54 a student cannot open employer or career office pages', async ({ pag
     await page.waitForURL('**/dashboard')                  // sent back to her own Dashboard, and told why
     await expect(page.getByRole('status').filter({ hasText: `That page is for ${who}` })).toBeVisible()
   }
-  await expect(page.getByRole('link', { name: 'Job Matches' })).toBeVisible()   // her Dashboard has drawn
+  await expect(page.getByText('Graduate Software Engineer').first()).toBeVisible()   // her Dashboard has drawn, jobs too
   await shot(page, 'TC-54_student_sent_to_dashboard')
 })

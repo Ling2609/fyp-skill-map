@@ -17,21 +17,30 @@ import { Busy } from '../../components/Spinner'
 const JOB_COLS = <colgroup><col /><col className="w-36" /><col className="w-48" /><col className="w-48" /><col className="w-52" /></colgroup>
 const fmtDate = (iso) => iso ? new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : ''
 
+// 22 Oct (her review, option A of the mock-up): centred both ways, an icon in the sidebar's line style (an emoji looks
+// different on each computer), and what happens next, as there is no approval email
 function Waiting({ status, company }) {
   const rejected = status === 'rejected'
   return (
-    <div className="flex-1 flex items-start justify-center px-8 py-16">
-      <div className="bg-white border border-slate-200 rounded-2xl p-8 max-w-lg">
-        <p className={`text-[11px] font-semibold uppercase tracking-widest mb-2 ${rejected ? 'text-rose-600' : 'text-amber-600'}`}>
-          {rejected ? 'Not approved' : 'Waiting for approval'}
-        </p>
-        <h1 className="text-xl font-semibold text-slate-900">
+    <div className="flex-1 flex items-center justify-center px-8 py-16">
+      <div className="bg-white border border-slate-200 rounded-2xl px-10 py-9 max-w-2xl text-center">
+        <div className={`mx-auto w-14 h-14 rounded-full flex items-center justify-center mb-4 ${rejected ? 'bg-rose-50 text-rose-600' : 'bg-amber-50 text-amber-600'}`} aria-hidden="true">
+          {rejected
+            ? <svg className="w-7 h-7" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" /><path d="M9 9l6 6M15 9l-6 6" strokeLinecap="round" /></svg>
+            : <svg className="w-7 h-7" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" strokeLinecap="round" strokeLinejoin="round" /></svg>}
+        </div>
+        <h1 className="text-xl font-semibold text-slate-900 text-balance">
           {rejected ? `${company || 'Your company'} wasn't approved to post jobs` : `${company || 'Your company'} is waiting for approval`}
         </h1>
+        <p className="text-sm text-slate-600 mt-3 leading-relaxed">
+          {rejected
+            ? 'The career office reviewed your account and did not approve it.'
+            : "The university's career office checks every company before it can post jobs."}
+        </p>
         <p className="text-sm text-slate-600 mt-2 leading-relaxed">
           {rejected
-            ? 'The career office reviewed your account and did not approve it. If you think this is a mistake, contact the career office.'
-            : "The university's career office checks every company before it can post jobs. You can post as soon as they approve your account."}
+            ? 'If you think this is a mistake, contact the career office.'
+            : "Sign in again later. Once you're approved, this page becomes your Dashboard."}
         </p>
       </div>
     </div>
