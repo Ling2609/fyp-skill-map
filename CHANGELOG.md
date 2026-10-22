@@ -3,6 +3,13 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 22 Oct 2026 — Stronger tests after a second outside audit
+- **Concurrency through the real endpoints:** an application and a stricter edit run at the same moment in both orders;
+  the edit is refused if the application came first, and the application is made under the new ad if the edit came
+  first. Both tests fail when the row lock is removed. Also: applications from before 21 Oct (no saved copy) still
+  show. 140 tests.
+- System test cases: 67 rows linked to the IR objectives, each with its evidence (`docs/testing/`).
+
 ## 21 Oct 2026 — Fuller profiles, what employers see, fairness after applying, one look everywhere
 Why: graduate recruiters weigh work experience, activities and languages, not only modules; employers should see the
 application as it was sent; and an employer must not change the rules after students applied (research:

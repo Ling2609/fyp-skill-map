@@ -94,3 +94,73 @@ def test_an_edit_and_an_application_at_the_same_moment_take_turns(client, users,
         assert second.query(Job).filter(Job.id == job["id"]).with_for_update(nowait=True).one().id == job["id"]
     finally:
         second.rollback(); first.close(); second.close()
+
+
+def _run_together(first, second, gap=0.3):
+    """Start `first`, then `second` a moment later while `first` is still inside its endpoint; return both responses."""
+    import time
+    from concurrent.futures import ThreadPoolExecutor
+    with ThreadPoolExecutor(max_workers=2) as pool:
+        a = pool.submit(first)
+        time.sleep(gap)
+        b = pool.submit(second)
+        return a.result(timeout=60), b.result(timeout=60)
+
+
+def _stricter_edit(client, users, employer, job):
+    e = client.get(f"/employer/jobs/{job['id']}/edit", headers=users.h(employer)).json()
+    body = {"description": e["description"], "salary": "", "soft": [],
+            "skills": e["skills"] + [{"name": "Docker", "level": "required", "quote": "", "group": ""}]}
+    return lambda: client.put(f"/employer/jobs/{job['id']}", headers=users.h(employer), json=body)
+
+
+def test_real_endpoints_application_first_then_a_stricter_edit_is_refused(client, users, post_job, monkeypatch):
+    """21 Oct (second outside audit: run the real endpoints, not only the lock). The application is mid-way (slowed
+    while it builds its copy) when the employer saves a stricter edit: the edit waits for the application, then
+    sees it and is refused; the job keeps the requirements the student applied under."""
+    import time
+    import app.routers.employer as emp
+    employer, student = users.employer(), users.student()
+    job = post_job(employer, required=("Python",))
+    edit = _stricter_edit(client, users, employer, job)
+    real = emp.sent_copy
+    monkeypatch.setattr(emp, "sent_copy", lambda *a, **k: (time.sleep(1.5), real(*a, **k))[1])
+    applied, edited = _run_together(
+        lambda: client.post("/applications", headers=users.h(student), json={"job_id": job["job_ref"]}), edit)
+    assert applied.status_code == 200, applied.text
+    assert edited.status_code == 409 and "Docker as a required skill" in edited.json()["detail"]
+    after = client.get(f"/employer/jobs/{job['id']}/edit", headers=users.h(employer)).json()
+    assert {s["name"] for s in after["skills"]} == {"Python"}
+
+
+def test_real_endpoints_edit_first_then_the_application_is_made_under_the_new_ad(client, users, post_job, monkeypatch):
+    """The other order: the stricter edit is mid-way (nobody has applied yet, so it is allowed) when a student
+    applies. The application waits for the edit, then is made under the new requirements, so the copy the employer
+    sees already has Docker: nobody applied under rules that changed afterwards."""
+    import time
+    import app.routers.employer as emp
+    employer, student = users.employer(), users.student()
+    job = post_job(employer, required=("Python",))
+    edit = _stricter_edit(client, users, employer, job)
+    real = emp._asks_for_more
+    monkeypatch.setattr(emp, "_asks_for_more", lambda *a, **k: (time.sleep(1.5), real(*a, **k))[1])
+    edited, applied = _run_together(
+        edit, lambda: client.post("/applications", headers=users.h(student), json={"job_id": job["job_ref"]}))
+    assert edited.status_code == 200, edited.text
+    assert applied.status_code == 200, applied.text
+    app_id = applied.json()["id"]
+    sent = client.get(f"/employer/applications/{app_id}", headers=users.h(employer)).json()
+    assert sent["versions"]["job_changed"] is False                     # applied under the edited job, not before it
+    assert sent["fit"]["total"] == 2 and "Docker" in sent["fit"]["missing"]     # judged against Python + Docker
+
+
+def test_an_application_from_before_copies_were_kept_still_shows(client, users, post_job, db):
+    """Applications made before 21 Oct have no saved copy: the employer sees the latest profile, no version bar."""
+    from conftest import sql
+    employer, student = users.employer(), users.student()
+    job = post_job(employer, required=("Python",))
+    app_id = client.post("/applications", headers=users.h(student), json={"job_id": job["job_ref"]}).json()["id"]
+    sql(db, "update applications set sent_profile = null, sent_at = null where id = :i", i=app_id)
+    r = client.get(f"/employer/applications/{app_id}", headers=users.h(employer))
+    assert r.status_code == 200 and r.json()["versions"] is None and r.json()["student"]["name"]
+    assert client.get("/applications/mine", headers=users.h(student)).json()[0]["job_changed"] is None

@@ -1,0 +1,2 @@
+Command: npx eslint src (ESLint v10.10.0)
+Result: 0 problems
