@@ -11,9 +11,12 @@ test('TC-54 signed out: a private page sends you to sign in', async ({ page }) =
 
 test('TC-54 a student cannot open employer or career office pages', async ({ page }) => {
   await signIn(page, STUDENT)
-  for (const path of ['/employer/jobs', '/employer/post', '/admin/users', '/admin/academic']) {
+  for (const [path, who] of [['/employer/jobs', 'employers'], ['/employer/post', 'employers'],
+                             ['/admin/users', 'the career office'], ['/admin/academic', 'the career office']]) {
     await page.goto(path)
-    await page.waitForURL('**/dashboard')                  // sent back to her own Dashboard
+    await page.waitForURL('**/dashboard')                  // sent back to her own Dashboard, and told why
+    await expect(page.getByRole('status').filter({ hasText: `That page is for ${who}` })).toBeVisible()
   }
+  await expect(page.getByRole('link', { name: 'Job Matches' })).toBeVisible()   // her Dashboard has drawn
   await shot(page, 'TC-54_student_sent_to_dashboard')
 })

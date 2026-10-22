@@ -15,5 +15,5 @@ export async function signIn(page, email) {
 
 // Evidence: a full-page screenshot named after the system test case it supports
 export async function shot(page, name) {
-  await page.screenshot({ path: `../docs/evidence/e2e/${name}.png`, fullPage: false })
+  await page.screenshot({ path: `../docs/evidence/e2e/${name}.png`, fullPage: false, animations: 'disabled' })   // fades finished, so the picture shows the end state
 }

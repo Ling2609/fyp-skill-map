@@ -3,12 +3,12 @@
 Playwright opens a real Chrome window, clicks through SkillMap like a user, and checks what the page shows.
 The tests live in `frontend/e2e/`:
 
-| File | Journey | Test cases |
-|---|---|---|
-| `1-student.spec.js` | Grades become skills, profile checklist, Job Matches, the skill gap, applying | TC-01, 10, 11, 16, 28 |
-| `2-employer.spec.js` | Who applied, contact details only after shortlisting, the student sees "Shortlisted" | TC-31, 42, 38 |
-| `3-admin.spec.js` | A new employer signs up and waits, the career office approves them, adds an intake | TC-51, 48, 50 |
-| `4-access.spec.js` | Signed out → sign in; a student can't open employer or career office pages | TC-54 |
+| File                   | Journey                                                                              | Test cases            |
+| ---------------------- | ------------------------------------------------------------------------------------ | --------------------- |
+| `1-student.spec.js`  | Grades become skills, profile checklist, Job Matches, the skill gap, applying        | TC-01, 10, 11, 16, 28 |
+| `2-employer.spec.js` | Who applied, contact details only after shortlisting, the student sees "Shortlisted" | TC-31, 42, 38         |
+| `3-admin.spec.js`    | A new employer signs up and waits, the career office approves them, adds an intake   | TC-51, 48, 50         |
+| `4-access.spec.js`   | Signed out → sign in; a student can't open employer or career office pages          | TC-54                 |
 
 They run in this order and build on each other (the employer shortlists the application made in the student test).
 
@@ -47,6 +47,7 @@ You need three terminals.
    ```bash
    python scripts/tools/setup_e2e.py
    ```
+
    It should end with: `Ready: skillmap_e2e has 4 accounts and 3 open jobs`.
 2. Start the backend on that database:
    ```bash
@@ -54,11 +55,13 @@ You need three terminals.
    ```
 
 **Terminal 2, frontend** (from `frontend/`):
+
 ```bash
 npm run dev
 ```
 
 **Terminal 3, the tests** (from `frontend/`):
+
 ```bash
 npx playwright test --ui     # a window: pick a test, press ▶, watch every step (best while learning)
 npx playwright test          # all tests, no window; prints ✓ or ✘ for each one
@@ -72,12 +75,12 @@ because the grade is already saved and the "Save grades" button never appears.
 
 All four use the password `Orchid-Lantern-42`.
 
-| Email | Who |
-|---|---|
-| e2e.student@example.com | Aina Rahman: SE student, no grades yet |
+| Email                     | Who                                                                              |
+| ------------------------- | -------------------------------------------------------------------------------- |
+| e2e.student@example.com   | Aina Rahman: SE student, no grades yet                                           |
 | e2e.applicant@example.com | Daniel Lim: SE student with 4 grades, has applied for Graduate Software Engineer |
-| e2e.employer@example.com | Mei Tan, Kayu Digital Sdn Bhd (approved): 3 open jobs |
-| e2e.admin@example.com | Career office |
+| e2e.employer@example.com  | Mei Tan, Kayu Digital Sdn Bhd (approved): 3 open jobs                            |
+| e2e.admin@example.com     | Career office                                                                    |
 
 ## Writing a new test
 
@@ -85,6 +88,7 @@ All four use the password `Orchid-Lantern-42`.
    ```bash
    npx playwright codegen localhost:5173
    ```
+
    Click through the journey; Playwright writes the code as you click. Copy the steps into a new file in
    `frontend/e2e/`, e.g. `2-employer.spec.js`.
 2. Add checks with `expect(...)`: what should be on the page afterwards.

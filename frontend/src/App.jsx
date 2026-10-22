@@ -1,5 +1,5 @@
-import { lazy, Suspense } from 'react'
-import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
+import { lazy, Suspense, useEffect, useState } from 'react'
+import { Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom'
 import { SidebarProvider, useSidebar } from './components/SidebarContext'
 import { useAuth } from './context/useAuth'
 import PrivacyUpdate from './components/PrivacyUpdate'
@@ -45,7 +45,8 @@ function RoleRoute({ children, roles }) {
     </div>
   )
   if (!user) return <Navigate to="/login" replace />
-  if (roles && !roles.includes(user.role)) return <Navigate to="/dashboard" />
+  // 22 Oct (her review of the browser test): say why she was brought back, instead of a silent jump to the Dashboard
+  if (roles && !roles.includes(user.role)) return <Navigate to="/dashboard" replace state={{ notFor: roles }} />
   // An employer the career office hasn't approved only sees their status (on /dashboard) and account settings
   if (user.role === 'employer' && user.employer_status !== 'approved' && !['/dashboard', '/account'].includes(pathname)) return <Navigate to="/dashboard" replace />
   // First sign-in setup (8 Oct): a student without a programme picks one before anything else
@@ -57,9 +58,34 @@ function RoleRoute({ children, roles }) {
 // One /dashboard address for everyone (Login goes there); each role sees its own home (7 Oct)
 function Home() {
   const { user } = useAuth()
-  if (user?.role === 'admin') return <AdminDashboard />
-  if (user?.role === 'employer') return <EmployerHome />     // 12 Oct: the employer dashboard, or "waiting for approval"
-  return <Dashboard />
+  const page = user?.role === 'admin' ? <AdminDashboard />
+    : user?.role === 'employer' ? <EmployerHome />      // 12 Oct: the employer dashboard, or "waiting for approval"
+    : <Dashboard />
+  return <>{page}<NotForYou /></>
+}
+
+// After a page meant for another role: a short note at the bottom that fades after a few seconds (Nielsen's heuristic
+// 9: say plainly what happened). Shown once; reloading the Dashboard doesn't bring it back.
+const WHO = { student: 'students', employer: 'employers', admin: 'the career office' }
+function NotForYou() {
+  const { state, pathname } = useLocation()
+  const navigate = useNavigate()
+  const [roles] = useState(() => state?.notFor)
+  const [open, setOpen] = useState(!!roles)
+  useEffect(() => {
+    if (!roles) return
+    navigate(pathname, { replace: true, state: null })
+    const t = setTimeout(() => setOpen(false), 6000)
+    return () => clearTimeout(t)
+  }, [])   // eslint-disable-line react-hooks/exhaustive-deps
+  if (!open) return null
+  const who = roles.map(r => WHO[r] || r).join(' and ')
+  return (
+    <div role="status" className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-4 bg-slate-900 text-white text-sm rounded-xl px-5 py-3 shadow-lg">
+      That page is for {who}, so you're back on your Dashboard.
+      <button type="button" onClick={() => setOpen(false)} aria-label="Close" className="text-slate-400 hover:text-white">×</button>
+    </div>
+  )
 }
 
 function Layout({ children }) {

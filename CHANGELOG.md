@@ -14,6 +14,9 @@ Planning, reasoning and research behind each decision are in the project roadmap
   `docs/testing/e2e.md`. Bugs they found, now fixed: on Sign in and Register, filling two fields quickly (as
   password managers do) emptied one of them; the sign-in fields, the sign-up fields, the grade lists and the
   show-password buttons had no labels for screen readers; a wrong sign-in is now announced.
+- After her look at the test screenshots: a page meant for another role now says so ("That page is for employers,
+  so you're back on your Dashboard") instead of a silent jump; Job Detail's two tabs are announced as tabs, with the
+  selected one; evidence screenshots wait for fades to finish.
 
 ## 21 Oct 2026 — Fuller profiles, what employers see, fairness after applying, one look everywhere
 Why: graduate recruiters weigh work experience, activities and languages, not only modules; employers should see the

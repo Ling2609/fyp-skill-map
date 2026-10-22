@@ -36,7 +36,8 @@ test.describe.serial('Student', () => {
     await page.waitForURL(/\/jobs\//)
     // Python matched (from her module); SQL and Git are the gap
     await expect(page.getByText('you have 1 of 3')).toBeVisible()
-    await page.getByRole('button', { name: 'Skill Gap Analysis' }).click()
+    await page.getByRole('tab', { name: 'Skill Gap Analysis' }).click()
+    await expect(page.getByRole('tab', { name: 'Skill Gap Analysis' })).toHaveAttribute('aria-selected', 'true')
     await expect(page.getByRole('heading', { name: /Required skills you have \(1 of 3\)/ })).toBeVisible()
     await expect(page.getByRole('heading', { name: /Required skills you're missing \(2\)/ })).toBeVisible()
     await shot(page, 'TC-16_job_detail_gap')

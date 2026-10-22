@@ -424,13 +424,15 @@ export default function JobDetail() {
         </div>
 
         {/* Tabs */}
-        <div className="flex gap-1 bg-white rounded-xl p-1 border border-gray-100 shadow-sm">
+        <div role="tablist" aria-label="Job details" className="flex gap-1 bg-white rounded-xl p-1 border border-gray-100 shadow-sm">
           {[
             { key: 'description', label: 'Job Description' },
             { key: 'gap', label: 'Skill Gap Analysis' },
           ].map(tab => (
             <button
               key={tab.key}
+              role="tab"
+              aria-selected={activeTab === tab.key}
               onClick={() => setActiveTab(tab.key)}
               className={`flex-1 py-2 rounded-lg text-sm font-medium transition ${
                 activeTab === tab.key
