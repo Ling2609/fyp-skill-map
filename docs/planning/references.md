@@ -1083,3 +1083,22 @@ Her request: show the student a clear process (instead of silence then a sudden 
 - One real gap: an edit and an application at the same moment could cross (the ask-for-less check read applications without a lock). Fixed: applications.apply and employer.save_edit both take the job's row with SELECT ... FOR UPDATE (PostgreSQL row lock, held to commit); test_edit_job.py proves the second waits.
 - Not done, on purpose: refactoring routers into services before submission (agreed with the audit); concurrency load testing (stated as a limitation with the E5 single-user response times).
 - (22 Oct, second audit) It asked for a test of the real endpoints, not only the lock. Added in test_edit_job.py: both orders run through the real API at the same moment (one side slowed on purpose): application first -> the stricter edit waits, sees it, is refused; edit first -> the application waits and is made under the new ad. Both fail with the lock removed (checked), pass with it; stable over 3 repeat runs. Also a test that applications from before 21 Oct (no saved copy) still show. 140 passed. Its other point: the lint log was empty (ESLint prints nothing when clean), so the log now states the command and "0 problems".
+
+## Security audit of the libraries, 22 Oct (opened; system testing step 3)
+- Tools: `npm audit` (frontend) and `pip-audit` (backend, against requirements.txt). Before/after reports in
+  `docs/evidence/security/`.
+- Frontend before (50c6ea7): 3 high (vite 8.2.2 dev server, follow-redirects 1.16.0, source-map-js 1.2.1). She ran
+  `npm audit fix` (fc344d5): vite 8.3.5 and small build-tool updates, package.json unchanged; after: 0. Her 13-passed
+  browser run (fea4b13) was made after the fix.
+- Backend before: 58 advisories in 6 packages. Upgraded: pillow 12.2 -> 13.0 (12.3 still left some, fixed only in 13),
+  urllib3 2.7 -> 2.8, certifi -> 2026.10.19, pytest 8.4 -> 9.0.3. python-jose 3.5.0 had an advisory with no fix released
+  (HMAC accepting public keys; not exploitable here: one fixed algorithm, HS256, with a secret key), and pulled in
+  ecdsa (2 advisories, no fix; not used). Replaced by PyJWT 2.15.1, which FastAPI's own tutorial now installs
+  ("Necesitamos instalar PyJWT para generar y verificar los tokens JWT en Python",
+  https://fastapi.tiangolo.com/es/tutorial/security/oauth2-jwt/); the docs were changed after a discussion asking to
+  return to PyJWT (https://github.com/fastapi/fastapi/discussions/11345, PR #11589, May 2024). Same HS256 tokens:
+  a token made by python-jose was checked to decode with PyJWT, so nobody is signed out. After: 0 known.
+  140 pytest + 13 browser tests pass. IR deviation to note: python-jose -> PyJWT.
+- Key length: PyJWT warns for HS256 keys under 32 bytes ("32 bytes (256 bits)", RFC 7518 3.2;
+  https://pyjwt.readthedocs.io/en/stable/algorithms.html). The API now prints a warning at start-up if SECRET_KEY is
+  shorter; the test key was lengthened. `.env.example` already says to make it with secrets.token_urlsafe(48).

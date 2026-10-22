@@ -1,0 +1,4 @@
+# npm audit, frontend, AFTER 'npm audit fix' (commit fc344d5; same in fea4b13), 22 Oct 2026
+# command (in frontend/): npm audit fix, then npm audit
+
+found 0 vulnerabilities

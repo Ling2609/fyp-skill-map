@@ -23,6 +23,10 @@ async def lifespan(app: FastAPI):
     from app.routers.admin import check_admin_schema
     check_admin_schema()     # the same for migrate_admin_structure.py (7 Oct)
     delete_old_codes()
+    from app.config import settings
+    if len(settings.secret_key.encode()) < 32:   # 22 Oct (security audit): RFC 7518 3.2, HS256 keys of 32+ bytes
+        print("WARNING: SECRET_KEY is shorter than 32 characters, so sign-in tokens are easier to guess. Make a new one: "
+              'python -c "import secrets; print(secrets.token_urlsafe(48))"')
     from app.mongo import history_ok
     if not history_ok():     # a warning, not a stop: the chatbot works without MongoDB, chats are just not saved
         print("WARNING: MongoDB is not running, so chat history won't be saved. Start the MongoDB service.")

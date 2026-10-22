@@ -16,7 +16,8 @@ from datetime import datetime, timedelta, timezone
 from urllib.parse import urlencode
 
 from fastapi import APIRouter, Depends, HTTPException
-from jose import JWTError, jwt
+import jwt
+from jwt import PyJWTError as JWTError   # PyJWT (22 Oct, security audit: replaced python-jose)
 from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 

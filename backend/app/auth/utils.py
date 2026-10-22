@@ -1,5 +1,5 @@
 import bcrypt
-from jose import jwt
+import jwt   # PyJWT (22 Oct: replaced python-jose, which has an unfixed advisory; same HS256 tokens)
 from datetime import datetime, timedelta, timezone
 from app.config import settings
 

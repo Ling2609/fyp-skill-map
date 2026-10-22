@@ -44,7 +44,7 @@ if "test" not in (_url.database or ""):
     pytest.exit(f'TEST_DATABASE_URL must name a database with "test" in it (got "{_url.database}").', returncode=2)
 
 # Settings for the app under test: environment variables win over backend/.env (pydantic-settings)
-os.environ.update(DATABASE_URL=TEST_URL, SECRET_KEY="test-secret", MONGODB_URL="mongodb://localhost:1",
+os.environ.update(DATABASE_URL=TEST_URL, SECRET_KEY="test-secret-key-for-the-regression-suite-only", MONGODB_URL="mongodb://localhost:1",
                   RELATION_MODEL_DIR="", GROQ_API_KEY="", GEMINI_API_KEY="", COHERE_API_KEY="", JSEARCH_KEY="",
                   SMTP_USER="", SMTP_PASSWORD="")
 sys.path.insert(0, str(BACKEND))

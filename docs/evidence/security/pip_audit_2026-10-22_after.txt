@@ -1,0 +1,10 @@
+# pip-audit, backend, AFTER the fixes (22 Oct 2026): pillow 13.0.0, urllib3 2.8.0, certifi 2026.10.19, pytest 9.0.3;
+# python-jose replaced by PyJWT 2.15.1 (no fix released for python-jose; this also removes ecdsa and rsa)
+# command (in backend/, venv on): pip-audit -r requirements.txt --disable-pip --no-deps
+
+Name           Skip Reason
+-------------- ---------------------------------------------------------------
+en-core-web-sm URL requirements cannot be pinned to a specific package version
+WARNING:pip_audit._cli:--no-deps is supported, but users are encouraged to fully hash their pinned dependencies
+WARNING:pip_audit._cli:Consider using a tool like `pip-compile`: https://pip-tools.readthedocs.io/en/latest/#using-hashes
+No known vulnerabilities found

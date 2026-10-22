@@ -19,6 +19,10 @@ Planning, reasoning and research behind each decision are in the project roadmap
   selected one; evidence screenshots wait for fades to finish. The employer's waiting page (her pick A of the mock-up):
   centred, a clock icon, and what happens next, as there is no approval email.
 - The browser tab says "SkillMap" with the SkillMap logo, instead of "frontend" and Vite's lightning icon.
+- **Security audit of the libraries** (`docs/evidence/security/`): frontend `npm audit` 3 high -> 0 (`npm audit fix`);
+  backend `pip-audit` 58 advisories in 6 packages -> 0: pillow, urllib3, certifi and pytest upgraded, and python-jose
+  (an advisory with no fix) replaced by PyJWT, so ecdsa and rsa are gone too. Existing sign-ins keep working. The API
+  warns at start-up if SECRET_KEY is shorter than 32 characters.
 
 ## 21 Oct 2026 — Fuller profiles, what employers see, fairness after applying, one look everywhere
 Why: graduate recruiters weigh work experience, activities and languages, not only modules; employers should see the

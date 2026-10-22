@@ -21,7 +21,7 @@ Live jobs (JSearch) + jobs posted on SkillMap ──► skill extraction with qu
 | Part | Technology |
 |---|---|
 | Frontend | React 19, Vite, Tailwind CSS v4 (pages load on first use) |
-| Backend | FastAPI (Python 3.13), SQLAlchemy, JWT (python-jose), bcrypt |
+| Backend | FastAPI (Python 3.13), SQLAlchemy, JWT (PyJWT; python-jose until 22 Oct), bcrypt |
 | Databases | PostgreSQL 16 (all app data); MongoDB (AI Assistant chat history, and a record of every AI skill reading with what people changed afterwards; SkillMap still works without it) |
 | Skill extraction + AI Assistant | gpt-oss-120b via the Groq API (gpt-oss-20b when its daily limit is reached) |
 | Job description formatting (display only) | Gemini (`gemini-3.1-flash-lite`) |

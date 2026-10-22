@@ -9,7 +9,8 @@ from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Request,
 from fastapi.responses import PlainTextResponse
 from fastapi.security import OAuth2PasswordBearer
 from pydantic import BaseModel, Field
-from jose import JWTError, jwt
+import jwt
+from jwt import PyJWTError as JWTError   # PyJWT (22 Oct, security audit: replaced python-jose)
 from sqlalchemy import func, inspect, or_
 from sqlalchemy.orm import Session
 from app.database import SessionLocal, engine, get_db
