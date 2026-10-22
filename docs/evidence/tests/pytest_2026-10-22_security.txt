@@ -1,0 +1,41 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.7, pytest-9.0.3, pluggy-1.6.0
+rootdir: C:\Users\Ling\Desktop\fyp-skill-map\backend
+configfile: pytest.ini
+testpaths: tests
+plugins: anyio-4.15.1, platformdirs-4.12.2
+collected 140 items
+
+tests\test_ad_requirements.py .......                                    [  5%]
+tests\test_admin.py ...                                                  [  7%]
+tests\test_applications.py ............                                  [ 15%]
+tests\test_audit_fixes.py .........                                      [ 22%]
+tests\test_auth.py ........                                              [ 27%]
+tests\test_career_fit.py ..                                              [ 29%]
+tests\test_counsellor_cv.py ..                                           [ 30%]
+tests\test_delete_account.py ...                                         [ 32%]
+tests\test_description_grounding.py ...                                  [ 35%]
+tests\test_edit_job.py ........                                          [ 40%]
+tests\test_employer_preview.py .....                                     [ 44%]
+tests\test_evaluation_runs.py ...                                        [ 46%]
+tests\test_extraction_records.py .....                                   [ 50%]
+tests\test_github_connect.py .......                                     [ 55%]
+tests\test_grades.py ..                                                  [ 56%]
+tests\test_install.py ....                                               [ 59%]
+tests\test_invitations.py .....                                          [ 62%]
+tests\test_learning_plan.py .........                                    [ 69%]
+tests\test_match_speed.py ...                                            [ 71%]
+tests\test_module_extraction_eval.py .                                   [ 72%]
+tests\test_module_prompt_v2.py ..                                        [ 73%]
+tests\test_more_evidence.py .........                                    [ 80%]
+tests\test_outside_applications.py ....                                  [ 82%]
+tests\test_permissions.py ...                                            [ 85%]
+tests\test_personal_data.py ...                                          [ 87%]
+tests\test_ranking_eval.py ..                                            [ 88%]
+tests\test_response_times.py ...                                         [ 90%]
+tests\test_spacy_baseline.py ...                                         [ 92%]
+tests\test_transparency.py ........                                      [ 98%]
+tests\test_upgrade_module_skills_v2.py .                                 [ 99%]
+tests\test_whatif.py .                                                   [100%]
+
+======================= 140 passed in 323.75s (0:05:23) =======================
