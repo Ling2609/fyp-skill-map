@@ -1114,3 +1114,7 @@ Her request: show the student a clear process (instead of silence then a sudden 
 - What tools miss: Lighthouse lists manual audits separately as not scored. Checked by hand: keyboard use. Job Matches
   cards and Applicants rows were mouse-only (a clickable div / tr); now the title / name is a link and the whole card or
   row still opens with a click.
+- Her first Lighthouse run (Sign in, desktop, Lighthouse 13.4.1): 93. Two failed audits my WCAG 2.1 scan didn't include:
+  `target-size` (show-password button 16x16 px, WCAG 2.2 2.5.8 asks 24x24) and `landmark-one-main` (best practice;
+  the report: "Automatic detection can only detect a subset of issues"). Fixed (28 px buttons; <main> on the pages
+  outside the app layout; the sidebar an <aside> landmark) and the scan widened to wcag22aa + best-practice tags.

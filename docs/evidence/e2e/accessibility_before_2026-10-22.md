@@ -18,3 +18,8 @@ Main cause: grey captions `text-slate-400` / `text-gray-400` on white (2.6:1). F
 Found by hand (no tool flags it): the job cards on Job Matches and the applicant rows on View applicants opened only
 with a mouse. Their titles / names are now real links (Tab + Enter); the keyboard tests in `5-accessibility.spec.js`
 check both.
+
+## Second round (after her first Lighthouse run, Sign in 93)
+Lighthouse also checks WCAG 2.2 and best practices. With those rules added to the scan: `landmark-one-main`
+(Sign in, Register), `region` (content outside landmarks: Sign in 7, Register 12, the sidebar logo on every signed-in
+page), `target-size` (show-password buttons, 16x16 px). Fixed; after: 0 problems on 18 pages (623 checks).

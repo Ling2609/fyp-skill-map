@@ -30,6 +30,9 @@ Planning, reasoning and research behind each decision are in the project roadmap
   with axe-core (WCAG 2.1 AA). Before: low-contrast grey text on 17 pages, two unlabelled tick boxes, a link told apart by
   colour only; after: 0. Grey captions one step darker; job titles on Job Matches and applicant names on View applicants
   are now links, so both lists work with Tab and Enter (checked by two keyboard tests). 16 browser tests.
+  After her first Lighthouse run (Sign in 93): show-password buttons 28 px (WCAG 2.2 target size), a main landmark on
+  Sign in, Register, Forgot password and Study set-up, the sidebar one landmark; the scan now also uses WCAG 2.2 and
+  best-practice rules (623 checks on 18 pages, 0 problems).
 
 ## 21 Oct 2026 — Fuller profiles, what employers see, fairness after applying, one look everywhere
 Why: graduate recruiters weigh work experience, activities and languages, not only modules; employers should see the

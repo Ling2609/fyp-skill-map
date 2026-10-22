@@ -1,0 +1,96 @@
+{
+  "standard": "WCAG 2.0/2.1/2.2 A + AA and best-practice rules (axe-core)",
+  "pages": [
+    {
+      "name": "Sign in",
+      "passes": 31,
+      "problems": 0
+    },
+    {
+      "name": "Register",
+      "passes": 32,
+      "problems": 0
+    },
+    {
+      "name": "Student Dashboard",
+      "passes": 37,
+      "problems": 0
+    },
+    {
+      "name": "My Profile",
+      "passes": 38,
+      "problems": 0
+    },
+    {
+      "name": "Job Matches",
+      "passes": 30,
+      "problems": 0
+    },
+    {
+      "name": "My Applications",
+      "passes": 35,
+      "problems": 0
+    },
+    {
+      "name": "AI Assistant",
+      "passes": 30,
+      "problems": 0
+    },
+    {
+      "name": "Profile & privacy",
+      "passes": 35,
+      "problems": 0
+    },
+    {
+      "name": "Job Detail",
+      "passes": 35,
+      "problems": 0
+    },
+    {
+      "name": "Job Detail: skill gap",
+      "passes": 35,
+      "problems": 0
+    },
+    {
+      "name": "Employer Dashboard",
+      "passes": 30,
+      "problems": 0
+    },
+    {
+      "name": "My Jobs",
+      "passes": 37,
+      "problems": 0
+    },
+    {
+      "name": "Applicants",
+      "passes": 41,
+      "problems": 0
+    },
+    {
+      "name": "Applicant",
+      "passes": 33,
+      "problems": 0
+    },
+    {
+      "name": "Post a Job",
+      "passes": 35,
+      "problems": 0
+    },
+    {
+      "name": "Career office Dashboard",
+      "passes": 28,
+      "problems": 0
+    },
+    {
+      "name": "Users",
+      "passes": 40,
+      "problems": 0
+    },
+    {
+      "name": "Academics",
+      "passes": 40,
+      "problems": 0
+    }
+  ],
+  "problems": []
+}

@@ -1,5 +1,5 @@
 // Accessibility (TC-66): every main page is scanned with axe-core, the engine behind Chrome Lighthouse's accessibility
-// score, against WCAG 2.1 A and AA (contrast, labels, names, structure). Any problem fails the test and is listed.
+// score, against WCAG 2.2 A and AA plus its best-practice rules (contrast, labels, names, landmarks, target size). Any problem fails the test and is listed.
 // A tool can't judge everything, so the keyboard is checked too: the main lists open with Tab and Enter, no mouse.
 import { test, expect } from '@playwright/test'
 import AxeBuilder from '@axe-core/playwright'
@@ -11,13 +11,13 @@ const found = []                       // every problem, saved to docs/evidence/
 async function scan(page, name) {
   await page.waitForLoadState('networkidle')
   await page.waitForTimeout(500)        // colour fades (0.15-0.2 s) finished, so contrast is measured at the end
-  const r = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']).analyze()
+  const r = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa', 'best-practice']).analyze()
   for (const v of r.violations) found.push({ page: name, rule: v.id, impact: v.impact, help: v.help,
                                              where: v.nodes.map(n => n.target.join(' ')) })
   return { name, passes: r.passes.length, problems: r.violations.length }
 }
 
-test('TC-66 the main pages of each role have no WCAG 2.1 AA problems that axe-core finds', async ({ page, browser }) => {
+test('TC-66 the main pages of each role have no accessibility problems that axe-core finds (WCAG 2.2 AA + best practice)', async ({ page, browser }) => {
   test.setTimeout(240_000)
   const pages = []
   await page.goto('/login'); pages.push(await scan(page, 'Sign in'))
@@ -45,7 +45,7 @@ test('TC-66 the main pages of each role have no WCAG 2.1 AA problems that axe-co
   await admin.goto('/admin/users'); pages.push(await scan(admin, 'Users'))
   await admin.goto('/admin/academic'); pages.push(await scan(admin, 'Academics'))
 
-  fs.writeFileSync('../docs/evidence/e2e/accessibility.json', JSON.stringify({ standard: 'WCAG 2.1 A + AA (axe-core)', pages, problems: found }, null, 2))
+  fs.writeFileSync('../docs/evidence/e2e/accessibility.json', JSON.stringify({ standard: 'WCAG 2.0/2.1/2.2 A + AA and best-practice rules (axe-core)', pages, problems: found }, null, 2))
   expect(found, found.map(f => `${f.page}: ${f.help} (${f.where.length})`).join('\n')).toEqual([])
 })
 

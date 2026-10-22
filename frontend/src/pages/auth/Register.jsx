@@ -164,7 +164,7 @@ export default function Register() {
     `w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 ${hasError ? 'border-red-400' : 'border-gray-300'}`
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-blue-50 to-slate-100 flex items-center justify-center p-4">
+    <main className="min-h-screen bg-linear-to-br from-blue-50 to-slate-100 flex items-center justify-center p-4">
       <div className="bg-white rounded-2xl shadow-lg p-5 w-full max-w-md">
         <div className="mb-3">
           <h1 className="text-2xl font-bold text-gray-900 leading-tight">Create account</h1>
@@ -292,7 +292,7 @@ export default function Register() {
                 minLength={8}
                 maxLength={72}
               />
-              <button type="button" onClick={() => setShowPassword(!showPassword)} aria-label={showPassword ? 'Hide password' : 'Show password'} className="absolute right-3 top-2.5">
+              <button type="button" onClick={() => setShowPassword(!showPassword)} aria-label={showPassword ? 'Hide password' : 'Show password'} className="absolute right-1.5 top-1/2 -translate-y-1/2 w-7 h-7 flex items-center justify-center rounded-md hover:bg-gray-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500">
                 <EyeIcon show={showPassword} />
               </button>
             </div>
@@ -327,7 +327,7 @@ export default function Register() {
                 placeholder="••••••••"
                 required
               />
-              <button type="button" onClick={() => setShowConfirm(!showConfirm)} aria-label={showConfirm ? 'Hide password' : 'Show password'} className="absolute right-3 top-2.5">
+              <button type="button" onClick={() => setShowConfirm(!showConfirm)} aria-label={showConfirm ? 'Hide password' : 'Show password'} className="absolute right-1.5 top-1/2 -translate-y-1/2 w-7 h-7 flex items-center justify-center rounded-md hover:bg-gray-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500">
                 <EyeIcon show={showConfirm} />
               </button>
             </div>
@@ -390,6 +390,6 @@ export default function Register() {
           <Link to="/login" className="text-blue-700 font-medium hover:underline">Sign in</Link>
         </p>
       </div>
-    </div>
+    </main>
   )
 }

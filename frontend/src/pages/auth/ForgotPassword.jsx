@@ -93,7 +93,7 @@ export default function ForgotPassword() {
   const countdown = `${Math.floor(wait / 60)}:${String(wait % 60).padStart(2, '0')}`
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-blue-50 to-slate-100 flex items-center justify-center p-4">
+    <main className="min-h-screen bg-linear-to-br from-blue-50 to-slate-100 flex items-center justify-center p-4">
       <div className="bg-white rounded-2xl shadow-lg p-8 w-full max-w-md">
 
         <div className="flex items-center gap-2 mb-6">
@@ -181,6 +181,6 @@ export default function ForgotPassword() {
           <Link to="/login" className="text-blue-700 font-medium hover:underline">Back to sign in</Link>
         </p>
       </div>
-    </div>
+    </main>
   )
 }

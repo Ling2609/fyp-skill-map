@@ -156,7 +156,8 @@ export default function Sidebar() {
   const initials = ((user?.first_name?.[0] || '') + (user?.last_name?.[0] || '')).toUpperCase() || '?'
 
   return (
-    <div className={`${collapsed ? 'w-14' : 'w-48'} bg-white border-r border-slate-200 flex flex-col h-screen fixed left-0 top-0 z-10 transition-all duration-200`}>
+    // 22 Oct (accessibility check): the whole sidebar is one landmark (logo, menu, account), so nothing sits outside one
+    <aside aria-label="SkillMap menu" className={`${collapsed ? 'w-14' : 'w-48'} bg-white border-r border-slate-200 flex flex-col h-screen fixed left-0 top-0 z-10 transition-all duration-200`}>
 
       {/* Logo + collapse */}
       {/* 21 Oct (her review: collapsed, the logo was squeezed into a rectangle beside the arrow; then "arrow beside the
@@ -287,6 +288,6 @@ export default function Sidebar() {
           )}
         </button>
       </div>
-    </div>
+    </aside>
   )
 }
