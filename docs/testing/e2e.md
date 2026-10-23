@@ -3,12 +3,12 @@
 Playwright opens a real Chrome window, clicks through SkillMap like a user, and checks what the page shows.
 The tests live in `frontend/e2e/`:
 
-| File                   | Journey                                                                              | Test cases            |
-| ---------------------- | ------------------------------------------------------------------------------------ | --------------------- |
-| `1-student.spec.js`  | Grades become skills, profile checklist, Job Matches, the skill gap, applying        | TC-01, 10, 11, 16, 28 |
-| `2-employer.spec.js` | Who applied, contact details only after shortlisting, the student sees "Shortlisted" | TC-31, 42, 38         |
-| `3-admin.spec.js`    | A new employer signs up and waits, the career office approves them, adds an intake   | TC-51, 48, 50         |
-| `4-access.spec.js`   | Signed out → sign in; a student can't open employer or career office pages; a broken link shows a message, not a blank page | TC-54                 |
+| File | Journey | Test cases |
+| --- | --- | --- |
+| `1-student.spec.js` | Grades become skills, profile checklist, Job Matches, the skill gap, applying | TC-01, 10, 11, 16, 28 |
+| `2-employer.spec.js` | Who applied, contact details only after shortlisting, the student sees "Shortlisted" | TC-31, 42, 38 |
+| `3-admin.spec.js` | A new employer signs up and waits, the career office approves them, adds an intake | TC-51, 48, 50 |
+| `4-access.spec.js` | Signed out → sign in; a student can't open employer or career office pages; a broken link shows a message, not a blank page | TC-54 |
 | `5-accessibility.spec.js` | 33 pages, pop-ups and forms of all roles scanned for accessibility problems (axe-core, WCAG 2.2 AA + best practice); the job and applicant lists used with the keyboard only | TC-66 |
 
 They run in this order and build on each other (the employer shortlists the application made in the student test).
