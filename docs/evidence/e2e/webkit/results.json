@@ -1,0 +1,795 @@
+{
+  "config": {
+    "configFile": "C:\\Users\\Ling\\Desktop\\fyp-skill-map\\frontend\\playwright.config.js",
+    "rootDir": "C:/Users/Ling/Desktop/fyp-skill-map/frontend/e2e",
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "../docs/evidence/e2e/webkit/results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "quiet": false,
+    "projects": [
+      {
+        "outputDir": "C:/Users/Ling/Desktop/fyp-skill-map/docs/evidence/e2e/webkit/failures",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "C:/Users/Ling/Desktop/fyp-skill-map/frontend/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      }
+    ],
+    "shard": null,
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.56.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "1-student.spec.js",
+      "file": "1-student.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Student",
+          "file": "1-student.spec.js",
+          "line": 6,
+          "column": 15,
+          "specs": [
+            {
+              "title": "TC-01 a grade turns a module into skills",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 3604,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-23T04:59:05.640Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "5e57e1881d770945815d-8d7c34f4c225e33e8e3b",
+              "file": "1-student.spec.js",
+              "line": 7,
+              "column": 3
+            },
+            {
+              "title": "TC-10 the profile checklist counts what was added",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2975,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-23T04:59:09.318Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "5e57e1881d770945815d-532f0e8a99ec93f22454",
+              "file": "1-student.spec.js",
+              "line": 17,
+              "column": 3
+            },
+            {
+              "title": "TC-11 Job Matches lists jobs for her skills",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 3328,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-23T04:59:12.306Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "5e57e1881d770945815d-99db016e958b03d69c67",
+              "file": "1-student.spec.js",
+              "line": 25,
+              "column": 3
+            },
+            {
+              "title": "TC-16 Job Detail explains the match and the gap",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 4357,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-23T04:59:15.643Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "5e57e1881d770945815d-173fad5de1ce40512fa1",
+              "file": "1-student.spec.js",
+              "line": 32,
+              "column": 3
+            },
+            {
+              "title": "TC-28 apply, and My Applications shows Applied",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 5287,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-23T04:59:20.008Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "5e57e1881d770945815d-20b55834d041a02c7333",
+              "file": "1-student.spec.js",
+              "line": 46,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "2-employer.spec.js",
+      "file": "2-employer.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Employer",
+          "file": "2-employer.spec.js",
+          "line": 6,
+          "column": 15,
+          "specs": [
+            {
+              "title": "TC-31 the employer sees who applied and how well they fit",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 3838,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-23T04:59:25.324Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "9045c0e3416938956da2-42166aa89b217565c451",
+              "file": "2-employer.spec.js",
+              "line": 7,
+              "column": 3
+            },
+            {
+              "title": "TC-42 contact details appear only after shortlisting",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 4271,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-23T04:59:29.176Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "9045c0e3416938956da2-0f915c2285ca7fa70aae",
+              "file": "2-employer.spec.js",
+              "line": 18,
+              "column": 3
+            },
+            {
+              "title": "TC-38 the student sees \"Shortlisted\" on My Applications",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2312,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-23T04:59:33.454Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "9045c0e3416938956da2-2d71e84eef4e6de0631d",
+              "file": "2-employer.spec.js",
+              "line": 32,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "3-admin.spec.js",
+      "file": "3-admin.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Career office",
+          "file": "3-admin.spec.js",
+          "line": 9,
+          "column": 15,
+          "specs": [
+            {
+              "title": "TC-51 a new employer signs up and waits for approval",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2904,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-23T04:59:35.789Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "2d05d056c9632285a0ba-6ac2c9473e87a1d2e78e",
+              "file": "3-admin.spec.js",
+              "line": 10,
+              "column": 3
+            },
+            {
+              "title": "TC-48 the career office approves the employer",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 4690,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-23T04:59:38.709Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "2d05d056c9632285a0ba-5d4153fc9eb8d203b95c",
+              "file": "3-admin.spec.js",
+              "line": 30,
+              "column": 3
+            },
+            {
+              "title": "TC-50 the career office adds an intake",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 3116,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-23T04:59:43.409Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "2d05d056c9632285a0ba-8ac45c2291f120638b55",
+              "file": "3-admin.spec.js",
+              "line": 48,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "4-access.spec.js",
+      "file": "4-access.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "TC-54 signed out: a private page sends you to sign in",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 533,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-23T04:59:46.552Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c7ff1923eda39df60b61-e96ded36d51838b80b9f",
+          "file": "4-access.spec.js",
+          "line": 6,
+          "column": 1
+        },
+        {
+          "title": "TC-54 a student cannot open employer or career office pages",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4535,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-23T04:59:47.093Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c7ff1923eda39df60b61-3d11baa4cbc9de6b2473",
+          "file": "4-access.spec.js",
+          "line": 12,
+          "column": 1
+        },
+        {
+          "title": "a broken link shows a message, not a blank page",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2176,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-23T04:59:51.637Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c7ff1923eda39df60b61-b9b1939aa371d159365a",
+          "file": "4-access.spec.js",
+          "line": 24,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "5-accessibility.spec.js",
+      "file": "5-accessibility.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "TC-66 the pages and pop-ups of each role have no accessibility problems that axe-core finds (WCAG 2.2 AA + best practice)",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 74408,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-23T04:59:53.956Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "48d7c8129f9e99ffe3d6-f4ad2ffbdefe1bc8af6a",
+          "file": "5-accessibility.spec.js",
+          "line": 20,
+          "column": 1
+        },
+        {
+          "title": "TC-66 keyboard only: a job opens from Job Matches with Tab and Enter",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 18929,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeFocused\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('link', { name: 'Junior Data Analyst' })\nExpected: focused\nReceived: inactive\nTimeout:  15000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeFocused\" with timeout 15000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('link', { name: 'Junior Data Analyst' })\u001b[22m\n\u001b[2m    18 × locator resolved to <a href=\"/jobs/skillmap-d629d90ed8bb\" class=\"font-semibold text-slate-800 text-sm truncate group-hover:text-blue-700 transition leading-snug rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500\">Junior Data Analyst</a>\u001b[22m\n\u001b[2m       - unexpected value \"inactive\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeFocused\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('link', { name: 'Junior Data Analyst' })\nExpected: focused\nReceived: inactive\nTimeout:  15000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeFocused\" with timeout 15000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('link', { name: 'Junior Data Analyst' })\u001b[22m\n\u001b[2m    18 × locator resolved to <a href=\"/jobs/skillmap-d629d90ed8bb\" class=\"font-semibold text-slate-800 text-sm truncate group-hover:text-blue-700 transition leading-snug rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500\">Junior Data Analyst</a>\u001b[22m\n\u001b[2m       - unexpected value \"inactive\"\u001b[22m\n\n    at C:\\Users\\Ling\\Desktop\\fyp-skill-map\\frontend\\e2e\\5-accessibility.spec.js:88:23",
+                    "location": {
+                      "file": "C:\\Users\\Ling\\Desktop\\fyp-skill-map\\frontend\\e2e\\5-accessibility.spec.js",
+                      "column": 23,
+                      "line": 88
+                    },
+                    "snippet": "\u001b[0m \u001b[90m 86 |\u001b[39m   \u001b[36mawait\u001b[39m expect(title)\u001b[33m.\u001b[39mtoBeVisible()\n \u001b[90m 87 |\u001b[39m   \u001b[36mfor\u001b[39m (\u001b[36mlet\u001b[39m i \u001b[33m=\u001b[39m \u001b[35m0\u001b[39m\u001b[33m;\u001b[39m i \u001b[33m<\u001b[39m \u001b[35m40\u001b[39m \u001b[33m&&\u001b[39m \u001b[33m!\u001b[39m(\u001b[36mawait\u001b[39m title\u001b[33m.\u001b[39mevaluate(el \u001b[33m=>\u001b[39m el \u001b[33m===\u001b[39m document\u001b[33m.\u001b[39mactiveElement))\u001b[33m;\u001b[39m i\u001b[33m++\u001b[39m) \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mkeyboard\u001b[33m.\u001b[39mpress(nextKey(browserName))\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 88 |\u001b[39m   \u001b[36mawait\u001b[39m expect(title)\u001b[33m.\u001b[39mtoBeFocused()                     \u001b[90m// reached with the keyboard alone\u001b[39m\n \u001b[90m    |\u001b[39m                       \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 89 |\u001b[39m   \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mkeyboard\u001b[33m.\u001b[39mpress(\u001b[32m'Enter'\u001b[39m)\n \u001b[90m 90 |\u001b[39m   \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForURL(\u001b[35m/\\/jobs\\//\u001b[39m)\n \u001b[90m 91 |\u001b[39m   \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'heading'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[32m'Junior Data Analyst'\u001b[39m }))\u001b[33m.\u001b[39mtoBeVisible()\u001b[0m"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Users\\Ling\\Desktop\\fyp-skill-map\\frontend\\e2e\\5-accessibility.spec.js",
+                        "column": 23,
+                        "line": 88
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeFocused\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('link', { name: 'Junior Data Analyst' })\nExpected: focused\nReceived: inactive\nTimeout:  15000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeFocused\" with timeout 15000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('link', { name: 'Junior Data Analyst' })\u001b[22m\n\u001b[2m    18 × locator resolved to <a href=\"/jobs/skillmap-d629d90ed8bb\" class=\"font-semibold text-slate-800 text-sm truncate group-hover:text-blue-700 transition leading-snug rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500\">Junior Data Analyst</a>\u001b[22m\n\u001b[2m       - unexpected value \"inactive\"\u001b[22m\n\n\n  86 |   await expect(title).toBeVisible()\n  87 |   for (let i = 0; i < 40 && !(await title.evaluate(el => el === document.activeElement)); i++) await page.keyboard.press(nextKey(browserName))\n> 88 |   await expect(title).toBeFocused()                     // reached with the keyboard alone\n     |                       ^\n  89 |   await page.keyboard.press('Enter')\n  90 |   await page.waitForURL(/\\/jobs\\//)\n  91 |   await expect(page.getByRole('heading', { name: 'Junior Data Analyst' })).toBeVisible()\n    at C:\\Users\\Ling\\Desktop\\fyp-skill-map\\frontend\\e2e\\5-accessibility.spec.js:88:23"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-23T05:01:08.373Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\Ling\\Desktop\\fyp-skill-map\\docs\\evidence\\e2e\\webkit\\failures\\5-accessibility-TC-66-keyb-c4cb4--Matches-with-Tab-and-Enter\\test-failed-1.png"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\Ling\\Desktop\\fyp-skill-map\\docs\\evidence\\e2e\\webkit\\failures\\5-accessibility-TC-66-keyb-c4cb4--Matches-with-Tab-and-Enter\\test-failed-3.png"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\Ling\\Desktop\\fyp-skill-map\\docs\\evidence\\e2e\\webkit\\failures\\5-accessibility-TC-66-keyb-c4cb4--Matches-with-Tab-and-Enter\\test-failed-2.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\Ling\\Desktop\\fyp-skill-map\\docs\\evidence\\e2e\\webkit\\failures\\5-accessibility-TC-66-keyb-c4cb4--Matches-with-Tab-and-Enter\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Users\\Ling\\Desktop\\fyp-skill-map\\frontend\\e2e\\5-accessibility.spec.js",
+                    "column": 23,
+                    "line": 88
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "48d7c8129f9e99ffe3d6-afcb32314d6f474b2325",
+          "file": "5-accessibility.spec.js",
+          "line": 82,
+          "column": 1
+        },
+        {
+          "title": "TC-66 keyboard only: an applicant opens from View applicants with Tab and Enter",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 18451,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeFocused\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('link', { name: 'Daniel Lim' })\nExpected: focused\nReceived: inactive\nTimeout:  15000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeFocused\" with timeout 15000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('link', { name: 'Daniel Lim' })\u001b[22m\n\u001b[2m    18 × locator resolved to <a data-discover=\"true\" href=\"/employer/applications/1\" class=\"hover:text-blue-700 rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500\">Daniel Lim</a>\u001b[22m\n\u001b[2m       - unexpected value \"inactive\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeFocused\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('link', { name: 'Daniel Lim' })\nExpected: focused\nReceived: inactive\nTimeout:  15000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeFocused\" with timeout 15000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('link', { name: 'Daniel Lim' })\u001b[22m\n\u001b[2m    18 × locator resolved to <a data-discover=\"true\" href=\"/employer/applications/1\" class=\"hover:text-blue-700 rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500\">Daniel Lim</a>\u001b[22m\n\u001b[2m       - unexpected value \"inactive\"\u001b[22m\n\n    at C:\\Users\\Ling\\Desktop\\fyp-skill-map\\frontend\\e2e\\5-accessibility.spec.js:101:22",
+                    "location": {
+                      "file": "C:\\Users\\Ling\\Desktop\\fyp-skill-map\\frontend\\e2e\\5-accessibility.spec.js",
+                      "column": 22,
+                      "line": 101
+                    },
+                    "snippet": "\u001b[0m \u001b[90m  99 |\u001b[39m   \u001b[36mawait\u001b[39m expect(name)\u001b[33m.\u001b[39mtoBeVisible()\n \u001b[90m 100 |\u001b[39m   \u001b[36mfor\u001b[39m (\u001b[36mlet\u001b[39m i \u001b[33m=\u001b[39m \u001b[35m0\u001b[39m\u001b[33m;\u001b[39m i \u001b[33m<\u001b[39m \u001b[35m40\u001b[39m \u001b[33m&&\u001b[39m \u001b[33m!\u001b[39m(\u001b[36mawait\u001b[39m name\u001b[33m.\u001b[39mevaluate(el \u001b[33m=>\u001b[39m el \u001b[33m===\u001b[39m document\u001b[33m.\u001b[39mactiveElement))\u001b[33m;\u001b[39m i\u001b[33m++\u001b[39m) \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mkeyboard\u001b[33m.\u001b[39mpress(nextKey(browserName))\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 101 |\u001b[39m   \u001b[36mawait\u001b[39m expect(name)\u001b[33m.\u001b[39mtoBeFocused()\n \u001b[90m     |\u001b[39m                      \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 102 |\u001b[39m   \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mkeyboard\u001b[33m.\u001b[39mpress(\u001b[32m'Enter'\u001b[39m)\n \u001b[90m 103 |\u001b[39m   \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForURL(\u001b[35m/\\/employer\\/applications\\//\u001b[39m)\n \u001b[90m 104 |\u001b[39m   \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'heading'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[32m'Daniel Lim'\u001b[39m }))\u001b[33m.\u001b[39mtoBeVisible()\u001b[0m"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Users\\Ling\\Desktop\\fyp-skill-map\\frontend\\e2e\\5-accessibility.spec.js",
+                        "column": 22,
+                        "line": 101
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeFocused\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('link', { name: 'Daniel Lim' })\nExpected: focused\nReceived: inactive\nTimeout:  15000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeFocused\" with timeout 15000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('link', { name: 'Daniel Lim' })\u001b[22m\n\u001b[2m    18 × locator resolved to <a data-discover=\"true\" href=\"/employer/applications/1\" class=\"hover:text-blue-700 rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500\">Daniel Lim</a>\u001b[22m\n\u001b[2m       - unexpected value \"inactive\"\u001b[22m\n\n\n   99 |   await expect(name).toBeVisible()\n  100 |   for (let i = 0; i < 40 && !(await name.evaluate(el => el === document.activeElement)); i++) await page.keyboard.press(nextKey(browserName))\n> 101 |   await expect(name).toBeFocused()\n      |                      ^\n  102 |   await page.keyboard.press('Enter')\n  103 |   await page.waitForURL(/\\/employer\\/applications\\//)\n  104 |   await expect(page.getByRole('heading', { name: 'Daniel Lim' })).toBeVisible()\n    at C:\\Users\\Ling\\Desktop\\fyp-skill-map\\frontend\\e2e\\5-accessibility.spec.js:101:22"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-23T05:01:28.205Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\Ling\\Desktop\\fyp-skill-map\\docs\\evidence\\e2e\\webkit\\failures\\5-accessibility-TC-66-keyb-8cff6-plicants-with-Tab-and-Enter\\test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\Ling\\Desktop\\fyp-skill-map\\docs\\evidence\\e2e\\webkit\\failures\\5-accessibility-TC-66-keyb-8cff6-plicants-with-Tab-and-Enter\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Users\\Ling\\Desktop\\fyp-skill-map\\frontend\\e2e\\5-accessibility.spec.js",
+                    "column": 22,
+                    "line": 101
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "48d7c8129f9e99ffe3d6-c57b420905b40eba5d26",
+          "file": "5-accessibility.spec.js",
+          "line": 94,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-23T04:59:04.531Z",
+    "duration": 162274.307,
+    "expected": 15,
+    "skipped": 0,
+    "unexpected": 2,
+    "flaky": 0
+  }
+}

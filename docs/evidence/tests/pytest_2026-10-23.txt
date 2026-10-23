@@ -1,0 +1,43 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.7, pytest-9.0.3, pluggy-1.6.0
+rootdir: C:\Users\Ling\Desktop\fyp-skill-map\backend
+configfile: pytest.ini
+testpaths: tests, tests_unit
+plugins: anyio-4.15.1, platformdirs-4.12.2
+collected 176 items
+
+tests\test_ad_requirements.py .......                                    [  3%]
+tests\test_admin.py ...                                                  [  5%]
+tests\test_applications.py ............                                  [ 12%]
+tests\test_audit_fixes.py .........                                      [ 17%]
+tests\test_auth.py ........                                              [ 22%]
+tests\test_career_fit.py ..                                              [ 23%]
+tests\test_counsellor_cv.py ..                                           [ 24%]
+tests\test_delete_account.py ...                                         [ 26%]
+tests\test_description_grounding.py ...                                  [ 27%]
+tests\test_edit_job.py ........                                          [ 32%]
+tests\test_employer_preview.py .....                                     [ 35%]
+tests\test_evaluation_runs.py ...                                        [ 36%]
+tests\test_extraction_records.py .....                                   [ 39%]
+tests\test_github_connect.py .......                                     [ 43%]
+tests\test_grades.py ..                                                  [ 44%]
+tests\test_install.py ....                                               [ 47%]
+tests\test_invitations.py .....                                          [ 50%]
+tests\test_learning_plan.py .........                                    [ 55%]
+tests\test_match_speed.py ...                                            [ 56%]
+tests\test_module_extraction_eval.py .                                   [ 57%]
+tests\test_module_prompt_v2.py ..                                        [ 58%]
+tests\test_mongodb_real.py ....                                          [ 60%]
+tests\test_more_evidence.py .........                                    [ 65%]
+tests\test_outside_applications.py ....                                  [ 68%]
+tests\test_permissions.py ...                                            [ 69%]
+tests\test_personal_data.py ...                                          [ 71%]
+tests\test_ranking_eval.py ..                                            [ 72%]
+tests\test_response_times.py ...                                         [ 74%]
+tests\test_spacy_baseline.py ...                                         [ 76%]
+tests\test_transparency.py ........                                      [ 80%]
+tests\test_upgrade_module_skills_v2.py .                                 [ 81%]
+tests\test_whatif.py .                                                   [ 81%]
+tests_unit\test_core_rules.py ................................           [100%]
+
+======================= 176 passed in 213.06s (0:03:33) =======================

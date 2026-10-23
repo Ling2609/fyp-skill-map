@@ -93,6 +93,9 @@ mkdir -p ../docs/evidence/e2e/firefox
 BROWSER=firefox npx playwright test 2>&1 | tee ../docs/evidence/e2e/firefox/run_2026-10-23.txt
 ```
 
+**WebKit and the keyboard:** Safari moves to links with **Option+Tab** (Tab alone skips them unless "Press Tab to
+highlight each item" is on in its settings), and WebKit does the same; the keyboard tests press Alt+Tab there.
+
 Each browser's screenshots, results and accessibility scan go to its own folder (`docs/evidence/e2e/firefox/` and so
 on); Chromium's stay in `docs/evidence/e2e/`.
 

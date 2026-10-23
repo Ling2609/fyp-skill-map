@@ -44,6 +44,12 @@ Planning, reasoning and research behind each decision are in the project roadmap
 - **Other browsers** (her request): the browser tests can run in Firefox, WebKit (Safari's engine), Microsoft Edge or
   Google Chrome as well as Chromium (`BROWSER=firefox npx playwright test`, set in `frontend/playwright.config.js`); each browser's
   evidence in its own folder under `docs/evidence/e2e/`.
+  Results on her laptop: Chromium, Firefox and Edge 17 of 17; WebKit 15 of 17, the two keyboard tests, because Safari
+  (and WebKit) move to links with Option+Tab, not Tab; the test now presses Option+Tab in WebKit, as Safari users do.
+- **MongoDB for real** (her question): `backend/tests/test_mongodb_real.py` runs against the real MongoDB server in a
+  separate `skillmap_test` database: the 18-month expiry indexes really exist, a chat is saved, listed, reopened,
+  continued and deleted (and another student can't reach it), Download my data and Delete my account cover
+  everything in MongoDB, and an evaluation run is saved and read back. Skipped with a message when MongoDB is off.
 
 ## 21 Oct 2026 — Fuller profiles, what employers see, fairness after applying, one look everywhere
 Why: graduate recruiters weigh work experience, activities and languages, not only modules; employers should see the

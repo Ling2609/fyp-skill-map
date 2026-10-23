@@ -74,25 +74,30 @@ test('TC-66 the pages and pop-ups of each role have no accessibility problems th
   expect(found, found.map(f => `${f.page}: ${f.help} (${f.where.length})`).join('\n')).toEqual([])
 })
 
-test('TC-66 keyboard only: a job opens from Job Matches with Tab and Enter', async ({ page }) => {
+// 23 Oct (her WebKit run): Safari moves to links with Option+Tab (Tab alone skips them unless "Press Tab to highlight
+// each item" is switched on in its settings), and WebKit, Safari's engine, does the same; so the test presses what a
+// Safari keyboard user presses
+const nextKey = (browserName) => (browserName === 'webkit' ? 'Alt+Tab' : 'Tab')
+
+test('TC-66 keyboard only: a job opens from Job Matches with Tab and Enter', async ({ page, browserName }) => {
   await signIn(page, STUDENT)
   await page.goto('/recommend')
   const title = page.getByRole('link', { name: 'Junior Data Analyst' })
   await expect(title).toBeVisible()
-  for (let i = 0; i < 40 && !(await title.evaluate(el => el === document.activeElement)); i++) await page.keyboard.press('Tab')
-  await expect(title).toBeFocused()                     // reached with Tab alone
+  for (let i = 0; i < 40 && !(await title.evaluate(el => el === document.activeElement)); i++) await page.keyboard.press(nextKey(browserName))
+  await expect(title).toBeFocused()                     // reached with the keyboard alone
   await page.keyboard.press('Enter')
   await page.waitForURL(/\/jobs\//)
   await expect(page.getByRole('heading', { name: 'Junior Data Analyst' })).toBeVisible()
 })
 
-test('TC-66 keyboard only: an applicant opens from View applicants with Tab and Enter', async ({ page }) => {
+test('TC-66 keyboard only: an applicant opens from View applicants with Tab and Enter', async ({ page, browserName }) => {
   await signIn(page, EMPLOYER)
   await page.goto('/employer/jobs')
   await page.getByRole('row', { name: /Graduate Software Engineer/ }).getByRole('link', { name: 'View applicants' }).click()
   const name = page.getByRole('link', { name: 'Daniel Lim' })
   await expect(name).toBeVisible()
-  for (let i = 0; i < 40 && !(await name.evaluate(el => el === document.activeElement)); i++) await page.keyboard.press('Tab')
+  for (let i = 0; i < 40 && !(await name.evaluate(el => el === document.activeElement)); i++) await page.keyboard.press(nextKey(browserName))
   await expect(name).toBeFocused()
   await page.keyboard.press('Enter')
   await page.waitForURL(/\/employer\/applications\//)
