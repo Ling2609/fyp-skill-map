@@ -41,6 +41,9 @@ Planning, reasoning and research behind each decision are in the project roadmap
   the page print the backend's list of field errors and the whole app went blank; `api.js` now turns such a list
   into one sentence for every page (new browser test). The scan also opens the Add work / certificate / award forms:
   their month pickers and lists had no linked labels (`Field` now links its label). 33 states, 0 problems; 17 tests.
+- **Other browsers** (her request): the browser tests can run in Firefox, WebKit (Safari's engine), Microsoft Edge or
+  Google Chrome as well as Chromium (`BROWSER=firefox npx playwright test`, set in `frontend/playwright.config.js`); each browser's
+  evidence in its own folder under `docs/evidence/e2e/`.
 
 ## 21 Oct 2026 — Fuller profiles, what employers see, fairness after applying, one look everywhere
 Why: graduate recruiters weigh work experience, activities and languages, not only modules; employers should see the

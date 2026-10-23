@@ -18,4 +18,9 @@ export default defineConfig([
       parserOptions: { ecmaFeatures: { jsx: true } },
     },
   },
+  {
+    // 23 Oct: the browser tests and their config run in Node.js (process, fs), not in the page
+    files: ['e2e/**/*.js', 'playwright.config.js'],
+    languageOptions: { globals: { ...globals.browser, ...globals.node } },
+  },
 ])

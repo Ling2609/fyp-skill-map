@@ -72,6 +72,30 @@ npx playwright test          # all tests, no window; prints ✓ or ✘ for each 
 backend (Ctrl+C in terminal 1), run `setup_e2e.py` again, then start the backend again. Otherwise TC-01 fails,
 because the grade is already saved and the "Save grades" button never appears.
 
+## Other browsers
+
+By default the tests run in **Chromium**, the engine of Chrome, Edge, Opera and Brave. They can also run in:
+
+| `BROWSER=` | Browser | Stands for |
+|---|---|---|
+| `firefox` | Firefox | Firefox |
+| `webkit` | WebKit | Safari (Mac, iPhone) |
+| `edge` | Microsoft Edge installed on this computer | Edge |
+| `chrome` | Google Chrome installed on this computer | Chrome |
+
+Once, from `frontend/`: `npx playwright install firefox webkit` (Edge and Chrome use the copies already installed).
+
+Then **one browser per run**, re-seeding before each (terminal 1: Ctrl+C, `setup_e2e.py`, start the backend again),
+because the tests change the data. From `frontend/`, for example Firefox:
+
+```bash
+mkdir -p ../docs/evidence/e2e/firefox
+BROWSER=firefox npx playwright test 2>&1 | tee ../docs/evidence/e2e/firefox/run_2026-10-23.txt
+```
+
+Each browser's screenshots, results and accessibility scan go to its own folder (`docs/evidence/e2e/firefox/` and so
+on); Chromium's stay in `docs/evidence/e2e/`.
+
 ## Lighthouse on every page
 
 Right after `npx playwright test` (it uses the applications those tests made), with the backend and `npm run dev`

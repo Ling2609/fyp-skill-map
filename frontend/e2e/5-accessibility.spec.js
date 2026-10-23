@@ -4,9 +4,9 @@
 import { test, expect } from '@playwright/test'
 import AxeBuilder from '@axe-core/playwright'
 import fs from 'fs'
-import { signIn, STUDENT, EMPLOYER, ADMIN } from './helpers'
+import { signIn, STUDENT, EMPLOYER, ADMIN, EVIDENCE } from './helpers'
 
-const found = []                       // every problem, saved to docs/evidence/e2e/accessibility.json
+const found = []                       // every problem, saved to accessibility.json in the evidence folder
 
 async function scan(page, name) {
   await page.waitForLoadState('networkidle')
@@ -69,7 +69,8 @@ test('TC-66 the pages and pop-ups of each role have no accessibility problems th
   await admin.getByRole('tab', { name: /Intakes/ }).click(); pages.push(await scan(admin, 'Academics: intakes'))
   await admin.getByRole('button', { name: 'Edit list' }).first().click(); pages.push(await scan(admin, 'Academics: edit a module list'))
 
-  fs.writeFileSync('../docs/evidence/e2e/accessibility.json', JSON.stringify({ standard: 'WCAG 2.0/2.1/2.2 A + AA and best-practice rules (axe-core)', pages, problems: found }, null, 2))
+  fs.mkdirSync(EVIDENCE, { recursive: true })
+  fs.writeFileSync(`${EVIDENCE}/accessibility.json`, JSON.stringify({ standard: 'WCAG 2.0/2.1/2.2 A + AA and best-practice rules (axe-core)', pages, problems: found }, null, 2))
   expect(found, found.map(f => `${f.page}: ${f.help} (${f.where.length})`).join('\n')).toEqual([])
 })
 
