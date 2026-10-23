@@ -4,7 +4,7 @@
 ## JobStreet Dataset
 
 - File: `jobstreet_all_job_dataset.csv`
-- Source: https://www.kaggle.com/datasets/azraimohamad/jobstreet-all-job-dataset
+- Source: <https://www.kaggle.com/datasets/azraimohamad/jobstreet-all-job-dataset>
 - Size: ~166MB, 69,024 Malaysian job postings
 - Not committed to Git due to file size. Download from Kaggle and place here.
 

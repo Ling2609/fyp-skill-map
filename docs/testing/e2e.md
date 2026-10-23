@@ -24,15 +24,20 @@ Commands are for **Git Bash** on Windows.
 ## One-time set-up
 
 1. **Make the database.** In pgAdmin, open the Query Tool on any database and run:
+
    ```sql
    CREATE DATABASE skillmap_e2e;
    ```
+
 2. **Tell SkillMap where it is.** Add this line to `backend/.env`. Use the same user and password as your
    `DATABASE_URL`; only the database name changes:
-   ```
+
+   ```text
    E2E_DATABASE_URL=postgresql://postgres:<password>@localhost:5432/skillmap_e2e
    ```
+
 3. **Install Playwright and its browser** (from `frontend/`):
+
    ```bash
    npm install
    npx playwright install chromium
@@ -45,12 +50,14 @@ You need three terminals.
 **Terminal 1, backend** (from `backend/`, with the venv on). Stop your normal backend first (Ctrl+C).
 
 1. Fill the test database:
+
    ```bash
    python scripts/tools/setup_e2e.py
    ```
 
    It should end with: `Ready: skillmap_e2e has 4 accounts and 3 open jobs`.
 2. Start the backend on that database:
+
    ```bash
    DATABASE_URL="postgresql://postgres:<password>@localhost:5432/skillmap_e2e" uvicorn app.main:app --port 8000
    ```
@@ -132,14 +139,15 @@ All four use the password `Orchid-Lantern-42`.
 
 | Email                     | Who                                                                              |
 | ------------------------- | -------------------------------------------------------------------------------- |
-| e2e.student@example.com   | Aina Rahman: SE student, no grades yet                                           |
-| e2e.applicant@example.com | Daniel Lim: SE student with 4 grades, has applied for Graduate Software Engineer |
-| e2e.employer@example.com  | Mei Tan, Kayu Digital Sdn Bhd (approved): 3 open jobs                            |
-| e2e.admin@example.com     | Career office                                                                    |
+| `e2e.student@example.com`   | Aina Rahman: SE student, no grades yet                                           |
+| `e2e.applicant@example.com` | Daniel Lim: SE student with 4 grades, has applied for Graduate Software Engineer |
+| `e2e.employer@example.com`  | Mei Tan, Kayu Digital Sdn Bhd (approved): 3 open jobs                            |
+| `e2e.admin@example.com`     | Career office                                                                    |
 
 ## Writing a new test
 
 1. With the backend and frontend running, start the recorder:
+
    ```bash
    npx playwright codegen localhost:5173
    ```

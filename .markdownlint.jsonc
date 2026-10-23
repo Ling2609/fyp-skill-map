@@ -1,0 +1,11 @@
+// Markdown style rules for SkillMap's documents (23 Oct; her VS Code markdownlint showed ~4,200 warnings).
+// Read by the VS Code markdownlint extension and by markdownlint-cli2. Everything is on except:
+{
+  "default": true,
+  // Line length: the planning docs and CHANGELOG keep one entry per line on purpose; GitHub and VS Code wrap them.
+  "MD013": false,
+  // Table pipes lined up in columns: cosmetic, and generated tables can't keep it.
+  "MD060": false,
+  // *emphasis* vs _emphasis_: both render the same; the docs use both.
+  "MD049": false
+}

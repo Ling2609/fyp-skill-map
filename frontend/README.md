@@ -2,7 +2,7 @@
 
 React 19 + Vite + Tailwind v4. Setup, running and the full folder map are in the [root README](../README.md).
 
-```
+```bash
 npm install
 npm run dev      # http://localhost:5173
 npm run lint

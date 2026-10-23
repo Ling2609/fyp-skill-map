@@ -4,6 +4,7 @@ What changed, when, and in which commit. Newest first. Built from `git log` (ful
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
 ## 22 Oct 2026 — Stronger tests after a second outside audit
+
 - **Concurrency through the real endpoints:** an application and a stricter edit run at the same moment in both orders;
   the edit is refused if the application came first, and the application is made under the new ad if the edit came
   first. Both tests fail when the row lock is removed. Also: applications from before 21 Oct (no saved copy) still
@@ -48,21 +49,28 @@ Planning, reasoning and research behind each decision are in the project roadmap
   (and WebKit) leave links out of the Tab order by default. Option+Tab didn't reach them in Playwright's WebKit on
   Windows either, so in WebKit the keyboard tests focus the link directly and check that Enter opens it (noted in the
   report); reaching it with Tab is checked in the other four browsers.
-  TC-28 now waits for "Applied · <date>" before opening My Applications: in WebKit, leaving at once had cancelled the
+  TC-28 now waits for "Applied · \<date\>" before opening My Applications: in WebKit, leaving at once had cancelled the
   application before it was sent (a timing flaw in the test, not in SkillMap). Her question "how long should it wait?":
   the test measures it and fails above 1 second (Google RAIL: beyond 1 s users lose focus); measured 0.17 s here.
   Her WebKit run: 17 passed, applying 427 ms. `frontend/scripts/all_browsers.sh` runs every browser one after another,
   unattended (re-seed, start the backend, test, stop), with a summary at the end.
+- **Tidy documents** (her VS Code showed thousands of Markdown and spelling warnings): `.markdownlint.jsonc` (line
+  length, table-pipe alignment and emphasis style off, with reasons; everything else on), `.markdownlintignore`
+  (tool-generated evidence), and the documents fixed: blank lines around headings, lists and code blocks, web addresses
+  as links, code blocks labelled. Placeholders such as \<company\> are escaped: GitHub had been hiding them as HTML
+  tags. `cspell.jsonc`: British English plus SkillMap's own names and terms. markdownlint 0 issues, cspell 0 issues.
 - **MongoDB for real** (her question): `backend/tests/test_mongodb_real.py` runs against the real MongoDB server in a
   separate `skillmap_test` database: the 18-month expiry indexes really exist, a chat is saved, listed, reopened,
   continued and deleted (and another student can't reach it), Download my data and Delete my account cover
   everything in MongoDB, and an evaluation run is saved and read back. Skipped with a message when MongoDB is off.
 
 ## 21 Oct 2026 — Fuller profiles, what employers see, fairness after applying, one look everywhere
+
 Why: graduate recruiters weigh work experience, activities and languages, not only modules; employers should see the
 application as it was sent; and an employer must not change the rules after students applied (research:
 references.md "What employers look for in graduates", "After applying", "Changing a job's requirements after
 people applied", "Actions on several applicants at once").
+
 - **Profile evidence** (`cd46ac2`): work experience and activities (AI suggests skills only if quoted from her own
   words), project role/team/outcome/demo link, languages, CGPA shown only if she switches it on; a Profile & privacy
   page; updated privacy notice (21 Oct) with a pop-up and a Dashboard reminder until agreed. Needs
@@ -90,6 +98,7 @@ people applied", "Actions on several applicants at once").
 - **Test evidence** (`a050903`): 136 passed on her laptop, lint clean, build fine (`docs/evidence/tests/`).
 
 ## 20 Oct 2026 — Applications on other sites, My Applications, employer dashboard
+
 - **Applications on other sites** (`111d09a`, `f367cef`): after "Apply on …", SkillMap asks on return whether she
   applied and keeps it in My Applications with a stage she updates; in-app confirms instead of browser pop-ups.
 - **My Applications** (`dda85da` to `60bf0e8`): one section each for SkillMap and other sites, filters across both,
@@ -98,14 +107,16 @@ people applied", "Actions on several applicants at once").
 - **Fix** (`ed09bbb`): 500 error on `/applications/invitations` for students with an outside record.
 
 ## 19 Oct 2026 — What the ad asks for besides skills (E6), and Job Detail
+
 - **E6 rules** (`e8aa4ca`, `b7d978f`): qualification, field, languages and salary read from the ad text by fixed
   rules, scored on 30 unseen live ads against bars set beforehand; citizenship found 0 of 2 real cases, so not shown.
 - **Job Detail** (`313b6dc`, `2ee4e7c`, `fcc4878`): the reply date and the employer's record in one box under the
   title; requirement pills (live ads: the E6 rules; SkillMap posts: the employer's own fields).
-- **AI Assistant** (`f8648d6`): "Back to <page>" for every way in; Learn reopens the earlier chat for that skill.
+- **AI Assistant** (`f8648d6`): "Back to \<page\>" for every way in; Learn reopens the earlier chat for that skill.
 - **Design fixes** (`18ada59`, `6101103`): one thin scrollbar, one capital style, a save bar only when grades changed.
 
 ## 18 Oct 2026 — Ranking and response-time evaluations, faster matching, honest descriptions
+
 - **Ranking vs keyword baseline (step 4)** (`3a13a88`): nDCG@10 0.796 vs 0.526, PASS (3 judges, 3,000-character ads,
   her spot-check 26 of 27).
 - **Response times (E5)** (`eca17c8`, `5334e36`): PASS on run 3 after two fixes that keep the answers identical
@@ -116,13 +127,16 @@ people applied", "Actions on several applicants at once").
 - Test log: 105 passed (`49be164`).
 
 ## 16 Oct 2026 — Ranking evaluation set-up
+
 - Judges see 3,000 characters of each ad; missed pairs asked one by one; only current pairs counted
   (`2aa0e0a`, `09e24a4`, `ace38b5`). Roadmap and references added to the repo (`1f4216e`).
 
 ## 15 Oct 2026 — Evaluation, and module skills with prompt v2
+
 Why: features are frozen; the evaluation measures each part against fixed rules written before the results
 (research and numbers: references.md; every run in MongoDB `evaluation_runs`, exported to
 docs/evidence/evaluation_runs.json).
+
 - **Evaluation runs.** Every evaluation is saved with its git commit, the app setup (relation model, cut-off,
   embedder, extractor) and a fingerprint of each file it read (`app/services/evaluation_runs.py`,
   `scripts/tools/evaluation_runs.py list | export`).
@@ -138,13 +152,15 @@ docs/evidence/evaluation_runs.json).
   `data/module_v2_suggestions.csv` to add in Admin.
 
 ## 14 Oct 2026 — Transparency between employers and students
+
 Why: a student could wait weeks and then see a job close with no reason; SkillMap can't force an employer to reply,
 so it asks for a promise up front, ends the wait at that date, asks for a reason with every outcome, and shows
 students what it already knows (research: references.md "Employer replies, ghosting and transparency").
+
 - **Decision date.** Posting a job asks "Decide by" (2 weeks, 4 weeks, 30 days, 6 weeks). Students see it before
   applying and on My applications. The employer can move it once, by 1 or 2 weeks, with a reason students see.
   Existing posts get 30 days from posting.
-- **When the date passes with no decision** the student sees "<Company> missed its decision date. Focus on other
+- **When the date passes with no decision** the student sees "\<Company\> missed its decision date. Focus on other
   jobs; any reply will still appear here." It is not a rejection in the employer's name (the UK teacher-training
   service removed automatic rejection as the worst experience for candidates). The employer's Dashboard and My jobs
   show the passed date in red.
@@ -154,7 +170,7 @@ students what it already knows (research: references.md "Employer replies, ghost
 - **Reasons for Not selected:** Missing required skills (each student sees their own missing skills, with "Plan
   these"), Position filled, More experience needed, or Other with a written note (300 characters). Several
   applicants can be marked at once from the applicants list. A student whose application closed without a reason
-  sees "<Company> gave no reason".
+  sees "\<Company\> gave no reason".
 - **What students see while waiting:** how many applied and were shortlisted, the decision date, where they stand on
   required skills ("ahead of 7 of 11 applicants", from 5 applicants, with an ⓘ that says it is skills only), and the
   employer's record ("decided on time for 3 of its 4 jobs").
@@ -165,6 +181,7 @@ students what it already knows (research: references.md "Employer replies, ghost
   `tests/test_applications.py`.
 
 ## 14 Oct 2026 — Privacy notice reads as one document
+
 - Compared with JobStreet's and Monzo's notices: one white document with headed sections and thin rules instead of a
   card per section on grey; the "In short" summary is the only box, and the text column is narrower for reading.
 - The back link is blue (underlined on hover or tap) and says where it goes: "Back to sign-up" when the notice was
@@ -176,6 +193,7 @@ students what it already knows (research: references.md "Employer replies, ghost
   on every entry page, or in Settings when there is no footer.)
 
 ## 14 Oct 2026 — Privacy notice: same look as the other pages, every version kept
+
 - The header follows the app's detail pages: a grey "← Back to SkillMap" above the title on the left (to the
   Dashboard when signed in, else to sign-in), the title and date, and a blue Bahasa Malaysia / English button on the
   right. Only the content scrolls; the header stays, and the contents list stays beside the sections.
@@ -184,6 +202,7 @@ students what it already knows (research: references.md "Employer replies, ghost
   that it isn't the current version. `users.privacy_accepted_at` tells which version a person accepted.
 
 ## 14 Oct 2026 — Personal data: privacy notice, contact after shortlisting, Download my data
+
 - Sign-up needs "I have read and agree to the Privacy notice" ticked (the notice is a blue link, as on most sign-up
   forms); the time is kept (`users.privacy_accepted_at`). The notice is a public page, `/privacy`, in English
   and Bahasa Malaysia (PDPA s.7(3)): an "In short" summary on top, a numbered table of contents in a left rail, then
@@ -191,7 +210,7 @@ students what it already knows (research: references.md "Employer replies, ghost
   table, who it is shared with, data sent outside Malaysia, how long it is kept, your choices, your rights, how to
   complain). Layout after NN/g on privacy pages; the Malay text is a draft to proofread.
   The university's career office is named as responsible for the data (the PDPA "data user"), with its email for
-  questions and complaints from `VITE_PRIVACY_CONTACT` (demo: careers@university.example).
+  questions and complaints from `VITE_PRIVACY_CONTACT` (demo: `careers@university.example`).
 - Students can add an optional phone, city and "available from" month (My Profile → Edit profile). No IC number,
   date of birth, gender, race, religion or photo: matching doesn't need them.
 - **Contact details only after shortlisting.** An employer sees a student's email, phone, city and start month only
@@ -205,11 +224,13 @@ students what it already knows (research: references.md "Employer replies, ghost
   `tests/test_invitations.py`, the notice in `tests/test_auth.py`.
 
 ## 13 Oct 2026 — AI Assistant: the message box keeps the cursor
+
 - The box was switched off while a reply loaded, which took the cursor away, so each answer needed a click on the box
   before typing. It now stays active (the next message can be typed while waiting; sending waits for the reply), and
   the cursor goes back to it after a starter or follow-up button.
 
 ## 13 Oct 2026 — AI Assistant: CV points and interview practice
+
 - The Career Counsellor now helps with the two things the IR's Sprint 4 promised and it didn't cover: "resume tips"
   and "interview preparation". Three starter buttons under its greeting: Which roles suit me? / Turn my projects into
   CV points / Practise interview questions with me.
@@ -222,6 +243,7 @@ students what it already knows (research: references.md "Employer replies, ghost
   behavioural answers (National Careers Service). Test: `tests/test_counsellor_cv.py`.
 
 ## 13 Oct 2026 — Dashboard: compare careers in the goal picker
+
 - The goal drop-down is now a list of every career (job category), best fit first, each with a bar and how many of its
   top skills the student has ("8 of 10"); the current goal is marked. Students with a goal see it too (it was only
   shown before a goal was set), so they can check whether another career fits them better before switching.
@@ -232,6 +254,7 @@ students what it already knows (research: references.md "Employer replies, ghost
   now goes under the skill.
 
 ## 13 Oct 2026 — Fixes from the 13 Oct audit
+
 - Students can delete their account (Account settings → Security → Delete account…): the password is asked again,
   then their profile, grades, projects, certificates, awards, applications, invitations, codes and AI Assistant chats
   are deleted (table by table, not relying on cascade rules older databases may lack). If chat history can't be
@@ -243,10 +266,11 @@ students what it already knows (research: references.md "Employer replies, ghost
 - Module grades: only the pass grades the page offers (A to C) are accepted; any number from 0 to 4 was, so a fail
   sent straight to the API would have counted that module's skills. Test: `tests/test_grades.py`.
 - Pages load on first use (React lazy): the first file went from 759 kB to 267 kB, and the size warning is gone.
-- Websites allowed to call the API come from `CORS_ORIGINS` in `.env` (default http://localhost:5173), so a demo on
+- Websites allowed to call the API come from `CORS_ORIGINS` in `.env` (default <http://localhost:5173>), so a demo on
   another address works without changing code.
 
 ## 13 Oct 2026 — Dashboard: what one skill would open up (small what-if)
+
 - The goal card's "Still to learn" now says what each skill would do for the student: "+N more jobs you'd fit" =
   goal jobs where that ONE skill takes them to half or more of the required skills (the same line as employers'
   "Graduates who fit"). "What opens up" lists those jobs with their count before -> after ("1 -> 2 of 4 required
@@ -258,12 +282,14 @@ students what it already knows (research: references.md "Employer replies, ghost
   plain words instead of "within reach"). Test: `tests/test_whatif.py`.
 
 ## 13 Oct 2026 — Learning plan PDF: no more black squares
+
 - The 3 blocked links (Linux Journey, Kaggle, Tableau) opened by hand on 13 Oct: marked in `checked_by_hand`; Linux
   Journey's address updated to where it moved (labex.io/linuxjourney). All 49 resources can now be shown.
 - Her first real PDF showed "data■heavy", "step■by■step": the AI writes non-breaking hyphens and thin spaces, which
   the PDF's built-in font can't draw. They (and ≥, ≤, →) are swapped for plain characters before printing. Test added.
 
 ## 13 Oct 2026 — AI Assistant asks for the hours a week in the chat
+
 - The "Hours a week 3 5 10" buttons above the chat are gone (her review: unclear). Before the first plan in a chat the
   assistant asks "how many hours a week can you spend learning this?" with 3 / 5 / 10 / 15+ hours as buttons (or a
   typed number), then plans for the answer. "I don't know what to learn" isn't asked; each new chat asks again.
@@ -274,6 +300,7 @@ students what it already knows (research: references.md "Employer replies, ghost
   links prints on several pages; the last-row rule.
 
 ## 13 Oct 2026 — AI Assistant: learning plans to follow, check and print
+
 - Skill Development answers a "learn X" request as one plan: why it matters for the job (with the ad's words), 2-4
   resources, a table of 3-5 steps with the time each takes (fitted to the student's hours a week: 3, 5 or 10, picked
   above the chat) and "Done when" (something they can show), and a portfolio project. The last step is always "Add
@@ -303,6 +330,7 @@ students what it already knows (research: references.md "Employer replies, ghost
   requirements: reportlab, pillow.
 
 ## 13 Oct 2026 — One-form Post a job; the same loading bars on every page
+
 - Post a job and Edit job are one form, top to bottom (her review: the two columns felt crowded). "Read the skills"
   adds the skills under the description; Cancel and Publish (or Save changes) are at the end. The page scrolls down to
   the skills after the first read.
@@ -635,7 +663,7 @@ students what it already knows (research: references.md "Employer replies, ghost
   their changed type; modules the intake before had are listed crossed out with "Put back". "+ Add module" opens a
   catalogue search (a module keeps its description and skills; added at its catalogue year and type unless changed), with
   "Create a new module" for one that isn't there. Remove takes a module out of this intake only (refused if a student
-  of this intake has a grade for it). Intakes tab: add an intake with its later codes and "Copy of <latest>"
+  of this intake has a grade for it). Intakes tab: add an intake with its later codes and "Copy of \<latest\>"
   preselected; each intake shows its module count, "Latest", and how many changes it has against the one before;
   "Edit list" opens it; only the table scrolls. A module's description, skills and review stay one per module everywhere.
 - New module (her flow, like a student's certificate): fill in the details, "Find skills" (new
@@ -685,8 +713,8 @@ students what it already knows (research: references.md "Employer replies, ghost
 ## 10 Oct 2026 — Clearer descriptions for project, investigations and four intro modules
 
 - (this commit) Her extraction run (158 modules, 818 skills) showed padded skills caused by the descriptions' wording:
-  every project module gave "<X> solution design / development / evaluation", every investigations module
-  "Literature review; Critical analysis; Research proposal writing" plus a vague "<X> investigation", and four intro
+  every project module gave "\<X\> solution design / development / evaluation", every investigations module
+  "Literature review; Critical analysis; Research proposal writing" plus a vague "\<X\> investigation", and four intro
   modules gave "awareness"-type skills (Threat and attack awareness, team role awareness, metaverse applications
   awareness, decision support understanding). 34 descriptions in `data/modules.json` rewritten to name concrete
   content (e.g. Cyber Security project: threat modelling, building a security tool, penetration testing; Data
@@ -1042,7 +1070,7 @@ students what it already knows (research: references.md "Employer replies, ghost
   The count sits at the end of the filter row, in line with the table (PatternFly). Dropdowns have their own arrow,
   set in from the edge.
 - Deactivate, Reactivate and Reject (here and on the dashboard) open a pop-up instead of the cramped in-row box:
-  "Deactivate <name>?", one line on what happens, a Reason box (required to deactivate / reactivate, optional to
+  "Deactivate \<name\>?", one line on what happens, a Reason box (required to deactivate / reactivate, optional to
   reject), Cancel and "Deactivate account" (Carbon danger modal, Primer). Enter confirms, Esc or a click outside
   cancels; a failed save shows its error inside the pop-up. `ReasonForm.jsx` replaced by `ReasonDialog.jsx`.
 - Checked in a browser at 1333×680 and 1440×900 (13 checks): columns line up with the titles, the list scrolls
@@ -1059,7 +1087,7 @@ students what it already knows (research: references.md "Employer replies, ghost
 - Users: the reason box opens in the row (Enter confirms, Esc cancels; the button stays off until a reason is
   typed). Under each status: the latest decision, e.g. "Deactivated 7 Oct by Career Office · Graduated". The
   account count moved up next to the filters.
-- Dashboard: "Good afternoon, <name> 👋" header like the student one; the two bottom panels stretch to the foot of
+- Dashboard: "Good afternoon, \<name\> 👋" header like the student one; the two bottom panels stretch to the foot of
   the screen. Reject there asks for an optional reason too.
 - Checked in a browser on a database copy (13 checks: greeting, full height, count position, reason required /
   optional, Esc, last-decision line, reasons carried from dashboard to Users, no page errors).
@@ -1214,7 +1242,7 @@ students what it already knows (research: references.md "Employer replies, ghost
 - Apply link: the company's own site (its careers site or the hiring system it runs: Workday, Greenhouse, Lever,
   SmartRecruiters, SuccessFactors, Eightfold...) is preferred over job boards. Checked on the 918 cached jobs:
   JSearch already lists the company's link first, so the old rule already picked it in all 99 cases; what changes
-  is the label ("Apply on Workday" / "Eightfold AI" -> "<company> careers") and 1 more job kept (Ørsted's own
+  is the label ("Apply on Workday" / "Eightfold AI" -> "\<company\> careers") and 1 more job kept (Ørsted's own
   careers page, not on the trusted list before). The sync updates saved jobs' labels too.
 - Tested on a copy of the test database: 7 jobs not in the results hidden, 1 hidden job returned again shown, 1
   label fixed; a second run changes nothing; hidden jobs leave the job cache, locations and categories at once.
@@ -1256,7 +1284,7 @@ students what it already knows (research: references.md "Employer replies, ghost
   resource instead, link only official documentation home pages. One small table at most, no emoji numbering,
   under ~350 words. Career Counsellor: no made-up URLs, salaries or company facts.
 - Send button: Heroicons v2 paper-airplane, pointing right (v1's pointed up and looked like an arrow).
-- "Learn →" on a job opens the chatbot with "← Back to <job>", which returns to the same job on the same tab.
+- "Learn →" on a job opens the chatbot with "← Back to \<job\>", which returns to the same job on the same tab.
 - Job Detail: "Back to Job Matches" / "Back to Dashboard" (where it was opened from), on the same left edge as other
   page headings. A job opened in a new tab goes back to Job Matches.
 - Job Matches no longer searches again when going back from a job: results, sort, "show more" and scroll position
@@ -1645,6 +1673,7 @@ students what it already knows (research: references.md "Employer replies, ghost
 ## 29 Sep 2026 — Project structure for all three roles
 
 Files moved with **names unchanged** and history kept (`git log --follow <file>`).
+
 - (this commit) **ICT title rule tuned on the first generated-query dry run** (494 results, `docs/evidence/generated_queries_dryrun.txt`).
   Now kept: plurals ("System Engineers"), service desk, firewall, ERP spelled out, tech support, agile / scrum / product owner.
   Now skipped: electrical, mechanical, power-systems and similar engineering titles, unless they also name software work.

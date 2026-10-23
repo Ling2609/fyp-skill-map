@@ -6,7 +6,7 @@ Final Year Project · Low Wei Ling (TP080089) · BSc (Hons) Software Engineering
 
 ## How it works
 
-```
+```text
 Module descriptors ──► skill extraction (LLM, checked by the career office) ──┐
 Projects / certificates / awards / GitHub languages ──► skill extraction ─────┼─► Graduate Skill Profile
 Module grades (strength of academic evidence, never "has it") ────────────────┘            │
@@ -39,7 +39,7 @@ Live jobs (JSearch) + jobs posted on SkillMap ──► skill extraction with qu
 
 The backend follows a **layered architecture** (FastAPI's "bigger applications" structure): routers receive HTTP requests, services and nlp hold the logic, models define the database. Routers are grouped **by feature**, because features such as login and jobs are shared by several roles. The frontend groups pages **by role**, because each role has its own screens.
 
-```
+```text
 fyp-skill-map/
 ├── README.md               this file
 ├── CHANGELOG.md            what changed, when, in which commit
@@ -86,17 +86,22 @@ fyp-skill-map/
 ## Setup
 
 **Backend** (Windows, Git Bash):
-```
+
+```bash
 cd backend
 python -m venv venv
 source venv/Scripts/activate        # PowerShell: venv\Scripts\activate
 pip install -r requirements.txt
 ```
+
 Copy `backend/.env.example` to `backend/.env` and fill in your values (never commit `.env`; it is in `.gitignore`). The example lists every setting with a comment. The API starts with only `DATABASE_URL` and `SECRET_KEY`; `GROQ_API_KEY` is needed for reading skills and the AI Assistant:
-```
+
+```bash
 cp .env.example .env
 ```
+
 **Connect GitHub (optional, 5 minutes).** Students prove which GitHub accounts are theirs by signing in to GitHub, so a project's repo can show as their own and Import from GitHub lists only their repos. It needs a free GitHub OAuth app:
+
 1. GitHub → Settings → Developer settings → OAuth Apps → **New OAuth App**.
 2. Application name `SkillMap (local)`; Homepage URL `http://localhost:5173`; Authorization callback URL `http://localhost:5173/github/callback`. Register.
 3. Copy the **Client ID**; **Generate a new client secret** and copy it (shown once).
@@ -105,16 +110,17 @@ cp .env.example .env
 No permissions are asked for (public information only), and GitHub's access key is used once to read the username, then dropped. For a deployment, register another app with the deployed address and set `FRONTEND_URL` to it. Without the app, everything else works; students see "Not linked to your GitHub" on projects with a repo, and employers see no badge.
 
 Without `SMTP_USER` and `SMTP_PASSWORD`, no email is sent: the reset code is printed in the backend console instead, so Forgot password still works on a local machine.
-Start the API: `uvicorn app.main:app --reload` (http://localhost:8000, docs at /docs). On an empty database the tables are created automatically at start-up.
+Start the API: `uvicorn app.main:app --reload` (<http://localhost:8000>, docs at /docs). On an empty database the tables are created automatically at start-up.
 
 **Frontend:**
-```
+
+```bash
 cd frontend
 npm install
 npm run dev                          # http://localhost:5173
 ```
 
-Optional `frontend/.env` (copy `frontend/.env.example`): `VITE_API_URL` (default http://localhost:8000) and `VITE_PRIVACY_CONTACT`, the email of the career office that runs SkillMap, shown in the privacy notice for questions and complaints (PDPA). Without it the notice shows the demo address careers@university.example.
+Optional `frontend/.env` (copy `frontend/.env.example`): `VITE_API_URL` (default <http://localhost:8000>) and `VITE_PRIVACY_CONTACT`, the email of the career office that runs SkillMap, shown in the privacy notice for questions and complaints (PDPA). Without it the notice shows the demo address `careers@university.example`.
 
 ## Scripts
 
@@ -190,7 +196,8 @@ Groq's free tier allows about 200,000 tokens a day (≈ 100 jobs). Don't run two
 A **new, empty** database gets its tables from `app/models/` when the API starts (the 12 Oct tables `application_events` and `job_invitations` too), but three of these scripts also load **data** a new install needs, so after the first start run, in this order: `migrate_admin_structure.py`, `migrate_all_programmes.py`, `migrate_intake_modules.py` (17 programmes, 198 modules, demo intakes), then `python scripts/pipeline/extract_module_skills.py` (module skills, Groq) and `python scripts/tools/create_admin.py` (the career-office account). Checked by `tests/test_install.py` on a brand-new database. Post a job lists the job categories already in the database, so load the JobStreet data (or fetch live jobs) before employers post. To apply one: `python migrations/<file>.py` from `backend/`.
 
 **Upgrading an existing database** (e.g. after a `git pull`): run the scripts you haven't run yet, **top to bottom in the table** (it is in date order). If unsure which, run them all in that order: every script is safe to run again: `tests/test_install.py` runs them all again on a database in use and checks that no row in any table changes and that modules the career office removed stay removed (until 14 Oct, `migrate_admin_structure.py` and `migrate_all_programmes.py` put them back on a rerun; fixed). The data scripts only fill a programme's module list when it has none yet. If one is missing, the API refuses to start and names the script to run; `tests/test_audit_fixes.py` checks that for the newest one. To prove an upgrade on real data without risking it, try it on a copy first (Git Bash; adjust the PostgreSQL path and database name):
-```
+
+```bash
 PG="/c/Program Files/PostgreSQL/16/bin"
 "$PG/pg_dump" -U postgres -Fc -f skillmap_backup.dump <your database>          # 1. back up
 "$PG/createdb" -U postgres -O <app user> skillmap_upgrade                      # 2. an empty copy
@@ -200,6 +207,7 @@ DATABASE_URL=...skillmap_upgrade python migrations/<each script not run yet>.py 
 DATABASE_URL=...skillmap_upgrade python scripts/tools/count_rows.py > after.txt
 diff before.txt after.txt                                                       # 4. same rows (new tables may appear)
 ```
+
 Then start the API on the copy and sign in. The backup file also lets you go back if anything goes wrong. A new database change gets a new `migrate_<what_it_does>.py` and a row in this table.
 
 ## Tests

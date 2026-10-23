@@ -1,0 +1,4 @@
+# Tool-generated evidence (run logs, judging sheets, summaries): outputs, not documents written by hand
+docs/evidence/**
+node_modules/**
+frontend/node_modules/**
