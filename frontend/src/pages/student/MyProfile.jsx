@@ -12,6 +12,7 @@ import { AwardsTab, CertsTab, ExperienceTab, ModulesTab, ProjectsTab } from './p
 import GithubImport from './GithubImport'
 import { Bar, RowSkeleton, LoadingLabel } from '../../components/Skeleton'
 import Popconfirm from '../../components/Popconfirm'
+import { useLatest } from '../../components/useLatest'
 
 // My Profile (9 Oct, her design): the page where a student puts things in. Four tabs, the four places her skills come
 // from: Modules, Projects, Certificates, Awards. What SkillMap works out from them (matches, skills to learn) is on the
@@ -60,13 +61,20 @@ export default function MyProfile() {
   const [dirty, setDirty] = useState(false)
   const [importNote, setImportNote] = useState('')
 
-  const load = useCallback(() => Promise.all([
-    api.get('/profile/showcase'), api.get('/profile/projects'), api.get('/profile/certifications'), api.get('/profile/awards'),
-    api.get('/profile/github/accounts').catch(() => ({ data: { accounts: [] } })), api.get('/profile/experiences'),
-  ]).then(([show, proj, cert, award, gh, exp]) => {
-    setData(show.data); setProjects(proj.data); setCerts(cert.data); setAwards(award.data); setExperiences(exp.data); setError('')
-    setGithubAccounts(gh.data.accounts.length)
-  }).catch(() => setError("Couldn't load your profile. Please refresh the page.")), [])
+  // 23 Oct (bug sweep): removing two skills quickly reloads twice; if the first reload came back last, the removed
+  // skill showed again. Only the latest reload fills the page now.
+  const start = useLatest()
+  const load = useCallback(() => {
+    const isLatest = start()
+    return Promise.all([
+      api.get('/profile/showcase'), api.get('/profile/projects'), api.get('/profile/certifications'), api.get('/profile/awards'),
+      api.get('/profile/github/accounts').catch(() => ({ data: { accounts: [] } })), api.get('/profile/experiences'),
+    ]).then(([show, proj, cert, award, gh, exp]) => {
+      if (!isLatest()) return
+      setData(show.data); setProjects(proj.data); setCerts(cert.data); setAwards(award.data); setExperiences(exp.data); setError('')
+      setGithubAccounts(gh.data.accounts.length)
+    }).catch(() => { if (isLatest()) setError("Couldn't load your profile. Please refresh the page.") })
+  }, [start])
 
   useEffect(() => { load() }, [load])
   // The return address from GitHub isn't kept: a refresh mustn't open the pop-up again

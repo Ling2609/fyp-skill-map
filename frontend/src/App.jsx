@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useState } from 'react'
+import { Fragment, lazy, Suspense, useEffect, useState } from 'react'
 import { Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom'
 import { SidebarProvider, useSidebar } from './components/SidebarContext'
 import { useAuth } from './context/useAuth'
@@ -104,6 +104,14 @@ function Layout({ children }) {
   )
 }
 
+// 23 Oct (bug sweep): React Router keeps the SAME page open when two addresses use the same page (Edit job → Post a
+// Job; one applicant → "Next to review"), so an answer for the old address could fill the new one (job 7's ad in a
+// new post; applicant 5 shown at /applications/6). A new address now opens a fresh page.
+function Fresh({ children }) {
+  const { pathname } = useLocation()
+  return <Fragment key={pathname}>{children}</Fragment>
+}
+
 function AppRoutes() {
   return (
     // fallback null: a page's code arrives in well under a second, too short to need a loading sign (NN/g)
@@ -117,12 +125,12 @@ function AppRoutes() {
       <Route path="/dashboard" element={<RoleRoute><Layout><Home /></Layout></RoleRoute>} />
       <Route path="/admin/users" element={<RoleRoute roles={['admin']}><Layout><AdminUsers /></Layout></RoleRoute>} />
       <Route path="/admin/academic" element={<RoleRoute roles={['admin']}><Layout><AdminAcademic /></Layout></RoleRoute>} />
-      <Route path="/employer/post" element={<RoleRoute roles={['employer']}><Layout><PostJob /></Layout></RoleRoute>} />
+      <Route path="/employer/post" element={<RoleRoute roles={['employer']}><Layout><Fresh><PostJob /></Fresh></Layout></RoleRoute>} />
       <Route path="/employer/jobs" element={<RoleRoute roles={['employer']}><Layout><EmployerJobs /></Layout></RoleRoute>} />
-      <Route path="/employer/graduates/:studentId" element={<RoleRoute roles={['employer']}><Layout><ApplicantProfile /></Layout></RoleRoute>} />
-      <Route path="/employer/jobs/:jobId/edit" element={<RoleRoute roles={['employer']}><Layout><PostJob /></Layout></RoleRoute>} />
+      <Route path="/employer/graduates/:studentId" element={<RoleRoute roles={['employer']}><Layout><Fresh><ApplicantProfile /></Fresh></Layout></RoleRoute>} />
+      <Route path="/employer/jobs/:jobId/edit" element={<RoleRoute roles={['employer']}><Layout><Fresh><PostJob /></Fresh></Layout></RoleRoute>} />
       <Route path="/employer/jobs/:jobId" element={<RoleRoute roles={['employer']}><Layout><Applicants /></Layout></RoleRoute>} />
-      <Route path="/employer/applications/:appId" element={<RoleRoute roles={['employer']}><Layout><ApplicantProfile /></Layout></RoleRoute>} />
+      <Route path="/employer/applications/:appId" element={<RoleRoute roles={['employer']}><Layout><Fresh><ApplicantProfile /></Fresh></Layout></RoleRoute>} />
       <Route path="/applications" element={<RoleRoute roles={['student']}><Layout><MyApplications /></Layout></RoleRoute>} />
       <Route path="/setup" element={<RoleRoute roles={['student']}><StudySetup /></RoleRoute>} />
       <Route path="/modules" element={<Navigate to="/profile?tab=modules" replace />} />

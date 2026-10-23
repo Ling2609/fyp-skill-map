@@ -65,9 +65,13 @@ export default function Register() {
 
     setTimeout(() => { setUsernameStatus('checking'); setUsernameMessage('Checking availability...') }, 0)
 
+    // 23 Oct: an answer that arrives after the name has changed again is ignored, so a slow check of an older name
+    // can't overwrite the newer one (React's "ignore" pattern for effects that fetch, react.dev/learn/synchronizing-with-effects)
+    let stale = false
     debounceRef.current = setTimeout(async () => {
       try {
-        const res = await api.get(`/auth/check-username/${username}`)
+        const res = await api.get(`/auth/check-username/${encodeURIComponent(username)}`)
+        if (stale) return
         if (res.data.available) {
           setUsernameStatus('available')
           setUsernameMessage('Username is available')
@@ -76,12 +80,13 @@ export default function Register() {
           setUsernameMessage(res.data.message)
         }
       } catch {
+        if (stale) return
         setUsernameStatus('idle')
         setUsernameMessage('')
       }
     }, 500)
 
-    return () => { if (debounceRef.current) clearTimeout(debounceRef.current) }
+    return () => { stale = true; if (debounceRef.current) clearTimeout(debounceRef.current) }
   }, [form.username])
 
 

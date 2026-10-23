@@ -8,6 +8,7 @@ import { cached, ALL_MATCHES } from '../../pageCache'
 import PageHeader from '../../components/PageHeader'
 import BackLink from '../../components/BackLink'
 import { Busy } from '../../components/Spinner'
+import { useLatest } from '../../components/useLatest'
 
 const MODES = [
   {
@@ -223,16 +224,21 @@ export default function Chatbot() {
   const topJobs = useRef(null)      // loaded once from /recommend/ (same list as Job Matches' default view)
   const toLearn = useRef([])        // "skills to learn next" from the same /recommend/ answer
 
+  const startOpen = useLatest()        // opening a past chat (below)
+  const startList = useLatest()        // 23 Oct (bug sweep): after a reply then a delete, the older list can't come back
   const loadSessions = useCallback(async () => {
+    const isLatest = startList()
     try {
       const res = await api.get('/chatbot/sessions')
+      if (!isLatest()) return
       setSessions(res.data)
       setHistoryNote('')
     } catch (err) {
+      if (!isLatest()) return
       setHistoryNote(err.response?.status === 503 ? 'Chat history is off: MongoDB is not running, so chats are not saved.'
         : "Couldn't load your past chats.")
     }
-  }, [])
+  }, [startList])
 
   useEffect(() => {
     let cancelled = false
@@ -423,7 +429,8 @@ export default function Chatbot() {
   // A new, empty chat in the given mode (not about a job any more)
   const newChat = (newMode = mode) => {
     if (loading) return
-    hasAutoSent.current = true          // never re-send "I want to learn X" in a new chat
+    startOpen()                         // a past chat still opening doesn't replace this new one
+    hasAutoSent.current = true         // never re-send "I want to learn X" in a new chat
     hours.current = null; pendingPlan.current = null     // each chat asks for its own hours
     sessionRef.current = null
     setSessionId(null)
@@ -440,8 +447,10 @@ export default function Chatbot() {
 
   const openSession = async (id) => {
     if (loading || id === sessionId) return
+    const isLatest = startOpen()
     try {
       const res = await api.get(`/chatbot/sessions/${id}`)
+      if (!isLatest()) return                   // 23 Oct (bug sweep): she clicked another chat (or New chat) meanwhile
       pendingChat.current = res.data.messages
       hasAutoSent.current = true
       hours.current = null; pendingPlan.current = null
@@ -453,7 +462,7 @@ export default function Chatbot() {
       setChatKey(k => k + 1)
       if (narrow()) setListOpen(false)          // on a phone the list covers the chat: close it once one is chosen
     } catch {
-      setHistoryNote("Couldn't open that chat. Please try again.")
+      if (isLatest()) setHistoryNote("Couldn't open that chat. Please try again.")
     }
   }
 

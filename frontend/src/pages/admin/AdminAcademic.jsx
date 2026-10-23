@@ -7,6 +7,7 @@ import ModuleForm from './ModuleForm'
 import RowMenu from './RowMenu'
 import { Bar, RowSkeleton, LoadingLabel } from '../../components/Skeleton'
 import { Busy } from '../../components/Spinner'
+import { useLatest } from '../../components/useLatest'
 
 // Admin > Academic structure (7 Oct, her pick A; references.md "Admin Academic structure layout"). Modules: a list on
 // the left (by year, "To review" / "Reviewed") and the chosen module on the right, so the career office can work
@@ -391,9 +392,10 @@ function AddModule({ scope, scopeLabel, onAdded, onNew, onCancel }) {
   useEffect(() => {
     const words = q.trim()
     if (words.length < 2) return
+    let stale = false     // 23 Oct (bug sweep): a slower answer for "data" mustn't replace the one for "database"
     const t = setTimeout(() => api.get('/admin/catalogue', { params: { q: words, ...scope } })
-      .then(res => setResults(res.data)).catch(() => setResults([])), 250)
-    return () => clearTimeout(t)
+      .then(res => { if (!stale) setResults(res.data) }).catch(() => { if (!stale) setResults([]) }), 250)
+    return () => { stale = true; clearTimeout(t) }
   }, [q, scope])
   useEffect(() => {
     const onKey = (e) => { if (e.key === 'Escape' && !busy) onCancel() }
@@ -484,10 +486,15 @@ export default function AdminAcademic() {
     setParams(next, { replace: true })
   }, [params, setParams])
 
-  const reload = useCallback(() => api.get('/admin/academic', {
-    params: intakeParam ? { intake_id: intakeParam } : programmeParam ? { programme_id: programmeParam } : {} })
-    .then(res => { setData(res.data); return res.data })
-    .catch(err => setError(errText(err, "Couldn't load the academic structure. Is the backend running?"))), [programmeParam, intakeParam])
+  // 23 Oct (bug sweep): picking programme A then B quickly could leave A on screen if A's answer came last
+  const startLoad = useLatest()
+  const reload = useCallback(() => {
+    const isLatest = startLoad()
+    return api.get('/admin/academic', {
+      params: intakeParam ? { intake_id: intakeParam } : programmeParam ? { programme_id: programmeParam } : {} })
+      .then(res => { if (isLatest()) setData(res.data); return res.data })
+      .catch(err => { if (isLatest()) setError(errText(err, "Couldn't load the academic structure. Is the backend running?")) })
+  }, [programmeParam, intakeParam, startLoad])
   useEffect(() => { reload() }, [reload])
   const programmeId = data?.programme.id
   const intake = data?.intake || null

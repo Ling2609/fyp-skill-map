@@ -9,6 +9,7 @@ import HistoryDialog from './HistoryDialog'
 import RowMenu from './RowMenu'
 import { TableRowsSkeleton } from '../../components/Skeleton'
 import { DECISIONS } from './decisions'
+import { useLatest } from '../../components/useLatest'
 
 // Admin > Users (7 Oct, her pick B after mock-ups; references.md "Admin Users table"). Every account, with:
 //  - filter buttons with counts (All / Students / Employers / Waiting / Deactivated) instead of two dropdowns:
@@ -81,10 +82,13 @@ export default function AdminUsers() {
 
   const query = params.toString()
   const search = params.get('q') || ''
+  // 23 Oct (bug sweep): the counts for "ali" mustn't replace those for "alice" if they arrive later
+  const startCounts = useLatest()
   const loadCounts = useCallback(() => {
+    const isLatest = startCounts()
     api.get(`/admin/users/counts${search ? `?q=${encodeURIComponent(search)}` : ''}`)
-      .then(res => setCounts(res.data)).catch(() => setCounts(null))
-  }, [search])
+      .then(res => { if (isLatest()) setCounts(res.data) }).catch(() => { if (isLatest()) setCounts(null) })
+  }, [search, startCounts])
   useEffect(() => { loadCounts() }, [loadCounts])
   useEffect(() => {
     let cancelled = false

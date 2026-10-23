@@ -21,6 +21,28 @@ test('TC-54 a student cannot open employer or career office pages', async ({ pag
   await shot(page, 'TC-54_student_sent_to_dashboard')
 })
 
+test('a slow answer for an older username does not overwrite the newer one', async ({ page }) => {
+  // 23 Oct (bug sweep): the check for "aina1" is held back 1.5 s, so it arrives AFTER the check for "aina12". Before the
+  // fix the page then said "available" for aina12, which is taken. Both answers are made up here; nothing is saved.
+  await page.route('**/auth/check-username/**', async route => {
+    const name = decodeURIComponent(route.request().url().split('/').pop())
+    if (name === 'aina1') {
+      await new Promise(r => setTimeout(r, 1500))
+      return route.fulfill({ json: { available: true, message: 'Username is available' } })
+    }
+    return route.fulfill({ json: { available: false, message: 'Username is already taken' } })
+  })
+  await page.goto('/register')
+  const box = page.getByLabel('Username')
+  await box.fill('aina1')
+  await page.waitForRequest(r => r.url().endsWith('/check-username/aina1'))   // the slow check is on its way
+  await box.fill('aina12')
+  await expect(page.getByText('Username is already taken')).toBeVisible()
+  await page.waitForTimeout(2000)                                              // the slow answer has arrived by now
+  await expect(page.getByText('Username is already taken')).toBeVisible()
+  await expect(page.getByText('Username is available')).toHaveCount(0)
+})
+
 test('a broken link shows a message, not a blank page', async ({ page }) => {
   // 23 Oct (found by the Lighthouse run over every page): a link missing its ?job= made the backend answer with a list
   // of field errors, which the page tried to print, and the whole app went blank

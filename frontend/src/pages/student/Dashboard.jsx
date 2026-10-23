@@ -10,6 +10,7 @@ import { Bar, RowSkeleton, LoadingLabel } from '../../components/Skeleton'
 import { skillName } from '../../skillName'
 import { ADMIN_COUNTS_CHANGED } from '../../components/Sidebar'
 import { greeting } from '../../greeting'
+import { useLatest } from '../../components/useLatest'
 
 // Dashboard (9 Oct redesign, her choice after the "Dashboard on One Screen" mock-ups). A dashboard tells the student
 // what she doesn't know yet (NN/g: "communicating critical information"), so:
@@ -383,19 +384,25 @@ export default function Dashboard() {
   }
 
   // Only sets state when an answer comes back (so it can run from an effect)
+  // 23 Oct (bug sweep): changing the goal while the first goal's jobs were still loading could show the old goal's jobs
+  // under the new goal; only the latest load may now fill the page
+  const start = useLatest()
   const load = useCallback(() => {
+    const isLatest = start()
     api.get('/recommend/goal')
       .then(res => {
+        if (!isLatest()) return null
         setGoalData(res.data)
         // The same request Job Matches sends for this category, so the order is the same there
         return cached('/recommend/', { ...ALL_MATCHES, category: res.data.goal || '' })
       })
-      .then(rec => setMatches(rec.recommendations || []))
+      .then(rec => { if (rec && isLatest()) setMatches(rec.recommendations || []) })
       .catch(err => {
+        if (!isLatest()) return
         if (err.response?.status === 400) setEmptyProfile(true)   // nothing in the profile yet
         else setLoadError("Couldn't load your dashboard. Please check the server is running and refresh.")
       })
-  }, [])
+  }, [start])
 
   useEffect(() => {
     load()
