@@ -1,96 +1,23 @@
 
 Running 17 tests using 1 worker
 
-  ✓   1 e2e\1-student.spec.js:7:3 › Student › TC-01 a grade turns a module into skills (3.6s)
-  ✓   2 e2e\1-student.spec.js:17:3 › Student › TC-10 the profile checklist counts what was added (3.0s)
+  ✓   1 e2e\1-student.spec.js:7:3 › Student › TC-01 a grade turns a module into skills (3.7s)
+  ✓   2 e2e\1-student.spec.js:17:3 › Student › TC-10 the profile checklist counts what was added (2.6s)
   ✓   3 e2e\1-student.spec.js:25:3 › Student › TC-11 Job Matches lists jobs for her skills (3.3s)
-  ✓   4 e2e\1-student.spec.js:32:3 › Student › TC-16 Job Detail explains the match and the gap (4.4s)
-  ✓   5 e2e\1-student.spec.js:46:3 › Student › TC-28 apply, and My Applications shows Applied (5.3s)
-  ✓   6 e2e\2-employer.spec.js:7:3 › Employer › TC-31 the employer sees who applied and how well they fit (3.8s)
-  ✓   7 e2e\2-employer.spec.js:18:3 › Employer › TC-42 contact details appear only after shortlisting (4.3s)
-  ✓   8 e2e\2-employer.spec.js:32:3 › Employer › TC-38 the student sees "Shortlisted" on My Applications (2.3s)
-  ✓   9 e2e\3-admin.spec.js:10:3 › Career office › TC-51 a new employer signs up and waits for approval (2.9s)
-  ✓  10 e2e\3-admin.spec.js:30:3 › Career office › TC-48 the career office approves the employer (4.7s)
-  ✓  11 e2e\3-admin.spec.js:48:3 › Career office › TC-50 the career office adds an intake (3.1s)
-  ✓  12 e2e\4-access.spec.js:6:1 › TC-54 signed out: a private page sends you to sign in (533ms)
-  ✓  13 e2e\4-access.spec.js:12:1 › TC-54 a student cannot open employer or career office pages (4.5s)
+  ✓   4 e2e\1-student.spec.js:32:3 › Student › TC-16 Job Detail explains the match and the gap (4.6s)
+  Apply: click to "Applied" in 427 ms (limit 1000 ms)
+  ✓   5 e2e\1-student.spec.js:46:3 › Student › TC-28 apply, and My Applications shows Applied (6.7s)
+  ✓   6 e2e\2-employer.spec.js:7:3 › Employer › TC-31 the employer sees who applied and how well they fit (3.4s)
+  ✓   7 e2e\2-employer.spec.js:18:3 › Employer › TC-42 contact details appear only after shortlisting (4.0s)
+  ✓   8 e2e\2-employer.spec.js:32:3 › Employer › TC-38 the student sees "Shortlisted" on My Applications (2.2s)
+  ✓   9 e2e\3-admin.spec.js:10:3 › Career office › TC-51 a new employer signs up and waits for approval (2.4s)
+  ✓  10 e2e\3-admin.spec.js:30:3 › Career office › TC-48 the career office approves the employer (4.4s)
+  ✓  11 e2e\3-admin.spec.js:48:3 › Career office › TC-50 the career office adds an intake (3.2s)
+  ✓  12 e2e\4-access.spec.js:6:1 › TC-54 signed out: a private page sends you to sign in (560ms)
+  ✓  13 e2e\4-access.spec.js:12:1 › TC-54 a student cannot open employer or career office pages (3.9s)
   ✓  14 e2e\4-access.spec.js:24:1 › a broken link shows a message, not a blank page (2.2s)
-  ✓  15 e2e\5-accessibility.spec.js:20:1 › TC-66 the pages and pop-ups of each role have no accessibility problems that axe-core finds (WCAG 2.2 AA + best practice) (1.2m)
-  ✘  16 e2e\5-accessibility.spec.js:82:1 › TC-66 keyboard only: a job opens from Job Matches with Tab and Enter (18.9s)
-  ✘  17 e2e\5-accessibility.spec.js:94:1 › TC-66 keyboard only: an applicant opens from View applicants with Tab and Enter (18.5s)
+  ✓  15 e2e\5-accessibility.spec.js:20:1 › TC-66 the pages and pop-ups of each role have no accessibility problems that axe-core finds (WCAG 2.2 AA + best practice) (1.3m)
+  ✓  16 e2e\5-accessibility.spec.js:90:1 › TC-66 keyboard only: a job opens from Job Matches with Tab and Enter (3.7s)
+  ✓  17 e2e\5-accessibility.spec.js:102:1 › TC-66 keyboard only: an applicant opens from View applicants with Tab and Enter (3.3s)
 
-
-  1) e2e\5-accessibility.spec.js:82:1 › TC-66 keyboard only: a job opens from Job Matches with Tab and Enter 
-
-    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeFocused[2m([22m[2m)[22m failed
-
-    Locator:  getByRole('link', { name: 'Junior Data Analyst' })
-    Expected: focused
-    Received: inactive
-    Timeout:  15000ms
-
-    Call log:
-    [2m  - Expect "toBeFocused" with timeout 15000ms[22m
-    [2m  - waiting for getByRole('link', { name: 'Junior Data Analyst' })[22m
-    [2m    18 × locator resolved to <a href="/jobs/skillmap-d629d90ed8bb" class="font-semibold text-slate-800 text-sm truncate group-hover:text-blue-700 transition leading-snug rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500">Junior Data Analyst</a>[22m
-    [2m       - unexpected value "inactive"[22m
-
-
-      86 |   await expect(title).toBeVisible()
-      87 |   for (let i = 0; i < 40 && !(await title.evaluate(el => el === document.activeElement)); i++) await page.keyboard.press(nextKey(browserName))
-    > 88 |   await expect(title).toBeFocused()                     // reached with the keyboard alone
-         |                       ^
-      89 |   await page.keyboard.press('Enter')
-      90 |   await page.waitForURL(/\/jobs\//)
-      91 |   await expect(page.getByRole('heading', { name: 'Junior Data Analyst' })).toBeVisible()
-        at C:\Users\Ling\Desktop\fyp-skill-map\frontend\e2e\5-accessibility.spec.js:88:23
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ..\docs\evidence\e2e\webkit\failures\5-accessibility-TC-66-keyb-c4cb4--Matches-with-Tab-and-Enter\test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ..\docs\evidence\e2e\webkit\failures\5-accessibility-TC-66-keyb-c4cb4--Matches-with-Tab-and-Enter\test-failed-3.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #3: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ..\docs\evidence\e2e\webkit\failures\5-accessibility-TC-66-keyb-c4cb4--Matches-with-Tab-and-Enter\test-failed-2.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: ..\docs\evidence\e2e\webkit\failures\5-accessibility-TC-66-keyb-c4cb4--Matches-with-Tab-and-Enter\error-context.md
-
-  2) e2e\5-accessibility.spec.js:94:1 › TC-66 keyboard only: an applicant opens from View applicants with Tab and Enter 
-
-    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeFocused[2m([22m[2m)[22m failed
-
-    Locator:  getByRole('link', { name: 'Daniel Lim' })
-    Expected: focused
-    Received: inactive
-    Timeout:  15000ms
-
-    Call log:
-    [2m  - Expect "toBeFocused" with timeout 15000ms[22m
-    [2m  - waiting for getByRole('link', { name: 'Daniel Lim' })[22m
-    [2m    18 × locator resolved to <a data-discover="true" href="/employer/applications/1" class="hover:text-blue-700 rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500">Daniel Lim</a>[22m
-    [2m       - unexpected value "inactive"[22m
-
-
-       99 |   await expect(name).toBeVisible()
-      100 |   for (let i = 0; i < 40 && !(await name.evaluate(el => el === document.activeElement)); i++) await page.keyboard.press(nextKey(browserName))
-    > 101 |   await expect(name).toBeFocused()
-          |                      ^
-      102 |   await page.keyboard.press('Enter')
-      103 |   await page.waitForURL(/\/employer\/applications\//)
-      104 |   await expect(page.getByRole('heading', { name: 'Daniel Lim' })).toBeVisible()
-        at C:\Users\Ling\Desktop\fyp-skill-map\frontend\e2e\5-accessibility.spec.js:101:22
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ..\docs\evidence\e2e\webkit\failures\5-accessibility-TC-66-keyb-8cff6-plicants-with-Tab-and-Enter\test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: ..\docs\evidence\e2e\webkit\failures\5-accessibility-TC-66-keyb-8cff6-plicants-with-Tab-and-Enter\error-context.md
-
-  2 failed
-    e2e\5-accessibility.spec.js:82:1 › TC-66 keyboard only: a job opens from Job Matches with Tab and Enter 
-    e2e\5-accessibility.spec.js:94:1 › TC-66 keyboard only: an applicant opens from View applicants with Tab and Enter 
-  15 passed (2.7m)
+  17 passed (2.2m)

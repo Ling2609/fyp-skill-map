@@ -48,7 +48,17 @@ test.describe.serial('Student', () => {
     await page.goto('/recommend')
     await page.getByText('Graduate Software Engineer').first().click()
     await page.getByRole('button', { name: 'Apply with my SkillMap profile' }).click()
+    const clicked = Date.now()
     await page.getByRole('button', { name: 'Apply now' }).click()
+    // 23 Oct (her WebKit run, then her "how long should it wait?"): leaving at once cancelled the application before it
+    // was sent, so the test waits for SkillMap's own confirmation, as a person would. And it must come quickly: Google's
+    // RAIL model, beyond 1 s "users lose focus on the task" (web.dev/articles/rail); the button shows "Applying…" at
+    // once meanwhile. Measured 0.15 s; slower than 1 s fails the test, so a slow app can't hide behind the wait.
+    await expect(page.getByText(/^Applied · /)).toBeVisible()
+    const took = Date.now() - clicked
+    test.info().annotations.push({ type: 'Apply took', description: `${took} ms (limit 1000 ms)` })
+    console.log(`  Apply: click to "Applied" in ${took} ms (limit 1000 ms)`)
+    expect(took, 'applying took longer than 1 second (RAIL)').toBeLessThan(1000)
     await page.goto('/applications')
     await expect(page.getByText('Graduate Software Engineer').first()).toBeVisible()
     await expect(page.getByText('Applied').first()).toBeVisible()

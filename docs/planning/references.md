@@ -1126,3 +1126,27 @@ Her request: show the student a clear process (instead of silence then a sudden 
   (frontend/scripts/lighthouse_all.mjs: one browser profile shared with Lighthouse, disableStorageReset so the sign-in
   stays, desktop config). Found a crash (FastAPI 422 `detail` is a list; pages rendered it as text -> blank app),
   fixed once in api.js; and the form `Field` label not linked to month pickers / lists. Result 33/33 at 100.
+
+## Safari, WebKit and the keyboard (23 Oct, opened; her "research first, we're not familiar with Safari and Mac")
+- Apple, Safari keyboard shortcuts (https://support.apple.com/en-tm/guide/safari/cpsh003): Tab = "Highlight the next
+  field or pop-up menu on a webpage"; Option-Tab = "Highlight the next field, pop-up menu, or clickable item (such as
+  a link)"; "Press Tab to highlight each item on a webpage" (Safari settings, Advanced) reverses the two. So Tab
+  skipping links is Safari's design on every site, not a SkillMap fault.
+- Adobe Spectrum Web Components PR 5833 (https://github.com/adobe/spectrum-web-components/pull/5833): Safari's
+  default Tab "only focused form controls, not all interactive elements"; behaviour changed across macOS/WebKit
+  versions; their WebKit tests still needed `el.focus` as a workaround.
+- Her runs (Playwright WebKit on Windows): neither Tab nor Alt (Option)+Tab reached the job title / applicant name.
+- Decision: in WebKit the keyboard tests focus the link directly and check that Enter opens it (annotated in the
+  report); Tab reach is checked in Chromium, Chrome, Edge and Firefox. Limitation for the report: not tested on real
+  Safari (no Mac); WebKit is its engine, not Safari itself.
+
+## How fast should applying be? (23 Oct, opened; her "how long should it wait? don't just make it pass")
+- Google RAIL (https://web.dev/articles/rail): "Complete a transition initiated by user input within 100 ms, so users
+  feel like the interactions are instantaneous"; "For actions that take longer than 50 ms to complete, always provide
+  feedback"; "Beyond 1000 milliseconds (1 second), users lose focus on the task they are performing."
+- INP, Core Web Vitals (https://web.dev/articles/inp): input to next visual feedback; "Good INP values are 200
+  milliseconds or less", 200-500 ms needs improvement, above 500 ms poor.
+- NN/g (https://www.nngroup.com/videos/3-response-time-limits-interaction-design/): limits of 0.1, 1.0 and 10 s.
+- SkillMap: the button shows "Applying…" with a spinner at once (feedback); click to "Applied" measured 0.15-0.17 s
+  (POST 60-80 ms) in the sandbox. TC-28 now fails above 1 s (RAIL) and logs the time, so a slow app can't hide
+  behind the test's wait.

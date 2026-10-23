@@ -74,18 +74,26 @@ test('TC-66 the pages and pop-ups of each role have no accessibility problems th
   expect(found, found.map(f => `${f.page}: ${f.help} (${f.where.length})`).join('\n')).toEqual([])
 })
 
-// 23 Oct (her WebKit run): Safari moves to links with Option+Tab (Tab alone skips them unless "Press Tab to highlight
-// each item" is switched on in its settings), and WebKit, Safari's engine, does the same; so the test presses what a
-// Safari keyboard user presses
-const nextKey = (browserName) => (browserName === 'webkit' ? 'Alt+Tab' : 'Tab')
+// 23 Oct (her WebKit runs): WebKit, Safari's engine, leaves links out of the Tab order by default (Safari users
+// switch on "Press Tab to highlight each item"), and Option+Tab didn't reach them in Playwright's WebKit on Windows
+// either. So in WebKit the test puts the keyboard focus on the link itself and checks that Enter opens it: the title
+// is a real, keyboard-usable link. Reaching it with Tab is checked in Chromium, Chrome, Edge and Firefox.
+async function reachByKeyboard(page, link, browserName) {
+  if (browserName === 'webkit') {
+    test.info().annotations.push({ type: 'WebKit', description: 'link focused directly (WebKit leaves links out of the Tab order by default); Enter checked' })
+    await link.focus()
+    return
+  }
+  for (let i = 0; i < 40 && !(await link.evaluate(el => el === document.activeElement)); i++) await page.keyboard.press('Tab')
+}
 
 test('TC-66 keyboard only: a job opens from Job Matches with Tab and Enter', async ({ page, browserName }) => {
   await signIn(page, STUDENT)
   await page.goto('/recommend')
   const title = page.getByRole('link', { name: 'Junior Data Analyst' })
   await expect(title).toBeVisible()
-  for (let i = 0; i < 40 && !(await title.evaluate(el => el === document.activeElement)); i++) await page.keyboard.press(nextKey(browserName))
-  await expect(title).toBeFocused()                     // reached with the keyboard alone
+  await reachByKeyboard(page, title, browserName)
+  await expect(title).toBeFocused()
   await page.keyboard.press('Enter')
   await page.waitForURL(/\/jobs\//)
   await expect(page.getByRole('heading', { name: 'Junior Data Analyst' })).toBeVisible()
@@ -97,7 +105,7 @@ test('TC-66 keyboard only: an applicant opens from View applicants with Tab and 
   await page.getByRole('row', { name: /Graduate Software Engineer/ }).getByRole('link', { name: 'View applicants' }).click()
   const name = page.getByRole('link', { name: 'Daniel Lim' })
   await expect(name).toBeVisible()
-  for (let i = 0; i < 40 && !(await name.evaluate(el => el === document.activeElement)); i++) await page.keyboard.press(nextKey(browserName))
+  await reachByKeyboard(page, name, browserName)
   await expect(name).toBeFocused()
   await page.keyboard.press('Enter')
   await page.waitForURL(/\/employer\/applications\//)

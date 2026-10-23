@@ -86,12 +86,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 3604,
+                      "duration": 3668,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-10-23T04:59:05.640Z",
+                      "startTime": "2026-10-23T05:30:02.863Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -120,12 +120,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 2975,
+                      "duration": 2592,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-10-23T04:59:09.318Z",
+                      "startTime": "2026-10-23T05:30:06.618Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -154,12 +154,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 3328,
+                      "duration": 3290,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-10-23T04:59:12.306Z",
+                      "startTime": "2026-10-23T05:30:09.239Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -188,12 +188,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 4357,
+                      "duration": 4579,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-10-23T04:59:15.643Z",
+                      "startTime": "2026-10-23T05:30:12.554Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -213,7 +213,12 @@
               "tests": [
                 {
                   "timeout": 60000,
-                  "annotations": [],
+                  "annotations": [
+                    {
+                      "type": "Apply took",
+                      "description": "427 ms (limit 1000 ms)"
+                    }
+                  ],
                   "expectedStatus": "passed",
                   "projectId": "",
                   "projectName": "",
@@ -222,13 +227,22 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 5287,
+                      "duration": 6674,
                       "errors": [],
-                      "stdout": [],
+                      "stdout": [
+                        {
+                          "text": "  Apply: click to \"Applied\" in 427 ms (limit 1000 ms)\n"
+                        }
+                      ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-10-23T04:59:20.008Z",
-                      "annotations": [],
+                      "startTime": "2026-10-23T05:30:17.154Z",
+                      "annotations": [
+                        {
+                          "type": "Apply took",
+                          "description": "427 ms (limit 1000 ms)"
+                        }
+                      ],
                       "attachments": []
                     }
                   ],
@@ -273,12 +287,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 3838,
+                      "duration": 3363,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-10-23T04:59:25.324Z",
+                      "startTime": "2026-10-23T05:30:23.866Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -307,12 +321,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 4271,
+                      "duration": 3983,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-10-23T04:59:29.176Z",
+                      "startTime": "2026-10-23T05:30:27.239Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -341,12 +355,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 2312,
+                      "duration": 2206,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-10-23T04:59:33.454Z",
+                      "startTime": "2026-10-23T05:30:31.230Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -392,12 +406,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 2904,
+                      "duration": 2355,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-10-23T04:59:35.789Z",
+                      "startTime": "2026-10-23T05:30:33.470Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -426,12 +440,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 4690,
+                      "duration": 4407,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-10-23T04:59:38.709Z",
+                      "startTime": "2026-10-23T05:30:35.835Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -460,12 +474,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 3116,
+                      "duration": 3233,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-10-23T04:59:43.409Z",
+                      "startTime": "2026-10-23T05:30:40.254Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -504,12 +518,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 533,
+                  "duration": 560,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-23T04:59:46.552Z",
+                  "startTime": "2026-10-23T05:30:43.506Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -538,12 +552,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 4535,
+                  "duration": 3861,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-23T04:59:47.093Z",
+                  "startTime": "2026-10-23T05:30:44.076Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -572,12 +586,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 2176,
+                  "duration": 2195,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-23T04:59:51.637Z",
+                  "startTime": "2026-10-23T05:30:47.945Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -614,12 +628,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 74408,
+                  "duration": 78565,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-23T04:59:53.956Z",
+                  "startTime": "2026-10-23T05:30:50.282Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -634,12 +648,17 @@
         },
         {
           "title": "TC-66 keyboard only: a job opens from Job Matches with Tab and Enter",
-          "ok": false,
+          "ok": true,
           "tags": [],
           "tests": [
             {
               "timeout": 60000,
-              "annotations": [],
+              "annotations": [
+                {
+                  "type": "WebKit",
+                  "description": "link focused directly (WebKit leaves links out of the Tab order by default); Enter checked"
+                }
+              ],
               "expectedStatus": "passed",
               "projectId": "",
               "projectName": "",
@@ -647,137 +666,72 @@
                 {
                   "workerIndex": 0,
                   "parallelIndex": 0,
-                  "status": "failed",
-                  "duration": 18929,
-                  "error": {
-                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeFocused\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('link', { name: 'Junior Data Analyst' })\nExpected: focused\nReceived: inactive\nTimeout:  15000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeFocused\" with timeout 15000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('link', { name: 'Junior Data Analyst' })\u001b[22m\n\u001b[2m    18 × locator resolved to <a href=\"/jobs/skillmap-d629d90ed8bb\" class=\"font-semibold text-slate-800 text-sm truncate group-hover:text-blue-700 transition leading-snug rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500\">Junior Data Analyst</a>\u001b[22m\n\u001b[2m       - unexpected value \"inactive\"\u001b[22m\n",
-                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeFocused\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('link', { name: 'Junior Data Analyst' })\nExpected: focused\nReceived: inactive\nTimeout:  15000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeFocused\" with timeout 15000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('link', { name: 'Junior Data Analyst' })\u001b[22m\n\u001b[2m    18 × locator resolved to <a href=\"/jobs/skillmap-d629d90ed8bb\" class=\"font-semibold text-slate-800 text-sm truncate group-hover:text-blue-700 transition leading-snug rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500\">Junior Data Analyst</a>\u001b[22m\n\u001b[2m       - unexpected value \"inactive\"\u001b[22m\n\n    at C:\\Users\\Ling\\Desktop\\fyp-skill-map\\frontend\\e2e\\5-accessibility.spec.js:88:23",
-                    "location": {
-                      "file": "C:\\Users\\Ling\\Desktop\\fyp-skill-map\\frontend\\e2e\\5-accessibility.spec.js",
-                      "column": 23,
-                      "line": 88
-                    },
-                    "snippet": "\u001b[0m \u001b[90m 86 |\u001b[39m   \u001b[36mawait\u001b[39m expect(title)\u001b[33m.\u001b[39mtoBeVisible()\n \u001b[90m 87 |\u001b[39m   \u001b[36mfor\u001b[39m (\u001b[36mlet\u001b[39m i \u001b[33m=\u001b[39m \u001b[35m0\u001b[39m\u001b[33m;\u001b[39m i \u001b[33m<\u001b[39m \u001b[35m40\u001b[39m \u001b[33m&&\u001b[39m \u001b[33m!\u001b[39m(\u001b[36mawait\u001b[39m title\u001b[33m.\u001b[39mevaluate(el \u001b[33m=>\u001b[39m el \u001b[33m===\u001b[39m document\u001b[33m.\u001b[39mactiveElement))\u001b[33m;\u001b[39m i\u001b[33m++\u001b[39m) \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mkeyboard\u001b[33m.\u001b[39mpress(nextKey(browserName))\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 88 |\u001b[39m   \u001b[36mawait\u001b[39m expect(title)\u001b[33m.\u001b[39mtoBeFocused()                     \u001b[90m// reached with the keyboard alone\u001b[39m\n \u001b[90m    |\u001b[39m                       \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 89 |\u001b[39m   \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mkeyboard\u001b[33m.\u001b[39mpress(\u001b[32m'Enter'\u001b[39m)\n \u001b[90m 90 |\u001b[39m   \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForURL(\u001b[35m/\\/jobs\\//\u001b[39m)\n \u001b[90m 91 |\u001b[39m   \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'heading'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[32m'Junior Data Analyst'\u001b[39m }))\u001b[33m.\u001b[39mtoBeVisible()\u001b[0m"
-                  },
-                  "errors": [
-                    {
-                      "location": {
-                        "file": "C:\\Users\\Ling\\Desktop\\fyp-skill-map\\frontend\\e2e\\5-accessibility.spec.js",
-                        "column": 23,
-                        "line": 88
-                      },
-                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeFocused\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('link', { name: 'Junior Data Analyst' })\nExpected: focused\nReceived: inactive\nTimeout:  15000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeFocused\" with timeout 15000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('link', { name: 'Junior Data Analyst' })\u001b[22m\n\u001b[2m    18 × locator resolved to <a href=\"/jobs/skillmap-d629d90ed8bb\" class=\"font-semibold text-slate-800 text-sm truncate group-hover:text-blue-700 transition leading-snug rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500\">Junior Data Analyst</a>\u001b[22m\n\u001b[2m       - unexpected value \"inactive\"\u001b[22m\n\n\n  86 |   await expect(title).toBeVisible()\n  87 |   for (let i = 0; i < 40 && !(await title.evaluate(el => el === document.activeElement)); i++) await page.keyboard.press(nextKey(browserName))\n> 88 |   await expect(title).toBeFocused()                     // reached with the keyboard alone\n     |                       ^\n  89 |   await page.keyboard.press('Enter')\n  90 |   await page.waitForURL(/\\/jobs\\//)\n  91 |   await expect(page.getByRole('heading', { name: 'Junior Data Analyst' })).toBeVisible()\n    at C:\\Users\\Ling\\Desktop\\fyp-skill-map\\frontend\\e2e\\5-accessibility.spec.js:88:23"
-                    }
-                  ],
+                  "status": "passed",
+                  "duration": 3659,
+                  "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-23T05:01:08.373Z",
-                  "annotations": [],
-                  "attachments": [
+                  "startTime": "2026-10-23T05:32:08.854Z",
+                  "annotations": [
                     {
-                      "name": "screenshot",
-                      "contentType": "image/png",
-                      "path": "C:\\Users\\Ling\\Desktop\\fyp-skill-map\\docs\\evidence\\e2e\\webkit\\failures\\5-accessibility-TC-66-keyb-c4cb4--Matches-with-Tab-and-Enter\\test-failed-1.png"
-                    },
-                    {
-                      "name": "screenshot",
-                      "contentType": "image/png",
-                      "path": "C:\\Users\\Ling\\Desktop\\fyp-skill-map\\docs\\evidence\\e2e\\webkit\\failures\\5-accessibility-TC-66-keyb-c4cb4--Matches-with-Tab-and-Enter\\test-failed-3.png"
-                    },
-                    {
-                      "name": "screenshot",
-                      "contentType": "image/png",
-                      "path": "C:\\Users\\Ling\\Desktop\\fyp-skill-map\\docs\\evidence\\e2e\\webkit\\failures\\5-accessibility-TC-66-keyb-c4cb4--Matches-with-Tab-and-Enter\\test-failed-2.png"
-                    },
-                    {
-                      "name": "error-context",
-                      "contentType": "text/markdown",
-                      "path": "C:\\Users\\Ling\\Desktop\\fyp-skill-map\\docs\\evidence\\e2e\\webkit\\failures\\5-accessibility-TC-66-keyb-c4cb4--Matches-with-Tab-and-Enter\\error-context.md"
+                      "type": "WebKit",
+                      "description": "link focused directly (WebKit leaves links out of the Tab order by default); Enter checked"
                     }
                   ],
-                  "errorLocation": {
-                    "file": "C:\\Users\\Ling\\Desktop\\fyp-skill-map\\frontend\\e2e\\5-accessibility.spec.js",
-                    "column": 23,
-                    "line": 88
-                  }
+                  "attachments": []
                 }
               ],
-              "status": "unexpected"
+              "status": "expected"
             }
           ],
           "id": "48d7c8129f9e99ffe3d6-afcb32314d6f474b2325",
           "file": "5-accessibility.spec.js",
-          "line": 82,
+          "line": 90,
           "column": 1
         },
         {
           "title": "TC-66 keyboard only: an applicant opens from View applicants with Tab and Enter",
-          "ok": false,
+          "ok": true,
           "tags": [],
           "tests": [
             {
               "timeout": 60000,
-              "annotations": [],
+              "annotations": [
+                {
+                  "type": "WebKit",
+                  "description": "link focused directly (WebKit leaves links out of the Tab order by default); Enter checked"
+                }
+              ],
               "expectedStatus": "passed",
               "projectId": "",
               "projectName": "",
               "results": [
                 {
-                  "workerIndex": 1,
+                  "workerIndex": 0,
                   "parallelIndex": 0,
-                  "status": "failed",
-                  "duration": 18451,
-                  "error": {
-                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeFocused\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('link', { name: 'Daniel Lim' })\nExpected: focused\nReceived: inactive\nTimeout:  15000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeFocused\" with timeout 15000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('link', { name: 'Daniel Lim' })\u001b[22m\n\u001b[2m    18 × locator resolved to <a data-discover=\"true\" href=\"/employer/applications/1\" class=\"hover:text-blue-700 rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500\">Daniel Lim</a>\u001b[22m\n\u001b[2m       - unexpected value \"inactive\"\u001b[22m\n",
-                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeFocused\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('link', { name: 'Daniel Lim' })\nExpected: focused\nReceived: inactive\nTimeout:  15000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeFocused\" with timeout 15000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('link', { name: 'Daniel Lim' })\u001b[22m\n\u001b[2m    18 × locator resolved to <a data-discover=\"true\" href=\"/employer/applications/1\" class=\"hover:text-blue-700 rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500\">Daniel Lim</a>\u001b[22m\n\u001b[2m       - unexpected value \"inactive\"\u001b[22m\n\n    at C:\\Users\\Ling\\Desktop\\fyp-skill-map\\frontend\\e2e\\5-accessibility.spec.js:101:22",
-                    "location": {
-                      "file": "C:\\Users\\Ling\\Desktop\\fyp-skill-map\\frontend\\e2e\\5-accessibility.spec.js",
-                      "column": 22,
-                      "line": 101
-                    },
-                    "snippet": "\u001b[0m \u001b[90m  99 |\u001b[39m   \u001b[36mawait\u001b[39m expect(name)\u001b[33m.\u001b[39mtoBeVisible()\n \u001b[90m 100 |\u001b[39m   \u001b[36mfor\u001b[39m (\u001b[36mlet\u001b[39m i \u001b[33m=\u001b[39m \u001b[35m0\u001b[39m\u001b[33m;\u001b[39m i \u001b[33m<\u001b[39m \u001b[35m40\u001b[39m \u001b[33m&&\u001b[39m \u001b[33m!\u001b[39m(\u001b[36mawait\u001b[39m name\u001b[33m.\u001b[39mevaluate(el \u001b[33m=>\u001b[39m el \u001b[33m===\u001b[39m document\u001b[33m.\u001b[39mactiveElement))\u001b[33m;\u001b[39m i\u001b[33m++\u001b[39m) \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mkeyboard\u001b[33m.\u001b[39mpress(nextKey(browserName))\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 101 |\u001b[39m   \u001b[36mawait\u001b[39m expect(name)\u001b[33m.\u001b[39mtoBeFocused()\n \u001b[90m     |\u001b[39m                      \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 102 |\u001b[39m   \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mkeyboard\u001b[33m.\u001b[39mpress(\u001b[32m'Enter'\u001b[39m)\n \u001b[90m 103 |\u001b[39m   \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForURL(\u001b[35m/\\/employer\\/applications\\//\u001b[39m)\n \u001b[90m 104 |\u001b[39m   \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'heading'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[32m'Daniel Lim'\u001b[39m }))\u001b[33m.\u001b[39mtoBeVisible()\u001b[0m"
-                  },
-                  "errors": [
-                    {
-                      "location": {
-                        "file": "C:\\Users\\Ling\\Desktop\\fyp-skill-map\\frontend\\e2e\\5-accessibility.spec.js",
-                        "column": 22,
-                        "line": 101
-                      },
-                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeFocused\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('link', { name: 'Daniel Lim' })\nExpected: focused\nReceived: inactive\nTimeout:  15000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeFocused\" with timeout 15000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('link', { name: 'Daniel Lim' })\u001b[22m\n\u001b[2m    18 × locator resolved to <a data-discover=\"true\" href=\"/employer/applications/1\" class=\"hover:text-blue-700 rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500\">Daniel Lim</a>\u001b[22m\n\u001b[2m       - unexpected value \"inactive\"\u001b[22m\n\n\n   99 |   await expect(name).toBeVisible()\n  100 |   for (let i = 0; i < 40 && !(await name.evaluate(el => el === document.activeElement)); i++) await page.keyboard.press(nextKey(browserName))\n> 101 |   await expect(name).toBeFocused()\n      |                      ^\n  102 |   await page.keyboard.press('Enter')\n  103 |   await page.waitForURL(/\\/employer\\/applications\\//)\n  104 |   await expect(page.getByRole('heading', { name: 'Daniel Lim' })).toBeVisible()\n    at C:\\Users\\Ling\\Desktop\\fyp-skill-map\\frontend\\e2e\\5-accessibility.spec.js:101:22"
-                    }
-                  ],
+                  "status": "passed",
+                  "duration": 3287,
+                  "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-23T05:01:28.205Z",
-                  "annotations": [],
-                  "attachments": [
+                  "startTime": "2026-10-23T05:32:12.533Z",
+                  "annotations": [
                     {
-                      "name": "screenshot",
-                      "contentType": "image/png",
-                      "path": "C:\\Users\\Ling\\Desktop\\fyp-skill-map\\docs\\evidence\\e2e\\webkit\\failures\\5-accessibility-TC-66-keyb-8cff6-plicants-with-Tab-and-Enter\\test-failed-1.png"
-                    },
-                    {
-                      "name": "error-context",
-                      "contentType": "text/markdown",
-                      "path": "C:\\Users\\Ling\\Desktop\\fyp-skill-map\\docs\\evidence\\e2e\\webkit\\failures\\5-accessibility-TC-66-keyb-8cff6-plicants-with-Tab-and-Enter\\error-context.md"
+                      "type": "WebKit",
+                      "description": "link focused directly (WebKit leaves links out of the Tab order by default); Enter checked"
                     }
                   ],
-                  "errorLocation": {
-                    "file": "C:\\Users\\Ling\\Desktop\\fyp-skill-map\\frontend\\e2e\\5-accessibility.spec.js",
-                    "column": 22,
-                    "line": 101
-                  }
+                  "attachments": []
                 }
               ],
-              "status": "unexpected"
+              "status": "expected"
             }
           ],
           "id": "48d7c8129f9e99ffe3d6-c57b420905b40eba5d26",
           "file": "5-accessibility.spec.js",
-          "line": 94,
+          "line": 102,
           "column": 1
         }
       ]
@@ -785,11 +739,11 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-10-23T04:59:04.531Z",
-    "duration": 162274.307,
-    "expected": 15,
+    "startTime": "2026-10-23T05:30:01.804Z",
+    "duration": 134132.382,
+    "expected": 17,
     "skipped": 0,
-    "unexpected": 2,
+    "unexpected": 0,
     "flaky": 0
   }
 }

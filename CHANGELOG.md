@@ -45,7 +45,12 @@ Planning, reasoning and research behind each decision are in the project roadmap
   Google Chrome as well as Chromium (`BROWSER=firefox npx playwright test`, set in `frontend/playwright.config.js`); each browser's
   evidence in its own folder under `docs/evidence/e2e/`.
   Results on her laptop: Chromium, Firefox and Edge 17 of 17; WebKit 15 of 17, the two keyboard tests, because Safari
-  (and WebKit) move to links with Option+Tab, not Tab; the test now presses Option+Tab in WebKit, as Safari users do.
+  (and WebKit) leave links out of the Tab order by default. Option+Tab didn't reach them in Playwright's WebKit on
+  Windows either, so in WebKit the keyboard tests focus the link directly and check that Enter opens it (noted in the
+  report); reaching it with Tab is checked in the other four browsers.
+  TC-28 now waits for "Applied · <date>" before opening My Applications: in WebKit, leaving at once had cancelled the
+  application before it was sent (a timing flaw in the test, not in SkillMap). Her question "how long should it wait?":
+  the test measures it and fails above 1 second (Google RAIL: beyond 1 s users lose focus); measured 0.17 s here.
 - **MongoDB for real** (her question): `backend/tests/test_mongodb_real.py` runs against the real MongoDB server in a
   separate `skillmap_test` database: the 18-month expiry indexes really exist, a chat is saved, listed, reopened,
   continued and deleted (and another student can't reach it), Download my data and Delete my account cover
