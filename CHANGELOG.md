@@ -51,6 +51,8 @@ Planning, reasoning and research behind each decision are in the project roadmap
   TC-28 now waits for "Applied · <date>" before opening My Applications: in WebKit, leaving at once had cancelled the
   application before it was sent (a timing flaw in the test, not in SkillMap). Her question "how long should it wait?":
   the test measures it and fails above 1 second (Google RAIL: beyond 1 s users lose focus); measured 0.17 s here.
+  Her WebKit run: 17 passed, applying 427 ms. `frontend/scripts/all_browsers.sh` runs every browser one after another,
+  unattended (re-seed, start the backend, test, stop), with a summary at the end.
 - **MongoDB for real** (her question): `backend/tests/test_mongodb_real.py` runs against the real MongoDB server in a
   separate `skillmap_test` database: the 18-month expiry indexes really exist, a chat is saved, listed, reopened,
   continued and deleted (and another student can't reach it), Download my data and Delete my account cover

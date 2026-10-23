@@ -97,6 +97,18 @@ BROWSER=firefox npx playwright test 2>&1 | tee ../docs/evidence/e2e/firefox/run_
 "Press Tab to highlight each item"). So in WebKit the two keyboard tests put the focus on the link directly and check
 that Enter opens it; reaching it with Tab is checked in the other browsers.
 
+**All browsers in one go, unattended** (about 15 minutes): stop your own backend, keep `npm run dev` running,
+activate the backend's venv in the test window, then from `frontend/`:
+
+```bash
+bash scripts/all_browsers.sh                  # chromium, firefox, webkit, edge, chrome
+bash scripts/all_browsers.sh firefox webkit   # only these
+```
+
+For each browser it re-seeds the database, starts the backend, runs the tests, saves the log in that browser's
+folder and stops the backend; at the end it prints a summary (passed / failed and how long applying took).
+They can't run side by side: every browser would share the same test data.
+
 Each browser's screenshots, results and accessibility scan go to its own folder (`docs/evidence/e2e/firefox/` and so
 on); Chromium's stay in `docs/evidence/e2e/`.
 
