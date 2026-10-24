@@ -182,7 +182,8 @@ def read_skills(data: AdIn, employer: User = Depends(require_employer)):
     _check_ad(data.title, data.description)
     from app.routers.jobs import get_extractor
     try:
-        mentions = get_extractor().extract_job_skills_with_evidence(data.title.strip(), data.description)
+        # 24 Oct (TC-64): 2 tries, not 3: an employer is waiting on this page
+        mentions = get_extractor().extract_job_skills_with_evidence(data.title.strip(), data.description, retries=2)
     except Exception as e:      # Groq down or its daily limit: the employer can type the skills themselves
         print(f"[employer] skill reading failed: {type(e).__name__}: {e}")
         raise HTTPException(status_code=503, detail="SkillMap couldn't read the skills just now. Try again in a "

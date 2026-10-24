@@ -304,6 +304,11 @@ def extract_json_array(text: str) -> list:
     return []
 
 
+class ReaderUnavailable(RuntimeError):
+    """24 Oct (TC-64): no call to the model got through (network, key or service down). Raised so callers can say
+    so, instead of treating the ad as having no skills."""
+
+
 class SkillExtractor:
     def __init__(self):
         self.client = client
@@ -388,16 +393,24 @@ class SkillExtractor:
         items, answered = [], set()
         self.last_calls = []          # (finish_reason, completion tokens) per call, for the dry-run report
         ids = list(lines)
+        reached = False               # 24 Oct (TC-64): did ANY call get an answer?
         for start in range(0, len(ids), SENTENCES_PER_CALL):
             batch = ids[start:start + SENTENCES_PER_CALL]
             got = self._ask_sentences(title, [lines[i] for i in batch], retries)
+            reached = reached or got is not None
+            got = got or {}
             items += [{**sk, "pass": 1, "sentence_id": sid} for sid, sks in got.items() if sid in batch for sk in sks]
             answered |= set(got) & set(batch)
+        if ids and not reached:
+            # The model could not be reached at all (network, key, service down). Said so, instead of an empty list
+            # that reads as "this ad has no skills"; the employer page then offers to add the skills by hand.
+            self.last_coverage = (0, len(ids))
+            raise ReaderUnavailable("the skill reader could not be reached")
         missing = [i for i in ids if i not in answered]
         if glean and missing:
             for start in range(0, len(missing), SENTENCES_PER_CALL):
                 batch = missing[start:start + SENTENCES_PER_CALL]
-                got = self._ask_sentences(title, [lines[i] for i in batch], retries)
+                got = self._ask_sentences(title, [lines[i] for i in batch], retries) or {}
                 items += [{**sk, "pass": 2, "sentence_id": sid} for sid, sks in got.items() if sid in batch for sk in sks]
                 answered |= set(got) & set(batch)
         self.last_coverage = (len(answered), len(ids))     # sentences answered / sentences in the ad
@@ -444,8 +457,9 @@ class SkillExtractor:
                     continue
                 self.last_calls.append(("error", None))
                 print(f"  attempt {attempt + 1} failed: {str(e)[:120]}")
-                time.sleep(5)
-        return {}
+                if attempt < retries - 1:          # 24 Oct (TC-64): no wait after the last try
+                    time.sleep(5)
+        return None                                # every try failed (None, not {}: "no skills" is a real answer)
 
     def format_job_description(self, title: str, description: str) -> list[str]:
         """

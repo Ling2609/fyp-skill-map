@@ -148,6 +148,8 @@ export default function PostJob() {
   const [asksMore, setAsksMore] = useState(false)    // 21 Oct: the edit asked for more after people applied (409)
   const skillsRef = useRef(null)
   const [justRead, setJustRead] = useState(false)   // first read on a new post: bring the skills into view
+  // 24 Oct (TC-64): SkillMap's reader couldn't be reached on the last try; the employer adds the skills by hand
+  const [readerDown, setReaderDown] = useState(false)
 
   useEffect(() => {
     api.get('/jobs/subcategories', { params: { include_past: true } }).then(res => setCategories(res.data)).catch(() => {})
@@ -208,10 +210,14 @@ export default function PostJob() {
         setRecordId(res.data.record_id || null)    // 14 Oct: sent back on publish (what you changed vs SkillMap's reading)
         if (!read) setJustRead(true)
         setReadFor(adKey)
+        setReaderDown(false)
       })
       .catch(err => {
-        setError(errText(err, "Couldn't read the skills. Try again."))
+        if (err.response?.status !== 503) setError(errText(err, "Couldn't read the skills. Try again."))
         if (err.response?.status === 503) {
+          // 24 Oct (TC-64): said at the top of the skills, not as a red line by Publish below the fold
+          setReaderDown(true)
+          if (!read) setJustRead(true)
           // SkillMap's reader is down: the employer may add the skills by hand. 12 Oct (audit): skills read from an
           // EARLIER version of the ad are dropped first, so they can't be published with the new ad; typed ones stay
           setSkills(prev => prev.filter(s => !s.quote))
@@ -251,12 +257,14 @@ export default function PostJob() {
       <PageHeader>
         <div className="pb-5">
           <p className="text-[11px] font-semibold text-blue-600 uppercase tracking-widest mb-2">{editing ? 'My Jobs' : 'Post a Job'}</p>
-          <h1 className="text-2xl font-semibold tracking-tight text-slate-900">{editing ? `Edit ${editJob?.title || 'job'}` : read ? 'Check the skills SkillMap read from your ad' : 'Write your job ad'}</h1>
+          <h1 className="text-2xl font-semibold tracking-tight text-slate-900">{editing ? `Edit ${editJob?.title || 'job'}` : readerDown ? 'Add the skills students are matched on' : read ? 'Check the skills SkillMap read from your ad' : 'Write your job ad'}</h1>
           <p className="text-sm text-slate-500 mt-1">{editing
             // 21 Oct: once people applied, the job can ask for less, not more (references.md "Changing a job's
             // requirements after people applied")
             ? (editJob ? `${editJob.applicants ? `${editJob.applicants} applicant${editJob.applicants === 1 ? '' : 's'}: you can fix the ad or ask for less; to ask for more, post a new job` : 'Changes show in Job Matches when you save'} · posted date stays the same` : '')
-            : read
+            : readerDown
+              ? 'Type the skills your ad asks for below, then publish.'
+              : read
               ? 'Students are matched on these. Remove anything wrong, add anything missing, then publish.'
               : 'SkillMap reads the skills from your ad, and you check them before the job goes live.'}</p>
         </div>
@@ -345,6 +353,12 @@ export default function PostJob() {
                   {reading ? <Busy>Reading the skills…</Busy> : 'Read the skills again'}
                 </button>
               </div>
+              {readerDown && !reading && (
+                <p role="alert" className="text-sm text-amber-900 bg-amber-50 border border-amber-200 rounded-lg px-3.5 py-3">
+                  SkillMap couldn't read the skills just now. Add them yourself below, or read the skills again in a
+                  few minutes.
+                </p>
+              )}
               {stale && (
                 <p className="text-sm text-amber-800 bg-amber-50 rounded-lg px-3 py-2">
                   Your ad changed: read the skills again so they match it. Skills you added stay.

@@ -398,6 +398,11 @@ def run(dry_run: bool, use_cache: bool, new_only: bool, sync_only: bool = False)
                 try:
                     mentions = extractor.extract_job_skills_with_evidence(title, desc)
                 except Exception as e:
+                    if type(e).__name__ == "ReaderUnavailable":      # 24 Oct: Groq unreachable, not "no skills"
+                        print("\nThe skill reader (Groq) can't be reached: stopping. Check the internet connection "
+                              "and GROQ_API_KEY, then run the same command with --use-cache (0 credits).")
+                        groq_limit = True
+                        break
                     if "tokens per day" in str(e).lower() or "tpd" in str(e).lower():
                         print("\nGroq daily limit reached: stopping. Run the same command with --use-cache "
                               "tomorrow (0 credits); saved jobs are skipped.")
@@ -460,7 +465,7 @@ def run(dry_run: bool, use_cache: bool, new_only: bool, sync_only: bool = False)
         print(f"  Dropped, < {MIN_HARD} hard skills:  {stats['no_skills']}")
         print(f"  Unsupported skills dropped:{stats['rejected']:>4}  (quote not in the ad)")
         if groq_limit:
-            print("  Stopped early: Groq daily limit")
+            print("  Stopped early: Groq daily limit or Groq unreachable (see the message above)")
     print(f"  {'Would save' if dry_run else 'Saved'}:                {stats['saved']}")
     print(f"  API credits used:          {credits}")
 

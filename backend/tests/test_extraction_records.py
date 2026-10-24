@@ -72,7 +72,7 @@ def test_employer_read_then_publish_records_their_changes(client, users, records
     class Reader:
         model = "test-model"
 
-        def extract_job_skills_with_evidence(self, title, description):
+        def extract_job_skills_with_evidence(self, title, description, retries=3):
             return [{"skill": "Python", "evidence_quote": "We need Python", "type": "hard", "level": "required"},
                     {"skill": "SQL", "evidence_quote": "Python and SQL", "type": "hard", "level": "required"},
                     {"skill": "Docker", "evidence_quote": "Docker is a plus", "type": "hard", "level": "preferred"},
@@ -142,3 +142,43 @@ def test_mongodb_down_never_blocks_and_pauses_retries(client, users, monkeypatch
         r = client.post("/profile/projects/suggest", headers=users.h(student), json=body)
         assert r.status_code == 200 and r.json()["skills"][0]["name"] == "Flask" and r.json()["record_id"] is None
     assert len(calls) == 1                     # tried once, then paused for DOWN_PAUSE seconds
+
+
+def test_reader_down_says_so_quickly_instead_of_no_skills(client, users, monkeypatch):
+    """24 Oct (TC-64, found before her manual run): with Groq unreachable, Read skills waited 45 s and then answered
+    "no skills". Now the real extractor raises ReaderUnavailable after its tries and the page gets the 503 message
+    that offers to add the skills by hand."""
+    import app.nlp.skill_extractor as se
+    from app.routers import jobs
+
+    class Down:                                   # every call fails, like a network or key failure
+        calls = 0
+
+        def create(self, **kw):
+            Down.calls += 1
+            raise ConnectionError("Connection error.")
+    reader = se.SkillExtractor.__new__(se.SkillExtractor)
+    reader.client = type("C", (), {"chat": type("Ch", (), {"completions": Down()})()})()
+    reader.model, reader._reasoning_ok = "test-model", True
+    reader._evidence_format = [{"type": "json_object"}]
+    slept = []
+    import time as real_time
+    from types import SimpleNamespace
+    monkeypatch.setattr(se, "time", SimpleNamespace(sleep=slept.append, time=real_time.time,
+                                                    perf_counter=real_time.perf_counter))   # only the reader's pauses
+    monkeypatch.setattr(jobs, "get_extractor", lambda: reader)
+
+    h = users.h(users.employer())
+    ad = "We need Python and SQL. Docker is a plus. You will build REST APIs in Python every day for our clients."
+    r = client.post("/employer/jobs/read", headers=h, json={"title": "Backend Developer", "description": ad})
+    assert r.status_code == 503 and "add the skills yourself" in r.json()["detail"]
+    assert Down.calls == 2 and slept == [5]       # 2 tries, one pause between them, no second "re-ask" round
+
+    # an answer with no skills is still a real answer, not "down"
+    class Empty:
+        def create(self, **kw):
+            msg = type("M", (), {"content": json.dumps({"sentences": [{"id": 1, "skills": []}]})})()
+            return type("R", (), {"choices": [type("Ch", (), {"message": msg, "finish_reason": "stop"})()],
+                                  "usage": None})()
+    reader.client = type("C", (), {"chat": type("Ch", (), {"completions": Empty()})()})()
+    assert reader.extract_job_skills_with_evidence("Clerk", "Please file the papers.", glean=False) == []

@@ -176,6 +176,10 @@ def main():
                 try:
                     items = extractor.extract_job_skills_with_evidence(job.job_title, text, glean=not args.no_glean)
                 except Exception as e:
+                    if type(e).__name__ == "ReaderUnavailable":      # 24 Oct: Groq unreachable, not "no skills"
+                        print(f"\nThe skill reader (Groq) can't be reached: stopping. Saved {totals['saved']} jobs this "
+                              f"run. Check the internet connection and GROQ_API_KEY, then run the same command again.")
+                        break
                     if "tokens per day" in str(e).lower():
                         print(f"\nGroq daily limit reached. Saved {totals['saved']} jobs this run; run the same "
                               f"command again tomorrow, it carries on where it stopped.")
