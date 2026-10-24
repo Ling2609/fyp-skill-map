@@ -1289,3 +1289,21 @@ Her request: show the student a clear process (instead of silence then a sudden 
 - SkillMap: the button shows "Applying…" with a spinner at once (feedback); click to "Applied" measured 0.15-0.17 s
   (POST 60-80 ms) in the sandbox. TC-28 now fails above 1 s (RAIL) and logs the time, so a slow app can't hide
   behind the test's wait.
+
+## How fast does the AI Assistant answer? Streaming or not (24 Oct, opened; her "has to wait quite long")
+
+- Groq, model page for openai/gpt-oss-120b (<https://console.groq.com/docs/model/openai/gpt-oss-120b>): about 500
+  tokens per second; "Utilize variable reasoning modes (low, medium, high) to balance performance and latency".
+  SkillMap uses reasoning "low".
+- Jakob Nielsen, "The Need for Speed in AI" (2 Aug 2023, <https://www.uxtigers.com/post/ai-response-time>): "10
+  seconds is the maximum delay before the user's attention drifts"; designers should "provide feedback to show that
+  the computer is working"; showing preliminary results is "another response-time-mitigating design technique".
+- Measured on her laptop (timing line added to app/routers/chatbot.py; 5 questions, real Groq + MongoDB):
+  Docker plan 2.3 s (565 tokens), "Explain step 1" 6.7 s (444), plan from a job 2.2 s (646), "Which roles suit me?"
+  1.3 s (252), CV points 1.6 s (330). SkillMap's own part (profile + skill gap) 0.0 s every time. The slowest reply
+  wrote fewer tokens than a faster one, so the variation is Groq's free-tier queue, not answer length.
+- Decision (her agreement): no streaming now. Replies are typically 1-2 s and all were under 10 s; the typing dots
+  already show it is working. Streaming would show text before SkillMap's checks run on the whole answer (links not
+  on the checked list removed, which happened once in the test; the "Add it to SkillMap" step added to plans), so an
+  unchecked link could appear and then vanish. Future work for the report: stream replies, with links checked line
+  by line. The timing line stays in the backend log.
