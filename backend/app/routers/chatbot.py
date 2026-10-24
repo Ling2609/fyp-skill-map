@@ -9,6 +9,7 @@ Conversations are saved in MongoDB (app/mongo.py, 6 Oct): each reply is added to
 the page lists past chats to continue. If MongoDB is off, the chat still works; it is just not saved.
 """
 import re
+import time
 import uuid
 from datetime import datetime, timezone
 
@@ -414,6 +415,7 @@ def delete_session(session_id: str, current_user: User = Depends(get_current_use
 
 @router.post("/")
 def chat(req: ChatRequest, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    t_start = time.perf_counter()
     if req.mode not in ("career_counsellor", "skill_development"):
         raise HTTPException(status_code=400, detail="mode must be 'career_counsellor' or 'skill_development'")
     if not req.messages:
@@ -449,8 +451,10 @@ def chat(req: ChatRequest, current_user: User = Depends(get_current_user), db: S
         groq_messages.append({"role": msg.role, "content": msg.content})
 
     reply, last_error = None, None
+    t_context = time.perf_counter() - t_start      # 24 Oct (her "the reply takes long"): where the time goes
     for model in (MODEL, FALLBACK_MODEL):
         try:
+            t_model = time.perf_counter()
             response = get_client().chat.completions.create(
                 model=model,
                 messages=groq_messages,
@@ -467,6 +471,9 @@ def chat(req: ChatRequest, current_user: User = Depends(get_current_user), db: S
                 continue                     # this model's daily limit is used up: try the next one
             raise HTTPException(status_code=502, detail="The assistant isn't available right now. Please try again.")
         choice = response.choices[0]
+        u = getattr(response, "usage", None)
+        print(f"[chatbot] {req.mode}: profile + gap {t_context:.1f} s, {model} {time.perf_counter() - t_model:.1f} s, "
+              f"{getattr(u, 'completion_tokens', '?')} tokens written (incl. reasoning)")
         reply = (choice.message.content or "").strip()
         if not reply:
             raise HTTPException(status_code=502, detail="The assistant couldn't finish an answer. Please try again.")
