@@ -161,7 +161,8 @@ export default function EmployerDashboard() {
       <div className="flex-1 min-w-0">
         <Link to={`/employer/graduates/${g.student_id}?job=${g.job_id}`} className="block text-sm font-semibold text-slate-900 truncate hover:text-blue-700">{g.name}</Link>
         {/* 24 Oct: the nice-to-have skills they also have, which put them higher in the list */}
-        <p className="text-xs text-slate-500 truncate">{g.programme}{g.nice > 0 && ` · +${g.nice} nice to have`}</p>
+        {/* 25 Oct: the nice-to-haves first, so a long programme name can't cut them off */}
+        <p className="text-xs text-slate-500 truncate">{g.nice > 0 && <span className="text-emerald-700 font-medium">+{g.nice} nice to have · </span>}{g.programme}</p>
       </div>
       {/* only when the graduates fit different jobs; with one open job every row would repeat the same name */}
       {manyJobs && <span className="w-40 shrink-0 flex items-center gap-1.5 text-xs font-medium text-slate-700 min-w-0" title={`Fits ${g.job_title}`}>
