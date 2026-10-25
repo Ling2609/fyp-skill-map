@@ -118,6 +118,11 @@ def close_or_reopen(job_id: int, data: CloseIn, employer: User = Depends(require
     job = _own_job(job_id, employer, db)
     now = datetime.now(timezone.utc)
     if data.stopped is not None and not job.closed_at:
+        # 25 Oct (her review: rules for stopping and restarting): taking applications again only before the decision
+        # date passes (a new applicant would at once see "No decision"). The date itself never moves with this: it is
+        # the promise to people who already applied, and only "Move decision date" (once, up to 2 weeks) changes it.
+        if data.stopped is False and job.applications_stopped_at and past_date(job):
+            raise HTTPException(status_code=400, detail="Your decision date has passed, so the job can't take new applications. Decide on the applicants waiting, then close it.")
         job.applications_stopped_at = now if data.stopped else None
     if data.closed is True and not job.closed_at:
         if data.reason not in CLOSE_REASONS:
@@ -151,6 +156,10 @@ def extend_decision_date(job_id: int, data: ExtendIn, employer: User = Depends(r
         raise HTTPException(status_code=400, detail="This job is closed.")
     if job.decide_extended_reason is not None:
         raise HTTPException(status_code=400, detail="The decision date can be moved once only.")
+    # 25 Oct (her review: "a rule for delay, a limit"): only before the date passes. Once it has passed, applicants
+    # still waiting already see "No decision"; pushing the date back then would hide a missed promise.
+    if past_date(job):
+        raise HTTPException(status_code=400, detail="Your decision date has passed, so it can't be moved. Decide on the applicants still waiting.")
     if data.days not in EXTEND_DAYS:
         raise HTTPException(status_code=400, detail="Move it by 1 or 2 weeks.")
     reason = " ".join(data.reason.split())

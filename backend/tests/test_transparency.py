@@ -43,6 +43,31 @@ def test_decision_date_is_set_when_posting_and_moved_once(client, users):
     assert client.post(url, headers=users.h(employer), json={"days": 7, "reason": "Again, sorry"}).status_code == 400
 
 
+def test_applications_can_restart_only_before_the_decision_date(client, users, db):
+    """25 Oct (her review): stopping keeps the date; taking applications again is refused once the date has passed."""
+    employer = users.employer()
+    job = _post(client, users, employer, days=14).json()
+    url, h = f"/employer/jobs/{job['id']}", users.h(employer)
+    r = client.patch(url, headers=h, json={"stopped": True})
+    assert r.status_code == 200 and r.json()["stopped"] and r.json()["decide_by"] == job["decide_by"]
+    r = client.patch(url, headers=h, json={"stopped": False})
+    assert r.status_code == 200 and not r.json()["stopped"] and r.json()["decide_by"] == job["decide_by"]   # date unchanged
+    client.patch(url, headers=h, json={"stopped": True})
+    sql(db, "update jobs set decide_by=:t where id=:i", t=datetime.now(timezone.utc) - timedelta(hours=1), i=job["id"])
+    r = client.patch(url, headers=h, json={"stopped": False})
+    assert r.status_code == 400 and "has passed" in r.text
+
+
+def test_decision_date_cannot_be_moved_once_it_has_passed(client, users, db):
+    """25 Oct (her review: a limit on delays): moving the date is allowed only before it passes."""
+    employer = users.employer()
+    job = _post(client, users, employer, days=14).json()
+    sql(db, "update jobs set decide_by=:t where id=:i", t=datetime.now(timezone.utc) - timedelta(hours=1), i=job["id"])
+    r = client.post(f"/employer/jobs/{job['id']}/extend", headers=users.h(employer),
+                    json={"days": 7, "reason": "Interviews take longer than planned"})
+    assert r.status_code == 400 and "has passed" in r.text
+
+
 def test_stopping_new_applications_keeps_the_job_for_applicants(client, users):
     employer, early, late = users.employer(), users.student(), users.student()
     job = _post(client, users, employer).json()

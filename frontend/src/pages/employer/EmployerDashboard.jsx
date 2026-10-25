@@ -107,8 +107,9 @@ function ActivityRow({ e }) {
   const to = e.application_id ? `/employer/applications/${e.application_id}`
     : e.kind === 'invited' || e.kind === 'declined' ? `/employer/graduates/${e.student_id}?job=${e.job_id}` : `/employer/jobs/${e.job_id}`
   return (
-    <li>
-      <Link to={to} className="px-5 py-2.5 flex items-start gap-3 text-sm text-slate-600 hover:bg-slate-50">
+    // 25 Oct (her review: blank under the activity): the row's content sits in the middle when rows share spare height
+    <li className="flex items-center">
+      <Link to={to} className="flex-1 min-w-0 px-5 py-2.5 flex items-start gap-3 text-sm text-slate-600 hover:bg-slate-50">
         <span aria-hidden="true" className={`mt-1.5 w-2 h-2 rounded-full shrink-0 ${DOT[e.status || e.kind]}`} />
         <span className="flex-1 min-w-0 truncate">{activityText(e)}</span>
         <span className="shrink-0 text-xs text-slate-500">{ago(e.at)}</span>

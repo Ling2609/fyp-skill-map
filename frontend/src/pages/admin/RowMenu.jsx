@@ -45,11 +45,12 @@ export default function RowMenu({ label, items, disabled }) {
 
   return (
     <>
-      <button ref={button} type="button" aria-label={label} aria-haspopup="menu" aria-expanded={!!pos} disabled={disabled}
+      {/* 25 Oct (her review: "make the ⋯ button a bit more obvious"): darker border and dots, larger dots, a tooltip */}
+      <button ref={button} type="button" aria-label={label} title="More actions" aria-haspopup="menu" aria-expanded={!!pos} disabled={disabled}
         onClick={() => (pos ? close() : open())}
-        className={`w-8 h-8 inline-flex items-center justify-center rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50 hover:text-slate-800 disabled:opacity-50 ${pos ? 'bg-slate-100' : 'bg-white'}`}>
-        <svg aria-hidden="true" className="w-4 h-4" viewBox="0 0 20 20" fill="currentColor">
-          <circle cx="4" cy="10" r="1.6" /><circle cx="10" cy="10" r="1.6" /><circle cx="16" cy="10" r="1.6" />
+        className={`w-8 h-8 inline-flex items-center justify-center rounded-lg border border-slate-300 text-slate-700 shadow-sm hover:bg-slate-100 hover:border-slate-400 hover:text-slate-900 disabled:opacity-50 ${pos ? 'bg-slate-100 border-slate-400' : 'bg-white'}`}>
+        <svg aria-hidden="true" className="w-[18px] h-[18px]" viewBox="0 0 20 20" fill="currentColor">
+          <circle cx="4" cy="10" r="2" /><circle cx="10" cy="10" r="2" /><circle cx="16" cy="10" r="2" />
         </svg>
       </button>
       {pos && (

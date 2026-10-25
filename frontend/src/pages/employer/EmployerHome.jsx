@@ -118,25 +118,59 @@ function CloseDialog({ job, busy, onCancel, onClose }) {
   )
 }
 
-// Moving the decision date (14 Oct): once, by 1 or 2 weeks, with a reason the applicants see
+// 25 Oct (her review: "rules for stop and take applications again"): both ask first and say what happens. The
+// decision date never moves with them (it's the promise to people who already applied; restarting can't be used to
+// delay). Taking applications again is offered only before the date passes; with a week or less left it says so.
+const daysLeft = (iso) => Math.ceil((new Date(iso).getTime() - Date.now()) / 86400000)
+function StopDialog({ job, stopped, busy, onCancel, onConfirm }) {
+  const left = daysLeft(job.decide_by)
+  const date = <b className="font-semibold text-slate-800">{fmtDate(job.decide_by)}</b>
+  return (
+    <Dialog title={stopped ? `Stop new applications for "${job.title}"?` : `Take applications again for "${job.title}"?`}
+      busy={busy} onCancel={onCancel} action={stopped ? 'Stop new applications' : 'Take applications again'} onAction={onConfirm}>
+      <ul className="mt-2 space-y-1.5 text-sm text-slate-600 list-disc pl-5">
+        {stopped ? <>
+          <li>Students stop seeing it in Job Matches and can't apply.</li>
+          <li>{job.waiting ? `The ${job.waiting} applicant${job.waiting === 1 ? '' : 's'} still waiting keep their place.` : 'People who already applied keep their place.'} Your decision date stays {date}.</li>
+          <li>You can take applications again any time before {date}.</li>
+        </> : <>
+          <li>It shows in Job Matches again, marked "Apply on SkillMap".</li>
+          <li>New applicants get the same decision date, {date} ({left <= 0 ? 'today' : `${left} day${left === 1 ? '' : 's'} left`}). Restarting doesn't move it.</li>
+          {left <= 7 && <li className="text-amber-800">That's a week or less for new applicants. If you need more time, use "Move decision date" (once, up to 2 weeks).</li>}
+        </>}
+      </ul>
+    </Dialog>
+  )
+}
+
+// Moving the decision date (14 Oct): once, by 1 or 2 weeks, with a reason the applicants see.
+// 25 Oct (her review: "a rule for delay, a limit"): the limits are written out, each option shows the new date, and
+// the date can only be moved before it passes (the server refuses after; the menu hides the option)
+const REASON_MAX = 200
+const later = (iso, days) => new Date(new Date(iso).getTime() + days * 86400000).toISOString()
 function ExtendDialog({ job, busy, onCancel, onExtend }) {
   const [days, setDays] = useState(7)
   const [reason, setReason] = useState('')
+  const short = reason.trim().length < 5
   return (
     <Dialog title={`Move the decision date for "${job.title}"?`} busy={busy} onCancel={onCancel} action="Move the date"
-      onAction={() => onExtend(days, reason)} disabled={reason.trim().length < 5}>
-      <p className="text-sm text-slate-600 mt-1.5">Now {fmtDate(job.decide_by)}. You can move it once.</p>
+      onAction={() => onExtend(days, reason)} disabled={short}>
+      <p className="text-sm text-slate-600 mt-1.5">Now <b className="font-semibold text-slate-800">{fmtDate(job.decide_by)}</b>.
+        You can move it <b className="font-semibold text-slate-800">once</b>, by <b className="font-semibold text-slate-800">up to 2 weeks</b>, and only before this date passes.</p>
       <div className="mt-3 flex gap-2">
         {[[7, '1 week later'], [14, '2 weeks later']].map(([d, label]) => (
           <button key={d} type="button" aria-pressed={days === d} onClick={() => setDays(d)}
-            className={`text-sm font-medium rounded-full px-3.5 py-1.5 border ${days === d ? 'bg-blue-600 border-blue-600 text-white' : 'bg-white border-slate-300 text-slate-700 hover:border-blue-300'}`}>{label}</button>
+            className={`text-sm font-medium rounded-full px-3.5 py-1.5 border ${days === d ? 'bg-blue-600 border-blue-600 text-white' : 'bg-white border-slate-300 text-slate-700 hover:border-blue-300'}`}>
+            {label} <span className={days === d ? 'text-blue-100' : 'text-slate-500'}>· {fmtDate(later(job.decide_by, d))}</span></button>
         ))}
       </div>
       <label className="block mt-3">
-        <span className="text-xs text-slate-500">Why (applicants see this)</span>
-        <input value={reason} maxLength={200} onChange={e => setReason(e.target.value)} placeholder="e.g. Interviews are taking longer than planned"
+        <span className="text-xs text-slate-500">Why (applicants see this; a few words at least)</span>
+        <input value={reason} maxLength={REASON_MAX} onChange={e => setReason(e.target.value)} placeholder="e.g. Interviews are taking longer than planned"
           className="mt-1 w-full text-sm border border-slate-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+        <span className="block text-xs text-slate-500 mt-1 text-right">{reason.length} / {REASON_MAX}</span>
       </label>
+      <p className="text-xs text-slate-500 mt-1">Applicants still waiting see the new date and your reason; your original date stays on record.</p>
     </Dialog>
   )
 }
@@ -155,6 +189,7 @@ export function MyJobs() {
   const [fitAll] = useState(state?.posted && state.fitAll > 0 ? state.fitAll : 0)   // 24 Oct: have every required skill
   const [askClose, setAskClose] = useState(null)       // the job being closed (a reason is asked)
   const [askExtend, setAskExtend] = useState(null)     // the job whose decision date is being moved
+  const [askStop, setAskStop] = useState(null)         // { job, stopped }: stopping or restarting, asked first
 
   useEffect(() => {
     if (state?.posted || state?.saved) window.history.replaceState({}, '')     // the "is live" note shows once, not after a reload
@@ -174,7 +209,7 @@ export function MyJobs() {
   const reopen = (job) => change(job, { closed: false }, `"${job.title}" is open again.`)
   const stop = (job, stopped) => change(job, { stopped }, stopped
     ? `"${job.title}" no longer takes new applications. Applicants are still waiting for your decision by ${fmtDate(job.decide_by)}.`
-    : `"${job.title}" takes applications again.`)
+    : `"${job.title}" takes applications again. Decision date: ${fmtDate(job.decide_by)}.`).then(() => setAskStop(null))
   const extend = (job, days, reason) => {
     setBusy(job.id); setError(''); setNotice('')
     api.post(`/employer/jobs/${job.id}/extend`, { days, reason })
@@ -208,6 +243,8 @@ export function MyJobs() {
         </p>}
         {askClose && <CloseDialog job={askClose} busy={busy === askClose.id} onCancel={() => setAskClose(null)}
           onClose={(reason) => close(askClose, reason)} />}
+        {askStop && <StopDialog job={askStop.job} stopped={askStop.stopped} busy={busy === askStop.job.id}
+          onCancel={() => setAskStop(null)} onConfirm={() => stop(askStop.job, askStop.stopped)} />}
         {askExtend && <ExtendDialog job={askExtend} busy={busy === askExtend.id} onCancel={() => setAskExtend(null)}
           onExtend={(days, reason) => extend(askExtend, days, reason)} />}
         {error && <p role="alert" className="text-sm text-rose-700 bg-rose-50 border border-rose-200 rounded-lg px-4 py-2.5">{error}</p>}
@@ -286,9 +323,9 @@ export function MyJobs() {
                             <RowMenu label={`Actions for ${j.title}`} disabled={busy === j.id} items={[
                               { label: 'Edit job', onSelect: () => navigate(`/employer/jobs/${j.id}/edit`) },
                               ...(j.status === 'open' ? [
-                                j.stopped ? { label: 'Take applications again', onSelect: () => stop(j, false) }
-                                  : { label: 'Stop new applications', onSelect: () => stop(j, true) },
-                                ...(!j.decide_extended ? [{ label: 'Move decision date', onSelect: () => setAskExtend(j) }] : []),
+                                ...(j.stopped ? (j.past_date ? [] : [{ label: 'Take applications again', onSelect: () => setAskStop({ job: j, stopped: false }) }])
+                                  : [{ label: 'Stop new applications', onSelect: () => setAskStop({ job: j, stopped: true }) }]),
+                                ...(!j.decide_extended && !j.past_date ? [{ label: 'Move decision date', onSelect: () => setAskExtend(j) }] : []),
                                 { label: 'Close job', danger: true, onSelect: () => setAskClose(j) },
                               ] : [{ label: 'Reopen job', success: true, onSelect: () => reopen(j) }]),
                             ]} />

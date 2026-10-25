@@ -161,11 +161,21 @@ export default function GithubImport({ onClose, onDone }) {
                 <button type="button" onClick={list} disabled={busy} className="shrink-0 text-xs font-medium text-blue-700 hover:underline disabled:opacity-40">Refresh</button>
               </div>
               {addable.length > 1 && (
-                <label className="flex items-center gap-3 px-3 pb-2 text-xs font-medium text-gray-600 cursor-pointer">
-                  <input type="checkbox" className="w-4 h-4 accent-blue-700 shrink-0" disabled={busy} checked={allPicked} onChange={pickAll}
-                    ref={el => { if (el) el.indeterminate = picked.length > 0 && !allPicked }} />
-                  {picked.length ? `${picked.length} selected` : `Select all ${addable.length}`}
-                </label>
+                // 25 Oct (her review): the same shape as the employer's tables: select-all on the left, the count and Clear
+                // on the right; the action itself is the "Next" button below
+                <div className="flex items-center justify-between gap-3 px-3 pb-2 text-xs font-medium text-gray-600">
+                  <label className="flex items-center gap-3 cursor-pointer">
+                    <input type="checkbox" className="w-4 h-4 accent-blue-700 shrink-0" disabled={busy} checked={allPicked} onChange={pickAll}
+                      ref={el => { if (el) el.indeterminate = picked.length > 0 && !allPicked }} />
+                    Select all {addable.length}
+                  </label>
+                  {picked.length > 0 && (
+                    <span role="status" className="flex items-center gap-3">
+                      <span className="font-semibold text-gray-800">{picked.length} selected</span>
+                      <button type="button" onClick={() => setPicked([])} className="text-gray-600 hover:text-gray-900">Clear</button>
+                    </span>
+                  )}
+                </div>
               )}
               <ul className="space-y-2 max-h-80 overflow-y-auto -mx-1 px-1">
                 {repos.map(r => (

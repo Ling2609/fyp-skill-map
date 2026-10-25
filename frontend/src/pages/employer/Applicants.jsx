@@ -58,7 +58,8 @@ function Titles({ names }) {
 function Picked({ n, onClear, children }) {
   return (
     <td colSpan={4} className={STRIP_TD}>
-      <div role="status" className="flex items-center gap-3 text-sm">
+      {/* on the right, where the eye ends the title strip (her review) */}
+      <div role="status" className="flex items-center justify-end gap-3 text-sm">
         <span className="font-semibold text-slate-800">{n} selected</span>
         {children}
         <button type="button" onClick={onClear} className="text-sm font-medium text-slate-600 hover:text-slate-900">Clear</button>
@@ -338,7 +339,7 @@ export default function Applicants() {
                     </td>
                       {selG.length > 0 ? (
                         <Picked n={selG.length} onClear={() => setTicked([])}>
-                          <button type="button" onClick={() => setAskInvite(true)} className={`${PICK_BTN} bg-blue-600 hover:bg-blue-700`}>Invite {selG.length} selected</button>
+                          <button type="button" onClick={() => setAskInvite(true)} className={`${PICK_BTN} bg-blue-600 hover:bg-blue-700`}>Invite</button>
                         </Picked>
                       ) : <Titles names={['Graduate', 'Required skills they have', 'Nice to have', 'Invitation']} />}</tr>
                   </thead>
