@@ -4,7 +4,7 @@ import api from '../../api'
 import PageHeader from '../../components/PageHeader'
 import BackLink from '../../components/BackLink'
 import { errText } from '../student/profileUtils'
-import { STATUSES, STATUS_CLS, fmtDay } from './statuses'
+import { NOT_VIEWED_TIP, STATUSES, STATUS_CLS, fmtDay } from './statuses'
 import { useStatusChange } from './statusChange'
 import ConfirmDecision from './ConfirmDecision'
 import { ADMIN_COUNTS_CHANGED } from '../../components/Sidebar'
@@ -245,7 +245,7 @@ export default function Applicants() {
               {/* 25 Oct (her ask): a tick box in the title strip selects every applicant shown that can still be
                   decided (Applied or Shortlisted); the strip is a layout-only table, so only that box is read out */}
               <div ref={strip} className={`shrink-0 overflow-hidden scrollbar-gutter-stable border-b ${sel.length ? 'bg-blue-50 border-blue-200' : 'bg-slate-50 border-slate-200'}`}>
-                <table role="presentation" className="w-full min-w-3x1 table-fixed text-sm">
+                <table role="presentation" className="w-full min-w-3xl table-fixed text-sm">
                   {APP_COLS}
                   <thead className="text-left text-xs font-semibold text-slate-500">
                     <tr><td className="pl-5 h-11 py-0 align-middle">
@@ -265,7 +265,7 @@ export default function Applicants() {
               </div>
               <div className="relative min-h-0 overflow-auto scrollbar-gutter-stable"
                 onScroll={e => { if (strip.current) strip.current.scrollLeft = e.currentTarget.scrollLeft }}>
-              <table className="w-full min-w-3x1 table-fixed text-sm">
+              <table className="w-full min-w-3xl table-fixed text-sm">
                 {APP_COLS}
                 {/* real column titles for screen readers; the visible ones are the strip above */}
                 <thead>
@@ -284,13 +284,13 @@ export default function Applicants() {
                           )}
                         </td>
                         <td className="px-5 py-3.5">
-                          {/* 12 Oct: an application not opened yet reads bold with "Not opened", like an unread email
+                          {/* 12 Oct: an application not opened yet reads bold with "Not viewed yet" (25 Oct wording), like an unread email
                               (DfE design history: a bold row for messages not viewed) */}
                           <p className={`text-slate-900 ${p.opened ? 'font-medium' : 'font-bold'}`}>
                             {/* 22 Oct (accessibility check): the name is a real link (Tab + Enter); the row still opens on a click */}
                             <Link to={`/employer/applications/${p.id}`} onClick={e => e.stopPropagation()}
                               className="hover:text-blue-700 rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500">{p.name}</Link>
-                            {!p.opened && <span className="ml-2 text-[11px] font-semibold text-blue-700">Not opened</span>}
+                            {!p.opened && <span className="ml-2 text-[11px] font-semibold text-blue-700" title={NOT_VIEWED_TIP}>Not viewed yet</span>}
                             {p.invited && <span className="ml-2 text-[11px] font-semibold text-violet-700 bg-violet-50 rounded-full px-2 py-0.5">Invited</span>}
                           </p>
                           <p className="text-xs text-slate-500 mt-0.5">{p.programme}</p>
@@ -329,7 +329,7 @@ export default function Applicants() {
               more={!see && <MoreButton total={fitList.length} shown={gradsNow.length} onClick={() => seeAll('graduates')} />} />
             <div className={`${CARD} ${see ? 'min-h-0' : ''} flex flex-col overflow-hidden`}>
               <div ref={gstrip} className={`shrink-0 overflow-hidden scrollbar-gutter-stable border-b ${selG.length ? 'bg-blue-50 border-blue-200' : 'bg-slate-50 border-slate-200'}`}>
-                <table role="presentation" className="w-full min-w-3x1 table-fixed text-sm">
+                <table role="presentation" className="w-full min-w-3xl table-fixed text-sm">
                   {APP_COLS}
                   <thead className="text-left text-xs font-semibold text-slate-500">
                     <tr><td className="pl-5 h-11 py-0 align-middle">
@@ -347,7 +347,7 @@ export default function Applicants() {
               </div>
               <div className="relative min-h-0 overflow-auto scrollbar-gutter-stable"
                 onScroll={e => { if (gstrip.current) gstrip.current.scrollLeft = e.currentTarget.scrollLeft }}>
-              <table className="w-full min-w-3x1 table-fixed text-sm">
+              <table className="w-full min-w-3xl table-fixed text-sm">
                 {APP_COLS}
                 <thead>
                   <tr>{['Select', 'Graduate', 'Required skills they have', 'Nice to have', 'Invitation'].map(n =>
@@ -370,7 +370,9 @@ export default function Applicants() {
                         </span>
                         {g.missing?.length > 0 && <span className="ml-2 text-xs text-slate-500">missing {g.missing.join(', ')}</span>}
                       </td>
-                      <td className="px-5 py-3.5 text-slate-600">{g.nice_total ? `${g.nice} of ${g.nice_total}` : <span className="text-xs text-slate-400">None listed</span>}</td>
+                      {/* her 21 Oct rule: strengths only. The nice-to-haves they have, by name; never "0 of 2" */}
+                      <td className="px-5 py-3.5 text-slate-600 truncate" title={g.nice_have?.join(', ') || undefined}>
+                        {g.nice_have?.length ? g.nice_have.join(', ') : <span className="text-slate-400">—</span>}</td>
                       <td className="px-5 py-3.5">{g.invite ? <InviteLabel invite={g.invite} /> : <span className="text-xs text-slate-400">Not invited</span>}</td>
                     </tr>
                   ))}

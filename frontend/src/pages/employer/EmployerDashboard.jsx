@@ -8,6 +8,7 @@ import { CardSkeleton, LoadingLabel } from '../../components/Skeleton'
 import { Busy } from '../../components/Spinner'
 import { greeting } from '../../greeting'
 import FitList from '../../components/FitList'
+import { NOT_VIEWED_TIP } from './statuses'
 import InviteLabel from '../../components/InviteLabel'
 import InfoTip from '../../components/InfoTip'
 import { RECORD_TIP } from '../../components/EmployerRecord'
@@ -146,7 +147,7 @@ export default function EmployerDashboard() {
           {a.name}
           {a.invited && <span className="ml-2 text-[11px] font-semibold text-violet-700 bg-violet-50 rounded-full px-2 py-0.5">Invited</span>}
         </p>
-        <p className="text-xs text-slate-500 truncate">{a.job_title} · applied {ago(a.applied_at)}{!a.opened && <> · <span className="font-semibold text-blue-700">not opened</span></>}</p>
+        <p className="text-xs text-slate-500 truncate">{a.job_title} · applied {ago(a.applied_at)}{!a.opened && <> · <span className="font-semibold text-blue-700" title={NOT_VIEWED_TIP}>not viewed yet</span></>}</p>
       </div>
       <Match have={a.have} total={a.total} />
       <Link to={`/employer/applications/${a.id}`} className={ACTION}>Review</Link>

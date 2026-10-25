@@ -467,7 +467,7 @@ def _applicant(a: Application, student: User, job: Job, db: Session) -> dict:
     from app.services.application_progress import first_seen
     events = db.query(ApplicationEvent).filter(ApplicationEvent.application_id == a.id).all()
     return {"id": a.id, "name": f"{student.first_name} {student.last_name}", "programme": _programme(student, db),
-            # 12 Oct: shown bold with "Not opened" until the employer opens the profile (like an unread email)
+            # 12 Oct: shown bold with "Not viewed yet" (25 Oct wording) until the employer opens the profile (like an unread email)
             "opened": first_seen(a, events) is not None,
             # 25 Oct: only when the application answers an open invitation (not after "No thanks" / "No reply")
             "invited": invite_answered(db.query(JobInvitation).filter(JobInvitation.job_id == job.id,
@@ -715,7 +715,9 @@ def _graduates_who_fit(open_jobs: list[Job], db: Session, limit: int | None = FI
                                     "have": have, "total": total, "ratio": ratio, "nice": nice,
                                     # 25 Oct (her pick: the graduates list has the applicants table's columns)
                                     "missing": [m["job_skill"] for m in gap["missing_skills"]],
-                                    "nice_total": len(gap.get("nice_to_have", [])),
+                                    # her 21 Oct rule (strengths only, never a "no" that isn't required): the
+                                    # nice-to-haves they HAVE, by name; how many they lack is never sent
+                                    "nice_have": [n["job_skill"] for n in gap.get("nice_to_have", []) if n.get("has")],
                                     # 25 Oct: Invited / Declined (+ reason) / No reply (app/services/invitations.py)
                                     "invite": invite_state(invited.get((job.id, student.id))),
                                     "invited_at": getattr(invited.get((job.id, student.id)), "created_at", None)}

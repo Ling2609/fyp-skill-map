@@ -96,7 +96,9 @@ def test_graduates_with_nice_to_have_skills_come_first(client, users):
     assert [(g["student_id"], g["have"], g["total"], g["nice"]) for g in grads] == [
         (users.ids[extra], 2, 3, 1), (users.ids[plain], 2, 3, 0)]
     # 25 Oct: the job's View applicants page lists them with the applicants table's columns
-    assert all(g["missing"] == ["Haskell"] and g["nice_total"] == 1 for g in grads)
+    assert all(g["missing"] == ["Haskell"] and "nice_total" not in g for g in grads)
+    # her 21 Oct rule: only the nice-to-haves they have, by name (nothing about the ones they lack)
+    assert [g["nice_have"] for g in grads] == [["Docker"], []]
 
 
 def _grad(client, users, employer, job, student):

@@ -129,7 +129,7 @@ APPLICATIONS = [
     ("jiahui", "lumen", "Graduate Data Analyst", "shortlisted", {}),
     ("arvind", "tropika", "Graduate Software Engineer", "rejected", {"reason": "missing_skills"}),
     ("weijie", "tropika", "Junior QA Tester", "applied", {"days_ago": 16}),        # waiting long
-    ("farah", "lumen", "Graduate Data Analyst", "applied", {}),                    # new, not opened
+    ("farah", "lumen", "Graduate Data Analyst", "applied", {}),                    # new, not viewed yet
     ("jiahui", "lumen", "Junior Data Engineer", "applied", {"days_ago": 3}),
 ]
 # (student, employer, job, what the student did): open / declined with a reason / no answer for 15 days ("No reply")
