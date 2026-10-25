@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { useToast } from '../../components/Toast'
 import api from '../../api'
 import PageHeader from '../../components/PageHeader'
 import { useAuth } from '../../context/useAuth'
@@ -190,6 +191,10 @@ export function MyJobs() {
   const [askClose, setAskClose] = useState(null)       // the job being closed (a reason is asked)
   const [askExtend, setAskExtend] = useState(null)     // the job whose decision date is being moved
   const [askStop, setAskStop] = useState(null)         // { job, stopped }: stopping or restarting, asked first
+  // 25 Oct (her review: green banners stayed and pushed the list down): "done" messages after an action are a short
+  // toast at the bottom that closes itself. The banner is kept only for arriving after posting or saving (it has a
+  // link to act on), and it now has a close button.
+  const toast = useToast()
 
   useEffect(() => {
     if (state?.posted || state?.saved) window.history.replaceState({}, '')     // the "is live" note shows once, not after a reload
@@ -200,7 +205,7 @@ export function MyJobs() {
   const change = (job, body, done) => {
     setBusy(job.id); setError(''); setNotice('')
     return api.patch(`/employer/jobs/${job.id}`, body)
-      .then(res => { setJobs(prev => prev.map(j => j.id === job.id ? res.data : j)); setNotice(done); setAskClose(null) })
+      .then(res => { setJobs(prev => prev.map(j => j.id === job.id ? res.data : j)); toast.show(done); setAskClose(null) })
       .catch(err => setError(errText(err, "Couldn't change the job. Try again.")))
       .finally(() => setBusy(null))
   }
@@ -214,7 +219,7 @@ export function MyJobs() {
     setBusy(job.id); setError(''); setNotice('')
     api.post(`/employer/jobs/${job.id}/extend`, { days, reason })
       .then(res => { setJobs(prev => prev.map(j => j.id === job.id ? res.data : j)); setAskExtend(null)
-        setNotice(`New decision date for "${job.title}": ${fmtDate(res.data.decide_by)}. Applicants see it with your reason.`) })
+        toast.show(`New decision date for "${job.title}": ${fmtDate(res.data.decide_by)}. Applicants see it with your reason.`) })
       .catch(err => { setAskExtend(null); setError(errText(err, "Couldn't move the date. Try again.")) })
       .finally(() => setBusy(null))
   }
@@ -235,12 +240,13 @@ export function MyJobs() {
       </PageHeader>
 
       <div className="flex-1 min-h-0 overflow-y-auto px-8 py-6 flex flex-col gap-4">
-        {notice && <p role="status" className="text-sm text-emerald-800 bg-emerald-50 border border-emerald-200 rounded-lg px-4 py-2.5">
-          {notice}
+        {notice && <div role="status" className="flex items-start gap-3 text-sm text-emerald-800 bg-emerald-50 border border-emerald-200 rounded-lg px-4 py-2.5">
+          <p className="flex-1 min-w-0">{notice}
           {fitNote > 0 && notice.includes('is live') && <> {fitAll > 0
             ? `${fitAll} graduate${fitAll === 1 ? ' already has' : 's already have'} all its required skills.`
-            : `${fitNote} graduate${fitNote === 1 ? ' already has' : 's already have'} at least half of its required skills.`} <Link to="/dashboard" className="font-semibold underline">Invite them from your Dashboard</Link></>}
-        </p>}
+            : `${fitNote} graduate${fitNote === 1 ? ' already has' : 's already have'} at least half of its required skills.`} <Link to="/dashboard" className="font-semibold underline">Invite them from your Dashboard</Link></>}</p>
+          <button type="button" onClick={() => setNotice('')} aria-label="Close" className="shrink-0 text-emerald-700 hover:text-emerald-900">×</button>
+        </div>}
         {askClose && <CloseDialog job={askClose} busy={busy === askClose.id} onCancel={() => setAskClose(null)}
           onClose={(reason) => close(askClose, reason)} />}
         {askStop && <StopDialog job={askStop.job} stopped={askStop.stopped} busy={busy === askStop.job.id}
@@ -273,8 +279,8 @@ export function MyJobs() {
                   column left-aligned and the actions are buttons. 20 Oct (her pick T2): no Status column (the tab already
                   says Open / Closed; a badge beside the title only for the special states); the decision date is its own
                   column with the days left (closed tab: when and why it closed); applicants show "to review" in blue */}
-              <div ref={strip} aria-hidden="true" className="shrink-0 overflow-hidden [scrollbar-gutter:stable] bg-slate-50 border-b border-slate-200">
-                <table className="w-full min-w-[62rem] text-sm table-fixed">
+              <div ref={strip} aria-hidden="true" className="shrink-0 overflow-hidden scrollbar-gutter-stable bg-slate-50 border-b border-slate-200">
+                <table className="w-full min-w-248 text-sm table-fixed">
                   {JOB_COLS}
                   <thead className="text-left text-xs font-semibold text-slate-500">
                     <tr>
@@ -287,9 +293,9 @@ export function MyJobs() {
                   </thead>
                 </table>
               </div>
-              <div className="relative min-h-0 overflow-auto [scrollbar-gutter:stable]"
+              <div className="relative min-h-0 overflow-auto scrollbar-gutter-stable"
                 onScroll={e => { if (strip.current) strip.current.scrollLeft = e.currentTarget.scrollLeft }}>
-              <table className="w-full min-w-[62rem] text-sm table-fixed">
+              <table className="w-full min-w-248 text-sm table-fixed">
                 {JOB_COLS}
                 {/* real column titles for screen readers; the visible ones are the strip above */}
                 <thead>
@@ -346,6 +352,7 @@ export function MyJobs() {
           </>
         )}
       </div>
+      {toast.ui}
     </>
   )
 }

@@ -11,6 +11,7 @@ import { ADMIN_COUNTS_CHANGED } from '../../components/Sidebar'
 import { CardSkeleton, LoadingLabel } from '../../components/Skeleton'
 import InviteLabel from '../../components/InviteLabel'
 import InfoTip from '../../components/InfoTip'
+import { useToast } from '../../components/Toast'
 
 // Employer > one job's applicants (11 Oct, batch 2; her pick 3A "applicants as a list"). Best match first: the
 // share of the job's required skills each student has, the same match the student sees. Changing a status shows on
@@ -83,7 +84,9 @@ export default function Applicants() {
   const [picked, setPicked] = useState([])          // application ids ticked
   const [askMany, setAskMany] = useState(null)      // 'rejected' | 'shortlisted': the action being confirmed
   const [savingMany, setSavingMany] = useState(false)
-  const [notice, setNotice] = useState('')
+  // 25 Oct (her review: the green banner stayed and pushed the tables down): "done" messages use the same short toast
+  // at the bottom as a single status change (it closes itself, nothing moves); errors stay as a banner until acted on
+  const toast = useToast()
   const strip = useRef(null)
   const gstrip = useRef(null)
 
@@ -106,8 +109,8 @@ export default function Applicants() {
     api.post('/employer/invitations/bulk', { job_id: Number(jobId), student_ids: selG })
       .then(res => {
         const n = res.data.invited.length, skip = res.data.skipped.length
-        setNotice(`${n} graduate${n === 1 ? '' : 's'} invited. They see it on their Dashboard and can apply or say No thanks.`
-          + (skip ? ` ${skip} couldn't be invited (they applied or were invited meanwhile).` : ''))
+        toast.show(`${n} graduate${n === 1 ? '' : 's'} invited. Their answer${n === 1 ? '' : 's'} will appear here.`
+          + (skip ? ` ${skip} skipped: they had already applied or been invited.` : ''))
         setTicked([]); setAskInvite(false); loadGrads()
       })
       .catch(err => { setAskInvite(false); setError(errText(err, "Couldn't send the invitations. Try again.")) })
@@ -124,7 +127,7 @@ export default function Applicants() {
     api.post('/employer/applications/bulk', { ids: sel, status: st, ...(st === 'rejected' ? why : {}) })
       .then(res => {
         const n = res.data.updated
-        setNotice(st === 'rejected'
+        toast.show(st === 'rejected'
           ? `${n} marked Not selected. They see it on My Applications${why.reason ? ', with your reason' : ''}.`
           : `${n} shortlisted. Their email and phone now show on their profiles.`)
         setPicked([]); setAskMany(null); load(); window.dispatchEvent(new Event(ADMIN_COUNTS_CHANGED))
@@ -188,7 +191,7 @@ export default function Applicants() {
     const ro = new ResizeObserver(measure)
     ro.observe(el)
     return () => ro.disconnect()
-  }, [see, tab, data, grads, notice, error, room])   // room: measure again after the rows change, until it settles
+  }, [see, tab, data, grads, error, room])   // room: measure again after the rows change, until it settles
 
   return (
     <div className="flex flex-col h-screen">
@@ -221,7 +224,6 @@ export default function Applicants() {
       <div className={`flex flex-col gap-4 ${see ? 'flex-1 min-h-0' : ''}`}>
         {error && <p role="alert" className="shrink-0 text-sm text-rose-700 bg-rose-50 border border-rose-200 rounded-lg px-4 py-2.5">{error}</p>}
         {!data && !error && <><LoadingLabel>Loading applicants…</LoadingLabel><CardSkeleton rows={5} /></>}
-        {notice && <p role="status" className="shrink-0 text-sm text-emerald-800 bg-emerald-50 border border-emerald-200 rounded-lg px-4 py-2.5">{notice}</p>}
         {data && see !== 'graduates' && people.length > 0 && (
           <div role="tablist" className="flex flex-wrap gap-2 shrink-0">
             {[['all', 'All'], ...STATUSES].map(([key, text]) => (
@@ -385,6 +387,7 @@ export default function Applicants() {
       </div>
       </div>
       {status.ui}
+      {toast.ui}
       {askMany === 'rejected' && <ConfirmDecision d={{ action: 'Mark as Not selected', danger: true }} busy={savingMany}
         title={`Mark ${sel.length} ${sel.length === 1 ? 'applicant' : 'applicants'} as Not selected?`}
         text={<>They will see <b>"Not selected"</b> for {job.title} on their My Applications page straight away.</>}
@@ -396,8 +399,7 @@ export default function Applicants() {
         onConfirm={many} onCancel={() => setAskMany(null)} />}
       {askInvite && <ConfirmDecision d={{ action: 'Invite' }} busy={inviting}
         title={`Invite ${selG.length} ${selG.length === 1 ? 'graduate' : 'graduates'} to apply for ${job.title}?`}
-        text={<>Each sees your invitation on their Dashboard and can apply or say No thanks. You see their answer here;
-          with no answer in 14 days it shows "No reply".</>}
+        text={<>They'll see it on their Dashboard and can apply or decline. Their answer appears here, or "No reply" after 14 days.</>}
         onConfirm={inviteSelected} onCancel={() => setAskInvite(false)} />}
     </div>
   )

@@ -10,6 +10,7 @@ import RowMenu from './RowMenu'
 import { TableRowsSkeleton } from '../../components/Skeleton'
 import { DECISIONS } from './decisions'
 import { useLatest } from '../../components/useLatest'
+import { useToast } from '../../components/Toast'
 
 // Admin > Users (7 Oct, her pick B after mock-ups; references.md "Admin Users table"). Every account, with:
 //  - filter buttons with counts (All / Students / Employers / Waiting / Deactivated) instead of two dropdowns:
@@ -55,7 +56,8 @@ export default function AdminUsers() {
   const [users, setUsers] = useState(null)
   const [counts, setCounts] = useState(null)
   const [error, setError] = useState('')
-  const [notice, setNotice] = useState('')
+  // 25 Oct (her review: green banners stayed): "done" messages are a short toast at the bottom that closes itself
+  const toast = useToast()
   const [reloadTick, setReloadTick] = useState(0)
   const [busy, setBusy] = useState(null)
   const [asking, setAsking] = useState(null)     // { user, action }: the decision whose reason pop-up is open
@@ -106,7 +108,7 @@ export default function AdminUsers() {
         // that list, and say what happened (the row may no longer be on screen)
         setUsers(list => list.map(u => (u.id === id ? res.data : u)))
         setReloadTick(t => t + 1)
-        setNotice(`${display(res.data)} ${DONE_WORD[action]}.`)
+        toast.show(`${display(res.data)} ${DONE_WORD[action]}.`)
         setAsking(null)
         loadCounts()
         window.dispatchEvent(new Event(ADMIN_COUNTS_CHANGED))
@@ -185,10 +187,9 @@ export default function AdminUsers() {
         </div>
 
         {error && <p className="text-sm text-rose-600">{error}</p>}
-        {notice && <p role="status" className="text-sm text-emerald-800 bg-emerald-50 border border-emerald-200 rounded-lg px-4 py-2">{notice}</p>}
 
         <div className="flex-1 min-h-0 flex flex-col bg-white rounded-2xl border border-slate-200 overflow-hidden">
-          <div ref={strip} aria-hidden="true" className="overflow-hidden [scrollbar-gutter:stable] bg-slate-50 border-b border-slate-200">
+          <div ref={strip} aria-hidden="true" className="overflow-hidden scrollbar-gutter-stable bg-slate-50 border-b border-slate-200">
             <table className="w-full min-w-190 table-fixed text-xs">
               {colgroup}
               <thead>
@@ -199,7 +200,7 @@ export default function AdminUsers() {
               </thead>
             </table>
           </div>
-          <div className="relative flex-1 min-h-0 overflow-auto [scrollbar-gutter:stable]"
+          <div className="relative flex-1 min-h-0 overflow-auto scrollbar-gutter-stable"
             onScroll={e => { if (strip.current) strip.current.scrollLeft = e.currentTarget.scrollLeft }}>
             <table className="w-full text-sm min-w-190 table-fixed">
               {colgroup}
@@ -240,6 +241,7 @@ export default function AdminUsers() {
           error={askError} onConfirm={reason => act(asking.user.id, asking.action, reason)} onCancel={() => setAsking(null)} />
       )}
       {history && <HistoryDialog user={history} name={display(history)} onClose={() => setHistory(null)} />}
+      {toast.ui}
     </div>
   )
 }
