@@ -317,7 +317,7 @@ def merge():
     labels = {who: load(f"answer_key_{who}.json") for who in LABELLERS if os.path.exists(path(f"answer_key_{who}.json"))}
     if len(labels) < len(LABELLERS):
         sys.exit(f"Missing labels from: {', '.join(w for w in LABELLERS if w not in labels)}.")
-    missing = [a["job_ref"] for a in ads if any(a["job_ref"] not in l for l in labels.values())]
+    missing = [a["job_ref"] for a in ads if any(a["job_ref"] not in labelled for labelled in labels.values())]
     if missing:
         sys.exit(f"{len(missing)} ads lack a label from one of the labellers (e.g. {missing[0]}).")
     decided = {(r["job_ref"], r["key"]): (r["your_decision"] or "").strip().lower() for r in read_csv("disagreements.csv")}
@@ -441,13 +441,15 @@ def score(with_checker: bool = False):
                        "tp": len(tp), "fp": len(fp), "fn": len(fn)})
         errors += [{"job_ref": a["job_ref"], "title": a["title"], "error": "extra (not in answer key)", "skill": n} for n in fp]
         errors += [{"job_ref": a["job_ref"], "title": a["title"], "error": "missed (in answer key)", "skill": n} for n in fn]
-    tot = lambda rows, k: sum(r[k] for r in rows)
+    def tot(rows, k):
+        return sum(r[k] for r in rows)
     P, R, F = prf(tot(per_ad, "tp"), tot(per_ad, "fp"), tot(per_ad, "fn"))
     rng, boots = random.Random(0), []
     for _ in range(10_000):
         s = [rng.choice(per_ad) for _ in per_ad]
         boots.append(prf(tot(s, "tp"), tot(s, "fp"), tot(s, "fn")))
-    ci = lambda i: (sorted(b[i] for b in boots)[249], sorted(b[i] for b in boots)[9749])
+    def ci(i):
+        return (sorted(b[i] for b in boots)[249], sorted(b[i] for b in boots)[9749])
     lines = [f"E1b extraction vs answer key: {len(per_ad)} ads, {tot(per_ad, 'answer_key')} answer-key skills, "
              f"{tot(per_ad, 'predicted')} extracted hard skills",
              f"TP {tot(per_ad, 'tp')}  FP {tot(per_ad, 'fp')}  FN {tot(per_ad, 'fn')}"]
@@ -483,7 +485,7 @@ def score(with_checker: bool = False):
                   "micro P/R/F1, 95% bootstrap over ads (10,000, seed 0)",
            dataset={"ads": len(per_ad), "answer_key_skills": tot(per_ad, "answer_key"),
                     "extracted": tot(per_ad, "predicted"), "sample": "30 live ads, stratified by subcategory, seed 1"},
-           metrics=metrics, verdict=next((l.split("-> ")[-1] for l in lines if l.startswith("Rule (")), None),
+           metrics=metrics, verdict=next((line.split("-> ")[-1] for line in lines if line.startswith("Rule (")), None),
            files=[path("ads.json"), path("answer_key.json"), path("spot_check.csv")]
                  + ([path("checked_skills.json")] if with_checker else []))
     print(f"Written scores{end}.txt, per_ad{end}.csv and errors{end}.csv"
@@ -498,15 +500,18 @@ def compare(ads, key, found, after) -> list[str]:
         g = clusters({"key": key[a["job_ref"]], "pred": [s["skill"] for s in found.get(a["job_ref"], [])]})
         before.append({"tp": sum(len(x) == 2 for x in g), "fp": sum(list(x) == ["pred"] for x in g),
                        "fn": sum(list(x) == ["key"] for x in g)})
-    tot = lambda rows, k, idx=None: sum(rows[i][k] for i in (idx if idx is not None else range(len(rows))))
-    m = lambda rows, idx=None: prf(tot(rows, "tp", idx), tot(rows, "fp", idx), tot(rows, "fn", idx))
+    def tot(rows, k, idx=None):
+        return sum(rows[i][k] for i in (idx if idx is not None else range(len(rows))))
+    def m(rows, idx=None):
+        return prf(tot(rows, "tp", idx), tot(rows, "fp", idx), tot(rows, "fn", idx))
     b, w = m(before), m(after)
     rng, d = random.Random(0), []
     for _ in range(10_000):
         idx = [rng.randrange(len(ads)) for _ in ads]
         x, y = m(before, idx), m(after, idx)
         d.append((y[0] - x[0], y[1] - x[1], y[2] - x[2]))
-    ci = lambda i: (sorted(t[i] for t in d)[249], sorted(t[i] for t in d)[9749])
+    def ci(i):
+        return (sorted(t[i] for t in d)[249], sorted(t[i] for t in d)[9749])
     lines = ["", "Without vs with the checker (same ads; change, 95% CI paired bootstrap over ads):"]
     for name, i in (("Precision", 0), ("Recall", 1), ("F1", 2)):
         lo, hi = ci(i)

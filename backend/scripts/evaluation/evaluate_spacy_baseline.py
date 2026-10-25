@@ -160,7 +160,8 @@ def main():
     lines = [f"spaCy dictionary baseline vs the LLM extractor: same {len(ads)} ads, same answer key "
              f"({sum(len(key[a['job_ref']]) for a in ads)} skills) and scoring as E1b",
              "", f"{'':<54} {'precision':>21} {'recall':>21} {'F1':>21}"]
-    fmt = lambda m: "".join(f"{m[k]['value']:>8.3f} ({m[k]['ci95'][0]:.3f}-{m[k]['ci95'][1]:.3f})" for k in ("precision", "recall", "f1"))
+    def fmt(m):
+        return "".join(f"{m[k]['value']:>8.3f} ({m[k]['ci95'][0]:.3f}-{m[k]['ci95'][1]:.3f})" for k in ("precision", "recall", "f1"))
     lines.append(f"{'LLM extractor (gpt-oss-120b, as in the app)':<54} {fmt(llm_ci)}")
     found_all, errors, results = {}, [], []
     for name, build, files in variants:

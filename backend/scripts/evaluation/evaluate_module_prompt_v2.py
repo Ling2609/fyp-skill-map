@@ -27,7 +27,6 @@ Steps (from backend/, venv active; files go to ../docs/evidence/module_prompt_v2
 import argparse
 import csv
 import os
-import random
 import sys
 import time
 
@@ -146,7 +145,8 @@ def score():
         print(f"v2b skipped: {sb.ONET} is needed")
     rows = {v: sb.counts(mods, key, p) for v, p in pred.items()}
     cis = {v: sb.with_ci(r) for v, r in rows.items()}
-    fmt = lambda m: "".join(f"{m[k]['value']:>8.3f} ({m[k]['ci95'][0]:.3f}-{m[k]['ci95'][1]:.3f})" for k in ("precision", "recall", "f1"))
+    def fmt(m):
+        return "".join(f"{m[k]['value']:>8.3f} ({m[k]['ci95'][0]:.3f}-{m[k]['ci95'][1]:.3f})" for k in ("precision", "recall", "f1"))
     lines = [f"Module prompt v1 vs v2 on {len(mods)} NEW modules ({sum(len(key[m['job_ref']]) for m in mods)} answer-key skills)",
              "", f"{'':<6} {'found':>6} {'precision':>21} {'recall':>21} {'F1':>21}"]
     for v in pred:

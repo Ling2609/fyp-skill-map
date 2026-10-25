@@ -650,7 +650,8 @@ def with_versions(a: Application, live: dict, want: str, job: Job | None = None,
     if job is not None and db is not None and a.sent_profile.get("job_skills") is not None \
             and a.sent_profile["job_skills"] != _job_skill_key(job, db):
         return {**live, "versions": {"sent_at": a.sent_at, "changed": True, "showing": "latest", "job_changed": True}}
-    strip = lambda st: {k: v for k, v in st.items() if k not in ("contact", "own_contact", "visible_to_employers")}
+    def strip(st):
+        return {k: v for k, v in st.items() if k not in ("contact", "own_contact", "visible_to_employers")}
     latest = json.loads(json.dumps(strip(live["student"]), default=str))
     changed = latest != strip(a.sent_profile["student"]) or json.loads(json.dumps(live["fit"], default=str)) != a.sent_profile["fit"]
     showing = "latest" if want == "latest" and changed else "sent"

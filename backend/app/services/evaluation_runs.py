@@ -18,7 +18,7 @@ docs/evidence/evaluation_runs.json for the report (examiners can't see a local M
 import hashlib
 import os
 import platform
-import subprocess
+import subprocess  # nosec B404: only to run "git" with fixed arguments (below)
 import uuid
 from datetime import datetime, timezone
 
@@ -39,7 +39,8 @@ def _col():
 def _git() -> dict:
     """The commit the code was at, and whether files had changed since (a dirty run can't be repeated exactly)."""
     def run(*args):
-        return subprocess.run(["git", *args], cwd=REPO, capture_output=True, text=True, timeout=10).stdout.strip()
+        # fixed "git" arguments chosen here, never user input; git is found on PATH, as in a terminal
+        return subprocess.run(["git", *args], cwd=REPO, capture_output=True, text=True, timeout=10).stdout.strip()  # nosec B603 B607
     try:
         return {"commit": run("rev-parse", "--short", "HEAD") or None,
                 "dirty": bool(run("status", "--porcelain", "--untracked-files=no"))}

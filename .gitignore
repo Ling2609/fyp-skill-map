@@ -38,3 +38,8 @@ backend/profile_slow_calls.txt
 docs/evidence/e2e/**/failures/
 frontend/test-results/
 frontend/playwright-report/
+
+# 26 Oct: coverage data and HTML reports (made by pytest --cov); the text report goes to docs/evidence/quality
+.coverage
+.coverage.*
+htmlcov/

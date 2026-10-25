@@ -1383,3 +1383,24 @@ Her request: show the student a clear process (instead of silence then a sudden 
   "No reply" stay visible (her rule that answers are shown); one list keeps the one-screen fit.
 - Built: _graduates_who_fit sorts (invited?, -ratio, -nice, -have, name), so the Dashboard card and the job's page agree;
   test_graduates_not_yet_invited_come_first.
+
+## Code quality, security scan and test coverage (26 Oct, opened; roadmap step "Ruff + Bandit + coverage")
+
+- Ruff with its default rules (pycodestyle E4/E7/E9 + Pyflakes F). First run: 62 findings, all style or unused
+  imports (14 in app/). All fixed by hand or with reviewed fixes: one "unsafe" fix changed SQLAlchemy's
+  `Job.subcategory != None` (SQL IS NOT NULL) into `is not None` (plain Python, always true, the filter silently gone);
+  replaced by `.is_not(None)`. Now "All checks passed!" (backend/ruff.toml).
+- Bandit on app/ (our own code; library holes are TC-65, pip-audit / npm audit). First run: 0 High, 2 Medium, 9 Low.
+  The 2 Medium (B615, Hugging Face download without a pinned revision) were real hardening: the model is our own
+  folder, now loaded with local_files_only=True so it can never download from the Hub. The 9 Low were false positives
+  (a dict key "pass", the OAuth2 token type "bearer", a message, `git rev-parse` with fixed arguments, xml escape()
+  used to write the PDF), each marked `# nosec Bxxx` with the reason. Bandit's docs: a line marked # nosec "has been
+  reviewed and the issue is a false positive or acceptable"; name the test IDs so "a separate vulnerability may be
+  added to the line later" is still reported; "it is good practice to add a comment explaining why"
+  (<https://bandit.readthedocs.io/en/1.9.3/config.html>). Now 0 issues, 11 reviewed and skipped.
+- Coverage (pytest-cov, statements in app/): 74%. Google Testing Blog, "Code coverage best practices" (2020,
+  <https://testing.googleblog.com/2020/08/code-coverage-best-practices.html>): "60% as 'acceptable', 75% as
+  'commendable' and 90% as 'exemplary'"; "project wide goals above 90% are most likely not worth it"; "a lot of the
+  value of code coverage data is to highlight not what's covered, but what's not covered". Lowest by design: embedder
+  (real SBERT replaced in tests), mailer (no real email), github_repo (no network); real gaps: admin_academic 45%,
+  profile 64%.

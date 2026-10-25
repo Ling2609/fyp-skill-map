@@ -3,8 +3,10 @@ Usage (from backend/): python scripts/skill_relations/make_notebook.py"""
 import nbformat as nbf
 
 cells = []
-md = lambda t: cells.append(nbf.v4.new_markdown_cell(t))
-code = lambda t: cells.append(nbf.v4.new_code_cell(t))
+def md(t):
+    return cells.append(nbf.v4.new_markdown_cell(t))
+def code(t):
+    return cells.append(nbf.v4.new_code_cell(t))
 
 md("""# SkillMap Stage 2: skill relationship model
 

@@ -205,8 +205,9 @@ def test_graduates_not_yet_invited_come_first(client, users):
         "description": "Build data pipelines in Python and SQL; Docker is a plus. Haskell for our parsers. " * 2,
         "skills": [{"name": s, "level": "required", "quote": "", "group": ""} for s in ("Python", "SQL", "Haskell")]
                   + [{"name": "Docker", "level": "preferred", "quote": "", "group": ""}], "soft": []}).json()
-    ours = lambda: [g["student_id"] for g in client.get(f"/employer/jobs/{job['id']}/graduates", headers=h).json()
-                    if g["student_id"] in (users.ids[top], users.ids[second])]
+    def ours():
+        return [g["student_id"] for g in client.get(f"/employer/jobs/{job['id']}/graduates", headers=h).json()
+                        if g["student_id"] in (users.ids[top], users.ids[second])]
     assert ours() == [users.ids[top], users.ids[second]]                  # best match first
     assert client.post("/employer/invitations", headers=h, json={"job_id": job["id"], "student_id": users.ids[top]}).status_code == 200
     assert ours() == [users.ids[second], users.ids[top]]                  # the invited one moves below

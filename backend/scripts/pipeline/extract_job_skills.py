@@ -103,7 +103,7 @@ def run():
             skills = result["extracted_skills"]
 
             if not skills:
-                print(f"  No skills extracted — skipping")
+                print("  No skills extracted — skipping")
                 failed += 1
                 continue
 

@@ -27,7 +27,6 @@ Usage (from backend/, venv active):
 import argparse
 import json
 import os
-import random
 import re
 import sys
 import time
@@ -51,20 +50,20 @@ BATCH = 25
 def best_long_form(short: str, long: str) -> str | None:
     """Schwartz & Hearst (2003): match the short form's letters right to left inside the candidate long form; the
     first short-form character must start a word. Returns the long form (from that word on) or None."""
-    s, l = short.lower(), long.lower()
-    si, li = len(s) - 1, len(l) - 1
+    s, lng = short.lower(), long.lower()
+    si, li = len(s) - 1, len(lng) - 1
     while si >= 0:
         c = s[si]
         if not c.isalnum():
             si -= 1
             continue
-        while li >= 0 and (l[li] != c or (si == 0 and li > 0 and l[li - 1].isalnum())):
+        while li >= 0 and (lng[li] != c or (si == 0 and li > 0 and lng[li - 1].isalnum())):
             li -= 1
         if li < 0:
             return None
         si -= 1
         li -= 1
-    start = l.rfind(" ", 0, li + 1) + 1
+    start = lng.rfind(" ", 0, li + 1) + 1
     result = long[start:].strip(" ,;:-")
     return result if len(result) > len(short) and " " in result or len(result) > len(short) + 3 else None
 
@@ -127,11 +126,11 @@ def propose():
     ads = Counter()                                   # (short key, sense key) -> number of ads defining it
     shorts, longs = defaultdict(Counter), defaultdict(Counter)   # most common spellings, for display and merging
     for t in texts:
-        for key in {(short_key(s), sense_key(l)) for s, l in candidates(t)}:   # once per ad
+        for key in {(short_key(s), sense_key(lf)) for s, lf in candidates(t)}:   # once per ad
             ads[key] += 1
-        for s, l in candidates(t):
+        for s, lf in candidates(t):
             shorts[short_key(s)][s] += 1
-            longs[(short_key(s), sense_key(l))][l] += 1
+            longs[(short_key(s), sense_key(lf))][lf] += 1
     esco = set()
     skills_csv = os.path.join(ESCO_DIR, "skills_en.csv")
     if os.path.exists(skills_csv):
@@ -196,7 +195,7 @@ Answer with JSON only: {"answers": [{"id": <id>, "answer": "same" | "different"}
 def ask_model(name: str, rows: pd.DataFrame) -> dict[int, str]:
     from judge_reference_pairs import ask_gpt_oss, ask_qwen
     ask = ask_gpt_oss if name == "gpt_oss" else ask_qwen
-    user = "\n".join(f"{i}. {s} = {l}" for i, s, l in zip(rows.index, rows.short, rows.long))
+    user = "\n".join(f"{i}. {s} = {lf}" for i, s, lf in zip(rows.index, rows.short, rows.long))
     data = json.loads(ask(PROMPT, user) or "{}")
     out = {}
     for item in data.get("answers", []) if isinstance(data, dict) else []:

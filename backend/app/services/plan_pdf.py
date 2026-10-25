@@ -9,7 +9,7 @@ Links are printed as their address, since paper can't be clicked.
 """
 from datetime import date
 from io import BytesIO
-from xml.sax.saxutils import escape
+from xml.sax.saxutils import escape  # nosec B406: escapes text written INTO the PDF; no XML is read or parsed
 
 from markdown_it import MarkdownIt
 from reportlab.lib import colors

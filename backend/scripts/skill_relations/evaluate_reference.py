@@ -190,7 +190,7 @@ def main():
             rules[f"baseline p >= {args.baseline_cutoff}"] = s.p_satisfies_baseline >= args.baseline_cutoff
         wh = {who: weighted_has(s, col, has) for who, has in rules.items()}
         result[name]["weighted_has"] = wh
-        print(f"\n'Has it' as the app decides, population-weighted (bands >= 0.55):")
+        print("\n'Has it' as the app decides, population-weighted (bands >= 0.55):")
         print(f"{'':<22} {'precision':>10} {'recall':>7} {'F1':>6}")
         for who, r in wh.items():
             print(f"{who:<22} {r['precision']:>10} {r['recall']:>7} {r['f1']:>6}")

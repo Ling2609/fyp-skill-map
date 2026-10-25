@@ -76,17 +76,22 @@ def test_on_time_boundaries(client, users, db):
     from app.services.transparency import employer_record
     student = users.student()
     cases = []
-    e = users.employer(); job, a, due = _judged_job(client, users, db, e, student, decided_offset=timedelta(0))
+    e = users.employer()
+    job, a, due = _judged_job(client, users, db, e, student, decided_offset=timedelta(0))
     cases.append((e, 1, "decided exactly on the date"))
-    e = users.employer(); job, a, due = _judged_job(client, users, db, e, student, decided_offset=timedelta(seconds=1))
+    e = users.employer()
+    job, a, due = _judged_job(client, users, db, e, student, decided_offset=timedelta(seconds=1))
     cases.append((e, 0, "decided a second after the date"))
-    e = users.employer(); job, a, due = _judged_job(client, users, db, e, student, decided_offset=-timedelta(days=1))
+    e = users.employer()
+    job, a, due = _judged_job(client, users, db, e, student, decided_offset=-timedelta(days=1))
     client.patch(f"/employer/applications/{a}", headers=users.h(e), json={"status": "accepted"})   # corrected now
     cases.append((e, 1, "Not selected on time, corrected to Accepted after the date"))
-    e = users.employer(); job, a, due = _judged_job(client, users, db, e, student, due_offset=timedelta(days=10))
+    e = users.employer()
+    job, a, due = _judged_job(client, users, db, e, student, due_offset=timedelta(days=10))
     client.patch(f"/employer/jobs/{job['id']}", headers=users.h(e), json={"closed": True, "reason": "not_filling"})
     cases.append((e, 1, "closed before the date: everyone told at once"))
-    e = users.employer(); job, a, due = _judged_job(client, users, db, e, student)
+    e = users.employer()
+    job, a, due = _judged_job(client, users, db, e, student)
     client.patch(f"/employer/jobs/{job['id']}", headers=users.h(e), json={"closed": True, "reason": "not_filling"})
     cases.append((e, 0, "closed after the date"))
     for e, expected, what in cases:

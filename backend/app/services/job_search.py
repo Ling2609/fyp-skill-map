@@ -58,7 +58,8 @@ def search_match(query: str, title: str, company: str = "", location: str = "",
     if not q:
         return NONE, ""
     phrase = f" {' '.join(q)} "
-    padded = lambda text: f" {' '.join(_words(text))} "
+    def padded(text):
+        return f" {' '.join(_words(text))} "
     if phrase in padded(title):
         return TITLE, ""
     for name, key in zip(skills, skill_keys):

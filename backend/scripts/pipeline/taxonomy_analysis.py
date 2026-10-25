@@ -285,7 +285,7 @@ print("TAXONOMY SUMMARY")
 print("=" * 60)
 print(f"Total skills: {len(taxonomy)}")
 
-print(f"\nBy category:")
+print("\nBy category:")
 cat_counts = {}
 for s in taxonomy:
     cat_counts[s["category"]] = cat_counts.get(s["category"], 0) + 1
@@ -296,7 +296,7 @@ zero_freq = [s for s in taxonomy if s["jobstreet_frequency"] == 0]
 print(f"\nSkills with market frequency > 0: {len(taxonomy) - len(zero_freq)}")
 print(f"Skills with market frequency = 0: {len(zero_freq)} (academically valid per ESCO)")
 
-print(f"\nTop 20 by Malaysian ICT job market frequency:")
+print("\nTop 20 by Malaysian ICT job market frequency:")
 print(f"{'Rank':<6} {'Skill':<40} {'Category':<30} {'Freq':>6}")
 print("-" * 85)
 top20 = sorted(taxonomy, key=lambda x: -x["jobstreet_frequency"])[:20]

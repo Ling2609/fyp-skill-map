@@ -94,10 +94,10 @@ def clean_jobstreet(input_path: str, output_path: str):
     print("\n" + "=" * 60)
     print("SUMMARY")
     print("=" * 60)
-    print(f"  Original ICT jobs: 8,675")
+    print("  Original ICT jobs: 8,675")
     print(f"  Cleaned ICT jobs:  {len(df)}")
     print(f"  Columns: {df.columns.tolist()}")
-    print(f"\nSample cleaned description:")
+    print("\nSample cleaned description:")
     print(f"  {df['descriptions'].iloc[0][:200]}...")
 
 if __name__ == "__main__":

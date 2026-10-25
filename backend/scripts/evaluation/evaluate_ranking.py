@@ -47,7 +47,6 @@ import random
 import sys
 import time
 from statistics import median
-from types import SimpleNamespace
 
 sys.path.append(".")
 
@@ -359,7 +358,8 @@ def write_csv(name, rows):
 def ndcg(order: list, grades: dict, pid: str) -> float:
     gains = [grades.get(f"{pid}|{ref}", 0) for ref in order[:K]]
     ideal = sorted((v for k, v in grades.items() if k.startswith(pid + "|")), reverse=True)[:K]
-    dcg = lambda gs: sum(g / math.log2(i + 2) for i, g in enumerate(gs))
+    def dcg(gs):
+        return sum(g / math.log2(i + 2) for i, g in enumerate(gs))
     return dcg(gains) / dcg(ideal) if dcg(ideal) else 0.0
 
 
@@ -372,10 +372,12 @@ def score():
     pids = sorted(orders)
     per = {s: {"ndcg": [ndcg(orders[p][s], grades, p) for p in pids], "p": [p_at_k(orders[p][s], grades, p) for p in pids]}
            for s in SYSTEMS}
-    mean = lambda xs: sum(xs) / len(xs)
+    def mean(xs):
+        return sum(xs) / len(xs)
     rng = random.Random(0)
     boots = [[rng.randrange(len(pids)) for _ in pids] for _ in range(10_000)]
-    ci = lambda vals: tuple(sorted(mean([vals[i] for i in b]) for b in boots)[j] for j in (249, 9749))
+    def ci(vals):
+        return tuple(sorted(mean([vals[i] for i in b]) for b in boots)[j] for j in (249, 9749))
     names = {"S": "SkillMap (Job Matches)", "B1": "Keyword match", "B2": "Keyword match + level penalty", "R": "Random order"}
     lines = [f"E2 ranking: {len(pids)} graduate profiles, pooled top {K} judged 0/1/2 (median of Claude, Qwen, Gemini)", "",
              f"{'':<32} {'nDCG@10':>22} {'P@10 (good fit)':>22}"]

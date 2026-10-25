@@ -31,7 +31,6 @@ Steps (from backend/, venv active; files go to ../docs/evidence/module_skill_ext
 """
 import argparse
 import csv
-import json
 import os
 import random
 import sys
@@ -163,7 +162,8 @@ def score():
                     "answer_key": tp + len(fn), "extracted": tp + len(fp), "tp": tp, "fp": len(fp), "fn": len(fn)})
         errors += [{"code": m["job_ref"], "module": m["title"], "error": "extra (not in answer key)", "skill": s} for s in fp]
         errors += [{"code": m["job_ref"], "module": m["title"], "error": "missed (in answer key)", "skill": s} for s in fn]
-    tot = lambda rows, k: sum(r[k] for r in rows)
+    def tot(rows, k):
+        return sum(r[k] for r in rows)
     point = e1.prf(tot(per, "tp"), tot(per, "fp"), tot(per, "fn"))
     rng, boots = random.Random(0), []
     for _ in range(10_000):

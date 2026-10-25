@@ -40,12 +40,18 @@ EMPTY_PROFILE_MESSAGE = (
 def grade_weight(grade: float) -> float:
     """Strength of academic evidence (4.0 scale). Used for the profile vector and
     shown as evidence strength; it never decides whether a skill is matched."""
-    if grade >= 4.0: return 1.0
-    elif grade >= 3.7: return 0.9
-    elif grade >= 3.3: return 0.8
-    elif grade >= 3.0: return 0.7
-    elif grade >= 2.7: return 0.6
-    else: return 0.5
+    if grade >= 4.0:
+        return 1.0
+    elif grade >= 3.7:
+        return 0.9
+    elif grade >= 3.3:
+        return 0.8
+    elif grade >= 3.0:
+        return 0.7
+    elif grade >= 2.7:
+        return 0.6
+    else:
+        return 0.5
 
 
 @dataclass

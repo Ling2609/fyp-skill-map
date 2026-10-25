@@ -69,7 +69,6 @@ def test_dates_and_types_are_checked(client, users):
 
 
 def test_project_context_saved_and_shown(client, users, monkeypatch):
-    import app.routers.profile as pr
     student = users.student()
     h = users.h(student)
     body = {"name": "Club booking app", "description": "A booking app built with React for the coding club.",

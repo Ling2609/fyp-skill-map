@@ -813,7 +813,8 @@ def get_skill_profile(
 ):
     """The same Graduate Skill Profile Job Matches and Skill Gap use (also fed to the chatbot)."""
     profile = build_skill_profile(current_user.id, db)
-    by_source = lambda src: sum(1 for ev in profile.values() if ev.source == src)
+    def by_source(src):
+        return sum(1 for ev in profile.values() if ev.source == src)
     return {
         "skills": [ev.name for ev in profile.values()],
         "total": len(profile),

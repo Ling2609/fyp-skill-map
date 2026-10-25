@@ -93,7 +93,9 @@ def test_an_edit_and_an_application_at_the_same_moment_take_turns(client, users,
         first.commit()                                        # the edit is saved: the row is free again
         assert second.query(Job).filter(Job.id == job["id"]).with_for_update(nowait=True).one().id == job["id"]
     finally:
-        second.rollback(); first.close(); second.close()
+        second.rollback()
+        first.close()
+        second.close()
 
 
 def _run_together(first, second, gap=0.3):

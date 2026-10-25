@@ -181,7 +181,8 @@ def format_salary(job: dict) -> str | None:
     cur = {"MYR": "RM", "SGD": "S$"}.get(job.get("job_salary_currency") or "", job.get("job_salary_currency") or "")
     period = (job.get("job_salary_period") or "").lower()
     per = {"month": " per month", "year": " per year", "hour": " per hour"}.get(period, "")
-    fmt = lambda v: f"{cur} {int(v):,}".strip()
+    def fmt(v):
+        return f"{cur} {int(v):,}".strip()
     return f"{fmt(lo)} - {fmt(hi)}{per}" if lo and hi else f"{fmt(lo or hi)}{per}"
 
 
@@ -327,7 +328,7 @@ def run(dry_run: bool, use_cache: bool, new_only: bool, sync_only: bool = False)
     seen_titles = set()    # job_key (title, company, location): the same posting can come back with different ids
     # Live jobs already in the database, by job_key → job_ref. A posting fetched again on a
     # later run (or via another publisher) gets a new id; this stops it being saved twice (F9)
-    saved_keys = {job_key(t, c, l): ref for ref, t, c, l in
+    saved_keys = {job_key(t, c, loc): ref for ref, t, c, loc in
                   db.query(Job.job_id, Job.job_title, Job.company, Job.location).filter(Job.source == "live")}
     credits = 0
 

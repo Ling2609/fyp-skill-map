@@ -206,7 +206,7 @@ def user_history(user_id: int, db: Session = Depends(get_db), admin: User = Depe
             .filter(AdminAction.target_user_id == user_id)
             .order_by(AdminAction.created_at.desc(), AdminAction.id.desc()))
     return [{"action": a.action, "reason": a.reason, "at": a.created_at,
-             "by": f"{f or ''} {l or ''}".strip() or "a former admin"} for a, f, l in rows]
+             "by": f"{first or ''} {last or ''}".strip() or "a former admin"} for a, first, last in rows]
 
 
 class Reason(BaseModel):

@@ -1,0 +1,4 @@
+# Ruff (linter), 26 Oct: Ruff's default rules (pycodestyle E4/E7/E9 and Pyflakes F: PEP 8 statements, unused
+# imports, undefined names). Run from backend/:  ruff check app tests tests_unit scripts migrations
+target-version = "py313"
+extend-exclude = ["venv", "data"]

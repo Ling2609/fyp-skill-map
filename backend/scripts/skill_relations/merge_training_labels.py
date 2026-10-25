@@ -79,7 +79,7 @@ def soft_rows(cand: pd.DataFrame) -> list[dict]:
         for x, y, vs in ((a, b, votes), (b, a, [MIRROR[v] for v in votes])):
             count = Counter(vs)
             top = max(count.values())
-            label5 = next(l for l in CAUTION if count.get(l) == top)
+            label5 = next(lab for lab in CAUTION if count.get(lab) == top)
             share = Counter(TO_CLASS[v] for v in vs)
             rows.append({"a": x, "b": y, "label5": label5, "source": f"skillmap_{kind}", "split": split,
                          **{f"p_{c.lower()}": round(share.get(c, 0) / len(vs), 3) for c in CLASSES},

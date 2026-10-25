@@ -280,8 +280,8 @@ def cv_lines(user: User, db: Session) -> list[str]:
                      f"({e.start_month} to {e.end_month or 'now'}). {did[:300]}{'...' if len(did) > 300 else ''}"
                      + (f" Skills: {', '.join(e.mapped_skills[:8])}" if e.mapped_skills else ""))
     if user.languages:
-        lines.append("Languages: " + "; ".join(f"{l['language']} ({l['level'].replace('_', ' ')}"
-                                               f"{', ' + l['test'] if l.get('test') else ''})" for l in user.languages))
+        lines.append("Languages: " + "; ".join(f"{lang['language']} ({lang['level'].replace('_', ' ')}"
+                                               f"{', ' + lang['test'] if lang.get('test') else ''})" for lang in user.languages))
     certs = db.query(UserCertification).filter(UserCertification.user_id == user.id).limit(6).all()
     if certs:
         lines.append("Certifications: " + "; ".join(f"{c.cert_name} ({c.issuer})" for c in certs))
@@ -294,7 +294,7 @@ def cv_lines(user: User, db: Session) -> list[str]:
             .order_by(UserModule.grade.desc(), Module.name).limit(5).all())
     if best:
         lines.append("Strongest modules: " + ", ".join(f"{name} ({grade_letter(g)})" for name, g in best))
-    if not any(l.startswith("Project:") for l in lines):
+    if not any(line.startswith("Project:") for line in lines):
         lines.append("Projects on SkillMap: none yet")
     return lines
 
@@ -305,7 +305,7 @@ def ensure_profile_step(reply: str) -> str:
     # (reportlab) is installed
     skill = learning_resources.plan_title(reply)
     lines = reply.split("\n")
-    head = next((i for i, l in enumerate(lines) if l.strip().startswith("|") and "done when" in l.lower()), None)
+    head = next((i for i, line in enumerate(lines) if line.strip().startswith("|") and "done when" in line.lower()), None)
     if skill is None or head is None:
         return reply
     end = head

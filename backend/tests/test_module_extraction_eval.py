@@ -1,6 +1,5 @@
 """E1 modules (15 Oct): the job-ad method reused for modules: three labellers, 2-of-3 answer key, spot-check,
 scored with the same grouping; files go to their own folder and the job-ad files are never touched."""
-import json
 import os
 import sys
 

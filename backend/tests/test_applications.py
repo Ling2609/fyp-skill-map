@@ -38,7 +38,10 @@ def test_simultaneous_applies_give_one_application_no_server_error(client, users
         with TestClient(app) as c:
             codes.append(c.post("/applications", headers=h, json={"job_id": job["job_ref"]}).status_code)
     threads = [threading.Thread(target=go) for _ in range(4)]
-    [t.start() for t in threads]; [t.join() for t in threads]
+    for t in threads:
+        t.start()
+    for t in threads:
+        t.join()
     assert sorted(codes).count(200) == 1 and set(codes) <= {200, 409}, codes
 
 
@@ -80,8 +83,10 @@ def test_shortlist_back_and_again_then_reject_then_correct(client, users, post_j
     employer, student = users.employer(), users.student()
     job = post_job(employer)
     app_id = apply(client, users, student, job).json()["id"]
-    set_ = lambda st: client.patch(f"/employer/applications/{app_id}", headers=users.h(employer), json={"status": st})
-    set_("shortlisted"); set_("applied")
+    def set_(st):
+        return client.patch(f"/employer/applications/{app_id}", headers=users.h(employer), json={"status": st})
+    set_("shortlisted")
+    set_("applied")
     assert mine(client, users, student, app_id)["progress"]["steps"][2]["at"] is None
     set_("shortlisted")
     assert mine(client, users, student, app_id)["progress"]["steps"][2]["at"]

@@ -1,0 +1,10 @@
+# Coverage (26 Oct): which lines of the app the tests run. From backend/:
+#   python -m pytest -q --cov --cov-report=term
+[run]
+source = app
+branch = false
+
+[report]
+show_missing = false
+skip_empty = true
+sort = Cover

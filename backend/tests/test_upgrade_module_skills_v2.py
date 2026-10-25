@@ -21,7 +21,8 @@ def test_unreviewed_replaced_reviewed_only_suggested(client, db, tmp_path, monke
                description="Penetration tests with Nmap or Metasploit.")
     b = Module(code="ZZ-V2-002", name="Penetration Testing 2", level=3, type="common",
                description="Penetration tests with Nmap or Metasploit.", skills_reviewed_at=datetime.now(timezone.utc))
-    db.add_all([a, b]); db.flush()
+    db.add_all([a, b])
+    db.flush()
     db.add_all([ModuleSkill(module_id=a.id, module_code=a.code, skill_name="Nmap scanning", extracted_by="gpt-oss-120b:descriptor-v1"),
                 ModuleSkill(module_id=a.id, module_code=a.code, skill_name="Report writing", extracted_by="admin"),
                 ModuleSkill(module_id=b.id, module_code=b.code, skill_name="Nmap", extracted_by="gpt-oss-120b:descriptor-v1")])
@@ -44,7 +45,8 @@ def test_unreviewed_replaced_reviewed_only_suggested(client, db, tmp_path, monke
     monkeypatch.setattr(sys, "argv", ["x"])
     up.main()
     db.expire_all()
-    names = lambda mod: sorted((s.skill_name, s.extracted_by) for s in db.query(ModuleSkill).filter(ModuleSkill.module_id == mod.id))
+    def names(mod):
+        return sorted((s.skill_name, s.extracted_by) for s in db.query(ModuleSkill).filter(ModuleSkill.module_id == mod.id))
     assert names(a) == [("Metasploit", up.MODULE_EXTRACTED_BY), ("Nmap", up.MODULE_EXTRACTED_BY),
                         ("Penetration testing", up.MODULE_EXTRACTED_BY), ("Report writing", "admin")]
     assert names(b) == [("Nmap", "gpt-oss-120b:descriptor-v1")]                 # reviewed: unchanged
@@ -61,7 +63,8 @@ def test_unreviewed_replaced_reviewed_only_suggested(client, db, tmp_path, monke
         w.writeheader()
         w.writerows(rows)
     monkeypatch.setattr(sys, "argv", ["x", "--apply"])
-    up.main(); up.main()
+    up.main()
+    up.main()
     db.expire_all()
     assert names(b) == [("Metasploit", up.MODULE_EXTRACTED_BY), ("Nmap", "gpt-oss-120b:descriptor-v1")]
     assert db.get(Module, b.id).skills_reviewed_at is not None
