@@ -190,3 +190,23 @@ def test_invite_selected_invites_each_and_reports_the_rest(client, users, post_j
     assert client.post("/employer/invitations/bulk", headers=users.h(employer),
                        json={"job_id": job["id"], "student_ids": [users.ids[a]]}).status_code == 400
     assert client.get(f"/employer/jobs/{job['id']}/graduates", headers=users.h(employer)).json() == []
+
+
+def test_graduates_not_yet_invited_come_first(client, users):
+    """26 Oct (her review): the ones still to invite come first; already-invited ones follow, each group best match first."""
+    employer = users.employer()
+    top = users.student(skills=("Python", "SQL", "Docker"), visible=True)
+    second = users.student(skills=("Python", "SQL"), visible=True)
+    h = users.h(employer)
+    cats = client.get("/jobs/subcategories", params={"include_past": True}, headers=h).json()
+    job = client.post("/employer/jobs", headers=h, json={
+        "title": "Graduate Data Engineer", "location": "Kuala Lumpur", "salary": "",
+        "category": cats[0] if cats else "Developers/Programmers",
+        "description": "Build data pipelines in Python and SQL; Docker is a plus. Haskell for our parsers. " * 2,
+        "skills": [{"name": s, "level": "required", "quote": "", "group": ""} for s in ("Python", "SQL", "Haskell")]
+                  + [{"name": "Docker", "level": "preferred", "quote": "", "group": ""}], "soft": []}).json()
+    ours = lambda: [g["student_id"] for g in client.get(f"/employer/jobs/{job['id']}/graduates", headers=h).json()
+                    if g["student_id"] in (users.ids[top], users.ids[second])]
+    assert ours() == [users.ids[top], users.ids[second]]                  # best match first
+    assert client.post("/employer/invitations", headers=h, json={"job_id": job["id"], "student_id": users.ids[top]}).status_code == 200
+    assert ours() == [users.ids[second], users.ids[top]]                  # the invited one moves below

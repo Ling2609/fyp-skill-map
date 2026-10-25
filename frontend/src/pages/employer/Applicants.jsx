@@ -327,7 +327,7 @@ export default function Applicants() {
         {showGrads && see !== 'applicants' && (
           <section aria-labelledby="fit-job-h" className={`flex flex-col gap-3 ${see ? 'min-h-0' : 'mt-1'}`}>
             <SectionHead id="fit-job-h" title={see ? `Graduates who fit this job · ${fitList.length}` : 'Graduates who fit this job'}
-              note="Visible students who haven't applied, best match first. Tick the ones you'd like to invite."
+              note="Visible students who haven't applied, best match first; anyone already invited is listed last."
               more={!see && <MoreButton total={fitList.length} shown={gradsNow.length} onClick={() => seeAll('graduates')} />} />
             <div className={`${CARD} ${see ? 'min-h-0' : ''} flex flex-col overflow-hidden`}>
               <div ref={gstrip} className={`shrink-0 overflow-hidden scrollbar-gutter-stable border-b ${selG.length ? 'bg-blue-50 border-blue-200' : 'bg-slate-50 border-slate-200'}`}>

@@ -339,7 +339,7 @@ export default function EmployerDashboard() {
                   <h2 id="fit-h" className="text-base font-semibold text-slate-900">Graduates who fit your jobs</h2>
                   {/* 25 Oct (her review): "See all" on the description's line, as on View applicants */}
                   <div className="mt-1 flex items-baseline justify-between gap-3">
-                    <p className="text-xs text-slate-500 min-w-0">Not applied yet, best match first. Invite several at once from the job's page.</p>
+                    <p className="text-xs text-slate-500 min-w-0">Best match first, invited ones last. Invite several at once from the job's page.</p>
                     {nGrads < data.graduates.length && <Link to={gradJob ? `/employer/jobs/${gradJob}?see=graduates` : '/employer/jobs'} className={SEE}>
                       {gradJob ? 'See all →' : 'See all in My Jobs →'}</Link>}
                   </div>

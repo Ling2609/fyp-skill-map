@@ -1364,3 +1364,22 @@ Her request: show the student a clear process (instead of silence then a sudden 
   selected" on View applicants: ticked by hand, no "invite all", up to 50 at a time, each the usual single invitation);
   migration migrate_invitation_replies.py (decline_reason, decline_note). No monthly cap (small, career-office
   supervised); a cap like Indeed's or Handshake's is future work.
+
+## Graduates who fit: who still needs inviting first (26 Oct, opened; her "invited ones at the top look weird")
+
+- Her review: with select-all ticked, invited graduates at the top of the list had no tick box, so the first rows
+  looked missed and the ones still to act on started lower down.
+- LinkedIn Recruiter lets recruiters "exclude people that have been viewed by your teammates and who have been
+  InMailed" (SHRM, "5 LinkedIn Recruiter hacks to save time",
+  <https://shrm.org/topics-tools/news/talent-acquisition/5-linkedin-recruiter-hacks-to-save-time>): already-contacted
+  people are taken out of the way of the ones still to contact.
+- Checklist tools offer "Move completed to-do items to the bottom" (UpNote,
+  <https://help.getupnote.com/write-and-edit/add-content-to-your-notes/checklists>); Taskworld keeps "Checklist items
+  remain in place when checked (default)" with "go to the bottom of the list when checked" as an option
+  (<https://help.taskworld.com/en/articles/9233906-as-a-user-i-want-to-choose-how-my-checklist-items-will-behave-when-completed>).
+  So moving done items down is a recognised choice, not a universal rule.
+- Options: A leave (best match only); B not-invited first, then invited / declined / no reply, each best match first;
+  C a separate "Already invited" section. Chosen B (her "yes"): moved, not hidden like LinkedIn, so "Declined" and
+  "No reply" stay visible (her rule that answers are shown); one list keeps the one-screen fit.
+- Built: _graduates_who_fit sorts (invited?, -ratio, -nice, -have, name), so the Dashboard card and the job's page agree;
+  test_graduates_not_yet_invited_come_first.

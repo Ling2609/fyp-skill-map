@@ -721,7 +721,10 @@ def _graduates_who_fit(open_jobs: list[Job], db: Session, limit: int | None = FI
                                     # 25 Oct: Invited / Declined (+ reason) / No reply (app/services/invitations.py)
                                     "invite": invite_state(invited.get((job.id, student.id))),
                                     "invited_at": getattr(invited.get((job.id, student.id)), "created_at", None)}
-    return sorted(best.values(), key=lambda g: (-g["ratio"], -g["nice"], -g["have"], g["name"]))[:limit]
+    # 26 Oct (her review: invited rows at the top left gaps in the tick boxes; references.md "Graduates who fit: who
+    # still needs inviting first"): graduates not yet invited come first, then those already invited (Invited, Declined,
+    # No reply), each group best match first. Like moving done items to the bottom: nothing is hidden.
+    return sorted(best.values(), key=lambda g: (g["invite"] is not None, -g["ratio"], -g["nice"], -g["have"], g["name"]))[:limit]
 
 
 @router.get("/dashboard")
