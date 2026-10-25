@@ -44,6 +44,11 @@ export default function GithubImport({ onClose, onDone }) {
   const connect = () => startGithubConnect('/profile?tab=projects&open=import')
     .catch(err => setError(errText(err, "Couldn't start connecting to GitHub. Please try again.")))
   const toggle = (url) => setPicked(prev => prev.includes(url) ? prev.filter(u => u !== url) : [...prev, url])
+  // 25 Oct (her review: tick boxes the same everywhere): a select-all box over the list, like the employer's tables;
+  // it ticks the repositories not added yet (each is still checked one by one on the next step)
+  const addable = (repos || []).filter(r => !r.added).map(r => r.url)
+  const allPicked = addable.length > 0 && addable.every(u => picked.includes(u))
+  const pickAll = () => setPicked(allPicked ? [] : addable)
 
   const update = (url, changes) => setItems(prev => prev.map(it => (it.url === url
     ? { ...it, ...(typeof changes === 'function' ? changes(it) : changes) } : it)))
@@ -155,6 +160,13 @@ export default function GithubImport({ onClose, onDone }) {
                 <p className="text-xs text-gray-500">{repos.length} public {repos.length === 1 ? 'repository' : 'repositories'}. Tick the ones to add; you check each one next.</p>
                 <button type="button" onClick={list} disabled={busy} className="shrink-0 text-xs font-medium text-blue-700 hover:underline disabled:opacity-40">Refresh</button>
               </div>
+              {addable.length > 1 && (
+                <label className="flex items-center gap-3 px-3 pb-2 text-xs font-medium text-gray-600 cursor-pointer">
+                  <input type="checkbox" className="w-4 h-4 accent-blue-700 shrink-0" disabled={busy} checked={allPicked} onChange={pickAll}
+                    ref={el => { if (el) el.indeterminate = picked.length > 0 && !allPicked }} />
+                  {picked.length ? `${picked.length} selected` : `Select all ${addable.length}`}
+                </label>
+              )}
               <ul className="space-y-2 max-h-80 overflow-y-auto -mx-1 px-1">
                 {repos.map(r => (
                   <li key={r.url}>

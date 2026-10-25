@@ -47,17 +47,23 @@ function SectionHead({ id, title, note, more }) {
     </div>
   )
 }
-// 25 Oct (her bug: ticking one graduate made the next one disappear): the selection's count and actions take the place
-// of "See all" on the section's title line instead of a bar above the table, so ticking never changes the height and
-// never hides a row. The slot has a fixed height, shorter than the title and note beside it.
-const PICK_BTN = 'text-sm font-medium px-3 py-1 rounded-lg text-white'
+// 25 Oct (her bug: ticking one graduate made the next one disappear, then "refine the placement"): with something
+// ticked, the table's column-title strip becomes its action bar, beside the select-all box (as in Gmail and most data
+// tables): "2 selected", the actions, Clear. Same height as the titles, so ticking never moves or hides a row.
+const PICK_BTN = 'text-xs font-semibold px-3 py-1.5 rounded-lg text-white'
+const STRIP_TD = 'px-5 h-11 py-0 align-middle'
+function Titles({ names }) {
+  return names.map(n => <td key={n} aria-hidden="true" className={STRIP_TD}>{n}</td>)
+}
 function Picked({ n, onClear, children }) {
   return (
-    <div className="shrink-0 h-8 flex items-center gap-2.5 text-sm">
-      <span className="font-medium text-slate-800">{n} selected</span>
-      {children}
-      <button type="button" onClick={onClear} className="text-slate-600 hover:text-slate-900">Clear</button>
-    </div>
+    <td colSpan={4} className={STRIP_TD}>
+      <div role="status" className="flex items-center gap-3 text-sm">
+        <span className="font-semibold text-slate-800">{n} selected</span>
+        {children}
+        <button type="button" onClick={onClear} className="text-sm font-medium text-slate-600 hover:text-slate-900">Clear</button>
+      </div>
+    </td>
   )
 }
 function MoreButton({ total, shown, onClick }) {
@@ -230,36 +236,35 @@ export default function Applicants() {
             <SectionHead id="apps-h" title={see ? `Applicants · ${shown.length}` : 'Applicants'}
               note={people.length ? 'Best match first. Students see your decisions on My Applications; email and phone show once you shortlist.'
                 : 'Students see this job in Job Matches, marked "Apply on SkillMap", and apply with their SkillMap profile.'}
-              more={sel.length > 0 ? (
-                <Picked n={sel.length} onClear={() => setPicked([])}>
-                  {toShortlist(sel) > 0 && <button type="button" onClick={() => setAskMany('shortlisted')} className={`${PICK_BTN} bg-blue-600 hover:bg-blue-700`}>
-                    Shortlist{toShortlist(sel) < sel.length ? ` ${toShortlist(sel)}` : ''}</button>}
-                  <button type="button" onClick={() => setAskMany('rejected')} className={`${PICK_BTN} bg-rose-600 hover:bg-rose-700`}>Mark as Not selected</button>
-                </Picked>
-              ) : !see && <MoreButton total={shown.length} shown={appsNow.length} onClick={() => seeAll('applicants')} />} />
+              more={!see && <MoreButton total={shown.length} shown={appsNow.length} onClick={() => seeAll('applicants')} />} />
             {people.length === 0 ? <p data-row className={`${CARD} px-5 py-3.5 text-sm text-slate-500`}>No applicants yet.</p> : (
             /* 21 Oct (her report: not scrollable in a narrow window): the table keeps a minimum width, the column titles
                sit in their own strip and only the rows scroll under them (sideways too; the strip follows) */
             <div className={`${CARD} ${see ? 'min-h-0' : ''} flex flex-col overflow-hidden`}>
               {/* 25 Oct (her ask): a tick box in the title strip selects every applicant shown that can still be
                   decided (Applied or Shortlisted); the strip is a layout-only table, so only that box is read out */}
-              <div ref={strip} className="shrink-0 overflow-hidden [scrollbar-gutter:stable] bg-slate-50 border-b border-slate-200">
-                <table role="presentation" className="w-full min-w-[48rem] table-fixed text-sm">
+              <div ref={strip} className={`shrink-0 overflow-hidden scrollbar-gutter-stable border-b ${sel.length ? 'bg-blue-50 border-blue-200' : 'bg-slate-50 border-slate-200'}`}>
+                <table role="presentation" className="w-full min-w-3x1 table-fixed text-sm">
                   {APP_COLS}
                   <thead className="text-left text-xs font-semibold text-slate-500">
-                    <tr><td className="pl-5 py-3">
+                    <tr><td className="pl-5 h-11 py-0 align-middle">
                       {selectable.length > 0 && <input type="checkbox" aria-label={`Select all ${selectable.length} still to decide`}
                         title="Select all still to decide" checked={allTicked} onChange={tickAll}
                         ref={el => { if (el) el.indeterminate = sel.length > 0 && !allTicked }} className="w-4 h-4 accent-blue-700 align-middle" />}
                     </td>
-                      <td aria-hidden="true" className="px-5 py-3">Student</td><td aria-hidden="true" className="px-5 py-3">Required skills they have</td>
-                      <td aria-hidden="true" className="px-5 py-3">Applied</td><td aria-hidden="true" className="px-5 py-3">Status</td></tr>
+                      {sel.length > 0 ? (
+                        <Picked n={sel.length} onClear={() => setPicked([])}>
+                          {toShortlist(sel) > 0 && <button type="button" onClick={() => setAskMany('shortlisted')} className={`${PICK_BTN} bg-blue-600 hover:bg-blue-700`}>
+                            Shortlist{toShortlist(sel) < sel.length ? ` ${toShortlist(sel)}` : ''}</button>}
+                          <button type="button" onClick={() => setAskMany('rejected')} className={`${PICK_BTN} bg-rose-600 hover:bg-rose-700`}>Mark as Not selected</button>
+                        </Picked>
+                      ) : <Titles names={['Student', 'Required skills they have', 'Applied', 'Status']} />}</tr>
                   </thead>
                 </table>
               </div>
-              <div className="relative min-h-0 overflow-auto [scrollbar-gutter:stable]"
+              <div className="relative min-h-0 overflow-auto scrollbar-gutter-stable"
                 onScroll={e => { if (strip.current) strip.current.scrollLeft = e.currentTarget.scrollLeft }}>
-              <table className="w-full min-w-[48rem] table-fixed text-sm">
+              <table className="w-full min-w-3x1 table-fixed text-sm">
                 {APP_COLS}
                 {/* real column titles for screen readers; the visible ones are the strip above */}
                 <thead>
@@ -320,29 +325,28 @@ export default function Applicants() {
           <section aria-labelledby="fit-job-h" className={`flex flex-col gap-3 ${see ? 'min-h-0' : 'mt-1'}`}>
             <SectionHead id="fit-job-h" title={see ? `Graduates who fit this job · ${fitList.length}` : 'Graduates who fit this job'}
               note="Visible students who haven't applied, best match first. Tick the ones you'd like to invite."
-              more={selG.length > 0 ? (
-                <Picked n={selG.length} onClear={() => setTicked([])}>
-                  <button type="button" onClick={() => setAskInvite(true)} className={`${PICK_BTN} bg-blue-600 hover:bg-blue-700`}>Invite {selG.length} selected</button>
-                </Picked>
-              ) : !see && <MoreButton total={fitList.length} shown={gradsNow.length} onClick={() => seeAll('graduates')} />} />
+              more={!see && <MoreButton total={fitList.length} shown={gradsNow.length} onClick={() => seeAll('graduates')} />} />
             <div className={`${CARD} ${see ? 'min-h-0' : ''} flex flex-col overflow-hidden`}>
-              <div ref={gstrip} className="shrink-0 overflow-hidden [scrollbar-gutter:stable] bg-slate-50 border-b border-slate-200">
-                <table role="presentation" className="w-full min-w-[48rem] table-fixed text-sm">
+              <div ref={gstrip} className={`shrink-0 overflow-hidden scrollbar-gutter-stable border-b ${selG.length ? 'bg-blue-50 border-blue-200' : 'bg-slate-50 border-slate-200'}`}>
+                <table role="presentation" className="w-full min-w-3x1 table-fixed text-sm">
                   {APP_COLS}
                   <thead className="text-left text-xs font-semibold text-slate-500">
-                    <tr><td className="pl-5 py-3">
+                    <tr><td className="pl-5 h-11 py-0 align-middle">
                       {invitable.length > 0 && <input type="checkbox" aria-label={`Select all ${Math.min(invitable.length, 50)} not invited yet`}
                         title="Select all not invited yet" checked={allG} onChange={tickAllG}
                         ref={el => { if (el) el.indeterminate = selG.length > 0 && !allG }} className="w-4 h-4 accent-blue-700 align-middle" />}
                     </td>
-                      <td aria-hidden="true" className="px-5 py-3">Graduate</td><td aria-hidden="true" className="px-5 py-3">Required skills they have</td>
-                      <td aria-hidden="true" className="px-5 py-3">Nice to have</td><td aria-hidden="true" className="px-5 py-3">Invitation</td></tr>
+                      {selG.length > 0 ? (
+                        <Picked n={selG.length} onClear={() => setTicked([])}>
+                          <button type="button" onClick={() => setAskInvite(true)} className={`${PICK_BTN} bg-blue-600 hover:bg-blue-700`}>Invite {selG.length} selected</button>
+                        </Picked>
+                      ) : <Titles names={['Graduate', 'Required skills they have', 'Nice to have', 'Invitation']} />}</tr>
                   </thead>
                 </table>
               </div>
-              <div className="relative min-h-0 overflow-auto [scrollbar-gutter:stable]"
+              <div className="relative min-h-0 overflow-auto scrollbar-gutter-stable"
                 onScroll={e => { if (gstrip.current) gstrip.current.scrollLeft = e.currentTarget.scrollLeft }}>
-              <table className="w-full min-w-[48rem] table-fixed text-sm">
+              <table className="w-full min-w-3x1 table-fixed text-sm">
                 {APP_COLS}
                 <thead>
                   <tr>{['Select', 'Graduate', 'Required skills they have', 'Nice to have', 'Invitation'].map(n =>

@@ -20,7 +20,8 @@ function natural(li) {
 
 // `last`: the column's last card, which always reaches the column's bottom (her review: the columns' bottoms line up),
 // so it isn't capped at its rows; spare height stays at the bottom of the card.
-export default function FitList({ items, renderItem, className = '', max = 5, least = 1, fill = false, last = false, onShown }) {
+// `after`: shown right under the rows once every row is showing (e.g. "that's everything").
+export default function FitList({ items, renderItem, className = '', max = 5, least = 1, fill = false, last = false, after = null, onShown }) {
   const box = useRef(null)
   const low = Math.min(least, items.length)
   const [fit, setFit] = useState(Math.min(max, items.length))
@@ -60,6 +61,7 @@ export default function FitList({ items, renderItem, className = '', max = 5, le
       {/* fill: while some rows are hidden, the rows shown share the height left over (less than a row), so no blank
           strip sits under them; when all rows show, they keep their own height */}
       <ul className={`divide-y divide-slate-100 ${fill && shown.length < items.length ? 'h-full flex flex-col [&>li]:grow' : ''}`}>{shown.map(renderItem)}</ul>
+      {shown.length === items.length && after}
     </div>
   )
 }

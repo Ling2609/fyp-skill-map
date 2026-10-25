@@ -151,6 +151,7 @@ export default function EmployerDashboard() {
       <Link to={`/employer/applications/${a.id}`} className={ACTION}>Review</Link>
     </li>
   )
+  const manyJobs = new Set((data?.graduates || []).map(g => g.job_id)).size > 1
   const jobDot = (id) => JOB_DOT[Math.max(0, (data?.open_jobs || []).findIndex(j => j.id === id)) % JOB_DOT.length]
   const gradRow = g => (
     <li key={g.student_id} className="px-5 py-3 flex items-center gap-3">
@@ -160,16 +161,20 @@ export default function EmployerDashboard() {
         {/* 24 Oct: the nice-to-have skills they also have, which put them higher in the list */}
         <p className="text-xs text-slate-500 truncate">{g.programme}{g.nice > 0 && ` · +${g.nice} nice to have`}</p>
       </div>
-      <span className="w-40 shrink-0 flex items-center gap-1.5 text-xs font-medium text-slate-700 min-w-0" title={`Fits ${g.job_title}`}>
+      {/* only when the graduates fit different jobs; with one open job every row would repeat the same name */}
+      {manyJobs && <span className="w-40 shrink-0 flex items-center gap-1.5 text-xs font-medium text-slate-700 min-w-0" title={`Fits ${g.job_title}`}>
         <JobDot cls={jobDot(g.job_id)} /><span className="truncate"><span className="sr-only">Fits </span>{g.job_title}</span>
-      </span>
+      </span>}
       <Match have={g.have} total={g.total} />
-      {g.invite
-        ? <InviteLabel invite={g.invite} />
-        : <button onClick={() => invite(g)} disabled={inviting === g.student_id}
-            className="shrink-0 text-sm font-medium text-blue-700 border border-blue-200 rounded-lg px-3 py-1 hover:bg-blue-50 disabled:opacity-40">
-            {inviting === g.student_id ? <Busy>Inviting…</Busy> : 'Invite'}
-          </button>}
+      {/* a fixed-width last column, so "Invited 25 Oct" and the Invite button keep every row's columns in line */}
+      <span className="w-36 shrink-0 min-w-0 flex justify-end">
+        {g.invite
+          ? <InviteLabel invite={g.invite} className="max-w-full" />
+          : <button onClick={() => invite(g)} disabled={inviting === g.student_id}
+              className="shrink-0 text-sm font-medium text-blue-700 border border-blue-200 rounded-lg px-3 py-1 hover:bg-blue-50 disabled:opacity-40">
+              {inviting === g.student_id ? <Busy>Inviting…</Busy> : 'Invite'}
+            </button>}
+      </span>
     </li>
   )
   // 25 Oct (her review: "no need to show all, show a few; See all goes to the relevant page"): each list shows the rows
@@ -328,17 +333,19 @@ export default function EmployerDashboard() {
               {/* only a card with rows stretches; an empty one would just be a large blank card */}
               <section className={`${card} flex-1`} aria-labelledby="fit-h">
                 <div className="px-5 pt-4 pb-3">
-                  <div className="flex items-baseline justify-between gap-3">
-                    <h2 id="fit-h" className="text-base font-semibold text-slate-900">Graduates who fit your jobs</h2>
+                  <h2 id="fit-h" className="text-base font-semibold text-slate-900">Graduates who fit your jobs</h2>
+                  {/* 25 Oct (her review): "See all" on the description's line, as on View applicants */}
+                  <div className="mt-1 flex items-baseline justify-between gap-3">
+                    <p className="text-xs text-slate-500 min-w-0">Not applied yet, best match first. Invite several at once from the job's page.</p>
                     {nGrads < data.graduates.length && <Link to={gradJob ? `/employer/jobs/${gradJob}?see=graduates` : '/employer/jobs'} className={SEE}>
                       {gradJob ? 'See all →' : 'See all in My Jobs →'}</Link>}
                   </div>
-                  <p className="text-xs text-slate-500 mt-1">Not applied yet, best match first. Invite several at once from the job's page.</p>
                 </div>
                 {data.graduates.length === 0 ? (
                   <p className="px-5 pb-4 text-sm text-slate-500">{data.open_jobs.length ? 'No visible graduate has at least half of your required skills yet. New profiles are matched as students add them.' : 'Open a job to see graduates who fit it.'}</p>
                 ) : (
-                  <FitList fill={lg} last onShown={setNGrads} className="border-t border-slate-200" items={data.graduates} renderItem={gradRow} />
+                  <FitList fill={lg} last onShown={setNGrads} className="border-t border-slate-200" items={data.graduates} renderItem={gradRow}
+                    after={<p className="border-t border-slate-100 px-5 py-3 text-xs text-slate-500">That's everyone who fits for now. New profiles are matched as students add them.</p>} />
                 )}
               </section>
             </div>
@@ -367,7 +374,7 @@ export default function EmployerDashboard() {
                           <li key={j.id} className="px-5 py-3.5">
                             <div className="flex items-baseline justify-between gap-3">
                               <p className="flex items-center gap-2 text-sm font-semibold text-slate-900 min-w-0">
-                                {data.open_jobs.length > 1 && <JobDot cls={jobDot(j.id)} />}<span className="truncate">{j.title}</span></p>
+                                {manyJobs && <JobDot cls={jobDot(j.id)} />}<span className="truncate">{j.title}</span></p>
                               <Link to={`/employer/jobs/${j.id}`} className="shrink-0 text-sm font-medium text-blue-700 hover:underline">View</Link>
                             </div>
                             <p className="text-xs text-slate-500 mt-0.5">
@@ -429,8 +436,10 @@ export default function EmployerDashboard() {
                 {data.activity.length === 0
                   ? <p className="px-5 pb-4 text-sm text-slate-500">Nothing in the last 14 days. Applications, your status changes and invitations will be listed here.</p>
                   : (<>
-                    <FitList fill={lg} last max={8} className="border-t border-slate-200" items={data.activity} renderItem={(e, i) => <ActivityRow key={i} e={e} />} />
-                    {data.activity.length < 3 && <p className="px-5 pb-3 text-xs text-slate-500">New applications and status changes appear here.</p>}
+                    {/* 25 Oct (her review: blank space under one activity): once every event shows, a quiet line right
+                        under the last one says that's all, so the empty part of the card reads as finished */}
+                    <FitList fill={lg} last max={8} className="border-t border-slate-200" items={data.activity} renderItem={(e, i) => <ActivityRow key={i} e={e} />}
+                      after={<p className="border-t border-slate-100 px-5 py-3 text-xs text-slate-500">That's everything from the last 14 days. New applications, your decisions and invitations appear here.</p>} />
                   </>)}
               </section>
             </div>

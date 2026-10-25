@@ -11,8 +11,9 @@ export default function InviteLabel({ invite, className = '' }) {
   if (!invite) return null
   const text = invite.state === 'invited' ? `Invited ${fmt(invite.invited_at)}` : invite.label
   return (
-    <span title={invite.state === 'declined' ? `Declined on ${fmt(invite.at)}` : invite.state === 'no_reply'
-      ? `Invited ${fmt(invite.invited_at)}; no answer within 14 days` : undefined}
+    // the tooltip always carries the full text, so a label cut short in a narrow column ("Declined · Alrea…") can be read
+    <span title={invite.state === 'declined' ? `${invite.label} (on ${fmt(invite.at)})` : invite.state === 'no_reply'
+      ? `Invited ${fmt(invite.invited_at)}; no answer within 14 days` : text}
       className={`shrink-0 max-w-56 truncate text-xs font-semibold rounded-full px-2.5 py-1 ${CLS[invite.state]} ${className}`}>
       {text}
     </span>
