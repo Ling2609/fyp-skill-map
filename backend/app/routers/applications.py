@@ -9,7 +9,7 @@ to the student as "Not selected" (her 9 Oct mock-up, board 6).
 from datetime import datetime, timezone
 
 from fastapi import APIRouter, Depends, HTTPException
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from sqlalchemy import inspect
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
@@ -30,6 +30,11 @@ def check_applications_schema():
     job_invitations tables are new tables, so main.py's create_all makes them; no migration needed.)"""
     if "applications" not in inspect(engine).get_table_names():
         raise RuntimeError("Database not updated: run  python migrations/migrate_applications.py  "
+                           "from the backend folder, then start the backend again.")
+    # 25 Oct: the reason a student gives when declining an invitation
+    if "job_invitations" in inspect(engine).get_table_names() and \
+            "decline_reason" not in {c["name"] for c in inspect(engine).get_columns("job_invitations")}:
+        raise RuntimeError("Database not updated: run  python migrations/migrate_invitation_replies.py  "
                            "from the backend folder, then start the backend again.")
 
 
@@ -210,7 +215,9 @@ def _open_invitations(student: User, db: Session):
     rows = (db.query(JobInvitation, Job).join(Job, Job.id == JobInvitation.job_id)
             .filter(JobInvitation.student_id == student.id, JobInvitation.dismissed_at.is_(None))
             .order_by(JobInvitation.created_at.desc()).all())
-    return [(i, j) for i, j in rows if j.id not in applied and _job_open(j)]
+    from app.services.invitations import expired
+    # 25 Oct: one with no answer ends after 14 days (the employer then sees "No reply")
+    return [(i, j) for i, j in rows if j.id not in applied and _job_open(j) and not expired(i)]
 
 
 @router.get("/invitations")
@@ -231,16 +238,25 @@ def invitations(student: User = Depends(require_student), db: Session = Depends(
 
 class DismissIn(BaseModel):
     dismissed: bool = True
+    reason: str | None = Field(default=None, max_length=20)    # 25 Oct: optional (app/services/invitations.py)
+    note: str | None = Field(default=None, max_length=400)     # "other": her own words (checked to 200 below)
 
 
 @router.patch("/invitations/{inv_id}")
 def dismiss_invitation(inv_id: int, data: DismissIn, student: User = Depends(require_student), db: Session = Depends(get_db)):
-    """"Not interested": the invitation goes away for the student (the employer isn't told)."""
+    """"No thanks": the invitation goes away for the student; the employer sees "Declined" and the reason, if one was
+    given (25 Oct, her option D: recruiters regard a polite no better than silence; references.md). She can still
+    apply while the job is open. dismissed=false takes it back (Undo)."""
+    from app.services.invitations import check_reason
     i = db.query(JobInvitation).filter(JobInvitation.id == inv_id, JobInvitation.student_id == student.id).first()
     if not i:
         raise HTTPException(status_code=404, detail="Invitation not found.")
     from datetime import datetime, timezone
-    i.dismissed_at = datetime.now(timezone.utc) if data.dismissed else None
+    if data.dismissed:
+        i.decline_reason, i.decline_note = check_reason(data.reason, data.note)
+        i.dismissed_at = datetime.now(timezone.utc)
+    else:
+        i.dismissed_at, i.decline_reason, i.decline_note = None, None, None
     db.commit()
     return {"id": i.id, "dismissed": i.dismissed_at is not None}
 

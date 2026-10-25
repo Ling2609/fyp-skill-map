@@ -11,6 +11,8 @@ import { skillName } from '../../skillName'
 import { ADMIN_COUNTS_CHANGED } from '../../components/Sidebar'
 import { greeting } from '../../greeting'
 import { useLatest } from '../../components/useLatest'
+import DeclineInvite from '../../components/DeclineInvite'
+import { errText } from './profileUtils'
 
 // Dashboard (9 Oct redesign, her choice after the "Dashboard on One Screen" mock-ups). A dashboard tells the student
 // what she doesn't know yet (NN/g: "communicating critical information"), so:
@@ -376,11 +378,20 @@ export default function Dashboard() {
   // 12 Oct (her review): an employer's invitation to apply shows here, where she looks first; only when there is one
   const [invites, setInvites] = useState([])
   useEffect(() => { api.get('/applications/invitations').then(res => setInvites(res.data)).catch(() => {}) }, [])
-  const dismissInvite = (inv) => {
-    setInvites(list => list.filter(i => i.id !== inv.id))
-    api.patch(`/applications/invitations/${inv.id}`, { dismissed: true })
-      .then(() => window.dispatchEvent(new Event(ADMIN_COUNTS_CHANGED)))
-      .catch(() => setInvites(list => [inv, ...list]))
+  // 25 Oct (option D): "No thanks" asks for an optional reason first; the employer sees the answer
+  const [declining, setDeclining] = useState(null)
+  const [declineBusy, setDeclineBusy] = useState(false)
+  const [declineError, setDeclineError] = useState('')
+  const declineInvite = (reason, note) => {
+    const inv = declining
+    setDeclineBusy(true); setDeclineError('')
+    api.patch(`/applications/invitations/${inv.id}`, { dismissed: true, reason, note })
+      .then(() => {
+        setInvites(list => list.filter(i => i.id !== inv.id)); setDeclining(null)
+        window.dispatchEvent(new Event(ADMIN_COUNTS_CHANGED))
+      })
+      .catch(err => setDeclineError(errText(err, "Couldn't send your answer. Try again.")))
+      .finally(() => setDeclineBusy(false))
   }
 
   // Only sets state when an answer comes back (so it can run from an effect)
@@ -473,12 +484,14 @@ export default function Dashboard() {
                 </p>
                 <Link to={`/jobs/${encodeURIComponent(inv.job_ref)}`} state={{ from: 'Dashboard' }}
                   className="text-sm font-medium text-violet-800 bg-white border border-violet-200 rounded-lg px-3.5 py-1.5 hover:bg-violet-100">View job</Link>
-                <button onClick={() => dismissInvite(inv)} className="text-sm text-slate-500 hover:text-slate-800">Not interested</button>
+                <button onClick={() => { setDeclineError(''); setDeclining(inv) }} className="text-sm text-slate-500 hover:text-slate-800">No thanks</button>
               </div>
             ))}
             {invites.length > 3 && <Link to="/applications" className="block px-5 py-2.5 text-sm font-medium text-violet-800 hover:underline">See all {invites.length} in My Applications</Link>}
           </section>
         )}
+        {declining && <DeclineInvite inv={declining} busy={declineBusy} error={declineError}
+          onCancel={() => setDeclining(null)} onDecline={declineInvite} />}
 
         {emptyProfile ? <StartCard onGo={(tab) => navigate(`/profile?tab=${tab}`)} /> : !goalData ? (
           <DashboardSkeleton />

@@ -4,6 +4,7 @@ import api from '../../api'
 import PageHeader from '../../components/PageHeader'
 import { ADMIN_COUNTS_CHANGED } from '../../components/Sidebar'
 import { errText } from './profileUtils'
+import DeclineInvite from '../../components/DeclineInvite'
 import { Bar, LoadingLabel } from '../../components/Skeleton'
 import InfoTip from '../../components/InfoTip'
 import EmployerRecord from '../../components/EmployerRecord'
@@ -403,11 +404,20 @@ export default function MyApplications() {
     api.get('/applications/outside').then(res => setOutside(res.data)).catch(() => {})
     api.get('/applications/invitations').then(res => setInvites(res.data)).catch(() => {})
   }, [])
-  const dismiss = (inv) => {
-    setInvites(list => list.filter(i => i.id !== inv.id))
-    api.patch(`/applications/invitations/${inv.id}`, { dismissed: true })
-      .then(() => window.dispatchEvent(new Event(ADMIN_COUNTS_CHANGED)))
-      .catch(err => { setInvites(list => [inv, ...list]); setError(errText(err, "Couldn't update the invitation. Try again.")) })
+  // 25 Oct (option D): "No thanks" asks for an optional reason first; the employer sees the answer
+  const [declining, setDeclining] = useState(null)
+  const [declineBusy, setDeclineBusy] = useState(false)
+  const [declineError, setDeclineError] = useState('')
+  const declineInvite = (reason, note) => {
+    const inv = declining
+    setDeclineBusy(true); setDeclineError('')
+    api.patch(`/applications/invitations/${inv.id}`, { dismissed: true, reason, note })
+      .then(() => {
+        setInvites(list => list.filter(i => i.id !== inv.id)); setDeclining(null)
+        window.dispatchEvent(new Event(ADMIN_COUNTS_CHANGED))
+      })
+      .catch(err => setDeclineError(errText(err, "Couldn't send your answer. Try again.")))
+      .finally(() => setDeclineBusy(false))
   }
   const setStatus = (o, status) => {
     const prev = o.status
@@ -481,7 +491,7 @@ export default function MyApplications() {
               <p className="text-sm text-slate-600">{inv.title}{inv.match && ` · you have ${inv.match} skills`} · {fmtDay(inv.invited_at)}</p>
             </div>
             <Link to={`/jobs/${encodeURIComponent(inv.job_ref)}`} state={{ from: 'My Applications' }} className="text-sm font-medium text-violet-800 bg-white border border-violet-200 rounded-lg px-3.5 py-1.5 hover:bg-violet-100">View job</Link>
-            <button onClick={() => dismiss(inv)} className="text-sm text-slate-500 hover:text-slate-800">Not interested</button>
+            <button onClick={() => { setDeclineError(''); setDeclining(inv) }} className="text-sm text-slate-500 hover:text-slate-800">No thanks</button>
           </section>
         ))}
 
@@ -534,6 +544,8 @@ export default function MyApplications() {
 
       </div></div>
       {toast.ui}
+      {declining && <DeclineInvite inv={declining} busy={declineBusy} error={declineError}
+        onCancel={() => setDeclining(null)} onDecline={declineInvite} />}
     </div>
   )
 }

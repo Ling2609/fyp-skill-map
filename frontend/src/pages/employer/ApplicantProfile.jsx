@@ -5,10 +5,11 @@ import PageHeader from '../../components/PageHeader'
 import BackLink from '../../components/BackLink'
 import { errText } from '../student/profileUtils'
 import { ApplicantCards, ApplicantHeading, VersionBar } from '../../components/EmployerView'
-import { STATUSES, STATUS_CLS, fmtDay } from './statuses'
+import { STATUSES, STATUS_CLS } from './statuses'
 import { useStatusChange } from './statusChange'
 import { CardSkeleton, LoadingLabel } from '../../components/Skeleton'
 import { Busy } from '../../components/Spinner'
+import InviteLabel from '../../components/InviteLabel'
 
 // Employer > one applicant (11 Oct, batch 2; mock-up board 4). Their match for this job, each required skill with
 // where it comes from (module, project, certificate), then the showcase: projects, strongest modules (grades only if
@@ -43,7 +44,8 @@ export default function ApplicantProfile() {
   const invite = () => {
     setInviting(true); setError('')
     api.post('/employer/invitations', { job_id: data.job.id, student_id: Number(studentId) })
-      .then(res => setData(d => ({ ...d, invited_at: res.data.invited_at })))
+      .then(res => setData(d => ({ ...d, invited_at: res.data.invited_at,
+        invite: { state: 'invited', label: 'Invited', at: res.data.invited_at, invited_at: res.data.invited_at } })))
       .catch(err => setError(errText(err, "Couldn't send the invitation. Try again.")))
       .finally(() => setInviting(false))
   }
@@ -81,8 +83,8 @@ export default function ApplicantProfile() {
           )}
           {data && !data.application && (data.applied_application_id
             ? <Link to={`/employer/applications/${data.applied_application_id}`} className="shrink-0 text-sm font-medium text-blue-700 hover:underline">They applied: open the application</Link>
-            : data.invited_at
-              ? <span className="shrink-0 text-sm font-medium text-blue-700 bg-blue-50 border border-blue-200 rounded-lg px-3.5 py-2">Invited {fmtDay(data.invited_at)}</span>
+            : data.invite
+              ? <InviteLabel invite={data.invite} className="text-sm px-3.5 py-2" />    /* 25 Oct: Invited / Declined / No reply */
               : <button onClick={invite} disabled={inviting}
                   className="shrink-0 px-4 py-2 text-sm font-medium rounded-lg bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-40">
                   {inviting ? <Busy>Inviting…</Busy> : 'Invite to apply'}

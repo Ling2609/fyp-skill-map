@@ -9,6 +9,7 @@ import { useStatusChange } from './statusChange'
 import ConfirmDecision from './ConfirmDecision'
 import { ADMIN_COUNTS_CHANGED } from '../../components/Sidebar'
 import { CardSkeleton, LoadingLabel } from '../../components/Skeleton'
+import InviteLabel from '../../components/InviteLabel'
 
 // Employer > one job's applicants (11 Oct, batch 2; her pick 3A "applicants as a list"). Best match first: the
 // share of the job's required skills each student has, the same match the student sees. Changing a status shows on
@@ -34,6 +35,28 @@ export default function Applicants() {
   const load = () => api.get(`/employer/jobs/${jobId}/applicants`).then(res => setData(res.data))
     .catch(err => setError(errText(err, "Couldn't load the applicants.")))
   useEffect(() => { load() }, [jobId])   // eslint-disable-line react-hooks/exhaustive-deps
+
+  // 25 Oct (her plan; references.md "Invitations"): graduates who fit THIS job and haven't applied; tick some and
+  // "Invite N selected". No "invite all": platforms allow bulk only for people the employer picks by hand.
+  const [grads, setGrads] = useState(null)
+  const [ticked, setTicked] = useState([])
+  const [askInvite, setAskInvite] = useState(false)
+  const [inviting, setInviting] = useState(false)
+  const loadGrads = () => api.get(`/employer/jobs/${jobId}/graduates`).then(res => setGrads(res.data)).catch(() => setGrads([]))
+  useEffect(() => { loadGrads() }, [jobId])   // eslint-disable-line react-hooks/exhaustive-deps
+  const tick = (id) => setTicked(t => t.includes(id) ? t.filter(x => x !== id) : [...t, id])
+  const inviteSelected = () => {
+    setInviting(true)
+    api.post('/employer/invitations/bulk', { job_id: Number(jobId), student_ids: ticked })
+      .then(res => {
+        const n = res.data.invited.length, skip = res.data.skipped.length
+        setNotice(`${n} graduate${n === 1 ? '' : 's'} invited. They see it on their Dashboard and can apply or say No thanks.`
+          + (skip ? ` ${skip} couldn't be invited (they applied or were invited meanwhile).` : ''))
+        setTicked([]); setAskInvite(false); loadGrads()
+      })
+      .catch(err => { setAskInvite(false); setError(errText(err, "Couldn't send the invitations. Try again.")) })
+      .finally(() => setInviting(false))
+  }
 
   const toggle = (id) => setPicked(p => p.includes(id) ? p.filter(x => x !== id) : [...p, id])
   // 21 Oct (her question): Shortlist several as well as Not selected (references.md "Actions on several applicants
@@ -118,7 +141,9 @@ export default function Applicants() {
             )}
             {/* 21 Oct (her report: not scrollable in a narrow window): as on My Jobs, the table keeps a minimum width, the
                 column titles sit in their own strip and only the rows scroll under them (sideways too; the strip follows) */}
-            <div className="min-h-0 flex flex-col bg-white border border-slate-200 rounded-2xl overflow-hidden">
+            {/* 25 Oct: with "Graduates who fit this job" below, the table keeps its own height (up to 70% of the screen,
+                then its rows scroll) instead of shrinking; the page scrolls down to the graduates */}
+            <div className={`${grads?.length && job?.status === 'open' ? 'shrink-0 max-h-[70vh]' : 'min-h-0'} flex flex-col bg-white border border-slate-200 rounded-2xl overflow-hidden`}>
               <div ref={strip} aria-hidden="true" className="shrink-0 overflow-hidden [scrollbar-gutter:stable] bg-slate-50 border-b border-slate-200">
                 <table className="w-full min-w-[48rem] table-fixed text-sm">
                   {APP_COLS}
@@ -185,6 +210,42 @@ export default function Applicants() {
             <p className="text-xs text-slate-600">Best match first. The student sees each status on their "My Applications" page (Rejected shows as "Not selected"). Email and phone appear after you shortlist someone.</p>
           </>
         )}
+
+        {/* 25 Oct: graduates who fit this job and haven't applied; invite the ones you pick */}
+        {job?.status === 'open' && grads && grads.length > 0 && (
+          <section aria-labelledby="fit-job-h" className="shrink-0 bg-white border border-slate-200 rounded-2xl overflow-hidden">
+            <div className="px-5 pt-4 pb-3">
+              <h2 id="fit-job-h" className="text-base font-semibold text-slate-900">Graduates who fit this job ({grads.length})</h2>
+              <p className="text-xs text-slate-500 mt-1">Visible students who haven't applied, best match first. Tick the ones you'd like to invite.</p>
+            </div>
+            {ticked.length > 0 && (
+              <div className="mx-5 mb-3 flex items-center gap-3 bg-blue-50 border border-blue-200 rounded-xl px-4 py-2.5 text-sm">
+                <span className="font-medium text-slate-800">{ticked.length} selected</span>
+                <button type="button" onClick={() => setAskInvite(true)}
+                  className="ml-auto text-sm font-medium px-3.5 py-1.5 rounded-lg bg-blue-600 text-white hover:bg-blue-700">Invite {ticked.length} selected</button>
+                <button type="button" onClick={() => setTicked([])} className="text-sm text-slate-600 hover:text-slate-900">Clear</button>
+              </div>
+            )}
+            <ul className="border-t border-slate-200 divide-y divide-slate-100">
+              {grads.map(g => (
+                <li key={g.student_id} className="px-5 py-3 flex items-center gap-3.5">
+                  <span className="w-4 shrink-0">
+                    {!g.invite && <input type="checkbox" aria-label={`Select ${g.name}`} checked={ticked.includes(g.student_id)}
+                      onChange={() => tick(g.student_id)} className="w-4 h-4 accent-blue-700" />}
+                  </span>
+                  <div className="flex-1 min-w-0">
+                    <Link to={`/employer/graduates/${g.student_id}?job=${jobId}`} className="block text-sm font-semibold text-slate-900 truncate hover:text-blue-700">{g.name}</Link>
+                    <p className="text-xs text-slate-500 truncate">{g.programme}{g.nice > 0 && ` · +${g.nice} nice to have`}</p>
+                  </div>
+                  <span className={`shrink-0 text-xs font-semibold rounded-full px-2.5 py-1 ${g.have === g.total ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-800'}`}>
+                    {g.have} of {g.total} required
+                  </span>
+                  <span className="w-40 shrink-0 flex justify-end">{g.invite && <InviteLabel invite={g.invite} />}</span>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
       </div>
       {status.ui}
       {askMany === 'rejected' && <ConfirmDecision d={{ action: 'Mark as Not selected', danger: true }} busy={savingMany}
@@ -196,6 +257,11 @@ export default function Applicants() {
         text={<>They will see <b>"Shortlisted"</b> for {job.title} on their My Applications page, and their email and
           phone will show on their profiles for you.{toShortlist < picked.length ? ' Only the ones still at Applied are shortlisted.' : ''}</>}
         onConfirm={many} onCancel={() => setAskMany(null)} />}
+      {askInvite && <ConfirmDecision d={{ action: 'Invite' }} busy={inviting}
+        title={`Invite ${ticked.length} ${ticked.length === 1 ? 'graduate' : 'graduates'} to apply for ${job.title}?`}
+        text={<>Each sees your invitation on their Dashboard and can apply or say No thanks. You see their answer here;
+          with no answer in 14 days it shows "No reply".</>}
+        onConfirm={inviteSelected} onCancel={() => setAskInvite(false)} />}
     </div>
   )
 }

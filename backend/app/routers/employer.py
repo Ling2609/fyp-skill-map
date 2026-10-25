@@ -31,6 +31,7 @@ from app.models.application import Application, ApplicationEvent, JobInvitation
 from app.models.job import Job, JobSkill
 from app.models.user import User, UserRole
 from app.routers.auth import get_current_user
+from app.services.invitations import answered_by as invite_answered, state as invite_state
 from app.services.job_skill_store import check_job_skills, skill_key
 from app.services.transparency import (CLOSE_REASONS, DEFAULT_DECIDE_DAYS, EXTEND_DAYS, WAITING, clear_reason,
                                        decide_by_from, past_date, set_reason)
@@ -459,8 +460,9 @@ def _applicant(a: Application, student: User, job: Job, db: Session) -> dict:
     return {"id": a.id, "name": f"{student.first_name} {student.last_name}", "programme": _programme(student, db),
             # 12 Oct: shown bold with "Not opened" until the employer opens the profile (like an unread email)
             "opened": first_seen(a, events) is not None,
-            "invited": db.query(JobInvitation).filter(JobInvitation.job_id == job.id,
-                                                      JobInvitation.student_id == student.id).first() is not None,
+            # 25 Oct: only when the application answers an open invitation (not after "No thanks" / "No reply")
+            "invited": invite_answered(db.query(JobInvitation).filter(JobInvitation.job_id == job.id,
+                                                                      JobInvitation.student_id == student.id).first(), a),
             "status": a.status, "applied_at": a.created_at, "status_changed_at": a.status_changed_at,
             "have": have, "total": total, "missing": [m["job_skill"] for m in gap["missing_skills"]] if gap else [],
             "reason": a.reason, "note": a.note}
@@ -681,7 +683,7 @@ def _graduates_who_fit(open_jobs: list[Job], db: Session, limit: int | None = FI
     """Visible students who haven't applied, each with the open job they fit best, best match first."""
     applied = {(a.job_id, a.student_id) for a in db.query(Application).filter(
         Application.job_id.in_([j.id for j in open_jobs]))}
-    invited = {(i.job_id, i.student_id): i.created_at for i in db.query(JobInvitation).filter(
+    invited = {(i.job_id, i.student_id): i for i in db.query(JobInvitation).filter(
         JobInvitation.job_id.in_([j.id for j in open_jobs]))}
     best = {}
     for student in _visible_students(db):
@@ -702,7 +704,9 @@ def _graduates_who_fit(open_jobs: list[Job], db: Session, limit: int | None = FI
                 best[student.id] = {"student_id": student.id, "name": f"{student.first_name} {student.last_name}",
                                     "programme": _programme(student, db), "job_id": job.id, "job_title": job.job_title,
                                     "have": have, "total": total, "ratio": ratio, "nice": nice,
-                                    "invited_at": invited.get((job.id, student.id))}
+                                    # 25 Oct: Invited / Declined (+ reason) / No reply (app/services/invitations.py)
+                                    "invite": invite_state(invited.get((job.id, student.id))),
+                                    "invited_at": getattr(invited.get((job.id, student.id)), "created_at", None)}
     return sorted(best.values(), key=lambda g: (-g["ratio"], -g["nice"], -g["have"], g["name"]))[:limit]
 
 
@@ -812,6 +816,11 @@ def _activity(jobs: list[Job], db: Session) -> list[dict]:
         for i in db.query(JobInvitation).filter(JobInvitation.job_id.in_(by_id), JobInvitation.created_at >= since):
             out.append({"kind": "invited", "at": i.created_at, "job": by_id[i.job_id].job_title, "job_id": i.job_id,
                         "student": name(i.student_id), "student_id": i.student_id})
+        # 25 Oct (option D): a student's "No thanks", with the reason if given
+        for i in db.query(JobInvitation).filter(JobInvitation.job_id.in_(by_id), JobInvitation.dismissed_at >= since):
+            out.append({"kind": "declined", "at": i.dismissed_at, "job": by_id[i.job_id].job_title, "job_id": i.job_id,
+                        "student": name(i.student_id), "student_id": i.student_id,
+                        "reason": invite_state(i)["reason"]})
     return sorted(out, key=lambda x: _aware(x["at"]), reverse=True)[:ACTIVITY_SHOWN]
 
 
@@ -837,7 +846,7 @@ def graduate_profile(student_id: int, job_id: int, employer: User = Depends(requ
         raise HTTPException(status_code=404, detail="This graduate's profile isn't visible to employers.")
     inv = db.query(JobInvitation).filter(JobInvitation.job_id == job.id, JobInvitation.student_id == student.id).first()
     applied = db.query(Application).filter(Application.job_id == job.id, Application.student_id == student.id).first()
-    return {"application": None, "invited_at": inv.created_at if inv else None,
+    return {"application": None, "invited_at": inv.created_at if inv else None, "invite": invite_state(inv),
             "applied_application_id": applied.id if applied else None,
             **_profile_for(student, job, db, contact=False)}
 
@@ -847,16 +856,9 @@ class InviteIn(BaseModel):
     student_id: int
 
 
-@router.post("/invitations")
-def invite(data: InviteIn, employer: User = Depends(require_employer), db: Session = Depends(get_db)):
-    """Invite a visible graduate to apply for one of the employer's open jobs (12 Oct; in-app only, one per job per
-    student). The student sees it at the top of My applications and decides; their email stays private.
-    Deliberately once only: after "Not interested" the employer can't invite again for the same job (the student
-    said no, and the employer isn't told, so a second invitation would be the only way they could find out)."""
-    job = _own_job(data.job_id, employer, db)
-    if _status(job) != "open":
-        raise HTTPException(status_code=400, detail="This job is closed. Reopen it to invite graduates.")
-    student = db.query(User).filter(User.id == data.student_id, User.role == UserRole.student,
+def _invite(job: Job, student_id: int, db: Session) -> JobInvitation:
+    """One invitation (the rules below), not yet committed. Raises HTTPException with the reason it can't be sent."""
+    student = db.query(User).filter(User.id == student_id, User.role == UserRole.student,
                                     User.is_visible_to_employers.is_(True), User.is_active.is_(True)).first()
     if not student:
         raise HTTPException(status_code=404, detail="This graduate's profile isn't visible to employers.")
@@ -866,10 +868,60 @@ def invite(data: InviteIn, employer: User = Depends(require_employer), db: Sessi
         raise HTTPException(status_code=409, detail="You already invited them to apply for this job.")
     inv = JobInvitation(job_id=job.id, student_id=student.id)
     db.add(inv)
+    return inv
+
+
+@router.post("/invitations")
+def invite(data: InviteIn, employer: User = Depends(require_employer), db: Session = Depends(get_db)):
+    """Invite a visible graduate to apply for one of the employer's open jobs (12 Oct; in-app only, one per job per
+    student). The student sees it at the top of My applications and decides; their email stays private.
+    Once only per job: after "No thanks" (shown to the employer as "Declined", 25 Oct) or 14 days without an answer
+    ("No reply"), the employer can't invite them again for that job; the student can still apply."""
+    job = _own_job(data.job_id, employer, db)
+    if _status(job) != "open":
+        raise HTTPException(status_code=400, detail="This job is closed. Reopen it to invite graduates.")
+    inv = _invite(job, data.student_id, db)
     try:
         db.commit()
     except IntegrityError:        # two clicks at once
         db.rollback()
         raise HTTPException(status_code=409, detail="You already invited them to apply for this job.")
     db.refresh(inv)
-    return {"id": inv.id, "job_id": job.id, "student_id": student.id, "invited_at": inv.created_at}
+    return {"id": inv.id, "job_id": job.id, "student_id": inv.student_id, "invited_at": inv.created_at}
+
+
+@router.get("/jobs/{job_id}/graduates")
+def job_graduates(job_id: int, employer: User = Depends(require_employer), db: Session = Depends(get_db)):
+    """25 Oct: visible graduates who fit THIS job and haven't applied, best first, with their invitation state, for
+    "Invite selected" on View applicants (Indeed and Handshake tie invitations to a job; references.md)."""
+    job = _own_job(job_id, employer, db)
+    if _status(job) != "open":
+        return []
+    return _graduates_who_fit([job], db, limit=None)
+
+
+class BulkInviteIn(BaseModel):
+    job_id: int
+    student_ids: list[int] = Field(min_length=1, max_length=50)
+
+
+@router.post("/invitations/bulk")
+def invite_selected(data: BulkInviteIn, employer: User = Depends(require_employer), db: Session = Depends(get_db)):
+    """25 Oct: "Invite N selected" on a job's View applicants page. Only graduates the employer ticked (no "invite
+    all": platforms allow bulk only for people picked by hand, references.md). Each gets the same single invitation
+    as one sent alone; any that can't be sent (applied meanwhile, already invited, profile hidden) are listed."""
+    job = _own_job(data.job_id, employer, db)
+    if _status(job) != "open":
+        raise HTTPException(status_code=400, detail="This job is closed. Reopen it to invite graduates.")
+    invited, skipped = [], []
+    for sid in dict.fromkeys(data.student_ids):           # each once, in the order ticked
+        try:
+            with db.begin_nested():                         # one failure doesn't undo the others
+                _invite(job, sid, db)
+            invited.append(sid)
+        except HTTPException as e:
+            skipped.append({"student_id": sid, "reason": e.detail})
+        except IntegrityError:
+            skipped.append({"student_id": sid, "reason": "You already invited them to apply for this job."})
+    db.commit()
+    return {"invited": invited, "skipped": skipped}

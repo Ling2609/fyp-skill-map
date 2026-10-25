@@ -1330,3 +1330,37 @@ Her request: show the student a clear process (instead of silence then a sudden 
 - Difference to state in the report: these employers require ALL minimum qualifications; SkillMap lists graduates
   with at least half, because the list suggests people to invite, not to hire. Sources are university and government
   HR policies, not peer-reviewed studies.
+
+## Invitations: inviting several, declining and ending (25 Oct, opened; her review of the employer Dashboard)
+
+- Indeed, Matched candidates (<https://ca.indeed.com/hire/matched-candidates>): needs "a live job post … so we can
+  surface candidates who match your job criteria"; candidates are invited one by one from that job's list; a
+  monthly contact limit.
+- Handshake, Messaging Limits (<https://support.joinhandshake.com/hc/en-us/articles/1500004973301>): employers can
+  message students "individually or in bulk", to candidates "you manually select"; Basic accounts 10 messages a month.
+  Handshake on job sourcing (<https://support.joinhandshake.com/hc/en-us/articles/14851774446615>): "Bulk messaging to
+  sourced candidates is not currently supported".
+- LinkedIn: a candidate's "Not Interested" counts as a response (TestGorilla, James Dixon, 28 Aug 2026,
+  <https://www.testgorilla.com/blog/inmail-response-rate/>); the recruiter "cannot respond to a specific conversation
+  once you've declined" (The Next Web, 9 Aug 2017, <https://thenextweb.com/news/linkedin-inmail-block-recruiters>).
+- ITviec (Vietnam IT jobs), FAQ (<https://itviec.com/blog/faq-job-invitation-for-candidate>): invitations expire
+  "after 72 hours"; after one is ignored the employer can't keep sending them.
+- Remotive, "To Ghost or Not to Ghost" (Vic Boano, 25 Jul 2023,
+  <https://remotive.com/blog/to-ghost-or-not-to-ghost/amp/>): recruiters call going silent "a red flag"; "It takes
+  minimal effort to send a courtesy email"; "Ghosting on either end shouldn't be normalized". CleverConnect/YouGov 2023
+  (<https://www.cleverconnect.com/blog/ghosting-why-candidates-ignoring-you>): 31% of candidates give up over "no
+  transparency about application status".
+- Gem (<https://gem.com/blog/outbound-candidates-more-likely-to-be-hired>; 1,200+ companies, 41M candidates): "1% of
+  inbound candidates are ultimately hired, 6% of outbound candidates"; Ashby 2025 (Joel Westmark,
+  <https://www.ashbyhq.com/talent-trends-report/reports/inbound>): sourced candidates "earn their reputation for higher
+  conversion rates" (no figures given). Reading: an "Invited" tag likely helps an application.
+- Options weighed: A today (decline hidden, invitation never ends); B decline shown; C decline hidden + 14-day end;
+  D (chosen, her plan): "No thanks" with an optional reason (three one-tap reasons or her own words, up to 200
+  characters) shown to the employer at once ("Declined · reason" or "Declined · No reason given"); no answer ends
+  after 14 days for both ("No reply", the same clock as SkillMap's 14-day "look elsewhere" rule); she can still apply
+  while the job is open (otherwise ignoring would be safer than answering); an application is tagged "Invited" only if
+  it answers an invitation that was still open (not after "No thanks" or "No reply").
+- Built: app/services/invitations.py; GET /employer/jobs/{id}/graduates and POST /employer/invitations/bulk ("Invite N
+  selected" on View applicants: ticked by hand, no "invite all", up to 50 at a time, each the usual single invitation);
+  migration migrate_invitation_replies.py (decline_reason, decline_note). No monthly cap (small, career-office
+  supervised); a cap like Indeed's or Handshake's is future work.

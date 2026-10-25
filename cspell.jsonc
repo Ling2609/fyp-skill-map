@@ -26,6 +26,10 @@
     "**/package-lock.json"
   ],
   "words": [
+    // 25 Oct: authors cited in docs/planning/references.md
+    "Boano", "Westmark", "ITviec", "Remotive",
+    // 25 Oct: names in the demo data (backend/scripts/tools/seed_demo.py)
+    "Aiman", "Alam", "Aqilah", "Arvind", "Bayu", "Chong", "Farah", "Ipoh", "Izzah", "Jiahui", "Kaixin", "Kenari", "Kuantan", "Nurul", "Priya", "Rahmah", "Siti", "Tropika", "Weijie",
     "acad",
     "Accountemps",
     "Adzuna",

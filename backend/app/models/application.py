@@ -52,7 +52,8 @@ class ApplicationEvent(Base):
 class JobInvitation(Base):
     """An employer invites a visible graduate who fits one of their open jobs to apply (12 Oct; her supervisor's
     point that employers could find graduates but not reach them; Handshake's "invite to apply"). In-app only.
-    One per job per student; the student can apply or say "Not interested" (dismissed_at; the employer isn't told)."""
+    One per job per student; the student can apply or say "No thanks" (dismissed_at, with an optional reason the
+    employer sees: 25 Oct, option D). With no answer it ends after 14 days ("No reply"; app/services/invitations.py)."""
     __tablename__ = "job_invitations"
     __table_args__ = (UniqueConstraint("job_id", "student_id", name="uq_invitation_job_student"),)
 
@@ -60,7 +61,10 @@ class JobInvitation(Base):
     job_id = Column(Integer, ForeignKey("jobs.id", ondelete="CASCADE"), nullable=False, index=True)
     student_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
-    dismissed_at = Column(DateTime(timezone=True), nullable=True)
+    dismissed_at = Column(DateTime(timezone=True), nullable=True)       # "No thanks" (the student declined)
+    # 25 Oct (her plan, option D): the employer sees "Declined" and the reason, if the student gave one
+    decline_reason = Column(String(20), nullable=True)   # not_looking / wrong_role / have_offer / other
+    decline_note = Column(String(200), nullable=True)    # "other": the student's own words
 
 
 class OutsideApplication(Base):
