@@ -1,0 +1,98 @@
+[main]	INFO	profile include tests: None
+[main]	INFO	profile exclude tests: None
+[main]	INFO	cli include tests: None
+[main]	INFO	cli exclude tests: None
+[main]	INFO	running on Python 3.13.7
+[manager]	WARNING	Test in comment: pass is not a test name or id, ignoring
+[manager]	WARNING	Test in comment: reading is not a test name or id, ignoring
+[manager]	WARNING	Test in comment: pass is not a test name or id, ignoring
+[manager]	WARNING	Test in comment: 1 is not a test name or id, ignoring
+[manager]	WARNING	Test in comment: or is not a test name or id, ignoring
+[manager]	WARNING	Test in comment: 2 is not a test name or id, ignoring
+[manager]	WARNING	Test in comment: not is not a test name or id, ignoring
+[manager]	WARNING	Test in comment: a is not a test name or id, ignoring
+[manager]	WARNING	Test in comment: password is not a test name or id, ignoring
+[manager]	WARNING	Test in comment: reading is not a test name or id, ignoring
+[manager]	WARNING	Test in comment: pass is not a test name or id, ignoring
+[manager]	WARNING	Test in comment: 2 is not a test name or id, ignoring
+[manager]	WARNING	Test in comment: not is not a test name or id, ignoring
+[manager]	WARNING	Test in comment: a is not a test name or id, ignoring
+[manager]	WARNING	Test in comment: password is not a test name or id, ignoring
+[tester]	WARNING	nosec encountered (B105), but no failed test on file app\nlp\skill_extractor.py:402
+[tester]	WARNING	nosec encountered (B105), but no failed test on file app\nlp\skill_extractor.py:415
+[manager]	WARNING	Test in comment: the is not a test name or id, ignoring
+[manager]	WARNING	Test in comment: OAuth2 is not a test name or id, ignoring
+[manager]	WARNING	Test in comment: token is not a test name or id, ignoring
+[manager]	WARNING	Test in comment: type is not a test name or id, ignoring
+[manager]	WARNING	Test in comment: not is not a test name or id, ignoring
+[manager]	WARNING	Test in comment: a is not a test name or id, ignoring
+[manager]	WARNING	Test in comment: password is not a test name or id, ignoring
+[manager]	WARNING	Test in comment: the is not a test name or id, ignoring
+[manager]	WARNING	Test in comment: OAuth2 is not a test name or id, ignoring
+[manager]	WARNING	Test in comment: token is not a test name or id, ignoring
+[manager]	WARNING	Test in comment: type is not a test name or id, ignoring
+[manager]	WARNING	Test in comment: not is not a test name or id, ignoring
+[manager]	WARNING	Test in comment: a is not a test name or id, ignoring
+[manager]	WARNING	Test in comment: password is not a test name or id, ignoring
+[manager]	WARNING	Test in comment: a is not a test name or id, ignoring
+[manager]	WARNING	Test in comment: message is not a test name or id, ignoring
+[manager]	WARNING	Test in comment: to is not a test name or id, ignoring
+[manager]	WARNING	Test in comment: the is not a test name or id, ignoring
+[manager]	WARNING	Test in comment: user is not a test name or id, ignoring
+[manager]	WARNING	Test in comment: not is not a test name or id, ignoring
+[manager]	WARNING	Test in comment: a is not a test name or id, ignoring
+[manager]	WARNING	Test in comment: password is not a test name or id, ignoring
+[tester]	WARNING	nosec encountered (B105), but no failed test on file app\routers\auth.py:234
+[tester]	WARNING	nosec encountered (B105), but no failed test on file app\routers\auth.py:234
+[tester]	WARNING	nosec encountered (B105), but no failed test on file app\routers\auth.py:521
+[tester]	WARNING	nosec encountered (B105), but no failed test on file app\routers\auth.py:521
+[manager]	WARNING	Test in comment: only is not a test name or id, ignoring
+[manager]	WARNING	Test in comment: to is not a test name or id, ignoring
+[manager]	WARNING	Test in comment: run is not a test name or id, ignoring
+[manager]	WARNING	Test in comment: git is not a test name or id, ignoring
+[manager]	WARNING	Test in comment: with is not a test name or id, ignoring
+[manager]	WARNING	Test in comment: fixed is not a test name or id, ignoring
+[manager]	WARNING	Test in comment: arguments is not a test name or id, ignoring
+[manager]	WARNING	Test in comment: below is not a test name or id, ignoring
+[tester]	WARNING	nosec encountered (B607), but no failed test on file app\services\evaluation_runs.py:43
+[tester]	WARNING	nosec encountered (B603), but no failed test on file app\services\evaluation_runs.py:43
+[manager]	WARNING	Test in comment: escapes is not a test name or id, ignoring
+[manager]	WARNING	Test in comment: text is not a test name or id, ignoring
+[manager]	WARNING	Test in comment: written is not a test name or id, ignoring
+[manager]	WARNING	Test in comment: INTO is not a test name or id, ignoring
+[manager]	WARNING	Test in comment: the is not a test name or id, ignoring
+[manager]	WARNING	Test in comment: PDF is not a test name or id, ignoring
+[manager]	WARNING	Test in comment: no is not a test name or id, ignoring
+[manager]	WARNING	Test in comment: XML is not a test name or id, ignoring
+[manager]	WARNING	Test in comment: is is not a test name or id, ignoring
+[manager]	WARNING	Test in comment: read is not a test name or id, ignoring
+[manager]	WARNING	Test in comment: or is not a test name or id, ignoring
+[manager]	WARNING	Test in comment: parsed is not a test name or id, ignoring
+[manager]	WARNING	Test in comment: local is not a test name or id, ignoring
+[manager]	WARNING	Test in comment: folder is not a test name or id, ignoring
+[manager]	WARNING	Test in comment: no is not a test name or id, ignoring
+[manager]	WARNING	Test in comment: download is not a test name or id, ignoring
+[tester]	WARNING	nosec encountered (B615), but no failed test on file app\services\skill_relation.py:74
+Working... ---------------------------------------- 100% 0:00:01
+Run started:2026-10-25 17:05:45.701782+00:00
+
+Test results:
+	No issues identified.
+
+Code scanned:
+	Total lines of code: 8837
+	Total lines skipped (#nosec): 0
+	Total potential issues skipped due to specifically being disabled (e.g., #nosec BXXX): 11
+
+Run metrics:
+	Total issues (by severity):
+		Undefined: 0
+		Low: 0
+		Medium: 0
+		High: 0
+	Total issues (by confidence):
+		Undefined: 0
+		Low: 0
+		Medium: 0
+		High: 0
+Files skipped (0):

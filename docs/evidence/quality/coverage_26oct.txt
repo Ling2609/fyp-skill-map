@@ -1,0 +1,69 @@
+........................................................................ [ 39%]
+........................................................................ [ 78%]
+........................................                                 [100%]
+=============================== tests coverage ================================
+_______________ coverage: platform win32, python 3.13.7-final-0 _______________
+
+Name                                   Stmts   Miss  Cover
+----------------------------------------------------------
+app\nlp\embedder.py                       69     69     0%
+app\services\job_keys.py                   7      7     0%
+app\services\job_search.py                51     43    16%
+app\services\mailer.py                    21     16    24%
+app\services\skill_checker.py             92     70    24%
+app\services\model_folder.py               8      6    25%
+app\services\github_repo.py              161     99    39%
+app\services\skill_relation.py            91     55    40%
+app\routers\admin_academic.py            394    217    45%
+app\nlp\skill_extractor.py               196     95    52%
+app\services\job_skill_tidy.py           259    107    59%
+app\services\account_emails.py            15      6    60%
+app\routers\profile.py                   822    299    64%
+app\routers\modules.py                    39     14    64%
+app\routers\auth.py                      381    129    66%
+app\routers\admin.py                     162     49    70%
+app\routers\jobs.py                      109     32    71%
+app\routers\experience.py                145     34    77%
+app\routers\chatbot.py                   301     62    79%
+app\services\evidence.py                 138     24    83%
+app\services\password_policy.py           29      5    83%
+app\schemas\user.py                       92     13    86%
+app\services\extraction_records.py        98     13    87%
+app\services\job_titles.py                31      4    87%
+app\services\skill_profile.py            161     20    88%
+app\services\job_skill_store.py           53      6    89%
+app\services\skill_names.py               82      9    89%
+app\auth\utils.py                         19      2    89%
+app\services\evaluation_runs.py           53      5    91%
+app\routers\applications.py              231     19    92%
+app\routers\recommend.py                 293     24    92%
+app\services\learning_resources.py        82      6    93%
+app\routers\github_connect.py             86      6    93%
+app\routers\employer.py                  552     25    95%
+app\services\showcase.py                 100      4    96%
+app\services\plan_pdf.py                 137      5    96%
+app\services\description_check.py         28      1    96%
+app\routers\skillgap.py                   65      2    97%
+app\services\transparency.py              73      2    97%
+app\main.py                               54      1    98%
+app\services\job_requirements.py          64      1    98%
+app\services\application_progress.py      68      1    99%
+app\services\ad_requirements.py           89      1    99%
+app\config.py                             27      0   100%
+app\database.py                           12      0   100%
+app\models\application.py                 46      0   100%
+app\models\job.py                         47      0   100%
+app\models\login_throttle.py               8      0   100%
+app\models\module.py                      22      0   100%
+app\models\password_reset.py              14      0   100%
+app\models\profile.py                     65      0   100%
+app\models\programme.py                   42      0   100%
+app\models\user.py                        42      0   100%
+app\models\user_module.py                 11      0   100%
+app\mongo.py                              27      0   100%
+app\services\invitations.py               38      0   100%
+----------------------------------------------------------
+TOTAL                                   6402   1608    75%
+
+7 empty files skipped.
+184 passed in 540.63s (0:09:00)
