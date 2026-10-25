@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import api from '../../api'
 import PageHeader from '../../components/PageHeader'
 import BackLink from '../../components/BackLink'
@@ -10,6 +10,7 @@ import ConfirmDecision from './ConfirmDecision'
 import { ADMIN_COUNTS_CHANGED } from '../../components/Sidebar'
 import { CardSkeleton, LoadingLabel } from '../../components/Skeleton'
 import InviteLabel from '../../components/InviteLabel'
+import InfoTip from '../../components/InfoTip'
 
 // Employer > one job's applicants (11 Oct, batch 2; her pick 3A "applicants as a list"). Best match first: the
 // share of the job's required skills each student has, the same match the student sees. Changing a status shows on
@@ -18,6 +19,52 @@ import InviteLabel from '../../components/InviteLabel'
 // missing skills for "missing skills"); the decision date and the numbers students see are in the header; contact
 // details appear only after shortlisting.
 const WAITING = ['applied', 'shortlisted']
+const CARD = 'bg-white border border-slate-200 rounded-2xl'
+const left = (iso) => {
+  const d = Math.ceil((new Date(iso).getTime() - Date.now()) / 86400000)
+  return d === 0 ? 'today' : `${d} day${d === 1 ? '' : 's'} left`
+}
+// 25 Oct (as My Applications' share()): each list gets up to 3 of the rows that fit; spare rows go to the applicants
+// first, then to the graduates. An empty list still takes one line.
+const FIRST = 3
+// On a short screen (fewer rows fit than 3 + 3), each list gives up rows down to one, graduates first.
+function share(a, b, room, withB) {
+  let x = Math.min(a, FIRST), y = withB ? Math.min(b, FIRST) : 0
+  while (x + y > room && (y > 1 || x > 1)) { if (y > 1 && y >= x - 1) y--; else x-- }
+  let spare = Math.max(0, room - Math.max(x, 1) - (withB ? Math.max(y, 1) : 0))
+  const ax = Math.min(a - x, spare); spare -= ax
+  return [x + ax, y + Math.min(b - y, spare)]
+}
+// the section title with "See all N" on its line, as on My Applications
+function SectionHead({ id, title, note, more }) {
+  return (
+    <div className="shrink-0 flex items-end justify-between gap-x-4">
+      <div className="min-w-0">
+        <h2 id={id} className="text-base font-semibold text-slate-900">{title}</h2>
+        <p className="text-sm text-slate-600">{note}</p>
+      </div>
+      {more}
+    </div>
+  )
+}
+// 25 Oct (her bug: ticking one graduate made the next one disappear): the selection's count and actions take the place
+// of "See all" on the section's title line instead of a bar above the table, so ticking never changes the height and
+// never hides a row. The slot has a fixed height, shorter than the title and note beside it.
+const PICK_BTN = 'text-sm font-medium px-3 py-1 rounded-lg text-white'
+function Picked({ n, onClear, children }) {
+  return (
+    <div className="shrink-0 h-8 flex items-center gap-2.5 text-sm">
+      <span className="font-medium text-slate-800">{n} selected</span>
+      {children}
+      <button type="button" onClick={onClear} className="text-slate-600 hover:text-slate-900">Clear</button>
+    </div>
+  )
+}
+function MoreButton({ total, shown, onClick }) {
+  if (total <= shown) return null
+  return <button type="button" onClick={onClick} className="shrink-0 text-sm font-medium text-blue-700 hover:underline">See all {total} →</button>
+}
+// 25 Oct (her pick): the graduates table uses the same columns, so it lines up with the applicants table
 const APP_COLS = <colgroup><col className="w-12" /><col /><col className="w-64" /><col className="w-28" /><col className="w-40" /></colgroup>
 
 export default function Applicants() {
@@ -31,13 +78,15 @@ export default function Applicants() {
   const [savingMany, setSavingMany] = useState(false)
   const [notice, setNotice] = useState('')
   const strip = useRef(null)
+  const gstrip = useRef(null)
 
   const load = () => api.get(`/employer/jobs/${jobId}/applicants`).then(res => setData(res.data))
     .catch(err => setError(errText(err, "Couldn't load the applicants.")))
   useEffect(() => { load() }, [jobId])   // eslint-disable-line react-hooks/exhaustive-deps
 
   // 25 Oct (her plan; references.md "Invitations"): graduates who fit THIS job and haven't applied; tick some and
-  // "Invite N selected". No "invite all": platforms allow bulk only for people the employer picks by hand.
+  // "Invite N selected". No "invite all" across jobs: bulk only for people the employer picks; a select-all box over
+  // the graduates shown was added later on 25 Oct (her ask), still confirmed first.
   const [grads, setGrads] = useState(null)
   const [ticked, setTicked] = useState([])
   const [askInvite, setAskInvite] = useState(false)
@@ -47,7 +96,7 @@ export default function Applicants() {
   const tick = (id) => setTicked(t => t.includes(id) ? t.filter(x => x !== id) : [...t, id])
   const inviteSelected = () => {
     setInviting(true)
-    api.post('/employer/invitations/bulk', { job_id: Number(jobId), student_ids: ticked })
+    api.post('/employer/invitations/bulk', { job_id: Number(jobId), student_ids: selG })
       .then(res => {
         const n = res.data.invited.length, skip = res.data.skipped.length
         setNotice(`${n} graduate${n === 1 ? '' : 's'} invited. They see it on their Dashboard and can apply or say No thanks.`
@@ -61,11 +110,11 @@ export default function Applicants() {
   const toggle = (id) => setPicked(p => p.includes(id) ? p.filter(x => x !== id) : [...p, id])
   // 21 Oct (her question): Shortlist several as well as Not selected (references.md "Actions on several applicants
   // at once"); only those still at Applied are shortlisted, and it asks first because contact details are shared
-  const toShortlist = (data?.applicants || []).filter(p => picked.includes(p.id) && p.status === 'applied').length
+  const toShortlist = (ids) => (data?.applicants || []).filter(p => ids.includes(p.id) && p.status === 'applied').length
   const many = (why) => {
     const st = askMany
     setSavingMany(true)
-    api.post('/employer/applications/bulk', { ids: picked, status: st, ...(st === 'rejected' ? why : {}) })
+    api.post('/employer/applications/bulk', { ids: sel, status: st, ...(st === 'rejected' ? why : {}) })
       .then(res => {
         const n = res.data.updated
         setNotice(st === 'rejected'
@@ -85,11 +134,60 @@ export default function Applicants() {
   const count = (s) => people.filter(p => s === 'all' || p.status === s).length
   const shown = people.filter(p => tab === 'all' || p.status === tab)
   const job = data?.job
+  const fitList = job?.status === 'open' ? (grads || []) : []
+  const showGrads = fitList.length > 0
+
+  // 25 Oct (her review: "like My Applications": both lists fit one screen, "See all" on a page of its own): the main
+  // view shows the rows that fit (measured, as on My Applications; applicants get any spare rows first), each section
+  // with "See all N" on its title line. ?see=applicants / ?see=graduates shows one list alone; Back returns to both.
+  const [params, setParams] = useSearchParams()
+  const see = params.get('see')
+  const seeAll = (which) => setParams(which ? { see: which } : {})
+  const box = useRef(null)
+  const [room, setRoom] = useState(6)
+  const [nApps, nGrads] = share(shown.length, fitList.length, room, showGrads)
+  const appsNow = see === 'applicants' ? shown : shown.slice(0, nApps)
+  const gradsNow = see === 'graduates' ? fitList : fitList.slice(0, nGrads)
+
+  // 25 Oct (her bug: tick someone, then change their status in the row: "1 selected" stayed with no tick box): the
+  // selection is only the ticked rows you can see and still act on (still Applied or Shortlisted)
+  const selectable = appsNow.filter(p => WAITING.includes(p.status)).map(p => p.id)
+  const sel = picked.filter(id => selectable.includes(id))
+  const allTicked = selectable.length > 0 && sel.length === selectable.length
+  const tickAll = () => setPicked(allTicked ? [] : selectable)
+  const invitable = gradsNow.filter(g => !g.invite).map(g => g.student_id)
+  const selG = ticked.filter(id => invitable.includes(id))
+  // 25 Oct (her ask): a select-all box for the graduates too; it ticks the ones shown who haven't been invited (up to
+  // 50, the most one "Invite selected" sends) and you still confirm before anything is sent
+  const allG = invitable.length > 0 && selG.length === Math.min(invitable.length, 50)
+  const tickAllG = () => setTicked(allG ? [] : invitable.slice(0, 50))
+
+  useLayoutEffect(() => {
+    const el = box.current
+    if (!el || see || !data) return
+    const measure = () => {
+      const rowsNow = el.querySelectorAll('[data-row]')
+      const rowH = rowsNow[0]?.getBoundingClientRect().height
+      if (!rowH) return
+      const cs = getComputedStyle(el)
+      const used = el.firstElementChild.getBoundingClientRect().height + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom)
+      const fit = rowsNow.length + Math.floor((el.clientHeight - used) / rowH)
+      setRoom(r => {
+        const next = Math.max(2, Math.min(15, fit))
+        return next === r ? r : next
+      })
+    }
+    measure()
+    const ro = new ResizeObserver(measure)
+    ro.observe(el)
+    return () => ro.disconnect()
+  }, [see, tab, data, grads, notice, error, room])   // room: measure again after the rows change, until it settles
 
   return (
     <div className="flex flex-col h-screen">
       {/* 21 Oct (her review: every back link the same, near the left edge) */}
-      <BackLink label="My Jobs" onClick={() => navigate('/employer/jobs')} />
+      {see ? <BackLink label={job?.title || 'this job'} onClick={() => seeAll(null)} />
+        : <BackLink label="My Jobs" onClick={() => navigate('/employer/jobs')} />}
       <PageHeader>
         <div className="pb-5">
           <div className="flex items-center gap-3 mt-1">
@@ -103,53 +201,59 @@ export default function Applicants() {
           </p>}
           {job?.decide_by && <p className={`text-sm mt-1 ${job.past_date ? 'text-rose-700 font-medium' : 'text-slate-700'}`}>
             {job.past_date ? `Your decision date (${fmtDay(job.decide_by)}) has passed: applicants still waiting see "No decision".`
-              : `Decide by ${fmtDay(job.decide_by)}`}{job.stopped && ' · Not taking new applications'}
+              : <>Decide by {fmtDay(job.decide_by)} · {left(job.decide_by)}{' '}
+                {/* 25 Oct (her question: "Decide by 17 Nov means what?"): days left, and what the date means */}
+                <InfoTip label="What the decision date means">Applicants see "Reply by {fmtDay(job.decide_by)}" on My Applications.
+                  Anyone still waiting after this date sees "No decision", and it counts in your reply record.</InfoTip></>}
+            {job.stopped && ' · Not taking new applications'}
           </p>}
         </div>
       </PageHeader>
 
-      <div className="flex-1 min-h-0 overflow-y-auto px-8 py-6 flex flex-col gap-4">
-        {error && <p role="alert" className="text-sm text-rose-700 bg-rose-50 border border-rose-200 rounded-lg px-4 py-2.5">{error}</p>}
+      <div ref={box} className={`flex-1 min-h-0 px-8 py-6 ${see ? 'flex flex-col' : 'overflow-y-auto'}`}>
+      <div className={`flex flex-col gap-4 ${see ? 'flex-1 min-h-0' : ''}`}>
+        {error && <p role="alert" className="shrink-0 text-sm text-rose-700 bg-rose-50 border border-rose-200 rounded-lg px-4 py-2.5">{error}</p>}
         {!data && !error && <><LoadingLabel>Loading applicants…</LoadingLabel><CardSkeleton rows={5} /></>}
-        {data && people.length === 0 && (
-          <div className="bg-white border border-slate-200 rounded-2xl p-8 text-center">
-            <h2 className="text-base font-semibold text-slate-900">No applicants yet</h2>
-            <p className="text-sm text-slate-500 mt-1">Students see this job in Job Matches, marked "Apply on SkillMap", and apply with their SkillMap profile.</p>
+        {notice && <p role="status" className="shrink-0 text-sm text-emerald-800 bg-emerald-50 border border-emerald-200 rounded-lg px-4 py-2.5">{notice}</p>}
+        {data && see !== 'graduates' && people.length > 0 && (
+          <div role="tablist" className="flex flex-wrap gap-2 shrink-0">
+            {[['all', 'All'], ...STATUSES].map(([key, text]) => (
+              <button key={key} role="tab" aria-selected={tab === key} onClick={() => setTab(key)}
+                className={`text-sm font-medium px-3.5 py-1.5 rounded-full border ${tab === key
+                  ? 'bg-blue-600 border-blue-600 text-white' : 'bg-white border-slate-200 text-slate-600 hover:border-blue-300'}`}>{text} {count(key)}</button>
+            ))}
           </div>
         )}
-        {notice && <p role="status" className="text-sm text-emerald-800 bg-emerald-50 border border-emerald-200 rounded-lg px-4 py-2.5">{notice}</p>}
-        {people.length > 0 && (
-          <>
-            <div role="tablist" className="flex flex-wrap gap-2">
-              {[['all', 'All'], ...STATUSES].map(([key, text]) => (
-                <button key={key} role="tab" aria-selected={tab === key} onClick={() => setTab(key)}
-                  className={`text-sm font-medium px-3.5 py-1.5 rounded-full border ${tab === key
-                    ? 'bg-blue-600 border-blue-600 text-white' : 'bg-white border-slate-200 text-slate-600 hover:border-blue-300'}`}>{text} {count(key)}</button>
-              ))}
-            </div>
-            {picked.length > 0 && (
-              <div className="flex items-center gap-3 bg-blue-50 border border-blue-200 rounded-xl px-4 py-2.5 text-sm">
-                <span className="font-medium text-slate-800">{picked.length} selected</span>
-                {toShortlist > 0 && (
-                  <button type="button" onClick={() => setAskMany('shortlisted')}
-                    className="ml-auto text-sm font-medium px-3.5 py-1.5 rounded-lg bg-blue-600 text-white hover:bg-blue-700">Shortlist{toShortlist < picked.length ? ` ${toShortlist}` : ''}</button>
-                )}
-                <button type="button" onClick={() => setAskMany('rejected')}
-                  className={`${toShortlist > 0 ? '' : 'ml-auto '}text-sm font-medium px-3.5 py-1.5 rounded-lg bg-rose-600 text-white hover:bg-rose-700`}>Mark as Not selected</button>
-                <button type="button" onClick={() => setPicked([])} className="text-sm text-slate-600 hover:text-slate-900">Clear</button>
-              </div>
-            )}
-            {/* 21 Oct (her report: not scrollable in a narrow window): as on My Jobs, the table keeps a minimum width, the
-                column titles sit in their own strip and only the rows scroll under them (sideways too; the strip follows) */}
-            {/* 25 Oct: with "Graduates who fit this job" below, the table keeps its own height (up to 70% of the screen,
-                then its rows scroll) instead of shrinking; the page scrolls down to the graduates */}
-            <div className={`${grads?.length && job?.status === 'open' ? 'shrink-0 max-h-[70vh]' : 'min-h-0'} flex flex-col bg-white border border-slate-200 rounded-2xl overflow-hidden`}>
-              <div ref={strip} aria-hidden="true" className="shrink-0 overflow-hidden [scrollbar-gutter:stable] bg-slate-50 border-b border-slate-200">
-                <table className="w-full min-w-[48rem] table-fixed text-sm">
+
+        {data && see !== 'graduates' && (
+          <section aria-labelledby="apps-h" className={`flex flex-col gap-3 ${see ? 'min-h-0' : ''}`}>
+            <SectionHead id="apps-h" title={see ? `Applicants · ${shown.length}` : 'Applicants'}
+              note={people.length ? 'Best match first. Students see your decisions on My Applications; email and phone show once you shortlist.'
+                : 'Students see this job in Job Matches, marked "Apply on SkillMap", and apply with their SkillMap profile.'}
+              more={sel.length > 0 ? (
+                <Picked n={sel.length} onClear={() => setPicked([])}>
+                  {toShortlist(sel) > 0 && <button type="button" onClick={() => setAskMany('shortlisted')} className={`${PICK_BTN} bg-blue-600 hover:bg-blue-700`}>
+                    Shortlist{toShortlist(sel) < sel.length ? ` ${toShortlist(sel)}` : ''}</button>}
+                  <button type="button" onClick={() => setAskMany('rejected')} className={`${PICK_BTN} bg-rose-600 hover:bg-rose-700`}>Mark as Not selected</button>
+                </Picked>
+              ) : !see && <MoreButton total={shown.length} shown={appsNow.length} onClick={() => seeAll('applicants')} />} />
+            {people.length === 0 ? <p data-row className={`${CARD} px-5 py-3.5 text-sm text-slate-500`}>No applicants yet.</p> : (
+            /* 21 Oct (her report: not scrollable in a narrow window): the table keeps a minimum width, the column titles
+               sit in their own strip and only the rows scroll under them (sideways too; the strip follows) */
+            <div className={`${CARD} ${see ? 'min-h-0' : ''} flex flex-col overflow-hidden`}>
+              {/* 25 Oct (her ask): a tick box in the title strip selects every applicant shown that can still be
+                  decided (Applied or Shortlisted); the strip is a layout-only table, so only that box is read out */}
+              <div ref={strip} className="shrink-0 overflow-hidden [scrollbar-gutter:stable] bg-slate-50 border-b border-slate-200">
+                <table role="presentation" className="w-full min-w-[48rem] table-fixed text-sm">
                   {APP_COLS}
                   <thead className="text-left text-xs font-semibold text-slate-500">
-                    <tr><th className="pl-5 py-3"></th><th className="px-5 py-3">Student</th><th className="px-5 py-3">Required skills they have</th>
-                      <th className="px-5 py-3">Applied</th><th className="px-5 py-3">Status</th></tr>
+                    <tr><td className="pl-5 py-3">
+                      {selectable.length > 0 && <input type="checkbox" aria-label={`Select all ${selectable.length} still to decide`}
+                        title="Select all still to decide" checked={allTicked} onChange={tickAll}
+                        ref={el => { if (el) el.indeterminate = sel.length > 0 && !allTicked }} className="w-4 h-4 accent-blue-700 align-middle" />}
+                    </td>
+                      <td aria-hidden="true" className="px-5 py-3">Student</td><td aria-hidden="true" className="px-5 py-3">Required skills they have</td>
+                      <td aria-hidden="true" className="px-5 py-3">Applied</td><td aria-hidden="true" className="px-5 py-3">Status</td></tr>
                   </thead>
                 </table>
               </div>
@@ -163,13 +267,13 @@ export default function Applicants() {
                     <th key={n} scope="col" className="p-0 h-0"><span className="sr-only">{n}</span></th>)}</tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100">
-                  {shown.map(p => {
+                  {appsNow.map(p => {
                     const full = p.total > 0 && p.have === p.total
                     return (
-                      <tr key={p.id} onClick={() => navigate(`/employer/applications/${p.id}`)} className="cursor-pointer hover:bg-blue-50/40">
+                      <tr key={p.id} data-row onClick={() => navigate(`/employer/applications/${p.id}`)} className="cursor-pointer hover:bg-blue-50/40">
                         <td className="pl-5 py-3.5" onClick={e => e.stopPropagation()}>
                           {WAITING.includes(p.status) && (
-                            <input type="checkbox" aria-label={`Select ${p.name}`} checked={picked.includes(p.id)} onChange={() => toggle(p.id)}
+                            <input type="checkbox" aria-label={`Select ${p.name}`} checked={sel.includes(p.id)} onChange={() => toggle(p.id)}
                               className="w-4 h-4 accent-blue-700" />
                           )}
                         </td>
@@ -202,63 +306,89 @@ export default function Applicants() {
                       </tr>
                     )
                   })}
-                  {shown.length === 0 && <tr><td colSpan={5} className="px-5 py-8 text-center text-sm text-slate-500">None here.</td></tr>}
+                  {shown.length === 0 && <tr data-row><td colSpan={5} className="px-5 py-8 text-center text-sm text-slate-500">None here.</td></tr>}
                 </tbody>
               </table>
               </div>
             </div>
-            <p className="text-xs text-slate-600">Best match first. The student sees each status on their "My Applications" page (Rejected shows as "Not selected"). Email and phone appear after you shortlist someone.</p>
-          </>
+            )}
+          </section>
         )}
 
         {/* 25 Oct: graduates who fit this job and haven't applied; invite the ones you pick */}
-        {job?.status === 'open' && grads && grads.length > 0 && (
-          <section aria-labelledby="fit-job-h" className="shrink-0 bg-white border border-slate-200 rounded-2xl overflow-hidden">
-            <div className="px-5 pt-4 pb-3">
-              <h2 id="fit-job-h" className="text-base font-semibold text-slate-900">Graduates who fit this job ({grads.length})</h2>
-              <p className="text-xs text-slate-500 mt-1">Visible students who haven't applied, best match first. Tick the ones you'd like to invite.</p>
-            </div>
-            {ticked.length > 0 && (
-              <div className="mx-5 mb-3 flex items-center gap-3 bg-blue-50 border border-blue-200 rounded-xl px-4 py-2.5 text-sm">
-                <span className="font-medium text-slate-800">{ticked.length} selected</span>
-                <button type="button" onClick={() => setAskInvite(true)}
-                  className="ml-auto text-sm font-medium px-3.5 py-1.5 rounded-lg bg-blue-600 text-white hover:bg-blue-700">Invite {ticked.length} selected</button>
-                <button type="button" onClick={() => setTicked([])} className="text-sm text-slate-600 hover:text-slate-900">Clear</button>
+        {showGrads && see !== 'applicants' && (
+          <section aria-labelledby="fit-job-h" className={`flex flex-col gap-3 ${see ? 'min-h-0' : 'mt-1'}`}>
+            <SectionHead id="fit-job-h" title={see ? `Graduates who fit this job · ${fitList.length}` : 'Graduates who fit this job'}
+              note="Visible students who haven't applied, best match first. Tick the ones you'd like to invite."
+              more={selG.length > 0 ? (
+                <Picked n={selG.length} onClear={() => setTicked([])}>
+                  <button type="button" onClick={() => setAskInvite(true)} className={`${PICK_BTN} bg-blue-600 hover:bg-blue-700`}>Invite {selG.length} selected</button>
+                </Picked>
+              ) : !see && <MoreButton total={fitList.length} shown={gradsNow.length} onClick={() => seeAll('graduates')} />} />
+            <div className={`${CARD} ${see ? 'min-h-0' : ''} flex flex-col overflow-hidden`}>
+              <div ref={gstrip} className="shrink-0 overflow-hidden [scrollbar-gutter:stable] bg-slate-50 border-b border-slate-200">
+                <table role="presentation" className="w-full min-w-[48rem] table-fixed text-sm">
+                  {APP_COLS}
+                  <thead className="text-left text-xs font-semibold text-slate-500">
+                    <tr><td className="pl-5 py-3">
+                      {invitable.length > 0 && <input type="checkbox" aria-label={`Select all ${Math.min(invitable.length, 50)} not invited yet`}
+                        title="Select all not invited yet" checked={allG} onChange={tickAllG}
+                        ref={el => { if (el) el.indeterminate = selG.length > 0 && !allG }} className="w-4 h-4 accent-blue-700 align-middle" />}
+                    </td>
+                      <td aria-hidden="true" className="px-5 py-3">Graduate</td><td aria-hidden="true" className="px-5 py-3">Required skills they have</td>
+                      <td aria-hidden="true" className="px-5 py-3">Nice to have</td><td aria-hidden="true" className="px-5 py-3">Invitation</td></tr>
+                  </thead>
+                </table>
               </div>
-            )}
-            <ul className="border-t border-slate-200 divide-y divide-slate-100">
-              {grads.map(g => (
-                <li key={g.student_id} className="px-5 py-3 flex items-center gap-3.5">
-                  <span className="w-4 shrink-0">
-                    {!g.invite && <input type="checkbox" aria-label={`Select ${g.name}`} checked={ticked.includes(g.student_id)}
-                      onChange={() => tick(g.student_id)} className="w-4 h-4 accent-blue-700" />}
-                  </span>
-                  <div className="flex-1 min-w-0">
-                    <Link to={`/employer/graduates/${g.student_id}?job=${jobId}`} className="block text-sm font-semibold text-slate-900 truncate hover:text-blue-700">{g.name}</Link>
-                    <p className="text-xs text-slate-500 truncate">{g.programme}{g.nice > 0 && ` · +${g.nice} nice to have`}</p>
-                  </div>
-                  <span className={`shrink-0 text-xs font-semibold rounded-full px-2.5 py-1 ${g.have === g.total ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-800'}`}>
-                    {g.have} of {g.total} required
-                  </span>
-                  <span className="w-40 shrink-0 flex justify-end">{g.invite && <InviteLabel invite={g.invite} />}</span>
-                </li>
-              ))}
-            </ul>
+              <div className="relative min-h-0 overflow-auto [scrollbar-gutter:stable]"
+                onScroll={e => { if (gstrip.current) gstrip.current.scrollLeft = e.currentTarget.scrollLeft }}>
+              <table className="w-full min-w-[48rem] table-fixed text-sm">
+                {APP_COLS}
+                <thead>
+                  <tr>{['Select', 'Graduate', 'Required skills they have', 'Nice to have', 'Invitation'].map(n =>
+                    <th key={n} scope="col" className="p-0 h-0"><span className="sr-only">{n}</span></th>)}</tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100">
+                  {gradsNow.map(g => (
+                    <tr key={g.student_id} data-row>
+                      <td className="pl-5 py-3.5">
+                        {!g.invite && <input type="checkbox" aria-label={`Select ${g.name}`} checked={selG.includes(g.student_id)}
+                          onChange={() => tick(g.student_id)} className="w-4 h-4 accent-blue-700" />}
+                      </td>
+                      <td className="px-5 py-3.5 min-w-0">
+                        <Link to={`/employer/graduates/${g.student_id}?job=${jobId}`} className="block font-medium text-slate-900 truncate hover:text-blue-700 rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500">{g.name}</Link>
+                        <p className="text-xs text-slate-500 mt-0.5 truncate">{g.programme}</p>
+                      </td>
+                      <td className="px-5 py-3.5">
+                        <span className={`text-xs font-semibold rounded-full px-2.5 py-0.5 ${g.have === g.total ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-800'}`}>
+                          {g.have} of {g.total}
+                        </span>
+                        {g.missing?.length > 0 && <span className="ml-2 text-xs text-slate-500">missing {g.missing.join(', ')}</span>}
+                      </td>
+                      <td className="px-5 py-3.5 text-slate-600">{g.nice_total ? `${g.nice} of ${g.nice_total}` : <span className="text-xs text-slate-400">None listed</span>}</td>
+                      <td className="px-5 py-3.5">{g.invite ? <InviteLabel invite={g.invite} /> : <span className="text-xs text-slate-400">Not invited</span>}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              </div>
+            </div>
           </section>
         )}
       </div>
+      </div>
       {status.ui}
       {askMany === 'rejected' && <ConfirmDecision d={{ action: 'Mark as Not selected', danger: true }} busy={savingMany}
-        title={`Mark ${picked.length} ${picked.length === 1 ? 'applicant' : 'applicants'} as Not selected?`}
+        title={`Mark ${sel.length} ${sel.length === 1 ? 'applicant' : 'applicants'} as Not selected?`}
         text={<>They will see <b>"Not selected"</b> for {job.title} on their My Applications page straight away.</>}
         onConfirm={many} onCancel={() => setAskMany(null)} />}
       {askMany === 'shortlisted' && <ConfirmDecision d={{ action: 'Shortlist' }} busy={savingMany}
-        title={`Shortlist ${toShortlist} ${toShortlist === 1 ? 'applicant' : 'applicants'}?`}
+        title={`Shortlist ${toShortlist(sel)} ${toShortlist(sel) === 1 ? 'applicant' : 'applicants'}?`}
         text={<>They will see <b>"Shortlisted"</b> for {job.title} on their My Applications page, and their email and
-          phone will show on their profiles for you.{toShortlist < picked.length ? ' Only the ones still at Applied are shortlisted.' : ''}</>}
+          phone will show on their profiles for you.{toShortlist(sel) < sel.length ? ' Only the ones still at Applied are shortlisted.' : ''}</>}
         onConfirm={many} onCancel={() => setAskMany(null)} />}
       {askInvite && <ConfirmDecision d={{ action: 'Invite' }} busy={inviting}
-        title={`Invite ${ticked.length} ${ticked.length === 1 ? 'graduate' : 'graduates'} to apply for ${job.title}?`}
+        title={`Invite ${selG.length} ${selG.length === 1 ? 'graduate' : 'graduates'} to apply for ${job.title}?`}
         text={<>Each sees your invitation on their Dashboard and can apply or say No thanks. You see their answer here;
           with no answer in 14 days it shows "No reply".</>}
         onConfirm={inviteSelected} onCancel={() => setAskInvite(false)} />}

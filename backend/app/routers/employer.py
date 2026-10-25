@@ -704,6 +704,9 @@ def _graduates_who_fit(open_jobs: list[Job], db: Session, limit: int | None = FI
                 best[student.id] = {"student_id": student.id, "name": f"{student.first_name} {student.last_name}",
                                     "programme": _programme(student, db), "job_id": job.id, "job_title": job.job_title,
                                     "have": have, "total": total, "ratio": ratio, "nice": nice,
+                                    # 25 Oct (her pick: the graduates list has the applicants table's columns)
+                                    "missing": [m["job_skill"] for m in gap["missing_skills"]],
+                                    "nice_total": len(gap.get("nice_to_have", [])),
                                     # 25 Oct: Invited / Declined (+ reason) / No reply (app/services/invitations.py)
                                     "invite": invite_state(invited.get((job.id, student.id))),
                                     "invited_at": getattr(invited.get((job.id, student.id)), "created_at", None)}

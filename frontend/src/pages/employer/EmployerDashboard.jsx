@@ -11,7 +11,6 @@ import FitList from '../../components/FitList'
 import InviteLabel from '../../components/InviteLabel'
 import InfoTip from '../../components/InfoTip'
 import { RECORD_TIP } from '../../components/EmployerRecord'
-import { Modal } from '../student/profileParts'
 
 // Employer dashboard (12 Oct, her pick E after mock-ups A-E; references.md "Employer dashboard layout"; left column
 // changed the same day to option B of mock-ups A-C (my proposal; her pick pending): to review sized to its rows + recent activity, so one application isn't a blank card).
@@ -28,6 +27,14 @@ const ago = (iso) => {
   return days <= 0 ? 'today' : days === 1 ? 'yesterday' : days < 14 ? `${days} days ago` : new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })
 }
 const card = 'bg-white border border-slate-200 rounded-2xl flex flex-col overflow-hidden'
+const SEE = 'shrink-0 text-sm font-medium text-blue-700 hover:underline'
+// 25 Oct (her review: "which job each graduate fits, clear at a glance"): each open job has a colour, shown as a dot
+// beside its title in "Your open jobs" (the key) and in each graduate's row with the job's name, so the colour is never
+// the only cue. Not grey, blue, green or red: those already mean a status in the jobs' bars.
+const JOB_DOT = ['bg-violet-500', 'bg-amber-500', 'bg-cyan-500', 'bg-fuchsia-500', 'bg-lime-500', 'bg-orange-500']
+function JobDot({ cls }) {
+  return <span aria-hidden="true" className={`w-2.5 h-2.5 rounded-full shrink-0 ${cls}`} />
+}
 const daysUntil = (iso) => Math.ceil((new Date(iso).getTime() - Date.now()) / 86400000)
 const fmtDay = (iso) => new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })
 const FEW_SKILLS = 3      // a job with fewer required skills than this: matching has little to go on
@@ -144,14 +151,18 @@ export default function EmployerDashboard() {
       <Link to={`/employer/applications/${a.id}`} className={ACTION}>Review</Link>
     </li>
   )
+  const jobDot = (id) => JOB_DOT[Math.max(0, (data?.open_jobs || []).findIndex(j => j.id === id)) % JOB_DOT.length]
   const gradRow = g => (
     <li key={g.student_id} className="px-5 py-3 flex items-center gap-3">
       <Avatar name={g.name} small />
       <div className="flex-1 min-w-0">
         <Link to={`/employer/graduates/${g.student_id}?job=${g.job_id}`} className="block text-sm font-semibold text-slate-900 truncate hover:text-blue-700">{g.name}</Link>
         {/* 24 Oct: the nice-to-have skills they also have, which put them higher in the list */}
-        <p className="text-xs text-slate-500 truncate">fits {g.job_title}{g.nice > 0 && ` · +${g.nice} nice to have`}{g.programme && ` · ${g.programme}`}</p>
+        <p className="text-xs text-slate-500 truncate">{g.programme}{g.nice > 0 && ` · +${g.nice} nice to have`}</p>
       </div>
+      <span className="w-40 shrink-0 flex items-center gap-1.5 text-xs font-medium text-slate-700 min-w-0" title={`Fits ${g.job_title}`}>
+        <JobDot cls={jobDot(g.job_id)} /><span className="truncate"><span className="sr-only">Fits </span>{g.job_title}</span>
+      </span>
       <Match have={g.have} total={g.total} />
       {g.invite
         ? <InviteLabel invite={g.invite} />
@@ -161,7 +172,18 @@ export default function EmployerDashboard() {
           </button>}
     </li>
   )
-  const [showAll, setShowAll] = useState(null)   // 'review' | 'graduates' | 'activity': that list in a pop-up
+  // 25 Oct (her review: "no need to show all, show a few; See all goes to the relevant page"): each list shows the rows
+  // that fit (laptops) and its title line links to where the full list lives
+  const [lg, setLg] = useState(() => window.matchMedia('(min-width: 1024px)').matches)
+  useEffect(() => {
+    const m = window.matchMedia('(min-width: 1024px)')
+    const on = () => setLg(m.matches)
+    m.addEventListener('change', on)
+    return () => m.removeEventListener('change', on)
+  }, [])
+  const [nReview, setNReview] = useState(0)
+  const [nGrads, setNGrads] = useState(0)
+  const [nJobs, setNJobs] = useState(0)
   const sum = data?.summary
   const noJobs = sum && sum.jobs === 0
   const steps = data ? nextSteps(data) : []
@@ -172,6 +194,10 @@ export default function EmployerDashboard() {
   const nextDate = data?.open_jobs.filter(j => j.decide_by).map(j => ({ ...j, days: daysUntil(j.decide_by) }))
     .filter(j => j.days >= 0).sort((a, b) => a.days - b.days)[0]
   const anyApplicants = data?.open_jobs.some(j => Object.values(j.counts).some(n => n > 0))
+  // where "See all" goes: the job's own page when the list is about one job, otherwise My Jobs
+  const one = (ids) => (new Set(ids).size === 1 ? ids[0] : null)
+  const reviewJob = data && one(data.to_review.map(p => p.job_id))
+  const gradJob = data && one(data.graduates.map(g => g.job_id))
 
   return (
     <div className="flex flex-col h-screen">
@@ -233,14 +259,18 @@ export default function EmployerDashboard() {
         // share the screen height exactly; a card with more than fits scrolls inside itself. Phones keep one column.
         // 21 Oct (her report: a row cut in half on a shorter screen): each row is at least its cards' headers plus one
         // whole row (FitList's minimum); the shares above apply when there is room, and a short screen scrolls instead
-        <div className="flex-1 min-h-0 overflow-y-auto px-8 py-6">
-          <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1.55fr)_minmax(0,1fr)] gap-5">
+        <div className="flex-1 min-h-0 overflow-y-auto px-8 py-6 lg:py-5">
+          <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1.55fr)_minmax(0,1fr)] lg:grid-rows-[minmax(0,1fr)] lg:h-full gap-5 lg:gap-4">
             {/* 25 Oct (her review: crowded cards beside cards with large blank space): two columns whose cards are as
-                tall as their content, like the admin Dashboard; the page scrolls. Lists show 5 rows, then "Show all" */}
-            <div className="flex flex-col gap-5 min-w-0">
+                tall as their content. Later 25 Oct (her review: "still doesn't fit the screen"): on a laptop the columns
+                are the screen's height; the cards with lists share it, each showing the whole rows that fit and never
+                growing past its own rows; the last card of each column always reaches the bottom, so both columns end on
+                the same line (her review; any spare height sits at the bottom of that card). A column too tall even with one
+                row per list (a short screen) scrolls inside itself, so the page and the other column stay put */}
+            <div className="flex flex-col gap-5 lg:gap-4 min-w-0 lg:min-h-0 lg:overflow-y-auto">
               {/* Row 1, left: applications to review, problems, then next steps (12 Oct, flow review M1) */}
               {/* 21 Oct (her review): amber, like the admin's "Needs your action", while there is something to act on */}
-              <section className={act ? card.replace('border-slate-200', 'border-amber-300') : card} aria-labelledby="review-h">
+              <section className={`${act ? card.replace('border-slate-200', 'border-amber-300') : card} ${data.to_review.length ? 'flex-1' : 'shrink-0'}`} aria-labelledby="review-h">
                 <div className={`px-5 py-4 flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 ${act ? 'bg-amber-50' : ''}`}>
                   <h2 id="review-h" className={`text-base font-semibold ${act ? 'text-amber-900' : 'text-slate-900'}`}>Needs your attention</h2>
                   {data.attention.review_days && <span className="text-xs text-slate-500">You view applications within {data.attention.review_days} day{data.attention.review_days === 1 ? '' : 's'} on average · students see this</span>}
@@ -271,13 +301,19 @@ export default function EmployerDashboard() {
                     ))}
                   </ul>
                 )}
-                {data.to_review.length > 0 && <p className={GROUP}>To review ({sum.new}) · across all your jobs, newest first</p>}
+                {data.to_review.length > 0 && (
+                  <div className={`${GROUP} flex items-baseline justify-between gap-3`}>
+                    <span>To review ({sum.new}) · across all your jobs, newest first</span>
+                    {nReview < sum.new && <Link to={reviewJob ? `/employer/jobs/${reviewJob}` : '/employer/jobs'} className={SEE}>
+                      {reviewJob ? `See all ${sum.new} →` : 'See all in My Jobs →'}</Link>}
+                  </div>
+                )}
                 {data.to_review.length === 0 ? (
                   <p className="px-5 pb-4 text-sm text-slate-500">
                     {sum.applicants ? 'All caught up: every application has a status.' : 'No applications yet. Your jobs are in students\' Job Matches, marked "Apply on SkillMap".'}
                   </p>
                 ) : (
-                  <FitList onShowAll={() => setShowAll('review')} className="border-t border-slate-200" items={data.to_review} renderItem={reviewRow} />
+                  <FitList fill={lg} onShown={setNReview} className="border-t border-slate-200" items={data.to_review} renderItem={reviewRow} />
                 )}
                 {/* 21 Oct (her review: blank space once the tips hide after people apply): when nothing is late or waiting
                     long, say so, with the nearest decision date, so the card reads "on track" rather than empty */}
@@ -290,28 +326,32 @@ export default function EmployerDashboard() {
               </section>
               {/* Left, last: graduates who fit (visible students who haven't applied, best match first); fills the column */}
               {/* only a card with rows stretches; an empty one would just be a large blank card */}
-              <section className={`${card} ${data.graduates.length ? 'flex-1' : ''}`} aria-labelledby="fit-h">
+              <section className={`${card} flex-1`} aria-labelledby="fit-h">
                 <div className="px-5 pt-4 pb-3">
-                  <h2 id="fit-h" className="text-base font-semibold text-slate-900">Graduates who fit your jobs</h2>
-                  <p className="text-xs text-slate-500 mt-1">Visible students who haven't applied, best match first. Invite them here, or several at once from the job's View applicants page.</p>
+                  <div className="flex items-baseline justify-between gap-3">
+                    <h2 id="fit-h" className="text-base font-semibold text-slate-900">Graduates who fit your jobs</h2>
+                    {nGrads < data.graduates.length && <Link to={gradJob ? `/employer/jobs/${gradJob}?see=graduates` : '/employer/jobs'} className={SEE}>
+                      {gradJob ? 'See all →' : 'See all in My Jobs →'}</Link>}
+                  </div>
+                  <p className="text-xs text-slate-500 mt-1">Not applied yet, best match first. Invite several at once from the job's page.</p>
                 </div>
                 {data.graduates.length === 0 ? (
                   <p className="px-5 pb-4 text-sm text-slate-500">{data.open_jobs.length ? 'No visible graduate has at least half of your required skills yet. New profiles are matched as students add them.' : 'Open a job to see graduates who fit it.'}</p>
                 ) : (
-                  <FitList fill onShowAll={() => setShowAll('graduates')} className="border-t border-slate-200" items={data.graduates} renderItem={gradRow} />
+                  <FitList fill={lg} last onShown={setNGrads} className="border-t border-slate-200" items={data.graduates} renderItem={gradRow} />
                 )}
               </section>
             </div>
-            <div className="flex flex-col gap-5 min-w-0">
+            <div className="flex flex-col gap-5 lg:gap-4 min-w-0 lg:min-h-0 lg:overflow-y-auto">
               {/* Row 1, right: open jobs with their status bar (Workable's pipeline) and decision date */}
-              <section className={card} aria-labelledby="jobs-h">
-                <div className="px-5 pt-4 pb-3">
+              <section className={`${card} ${data.open_jobs.length ? 'flex-1' : 'shrink-0'}`} aria-labelledby="jobs-h">
+                <div className="px-5 pt-4 pb-3 lg:pb-2.5">
                   <div className="flex items-baseline justify-between gap-3">
                     <h2 id="jobs-h" className="text-base font-semibold text-slate-900">Your open jobs</h2>
-                    <Link to="/employer/jobs" className="text-sm font-medium text-blue-700 hover:underline">My Jobs</Link>
+                    <Link to="/employer/jobs" className={SEE}>{nJobs < data.open_jobs.length ? `See all ${data.open_jobs.length} →` : 'My Jobs'}</Link>
                   </div>
                   {anyApplicants && (
-                    <div className="flex flex-wrap gap-x-3 gap-y-1 mt-2 text-xs text-slate-500">
+                    <div className="flex flex-wrap gap-x-3 gap-y-1 mt-2 lg:mt-1 text-xs text-slate-500">
                       {BAR.map(([k, label, cls]) => <span key={k} className="inline-flex items-center gap-1.5"><span className={`w-2.5 h-2.5 rounded-sm ${cls}`} />{label}</span>)}
                     </div>
                   )}
@@ -319,14 +359,15 @@ export default function EmployerDashboard() {
                 {data.open_jobs.length === 0
                   ? <p className="px-5 pb-4 text-sm text-slate-500">No open jobs. Reopen one in My Jobs, or post a new one.</p>
                   : (
-                    <FitList className="border-t border-slate-200" items={data.open_jobs} renderItem={j => {
+                    <FitList fill={lg} onShown={setNJobs} className="border-t border-slate-200" items={data.open_jobs} renderItem={j => {
 
                         const total = Object.values(j.counts).reduce((x, y) => x + y, 0)
                         const days = j.decide_by ? daysUntil(j.decide_by) : null
                         return (
                           <li key={j.id} className="px-5 py-3.5">
                             <div className="flex items-baseline justify-between gap-3">
-                              <p className="text-sm font-semibold text-slate-900 truncate">{j.title}</p>
+                              <p className="flex items-center gap-2 text-sm font-semibold text-slate-900 min-w-0">
+                                {data.open_jobs.length > 1 && <JobDot cls={jobDot(j.id)} />}<span className="truncate">{j.title}</span></p>
                               <Link to={`/employer/jobs/${j.id}`} className="shrink-0 text-sm font-medium text-blue-700 hover:underline">View</Link>
                             </div>
                             <p className="text-xs text-slate-500 mt-0.5">
@@ -349,11 +390,11 @@ export default function EmployerDashboard() {
               {/* 25 Oct (her review: optional tips inside the amber card looked as urgent as late decisions): suggestions get
                   their own plain card; "Needs your attention" keeps only what the employer owes students */}
               {steps.length > 0 && (
-                <section className={card} aria-labelledby="tips-h">
+                <section className={`${card} shrink-0`} aria-labelledby="tips-h">
                   <h2 id="tips-h" className="px-5 pt-4 pb-3 text-base font-semibold text-slate-900">What you can do now</h2>
                   <ul className="border-t border-slate-200 divide-y divide-slate-100">
                     {steps.map(s => (
-                      <li key={s.key} className="px-5 py-3 flex items-center gap-3.5 text-sm text-slate-700">
+                      <li key={s.key} className="px-5 py-3 lg:py-2.5 flex items-center gap-3.5 text-sm text-slate-700">
                         <Mark kind="tip" />
                         <span className="flex-1 min-w-0">{s.text}</span>
                         {s.to.startsWith('#')
@@ -365,23 +406,22 @@ export default function EmployerDashboard() {
                 </section>
               )}
               {/* Row 2, right (20 Oct, mock-up E3): what students see about this employer (improvement #1), kept short */}
-              <section className={card} aria-labelledby="record-h">
-                <div className="px-5 py-4">
+              <section className={`${card} shrink-0`} aria-labelledby="record-h">
+                <div className="px-5 py-4 lg:py-3">
                   <h2 id="record-h" className="text-base font-semibold text-slate-900">
                     Your reply record <InfoTip label="How the record is counted">{RECORD_TIP}</InfoTip>
                   </h2>
                   {data.record?.shown ? (
                     <p className="text-sm text-slate-700 mt-1.5">You replied to every applicant by your promised date on <b>{data.record.on_time} of {data.record.of}</b> past jobs. Students see this before applying.</p>
                   ) : (
-                    <>
-                      <p className="text-sm text-slate-700 mt-1.5">Students see: "New on SkillMap: no reply record yet."</p>
-                      <p className="text-xs text-slate-500 mt-1">It appears after 3 of your jobs pass their decision date{data.record?.of ? ` (${data.record.of} so far)` : ''}.</p>
-                    </>
+                    // 25 Oct (her review: the columns' bottoms should line up): "appears after 3 jobs" is in the ⓘ tip
+                    <p className="text-sm text-slate-700 mt-1.5">Students see: "New on SkillMap: no reply record yet."{data.record?.of ? ` ${data.record.of} of 3 jobs so far.` : ''}</p>
                   )}
                 </div>
               </section>
               {/* Right, last: recent activity; fills the column */}
-              <section className={`${card} ${data.activity.length > 1 ? 'flex-1' : ''}`} aria-labelledby="activity-h">
+              {/* recent activity has no page of its own (her review), so it shows the newest that fit */}
+              <section className={`${card} flex-1`} aria-labelledby="activity-h">
                 <div className="px-5 py-4 flex items-baseline justify-between gap-3">
                   <h2 id="activity-h" className="text-base font-semibold text-slate-900">Recent activity</h2>
                   <span className="text-xs text-slate-500">Last 14 days</span>
@@ -389,27 +429,13 @@ export default function EmployerDashboard() {
                 {data.activity.length === 0
                   ? <p className="px-5 pb-4 text-sm text-slate-500">Nothing in the last 14 days. Applications, your status changes and invitations will be listed here.</p>
                   : (<>
-                    <FitList fill onShowAll={() => setShowAll('activity')} className="border-t border-slate-200" items={data.activity} renderItem={(e, i) => <ActivityRow key={i} e={e} />} />
+                    <FitList fill={lg} last max={8} className="border-t border-slate-200" items={data.activity} renderItem={(e, i) => <ActivityRow key={i} e={e} />} />
                     {data.activity.length < 3 && <p className="px-5 pb-3 text-xs text-slate-500">New applications and status changes appear here.</p>}
                   </>)}
               </section>
             </div>
           </div>
         </div>
-      )}
-      {/* 25 Oct (her review): "Show all" opens the whole list over the Dashboard, so the page's layout never changes */}
-      {showAll && data && (
-        <Modal wide onClose={() => setShowAll(null)} title={{
-          review: `To review (${data.to_review.length}) · newest first`,
-          graduates: `Graduates who fit your jobs (${data.graduates.length})`,
-          activity: `Recent activity · last 14 days (${data.activity.length})`,
-        }[showAll]}>
-          <ul className="-mx-6 divide-y divide-slate-100">
-            {showAll === 'review' && data.to_review.map(reviewRow)}
-            {showAll === 'graduates' && data.graduates.map(gradRow)}
-            {showAll === 'activity' && data.activity.map((e, i) => <ActivityRow key={i} e={e} />)}
-          </ul>
-        </Modal>
       )}
     </div>
   )
