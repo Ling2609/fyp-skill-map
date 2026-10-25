@@ -1307,3 +1307,26 @@ Her request: show the student a clear process (instead of silence then a sudden 
   on the checked list removed, which happened once in the test; the "Add it to SkillMap" step added to plans), so an
   unchecked link could appear and then vanish. Future work for the report: stream replies, with links checked line
   by line. The timing line stays in the backend log.
+
+## Graduates who fit: nice-to-have skills break ties (24 Oct, opened; her point "3-4 required skills give many fits")
+
+- US Office of Personnel Management, IT Management Series 2210 Q&A
+  (<https://www.opm.gov/policy-data-oversight/classification-qualifications/general-schedule-qualification-standards/2200/information-technology-management-series-2210-questions-and-answers/>):
+  "Applicants with higher proficiency levels on a quality ranking factor are ranked above those with lower
+  proficiency levels"; "Agencies may not rate qualified candidates ineligible solely for failure to possess a quality
+  ranking factor"; a selective factor is a "screen-out" and becomes "part of the minimum requirements".
+- East Tennessee State University, "Minimum and Preferred or Desirable Qualifications" (adapted from Willamette
+  University, 2022; <https://oupub.etsu.edu/human-resources/documents/new_minimum_preferred_qualifications.pdf>):
+  "The University cannot hire a candidate who does not meet all of the minimum qualifications"; "Preferred
+  qualifications should never be used to screen candidates out"; "There is no requirement to meet all of them".
+- UC Davis HR, Applicant Screening Guidelines (<https://hr.ucdavis.edu/node/2556>): "only those applicants who meet
+  minimum qualifications" are "eligible for consideration"; the pool then goes to the department "for preferred
+  qualification screening".
+- With UIC (above, "Scoring must-have vs nice-to-have"): required decides who is in, preferred ranks those who are in
+  and never screens anyone out.
+- Built: who fits is unchanged (at least half of the required skills, FIT_MIN, TalentWorks); the list is ordered by
+  share of required skills, then nice-to-have skills held, then required count; the row shows "+N nice to have".
+  Example, 3 required + 2 nice-to-have: 3/3 + 1 > 3/3 + 0 > 2/3 + 1; 1/3 + 2 not listed.
+- Difference to state in the report: these employers require ALL minimum qualifications; SkillMap lists graduates
+  with at least half, because the list suggests people to invite, not to hire. Sources are university and government
+  HR policies, not peer-reviewed studies.

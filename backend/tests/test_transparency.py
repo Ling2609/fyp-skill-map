@@ -29,7 +29,8 @@ def _post(client, users, employer, days=None, required=("Python", "SQL")):
 
 def test_decision_date_is_set_when_posting_and_moved_once(client, users):
     employer = users.employer()
-    assert _post(client, users, employer, days=10).status_code == 400            # only 14 / 28 / 30 / 42
+    assert _post(client, users, employer, days=10).status_code == 400            # only 14 / 21 / 30 / 45
+    assert _post(client, users, employer, days=28).status_code == 400            # 24 Oct: "4 weeks" is gone
     job = _post(client, users, employer, days=14).json()
     due = datetime.fromisoformat(job["decide_by"].replace("Z", "+00:00"))
     assert timedelta(days=13) < due - datetime.now(timezone.utc) <= timedelta(days=14)

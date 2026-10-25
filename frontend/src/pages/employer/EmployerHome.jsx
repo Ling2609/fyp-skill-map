@@ -148,10 +148,11 @@ export function MyJobs() {
   const [busy, setBusy] = useState(null)
   const [error, setError] = useState('')
   const navigate = useNavigate()
-  const [notice, setNotice] = useState(state?.posted ? `"${state.posted}" is live. Students see it in Job Matches now.`
+  const [notice, setNotice] = useState(state?.posted ? `"${state.posted}" is live in students' Job Matches.`
     : state?.saved ? `Changes to "${state.saved}" are saved. Students see them in Job Matches now.` : '')
   // 12 Oct (flow review): after publishing, how many visible graduates already fit, so the next step is clear
   const [fitNote] = useState(state?.posted && state.fit > 0 ? state.fit : 0)
+  const [fitAll] = useState(state?.posted && state.fitAll > 0 ? state.fitAll : 0)   // 24 Oct: have every required skill
   const [askClose, setAskClose] = useState(null)       // the job being closed (a reason is asked)
   const [askExtend, setAskExtend] = useState(null)     // the job whose decision date is being moved
 
@@ -201,7 +202,9 @@ export function MyJobs() {
       <div className="flex-1 min-h-0 overflow-y-auto px-8 py-6 flex flex-col gap-4">
         {notice && <p role="status" className="text-sm text-emerald-800 bg-emerald-50 border border-emerald-200 rounded-lg px-4 py-2.5">
           {notice}
-          {fitNote > 0 && notice.includes('is live') && <> {fitNote} visible graduate{fitNote === 1 ? '' : 's'} already fit it (at least half of its required skills). <Link to="/dashboard" className="font-semibold underline">Invite them from your Dashboard</Link></>}
+          {fitNote > 0 && notice.includes('is live') && <> {fitAll > 0
+            ? `${fitAll} graduate${fitAll === 1 ? ' already has' : 's already have'} all its required skills.`
+            : `${fitNote} graduate${fitNote === 1 ? ' already has' : 's already have'} at least half of its required skills.`} <Link to="/dashboard" className="font-semibold underline">Invite them from your Dashboard</Link></>}
         </p>}
         {askClose && <CloseDialog job={askClose} busy={busy === askClose.id} onCancel={() => setAskClose(null)}
           onClose={(reason) => close(askClose, reason)} />}

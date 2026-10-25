@@ -237,7 +237,7 @@ export default function PostJob() {
     const req = editing
       ? api.put(`/employer/jobs/${jobId}`, { description: ad.description, salary: ad.salary, skills, soft, record_id: recordId, ...reqs })
       : api.post('/employer/jobs', { ...ad, skills, soft, decide_days: decideDays, record_id: recordId, ...reqs })
-    req.then(res => navigate('/employer/jobs', { state: editing ? { saved: ad.title.trim() } : { posted: ad.title.trim(), fit: res.data.graduates_fit } }))
+    req.then(res => navigate('/employer/jobs', { state: editing ? { saved: ad.title.trim() } : { posted: ad.title.trim(), fit: res.data.graduates_fit, fitAll: res.data.graduates_all_required } }))
       .catch(err => {
         setError(errText(err, editing ? "Couldn't save the changes. Try again." : "Couldn't publish the job. Try again."))
         setAsksMore(editing && err.response?.status === 409)
@@ -312,7 +312,7 @@ export default function PostJob() {
             <div>
               <p className={label} id="pj-decide">Decide by</p>
               <div role="radiogroup" aria-labelledby="pj-decide" className="flex flex-wrap gap-2">
-                {[[14, '2 weeks'], [28, '4 weeks'], [30, '30 days'], [42, '6 weeks']].map(([d, text]) => (
+                {[[14, '14 days'], [21, '21 days'], [30, '30 days'], [45, '45 days']].map(([d, text]) => (
                   <button key={d} type="button" role="radio" aria-checked={decideDays === d} onClick={() => setDecideDays(d)}
                     className={`text-sm font-medium rounded-full px-3.5 py-1.5 border ${decideDays === d
                       ? 'bg-blue-600 border-blue-600 text-white' : 'bg-white border-slate-300 text-slate-700 hover:border-blue-300'}`}>{text}</button>

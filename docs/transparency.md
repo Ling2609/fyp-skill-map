@@ -4,7 +4,7 @@ What students are shown about an employer's job, and exactly how each number is 
 
 ## Decision date
 
-- Every SkillMap job post has a date the employer promises a decision by: 2 weeks, 4 weeks, 30 days (default) or 6 weeks after posting.
+- Every SkillMap job post has a date the employer promises a decision by: 14, 21, 30 (default) or 45 days after posting.
 - It can be moved **once**, by 1 or 2 weeks, with a reason applicants see. The first date is kept (`jobs.decide_by_original`) and shown: "Decision date moved from 12 Nov: …".
 - After the date, an applicant still waiting sees "No decision by the date". This is **not** a rejection in the employer's name.
 

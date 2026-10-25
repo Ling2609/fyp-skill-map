@@ -16,7 +16,9 @@ from sqlalchemy.orm import Session
 from app.models.application import Application, ApplicationEvent
 from app.models.job import Job
 
-DECIDE_DAYS = (14, 28, 30, 42)      # 2 weeks, 4 weeks, 30 days (default; DfE: decide within 30 working days), 6 weeks
+# 24 Oct (her review: "4 weeks" next to "30 days" read oddly): one unit, days. 30 stays the default (DfE: decide within
+# 30 working days); 45 matches the 45-day cut-off for old jobs (F8). Jobs posted earlier keep their dates.
+DECIDE_DAYS = (14, 21, 30, 45)
 DEFAULT_DECIDE_DAYS = 30
 EXTEND_DAYS = (7, 14)                # one extension, with a reason students see
 STAND_MIN_APPLICANTS = 5             # "where you stand" only from 5 applicants, so no one can be singled out
@@ -38,7 +40,7 @@ def _aware(t):
 
 def decide_by_from(days: int, start: datetime | None = None) -> datetime:
     if days not in DECIDE_DAYS:
-        raise HTTPException(status_code=400, detail="Pick when you will decide: 2 weeks, 4 weeks, 30 days or 6 weeks.")
+        raise HTTPException(status_code=400, detail="Pick when you will decide: 14, 21, 30 or 45 days.")
     return (start or datetime.now(timezone.utc)) + timedelta(days=days)
 
 

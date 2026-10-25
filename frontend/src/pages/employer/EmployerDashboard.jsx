@@ -50,13 +50,13 @@ function Avatar({ name, small }) {
   return <span aria-hidden="true" className={`${small ? 'w-8 h-8 text-xs' : 'w-10 h-10 text-sm'} shrink-0 rounded-full text-white font-semibold flex items-center justify-center ${avatarCls(name)}`}>{initials(name)}</span>
 }
 
-// Short on purpose so the name and job keep their room; what's missing is on the profile
-function Match({ have, total, short }) {
+// What's missing is on the profile. 24 Oct (her review: "what does 2 of 3 mean?"): always says "required"
+function Match({ have, total }) {
   const full = total > 0 && have === total
   return (
     <span title={`Has ${have} of the job's ${total} required skills`}
       className={`text-xs font-semibold rounded-full px-2.5 py-1 whitespace-nowrap ${full ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-800'}`}>
-      {have} of {total}{short ? '' : ' required'}
+      {have} of {total} required
     </span>
   )
 }
@@ -349,9 +349,10 @@ export default function EmployerDashboard() {
                       <Avatar name={g.name} small />
                       <div className="flex-1 min-w-0">
                         <Link to={`/employer/graduates/${g.student_id}?job=${g.job_id}`} className="block text-sm font-semibold text-slate-900 truncate hover:text-blue-700">{g.name}</Link>
-                        <p className="text-xs text-slate-500 truncate">fits {g.job_title}{g.programme && ` · ${g.programme}`}</p>
+                        {/* 24 Oct: the nice-to-have skills they also have, which put them higher in the list */}
+                        <p className="text-xs text-slate-500 truncate">fits {g.job_title}{g.nice > 0 && ` · +${g.nice} nice to have`}{g.programme && ` · ${g.programme}`}</p>
                       </div>
-                      <Match have={g.have} total={g.total} short />
+                      <Match have={g.have} total={g.total} />
                       {g.invited_at
                         ? <span className="shrink-0 text-xs font-semibold text-blue-700 bg-blue-50 rounded-full px-2.5 py-1">Invited {ago(g.invited_at)}</span>
                         : <button onClick={() => invite(g)} disabled={inviting === g.student_id}

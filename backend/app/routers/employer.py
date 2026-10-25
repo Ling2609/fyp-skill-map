@@ -325,7 +325,11 @@ def publish(data: JobIn, employer: User = Depends(require_employer), db: Session
     db.commit()
     _review_job(data, job, employer)
     # 12 Oct: say straight away how many visible graduates fit the new job, so the employer can invite them
-    return {**_row(job, rows), "graduates_fit": len(_graduates_who_fit([job], db, limit=None))}
+    fits = _graduates_who_fit([job], db, limit=None)
+    # 24 Oct (her point: with 3-4 required skills "at least half" is easy, so the count sounds bigger than it is): the
+    # "is live" note names the graduates with ALL the required skills; it falls back to "at least half" when none do
+    return {**_row(job, rows), "graduates_fit": len(fits),
+            "graduates_all_required": sum(1 for g in fits if g["have"] == g["total"])}
 
 
 # ── Edit a posted job (13 Oct; her design after research, references.md "Editing a published job") ──────────────
@@ -690,12 +694,16 @@ def _graduates_who_fit(open_jobs: list[Job], db: Session, limit: int | None = FI
             have = len(gap["matched_skills"])
             total = have + len(gap["missing_skills"])
             ratio = have / total if total else 0
-            if ratio >= FIT_MIN and (student.id not in best or ratio > best[student.id]["ratio"]):
+            # 24 Oct (her point: a job with 3-4 required skills gives many ties): the nice-to-have skills a graduate
+            # also has break the tie. Who fits is unchanged (FIT_MIN, required skills only); only the order is.
+            nice = sum(1 for n in gap.get("nice_to_have", []) if n.get("has"))
+            if ratio >= FIT_MIN and (student.id not in best or (ratio, nice) > (best[student.id]["ratio"],
+                                                                               best[student.id]["nice"])):
                 best[student.id] = {"student_id": student.id, "name": f"{student.first_name} {student.last_name}",
                                     "programme": _programme(student, db), "job_id": job.id, "job_title": job.job_title,
-                                    "have": have, "total": total, "ratio": ratio,
+                                    "have": have, "total": total, "ratio": ratio, "nice": nice,
                                     "invited_at": invited.get((job.id, student.id))}
-    return sorted(best.values(), key=lambda g: (-g["ratio"], -g["have"], g["name"]))[:limit]
+    return sorted(best.values(), key=lambda g: (-g["ratio"], -g["nice"], -g["have"], g["name"]))[:limit]
 
 
 @router.get("/dashboard")

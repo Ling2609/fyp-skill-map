@@ -5,6 +5,7 @@ from conftest import sql
 def test_invite_flow(client, users, post_job):
     employer, student = users.employer(), users.student(visible=True)
     job = post_job(employer)
+    assert job["graduates_all_required"] >= 1 and job["graduates_fit"] >= job["graduates_all_required"]   # 24 Oct
     d = client.get("/employer/dashboard", headers=users.h(employer)).json()
     assert any(g["student_id"] == users.ids[student] for g in d["graduates"]), "a visible student with every skill should fit"
     r = client.post("/employer/invitations", headers=users.h(employer), json={"job_id": job["id"], "student_id": users.ids[student]})
@@ -70,3 +71,27 @@ def test_deactivated_student_leaves_graduates_who_fit(client, users, post_job, d
     assert all(g["student_id"] != users.ids[student] for g in d["graduates"])
     assert client.get(f"/employer/graduates/{users.ids[student]}", params={"job_id": job["id"]}, headers=users.h(employer)).status_code == 404
     sql(db, "update users set is_active=true where id=:i", i=users.ids[student])
+
+
+def test_graduates_with_nice_to_have_skills_come_first(client, users):
+    """24 Oct (her point): a job with 3 required skills gives many graduates at "2 of 3". Among them, the one who also
+    has the nice-to-have skill comes first. Who fits doesn't change, only the order."""
+    employer = users.employer()
+    plain = users.student(skills=("Python", "SQL"), visible=True)                # made first: sorts first by name
+    extra = users.student(skills=("Python", "SQL", "Docker"), visible=True)      # same 2 of 3 + the nice-to-have
+    h = users.h(employer)
+    cats = client.get("/jobs/subcategories", params={"include_past": True}, headers=h).json()
+    skills = ([{"name": s, "level": "required", "quote": "", "group": ""} for s in ("Python", "SQL", "Haskell")]
+              + [{"name": "Docker", "level": "preferred", "quote": "", "group": ""}])
+    r = client.post("/employer/jobs", headers=h, json={
+        "title": "Graduate Data Engineer", "location": "Kuala Lumpur", "salary": "",
+        "category": cats[0] if cats else "Developers/Programmers",
+        "description": "Build data pipelines in Python and SQL; Docker is a plus. Haskell for our parsers. " * 2,
+        "skills": skills, "soft": []})
+    assert r.status_code == 200, r.text
+    # nobody has Haskell: the "is live" note falls back to "at least half" (24 Oct)
+    assert r.json()["graduates_all_required"] == 0 and r.json()["graduates_fit"] >= 2
+    grads = [g for g in client.get("/employer/dashboard", headers=h).json()["graduates"]
+             if g["job_id"] == r.json()["id"] and g["student_id"] in (users.ids[plain], users.ids[extra])]
+    assert [(g["student_id"], g["have"], g["total"], g["nice"]) for g in grads] == [
+        (users.ids[extra], 2, 3, 1), (users.ids[plain], 2, 3, 0)]
