@@ -1,6 +1,8 @@
-# Tools for checking the code, not needed to run SkillMap (26 Oct). Install with:
+# Tools for checking the code and testing the load, not needed to run SkillMap (26 Oct). Install with:
 #   pip install -r requirements-dev.txt
 ruff==0.15.11
 bandit==1.9.4
 coverage==7.17.0
 pytest-cov==7.1.0
+locust==2.47.0
+psutil==7.2.2
