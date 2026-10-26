@@ -399,7 +399,8 @@ class SkillExtractor:
             got = self._ask_sentences(title, [lines[i] for i in batch], retries)
             reached = reached or got is not None
             got = got or {}
-            items += [{**sk, "pass": 1, "sentence_id": sid}  # nosec B105: "pass" = reading pass 1 or 2, not a password
+            # Bandit B105: reviewed, "pass" = reading pass 1 or 2, not a password
+            items += [{**sk, "pass": 1, "sentence_id": sid}  # nosec B105
                        for sid, sks in got.items() if sid in batch for sk in sks]
             answered |= set(got) & set(batch)
         if ids and not reached:
@@ -412,7 +413,8 @@ class SkillExtractor:
             for start in range(0, len(missing), SENTENCES_PER_CALL):
                 batch = missing[start:start + SENTENCES_PER_CALL]
                 got = self._ask_sentences(title, [lines[i] for i in batch], retries) or {}
-                items += [{**sk, "pass": 2, "sentence_id": sid}  # nosec B105: reading pass 2, not a password
+                # Bandit B105: reviewed, reading pass 2, not a password
+                items += [{**sk, "pass": 2, "sentence_id": sid}  # nosec B105
                           for sid, sks in got.items() if sid in batch for sk in sks]
                 answered |= set(got) & set(batch)
         self.last_coverage = (len(answered), len(ids))     # sentences answered / sentences in the ad

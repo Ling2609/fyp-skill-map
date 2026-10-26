@@ -70,7 +70,8 @@ def _load():
         from transformers import AutoModelForSequenceClassification, AutoTokenizer
         # 26 Oct (Bandit B615): our own trained model, read from local folders only. local_files_only=True means it can
         # never download (or silently replace) a model from the Hugging Face Hub, so there is no revision to pin.
-        _model = [(AutoTokenizer.from_pretrained(f, local_files_only=True),  # nosec B615: local folder, no download
+        # Bandit B615: reviewed, local folder, no download
+        _model = [(AutoTokenizer.from_pretrained(f, local_files_only=True),  # nosec B615
                    AutoModelForSequenceClassification.from_pretrained(f, local_files_only=True).eval())  # nosec B615
                   for f in folders]
         print(f"[relation] model loaded: {os.path.basename(os.path.normpath(path))}"

@@ -18,7 +18,8 @@ docs/evidence/evaluation_runs.json for the report (examiners can't see a local M
 import hashlib
 import os
 import platform
-import subprocess  # nosec B404: only to run "git" with fixed arguments (below)
+# Bandit B404: reviewed, only to run "git" with fixed arguments (below)
+import subprocess  # nosec B404
 import uuid
 from datetime import datetime, timezone
 

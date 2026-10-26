@@ -231,7 +231,8 @@ def change_password(payload: PasswordChange, background: BackgroundTasks, db: Se
     db.refresh(current_user)
     background.add_task(send_email, current_user.email, *account_emails.password_changed(
         current_user.first_name, current_user.username))
-    return {"access_token": _login_token(current_user), "token_type": "bearer"}  # nosec B105: the OAuth2 token type, not a password
+    # Bandit B105: reviewed, the OAuth2 token type, not a password
+    return {"access_token": _login_token(current_user), "token_type": "bearer"}  # nosec B105
 
 
 # The privacy notice a new user accepts: the date of the newest entry in frontend/src/pages/privacyText.js VERSIONS
@@ -518,7 +519,8 @@ def login(payload: UserLogin, request: Request, db: Session = Depends(get_db)):
         db.commit()
     if not user.is_active:   # told only after the right password, so it reveals nothing to a guesser
         raise HTTPException(status_code=403, detail=DEACTIVATED)
-    return {"access_token": _login_token(user), "token_type": "bearer"}  # nosec B105: the OAuth2 token type, not a password
+    # Bandit B105: reviewed, the OAuth2 token type, not a password
+    return {"access_token": _login_token(user), "token_type": "bearer"}  # nosec B105
 
 
 # ── Forgot password (4 Oct; OWASP Forgot Password Cheat Sheet, references.md) ──────────────────────────────────
@@ -536,7 +538,8 @@ RESET_RESEND_SECONDS = 60
 FORGOT_REPLY = {"message": "If an account exists, a 6-digit code has been sent to its email address."}
 INVALID_CODE = "Wrong or expired code."
 RESET_PASS_MINUTES = 10
-EXPIRED_PASS = "This reset has expired. Please start again."  # nosec B105: a message to the user, not a password
+# Bandit B105: reviewed, a message to the user, not a password
+EXPIRED_PASS = "This reset has expired. Please start again."  # nosec B105
 
 
 def _reset_key() -> str:
