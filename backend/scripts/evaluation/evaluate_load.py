@@ -27,7 +27,8 @@ Plan, fixed on 26 Oct BEFORE any number was seen:
 Run from backend/ with the venv active (PostgreSQL running; MongoDB optional, it only saves the run record):
   pip install -r requirements-dev.txt
   python scripts/evaluation/evaluate_load.py
-Writes ../docs/evidence/performance/load/: stage_*_stats.csv (Locust's own tables), summary.txt
+Writes ../docs/evidence/performance/load/: stage_*_stats.csv, _failures.csv, _exceptions.csv and _locust.log (Locust's own
+output), server.log (the server's messages), summary.txt
 """
 import csv
 import json
@@ -47,6 +48,7 @@ OUT = "../docs/evidence/performance/load"
 PORT = 8078
 BASE = f"http://127.0.0.1:{PORT}"
 STAGE_SECONDS, RAMP_SECONDS, PER_PROFILE, MIN_CALLS = 180, 10, 2, 10
+EXIT_GRACE = 60          # seconds Locust gets to close after the stage time before the script stops it
 FAST_MS, SLOW_MS = 1000, 10000
 STAGES = [   # name, students, (pause min, pause max), p95 limit in ms (None = reported only, no rule)
     dict(name="5 students", users=5, wait=(3, 10), limit_ms=FAST_MS),
@@ -96,13 +98,14 @@ def make_students(db, per_profile=PER_PROFILE) -> list[dict]:
 
 def start_server():
     env = {**os.environ, "GEMINI_API_KEY": ""}           # no outside call during the run (see the plan above)
+    log = open(path("server.log"), "w", encoding="utf-8")   # the server's own messages (errors, warnings) are kept for the report
     proc = subprocess.Popen([sys.executable, "-m", "uvicorn", "app.main:app", "--port", str(PORT), "--log-level", "warning"],
-                            stdout=subprocess.DEVNULL, stderr=subprocess.PIPE, text=True, env=env)
+                            stdout=log, stderr=subprocess.STDOUT, text=True, env=env)
     import httpx
     t0 = time.perf_counter()
     while time.perf_counter() - t0 < 600:
         if proc.poll() is not None:
-            sys.exit(f"The server stopped while starting:\n{proc.stderr.read()[-2000:]}")
+            sys.exit(f"The server stopped while starting:\n{open(path('server.log'), encoding='utf-8').read()[-2000:]}")
         try:
             if httpx.get(BASE + "/openapi.json", timeout=2).status_code == 200:
                 return proc, time.perf_counter() - t0
@@ -136,14 +139,23 @@ def warm_up(students):
                 time.sleep(1)
 
 
+def number(value):
+    """Locust writes 'N/A' for a call that has no answer times (no call, or none that came back): that is None here."""
+    try:
+        return float(value)
+    except ValueError:
+        return None
+
+
 def parse_stats(csv_path) -> dict:
-    """Locust's *_stats.csv -> {call: {requests, failures, median_ms, p95_ms, max_ms, rps}} (+ 'Aggregated')."""
+    """Locust's *_stats.csv -> {call: {requests, failures, median_ms, p95_ms, max_ms, rps}} (+ 'Aggregated').
+    A time Locust could not give (N/A) is None, and judge() reports it instead of the script stopping."""
     out = {}
     with open(csv_path, newline="", encoding="utf-8") as f:
         for row in csv.DictReader(f):
             out[row["Name"]] = {"requests": int(row["Request Count"]), "failures": int(row["Failure Count"]),
-                                "median_ms": float(row["Median Response Time"]), "p95_ms": float(row["95%"]),
-                                "max_ms": float(row["Max Response Time"]), "rps": float(row["Requests/s"])}
+                                "median_ms": number(row["Median Response Time"]), "p95_ms": number(row["95%"]),
+                                "max_ms": number(row["Max Response Time"]), "rps": number(row["Requests/s"]) or 0.0}
     return out
 
 
@@ -159,9 +171,27 @@ def judge(stage, stats) -> tuple[bool | None, list[str]]:
         s = stats.get(name)
         if not s or s["requests"] < MIN_CALLS:
             problems.append(f"{name}: only {s['requests'] if s else 0} calls (need {MIN_CALLS})")
+        elif s["p95_ms"] is None:
+            problems.append(f"{name}: {s['requests']} calls, {s['failures']} failed, no answer times (Locust gave N/A)")
         elif s["p95_ms"] >= stage["limit_ms"]:
             problems.append(f"{name}: p95 {s['p95_ms'] / 1000:.2f} s (limit {stage['limit_ms'] / 1000:g} s)")
     return not problems, problems
+
+
+def tree_cpu(server, watched) -> float:
+    """CPU % (100 = one core) of the server process and everything it started. A process seen for the first time reads
+    0 once (psutil measures between two calls), so each one is looked at when it first appears and counted from then on."""
+    total = 0.0
+    try:
+        for p in [server, *server.children(recursive=True)]:
+            if p.pid not in watched:
+                watched[p.pid] = p
+                p.cpu_percent(None)
+                continue
+            total += watched[p.pid].cpu_percent(None)
+    except Exception:                    # a process ended between two looks: skip this reading
+        pass
+    return total
 
 
 def run_stage(stage, index, token_file, server_pid):
@@ -171,22 +201,40 @@ def run_stage(stage, index, token_file, server_pid):
            "-t", f"{STAGE_SECONDS + RAMP_SECONDS}s", "--reset-stats", "--host", BASE, "--csv", prefix,
            "--only-summary", "--loglevel", "WARNING"]
     env = {**os.environ, "LOAD_TOKENS": token_file, "LOAD_WAIT_MIN": str(stage["wait"][0]), "LOAD_WAIT_MAX": str(stage["wait"][1])}
-    proc = subprocess.Popen(cmd, env=env, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
-    cpu = []
-    try:
-        import psutil
-        server = psutil.Process(server_pid)
-        server.cpu_percent(None)
+    log_path = prefix + "_locust.log"
+    deadline = time.perf_counter() + STAGE_SECONDS + RAMP_SECONDS + EXIT_GRACE
+    cpu, killed, started = [], False, time.perf_counter()
+    with open(log_path, "w", encoding="utf-8") as log:           # Locust's own messages go to a file, never a pipe that can fill
+        proc = subprocess.Popen(cmd, env=env, stdin=subprocess.DEVNULL, stdout=log, stderr=subprocess.STDOUT, text=True)
+        try:
+            import psutil
+            server = psutil.Process(server_pid)
+        except ImportError:
+            psutil, server = None, None
+        watched = {}                      # on Windows the venv launcher is the parent of the real server: count the whole tree
+        last_report = started
         while proc.poll() is None:
             time.sleep(2)
-            cpu.append(server.cpu_percent(None))
-    except ImportError:
-        pass
-    out = proc.communicate()[0]
-    if proc.returncode not in (0, 1):                # Locust exits 1 when some calls failed: that is a result, not a crash
-        sys.exit(f"Locust stopped with code {proc.returncode}:\n{out[-2000:]}")
+            if server:
+                cpu.append(tree_cpu(server, watched))
+            now = time.perf_counter()
+            if now - last_report >= 30:
+                last_report = now
+                print(f"   ... {now - started:.0f} s of {STAGE_SECONDS + RAMP_SECONDS} s" + (f", server CPU {cpu[-1]:.0f}%" if cpu else ""), flush=True)
+            if now > deadline:        # the test time is over and Locust has not closed: its tables are already written
+                proc.kill()
+                proc.wait()
+                killed = True
+                print("   Locust did not close by itself after the stage; stopped it (its stats files are complete).", flush=True)
+    if not killed and proc.returncode not in (0, 1):     # Locust exits 1 when some calls failed: that is a result, not a crash
+        with open(log_path, encoding="utf-8") as f:
+            sys.exit(f"Locust stopped with code {proc.returncode}:\n{f.read()[-2000:]}")
     stats = parse_stats(prefix + "_stats.csv")
     return stats, ({"mean": round(statistics.mean(cpu)), "max": round(max(cpu))} if cpu else None)
+
+
+def _secs(ms) -> str:
+    return "n/a" if ms is None else f"{ms / 1000:.3f}"
 
 
 def summarise(results, startup) -> tuple[list[str], dict, str]:
@@ -211,7 +259,7 @@ def summarise(results, startup) -> tuple[list[str], dict, str]:
     lines.append("\np95 per call (seconds)")
     lines.append(f"{'Call':<30}" + "".join(f"{n.split(':')[0][:12]:>14}" for n in names))
     for c in CALLS:
-        lines.append(f"{c:<30}" + "".join(f"{(s.get(c, {}).get('p95_ms', 0) / 1000):>14.3f}" for _, s, _ in results))
+        lines.append(f"{c:<30}" + "".join(f"{_secs(s.get(c, {}).get('p95_ms')):>14}" for _, s, _ in results))
     for stage, stats, _ in results:
         ok, problems = judge(stage, stats)
         for p in problems:
@@ -262,7 +310,7 @@ def main():
         try:
             for i, stage in enumerate(STAGES, 1):
                 warm_up(students)
-                print(f"Stage {i}/{len(STAGES)}: {stage['name']} ({STAGE_SECONDS + RAMP_SECONDS} s) ...")
+                print(f"Stage {i}/{len(STAGES)}: {stage['name']} ({STAGE_SECONDS + RAMP_SECONDS} s) ...", flush=True)
                 stats, cpu = run_stage(stage, i, token_file, proc.pid)
                 results.append((stage, stats, cpu))
         finally:

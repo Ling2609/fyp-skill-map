@@ -80,3 +80,17 @@ def test_test_students_saved_then_removed(db):
     for i in ids:
         assert sql(db, "select count(*) from users where id = :i", i=i).scalar() == 0
         assert sql(db, "select count(*) from user_modules where user_id = :i", i=i).scalar() == 0
+
+
+def test_na_from_locust_does_not_stop_the_script_and_is_reported(tmp_path):
+    f = tmp_path / "stage_stats.csv"
+    f.write_text(HEADER + "GET,GET /recommend/fit,0,0,N/A,N/A,N/A,N/A,0,0,0,N/A,N/A\n"
+                 "POST,POST /recommend/,20,20,N/A,N/A,N/A,N/A,0,1,1,N/A,N/A\n", encoding="utf-8")
+    s = el.parse_stats(f)
+    assert s["GET /recommend/fit"]["p95_ms"] is None and s["POST /recommend/"]["failures"] == 20
+    stats = stats_for()
+    stats["POST /recommend/"] = s["POST /recommend/"]
+    ok, problems = el.judge({"limit_ms": el.FAST_MS}, stats)
+    assert not ok and "20 calls, 20 failed, no answer times" in problems[0]
+    lines, _, verdict = el.summarise([(el.STAGES[0], stats, None)], 1.0)          # the table still prints
+    assert verdict.startswith("FAIL") and any("n/a" in ln for ln in lines)
