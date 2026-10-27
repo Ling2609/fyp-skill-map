@@ -99,7 +99,8 @@ def make_students(db, per_profile=PER_PROFILE) -> list[dict]:
 def start_server():
     env = {**os.environ, "GEMINI_API_KEY": ""}           # no outside call during the run (see the plan above)
     log = open(path("server.log"), "w", encoding="utf-8")   # the server's own messages (errors, warnings) are kept for the report
-    proc = subprocess.Popen([sys.executable, "-m", "uvicorn", "app.main:app", "--port", str(PORT), "--log-level", "warning"],
+    proc = subprocess.Popen([sys.executable, "-m", "uvicorn", "app.main:app", "--port", str(PORT),
+                             "--timeout-keep-alive", "15", "--log-level", "warning"],
                             stdout=log, stderr=subprocess.STDOUT, text=True, env=env)
     import httpx
     t0 = time.perf_counter()
