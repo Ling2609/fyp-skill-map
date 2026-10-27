@@ -1,24 +1,24 @@
 Load test: students using SkillMap at the same time (one uvicorn process, client on the same machine)
-Each stage 180 s counted after 10 s of starting users; server start until it answered: 20.6 s
+Each stage 180 s counted after 10 s of starting users; server start until it answered: 19.5 s
 
 Stage                                       calls  calls/s  failed   server CPU mean/max %   result
-5 students                                    474      2.6       0                   0 / 0   pass
-10 students                                   925      5.2       0                   0 / 0   pass
-20 students                                  1846     10.3       0                   0 / 0   pass
-40 students                                  3598     20.0       1                   0 / 0   FAIL
-stress: 20 students, no reading time         5351     29.7       0                   0 / 0   no rule (stress)
+5 students                                    464      2.5       0                24 / 142   pass
+10 students                                   887      5.0       0                39 / 139   pass
+20 students                                  1816     10.1       0                80 / 204   pass
+40 students                                  3606     20.0       4              222 / 1303   FAIL
+stress: 20 students, no reading time         5026     27.9       0              781 / 1607   no rule (stress)
 
 p95 per call (seconds)
 Call                              5 students   10 students   20 students   40 students        stress
-GET /auth/me                           0.025         0.020         0.021         0.022         0.390
-POST /recommend/                       0.550         0.440         0.450         0.820         3.500
-GET /profile/skills                    0.017         0.020         0.014         0.023         0.350
-GET /jobs/subcategories                0.007         0.009         0.007         0.009         0.360
-POST /skillgap/                        0.058         0.040         0.057         0.150         0.840
-GET /jobs/{id}/description             0.010         0.009         0.009         0.012         0.330
-GET /recommend/goal                    0.290         0.200         0.360         0.490         2.600
-GET /recommend/fit                     0.100         0.050         0.078         0.170         1.100
-  40 students: 1 of 3598 calls failed
+GET /auth/me                           0.016         0.018         0.021         0.025         0.520
+POST /recommend/                       0.340         0.350         0.670         1.000         4.500
+GET /profile/skills                    0.014         0.016         0.016         0.021         0.380
+GET /jobs/subcategories                0.005         0.007         0.006         0.011         0.340
+POST /skillgap/                        0.035         0.042         0.051         0.190         1.200
+GET /jobs/{id}/description             0.009         0.009         0.009         0.015         0.330
+GET /recommend/goal                    0.890         0.180         0.270         0.630         2.600
+GET /recommend/fit                     0.040         0.041         0.063         0.240         1.700
+  40 students: 4 of 3606 calls failed
 
 FAIL: at least one rule stage broke its limit; every call's p95 stayed under 1 s up to 20 students (the rule fixed beforehand)
 Machine: os Windows-11-10.0.26300-SP0, cpu Intel64 Family 6 Model 170 Stepping 4, GenuineIntel, cores 22, python 3.13.7, ram_gb 31.5, locust 2.47.0
