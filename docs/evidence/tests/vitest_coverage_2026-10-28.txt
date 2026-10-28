@@ -1,0 +1,122 @@
+
+> frontend@0.0.0 test:coverage
+> vitest run --coverage
+
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.5 [39m[90mC:/Users/Ling/Desktop/fyp-skill-map/frontend[39m
+      [2mCoverage enabled with [22m[33mv8[39m
+
+ [32m✓[39m src/greeting.test.js [2m([22m[2m12 tests[22m[2m)[22m[32m 25[2mms[22m[39m
+ [32m✓[39m src/pages/admin/decisions.test.js [2m([22m[2m4 tests[22m[2m)[22m[32m 17[2mms[22m[39m
+ [32m✓[39m src/skillName.test.js [2m([22m[2m5 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+ [32m✓[39m src/components/profileDone.test.js [2m([22m[2m4 tests[22m[2m)[22m[32m 19[2mms[22m[39m
+ [32m✓[39m src/components/LevelTag.test.jsx [2m([22m[2m9 tests[22m[2m)[22m[32m 192[2mms[22m[39m
+ [32m✓[39m src/pages/employer/statuses.test.js [2m([22m[2m2 tests[22m[2m)[22m[32m 66[2mms[22m[39m
+ [32m✓[39m src/api.test.js [2m([22m[2m20 tests[22m[2m)[22m[32m 70[2mms[22m[39m
+ [32m✓[39m src/pageCache.test.js [2m([22m[2m10 tests[22m[2m)[22m[32m 117[2mms[22m[39m
+ [32m✓[39m src/components/Toast.test.jsx [2m([22m[2m7 tests[22m[2m)[22m[33m 632[2mms[22m[39m
+   [32m✓[39m useToast: a short message that closes itself [2m(7)[22m
+     [33m[2m✓[22m[39m shows the text and closes by itself after 6 seconds[33m 356[2mms[22m[39m
+ [32m✓[39m src/components/PasswordStrength.test.jsx [2m([22m[2m16 tests[22m[2m)[22m[33m 343[2mms[22m[39m
+ [32m✓[39m src/components/Popconfirm.test.jsx [2m([22m[2m6 tests[22m[2m)[22m[33m 734[2mms[22m[39m
+   [32m✓[39m Popconfirm: one question beside the button that was clicked [2m(6)[22m
+     [33m[2m✓[22m[39m is an alert dialog named by its question, with buttons that say what they do[33m 474[2mms[22m[39m
+ [32m✓[39m src/components/InfoTip.test.jsx [2m([22m[2m6 tests[22m[2m)[22m[33m 1103[2mms[22m[39m
+   [32m✓[39m InfoTip: opens on click, never on hover only [2m(6)[22m
+     [33m[2m✓[22m[39m is closed to start with[33m 441[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m12 passed[39m[22m[90m (12)[39m
+[2m      Tests [22m [1m[32m101 passed[39m[22m[90m (101)[39m
+[2m   Start at [22m 18:27:36
+[2m   Duration [22m 8.58s[2m (environment 74%, setup 13%, tests 5%, transform 3%, worker 2%, import 2%)[22m
+
+[34m % [39m[2mCoverage report from [22m[33mv8[39m
+-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-------------------|---------|----------|---------|---------|-------------------
+All files          |    3.69 |     2.65 |    2.52 |    3.95 |                   
+ src               |   50.28 |    60.41 |   34.61 |    57.6 |                   
+  App.jsx          |       0 |        0 |       0 |       0 | 12-155            
+  api.js           |     100 |    91.66 |     100 |     100 | 28,46             
+  greeting.js      |     100 |      100 |     100 |     100 |                   
+  pageCache.js     |   94.11 |    94.44 |     100 |     100 | 34                
+  skillName.js     |     100 |      100 |     100 |     100 |                   
+ src/components    |   16.57 |    12.21 |   13.63 |    16.7 |                   
+  ...uirements.jsx |       0 |        0 |       0 |       0 | 6-48              
+  ...tionSteps.jsx |       0 |        0 |       0 |       0 | 4-13              
+  BackLink.jsx     |       0 |      100 |       0 |       0 | 6                 
+  ...ineInvite.jsx |       0 |        0 |       0 |       0 | 8-42              
+  ...yerRecord.jsx |       0 |        0 |       0 |       0 | 7-16              
+  EmployerView.jsx |       0 |        0 |       0 |       0 | 19-312            
+  FitList.jsx      |       0 |        0 |       0 |       0 | 13-57             
+  InfoTip.jsx      |     100 |     92.3 |     100 |     100 | 23                
+  InviteLabel.jsx  |       0 |        0 |       0 |       0 | 3-13              
+  LevelTag.jsx     |     100 |      100 |     100 |     100 |                   
+  OutsideApply.jsx |       0 |        0 |       0 |       0 | 6-27              
+  PageHeader.jsx   |       0 |        0 |       0 |       0 | 4                 
+  ...dStrength.jsx |   94.59 |    97.43 |    90.9 |   96.42 | 21                
+  Popconfirm.jsx   |     100 |    77.77 |     100 |     100 | 6                 
+  ...cySummary.jsx |       0 |        0 |       0 |       0 | 7-10              
+  ...acyUpdate.jsx |       0 |        0 |       0 |       0 | 12-72             
+  ...leTracker.jsx |       0 |        0 |       0 |       0 | 9-48              
+  Sidebar.jsx      |       0 |        0 |       0 |       0 | 7-271             
+  ...arContext.jsx |       0 |        0 |       0 |       0 | 4-28              
+  Skeleton.jsx     |       0 |        0 |       0 |       0 | 7-94              
+  Spinner.jsx      |       0 |        0 |       0 |       0 | 6-11              
+  Toast.jsx        |     100 |      100 |     100 |     100 |                   
+  profileDone.js   |     100 |      100 |     100 |     100 |                   
+  useLatest.js     |       0 |      100 |       0 |       0 | 11-14             
+  ...pplication.js |       0 |        0 |       0 |       0 | 13-80             
+ src/context       |       0 |        0 |       0 |       0 |                   
+  AuthContext.jsx  |       0 |        0 |       0 |       0 | 6-67              
+  useAuth.js       |       0 |        0 |       0 |       0 | 3-8               
+ src/pages         |       0 |        0 |       0 |       0 |                   
+  ...tSettings.jsx |       0 |        0 |       0 |       0 | 15-288            
+  Privacy.jsx      |       0 |        0 |       0 |       0 | 14-148            
+  privacyText.js   |       0 |        0 |       0 |       0 | 7-197             
+ src/pages/admin   |    0.55 |        0 |    0.95 |    0.78 |                   
+  ...nAcademic.jsx |       0 |        0 |       0 |       0 | 26-730            
+  ...Dashboard.jsx |       0 |        0 |       0 |       0 | 17-219            
+  AdminUsers.jsx   |       0 |        0 |       0 |       0 | 25-243            
+  ...oryDialog.jsx |       0 |        0 |       0 |       0 | 8-52              
+  ModuleForm.jsx   |       0 |        0 |       0 |       0 | 12-156            
+  ReasonDialog.jsx |       0 |        0 |       0 |       0 | 11-34             
+  RowMenu.jsx      |       0 |        0 |       0 |       0 | 11-61             
+  decisions.js     |     100 |      100 |     100 |     100 |                   
+ src/pages/auth    |       0 |        0 |       0 |       0 |                   
+  ...tPassword.jsx |       0 |        0 |       0 |       0 | 12-140            
+  Login.jsx        |       0 |        0 |       0 |       0 | 8-133             
+  Register.jsx     |       0 |        0 |       0 |       0 | 8-371             
+ ...pages/employer |    0.67 |     0.23 |     0.3 |    0.75 |                   
+  ...ntProfile.jsx |       0 |        0 |       0 |       0 | 23-79             
+  Applicants.jsx   |       0 |        0 |       0 |       0 | 22-403            
+  ...mDecision.jsx |       0 |        0 |       0 |       0 | 11-31             
+  ...Dashboard.jsx |       0 |        0 |       0 |       0 | 21-444            
+  EmployerHome.jsx |       0 |        0 |       0 |       0 | 18-363            
+  EmployerJobs.jsx |       0 |      100 |       0 |       0 | 5                 
+  PostJob.jsx      |       0 |        0 |       0 |       0 | 13-372            
+  ReasonPicker.jsx |       0 |        0 |       0 |       0 | 6-21              
+  reasons.js       |       0 |        0 |       0 |       0 | 3-11              
+  statusChange.jsx |       0 |        0 |       0 |       0 | 12-73             
+  statuses.js      |     100 |      100 |     100 |     100 |                   
+ src/pages/student |       0 |        0 |       0 |       0 |                   
+  Chatbot.jsx      |       0 |        0 |       0 |       0 | 13-662            
+  Dashboard.jsx    |       0 |        0 |       0 |       0 | 25-558            
+  ...erPreview.jsx |       0 |        0 |       0 |       0 | 21-41             
+  ...bAccounts.jsx |       0 |        0 |       0 |       0 | 19-125            
+  ...bCallback.jsx |       0 |        0 |       0 |       0 | 16-57             
+  GithubImport.jsx |       0 |        0 |       0 |       0 | 20-270            
+  JobDetail.jsx    |       0 |        0 |       0 |       0 | 18-655            
+  ...lesEditor.jsx |       0 |        0 |       0 |       0 | 12-235            
+  ...lications.jsx |       0 |        0 |       0 |       0 | 20-548            
+  MyProfile.jsx    |       0 |        0 |       0 |       0 | 23-240            
+  ...lePrivacy.jsx |       0 |        0 |       0 |       0 | 19-224            
+  Recommend.jsx    |       0 |        0 |       0 |       0 | 12-607            
+  StudySetup.jsx   |       0 |        0 |       0 |       0 | 18-112            
+  ...ienceKinds.js |       0 |        0 |       0 |       0 | 4-14              
+  githubConnect.js |       0 |      100 |       0 |       0 | 6-8               
+  profileForms.jsx |       0 |        0 |       0 |       0 | 20-671            
+  profileParts.jsx |       0 |        0 |       0 |       0 | 15-246            
+  ...eSections.jsx |       0 |        0 |       0 |       0 | 17-337            
+  profileUtils.js  |       0 |        0 |       0 |       0 | 4-64              
+-------------------|---------|----------|---------|---------|-------------------

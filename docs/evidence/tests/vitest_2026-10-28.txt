@@ -1,0 +1,25 @@
+
+> frontend@0.0.0 test
+> vitest run
+
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.5 [39m[90mC:/Users/Ling/Desktop/fyp-skill-map/frontend[39m
+
+ [32m✓[39m src/skillName.test.js [2m([22m[2m5 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m src/pages/admin/decisions.test.js [2m([22m[2m4 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m src/greeting.test.js [2m([22m[2m12 tests[22m[2m)[22m[32m 15[2mms[22m[39m
+ [32m✓[39m src/components/profileDone.test.js [2m([22m[2m4 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m src/api.test.js [2m([22m[2m20 tests[22m[2m)[22m[32m 38[2mms[22m[39m
+ [32m✓[39m src/pages/employer/statuses.test.js [2m([22m[2m2 tests[22m[2m)[22m[32m 36[2mms[22m[39m
+ [32m✓[39m src/components/LevelTag.test.jsx [2m([22m[2m9 tests[22m[2m)[22m[32m 110[2mms[22m[39m
+ [32m✓[39m src/pageCache.test.js [2m([22m[2m10 tests[22m[2m)[22m[32m 71[2mms[22m[39m
+ [32m✓[39m src/components/PasswordStrength.test.jsx [2m([22m[2m16 tests[22m[2m)[22m[32m 215[2mms[22m[39m
+ [32m✓[39m src/components/Popconfirm.test.jsx [2m([22m[2m6 tests[22m[2m)[22m[33m 400[2mms[22m[39m
+ [32m✓[39m src/components/Toast.test.jsx [2m([22m[2m7 tests[22m[2m)[22m[32m 287[2mms[22m[39m
+ [32m✓[39m src/components/InfoTip.test.jsx [2m([22m[2m6 tests[22m[2m)[22m[33m 745[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m12 passed[39m[22m[90m (12)[39m
+[2m      Tests [22m [1m[32m101 passed[39m[22m[90m (101)[39m
+[2m   Start at [22m 18:26:24
+[2m   Duration [22m 5.43s[2m (environment 84%, setup 10%, tests 4%, import 2%)[22m
+
