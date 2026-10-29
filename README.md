@@ -22,7 +22,7 @@ Live jobs (JSearch) + jobs posted on SkillMap ──► skill extraction with qu
 |---|---|
 | Frontend | React 19, Vite, Tailwind CSS v4 (pages load on first use) |
 | Backend | FastAPI (Python 3.13), SQLAlchemy, JWT (PyJWT; python-jose until 22 Oct), bcrypt |
-| Databases | PostgreSQL 16 (all app data); MongoDB (AI Assistant chat history, and a record of every AI skill reading with what people changed afterwards; SkillMap still works without it) |
+| Databases | PostgreSQL 18 (all app data; the code also ran on 16); MongoDB (AI Assistant chat history, and a record of every AI skill reading with what people changed afterwards; SkillMap still works without it) |
 | Skill extraction + AI Assistant | gpt-oss-120b via the Groq API (gpt-oss-20b when its daily limit is reached) |
 | Job description formatting (display only) | Gemini (`gemini-3.1-flash-lite`) |
 | Matching | SBERT `all-MiniLM-L6-v2` (pre-trained) + a fine-tuned DeBERTa relationship model ("does skill A cover job skill B?") when `RELATION_MODEL_DIR` is set; without it, cosine similarity only. The backend prints which one is in use at start-up |
@@ -43,6 +43,8 @@ The backend follows a **layered architecture** (FastAPI's "bigger applications" 
 fyp-skill-map/
 ├── README.md               this file
 ├── CHANGELOG.md            what changed, when, in which commit
+├── docker-compose.yml      SkillMap in containers: database, MongoDB, API and web app (see "Run with Docker")
+├── docker/db/              restore.sh, and your own skillmap.dump (never committed)
 ├── docs/
 │   └── evidence/           run outputs kept for the report (extraction scores, relationship model, test logs)
 ├── backend/
@@ -122,6 +124,48 @@ npm run dev                          # http://localhost:5173
 
 Optional `frontend/.env` (copy `frontend/.env.example`): `VITE_API_URL` (default <http://localhost:8000>) and `VITE_PRIVACY_CONTACT`, the email of the career office that runs SkillMap, shown in the privacy notice for questions and complaints (PDPA). Without it the notice shows the demo address `careers@university.example`.
 
+## Run with Docker
+
+Built 28 Oct 2026 (system test TC-67; the first run on Windows is still to be recorded). One command starts the database, MongoDB, the API and the web app. You need Docker Desktop (Compose v2) and your `backend/.env` (API keys, SMTP, GitHub app; the same file the API reads without Docker).
+
+| Service | Image | Where |
+|---|---|---|
+| `db` | `postgres:18` | `localhost:5433` for pgAdmin (5433, so it never clashes with a local PostgreSQL on 5432) |
+| `mongo` | `mongo:9` | inside Docker only |
+| `backend` | built from `backend/Dockerfile` (Python 3.13, CPU-only PyTorch, SBERT model inside the image) | <http://localhost:8000> |
+| `frontend` | built from `frontend/Dockerfile` (Node build, served by nginx) | <http://localhost:5173> (the same address as `npm run dev`) |
+
+**First start** (Git Bash, from the project folder):
+
+1. Make a dump of your database, so the containers have the jobs, programmes, modules and test accounts. It holds real accounts, so it is in `.gitignore`:
+
+   ```bash
+   pg_dump -U <your user> -d <your database> -Fc -f docker/db/skillmap.dump
+   ```
+
+   The `postgres` image must be the same major version as the PostgreSQL that made the dump (`pg_restore` refuses a dump from a newer version). The compose file uses 18; if yours is different, change `image: postgres:18` in `docker-compose.yml` to match. In Git Bash `pg_dump` is not on the PATH by default: use `"/c/Program Files/PostgreSQL/<version>/bin/pg_dump"`.
+
+2. Build and start (the first build takes several minutes: PyTorch and the models):
+
+   ```bash
+   docker compose up --build
+   ```
+
+   The first start restores the dump (`docker/db/restore.sh`). Wait until `docker compose ps` shows `backend` as healthy; the API first loads the models and the job cache, which takes up to a few minutes.
+3. Open <http://localhost:5173>. To check everything at once, from `backend/` run `python scripts/tools/docker_smoke.py`: nine checks (API, CORS, web app and a deep link, built JavaScript, job data, register and sign in, a database read, delete the account, an idle connection stays open) that need only Python. Save the output with `| tee ../docs/evidence/docker/smoke_<date>.txt`.
+
+**Things to know:**
+
+- `DATABASE_URL` and `MONGODB_URL` in `backend/.env` are replaced inside the container by the container addresses; Compose gives the `environment` setting priority over `env_file`.
+- `backend/data/` is mounted into the API container, not copied: the data files, the relationship model folder named in `RELATION_MODEL_DIR` (gigabytes) and the caches stay on your computer.
+- The dump is restored **only when the database volume is empty**, that is the first start. To start again from the dump, or after a failed restore, run `docker compose down -v` (this deletes the Docker volumes: the database and the chats in Docker, not your own PostgreSQL), then `docker compose up`.
+- With no dump the database starts empty and the API makes the tables. Then follow "Database migrations" below with `docker compose exec backend python migrations/<file>.py`, create the career-office account with `docker compose exec backend python scripts/tools/create_admin.py`, and load jobs with the scripts in the next section.
+- The API runs as one process with `--timeout-keep-alive 15`. uvicorn's default is 5 s, which dropped idle connections in the load test (`docs/evidence/performance/load_runs/`).
+- The web app is built with the API address the **browser** uses (`VITE_API_URL`, default `http://localhost:8000`) and the privacy contact (`VITE_PRIVACY_CONTACT`). To change them, set them in a `.env` file next to `docker-compose.yml` and run `docker compose up --build`. The same file can set `POSTGRES_PASSWORD` (default `skillmap_local`, fine for a laptop only).
+- If the PyTorch download fails, set `TORCH_INDEX=` (empty) in the same `.env` to use PyPI instead (a larger image).
+- Check that MongoDB is reached: `docker compose logs backend` shows a start-up warning if it is not. Stop with `docker compose down`; follow the API with `docker compose logs -f backend`.
+- The containers run as root and are meant for a laptop or a demo, not for the internet (hardening is future work).
+
 ## Scripts
 
 Run every script from `backend/` with the venv active, e.g. `python scripts/tools/check_skill_profile.py low1`.
@@ -161,6 +205,9 @@ Run every script from `backend/` with the venv active, e.g. `python scripts/tool
 | `tools/remove_duplicate_jobs.py` | Lists live jobs saved twice (same title, company, location) and deletes the extra copies after you confirm | – |
 | `tools/remove_non_ict_jobs.py` | Lists saved live jobs whose title isn't an ICT role (same rule as the fetcher) and deletes them after you confirm | – |
 | `tools/check_skill_mapping.py` | Read-only (A8): groups the skill names in the database by rules (`app/services/skill_names.py`) and counts the close pairs an LLM would check; `--taxonomy` for the first analysis against `skill_taxonomy.json`. Writes evidence CSVs to `docs/evidence/` | – |
+| `evaluation/evaluate_load.py` | Load test (27 Oct): starts the API as one process, runs 5, 10, 20 and 40 simulated students and a stress stage with Locust, applies the pass rule fixed beforehand; writes `docs/evidence/performance/load/`. `pip install -r requirements-dev.txt` first | Postgres |
+| `evaluation/locustfile.py` | One simulated student for the load test (Job Matches, Job Detail, Dashboard); started by `evaluate_load.py`, not by hand | – |
+| `tools/docker_smoke.py` | Nine checks on the running Docker containers (see "Run with Docker"); standard library only | – |
 
 Groq's free tier allows about 200,000 tokens a day (≈ 100 jobs). Don't run two Groq-heavy scripts on the same day. To save long output: `PYTHONIOENCODING=utf-8 python <script> 2>&1 | tee out.txt`.
 
@@ -220,6 +267,12 @@ Then start the API on the copy and sign in. The backup file also lets you go bac
 
 From `backend/` with the venv active, run `python -m pytest` (unit and integration tests together). It uses the server, user and password of `DATABASE_URL` in `backend/.env` with a separate database called `skillmap_test`, made for the run (your own database is never touched). To use a different throwaway database, set `TEST_DATABASE_URL` first (its name must contain "test"). If your database user may not create databases, make it once as `postgres` (pgAdmin Query Tool or psql): `CREATE DATABASE skillmap_test OWNER <your user>;` — the tests then empty it at the start of each run. Takes about two to three minutes.
 
+**Code quality** (26 Oct; tools in `backend/requirements-dev.txt`). From `backend/`: `ruff check app tests tests_unit scripts migrations` (Ruff's default rules, settings in `ruff.toml`), `bandit -r app` (security scan of the app's own code; a few false positives are marked in the code with `# nosec` and the reason) and `python -m pytest -q --cov --cov-report=term` (coverage of `app/`, settings in `.coveragerc`). Reports: `docs/evidence/quality/`.
+
+**Front-end unit tests** (27 Oct): the `*.test.js` and `*.test.jsx` files in `frontend/src/` (Vitest and Testing Library). `npm test` from `frontend/` runs them in a few seconds; `npm run test:coverage` adds a coverage table. They check the saved-answer cache and the sign-in expiry (`api.js`, `pageCache.js`), the live password guidance and small components and rules (level tag, confirm box, info tip, toast, skill names, greeting, profile checklist, admin decisions). Pages are covered by the browser tests, not by these.
+
+**Load test** (27 Oct): `python scripts/evaluation/evaluate_load.py` from `backend/` (about 20 minutes; do not use the computer for anything heavy meanwhile). It starts the API itself and uses test students it removes again. The pass rule was fixed before the first run: no failed call and every call's p95 under 1 s with 5, 10 and 20 students, under 10 s with 40. Results, three runs and what changed between them: `docs/evidence/performance/` and `docs/planning/references.md`.
+
 ## Known limitations
 
 - Job skills and module skills are read by a language model; employers and the career office check them, and a quote from the ad or description backs each one, but a skill can still be missed or misread (scores in `docs/evidence/`).
@@ -231,8 +284,9 @@ From `backend/` with the venv active, run `python -m pytest` (unit and integrati
 - Students can delete their account themselves; employers and admins ask the career office (their jobs and decisions involve other people). Deleting spans two databases, so it is not one transaction: chats go first, and a failure after that is safe to retry (`docs/data_flow.md`).
 - GitHub ownership is proved by signing in; LinkedIn and portfolio links are typed (LinkedIn's sign-in doesn't return the profile address). A repo counts as the student's if a connected account owns it or is among its first 100 contributors.
 - The privacy notice is a draft for the university that deploys SkillMap: its data-user name, contact address and Malay text must be checked by that university.
+- Capacity: one API process on one laptop kept every call under 1 s (p95) with 20 students using it at the same time (about 10 calls a second) and under 10 s with 40; above about 28 calls a second it slows down (`docs/evidence/performance/load/`). Pauses between pages were assumed, not measured from real students.
 - Tests use a stand-in embedding model with the relationship model off: they check behaviour, not matching quality (that is the evaluation, `docs/evidence/`).
 
 ## Never commit
 
-`backend/.env`, `backend/test_credentials.txt`, `backend/data/live_jobs_cache.json`, `backend/data/embedding_cache.npz` (all in `.gitignore`).
+`backend/.env`, `backend/test_credentials.txt`, `backend/data/live_jobs_cache.json`, `backend/data/embedding_cache.npz`, `docker/db/skillmap.dump` (all in `.gitignore`).

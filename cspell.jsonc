@@ -26,6 +26,8 @@
     "**/package-lock.json"
   ],
   "words": [
+    "locustfile",
+    "healthcheck",
     // 25 Oct: authors cited in docs/planning/references.md
     "Boano", "Westmark", "Taskworld", "UpNote", "Bxxx", "nosec", "coveragerc", "htmlcov", "ITviec", "Remotive",
     // 25 Oct: names in the demo data (backend/scripts/tools/seed_demo.py)

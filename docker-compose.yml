@@ -1,0 +1,74 @@
+# SkillMap in Docker (28 Oct, system test TC-67). One command from this folder:  docker compose up --build
+# Needs Docker Desktop and backend/.env (your API keys; see README "Run with Docker"). The database starts empty
+# unless docker/db/skillmap.dump exists (README: how to make it), so the demo has its jobs, modules and test accounts.
+name: skillmap
+
+services:
+  db:
+    image: postgres:18          # the same major version as the PostgreSQL the dump is made with (pg_restore cannot read a newer dump)
+    environment:
+      POSTGRES_USER: skillmap
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-skillmap_local}
+      POSTGRES_DB: skillmap
+    volumes:
+      - pgdata:/var/lib/postgresql   # from PostgreSQL 18 the image keeps its data in /var/lib/postgresql/18/docker, so the volume goes here
+      - ./docker/db:/dump:ro
+      # runs only when the data volume is empty (first start), restores /dump/skillmap.dump if it is there
+      - ./docker/db/restore.sh:/docker-entrypoint-initdb.d/10-restore.sh:ro
+    ports:
+      - "127.0.0.1:5433:5432"        # for pgAdmin on this computer; 5433 so it never clashes with a local PostgreSQL on 5432
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U skillmap -d skillmap"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  mongo:
+    image: mongo:9              # the same major version as the MongoDB on the laptop (9.0)
+    volumes:
+      - mongodata:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.runCommand({ ping: 1 }).ok"]
+      interval: 5s
+      timeout: 10s
+      retries: 20
+
+  backend:
+    build:
+      context: ./backend
+      args:
+        TORCH_INDEX: ${TORCH_INDEX-https://download.pytorch.org/whl/cpu}   # CPU-only PyTorch (the default one carries ~3 GB of GPU libraries); set TORCH_INDEX= (empty) to use PyPI
+    env_file: backend/.env          # your API keys, SMTP, GitHub OAuth, RELATION_MODEL_DIR ...
+    environment:                     # these win over backend/.env: inside Docker the databases are reached by service name
+      DATABASE_URL: postgresql://skillmap:${POSTGRES_PASSWORD:-skillmap_local}@db:5432/skillmap
+      MONGODB_URL: mongodb://mongo:27017
+    volumes:
+      - ./backend/data:/app/data     # data files, the relationship model folder and the caches stay on your computer
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+      mongo:
+        condition: service_healthy
+    healthcheck:                     # the first start loads the models and the job cache: give it time
+      test: ["CMD", "python", "-c", "import urllib.request as u; u.urlopen('http://127.0.0.1:8000/openapi.json', timeout=5)"]
+      interval: 15s
+      timeout: 10s
+      retries: 20
+      start_period: 120s
+
+  frontend:
+    build:
+      context: ./frontend
+      args:                          # the address the BROWSER uses to reach the API (baked in at build time)
+        VITE_API_URL: ${VITE_API_URL:-http://localhost:8000}
+        VITE_PRIVACY_CONTACT: ${VITE_PRIVACY_CONTACT:-careers@university.example}
+    ports:
+      - "5173:80"                    # same address as `npm run dev`, so CORS_ORIGINS and the GitHub callback need no change
+    depends_on:
+      - backend
+
+volumes:
+  pgdata:
+  mongodata:

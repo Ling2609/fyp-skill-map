@@ -43,3 +43,8 @@ frontend/playwright-report/
 .coverage
 .coverage.*
 htmlcov/
+
+# 28 Oct: Docker. The database dump holds real accounts and their data: never commit it
+docker/db/*.dump
+# the optional settings file next to docker-compose.yml (passwords, VITE_API_URL)
+/.env

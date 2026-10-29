@@ -1,0 +1,13 @@
+venv/
+__pycache__/
+**/__pycache__/
+*.pyc
+.env
+data/
+tests/
+tests_unit/
+.pytest_cache/
+.coverage*
+htmlcov/
+test_credentials.txt
+profile_slow_calls.txt

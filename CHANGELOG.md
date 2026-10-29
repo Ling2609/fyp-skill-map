@@ -3,6 +3,80 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 28 Oct 2026 — Front-end unit tests, and SkillMap in Docker
+
+- **Front-end unit tests (Vitest and Testing Library, `18dc18e`):** 101 tests in 12 files, run with `npm test` from `frontend/`
+  (log and coverage table in `docs/evidence/tests/`). They check the sign-in expiry and the plain message for a failed
+  input check (`api.js`), the saved-answer cache (kept 15 minutes, dropped at once after a profile change, 15 entries),
+  the live password guidance (length only, common-password list, 72 bytes) and small components and rules. Ten rules were
+  broken on purpose and every break made a test fail. The whole front-end is 3.7% covered: pages are covered by the browser
+  tests, these cover logic and small components.
+- **Docker:** `docker-compose.yml` starts the database (`postgres:18`, to match the PostgreSQL the dump is made with), MongoDB, the API and the web app;
+  `backend/Dockerfile` (CPU-only PyTorch, SBERT model inside the image, data folder mounted, one process with
+  `--timeout-keep-alive 15`) and `frontend/Dockerfile` (Node build, served by nginx, deep links fall back to the app).
+  `docker/db/restore.sh` restores your own `skillmap.dump` on the first start. `backend/scripts/tools/docker_smoke.py`
+  checks nine things on the running containers (tested here against stand-in servers: check 9 fails on a 2 s
+  keep-alive, as the load test's dropped connections did). The images have not been built or run yet: system test TC-67
+  stays Not run until the first run on Windows. README: "Run with Docker".
+- Test-case workbook: TC-79 to TC-81 (load test, Vitest), TC-67 describes the Docker check; 81 rows, 80 Pass, 1 Not run.
+- Docs: README (Docker, scripts, tests, limits), this file, roadmap and references brought up to date for 23 to 28 Oct.
+
+## 27 Oct 2026 — Load test: how many students at once
+
+- **Locust load test** (`backend/scripts/evaluation/evaluate_load.py`, `locustfile.py`; `3a21567`, `5df8451`, `a3057f7`, `2fc70cd`):
+  the API runs as one process; simulated students open Job Matches, Job Detail and the Dashboard with a 3 to 10 second pause;
+  stages of 5, 10, 20 and 40 students plus a stress stage with almost no pause. The pass rule was fixed before the first
+  run: no failed call and every call's p95 under 1 s up to 20 students, under 10 s at 40.
+- **Result:** 5, 10 and 20 students pass in all three runs (comfortable capacity 20 students, about 10 calls a second;
+  slowest call `POST /recommend/`, p95 0.45 to 0.92 s at 20). At 40 students runs 1 and 2 failed (1 and 4 of about 3,600
+  calls, all `GET /auth/me` with a dropped connection, nothing in the server log); run 3 with `--timeout-keep-alive 15`
+  (uvicorn's default is 5 s, the simulated pauses run to 10 s) had no failures. Only the server setting changed, not the
+  rule. Stress: no failures, about 28 calls a second, `POST /recommend/` p95 3.7 s. All three runs are kept in
+  `docs/evidence/performance/` (`load_runs/run1`, `run2`, and `load/` for run 3).
+- Runner fixes found along the way: Locust's `N/A` for a call with no times no longer stops the script and is reported;
+  progress lines every 30 s; Locust's output and the server's messages go to log files; server CPU is counted over the
+  whole process tree (run 1 measured only the Windows launcher, 0%).
+- Test cases TC-79 and TC-80.
+
+## 26 Oct 2026 — Code quality, graduates who fit, workbook
+
+- **Ruff, Bandit and coverage** (`1bcc6ac`, `76c3d91`): Ruff 62 findings to 0 (one automatic "unsafe" fix would have
+  turned a database filter into a plain Python test and was replaced); Bandit on `app/` 0 High, 2 Medium, 9 Low to 0 issues
+  (the two Medium were real: the relationship model now loads local files only; the nine Low were reviewed false positives,
+  each marked with its reason); coverage 75% of the app's statements. Dev tools in `backend/requirements-dev.txt`;
+  reports in `docs/evidence/quality/`.
+- **Graduates who fit** (`181b182`): graduates not yet invited come first, then invited ones, best match first in each group.
+- Browser tests 18 of 18 in Chromium, pytest 184 passed (`87eb238`, `a53f598`, `c05dcef`). Workbook rows TC-70 to TC-78
+  (`c8bc6dd`, `619f01f`).
+
+## 25 Oct 2026 — Invitations, employer dashboard, job rules
+
+- **Invitations** (`979f4fd`): a graduate can answer "No thanks" with an optional reason (employers see it, or "No reason
+  given"); no answer ends as "No reply" after 14 days; "Invite selected" on View applicants (no invite-all, 50 at a time).
+- **Employer Dashboard and View applicants** (`d6fa177`, `9c8ee1d`, `d0b8d21`): columns end on the same line, a colour
+  per job on each graduate row, tips float above the cards, tick boxes turn the title strip into the action bar, graduates
+  show only the nice-to-have skills they have, "Not viewed yet" with a tooltip.
+- **Job rules** (`2552b59`): the decision date moves once, up to 2 weeks, and only before it passes; Stop and Take
+  applications again ask first and state the rules; restarting never moves the date. "Decide by" in days (`42cf73e`);
+  graduates who fit are ranked by nice-to-have skills as a tie-break. Done messages are a short toast (`8339f2a`).
+
+## 24 Oct 2026 — Manual checks, and a skill-reader fix
+
+- Forgot password tested by hand with real Gmail (TC-53, `d3cbd2d`) and AI Assistant chat kept (TC-26, `264469f`).
+- AI Assistant reply times measured: 1.3 to 6.7 s, all under 10 s, SkillMap's own part 0.0 s; no streaming for now
+  (`4ed5c81`).
+- When the skill reader is down while posting a job, the employer is told in about 9 s (was 45 s with "no skills") and adds
+  skills by hand (TC-64, `8021b9c`).
+
+## 23 Oct 2026 — Five browsers, real MongoDB tests, stale-answer fixes
+
+- Browser tests run in Chromium, Firefox, WebKit, Edge and Chrome (`2388037`, `c990ae2`, `738ab3e`); applying takes under
+  1 s in each. In WebKit the keyboard tests focus the link and check Enter (Safari's Tab skips links by design).
+- Tests against a real MongoDB (indexes, chats, export and delete, evaluation runs; `1f63466`).
+- **Stale-answer races fixed in 8 places** (`c2b3407`): only the latest request updates a page; 18 of 18 browser tests in
+  all five browsers (`d5327d2`).
+- Markdown lint and British-English spell-check settings (`57234db`).
+
 ## 22 Oct 2026 — Stronger tests after a second outside audit
 
 - **Concurrency through the real endpoints:** an application and a stricter edit run at the same moment in both orders;
