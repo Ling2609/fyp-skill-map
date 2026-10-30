@@ -126,7 +126,7 @@ Optional `frontend/.env` (copy `frontend/.env.example`): `VITE_API_URL` (default
 
 ## Run with Docker
 
-Built 28 Oct 2026 (system test TC-67; the first run on Windows is still to be recorded). One command starts the database, MongoDB, the API and the web app. You need Docker Desktop (Compose v2) and your `backend/.env` (API keys, SMTP, GitHub app; the same file the API reads without Docker).
+Built 28 Oct 2026 and run on Windows on 29 Oct 2026 (system test TC-67: all nine smoke checks passed). One command starts the database, MongoDB, the API and the web app. You need Docker Desktop (Compose v2) and your `backend/.env` (API keys, SMTP, GitHub app; the same file the API reads without Docker).
 
 | Service | Image | Where |
 |---|---|---|

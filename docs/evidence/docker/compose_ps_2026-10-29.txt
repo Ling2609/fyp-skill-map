@@ -1,0 +1,5 @@
+NAME                  IMAGE               COMMAND                  SERVICE    CREATED        STATUS                        PORTS
+skillmap-backend-1    skillmap-backend    "uvicorn app.main:ap…"   backend    16 hours ago   Up About a minute (healthy)   0.0.0.0:8000->8000/tcp, [::]:8000->8000/tcp
+skillmap-db-1         postgres:18         "docker-entrypoint.s…"   db         16 hours ago   Up About a minute (healthy)   127.0.0.1:5433->5432/tcp
+skillmap-frontend-1   skillmap-frontend   "/docker-entrypoint.…"   frontend   16 hours ago   Up About a minute             0.0.0.0:5173->80/tcp, [::]:5173->80/tcp
+skillmap-mongo-1      mongo:9             "docker-entrypoint.s…"   mongo      16 hours ago   Up About a minute (healthy)   27017/tcp

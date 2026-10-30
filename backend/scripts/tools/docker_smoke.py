@@ -37,7 +37,8 @@ def check(name, ok, detail=""):
 
 
 def call(method, url, body=None, headers=None, timeout=30):
-    """-> (status, headers, body text); an HTTP error status is returned, not raised."""
+    """-> (status, headers, body text). An HTTP error status is returned, not raised. A connection that fails
+    (nothing listening, closed without an answer, a half-started server) gives status 0 and the reason as the text."""
     data = json.dumps(body).encode() if body is not None else None
     req = urllib.request.Request(url, data=data, method=method, headers={**({"Content-Type": "application/json"} if data else {}), **(headers or {})})
     try:
@@ -45,6 +46,8 @@ def call(method, url, body=None, headers=None, timeout=30):
             return r.status, r.headers, r.read().decode("utf-8", "replace")
     except urllib.error.HTTPError as e:
         return e.code, e.headers, e.read().decode("utf-8", "replace")
+    except (urllib.error.URLError, http.client.HTTPException, OSError, ValueError) as e:
+        return 0, {}, f"{type(e).__name__}: {e}"
 
 
 def keep_alive_check(api, idle_seconds):
@@ -71,10 +74,9 @@ def main():
     a = ap.parse_args()
     api, web = a.api.rstrip("/"), a.web.rstrip("/")
 
-    try:
-        status, _, _ = call("GET", api + "/openapi.json")
-    except (urllib.error.URLError, OSError) as e:
-        sys.exit(f"FAIL  the API does not answer at {api}: {e}\nIs `docker compose up` finished? Check `docker compose ps` and `docker compose logs backend`.")
+    status, _, why = call("GET", api + "/openapi.json")
+    if status == 0:
+        sys.exit(f"FAIL  the API does not answer at {api}: {why}\nIs `docker compose up` finished? Check `docker compose ps` and `docker compose logs backend`.")
     check("1. the API answers", status == 200, f"HTTP {status}")
 
     status, headers, _ = call("OPTIONS", api + "/auth/login", headers={"Origin": web, "Access-Control-Request-Method": "POST",
@@ -82,15 +84,10 @@ def main():
     check("2. the browser may call the API (CORS for " + web + ")", headers.get("access-control-allow-origin") == web,
           f"HTTP {status}, allow-origin: {headers.get('access-control-allow-origin')}")
 
-    try:
-        status, _, html = call("GET", web + "/")
-        deep_status, _, deep_html = call("GET", web + "/login")
-    except (urllib.error.URLError, OSError) as e:
-        check("3. the web app is served", False, str(e))
-        html = deep_html = ""
-        status = deep_status = 0
+    status, _, html = call("GET", web + "/")
+    deep_status, _, deep_html = call("GET", web + "/login")
     check("3. the web app is served, and a deep link (/login) gets the same page", status == 200 and 'id="root"' in html and
-          deep_status == 200 and 'id="root"' in deep_html, f"/ HTTP {status}, /login HTTP {deep_status}")
+          deep_status == 200 and 'id="root"' in deep_html, f"/ HTTP {status}, /login HTTP {deep_status}" + (f": {html[:100]}" if status == 0 else ""))
 
     script = re.search(r'src="(/assets/[^"]+\.js)"', html)
     if script:

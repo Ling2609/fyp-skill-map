@@ -1,0 +1,11 @@
+PASS  1. the API answers  (HTTP 200)
+PASS  2. the browser may call the API (CORS for http://localhost:5173)  (HTTP 200, allow-origin: http://localhost:5173)
+PASS  3. the web app is served, and a deep link (/login) gets the same page  (/ HTTP 200, /login HTTP 200)
+PASS  4. the built JavaScript file is served  (/assets/index-D_zLlcbJ.js HTTP 200)
+PASS  5. the database holds job data  (14 job categories)
+PASS  6. a student can register and sign in  (register HTTP 201)
+PASS  7. a signed-in call reads the database (/profile/skills)  (HTTP 200)
+PASS  8. the student can delete their account again  (HTTP 204)
+PASS  9. an idle connection stays open for 7 s (uvicorn --timeout-keep-alive 15)
+
+9 of 9 checks passed.

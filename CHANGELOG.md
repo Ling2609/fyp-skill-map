@@ -3,6 +3,17 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 29 Oct 2026 — Docker runs
+
+- **First run on Windows (Docker Desktop):** `docker compose up --build` started all four containers (database, MongoDB and API healthy,
+  web app up) and `docker_smoke.py` passed 9 of 9 checks, including an idle connection staying open for 7 s with the 15 s
+  keep-alive. System test **TC-67 passes**: the workbook is now 81 rows, 81 Pass, none Not run (`88caca0` and this commit).
+- Image versions follow the laptop: **PostgreSQL 18** (a dump from 18 cannot be restored by 16; from 18 the data volume is mounted
+  at `/var/lib/postgresql`) and **MongoDB 9**. README: pg_dump path in Git Bash and the same-major-version rule.
+- `docker_smoke.py` turns every kind of failed connection (nothing listening, closed without an answer, a half-started
+  server) into a FAIL line instead of a traceback; the output is saved in `docs/evidence/docker/`.
+- Use case diagram redrawn with a general User actor, nine `<<extend>>` relationships and merged use cases; locked in.
+
 ## 28 Oct 2026 — Front-end unit tests, and SkillMap in Docker
 
 - **Front-end unit tests (Vitest and Testing Library, `18dc18e`):** 101 tests in 12 files, run with `npm test` from `frontend/`
@@ -16,9 +27,8 @@ Planning, reasoning and research behind each decision are in the project roadmap
   `--timeout-keep-alive 15`) and `frontend/Dockerfile` (Node build, served by nginx, deep links fall back to the app).
   `docker/db/restore.sh` restores your own `skillmap.dump` on the first start. `backend/scripts/tools/docker_smoke.py`
   checks nine things on the running containers (tested here against stand-in servers: check 9 fails on a 2 s
-  keep-alive, as the load test's dropped connections did). The images have not been built or run yet: system test TC-67
-  stays Not run until the first run on Windows. README: "Run with Docker".
-- Test-case workbook: TC-79 to TC-81 (load test, Vitest), TC-67 describes the Docker check; 81 rows, 80 Pass, 1 Not run.
+  keep-alive, as the load test's dropped connections did). The first run on Windows is recorded under 29 Oct. README: "Run with Docker".
+- Test-case workbook: TC-79 to TC-81 (load test, Vitest), TC-67 describes the Docker check; 81 rows, 80 Pass, 1 Not run (TC-67 passed on 29 Oct).
 - Docs: README (Docker, scripts, tests, limits), this file, roadmap and references brought up to date for 23 to 28 Oct.
 
 ## 27 Oct 2026 — Load test: how many students at once
