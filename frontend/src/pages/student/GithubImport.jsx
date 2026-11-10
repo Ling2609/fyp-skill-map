@@ -30,16 +30,18 @@ export default function GithubImport({ onClose, onDone }) {
   const [items, setItems] = useState(null)        // step 2: the picked repos being checked
   const [adding, setAdding] = useState('')        // "Adding 2 of 3…"
   const [error, setError] = useState('')
+  const [listError, setListError] = useState('')
 
   const fetchRepos = useCallback(() => api.get('/profile/github/repos')
-    .then(res => setRepos(res.data.repos))
+    .then(res => { setRepos(res.data.repos); setNeedsConnect(false); setListError('') })
     .catch(err => {
       setRepos(null)
-      if (err.response?.status === 400 && /connect/i.test(err.response.data?.detail || '')) setNeedsConnect(true)
-      else setError(errText(err, "Couldn't list the repositories. Please try again."))
+      const notConnected = err.response?.status === 400 && /connect/i.test(err.response.data?.detail || '')
+      setNeedsConnect(!!notConnected)
+      if (!notConnected) setListError("Couldn't load your GitHub repositories. Please try again.")
     })
     .finally(() => setListing(false)), [])
-  const list = () => { setListing(true); setError(''); setPicked([]); fetchRepos() }
+  const list = () => { setListing(true); setListError(''); setError(''); setPicked([]); fetchRepos() }
   useEffect(() => { fetchRepos() }, [fetchRepos])
   const connect = () => startGithubConnect('/profile?tab=projects&open=import')
     .catch(err => setError(errText(err, "Couldn't start connecting to GitHub. Please try again.")))
@@ -151,6 +153,16 @@ export default function GithubImport({ onClose, onDone }) {
           </div>
         )}
         {error && <p role="alert" className="text-xs text-red-500 bg-red-50 rounded-lg px-3 py-2">{error}</p>}
+
+        {listError && !listing && (
+          <div className="rounded-xl border border-gray-200 p-4 flex flex-wrap items-center gap-3">
+            <p role="alert" className="flex-1 min-w-48 text-xs text-red-500">{listError}</p>
+            <button type="button" onClick={list} disabled={busy}
+              className="ml-auto shrink-0 text-sm font-medium text-white bg-blue-700 hover:bg-blue-800 rounded-lg px-4 py-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-300 disabled:opacity-40">
+              Retry
+            </button>
+          </div>
+        )}
 
         {repos && !listing && (repos.length === 0
           ? <p className="text-sm text-gray-500">No public repositories of your own on your connected GitHub {repos.length === 1 ? 'account' : 'accounts'}.</p>

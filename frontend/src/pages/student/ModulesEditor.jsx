@@ -55,6 +55,8 @@ export default function ModulesEditor({ onUnsavedChange, onSaved }) {
   const [savedSelections, setSavedSelections] = useState({})
   const [selectedYear, setSelectedYear] = useState(1)
   const [loading, setLoading] = useState(true)
+  const [loadError, setLoadError] = useState('')
+  const [loadAttempt, setLoadAttempt] = useState(0)
   const [saving, setSaving] = useState(false)
   const [saveStatus, setSaveStatus] = useState('') // '', 'saved', 'error'
 
@@ -74,21 +76,35 @@ export default function ModulesEditor({ onUnsavedChange, onSaved }) {
   }, [hasUnsaved, onUnsavedChange])
 
   useEffect(() => {
+    let cancelled = false
     Promise.all([
       api.get('/modules/'),
       api.get('/profile/modules'),
     ]).then(([modRes, gradeRes]) => {
-      setModules(modRes.data)
+      if (cancelled) return
       const saved = {}
       for (const { module_code, grade } of gradeRes.data.grades) {
         saved[module_code] = grade
       }
+      setModules(modRes.data)
       setSelections(saved)
       setSavedSelections(saved)
-    }).catch(console.error).finally(() => setLoading(false))
-  }, [])
+    }).catch(() => {
+      if (!cancelled) setLoadError("Couldn't load your modules and grades. Please try again.")
+    }).finally(() => {
+      if (!cancelled) setLoading(false)
+    })
+    return () => { cancelled = true }
+  }, [loadAttempt])
+
+  const retryLoad = () => {
+    setLoadError('')
+    setLoading(true)
+    setLoadAttempt(n => n + 1)
+  }
 
   const saveGrades = async () => {
+    if (loading || loadError || saving) return
     // Send only entries with a real grade — backend will delete anything not in this list
     const grades = Object.entries(selections)
       .filter(([, g]) => g !== '' && g !== undefined)
@@ -133,6 +149,16 @@ export default function ModulesEditor({ onUnsavedChange, onSaved }) {
           ))}
         </div>
       </div>
+    </div>
+  )
+
+  if (loadError) return (
+    <div className="bg-white rounded-2xl border border-slate-200 p-6">
+      <p role="alert" className="text-sm text-rose-600">{loadError}</p>
+      <button type="button" onClick={retryLoad}
+        className="mt-3 px-4 py-2 rounded-xl text-sm font-medium bg-blue-700 text-white hover:bg-blue-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-300">
+        Retry
+      </button>
     </div>
   )
 
