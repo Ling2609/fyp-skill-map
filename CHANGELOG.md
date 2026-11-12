@@ -3,6 +3,16 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 10 Nov 2026 — Retry when the modules or the GitHub list fail to load
+
+- **Modules tab** (`8dff41e`): when the modules and grades cannot be loaded the student sees "Couldn't load your modules and grades. Please try again."
+  with a Retry button (before, the failure was only written to the console and nothing showed). A slow answer from an earlier try can no longer
+  overwrite a newer one, and Save grades does nothing while the load has failed.
+- **GitHub import** (`8dff41e`): a failed repository list shows "Couldn't load your GitHub repositories. Please try again." with a Retry button,
+  separate from the other import messages.
+- Both now match the wording of use cases UC07 and UC09 in the specification. No automated test was added for these two paths yet.
+- Ethics approval for the usability study received from the supervisor (about 3 participants).
+
 ## 29 Oct 2026 — Docker runs
 
 - **First run on Windows (Docker Desktop):** `docker compose up --build` started all four containers (database, MongoDB and API healthy,
