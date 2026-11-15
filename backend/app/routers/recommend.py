@@ -8,6 +8,7 @@ from app.nlp.embedder import get_embedder
 from app.routers.auth import get_current_user
 from app.models.user import User
 from app.services.job_titles import SENIORITY_RANK, job_level
+from app.services.employer_availability import owner_available_clause
 from app.services.job_search import TITLE, names_company_or_place, search_match, title_boost
 from app.services.skill_names import canonical_key
 from app.services.job_requirements import BONUS_WEIGHT, FIT_MIN, job_skill_items, score_job, unit_name
@@ -120,7 +121,7 @@ def _sync_job_cache():
         # The same for posts their employer closed or Admin hid (11 Oct)
         db_ids -= {row[0] for row in db.query(Job.id).filter(
             Job.gone_at.isnot(None) | Job.closed_at.isnot(None) | Job.hidden_by_admin_at.isnot(None)
-            | Job.applications_stopped_at.isnot(None))}       # 14 Oct: "Stop new applications" leaves Job Matches
+            | Job.applications_stopped_at.isnot(None) | ~owner_available_clause())}       # 14 Oct: "Stop new applications" leaves Job Matches
         for gone in set(_job_cache) - db_ids:
             del _job_cache[gone]
         new_ids = db_ids - set(_job_cache)

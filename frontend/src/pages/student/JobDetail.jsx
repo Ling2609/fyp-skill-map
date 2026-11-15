@@ -127,7 +127,7 @@ function ApplyConfirm({ job, summary, missing = [], onApply, onClose }) {
   }, [onClose])
   return (
     <div ref={box} role="dialog" aria-label={`Apply to ${job.company}?`}
-      className="absolute right-0 top-full mt-2 z-40 w-[28rem] max-w-[calc(100vw-2rem)] bg-white border border-slate-200 rounded-xl shadow-lg p-4 text-left">
+      className="absolute right-0 top-full mt-2 z-40 w-md max-w-[calc(100vw-2rem)] bg-white border border-slate-200 rounded-xl shadow-lg p-4 text-left">
       {/* 21 Oct (her review): × in the top right corner, level with the title */}
       <div className="flex items-start justify-between gap-3">
         <p className="text-sm font-semibold text-slate-900 leading-5">Apply to {job.company}?</p>
@@ -275,7 +275,7 @@ export default function JobDetail() {
             <Bar className="h-12 w-20" />
           </div>
           <div className="bg-white rounded-xl border border-slate-200">
-            <div className="px-6 py-3.5 border-b border-slate-200 flex gap-6">{['w-20', 'w-20', 'w-24'].map(w => <Bar key={w} className={`h-4 ${w}`} />)}</div>
+            <div className="px-6 py-3.5 border-b border-slate-200 flex gap-6">{['w-20', 'w-20', 'w-24'].map((w, i) => (<Bar key={i} className={`h-4 ${w}`} />))}</div>
             <div className="px-6 divide-y divide-slate-100">{[0, 1, 2, 3, 4].map(i => <RowSkeleton key={i} />)}</div>
           </div>
         </div>

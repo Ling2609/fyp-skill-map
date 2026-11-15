@@ -7,6 +7,7 @@ from app.models.job import Job, JobSkill
 from app.models.user import User
 from app.routers.auth import get_current_user
 from app.services.description_check import ungrounded
+from app.services.employer_availability import owner_available_clause
 
 router = APIRouter(prefix="/jobs", tags=["jobs"])
 
@@ -45,7 +46,8 @@ CURRENT_SOURCES = ("live", "employer")
 
 def current_jobs_filter(q):
     return q.filter(Job.source.in_(CURRENT_SOURCES), Job.gone_at.is_(None), Job.closed_at.is_(None),
-                    Job.hidden_by_admin_at.is_(None), Job.applications_stopped_at.is_(None))
+                    Job.hidden_by_admin_at.is_(None), Job.applications_stopped_at.is_(None),
+                    owner_available_clause())
 
 
 def get_extractor():

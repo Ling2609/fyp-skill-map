@@ -19,6 +19,7 @@ from app.models.application import Application, JobInvitation, OutsideApplicatio
 from app.models.job import Job, JobSkill
 from app.models.user import User, UserRole
 from app.routers.auth import get_current_user
+from app.services.employer_availability import employer_available
 
 router = APIRouter(prefix="/applications", tags=["applications"])
 
@@ -63,6 +64,8 @@ def apply(data: ApplyIn, student: User = Depends(require_student), db: Session =
         raise HTTPException(status_code=404, detail="Only jobs posted on SkillMap can be applied for here.")
     if not _job_open(job):
         raise HTTPException(status_code=400, detail="This job is closed.")
+    if not employer_available(job, db, lock=True):
+        raise HTTPException(status_code=400, detail="This employer is not currently accepting applications.")
     if job.applications_stopped_at:          # 14 Oct: the employer stopped new applications (still deciding)
         raise HTTPException(status_code=400, detail="This job isn't taking new applications.")
     if db.query(Application).filter(Application.job_id == job.id, Application.student_id == student.id).first():
@@ -82,7 +85,7 @@ def apply(data: ApplyIn, student: User = Depends(require_student), db: Session =
         db.rollback()
         raise HTTPException(status_code=409, detail="You already applied for this job.")
     db.refresh(a)
-    return _mine(a, job)
+    return _mine(a, job, db=db)
 
 
 def _snapshot(a: Application, student: User, job: Job, db: Session) -> dict | None:
@@ -98,7 +101,7 @@ def _snapshot(a: Application, student: User, job: Job, db: Session) -> dict | No
 
 
 def _mine(a: Application, job: Job, match: str | None = None, events=None, usually_days: int | None = None,
-          extra: dict | None = None) -> dict:
+          extra: dict | None = None, *, db: Session) -> dict:
     from app.services.application_progress import progress
     return {"id": a.id, "job_ref": job.job_id, "title": job.job_title, "company": job.company,
             "status": a.status, "status_label": STUDENT_STATUS[a.status], "applied_at": a.created_at,
@@ -111,7 +114,8 @@ def _mine(a: Application, job: Job, match: str | None = None, events=None, usual
             # closed, and why this application wasn't selected (reason, note, the missing skills then)
             "decide_by": job.decide_by, "decide_extended_reason": job.decide_extended_reason,
             "decide_by_original": job.decide_by_original,
-            "taking_applications": _job_open(job) and not job.applications_stopped_at,
+            "taking_applications": _job_open(job) and not job.applications_stopped_at
+                                   and employer_available(job, db),
             "close_reason": job.close_reason, "category": job.subcategory,
             "reason": a.reason, "note": a.note, "reason_skills": a.reason_skills or [],
             **(extra or {})}
@@ -141,7 +145,8 @@ def job_open_now(job_ref: str, student: User = Depends(require_student), db: Ses
     job = db.query(Job).filter(Job.job_id == job_ref).first()
     if not job:
         raise HTTPException(status_code=404, detail="Job not found.")
-    return {"closed": not _job_open(job), "taking_applications": _job_open(job) and not job.applications_stopped_at,
+    return {"closed": not _job_open(job), "taking_applications": _job_open(job) and not job.applications_stopped_at
+                                   and employer_available(job, db),
             "decide_by": job.decide_by}
 
 
@@ -153,7 +158,7 @@ def for_job(job_ref: str, student: User = Depends(require_student), db: Session 
     if not row:
         return None
     from app.services.application_progress import events_for
-    return _mine(*row, events=events_for([row[0].id], db)[row[0].id])
+    return _mine(*row, events=events_for([row[0].id], db)[row[0].id], db=db)
 
 
 @router.get("/mine")
@@ -187,7 +192,7 @@ def mine(student: User = Depends(require_student), db: Session = Depends(get_db)
                         _snapshot(other, person, job, db)
         out.append(_mine(a, job, match, events[a.id], usually[emp],
                          {"job_stats": stats[job.id], "stand": stand(a, everyone), "employer_record": records[emp],
-                          "job_changed": _job_changed(a, job, db)}))
+                          "job_changed": _job_changed(a, job, db)}, db=db))
     db.commit()                                       # the refreshed counts
     return out
 
@@ -217,7 +222,7 @@ def _open_invitations(student: User, db: Session):
             .order_by(JobInvitation.created_at.desc()).all())
     from app.services.invitations import expired
     # 25 Oct: one with no answer ends after 14 days (the employer then sees "No reply")
-    return [(i, j) for i, j in rows if j.id not in applied and _job_open(j) and not expired(i)]
+    return [(i, j) for i, j in rows if j.id not in applied and _job_open(j) and employer_available(j, db) and not expired(i)]
 
 
 @router.get("/invitations")
