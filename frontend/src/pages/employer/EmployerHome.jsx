@@ -309,9 +309,10 @@ export function MyJobs() {
                         <div className="flex items-center gap-2 min-w-0">
                           <p className="font-medium text-slate-900 truncate">{j.title}</p>
                           {j.status === 'hidden' && <SpecialBadge>Hidden by the career office</SpecialBadge>}
-                          {j.status === 'open' && j.stopped && <SpecialBadge>Not taking applications</SpecialBadge>}
+                          {j.status === 'open' && j.stopped && <SpecialBadge>{j.deadline_passed ? 'Decision date passed · applications paused' : 'Not taking applications'}</SpecialBadge>}
                         </div>
                         <p className="text-xs text-slate-500 mt-0.5">{[j.location, j.category, `posted ${fmtDate(j.posted_at)}`].filter(Boolean).join(' · ')}</p>
+                        {j.status === 'open' && j.deadline_passed && <p className="text-xs text-amber-800 mt-1">New applications are paused. Review the applicants still waiting.</p>}
                       </td>
                       {/* 12 Oct: the total, and how many still wait for a status */}
                       <td className="px-5 py-3.5 text-slate-600">

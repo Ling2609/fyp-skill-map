@@ -318,7 +318,7 @@ export default function PostJob() {
                       ? 'bg-blue-600 border-blue-600 text-white' : 'bg-white border-slate-300 text-slate-700 hover:border-blue-300'}`}>{text}</button>
                 ))}
               </div>
-              <p className="text-xs text-slate-500 mt-1.5">Students see this date before applying. Applications without a decision by then close automatically and count in your record.</p>
+              <p className="text-xs text-slate-500 mt-1.5">Students see this date before applying. New applications pause when it passes. Existing applications stay pending until you decide, and missed promises remain in your reply record.</p>
             </div>
           )}
           <div className={read ? '' : 'flex-1 min-h-0 flex flex-col'}>

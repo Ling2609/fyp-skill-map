@@ -210,7 +210,7 @@ export default function Applicants() {
             {job.required_names?.length > 0 && ` · requires ${job.required_names.join(', ')}`}
           </p>}
           {job?.decide_by && <p className={`text-sm mt-1 ${job.past_date ? 'text-rose-700 font-medium' : 'text-slate-700'}`}>
-            {job.past_date ? `Your decision date (${fmtDay(job.decide_by)}) has passed: applicants still waiting see "No decision".`
+            {job.past_date ? `Your decision date (${fmtDay(job.decide_by)}) has passed. New applications are paused. Review the applicants still waiting; their applications remain pending.`
               : <>Decide by {fmtDay(job.decide_by)} · {left(job.decide_by)}{' '}
                 {/* 25 Oct (her question: "Decide by 17 Nov means what?"): days left, and what the date means */}
                 <InfoTip label="What the decision date means">Applicants see "Reply by {fmtDay(job.decide_by)}" on My Applications.

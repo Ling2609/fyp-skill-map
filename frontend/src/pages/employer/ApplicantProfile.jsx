@@ -85,9 +85,9 @@ export default function ApplicantProfile() {
             ? <Link to={`/employer/applications/${data.applied_application_id}`} className="shrink-0 text-sm font-medium text-blue-700 hover:underline">They applied: open the application</Link>
             : data.invite
               ? <InviteLabel invite={data.invite} className="text-sm px-3.5 py-2" />    /* 25 Oct: Invited / Declined / No reply */
-              : <button onClick={invite} disabled={inviting}
+              : <button onClick={invite} disabled={inviting || data.job.taking_applications === false}
                   className="shrink-0 px-4 py-2 text-sm font-medium rounded-lg bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-40">
-                  {inviting ? <Busy>Inviting…</Busy> : 'Invite to apply'}
+                  {inviting ? <Busy>Inviting…</Busy> : data.job.taking_applications === false ? 'New applications paused' : 'Invite to apply'}
                 </button>)}
         </div>
       </PageHeader>

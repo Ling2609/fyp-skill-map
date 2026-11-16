@@ -19,7 +19,7 @@ from app.models.application import Application, JobInvitation, OutsideApplicatio
 from app.models.job import Job, JobSkill
 from app.models.user import User, UserRole
 from app.routers.auth import get_current_user
-from app.services.employer_availability import employer_available
+from app.services.employer_availability import employer_available, new_applications_open, decision_window_open
 
 router = APIRouter(prefix="/applications", tags=["applications"])
 
@@ -66,6 +66,8 @@ def apply(data: ApplyIn, student: User = Depends(require_student), db: Session =
         raise HTTPException(status_code=400, detail="This job is closed.")
     if not employer_available(job, db, lock=True):
         raise HTTPException(status_code=400, detail="This employer is not currently accepting applications.")
+    if not decision_window_open(job):
+        raise HTTPException(status_code=400, detail="New applications are paused because the promised decision date has passed.")
     if job.applications_stopped_at:          # 14 Oct: the employer stopped new applications (still deciding)
         raise HTTPException(status_code=400, detail="This job isn't taking new applications.")
     if db.query(Application).filter(Application.job_id == job.id, Application.student_id == student.id).first():
@@ -114,8 +116,8 @@ def _mine(a: Application, job: Job, match: str | None = None, events=None, usual
             # closed, and why this application wasn't selected (reason, note, the missing skills then)
             "decide_by": job.decide_by, "decide_extended_reason": job.decide_extended_reason,
             "decide_by_original": job.decide_by_original,
-            "taking_applications": _job_open(job) and not job.applications_stopped_at
-                                   and employer_available(job, db),
+            "taking_applications": new_applications_open(job, db),
+            "deadline_passed": not decision_window_open(job),
             "close_reason": job.close_reason, "category": job.subcategory,
             "reason": a.reason, "note": a.note, "reason_skills": a.reason_skills or [],
             **(extra or {})}
@@ -145,8 +147,8 @@ def job_open_now(job_ref: str, student: User = Depends(require_student), db: Ses
     job = db.query(Job).filter(Job.job_id == job_ref).first()
     if not job:
         raise HTTPException(status_code=404, detail="Job not found.")
-    return {"closed": not _job_open(job), "taking_applications": _job_open(job) and not job.applications_stopped_at
-                                   and employer_available(job, db),
+    return {"closed": not _job_open(job), "taking_applications": new_applications_open(job, db),
+            "deadline_passed": not decision_window_open(job),
             "decide_by": job.decide_by}
 
 
@@ -222,7 +224,7 @@ def _open_invitations(student: User, db: Session):
             .order_by(JobInvitation.created_at.desc()).all())
     from app.services.invitations import expired
     # 25 Oct: one with no answer ends after 14 days (the employer then sees "No reply")
-    return [(i, j) for i, j in rows if j.id not in applied and _job_open(j) and employer_available(j, db) and not expired(i)]
+    return [(i, j) for i, j in rows if j.id not in applied and _job_open(j) and new_applications_open(j, db) and not expired(i)]
 
 
 @router.get("/invitations")

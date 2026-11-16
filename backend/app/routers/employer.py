@@ -29,6 +29,7 @@ from sqlalchemy.orm import Session
 from app.database import get_db
 from app.models.application import Application, ApplicationEvent, JobInvitation
 from app.models.job import Job, JobSkill
+from app.services.employer_availability import new_applications_open, decision_window_open
 from app.models.user import User, UserRole
 from app.routers.auth import get_current_user
 from app.services.invitations import answered_by as invite_answered, state as invite_state
@@ -74,7 +75,8 @@ def _row(job: Job, skills: list[JobSkill], statuses: list[str] = ()) -> dict:
             "decide_by": job.decide_by, "decide_extended": job.decide_extended_reason is not None,
             "decide_extended_reason": job.decide_extended_reason, "decide_by_original": job.decide_by_original,
             "past_date": past_date(job),
-            "stopped": job.applications_stopped_at is not None, "close_reason": job.close_reason}
+            "stopped": job.applications_stopped_at is not None or not decision_window_open(job),
+            "deadline_passed": not decision_window_open(job), "close_reason": job.close_reason}
 
 
 def _statuses(job_ids: list[int], db: Session) -> dict[int, list[str]]:
@@ -121,7 +123,7 @@ def close_or_reopen(job_id: int, data: CloseIn, employer: User = Depends(require
         # 25 Oct (her review: rules for stopping and restarting): taking applications again only before the decision
         # date passes (a new applicant would at once see "No decision"). The date itself never moves with this: it is
         # the promise to people who already applied, and only "Move decision date" (once, up to 2 weeks) changes it.
-        if data.stopped is False and job.applications_stopped_at and past_date(job):
+        if data.stopped is False and not decision_window_open(job):
             raise HTTPException(status_code=400, detail="Your decision date has passed, so the job can't take new applications. Decide on the applicants waiting, then close it.")
         job.applications_stopped_at = now if data.stopped else None
     if data.closed is True and not job.closed_at:
@@ -158,7 +160,7 @@ def extend_decision_date(job_id: int, data: ExtendIn, employer: User = Depends(r
         raise HTTPException(status_code=400, detail="The decision date can be moved once only.")
     # 25 Oct (her review: "a rule for delay, a limit"): only before the date passes. Once it has passed, applicants
     # still waiting already see "No decision"; pushing the date back then would hide a missed promise.
-    if past_date(job):
+    if not decision_window_open(job):
         raise HTTPException(status_code=400, detail="Your decision date has passed, so it can't be moved. Decide on the applicants still waiting.")
     if data.days not in EXTEND_DAYS:
         raise HTTPException(status_code=400, detail="Move it by 1 or 2 weeks.")
@@ -619,7 +621,7 @@ def _profile_for(student: User, job: Job, db: Session, contact: bool) -> dict:
         [m["job_skill"] for m in gap["matched_skills"]] + [m.get("matched_graduate_skill") or "" for m in gap["matched_skills"]]
         + [m["job_skill"] for m in gap["missing_skills"]] + [n["job_skill"] for n in gap["nice_to_have"]]
         + [x["job_skill"] for x in gap.get("learn_on_job", [])])
-    return {"job": {"id": job.id, "title": job.job_title},
+    return {"job": {"id": job.id, "title": job.job_title, "taking_applications": new_applications_open(job, db)},
             "student": {**build_showcase(student, db, for_employer=True, job_skills=job_skills), "programme_line": _programme(student, db),
                         "contact": {"email": student.email, "phone": student.phone, "city": student.city,
                                     "available_from": student.available_from} if contact else None},
@@ -691,6 +693,9 @@ def _visible_students(db: Session) -> list[User]:
 
 def _graduates_who_fit(open_jobs: list[Job], db: Session, limit: int | None = FIT_SHOWN) -> list[dict]:
     """Visible students who haven't applied, each with the open job they fit best, best match first."""
+    open_jobs = [j for j in open_jobs if new_applications_open(j, db)]
+    if not open_jobs:
+        return []
     applied = {(a.job_id, a.student_id) for a in db.query(Application).filter(
         Application.job_id.in_([j.id for j in open_jobs]))}
     invited = {(i.job_id, i.student_id): i for i in db.query(JobInvitation).filter(
@@ -876,6 +881,8 @@ class InviteIn(BaseModel):
 
 def _invite(job: Job, student_id: int, db: Session) -> JobInvitation:
     """One invitation (the rules below), not yet committed. Raises HTTPException with the reason it can't be sent."""
+    if not new_applications_open(job, db):
+        raise HTTPException(status_code=400, detail="This job is not accepting new applications. Review existing applicants instead.")
     student = db.query(User).filter(User.id == student_id, User.role == UserRole.student,
                                     User.is_visible_to_employers.is_(True), User.is_active.is_(True)).first()
     if not student:
@@ -898,6 +905,8 @@ def invite(data: InviteIn, employer: User = Depends(require_employer), db: Sessi
     job = _own_job(data.job_id, employer, db)
     if _status(job) != "open":
         raise HTTPException(status_code=400, detail="This job is closed. Reopen it to invite graduates.")
+    if not new_applications_open(job, db):
+        raise HTTPException(status_code=400, detail="This job is not accepting new applications. Review existing applicants instead.")
     inv = _invite(job, data.student_id, db)
     try:
         db.commit()
@@ -931,6 +940,8 @@ def invite_selected(data: BulkInviteIn, employer: User = Depends(require_employe
     job = _own_job(data.job_id, employer, db)
     if _status(job) != "open":
         raise HTTPException(status_code=400, detail="This job is closed. Reopen it to invite graduates.")
+    if not new_applications_open(job, db):
+        raise HTTPException(status_code=400, detail="This job is not accepting new applications. Review existing applicants instead.")
     invited, skipped = [], []
     for sid in dict.fromkeys(data.student_ids):           # each once, in the order ticked
         try:

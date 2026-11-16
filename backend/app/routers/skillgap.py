@@ -8,7 +8,7 @@ from app.routers.auth import get_current_user
 from app.models.user import User
 from app.nlp.embedder import get_embedder
 from app.services import ad_requirements
-from app.services.employer_availability import employer_available
+from app.services.employer_availability import new_applications_open, decision_window_open
 from app.services.job_requirements import job_skill_items, score_job, unit_name, unit_quote
 from app.services.skill_profile import (
     EMPTY_PROFILE_MESSAGE, build_skill_profile, match_matrix, normalise_rows, profile_spellings,
@@ -145,8 +145,8 @@ def skill_gap_for(student: User, job_ref: str, db: Session) -> dict:
             "gone": bool(job.gone_at),
             # 14 Oct: before applying, the student sees the employer's decision date; a stopped job can't be applied to
             "decide_by": job.decide_by.isoformat() if job.decide_by else None,
-            "taking_applications": not (job.closed_at or job.hidden_by_admin_at or job.applications_stopped_at)
-                                   and employer_available(job, db),
+            "taking_applications": new_applications_open(job, db),
+            "deadline_passed": not decision_window_open(job),
             # 18 Oct (improvement #1): the employer's on-time record BEFORE applying (it was only in My applications);
             # SkillMap posts only: for a job on another site SkillMap never sees the replies
             "employer_record": _record(job, db),

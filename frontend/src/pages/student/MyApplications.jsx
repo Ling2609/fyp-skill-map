@@ -145,7 +145,7 @@ function Note({ r }) {
   // 14 Oct: the employer's own date passed with no decision (B1 wording, her pick): not a rejection
   if (p.nudge === 'no_decision') return (
     <p className="mt-4 text-sm text-amber-900 bg-amber-50 rounded-lg px-3.5 py-2.5">
-      <b>{r.company} missed its promised reply date ({fmtDay(r.decide_by)}).</b> Focus on other jobs; any reply will still appear here.
+      <b>{r.company} missed its promised reply date ({fmtDay(r.decide_by)}).</b> Your application is still awaiting a decision. Focus on other jobs; any reply will still appear here.
     </p>
   )
   if (p.nudge === 'move_on') return (
