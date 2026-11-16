@@ -3,6 +3,29 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 16 Nov 2026 — Pause new recruitment after the promised decision date
+
+- **Pushed in `3a91748`:** employer posts whose `decide_by` has been reached leave
+  current recommendations/discovery and cannot accept new applications or new
+  single/bulk invitations. Expired invitations no longer offer an application.
+- **Existing applicants are preserved:** expiry does not set `closed_at`, write
+  `applications_stopped_at`, reject applicants or change their status. Review and
+  real decisions remain available, with clear overdue/intake-paused messages.
+- The shared Python and SQL date rules agree at the exact deadline and normalize
+  timezone-aware/legacy-naive timestamps. External jobs and undated legacy posts
+  keep their previous deadline behaviour.
+- Existing pre-deadline one-time 7/14-day extensions remain. Resume/reopen cannot
+  bypass an expired promise; no after-deadline reset or mandatory reposting rule
+  was added. The posting-form hint no longer claims pending applications close.
+- **No migration/ERD change.** Existing employer-suspension checks remain in force.
+  The experimental admin job-hide page was reverted, not shipped as a new feature.
+- **Saved local evidence:** 50 unit tests passed in 1.59 s
+  (`pytest_2026-11-16_130941_unit.txt`). The deadline API regression run passed **38 tests in 101.18 s**
+  (`pytest_2026-11-16_130948_deadline_regression.txt`).
+  These are focused checks, not a new full-backend-suite or browser pass.
+- Markdown rules are synchronized here; Word use-case specifications and draw.io
+  activity wording still need the matching update. The UI redesign stays a mock.
+
 ## 15 Nov 2026 — Suspended or rejected employers stop taking new applications
 
 - **Bug found and fixed** (`f482127`, `24229dc`, `37d5ed6`): when Admin deactivated or rejected an employer, that employer's jobs stayed in

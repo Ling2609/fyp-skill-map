@@ -1,0 +1,48 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.7, pytest-9.0.3, pluggy-1.6.0 -- C:\Users\Ling\Desktop\fyp-skill-map\backend\venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\Ling\Desktop\fyp-skill-map\backend
+configfile: pytest.ini
+plugins: anyio-4.15.1, locust-2.47.0, platformdirs-4.12.2, cov-7.1.0
+collecting ... collected 38 items
+
+tests/test_decision_deadline.py::test_expired_job_leaves_warm_cache_and_blocks_direct_apply_without_rejecting_existing PASSED [  2%]
+tests/test_decision_deadline.py::test_expiry_hides_old_invitations_and_blocks_single_and_bulk_invites PASSED [  5%]
+tests/test_decision_deadline.py::test_overdue_resume_and_extension_cannot_bypass_pause PASSED [  7%]
+tests/test_employer_availability.py::test_owner_status_blocks_new_applications_and_restores_visibility[deactivate] PASSED [ 10%]
+tests/test_employer_availability.py::test_owner_status_blocks_new_applications_and_restores_visibility[reject] PASSED [ 13%]
+tests/test_employer_availability.py::test_closed_job_stays_closed_after_owner_reactivation PASSED [ 15%]
+tests/test_applications.py::test_apply_once_with_progress PASSED         [ 18%]
+tests/test_applications.py::test_student_without_skills_cannot_apply PASSED [ 21%]
+tests/test_applications.py::test_simultaneous_applies_give_one_application_no_server_error PASSED [ 23%]
+tests/test_applications.py::test_cannot_apply_to_closed_or_gone_or_live_jobs PASSED [ 26%]
+tests/test_applications.py::test_viewed_is_recorded_when_the_profile_is_opened_not_the_list PASSED [ 28%]
+tests/test_applications.py::test_status_set_from_the_list_counts_as_viewed PASSED [ 31%]
+tests/test_applications.py::test_shortlist_back_and_again_then_reject_then_correct PASSED [ 34%]
+tests/test_applications.py::test_undo_restores_the_previous_status_from_history PASSED [ 36%]
+tests/test_applications.py::test_quiet_applications_get_the_14_day_note_then_no_decision_at_the_date PASSED [ 39%]
+tests/test_applications.py::test_closing_a_job_with_waiting_applicants PASSED [ 42%]
+tests/test_applications.py::test_closing_needs_a_reason_and_tells_everyone_waiting PASSED [ 44%]
+tests/test_applications.py::test_employer_dashboard_and_counts PASSED    [ 47%]
+tests/test_transparency.py::test_decision_date_is_set_when_posting_and_moved_once PASSED [ 50%]
+tests/test_transparency.py::test_applications_can_restart_only_before_the_decision_date PASSED [ 52%]
+tests/test_transparency.py::test_decision_date_cannot_be_moved_once_it_has_passed PASSED [ 55%]
+tests/test_transparency.py::test_stopping_new_applications_keeps_the_job_for_applicants PASSED [ 57%]
+tests/test_transparency.py::test_not_selected_with_a_reason_the_student_sees PASSED [ 60%]
+tests/test_transparency.py::test_several_at_once_all_or_nothing PASSED   [ 63%]
+tests/test_transparency.py::test_shortlist_several_only_moves_those_at_applied PASSED [ 65%]
+tests/test_transparency.py::test_closing_filled_through_skillmap_needs_the_hire PASSED [ 68%]
+tests/test_transparency.py::test_job_numbers_and_where_you_stand PASSED  [ 71%]
+tests/test_transparency.py::test_employer_record_of_deciding_on_time PASSED [ 73%]
+tests/test_invitations.py::test_invite_flow PASSED                       [ 76%]
+tests/test_invitations.py::test_invite_only_once_even_after_not_interested PASSED [ 78%]
+tests/test_invitations.py::test_cannot_invite_hidden_or_already_applied_or_to_a_closed_job PASSED [ 81%]
+tests/test_invitations.py::test_contact_details_only_after_shortlisting PASSED [ 84%]
+tests/test_invitations.py::test_deactivated_student_leaves_graduates_who_fit PASSED [ 86%]
+tests/test_invitations.py::test_graduates_with_nice_to_have_skills_come_first PASSED [ 89%]
+tests/test_invitations.py::test_declining_shows_the_reason_and_still_lets_her_apply PASSED [ 92%]
+tests/test_invitations.py::test_no_answer_after_14_days_is_no_reply PASSED [ 94%]
+tests/test_invitations.py::test_invite_selected_invites_each_and_reports_the_rest PASSED [ 97%]
+tests/test_invitations.py::test_graduates_not_yet_invited_come_first PASSED [100%]
+
+======================= 38 passed in 101.18s (0:01:41) ========================

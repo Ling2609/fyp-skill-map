@@ -1428,3 +1428,36 @@ Her request: show the student a clear process (instead of silence then a sudden 
 - **PostgreSQL version (28 Oct, her local server is 18):** a custom-format dump can only be restored by the same or a newer `pg_restore`, so the image is `postgres:18`. From 18 the image's data folder is version-specific (`/var/lib/postgresql/18/docker`) and the data volume is mounted at `/var/lib/postgresql`; for 17 and below it is `/var/lib/postgresql/data`, and mounting the wrong one does not persist the data ([docker-library, postgres README](https://github.com/docker-library/docs/blob/master/postgres/README.md)). The README and earlier notes that say PostgreSQL 16 were the planned version; the code has only been run on 18 on her laptop (the tests and earlier runs).
 - **MongoDB version (28 Oct):** the Docker image is `mongo:9`, the same major version as her local MongoDB 9.0.2; the official image list has a `9` tag (9.0.4 at the time, [docker-library, official-images, mongo](https://github.com/docker-library/official-images/blob/master/library/mongo)). The containers start with an empty MongoDB (only the PostgreSQL dump is restored), so chats made outside Docker do not appear in Docker.
 - **First run (29 Oct 2026, her laptop, Docker Desktop on Windows):** all four containers up; database, MongoDB and API reported healthy by `docker compose ps`; `docker_smoke.py` passed 9 of 9 checks (API, CORS for `http://localhost:5173`, web app and `/login` deep link, built JavaScript, 14 job categories from the restored dump, register and sign in, a database read, account deletion, an idle connection kept open for 7 s). Evidence: `docs/evidence/docker/`. System test TC-67: Pass. The smoke test shows the stack answers like the laptop setup; it does not repeat the load test or the full pytest suite inside Docker.
+
+
+## Recruitment decision date and intake policy (reviewed 16 Nov 2026)
+
+Question: when a promised decision date passes, should new intake stop and must
+the employer create another posting? These sources informed the decision; they
+do not empirically prove a universally best SkillMap policy.
+
+- [Careers@Gov — mid-career application process](https://www.careers.gov.sg/join-us/mid-careers/):
+  candidates may hear several weeks after the application closing date. An intake
+  deadline and an expected response date are distinct concepts.
+- [Workable — candidate experience guidance](https://help.workable.com/hc/en-us/articles/360051722034-Best-Practices-Create-an-Amazing-Candidate-Experience):
+  proactively explain delays and when candidates can expect another response.
+- [Handshake — updating job-posting closing dates](https://support.joinhandshake.com/hc/en-us/articles/230379768-Updating-Job-Posting-Closing-Dates):
+  eligible closed postings can be renewed. A blanket requirement to duplicate a
+  posting after every delay is unsupported; this source concerns application dates,
+  not SkillMap's particular job-wide promise.
+- [DfE — removing automatic rejections and declines](https://becoming-a-teacher.design-history.education.gov.uk/manage-teacher-training-applications/removing-automatic-rejections-and-automatic-declines/):
+  negative candidate experience informed removal of automatic rejection. This is
+  education-admissions evidence, not a Malaysian recruitment requirement, and
+  does not establish when new job applications must stop.
+
+**Chosen constrained-release policy (`3a91748`):** pause new intake when the
+existing job-wide promise expires, to avoid accepting applicants against a date
+already in the past. Preserve existing application statuses and overdue history;
+allow real decisions later. Keep the existing pre-deadline extension limit. Do not
+silently reset a missed promise or add a mandatory reposting rule. The exact
+14/21/30/45-day choices and once-only 7/14-day extension are local product choices.
+
+Separate application-closing and expected-decision dates are a clearer possible
+future model. A post-deadline renewal/revised-date workflow needs an explicit
+policy and history design before implementation; it was not added by this fix.
+The current guard uses existing fields, so it requires no schema/ERD change.

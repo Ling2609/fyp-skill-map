@@ -1,4 +1,4 @@
-# Where SkillMap keeps data (audit, 14 Oct 2026; updated the same day after the privacy, transparency and audit-fix batches)
+# Where SkillMap keeps data (updated 16 Nov 2026)
 
 Checked in the code before adding anything new to MongoDB. Each store has one purpose; nothing is kept in two places.
 
@@ -13,10 +13,28 @@ Checked in the code before adding anything new to MongoDB. Each store has one pu
 | What an employer was shown when applying (21 Oct) | `applications.sent_profile`, `sent_at`: a copy of the student's profile and match for that job, no contact details | Yes (with the application) | Account deleted |
 | Connected GitHub accounts | `github_accounts` (GitHub id and username only; GitHub's access key is used once and not kept) | Yes | Disconnected, or account deleted |
 | Modules, programmes, intakes | `modules`, `module_skills`, `programmes`, `intakes`, `programme_modules`, `intake_modules` | No | Changed by the career office |
-| Jobs and their skills | `jobs` (with the employer's decision date, the first date if it was moved, stop/close reasons), `job_skills` (skill, quote from the ad, level, extractor model) | No (company data) | Live jobs: until they expire or go; employer posts: until closed |
+| Jobs and their skills | `jobs` (with the employer's decision date, the first date if it was moved, stop/close reasons), `job_skills` (skill, quote from the ad, level, extractor model) | No (company data) | Availability is separate from retention: closing, expiry and account restrictions do not themselves delete these rows |
 | Applications | `applications` (status, reason and note for Not selected, the applicant's skill counts and when they were worked out), `application_events` (viewed, status changes), `job_invitations` | Yes (links a student to a job) | Account deleted |
 | Security | `password_reset_otps`, `login_attempts` (username or what was typed, IP) | Yes | Codes expire; attempts reset on success; both removed on account deletion |
 | Career-office actions | `admin_actions` | Yes (target user) | Rows about a deleted student are removed |
+
+## Recruitment availability is derived, not a new store
+
+The suspension fix and `3a91748` decision-date fix use existing fields:
+`users.is_active`, `users.employer_status`, `jobs.posted_by_user_id`,
+`jobs.decide_by`, `jobs.decide_by_original`, `jobs.decide_extended_reason`,
+`jobs.gone_at`, `jobs.closed_at`, `jobs.hidden_by_admin_at` and
+`jobs.applications_stopped_at`.
+
+Read/write eligibility checks exclude unavailable owners and expired promises.
+Reaching the deadline does not write a status-change event, modify applicant
+outcomes, set the manual pause timestamp, copy personal data into another store,
+or delete a job/application. Existing `applications`, `application_events` and
+submitted-profile copies remain available for review and real decisions.
+
+No table, column, MongoDB document shape, TTL index or ERD structure was added.
+The hidden-field check is pre-existing infrastructure: the experimental admin
+hide/restore screen was reverted and is not part of the shipped flow.
 
 ## MongoDB — documents
 
