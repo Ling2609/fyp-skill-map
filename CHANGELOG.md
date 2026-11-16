@@ -3,6 +3,19 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 16 Nov 2026 — Tests for the two Retry buttons
+
+- **New Vitest tests** close the gap noted on 10 Nov ("No automated test was added for these two paths yet"):
+  `ModulesEditor.test.jsx` (3: a failed load shows the alert and Retry; Retry loads the modules and the message goes; a failed Retry
+  shows it again and asks the server again) and `GithubImport.test.jsx` (4: a failed list shows the alert and Retry; Retry lists the
+  repositories; a failed Retry asks again; "GitHub not connected yet" still offers Connect, not Retry). The network is replaced by
+  `api.get`, so no server is needed.
+- **Each rule was broken on purpose** and the tests failed: the old behaviour (error swallowed), a Retry button that does nothing
+  (both components), and "not connected" treated as a failed list. A first version of the two "failed Retry" tests still passed
+  with a Retry that did nothing (the old message stays on screen), so they now also check how many times the server was asked.
+- Front-end tests: **108 passed in 14 files** (101 in 12 before); lint clean. Run on Claude's side, not yet saved as evidence
+  from her laptop.
+
 ## 16 Nov 2026 — Pause new recruitment after the promised decision date
 
 - **Pushed in `3a91748`:** employer posts whose `decide_by` has been reached leave

@@ -35,7 +35,7 @@ Last updated: 16 Nov 2026 (see Start here). Before: 10 Nov 2026. Before: 29 Oct 
   3. Dependency advisories (new since 22 Oct, both audits were 0): `npm audit fix` (follow-redirects high; minimatch and eslint dev only);
      pip pins dnspython 2.8.0 to 2.9.2, filelock 3.32.6 to 4.2.1 (major, test alone), pyasn1 0.6.4 to 0.6.5, pymongo 4.18.2 to 4.18.3,
      setuptools 84.0.0 to 84.1.0; rerun pytest; re-run both audits just before submission and save the output.
-  4. Two Vitest tests for the Retry buttons (Modules tab, GitHub import): failed load shows the message, Retry loads the list.
+  4. DONE in the next push: Vitest tests for the Retry buttons (7 tests, 108 passed in 14 files); save `npm test` output on her laptop to `docs/evidence/tests/`.
   5. Usability study with 3 participants (ethics approved): tasks, consent form, SUS sheet; her answers on the supervisor's points
      (learning-plan wording example, Scholar link yes or no, which charts).
   6. Documents: Word use-case specifications and draw.io activity wording for the intake pause; 20 use case specifications; DFD fixes,
