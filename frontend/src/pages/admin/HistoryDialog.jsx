@@ -54,7 +54,7 @@ export default function HistoryDialog({ user, name, onClose }) {
                   <div className="min-w-0">
                     <p className="text-sm font-semibold text-slate-900">{LABEL[r.action] || r.action}</p>
                     <p className="text-xs text-slate-500 mt-0.5">{when(r.at)} · by {r.by}</p>
-                    {r.reason && <p className="text-sm text-slate-700 mt-1.5 bg-slate-50 rounded-lg px-2.5 py-1.5 wrap-break-words">{r.reason}</p>}
+                    {r.reason && <p className="text-sm text-slate-700 mt-1.5 bg-slate-50 rounded-lg px-2.5 py-1.5 wrap-break-word">{r.reason}</p>}
                   </div>
                 </li>
               ))}

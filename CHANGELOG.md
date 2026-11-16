@@ -3,6 +3,23 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 15 Nov 2026 — Suspended or rejected employers stop taking new applications
+
+- **Bug found and fixed** (`f482127`, `24229dc`, `37d5ed6`): when Admin deactivated or rejected an employer, that employer's jobs stayed in
+  Job Matches and students could still apply. Now such a job leaves Job Matches, shows "not taking applications" on the job page and in
+  My Applications, is left out of invitations, and Apply is refused with "This employer is not currently accepting applications."
+  Applications already sent are kept (status unchanged), a job the employer closed stays closed after the account is reactivated, and
+  reactivating or approving the employer brings the job back without a restart.
+- **How:** one rule in `services/employer_availability.py` (employer posts need an approved, active employer; live and dataset jobs are
+  unchanged), used as a database filter for the listings and as a check on the job page, My Applications and Apply. Apply takes a shared lock on
+  the employer's row until commit, so an Admin change cannot slip in between the check and saving the application.
+- **Tests:** `tests/test_employer_availability.py` (3: deactivate and reject both block and restore, closed job stays closed) and
+  `tests_unit/test_employer_availability_rules.py` (10: the database filter and the single-job check agree for 9 owner states, and
+  a reactivation is seen at once). Evidence: `docs/evidence/tests/pytest_2026-11-15_*` (unit 42 passed; applications, invitations,
+  transparency and the new file 35 passed). The full suite has not been re-run on this commit yet.
+- **Small fixes:** Admin history dialog wraps long reasons (the class is `wrap-break-word`; `wrap-break-words` with an s makes no CSS, so it
+  would not have wrapped); the apply pop-up width is `w-md` (same 28 rem); skeleton rows use an index key.
+
 ## 10 Nov 2026 — Retry when the modules or the GitHub list fail to load
 
 - **Modules tab** (`8dff41e`): when the modules and grades cannot be loaded the student sees "Couldn't load your modules and grades. Please try again."
