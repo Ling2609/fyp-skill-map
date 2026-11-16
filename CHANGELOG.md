@@ -3,18 +3,27 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
-## 16 Nov 2026 — Tests for the two Retry buttons
+## 16 Nov 2026 — First full test run since 26 Oct: 217 passed; one test made independent of leftover data
 
-- **New Vitest tests** close the gap noted on 10 Nov ("No automated test was added for these two paths yet"):
-  `ModulesEditor.test.jsx` (3: a failed load shows the alert and Retry; Retry loads the modules and the message goes; a failed Retry
-  shows it again and asks the server again) and `GithubImport.test.jsx` (4: a failed list shows the alert and Retry; Retry lists the
-  repositories; a failed Retry asks again; "GitHub not connected yet" still offers Connect, not Retry). The network is replaced by
-  `api.get`, so no server is needed.
-- **Each rule was broken on purpose** and the tests failed: the old behaviour (error swallowed), a Retry button that does nothing
-  (both components), and "not connected" treated as a failed list. A first version of the two "failed Retry" tests still passed
-  with a Retry that did nothing (the old message stays on screen), so they now also check how many times the server was asked.
-- Front-end tests: **108 passed in 14 files** (101 in 12 before); lint clean. Run on Claude's side, not yet saved as evidence
-  from her laptop.
+- **Full backend suite (her laptop, Windows, Python 3.13.7, pytest 9.0.3, `tests/` and `tests_unit/`):** first run on the current
+  code, after the employer-availability and decision-date fixes: **216 passed, 1 failed** (480.95 s). After the test fix below:
+  **217 passed in 419.27 s (6 min 59 s)**. The last full run before this was 184 passed on 26 Oct. Log: `docs/evidence/tests/`,
+  the `pytest_2026-11-16_*_full.txt` file (add the exact name when it is pushed).
+- **The one failure was the test, not the app:** `test_graduates_with_nice_to_have_skills_come_first` expects two graduates in the
+  employer dashboard's list, which shows only the best 10 (`FIT_SHOWN`). The test database keeps every student the earlier tests made,
+  and visible students with the default Python and SQL skills fit that job at 2 of 3, the same as the test's "plain" graduate, so
+  the name tie-break pushed "plain" out of the 10 once enough had piled up (new tests this week added more). Alone, the test passed.
+  The "with the nice-to-have comes first" rule was never broken. The suspension and decision-date changes do not touch this ranking.
+- **Fix (test only, no app change):** the two graduates now have 3 of the job's 4 required skills (a fourth, Elixir, which nobody
+  has), so they outrank leftover students (2 of 4) on the match itself, and the only difference between them is still the
+  nice-to-have. Confirmed by the full run above. Other tests that read the capped list could become fragile in the same way as
+  the test database fills up: the same fix applies.
+- **Front end (Claude's sandbox, not yet from her laptop):** new Vitest tests for the two Retry buttons close the gap noted on 10 Nov
+  ("No automated test was added for these two paths yet"): `ModulesEditor.test.jsx` (3) and `GithubImport.test.jsx` (4), with the
+  network replaced by `api.get`. Each rule was broken on purpose and the tests failed: the old behaviour (error swallowed), a Retry
+  that does nothing (both components), and "not connected" treated as a failed list. A first version of the two "failed Retry" tests
+  still passed with a Retry that did nothing (the old message stays on screen), so they also check how many times the server was
+  asked. Front-end tests: **108 passed in 14 files** (101 in 12 before); lint clean. Her own `npm test` log is still to be saved.
 
 ## 16 Nov 2026 — Pause new recruitment after the promised decision date
 

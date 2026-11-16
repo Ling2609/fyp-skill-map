@@ -30,12 +30,14 @@ Last updated: 16 Nov 2026 (see Start here). Before: 10 Nov 2026. Before: 29 Oct 
   The 1de2680 docs, README, transparency.md and data_flow.md match the code; markdownlint 0 issues.
 - **Next (after 1de2680; the evidence commit is done):**
   1. Re-seed the demo and user-study data (`seed_demo.py`): employer jobs older than their 14, 21, 30 or 45 day window have left Job Matches.
-  2. Full `pytest` (tests and tests_unit; last full log 26 Oct = 184 passed), `npm run lint`, `npm test`, `npm run build` and the
-     5-browser run on the latest commit, saved to `docs/evidence/`. The focused runs above are not a full pass.
+  2. Backend DONE 16 Nov: full pytest **217 passed in 419 s** (her laptop; first full run since 26 Oct = 184; the one failure in the
+     first run, 216 passed and 1 failed, was a test that depended on leftover students, fixed in the test only, see CHANGELOG). STILL TO DO:
+     `npm test`, `npm run lint` and `npm run build` on her laptop with the output saved to `docs/evidence/tests/`, then the 5-browser run
+     after re-seeding (item 1), saved to `docs/evidence/`.
   3. Dependency advisories (new since 22 Oct, both audits were 0): `npm audit fix` (follow-redirects high; minimatch and eslint dev only);
      pip pins dnspython 2.8.0 to 2.9.2, filelock 3.32.6 to 4.2.1 (major, test alone), pyasn1 0.6.4 to 0.6.5, pymongo 4.18.2 to 4.18.3,
      setuptools 84.0.0 to 84.1.0; rerun pytest; re-run both audits just before submission and save the output.
-  4. DONE in the next push: Vitest tests for the Retry buttons (7 tests, 108 passed in 14 files); save `npm test` output on her laptop to `docs/evidence/tests/`.
+  4. DONE 16 Nov: Vitest tests for the Retry buttons (7 tests, 108 passed in 14 files, run in Claude's sandbox): save `npm test` output on her laptop to `docs/evidence/tests/`.
   5. Usability study with 3 participants (ethics approved): tasks, consent form, SUS sheet; her answers on the supervisor's points
      (learning-plan wording example, Scholar link yes or no, which charts).
   6. Documents: Word use-case specifications and draw.io activity wording for the intake pause; 20 use case specifications; DFD fixes,
