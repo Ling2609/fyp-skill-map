@@ -77,26 +77,30 @@ def test_graduates_with_nice_to_have_skills_come_first(client, users):
     """24 Oct (her point): a job with 3 required skills gives many graduates at "2 of 3". Among them, the one who also
     has the nice-to-have skill comes first. Who fits doesn't change, only the order."""
     employer = users.employer()
-    plain = users.student(skills=("Python", "SQL"), visible=True)                # made first: sorts first by name
-    extra = users.student(skills=("Python", "SQL", "Docker"), visible=True)      # same 2 of 3 + the nice-to-have
+    # 16 Nov: the dashboard lists only the best FIT_SHOWN (10) graduates and the test database keeps every student the
+    # earlier tests made (visible ones with Python + SQL fit this job too). At 2 of 3 these two had to beat those leftovers
+    # on the name tie-break, so the full run (216 tests) pushed "plain" out of the 10 while this test alone passed. At 3 of 4
+    # they outrank any leftover (2 of 4) on the match itself, and the only difference between them is the nice-to-have.
+    plain = users.student(skills=("Python", "SQL", "Haskell"), visible=True)
+    extra = users.student(skills=("Python", "SQL", "Haskell", "Docker"), visible=True)   # same 3 of 4 + the nice-to-have
     h = users.h(employer)
     cats = client.get("/jobs/subcategories", params={"include_past": True}, headers=h).json()
-    skills = ([{"name": s, "level": "required", "quote": "", "group": ""} for s in ("Python", "SQL", "Haskell")]
+    skills = ([{"name": s, "level": "required", "quote": "", "group": ""} for s in ("Python", "SQL", "Haskell", "Elixir")]
               + [{"name": "Docker", "level": "preferred", "quote": "", "group": ""}])
     r = client.post("/employer/jobs", headers=h, json={
         "title": "Graduate Data Engineer", "location": "Kuala Lumpur", "salary": "",
         "category": cats[0] if cats else "Developers/Programmers",
-        "description": "Build data pipelines in Python and SQL; Docker is a plus. Haskell for our parsers. " * 2,
+        "description": "Build data pipelines in Python and SQL; Docker is a plus. Haskell for our parsers, Elixir for our services. " * 2,
         "skills": skills, "soft": []})
     assert r.status_code == 200, r.text
-    # nobody has Haskell: the "is live" note falls back to "at least half" (24 Oct)
+    # nobody has Elixir: the "is live" note falls back to "at least half" (24 Oct)
     assert r.json()["graduates_all_required"] == 0 and r.json()["graduates_fit"] >= 2
     grads = [g for g in client.get("/employer/dashboard", headers=h).json()["graduates"]
              if g["job_id"] == r.json()["id"] and g["student_id"] in (users.ids[plain], users.ids[extra])]
     assert [(g["student_id"], g["have"], g["total"], g["nice"]) for g in grads] == [
-        (users.ids[extra], 2, 3, 1), (users.ids[plain], 2, 3, 0)]
+        (users.ids[extra], 3, 4, 1), (users.ids[plain], 3, 4, 0)]
     # 25 Oct: the job's View applicants page lists them with the applicants table's columns
-    assert all(g["missing"] == ["Haskell"] and "nice_total" not in g for g in grads)
+    assert all(g["missing"] == ["Elixir"] and "nice_total" not in g for g in grads)
     # her 21 Oct rule: only the nice-to-haves they have, by name (nothing about the ones they lack)
     assert [g["nice_have"] for g in grads] == [["Docker"], []]
 
