@@ -8,7 +8,7 @@ Planning, reasoning and research behind each decision are in the project roadmap
 - **Full backend suite (her laptop, Windows, Python 3.13.7, pytest 9.0.3, `tests/` and `tests_unit/`):** first run on the current
   code, after the employer-availability and decision-date fixes: **216 passed, 1 failed** (480.95 s). After the test fix below:
   **217 passed in 419.27 s (6 min 59 s)**. The last full run before this was 184 passed on 26 Oct. Log: `docs/evidence/tests/`,
-  the `pytest_2026-11-16_*_full.txt` file (add the exact name when it is pushed).
+  `pytest_2026-11-16_143700_full.txt` (the failing first run is kept beside it: `pytest_2026-11-16_142123_full.txt`).
 - **The one failure was the test, not the app:** `test_graduates_with_nice_to_have_skills_come_first` expects two graduates in the
   employer dashboard's list, which shows only the best 10 (`FIT_SHOWN`). The test database keeps every student the earlier tests made,
   and visible students with the default Python and SQL skills fit that job at 2 of 3, the same as the test's "plain" graduate, so
@@ -18,12 +18,12 @@ Planning, reasoning and research behind each decision are in the project roadmap
   has), so they outrank leftover students (2 of 4) on the match itself, and the only difference between them is still the
   nice-to-have. Confirmed by the full run above. Other tests that read the capped list could become fragile in the same way as
   the test database fills up: the same fix applies.
-- **Front end (Claude's sandbox, not yet from her laptop):** new Vitest tests for the two Retry buttons close the gap noted on 10 Nov
+- **Front end (her laptop: `vitest_2026-11-16.txt`):** new Vitest tests for the two Retry buttons close the gap noted on 10 Nov
   ("No automated test was added for these two paths yet"): `ModulesEditor.test.jsx` (3) and `GithubImport.test.jsx` (4), with the
   network replaced by `api.get`. Each rule was broken on purpose and the tests failed: the old behaviour (error swallowed), a Retry
   that does nothing (both components), and "not connected" treated as a failed list. A first version of the two "failed Retry" tests
   still passed with a Retry that did nothing (the old message stays on screen), so they also check how many times the server was
-  asked. Front-end tests: **108 passed in 14 files** (101 in 12 before); lint clean. Her own `npm test` log is still to be saved.
+  asked. Front-end tests: **108 passed in 14 files** (101 in 12 before); lint clean. Mutation checks (the rules broken on purpose) were run in Claude's sandbox.
 
 ## 16 Nov 2026 — Pause new recruitment after the promised decision date
 
