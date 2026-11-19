@@ -247,7 +247,7 @@ function Trail({ readiness, picked, goal }) {
             <g key={s.skill} transform={`translate(${x.toFixed(1)} ${(pathY(x) + side * 8 * k).toFixed(1)}) rotate(${ang.toFixed(1)}) scale(${side < 0 ? -k : k} ${k})`}>
               <title>{`${skillName(s.skill)}: ${label[s.k]}`}</title>
               <path d={TOPO_PRINT} style={{ '--i': i }}
-                className={`dash-step ${s.k === 'have' ? 'fill-have' : s.k === 'plan' ? 'fill-plan' : 'fill-white stroke-missing-strong [stroke-1.5] [stroke-dasharray:3_2]'}`} />
+                className={`dash-step ${s.k === 'have' ? 'fill-have' : s.k === 'plan' ? 'fill-plan' : 'fill-white stroke-missing-strong stroke-[1.5] [stroke-dasharray:3_2]'}`} />
             </g>
           )
         })}

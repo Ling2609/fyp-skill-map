@@ -15,7 +15,7 @@ from difflib import SequenceMatcher
 QUOTE_MATCH = 0.85       # share of the quote that must match a stretch of the ad (1.0 = exact)
 MIN_QUOTE_CHARS = 3      # "C", "R" alone are too short to prove anything
 
-_QUOTES = str.maketrans({"'": "'", "'": "'", "“": '"', "”": '"', "\u2013": "-", "—": "-",
+_QUOTES = str.maketrans({"\u2018": "'", "\u2019": "'", "“": '"', "”": '"', "\u2013": "-", "—": "-",
                          "•": " ", " ": " "})
 
 
