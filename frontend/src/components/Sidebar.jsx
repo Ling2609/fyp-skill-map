@@ -67,6 +67,12 @@ function useMedia(q) {
 }
 
 // Admin = the career office (7 Oct, layout D): Users carries a badge for employers waiting for approval
+const PROPOSALS_ICON = (
+  <svg className="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+  </svg>
+)
+
 const ADMIN_ITEMS = [
   NAV_ITEMS[0],
   {
@@ -90,6 +96,7 @@ const ADMIN_ITEMS = [
       </svg>
     ),
   },
+  { to: '/admin/workshop/proposals', label: 'Saved proposals', icon: PROPOSALS_ICON },
 ]
 
 // Employer (11 Oct, batch 1; 12 Oct dashboard E): Dashboard is their home (/dashboard), My Jobs carries a badge for

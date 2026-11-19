@@ -21,6 +21,7 @@ const AdminDashboard = lazy(() => import('./pages/admin/AdminDashboard'))
 const AdminUsers = lazy(() => import('./pages/admin/AdminUsers'))
 const AdminAcademic = lazy(() => import('./pages/admin/AdminAcademic'))
 const AdminWorkshop = lazy(() => import('./pages/admin/AdminWorkshop'))
+const SavedWorkshopProposals = lazy(() => import('./pages/admin/SavedWorkshopProposals'))
 const EmployerHome = lazy(() => import('./pages/employer/EmployerHome'))
 const EmployerJobs = lazy(() => import('./pages/employer/EmployerJobs'))
 const PostJob = lazy(() => import('./pages/employer/PostJob'))
@@ -127,6 +128,7 @@ function AppRoutes() {
       <Route path="/dashboard" element={<RoleRoute><Layout><Home /></Layout></RoleRoute>} />
       <Route path="/admin/users" element={<RoleRoute roles={['admin']}><Layout><AdminUsers /></Layout></RoleRoute>} />
       <Route path="/admin/academic" element={<RoleRoute roles={['admin']}><Layout><AdminAcademic /></Layout></RoleRoute>} />
+      <Route path="/admin/workshop/proposals" element={<RoleRoute roles={['admin']}><Layout><SavedWorkshopProposals /></Layout></RoleRoute>} />
       <Route path="/admin/workshop" element={<RoleRoute roles={['admin']}><Layout><AdminWorkshop /></Layout></RoleRoute>} />
       <Route path="/employer/post" element={<RoleRoute roles={['employer']}><Layout><Fresh><PostJob /></Fresh></Layout></RoleRoute>} />
       <Route path="/employer/jobs" element={<RoleRoute roles={['employer']}><Layout><EmployerJobs /></Layout></RoleRoute>} />

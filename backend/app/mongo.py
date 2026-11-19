@@ -51,6 +51,20 @@ def chat_sessions():
     return col
 
 
+def workshop_proposals():
+    """20 Nov: the career office's saved workshop proposals (routers/workshop.py), one document each:
+    {_id, admin_id, title, skills: [...], proposal: {title, facts, background, ...}, created_at, updated_at}."""
+    col = get_db()["workshop_proposals"]
+    col.create_index([("updated_at", DESCENDING)])
+    return col
+
+
+def gap_snapshots():
+    """20 Nov: one copy per week of the admin's "most common skill gaps" (routers/admin.py), so the change over time can
+    be shown: {_id: "2026-W47", at, of_students, gaps: [{skill, students}]}. The first count of a week is kept."""
+    return get_db()["gap_snapshots"]
+
+
 def history_ok() -> bool:
     """Is MongoDB reachable? Used at start-up (a warning, not a crash) and by the chat-history endpoints."""
     try:

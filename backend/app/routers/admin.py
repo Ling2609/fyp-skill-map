@@ -122,7 +122,39 @@ def common_skill_gaps(db: Session) -> list[dict]:
             names.setdefault(key, item["skill"])
     value = [{"skill": names[k], "students": n, "of_students": students} for k, n in counts.most_common(GAPS_TOP)]
     _gaps_cache.update(at=now, value=value)
+    _snapshot(value)
     return value
+
+
+def _week(d: datetime) -> str:
+    y, w, _ = d.isocalendar()
+    return f"{y}-W{w:02d}"
+
+
+def _snapshot(gaps: list[dict]) -> None:
+    """Keep the first count of each week in MongoDB (20 Nov, her pick). MongoDB off: nothing is kept, nothing breaks."""
+    if not gaps:
+        return
+    from pymongo.errors import PyMongoError
+    from app.mongo import gap_snapshots
+    now = datetime.now(timezone.utc)
+    try:
+        gap_snapshots().update_one({"_id": _week(now)}, {"$setOnInsert": {
+            "at": now, "of_students": gaps[0]["of_students"],
+            "gaps": [{"skill": g["skill"], "students": g["students"]} for g in gaps]}}, upsert=True)
+    except PyMongoError as e:
+        print(f"[admin] gap snapshot not saved: {type(e).__name__}")
+
+
+def gap_history(n: int = 8) -> list[dict]:
+    """The last n weekly snapshots, oldest first; [] when MongoDB is off."""
+    from pymongo.errors import PyMongoError
+    from app.mongo import gap_snapshots
+    try:
+        rows = list(gap_snapshots().find().sort("_id", -1).limit(n))
+    except PyMongoError:
+        return []
+    return [{"week": r["_id"], "at": r["at"], "of_students": r["of_students"], "gaps": r["gaps"]} for r in reversed(rows)]
 
 
 RECENT_DAYS = 30     # the same window as the header's "new in 30 days"
@@ -190,6 +222,12 @@ def dashboard(db: Session = Depends(get_db), admin: User = Depends(require_admin
 def skill_gaps(db: Session = Depends(get_db), admin: User = Depends(require_admin)):
     """Its own call: it runs the matching for every student, so the dashboard opens first and this panel fills in."""
     return common_skill_gaps(db)
+
+
+@router.get("/skill-gaps/history")
+def skill_gap_history(admin: User = Depends(require_admin)):
+    """The weekly copies of the skill gaps (20 Nov), oldest first, so the dashboard can show the change since last time."""
+    return gap_history()
 
 
 @router.get("/counts")

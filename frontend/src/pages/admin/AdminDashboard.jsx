@@ -59,12 +59,29 @@ function useShort() {
   return m
 }
 
+// the change in students lacking a skill since the last weekly copy: fewer is good (teal), more is coral
+function Trend({ now, then }) {
+  if (then === undefined) return <span className="adm-trend new" title="Not in last week's list">new</span>
+  const d = now - then
+  if (!d) return <span className="adm-trend same" title="Same as last time">=</span>
+  return <span className={`adm-trend ${d < 0 ? 'down' : 'up'}`} title={`${Math.abs(d)} ${d < 0 ? 'fewer' : 'more'} than last time`}>{d < 0 ? '▼' : '▲'} {Math.abs(d)}</span>
+}
+const isoWeek = (d) => {
+  const t = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()))
+  t.setUTCDate(t.getUTCDate() + 4 - (t.getUTCDay() || 7))
+  const w = Math.ceil(((t - Date.UTC(t.getUTCFullYear(), 0, 1)) / 864e5 + 1) / 7)
+  return `${t.getUTCFullYear()}-W${String(w).padStart(2, '0')}`
+}
+const shortDate = (iso) => new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })
+
 export default function AdminDashboard() {
   const { user } = useAuth()
   const [rejecting, setRejecting] = useState(null)   // the employer whose reject pop-up is open
   const [askError, setAskError] = useState('')
   const [data, setData] = useState(null)
   const [gaps, setGaps] = useState(null)      // null = loading (it runs the matching for every student)
+  // 20 Nov: weekly copies of these numbers (MongoDB); the one before this week gives the change shown per skill
+  const [history, setHistory] = useState([])
   const [error, setError] = useState('')
   const [busy, setBusy] = useState(null)      // id of the employer being approved / rejected
 
@@ -76,6 +93,7 @@ export default function AdminDashboard() {
   useEffect(() => {
     load()
     api.get('/admin/skill-gaps').then(res => setGaps(res.data)).catch(() => setGaps([]))
+    api.get('/admin/skill-gaps/history').then(res => setHistory(res.data)).catch(() => setHistory([]))
   }, [load])
 
   const decide = (id, action, reason) => {
@@ -92,6 +110,9 @@ export default function AdminDashboard() {
   const todo = data?.todo
   const waiting = todo ? todo.pending_employers.length : 0
   const [plan, setPlan] = useState([])
+  // the newest weekly copy from before this week (this week's copy equals what is shown now)
+  const [weekNow] = useState(() => isoWeek(new Date()))
+  const before = [...history].reverse().find(h => h.week !== weekNow) || null
   const togglePlan = (skill) => setPlan(p => p.includes(skill) ? p.filter(x => x !== skill) : p.length < 4 ? [...p, skill] : p)
   // employers shown: 2, or 1 on a short screen; never a scroll inside this card (20 Nov, her review)
   const short = useShort()
@@ -234,7 +255,8 @@ export default function AdminDashboard() {
             <section className="emp-tile adm-gaps bg-white rounded-2xl border flex flex-col">
               <div className="px-5 pt-4 pb-2">
                 <h2 className="adm-tt"><i>{TT.chart}</i>Most common skill gaps</h2>
-                <p className="text-xs text-slate-500 mt-1">Skills students most often lack in their top job matches. Use it to plan workshops.</p>
+                <p className="text-xs text-slate-500 mt-1">Skills students most often lack in their top job matches.{before
+                  ? <> Change since <b className="font-semibold text-ink-soft">{shortDate(before.at)}</b>.</> : ' Use it to plan workshops.'}</p>
               </div>
               <div className="flex-1 flex flex-col px-5 py-4">
                 {gaps === null && <p className="text-sm text-slate-500">Working it out for every student…</p>}
@@ -248,7 +270,10 @@ export default function AdminDashboard() {
                           disabled={!plan.includes(g.skill) && plan.length >= 4} onChange={() => togglePlan(g.skill)} className="h-4 w-4 accent-[var(--color-accent)]" />
                         <span className="truncate text-slate-800">{skillName(g.skill)}</span>
                         <Bar value={g.students} max={g.of_students} colour={gapColour(g.students / Math.max(...gaps.map(x => x.students)))} />
-                        <span className="text-xs text-slate-500 tabular-nums">{g.students} of {g.of_students}</span>
+                        <span className="flex items-center justify-end gap-1.5">
+                          {before && <Trend now={g.students} then={before.gaps.find(x => x.skill.toLowerCase() === g.skill.toLowerCase())?.students} />}
+                          <span className="text-xs text-slate-500 tabular-nums">{g.students} of {g.of_students}</span>
+                        </span>
                       </li>
                     ))}
                   </ul>

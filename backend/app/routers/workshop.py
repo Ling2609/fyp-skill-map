@@ -188,3 +188,71 @@ def pdf(p: Proposal, admin: User = Depends(require_admin)):
     slug = re.sub(r"[^a-z0-9]+", "-", p.title.lower()).strip("-")[:60] or "workshop"
     return Response(content=build_workshop_pdf(p.model_dump()), media_type="application/pdf",
                     headers={"Content-Disposition": f'attachment; filename="workshop-proposal-{slug}.pdf"'})
+
+
+# ── Saved proposals (20 Nov, her pick): MongoDB, like the chats: a proposal is one document of free-form sections ──
+class SaveIn(BaseModel):
+    skills: list[str] = Field(default_factory=list, max_length=4)
+    proposal: Proposal
+
+
+def _proposals():
+    from app.mongo import workshop_proposals
+    return workshop_proposals()
+
+
+def _saving(fn):
+    from pymongo.errors import PyMongoError
+    try:
+        return fn()
+    except PyMongoError as e:
+        print(f"[workshop] MongoDB: {type(e).__name__}: {e}")
+        raise HTTPException(status_code=503, detail="Saving isn't available right now (the document database is off).")
+
+
+def _summary(d: dict) -> dict:
+    return {"id": d["_id"], "title": d["title"], "skills": d.get("skills", []), "updated_at": d["updated_at"],
+            "by": d.get("admin_name")}
+
+
+@router.get("/proposals")
+def list_proposals(admin: User = Depends(require_admin)):
+    return _saving(lambda: [_summary(d) for d in _proposals().find({}, {"proposal": 0}).sort("updated_at", -1)])
+
+
+@router.get("/proposals/{pid}")
+def get_proposal(pid: str, admin: User = Depends(require_admin)):
+    d = _saving(lambda: _proposals().find_one({"_id": pid}))
+    if not d:
+        raise HTTPException(status_code=404, detail="That proposal was deleted.")
+    return {**_summary(d), "proposal": d["proposal"]}
+
+
+@router.post("/proposals")
+def save_proposal(body: SaveIn, admin: User = Depends(require_admin)):
+    import uuid
+    from datetime import datetime, timezone
+    now = datetime.now(timezone.utc)
+    doc = {"_id": uuid.uuid4().hex, "admin_id": admin.id,
+           "admin_name": " ".join(filter(None, [admin.first_name, admin.last_name])) or admin.username,
+           "title": body.proposal.title, "skills": body.skills, "proposal": body.proposal.model_dump(),
+           "created_at": now, "updated_at": now}
+    _saving(lambda: _proposals().insert_one(doc))
+    return _summary(doc)
+
+
+@router.put("/proposals/{pid}")
+def update_proposal(pid: str, body: SaveIn, admin: User = Depends(require_admin)):
+    from datetime import datetime, timezone
+    now = datetime.now(timezone.utc)
+    res = _saving(lambda: _proposals().update_one({"_id": pid}, {"$set": {
+        "title": body.proposal.title, "skills": body.skills, "proposal": body.proposal.model_dump(), "updated_at": now}}))
+    if not res.matched_count:
+        raise HTTPException(status_code=404, detail="That proposal was deleted.")
+    return {"id": pid, "title": body.proposal.title, "skills": body.skills, "updated_at": now}
+
+
+@router.delete("/proposals/{pid}")
+def delete_proposal(pid: str, admin: User = Depends(require_admin)):
+    _saving(lambda: _proposals().delete_one({"_id": pid}))
+    return {"ok": True}

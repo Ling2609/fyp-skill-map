@@ -56,3 +56,70 @@ def test_the_proposal_exports_as_a_pdf(client, users):
     r = client.post("/admin/workshop/pdf", headers=users.h(users.admin()), json=body)
     assert r.status_code == 200 and r.content[:4] == b"%PDF"
     assert "workshop-proposal-data-to-decisions" in r.headers["content-disposition"]
+
+
+class FakeCol:
+    """Enough of a pymongo collection for these tests."""
+    def __init__(self):
+        self.docs = {}
+
+    def insert_one(self, d):
+        self.docs[d["_id"]] = dict(d)
+
+    def find_one(self, q):
+        return self.docs.get(q["_id"])
+
+    def find(self, q=None, proj=None):
+        rows = list(self.docs.values())
+        class Cur(list):
+            def sort(self, key, order):
+                return Cur(sorted(self, key=lambda r: r[key], reverse=order == -1))
+            def limit(self, n):
+                return Cur(self[:n])
+        return Cur(rows)
+
+    def update_one(self, q, u, upsert=False):
+        d = self.docs.get(q["_id"])
+        if d is None and upsert:
+            d = self.docs[q["_id"]] = {"_id": q["_id"], **u.get("$setOnInsert", {})}
+        elif d is not None:
+            d.update(u.get("$set", {}))
+        return type("R", (), {"matched_count": int(d is not None)})()
+
+    def delete_one(self, q):
+        self.docs.pop(q["_id"], None)
+
+
+BODY = {"skills": ["Reporting"], "proposal": {"title": "Data to decisions", "facts": [], "background": "B", "objectives": ["O"],
+        "outcomes": "L", "participants": "P", "partners": "", "agenda": [], "resources": "R", "evaluation": "E"}}
+
+
+def test_proposals_are_saved_listed_updated_and_deleted(client, users, monkeypatch):
+    import app.mongo
+    col = FakeCol()
+    monkeypatch.setattr(app.mongo, "workshop_proposals", lambda: col)
+    h = users.h(users.admin())
+    pid = client.post("/admin/workshop/proposals", headers=h, json=BODY).json()["id"]
+    assert [p["title"] for p in client.get("/admin/workshop/proposals", headers=h).json()] == ["Data to decisions"]
+    changed = {**BODY, "proposal": {**BODY["proposal"], "title": "Reporting for graduates"}}
+    assert client.put(f"/admin/workshop/proposals/{pid}", headers=h, json=changed).status_code == 200
+    assert client.get(f"/admin/workshop/proposals/{pid}", headers=h).json()["proposal"]["title"] == "Reporting for graduates"
+    client.delete(f"/admin/workshop/proposals/{pid}", headers=h)
+    assert client.get(f"/admin/workshop/proposals/{pid}", headers=h).status_code == 404
+
+
+def test_saving_says_so_when_mongodb_is_off(client, users):
+    # the test settings point MongoDB at a closed port
+    r = client.post("/admin/workshop/proposals", headers=users.h(users.admin()), json=BODY)
+    assert r.status_code == 503 and "isn't available" in r.json()["detail"]
+
+
+def test_skill_gaps_keep_one_copy_a_week(client, users, monkeypatch):
+    import app.mongo
+    from app.routers import admin as adm
+    col = FakeCol()
+    monkeypatch.setattr(app.mongo, "gap_snapshots", lambda: col)
+    adm._snapshot([{"skill": "Git", "students": 7, "of_students": 9}])
+    adm._snapshot([{"skill": "Git", "students": 3, "of_students": 9}])      # later the same week: the first is kept
+    hist = client.get("/admin/skill-gaps/history", headers=users.h(users.admin())).json()
+    assert len(hist) == 1 and hist[0]["gaps"] == [{"skill": "Git", "students": 7}]
