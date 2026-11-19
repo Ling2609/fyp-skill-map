@@ -1,8 +1,9 @@
-import { useEffect, useRef, useState } from 'react'
-import { NavLink, useLocation, useNavigate } from 'react-router-dom'
+import { useEffect, useRef, useState, useSyncExternalStore } from 'react'
+import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom'
 import api from '../api'
-import { useSidebar } from './SidebarContext'
 import { useAuth } from '../context/useAuth'
+import { Logo } from './ui/index.jsx'
+import { useSidebar } from './SidebarContext'
 
 const NAV_ITEMS = [
   {
@@ -59,6 +60,12 @@ const NAV_ITEMS = [
 
 export const ADMIN_COUNTS_CHANGED = 'admin-counts-changed'
 
+function useMedia(q) {
+  return useSyncExternalStore(
+    (cb) => { const m = matchMedia(q); m.addEventListener('change', cb); return () => m.removeEventListener('change', cb) },
+    () => matchMedia(q).matches, () => false)
+}
+
 // Admin = the career office (7 Oct, layout D): Users carries a badge for employers waiting for approval
 const ADMIN_ITEMS = [
   NAV_ITEMS[0],
@@ -101,38 +108,86 @@ const EMPLOYER_ITEMS = [
   },
 ]
 
-const ROLE_LABEL = { student: 'For Graduates', employer: 'For Employers', admin: 'Admin Panel' }
+// 19 Nov (her pick B, glass headers): every page header shows its menu item's icon. Pages not in the menu borrow
+// the nearest one (a job -> Job Matches, an applicant -> Users); Account settings gets a gear
+const GEAR = (
+  <svg className="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M10.3 4.3c.4-1.7 3-1.7 3.4 0a1.7 1.7 0 0 0 2.6 1.1c1.5-.9 3.3.8 2.4 2.4a1.7 1.7 0 0 0 1 2.5c1.8.4 1.8 3 0 3.4a1.7 1.7 0 0 0-1 2.6c.9 1.5-.9 3.3-2.4 2.4a1.7 1.7 0 0 0-2.6 1c-.4 1.8-3 1.8-3.4 0a1.7 1.7 0 0 0-2.5-1c-1.6.9-3.3-.9-2.4-2.4a1.7 1.7 0 0 0-1.1-2.6c-1.7-.4-1.7-3 0-3.4a1.7 1.7 0 0 0 1.1-2.5c-.9-1.6.8-3.3 2.4-2.4a1.7 1.7 0 0 0 2.5-1.1Z" />
+    <circle cx="12" cy="12" r="3" strokeWidth={1.75} />
+  </svg>
+)
+const ICON_ROUTES = [
+  ...NAV_ITEMS, ...ADMIN_ITEMS, ...EMPLOYER_ITEMS,
+  { to: '/account', icon: GEAR },
+  { to: '/jobs', icon: NAV_ITEMS[2].icon },
+  { to: '/employer/applications', icon: ADMIN_ITEMS[1].icon },
+  { to: '/employer/graduates', icon: ADMIN_ITEMS[1].icon },
+]
+// eslint-disable-next-line react-refresh/only-export-components
+export function navIcon(path) {
+  const hits = ICON_ROUTES.filter(r => path === r.to || path.startsWith(r.to + '/'))
+  return hits.sort((a, b) => b.to.length - a.to.length)[0]?.icon ?? null
+}
+
 const ROLE_NAME = { student: 'Student', employer: 'Employer', admin: 'Admin' }
 
-export default function Sidebar() {
-  const navigate = useNavigate()
-  const { collapsed, setCollapsed } = useSidebar()
-  const { user, logout: authLogout } = useAuth()
-  const location = useLocation()
-  const isAdmin = user?.role === 'admin'
-  const items = isAdmin ? ADMIN_ITEMS
-    : user?.role === 'employer' ? (user.employer_status === 'approved' ? EMPLOYER_ITEMS : EMPLOYER_ITEMS.slice(0, 1))
-    : NAV_ITEMS
+const itemsFor = (user) => user?.role === 'admin' ? ADMIN_ITEMS
+  : user?.role === 'employer' ? (user.employer_status === 'approved' ? EMPLOYER_ITEMS : EMPLOYER_ITEMS.slice(0, 1))
+  : NAV_ITEMS
 
-  // Admin badges, asked again on every page change (two small counts), so an approval shows straight away
-  // and when an admin page says something changed (an approval on the dashboard doesn't change the page)
+// The menu badges and the bell read the same small counts; asked again on every page change and when a page says
+// something changed (an approval on the dashboard doesn't change the page)
+function useNavCounts() {
+  const { user } = useAuth()
+  const location = useLocation()
   const [counts, setCounts] = useState({})
-  const [countsTick, setCountsTick] = useState(0)
+  const [tick, setTick] = useState(0)
   useEffect(() => {
-    const bump = () => setCountsTick(t => t + 1)
+    const bump = () => setTick(t => t + 1)
     window.addEventListener(ADMIN_COUNTS_CHANGED, bump)
     return () => window.removeEventListener(ADMIN_COUNTS_CHANGED, bump)
   }, [])
-  // Approved employers get the same: new applications ("applied") on My Jobs; students: invitations to apply (12 Oct)
-  const countsUrl = isAdmin ? '/admin/counts'
+  const url = user?.role === 'admin' ? '/admin/counts'
     : user?.role === 'employer' && user.employer_status === 'approved' ? '/employer/counts'
     : user?.role === 'student' ? '/applications/counts' : null
   useEffect(() => {
-    if (!countsUrl) return
+    if (!url) return
     let cancelled = false
-    api.get(countsUrl).then(res => { if (!cancelled) setCounts(res.data) }).catch(() => {})
+    api.get(url).then(res => { if (!cancelled) setCounts(res.data) }).catch(() => {})
     return () => { cancelled = true }
-  }, [countsUrl, location.pathname, location.search, countsTick])
+  }, [url, location.pathname, location.search, tick])
+  const items = itemsFor(user)
+  const waiting = items.reduce((n, item) => n + (item.badge ? counts[item.badge] || 0 : 0), 0)
+  const bellTo = user?.role === 'admin' ? '/admin/users' : user?.role === 'employer' ? '/employer/jobs' : '/applications'
+  return { items, counts, waiting, bellTo }
+}
+
+const BELL = <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M6 16V11a6 6 0 1 1 12 0v5l1.5 2h-15zM10 20a2 2 0 0 0 4 0" /></svg>
+
+// 20 Nov (her review): on laptops and tablets the bell sits at the page's top right (the greeting line, or the page
+// header); phones keep it in their top bar
+export function Bell({ className = '' }) {
+  const { waiting, bellTo } = useNavCounts()
+  const label = waiting ? `${waiting} waiting for you` : 'Nothing new'
+  return (
+    <Link to={bellTo} title={label} aria-label={label} className={`page-bell ${className}`}>
+      {BELL}
+      {waiting > 0 && <span className="page-bell-n" aria-hidden="true">{waiting}</span>}
+    </Link>
+  )
+}
+
+export default function Sidebar() {
+  const navigate = useNavigate()
+  const { user, logout: authLogout } = useAuth()
+  const { items, counts, waiting, bellTo } = useNavCounts()
+  // 20 Nov (her review): the sidebar folds to an icon rail (remembered); under 1280px it is always the rail
+  // the same fold state as her sidebar before the redesign (SidebarContext: open by default)
+  const { collapsed: folded, setCollapsed } = useSidebar()
+  const narrow = useMedia('(min-width: 640px) and (max-width: 1359px)')
+  const rail = folded || narrow
+  const fold = () => setCollapsed(!folded)
 
   const logout = () => {
     sessionStorage.clear()
@@ -155,139 +210,90 @@ export default function Sidebar() {
   const fullName = [user?.first_name, user?.last_name].filter(Boolean).join(' ') || user?.username || 'Account'
   const initials = ((user?.first_name?.[0] || '') + (user?.last_name?.[0] || '')).toUpperCase() || '?'
 
+  // 20 Nov (her pick, after a review of her ~1440x735 screen): a SIDEBAR, not a top bar. A wide, short laptop has spare
+  // width and too little height, so the menu moves to the side and gives every page ~60px of height back.
+  //   >= 1280px: a floating card on the left, icons + labels, bell and account at its foot
+  //   640-1279px: the same card as an icon rail (labels stay for screen readers and as tooltips)
+  //   < 640px (phones): a slim top bar (logo, bell, account) and the menu as a bottom tab bar (thumb reach)
+  // Styles: .sb-* in index.css. The page column's offsets follow in App.jsx (#main) and --bar-h.
   return (
-    // 22 Oct (accessibility check): the whole sidebar is one landmark (logo, menu, account), so nothing sits outside one
-    <aside aria-label="SkillMap menu" className={`${collapsed ? 'w-14' : 'w-48'} bg-white border-r border-slate-200 flex flex-col h-screen fixed left-0 top-0 z-10 transition-all duration-200`}>
-
-      {/* Logo + collapse */}
-      {/* 21 Oct (her review: collapsed, the logo was squeezed into a rectangle beside the arrow; then "arrow beside the
-          logo"): collapsed, the logo keeps its square and the expand arrow is a small round button on the sidebar's
-          edge, level with the logo */}
-      <div className={`relative px-3 py-4 border-b border-slate-200 flex items-center min-h-15 ${collapsed ? 'justify-center' : 'justify-between'}`}>
-        {!collapsed && (
-          <div className="flex items-center gap-2.5 flex-1 min-w-0">
-            <div className="w-7 h-7 bg-blue-600 rounded-lg flex items-center justify-center shrink-0">
-              <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-              </svg>
-            </div>
-            <div className="min-w-0">
-              <p className="text-sm font-semibold text-slate-900 leading-none tracking-tight">SkillMap</p>
-              <p className="text-[10px] text-slate-500 mt-0.5 font-medium tracking-wide uppercase">{ROLE_LABEL[user?.role] ?? 'SkillMap'}</p>
-            </div>
-          </div>
+    <header className={`sb${rail ? ' rail' : ''}`}>
+      {/* 20 Nov (her review): the fold button sits at the sidebar's top right */}
+      <div className="sb-top">
+        <Link to="/" aria-label="SkillMap home" className="sb-brand">
+          <Logo />
+          <span className="sb-name">SkillMap</span>
+        </Link>
+        {/* her 21 Oct rule kept: open, « sits beside the logo; folded, a small round » on the sidebar's edge */}
+        {!narrow && (
+          <button type="button" onClick={fold} className={`sb-fold${folded ? ' edge' : ''}`} aria-label={folded ? 'Expand the sidebar' : 'Collapse the sidebar'}
+            title={folded ? 'Expand the sidebar' : 'Collapse the sidebar'}>
+            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={folded ? 'M13 5l7 7-7 7M5 5l7 7-7 7' : 'M11 19l-7-7 7-7m8 14l-7-7 7-7'} />
+            </svg>
+          </button>
         )}
-        {collapsed && (
-          <div className="w-7 h-7 bg-blue-600 rounded-lg flex items-center justify-center shrink-0">
-            <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-            </svg>
-          </div>
-        )}
-        <button
-          onClick={() => setCollapsed(!collapsed)} aria-label={collapsed ? 'Expand the sidebar' : 'Collapse the sidebar'}
-          className={collapsed
-            ? 'absolute -right-3 top-1/2 -translate-y-1/2 w-6 h-6 flex items-center justify-center rounded-full bg-white border border-slate-200 shadow-sm text-slate-500 hover:text-slate-800 hover:bg-slate-50 transition'
-            : 'p-1.5 rounded-md hover:bg-slate-100 text-slate-500 hover:text-slate-600 transition shrink-0'}
-        >
-          {collapsed ? (
-            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 5l7 7-7 7M5 5l7 7-7 7" />
-            </svg>
-          ) : (
-            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
-            </svg>
-          )}
-        </button>
       </div>
 
-      {/* Nav */}
-      <nav className="flex-1 px-2 py-3 space-y-0.5">
+      <nav aria-label="SkillMap menu" className="sb-nav">
         {items.map(item => (
-          <NavLink
-            key={item.to}
-            to={item.to}
-            title={collapsed ? item.label + (item.badge && counts[item.badge] > 0 ? ` (${counts[item.badge]} ${item.badgeLabel || 'waiting'})` : '') : ''}
-            className={({ isActive }) =>
-              `relative flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-sm font-medium transition-all ${
-                collapsed ? 'justify-center' : ''
-              } ${
-                isActive
-                  ? 'bg-blue-50 text-blue-700'
-                  : 'text-slate-500 hover:bg-slate-50 hover:text-slate-800'
-              }`
-            }
-          >
-            {({ isActive }) => (
-              <>
-                <span className={`shrink-0 w-4.5 h-4.5 flex items-center justify-center ${isActive ? 'text-blue-600' : 'text-slate-500'}`}>
-                  {item.icon}
-                </span>
-                {!collapsed && <span className="truncate flex-1">{item.label}</span>}
-                {/* 12 Oct (her review): collapsed, the number sat on top of the icon; now a dot in the corner, clear of
-                    the icon (the count stays in the label and the tooltip) */}
-                {item.badge && counts[item.badge] > 0 && (collapsed
-                  ? <span role="img" aria-label={`${counts[item.badge]} ${item.badgeLabel || 'waiting'}`}
-                      className="absolute top-1.5 right-0.5 w-2 h-2 rounded-full bg-amber-500 ring-2 ring-white" />
-                  : <span aria-label={`${counts[item.badge]} ${item.badgeLabel || 'waiting'}`}
-                      className="text-[11px] font-semibold bg-amber-100 text-amber-800 rounded-full px-1.5 min-w-5 text-center">
-                      {counts[item.badge]}
-                    </span>
-                )}
-              </>
+          <NavLink key={item.to} to={item.to} title={item.label} className={({ isActive }) => `sb-item${isActive ? ' on' : ''}`}>
+            <span className="sb-ic" aria-hidden="true">{item.icon}</span>
+            <span className="sb-label">{item.label}</span>
+            {item.badge && counts[item.badge] > 0 && (
+              <span className={`sb-badge${item.badge === 'invitations' ? ' inv' : ''}`} aria-label={`${counts[item.badge]} ${item.badgeLabel || 'waiting'}`}>{counts[item.badge]}</span>
             )}
           </NavLink>
         ))}
       </nav>
 
-      {/* User menu */}
-      <div ref={menuRef} className="relative px-2 pb-4 pt-2 border-t border-slate-200">
-        {menuOpen && (
-          <div role="menu"
-            className={`absolute z-20 w-52 bg-white border border-slate-200 rounded-xl shadow-lg py-1.5 ${
-              collapsed ? 'left-full bottom-3 ml-2' : 'left-2 right-2 w-auto bottom-full mb-1'}`}>
-            <div className="px-3.5 pt-1.5 pb-2.5 border-b border-slate-200 mb-1">
-              <p className="text-sm font-medium text-slate-800 truncate">{fullName}</p>
-              <p className="text-xs text-slate-500 truncate">{user?.email}</p>
-            </div>
-            <button role="menuitem" onClick={() => { setMenuOpen(false); navigate('/account') }}
-              className="w-full flex items-center gap-2.5 px-3.5 py-2 text-sm text-slate-600 hover:bg-slate-50 hover:text-slate-900">
-              <svg className="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-              </svg>
-              Account settings
-            </button>
-            <button role="menuitem" onClick={logout}
-              className="w-full flex items-center gap-2.5 px-3.5 py-2 text-sm text-slate-600 hover:bg-red-50 hover:text-red-600">
-              <svg className="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-              </svg>
-              Logout
-            </button>
-          </div>
-        )}
-        <button onClick={() => setMenuOpen(o => !o)} aria-haspopup="menu" aria-expanded={menuOpen}
-          title={collapsed ? fullName : ''}
-          className={`w-full flex items-center gap-2.5 px-1.5 py-1.5 rounded-lg text-left transition ${
-            menuOpen ? 'bg-slate-100' : 'hover:bg-slate-50'} ${collapsed ? 'justify-center' : ''}`}>
-          <span className="w-7 h-7 rounded-full bg-blue-100 text-blue-700 text-xs font-semibold flex items-center justify-center shrink-0">
-            {initials}
+      <div className="sb-foot">
+        <Link to={bellTo} title={waiting ? `${waiting} waiting for you` : 'Nothing new'} aria-label={waiting ? `${waiting} waiting for you` : 'Nothing new'} className="sb-item sb-bell">
+          <span className="sb-ic" aria-hidden="true">
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M6 16V11a6 6 0 1 1 12 0v5l1.5 2h-15zM10 20a2 2 0 0 0 4 0" />
+            </svg>
+            {waiting > 0 && <span className="sb-dot" />}
           </span>
-          {!collapsed && (
-            <>
-              <span className="flex-1 min-w-0">
-                <span className="block text-sm font-medium text-slate-800 truncate">{fullName}</span>
-                <span className="block text-xs text-slate-500">{ROLE_NAME[user?.role] ?? ''}</span>
-              </span>
-              <svg className={`w-4 h-4 text-slate-500 shrink-0 transition ${menuOpen ? '-rotate-90' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
-            </>
+          <span className="sb-label" aria-hidden="true">{waiting ? `${waiting} waiting for you` : 'Nothing new'}</span>
+        </Link>
+
+
+
+        <div ref={menuRef} className="sb-acct">
+          {menuOpen && (
+            <div role="menu" className="sb-menu">
+              <div className="px-3.5 pt-1.5 pb-2.5 border-b border-line mb-1">
+                <p className="text-body font-medium text-ink truncate m-0">{fullName}</p>
+                <p className="text-small text-faint truncate m-0">{user?.email}</p>
+              </div>
+              <button role="menuitem" onClick={() => { setMenuOpen(false); navigate('/account') }}
+                className="w-full flex items-center gap-2.5 px-3.5 py-2 text-body text-muted hover:bg-well hover:text-ink">
+                <span className="w-4 h-4 text-faint [&>svg]:w-4 [&>svg]:h-4" aria-hidden="true">{GEAR}</span>
+                Account settings
+              </button>
+              <button role="menuitem" onClick={logout}
+                className="w-full flex items-center gap-2.5 px-3.5 py-2 text-body text-muted hover:bg-missing-soft hover:text-missing-strong">
+                <svg className="w-4 h-4 text-faint" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                </svg>
+                Logout
+              </button>
+            </div>
           )}
-        </button>
+          <button onClick={() => setMenuOpen(o => !o)} aria-haspopup="menu" aria-expanded={menuOpen} title={fullName}
+            className={`sb-me${menuOpen ? ' open' : ''}`}>
+            <span className="sb-ava">{initials}</span>
+            <span className="sb-who">
+              <span className="block text-small font-semibold text-ink truncate">{fullName}</span>
+              <span className="block text-label text-faint">{ROLE_NAME[user?.role] ?? ''}</span>
+            </span>
+            <svg className={`sb-chev w-3.5 h-3.5 text-faint shrink-0 transition ${menuOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 9l4-4 4 4M16 15l-4 4-4-4" />
+            </svg>
+          </button>
+        </div>
       </div>
-    </aside>
+    </header>
   )
 }

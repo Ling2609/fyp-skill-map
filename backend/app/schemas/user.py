@@ -37,6 +37,9 @@ class UserRegister(BaseModel):
     # Only these two can be chosen at sign-up. Admin accounts are created by the seed script.
     role: Literal["student", "employer"] = "student"
     company_name: str | None = Field(default=None, max_length=120)   # employers (7 Oct)
+    # 20 Nov (her call: required, as real systems do): so the career office can check the company is real
+    company_website: str | None = Field(default=None, max_length=200)
+    company_ssm: str | None = Field(default=None, max_length=20)
     accept_privacy: bool = False     # 14 Oct: the privacy notice must be accepted to sign up (PDPA notice and choice)
 
     @field_validator("password")
@@ -44,11 +47,36 @@ class UserRegister(BaseModel):
     def check_password_length(cls, v: str) -> str:
         return check_password(v)
 
+    @field_validator("company_website")
+    @classmethod
+    def check_website(cls, v: str | None) -> str | None:
+        v = (v or "").strip()
+        if not v:
+            return None
+        if not re.match(r"^(https?://)?([a-z0-9-]+\.)+[a-z]{2,}(/\S*)?$", v, re.I):
+            raise ValueError("Enter the company website, e.g. tropika.com.my")
+        return v if v.lower().startswith(("http://", "https://")) else f"https://{v}"
+
+    @field_validator("company_ssm")
+    @classmethod
+    def check_ssm(cls, v: str | None) -> str | None:
+        v = re.sub(r"\s+", "", (v or "")).upper()
+        if not v:
+            return None
+        # SSM numbers: the 12-digit format every entity has had since 2019 (202301012345); the older company form
+        # (1234567-X) is still accepted quietly. The message asks for the 12-digit one (20 Nov, her call)
+        if not re.match(r"^(\d{12}|\d{1,7}-?[A-Z])$", v):
+            raise ValueError("Use the 12-digit number on your SSM certificate, e.g. 202301012345")
+        return v
+
     @model_validator(mode="after")
     def employer_needs_company(self):
         """12 Oct: the Register page had no company field, so employers reached Admin with no company to check."""
         if self.role == "employer" and len((self.company_name or "").strip()) < 2:
             raise ValueError("Add your company name.")
+        # 20 Nov (her review): a small company may have no website, so only the SSM number is required
+        if self.role == "employer" and not self.company_ssm:
+            raise ValueError("Add your company's SSM registration number.")
         return self
 
 class UserLogin(BaseModel):

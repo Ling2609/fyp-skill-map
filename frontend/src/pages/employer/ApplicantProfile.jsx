@@ -52,7 +52,7 @@ export default function ApplicantProfile() {
   const s = data?.student, fit = data?.fit
 
   return (
-    <div className="flex flex-col h-screen">
+    <div className="flex flex-col h-[calc(100dvh-var(--bar-h))]">
       {/* 21 Oct (her review: every back link the same, near the left edge) */}
       {data && (data.application
         ? <BackLink label={`Applicants for ${data.job.title}`} onClick={() => navigate(`/employer/jobs/${data.job.id}`)} />
@@ -101,7 +101,7 @@ export default function ApplicantProfile() {
           <LoadingLabel>Loading the applicant…</LoadingLabel>
           <div className="grid lg:grid-cols-[1fr_23rem] gap-4"><CardSkeleton rows={6} /><CardSkeleton rows={5} /></div>
         </div>)}
-        {data && <div className="lg:flex-1 lg:min-h-0"><ApplicantCards s={s} fit={fit} /></div>}
+        {data && <div className="lg:flex-1 lg:min-h-0 mx-4 sm:mx-8 mt-3 mb-4 overflow-hidden emp-tile border border-slate-200 rounded-2xl"><ApplicantCards s={s} fit={fit} /></div>}
       </div>
       {status.ui}
     </div>

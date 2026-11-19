@@ -1,13 +1,12 @@
 import { useCallback, useEffect, useState } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import api from '../../api'
-import PageHeader from '../../components/PageHeader'
+import PageHeader, { HeadStats } from '../../components/PageHeader'
 import ProfileTracker from '../../components/ProfileTracker'
 import { doneFrom } from '../../components/profileDone'
 import { useAuth } from '../../context/useAuth'
 import { Modal } from './profileParts'
 import { StudyForm } from './profileForms'
-import { softBtnCls } from './profileUtils'
 import { AwardsTab, CertsTab, ExperienceTab, ModulesTab, ProjectsTab } from './profileSections'
 import GithubImport from './GithubImport'
 import { Bar, RowSkeleton, LoadingLabel } from '../../components/Skeleton'
@@ -111,82 +110,86 @@ export default function MyProfile() {
 
   const count = { modules: data.module_count, projects: projects.length, experience: experiences.length, certs: certs.length, awards: awards.length }
   const { links } = data
-  const linkList = [['LinkedIn', links.linkedin], ['GitHub', links.github], ['Portfolio', links.portfolio]].filter(([, url]) => url)
+  const linkList = [['LinkedIn', links.linkedin], ['GitHub', links.github], ['Portfolio', links.portfolio],
+    ...(links.other || []).map(o => [o.label, o.url])].filter(([, url]) => url)
 
-  return (
-    // Wide screens: the page fills the window and only the open tab's list scrolls; narrow: the page scrolls
-    <div className="min-h-screen lg:h-screen bg-slate-50 flex flex-col">
-      <PageHeader>
-        <div className="pt-1 pb-4">
-          <p className="text-[11px] font-semibold text-blue-600 uppercase tracking-widest mb-2">My Profile</p>
-          {/* One line about you: name, links, visibility; "Links & visibility" at its right end (her layout, 9 Oct) */}
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <div className="flex flex-wrap items-center gap-x-3 gap-y-1 min-w-0">
-              <h1 className="text-2xl font-semibold tracking-tight text-slate-900">{data.name}</h1>
-              {linkList.map(([label, url]) => (
-                <a key={label} href={url} target="_blank" rel="noopener noreferrer" className="text-sm text-blue-700 hover:underline">{label} ↗</a>
-              ))}
-              <VisibilityPill on={data.visible_to_employers} />
-            </div>
+  const actions = (
+    <>
+          {/* 21 Oct (her pick after research: LinkedIn shows its profile meter on the profile page) */}
+            <ProfileTracker done={doneFrom({ ...data, projects, experiences, certifications: certs, awards })} onGo={chooseTab} />
             {/* 21 Oct (her idea): what employers see, any time (pages/student/EmployerPreview.jsx) */}
-            <div className="flex items-center gap-2.5 shrink-0">
-            <Link to="/profile/preview" className="flex items-center gap-2 text-sm font-medium text-slate-700 border border-slate-300 bg-white rounded-lg px-3.5 py-2 hover:bg-slate-50">
-              {/* 21 Oct (her idea): an eye, "see it as they see it" */}
+            <Link to="/profile/preview" aria-label="Preview as employer" title="Preview as employer" className="flex items-center gap-2 h-[34px] text-[13px] font-semibold text-ink border border-line-strong bg-white rounded-[10px] px-3 hover:bg-well">
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
               </svg>
-              Preview as employer</Link>
+              Preview</Link>
             {/* 21 Oct (her rename): Links & visibility became the Profile & privacy page (ProfilePrivacy.jsx) */}
-            <Link to="/profile/settings" className={`${softBtnCls} shrink-0`}>
+            <Link to="/profile/settings" aria-label="Profile and privacy" title="Profile & privacy" className="flex items-center gap-2 h-[34px] text-[13px] font-semibold text-accent-strong border border-[#c8d7f4] bg-accent-soft rounded-[10px] px-3 hover:bg-[#d6e2f8]">
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
               </svg>
-              Profile &amp; privacy
+              Privacy
             </Link>
+    </>
+  )
+  return (
+    // Wide screens: the page fills the window and only the open tab's list scrolls; narrow: the page scrolls
+    <div className="min-h-[calc(100dvh-var(--bar-h))] lg:h-[calc(100dvh-var(--bar-h))] flex flex-col">
+      <PageHeader>
+        {/* 19 Nov (her approved mock review/student-pages.html; her review: "too large, things shrink below"): name,
+            visibility and links on one line, the programme on one line, the counts in the white strip. The two
+            buttons moved to the tab row's right end, where there was empty space */}
+        <div className="pt-1 pb-4 flex flex-wrap items-center gap-x-6 gap-y-3">
+          <div className="min-w-0 flex-1 basis-96">
+            <p className="text-[11px] font-semibold text-blue-600 uppercase tracking-widest mb-2">My Profile</p>
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-1 min-w-0">
+              <h1 className="text-2xl font-semibold tracking-tight text-slate-900">{data.name}</h1>
+              <VisibilityPill on={data.visible_to_employers} />
+              {linkList.map(([label, url]) => (
+                <a key={url} href={url} target="_blank" rel="noopener noreferrer" className="text-sm font-semibold text-blue-700 hover:underline">{label} ↗</a>
+              ))}
             </div>
-          </div>
-          {/* Skill count on the left; programme and intake on the right of the same line, under "Links & visibility":
-              they describe the student, so they sit in the header, and the empty space there costs no height (9 Oct) */}
-          <div className="mt-2 flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
-            <p className="text-sm text-slate-500">
-              <span className="text-xl font-semibold text-slate-900 tabular-nums">{data.total_skills}</span>{' '}
-              <span className="font-medium text-slate-700">{data.total_skills === 1 ? 'skill' : 'skills'}</span> found in your modules, projects, experience, certificates and awards
-            </p>
-            <p className="text-sm text-slate-600">
+            <p className="text-sm text-slate-600 mt-1 lg:truncate">
               {data.programme || 'Programme not set'}{data.intake && <span className="text-slate-500"> · Intake {data.intake}</span>}
-              {' · '}<button type="button" onClick={() => setOpen('study')} className="font-medium text-blue-700 hover:underline">Change</button>
+              {' · '}<button type="button" onClick={() => setOpen('study')} className="font-semibold text-blue-700 hover:underline">Change</button>
             </p>
           </div>
+          {/* skills found across modules, projects, experience, certificates and awards */}
+          <HeadStats items={[[data.total_skills, data.total_skills === 1 ? 'Skill found' : 'Skills found', 'blue'], [data.module_count, 'Modules'], [projects.length, projects.length === 1 ? 'Project' : 'Projects']]} />
         </div>
-        {/* Tabs wrap onto a second line on a narrow window: never a sideways scrollbar (her request 8 Oct) */}
+      </PageHeader>
+
+      {/* 20 Nov (her review): the tabs sit under the header card, left-aligned with its edge, and the profile's three
+          buttons on the same line at the right (outside the card, so the tracker's pop-up is no longer clipped) */}
+      <div className="shrink-0 px-4 sm:px-8">
+        {/* Tabs wrap onto a second line on a narrow window: never a sideways scrollbar (her request 8 Oct).
+            19 Nov (her review: "not sure which tab was chosen"): the chosen tab is a solid blue pill */}
         <div className="relative">
         {leaveTo && <Popconfirm text="You have grade changes that aren't saved." confirmLabel="Leave without saving"
           cancelLabel="Stay and save" danger onConfirm={() => chooseTab(leaveTo, true)} onCancel={() => setLeaveTo(null)} />}
-        <div className="flex flex-wrap items-center justify-between gap-x-6 border-t border-slate-200 -mx-4 sm:-mx-8 px-4 sm:px-8">
-        <div role="tablist" aria-label="Profile sections" className="flex flex-wrap gap-x-6">
+        <div className="profile-tabs flex flex-wrap items-center gap-x-3 gap-y-2 pt-3">
+        <div role="tablist" aria-label="Profile sections" className="tab-track flex flex-wrap gap-1">
           {TABS.map(t => {
             const active = tab === t.key
             return (
               <button key={t.key} type="button" role="tab" aria-selected={active} onClick={() => chooseTab(t.key)}
-                className={`flex items-center gap-2 py-3 text-sm font-medium border-b-2 transition-colors ${active
-                  ? 'border-blue-600 text-blue-700' : 'border-transparent text-slate-500 hover:text-slate-800 hover:border-slate-200'}`}>
+                className={`flex items-center gap-2 h-[34px] px-3.5 rounded-full text-sm font-semibold transition-colors ${active
+                  ? 'bg-accent text-white shadow-[0_6px_14px_-8px_rgb(37_87_196/70%)]' : 'text-ink-soft hover:bg-white/70'}`}>
                 {t.label}
-                <span className={`text-xs px-1.5 py-0.5 rounded-full font-medium tabular-nums ${active ? 'bg-blue-100 text-blue-700' : 'bg-slate-100 text-slate-600'}`}>
+                <span className={`font-mono text-[11.5px] px-1.5 rounded-full tabular-nums ${active ? 'bg-white text-accent-strong' : 'bg-[rgb(20_30_60/6%)] text-ink-soft'}`}>
                   {count[t.key]}
                 </span>
               </button>
             )
           })}
         </div>
-        {/* 21 Oct (her pick after research: LinkedIn shows its profile meter on the profile page and hides it once
-            complete): what's left to add, at the end of the tab row */}
-        <ProfileTracker done={doneFrom({ ...data, projects, experiences, certifications: certs, awards })} onGo={chooseTab} />
+        <div className="ml-auto flex flex-wrap items-center gap-2">{actions}</div>
         </div>
         </div>
-      </PageHeader>
+      </div>
 
-      <div className="flex-1 min-h-0 px-4 sm:px-8 py-6">
+      <div className="flex-1 min-h-0 px-4 sm:px-8 pt-3.5 pb-4">
         {githubNote && (
           <p role="status" className="mb-4 text-sm text-emerald-800 bg-emerald-50 border border-emerald-200 rounded-xl px-4 py-2.5 flex justify-between gap-3">
             <span>GitHub connected as <b>{githubNote}</b>.{githubLinked > 0 && ` ${githubLinked} ${githubLinked === 1 ? 'project now shows' : 'projects now show'} as yours.`}</span>
@@ -222,7 +225,7 @@ export default function MyProfile() {
 // While My Profile loads: the real header shape (name, skill count, tabs) and a list panel, in grey bars (9 Oct)
 function ProfileSkeleton() {
   return (
-    <div className="min-h-screen lg:h-screen bg-slate-50 flex flex-col" aria-busy="true">
+    <div className="min-h-[calc(100dvh-var(--bar-h))] lg:h-[calc(100dvh-var(--bar-h))] flex flex-col" aria-busy="true">
       <LoadingLabel>Loading your profile…</LoadingLabel>
       <PageHeader>
         <div className="pt-1 pb-4">

@@ -156,6 +156,8 @@ class Users:
                 "password": PASSWORD, "role": role, "accept_privacy": True}
         if company:
             body["company_name"] = company
+        if role == "employer":     # 20 Nov: required at sign-up
+            body.update(company_website="kayudigital.com.my", company_ssm=f"2023010{self.n:05d}")
         r = self.client.post("/auth/register", json=body)
         assert r.status_code in (200, 201), r.text
         self.ids[email] = sql(self.db, "select id from users where email=:e", e=email).scalar()

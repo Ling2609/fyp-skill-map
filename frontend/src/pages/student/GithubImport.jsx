@@ -170,7 +170,8 @@ export default function GithubImport({ onClose, onDone }) {
             <div>
               <div className="flex items-baseline justify-between gap-3 mb-2">
                 <p className="text-xs text-gray-500">{repos.length} public {repos.length === 1 ? 'repository' : 'repositories'}. Tick the ones to add; you check each one next.</p>
-                <button type="button" onClick={list} disabled={busy} className="shrink-0 text-xs font-medium text-blue-700 hover:underline disabled:opacity-40">Refresh</button>
+                <button type="button" onClick={list} disabled={busy} className="shrink-0 inline-flex items-center gap-1 text-xs font-medium text-blue-700 hover:underline disabled:opacity-40">
+                  <svg aria-hidden="true" className={`w-3.5 h-3.5 ${busy ? 'motion-safe:animate-spin' : ''}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 11a8 8 0 1 0-2.3 5.7M20 4v7h-7" /></svg>Refresh</button>
               </div>
               {addable.length > 1 && (
                 // 25 Oct (her review): the same shape as the employer's tables: select-all on the left, the count and Clear

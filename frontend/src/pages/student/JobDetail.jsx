@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
+import InfoTip from '../../components/InfoTip'
 import api from '../../api'
 import { cached, peek } from '../../pageCache'
 import { skillName } from '../../skillName'
@@ -8,11 +9,21 @@ import ApplicationSteps from '../../components/ApplicationSteps'
 import { ADMIN_COUNTS_CHANGED } from '../../components/Sidebar'
 import { Bar, RowSkeleton, LoadingLabel, TextSkeleton } from '../../components/Skeleton'
 import { Busy } from '../../components/Spinner'
-import EmployerRecord, { PromisedDate } from '../../components/EmployerRecord'
 import BackLink from '../../components/BackLink'
 import { OutsideBanner, OutsideStatus } from '../../components/OutsideApply'
 import { useOutsideApplication } from '../../components/useOutsideApplication'
 import { AdRequirementPills, SalaryFromAd } from '../../components/AdRequirements'
+
+// 19 Nov: the company's initials in the header's tile (as the Job Matches cards)
+const initials = (name = '') => name.replace(/\b(sdn|bhd|berhad|ltd|limited|plc|inc)\b\.?/gi, '').trim().split(/\s+/).filter(Boolean).slice(0, 2).map(w => w[0]).join('').toUpperCase() || '·'
+// 19 Nov: mark the job's skill words inside a line of the ad (case-insensitive, whole words)
+const esc = (t) => t.replace(/[.*+?^${}()|[\]\\/]/g, '\\$&')
+function markSkills(text, marks) {
+  if (!marks.length || !text) return text
+  const re = new RegExp(`(?<![\\w-])(${marks.map(([k]) => esc(k)).join('|')})(?![\\w-])`, 'gi')
+  const kind = Object.fromEntries(marks.map(([k, c]) => [k.toLowerCase(), c]))
+  return text.split(re).map((part, i) => (i % 2 ? <mark key={i} className={`jd-mark ${kind[part.toLowerCase()] === 'm' ? 'm' : ''}`}>{part}</mark> : part))
+}
 
 // The grade itself, not its weight: the weight is the same for C+ and C, so a C showed as "C+" (5 Oct)
 const GRADE_LETTERS = { '4.0': 'A', '3.7': 'A-', '3.3': 'B+', '3.0': 'B', '2.7': 'B-', '2.3': 'C+', '2.0': 'C' }
@@ -76,11 +87,15 @@ function ApplyInfo({ a, company, closed: closedCached, taking: takingCached, dec
   const decideBy = now ? now.decide_by : dateCached
   if (app !== null || closed || taking === false) return null      // loading, applied, or can't apply: nothing to say
   return (
-    <div className="mt-4 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5 space-y-1">
-      {decideBy && <PromisedDate company={company} date={fmtDay(decideBy)} className="text-sm font-medium text-slate-800" />}
-      <EmployerRecord company={company} record={record} className="text-sm text-slate-700" />
-      <p className="text-xs text-slate-500">{company || 'The employer'} sees your profile and your match. Your contact details only if they shortlist you.</p>
-    </div>
+    // 20 Nov (her review: the header pushed the content down): one compact line instead of a three-line box
+    // 20 Nov (her review: "show the date directly"): one chip; the record and who sees what sit in its info tip
+    decideBy ? (
+      <span className="jd-chip">Reply by <b>{fmtDay(decideBy)}</b>
+        <InfoTip label="About this date">{company || 'The employer'} promises to reply by this date.{' '}
+          {record?.shown ? `They replied on time on ${record.on_time} of ${record.of} past jobs.` : 'New on SkillMap, so no reply record yet.'}{' '}
+          They see your profile and match; your contact details only if they shortlist you.</InfoTip>
+      </span>
+    ) : null
   )
 }
 
@@ -158,9 +173,10 @@ function ApplyAction({ a, closed: closedCached, taking: takingCached, fromApps, 
     <div className="relative shrink-0 flex flex-col items-end gap-1 max-w-64 text-right">
       {app ? (
         <>
-          <span className={`text-sm font-semibold border px-4 py-2 rounded-lg ${OUTCOME[app.status] || 'text-slate-700 bg-slate-50 border-slate-200'}`}>
-            {['accepted', 'rejected'].includes(app.status) ? `${app.status_label} · ${fmtDay(app.status_changed_at)}` : `Applied · ${fmtDay(app.applied_at)}`}
-          </span>
+          {/* 20 Nov (her review: "Applied · 19 Nov" repeated the step track under it): only an outcome gets a chip */}
+          {['accepted', 'rejected'].includes(app.status) && <span className={`text-sm font-semibold border px-4 py-2 rounded-lg ${OUTCOME[app.status] || 'text-slate-700 bg-slate-50 border-slate-200'}`}>
+            {`${app.status_label} · ${fmtDay(app.status_changed_at)}`}
+          </span>}
           {/* 14 Oct (her review): the way to all applications sits under the status it belongs to; not shown when
               the back link already goes there */}
           {!fromApps && <Link to="/applications" className="text-xs text-blue-700 hover:underline">View in My Applications</Link>}
@@ -187,15 +203,13 @@ function ApplyAction({ a, closed: closedCached, taking: takingCached, fromApps, 
 function ApplicationProgress({ a, company }) {
   const { app, invite } = a
   if (!app && invite) return (
-    <p className="mt-4 text-sm text-violet-900 bg-violet-50 border border-violet-200 rounded-lg px-3.5 py-2.5">
-      <b>{invite.company || company} invited you to apply</b> on {fmtDay(invite.invited_at)}. Applying shares your profile and email with them.
-    </p>
+    <span className="jd-chip invite" title="Applying shares your profile and email with them">Invited <b>{fmtDay(invite.invited_at)}</b></span>
   )
   if (!app?.progress) return null
   const p = app.progress
   return (
-    <div className="mt-2 border-t border-slate-200">
-      <ApplicationSteps steps={p.steps} decided={['accepted', 'rejected'].includes(app.status)} />
+    <div className="jd-progress">
+      <ApplicationSteps compact steps={p.steps} decided={['accepted', 'rejected'].includes(app.status)} />
       {p.nudge === 'no_decision' ? <p className="mt-3 text-sm text-amber-900 bg-amber-50 rounded-lg px-3.5 py-2">
         <b>{company} missed its promised reply date ({fmtDay(app.decide_by)}).</b> Your application is still awaiting a decision. Focus on other jobs; any reply will still appear here.
       </p> : p.nudge && <p className="mt-3 text-sm text-amber-900 bg-amber-50 rounded-lg px-3.5 py-2">
@@ -233,11 +247,12 @@ export default function JobDetail() {
   const [error, setError] = useState('')
   // 12 Oct (her review): a rejected application opens on Skill Gap Analysis (what to work on next) unless the
   // student picked a tab (or came back to one)
-  const [chosenTab, setActiveTab] = useState(location.state?.tab || null)
+  const [chosenTab] = useState(location.state?.tab || null)
+  // 19 Nov (her review): on a phone the two tiles stacked made a very long page, so a switch shows one at a time
+  const [phoneView, setPhoneView] = useState(location.state?.tab === 'description' ? 'ad' : 'gap')
   const activeTab = chosenTab || (skillmapApp.app?.status === 'rejected' ? 'gap' : 'description')
   const [bullets, setBullets] = useState(() => peek(`/jobs/${encodeURIComponent(jobId)}/description`)?.bullets ?? null)
   const [bulletsLoading, setBulletsLoading] = useState(false)
-  const [showSources, setShowSources] = useState(false)
 
   useEffect(() => {
     // The backend builds the profile from the logged-in user's saved record
@@ -251,7 +266,7 @@ export default function JobDetail() {
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
-    if (activeTab !== 'description' || bullets !== null || !gap) return
+    if (bullets !== null || !gap) return   // 19 Nov: the ad is always on screen now (no tabs)
     let cancelled = false
     setTimeout(() => {
       if (!cancelled) setBulletsLoading(true)
@@ -266,7 +281,7 @@ export default function JobDetail() {
   if (loading) {
     return (
       // 13 Oct: grey bars in the page's shape, like the other pages (was a lone spinner)
-      <div className="min-h-screen" aria-busy="true">
+      <div className="min-h-[calc(100dvh-var(--bar-h))]" aria-busy="true">
         <LoadingLabel>Loading job details…</LoadingLabel>
         <div className="bg-white border-b border-slate-200 px-4 sm:px-8 py-3.5"><Bar className="h-3 w-24" /></div>
         <div className="px-4 sm:px-6 py-5 max-w-4xl mx-auto space-y-4" aria-hidden="true">
@@ -275,7 +290,7 @@ export default function JobDetail() {
             <Bar className="h-12 w-20" />
           </div>
           <div className="bg-white rounded-xl border border-slate-200">
-            <div className="px-6 py-3.5 border-b border-slate-200 flex gap-6">{['w-20', 'w-20', 'w-24'].map((w, i) => (<Bar key={i} className={`h-4 ${w}`} />))}</div>
+            <div className="px-6 py-3.5 border-b border-slate-200 flex gap-6">{['w-20', 'w-20', 'w-24'].map((w, i) => <Bar key={i} className={`h-4 ${w}`} />)}</div>
             <div className="px-6 divide-y divide-slate-100">{[0, 1, 2, 3, 4].map(i => <RowSkeleton key={i} />)}</div>
           </div>
         </div>
@@ -285,7 +300,7 @@ export default function JobDetail() {
 
   if (error) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-[calc(100dvh-var(--bar-h))] flex items-center justify-center">
         <div className="text-center">
           <p className="text-red-500 text-sm mb-4">{error}</p>
           <button onClick={goBack} className="text-blue-700 text-sm hover:underline">← Go back</button>
@@ -294,9 +309,6 @@ export default function JobDetail() {
     )
   }
 
-  const coverage = gap?.summary?.coverage_percent || 0
-  const coverageColor = coverage >= 70 ? 'text-green-600' : coverage >= 40 ? 'text-yellow-600' : 'text-red-500'
-  const barColor = coverage >= 70 ? 'bg-green-500' : coverage >= 40 ? 'bg-yellow-500' : 'bg-red-400'
 
   // Layout (summary first): 1) what to learn, 2) what you already have (with where it comes from).
   // Only skills you have count (same skill, or SBERT >= 0.7). Gaps carry no "partly / related" reason:
@@ -341,327 +353,212 @@ export default function JobDetail() {
   // 19 Oct (her T1 + wording G1, research in references.md): skills gained by doing the job ("you will learn",
   // "exposure to"): never a gap; shown as a card after Nice-to-have, with the other skills (they are skills)
   const gainInRole = gap?.learn_on_job || []
+  // the skill words to mark in the ad: teal if she has them, coral if not (longest first, so "Spring Boot Test" wins)
+  const marks = [
+    ...matchedRows.map(m => [m.job_skill, 'h']), ...gapRows.map(m => [m.job_skill, 'm']),
+    ...niceToHave.map(m => [m.job_skill, m.has ? 'h' : 'm']),
+  ].filter(([k]) => k && k.length > 1).sort((a, b) => b[0].length - a[0].length)
 
   return (
-    <div className="min-h-screen">
+    <div className="flex flex-col min-h-[calc(100dvh-var(--bar-h))] lg:h-[calc(100dvh-var(--bar-h))]">
 
       {/* Top nav: same left edge as the other pages' headings (PageHeader: px-8); the shared back link (20 Oct) */}
       <BackLink label={backLabel} onClick={goBack} />
       {outside.toastUi}
 
-      <div className="px-4 sm:px-6 py-5 max-w-4xl mx-auto space-y-4">
+      {/* 19 Nov (her approved mock review/job-detail.html): the page width every screen uses; the glass header; the two
+          tabs became two tiles side by side (the ad with its skill words marked | the skill gap), so nothing hides
+          behind a tab and the page fits one screen; each tile scrolls inside. Phone: the gap first, then the ad */}
+      <div className="mx-auto flex w-full max-w-[1256px] min-h-0 flex-1 flex-col px-4 pb-4 sm:px-8">
 
-        {/* Job header: info + action on top, one score row underneath */}
-        <div className="bg-white rounded-xl p-6 border border-gray-100 shadow-sm">
-          {/* 19 Oct: on a phone the button goes under the title (the title was squeezed into a narrow column) */}
-          <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 sm:gap-6">
-            <div className="flex-1 min-w-0">
-              <h1 className="text-xl font-bold text-gray-800">{gap?.job?.job_title}</h1>
-              <p className="text-sm text-gray-500 mt-1">{gap?.job?.company} · {gap?.job?.location}</p>
-              <p className="text-xs text-gray-500 mt-1.5">
-                {gap?.job?.salary && gap.job.salary !== 'nan'
-                  ? <span className="text-green-700 font-medium">{gap.job.salary}</span>
-                  : gap?.job?.requirements?.salary
-                    ? <SalaryFromAd salary={gap.job.requirements.salary} />
-                    : 'Salary not disclosed'}
-                {gap?.job?.source === 'live'
-                  ? (postedAgo(gap.job.listing_date) ? ` · Posted ${postedAgo(gap.job.listing_date)}` : '')
-                  : gap?.job?.source === 'employer'
-                    ? ` · Posted on SkillMap${postedAgo(gap.job.listing_date) ? ` ${postedAgo(gap.job.listing_date)}` : ''}`
-                    : ' · Past posting from JobStreet (2024)'}
-                {/* F8: most postings close within about a month (references.md); SkillMap can't check without credits.
-                    20 Oct (her pick H1): the warning sits next to the date it is about, not under the Apply button */}
-                {gap?.job?.source === 'live' && !gap.job.gone && daysSince(gap.job.listing_date) > 30 && (
-                  <span className="text-amber-700"> · it may have closed</span>
-                )}
-              </p>
-            </div>
-            {gap?.job?.source === 'employer' && <ApplyAction a={skillmapApp} job={gap.job} summary={gap.summary} missing={(gap.missing_skills || []).map(m => skillName(m.job_skill))} fromApps={backLabel === 'My Applications'} closed={gap.job.closed}
-              taking={gap.job.taking_applications} />}
-            {gap?.job?.source === 'live' && gap.job.source_url && (
-              <div className="shrink-0 flex flex-col items-start sm:items-end gap-1">
-              {/* 20 Oct: the latest job search no longer returns this ad, so its link may be dead (opened from My Applications) */}
-              {gap.job.gone ? (
-                <span className="text-sm text-slate-600 bg-slate-100 px-4 py-2 rounded-lg">This ad is no longer listed</span>
-              ) : (
-              <a
-                href={gap.job.source_url}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={outside.leaving}
-                className="shrink-0 text-sm font-semibold text-white bg-blue-700 hover:bg-blue-800 px-4 py-2 rounded-lg transition"
-              >
-                Apply on {gap.job.publisher || 'employer site'} ↗
-              </a>
+        <section className="page-glass jd-head mt-3 shrink-0" aria-labelledby="jd-title">
+          <span className="page-glass-ic jd-ic" aria-hidden="true">{initials(gap?.job?.company)}</span>
+          <div className="page-glass-body relative px-4 py-4 sm:px-7 sm:py-5">
+            <div className="flex flex-wrap items-center gap-x-7 gap-y-3">
+              <div className="min-w-0 flex-1 basis-80">
+                <p className="jd-eb">Job{gap?.job?.category ? ` · ${gap.job.category}` : ''}</p>
+                <h1 id="jd-title" className="m-0">{gap?.job?.job_title}</h1>
+                <p className="jd-meta">
+                  <span>{[gap?.job?.company, gap?.job?.location].filter(Boolean).join(' · ')}</span>
+                  <span>
+                    {gap?.job?.salary && gap.job.salary !== 'nan'
+                      ? <span className="font-medium text-have-strong">{gap.job.salary}</span>
+                      : gap?.job?.requirements?.salary
+                        ? <SalaryFromAd salary={gap.job.requirements.salary} />
+                        : 'Salary not disclosed'}
+                    {gap?.job?.source === 'live'
+                      ? (postedAgo(gap.job.listing_date) ? ` · Posted ${postedAgo(gap.job.listing_date)}` : '')
+                      : gap?.job?.source === 'employer'
+                        ? ` · Posted on SkillMap${postedAgo(gap.job.listing_date) ? ` ${postedAgo(gap.job.listing_date)}` : ''}`
+                        : ' · Past posting from JobStreet (2024)'}
+                    {/* F8: most postings close within about a month (references.md). 20 Oct (her pick H1): next to the date */}
+                    {gap?.job?.source === 'live' && !gap.job.gone && daysSince(gap.job.listing_date) > 30 && (
+                      <span className="text-partial-strong"> · it may have closed</span>
+                    )}
+                  </span>
+                </p>
+              </div>
+
+              {/* the fit: integers from the API (her rule: 6/13, never a %), one dot per skill counted */}
+              <div className="jd-fit" role="img" aria-label={`You have ${gap?.summary?.matched_skills ?? 0} of the ${gap?.summary?.job_skills_total ?? 0} ${basisWord} skills`}>
+                <p className="m-0 jd-n"><b>{gap?.summary?.matched_skills ?? 0}</b><span>/{gap?.summary?.job_skills_total ?? 0}</span></p>
+                <div>
+                  <p className="m-0 jd-lbl">{basisWord} skills you have</p>
+                  <p className="m-0 jd-dots" aria-hidden="true">
+                    {Array.from({ length: gap?.summary?.job_skills_total || 0 }, (_, i) => <i key={i} className={i < (gap?.summary?.matched_skills || 0) ? '' : 'm'} />)}
+                  </p>
+                </div>
+              </div>
+
+              {gap?.job?.source === 'employer' && <ApplyAction a={skillmapApp} job={gap.job} summary={gap.summary} missing={(gap.missing_skills || []).map(m => skillName(m.job_skill))} fromApps={backLabel === 'My Applications'} closed={gap.job.closed}
+                taking={gap.job.taking_applications} />}
+              {gap?.job?.source === 'live' && gap.job.source_url && (
+                <div className="shrink-0 flex flex-col items-start gap-1 sm:items-end">
+                  {/* 20 Oct: the latest job search no longer returns this ad, so its link may be dead */}
+                  {gap.job.gone ? (
+                    <span className="text-sm text-slate-600 bg-slate-100 px-4 py-2 rounded-lg">This ad is no longer listed</span>
+                  ) : (
+                    <a href={gap.job.source_url} target="_blank" rel="noopener noreferrer" onClick={outside.leaving} className="head-cta">
+                      Apply on {gap.job.publisher || 'employer site'}
+                      <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round"><path d="M7 17 17 7M9 7h8v8" /></svg>
+                    </a>
+                  )}
+                  <OutsideStatus o={outside} />
+                </div>
               )}
-              <OutsideStatus o={outside} />
-              </div>
-            )}
-          </div>
-
-          {gap?.job?.source === 'live' && <OutsideBanner o={outside} site={gap.job.publisher} company={gap.job.company} />}
-          <AdRequirementPills req={gap?.job?.requirements} />
-
-          {gap?.job?.source === 'employer' && <ApplyInfo a={skillmapApp} company={gap.job.company} closed={gap.job.closed}
-            taking={gap.job.taking_applications} decideBy={gap.job.decide_by} record={gap.job.employer_record} />}
-          {gap?.job?.source === 'employer' && <ApplicationProgress a={skillmapApp} company={gap.job.company} />}
-
-          {/* Score: one number, one bar (they say the same thing) */}
-          <div className="mt-5">
-            <div className="flex items-baseline justify-between mb-1.5">
-              <p className="text-sm text-gray-600">
-                <span className={`text-2xl font-bold ${coverageColor}`}>{Math.round(coverage)}%</span>
-                <span className="ml-2">
-                  of {basisWord} skills · you have {gap?.summary?.matched_skills} of {gap?.summary?.job_skills_total}
-                </span>
-              </p>
-              <span className="text-xs text-gray-500">{gap?.summary?.missing_skills} to develop</span>
             </div>
-            <div className="w-full bg-gray-100 rounded-full h-2">
-              <div className={`h-2 rounded-full ${barColor}`} style={{ width: `${coverage}%` }} />
+
+            {gap?.job?.source === 'live' && <OutsideBanner o={outside} site={gap.job.publisher} company={gap.job.company} />}
+            {/* 19 Nov (her review): what the ad asks for and the application's steps share one line */}
+            <div className="jd-strip empty:hidden">
+              <AdRequirementPills req={gap?.job?.requirements} />
+              <span className="jd-chips empty:hidden">
+                {gap?.job?.source === 'employer' && <ApplyInfo a={skillmapApp} company={gap.job.company} closed={gap.job.closed}
+              taking={gap.job.taking_applications} decideBy={gap.job.decide_by} record={gap.job.employer_record} />}
+                {gap?.job?.source === 'employer' && <ApplicationProgress a={skillmapApp} company={gap.job.company} />}
+              </span>
             </div>
           </div>
+        </section>
+
+        {/* phones and tablets only: one tile at a time; the skill gap first (what SkillMap adds to the ad) */}
+        <div className="jd-switch" role="group" aria-label="Show">
+          <button type="button" aria-pressed={phoneView === 'gap'} onClick={() => setPhoneView('gap')}>Skill gap <span className="c">{gapRows.length} to learn</span></button>
+          <button type="button" aria-pressed={phoneView === 'ad'} onClick={() => setPhoneView('ad')}>Job description</button>
         </div>
-
-        {/* Tabs */}
-        <div role="tablist" aria-label="Job details" className="flex gap-1 bg-white rounded-xl p-1 border border-gray-100 shadow-sm">
-          {[
-            { key: 'description', label: 'Job Description' },
-            { key: 'gap', label: 'Skill Gap Analysis' },
-          ].map(tab => (
-            <button
-              key={tab.key}
-              role="tab"
-              aria-selected={activeTab === tab.key}
-              onClick={() => setActiveTab(tab.key)}
-              className={`flex-1 py-2 rounded-lg text-sm font-medium transition ${
-                activeTab === tab.key
-                  ? 'bg-blue-700 text-white shadow-sm'
-                  : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
-              }`}
-            >
-              {tab.label}
-            </button>
-          ))}
-        </div>
-
-        {/* Job Description Tab */}
-        {activeTab === 'description' && (
-          <div className="bg-white rounded-xl p-6 border border-gray-100 shadow-sm">
-            {bulletsLoading ? (
-              <div>
-                <p role="status" className="text-xs text-gray-500 mb-4">Tidying the job description into points. This takes a few seconds.</p>
-                <TextSkeleton lines={7} />
-              </div>
-            ) : bullets?.length > 0 ? (
-              <ul className="space-y-2">
-                {bullets.map((point, idx) => {
-                  const isMainHeader = point.startsWith('## ')
-                  const isSubHeader = point.startsWith('### ')
-                  const displayText = point.replace(/^##+ /, '').replace(/^\d+\.\s+/, '').replace(/^-\s+/, '').trim()
-
-                  if (isMainHeader) {
-                    return (
-                      <li key={idx} className="pt-4 first:pt-0">
-                        <p className="text-sm font-semibold text-gray-800 uppercase tracking-wide border-b border-slate-200 pb-2">
-                          {displayText}
-                        </p>
-                      </li>
-                    )
-                  }
-
-                  if (isSubHeader) {
-                    return (
-                      <li key={idx} className="pt-2">
-                        <p className="text-sm font-medium text-gray-700 italic">{displayText}</p>
-                      </li>
-                    )
-                  }
-
-                  return (
-                    <li key={idx} className="flex items-start gap-2.5 text-sm text-gray-600 leading-relaxed">
-                      <span className="text-blue-400 shrink-0">•</span>
-                      <span>{point.replace(/^-\s+/, '').trim()}</span>
-                    </li>
-                  )
-                })}
-              </ul>
-            ) : gap?.job?.description ? (
-              <p className="text-sm text-gray-600 leading-relaxed whitespace-pre-line">
-                {gap.job.description}
-              </p>
-            ) : (
-              <p className="text-sm text-gray-500">No description available.</p>
-            )}
-          </div>
-        )}
-
-        {/* Skill Gap Tab — summary first: to learn → you already have (with where it comes from) */}
-        {activeTab === 'gap' && (
-          <div className="space-y-4">
-
-            {/* 1. To learn */}
-            <div className="bg-white rounded-xl border border-gray-100 shadow-sm">
-              <div className="px-5 py-4 border-b border-slate-200">
-                <h2 className="text-sm font-semibold text-gray-700">
-                  {BasisWord} skills you're missing <span className="text-red-600">({gapRows.length})</span>
-                </h2>
-              </div>
-              {gapRows.length === 0 ? (
-                <p className="text-xs text-gray-500 px-5 py-4">None. You have every {basisWord} skill this job lists.</p>
-              ) : (
-                <ul className="divide-y divide-slate-100">
-                  {gapRows.map((item, idx) => {
-                    return (
-                      <li key={idx} className="flex items-start gap-3 px-5 py-2.5">
-                        <span className="w-5 h-5 mt-0.5 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0 bg-red-100 text-red-600">
-                          ✕
-                        </span>
-                        {/* Why it's a requirement, in the ad's own words (Stage 1 evidence quote; none for older jobs).
-                            Always shown, wrapped to 2 lines: objective 3 is an explained gap, so no click needed */}
-                        <span className="flex-1 min-w-0">
-                          <span className="block text-xs font-medium text-gray-800">{skillName(item.job_skill)}</span>
-                          {item.ad_quote && (
-                            <span className="block mt-0.5 text-[11px] text-gray-500 line-clamp-2" title={item.ad_quote}>
-                              From the ad: <i>“{item.ad_quote}”</i>
-                            </span>
-                          )}
-                        </span>
-                        <button
-                          onClick={() => openChat(item.job_skill)}
-                          className="text-xs text-blue-600 bg-blue-50 hover:bg-blue-100 px-2.5 py-1 rounded-full transition font-medium shrink-0"
-                        >
-                          Learn →
-                        </button>
-                      </li>
-                    )
+        <div className="jd-grid mt-3.5 min-h-0 flex-1" data-show={phoneView}>
+          {/* the ad: its skill words marked teal (you have) or coral (to learn) */}
+          <section className="jd-tile jd-ad" aria-labelledby="jd-desc">
+            <div className="jd-thead">
+              <h2 id="jd-desc" className="jd-tt"><i aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M6 3h9l4 4v14H6Z" /><path d="M9 11h7M9 15h7M9 7h3" /></svg></i>Job description</h2>
+              <p className="jd-key"><span><u />You have</span><span><u className="m" />To learn</span></p>
+            </div>
+            <div className="jd-tbody" tabIndex={0} aria-label="Job description text">
+              {bulletsLoading || (bullets === null && gap) ? (
+                <div>
+                  <p role="status" className="text-xs text-muted mb-4">Tidying the job description into points. This takes a few seconds.</p>
+                  <TextSkeleton lines={7} />
+                </div>
+              ) : bullets?.length > 0 ? (
+                <ul className="jd-points">
+                  {bullets.map((point, idx) => {
+                    const displayText = point.replace(/^##+ /, '').replace(/^\d+\.\s+/, '').replace(/^-\s+/, '').trim()
+                    if (point.startsWith('## ')) return <li key={idx} className="jd-h">{displayText}</li>
+                    if (point.startsWith('### ')) return <li key={idx} className="jd-sub">{displayText}</li>
+                    return <li key={idx} className="jd-pt">{markSkills(point.replace(/^-\s+/, '').trim(), marks)}</li>
                   })}
                 </ul>
+              ) : gap?.job?.description ? (
+                <p className="text-sm text-ink-soft leading-relaxed whitespace-pre-line">{markSkills(gap.job.description, marks)}</p>
+              ) : (
+                <p className="text-sm text-muted">No description available.</p>
               )}
             </div>
+          </section>
 
-            {/* 2. You already have — chips by default, grouped by source on click */}
-            <div className="bg-white rounded-xl border border-gray-100 shadow-sm">
-              <div className="flex items-center justify-between gap-3 px-5 py-4 border-b border-slate-200">
-                <h2 className="text-sm font-semibold text-gray-700">
-                  {BasisWord} skills you have <span className="text-green-700">({matchedRows.length} of {totalRequired})</span>
-                </h2>
-                {matchedRows.length > 0 && (
-                  <button
-                    onClick={() => setShowSources(v => !v)}
-                    className="text-xs font-medium text-blue-600 bg-blue-50 hover:bg-blue-100 border border-blue-100 px-3 py-1 rounded-full transition"
-                  >
-                    {showSources ? 'Hide sources ▴' : 'Show where these come from ▾'}
-                  </button>
+          {/* the skill gap: to learn (each opens the AI Assistant), you have (by where it comes from), the rest */}
+          <section className="jd-tile jd-gap" aria-labelledby="jd-gap">
+            <div className="jd-thead">
+              <h2 id="jd-gap" className="jd-tt"><i aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="9" /><circle cx="12" cy="12" r="5" /><circle cx="12" cy="12" r="1.2" fill="currentColor" /></svg></i>Skill gap</h2>
+            </div>
+            <div className="jd-tbody" tabIndex={0} aria-label="Skill gap details">
+              <div className="jd-sec">
+                <h3 className="jd-sh">{BasisWord} skills to learn <span className="c m">{gapRows.length}</span></h3>
+                {gapRows.length === 0 ? (
+                  <p className="text-sm text-muted m-0">None. You have every {basisWord} skill this job lists.</p>
+                ) : (
+                  <ul className="jd-learn">
+                    {gapRows.map((item, idx) => (
+                      <li key={idx}>
+                        {/* why it's asked for, in the ad's own words (objective 3: an explained gap) */}
+                        <div className="min-w-0">
+                          <b>{skillName(item.job_skill)}</b>
+                          {item.ad_quote && <small title={item.ad_quote}>From the ad: “{item.ad_quote}”</small>}
+                        </div>
+                        <button type="button" onClick={() => openChat(item.job_skill)} className="jd-lbtn">Learn<span className="sr-only"> {skillName(item.job_skill)} with the AI Assistant</span></button>
+                      </li>
+                    ))}
+                  </ul>
                 )}
               </div>
 
-              {matchedRows.length === 0 ? (
-                <p className="text-xs text-gray-500 px-5 py-4">None of this job's skills match your record yet.</p>
-              ) : !showSources ? (
-                <div className="flex flex-wrap gap-1.5 px-5 py-4">
-                  {matchedRows.map((item, idx) => (
-                    <span key={idx} title={item.ad_quote ? `From the ad: “${item.ad_quote}”` : undefined}
-                      className="inline-flex items-center gap-1.5 text-xs text-gray-700 bg-slate-50 border border-gray-200 px-2.5 py-1 rounded-lg">
-                      <span className="text-green-600 font-bold">✓</span>
-                      {skillName(item.job_skill)}
-                    </span>
-                  ))}
-                </div>
-              ) : (
-                <div className="divide-y divide-slate-100">
-                  {sourceGroups.map(([source, group]) => (
-                    <div key={source} className="px-5 py-3">
-                      <div className="flex items-center gap-1.5 mb-2">
-                        <span className="text-xs font-semibold text-gray-700">{group.label}</span>
-                        {group.grade && (
-                          <span className="text-[10px] bg-blue-50 text-blue-600 px-1.5 py-0.5 rounded font-semibold">{group.grade}</span>
-                        )}
-                        {group.strength && <span className="text-[11px] text-gray-500">{group.strength}</span>}
-                        {group.selfDeclared && (
-                          <span className={sourcePillCls} title={SELF_DECLARED_TIP}>Self-declared</span>
-                        )}
+              <div className="jd-sec">
+                <h3 className="jd-sh">{BasisWord} skills you have <span className="c h">{matchedRows.length}</span><span className="of">of {totalRequired}</span></h3>
+                {matchedRows.length === 0 ? (
+                  <p className="text-sm text-muted m-0">None of this job's skills match your record yet.</p>
+                ) : sourceGroups.map(([source, group]) => (
+                  <div key={source} className="jd-src">
+                    <p className="jd-from">
+                      <b>{group.label}</b>
+                      {group.grade && <span className="g">{group.grade}</span>}
+                      {group.strength && <span className="text-muted"> {group.strength}</span>}
+                      {group.selfDeclared && <span className={`${sourcePillCls} ml-1.5`} title={SELF_DECLARED_TIP}>Self-declared</span>}
+                    </p>
+                    <p className="jd-chips">
+                      {group.items.map((item, idx) => (
+                        <span key={idx} className="jd-chip" title={item.ad_quote ? `From the ad: “${item.ad_quote}”` : undefined}>
+                          {skillName(item.job_skill)}
+                          {item.matched_graduate_skill && item.matched_graduate_skill.toLowerCase() !== item.job_skill.toLowerCase() && (
+                            <span className="via">via {skillName(item.matched_graduate_skill)}</span>
+                          )}
+                        </span>
+                      ))}
+                    </p>
+                  </div>
+                ))}
+              </div>
+
+              {(niceToHave.length > 0 || gainInRole.length > 0 || (gap?.soft_skills || []).length > 0) && (
+                <div className="jd-sec">
+                  {[[niceToHave, 'Nice to have', 'not counted in the score'], [gainInRole, "You'll gain in this role", 'not expected before you start']]
+                    .filter(([list]) => list.length > 0).map(([list, title, note]) => (
+                      <div key={title} className="mb-3">
+                        <h3 className="jd-sh">{title} <span className="of">{note}</span></h3>
+                        {/* her review 5 Oct / 19 Oct: the ones you have first; the others open the AI Assistant */}
+                        <p className="jd-chips">
+                          {[...list].sort((x, y) => Number(y.has) - Number(x.has)).map((item, idx) => item.has ? (
+                            <span key={idx} className="jd-chip" title={item.ad_quote ? `From the ad: “${item.ad_quote}”` : undefined}>✓ {skillName(item.job_skill)}</span>
+                          ) : (
+                            <button key={idx} type="button" className="jd-chip m" onClick={() => openChat(item.job_skill)}
+                              title={item.ad_quote ? `From the ad: “${item.ad_quote}” · Learn more` : 'Learn more'}>
+                              {skillName(item.job_skill)} <span aria-hidden="true">→</span>
+                            </button>
+                          ))}
+                        </p>
                       </div>
-                      <div className="flex flex-wrap gap-1.5">
-                        {group.items.map((item, idx) => (
-                          <span key={idx} title={item.ad_quote ? `From the ad: “${item.ad_quote}”` : undefined}
-                            className="inline-flex items-center gap-1.5 text-xs text-gray-700 bg-slate-50 border border-gray-200 px-2.5 py-1 rounded-lg">
-                            <span className="text-green-600 font-bold">✓</span>
-                            {skillName(item.job_skill)}
-                            {item.matched_graduate_skill && item.matched_graduate_skill.toLowerCase() !== item.job_skill.toLowerCase() && (
-                              <span className="text-[10px] text-gray-500">via {skillName(item.matched_graduate_skill)}</span>
-                            )}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  ))}
+                    ))}
+                  {(gap?.soft_skills || []).length > 0 && (
+                    <>
+                      <h3 className="jd-sh">Soft skills it asks for</h3>
+                      <p className="jd-chips">{gap.soft_skills.map(s => <span key={s} className="jd-chip n">{s}</span>)}</p>
+                      <p className="text-xs text-muted mt-1.5 mb-0">Show these through your projects and experience.</p>
+                    </>
+                  )}
                 </div>
               )}
             </div>
-
-            {/* 3. Nice-to-have skills: a bonus, not counted in the % (only for jobs extracted with levels, Stage 1) */}
-            {niceToHave.length > 0 && (
-              <div className="bg-white rounded-xl border border-gray-100 shadow-sm">
-                <div className="px-5 py-4 border-b border-slate-200">
-                  <h2 className="text-sm font-semibold text-gray-700">
-                    Nice-to-have skills <span className="text-green-700">({niceToHave.filter(n => n.has).length} of {niceToHave.length})</span>
-                    <span className="ml-2 font-normal text-xs text-gray-500">bonus · not counted in the %</span>
-                  </h2>
-                </div>
-                {/* Her review 5 Oct: the ones you have first, then the ones to learn; those open the AI Assistant like
-                    "Learn →" on the missing required skills */}
-                <div className="flex flex-wrap gap-1.5 px-5 py-4">
-                  {[...niceToHave].sort((x, y) => Number(y.has) - Number(x.has)).map((item, idx) => item.has ? (
-                    <span key={idx} title={item.ad_quote ? `From the ad: “${item.ad_quote}”` : undefined}
-                      className="inline-flex items-center gap-1.5 text-xs text-gray-700 bg-slate-50 border border-gray-200 px-2.5 py-1 rounded-lg">
-                      <span className="text-green-600 font-bold">✓</span>
-                      {skillName(item.job_skill)}
-                    </span>
-                  ) : (
-                    <button key={idx} type="button"
-                      title={item.ad_quote ? `From the ad: “${item.ad_quote}” · Learn more` : 'Learn more'}
-                      onClick={() => openChat(item.job_skill)}
-                      className="inline-flex items-center gap-1 text-xs text-blue-700 bg-white border border-blue-200 hover:bg-blue-50 px-2.5 py-1 rounded-lg transition">
-                      {skillName(item.job_skill)} <span aria-hidden="true">→</span>
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-
-
-            {/* 4. Gained in the role: not expected before starting, never in the % */}
-            {gainInRole.length > 0 && (
-              <div className="bg-white rounded-xl border border-gray-100 shadow-sm">
-                <div className="px-5 py-4 border-b border-slate-200">
-                  <h2 className="text-sm font-semibold text-gray-700">
-                    Skills you'll gain in this role <span className="text-green-700">({gainInRole.filter(g => g.has).length} of {gainInRole.length})</span>
-                    <span className="ml-2 font-normal text-xs text-gray-500">not expected before you start · not counted in the %</span>
-                  </h2>
-                </div>
-                {/* Her review 19 Oct: like Nice-to-have: the ones you already have ticked first, the others open the AI
-                    Assistant (you can get a head start) */}
-                <div className="flex flex-wrap gap-1.5 px-5 py-4">
-                  {[...gainInRole].sort((x, y) => Number(y.has) - Number(x.has)).map((item, idx) => item.has ? (
-                    <span key={idx} title={item.ad_quote ? `From the ad: “${item.ad_quote}”` : undefined}
-                      className="inline-flex items-center gap-1.5 text-xs text-gray-700 bg-slate-50 border border-gray-200 px-2.5 py-1 rounded-lg">
-                      <span className="text-green-600 font-bold">✓</span>
-                      {skillName(item.job_skill)}
-                    </span>
-                  ) : (
-                    <button key={idx} type="button"
-                      title={item.ad_quote ? `From the ad: “${item.ad_quote}” · Learn more` : 'Learn more'}
-                      onClick={() => openChat(item.job_skill)}
-                      className="inline-flex items-center gap-1 text-xs text-blue-700 bg-white border border-blue-200 hover:bg-blue-50 px-2.5 py-1 rounded-lg transition">
-                      {skillName(item.job_skill)} <span aria-hidden="true">→</span>
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
-        )}
+          </section>
+        </div>
       </div>
     </div>
   )

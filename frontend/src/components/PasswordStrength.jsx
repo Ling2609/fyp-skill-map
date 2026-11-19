@@ -7,12 +7,12 @@ import api from '../api'
 // Save without the password being sent anywhere while typing (NIST: tell the user why a password is refused).
 // The list (public SecLists top 10,000) is downloaded once; the server still makes the real check on Save.
 const LEVELS = [
-  { min: 0,  label: 'Use at least 8 characters', bars: 1, colour: 'bg-red-400',     text: 'text-red-500' },
-  { min: 8,  label: 'OK',        bars: 2, colour: 'bg-amber-400',   text: 'text-amber-600' },
-  { min: 12, label: 'Good',      bars: 3, colour: 'bg-emerald-400', text: 'text-emerald-600' },
-  { min: 16, label: 'Strong',    bars: 4, colour: 'bg-emerald-500', text: 'text-emerald-700' },
+  { min: 0,  label: 'Use at least 8 characters', bars: 1, colour: 'bg-missing',     text: 'text-missing-strong' },
+  { min: 8,  label: 'OK',        bars: 2, colour: 'bg-partial',   text: 'text-partial-strong' },
+  { min: 12, label: 'Good',      bars: 3, colour: 'bg-have', text: 'text-have-strong' },
+  { min: 16, label: 'Strong',    bars: 4, colour: 'bg-have', text: 'text-have-strong' },
 ]
-const REFUSED = { label: '', bars: 1, colour: 'bg-amber-400', text: 'text-amber-700' }   // advice while typing, not an error
+const REFUSED = { label: '', bars: 1, colour: 'bg-partial', text: 'text-partial-strong' }   // advice while typing, not an error
 
 let commonList = null   // one download for the whole app session
 const loadCommon = () => {
@@ -50,18 +50,18 @@ export default function PasswordStrength({ password, username = '', email = '' }
 
   // Before typing: the rules up front (NN/g "Password creation": show requirements before, not after). Only rules we
   // really have, no forced mixing (NIST).
-  if (!password) return <p className="mt-1.5 text-xs text-gray-500">At least 8 characters. Avoid common passwords and your username.</p>
+  if (!password) return <p className="mt-1.5 text-small text-faint">At least 8 characters. Avoid common passwords and your username.</p>
   const refused = password.length >= 8 ? problemWith(password, common, username || '', email || '') : null
   const level = refused ? REFUSED : [...LEVELS].reverse().find(l => password.length >= l.min)
   return (
-    <div className="mt-2" aria-live="polite">
+    <div className="-mt-2" aria-live="polite">
       <div className="flex gap-1 mb-1">
         {[1, 2, 3, 4].map(i => (
-          <div key={i} className={`h-1 flex-1 rounded-full ${i <= level.bars ? level.colour : 'bg-gray-200'}`} />
+          <div key={i} className={`h-1 flex-1 rounded-full ${i <= level.bars ? level.colour : 'bg-well'}`} />
         ))}
       </div>
-      <p className={`text-xs ${level.text}`}>
-        {refused || <>{level.label}{level.bars === 2 && <span className="text-gray-500"> · longer is stronger, e.g. a few random words</span>}</>}
+      <p className={`m-0 mt-1 text-small ${level.text}`}>
+        {refused || <>{level.label}{level.bars === 2 && <span className="text-faint"> · longer is stronger, e.g. a few random words</span>}</>}
       </p>
     </div>
   )

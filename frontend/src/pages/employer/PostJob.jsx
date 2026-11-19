@@ -126,7 +126,13 @@ function OtherRequirements({ reqs, setReqs }) {
   )
 }
 
+const TIPS_KEY = 'sm-post-tips'
+
 export default function PostJob() {
+  // 20 Nov (her pick): the tips fold, remembered; the description box follows the height of the fields beside it,
+  // so folding them leaves no blank
+  const [tipsOpen, setTipsOpen] = useState(() => { try { return localStorage.getItem(TIPS_KEY) !== 'closed' } catch { return true } })
+  const toggleTips = (e) => { const open = e.currentTarget.open; setTipsOpen(open); try { localStorage.setItem(TIPS_KEY, open ? 'open' : 'closed') } catch { /* storage blocked */ } }
   const navigate = useNavigate()
   const { jobId } = useParams()
   const editing = Boolean(jobId)
@@ -253,9 +259,10 @@ export default function PostJob() {
   const byLevel = useMemo(() => Object.fromEntries(BOXES.map(b => [b.level, skills.filter(s => s.level === b.level)])), [skills])
 
   return (
-    <div className="flex flex-col h-screen">
+    <div className="flex flex-col h-[calc(100dvh-var(--bar-h))]">
       <PageHeader>
-        <div className="pb-5">
+        <div className="pb-5 flex flex-wrap items-center gap-x-6 gap-y-3">
+          <div className="min-w-0 flex-1 basis-96">
           <p className="text-[11px] font-semibold text-blue-600 uppercase tracking-widest mb-2">{editing ? 'My Jobs' : 'Post a Job'}</p>
           <h1 className="text-2xl font-semibold tracking-tight text-slate-900">{editing ? `Edit ${editJob?.title || 'job'}` : readerDown ? 'Add the skills students are matched on' : read ? 'Check the skills SkillMap read from your ad' : 'Write your job ad'}</h1>
           <p className="text-sm text-slate-500 mt-1">{editing
@@ -267,13 +274,22 @@ export default function PostJob() {
               : read
               ? 'Students are matched on these. Remove anything wrong, add anything missing, then publish.'
               : 'SkillMap reads the skills from your ad, and you check them before the job goes live.'}</p>
+          </div>
+          {/* 20 Nov (her approved mock): where you are in posting */}
+          {!editing && (
+            <ol className="post-steps" aria-label={`Step ${read ? 2 : 1} of 2`}>
+              <li className={read ? 'done' : 'now'}><b aria-hidden="true">{read ? '✓' : 1}</b>Write the ad</li>
+              <li aria-hidden="true" className="bar" />
+              <li className={read ? 'now' : ''}><b aria-hidden="true">2</b>Check the skills</li>
+            </ol>
+          )}
         </div>
       </PageHeader>
 
       {/* 13 Oct (her review: two columns felt crowded): ONE form, top to bottom. The ad first; "Read the skills" adds
           the skills under it in the same form, then Cancel / Publish at the end. Before reading, the description box
           takes the height left so the form shows without scrolling (12 Oct); after reading, the page scrolls. */}
-      <div className="flex-1 min-h-0 overflow-y-auto px-8 py-6 flex flex-col">
+      <div className="flex-1 min-h-0 px-4 sm:px-8 pt-3.5 pb-4 flex flex-col">
         {/* 15 Oct (her review: loading for all): editing a job, the saved ad is fetched first; grey bars in the form's
             shape until it arrives, instead of empty boxes that fill in a moment later */}
         {loadingJob && (
@@ -283,7 +299,11 @@ export default function PostJob() {
             <div aria-hidden="true" className="space-y-2"><Bar className="h-3 w-24" /><Bar className="h-48 w-full rounded-lg" /></div>
           </section>
         )}
-        <section className={`bg-white border border-slate-200 rounded-2xl p-6 flex flex-col gap-4 ${read ? '' : 'flex-1'} ${loadingJob ? 'hidden' : ''}`}>
+        <section className={`post-card emp-tile bg-white border border-slate-200 rounded-2xl p-6 flex flex-col gap-4 min-h-0 overflow-y-auto ${loadingJob ? 'hidden' : ''}`}>
+          {/* 20 Nov (her approved mock): before the skills are read, the short fields sit left and the description fills
+              the right, so the form fits one screen with nothing empty */}
+          <div className={read ? 'flex flex-col gap-4' : 'post-grid'}>
+          <div className="flex flex-col gap-4">
           <div>
             <label htmlFor="pj-title" className={label}>Job title</label>
             <input id="pj-title" value={ad.title} onChange={set('title')} maxLength={120} placeholder="e.g. Junior Backend Developer"
@@ -321,25 +341,41 @@ export default function PostJob() {
               <p className="text-xs text-slate-500 mt-1.5">Students see this date before applying. New applications pause when it passes. Existing applications stay pending until you decide, and missed promises remain in your reply record.</p>
             </div>
           )}
+          {!read && (
+            <details className="post-tips" open={tipsOpen} onToggle={toggleTips}>
+              <summary>Tips for finding the right graduates</summary>
+              <ul>
+                <li>Name each skill you need, e.g. "SQL", "REST APIs". SkillMap uses these to find graduates who have them.</li>
+                <li>Say which skills are a must and which are nice to have.</li>
+                <li>Skills you will teach on the job, e.g. "you will learn Docker", are not held against anyone.</li>
+              </ul>
+            </details>
+          )}
+          </div>
           <div className={read ? '' : 'flex-1 min-h-0 flex flex-col'}>
-            <label htmlFor="pj-description" className={label}>Description</label>
+            <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-0.5">
+              <label htmlFor="pj-description" className={label}>Description</label>
+              <div className="flex items-baseline gap-3 ml-auto">
+              <p className="text-xs text-amber-800">{tooLong ? `Shorten the description to ${MAX_DESCRIPTION.toLocaleString()} characters to read the skills.`
+                  : missing.length > 0 && `To read the skills, add ${missing.join(' and ')}.`}</p>
+                <p className={`text-xs tabular-nums shrink-0 ${tooLong ? 'text-rose-700 font-medium' : 'text-slate-500'}`}>{ad.description.length.toLocaleString()} / {MAX_DESCRIPTION.toLocaleString()}</p>
+              </div>
+            </div>
             <textarea id="pj-description" rows={read ? 10 : undefined} value={ad.description} onChange={set('description')}
               placeholder="What the graduate will do, and the skills you ask for, prefer, or will teach"
-              className={`${field} leading-relaxed ${read ? 'resize-y' : 'flex-1 min-h-36 resize-none'}`} />
-            <div className="flex items-start justify-between gap-3 mt-1">
-              <p className="text-xs text-amber-800">{tooLong ? `Shorten the description to ${MAX_DESCRIPTION.toLocaleString()} characters to read the skills.`
-                : missing.length > 0 && `To read the skills, add ${missing.join(' and ')}.`}</p>
-              <p className={`text-xs tabular-nums shrink-0 ${tooLong ? 'text-rose-700 font-medium' : 'text-slate-500'}`}>{ad.description.length.toLocaleString()} / {MAX_DESCRIPTION.toLocaleString()}</p>
-            </div>
+              className={`${field} leading-relaxed ${read ? 'resize-y' : 'flex-1 min-h-40 resize-none'}`} />
+          </div>
           </div>
 
           {!read && (
             <div className="pt-4 border-t border-slate-200 flex flex-wrap items-center justify-between gap-3">
               <Link to="/employer/jobs" className="text-sm text-slate-600 hover:underline">Cancel</Link>
+              <div className="flex flex-wrap items-center gap-3 ml-auto">
               <button type="button" onClick={readSkills} disabled={reading || cantRead}
-                className="px-4 py-2 text-sm font-medium rounded-lg bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-40">
+                className="head-cta disabled:opacity-40 disabled:cursor-not-allowed">
                 {reading ? <Busy>Reading the skills…</Busy> : 'Read the skills'}
               </button>
+              </div>
             </div>
           )}
           {!read && error && <p role="alert" className="text-sm text-rose-600">{error}</p>}

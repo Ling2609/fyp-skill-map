@@ -507,7 +507,7 @@ export default function Chatbot() {
   ].filter(([, list]) => list.length)
 
   return (
-    <div className="flex flex-col h-screen">
+    <div className="flex flex-col h-[calc(100dvh-var(--bar-h))]">
 
       {/* The shared back link, same as Job Detail's (20 Oct) */}
       {backTo && <BackLink label={backTo} onClick={() => navigate(-1)} />}
@@ -519,19 +519,20 @@ export default function Chatbot() {
             <h1 className="text-2xl font-semibold tracking-tight text-slate-900">{currentMode.label}</h1>
             {/* 19 Oct (design review, her pick 3): what this mode does, as every page's one line under the title; the
                 developer wording "Powered by Groq · Context-aware" is gone */}
-            <p className="text-sm text-slate-500 mt-1">{currentMode.description}</p>
+            <p className="chat-desc text-sm text-slate-500 mt-1">{currentMode.description}</p>
           </div>
           {/* Mode switcher */}
-          <div className="flex gap-1 bg-slate-100 rounded-lg p-1 mt-1">
+          {/* 19 Nov (her approved mock): a white strip with the chosen mode solid blue, like the other headers' strips */}
+          <div className="chat-modes flex gap-1 bg-white rounded-[14px] p-1 mt-1 border border-[rgb(20_30_60/8%)] shadow-card">
             {MODES.map(m => (
               <button
                 key={m.key}
                 onClick={() => switchMode(m.key)}
                 disabled={loading}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-all disabled:cursor-not-allowed ${
+                className={`flex items-center gap-1.5 h-[38px] px-3.5 rounded-[10px] text-[13.5px] font-bold transition-all disabled:cursor-not-allowed ${
                   mode === m.key
-                    ? 'bg-white text-slate-800 shadow-sm'
-                    : 'text-slate-600 hover:text-slate-800'
+                    ? 'bg-accent text-white'
+                    : 'text-ink-soft hover:bg-well'
                 }`}
               >
                 {m.icon}
@@ -551,33 +552,25 @@ export default function Chatbot() {
         </div>}
       </PageHeader>
 
-      <div className="relative flex flex-1 min-h-0">
+      {/* 19 Nov: the chat sits at the page's width (the top bar's edges), as one rounded panel */}
+      <div className="chat-shell relative flex flex-1 min-h-0 mx-4 sm:mx-8 mt-3 mb-4 rounded-2xl overflow-hidden border border-slate-200 bg-white shadow-card">
         {/* Past chats (her choice A, 6 Oct): always visible on the left, like ChatGPT / Claude / Gemini */}
         {!listOpen ? (
-          <aside className="w-12 shrink-0 bg-white border-r border-slate-200 flex flex-col items-center gap-2 py-3">
-            <button onClick={toggleList} title="Show past chats" aria-label="Show past chats"
-              className="p-1.5 rounded-md hover:bg-slate-100 text-slate-500 hover:text-slate-600 transition">
-              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 5l7 7-7 7M5 5l7 7-7 7" />
-              </svg>
-            </button>
+          // 19 Nov (her approved mock): folded, the chats are a slim rail: the panel icon and New chat
+          <aside className="chat-rail w-14 shrink-0 bg-white border-r border-line flex flex-col items-center gap-2 py-3.5">
+            <button onClick={toggleList} title="Show your chats" aria-label="Show your chats" aria-expanded="false" className="chat-ib"><svg className="w-[17px] h-[17px]" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="3" /><path d="M9 4v16" /></svg></button>
             <button onClick={() => newChat()} disabled={loading} title="New chat" aria-label="New chat"
-              className="w-8 h-8 rounded-lg bg-blue-600 text-white text-base leading-none hover:bg-blue-700 disabled:opacity-40 disabled:cursor-not-allowed transition">
-              +
-            </button>
+              className="chat-ib text-[20px] leading-none disabled:opacity-40 disabled:cursor-not-allowed">+</button>
           </aside>
         ) : (
-        <aside className="w-56 shrink-0 bg-white border-r border-slate-200 flex flex-col min-h-0 max-md:absolute max-md:inset-y-0 max-md:left-0 max-md:z-20 max-md:shadow-xl">
-          <div className="p-3 flex items-center gap-2">
-            <button onClick={() => newChat()} disabled={loading}
-              className="flex-1 flex items-center justify-center gap-1.5 bg-blue-600 text-white text-xs font-medium rounded-lg py-2 hover:bg-blue-700 disabled:opacity-40 disabled:cursor-not-allowed transition">
-              <span className="text-sm leading-none">+</span> New chat
-            </button>
-            <button onClick={toggleList} title="Hide past chats" aria-label="Hide past chats"
-              className="p-1.5 rounded-md hover:bg-slate-100 text-slate-500 hover:text-slate-600 transition shrink-0">
-              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
-              </svg>
+        <aside className="w-64 shrink-0 bg-white border-r border-line flex flex-col min-h-0 max-md:absolute max-md:inset-y-0 max-md:left-0 max-md:z-20 max-md:shadow-xl">
+          <div className="px-4 pt-3.5 pb-2 flex items-center gap-2">
+            <p className="m-0 font-mono text-[11.5px] tracking-[.09em] uppercase text-ink-soft">Your chats</p>
+            <button onClick={toggleList} title="Hide your chats" aria-label="Hide your chats" aria-expanded="true" className="chat-ib ml-auto"><svg className="w-[17px] h-[17px]" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="3" /><path d="M9 4v16" /></svg></button>
+          </div>
+          <div className="px-3 pb-2">
+            <button onClick={() => newChat()} disabled={loading} className="head-cta w-full justify-center h-10 text-sm disabled:opacity-40 disabled:cursor-not-allowed">
+              <span className="text-base leading-none">+</span> New chat
             </button>
           </div>
           <nav className="flex-1 overflow-y-auto px-2 pb-3" aria-label="Past chats">
@@ -624,7 +617,7 @@ export default function Chatbot() {
 
         <div className="flex-1 flex flex-col min-w-0">
         {/* Messages */}
-        <div className="flex-1 overflow-y-auto px-3 sm:px-6 py-5 bg-slate-50">
+        <div className="chat-glow flex-1 overflow-y-auto px-3 sm:px-6 py-5">
           <div className="space-y-4">
             {messages.map((msg, idx) => (
               <MessageBubble key={idx} msg={msg} downloading={downloading === idx}
@@ -637,26 +630,29 @@ export default function Chatbot() {
         </div>
 
         {/* Input */}
-        <div className="bg-white border-t border-slate-200 px-3 sm:px-6 py-4 shrink-0">
+        <div className="bg-white border-t border-line px-3 sm:px-5 pt-3 pb-3.5 shrink-0">
           {pdfError && <p role="alert" className="text-xs text-rose-700 mb-2">{pdfError}</p>}
           {!loading && messages.length === 1 && currentMode.starters && !input && (
-            <div className="flex flex-wrap gap-2 mb-3" aria-label="Ways to start">
+            <div className="chat-starters flex flex-wrap gap-2 mb-3" aria-label="Ways to start">
               {currentMode.starters.map(f => (
                 <button key={f} type="button" onClick={() => sendText(f)}
-                  className="text-xs text-blue-700 bg-white border border-blue-200 rounded-full px-3 py-1.5 hover:bg-blue-50">{f}</button>
+                  className="chat-starter">{f}</button>
               ))}
             </div>
           )}
           {!loading && messages.length > 0 && isPlan(messages[messages.length - 1]) && !input && (
-            <div className="flex flex-wrap gap-2 mb-3" aria-label="Suggested follow-ups">
+            <div className="chat-starters flex flex-wrap gap-2 mb-3" aria-label="Suggested follow-ups">
               {FOLLOW_UPS.map(f => (
                 <button key={f} type="button" onClick={() => sendText(f)}
-                  className="text-xs text-blue-700 bg-white border border-blue-200 rounded-full px-3 py-1.5 hover:bg-blue-50">{f}</button>
+                  className="chat-starter">{f}</button>
               ))}
             </div>
           )}
-          <div className="flex items-end gap-3">
+          {/* 19 Nov (her review: the hint line made the chat smaller): one box holding the text, the keys and Send */}
+          <div className="chat-box">
             <textarea
+              aria-label="Message the AI Assistant"
+              aria-describedby="chat-keys"
               ref={inputRef}
               value={input}
               onChange={e => setInput(e.target.value)}
@@ -664,16 +660,17 @@ export default function Chatbot() {
               placeholder={currentMode.placeholder}
               maxLength={4000}
               rows={1}
-              className="flex-1 resize-none rounded-xl border border-slate-200 px-4 py-3 text-sm leading-5 text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="flex-1 min-w-0 resize-none border-0 bg-transparent px-1 py-2.5 text-[14.5px] leading-5 text-ink placeholder:text-[#8a8aa0] focus:outline-none"
               style={{ maxHeight: `${INPUT_MAX}px` }}
               // 13 Oct (her report): not disabled while the reply loads; a disabled box loses the cursor, so she had to
               // click it again before typing. Sending still waits for the reply (sendText and the button check loading).
             />
+            <span id="chat-keys" className="chat-keys" title="Enter to send · Shift+Enter for a new line"><kbd>↵</kbd> send <kbd>⇧↵</kbd> new line</span>
             <button
               onClick={handleSend}
               disabled={!input.trim() || loading}
               aria-label="Send message"
-              className="w-11 h-11 bg-blue-600 text-white rounded-xl flex items-center justify-center hover:bg-blue-700 disabled:opacity-40 disabled:cursor-not-allowed transition shrink-0 self-end"
+              className="chat-send"
             >
               {/* Heroicons v2 paper-airplane: points right, the way the message goes (v1's pointed up) */}
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -682,7 +679,6 @@ export default function Chatbot() {
               </svg>
             </button>
           </div>
-          <p className="text-center text-xs text-slate-500 mt-2">Enter to send · Shift+Enter for new line</p>
         </div>
         </div>
       </div>

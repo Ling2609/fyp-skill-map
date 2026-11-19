@@ -34,14 +34,14 @@ function Field({ label, children }) {
 // One line of a section: label, current value, and a button that opens the row's form
 function Row({ label, value, action, onAction, note, open, children, danger }) {
   return (
-    <div className="py-4 border-t border-slate-200 first:border-t-0">
+    <div className="acct-row py-4 border-t border-slate-200 first:border-t-0">
       <div className="flex items-center gap-4">
         <p className="w-32 shrink-0 text-sm text-slate-500">{label}</p>
         <p className="flex-1 min-w-0 text-sm text-slate-800 truncate">{value}</p>
         {action && !open && (
           <button onClick={onAction}
-            className={`text-sm font-medium px-2 py-1 rounded focus:outline-none focus-visible:ring-2 ${danger
-              ? 'text-rose-700 hover:text-rose-900 focus-visible:ring-rose-200' : 'text-blue-600 hover:text-blue-800 focus-visible:ring-blue-200'}`}>
+            className={`text-sm font-semibold focus:outline-none focus-visible:ring-2 ${danger
+              ? 'acct-danger' : 'px-2 py-1 rounded text-blue-600 hover:text-blue-800 focus-visible:ring-blue-200'}`}>
             {action}
           </button>
         )}
@@ -181,7 +181,7 @@ export default function AccountSettings() {
   const errorBox = error && <p className="text-sm text-rose-700 bg-rose-50 border border-rose-100 rounded-lg px-3 py-2">{error}</p>
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="flex flex-col min-h-[calc(100dvh-var(--bar-h))] lg:h-[calc(100dvh-var(--bar-h))]">
       <PageHeader>
         <div className="pb-5 pt-1">
           <p className="text-[11px] font-semibold text-blue-600 uppercase tracking-widest mb-2">Account</p>
@@ -190,12 +190,13 @@ export default function AccountSettings() {
         </div>
       </PageHeader>
 
-      <div className="px-4 sm:px-8 py-6 space-y-5">
+      {/* 20 Nov (her approved mock): one card, the three sections stacked and sharing the screen's height */}
+      <div className="acct-card emp-tile mx-4 sm:mx-8 mt-3.5 mb-4 flex-1 min-h-0 overflow-y-auto bg-white border rounded-2xl px-6 py-2">
         {done && (
           <p role="status" className="text-sm text-emerald-700 bg-emerald-50 border border-emerald-100 rounded-lg px-4 py-2.5">{done}</p>
         )}
 
-        <section className="bg-white border border-slate-200 rounded-2xl px-6 py-2">
+        <section className="acct-sec">
           <h2 className="text-sm font-semibold text-slate-800 pt-4 pb-1">Account information</h2>
 
           <Row label="Name" value={[user?.first_name, user?.last_name].filter(Boolean).join(' ')}
@@ -254,13 +255,13 @@ export default function AccountSettings() {
           </Row>
         </section>
 
-        <section className="bg-white border border-slate-200 rounded-2xl px-6 py-2">
+        <section className="acct-sec">
           <h2 className="text-sm font-semibold text-slate-800 pt-4 pb-1">Security</h2>
 
           <Row label="Password" value="••••••••••" action="Change password" onAction={() => start('password')} open={open === 'password'}>
             <form onSubmit={savePassword} className="space-y-3">
               <Field label="Current password"><input type="password" className={inputClass} value={form.current_password || ''} onChange={set('current_password')} autoComplete="current-password" autoFocus /></Field>
-              <div>
+              <div className="[&>div[aria-live]]:mt-1.5">
                 <Field label="New password"><input type="password" className={inputClass} value={form.new_password || ''} onChange={set('new_password')} autoComplete="new-password" /></Field>
                 <PasswordStrength password={form.new_password} username={user?.username} email={user?.email} />
               </div>
@@ -273,7 +274,7 @@ export default function AccountSettings() {
         </section>
 
         {/* 14 Oct: your data, the notice and deleting the account together, apart from sign-in security */}
-        <section className="bg-white border border-slate-200 rounded-2xl px-6 py-2">
+        <section className="acct-sec">
           <h2 className="text-sm font-semibold text-slate-800 pt-4 pb-1">Privacy and data</h2>
           {/* 14 Oct (PDPA access principle, 2024 data portability): everything SkillMap holds, as one JSON file */}
           <Row label="Your data" value="Everything SkillMap holds about you, in one file" action={downloading ? <Busy>Preparing…</Busy> : 'Download my data'}

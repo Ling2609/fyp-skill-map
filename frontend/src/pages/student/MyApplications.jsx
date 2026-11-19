@@ -1,7 +1,8 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import api from '../../api'
-import PageHeader from '../../components/PageHeader'
+import PageHeader, { HeadStats } from '../../components/PageHeader'
+import { Logo } from '../../components/ui/index.jsx'
 import { ADMIN_COUNTS_CHANGED } from '../../components/Sidebar'
 import { errText } from './profileUtils'
 import DeclineInvite from '../../components/DeclineInvite'
@@ -196,10 +197,14 @@ const FIRST = 3
 // gets up to 3, and rows one section doesn't need go to the other (1 SkillMap + 4 other sites shows all 5).
 // `room` is measured on her screen (her review: 6 rows started scrolling on her laptop), see MyApplications.
 function share(a, b, ROOM) {
-  const x = Math.min(a, FIRST), y = Math.min(b, FIRST)
-  let spare = ROOM - Math.max(x, 1) - Math.max(y, 1)      // an empty section still takes one line ("None …")
-  const ax = Math.min(a - x, spare); spare -= ax
-  return [x + ax, y + Math.min(b - y, spare)]
+  // 20 Nov (her review: on a short screen "On SkillMap" showed none): every section keeps at least one row, then
+  // each gets up to FIRST, then SkillMap takes what is left. An empty section still takes one line ("None …")
+  let x = Math.min(a, 1), y = Math.min(b, 1)
+  let spare = Math.max(0, ROOM - 2)
+  const add = (have, total, cap) => { const n = Math.max(0, Math.min(total - have, cap, spare)); spare -= n; return have + n }
+  x = add(x, a, FIRST - x); y = add(y, b, FIRST - y)
+  x = add(x, a, Infinity); y = add(y, b, Infinity)
+  return [x, y]
 }
 // 20 Oct (her review: the gaps between cards looked odd): each section is one card with a line between applications
 const LIST = 'bg-white border border-slate-200 rounded-2xl divide-y divide-slate-100'
@@ -207,7 +212,15 @@ const LIST = 'bg-white border border-slate-200 rounded-2xl divide-y divide-slate
 // One line per row from 1024 px (her review: consistency); the progress column never wraps and starts at the same place
 // 20 Oct (her review: big gap after the job name): the job column grows only to 22rem; any spare width is shared
 // equally between the four columns (space-between), so the gaps match
-const ROW = 'grid gap-x-4 gap-y-2 lg:grid-cols-[minmax(0,22rem)_11.5rem_8.5rem_10.5rem] xl:grid-cols-[minmax(0,22rem)_24rem_8.5rem_10.5rem] 2xl:grid-cols-[minmax(0,22rem)_24rem_10.5rem_10.5rem] lg:justify-between lg:items-center lg:min-h-12'
+// 19 Nov: the progress column grew for the ticked dots (14 px each instead of 8)
+const ROW = 'grid gap-x-4 gap-y-2 lg:grid-cols-[minmax(0,22rem)_13.5rem_8.5rem_10.5rem] xl:grid-cols-[minmax(0,22rem)_27.5rem_8.5rem_10.5rem] 2xl:grid-cols-[minmax(0,22rem)_27.5rem_10.5rem_10.5rem] lg:justify-between lg:items-center lg:min-h-12'
+
+// 19 Nov (her pick, mock review/page-headers.html): a finished step is a filled dot with a tick, so "done" doesn't
+// rest on colour alone; good news (Accepted, Offer) is teal
+const GOOD = ['Accepted', 'Offer']
+function StepDot({ s }) {
+  return <span aria-hidden="true" className={`step-dot ${s.at ? 'on' : ''} ${s.at && GOOD.includes(s.label) ? 'good' : ''}`} />
+}
 
 function MiniSteps({ steps }) {
   // 20 Oct (her review): always ONE line. Laptops: every step named, the date on the latest one (all dates are in
@@ -217,13 +230,13 @@ function MiniSteps({ steps }) {
   const date = (s) => (s?.at && s.at !== true ? fmtDay(s.at) : '')
   return (
     <div aria-label="Progress">
-      <ol className="hidden xl:flex flex-nowrap items-center gap-2 whitespace-nowrap">
+      <ol className="hidden xl:flex flex-nowrap items-center gap-1.5 whitespace-nowrap">
         {steps.map((s, i) => (
-          <li key={s.key} className="flex items-center gap-2">
-            {i > 0 && <span aria-hidden="true" className={`w-3 h-px ${s.at ? 'bg-blue-500' : 'bg-slate-300'}`} />}
-            <span className={`flex items-center gap-1 text-[13px] ${i === last ? 'font-semibold text-slate-900' : s.at ? 'text-slate-600' : 'text-slate-500'}`}>
-              <span aria-hidden="true" className={`w-2 h-2 rounded-full ${s.at ? 'bg-blue-600' : 'bg-slate-300'}`} />
-              {s.label}{i === last && date(s) && <span className="font-normal text-slate-500"> {date(s)}</span>}
+          <li key={s.key} className="flex items-center gap-1.5">
+            {i > 0 && <span aria-hidden="true" className={`w-3 h-0.5 rounded-full ${s.at ? 'bg-accent' : 'bg-line-strong'}`} />}
+            <span className={`flex items-center gap-1.5 text-[13px] ${i === last ? 'font-semibold text-slate-900' : s.at ? 'text-slate-600' : 'text-slate-500'}`}>
+              <StepDot s={s} />
+              {s.label}{i === last && date(s) && <span className="font-normal text-slate-500 whitespace-nowrap"> {date(s)}</span>}
               <span className="sr-only">{s.at ? ' done' : ' not yet'}</span>
             </span>
           </li>
@@ -233,8 +246,8 @@ function MiniSteps({ steps }) {
         <span aria-hidden="true" className="flex items-center">
           {steps.map((s, i) => (
             <span key={s.key} className="flex items-center">
-              {i > 0 && <span className={`w-2.5 h-px ${s.at ? 'bg-blue-500' : 'bg-slate-300'}`} />}
-              <span className={`w-2 h-2 rounded-full ${s.at ? 'bg-blue-600' : 'bg-slate-300'}`} />
+              {i > 0 && <span className={`w-2.5 h-0.5 rounded-full ${s.at ? 'bg-accent' : 'bg-line-strong'}`} />}
+              <StepDot s={s} />
             </span>
           ))}
         </span>
@@ -246,14 +259,30 @@ function MiniSteps({ steps }) {
 }
 
 // 20 Oct (her review): "Show all" sits on the section title's line, so it is seen before the list, not after it
-function SectionHead({ id, title, note, more }) {
+// 19 Nov (her review: "just a different logo isn't clear enough"): the two sections differ in WHO updates them, so
+// that is what they say, with weight instead of a new colour (every colour already has one meaning): SkillMap's is
+// the main card with a live badge, the other sites' a quieter card with "You update these"
+const PEN = <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 20h4L19 9l-4-4L4 16Z" /><path d="M13 7l4 4" /></svg>
+function SectionHead({ id, title, n, kind, more }) {
   return (
-    <div className="flex flex-wrap items-end justify-between gap-x-4 gap-y-1">
-      <div>
-        <h2 id={id} className="text-base font-semibold text-slate-900">{title}</h2>
-        <p className="text-sm text-slate-600">{note}</p>
-      </div>
+    <div className="src-head">
+      <span className={`src-mark ${kind}`} aria-hidden="true">{kind === 'live' ? <Logo size="sm" /> : PEN}</span>
+      <h2 id={id}>{title} <span className="src-n">{n}</span></h2>
+      {kind === 'live'
+        ? <span className="src-badge live"><i aria-hidden="true" />Live · updates as the employer acts</span>
+        : <span className="src-badge self">You update these · their employers can&apos;t see SkillMap</span>}
       {more}
+    </div>
+  )
+}
+
+// a row's facts in exactly two lines (19 Nov, her review: never split a phrase): the words, then the chips
+function Meta({ line, chip, match }) {
+  const [, have, of] = (match || '').match(/(\d+)\D+(\d+)/) || []   // "2 of 16 required" -> 2, 16
+  return (
+    <div className="app-meta">
+      <p className="l1" title={line}>{line}</p>
+      <p className="l2">{chip}{match && <span className={`fitpill ${of && have / of < 0.5 ? 'low' : ''}`}>{short(match)}</span>}</p>
     </div>
   )
 }
@@ -297,7 +326,8 @@ function AppCard({ r, open, onToggle }) {
       <div className={ROW}>
         <div className="min-w-0">
           <Link to={`/jobs/${encodeURIComponent(r.job_ref)}`} state={{ from: 'My Applications' }} className={`${TITLE} ${ONE}`} title={r.title}>{r.title}</Link>
-          <p className={`text-xs text-slate-500 mt-0.5 ${ONE}`}>{r.company}{r.match && ` · ${short(r.match)}`}</p>
+          <Meta line={`${r.company}${steps[0]?.at && steps[0].at !== true ? ` · applied ${fmtDay(steps[0].at)}` : ''}`}
+            chip={<span className="via sm">on SkillMap</span>} match={r.match} />
         </div>
         {/* opened, the steps and the numbers below say these, so the row doesn't repeat them */}
         {open ? <span className="hidden lg:block" /> : <MiniSteps steps={steps} />}
@@ -306,7 +336,7 @@ function AppCard({ r, open, onToggle }) {
           : r.status === 'shortlisted' ? <p className="text-[13px] text-violet-800 whitespace-nowrap"><b className="font-semibold">Get ready</b> · watch your email</p>
           : <Labelled label="Reply by" value={when} />}
         <div className="flex items-center gap-3 lg:justify-end">
-          <span className={`shrink-0 text-xs font-semibold rounded-full px-2.5 py-0.5 ${PILL[key]}`}>{label}</span>
+          <span data-pill={r.id} className={`shrink-0 text-xs font-semibold rounded-full px-2.5 py-0.5 ${PILL[key]}`}>{label}</span>
           <button type="button" onClick={onToggle} aria-expanded={open}
             className="text-xs font-medium text-blue-700 hover:underline whitespace-nowrap">{open ? 'Hide ▴' : 'Details ▾'}</button>
         </div>
@@ -365,10 +395,11 @@ function OutsideCard({ o, onStatus, onRemove }) {
       <div className={ROW}>
         <div className="min-w-0">
           <Link to={`/jobs/${encodeURIComponent(o.job_ref)}`} state={{ from: 'My Applications' }} className={`${TITLE} ${ONE}`} title={o.title}>{o.title}</Link>
-          <p className={`text-xs text-slate-500 mt-0.5 ${ONE}`}>{o.company}{o.match && ` · ${short(o.match)}`}{o.listed === false && <span className="text-slate-500"> · ad no longer listed</span>}</p>
+          <Meta line={`${o.company}${o.listed === false ? ' · ad no longer listed' : ''}`}
+            chip={<span className="via">via {o.publisher || 'another site'}</span>} match={o.match} />
         </div>
         <MiniSteps steps={outsideSteps(o)} />
-        <Labelled label="Applied via" value={o.publisher || 'another site'} />
+        <span className="hidden lg:block" />
         <div className="flex items-center gap-3 lg:justify-end">
           <label className="sr-only" htmlFor={`os-${o.id}`}>Status of {o.title}</label>
           <select id={`os-${o.id}`} value={o.status} onChange={e => onStatus(o, e.target.value)}
@@ -382,9 +413,68 @@ function OutsideCard({ o, onStatus, onRemove }) {
   )
 }
 
+// 19 Nov (her mock review: the "What happens next" card took room on every visit): help she pulls up when she needs
+// it, a pill by the title opening a popover (contextual help, Adobe Spectrum). It pings three times until opened once.
+const HOW_SEEN = 'sm-how-seen'
+function HowItWorks() {
+  const pop = useRef(null)
+  const [fresh, setFresh] = useState(() => { try { return localStorage.getItem(HOW_SEEN) !== '1' } catch { return false } })
+  useEffect(() => {
+    const el = pop.current
+    if (!el) return
+    const onToggle = (e) => {
+      if (e.newState !== 'open') return
+      setFresh(false)
+      try { localStorage.setItem(HOW_SEEN, '1') } catch { /* storage blocked */ }
+    }
+    el.addEventListener('toggle', onToggle)
+    return () => el.removeEventListener('toggle', onToggle)
+  }, [])
+  return (
+    <>
+      <button type="button" popoverTarget="how-apps" className={`how-pill ${fresh ? 'fresh' : ''}`}>
+        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><circle cx="12" cy="12" r="9" /><path d="M9.5 9.5a2.5 2.5 0 0 1 4.8 1c0 1.7-2.3 2-2.3 3.5M12 17h.01" /></svg>
+        How it works
+      </button>
+      <div ref={pop} id="how-apps" popover="auto" className="how-pop" aria-label="How applications work">
+        <p className="how-title">What happens next</p>
+        <ol>
+          <li><b>Viewed:</b> the employer opened your application.</li>
+          <li><b>Shortlisted:</b> they want to talk. Watch your email and phone.</li>
+          <li><b>Decided:</b> by the date on the ad. You&apos;ll see it here first.</li>
+        </ol>
+        <p className="how-fine">Jobs on other sites don&apos;t update by themselves: change their status when you hear back.</p>
+        <button type="button" popoverTarget="how-apps" popoverTargetAction="hide" className="how-ok">Got it</button>
+      </div>
+    </>
+  )
+}
+
+// 19 Nov (research: celebrate real milestones only, short, brand colours, never with reduced motion): one burst
+const CHEERED = 'sm-cheered-apps'
+const cheered = () => { try { return JSON.parse(localStorage.getItem(CHEERED) || '[]') } catch { return [] } }
+function cheer(from) {
+  if (!from || matchMedia('(prefers-reduced-motion: reduce)').matches) return
+  const r = from.getBoundingClientRect(), box = document.createElement('div')
+  box.className = 'confetti'
+  box.style.left = `${r.left + r.width / 2}px`; box.style.top = `${r.top + r.height / 2}px`
+  const colours = ['#2557c4', '#13998c', '#e9795a', '#e0a21a', '#6b93dc']
+  for (let i = 0; i < 26; i++) {
+    const c = document.createElement('i'); c.style.background = colours[i % colours.length]; box.appendChild(c)
+    const a = Math.random() * Math.PI * 2, d = 50 + Math.random() * 90
+    c.animate([{ transform: 'translate(-50%,-50%) rotate(0)', opacity: 1 },
+      { transform: `translate(${Math.cos(a) * d}px,${Math.sin(a) * d - 30}px) rotate(${Math.random() * 540}deg)`, opacity: 1, offset: 0.6 },
+      { transform: `translate(${Math.cos(a) * d * 1.1}px,${Math.sin(a) * d + 40}px) rotate(${Math.random() * 720}deg)`, opacity: 0 }],
+    { duration: 900 + Math.random() * 300, easing: 'cubic-bezier(.2,.7,.3,1)', fill: 'forwards' })
+  }
+  document.body.appendChild(box)
+  setTimeout(() => box.remove(), 1400)
+}
+
 export default function MyApplications() {
   const [rows, setRows] = useState(null)
   const [invites, setInvites] = useState([])
+  const [allInvites, setAllInvites] = useState(false)
   const [tab, setTab] = useState('all')
   const [error, setError] = useState('')
   const [outside, setOutside] = useState([])
@@ -395,6 +485,7 @@ export default function MyApplications() {
   // shouldn't hide others) or in "See all". At least one row per section.
   const scrollBox = useRef(null)
   const [room, setRoom] = useState(6)
+  const roomSeen = useRef([])   // the last few counts, to stop a flip between two
   const [params, setParams] = useSearchParams()
   const see = params.get('see')
   const seeAll = (which) => setParams(which ? { see: which } : {})
@@ -424,6 +515,7 @@ export default function MyApplications() {
     api.patch(`/applications/outside/${o.id}`, { status })
       .then(res => {
         setOutside(list => list.map(x => x.id === o.id ? res.data : x))
+        if (status === 'offer') cheer(document.getElementById(`os-${o.id}`))
         toast.show(`Status changed to ${res.data.status_label}.`, () => setStatus(res.data, prev))
       })
       .catch(err => toast.show(errText(err, "Couldn't change the status. Try again."), null, true))
@@ -439,6 +531,17 @@ export default function MyApplications() {
       })
       .catch(err => toast.show(errText(err, "Couldn't remove it. Try again."), null, true))
   }
+  // 19 Nov: an acceptance on SkillMap is celebrated once, the first time she sees it (remembered per application)
+  useEffect(() => {
+    const fresh = (rows || []).filter(r => r.status === 'accepted' && !cheered().includes(r.id))
+    if (!fresh.length) return
+    // remembered only once it has played (React runs effects twice in development; the first run is cancelled)
+    const t = setTimeout(() => {
+      cheer(document.querySelector(`[data-pill="${fresh[0].id}"]`))
+      try { localStorage.setItem(CHEERED, JSON.stringify([...cheered(), ...fresh.map(r => r.id)])) } catch { /* storage blocked */ }
+    }, 600)
+    return () => clearTimeout(t)
+  }, [rows])
   // 20 Oct (her review): in "See all" the filter counts are for that section only
   const count = (t) => (see === 'other' ? 0 : (rows || []).filter(r => inTab(r, t)).length)
     + (see === 'skillmap' ? 0 : outside.filter(o => outsideInTab(o, t)).length)
@@ -458,24 +561,43 @@ export default function MyApplications() {
       const cs = getComputedStyle(el)
       const used = el.firstElementChild.getBoundingClientRect().height + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom)
       const fit = rowsNow.length + Math.floor((el.clientHeight - used) / rowH)
+      // 20 Nov (a page that never showed at 1280x720): N rows overflow but N-1 leave room for N, so the count
+      // flipped forever ("Maximum update depth"). Seen flipping back to the count before last: settle on the smaller
       setRoom(r => {
         const next = Math.max(2, Math.min(12, fit))
-        return next === r ? r : next
+        if (next === r) return r
+        const h = roomSeen.current
+        h.push(r)
+        if (h.length > 6) h.shift()
+        return h.includes(next) ? Math.min(r, next) : next
       })
     }
     measure()
-    const ro = new ResizeObserver(measure)
+    // measured on the next frame, so a change it causes is never reported inside the same observer pass (the
+    // "ResizeObserver loop completed with undelivered notifications" warning, 20 Nov)
+    let raf = 0
+    const ro = new ResizeObserver(() => { cancelAnimationFrame(raf); raf = requestAnimationFrame(measure) })
     ro.observe(el)
-    return () => ro.disconnect()
+    return () => { ro.disconnect(); cancelAnimationFrame(raf) }
   }, [see, openId, hasAny, tab, rows, outside])
 
   return (
-    <div className="flex flex-col h-screen">
+    <div className="flex flex-col h-[calc(100dvh-var(--bar-h))]">
       <PageHeader>
-        <div className="pb-5">
-          <p className="text-[11px] font-semibold text-blue-600 uppercase tracking-widest mb-2">My Applications</p>
-          <h1 className="text-2xl font-semibold tracking-tight text-slate-900">Where your applications stand</h1>
-          <p className="text-sm text-slate-500 mt-1">Newest update first. Jobs on SkillMap update as the employer acts; jobs on other sites you update yourself.</p>
+        <div className="pb-5 flex flex-wrap items-center gap-x-6 gap-y-3">
+          <div className="min-w-0 flex-1">
+            <p className="text-[11px] font-semibold text-blue-600 uppercase tracking-widest mb-2">My Applications</p>
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
+              <h1 className="text-2xl font-semibold tracking-tight text-slate-900">Where your applications stand</h1>
+              <HowItWorks />
+            </div>
+            <p className="text-sm text-slate-500 mt-1 head-line">Newest update first. Jobs on SkillMap update as the employer acts; jobs on other sites you update yourself.</p>
+          </div>
+          {hasAny && <HeadStats items={[
+            [(rows?.length || 0) + outside.length, 'Applied', 'blue'],
+            [(rows || []).filter(r => groupOf(r) === 'progress').length + outside.filter(o => outsideGroup(o) === 'progress').length, 'In progress'],
+            [(rows || []).filter(r => groupOf(r) === 'offer').length + outside.filter(o => outsideGroup(o) === 'offer').length, 'Offers', 'good'],
+          ]} />}
         </div>
       </PageHeader>
       {see && <BackLink label="all applications" onClick={() => seeAll(null)} />}
@@ -484,20 +606,30 @@ export default function MyApplications() {
       <div ref={scrollBox} className={`flex-1 min-h-0 px-4 sm:px-8 py-4 ${see ? 'flex flex-col' : 'overflow-y-auto'}`}><div className={`flex flex-col gap-3.5 ${see ? 'flex-1 min-h-0' : ''}`}>
         {error && <p role="alert" className="text-sm text-rose-700 bg-rose-50 border border-rose-200 rounded-lg px-4 py-2.5">{error}</p>}
 
-        {!see && invites.map(inv => (
-          <section key={inv.id} className="bg-violet-50 border border-violet-200 rounded-2xl px-5 py-4 flex flex-wrap items-center gap-x-5 gap-y-2">
+        {/* 20 Nov (her question: several invitations): the newest shows; the others open with "Show N more" */}
+        {!see && invites.slice(0, allInvites ? invites.length : 1).map(inv => (
+          // 20 Nov (her review: "use other colour to raise notice"): the invitation is the accent, as on the Dashboard
+          <section key={inv.id} className="invite-note shrink-0 rounded-2xl px-5 py-3.5 flex flex-wrap items-center gap-x-4 gap-y-2">
+            <span className="invite-ic" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="5" width="18" height="14" rx="2.5" /><path d="m4 7 8 6 8-6" /></svg>
+            </span>
             <div className="flex-1 min-w-60">
-              <h2 className="text-[15px] font-semibold text-slate-900">{inv.company} invited you to apply</h2>
-              <p className="text-sm text-slate-600">{inv.title}{inv.match && ` · you have ${inv.match} skills`} · {fmtDay(inv.invited_at)}</p>
+              <h2 className="text-[15px] font-bold text-ink"><span className="text-accent-strong">{inv.company}</span> invited you to apply</h2>
+              <p className="text-sm text-ink-soft">{inv.title}{inv.match && ` · you have ${inv.match} skills`} · {fmtDay(inv.invited_at)}</p>
             </div>
-            <Link to={`/jobs/${encodeURIComponent(inv.job_ref)}`} state={{ from: 'My Applications' }} className="text-sm font-medium text-violet-800 bg-white border border-violet-200 rounded-lg px-3.5 py-1.5 hover:bg-violet-100">View job</Link>
+            <Link to={`/jobs/${encodeURIComponent(inv.job_ref)}`} state={{ from: 'My Applications' }} className="head-cta h-9 px-4 text-sm">View job</Link>
             <button onClick={() => { setDeclineError(''); setDeclining(inv) }} className="text-sm text-slate-500 hover:text-slate-800">No thanks</button>
           </section>
         ))}
+        {!see && invites.length > 1 && (
+          <button type="button" onClick={() => setAllInvites(v => !v)} className="inv-more self-start">
+            {allInvites ? 'Show fewer invitations' : `Show ${invites.length - 1} more invitation${invites.length > 2 ? 's' : ''}`}</button>
+        )}
 
         {rows === null && !error && <AppsSkeleton />}
         {(rows?.length > 0 || outside.length > 0) && (
-          <div role="tablist" className="flex flex-wrap gap-2 shrink-0">
+          <div className="flex flex-wrap items-center gap-2 shrink-0">
+          <div role="tablist" className="flex flex-wrap gap-2">
             {TABS.map(([t, text]) => (
               <button key={t} role="tab" aria-selected={tab === t} onClick={() => setTab(t)}
                 className={`text-sm font-medium px-3.5 py-1.5 rounded-full border ${tab === t
@@ -505,6 +637,9 @@ export default function MyApplications() {
                 {text} {count(t)}
               </button>
             ))}
+          </div>
+          {/* 19 Nov (her review: a strip at the bottom is missed in a long list): by the filters, always in view */}
+          {!see && <Link to="/recommend" className="more-jobs"><span>Find <b>more jobs that fit you</b> in Job Matches</span><span aria-hidden="true">→</span></Link>}
           </div>
         )}
         {rows?.length === 0 && outside.length === 0 && (
@@ -517,9 +652,9 @@ export default function MyApplications() {
         {/* 20 Oct (her review): both sections always show, so the page keeps its shape; an empty one says why in one line */}
         {see !== 'other' && hasAny && (
           <section aria-labelledby="skillmap-h" className={`flex flex-col gap-3 ${see ? 'min-h-0' : ''}`}>
-            <SectionHead id="skillmap-h" title={see ? `On SkillMap · ${shown.length}` : 'On SkillMap'} note="The employer updates these as they act."
+            <SectionHead id="skillmap-h" title="On SkillMap" n={shown.length} kind="live"
               more={!see && <MoreButton total={shown.length} shown={nApps} onClick={() => seeAll('skillmap')} />} />
-            <div className={`${LIST} ${see ? 'min-h-0 overflow-y-auto' : ''}`}>
+            <div className={`${LIST} src-list live ${see ? 'min-h-0 overflow-y-auto' : ''}`}>
               {(see ? shown : shown.slice(0, nApps)).map(r => <AppCard key={r.id} r={r} open={openId === r.id} onToggle={() => setOpenId(id => id === r.id ? null : r.id)} />)}
               {shown.length === 0 && (rows?.length
                 ? <Empty>None {tab === 'all' ? 'here' : `with “${TABS.find(t => t[0] === tab)[1]}”`}.</Empty>
@@ -530,10 +665,9 @@ export default function MyApplications() {
         )}
         {see !== 'skillmap' && hasAny && (
           <section aria-labelledby="outside-h" className={`flex flex-col gap-3 ${see ? 'min-h-0' : 'mt-1'}`}>
-            <SectionHead id="outside-h" title={see ? `On other sites · ${outsideShown.length}` : 'On other sites'}
-              note="Jobs you applied for through “Apply on …”. Their employers won't see these, so you update the status."
+            <SectionHead id="outside-h" title="On other sites" n={outsideShown.length} kind="self"
               more={!see && <MoreButton total={outsideShown.length} shown={nOut} onClick={() => seeAll('other')} />} />
-            <div className={`${LIST} ${see ? 'min-h-0 overflow-y-auto' : ''}`}>
+            <div className={`${LIST} src-list self ${see ? 'min-h-0 overflow-y-auto' : ''}`}>
               {(see ? outsideShown : outsideShown.slice(0, nOut)).map(o => <OutsideCard key={o.id} o={o} onStatus={setStatus} onRemove={remove} />)}
               {outsideShown.length === 0 && (outside.length
                 ? <Empty>None {tab === 'all' ? 'here' : `with “${TABS.find(t => t[0] === tab)[1]}”`}.</Empty>

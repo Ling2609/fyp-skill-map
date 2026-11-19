@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import api from '../../api'
 import PasswordStrength from '../../components/PasswordStrength'
 import { Busy } from '../../components/Spinner'
+import { AuthShell, AUTH_FIELD, PressButton, Field, Input, Notice } from '../../components/ui'
 
 // Forgot password (4 Oct; OWASP Forgot Password Cheat Sheet + OTP screen patterns, references.md).
 // Step 1: username or email -> a 6-digit code is emailed. Step 2: the code is checked. Step 3: new password.
@@ -12,7 +13,9 @@ import { Busy } from '../../components/Spinner'
 const RESEND_SECONDS = 60
 const EMAIL_SHAPE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/                        // something@something.something
 const USERNAME_SHAPE = /^[a-zA-Z0-9][a-zA-Z0-9._]{1,28}[a-zA-Z0-9]$/      // Register's username rule
-const inputClass = 'w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500'
+
+const STEPS = ['Your account', 'The code', 'New password']
+const STEP_OF = { ask: 0, code: 1, password: 2 }
 
 const errorText = (err) => {
   const detail = err.response?.data?.detail
@@ -92,95 +95,92 @@ export default function ForgotPassword() {
   const changeAccount = () => { setStep('ask'); setError('') }
   const countdown = `${Math.floor(wait / 60)}:${String(wait % 60).padStart(2, '0')}`
 
+  const HEAD = {
+    ask: { title: 'Reset password', sub: "We'll email you a 6-digit code." },
+    code: { title: 'Enter the code', sub: 'It expires 15 minutes after it was sent.' },
+    password: { title: 'New password', sub: 'Code verified. Choose a new password.' },
+  }[step]
+
   return (
-    <main className="min-h-screen bg-linear-to-br from-blue-50 to-slate-100 flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl shadow-lg p-8 w-full max-w-md">
+    <AuthShell
+      title={HEAD.title}
+      sub={HEAD.sub}
+      steps={STEPS}
+      step={STEP_OF[step]}
+      intro={{ headline: <>Pick up where you <em>left off</em>.</> }}
+      formFirst
+    >
+      {step === 'ask' && (
+        <>
+          {error && <Notice tone="bad"><span role="alert">{error}</span></Notice>}
+          <form onSubmit={sendCode} className="flex flex-col gap-4">
+            <Field label="Username or Email" id="fp-identifier" required>
+              <Input id="fp-identifier" type="text" value={form.identifier} onChange={set('identifier')}
+                placeholder="Enter your username or email" required autoFocus />
+            </Field>
+            <PressButton type="submit" disabled={loading} className="w-full">
+              {loading ? <Busy>Sending…</Busy> : 'Send code'}
+            </PressButton>
+          </form>
+        </>
+      )}
 
-        <div className="flex items-center gap-2 mb-6">
-          <div className="w-8 h-8 bg-blue-700 rounded-lg flex items-center justify-center">
-            <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-            </svg>
-          </div>
-          <span className="text-lg font-bold text-gray-900">SkillMap</span>
-        </div>
+      {step === 'code' && (
+        <>
+          <p className="m-0 text-small leading-relaxed text-muted">
+            If <span className="font-medium text-ink">{form.identifier.trim()}</span> has a SkillMap account, we&apos;ve emailed it a code.{' '}
+            <button type="button" onClick={changeAccount} className="font-medium text-accent hover:underline">Change</button>
+          </p>
+          {error && <Notice tone="bad"><span role="alert">{error}</span></Notice>}
+          <form onSubmit={verifyCode} className="flex flex-col gap-4">
+            <Field label="Code" id="fp-code" required hint="Expires in 15 minutes · one code a minute">
+              <input
+                id="fp-code" type="text" inputMode="numeric" autoComplete="one-time-code" maxLength={6}
+                value={form.code}
+                onChange={e => setForm(f => ({ ...f, code: e.target.value.replace(/\D/g, '') }))}
+                className={`${AUTH_FIELD} tabular tracking-[0.4em]`} placeholder="000000" required autoFocus
+              />
+            </Field>
+            <PressButton type="submit" disabled={loading || form.code.length !== 6} className="w-full">
+              {loading ? <Busy>Checking…</Busy> : 'Verify'}
+            </PressButton>
+          </form>
+          <p className="m-0 border-t border-line pt-3.5 text-center text-small">
+            {wait > 0
+              ? <span className="text-muted">Resend code in <span className="tabular text-ink-soft">{countdown}</span></span>
+              : <button type="button" onClick={sendCode} disabled={loading} className="font-medium text-accent hover:underline">Resend code</button>}
+          </p>
+        </>
+      )}
 
-        {step === 'ask' ? (
-          <>
-            <h1 className="text-2xl font-bold text-gray-900 leading-tight">Reset password</h1>
-            <p className="text-gray-500 text-sm mt-1 mb-6">We&apos;ll email you a 6-digit code.</p>
-            {error && <div className="bg-red-50 text-red-600 text-sm px-4 py-3 rounded-lg mb-4">{error}</div>}
-            <form onSubmit={sendCode} className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Username or Email</label>
-                <input type="text" value={form.identifier} onChange={set('identifier')} className={inputClass}
-                  placeholder="Enter your username or email" required autoFocus />
-              </div>
-              <button type="submit" disabled={loading}
-                className="w-full bg-blue-700 text-white py-2.5 rounded-lg font-medium hover:bg-blue-800 transition disabled:opacity-50">
-                {loading ? <Busy>Sending…</Busy> : 'Send code'}
-              </button>
-            </form>
-          </>
-        ) : step === 'code' ? (
-          <>
-            <h1 className="text-2xl font-bold text-gray-900 leading-tight">Enter the code</h1>
-            <p className="text-gray-500 text-sm mt-1 mb-6">
-              If <span className="font-medium text-gray-800">{form.identifier.trim()}</span> has a SkillMap account, we&apos;ve emailed it a code.{' '}
-              <button type="button" onClick={changeAccount} className="text-blue-700 font-medium hover:underline">Change</button>
-            </p>
-            {error && <div className="bg-red-50 text-red-600 text-sm px-4 py-3 rounded-lg mb-4">{error}</div>}
-            <form onSubmit={verifyCode} className="space-y-4">
-              <div>
-                <div className="flex items-baseline justify-between mb-1">
-                  <label className="block text-sm font-medium text-gray-700">Code</label>
-                  <span className="text-xs text-gray-500">Expires in 15 minutes</span>
-                </div>
-                <input type="text" inputMode="numeric" autoComplete="one-time-code" maxLength={6} value={form.code}
-                  onChange={e => setForm(f => ({ ...f, code: e.target.value.replace(/\D/g, '') }))}
-                  className={`${inputClass} tracking-[0.4em] font-medium`} placeholder="000000" required autoFocus />
-              </div>
-              <button type="submit" disabled={loading || form.code.length !== 6}
-                className="w-full bg-blue-700 text-white py-2.5 rounded-lg font-medium hover:bg-blue-800 transition disabled:opacity-50">
-                {loading ? <Busy>Checking…</Busy> : 'Verify'}
-              </button>
-            </form>
-            <p className="text-sm text-center mt-4">
-              {wait > 0
-                ? <span className="text-gray-500">Resend code in {countdown}</span>
-                : <button type="button" onClick={sendCode} disabled={loading} className="text-blue-700 font-medium hover:underline">Resend code</button>}
-            </p>
-          </>
-        ) : (
-          <>
-            <h1 className="text-2xl font-bold text-gray-900 leading-tight">New password</h1>
-            <p className="text-gray-500 text-sm mt-1 mb-6">Code verified. Choose a new password.</p>
-            {error && <div className="bg-red-50 text-red-600 text-sm px-4 py-3 rounded-lg mb-4">{error}</div>}
-            <form onSubmit={resetPassword} className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">New password</label>
-                <input type="password" autoComplete="new-password" value={form.new_password} onChange={set('new_password')}
-                  className={inputClass} required autoFocus />
-                <PasswordStrength password={form.new_password}
-                  {...(EMAIL_SHAPE.test(form.identifier.trim()) ? { email: form.identifier.trim() } : { username: form.identifier.trim() })} />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Confirm password</label>
-                <input type="password" autoComplete="new-password" value={form.confirm} onChange={set('confirm')}
-                  className={inputClass} required />
-              </div>
-              <button type="submit" disabled={loading}
-                className="w-full bg-blue-700 text-white py-2.5 rounded-lg font-medium hover:bg-blue-800 transition disabled:opacity-50">
-                {loading ? <Busy>Saving…</Busy> : 'Change password'}
-              </button>
-            </form>
-          </>
-        )}
+      {step === 'password' && (
+        <>
+          {error && <Notice tone="bad"><span role="alert">{error}</span></Notice>}
+          <form onSubmit={resetPassword} className="flex flex-col gap-4">
+            <Field label="New password" id="fp-password" required>
+              <input
+                id="fp-password" type="password" autoComplete="new-password" value={form.new_password}
+                onChange={set('new_password')} className={AUTH_FIELD} required autoFocus
+              />
+            </Field>
+            <PasswordStrength password={form.new_password}
+              {...(EMAIL_SHAPE.test(form.identifier.trim()) ? { email: form.identifier.trim() } : { username: form.identifier.trim() })} />
+            <Field label="Confirm password" id="fp-confirm" required>
+              <input
+                id="fp-confirm" type="password" autoComplete="new-password" value={form.confirm}
+                onChange={set('confirm')} className={AUTH_FIELD} required
+              />
+            </Field>
+            <PressButton type="submit" disabled={loading} className="w-full">
+              {loading ? <Busy>Saving…</Busy> : 'Change password'}
+            </PressButton>
+          </form>
+        </>
+      )}
 
-        <p className="text-sm text-center text-gray-500 mt-5">
-          <Link to="/login" className="text-blue-700 font-medium hover:underline">Back to sign in</Link>
-        </p>
-      </div>
-    </main>
+      <p className="m-0 border-t border-line pt-3.5 text-center text-small text-muted">
+        <Link to="/login" className="font-medium text-accent hover:underline">Back to sign in</Link>
+      </p>
+    </AuthShell>
   )
 }

@@ -15,8 +15,10 @@ test.describe.serial('Career office', () => {
     await page.getByLabel('Email').fill(NEW_EMPLOYER)
     await page.getByLabel('Password', { exact: true }).fill(PASSWORD)
     await page.getByLabel('Confirm Password').fill(PASSWORD)
-    await page.getByLabel('Role').selectOption('employer')
+    await page.getByRole('button', { name: 'Employer' }).click()
     await page.getByLabel('Company name').fill(COMPANY)
+    await page.getByLabel('Company website').fill('e2e-company.example')
+    await page.getByLabel('SSM registration number').fill('202301000002')
     await page.getByRole('checkbox').check()                       // the privacy notice
     await expect(page.getByText('Username is available')).toBeVisible()   // the name check has answered
     await page.getByRole('button', { name: 'Create account' }).click()

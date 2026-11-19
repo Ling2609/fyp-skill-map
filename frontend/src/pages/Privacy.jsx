@@ -54,12 +54,14 @@ export default function Privacy() {
   const toc = [...body.map(([id, title]) => [id, title]), ['changes', L.history]]
 
   return (
-    <div className="h-screen flex flex-col bg-white">
+    <div className="h-dvh flex flex-col">
       {/* 14 Oct (her review): like the app's detail pages (Job detail, an applicant's profile): a grey "← back"
           link above the title on the left, no logo row; the language button on the right */}
-      <header className="shrink-0 bg-white border-b border-slate-200">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 pt-5 pb-5 flex items-end justify-between gap-4">
-          <div className="min-w-0">
+      {/* 20 Nov (her approved mock): the glass header every page has, at the page width */}
+      <header className="shrink-0 mx-auto w-full max-w-[1256px] px-4 sm:px-8 pt-3">
+        <div className="page-glass relative px-4 sm:px-7 py-5 flex items-end justify-between gap-4">
+          <span className="page-glass-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 3 5 6v6c0 4 3 7.5 7 9 4-1.5 7-5 7-9V6Z" /><path d="m9 12 2 2 4-4" /></svg></span>
+          <div className="min-w-0 page-glass-body !pl-[70px] sm:!pl-[70px]">
             {fromSignup ? (
               <button type="button" onClick={() => { window.close(); setTimeout(() => navigate('/register'), 150) }} className={backCls}>← {L.backSignup}</button>
             ) : (
@@ -70,22 +72,22 @@ export default function Privacy() {
             <p className="text-sm text-slate-500 mt-1">{L.updated} {version.label[lang]}</p>
           </div>
           <button type="button" onClick={() => setLang(lang === 'en' ? 'ms' : 'en')} lang={lang === 'en' ? 'ms' : 'en'}
-            className="shrink-0 text-sm font-medium bg-blue-600 text-white rounded-lg px-3.5 py-1.5 hover:bg-blue-700 transition">
+            className="shrink-0 h-10 px-4 text-sm font-bold rounded-[12px] bg-white border border-[#c8d7f4] text-accent-strong shadow-card hover:bg-accent-soft transition">
             {L.other}
           </button>
         </div>
       </header>
 
       {/* only the content scrolls; the header stays */}
-      <main lang={lang} className="flex-1 min-h-0 overflow-y-auto">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-6">
+      <main lang={lang} className="flex-1 min-h-0 mx-auto w-full max-w-[1256px] px-4 sm:px-8 pt-3.5 pb-4 flex flex-col">
+        <div className="emp-tile flex-1 min-h-0 overflow-y-auto bg-white border rounded-2xl px-5 sm:px-8 py-6">
           {!isCurrent && (
             <p role="status" className="mb-5 text-sm text-amber-900 bg-amber-50 border border-amber-200 rounded-xl px-4 py-3">
               {L.older} {version.label[lang]}. <Link to="/privacy" className="font-medium text-blue-700 underline hover:no-underline">{L.current}</Link>
             </p>
           )}
 
-          <section aria-labelledby="in-short" className="rounded-xl bg-slate-50 border border-slate-200 px-5 sm:px-6 py-4">
+          <section aria-labelledby="in-short" className="rounded-xl bg-accent-soft/60 border border-[#c8d7f4] px-5 sm:px-6 py-4">
             <h2 id="in-short" className="text-base font-semibold text-slate-900">{short.title}</h2>
             <dl className="mt-3 divide-y divide-slate-100">
               {short.lines.map(([k, v]) => (

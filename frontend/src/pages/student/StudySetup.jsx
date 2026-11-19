@@ -66,7 +66,7 @@ export default function StudySetup() {
   }
 
   return (
-    <main className="min-h-screen bg-slate-100 flex items-center justify-center p-4">
+    <main className="min-h-screen flex items-center justify-center p-4">
       {step === 1 ? (
       <form onSubmit={saveStudy} className="bg-white rounded-2xl border border-slate-200 shadow-sm w-full max-w-lg p-8 space-y-5">
         <div>

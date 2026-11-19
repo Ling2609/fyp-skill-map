@@ -6,13 +6,18 @@ import { Link } from 'react-router-dom'
 export default function PrivacySummary({ accepted, onChange, showError }) {
   return (
     <div>
-      <label className="flex items-start gap-2 text-sm text-gray-700 cursor-pointer">
-        <input type="checkbox" checked={accepted} onChange={e => onChange(e.target.checked)}
-          className="mt-0.5 w-4 h-4 accent-blue-700" />
+      <label className="flex cursor-pointer items-start gap-2 text-small leading-snug text-ink-soft">
+        <input
+          type="checkbox" checked={accepted} onChange={e => onChange(e.target.checked)}
+          aria-invalid={(showError && !accepted) || undefined}
+          className="mt-0.5 h-3.5 w-3.5 shrink-0 accent-[var(--color-accent)]"
+        />
         <span>I have read and agree to the{' '}
-          <Link to="/privacy?from=signup" target="_blank" rel="noopener" className="text-blue-700 underline hover:no-underline">Privacy notice</Link>.</span>
+          <Link to="/privacy?from=signup" target="_blank" rel="noopener" className="text-accent underline hover:no-underline">Privacy notice</Link>.</span>
       </label>
-      {showError && !accepted && <p className="text-xs text-red-500 mt-1">Please accept the privacy notice to create an account.</p>}
+      {showError && !accepted && (
+        <p className="m-0 mt-1 text-small text-missing-strong">Please accept the privacy notice to create an account.</p>
+      )}
     </div>
   )
 }

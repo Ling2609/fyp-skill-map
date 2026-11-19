@@ -1,7 +1,15 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <!-- SkillMap logo (the sidebar's): white bar chart on a blue rounded square -->
-  <rect width="32" height="32" rx="7" fill="#2563eb"/>
-  <svg x="5" y="5" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
-  </svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none">
+  <!-- SkillMap mark, "meet on the map" (geometry of src/components/ui/Logo.jsx), white on an Ocean-blue tile so it
+       reads on dark and light browser tabs -->
+  <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3a72e0"/><stop offset="1" stop-color="#1c46a8"/></linearGradient></defs>
+  <rect width="48" height="48" rx="11" fill="url(#g)"/>
+  <g transform="translate(6 5) scale(.75)">
+    <path d="m6 19 12-6 12 6 12-6v25l-12 5-12-6-12 6Z" fill="#fff"/>
+    <path d="M18 13v24l12 6V19Z" fill="#2557c4" fill-opacity=".18"/>
+    <circle cx="12" cy="7" r="4" fill="#fff"/>
+    <circle cx="36" cy="7" r="4" fill="#fff"/>
+    <path d="M12 26c8-11 15 15 24-1" stroke="#2557c4" stroke-width="3.4" stroke-linecap="round"/>
+    <circle cx="12" cy="26" r="3" fill="#2557c4"/>
+    <circle cx="36" cy="25" r="3.6" fill="#fff" stroke="#2557c4" stroke-width="2.4"/>
+  </g>
 </svg>

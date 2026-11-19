@@ -168,7 +168,8 @@ def build_showcase(user: User, db: Session, for_employer: bool = False, job_skil
         "headline": user.headline or "",
         "about": user.about or "",
         # 14 Oct: GitHub only from a connected (proved) account, never a typed link; LinkedIn and portfolio are typed
-        "links": {"linkedin": user.linkedin_url, "portfolio": user.portfolio_url, "github": _github_link(user.id, db)},
+        "links": {"linkedin": user.linkedin_url, "portfolio": user.portfolio_url, "github": _github_link(user.id, db),
+                  "other": user.other_links or []},
         "visible_to_employers": user.is_visible_to_employers,
         "show_grades_to_employers": user.show_grades_to_employers,
         # 14 Oct: the student's own contact details, for her own view only; employers get them from

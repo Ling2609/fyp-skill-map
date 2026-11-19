@@ -21,7 +21,8 @@ export const card = 'bg-white border border-slate-200 rounded-2xl'
 // ── The heading ───────────────────────────────────────────────────────────────
 
 export function ApplicantHeading({ s, note }) {
-  const links = [['GitHub', s.links?.github], ['LinkedIn', s.links?.linkedin], ['Portfolio', s.links?.portfolio]].filter(([, u]) => u)
+  const links = [['GitHub', s.links?.github], ['LinkedIn', s.links?.linkedin], ['Portfolio', s.links?.portfolio],
+    ...(s.links?.other || []).map(o => [o.label, o.url])].filter(([, u]) => u)
   const langs = (s.languages || []).map(l => `${l.language}${l.test ? ` (${l.test})` : ''}`)
   const facts = [s.programme_line, s.cgpa != null && <b key="c" className="font-semibold text-slate-900">CGPA {Number(s.cgpa).toFixed(2)}</b>,
     langs.length > 0 && <span key="l" title={(s.languages || []).map(l => `${l.language}: ${levelLabel(l.level)}`).join('\n')}>{langs.join(', ')}</span>]
@@ -32,11 +33,11 @@ export function ApplicantHeading({ s, note }) {
         <h1 className="text-2xl font-semibold tracking-tight text-slate-900">{s.name}</h1>
         {/* 21 Oct (her review): the links beside the name, as on My Profile */}
         {links.map(([label, url]) =>
-          <a key={label} href={url} target="_blank" rel="noopener noreferrer" className="text-sm text-blue-700 hover:underline">{label} ↗</a>)}
+          <a key={url} href={url} target="_blank" rel="noopener noreferrer" className="text-sm text-blue-700 hover:underline">{label} ↗</a>)}
         {s.headline && <p className="text-sm text-slate-500">{s.headline}</p>}
       </div>
       {s.about && <p className="text-sm text-slate-700 mt-1.5 whitespace-pre-line">{s.about}</p>}
-      <div className="mt-3 pt-3 border-t border-slate-300 text-sm">
+      <div className="mt-1.5 text-sm">
         <p className="text-slate-600 min-w-0">{facts.map((f, i) => <span key={i}>{i > 0 && ' · '}{f}</span>)}</p>
       </div>
       {s.contact ? (
@@ -46,7 +47,12 @@ export function ApplicantHeading({ s, note }) {
           {s.contact.city && <> · {s.contact.city}</>}
           {s.contact.available_from && <> · available from {monthLabel(s.contact.available_from)}</>}
         </p>
-      ) : note && <p className="text-xs text-slate-500 mt-1">✉ {note}</p>}
+      ) : note && (
+        // 20 Nov (her review: easy to miss): a blue notice with a lock, not grey small print
+        <p className="mt-2 inline-flex items-center gap-2 rounded-[10px] border border-line-strong bg-white px-3 py-1.5 text-[13px] text-ink-soft shadow-card">
+          <svg aria-hidden="true" className="h-[15px] w-[15px] shrink-0 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="4" y="10" width="16" height="11" rx="2" /><path d="M8 10V7a4 4 0 0 1 8 0v3" /></svg>
+          <span><b className="font-extrabold text-ink">Email and phone are hidden</b> until you shortlist {s.name.split(' ')[0]}.</span>
+        </p>)}
     </>
   )
 }
@@ -227,7 +233,7 @@ export function ApplicantCards({ s, fit, withFit = true, you, aside }) {
               <Skills skills={p.skills} relevant={p.relevant} />
             </div>
           )} />
-        <Section title="Strongest modules" first={6} cols={2} items={s.strongest_modules} empty="No module grades yet."
+        <Section title="Strongest modules" first={10} cols={2} items={s.strongest_modules} empty="No module grades yet."
           sub={`${withFit ? "The ones that teach this job's skills first. " : ''}${s.show_grades_to_employers
             ? (you ? 'Your grades are shown to employers.' : 'Grades shown because the student allows it.')
             : (you ? 'Your grades are hidden from employers.' : "The student doesn't share grades.")}`}

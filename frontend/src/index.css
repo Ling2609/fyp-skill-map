@@ -1,8 +1,120 @@
 @import "tailwindcss";
 
-body {
-  background-color: #f1f5f9;
+@theme {
+  /* ── Ocean & Coral (17 Nov, DESIGN-SYSTEM.md §2): five roles, one meaning each ── */
+  --color-canvas:      #f4f7fb;
+  --color-card:        #ffffff;
+  --color-band:        #f7faff;
+  --color-well:        #eef2f8;
+
+  /* ── ink: four steps ──────────────────────────────────────────────────── */
+  --color-ink:         #16142b;
+  --color-ink-soft:    #3a3754;
+  --color-muted:       #5c5976;
+  --color-faint:       #5f5c78;
+
+  /* ── lines ────────────────────────────────────────────────────────────── */
+  --color-line:        #e3e6ee;
+  --color-line-strong: #d3d8e2;
+  --color-field:       #9aa3b5;
+
+  /* ── action / new for you ─────────────────────────────────────────────── */
+  --color-accent:        #2557c4;
+  --color-accent-strong: #1d469f;
+  --color-accent-soft:   #e3ebfa;
+  --color-on-accent:     #ffffff;
+
+  /* ── what the data means: teal = have/good, coral = still to learn ────── */
+  --color-have:          #13998c;
+  --color-have-strong:   #0a6c62;
+  --color-have-soft:     #dcf2ef;
+  --color-partial:       #e0a21a;
+  --color-partial-strong:#7d5600;
+  --color-partial-soft:  #fff4d6;
+  --color-missing:       #e9795a;
+  --color-missing-strong:#a43c20;
+  --color-missing-soft:  #fdece6;
+  --color-plan:          #e9795a;
+  --color-learn-ink:     #6e2410;
+  --color-mark:          #ffc93c;
+  --color-track:         #eef1f6;
+  --color-neutral:       #d6dce5;
+  --color-neutral-strong:#b2bccb;
+
+  /* ── tones that carry meaning: one hue, deeper = more ─────────────────── */
+  --color-seq1: #d9e5f8; --color-seq2: #a9c2ee; --color-seq3: #6b93dc; --color-seq4: #2f5fbf;   /* blue: application stages */
+  --color-fit1: #d3ebe8; --color-fit2: #9fd6cf; --color-fit3: #57b6aa; --color-fit4: #13998c;   /* teal: how much of a job you have */
+
+  /* ── charts: one hue per series, solid fills only ─────────────────────── */
+  --color-c1: #2557c4;  --grad-c1: linear-gradient(#2557c4, #2557c4);
+  --color-c2: #13998c;  --grad-c2: linear-gradient(#13998c, #13998c);
+  --color-c3: #6b93dc;  --grad-c3: linear-gradient(#6b93dc, #6b93dc);
+  --color-c4: #e0a21a;  --grad-c4: linear-gradient(#e0a21a, #e0a21a);
+  --color-c5: #e9795a;  --grad-c5: linear-gradient(#e9795a, #e9795a);
+  --color-c6: #57b6aa;  --grad-c6: linear-gradient(#57b6aa, #57b6aa);
+
+  /* the page wash (never a flat grey page) and the one featured card */
+  --grad-bar:  linear-gradient(180deg, #ffffff 0%, #ffffff 100%);
+  --grad-hero: linear-gradient(150deg, #f7faff, #e6efff);
+  --grad-page:
+    radial-gradient(40vw 40vw at 6% 4%,    #dcecff 0%, transparent 62%),
+    radial-gradient(36vw 36vw at 94% 6%,   #d9f3ef 0%, transparent 62%),
+    radial-gradient(44vw 38vw at 72% 102%, #fde4dc 0%, transparent 60%),
+    radial-gradient(34vw 34vw at 18% 98%,  #e6efff 0%, transparent 60%);
+
+  /* ── shape ────────────────────────────────────────────────────────────── */
+  --radius-chip:    7px;
+  --radius-control: 10px;
+  --radius-panel:   14px;
+  --radius-tile:    15px;
+  --radius-card:    24px;
+  --radius-pill:    999px;
+
+  /* ── depth: one card shadow, one lifted ───────────────────────────────── */
+  --shadow-card:   0 1px 2px rgb(20 30 60 / 0.05), 0 12px 32px -18px rgb(20 30 60 / 0.22);
+  --shadow-lifted: 0 2px 6px rgb(15 20 32 / 0.06), 0 18px 40px -20px rgb(15 20 32 / 0.26);
+
+  /* ── type: six steps, and the sizes already in the app map onto them ──── */
+  --text-display: 32px; --text-display--line-height: 38px;
+  --text-title:   20px; --text-title--line-height: 26px;
+  --text-lead:    16px; --text-lead--line-height: 24px;
+  --text-body:    14px; --text-body--line-height: 20px;
+  --text-small:   12px; --text-small--line-height: 16px;
+  --text-label:   11px; --text-label--line-height: 14px;
+
+  --font-sans: "Plus Jakarta Sans", "Instrument Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: "Inter Tight", "Bricolage Grotesque", "Instrument Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "DM Mono", ui-monospace, Menlo, Consolas, monospace;
 }
+
+@layer base {
+  /* 20 Nov (her review): no page-level gutter. It left an unpainted strip at both window edges, and every page now
+     fits and scrolls inside its own cards (those keep their own gutter below) */
+  body {
+    background-color: var(--color-canvas);
+    background-image: var(--grad-page);
+    background-attachment: fixed;
+    background-attachment: fixed;
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  /* every scroll area: 8px bar, thumb never shorter than 28px, space always reserved (her rules) */
+  .scroll-y { overflow-y: auto; scrollbar-gutter: stable; }
+  .scroll-y::-webkit-scrollbar { width: 8px; }
+  .scroll-y::-webkit-scrollbar-thumb { min-height: 28px; border-radius: 99px; background: #c3d3e6; border: 2px solid transparent; background-clip: padding-box; }
+  .scroll-y::-webkit-scrollbar-thumb:hover { background: #93a9c6; background-clip: padding-box; }
+  .scroll-y { scrollbar-width: thin; scrollbar-color: #c3d3e6 transparent; }
+  .tabular { font-family: var(--font-mono); font-variant-numeric: tabular-nums; letter-spacing: -0.01em; }
+  :focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+  p, li, figcaption { text-wrap: pretty; }   /* no single word left alone on the last line */
+  ::selection { background: var(--color-accent-soft); color: var(--color-ink); }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+  }
+}
+
 
 .scrollbar-hide {
   -ms-overflow-style: none;
@@ -38,3 +150,1103 @@ select:disabled { opacity: 0.6; cursor: not-allowed; }
   * { scrollbar-width: thin; scrollbar-color: #cbd5e1 transparent; }
 }
 [class*="overflow-y-auto"], [class*="overflow-auto"] { scrollbar-gutter: stable; }
+
+/* ── the entry screens: a split that leans toward the form when you type ──────
+   Kept as plain CSS because it is one authored move, not a utility: the map
+   gives room to the card, and the dots on the route keep travelling.         */
+.auth-split {
+  display: grid;
+  grid-template-columns: minmax(0, 1.02fr) minmax(0, 1fr);
+  transition: grid-template-columns .55s cubic-bezier(.4, .05, .2, 1);
+}
+.auth-split:has(.auth-card :is(input, select, textarea):focus) { grid-template-columns: minmax(0, .72fr) minmax(0, 1fr); }
+.auth-map { transition: opacity .45s ease, transform .55s cubic-bezier(.4, .05, .2, 1); }
+.auth-split:has(.auth-card :is(input, select, textarea):focus) .auth-map { opacity: .45; transform: scale(.955); }
+.auth-card { transition: max-width .55s cubic-bezier(.4, .05, .2, 1); }
+.auth-split:has(.auth-card :is(input, select, textarea):focus) .auth-card:not(.auth-card-wide) { max-width: 448px; }
+
+@keyframes flow { to { stroke-dashoffset: -15; } }
+.auth-route { animation: flow 1.3s linear infinite; }
+.auth-route-late { animation: flow 1.3s linear infinite; animation-delay: .55s; }
+@keyframes rise { from { opacity: 0; transform: translateY(12px) scale(.985); } to { opacity: 1; transform: none; } }
+.auth-rise { animation: rise .6s cubic-bezier(.22, 1, .36, 1) both; }
+@keyframes breathe { 0%, 100% { opacity: .10; transform: scale(1); } 50% { opacity: .20; transform: scale(1.06); } }
+.auth-halo { animation: breathe 4.5s ease-in-out infinite; transform-origin: 293px 232px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .auth-split, .auth-map, .auth-card { transition: none !important; }
+  .auth-split:has(.auth-card :is(input, select, textarea):focus) { grid-template-columns: minmax(0, 1.02fr) minmax(0, 1fr); }
+  .auth-route, .auth-route-late, .auth-rise, .auth-halo { animation: none !important; }
+}
+@media (max-width: 1023px) {
+  /* one column, and focus must not pull it back into a split (autoFocus would) */
+  .auth-split,
+  .auth-split:has(.auth-card :is(input, select, textarea):focus) { grid-template-columns: minmax(0, 1fr); }
+  .auth-split:has(.auth-card :is(input, select, textarea):focus) .auth-map { opacity: 1; transform: none; }
+  .auth-split:has(.auth-card :is(input, select, textarea):focus) .auth-card { max-width: 100%; }
+}
+
+/* the map on the entry screens: chips and wires drawn once, in CSS */
+.am-cap { font-family: var(--font-mono); font-size: 9px; letter-spacing: .14em; fill: #857e6f; text-transform: uppercase; }
+.am-t   { font-family: var(--font-sans); font-size: 12px; font-weight: 500; fill: #1b1a17; }
+.am-bx  { fill: #f2fbf7; stroke: #bfe4d9; stroke-width: 1.1; }
+.am-bp  { fill: #eef1ff; stroke: #ccd6ff; stroke-width: 1.1; }
+.am-bj  { fill: #f6f5ff; stroke: #d7d8f7; stroke-width: 1.1; }
+.am-bg  { fill: #fffaf1; stroke: #cbbfae; stroke-width: 1.1; stroke-dasharray: 4 4; }
+
+/* ── the map, in sequence ────────────────────────────────────────────────────
+   The mockup's idea, at app speed: your skills arrive, the wires reach you,
+   you arrive, then the roles. Once on load, then only the light keeps moving. */
+@keyframes am-in {
+  from { opacity: 0; transform: translateY(9px); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes am-pop {
+  0%   { opacity: 0; transform: scale(.82); }
+  70%  { opacity: 1; transform: scale(1.03); }
+  100% { opacity: 1; transform: scale(1); }
+}
+@keyframes am-wire {
+  from { opacity: 0; transform: scaleX(.6); }
+  to   { opacity: 1; transform: none; }
+}
+.am-in, .am-pop, .am-wire { transform-box: fill-box; transform-origin: center; animation-duration: .55s; animation-timing-function: cubic-bezier(.22, 1, .36, 1); animation-fill-mode: both; }
+.am-in   { animation-name: am-in; }
+.am-pop  { animation-name: am-pop; animation-duration: .7s; }
+.am-wire { animation-name: am-wire; animation-duration: .5s; }
+@media (prefers-reduced-motion: reduce) {
+  .am-in, .am-pop, .am-wire { animation: none !important; opacity: 1; transform: none; }
+}
+
+/* ── Meet on the map (from the chosen mockup, recoloured) ─────────────────── */
+.map-scene { position: relative; }
+.map-scene .cinema { width: 100%; position: relative; isolation: isolate; }
+.map-scene .cinema svg { display: block; width: 100%; overflow: visible; }
+.map-scene .cinema text { font-family: var(--font-sans); }
+.map-scene .cinema.paused * { animation-play-state: paused !important; }
+.map-scene .cinema {width:100%;position:relative;isolation:isolate}
+.map-scene .cinema svg {width:100%;display:block;overflow:visible}
+.map-scene .cinema text {font-family:'Segoe UI',Arial,sans-serif}
+.map-scene .cinema .source-academic {transform-origin:141px 145px;animation:academicArrival 16s cubic-bezier(.22,1,.36,1) infinite}
+.map-scene .cinema .source-project {transform-origin:490px 278px;animation:projectArrival 16s cubic-bezier(.22,1,.36,1) infinite}
+.map-scene .cinema .source-thread {stroke-dasharray:200;animation:evidenceThread 16s ease-in-out infinite}
+.map-scene .cinema .core {transform-origin:315px 211px;animation:coreBloom 16s cubic-bezier(.22,1,.36,1) infinite}
+.map-scene .cinema .skill-network {transform-origin:315px 211px;animation:networkBloom 16s cubic-bezier(.22,1,.36,1) infinite}
+.map-scene .cinema .skill {transform-box:fill-box;transform-origin:center;animation:skillPop 16s cubic-bezier(.22,1,.36,1) infinite}
+.map-scene .cinema .skill-sql {animation-delay:.15s}
+.map-scene .cinema .skill-js {animation-delay:.3s}
+.map-scene .cinema .skill-git {animation-delay:.45s}
+.map-scene .cinema .role-card {transform-origin:493px 111px;animation:roleReveal 16s cubic-bezier(.22,1,.36,1) infinite}
+.map-scene .cinema .role-beam {stroke-dasharray:230;animation:roleBeam 16s ease-in-out infinite}
+.map-scene .cinema .gap-card {transform-origin:499px 309px;animation:gapReveal 16s cubic-bezier(.22,1,.36,1) infinite}
+.map-scene .cinema .learning-chip {transform-origin:165px 338px;animation:learnReveal 16s cubic-bezier(.22,1,.36,1) infinite}
+.map-scene .cinema .learning-path {stroke-dasharray:190;animation:learnPath 16s ease-in-out infinite}
+.map-scene .cinema .tiny-stars {animation:starReveal 16s ease-in-out infinite}
+.map-scene .cinema.paused * {animation-play-state:paused!important}
+.map-scene .cinema .skill text {font-size:17px}
+.map-scene .cinema .role-card text:nth-of-type(2) {font-size:19px}
+.map-scene .cinema .role-card text:nth-of-type(3),
+.map-scene .cinema .role-card text:nth-of-type(4) {font-size:14px}
+@media (prefers-reduced-motion: reduce) {
+  .map-scene .cinema * { animation: none !important; opacity: 1 !important; }
+  .map-scene .cinema .source-card,
+  .map-scene .cinema .source-thread,
+  .map-scene .cinema .tiny-stars { display: none; }
+  .map-scene .cinema .skill-network,
+  .map-scene .cinema .core { transform: translate(-98px, 0) scale(.72); }
+}
+
+@keyframes academicArrival{0%{opacity:0;transform:translate(-30px,25px) rotate(-7deg) scale(.9)}5%,17%{opacity:1;transform:translate(0,0) rotate(-3deg) scale(1)}25%,94%{opacity:0;transform:translate(174px,66px) rotate(0) scale(.12)}100%{opacity:0;transform:translate(-30px,25px) scale(.9)}}
+@keyframes projectArrival{0%,4%{opacity:0;transform:translate(30px,20px) rotate(7deg) scale(.9)}10%,18%{opacity:1;transform:translate(0,0) rotate(3deg) scale(1)}27%,94%{opacity:0;transform:translate(-175px,-67px) rotate(0) scale(.12)}100%{opacity:0;transform:translate(30px,20px) scale(.9)}}
+@keyframes evidenceThread{0%,14%{stroke-dashoffset:200;opacity:0}17%,23%{opacity:1;stroke-dashoffset:0}28%,100%{opacity:0}}
+@keyframes coreBloom{0%{opacity:0;transform:scale(.2)}9%,17%{opacity:1;transform:scale(.7)}24%{transform:scale(1.16);opacity:1}29%,47%{transform:scale(1);opacity:1}53%,88%{transform:translate(-98px,0) scale(.72);opacity:1}97%,100%{opacity:0;transform:translate(-98px,0) scale(.65)}}
+@keyframes orbitReveal{0%,19%{opacity:0;transform:scale(.6) rotate(-20deg)}32%,85%{opacity:.7;transform:scale(1) rotate(0)}96%,100%{opacity:0;transform:scale(1.1) rotate(8deg)}}
+@keyframes networkBloom{0%,24%{opacity:0;transform:scale(.08)}34%,47%{opacity:1;transform:scale(1)}53%,88%{opacity:1;transform:translate(-98px,0) scale(.72)}97%,100%{opacity:0;transform:translate(-98px,0) scale(.65)}}
+@keyframes skillPop{0%,25%{opacity:0;transform:scale(.1)}32%{opacity:1;transform:scale(1.1)}35%,90%{opacity:1;transform:scale(1)}97%,100%{opacity:0;transform:scale(.9)}}
+@keyframes roleReveal{0%,45%{opacity:0;transform:translate(45px,15px) scale(.85)}55%,89%{opacity:1;transform:translate(0,0) scale(1)}97%,100%{opacity:0;transform:translate(15px,-10px) scale(.97)}}
+@keyframes roleBeam{0%,43%{opacity:0;stroke-dashoffset:230}52%,87%{opacity:1;stroke-dashoffset:0}97%,100%{opacity:0}}
+@keyframes gapReveal{0%,63%{opacity:0;transform:translate(25px,15px) scale(.9)}73%,89%{opacity:1;transform:translate(0,0) scale(1)}97%,100%{opacity:0;transform:translate(0,8px)}}
+@keyframes learnReveal{0%,73%{opacity:0;transform:translate(0,20px) scale(.95)}82%,89%{opacity:1;transform:translate(0,0) scale(1)}97%,100%{opacity:0;transform:translate(0,10px)}}
+@keyframes learnPath{0%,72%{opacity:0;stroke-dashoffset:190}82%,89%{opacity:1;stroke-dashoffset:0}97%,100%{opacity:0}}
+@keyframes starReveal{0%,26%{opacity:0}31%{opacity:1}39%,100%{opacity:0}}
+@media (prefers-reduced-motion: reduce) {
+  .map-scene .cinema * { animation: none !important; opacity: 1 !important; }
+  .map-scene .cinema .source-card, .map-scene .cinema .source-thread, .map-scene .cinema .tiny-stars { display: none; }
+  .map-scene .cinema .skill-network, .map-scene .cinema .core { transform: translate(-98px, 0) scale(.72); }
+}
+
+@keyframes academicArrival{0%{opacity:0;transform:translate(-30px,25px) rotate(-7deg) scale(.9)}5%,17%{opacity:1;transform:translate(0,0) rotate(-3deg) scale(1)}25%,94%{opacity:0;transform:translate(174px,66px) rotate(0) scale(.12)}100%{opacity:0;transform:translate(-30px,25px) scale(.9)}}
+@keyframes projectArrival{0%,4%{opacity:0;transform:translate(30px,20px) rotate(7deg) scale(.9)}10%,18%{opacity:1;transform:translate(0,0) rotate(3deg) scale(1)}27%,94%{opacity:0;transform:translate(-175px,-67px) rotate(0) scale(.12)}100%{opacity:0;transform:translate(30px,20px) scale(.9)}}
+@keyframes evidenceThread{0%,14%{stroke-dashoffset:200;opacity:0}17%,23%{opacity:1;stroke-dashoffset:0}28%,100%{opacity:0}}
+@keyframes coreBloom{0%{opacity:0;transform:scale(.2)}9%,17%{opacity:1;transform:scale(.7)}24%{transform:scale(1.16);opacity:1}29%,47%{transform:scale(1);opacity:1}53%,88%{transform:translate(-98px,0) scale(.72);opacity:1}97%,100%{opacity:0;transform:translate(-98px,0) scale(.65)}}
+@keyframes orbitReveal{0%,19%{opacity:0;transform:scale(.6) rotate(-20deg)}32%,85%{opacity:.7;transform:scale(1) rotate(0)}96%,100%{opacity:0;transform:scale(1.1) rotate(8deg)}}
+@keyframes networkBloom{0%,24%{opacity:0;transform:scale(.08)}34%,47%{opacity:1;transform:scale(1)}53%,88%{opacity:1;transform:translate(-98px,0) scale(.72)}97%,100%{opacity:0;transform:translate(-98px,0) scale(.65)}}
+@keyframes skillPop{0%,25%{opacity:0;transform:scale(.1)}32%{opacity:1;transform:scale(1.1)}35%,90%{opacity:1;transform:scale(1)}97%,100%{opacity:0;transform:scale(.9)}}
+@keyframes roleReveal{0%,45%{opacity:0;transform:translate(45px,15px) scale(.85)}55%,89%{opacity:1;transform:translate(0,0) scale(1)}97%,100%{opacity:0;transform:translate(15px,-10px) scale(.97)}}
+@keyframes roleBeam{0%,43%{opacity:0;stroke-dashoffset:230}52%,87%{opacity:1;stroke-dashoffset:0}97%,100%{opacity:0}}
+@keyframes gapReveal{0%,63%{opacity:0;transform:translate(25px,15px) scale(.9)}73%,89%{opacity:1;transform:translate(0,0) scale(1)}97%,100%{opacity:0;transform:translate(0,8px)}}
+@keyframes learnReveal{0%,73%{opacity:0;transform:translate(0,20px) scale(.95)}82%,89%{opacity:1;transform:translate(0,0) scale(1)}97%,100%{opacity:0;transform:translate(0,10px)}}
+@keyframes learnPath{0%,72%{opacity:0;stroke-dashoffset:190}82%,89%{opacity:1;stroke-dashoffset:0}97%,100%{opacity:0}}
+@keyframes starReveal{0%,26%{opacity:0}31%{opacity:1}39%,100%{opacity:0}}
+@keyframes humanRoleReveal{0%,45%{opacity:0;transform:translate(45px,76px) scale(.85)}55%,89%{opacity:1;transform:translate(0,61px) scale(1)}97%,100%{opacity:0;transform:translate(15px,51px) scale(.97)}}
+@keyframes employerArrives{0%,40%{opacity:0;transform:translate(20px,-8px)}50%,89%{opacity:1;transform:translate(0,0)}97%,100%{opacity:0}}
+@keyframes studentPresence{0%{opacity:0;transform:translateY(10px)}7%,89%{opacity:1;transform:translateY(0)}97%,100%{opacity:0}}
+.map-scene .cinema .employer-person { transform-origin: 493px 54px; animation: employerArrives 16s cubic-bezier(.22,1,.36,1) infinite; }
+.map-scene .cinema .employer-thread { animation: employerArrives 16s ease-in-out infinite; }
+.map-scene .cinema .student-tag { animation: studentPresence 16s ease-in-out infinite; }
+.map-scene .cinema .role-card { transform-origin: 493px 172px; animation: humanRoleReveal 16s cubic-bezier(.22,1,.36,1) infinite; }
+.map-scene .cinema .core text { paint-order: stroke; stroke: #eef2ff; stroke-width: 4px; stroke-linejoin: round; }
+@media (prefers-reduced-motion: reduce) {
+  .map-scene .cinema .employer-person, .map-scene .cinema .employer-thread, .map-scene .cinema .student-tag { animation: none !important; opacity: 1 !important; transform: none; }
+}
+
+/* ── Dashboard tiles (17 Nov, DESIGN-SYSTEM.md §5–6) ──────────────────────────────────────────────────────────
+   Laptop and tablet: exactly one screen; the two rows share the height and each chart takes what is left.
+   Phones: one column, the page scrolls, the tab bar sits at the bottom. All motion is off under reduced motion. */
+@custom-variant dash-short (@media (min-width: 768px) and (max-height: 820px));
+/* 20 Nov (her window is ~1440x735): one more step for laptops this short */
+@custom-variant dash-tight (@media (min-width: 768px) and (max-height: 760px));
+@media (min-width: 768px) and (min-height: 680px) {
+  .dash-fit { height: calc(100dvh - var(--bar-h)); }
+  .dash-tiles { grid-template-rows: minmax(0, 1fr) minmax(0, 1fr); }
+  .dash-tiles.dash-banded { grid-template-rows: auto minmax(0, 1fr); }      /* the goal band takes what it needs */
+}
+.dash-tile { animation: dash-reveal .5s cubic-bezier(.2, .8, .2, 1) both; animation-delay: calc(var(--n, 0) * 70ms + 60ms);
+  transition: transform .15s ease-out, box-shadow .15s ease-out; }
+.dash-rise-in { animation: dash-reveal .45s cubic-bezier(.2, .8, .2, 1) both; }
+@keyframes dash-reveal { from { opacity: 0; transform: translateY(28px) scale(.97); filter: blur(10px); } to { opacity: 1; transform: none; filter: none; } }
+/* a light that follows the pointer round the card edge (mouse only) */
+.dash-tile::after { content: ""; position: absolute; inset: 0; border-radius: inherit; padding: 1.5px; pointer-events: none; opacity: 0; transition: opacity .25s;
+  background: radial-gradient(260px circle at var(--mx, 50%) var(--my, 0%), rgb(37 87 196 / 85%), rgb(37 87 196 / 0%) 70%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; }
+@media (hover: hover) and (pointer: fine) {
+  .dash-tile:hover { transform: translateY(-3px); box-shadow: 0 1px 2px rgb(20 30 60 / 6%), 0 20px 40px -22px rgb(20 30 60 / 30%); }
+  .dash-tile:hover::after { opacity: 1; }
+}
+/* the one featured card: pale blue + topographic contour lines (the footprints walk across a map) */
+.dash-featured { background-color: #eef4fe; background-image: url("/topo.svg"), var(--grad-hero); background-size: 420px 320px, auto; border-color: #d7e4fb; }
+/* footprints step in one by one; bars, funnel and histogram grow in */
+.dash-step { transform-box: fill-box; transform-origin: center; animation: dash-step .35s cubic-bezier(.3, 1.5, .5, 1) both; animation-delay: calc(var(--i, 0) * 60ms + 250ms); }
+@keyframes dash-step { from { opacity: 0; transform: scale(.4); } }
+.dash-grow { transform-origin: left; animation: dash-grow .5s cubic-bezier(.2, .8, .2, 1) both; animation-delay: calc(var(--k, 0) * 60ms + 200ms); }
+@keyframes dash-grow { from { transform: scaleX(0); } }
+.dash-spread { transform-origin: center; animation: dash-grow .5s cubic-bezier(.2, .8, .2, 1) both; animation-delay: calc(var(--k, 0) * 60ms + 200ms); }
+.dash-rise { transform-origin: bottom; animation: dash-rise .5s cubic-bezier(.2, .8, .2, 1) both; animation-delay: calc(var(--k, 0) * 60ms + 200ms); }
+@keyframes dash-rise { from { transform: scaleY(0); } }
+/* the invitation pulses three times, then is still */
+.dash-ping { animation: dash-ping 1.6s ease-out .8s 3; }
+@keyframes dash-ping { from { box-shadow: 0 0 0 0 rgb(37 87 196 / 40%); } to { box-shadow: 0 0 0 12px rgb(37 87 196 / 0%); } }
+/* one breathing main button per screen */
+.dash-breathe:not(:disabled) { animation: dash-breathe 1.6s ease-out infinite; }
+@keyframes dash-breathe { from { box-shadow: 0 0 0 0 rgb(37 87 196 / 40%); } to { box-shadow: 0 0 0 9px rgb(37 87 196 / 0%); } }
+/* ticking a skill: the box pops in, the tick draws */
+.dash-check { appearance: none; -webkit-appearance: none; margin: 0; border-radius: 6px; border: 2px solid #b8bccb; background: #fff; display: grid; place-items: center; cursor: pointer; transition: background-color .2s, border-color .2s; }
+.dash-check::after { content: ""; width: 11px; height: 6px; border-left: 2.5px solid #fff; border-bottom: 2.5px solid #fff; transform: translateY(-1px) rotate(-45deg); clip-path: inset(0 100% 0 0); transition: clip-path .3s ease-out .05s; }
+.dash-check:checked { background: var(--color-plan); border-color: var(--color-plan); animation: dash-pop .5s cubic-bezier(.3, 1.6, .5, 1); }
+.dash-check:checked::after { clip-path: inset(0 0 0 0); }
+@keyframes dash-pop { from { transform: scale(.8); } }
+@media (prefers-reduced-motion: reduce) {
+  .dash-tile, .dash-rise-in, .dash-step, .dash-grow, .dash-spread, .dash-rise, .dash-ping, .dash-breathe, .dash-check:checked { animation: none !important; }
+}
+
+/* phones: every control outside running text is at least 44px tall (WCAG 2.5.5 / taste-skill tap-size) */
+@media (max-width: 639px) {
+  header a, header button, .dash-tile a:not(p a), .dash-tile button, .dash-tile label { min-height: 44px; }
+  .dash-tile a:not(p a) { display: inline-flex; align-items: center; justify-content: center; }
+  /* a line that holds a link is itself 44px tall, so the link's tap area never reaches into a neighbour */
+  .dash-tile p:has(> a) { min-height: 44px; display: flex; flex-wrap: wrap; align-items: center; column-gap: .3em; }
+}
+
+/* frosted glass inside the featured card: the blur softens the map lines behind the text */
+.dash-frost { background: rgb(255 255 255 / 62%); border: 1px solid rgb(255 255 255 / 85%);
+  -webkit-backdrop-filter: blur(10px) saturate(140%); backdrop-filter: blur(10px) saturate(140%);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 90%), 0 8px 24px -16px rgb(30 50 110 / 25%); }
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) { .dash-frost { background: rgb(255 255 255 / 94%); } }
+@media (prefers-reduced-transparency: reduce) { .dash-frost { background: #fff; -webkit-backdrop-filter: none; backdrop-filter: none; } }
+
+/* everything you can click shows the hand cursor (Tailwind v4 leaves buttons on the arrow) */
+@layer base { button:not(:disabled), [role="button"], label:has(> input:not(:disabled)) { cursor: pointer; } }
+
+/* tiles: separated by tone and a soft shadow, no grey line (de-plastic) */
+.dash-tile { box-shadow: 0 1px 2px rgb(20 30 60 / 4%), 0 16px 36px -22px rgb(20 30 60 / 26%); }
+/* a footprint planned or unplanned fades between the two looks */
+.dash-step { transition: fill .3s ease-out, stroke .3s ease-out; }
+/* charts wait at zero until their tile is on screen (phones), then grow once */
+.dash-wait .dash-grow, .dash-wait .dash-rise, .dash-wait .dash-spread, .dash-wait .dash-step { animation-play-state: paused; }
+/* invitations fanning out, one after another */
+.dash-fan { animation: dash-fan .35s cubic-bezier(.2, .8, .2, 1) both; animation-delay: calc(var(--k, 0) * 60ms); }
+@keyframes dash-fan { from { opacity: 0; transform: translateY(-14px) scale(.97); } }
+/* controls: focus keeps its ring and gains a soft halo instead of a harsh edge */
+.dash-tile :is(button, a, input, select):focus-visible { box-shadow: 0 0 0 4px var(--color-accent-soft); }
+@media (prefers-reduced-motion: reduce) { .dash-fan { animation: none !important; } .dash-step { transition: none; } }
+
+/* 1024–1279 wide and short: the goal card's number shrinks a step so its key stays inside the card */
+@media (min-width: 768px) and (max-width: 1279px) and (max-height: 820px) {
+  .dash-tile .font-display.text-\[92px\] { font-size: 60px; }
+}
+
+/* Job Matches cards (17 Nov): tone + soft shadow, rise in one after another, lift with a light round the edge */
+.jm-card { box-shadow: 0 1px 2px rgb(20 30 60 / 4%), 0 10px 26px -20px rgb(20 30 60 / 26%);
+  animation: dash-fan .4s cubic-bezier(.2, .8, .2, 1) both; animation-delay: calc(var(--k, 0) * 45ms);
+  transition: transform .15s ease-out, box-shadow .15s ease-out; }
+.jm-card::after { content: ""; position: absolute; inset: 0; border-radius: inherit; padding: 1.5px; pointer-events: none; opacity: 0; transition: opacity .25s;
+  background: radial-gradient(240px circle at var(--mx, 50%) var(--my, 0%), rgb(37 87 196 / 80%), rgb(37 87 196 / 0%) 70%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; }
+@media (hover: hover) and (pointer: fine) {
+  .jm-card:hover { transform: translateY(-2px); box-shadow: 0 1px 2px rgb(20 30 60 / 6%), 0 18px 34px -20px rgb(20 30 60 / 32%); }
+  .jm-card:hover::after { opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) { .jm-card { animation: none !important; } }
+
+/* the line draws itself once, left to right */
+.dash-draw { stroke-dasharray: 1; stroke-dashoffset: 1; animation: dash-draw .9s cubic-bezier(.2, .8, .2, 1) .35s forwards; }
+@keyframes dash-draw { to { stroke-dashoffset: 0; } }
+@media (prefers-reduced-motion: reduce) { .dash-draw { animation: none; stroke-dashoffset: 0; } }
+
+/* ── Bento dashboard (18 Nov, review/dashboard-bento.html) ─────────────────────────────────────────────────────
+   Laptop (≥1024): six cards of different sizes in one screen. Tablet: two columns. Phone: one column, AI last;
+   My Applications second when there is something in it, else just before the AI card. */
+.dash-bento { display: grid; gap: 14px; grid-template-columns: repeat(12, minmax(0, 1fr));
+  grid-template-areas: "goal goal goal goal goal goal goal apps apps apps apps apps"
+                       "grow grow grow grow jobs jobs jobs jobs jobs side side side"; grid-template-rows: auto minmax(0, 1fr); }
+.dash-bento.no-goal { grid-template-areas: "goal goal goal goal goal goal apps apps apps side side side"
+                                           "goal goal goal goal goal goal jobs jobs jobs side side side"; grid-template-rows: auto minmax(0, 1fr); }
+.a-goal { grid-area: goal; } .a-apps { grid-area: apps; } .a-grow { grid-area: grow; } .a-jobs { grid-area: jobs; }
+.dash-side { grid-area: side; display: flex; flex-direction: column; gap: 14px; min-height: 0; }
+/* 20 Nov (her review on a ~1440x735 window): the application list never sets the top row's height (the goal card
+   does); it fills what is left and scrolls inside, so more applications can't push the lower cards off the screen */
+@media (min-width: 1024px) {   /* the skill chips fill what the AI card leaves and scroll inside, so the AI card is never pushed off the screen */
+  .dash-side .a-want { flex: 0 1 auto; min-height: 0; } .dash-want-list { min-height: 0; overflow-y: auto; } }
+@media (max-width: 1023px) {
+  .dash-bento, .dash-bento.no-goal { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: auto auto minmax(0, 1fr) auto;
+    grid-template-areas: "goal goal" "apps apps" "grow jobs" "side side"; }
+  .dash-bento.no-goal { grid-template-areas: "goal goal" "apps jobs" "side side"; grid-template-rows: auto minmax(0, 1fr) auto; }
+  .dash-side { flex-direction: row; } .dash-side > * { flex: 1; }
+}
+@media (max-width: 767px) {
+  .dash-bento, .dash-bento.no-goal { display: flex; flex-direction: column; }
+  .dash-side { display: contents; }
+  .a-goal { order: 1; } .a-apps { order: 2; } .a-grow { order: 3; } .a-jobs { order: 4; } .a-want { order: 5; } .a-ai { order: 7; }
+  .dash-bento.no-apps .a-apps { order: 6; }
+  .a-grow [role="group"], .a-apps ul { max-height: 340px; }
+}
+/* the goal card: frosted glass with the map's contour lines, soft colour drifting behind it */
+.dash-glass { background: url("/topo.svg"), rgb(255 255 255 / 45%); background-size: 420px 320px, auto; border-color: rgb(255 255 255 / 85%);
+  -webkit-backdrop-filter: blur(22px) saturate(160%); backdrop-filter: blur(22px) saturate(160%);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 90%), 0 16px 36px -22px rgb(20 30 60 / 30%); }
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) { .dash-glass { background-color: #eef4ff; } }
+@media (prefers-reduced-transparency: reduce) { .dash-glass { background-color: #eef4ff; backdrop-filter: none; -webkit-backdrop-filter: none; } }
+.dash-fit { position: relative; }
+.dash-orbs { position: absolute; inset: 0; z-index: -1; pointer-events: none; overflow: hidden; }
+.dash-orbs i { position: absolute; border-radius: 50%; filter: blur(6px); animation: dash-drift 24s ease-in-out infinite alternate; }
+.dash-orbs i:nth-child(1) { width: 300px; height: 300px; left: 4%; top: 40px; background: radial-gradient(circle, #a9cdfb, transparent 68%); }
+.dash-orbs i:nth-child(2) { width: 260px; height: 260px; left: 32%; top: 70px; background: radial-gradient(circle, #a6e3da, transparent 68%); animation-delay: -8s; }
+.dash-orbs i:nth-child(3) { width: 240px; height: 240px; left: 16%; top: 170px; background: radial-gradient(circle, #f8c3b2, transparent 68%); animation-delay: -14s; }
+@keyframes dash-drift { to { transform: translate(40px, -20px) scale(1.08); } }
+/* the AI card: a soft corner glow, no pattern behind the text */
+.dash-aiglow { background: radial-gradient(220px 160px at 100% 0%, rgb(37 87 196 / 16%), transparent 70%), radial-gradient(200px 140px at 0% 100%, rgb(19 153 140 / 12%), transparent 70%), #fff; }
+/* My Applications: how far they got, as connected dots like the footprint route */
+.dash-track li { position: relative; text-align: center; padding-top: 20px; }
+.dash-track li::before { content: ""; position: absolute; top: 3px; left: 50%; width: 12px; height: 12px; margin-left: -6px; border-radius: 50%; background: #fff; box-shadow: inset 0 0 0 2.5px #b2bccb; z-index: 1; }
+.dash-track li.on::before { background: var(--color-accent); box-shadow: 0 0 0 4px var(--color-accent-soft); }
+.dash-track li + li::after { content: ""; position: absolute; top: 8px; right: 50%; width: 100%; height: 2px; background: #d6dce5; }
+.dash-track li.on + li.on::after { background: var(--color-accent); }
+@media (prefers-reduced-motion: reduce) { .dash-orbs i { animation: none; } }
+
+/* short or narrow laptops: the third ready question and the chip key give way, so the right column fits */
+@media (min-width: 1024px) and (max-height: 820px), (min-width: 1024px) and (max-width: 1279px) {
+  .dash-key { display: none; }
+  .a-want li { font-size: 12.5px; padding-block: 2px; }
+}
+/* tablets: the cards keep their natural height and the page scrolls, instead of squeezing the charts */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .dash-fit { height: auto !important; }
+  .dash-bento, .dash-bento.no-goal { grid-template-rows: none; }
+  .a-jobs [aria-pressed] { min-height: 120px; }
+}
+/* very short laptops (720–760 tall) keep one ready question; narrow laptops drop the modes line */
+@media (min-width: 1024px) and (max-width: 1279px) { .a-ai > p { display: none; } }
+@media (min-width: 1024px) and (max-width: 1279px) and (max-height: 820px) { .a-want li { padding-block: 1px; } }
+/* 20 Nov (her review: blank in the AI card): the card takes the column's spare height and shows as many ready
+   questions as fit, whole (a column-wrap list: the ones that don't fit wrap into a hidden column), spread evenly */
+@media (min-width: 1024px) {
+  .dash-side .a-ai { flex: 1 1 0; min-height: 124px; }
+  .dash-asks { flex: 1; min-height: 34px; display: flex; flex-direction: column; flex-wrap: wrap; justify-content: space-evenly;
+    align-content: flex-start; column-gap: 40px; overflow: hidden; }
+  .dash-asks > li { width: 100%; }
+}
+
+/* ── Page headers (19 Nov, her pick B: review/page-headers.html) ─────────────────────────────────────────────────
+   The Dashboard goal card's recipe on every page: glass, the map texture, soft blue/teal/coral glows, the page's
+   menu icon in a blue tile. Unlayered, so it outranks the old utility classes the pages still pass to their heading */
+.page-glass { position: relative; isolation: isolate; overflow: visible; border-radius: 24px; border: 1px solid rgb(255 255 255 / 90%);
+  background: rgb(255 255 255 / 50%); -webkit-backdrop-filter: blur(16px) saturate(130%); backdrop-filter: blur(16px) saturate(130%);
+  box-shadow: 0 1px 2px rgb(20 30 60 / 5%), 0 22px 44px -26px rgb(20 30 60 / 35%); }
+.page-glass::before { content: ""; position: absolute; inset: 0; z-index: -1; background: url("/topo.svg") 0 0 / 420px 320px; }
+.page-glass::after { content: ""; position: absolute; inset: 0; z-index: -2;
+  background: radial-gradient(260px 200px at 8% 0%, rgb(37 87 196 / 18%), transparent 70%),
+              radial-gradient(300px 220px at 70% 120%, rgb(19 153 140 / 18%), transparent 70%),
+              radial-gradient(240px 200px at 100% 0%, rgb(233 121 90 / 16%), transparent 70%); }
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) { .page-glass { background-color: rgb(244 248 255 / 92%); } }
+@media (prefers-reduced-transparency: reduce) { .page-glass { background-color: #f4f8ff; backdrop-filter: none; -webkit-backdrop-filter: none; } }
+.page-glass-ic { position: absolute; left: 28px; top: 24px; width: 52px; height: 52px; border-radius: 15px; display: grid; place-items: center;
+  background: linear-gradient(140deg, #3a6fd8, #1d469f); color: #fff; box-shadow: 0 10px 22px -10px rgb(37 87 196 / 70%); }
+.page-glass-ic svg { width: 24px; height: 24px; }
+.page-glass-body { padding-left: 98px; }
+/* the page's own heading, restyled in place: eyebrow in mono, a bolder display title, the one line in muted ink */
+.page-glass .uppercase.tracking-widest { font-family: var(--font-mono); font-weight: 500; letter-spacing: .09em; color: var(--color-accent); margin-bottom: 2px; }
+.page-glass h1 { font-family: var(--font-display); font-weight: 800; font-size: 30px; line-height: 1.08; letter-spacing: -0.045em; color: var(--color-ink); }
+/* 20 Nov (her review on a ~1440x735 window: "feeling compressed"): on short screens the header gives height back */
+@media (min-width: 640px) and (max-height: 820px) {
+  .page-glass { margin-top: 12px; }
+  .page-glass-ic { top: 18px; width: 44px; height: 44px; border-radius: 13px; }
+  .page-glass-ic svg { width: 21px; height: 21px; }
+  .page-glass-body { padding-left: 88px; padding-top: 14px; }
+  .page-glass h1 { font-size: 26px; }
+  .page-glass .head-stats dd { font-size: 21px; }
+  .page-glass .head-stats > div { padding: 5px 13px; }
+}
+@media (max-width: 639px) {
+  .page-glass-ic { left: 16px; top: 18px; width: 40px; height: 40px; border-radius: 12px; }
+  .page-glass-ic svg { width: 20px; height: 20px; }
+  .page-glass-body { padding-left: 68px; }
+  .page-glass h1 { font-size: 24px; }
+}
+
+/* ── Ocean palette for every screen (18 Nov preview shots/ocean-preview, built 19 Nov) ─────────────────────────────
+   Tailwind's own colour steps redefined as Ocean shades, so screens that still use blue-600 / slate-500 / emerald-700 …
+   take the Dashboard palette. One meaning per hue: blue/sky/indigo/violet -> action blue · slate/gray -> ink and lines ·
+   emerald/green/teal -> have teal · rose/red/orange/pink -> coral · amber/yellow -> partial gold. Unlayered :root, so
+   it outranks the defaults Tailwind writes in @layer theme */
+:root {
+  --color-blue-50:#f1f5fd; --color-blue-100:#e3ebfa; --color-blue-200:#c8d7f4; --color-blue-300:#a3bcec; --color-blue-400:#6b93dc;
+  --color-blue-500:#3f72d3; --color-blue-600:#2557c4; --color-blue-700:#1d469f; --color-blue-800:#193b83; --color-blue-900:#16326b;
+
+  --color-slate-50:#f4f7fb; --color-slate-100:#eef2f8; --color-slate-200:#e3e6ee; --color-slate-300:#d3d8e2; --color-slate-400:#8f97ab;
+  --color-slate-500:#5c5976; --color-slate-600:#4a4766; --color-slate-700:#3a3754; --color-slate-800:#26243f; --color-slate-900:#16142b;
+
+  --color-emerald-50:#edf8f6; --color-emerald-100:#dcf2ef; --color-emerald-200:#b5e3dd; --color-emerald-300:#84cfc6; --color-emerald-400:#4fb6aa;
+  --color-emerald-500:#13998c; --color-emerald-600:#0e7d71; --color-emerald-700:#0a6c62; --color-emerald-800:#08574f; --color-emerald-900:#064740;
+
+  --color-rose-50:#fef4f0; --color-rose-100:#fdece6; --color-rose-200:#f9d3c6; --color-rose-300:#f3b19b; --color-rose-400:#ee9478;
+  --color-rose-500:#e9795a; --color-rose-600:#c4532f; --color-rose-700:#a43c20; --color-rose-800:#86301a; --color-rose-900:#6e2410;
+
+  --color-amber-50:#fffaeb; --color-amber-100:#fff4d6; --color-amber-200:#fde6a8; --color-amber-300:#f7d070; --color-amber-400:#edb73a;
+  --color-amber-500:#e0a21a; --color-amber-600:#b98310; --color-amber-700:#94690a; --color-amber-800:#7d5600; --color-amber-900:#5f4100;
+}
+/* the other names point at the five families above */
+:root {
+  --color-sky-50:var(--color-blue-50); --color-sky-200:var(--color-blue-200); --color-sky-800:var(--color-blue-800);
+  --color-indigo-50:var(--color-blue-50); --color-indigo-600:var(--color-blue-600); --color-indigo-700:var(--color-blue-700);
+  --color-violet-50:var(--color-blue-50); --color-violet-100:var(--color-blue-100); --color-violet-200:var(--color-blue-200); --color-violet-400:var(--color-blue-400);
+  --color-violet-500:var(--color-blue-500); --color-violet-700:var(--color-blue-700); --color-violet-800:var(--color-blue-800); --color-violet-900:var(--color-blue-900);
+  --color-gray-50:var(--color-slate-50); --color-gray-100:var(--color-slate-100); --color-gray-200:var(--color-slate-200); --color-gray-300:var(--color-slate-300);
+  --color-gray-400:var(--color-slate-400); --color-gray-500:var(--color-slate-500); --color-gray-600:var(--color-slate-600); --color-gray-700:var(--color-slate-700);
+  --color-gray-800:var(--color-slate-800); --color-gray-900:var(--color-slate-900);
+  --color-green-50:var(--color-emerald-50); --color-green-500:var(--color-emerald-500); --color-green-600:var(--color-emerald-600);
+  --color-green-700:var(--color-emerald-700); --color-green-800:var(--color-emerald-800); --color-teal-700:var(--color-emerald-700);
+  --color-red-50:var(--color-rose-50); --color-red-100:var(--color-rose-100); --color-red-400:var(--color-rose-400); --color-red-500:var(--color-rose-500);
+  --color-red-600:var(--color-rose-600); --color-red-700:var(--color-rose-700); --color-orange-500:var(--color-rose-500); --color-orange-700:var(--color-rose-700);
+  --color-pink-700:var(--color-rose-700);
+  --color-yellow-500:var(--color-amber-500); --color-yellow-600:var(--color-amber-600);
+}
+
+/* ── My Applications (19 Nov, mock review/page-headers.html) ───────────────────────────────────────────────────── */
+/* the header's counts: one white strip; the number on top, its label under it */
+.head-stats { display: flex; margin: 0; padding: 4px; border-radius: 16px; background: #fff; border: 1px solid rgb(20 30 60 / 8%);
+  box-shadow: 0 1px 2px rgb(20 30 60 / 6%), 0 10px 24px -14px rgb(20 30 60 / 35%); }
+.head-stats > div { display: flex; flex-direction: column-reverse; min-width: 84px; padding: 7px 14px; }
+.head-stats > div + div { border-left: 1px solid var(--color-line); }
+.head-stats dd { margin: 0; font-family: var(--font-display); font-weight: 800; font-size: 24px; letter-spacing: -0.04em; line-height: 1.1; color: var(--color-ink); }
+.head-stats dt { font-size: 12px; font-weight: 600; color: var(--color-ink-soft); }
+.head-stats .blue dd { color: var(--color-accent-strong); } .head-stats .good dd { color: var(--color-have-strong); } .head-stats .todo dd { color: var(--color-missing-strong); }
+@media (min-width: 1280px) { .head-line { white-space: nowrap; } }
+/* How it works: a filled pill by the title, a popover under it (centred where anchoring isn't supported) */
+.how-pill { display: inline-flex; align-items: center; gap: 7px; height: 34px; padding: 0 14px 0 10px; border-radius: 999px; border: 1px solid #c8d7f4;
+  background: var(--color-accent-soft); color: var(--color-accent-strong); font-weight: 700; font-size: 13.5px; anchor-name: --how;
+  box-shadow: 0 6px 16px -10px rgb(37 87 196 / 60%); transition: background .2s, transform .15s; }
+.how-pill:hover { background: #d6e2f8; } .how-pill:active { transform: translateY(2px); }
+.how-pill svg { width: 17px; height: 17px; }
+.how-pill.fresh { animation: how-ping 1.8s ease-out .9s 3; }
+@keyframes how-ping { from { box-shadow: 0 0 0 0 rgb(37 87 196 / 45%); } to { box-shadow: 0 0 0 12px rgb(37 87 196 / 0%); } }
+.how-pop { margin: 0; inset: auto; position-anchor: --how; top: anchor(bottom); left: anchor(left); translate: 0 10px; width: min(360px, calc(100vw - 32px));
+  padding: 18px 20px; border: 1px solid var(--color-line); border-radius: 18px; background: #fff; color: var(--color-ink); box-shadow: 0 24px 60px -24px rgb(20 30 60 / 45%); }
+@supports not (position-anchor: --x) { .how-pop { inset: 0; margin: auto; height: max-content; } }
+.how-pop .how-title { font-family: var(--font-mono); font-size: 11.5px; letter-spacing: .09em; text-transform: uppercase; color: var(--color-ink-soft); margin: 0 0 8px; }
+.how-pop ol { margin: 0; padding-left: 18px; list-style: decimal; } .how-pop li { margin: 7px 0; color: var(--color-ink-soft); font-size: 14px; } .how-pop li b { color: var(--color-ink); }
+.how-pop .how-fine { margin: 10px 0 14px; font-size: 12.5px; color: var(--color-muted); }
+.how-pop .how-ok { height: 34px; padding: 0 14px; border-radius: 10px; background: var(--color-accent-soft); color: var(--color-accent-strong); font-weight: 700; font-size: 13px; }
+/* "more jobs" by the filters */
+.more-jobs { margin-left: auto; display: inline-flex; align-items: center; gap: 9px; height: 36px; padding: 0 14px; border-radius: 999px; background: rgb(255 255 255 / 85%);
+  border: 1px solid rgb(20 30 60 / 8%); box-shadow: var(--shadow-card); color: var(--color-ink-soft); font-size: 13.5px; transition: transform .15s, box-shadow .2s; }
+.more-jobs b { color: var(--color-accent-strong); } .more-jobs:hover { transform: translateY(-2px); }
+@media (max-width: 899px) { .more-jobs { margin-left: 0; width: 100%; justify-content: space-between; } }
+/* the two kinds of application: live (SkillMap) vs self-tracked (other sites), by weight and wording */
+.src-head { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 10px; }
+.src-head h2 { margin: 0; font-family: var(--font-display); font-size: 18px; font-weight: 800; letter-spacing: -0.03em; color: var(--color-ink); }
+.src-n { font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--color-muted); background: var(--color-well); padding: 1px 7px; border-radius: 999px; vertical-align: 3px; letter-spacing: 0; }
+.src-mark { width: 30px; height: 30px; border-radius: 9px; display: grid; place-items: center; background: var(--color-accent-soft); color: var(--color-accent); }
+.src-mark.self { background: #fff; color: var(--color-muted); border: 1px solid var(--color-line-strong); }
+.src-mark.self svg { width: 15px; height: 15px; }
+.src-badge { margin-left: auto; display: inline-flex; align-items: center; gap: 7px; font-size: 12.5px; font-weight: 600; padding: 4px 11px; border-radius: 999px; }
+.src-badge.live { color: var(--color-accent-strong); background: var(--color-accent-soft); }
+.src-badge.live i { width: 7px; height: 7px; border-radius: 50%; background: var(--color-accent); animation: src-live 2.4s ease-out infinite; }
+@keyframes src-live { 0% { box-shadow: 0 0 0 0 rgb(37 87 196 / 50%); } 70%, 100% { box-shadow: 0 0 0 6px rgb(37 87 196 / 0%); } }
+.src-badge.self { color: var(--color-ink-soft); background: #fff; border: 1px solid var(--color-line-strong); }
+.src-head > button { margin-left: 4px; }
+.src-list.live { border-color: #d7e4fb !important; box-shadow: 0 1px 2px rgb(20 30 60 / 5%), 0 16px 36px -20px rgb(37 87 196 / 35%); }
+.src-list.self { background: rgb(255 255 255 / 62%) !important; border-color: rgb(20 30 60 / 8%) !important; }
+/* a row's facts: exactly two lines */
+.app-meta { margin-top: 3px; min-width: 0; }
+.app-meta .l1 { font-size: 12.5px; color: var(--color-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.app-meta .l2 { display: flex; align-items: center; gap: 6px; margin-top: 5px; white-space: nowrap; }
+.app-meta .via { display: inline-flex; padding: 1px 8px; border-radius: 6px; border: 1px solid var(--color-line-strong); background: #fff; color: var(--color-ink-soft); font-weight: 700; font-size: 11.5px; }
+.app-meta .via.sm { border-color: #c8d7f4; background: var(--color-accent-soft); color: var(--color-accent-strong); }
+.app-meta .fitpill { font-family: var(--font-mono); font-size: 11.5px; padding: 1px 7px; border-radius: 6px; background: var(--color-have-soft); color: var(--color-have-strong); }
+.app-meta .fitpill.low { background: var(--color-missing-soft); color: var(--color-missing-strong); }
+/* a step: a filled dot with a tick when done; teal for good news */
+.step-dot { flex: none; width: 15px; height: 15px; border-radius: 50%; background: #fff; border: 2px solid var(--color-line-strong); }
+.step-dot.on { border-color: var(--color-accent); background: var(--color-accent) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 8.5l2.6 2.5L12 5.5' fill='none' stroke='%23fff' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 11px no-repeat; }
+.step-dot.good { border-color: var(--color-have); background-color: var(--color-have); }
+/* the offer burst */
+.confetti { position: fixed; left: 0; top: 0; width: 0; height: 0; pointer-events: none; z-index: 60; }
+.confetti i { position: absolute; left: 0; top: 0; width: 7px; height: 10px; border-radius: 2px; }
+@media (prefers-reduced-motion: reduce) { .how-pill.fresh, .src-badge.live i { animation: none; } }
+/* employer My Jobs: what needs them, as a quiet second line under the applicant count (19 Nov) */
+.to-review { display: flex; align-items: center; gap: 6px; margin-top: 2px; font-size: 12.5px; font-weight: 700; color: var(--color-missing-strong); white-space: nowrap; }
+.to-review i { width: 7px; height: 7px; border-radius: 50%; background: var(--color-missing); box-shadow: 0 0 0 3px var(--color-missing-soft); }
+/* a header's one main action (My Jobs: Post a job), solid with the 3px press */
+.head-cta { display: inline-flex; align-items: center; gap: 8px; height: 44px; padding: 0 18px; border-radius: 12px; background: var(--color-accent); color: #fff; font-weight: 700; font-size: 14.5px; box-shadow: 0 3px 0 var(--color-accent-strong), 0 10px 24px -12px rgb(37 87 196 / 60%); transition: transform .12s, box-shadow .12s, background .2s; white-space: nowrap; }
+.head-cta:hover { background: #2a5fd0; } .head-cta:active { transform: translateY(3px); box-shadow: 0 0 0 var(--color-accent-strong); }
+.head-cta svg { width: 16px; height: 16px; }
+
+/* one page width for every screen (19 Nov, her review: pages were 40–1400 while the Dashboard and Job Matches are
+   124–1316): a page with the glass header is centred at 1192px of content (1256 minus its 32px sides), the same
+   edges as the top bar */
+#main > :has(> .page-glass) { width: 100%; max-width: 1256px; margin-inline: auto; }
+
+/* ── Job Detail (19 Nov, approved mock review/job-detail.html) ───────────────────────────────────────────────── */
+.jd-ic { font-family: var(--font-display); font-weight: 800; font-size: 17px; letter-spacing: -0.02em; }
+.jd-head .jd-eb { margin: 0; font-family: var(--font-mono); font-size: 11px; letter-spacing: .09em; text-transform: uppercase; color: var(--color-accent); }
+.jd-head h1 { margin: 2px 0 4px; }
+.jd-meta { display: flex; flex-wrap: wrap; gap: 2px 0; margin: 0; color: var(--color-muted); font-size: 14px; }
+.jd-meta > span:not(:last-child)::after { content: "·"; margin: 0 7px; }
+.jd-fit { display: flex; align-items: center; gap: 14px; padding: 10px 16px; border-radius: 16px; background: #fff; border: 1px solid rgb(20 30 60 / 8%); box-shadow: 0 1px 2px rgb(20 30 60 / 6%), 0 10px 24px -14px rgb(20 30 60 / 35%); }
+.jd-n { font-family: var(--font-display); font-weight: 800; letter-spacing: -0.05em; line-height: 1; white-space: nowrap; }
+.jd-n b { font-size: 32px; color: var(--color-have-strong); } .jd-n span { font-size: 18px; color: var(--color-muted); }
+.jd-lbl { font-size: 12px; font-weight: 600; color: var(--color-ink-soft); }
+.jd-lbl::first-letter { text-transform: uppercase; }
+.jd-dots { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; max-width: 260px; }
+.jd-dots i { width: 12px; height: 12px; border-radius: 50%; background: var(--color-have); }
+.jd-dots i.m { background: #fff; border: 2px dashed var(--color-missing); }
+.head-cta svg { width: 16px; height: 16px; }
+.jd-grid { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 14px; }
+.jd-tile { display: flex; flex-direction: column; min-height: 0; background: #fff; border-radius: 20px; box-shadow: var(--shadow-card); border: 1px solid rgb(20 30 60 / 5%); }
+.jd-thead { display: flex; align-items: center; gap: 10px; padding: 16px 20px 10px; flex-wrap: wrap; }
+.jd-tt { display: flex; align-items: center; gap: 9px; margin: 0; font-family: var(--font-mono); font-size: 11.5px; letter-spacing: .09em; text-transform: uppercase; color: var(--color-ink-soft); font-weight: 500; }
+.jd-tt i { width: 24px; height: 24px; border-radius: 7px; background: var(--color-accent-soft); color: var(--color-accent); display: grid; place-items: center; }
+.jd-tt i svg { width: 14px; height: 14px; }
+.jd-key { margin: 0 0 0 auto; display: flex; gap: 12px; font-size: 12px; color: var(--color-muted); font-weight: 600; }
+.jd-key span { display: inline-flex; align-items: center; gap: 5px; }
+.jd-key u { width: 16px; height: 3px; border-radius: 2px; background: var(--color-have); } .jd-key u.m { background: var(--color-missing); }
+.jd-tbody { position: relative; flex: 1; min-height: 0; overflow: auto; padding: 0 20px 16px; scrollbar-gutter: stable; }
+.jd-points { margin: 0; padding: 0; list-style: none; font-size: 14px; }
+.jd-points .jd-h { margin: 14px 0 6px; font-family: var(--font-mono); font-size: 11px; letter-spacing: .09em; text-transform: uppercase; color: var(--color-muted); }
+.jd-points .jd-h:first-child { margin-top: 2px; }
+.jd-points .jd-sub { margin: 8px 0 2px; font-weight: 600; color: var(--color-ink); }
+.jd-points .jd-pt { position: relative; padding: 4px 0 4px 16px; color: var(--color-ink-soft); line-height: 1.55; }
+.jd-points .jd-pt::before { content: ""; position: absolute; left: 2px; top: 13px; width: 5px; height: 5px; border-radius: 50%; background: #a3bcec; }
+.jd-mark { background: none; color: inherit; font-weight: 700; border-bottom: 3px solid var(--color-have); padding: 0 1px; }
+.jd-mark.m { border-bottom-color: var(--color-missing); }
+.jd-sec + .jd-sec { margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--color-line); }
+.jd-sh { display: flex; align-items: baseline; gap: 8px; margin: 0 0 8px; font-family: var(--font-display); font-size: 16px; font-weight: 800; letter-spacing: -0.02em; color: var(--color-ink); }
+.jd-sh .c { font-family: var(--font-mono); font-size: 12px; font-weight: 500; padding: 1px 8px; border-radius: 999px; letter-spacing: 0; }
+.jd-sh .c.m { background: var(--color-missing-soft); color: var(--color-missing-strong); } .jd-sh .c.h { background: var(--color-have-soft); color: var(--color-have-strong); }
+.jd-sh .of { font-family: var(--font-sans); font-size: 12.5px; font-weight: 500; color: var(--color-muted); letter-spacing: 0; }
+.jd-learn { list-style: none; margin: 0; padding: 0; }
+.jd-learn li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px; align-items: center; padding: 8px 0; border-top: 1px solid var(--color-line); }
+.jd-learn li:first-child { border-top: 0; }
+.jd-learn b { display: flex; align-items: center; gap: 8px; font-size: 14px; }
+.jd-learn b::before { content: ""; width: 10px; height: 10px; border-radius: 50%; border: 2px dashed var(--color-missing); flex: none; }
+.jd-learn small { display: block; margin: 1px 0 0 18px; color: var(--color-muted); font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.jd-lbtn { display: inline-flex; align-items: center; height: 30px; padding: 0 12px; border-radius: 999px; border: 1px solid #c8d7f4; background: var(--color-accent-soft); color: var(--color-accent-strong); font-weight: 700; font-size: 12.5px; transition: transform .15s; }
+.jd-lbtn:hover { transform: translateY(-2px); }
+.jd-src { padding: 8px 0; border-top: 1px solid var(--color-line); }
+.jd-src:first-of-type { border-top: 0; }
+.jd-from { margin: 0 0 6px; font-size: 12.5px; color: var(--color-muted); }
+.jd-from b { color: var(--color-ink-soft); font-weight: 600; }
+.jd-from .g { font-family: var(--font-mono); font-size: 11px; padding: 1px 6px; border-radius: 5px; background: var(--color-accent-soft); color: var(--color-accent-strong); margin-left: 6px; }
+.jd-chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; }
+.jd-chip { display: inline-flex; align-items: center; gap: 5px; min-height: 28px; padding: 0 11px; border-radius: 999px; background: var(--color-have-soft); color: var(--color-have-strong); border: 1px solid #b5e3dd; font-weight: 600; font-size: 12.5px; }
+.jd-chip .via { font-weight: 500; font-size: 11px; color: var(--color-muted); }
+.jd-chip.m { background: #fff; color: var(--color-missing-strong); border: 1.5px dashed var(--color-missing); }
+.jd-chip.n { background: var(--color-well); color: var(--color-ink-soft); border: 1px solid var(--color-line); }
+@media (max-width: 1023px) {
+  .jd-grid { grid-template-columns: 1fr; }
+  .jd-gap { order: -1; }
+  .jd-tbody { overflow: visible; }
+  .jd-fit, .jd-head .head-cta { width: 100%; justify-content: center; }
+}
+@media (max-width: 639px) { .jd-meta { flex-direction: column; } .jd-meta > span::after { display: none; } }
+
+/* ── AI Assistant (19 Nov, approved mock review/student-pages.html) ─────────────────────────────────────────── */
+.chat-ib { width: 34px; height: 34px; border-radius: 10px; border: 1px solid var(--color-line-strong); background: #fff; display: grid; place-items: center; color: var(--color-ink-soft); transition: background .15s; }
+.chat-ib:hover { background: var(--color-well); }
+.chat-glow { background: radial-gradient(320px 240px at 100% 0%, rgb(37 87 196 / 7%), transparent 70%), radial-gradient(300px 220px at 0% 100%, rgb(19 153 140 / 6%), transparent 70%), #fbfcfe; }
+.chat-starter { height: 32px; padding: 0 13px; border-radius: 999px; border: 1px solid #c8d7f4; background: var(--color-accent-soft); color: var(--color-accent-strong); font-weight: 600; font-size: 13px; transition: transform .15s; }
+.chat-starter:hover { transform: translateY(-2px); }
+.chat-box { display: flex; align-items: flex-end; gap: 10px; padding: 5px 5px 5px 12px; border-radius: 16px; border: 1.5px solid var(--color-line-strong); background: #fff; transition: border-color .2s, box-shadow .2s; }
+.chat-box:focus-within { border-color: var(--color-accent); box-shadow: 0 0 0 4px rgb(37 87 196 / 14%); }
+.chat-keys { flex: none; align-self: center; font-size: 11.5px; color: var(--color-muted); white-space: nowrap; }
+.chat-keys kbd { font-family: var(--font-mono); font-size: 10.5px; padding: 1px 5px; border-radius: 5px; border: 1px solid var(--color-line-strong); background: var(--color-well); color: var(--color-ink-soft); margin: 0 2px 0 6px; }
+.chat-send { width: 40px; height: 40px; flex: none; border-radius: 12px; background: var(--color-accent); color: #fff; display: grid; place-items: center; box-shadow: 0 3px 0 var(--color-accent-strong); transition: transform .12s, box-shadow .12s; }
+.chat-send:active:not(:disabled) { transform: translateY(3px); box-shadow: none; }
+.chat-send:disabled { opacity: .4; cursor: not-allowed; }
+@media (max-width: 767px) { .chat-keys { display: none; } }
+
+/* Job Detail: the ad's requirements and the application's steps on one line (19 Nov) */
+.jd-strip { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 24px; margin-top: 12px; padding-top: 12px; border-top: 1px solid rgb(20 30 60 / 7%); }
+.jd-strip > div { margin: 0 !important; padding: 0 !important; border: 0 !important; }
+.jd-progress { margin-left: auto; }
+.app-steps-line { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 0; padding: 0; list-style: none; font-size: 13px; color: var(--color-muted); }
+.app-steps-line li { display: flex; align-items: center; gap: 6px; white-space: nowrap; }
+.app-steps-line li.on { color: var(--color-ink-soft); }
+.app-steps-line li.now { color: var(--color-ink); font-weight: 700; }
+.app-steps-line .when { font-weight: 500; color: var(--color-muted); }
+.app-steps-line .bar { width: 16px; height: 2px; border-radius: 2px; background: var(--color-line-strong); }
+.app-steps-line .bar.on { background: var(--color-accent); }
+@media (max-width: 767px) { .jd-progress { margin-left: 0; } }
+
+/* ── Phones (19 Nov, her review) ───────────────────────────────────────────────────────────────────────────── */
+/* Job Detail: one tile at a time behind a two-way switch; laptops keep both side by side */
+.jd-switch { display: none; }
+@media (max-width: 1023px) {
+  .jd-switch { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin-top: 14px; padding: 4px; border-radius: 14px; background: #fff; border: 1px solid rgb(20 30 60 / 8%); box-shadow: var(--shadow-card); position: sticky; top: 72px; z-index: 5; }
+  .jd-switch button { height: 40px; border-radius: 10px; font-weight: 700; font-size: 14px; color: var(--color-ink-soft); display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
+  .jd-switch button[aria-pressed="true"] { background: var(--color-accent); color: #fff; }
+  .jd-switch .c { font-family: var(--font-mono); font-size: 11px; font-weight: 500; padding: 1px 6px; border-radius: 999px; background: var(--color-missing-soft); color: var(--color-missing-strong); }
+  .jd-switch button[aria-pressed="true"] .c { background: var(--color-accent-strong); color: #fff; }
+  .jd-grid[data-show="gap"] .jd-ad, .jd-grid[data-show="ad"] .jd-gap { display: none; }
+}
+/* AI Assistant: the conversation gets the room. One line of mode buttons, no description line, the chat tools
+   as a slim bar on top instead of a side rail, and the ready questions in one sideways-scrolling row */
+@media (max-width: 767px) {
+  .chat-desc { display: none; }
+  .chat-modes { width: 100%; }
+  .chat-modes > button { flex: 1; min-width: 0; justify-content: center; white-space: nowrap; font-size: 13px; height: 36px; padding: 0 6px; }
+  .chat-modes > button svg { display: none; }
+  .chat-shell { flex-direction: column; margin-top: 10px; margin-bottom: 8px; min-height: calc(100dvh - 260px); }
+  .chat-rail { width: auto; flex-direction: row; justify-content: flex-start; padding: 8px 10px; border-right: 0; border-bottom: 1px solid var(--color-line); }
+  .chat-starters { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; margin-inline: -12px; padding-inline: 12px; }
+  .chat-starters::-webkit-scrollbar { display: none; }
+  .chat-starters > button { flex: none; white-space: nowrap; }
+}
+
+/* ── Employer pages (20 Nov, approved mock review/employer-pages.html) ─────────────────────────────────────── */
+.emp-tile { border-radius: 20px !important; border-color: rgb(20 30 60 / 5%) !important; box-shadow: var(--shadow-card); }
+.emp-tile.emp-needs { border-color: #f6d3c6 !important; }
+.emp-tile h2 { font-family: var(--font-mono) !important; font-size: 11.5px !important; font-weight: 500 !important; letter-spacing: .09em; text-transform: uppercase; color: var(--color-ink-soft) !important; }
+.emp-tile.emp-needs h2 { color: var(--color-missing-strong) !important; }
+
+/* Post a Job (20 Nov, approved mock) */
+.post-steps { display: flex; align-items: center; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.post-steps li { display: inline-flex; align-items: center; gap: 8px; font-weight: 700; font-size: 13px; color: var(--color-muted); }
+.post-steps li b { width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; font-size: 12px; border: 2px solid var(--color-line-strong); background: #fff; }
+.post-steps li.now { color: var(--color-ink); } .post-steps li.now b { background: var(--color-accent); border-color: var(--color-accent); color: #fff; }
+.post-steps li.done b { background: var(--color-have); border-color: var(--color-have); color: #fff; }
+.post-steps li.bar { width: 28px; height: 2px; background: var(--color-line-strong); border-radius: 2px; }
+.post-grid { align-items: stretch; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); gap: 16px 28px; }
+.post-grid > div:last-child { display: flex; flex-direction: column; min-height: 0; }
+.post-tips { padding: 12px 14px; border-radius: 14px; background: var(--color-accent-soft); border: 1px solid #c8d7f4; }
+.post-tips summary { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 13px; color: var(--color-accent-strong); cursor: pointer; list-style: none; }
+.post-tips summary::-webkit-details-marker { display: none; }
+.post-tips summary::before { content: "💡"; }
+.post-tips summary::after { content: "Hide"; margin-left: auto; font-weight: 600; font-size: 12px; text-decoration: underline; text-underline-offset: 3px; }
+.post-tips:not([open]) summary::after { content: "Show ▸"; }
+.post-tips:not([open]) { align-self: start; padding-block: 9px; }
+.post-tips[open] summary { margin-bottom: 4px; }
+.post-tips ul { margin: 0; padding-left: 18px; list-style: disc; font-size: 13px; color: var(--color-ink-soft); }
+.post-tips li { margin: 4px 0; }
+.post-prev-btn { height: 40px; padding: 0 14px; border-radius: 12px; border: 1px solid #c8d7f4; background: var(--color-accent-soft); color: var(--color-accent-strong); font-weight: 700; font-size: 13.5px; anchor-name: --pjprev; }
+.post-pop { margin: 0; inset: auto; position-anchor: --pjprev; bottom: anchor(top); right: anchor(right); translate: 0 -10px; width: min(360px, calc(100vw - 32px)); padding: 16px 18px; border: 1px solid var(--color-line); border-radius: 18px; background: #fff; box-shadow: 0 24px 60px -24px rgb(20 30 60 / 45%); }
+@supports not (position-anchor: --x) { .post-pop { inset: 0; margin: auto; height: max-content; } }
+.post-pop .pp-t { margin: 0 0 10px; font-family: var(--font-mono); font-size: 11.5px; letter-spacing: .09em; text-transform: uppercase; color: var(--color-ink-soft); }
+.post-pop .pp-card { padding: 12px 14px; border: 1px solid var(--color-line); border-radius: 14px; background: #fbfcfe; }
+@media (max-width: 1023px) { .post-grid { grid-template-columns: 1fr; } }
+.post-grid > div:first-child { min-height: 0; }
+.post-live { flex: 1; min-height: 0; display: flex; flex-direction: column; padding: 10px 12px; border-radius: 14px; border: 1px dashed var(--color-line-strong); background: #fbfcfe; }
+.post-live .pp-t { margin: 0 0 8px; font-family: var(--font-mono); font-size: 11px; letter-spacing: .09em; text-transform: uppercase; color: var(--color-muted); }
+.post-live .pp-card { padding: 12px 14px; border: 1px solid var(--color-line); border-radius: 14px; background: #fff; box-shadow: var(--shadow-card); }
+.post-live .pp-ava { width: 34px; height: 34px; flex: none; border-radius: 10px; display: grid; place-items: center; background: var(--color-accent-soft); color: var(--color-accent-strong); font-weight: 800; font-size: 12px; }
+/* Post a Job on short laptops: tighter spacing so "Read the skills" stays on screen */
+@media (min-width: 1024px) and (max-height: 820px) {
+  .post-grid input, .post-grid select { height: 38px !important; padding-top: 0 !important; padding-bottom: 0 !important; }
+  .post-grid > div:first-child { gap: 10px !important; }
+  .post-grid label, .post-grid #pj-decide { margin-bottom: 4px !important; }
+  .post-live { padding: 8px 10px; } .post-live .pp-t { margin-bottom: 6px; } .post-live .pp-card { padding: 9px 12px; }
+  .emp-tile:has(.post-grid) { padding-top: 16px !important; padding-bottom: 12px !important; gap: 12px !important; }
+}
+@media (min-width: 1024px) and (max-height: 740px) { .post-grid [role="radiogroup"] + p { display: none; } }
+@media (min-width: 1024px) and (max-height: 820px) { .post-grid [role="radiogroup"] + p { display: none; } .post-tips { padding: 8px 12px; } .post-tips li { margin: 2px 0; } }
+@media (min-width: 1024px) and (max-height: 740px) { .post-tips ul { font-size: 12px; line-height: 1.35; } .post-tips summary { margin-bottom: 2px; } .post-grid > div:first-child { gap: 8px !important; } }
+
+/* scroll cue for every inside-a-card scroll area (scrollFade.js sets data-fade): the last visible item fades */
+[data-fade] { --fade: min(64px, 40%); }
+[data-fade="bottom"] { -webkit-mask-image: linear-gradient(#000 calc(100% - var(--fade)), rgb(0 0 0 / 62%) calc(100% - var(--fade) / 3), rgb(0 0 0 / 22%)); mask-image: linear-gradient(#000 calc(100% - var(--fade)), rgb(0 0 0 / 62%) calc(100% - var(--fade) / 3), rgb(0 0 0 / 22%)); }
+[data-fade="top"] { -webkit-mask-image: linear-gradient(rgb(0 0 0 / 22%), rgb(0 0 0 / 62%) calc(var(--fade) / 3), #000 var(--fade)); mask-image: linear-gradient(rgb(0 0 0 / 22%), rgb(0 0 0 / 62%) calc(var(--fade) / 3), #000 var(--fade)); }
+[data-fade="both"] { -webkit-mask-image: linear-gradient(rgb(0 0 0 / 22%), rgb(0 0 0 / 62%) calc(var(--fade) / 3), #000 var(--fade), #000 calc(100% - var(--fade)), rgb(0 0 0 / 62%) calc(100% - var(--fade) / 3), rgb(0 0 0 / 22%)); mask-image: linear-gradient(rgb(0 0 0 / 22%), rgb(0 0 0 / 62%) calc(var(--fade) / 3), #000 var(--fade), #000 calc(100% - var(--fade)), rgb(0 0 0 / 62%) calc(100% - var(--fade) / 3), rgb(0 0 0 / 22%)); }
+
+/* ── Admin dashboard (20 Nov, approved mock review/admin-account-pages.html) ───────────────────────────────── */
+/* 20 Nov (her review): the dashboard fills the screen; the cards stretch to the same bottom line and spread their rows */
+.adm-grid { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); grid-template-rows: minmax(0, 1fr) auto; gap: 14px; }
+.adm-grid > p, .adm-grid > [aria-busy] { grid-column: 1 / -1; }
+/* 20 Nov (her review on a ~1440x735 window: the profiles card was cut off under the needs card): needs on the left at
+   full height (its list scrolls inside when long); the gaps and the profiles share the right column */
+.adm-needs { grid-column: 1; grid-row: 1 / 3; display: flex; flex-direction: column; }
+.adm-needs > div:last-child { flex: 1; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; }
+.adm-needs > div:last-child > ul { flex: 1; display: flex; flex-direction: column; justify-content: space-evenly; }
+.adm-gaps { grid-column: 2; grid-row: 1; }
+.adm-prof { grid-column: 2; grid-row: 2; }
+.adm-prof .adm-th { padding-bottom: 4px; }
+.adm-prof-bars { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.adm-prof-bars li { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: 6px 8px; }
+.adm-prof-bars li > :first-child { font-size: 12.5px; line-height: 1.25; color: var(--color-ink-soft); }
+.adm-prof-bars li > :nth-child(2) { grid-column: 1 / -1; grid-row: 2; }
+.adm-prof-bars li > :nth-child(3) { grid-column: 2; grid-row: 1; line-height: 1; }
+
+.adm-gaps > div:last-child { flex: 1; min-height: 0; padding-top: 8px; padding-bottom: 12px; }
+.adm-gaps ul { min-height: 0; overflow-y: auto; gap: 8px !important; margin: 0; padding: 0 2px 0 0; }
+.adm-grid:not(:has(.adm-needs)) .adm-prof { grid-row: 1; }
+.adm-grid:not(:has(.adm-needs)) .adm-gaps { grid-row: 1; }
+.adm-prof-body { display: grid; gap: 12px; }
+.adm-ring { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.adm-ring svg { width: clamp(84px, 12vh, 120px); height: clamp(84px, 12vh, 120px); }
+.adm-key { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 6px 14px; }
+.adm-key span { display: inline-flex; align-items: center; gap: 5px; } .adm-key i { width: 10px; height: 10px; border-radius: 3px; }
+.adm-gaps ul { justify-content: space-evenly !important; }
+@media (max-width: 1023px) { .adm-grid { grid-template-columns: 1fr; } .adm-grid > * { grid-column: 1 !important; grid-row: auto !important; } .adm-prof-body { grid-template-columns: 1fr; } }
+
+/* Account settings: one card, sections share the height by their number of rows (20 Nov) */
+.acct-card { display: flex; flex-direction: column; }
+.acct-card > p[role="status"] { margin-top: 12px; }
+.acct-sec { display: flex; flex-direction: column; }
+.acct-sec:nth-of-type(1) { flex: 3.6; } .acct-sec:nth-of-type(2) { flex: 1.6; } .acct-sec:nth-of-type(3) { flex: 3.6; }
+.acct-sec + .acct-sec { border-top: 2px solid var(--color-line); margin-top: 6px; }
+.acct-sec > h2 { font-family: var(--font-mono); font-size: 11.5px !important; font-weight: 500 !important; letter-spacing: .09em; text-transform: uppercase; color: var(--color-ink-soft) !important; }
+.acct-row { flex: 1; display: flex; flex-direction: column; justify-content: center; }
+.acct-danger { height: 34px; padding: 0 14px; border-radius: 10px; background: #c0362c; color: #fff; box-shadow: 0 3px 0 #8f2219; }
+.acct-danger:active { transform: translateY(3px); box-shadow: none; }
+@media (min-width: 1024px) and (max-height: 820px) { .acct-row { padding-top: 7px !important; padding-bottom: 7px !important; } .acct-sec > h2 { padding-top: 10px !important; } }
+
+/* Users (20 Nov): initials avatar (square for companies) and a role chip */
+.usr-ava { width: 32px; height: 32px; flex: none; border-radius: 50%; display: grid; place-items: center; background: var(--color-accent-soft); color: var(--color-accent-strong); font-weight: 800; font-size: 11.5px; }
+.usr-ava.co { border-radius: 9px; background: var(--color-well); color: var(--color-ink-soft); }
+.usr-role { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 700; padding: 3px 10px; border-radius: 8px; border: 1px solid var(--color-line-strong); background: #fff; color: var(--color-ink-soft); white-space: nowrap; }
+.usr-role svg { width: 14px; height: 14px; }
+.usr-role.student { border-color: #c8d7f4; background: var(--color-accent-soft); color: var(--color-accent-strong); }
+.usr-role.admin { border-color: #b5e3dd; background: var(--color-have-soft); color: var(--color-have-strong); }
+/* admin dashboard parts, as the mock (20 Nov) */
+.adm-th { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; padding: 16px 20px 8px; }
+.adm-tt { display: flex; align-items: center; gap: 9px; margin: 0; font-family: var(--font-mono); font-size: 11.5px !important; font-weight: 500 !important; letter-spacing: .09em; text-transform: uppercase; color: var(--color-ink-soft) !important; }
+.adm-tt i { width: 24px; height: 24px; border-radius: 7px; display: grid; place-items: center; background: var(--color-accent-soft); color: var(--color-accent); }
+.adm-tt i.c { background: var(--color-missing-soft); color: var(--color-missing-strong); }
+.adm-tt svg { width: 14px; height: 14px; }
+.adm-needs .adm-th { background: transparent; }
+.adm-sub { margin: 6px 0 0; padding-bottom: 6px; border-bottom: 1px solid var(--color-line); font-family: var(--font-mono); font-size: 11px; letter-spacing: .09em; text-transform: uppercase; color: var(--color-muted); }
+.adm-row { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-top: 1px solid var(--color-line); }
+.adm-sub + ul .adm-row:first-child, .adm-sub + .adm-row { border-top: 0; }
+.adm-row .usr-ava { width: 36px; height: 36px; }
+.adm-row .usr-ava svg { width: 16px; height: 16px; }
+.adm-progress { height: 8px; border-radius: 9px; background: var(--color-well); overflow: hidden; margin-top: 4px; }
+.adm-progress i { display: block; height: 100%; background: var(--color-have); border-radius: inherit; }
+.adm-scale { display: flex; align-items: center; gap: 8px; margin-top: 8px !important; font-size: 11.5px; color: var(--color-muted); }
+.adm-scale i { width: 90px; height: 8px; border-radius: 9px; background: linear-gradient(90deg, rgb(248 196 176), rgb(164 60 32)); }
+.adm-prof-body { padding-top: 6px; }
+.adm-ring svg { width: clamp(104px, 14vh, 132px) !important; height: clamp(104px, 14vh, 132px) !important; }
+.adm-row .head-cta { height: 36px; box-shadow: 0 3px 0 var(--color-accent-strong); }
+.adm-prof .adm-prof-body { align-content: center !important; gap: 18px 22px; }
+.adm-gaps li span:first-child, .adm-prof li span:first-child { color: var(--color-ink) !important; font-weight: 500; }
+.adm-row .head-cta { height: 36px !important; padding: 0 16px !important; }
+.adm-needs .adm-row { padding: 14px 0; }
+.adm-needs .adm-sub { margin-top: 10px; }
+.adm-needs .adm-progress { margin-top: 6px; margin-bottom: 4px; }
+.adm-prof .adm-prof-body { align-content: space-evenly !important; }
+.adm-prof .adm-ring svg { width: clamp(112px, 17vh, 150px) !important; height: clamp(112px, 17vh, 150px) !important; }
+.adm-prof li { padding: 4px 0; }
+/* 20 Nov (her review: too spread out): rows are bigger and sit in an evenly balanced block; text, bars and the ring
+   grow with the screen height instead of the gaps between them */
+.adm-gaps ul { justify-content: space-around !important; gap: 0 !important; }
+.adm-gaps li { grid-template-columns: minmax(0, 9.5rem) 1fr 4.2rem !important; font-size: clamp(14px, 1.75vh, 16px) !important; }
+.adm-gaps li .h-2\.5, .adm-prof li .h-2\.5 { height: clamp(10px, 1.6vh, 16px); }
+.adm-gaps li span:last-child { justify-self: end; font-family: var(--font-mono); font-size: 12px !important; padding: 2px 8px; border-radius: 999px; background: var(--color-missing-soft); color: var(--color-missing-strong) !important; }
+.adm-prof .adm-prof-body { grid-template-columns: auto minmax(0, 1fr); align-content: stretch !important; align-items: center; gap: 14px 26px; }
+.adm-prof ul { height: auto; justify-content: center !important; gap: clamp(14px, 3vh, 30px) !important; }
+.adm-prof li { font-size: clamp(14px, 1.75vh, 16px); grid-template-columns: 14.5rem minmax(0, 1fr) 3rem !important; }
+.adm-prof .adm-ring svg { width: clamp(120px, 19vh, 176px) !important; height: clamp(120px, 19vh, 176px) !important; }
+.adm-prof .adm-key { align-self: end; }
+.adm-prof li { grid-template-columns: max-content minmax(80px, 1fr) 3rem !important; }
+.adm-prof ul { min-width: 0; }
+.adm-gaps li > div, .adm-prof li > div { height: 12px !important; }
+.adm-prof li { grid-template-columns: 12.8rem minmax(80px, 1fr) 3rem !important; }
+/* label and count on one line, the bar full width under them: nothing collides, bars line up */
+.adm-prof li { grid-template-columns: minmax(0, 1fr) 3rem !important; row-gap: 7px !important; }
+.adm-prof li > span:first-child { grid-column: 1; grid-row: 1; }
+.adm-prof li > span:last-child { grid-column: 2; grid-row: 1; }
+.adm-prof li > div { grid-column: 1 / -1; grid-row: 2; }
+
+/* Academics (20 Nov): coloured action buttons, the list scope as a blue notice */
+.acad-btn { display: inline-flex; align-items: center; gap: 6px; height: 36px; padding: 0 14px; border-radius: 10px; border: 1px solid; font-weight: 700; font-size: 13px; transition: background .15s; }
+.acad-btn.edit { background: var(--color-accent-soft); border-color: #a3bcec; color: var(--color-accent-strong); } .acad-btn.edit:hover { background: #d6e2f8; }
+.acad-btn.warn { background: #fff4d6; border-color: #f2c75c; color: #7d5600; } .acad-btn.warn:hover { background: #fde9b0; }
+.acad-btn.red { background: #c0362c; border-color: #c0362c; color: #fff; box-shadow: 0 3px 0 #8f2219; }
+.acad-scope { margin: 0 0 12px; padding: 8px 12px; border-radius: 10px; background: var(--color-accent-soft); color: var(--color-accent-strong); font-size: 13px; width: max-content; max-width: 100%; }
+
+/* Academics · Intakes panel (20 Nov) */
+.intake-facts { display: grid; grid-template-columns: repeat(4, minmax(0, auto)); gap: 10px 28px; margin: 0; }
+.intake-facts dt { font-size: 12px; font-weight: 600; color: var(--color-muted); }
+.intake-facts dd { margin: 2px 0 0; font-weight: 600; color: var(--color-ink); }
+.intake-note { display: inline-block; margin: 12px 0 0; padding: 7px 11px; border-radius: 10px; background: var(--color-well); color: var(--color-ink-soft); font-size: 12.5px; }
+.intake-yr { display: grid; grid-template-columns: 112px minmax(0, 1fr) 240px; gap: 12px; align-items: center; padding: 10px 0; border-top: 1px solid var(--color-line); }
+.intake-yr:first-of-type { border-top: 0; }
+.intake-bar { display: flex; height: 12px; gap: 2px; border-radius: 9px; overflow: hidden; }
+.intake-bar i.common, .intake-key i.common { background: #2557c4; } .intake-bar i.specialised, .intake-key i.specialised { background: #13998c; } .intake-bar i.elective, .intake-key i.elective { background: #e0a21a; }
+.intake-key { display: flex; gap: 14px; margin: 8px 0 0; font-size: 12px; color: var(--color-muted); }
+.intake-key span { display: inline-flex; align-items: center; gap: 5px; } .intake-key i { width: 10px; height: 10px; border-radius: 3px; }
+@media (max-width: 900px) { .intake-facts { grid-template-columns: 1fr 1fr; } .intake-yr { grid-template-columns: 60px minmax(0, 1fr); } .intake-yr > span:last-child { grid-column: 1 / -1; } }
+.emp-tile h2.intake-code { font-family: var(--font-mono) !important; font-size: 20px !important; font-weight: 600 !important; letter-spacing: 0 !important; text-transform: none !important; color: var(--color-ink) !important; }
+.intake-names { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 18px; margin: 0; padding: 0; list-style: none; }
+.intake-names li { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--color-ink-soft); }
+.intake-names li::before { content: ""; width: 8px; height: 8px; flex: none; border-radius: 2px; background: #2557c4; }
+.intake-names li.specialised::before { background: #13998c; } .intake-names li.elective::before { background: #e0a21a; }
+@media (max-width: 900px) { .intake-names { grid-template-columns: 1fr; } }
+
+/* employer checks for the career office (20 Nov) */
+.co-checks { display: flex; flex-wrap: wrap; gap: 4px 6px; margin-top: 5px; }
+.co-check { display: inline-flex; align-items: center; height: 22px; padding: 0 8px; border-radius: 7px; font-size: 11.5px; font-weight: 600; background: var(--color-well); color: var(--color-ink-soft); white-space: nowrap; max-width: 100%; overflow: hidden; text-overflow: ellipsis; }
+.co-check.link { background: var(--color-accent-soft); color: var(--color-accent-strong); text-decoration: none; } .co-check.link:hover { text-decoration: underline; }
+.co-check.ok { background: var(--color-have-soft); color: var(--color-have-strong); }
+.co-check.warn { background: var(--color-partial-soft); color: var(--color-partial-strong); }
+
+/* 20 Nov (her review): an invitation to apply stands out from the lists under it */
+.invite-note { background: linear-gradient(100deg, var(--color-accent-soft), #fff 70%); border: 2px solid var(--color-accent);
+  box-shadow: 0 14px 30px -20px rgb(37 87 196 / 60%); }
+.invite-ic { width: 38px; height: 38px; border-radius: 12px; display: grid; place-items: center; flex: none;
+  background: var(--color-accent); color: #fff; }
+.invite-ic svg { width: 19px; height: 19px; }
+.sort-btn { display: inline-flex; align-items: center; gap: 4px; margin: -4px -8px; padding: 4px 8px; border-radius: 8px; font: inherit; color: inherit; cursor: pointer; }
+.sort-btn:hover { background: var(--color-accent-soft); color: var(--color-accent-strong); }
+.job-open { color: var(--color-ink); text-decoration: none; } .job-open:hover { color: var(--color-accent-strong); text-decoration: underline; text-underline-offset: 3px; }
+/* 20 Nov (her review): the student's preview strip is gold, apart from the employer's page under it */
+.preview-note { background: #fff6dc; border: 1px solid #f2c75c; box-shadow: 0 10px 24px -18px rgb(125 86 0 / 45%); }
+.preview-ic { width: 28px; height: 28px; border-radius: 9px; display: grid; place-items: center; flex: none; background: #e0a21a; color: #fff; }
+.preview-ic svg { width: 16px; height: 16px; }
+/* My Jobs row buttons: compact, so the Skills column keeps its room */
+.job-acts .head-cta, .job-acts .acad-btn { height: 32px !important; padding: 0 11px !important; font-size: 13px !important; }
+/* the Dashboard's step track: number and label on one line (20 Nov, so the goal card can set the row's height) */
+.pp-visible { background: #fff; border: 1px solid rgb(20 30 60 / 8%); border-radius: 16px; padding: 10px 16px; box-shadow: 0 8px 20px -14px rgb(20 30 60 / 35%); }
+@media (max-width: 767px) { .pp-visible { text-align: left; width: 100%; } .pp-visible > div { justify-content: flex-start !important; } }
+/* Dashboard, My Applications (20 Nov): the three counts of the My Applications header, then the newest update */
+.dash-appstats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border: 1px solid var(--color-line); border-radius: 14px; }
+.dash-appstats > div { display: flex; flex-direction: column-reverse; padding: 4px 12px; }
+.dash-appstats > div + div { border-left: 1px solid var(--color-line); }
+.dash-appstats dd { margin: 0; font-family: var(--font-display); font-weight: 800; font-size: 18px; line-height: 1.1; color: var(--color-ink); }
+.dash-appstats dt { font-size: 12px; font-weight: 600; color: var(--color-ink-soft); }
+.dash-appstats .good dd { color: var(--color-have-strong); }
+.dash-latest { display: flex; align-items: center; gap: 12px; justify-content: space-between; margin-top: 8px; padding: 7px 12px;
+  border-radius: 12px; background: var(--color-well); text-decoration: none; }
+.dash-latest:hover { background: var(--color-accent-soft); }
+
+/* ── App menu: sidebar (20 Nov, her pick for a wide, short laptop) ───────────────────────────────────────────────
+   >= 1280px: floating card, icons + labels. 640-1279px: icon rail. < 640px: slim top bar + bottom tab bar.
+   --bar-h is the height a page loses to a bar above it (only phones have one). */
+:root { --bar-h: 0px; --sb-w: 232px; }
+:root:has(.sb.rail) { --sb-w: 68px; }
+.app-main { flex: 1; min-width: 0; outline: none; overflow-x: hidden; min-height: calc(100dvh - var(--bar-h)); padding-left: calc(var(--sb-w) + 24px); }
+.sb { position: fixed; z-index: 30; left: 12px; top: 12px; bottom: 12px; width: var(--sb-w); display: flex; flex-direction: column; gap: 6px;
+  padding: 14px 10px 10px; border-radius: 22px; border: 1px solid var(--color-line);
+  background: color-mix(in srgb, var(--color-card) 92%, transparent); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
+  box-shadow: 0 1px 2px rgb(20 30 60 / 5%), 0 18px 40px -26px rgb(20 30 60 / 35%); }
+.sb-brand { display: flex; align-items: center; gap: 8px; padding: 2px 8px 12px; border-radius: 12px; text-decoration: none; }
+.sb-name { font-family: var(--font-display); font-size: 18px; font-weight: 800; letter-spacing: -0.03em; color: var(--color-ink); }
+.sb-nav { display: flex; flex-direction: column; gap: 3px; min-height: 0; overflow-y: auto; }
+.sb-item { position: relative; display: flex; align-items: center; gap: 10px; height: 42px; padding: 0 12px; border-radius: 12px; flex: none;
+  color: var(--color-ink-soft); font-size: 14.5px; font-weight: 500; text-decoration: none; transition: background-color .15s, color .15s, transform .15s; }
+.sb-item:hover { background: var(--color-well); color: var(--color-ink); }
+.sb-item:active { transform: translateY(1px); }
+.sb-item.on { background: var(--color-accent); color: var(--color-on-accent); font-weight: 650; box-shadow: 0 10px 20px -12px rgb(37 87 196 / 70%); }
+.sb-ic { position: relative; width: 20px; height: 20px; display: grid; place-items: center; flex: none; color: var(--color-faint); }
+.sb-item:hover .sb-ic { color: var(--color-ink-soft); } .sb-item.on .sb-ic { color: var(--color-on-accent); }
+.sb-ic svg { width: 19px; height: 19px; }
+.sb-label { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.sb-badge { margin-left: auto; min-width: 20px; height: 20px; padding: 0 6px; border-radius: 99px; display: grid; place-items: center;
+  background: var(--color-accent); color: var(--color-on-accent); font-size: 11px; font-weight: 800; }
+.sb-item.on .sb-badge { background: #fff; color: var(--color-accent); }
+.sb-foot { margin-top: auto; padding-top: 8px; border-top: 1px solid var(--color-line); display: flex; flex-direction: column; gap: 4px; }
+.sb-bell .sb-label { font-size: 13.5px; }
+.sb-dot { position: absolute; top: -1px; right: -1px; width: 8px; height: 8px; border-radius: 50%; background: var(--color-missing); box-shadow: 0 0 0 2px var(--color-card); }
+.sb-acct { position: relative; }
+.sb-me { display: flex; align-items: center; gap: 10px; width: 100%; padding: 6px; border-radius: 14px; text-align: left; transition: background-color .15s; }
+.sb-me:hover, .sb-me.open { background: var(--color-well); }
+.sb-ava { width: 34px; height: 34px; border-radius: 50%; flex: none; display: grid; place-items: center; background: var(--color-accent-soft);
+  color: var(--color-accent-strong); font-family: var(--font-display); font-size: 12px; font-weight: 800; letter-spacing: .03em; }
+.sb-who { flex: 1; min-width: 0; }
+.sb-menu { position: absolute; left: 0; bottom: calc(100% + 8px); z-index: 40; width: 232px; padding: 6px 0; border-radius: var(--radius-panel);
+  border: 1px solid var(--color-line); background: var(--color-card); box-shadow: 0 24px 48px -20px rgb(20 30 60 / 40%); }
+/* rail (folded, or any screen under 1280px): icons only; labels stay for screen readers and as tooltips */
+@media (min-width: 640px) {
+  .sb.rail { padding: 12px 8px 8px; align-items: stretch; }
+  .sb.rail .sb-brand { justify-content: center; padding: 2px 0 12px; }
+  .sb.rail :is(.sb-name, .sb-who, .sb-chev) { display: none; }
+  .sb.rail .sb-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  .sb.rail .sb-item { justify-content: center; padding: 0; height: 44px; }
+  .sb.rail .sb-badge { position: absolute; top: 3px; right: 4px; min-width: 17px; height: 17px; padding: 0 4px; font-size: 10px; }
+  .sb.rail .sb-me { justify-content: center; padding: 4px; }
+  /* the bell lives at the page's top right on laptops and tablets (20 Nov, her review) */
+  .sb-bell { display: none; }
+}
+.sb-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 4px; }
+.sb-fold { flex: none; width: 34px; height: 34px; border-radius: 10px; display: grid; place-items: center; color: var(--color-faint); background: none; border: 0; cursor: pointer; transition: background-color .15s, color .15s; }
+.sb-fold:hover { background: var(--color-well); color: var(--color-ink); }
+.sb.rail .sb-top { position: relative; justify-content: center; }
+.sb-fold.edge { position: absolute; right: -21px; top: 4px; width: 24px; height: 24px; border-radius: 50%; background: #fff; border: 1px solid var(--color-line);
+  box-shadow: 0 2px 6px rgb(20 30 60 / 12%); color: var(--color-muted); z-index: 2; }
+.sb-fold.edge:hover { background: var(--color-well); color: var(--color-ink); }
+/* folded: a count becomes a dot in the icon's corner (her 12 Oct rule; the count stays in the label and tooltip) */
+.sb.rail .sb-nav .sb-badge { top: 7px; right: 9px; min-width: 0; width: 9px; height: 9px; padding: 0; font-size: 0; background: var(--color-missing); box-shadow: 0 0 0 2px #fff; }
+.sb.rail .sb-top .sb-brand { padding-bottom: 0; }
+@media (max-width: 639px) { .sb-fold { display: none; } }
+/* the page's bell: top right, on the greeting line or in the page header */
+.page-bell { position: relative; flex: none; width: 40px; height: 40px; border-radius: 13px; display: grid; place-items: center;
+  background: #fff; border: 1px solid var(--color-line); color: var(--color-ink-soft); box-shadow: 0 6px 16px -12px rgb(20 30 60 / 40%); transition: background-color .15s, color .15s; }
+.page-bell:hover { background: var(--color-accent-soft); color: var(--color-accent-strong); }
+.page-bell-n { position: absolute; top: -5px; right: -5px; min-width: 18px; height: 18px; padding: 0 5px; border-radius: 99px; display: grid; place-items: center;
+  background: var(--color-missing); color: #fff; font-size: 10.5px; font-weight: 800; box-shadow: 0 0 0 2px #fff; }
+@media (max-width: 639px) { .page-bell { display: none; } }
+/* phones: slim top bar + bottom tab bar */
+@media (max-width: 639px) {
+  :root { --bar-h: 4rem; }
+  .app-main { padding-left: 0; padding-top: 4rem; padding-bottom: 6rem; }
+  .sb { left: 8px; right: 8px; top: 6px; bottom: auto; width: auto; height: 52px; flex-direction: row; align-items: center; padding: 0 6px 0 12px; gap: 8px;
+    background: var(--color-card); -webkit-backdrop-filter: none; backdrop-filter: none; border-radius: 18px; }
+  .sb-brand { padding: 0; }
+  .sb-nav { position: fixed; left: 8px; right: 8px; bottom: 8px; z-index: 40; flex-direction: row; justify-content: space-around; gap: 2px; padding: 6px;
+    border-radius: 22px; border: 1px solid var(--color-line); background: var(--color-card); box-shadow: 0 -8px 30px -18px rgb(20 30 60 / 45%); overflow: visible; }
+  .sb-nav .sb-item { flex: 1 1 0; min-width: 0; flex-direction: column; justify-content: center; gap: 3px; height: auto; min-height: 54px; padding: 6px 2px; border-radius: 16px; font-size: 10px; line-height: 1.15; }
+  .sb-nav .sb-label { white-space: normal; text-align: center; overflow: visible; }
+  .sb-nav .sb-badge { position: absolute; top: 2px; right: 16%; min-width: 17px; height: 17px; padding: 0 4px; font-size: 10px; }
+  .sb-foot { margin: 0 0 0 auto; padding: 0; border: 0; flex-direction: row; align-items: center; gap: 2px; }
+  .sb-bell { width: 40px; height: 40px; padding: 0; justify-content: center; }
+  .sb-bell .sb-label, .sb-who, .sb-chev { display: none; }
+  .sb-me { padding: 4px; }
+  .sb-menu { left: auto; right: 0; bottom: auto; top: calc(100% + 8px); }
+}
+/* Dashboard fit strip (20 Nov) */
+.fit-strip { display: flex; gap: 3px; height: 14px; }
+.fit-seg { flex-basis: 0; min-width: 10px; border-radius: 5px; transition: transform .15s, filter .15s; }
+.fit-seg:hover { transform: translateY(-2px); filter: brightness(.95); }
+.fit-key { display: flex; flex-wrap: wrap; gap: 4px 14px; margin: 8px 0 0; padding: 0; list-style: none; font-size: 12px; color: var(--color-muted); }
+.fit-key li { display: inline-flex; align-items: center; gap: 5px; } .fit-key li.hi { color: var(--color-have-strong); font-weight: 600; }
+.fit-key i { width: 9px; height: 9px; border-radius: 3px; } .fit-key b { color: var(--color-ink); font-weight: 800; }
+/* Profile & privacy: one card, sections in two balanced columns (20 Nov) */
+.pp-card { background: #fff; border: 1px solid rgb(20 30 60 / 8%); border-radius: 20px; padding: 6px 26px 10px;
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); column-gap: 48px; box-shadow: 0 1px 2px rgb(20 30 60 / 5%); }
+.pp-col { min-width: 0; }
+@media (min-width: 900px) { .pp-col + .pp-col { border-left: 1px solid var(--color-line); padding-left: 48px; margin-left: -24px; } }
+.pp-sec { padding: 16px 0 14px; }
+.pp-sec + .pp-sec { border-top: 1px solid var(--color-line); }
+.dash-behind { padding: 8px 0 2px; font-size: 12px; font-weight: 700; color: var(--color-muted); border-top: 0 !important; }
+.dash-behind + li { border-top: 0 !important; }
+.dash-gaps { justify-content: space-evenly; }
+.dash-joblist { padding-right: 12px !important; margin-right: -6px !important; }
+/* 20 Nov (her review: one word per line at a mid width): a header's text keeps at least 20rem; the counts wrap
+   under it instead of squeezing it */
+.page-glass .flex-wrap > .flex-1.min-w-0 { flex-basis: 20rem; }
+/* Job Detail (20 Nov): the promise in one line (items wrap, never a box); the invitation as the accent note */
+.jd-promise { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 0; margin-top: 12px; font-size: 13px; color: var(--color-ink-soft); }
+.jd-promise > :not(:last-child)::after { content: "·"; margin: 0 7px; color: var(--color-faint); }
+.jd-invite { margin: 0; padding: 6px 12px; border-radius: 10px; font-size: 13px; color: var(--color-ink); background: var(--color-accent-soft); border: 1px solid #c8d7f4; }
+.jd-invite b { color: var(--color-accent-strong); }
+/* 20 Nov (her review): a tile with an open menu (the goal picker) sits above its neighbours */
+.dash-tile:has([aria-expanded="true"]) { z-index: 30; }
+/* AI card: the modes line stays one line */
+.a-ai > p:first-of-type { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.head-stats dt small { display: block; font-size: 11px; font-weight: 500; color: var(--color-muted); white-space: nowrap; }
+/* admin dashboard (20 Nov, her review: big gaps in Needs your action): needs at its own height, the profiles under it
+   take the rest; the skill gaps fill the right column */
+.adm-grid { grid-template-rows: auto minmax(0, 1fr) !important; }
+.adm-needs { grid-row: 1 !important; }
+.adm-needs > div:last-child > ul { flex: none !important; justify-content: flex-start !important; }
+.adm-prof { grid-column: 1 !important; grid-row: 2 !important; }
+.adm-gaps { grid-column: 2 !important; grid-row: 1 / 3 !important; }
+.adm-prof .adm-prof-body { flex: 1; align-content: center; }
+.adm-prof-bars { grid-template-columns: 1fr !important; gap: 14px !important; }
+.adm-prof-bars li { grid-template-columns: 13rem minmax(0, 1fr) 3.5rem !important; align-items: center !important; }
+.adm-prof-bars li > :nth-child(2) { grid-column: 2 !important; grid-row: 1 !important; }
+.adm-prof-bars li > :nth-child(3) { grid-column: 3 !important; text-align: right; }
+@media (max-width: 1023px) { .adm-needs, .adm-prof, .adm-gaps { grid-column: 1 !important; grid-row: auto !important; } }
+.adm-prof-body, .adm-prof-bars, .adm-prof-bars li { width: 100%; } .adm-prof-body { grid-template-columns: minmax(0, 1fr) !important; }
+/* admin dashboard on short screens: tighter rows, so the profiles card below keeps its three bars */
+@media (max-height: 820px) {
+  .adm-needs .adm-row { padding: 6px 0; }
+  .adm-needs .co-checks { margin-top: 3px; }
+  .adm-needs .adm-sub { margin-top: 2px; padding-bottom: 4px; }
+  .adm-needs .adm-th, .adm-prof .adm-th { padding-top: 12px; padding-bottom: 4px; }
+  .adm-prof-bars { gap: 8px !important; }
+  .adm-prof .adm-prof-body { padding-bottom: 10px; gap: 8px; }
+}
+.jd-chips { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-left: auto; }
+.jd-chip { display: inline-flex; align-items: center; gap: 5px; height: 30px; padding: 0 12px; border-radius: 99px; font-size: 13px;
+  background: #fff; border: 1px solid var(--color-line); color: var(--color-ink-soft); }
+.jd-chip b { color: var(--color-ink); }
+.jd-chip.invite { background: var(--color-accent-soft); border-color: #c8d7f4; color: var(--color-accent-strong); }
+.jd-chip.invite b { color: var(--color-accent-strong); }
+/* admin: needs + profiles on the left, gaps + recent on the right (20 Nov) */
+.adm-grid { grid-template-rows: auto minmax(0, 1fr) !important; }
+.adm-gaps { grid-row: 1 !important; }
+.adm-recent { grid-column: 2; grid-row: 2; min-height: 0; overflow: hidden; }
+.adm-recent-list { flex: 1; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; }
+.adm-recent-list li { display: flex; align-items: center; gap: 10px; padding: 7px 0; font-size: 13px; color: var(--color-ink-soft); border-top: 1px solid var(--color-line); }
+.adm-recent-list li:first-child { border-top: 0; }
+.adm-recent-list b { color: var(--color-ink); font-weight: 600; }
+.adm-dot { width: 8px; height: 8px; border-radius: 50%; flex: none; background: var(--color-accent); }
+.adm-dot.approve, .adm-dot.reactivate { background: var(--color-have); } .adm-dot.reject, .adm-dot.deactivate { background: var(--color-missing); }
+.adm-grid:not(:has(.adm-recent)) .adm-gaps { grid-row: 1 / 3 !important; }
+@media (max-width: 1023px) { .adm-recent { grid-column: 1 !important; grid-row: auto !important; } }
+.tab-track { padding: 4px; border-radius: 14px; background: #fff; border: 1px solid rgb(20 30 60 / 8%); box-shadow: 0 6px 18px -14px rgb(20 30 60 / 40%); }
+/* 20 Nov (her review: any number of rows): left = needs and profiles at their own height, then recent activity takes
+   whatever is left and scrolls; the skill gaps fill the right column. No card is stretched past its content. */
+/* needs grows to its content when there is room and scrolls inside when not; recent keeps at least ~2 rows */
+.adm-grid { grid-template-rows: minmax(150px, max-content) max-content minmax(110px, 1fr) !important; }
+.adm-needs { min-height: 0; }
+.adm-needs { grid-column: 1 !important; grid-row: 1 !important; }
+.adm-prof { grid-column: 1 !important; grid-row: 2 !important; }
+.adm-recent { grid-column: 1 !important; grid-row: 3 !important; min-height: 0; }
+.adm-gaps { grid-column: 2 !important; grid-row: 1 / 4 !important; }
+.adm-prof .adm-prof-body { flex: none; }
+.adm-prof-bars { gap: 10px !important; }
+.adm-grid:not(:has(.adm-recent)) .adm-prof { grid-row: 2 / 4 !important; }
+/* only the employer list scrolls; the module review part always shows */
+.adm-needs > div:last-child { overflow: hidden !important; }
+.adm-needs > div:last-child > ul { flex: 0 1 auto !important; min-height: 72px; overflow-y: auto; }
+.adm-needs > div:last-child > :not(ul) { flex-shrink: 0; }
+.adm-prof-bars { height: auto !important; align-content: start !important; }
+.adm-prof ul.adm-prof-bars { gap: 12px !important; }
+/* whole rows only: rows that don't fit wrap into a second column that is clipped (20 Nov) */
+.fit-rows { display: flex !important; flex-direction: column; flex-wrap: wrap; align-content: flex-start; overflow: hidden !important; column-gap: 200px; min-height: 0; }
+.fit-rows > li { width: 100%; flex: none; }
+.adm-needs > div:last-child > ul.adm-emps { flex: none !important; min-height: 0; overflow: visible !important; }
+.adm-recent-list.fit-rows { flex: 1; }
+.adm-grid { grid-template-rows: max-content max-content minmax(72px, 1fr) !important; }
+/* short screens: the three profile bars side by side (one row), so Recent activity keeps a few rows */
+@media (min-width: 1024px) and (max-height: 820px) {
+  .adm-prof ul.adm-prof-bars { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; gap: 18px !important; }
+  .adm-prof-bars li { grid-template-columns: minmax(0, 1fr) auto !important; align-items: end !important; row-gap: 6px !important; }
+  .adm-prof-bars li > :nth-child(2) { grid-column: 1 / -1 !important; grid-row: 2 !important; }
+  .adm-prof-bars li > :nth-child(3) { grid-column: 2 !important; grid-row: 1 !important; }
+  .adm-prof-bars li > :first-child { font-size: 12.5px; line-height: 1.25; }
+}
+/* 20 Nov (v3): left = needs (its own height) + profiles (the rest, bars centred); right = skill gaps (compact rows) +
+   recent activity (the rest, whole rows only) */
+.adm-grid { grid-template-rows: max-content minmax(0, 1fr) !important; }
+.adm-needs { grid-column: 1 !important; grid-row: 1 !important; }
+.adm-prof { grid-column: 1 !important; grid-row: 2 !important; }
+.adm-gaps { grid-column: 2 !important; grid-row: 1 !important; }
+.adm-recent { grid-column: 2 !important; grid-row: 2 !important; }
+.adm-gaps ul { justify-content: flex-start !important; gap: 9px !important; overflow: visible !important; }
+.adm-gaps > div:last-child { flex: none !important; }
+.adm-prof { justify-content: center; }
+.adm-prof .adm-prof-body { flex: 1; align-content: center !important; }
+.adm-grid:not(:has(.adm-recent)) .adm-gaps { grid-row: 1 / 3 !important; }
+@media (max-width: 1023px) { .adm-needs, .adm-prof, .adm-gaps, .adm-recent { grid-column: 1 !important; grid-row: auto !important; } }
+.adm-grid { grid-template-rows: minmax(0, 1fr) !important; align-items: stretch; }
+.adm-col { display: flex; flex-direction: column; gap: 14px; min-height: 0; }
+.adm-col > * { flex: none; grid-column: auto !important; grid-row: auto !important; }
+.adm-col > :last-child { flex: 1 1 0; min-height: 0; }
+.adm-col > .adm-needs:last-child { flex: none; }
+@media (max-width: 1023px) { .adm-col > :last-child { flex: none; } }
+/* right column: the skill gaps take the space, recent activity is its 5 newest rows (her review: few rows are enough) */
+.adm-col > .adm-gaps { flex: 1 1 0; min-height: 0; }
+.adm-col > .adm-recent:last-child { flex: none; }
+.adm-col > .adm-gaps > div:last-child { flex: 1 !important; display: flex; flex-direction: column; }
+.adm-col > .adm-gaps ul { flex: 1; justify-content: space-evenly !important; gap: 4px !important; }
+.adm-recent-list li { padding: 6px 0; }
+.adm-prof ul.adm-prof-bars { gap: clamp(12px, 2.6vh, 26px) !important; }
+/* profiles: the rows spread over the card like the skill gaps beside it; the key at the foot */
+.adm-col > .adm-prof .adm-prof-body { display: flex !important; flex-direction: column !important; align-items: stretch !important; flex: 1; padding-top: 6px; }
+.adm-col > .adm-prof ul.adm-prof-bars { flex: 1; display: flex !important; flex-direction: column; justify-content: space-evenly !important; gap: 4px !important; }
+.adm-col > .adm-prof .adm-prof-bars li { display: grid; }
+.save-bar { display: inline-flex; align-items: center; gap: 10px; padding: 5px 6px 5px 14px; border-radius: 14px; }
+.save-bar.unsaved { background: #fff4d6; border: 1px solid #f2c75c; color: #6b4a00; box-shadow: 0 8px 20px -14px rgb(125 86 0 / 55%); }
+.save-bar.saved { padding: 7px 14px; background: var(--color-have-soft); border: 1px solid #9fd9d0; color: var(--color-have-strong); font-size: 14px; font-weight: 600; }
+.save-dot { width: 9px; height: 9px; border-radius: 50%; background: #e0a21a; box-shadow: 0 0 0 4px rgb(224 162 26 / 22%); }
+@media (prefers-reduced-motion: no-preference) { .save-dot { animation: save-ping 1.6s ease-in-out infinite; } }
+@keyframes save-ping { 50% { box-shadow: 0 0 0 7px rgb(224 162 26 / 8%); } }
+.adm-clear { display: flex; align-items: center; gap: 14px; padding: 16px 20px; flex: none !important; }
+.adm-clear-ic { width: 38px; height: 38px; border-radius: 12px; display: grid; place-items: center; flex: none; background: var(--color-have-soft); color: var(--color-have-strong); font-weight: 800; font-size: 18px; }
+/* 20 Nov (her report: the Apply pop-up was cut off by the header): the header no longer clips; its map texture and
+   glows are rounded by themselves, so pop-ups opened from a header (Apply, How it works, tips) show whole */
+.page-glass::before, .page-glass::after { border-radius: inherit; }
+.page-glass:has([aria-expanded="true"], [role="dialog"]) { z-index: 30; }
+/* invitations: violet, the one colour nothing else uses (20 Nov, her review: "everything is already blue") */
+:root { --color-invite: #7444d1; --color-invite-soft: #f1ebfd; --color-invite-strong: #552b9e; }
+.invite-note { background: linear-gradient(100deg, var(--color-invite-soft), #fff 70%) !important; border-color: var(--color-invite) !important; box-shadow: 0 14px 30px -20px rgb(116 68 209 / 55%) !important; }
+.invite-ic { background: var(--color-invite) !important; }
+.invite-note .text-accent-strong { color: var(--color-invite-strong) !important; }
+.invite-note .head-cta { background: var(--color-invite) !important; box-shadow: 0 3px 0 var(--color-invite-strong) !important; }
+.jd-chip.invite { background: var(--color-invite-soft) !important; border-color: #d6c6f6 !important; color: var(--color-invite-strong) !important; }
+.jd-chip.invite b { color: var(--color-invite-strong) !important; }
+.dash-ping.invite { border-color: var(--color-invite) !important; background: var(--color-invite-soft) !important; }
+.dash-ping.invite a { background: var(--color-invite) !important; }
+.inv-word { color: var(--color-invite-strong); }
+.adm-clear p { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.adm-col > .adm-prof:not(:last-child) { flex: none; }
+.adm-col > .adm-recent:last-child { flex: 1 1 0; }
+.adm-col > .adm-recent:last-child .adm-recent-list { flex: 1; justify-content: space-evenly; overflow: hidden; }
+.adm-col:has(> .adm-gaps:only-child) > .adm-gaps { flex: 1 1 0; }
+.adm-col > .adm-prof:not(:last-child) ul.adm-prof-bars { flex: none; gap: 14px !important; }
+.inv-more { margin-top: -6px; font-size: 13px; font-weight: 600; color: var(--color-invite-strong); } .inv-more:hover { text-decoration: underline; }
+.sb-badge.inv { background: var(--color-invite); } .sb-item.on .sb-badge.inv { background: #fff; color: var(--color-invite-strong); }
+/* 20 Nov (v4): left = needs + profiles at their own height, recent activity takes the rest (whole rows only);
+   right = the skill gaps, full height, rows spread */
+.adm-col > .adm-prof { flex: none !important; }
+.adm-col > .adm-prof ul.adm-prof-bars { flex: none !important; gap: 14px !important; }
+.adm-col > .adm-prof .adm-prof-body { flex: none !important; }
+.adm-col > .adm-recent:last-child { flex: 1 1 0 !important; min-height: 92px; }
+.adm-col > .adm-recent .adm-recent-list { flex: 1; justify-content: flex-start; }
+.adm-col > .adm-gaps:only-child { flex: 1 1 0 !important; }
+.adm-col > .adm-gaps:only-child > div:last-child { flex: 1 !important; display: flex; flex-direction: column; min-height: 0; }
+.adm-col > .adm-gaps:only-child ul { flex: 1; justify-content: space-evenly !important; gap: 4px !important; min-height: 0; }
+.adm-col > .adm-gaps .adm-scale { margin-top: 8px !important; flex: none; }
+/* short screens: the three profile bars side by side, so Recent activity keeps room */
+@media (min-width: 1024px) and (max-height: 820px) {
+  .adm-col > .adm-prof ul.adm-prof-bars { display: grid !important; grid-template-columns: repeat(3, minmax(0, 1fr)) !important; gap: 18px !important; }
+  .adm-col > .adm-prof .adm-prof-bars li { grid-template-columns: minmax(0, 1fr) auto !important; align-items: end !important; row-gap: 6px !important; }
+  .adm-col > .adm-prof .adm-prof-bars li > :nth-child(2) { grid-column: 1 / -1 !important; grid-row: 2 !important; }
+  .adm-col > .adm-prof .adm-prof-bars li > :nth-child(3) { grid-column: 2 !important; grid-row: 1 !important; }
+  .adm-col > .adm-prof .adm-prof-bars li > :first-child { font-size: 12.5px; line-height: 1.25; }
+  .adm-col > .adm-recent:last-child { min-height: 84px; }
+}
+/* recent activity shows the whole rows that fit; on a small laptop (under 1280 wide and short) it gives way */
+.adm-col > .adm-recent:last-child { min-height: 0 !important; overflow: hidden; }
+@media (min-width: 1024px) and (max-width: 1279px) and (max-height: 820px) { .adm-col > .adm-recent { display: none !important; } .adm-col > .adm-prof:nth-last-child(1), .adm-col > .adm-prof:nth-last-child(2) { flex: 1 1 0 !important; } }
+/* the profile bars side by side on every laptop (one compact row), so Recent activity always keeps rows */
+@media (min-width: 1024px) {
+  .adm-col > .adm-prof ul.adm-prof-bars { display: grid !important; grid-template-columns: repeat(3, minmax(0, 1fr)) !important; gap: 18px !important; }
+  .adm-col > .adm-prof .adm-prof-bars li { grid-template-columns: minmax(0, 1fr) auto !important; align-items: end !important; row-gap: 6px !important; }
+  .adm-col > .adm-prof .adm-prof-bars li > :nth-child(2) { grid-column: 1 / -1 !important; grid-row: 2 !important; }
+  .adm-col > .adm-prof .adm-prof-bars li > :nth-child(3) { grid-column: 2 !important; grid-row: 1 !important; }
+  .adm-col > .adm-prof .adm-prof-bars li > :first-child { font-size: 12.5px; line-height: 1.25; }
+}
+/* AI card (20 Nov): questions together at the top, a question box at the foot */
+@media (min-width: 1024px) { .dash-asks { flex: 0 1 auto !important; justify-content: flex-start !important; gap: 6px !important; } }
+.dash-askbox { margin-top: auto; padding-top: 10px; display: flex; gap: 6px; }
+.dash-askbox input { flex: 1; min-width: 0; height: 36px; padding: 0 12px; border-radius: 11px; border: 1px solid #cfd5e2; background: #fff; font: inherit; font-size: 13px; }
+.dash-askbox input:focus { outline: 2px solid var(--color-accent); outline-offset: 1px; border-color: transparent; }
+.dash-askbox button { width: 36px; height: 36px; flex: none; border-radius: 11px; display: grid; place-items: center; background: var(--color-accent); color: #fff; }
+.dash-askbox button:disabled { background: var(--color-well); color: var(--color-faint); }
+.dash-askbox svg { width: 17px; height: 17px; }
+/* the counts' labels stay on one line in a narrow card */
+.dash-appstats > div { padding: 4px 10px !important; min-width: 0; } .dash-appstats dt { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 11.5px; }
+@media (min-width: 1024px) { .dash-asks { flex: 1 1 0 !important; min-height: 34px; } }
+.fit-seg { min-width: 24px; }
+.dash-appstats > div { padding: 4px 8px !important; } .dash-appstats dt { font-size: 11px; }

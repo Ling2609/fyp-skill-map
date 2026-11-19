@@ -96,7 +96,7 @@ STUDENTS = [
 ]
 
 EMPLOYERS = [
-    dict(key="lumen", first="Siti", last="Rahmah", company="Lumen Analytics Sdn Bhd", approved=True, jobs=[
+    dict(key="lumen", first="Siti", last="Rahmah", company="Lumen Analytics Sdn Bhd", website="lumen-analytics.example", ssm="202101004512", approved=True, jobs=[
         dict(title="Graduate Data Analyst", category=("Data", "Database", "Business"), decide_days=30,
              required=("SQL", "Python", "Power BI"), nice=("Tableau",),
              text="Turn sales and operations data into clear dashboards for our retail clients. You will write SQL, "
@@ -106,7 +106,7 @@ EMPLOYERS = [
              text="Help build the pipelines behind our analytics: Python and SQL ETL jobs on PostgreSQL, run in Docker. "
                   "Fresh graduates welcome."),
     ]),
-    dict(key="tropika", first="Jason", last="Ong", company="Tropika Systems Sdn Bhd", approved=True, jobs=[
+    dict(key="tropika", first="Jason", last="Ong", company="Tropika Systems Sdn Bhd", website="tropika-systems.example", ssm="201901023387", approved=True, jobs=[
         dict(title="Graduate Software Engineer", category=("Developers", "Software"), decide_days=21,
              required=("Java", "SQL", "Git"), nice=("Spring Boot", "Docker"),
              text="Join our payments team building Java services. You will write SQL, review code in Git and learn "
@@ -115,12 +115,12 @@ EMPLOYERS = [
              required=("Software Testing", "SQL"), nice=("Selenium",),
              text="Plan and run tests for our web apps, check data with SQL and help automate tests with Selenium."),
     ]),
-    dict(key="kenari", first="Aiman", last="Hakim", company="Kenari Cloud Sdn Bhd", approved=True, jobs=[
+    dict(key="kenari", first="Aiman", last="Hakim", company="Kenari Cloud Sdn Bhd", website="kenari-cloud.example", ssm="202201011906", approved=True, jobs=[
         dict(title="Junior Cloud Support Engineer", category=("Network", "System", "Cloud", "Support"), decide_days=30,
              required=("Linux", "Networking", "AWS"), nice=("Docker",),
              text="Support our customers' AWS workloads: Linux servers, networking and monitoring. Docker is a plus."),
     ]),
-    dict(key="bayu", first="Grace", last="Lee", company="Bayu Digital Sdn Bhd", approved=False, jobs=[]),
+    dict(key="bayu", first="Grace", last="Lee", company="Bayu Digital Sdn Bhd", website="bayu-digital.example", ssm="202301018840", approved=False, jobs=[]),
 ]
 
 # Who applies where and what happens next: (student, employer, job title, status, extra)
@@ -206,11 +206,12 @@ def add():
                 sys.exit(f"\n{r.request.method} {r.request.url.path} -> {r.status_code}: {r.text}\n")
             return r.json() if r.content else None
 
-        def register(key, role, first, last, company=None):
+        def register(key, role, first, last, company=None, website=None, ssm=None):
             body = {"username": f"demo_{key}", "first_name": first, "last_name": last, "email": email(key),
                     "password": DEMO_PASSWORD, "role": role, "accept_privacy": True}
             if company:
                 body["company_name"] = company
+                body.update(company_website=website, company_ssm=ssm)   # 20 Nov: required for employers
             ok(client.post("/auth/register", json=body))
             if role == "employer":
                 return None
@@ -221,10 +222,11 @@ def add():
             return {"Authorization": f"Bearer {t}"}
 
         cats = ok(client.get("/jobs/subcategories", params={"include_past": True}))
+        live = None   # categories with live jobs, read after the demo jobs are posted
         # ── Employers and their jobs ──
         jobs, emp_h = {}, {}
         for e in EMPLOYERS:
-            register(e["key"], "employer", e["first"], e["last"], company=e["company"])
+            register(e["key"], "employer", e["first"], e["last"], company=e["company"], website=e["website"], ssm=e["ssm"])
             if not e["approved"]:
                 continue                             # stays "waiting for approval" for the career office
             db.execute(text("update users set employer_status='approved' where email=:e"), {"e": email(e["key"])})
@@ -275,7 +277,10 @@ def add():
                     "languages": [{"language": "English", "level": "full_professional"},
                                   {"language": "Malay", "level": "native"}]}))
             if s["goal"]:
-                goal = first_match(cats, s["goal"])
+                # a goal must be a category with live jobs now (PUT /profile/goal refuses others), so not `cats`,
+                # which also lists categories that only have past jobs
+                live = live or ok(client.get("/jobs/subcategories"))
+                goal = first_match(live, s["goal"])
                 if goal:
                     ok(client.put("/profile/goal", headers=h, json={"category": goal}))
         # ── Applications, statuses, invitations ──

@@ -468,6 +468,8 @@ def register(payload: UserRegister, db: Session = Depends(get_db)):
     if payload.role == "employer":   # Admin approves employers before they can post jobs (7 Oct)
         user.employer_status = "pending"
         user.company_name = (payload.company_name or "").strip() or None
+        user.company_website = payload.company_website
+        user.company_ssm = payload.company_ssm
     db.add(user)
     db.commit()
     db.refresh(user)

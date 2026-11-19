@@ -1,7 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import api from '../../api'
-import PageHeader from '../../components/PageHeader'
+import PageHeader, { HeadStats } from '../../components/PageHeader'
 import BackLink from '../../components/BackLink'
 import { errText } from '../student/profileUtils'
 import { NOT_VIEWED_TIP, STATUSES, STATUS_CLS, fmtDay } from './statuses'
@@ -20,7 +20,7 @@ import { useToast } from '../../components/Toast'
 // missing skills for "missing skills"); the decision date and the numbers students see are in the header; contact
 // details appear only after shortlisting.
 const WAITING = ['applied', 'shortlisted']
-const CARD = 'bg-white border border-slate-200 rounded-2xl'
+const CARD = 'emp-tile bg-white border border-slate-200 rounded-2xl'
 const left = (iso) => {
   const d = Math.ceil((new Date(iso).getTime() - Date.now()) / 86400000)
   return d === 0 ? 'today' : `${d} day${d === 1 ? '' : 's'} left`
@@ -155,6 +155,7 @@ export default function Applicants() {
   const seeAll = (which) => setParams(which ? { see: which } : {})
   const box = useRef(null)
   const [room, setRoom] = useState(6)
+  const roomSeen = useRef([])   // the last few counts, to stop a flip between two
   const [nApps, nGrads] = share(shown.length, fitList.length, room, showGrads)
   const appsNow = see === 'applicants' ? shown : shown.slice(0, nApps)
   const gradsNow = see === 'graduates' ? fitList : fitList.slice(0, nGrads)
@@ -182,41 +183,55 @@ export default function Applicants() {
       const cs = getComputedStyle(el)
       const used = el.firstElementChild.getBoundingClientRect().height + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom)
       const fit = rowsNow.length + Math.floor((el.clientHeight - used) / rowH)
+      // 20 Nov (a page that never showed at 1280x720): N rows overflow but N-1 leave room for N, so the count
+      // flipped forever ("Maximum update depth"). Seen flipping back to the count before last: settle on the smaller
       setRoom(r => {
         const next = Math.max(2, Math.min(15, fit))
-        return next === r ? r : next
+        if (next === r) return r
+        const h = roomSeen.current
+        h.push(r)
+        if (h.length > 6) h.shift()
+        return h.includes(next) ? Math.min(r, next) : next
       })
     }
     measure()
-    const ro = new ResizeObserver(measure)
+    let raf = 0   // next frame, so no "ResizeObserver loop" warning (20 Nov)
+    const ro = new ResizeObserver(() => { cancelAnimationFrame(raf); raf = requestAnimationFrame(measure) })
     ro.observe(el)
-    return () => ro.disconnect()
+    return () => { ro.disconnect(); cancelAnimationFrame(raf) }
   }, [see, tab, data, grads, error, room])   // room: measure again after the rows change, until it settles
 
   return (
-    <div className="flex flex-col h-screen">
+    <div className="flex flex-col h-[calc(100dvh-var(--bar-h))]">
       {/* 21 Oct (her review: every back link the same, near the left edge) */}
       {see ? <BackLink label={job?.title || 'this job'} onClick={() => seeAll(null)} />
         : <BackLink label="My Jobs" onClick={() => navigate('/employer/jobs')} />}
       <PageHeader>
-        <div className="pb-5">
-          <div className="flex items-center gap-3 mt-1">
+        {/* 20 Nov (her approved mock): eyebrow, the job's state as pills, the counts in the white strip */}
+        <div className="pb-5 flex flex-wrap items-center gap-x-6 gap-y-3">
+          <div className="min-w-0 flex-1 basis-96">
+          <p className="text-[11px] font-semibold text-blue-600 uppercase tracking-widest mb-2">My Jobs · Applicants</p>
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
             <h1 className="text-2xl font-semibold tracking-tight text-slate-900">{job?.title || 'Applicants'}</h1>
-            {job && <span className={`text-xs font-medium border rounded-full px-2.5 py-0.5 ${job.status === 'open'
-              ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-slate-100 text-slate-600 border-slate-200'}`}>{job.status === 'open' ? 'Open' : 'Closed'}</span>}
+            {job && <span className={`text-xs font-bold rounded-full px-2.5 py-0.5 ${job.status === 'open'
+              ? 'bg-have-soft text-have-strong' : 'bg-well text-ink-soft'}`}>{job.status === 'open' ? '● Open' : 'Closed'}</span>}
+            {job?.stopped && <span className="text-xs font-bold rounded-full px-2.5 py-0.5 bg-partial-soft text-partial-strong">Not taking applications</span>}
           </div>
-          {job && <p className="text-sm text-slate-500 mt-1">
+          {job && <p className="text-sm text-slate-500 mt-1 inline mr-3">
             {[job.location, `posted ${fmtDay(job.posted_at)}`].filter(Boolean).join(' · ')}
             {job.required_names?.length > 0 && ` · requires ${job.required_names.join(', ')}`}
           </p>}
-          {job?.decide_by && <p className={`text-sm mt-1 ${job.past_date ? 'text-rose-700 font-medium' : 'text-slate-700'}`}>
-            {job.past_date ? `Your decision date (${fmtDay(job.decide_by)}) has passed. New applications are paused. Review the applicants still waiting; their applications remain pending.`
+          {/* 20 Nov (her review: a smaller header): the date on the same line as the job's facts when there is room */}
+          {job?.decide_by && <p className={`text-sm mt-1 ${job.past_date ? 'inline-block rounded-full bg-missing-soft px-3 py-0.5 text-[13px] font-semibold text-missing-strong' : 'text-slate-700'}`}>
+            {job.past_date ? `Decision date ${fmtDay(job.decide_by)} passed · new applications paused; review those still waiting`
               : <>Decide by {fmtDay(job.decide_by)} · {left(job.decide_by)}{' '}
                 {/* 25 Oct (her question: "Decide by 17 Nov means what?"): days left, and what the date means */}
                 <InfoTip label="What the decision date means">Applicants see "Reply by {fmtDay(job.decide_by)}" on My Applications.
                   Anyone still waiting after this date sees "No decision", and it counts in your reply record.</InfoTip></>}
-            {job.stopped && ' · Not taking new applications'}
           </p>}
+          </div>
+          {people.length > 0 && <HeadStats items={[[people.length, people.length === 1 ? 'Applicant' : 'Applicants'],
+            [count('applied'), 'To review', count('applied') > 0 ? 'todo' : ''], [count('accepted'), 'Accepted', 'good']]} />}
         </div>
       </PageHeader>
 
@@ -228,8 +243,8 @@ export default function Applicants() {
           <div role="tablist" className="flex flex-wrap gap-2 shrink-0">
             {[['all', 'All'], ...STATUSES].map(([key, text]) => (
               <button key={key} role="tab" aria-selected={tab === key} onClick={() => setTab(key)}
-                className={`text-sm font-medium px-3.5 py-1.5 rounded-full border ${tab === key
-                  ? 'bg-blue-600 border-blue-600 text-white' : 'bg-white border-slate-200 text-slate-600 hover:border-blue-300'}`}>{text} {count(key)}</button>
+                className={`text-sm font-semibold px-3.5 py-1.5 rounded-full border ${tab === key
+                  ? 'bg-accent border-accent text-white' : 'bg-white border-line-strong text-ink-soft hover:border-blue-300'}`}>{key === 'rejected' ? 'Not selected' : text} {count(key)}</button>
             ))}
           </div>
         )}
@@ -323,6 +338,16 @@ export default function Applicants() {
           </section>
         )}
 
+        {/* 20 Nov (her approved mock): with nobody to invite yet, say so instead of leaving the space empty */}
+        {data && !showGrads && !see && job?.status === 'open' && (
+          <section aria-labelledby="fit-none-h" className={`${CARD} px-5 py-4 flex items-start gap-3.5`}>
+            <svg aria-hidden="true" className="w-7 h-7 shrink-0 text-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><circle cx="9" cy="8" r="3.5" /><path d="M2.5 20c1-3.5 3.6-5.5 6.5-5.5s5.5 2 6.5 5.5M16 4.5a3.5 3.5 0 0 1 0 7M18 14.8c1.8.7 3 2.5 3.5 5.2" /></svg>
+            <div>
+              <h2 id="fit-none-h" className="text-sm font-bold text-ink m-0">Graduates who fit this job: none yet</h2>
+              <p className="text-sm text-ink-soft m-0 mt-0.5">Visible graduates with 50% or more of the required skills appear here, best match first, and you can invite several at once. New profiles are matched as students add them.</p>
+            </div>
+          </section>
+        )}
         {/* 25 Oct: graduates who fit this job and haven't applied; invite the ones you pick */}
         {showGrads && see !== 'applicants' && (
           <section aria-labelledby="fit-job-h" className={`flex flex-col gap-3 ${see ? 'min-h-0' : 'mt-1'}`}>
@@ -375,7 +400,7 @@ export default function Applicants() {
                       {/* her 21 Oct rule: strengths only. The nice-to-haves they have, by name; never "0 of 2" */}
                       <td className="px-5 py-3.5 text-slate-600 truncate" title={g.nice_have?.join(', ') || undefined}>
                         {g.nice_have?.length ? g.nice_have.join(', ') : <span className="text-slate-400">—</span>}</td>
-                      <td className="px-5 py-3.5">{g.invite ? <InviteLabel invite={g.invite} /> : <span className="text-xs text-slate-400">Not invited</span>}</td>
+                      <td className="px-5 py-3.5">{g.invite ? <InviteLabel invite={g.invite} /> : <span className="text-xs text-slate-500">Not invited</span>}</td>
                     </tr>
                   ))}
                 </tbody>

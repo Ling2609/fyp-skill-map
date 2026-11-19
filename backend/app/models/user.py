@@ -30,6 +30,9 @@ class User(Base):
     intake_id       = Column(Integer, ForeignKey("intakes.id", ondelete="SET NULL"), nullable=True)     # students
     company_name    = Column(String(120), nullable=True)                                                 # employers
     employer_status = Column(String(10), nullable=True)   # employers: pending / approved / rejected (by Admin)
+    # 20 Nov (her request; migrations/migrate_employer_details.py): what the career office checks before approving
+    company_website = Column(String(200), nullable=True)   # employers: required at sign-up since 20 Nov
+    company_ssm     = Column(String(20), nullable=True)    # employers: SSM registration number (same)
     # Showcase profile (8 Oct, Mr Au): shown on My Profile and to employers (migrations/migrate_profile_showcase.py)
     headline      = Column(String(120), nullable=True)   # one line, e.g. "Final-year Software Engineering student"
     about         = Column(Text, nullable=True)          # a short paragraph about the student
@@ -50,6 +53,8 @@ class User(Base):
     # languages as [{"language": "English", "level": "professional", "test": "MUET Band 5"}], and the CGPA the
     # student types from her transcript, shown to employers only if she switches it on
     languages = Column(JSON, nullable=False, default=list, server_default='[]')
+    # 20 Nov (her supervisor: e.g. a Google Scholar page): any other profile links, [{"label": "Google Scholar", "url": ...}]
+    other_links = Column(JSON, nullable=False, default=list, server_default='[]')
     cgpa = Column(Numeric(3, 2), nullable=True)
     show_cgpa = Column(Boolean, default=False, nullable=False, server_default="false")
 

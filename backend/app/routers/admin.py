@@ -52,8 +52,14 @@ def check_admin_schema():
     if "admin_actions" not in tables:
         raise RuntimeError("Database not updated: run  python migrations/migrate_admin_actions.py  "
                            "from the backend folder, then start the backend again.")
+    if "other_links" not in columns:     # 20 Nov
+        raise RuntimeError("Database not updated: run  python migrations/migrate_other_links.py  "
+                           "from the backend folder, then start the backend again.")
     if "kind" not in {c["name"] for c in inspect(engine).get_columns("programme_modules")}:     # 10 Oct
         raise RuntimeError("Database not updated: run  python migrations/migrate_all_programmes.py  "
+                           "from the backend folder, then start the backend again.")
+    if "company_ssm" not in columns:                                                            # 20 Nov
+        raise RuntimeError("Database not updated: run  python migrations/migrate_employer_details.py  "
                            "from the backend folder, then start the backend again.")
     if "other_codes" not in {c["name"] for c in inspect(engine).get_columns("intakes")}:       # 10 Oct, intakes
         raise RuntimeError("Database not updated: run  python migrations/migrate_intake_modules.py  "
@@ -75,10 +81,26 @@ def _last_actions(db: Session, user_ids: list[int]) -> dict[int, dict]:
     return latest
 
 
+# 20 Nov: public mailbox providers; an employer signing up with one of these isn't using a company address
+FREE_MAIL = {"gmail.com", "googlemail.com", "yahoo.com", "ymail.com", "hotmail.com", "outlook.com", "live.com",
+             "icloud.com", "me.com", "aol.com", "proton.me", "protonmail.com", "gmx.com", "mail.com", "yahoo.com.my"}
+
+
+def _company_checks(u: User) -> dict:
+    """What helps the career office decide: the website and SSM number given, and whether the email is a company one."""
+    domain = (u.email or "").rsplit("@", 1)[-1].lower()
+    site = (u.company_website or "").lower().split("//", 1)[-1].split("/", 1)[0].removeprefix("www.")
+    return {"company_website": u.company_website, "company_ssm": u.company_ssm, "free_email": domain in FREE_MAIL,
+            "email_matches_site": bool(site) and (domain == site or domain.endswith("." + site))}
+
+
 def _user_row(u: User, last: dict | None = None) -> dict:
-    return {"last_action": last, "id": u.id, "username": u.username, "name": f"{u.first_name} {u.last_name}".strip(), "email": u.email,
-            "role": u.role.value if hasattr(u.role, "value") else u.role, "is_active": u.is_active,
-            "company_name": u.company_name, "employer_status": u.employer_status, "created_at": u.created_at}
+    row = {"last_action": last, "id": u.id, "username": u.username, "name": f"{u.first_name} {u.last_name}".strip(), "email": u.email,
+           "role": u.role.value if hasattr(u.role, "value") else u.role, "is_active": u.is_active,
+           "company_name": u.company_name, "employer_status": u.employer_status, "created_at": u.created_at}
+    if row["role"] == "employer":
+        row.update(_company_checks(u))
+    return row
 
 
 def common_skill_gaps(db: Session) -> list[dict]:
@@ -101,6 +123,25 @@ def common_skill_gaps(db: Session) -> list[dict]:
     value = [{"skill": names[k], "students": n, "of_students": students} for k, n in counts.most_common(GAPS_TOP)]
     _gaps_cache.update(at=now, value=value)
     return value
+
+
+RECENT_DAYS = 30     # the same window as the header's "new in 30 days"
+
+
+def _recent(db: Session, n: int = 8) -> list[dict]:
+    """The newest n events of the last RECENT_DAYS days: sign-ups (students, employers) and admin decisions."""
+    since = datetime.now(timezone.utc) - timedelta(days=RECENT_DAYS)
+    joined = (db.query(User).filter(User.role != UserRole.admin, User.created_at >= since)
+              .order_by(User.created_at.desc()).limit(n).all())
+    events = [{"kind": "joined", "at": u.created_at, "name": u.company_name if u.role == UserRole.employer and u.company_name
+               else " ".join(filter(None, [u.first_name, u.last_name])) or u.username, "role": u.role.value} for u in joined]
+    for act, target in (db.query(AdminAction, User).join(User, User.id == AdminAction.target_user_id)
+                        .filter(AdminAction.created_at >= since).order_by(AdminAction.created_at.desc()).limit(n).all()):
+        events.append({"kind": act.action, "at": act.created_at, "role": target.role.value,
+                       "name": target.company_name if target.role == UserRole.employer and target.company_name
+                       else " ".join(filter(None, [target.first_name, target.last_name])) or target.username})
+    events.sort(key=lambda e: e["at"] or datetime.min.replace(tzinfo=timezone.utc), reverse=True)
+    return events[:n]
 
 
 @router.get("/dashboard")
@@ -136,6 +177,8 @@ def dashboard(db: Session = Depends(get_db), admin: User = Depends(require_admin
             "modules_reviewed": db.query(Module).filter(Module.skills_reviewed_at.isnot(None)).count(),
             "newest_live_job_at": db.query(func.max(Job.created_at)).filter(Job.source == "live").scalar(),
         },
+        # 20 Nov (her review: a card of what happened lately): the newest sign-ups and the latest admin decisions, one list
+        "recent": _recent(db),
         "profiles": {"students": students, "with_grades": with_grades, "with_project_or_cert": with_extra,
                      "visible_to_employers": db.query(User).filter(User.role == UserRole.student,
                                                                    User.is_active.is_(True),
@@ -175,6 +218,8 @@ def user_counts(q: str = "", db: Session = Depends(get_db), admin: User = Depend
             "students": base.filter(User.role == UserRole.student).count(),
             "employers": base.filter(User.role == UserRole.employer).count(),
             "waiting": base.filter(User.role == UserRole.employer, User.employer_status == "pending").count(),
+            # 20 Nov (her question: where are rejected employers?): their own filter; reasons are in View history
+            "not_approved": base.filter(User.role == UserRole.employer, User.employer_status == "rejected").count(),
             "deactivated": base.filter(User.is_active.is_(False)).count()}
 
 

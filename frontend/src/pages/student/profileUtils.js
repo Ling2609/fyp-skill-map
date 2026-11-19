@@ -23,6 +23,8 @@ export const aboutBody = (d) => ({
   // 21 Oct: languages and the CGPA (typed as text so "3.7" can be edited freely; sent as a number)
   languages: (d.languages || []).map(l => ({ language: l.language, level: l.level, test: l.test || '' })),
   cgpa: d.cgpa != null ? Number(d.cgpa).toFixed(2) : '', show_cgpa: !!d.show_cgpa,
+  // 20 Nov: other profile links (Google Scholar, ORCID...)
+  other_links: (d.links?.other || []).map(o => ({ label: o.label, url: o.url })),
 })
 
 // A programme picked, and an intake too whenever that programme has intakes

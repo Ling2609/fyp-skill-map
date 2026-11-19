@@ -1,13 +1,13 @@
 import { Fragment, useState, useEffect, useRef } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useAuth } from '../../context/useAuth'
 import api from '../../api'
 import { cached, peek } from '../../pageCache'
-import PageHeader from '../../components/PageHeader'
 import LevelTag from '../../components/LevelTag'
 import { Bar, LoadingLabel } from '../../components/Skeleton'
 import { skillName } from '../../skillName'
 import { Busy } from '../../components/Spinner'
+import { FIT_BANDS, FIT_FILTERS, filterOf } from '../../fitBands'
 
 const LOADING_STEPS = [
   'Building your skill profile...',
@@ -33,23 +33,25 @@ const inLocation = (job, loc) => loc === 'all'
 // would hide most suitable jobs. Off by default; the level penalty already ranks these lower.
 const SENIOR_LEVELS = ['senior', 'lead', 'manager']
 
+const monogram = (name = '') => (name.match(/[A-Za-z]+/g) || []).slice(0, 2).map(w => w[0]).join('').toUpperCase() || '·'
+
 function NoSkillsState() {
   const navigate = useNavigate()
   return (
-    <div className="h-screen bg-slate-50 flex flex-col items-center justify-center gap-5 px-4 sm:px-8 text-center">
-      <div className="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center">
-        <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <div className="h-screen flex flex-col items-center justify-center gap-5 px-4 sm:px-8 text-center">
+      <div className="w-12 h-12 rounded-tile bg-accent-soft flex items-center justify-center">
+        <svg className="w-6 h-6 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
         </svg>
       </div>
       <div>
-        <h2 className="text-base font-semibold text-slate-800 mb-1">Your skill profile is empty</h2>
-        <p className="text-sm text-slate-500 max-w-sm">
+        <h2 className="text-base font-semibold text-ink mb-1">Your skill profile is empty</h2>
+        <p className="text-sm text-muted max-w-sm">
           Add your module grades, projects, or certifications on your Profile page — we'll match you with jobs that fit your skills.
         </p>
       </div>
       <button onClick={() => navigate('/profile')}
-        className="bg-blue-600 text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-blue-700 transition flex items-center gap-2">
+        className="bg-accent text-white px-5 py-2.5 rounded-control text-sm font-medium hover:bg-accent transition flex items-center gap-2">
         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
         </svg>
@@ -94,7 +96,7 @@ function AppliedPill({ m }) {
   const ended = ENDED.includes(m.status)
   const text = `✓ Applied${m.site ? ` on ${m.site}` : ''}${m.status !== 'applied' ? ` · ${m.status_label}` : ''}`
   return <span className={`shrink-0 text-[11px] font-medium border rounded-full px-2 py-0.5 ${ended
-    ? 'text-slate-600 bg-slate-50 border-slate-200' : 'text-green-800 bg-green-50 border-green-200'}`}>{text}</span>
+    ? 'text-ink-soft bg-well border-line' : 'text-green-800 bg-green-50 border-green-200'}`}>{text}</span>
 }
 
 export default function Recommend() {
@@ -113,8 +115,13 @@ export default function Recommend() {
   const [subcategories, setSubcategories] = useState([])
   const [activeCategory, setActiveCategory] = useState('all')
   const [locations, setLocations] = useState([])     // every (country, location) of current openings
-  const [location, setLocation] = useState(sessionStorage.getItem('lastLocation') || 'all')
-  const [hideSenior, setHideSenior] = useState(sessionStorage.getItem('lastHideSenior') === '1')
+  const [params, setParams] = useSearchParams()
+  // "How well you fit" (17 Nov, her idea): the same bands as the Dashboard chart (fitBands.js); ?fit= picks one
+  const fromLink = !!filterOf(params.get('fit'))
+  const [fit, setFit] = useState(fromLink ? params.get('fit') : 'all')
+  // Arriving from a Dashboard bar (?fit=): the same jobs the bar counted, so no location or "hide senior" from before
+  const [location, setLocation] = useState(fromLink ? 'all' : sessionStorage.getItem('lastLocation') || 'all')
+  const [hideSenior, setHideSenior] = useState(fromLink ? false : sessionStorage.getItem('lastHideSenior') === '1')
   const [visibleCount, setVisibleCount] = useState(10)
   const latestSearch = useRef(0)   // only the newest search may update the page
   const restoreScroll = useRef(null)   // scroll position to go back to once cached results are shown
@@ -228,18 +235,17 @@ export default function Recommend() {
 
   // First load (checking the profile): the page's own header and a few job cards in grey bars (9 Oct)
   if (skillCount === null) return (
-    <div className="h-screen bg-slate-50 flex flex-col" aria-busy="true">
+    <div className="flex h-[calc(100dvh-var(--bar-h))] flex-col" aria-busy="true">
       <LoadingLabel>Loading your job matches…</LoadingLabel>
-      <PageHeader>
-        <div className="pt-1 pb-4">
-          <p className="text-[11px] font-semibold text-blue-600 uppercase tracking-widest mb-2">Job Matches</p>
-          <h1 className="text-2xl font-semibold tracking-tight text-slate-900">Explore your career fit</h1>
-          <Bar className="h-3.5 w-72 mt-2" />
-          <Bar className="h-11 w-full rounded-xl mt-4" />
-          <div className="flex gap-2 mt-3">{['w-28', 'w-36', 'w-36'].map((w, i) => <Bar key={i} className={`h-9 ${w} rounded-full`} />)}</div>
+      <div className="shrink-0 px-4 pb-2 pt-3 sm:px-6">
+        <div className="pb-4 pt-1">
+          <h1 className="m-0 font-display text-[27px] font-bold leading-[1.1] tracking-[-0.03em] text-ink">Job matches</h1>
+          <Bar className="mt-2 h-3.5 w-72" />
+          <Bar className="mt-4 h-11 w-full rounded-control" />
+          <div className="mt-3 flex gap-2">{['w-28', 'w-36', 'w-36'].map((w, i) => <Bar key={i} className={`h-9 ${w} rounded-pill`} />)}</div>
         </div>
-      </PageHeader>
-      <div className="flex-1 overflow-hidden px-4 sm:px-8 py-4"><JobCardsSkeleton /></div>
+      </div>
+      <div className="flex-1 overflow-hidden px-4 pb-4 sm:px-6"><JobCardsSkeleton /></div>
     </div>
   )
 
@@ -265,26 +271,29 @@ export default function Recommend() {
     sessionStorage.setItem('lastHideSenior', on ? '1' : '0')
   }
 
+  const handleFit = (value) => {
+    setFit(value)
+    setVisibleCount(10)
+    const next = new URLSearchParams(params)
+    if (value === 'all') next.delete('fit'); else next.set('fit', value)
+    setParams(next, { replace: true })
+  }
+
   const clearFilters = () => {
+    handleFit('all')
     handleLocation('all')
     handleHideSenior(false)
     setActiveCategory('all')
     doSearch(roleFilter, 'all')
   }
 
-  const getMatchBgColor = (pct) => pct >= 70 ? 'bg-emerald-50 text-emerald-700' : pct >= 40 ? 'bg-amber-50 text-amber-700' : 'bg-rose-50 text-rose-700'
-  const getAccentColor  = (pct) => pct >= 70 ? 'bg-emerald-400' : pct >= 40 ? 'bg-amber-400' : 'bg-rose-400'
-
-  // Displayed number = skill coverage (same as Job Detail). Default order = "best fit" (backend ranking,
-  // which also weighs overall profile similarity and seniority); "most skills" re-sorts by coverage.
-  const coverageOf = (job) => job.coverage_percent ?? job.match_percent
-  // Job Matches shows only current openings (the backend no longer sends past 2024 postings;
-  // those are used for Career Paths and market statistics instead)
   const allJobs = results?.recommendations || []
-  const isSenior = (job) => SENIOR_LEVELS.includes(job.level)
-  const levelJobs = hideSenior ? allJobs.filter(job => !isSenior(job)) : allJobs
-  const placeJobs = levelJobs.filter(job => inLocation(job, location))
-  // Options come from all current openings (stable list); counts follow the current search, chip and level switch
+  const levelJobs = hideSenior ? allJobs.filter(j => !SENIOR_LEVELS.includes((j.level || '').toLowerCase())) : allJobs
+  const coverageOf = (job) => job.skills_total ? job.skills_matched / job.skills_total : (job.match_percent || 0) / 100
+  const inPlace = levelJobs.filter(job => inLocation(job, location))
+  const fitCount = (k) => inPlace.filter(job => filterOf(k).test(coverageOf(job))).length
+  const placeJobs = fit === 'all' ? inPlace : inPlace.filter(job => filterOf(fit).test(coverageOf(job)))
+
   const countIn = (loc) => levelJobs.filter(job => inLocation(job, loc)).length
   const statesBy = {}
   for (const place of locations) {
@@ -305,7 +314,7 @@ export default function Recommend() {
   const visibleJobs = sortedJobs.slice(0, visibleCount)
   const hasMore = results && visibleCount < sortedJobs.length
 
-  const filtersOn = location !== 'all' || activeCategory !== 'all' || hideSenior
+  const filtersOn = location !== 'all' || activeCategory !== 'all' || hideSenior || fit !== 'all'
   const matchCount = placeJobs.filter(job => titleOf(job) > 0).length
   const locationOptions = (
     <>
@@ -332,7 +341,7 @@ export default function Recommend() {
   )
   const searchInput = (pad) => (
     <div className={`flex-1 flex items-center gap-2 ${pad} pr-3 py-2.5 min-w-0`}>
-      <svg className="w-4 h-4 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <svg className="w-4 h-4 text-muted shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
       </svg>
       <input type="text" value={roleFilter} aria-label="Search jobs"
@@ -346,26 +355,26 @@ export default function Recommend() {
           if (e.key === 'Escape' && roleFilter) { setRoleFilter(''); doSearch('', activeCategory) }
         }}
         placeholder="Job title, skill or company"
-        className="flex-1 min-w-0 bg-transparent text-sm focus:outline-none text-slate-700 placeholder-slate-400" />
+        className="flex-1 min-w-0 bg-transparent text-sm focus:outline-none text-ink-soft placeholder-slate-400" />
       {roleFilter && (
         <button onClick={() => { setRoleFilter(''); doSearch('', activeCategory) }} aria-label="Clear search"
-          className="text-slate-500 hover:text-slate-600 text-xs">✕</button>
+          className="text-muted hover:text-ink-soft text-label">✕</button>
       )}
     </div>
   )
   const searchButton = (
     <button onClick={handleFindJobs} disabled={loading}
-      className="shrink-0 bg-blue-600 text-white px-4 sm:px-5 rounded-lg text-sm font-medium hover:bg-blue-700 transition disabled:opacity-50">
+      className="shrink-0 bg-accent text-white px-4 sm:px-5 rounded-control text-sm font-medium hover:bg-accent transition disabled:opacity-50">
       {loading ? <Busy>Searching…</Busy> : 'Search'}
     </button>
   )
   // Sort shows plain text with the browser's list invisibly on top (same as the filter buttons), so it is only as
   // wide as "Best fit" in every browser
   const sortSelect = (
-    <span className="relative inline-flex items-center gap-1.5 text-sm text-slate-500 rounded focus-within:ring-2 focus-within:ring-blue-200">
+    <span className="relative inline-flex items-center gap-1.5 text-sm text-muted rounded focus-within:ring-2 focus-within:ring-accent/30">
       Sort by
-      <span className="text-slate-700 font-medium">{sortBy === 'fit' ? 'Best fit' : 'Most skills matched'}</span>
-      <svg className="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+      <span className="text-ink-soft font-medium">{sortBy === 'fit' ? 'Best fit' : 'Most skills matched'}</span>
+      <svg className="w-3.5 h-3.5 text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
       </svg>
       <select aria-label="Sort by" value={sortBy} onChange={e => { setSortBy(e.target.value); setVisibleCount(10) }}
@@ -380,22 +389,21 @@ export default function Recommend() {
   )
 
   return (
-    <div className="h-screen bg-slate-50 flex flex-col">
-      <PageHeader>
-        <div>
-          <div className="flex items-start justify-between mb-4 pt-1">
-            <div>
-              <p className="text-[11px] font-semibold text-blue-600 uppercase tracking-widest mb-2">Job Matches</p>
-              <h1 className="text-2xl font-semibold tracking-tight text-slate-900">Explore your career fit</h1>
-              <p className="text-sm text-slate-500 mt-1">
-                Matched from your full skill profile
-                {results && ` · ${results.total_jobs_compared} current openings compared`}
+    <div className="mx-auto flex h-[calc(100dvh-var(--bar-h))] w-full max-w-[1240px] flex-col">
+      <div className="shrink-0 px-4 pt-3 pb-3 sm:px-6">
+        <div className="dash-featured dash-rise-in rounded-[28px] border px-5 pt-4 pb-1 sm:px-6">
+          <div className="mb-3 flex items-start justify-between gap-4">
+            {/* 20 Nov (her review): the line sits beside the title, so the card is one line lower */}
+            <div className="min-w-0 flex flex-wrap items-baseline gap-x-3 gap-y-0.5">
+              <h1 className="m-0 font-display text-[32px] font-extrabold leading-[1.05] tracking-[-0.04em] text-ink max-sm:text-[26px]">Job matches</h1>
+              <p className="m-0 text-small text-muted">
+                From your skill profile
+                {results && <span className="text-faint"> · {results.total_jobs_compared} openings compared</span>}
               </p>
             </div>
             {/* A visible button: matches come from the profile, so updating it is the main way to change them */}
             <button onClick={() => navigate('/profile')}
-              className="flex items-center gap-2 text-sm font-medium text-blue-700 bg-blue-50 border border-blue-200 rounded-lg px-3.5 py-2
-                hover:bg-blue-100 hover:border-blue-300 transition shrink-0">
+              className="acad-btn edit shrink-0 rounded-full! active:scale-95">
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                   d="M15.232 5.232l3.536 3.536M9 13l6.232-6.232a2.5 2.5 0 113.536 3.536L12.536 16.536 8 18l1.464-4.536z" />
@@ -405,7 +413,7 @@ export default function Recommend() {
           </div>
 
           <div className="flex gap-2 mb-3">
-            <div className="flex-1 min-w-0 flex items-center bg-white border border-slate-200 rounded-lg focus-within:border-blue-300 transition">
+            <div className="flex min-w-0 flex-1 items-center rounded-control border border-line-strong bg-card transition focus-within:border-accent focus-within:ring-[3px] focus-within:ring-accent/15">
               {searchInput('pl-3.5')}
             </div>
             {searchButton}
@@ -417,6 +425,11 @@ export default function Recommend() {
               value={location} onChange={handleLocation} onClear={() => handleLocation('all')}>{locationOptions}</FilterButton>
             <FilterButton label="Job category" display={activeCategory} active={activeCategory !== 'all'}
               value={activeCategory} onChange={handleCategoryClick} onClear={() => handleCategoryClick('all')}>{categoryOptions}</FilterButton>
+            <FilterButton label="How well you fit" display={filterOf(fit)?.label} active={fit !== 'all'}
+              value={fit} onChange={handleFit} onClear={() => handleFit('all')}>
+              <option value="all">Any fit</option>
+              {FIT_FILTERS.map(f => <option key={f.key} value={f.key} disabled={!fitCount(f.key)}>{f.label} of the skills ({fitCount(f.key)})</option>)}
+            </FilterButton>
             <button type="button" aria-pressed={hideSenior} onClick={() => handleHideSenior(!hideSenior)}
               title="Hides jobs whose title says Senior, Lead or Manager"
               className={`${PILL} px-3.5 py-1.5 ${hideSenior ? PILL_ON : PILL_OFF}`}>
@@ -425,19 +438,19 @@ export default function Recommend() {
             <div className="ml-auto">{sortSelect}</div>
           </div>
         </div>
-      </PageHeader>
+      </div>
 
-      <div ref={listRef} className="flex-1 overflow-auto px-4 sm:px-8 py-4">
+      <div ref={listRef} className="scroll-y min-h-0 flex-1 px-4 pb-4 sm:px-6">
         {loading && (
           <>
           <div className="flex flex-col items-center justify-center pt-6 pb-5 gap-4">
             <div className="w-full max-w-xs">
-              <div className="flex justify-between text-xs mb-2">
-                <span className="text-slate-500">{LOADING_STEPS[loadingStep]}</span>
-                <span className="text-blue-600 font-medium tabular-nums">{loadingProgress}%</span>
+              <div className="flex justify-between text-label mb-2">
+                <span className="text-muted">{LOADING_STEPS[loadingStep]}</span>
+                <span className="text-accent font-medium tabular-nums">{loadingProgress}%</span>
               </div>
-              <div className="w-full bg-slate-100 rounded-full h-1">
-                <div className="bg-blue-600 h-1 rounded-full transition-all duration-500" style={{ width: `${loadingProgress}%` }} />
+              <div className="w-full bg-well rounded-full h-1">
+                <div className="bg-accent h-1 rounded-full transition-all duration-500" style={{ width: `${loadingProgress}%` }} />
               </div>
             </div>
           </div>
@@ -448,16 +461,16 @@ export default function Recommend() {
         )}
 
         {error && !loading && (
-          <div className="bg-rose-50 text-rose-700 text-sm px-4 py-3 rounded-lg border border-rose-100 mb-4">{error}</div>
+          <div className="bg-missing-soft text-missing-strong text-sm px-4 py-3 rounded-control border border-missing/25 mb-4">{error}</div>
         )}
 
         {results && !loading && (
-          <div className="space-y-1.5">
+          <div className="space-y-2">
             {/* Count line (3 Oct): a search only ranks (others stay below the divider), so with a search it counts the
                 jobs that match it, not the whole list; with nothing typed or set the header already gives the total */}
             {allJobs.length > 0 && (shownQuery || filtersOn) && (
               <div className="pb-1 text-sm">
-                <p className="text-slate-500">
+                <p className="text-muted">
                   {shownQuery && matchCount === 0 && filtersOn
                     ? `No openings match “${shownQuery}” with these filters. Showing the ${placeJobs.length} ${placeJobs.length === 1 ? 'opening' : 'openings'} in these filters instead.`
                     : shownQuery && matchCount === 0
@@ -466,77 +479,66 @@ export default function Recommend() {
                     ? `${matchCount} ${matchCount === 1 ? 'opening matches' : 'openings match'} “${shownQuery}”`
                     : `${placeJobs.length} ${placeJobs.length === 1 ? 'opening' : 'openings'}`}
                   {filtersOn && (
-                    <button onClick={clearFilters} className="ml-3 text-blue-600 hover:underline">Clear filters</button>
+                    <button onClick={clearFilters} className="ml-3 text-accent hover:underline">Clear filters</button>
                   )}
                 </p>
               </div>
             )}
             {placeJobs.length === 0 ? (
-              <div className="bg-white rounded-xl p-10 text-center border border-slate-200">
-                <p className="text-slate-500 text-sm">No current openings match this search. Try a broader search, another category or location.</p>
+              <div className="rounded-[20px] bg-card p-10 text-center shadow-card">
+                <p className="text-muted text-sm">No current openings match this search. Try a broader search, another category or location.</p>
               </div>
             ) : (
               <>
                 {visibleJobs.map((job, idx) => (
                   <Fragment key={job.job_id}>
                   {idx > 0 && titleOf(job) === 0 && titleOf(visibleJobs[idx - 1]) > 0 && (
-                    <p className="text-xs text-slate-500 pt-3 pb-1 px-1">Other openings that fit your profile</p>
+                    <p className="text-label text-muted pt-3 pb-1 px-1">Other openings that fit your profile</p>
                   )}
-                  <div onClick={() => openJob(job.job_id)}
-                    className="bg-white rounded-xl border border-slate-200 cursor-pointer hover:border-blue-200 hover:shadow-sm transition group overflow-hidden flex">
-                    {/* Left accent bar */}
-                    <div className={`w-1 shrink-0 ${getAccentColor(coverageOf(job))}`} />
-                    <div className="flex-1 px-4 py-3.5 min-w-0">
-                      <div className="flex items-center justify-between gap-3">
-                        <div className="flex items-center gap-2.5 min-w-0">
-                          <span className="text-xs text-slate-500 font-medium tabular-nums shrink-0 w-4">{idx + 1}</span>
-                          <div className="min-w-0">
-                            {/* 12 Oct (her review): the pill sat inside the truncated title line, so its bottom was cut off;
-                                now the title truncates on its own and the pills sit beside it */}
-                            <div className="flex items-center gap-2 min-w-0">
-                              {/* 22 Oct (accessibility check): the title is a real link, so the card opens with Tab + Enter and
-                                  screen readers announce it; the whole card still opens with a mouse click */}
-                              <a href={`/jobs/${encodeURIComponent(job.job_id)}`}
-                                onClick={e => { e.stopPropagation(); if (e.ctrlKey || e.metaKey || e.shiftKey || e.button) return; e.preventDefault(); openJob(job.job_id) }}
-                                className="font-semibold text-slate-800 text-sm truncate group-hover:text-blue-700 transition leading-snug rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500">{job.job_title}</a>
-                              {/* 11 Oct: a post by one of the university's partner employers, applied for on SkillMap */}
-                              {/* 19 Oct (her pick 5, option B; Indeed labels its own-apply jobs by the action, references.md "Job source on
-                                  cards"): every card says how to apply, before clicking */}
-                              {/* 20 Oct (her pick P1+P2): once applied, one pill replaces "Apply on…": "✓ Applied", the site for
-                                  a job on another site, and the stage once it moves past Applied */}
-                              {mine[job.job_id]?.applied ? <AppliedPill m={mine[job.job_id]} />
-                                : job.source === 'employer' ? <span className="shrink-0 text-[11px] font-medium text-blue-700 bg-blue-50 border border-blue-200 rounded-full px-2 py-0.5">Apply on SkillMap</span>
-                                : job.source === 'live' ? <span className="shrink-0 text-[11px] font-medium text-slate-600 bg-slate-50 border border-slate-200 rounded-full px-2 py-0.5">Apply on {job.publisher || 'employer site'} ↗</span>
-                                : null}
-                              {mine[job.job_id]?.invited && <span className="shrink-0 text-[11px] font-medium text-violet-700 bg-violet-50 border border-violet-200 rounded-full px-2 py-0.5">Invited to apply</span>}
-                            </div>
-                            <p className="text-xs text-slate-500 mt-0.5 truncate">
-                              {job.company} · {job.location}{daysAgo(job.posted_days_ago) && ` · ${daysAgo(job.posted_days_ago)}`}
-                            </p>
-                          </div>
+                  <div onClick={() => openJob(job.job_id)} style={{ '--k': Math.min(idx, 10) }}
+                    onPointerMove={e => { const r = e.currentTarget.getBoundingClientRect(); e.currentTarget.style.setProperty('--mx', `${e.clientX - r.left}px`); e.currentTarget.style.setProperty('--my', `${e.clientY - r.top}px`) }}
+                    className="jm-card group relative flex cursor-pointer rounded-[20px] border border-transparent bg-card">
+                    <div className="flex min-w-0 flex-1 flex-wrap items-start gap-3 px-3.5 py-3 sm:flex-nowrap">
+                      <span aria-hidden="true" className="grid h-10 w-10 shrink-0 place-items-center rounded-[12px] bg-accent-soft font-display text-label font-bold text-accent-strong">
+                        {monogram(job.company)}
+                      </span>
+                      <div className="min-w-0 flex-1 max-sm:basis-[calc(100%-52px)]">
+                        <div className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1 sm:flex-nowrap">
+                          <a href={`/jobs/${encodeURIComponent(job.job_id)}`}
+                            onClick={e => { e.stopPropagation(); if (e.ctrlKey || e.metaKey || e.shiftKey || e.button) return; e.preventDefault(); openJob(job.job_id) }}
+                            className="min-w-0 rounded font-display text-body font-bold leading-snug text-ink sm:truncate transition group-hover:text-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/40">{job.job_title}</a>
+                          {mine[job.job_id]?.applied ? <AppliedPill m={mine[job.job_id]} />
+                            : job.source === 'employer' ? <span className="shrink-0 rounded-pill border border-accent/30 bg-accent-soft px-2 py-0.5 text-label font-medium text-accent">On SkillMap</span>
+                            : job.source === 'live' ? <span className="shrink-0 rounded-pill border border-line bg-band px-2 py-0.5 text-label font-medium text-muted">{job.publisher || 'employer site'} ↗</span>
+                            : null}
+                          {mine[job.job_id]?.invited && <span className="shrink-0 rounded-pill border border-c3/40 bg-c3/15 px-2 py-0.5 text-label font-medium text-ink-soft">Invited</span>}
                         </div>
-                        {/* Match % pill */}
-                        {/* 13 Oct (audit): say what the count is out of. Most ads have required skills; an ad that names
-                            none is counted on its listed (or only its preferred) skills, as Job Detail already says */}
-                        <span
-                          title={BASIS_TIP[job.coverage_basis] || BASIS_TIP.required}
-                          className={`shrink-0 text-xs font-bold tabular-nums px-2.5 py-1 rounded-full ${getMatchBgColor(coverageOf(job))}`}
-                        >
+                        <p className="m-0 mt-0.5 truncate text-small text-faint">
+                          {job.company} · {job.location}{daysAgo(job.posted_days_ago) && ` · ${daysAgo(job.posted_days_ago)}`}
+                        </p>
+                        <div className="mt-2 flex flex-wrap items-center gap-1.5">
+                          <LevelTag level={job.level} />
+                          <span className="rounded-chip bg-well px-2 py-0.5 text-label font-medium text-ink-soft">{job.subcategory}</span>
+                          {job.salary && job.salary !== 'nan' && (
+                            <span className="rounded-chip bg-well px-2 py-0.5 text-label font-medium text-ink-soft">{job.salary}</span>
+                          )}
+                          {job.top_job_skills?.slice(0, 3).map(skill => (
+                            <span key={skill} className={skill === job.search_skill
+                              ? 'rounded-chip border border-accent/30 bg-accent-soft px-2 py-0.5 text-label font-medium text-accent'
+                              : 'rounded-chip border border-line px-2 py-0.5 text-label text-muted'}>{skillName(skill)}</span>
+                          ))}
+                        </div>
+                      </div>
+                      <div className="flex w-28 shrink-0 flex-col items-end gap-1.5 max-sm:w-full max-sm:flex-row max-sm:items-center max-sm:gap-3 max-sm:pl-[52px]">
+                        <span title={BASIS_TIP[job.coverage_basis] || BASIS_TIP.required}
+                          className="rounded-pill bg-have-soft px-2 py-0.5 font-mono text-label font-medium tabular text-have-strong whitespace-nowrap">
                           {job.skills_total ? `${job.skills_matched}/${job.skills_total} ${BASIS_WORD[job.coverage_basis] || 'required'}` : `${job.match_percent}%`}
                         </span>
-                      </div>
-                      <div className="flex gap-1.5 mt-2.5 flex-wrap">
-                        <LevelTag level={job.level} />
-                        <span className="text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded-md font-medium">{job.subcategory}</span>
-                        {job.salary && job.salary !== 'nan' && (
-                          <span className="text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded-md font-medium">{job.salary}</span>
-                        )}
-                        {job.top_job_skills?.slice(0, 3).map(skill => (
-                          // the skill the search matched comes first and is highlighted: it shows why the job is here
-                          <span key={skill} className={skill === job.search_skill
-                            ? 'text-xs text-blue-700 bg-blue-50 px-2 py-0.5 rounded-md border border-blue-200 font-medium'
-                            : 'text-xs text-slate-500 px-2 py-0.5 rounded-md border border-slate-200'}>{skillName(skill)}</span>
-                        ))}
+                        {job.skills_total ? (
+                          <span aria-hidden="true" className="h-1.5 w-full overflow-hidden rounded-full bg-well max-sm:order-first max-sm:flex-1">
+                            <span className={`dash-grow block h-full rounded-full ${(FIT_BANDS.find(b => b.test(coverageOf(job))) || FIT_BANDS[0]).tone}`} style={{ width: Math.round((job.skills_matched / Math.max(1, job.skills_total)) * 100) + '%' }} />
+                          </span>
+                        ) : null}
                       </div>
                     </div>
                   </div>
@@ -544,12 +546,12 @@ export default function Recommend() {
                 ))}
                 {hasMore && (
                   <button onClick={() => setVisibleCount(prev => prev + 10)}
-                    className="w-full py-3 bg-white border border-slate-200 rounded-xl text-sm text-slate-500 hover:border-blue-300 hover:text-blue-600 transition mt-2">
+                    className="mt-2 w-full rounded-[20px] bg-card py-3 text-sm font-semibold text-accent-strong shadow-card transition hover:bg-accent-soft active:scale-[.99]">
                     Show more ({sortedJobs.length - visibleCount} remaining)
                   </button>
                 )}
                 {!hasMore && sortedJobs.length > 0 && (
-                  <p className="text-center text-xs text-slate-500 py-3">{sortedJobs.length === 1 ? 'End of list' : `End of list · all ${sortedJobs.length} shown`}</p>
+                  <p className="text-center text-label text-muted py-3">{sortedJobs.length === 1 ? 'End of list' : `End of list · all ${sortedJobs.length} shown`}</p>
                 )}
               </>
             )}
@@ -560,22 +562,24 @@ export default function Recommend() {
   )
 }
 
+// The spread of fit across the openings: a five-bucket bar strip, so "most ads
+// ask for 3-5 of these 10 skills" is visible without reading every card.
 const Chevron = () => (
-  <svg className="w-3.5 h-3.5 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none text-slate-500"
+  <svg className="w-3.5 h-3.5 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none text-muted"
     fill="none" stroke="currentColor" viewBox="0 0 24 24">
     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
   </svg>
 )
 
-const PILL = 'inline-flex items-center text-sm rounded-full border transition'
-const PILL_ON = 'border-blue-300 bg-blue-50 text-blue-700'
-const PILL_OFF = 'border-slate-200 bg-white text-slate-600 hover:border-slate-300'
+const PILL = 'inline-flex items-center rounded-pill border text-small transition'
+const PILL_ON = 'border-accent/40 bg-accent-soft text-accent'
+const PILL_OFF = 'border-line bg-card text-ink-soft hover:border-line-strong'
 
 // Filter button: shows "Location ⌄" or the chosen value with ✕. The browser's own list sits invisibly on top of the
 // label, so opening, keyboard use and screen readers work as with a normal dropdown.
 function FilterButton({ label, display, active, value, onChange, onClear, children }) {
   return (
-    <span className={`${PILL} focus-within:ring-2 focus-within:ring-blue-200 ${active ? PILL_ON : PILL_OFF}`}>
+    <span className={`${PILL} focus-within:ring-2 focus-within:ring-accent/30 ${active ? PILL_ON : PILL_OFF}`}>
       <span className={`relative py-1.5 pl-3.5 ${active ? 'pr-1.5' : 'pr-8'}`}>
         {active ? display : label}
         {!active && <Chevron />}
@@ -597,8 +601,8 @@ function JobCardsSkeleton({ count = 5 }) {
   return (
     <div className="space-y-2.5" aria-hidden="true">
       {[...Array(count)].map((_, i) => (
-        <div key={i} className="bg-white rounded-xl border border-slate-200 overflow-hidden flex">
-          <div className="w-1 shrink-0 bg-slate-200" />
+        <div key={i} className="flex overflow-hidden rounded-[20px] bg-card shadow-card">
+          <div className="w-1 shrink-0 bg-line-strong" />
           <div className="flex-1 px-4 py-3.5 space-y-2.5">
             <div className="flex items-center justify-between gap-3">
               <div className="space-y-2 flex-1"><Bar className="h-3.5 w-2/5" /><Bar className="h-3 w-1/3" /></div>

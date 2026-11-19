@@ -1,10 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import api from '../../api'
-import PageHeader from '../../components/PageHeader'
+import PageHeader, { HeadStats } from '../../components/PageHeader'
 import { useAuth } from '../../context/useAuth'
 import { ADMIN_COUNTS_CHANGED } from '../../components/Sidebar'
 import ReasonDialog from './ReasonDialog'
+import { CompanyChecks } from './CompanyChecks'
 import HistoryDialog from './HistoryDialog'
 import RowMenu from './RowMenu'
 import { TableRowsSkeleton } from '../../components/Skeleton'
@@ -25,6 +26,13 @@ import { useToast } from '../../components/Toast'
 const ROLE = { student: 'Student', employer: 'Employer', admin: 'Admin' }
 // The column titles sit in their own strip above the scrolling list, so the scroll bar starts at the first account;
 // both tables share these widths, and the strip keeps a scroll-bar gutter so the columns line up
+// role chips (20 Nov): a cap for students, a briefcase for employers, a shield for the career office
+const ic = (d) => <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">{d}</svg>
+const ROLE_ICON = {
+  student: ic(<><path d="M2 9l10-5 10 5-10 5Z" /><path d="M6 11v5c3 2 9 2 12 0v-5" /></>),
+  employer: ic(<><rect x="3" y="7" width="18" height="13" rx="2" /><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" /></>),
+  admin: ic(<path d="M12 3 5 6v6c0 4 3 7.5 7 9 4-1.5 7-5 7-9V6Z" />),
+}
 const COLS = [['Name', '31%'], ['Role', '20%'], ['Joined', '22%'], ['Status', '20%'], ['Actions', '7%']]
 const colgroup = <colgroup>{COLS.map(([n, w]) => <col key={n} style={{ width: w }} />)}</colgroup>
 const day = (iso) => new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
@@ -36,6 +44,7 @@ const FILTERS = [
   { key: 'students', label: 'Students', role: 'student', status: '' },
   { key: 'employers', label: 'Employers', role: 'employer', status: '' },
   { key: 'waiting', label: 'Waiting', role: 'employer', status: 'pending', warn: true },
+  { key: 'not_approved', label: 'Not approved', role: 'employer', status: 'rejected' },
   { key: 'deactivated', label: 'Deactivated', role: '', status: 'inactive' },
 ]
 
@@ -54,6 +63,9 @@ export default function AdminUsers() {
   const status = params.get('status') || ''
   const [q, setQ] = useState(params.get('q') || '')
   const [users, setUsers] = useState(null)
+  // 20 Nov (her review): the Joined heading sorts, newest or oldest first (all loaded rows, up to LIMIT)
+  const [oldest, setOldest] = useState(false)
+  const sorted = users && (oldest ? [...users].sort((a, b) => new Date(a.created_at) - new Date(b.created_at)) : users)
   const [counts, setCounts] = useState(null)
   const [error, setError] = useState('')
   // 25 Oct (her review: green banners stayed): "done" messages are a short toast at the bottom that closes itself
@@ -138,16 +150,19 @@ export default function AdminUsers() {
   }
 
   return (
-    <div className="h-screen flex flex-col">
+    <div className="h-[calc(100dvh-var(--bar-h))] flex flex-col">
       <PageHeader>
-        <div className="pb-5">
-          <p className="text-[11px] font-semibold text-blue-600 uppercase tracking-widest mb-2">Admin</p>
+        <div className="pb-5 flex flex-wrap items-center gap-x-6 gap-y-3">
+          <div className="min-w-0 flex-1 basis-80">
+          <p className="text-[11px] font-semibold text-blue-600 uppercase tracking-widest mb-2">Admin · Users</p>
           <h1 className="text-2xl font-semibold tracking-tight text-slate-900">Users</h1>
           <p className="text-sm text-slate-500 mt-1">Approve employers, and deactivate accounts that shouldn't sign in.</p>
+          </div>
+          {counts && <HeadStats items={[[counts.students, 'Students', 'blue'], [counts.employers, 'Employers'], [counts.waiting, 'Waiting', counts.waiting ? 'todo' : '']]} />}
         </div>
       </PageHeader>
 
-      <div className="flex-1 min-h-0 flex flex-col gap-4 px-8 py-6">
+      <div className="flex-1 min-h-0 flex flex-col gap-3.5 px-8 pt-3.5 pb-4">
         <div className="flex flex-wrap items-center gap-2.5">
           {/* magnifying glass and ✕ to clear, the same as the Job Matches search (7 Oct, her review) */}
           <div className="relative w-80 max-w-full mr-1">
@@ -175,7 +190,7 @@ export default function AdminUsers() {
               return (
                 <button key={f.key} type="button" aria-pressed={on} onClick={() => pick(f)}
                   className={`px-3 py-1.5 text-sm rounded-full border transition ${on
-                    ? 'bg-blue-700 border-blue-700 text-white'
+                    ? 'bg-accent border-accent text-white'
                     : f.warn && n ? 'bg-amber-50 border-amber-300 text-amber-800 hover:bg-amber-100'
                       : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'}`}>
                   {f.label}
@@ -188,14 +203,16 @@ export default function AdminUsers() {
 
         {error && <p className="text-sm text-rose-600">{error}</p>}
 
-        <div className="flex-1 min-h-0 flex flex-col bg-white rounded-2xl border border-slate-200 overflow-hidden">
-          <div ref={strip} aria-hidden="true" className="overflow-hidden scrollbar-gutter-stable bg-slate-50 border-b border-slate-200">
-            <table className="w-full min-w-190 table-fixed text-xs">
+        <div className="emp-tile min-h-0 flex flex-col bg-white rounded-2xl border overflow-hidden">
+          <div ref={strip} className="overflow-hidden scrollbar-gutter-stable bg-slate-50 border-b border-slate-200">
+            <table role="presentation" className="w-full min-w-190 table-fixed text-xs">
               {colgroup}
               <thead>
                 {/* 21 Oct (her review: admin blue, employer grey): every table's titles grey, as blue means clickable */}
                 <tr className="text-left text-slate-500">
-                  {COLS.map(([n]) => <th key={n} className="font-semibold px-4 py-3">{n === 'Actions' ? '' : n}</th>)}
+                  {COLS.map(([n]) => <th key={n} className="font-semibold px-4 py-3">{n === 'Actions' ? <span className="sr-only">Actions</span> : n === 'Joined'
+                    ? <button type="button" onClick={() => setOldest(v => !v)} className="sort-btn">Joined <span className="font-normal text-muted">· {oldest ? 'oldest' : 'newest'} first</span>
+                        <svg aria-hidden="true" className={`w-3.5 h-3.5 transition-transform ${oldest ? 'rotate-180' : ''}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><path d="M12 5v14M6 13l6 6 6-6" /></svg></button> : n}</th>)}
                 </tr>
               </thead>
             </table>
@@ -206,20 +223,27 @@ export default function AdminUsers() {
               {colgroup}
               {/* real column titles for screen readers; the visible ones are the strip above */}
               <thead>
-                <tr>{COLS.map(([n]) => <th key={n} scope="col" className="p-0 h-0"><span className="sr-only">{n}</span></th>)}</tr>
+                <tr>{COLS.map(([n]) => <th key={n} scope="col" aria-sort={n === 'Joined' ? (oldest ? 'ascending' : 'descending') : undefined} className="p-0 h-0"><span className="sr-only">{n}</span></th>)}</tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
                 {users === null && <TableRowsSkeleton cols={COLS.length} rows={8} />}
                 {users?.length === 0 && <tr><td colSpan={COLS.length} className="px-4 py-6 text-slate-500">No accounts match.</td></tr>}
-                {users?.map(u => (
+                {sorted?.map(u => (
                   <tr key={u.id} className={u.is_active && u.employer_status === 'pending' ? 'bg-amber-50/70' : ''}>
                     <td className="px-4 py-3">
-                      <p className="font-medium text-slate-800 truncate">{display(u)}</p>
-                      <p className="text-xs text-slate-500 mt-0.5 truncate">
-                        {u.role === 'employer' && u.company_name ? `${u.name} · ` : ''}{u.email}
-                      </p>
+                      <div className="flex items-center gap-3 min-w-0">
+                        <span aria-hidden="true" className={`usr-ava ${u.role === 'employer' ? 'co' : ''}`}>{display(u).split(/\s+/).slice(0, 2).map(w => w[0]).join('').toUpperCase()}</span>
+                        <div className="min-w-0">
+                          <p className="font-medium text-slate-800 truncate">{display(u)}</p>
+                          <p className="text-xs text-slate-500 mt-0.5 truncate">
+                            {u.role === 'employer' && u.company_name ? `${u.name} · ` : ''}{u.email}
+                          </p>
+                          {u.role === 'employer' && u.employer_status === 'pending' && <CompanyChecks u={u} />}
+                        </div>
+                      </div>
                     </td>
-                    <td className="px-4 py-3 text-slate-700">{ROLE[u.role] || u.role}</td>
+                    {/* 20 Nov (her review): students and employers told apart by an icon chip, not only a word */}
+                    <td className="px-4 py-3"><span className={`usr-role ${u.role}`}>{ROLE_ICON[u.role]}{ROLE[u.role] || u.role}</span></td>
                     <td className="px-4 py-3 text-slate-700 whitespace-nowrap">{day(u.created_at)}</td>
                     <td className="px-4 py-3"><Status u={u} /></td>
                     <td className="px-4 py-3 text-right">

@@ -101,6 +101,7 @@ with TestClient(app) as client:
                 "password": E2E_PASSWORD, "role": role, "accept_privacy": True}
         if company:
             body["company_name"] = company
+            body.update(company_website="e2e-company.example", company_ssm="202301000001")   # 20 Nov: required
         ok(client.post("/auth/register", json=body))
         token = ok(client.post("/auth/login", json={"email": body["email"], "password": E2E_PASSWORD}))["access_token"]
         return {"Authorization": f"Bearer {token}"}

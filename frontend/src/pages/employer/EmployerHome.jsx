@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { useToast } from '../../components/Toast'
 import api from '../../api'
-import PageHeader from '../../components/PageHeader'
+import PageHeader, { HeadStats } from '../../components/PageHeader'
 import { useAuth } from '../../context/useAuth'
 import EmployerDashboard from './EmployerDashboard'
 import { errText } from '../student/profileUtils'
@@ -15,7 +15,7 @@ import { Busy } from '../../components/Spinner'
 // /employer/jobs: their posts, open or closed, with applicant counts, View applicants and a ⋯ menu (Edit job, Close / Reopen; 13 Oct).
 // 14 Oct (transparency flow): each open job shows its decision date; the menu adds Stop new applications / Take
 // applications again and Move decision date (once); Close job asks why.
-const JOB_COLS = <colgroup><col /><col className="w-36" /><col className="w-48" /><col className="w-48" /><col className="w-52" /></colgroup>
+const JOB_COLS = <colgroup><col /><col className="w-34" /><col className="w-44" /><col className="w-36" /><col className="w-66" /></colgroup>
 const fmtDate = (iso) => iso ? new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : ''
 
 // 22 Oct (her review, option A of the mock-up): centred both ways, an icon in the sidebar's line style (an emoji looks
@@ -182,7 +182,6 @@ export function MyJobs() {
   const [tab, setTab] = useState('open')
   const [busy, setBusy] = useState(null)
   const [error, setError] = useState('')
-  const navigate = useNavigate()
   const [notice, setNotice] = useState(state?.posted ? `"${state.posted}" is live in students' Job Matches.`
     : state?.saved ? `Changes to "${state.saved}" are saved. Students see them in Job Matches now.` : '')
   // 12 Oct (flow review): after publishing, how many visible graduates already fit, so the next step is clear
@@ -228,14 +227,64 @@ export function MyJobs() {
   const shown = tab === 'open' ? open : closed
   const strip = useRef(null)
 
+  // 19 Nov: one copy of each cell, used by the laptop table and the phone cards, so the two never drift apart
+  const applicantsOf = (j) => (
+    <>
+      {j.applicants
+        ? <span className="whitespace-nowrap"><b className="font-semibold text-slate-900">{j.applicants}</b> applicant{j.applicants === 1 ? '' : 's'}</span>
+        : <span className="text-slate-500">None yet</span>}
+      {j.new_applicants > 0
+        ? <span className="to-review"><i aria-hidden="true" />{j.new_applicants} to review</span>
+        : j.applicants > 0 && <span className="block text-xs text-slate-500 mt-0.5">all reviewed</span>}
+    </>
+  )
+  const badgesOf = (j) => (
+    <>
+      {j.status === 'hidden' && <SpecialBadge>Hidden by the career office</SpecialBadge>}
+      {j.status === 'open' && j.stopped && <SpecialBadge>{j.deadline_passed ? 'Decision date passed · applications paused' : 'Not taking applications'}</SpecialBadge>}
+    </>
+  )
+  // 13 Oct (her pick after research, references.md "Editing a published job"): the row's main action, then a ⋯ menu
+  // beside it, like Indeed's menu beside each job
+  const actionsOf = (j, align = '') => (
+    <div className={`job-acts flex items-center gap-2 ${align}`}>
+      <Link to={`/employer/jobs/${j.id}`} className="head-cta h-8 px-3 text-sm whitespace-nowrap">View applicants</Link>
+      {j.status !== 'hidden' && <Link to={`/employer/jobs/${j.id}/edit`} aria-label={`Edit ${j.title}`} className="acad-btn edit h-8 px-3 text-sm whitespace-nowrap">
+        <svg aria-hidden="true" className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z" /></svg>Edit</Link>}
+      {j.status !== 'hidden' && (
+        <RowMenu label={`More actions for ${j.title}`} disabled={busy === j.id} items={[
+          ...(j.status === 'open' ? [
+            ...(j.stopped ? (j.past_date ? [] : [{ label: 'Take applications again', onSelect: () => setAskStop({ job: j, stopped: false }) }])
+              : [{ label: 'Stop new applications', onSelect: () => setAskStop({ job: j, stopped: true }) }]),
+            ...(!j.decide_extended && !j.past_date ? [{ label: 'Move decision date', onSelect: () => setAskExtend(j) }] : []),
+            { label: 'Close job', danger: true, onSelect: () => setAskClose(j) },
+          ] : [{ label: 'Reopen job', success: true, onSelect: () => reopen(j) }]),
+        ]} />
+      )}
+    </div>
+  )
+
   return (
     <>
       <PageHeader>
-        {/* 12 Oct (her review): same header as the other pages (eyebrow, title, one line); Post a Job lives in the sidebar */}
-        <div className="pb-5">
-          <p className="text-[11px] font-semibold text-blue-600 uppercase tracking-widest mb-2">My Jobs</p>
-          <h1 className="text-2xl font-semibold tracking-tight text-slate-900">Your job posts</h1>
-          <p className="text-sm text-slate-500 mt-1">Posted jobs appear in students' Job Matches straight away, marked "Apply on SkillMap".</p>
+        {/* 12 Oct (her review): same header as the other pages (eyebrow, title, one line).
+            19 Nov (her approved mock review/page-headers.html): the counts that matter to an employer in one strip
+            (open jobs, applicants waiting for a status, all applicants) and Post a job as the page's one main action */}
+        <div className="pb-5 flex flex-wrap items-center gap-x-6 gap-y-3">
+          <div className="min-w-0 flex-1">
+            <p className="text-[11px] font-semibold text-blue-600 uppercase tracking-widest mb-2">My Jobs</p>
+            <h1 className="text-2xl font-semibold tracking-tight text-slate-900">Your job posts</h1>
+            <p className="text-sm text-slate-500 mt-1">Posted jobs appear in students' Job Matches straight away, marked "Apply on SkillMap".</p>
+          </div>
+          {jobs && jobs.length > 0 && <HeadStats items={[
+            [open.length, 'Open', 'blue'],
+            [open.reduce((n, j) => n + (j.new_applicants || 0), 0), 'To review', open.some(j => j.new_applicants > 0) ? 'todo' : ''],
+            [(jobs || []).reduce((n, j) => n + (j.applicants || 0), 0), 'Applicants'],
+          ]} />}
+          <Link to="/employer/post" className="head-cta">
+            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round"><path d="M12 5v14M5 12h14" /></svg>
+            Post a job
+          </Link>
         </div>
       </PageHeader>
 
@@ -274,13 +323,13 @@ export function MyJobs() {
             {/* 21 Oct (her report: in a narrow window the Job column was squeezed to nothing; then "fixed header"): the
                 table keeps a minimum width; the column titles sit in their own strip and only the rows scroll under them,
                 up and down and, in a narrow window, sideways (the strip follows), as on the admin's Users page */}
-            <div className="min-h-0 flex flex-col bg-white border border-slate-200 rounded-2xl overflow-hidden">
+            <div className="min-h-0 flex flex-col bg-white border border-slate-200 rounded-2xl overflow-hidden max-md:hidden">
               {/* 12 Oct (her review): the Job column takes the spare width; the others are fixed, so no wide gaps; every
                   column left-aligned and the actions are buttons. 20 Oct (her pick T2): no Status column (the tab already
                   says Open / Closed; a badge beside the title only for the special states); the decision date is its own
                   column with the days left (closed tab: when and why it closed); applicants show "to review" in blue */}
               <div ref={strip} aria-hidden="true" className="shrink-0 overflow-hidden scrollbar-gutter-stable bg-slate-50 border-b border-slate-200">
-                <table className="w-full min-w-248 text-sm table-fixed">
+                <table className="w-full min-w-200 text-sm table-fixed">
                   {JOB_COLS}
                   <thead className="text-left text-xs font-semibold text-slate-500">
                     <tr>
@@ -295,7 +344,7 @@ export function MyJobs() {
               </div>
               <div className="relative min-h-0 overflow-auto scrollbar-gutter-stable"
                 onScroll={e => { if (strip.current) strip.current.scrollLeft = e.currentTarget.scrollLeft }}>
-              <table className="w-full min-w-248 text-sm table-fixed">
+              <table className="w-full min-w-200 text-sm table-fixed">
                 {JOB_COLS}
                 {/* real column titles for screen readers; the visible ones are the strip above */}
                 <thead>
@@ -307,37 +356,24 @@ export function MyJobs() {
                     <tr key={j.id} className="hover:bg-blue-50/40">
                       <td className="px-5 py-3.5">
                         <div className="flex items-center gap-2 min-w-0">
-                          <p className="font-medium text-slate-900 truncate">{j.title}</p>
-                          {j.status === 'hidden' && <SpecialBadge>Hidden by the career office</SpecialBadge>}
-                          {j.status === 'open' && j.stopped && <SpecialBadge>{j.deadline_passed ? 'Decision date passed · applications paused' : 'Not taking applications'}</SpecialBadge>}
+                          {j.status === 'hidden' ? <p className="font-medium text-slate-900 truncate">{j.title}</p>
+                            : <Link to={`/employer/jobs/${j.id}/edit`} title={`Open ${j.title}`} className="job-open font-medium truncate">{j.title}</Link>}
+                          {badgesOf(j)}
                         </div>
                         <p className="text-xs text-slate-500 mt-0.5">{[j.location, j.category, `posted ${fmtDate(j.posted_at)}`].filter(Boolean).join(' · ')}</p>
-                        {j.status === 'open' && j.deadline_passed && <p className="text-xs text-amber-800 mt-1">New applications are paused. Review the applicants still waiting.</p>}
                       </td>
                       {/* 12 Oct: the total, and how many still wait for a status */}
+                      {/* 19 Nov (her review: "1 · 1 to review" looked squeezed): two calm lines like "Decide by": the
+                          number, then what needs you (a coral dot) or "all reviewed" */}
                       <td className="px-5 py-3.5 text-slate-600">
-                        {j.applicants ? <span className="font-medium text-slate-800">{j.applicants}</span> : <span className="text-slate-500">None yet</span>}
-                        {j.new_applicants > 0 && <span className="text-xs font-semibold text-blue-700"> · {j.new_applicants} to review</span>}
+                        {applicantsOf(j)}
                       </td>
                       <td className="px-5 py-3.5"><DecideCell j={j} /></td>
-                      <td className="px-5 py-3.5 text-xs text-slate-600 whitespace-nowrap">{j.required} required{j.preferred ? ` · ${j.preferred} nice to have` : ''}</td>
+                      <td className="px-5 py-3.5 text-xs text-slate-600">{j.required} required{j.preferred ? <><br />{j.preferred} nice to have</> : ''}</td>
                       <td className="px-5 py-3.5 whitespace-nowrap">
                         {/* 13 Oct (her pick after research, references.md "Editing a published job"): the row's main action,
                             then a ⋯ menu beside it, like Indeed's menu beside each job */}
-                        <div className="flex items-center justify-end gap-2">
-                          <Link to={`/employer/jobs/${j.id}`} className="inline-block text-sm font-medium text-blue-700 border border-blue-300 bg-blue-50 rounded-lg px-3 py-1 hover:bg-blue-100">View applicants</Link>
-                          {j.status !== 'hidden' && (
-                            <RowMenu label={`Actions for ${j.title}`} disabled={busy === j.id} items={[
-                              { label: 'Edit job', onSelect: () => navigate(`/employer/jobs/${j.id}/edit`) },
-                              ...(j.status === 'open' ? [
-                                ...(j.stopped ? (j.past_date ? [] : [{ label: 'Take applications again', onSelect: () => setAskStop({ job: j, stopped: false }) }])
-                                  : [{ label: 'Stop new applications', onSelect: () => setAskStop({ job: j, stopped: true }) }]),
-                                ...(!j.decide_extended && !j.past_date ? [{ label: 'Move decision date', onSelect: () => setAskExtend(j) }] : []),
-                                { label: 'Close job', danger: true, onSelect: () => setAskClose(j) },
-                              ] : [{ label: 'Reopen job', success: true, onSelect: () => reopen(j) }]),
-                            ]} />
-                          )}
-                        </div>
+                        {actionsOf(j, 'justify-end')}
                       </td>
                     </tr>
                   ))}
@@ -350,6 +386,25 @@ export function MyJobs() {
               </table>
               </div>
             </div>
+            {/* 19 Nov (her pick): on a phone the five columns can't fit, so each job is a card with the same facts:
+                title and badges, where and when, applicants beside the decision date, the skills, then its actions */}
+            <ul className="md:hidden m-0 p-0 list-none flex flex-col gap-3" aria-label={tab === 'open' ? 'Open jobs' : 'Closed jobs'}>
+              {shown.map(j => (
+                <li key={j.id} className="bg-white border border-slate-200 rounded-2xl px-4 py-3.5">
+                  {j.status === 'hidden' ? <p className="m-0 font-semibold text-slate-900">{j.title}</p>
+                    : <Link to={`/employer/jobs/${j.id}/edit`} className="job-open font-semibold">{j.title}</Link>}
+                  <div className="flex flex-wrap gap-1.5 mt-1 empty:hidden">{badgesOf(j)}</div>
+                  <p className="m-0 mt-1 text-xs text-slate-500">{[j.location, j.category, `posted ${fmtDate(j.posted_at)}`].filter(Boolean).join(' · ')}</p>
+                  <dl className="m-0 mt-3 grid grid-cols-2 gap-3 text-sm">
+                    <div><dt className="text-xs font-semibold text-slate-500">Applicants</dt><dd className="m-0 mt-0.5 text-slate-600">{applicantsOf(j)}</dd></div>
+                    <div><dt className="text-xs font-semibold text-slate-500">{tab === 'open' ? 'Decide by' : 'Closed'}</dt><dd className="m-0 mt-0.5"><DecideCell j={j} /></dd></div>
+                  </dl>
+                  <p className="m-0 mt-2 text-xs text-slate-600">{j.required} required{j.preferred ? ` · ${j.preferred} nice to have` : ''}</p>
+                  <div className="mt-3 pt-3 border-t border-slate-100">{actionsOf(j)}</div>
+                </li>
+              ))}
+              {shown.length === 0 && <li className="bg-white border border-slate-200 rounded-2xl px-4 py-6 text-center text-sm text-slate-500">{tab === 'open' ? 'No open jobs.' : 'No closed jobs.'}</li>}
+            </ul>
           </>
         )}
       </div>
@@ -361,5 +416,5 @@ export function MyJobs() {
 export default function EmployerHome() {
   const { user } = useAuth()
   if (user?.employer_status === 'approved') return <EmployerDashboard />
-  return <div className="flex flex-col h-screen"><Waiting status={user?.employer_status} company={user?.company_name} /></div>
+  return <div className="flex flex-col h-[calc(100dvh-var(--bar-h))]"><Waiting status={user?.employer_status} company={user?.company_name} /></div>
 }

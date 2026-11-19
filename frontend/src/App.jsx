@@ -1,6 +1,6 @@
 import { Fragment, lazy, Suspense, useEffect, useState } from 'react'
 import { Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom'
-import { SidebarProvider, useSidebar } from './components/SidebarContext'
+import { SidebarProvider } from './components/SidebarContext'
 import { useAuth } from './context/useAuth'
 import PrivacyUpdate from './components/PrivacyUpdate'
 import Sidebar from './components/Sidebar'
@@ -35,7 +35,7 @@ function RoleRoute({ children, roles }) {
   const { pathname } = useLocation()
   if (loading) return null
   if (!user && serverDown) return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-100 p-4">
+    <div className="min-h-[calc(100dvh-var(--bar-h))] flex items-center justify-center bg-slate-100 p-4">
       <div className="bg-white rounded-xl shadow p-6 text-center max-w-sm">
         <p className="font-semibold text-slate-800">Can't reach the server</p>
         <p className="text-sm text-slate-500 mt-1">You're still signed in. Check that the backend is running, then retry.</p>
@@ -89,15 +89,16 @@ function NotForYou() {
 }
 
 function Layout({ children }) {
-  const { collapsed } = useSidebar()
   return (
-    <div className="flex min-h-screen bg-slate-100">
+    <div className="flex min-h-screen">
+      {/* no background here: the body's soft colour wash (index.css --grad-page) shows through, as in the mock */}
+      <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-3 focus:z-50 focus:rounded-full focus:bg-accent focus:px-4 focus:py-2.5 focus:font-bold focus:text-on-accent">Skip to content</a>
       <Sidebar />
       <PrivacyUpdate />
-      {/* Same width classes and timing as the sidebar (w-14 / w-48, 200 ms; 192px since 9 Oct, was 224px with empty space after the labels); 64px left an 8px gap when collapsed */}
-      <main
-        className={`flex-1 min-h-screen min-w-0 overflow-x-hidden transition-all duration-200 ${collapsed ? 'ml-14' : 'ml-48'}`}
-      >
+      {/* 20 Nov: the menu is a fixed sidebar (rail under 1280px), so the page column starts beside it and the page
+          itself never scrolls: only the lists inside the cards do. Phones: a slim top bar and a bottom tab bar
+          (index.css .app-main, --bar-h) */}
+      <main id="main" tabIndex={-1} className="app-main">
         {children}
       </main>
     </div>

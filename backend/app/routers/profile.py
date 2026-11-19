@@ -174,6 +174,7 @@ class AboutIn(BaseModel):
     available_from: str = ""      # "YYYY-MM"
     # 21 Oct: languages and the CGPA (shown only if show_cgpa). None = leave as it is (older callers don't send them)
     languages: list[dict] | None = None
+    other_links: list[dict] | None = None      # 20 Nov: None = leave as it is
     cgpa: float | None = None
     show_cgpa: bool | None = None
     clear_cgpa: bool = False
@@ -1002,7 +1003,7 @@ def _about_out(user: User) -> dict:
             "visible_to_employers": user.is_visible_to_employers,
             "show_grades_to_employers": user.show_grades_to_employers,
             "phone": user.phone or "", "city": user.city or "", "available_from": user.available_from or "",
-            "languages": user.languages or [], "cgpa": float(user.cgpa) if user.cgpa is not None else None,
+            "languages": user.languages or [], "other_links": user.other_links or [], "cgpa": float(user.cgpa) if user.cgpa is not None else None,
             "show_cgpa": user.show_cgpa}
 
 
@@ -1032,6 +1033,33 @@ def _languages(items: list[dict]) -> list[dict]:
         out.append({"language": name, "level": level, "test": test})
     if len(out) > MAX_LANGUAGES:
         raise HTTPException(status_code=400, detail=f"Up to {MAX_LANGUAGES} languages")
+    return out
+
+
+MAX_OTHER_LINKS = 5
+
+
+def _other_links(items: list[dict]) -> list[dict]:
+    """20 Nov: other profile links (Google Scholar, ORCID, Behance, a blog...). Each needs a name and a full address;
+    empty rows are dropped; up to 5; the same address once."""
+    out, seen = [], set()
+    for item in items[:MAX_OTHER_LINKS + 1]:
+        label = " ".join(str(item.get("label") or "").split())
+        url = str(item.get("url") or "").strip()
+        if not label and not url:
+            continue
+        if not label:
+            raise HTTPException(status_code=400, detail="Give each link a name, e.g. Google Scholar")
+        if len(label) > 40:
+            raise HTTPException(status_code=400, detail="Link name: 40 characters at most")
+        if len(url) > 300 or not re.match(r"^https?://[^\s/]+\.[^\s]+$", url, re.I):
+            raise HTTPException(status_code=400, detail=f"{label}: use the full address, e.g. https://scholar.google.com/citations?user=...")
+        if url.lower() in seen:
+            raise HTTPException(status_code=400, detail=f"{label}: this address is listed twice")
+        seen.add(url.lower())
+        out.append({"label": label, "url": url})
+    if len(out) > MAX_OTHER_LINKS:
+        raise HTTPException(status_code=400, detail=f"Up to {MAX_OTHER_LINKS} other links")
     return out
 
 
@@ -1068,6 +1096,7 @@ def save_about(data: AboutIn, current_user: User = Depends(get_current_user), db
     _check_length("About", data.about)
     # 21 Oct: everything is checked before anything changes
     languages = _languages(data.languages) if data.languages is not None else None
+    other_links = _other_links(data.other_links) if data.other_links is not None else None
     cgpa = _cgpa(data.cgpa) if data.cgpa is not None else None
     if data.show_cgpa and not data.clear_cgpa and cgpa is None and current_user.cgpa is None:
         raise HTTPException(status_code=400, detail="Type your CGPA first, then choose to show it")
@@ -1081,6 +1110,8 @@ def save_about(data: AboutIn, current_user: User = Depends(get_current_user), db
     current_user.show_grades_to_employers = data.show_grades_to_employers
     if languages is not None:
         current_user.languages = languages
+    if other_links is not None:
+        current_user.other_links = other_links
     if data.clear_cgpa:
         current_user.cgpa, current_user.show_cgpa = None, False
     else:

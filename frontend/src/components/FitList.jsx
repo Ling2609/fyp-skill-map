@@ -47,9 +47,10 @@ export default function FitList({ items, renderItem, className = '', max = 5, le
       }
     }
     measure()
-    const ro = new ResizeObserver(measure)
+    let raf = 0   // next frame, so no "ResizeObserver loop" warning (20 Nov)
+    const ro = new ResizeObserver(() => { cancelAnimationFrame(raf); raf = requestAnimationFrame(measure) })
     ro.observe(el)
-    return () => { ro.disconnect(); if (sec) { sec.style.maxHeight = ''; sec.style.minHeight = '' } }
+    return () => { ro.disconnect(); cancelAnimationFrame(raf); if (sec) { sec.style.maxHeight = ''; sec.style.minHeight = '' } }
   }, [fill, last, items.length, low])
 
   const shown = items.slice(0, fill ? fit : max)

@@ -186,12 +186,24 @@ export default function ModulesEditor({ onUnsavedChange, onSaved }) {
           <span className={`${sourcePillCls} ml-1`} title={PROGRAMME_TIP}>Skills set by your programme</span>
         </div>
 
-        {/* 19 Oct (her pick S2): saving moved to a bar under the module cards that appears only when a grade changed;
-            here only the short "Saved" confirmation after saving */}
-        {!hasUnsaved && saveStatus === 'saved' && (
-          <span role="status" className="text-xs text-green-700 font-medium flex items-center gap-1.5">
-            <span className="w-1.5 h-1.5 rounded-full bg-green-500 inline-block" />
-            Grades saved
+        {/* 20 Nov (her review): the save bar sits at the top, on the year row, under Preview / Privacy; amber while
+            grades aren't saved, green once they are */}
+        {hasUnsaved ? (
+          <div role="region" aria-label="Unsaved grades" className="save-bar unsaved">
+            <span className="save-dot" aria-hidden="true" />
+            <p className="m-0 text-sm font-semibold">
+              {changed.size} {changed.size === 1 ? 'grade' : 'grades'} not saved yet
+              {saveStatus === 'error' && <span role="alert" className="ml-2 font-normal text-rose-700">Couldn't save. Try again.</span>}
+            </p>
+            <button type="button" onClick={undo} disabled={saving}
+              className="h-8 px-3 rounded-lg text-sm font-semibold border border-[#e2c26a] bg-white text-ink hover:bg-[#fffaf0] disabled:opacity-50">Undo</button>
+            <button type="button" onClick={saveGrades} disabled={saving} className="head-cta h-8 px-3.5 text-sm disabled:opacity-70">
+              {saving ? <><Spinner size="sm" />Saving…</> : 'Save grades'}</button>
+          </div>
+        ) : saveStatus === 'saved' && (
+          <span role="status" className="save-bar saved">
+            <svg aria-hidden="true" className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round"><path d="m5 12 5 5 9-10" /></svg>
+            Grades saved · your skills and matches are updated
           </span>
         )}
       </div>
@@ -269,25 +281,6 @@ export default function ModulesEditor({ onUnsavedChange, onSaved }) {
         </div>
       </div>
 
-      {/* 19 Oct (her pick S2 of the mock-up): the save bar shows only when something changed, says how many, and can
-          undo; it sits right under the cards, where the grades were just picked */}
-      {hasUnsaved && (
-        <div role="region" aria-label="Unsaved grades"
-          className="shrink-0 flex flex-wrap items-center justify-end gap-3 px-4 py-2.5 rounded-xl bg-blue-50 border border-blue-200">
-          <p className="mr-auto text-sm font-medium text-blue-900">
-            {changed.size} {changed.size === 1 ? 'grade' : 'grades'} changed
-            {saveStatus === 'error' && <span role="alert" className="ml-2 font-normal text-rose-600">Couldn't save. Try again.</span>}
-          </p>
-          <button type="button" onClick={undo} disabled={saving}
-            className="px-3.5 py-2 rounded-xl text-sm font-medium border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 disabled:opacity-50">
-            Undo
-          </button>
-          <button type="button" onClick={saveGrades} disabled={saving}
-            className="px-4 py-2 rounded-xl text-sm font-medium border border-blue-700 bg-blue-700 text-white hover:bg-blue-800 flex items-center gap-2 disabled:opacity-70">
-            {saving ? <><Spinner size="sm" />Saving…</> : 'Save grades'}
-          </button>
-        </div>
-      )}
 
     </div>
   )

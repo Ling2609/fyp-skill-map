@@ -3,7 +3,28 @@
 // (12 Oct, her review: "Shortlisted: skipped" read oddly).
 const fmtDay = (iso) => iso ? new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }) : ''
 
-export default function ApplicationSteps({ steps, decided }) {
+// compact (19 Nov, her review: Job Detail's header was too tall): one line of ticked dots, the date on the latest step
+export default function ApplicationSteps({ steps, decided, compact = false }) {
+  if (compact) {
+    const lastAt = steps.findLastIndex(x => x.at)
+    return (
+      <ol className="app-steps-line" aria-label="Progress">
+        {steps.map((s, i) => {
+          const done = !!s.at
+          const skipped = !done && decided && s.key !== 'decision'
+          const good = done && i === steps.length - 1 && /accept|offer/i.test(s.label)
+          return (
+            <li key={s.key} className={`${done ? 'on' : ''} ${i === lastAt ? 'now' : ''}`}>
+              {i > 0 && <span aria-hidden="true" className={`bar ${done || skipped ? 'on' : ''}`} />}
+              <span aria-hidden="true" className={`step-dot ${done ? 'on' : ''} ${good ? 'good' : ''}`} />
+              {s.label}{i === lastAt && done && <span className="when"> {fmtDay(s.at)}</span>}
+              <span className="sr-only">{done ? ' (done)' : skipped ? ' (skipped)' : ' (not yet)'}</span>
+            </li>
+          )
+        })}
+      </ol>
+    )
+  }
   return (
     <ol className="flex items-start mt-4" aria-label="Progress">
       {steps.map((s, i) => {
@@ -19,7 +40,7 @@ export default function ApplicationSteps({ steps, decided }) {
               {s.label}
             </span>
             <span className="text-[11px] text-slate-500">{done ? fmtDay(s.at) : skipped ? '—' : ''}</span>
-            <span className="sr-only">{done ? `done ${fmtDay(s.at)}` : skipped ? 'skipped' : 'not yet'}</span>
+            <span className="sr-only">{done ? '(done)' : skipped ? '(skipped)' : '(not yet)'}</span>
           </li>
         )
       })}

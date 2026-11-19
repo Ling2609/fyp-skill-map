@@ -39,16 +39,18 @@ export default function EmployerPreview() {
   const company = data?.company || 'the employer'
 
   return (
-    <div className="flex flex-col h-screen">
+    <div className="flex flex-col h-[calc(100dvh-var(--bar-h))]">
       <BackLink label={jobId ? (data?.job?.title || 'the job') : 'My Profile'} onClick={back} />
       {/* the student's bar: what this page is, and the actions; everything under it is the employer's page */}
       {/* 21 Oct (her review: the solid blue was too strong): a light strip with dark text; blue only on what you can click */}
-      <div className="shrink-0 bg-blue-50 border-b border-blue-200 px-4 sm:px-8 py-2.5 flex flex-wrap items-center justify-between gap-3">
-        <p className="text-sm text-slate-800"><b className="font-semibold">Preview:</b>{' '}
-          {jobId ? `this is exactly what ${company} sees when you apply.` : 'this is what employers see. When you apply for a job, they also see your match for it.'}</p>
+      <div className="preview-note shrink-0 mx-4 sm:mx-8 mt-1 rounded-2xl px-4 sm:px-5 py-2.5 flex flex-wrap items-center justify-between gap-3">
+        <p className="m-0 flex items-center gap-2.5 text-sm text-ink">
+          <span className="preview-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z" /><circle cx="12" cy="12" r="3" /></svg></span>
+          <span><b className="font-bold">Preview:</b>{' '}
+          {jobId ? `this is exactly what ${company} sees when you apply.` : 'this is what employers see. When you apply for a job, they also see your match for it.'}</span></p>
         {s && (
           <div className="flex items-center gap-2.5">
-            <Link to="/profile" className="text-sm font-medium text-blue-700 bg-white border border-blue-300 rounded-lg px-3.5 py-1.5 hover:bg-blue-100">Edit my profile</Link>
+            <Link to="/profile" className="acad-btn edit h-9">Edit my profile</Link>
             {jobId && (data.applied
               ? <span className="text-sm text-slate-500 border border-slate-300 bg-white px-3.5 py-1.5 rounded-lg">Already applied</span>
               : <button type="button" onClick={send} disabled={sending}
@@ -70,7 +72,7 @@ export default function EmployerPreview() {
         {error && <p role="alert" className="m-4 sm:mx-8 text-sm text-rose-700 bg-rose-50 border border-rose-200 rounded-lg px-4 py-2.5">{error}</p>}
         {!data && !error && (<div className="px-4 sm:px-8 py-5"><LoadingLabel>Loading the preview…</LoadingLabel>
           <div className="grid lg:grid-cols-[1fr_23rem] gap-4"><CardSkeleton rows={6} /><CardSkeleton rows={5} /></div></div>)}
-        {s && <div className="lg:flex-1 lg:min-h-0"><ApplicantCards s={s} fit={data.fit} withFit={!!jobId}
+        {s && <div className="lg:flex-1 lg:min-h-0 mx-4 sm:mx-8 mt-3 mb-4 overflow-hidden emp-tile border border-slate-200 rounded-2xl"><ApplicantCards s={s} fit={data.fit} withFit={!!jobId}
           aside={!jobId && <NotShownYet s={s} />} /></div>}
       </div>
     </div>

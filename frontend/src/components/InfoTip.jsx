@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 
 // ⓘ that opens on click or tap and stays until closed (14 Oct; Carbon "toggletip": opens on click or Enter, closes
 // on Escape or a click outside; for supplementary text only, never what someone needs to act). Hover-only tooltips
@@ -21,7 +22,7 @@ export default function InfoTip({ label, children }) {
   useEffect(() => {
     if (!open) return
     const onKey = (e) => { if (e.key === 'Escape') setOpen(false) }
-    const onClick = (e) => { if (!box.current?.contains(e.target)) setOpen(false) }
+    const onClick = (e) => { if (!box.current?.contains(e.target) && !e.target.closest?.('[data-tip]')) setOpen(false) }
     const close = () => setOpen(false)
     document.addEventListener('keydown', onKey)
     document.addEventListener('mousedown', onClick)
@@ -36,10 +37,12 @@ export default function InfoTip({ label, children }) {
     <span ref={box} className="relative inline-flex align-middle">
       <button ref={btn} type="button" aria-label={label} aria-expanded={open} onClick={toggle}
         className="ml-1.5 w-4 h-4 rounded-full border border-blue-600 text-blue-700 text-[10px] font-bold leading-none inline-flex items-center justify-center hover:bg-blue-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400">i</button>
-      {open && at && (
-        <span role="status" style={{ position: 'fixed', top: at.top, left: at.left, width: TIP_W }} className="z-50 rounded-lg bg-slate-900 text-white text-xs leading-relaxed px-3 py-2 shadow-lg">
+      {/* 20 Nov (her report: the Reply-by tip showed nothing): a blurred header makes "fixed" relative to itself, so
+          the tip is drawn at the page's root instead */}
+      {open && at && createPortal(
+        <span role="status" data-tip style={{ position: 'fixed', top: at.top, left: at.left, width: TIP_W }} className="z-[60] rounded-lg bg-slate-900 text-white text-xs leading-relaxed px-3 py-2 shadow-lg">
           {children}
-        </span>
+        </span>, document.body
       )}
     </span>
   )

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import api from '../../api'
-import PageHeader from '../../components/PageHeader'
+import PageHeader, { HeadStats } from '../../components/PageHeader'
 import { useAuth } from '../../context/useAuth'
 import { errText } from '../student/profileUtils'
 import { CardSkeleton, LoadingLabel } from '../../components/Skeleton'
@@ -27,7 +27,8 @@ const ago = (iso) => {
   const days = Math.floor((Date.now() - new Date(iso).getTime()) / 86400000)
   return days <= 0 ? 'today' : days === 1 ? 'yesterday' : days < 14 ? `${days} days ago` : new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })
 }
-const card = 'bg-white border border-slate-200 rounded-2xl flex flex-col overflow-hidden'
+// 20 Nov (her approved mock review/employer-pages.html): Dashboard tiles (.emp-tile in index.css: rounded, soft shadow, mono titles)
+const card = 'emp-tile bg-white border border-slate-200 rounded-2xl flex flex-col overflow-hidden'
 const SEE = 'shrink-0 text-sm font-medium text-blue-700 hover:underline'
 // 25 Oct (her review: "which job each graduate fits, clear at a glance"): each open job has a colour, shown as a dot
 // beside its title in "Your open jobs" (the key) and in each graduate's row with the job's name, so the colour is never
@@ -208,20 +209,25 @@ export default function EmployerDashboard() {
   const gradJob = data && one(data.graduates.map(g => g.job_id))
 
   return (
-    <div className="flex flex-col h-screen">
+    <div className="flex flex-col h-[calc(100dvh-var(--bar-h))]">
       {/* 12 Oct (her review): the same header as the student and admin dashboards (eyebrow, greeting, one line);
           Post a Job lives in the sidebar */}
-      <PageHeader>
-        <div className="pb-5 pt-1">
-          <p className="text-[11px] font-semibold text-blue-600 uppercase tracking-widest mb-2">Dashboard</p>
-          <h1 className="text-2xl font-semibold tracking-tight text-slate-900">{greeting(user?.first_name)} 👋</h1>
-          <p className="text-sm text-slate-500 mt-1">
-            {user?.company_name}
-            {sum && (noJobs ? ' · post a job to start receiving applications' : <>
-              {' · '}{sum.open_jobs} open job{sum.open_jobs === 1 ? '' : 's'} · {sum.applicants ? `${sum.applicants} applicant${sum.applicants === 1 ? '' : 's'}` : 'no applicants yet'}
-              {sum.new > 0 && <> · <span className="font-semibold text-blue-700">{sum.new} to review</span></>}
-            </>)}
-          </p>
+      <PageHeader bell>
+        {/* 20 Nov (her approved mock): the counts in the white strip, Post a job as the page's main action */}
+        <div className="pb-5 pt-1 flex flex-wrap items-center gap-x-6 gap-y-3">
+          <div className="min-w-0 flex-1 basis-72">
+            <p className="text-[11px] font-semibold text-blue-600 uppercase tracking-widest mb-2">Dashboard</p>
+            <h1 className="text-2xl font-semibold tracking-tight text-slate-900">{greeting(user?.first_name)} 👋</h1>
+            <p className="text-sm text-slate-500 mt-1">
+              {user?.company_name}
+              {sum && (noJobs ? ' · post a job to start receiving applications' : ` · hiring for ${sum.open_jobs} open job${sum.open_jobs === 1 ? '' : 's'}`)}
+            </p>
+          </div>
+          {sum && !noJobs && <HeadStats items={[[sum.open_jobs, 'Open jobs', 'blue'], [sum.new, 'To review', sum.new > 0 ? 'todo' : ''], [sum.applicants, 'Applicants']]} />}
+          <Link to="/employer/post" className="head-cta">
+            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round"><path d="M12 5v14M5 12h14" /></svg>
+            Post a job
+          </Link>
         </div>
       </PageHeader>
 
@@ -278,18 +284,20 @@ export default function EmployerDashboard() {
             <div className="flex flex-col gap-5 lg:gap-4 min-w-0 lg:min-h-0 lg:overflow-y-auto">
               {/* Row 1, left: applications to review, problems, then next steps (12 Oct, flow review M1) */}
               {/* 21 Oct (her review): amber, like the admin's "Needs your action", while there is something to act on */}
-              <section className={`${act ? card.replace('border-slate-200', 'border-amber-300') : card} ${data.to_review.length ? 'flex-1' : 'shrink-0'}`} aria-labelledby="review-h">
-                <div className={`px-5 py-4 flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 ${act ? 'bg-amber-50' : ''}`}>
-                  <h2 id="review-h" className={`text-base font-semibold ${act ? 'text-amber-900' : 'text-slate-900'}`}>Needs your attention</h2>
+              <section className={`${act ? card.replace('border-slate-200', 'border-[#f6d3c6] emp-needs') : card} ${data.to_review.length ? 'flex-1' : 'shrink-0'}`} aria-labelledby="review-h">
+                <div className={`px-5 py-4 flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 ${act ? 'bg-[#fff6f2]' : ''}`}>
+                  <h2 id="review-h" className={`text-base font-semibold ${act ? 'text-missing-strong' : 'text-slate-900'}`}>Needs your attention</h2>
                   {data.attention.review_days && <span className="text-xs text-slate-500">You view applications within {data.attention.review_days} day{data.attention.review_days === 1 ? '' : 's'} on average · students see this</span>}
                 </div>
                 {(data.attention.waiting_long.length > 0 || data.attention.quiet_jobs.length > 0 || data.attention.past_date?.length > 0) && (
-                  <ul className="shrink-0 border-t border-slate-200 divide-y divide-slate-100">
+                  // 20 Nov (her review: the last row was cut off): on a short screen this list scrolls inside the card, so
+                  // the applications to review below always keep at least one row
+                  <ul tabIndex={0} aria-label="Things that need you" className="shrink min-h-[64px] overflow-y-auto border-t border-slate-200 divide-y divide-slate-100">
                     {/* 14 Oct (transparency flow): the employer's own decision date passed with applicants still waiting */}
                     {(data.attention.past_date || []).map(p => (
                       <li key={`d${p.job_id}`} className="px-5 py-3 flex items-center gap-3.5 bg-rose-50/60 text-sm text-slate-700">
                         <Mark kind="late" />
-                        <span className="flex-1 min-w-0"><b className="font-semibold text-rose-900">{p.title}: your decision date has passed</b> with {p.waiting} applicant{p.waiting === 1 ? '' : 's'} waiting. They now see "No decision".</span>
+                        <span className="flex-1 min-w-0"><b className="font-semibold text-rose-900">{p.title}: your decision date has passed</b> with {p.waiting} applicant{p.waiting === 1 ? '' : 's'} waiting. New applications are paused; theirs stay pending until you decide.</span>
                         <Link to={`/employer/jobs/${p.job_id}`} className={ACTION}>Decide</Link>
                       </li>
                     ))}

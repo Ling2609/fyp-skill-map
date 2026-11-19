@@ -55,7 +55,7 @@ export default function GithubCallback() {
     .catch(err => setFailed(errText(err, "Couldn't start connecting to GitHub. Please try again.")))
 
   return (
-    <div className="min-h-screen bg-slate-50 flex items-center justify-center p-6">
+    <div className="min-h-screen flex items-center justify-center p-6">
       <div className="bg-white rounded-2xl border border-slate-200 shadow-sm w-full max-w-sm p-7 text-center" role="status" aria-live="polite">
         {error ? (
           <>

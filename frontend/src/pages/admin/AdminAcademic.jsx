@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import api from '../../api'
 import PageHeader from '../../components/PageHeader'
@@ -222,19 +222,19 @@ function ModuleDetails({ id, programmeId, row, onChanged, onReviewed, onEdit, on
         <button type="button" disabled={!!busy || dirty}
           title={dirty ? 'Save the description first' : undefined}
           onClick={() => run('extract', () => api.post(`/admin/modules/${id}/extract`))}
-          className="px-3.5 py-2 text-sm font-medium rounded-lg border border-slate-200 text-slate-700 hover:bg-slate-50 disabled:opacity-50">
+          className="acad-btn edit disabled:opacity-50">
           {busy === 'extract' ? <Busy>Finding skills…</Busy> : 'Find skills again'}
         </button>
         {reviewed ? (
           <button type="button" disabled={!!busy}
             onClick={() => run('review', () => api.post(`/admin/modules/${id}/review`, { reviewed: false }))}
-            className="px-3.5 py-2 text-sm font-medium rounded-lg border border-slate-200 text-slate-700 hover:bg-slate-50">
+            className="acad-btn warn">
             Mark as to review
           </button>
         ) : (
           <button type="button" disabled={!!busy || dirty || mod.skills.length === 0}
             onClick={() => run('review', () => api.post(`/admin/modules/${id}/review`, { reviewed: true }), onReviewed)}
-            className="px-3.5 py-2 text-sm font-medium rounded-lg bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50">
+            className="head-cta h-10 px-4 text-sm disabled:opacity-50">
             {busy === 'review' ? <Busy>Saving…</Busy> : 'Mark as reviewed'}
           </button>
         )}
@@ -250,53 +250,158 @@ function ModuleDetails({ id, programmeId, row, onChanged, onReviewed, onEdit, on
 const monthYear = (iso) => new Date(iso).toLocaleDateString('en-GB', { month: 'short', year: 'numeric' })
 
 function Intakes({ programmeId, intakes, setIntakes, onOpen }) {
+  // 20 Nov (her pick, mock review/admin-account-pages.html?page=academic&tab=i): the same shape as Modules: the intakes
+  // on the left, the chosen one's details on the right; adding an intake is a dialog, opened only when needed
+  const [picked, setPicked] = useState(intakes[0]?.id ?? null)
+  const sel = intakes.find(i => i.id === picked) || intakes[0] || null
+  const [adding, setAdding] = useState(false)
+  const [error, setError] = useState('')
+  // later codes, edited in place (PUT /admin/intakes/{id}, the backend already had it)
+  const [codesDraft, setCodesDraft] = useState(null)
+  const [saving, setSaving] = useState(false)
+  const saveCodes = () => {
+    setSaving(true); setError('')
+    api.put(`/admin/intakes/${sel.id}`, { other_codes: codesDraft })
+      .then(res => { setIntakes(res.data); setCodesDraft(null) })
+      .catch(err => setError(errText(err, "Couldn't save the later codes.")))
+      .finally(() => setSaving(false))
+  }
+  // the group's code in each year: Year 1 is the intake's own code; APU2F… / APU3F… are its later codes
+  const codeFor = (y) => y === 1 ? sel?.code
+    : (sel?.other_codes || '').split(',').map(c => c.trim()).find(c => new RegExp(`^[A-Z]+${y}F`, 'i').test(c))
+  // its module list, by year and type (the same call the Modules tab makes for an intake)
+  const [plan, setPlan] = useState(null)
+  useEffect(() => {
+    if (!sel) return
+    let gone = false
+    api.get('/admin/academic', { params: { intake_id: sel.id } })
+      .then(res => { if (!gone) setPlan(res.data.modules || []) }).catch(() => { if (!gone) setPlan([]) })
+    return () => { gone = true; setPlan(null) }
+  }, [sel?.id]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  const remove = (i) => {
+    setError('')
+    api.delete(`/admin/intakes/${i.id}`).then(res => { setIntakes(res.data); setPicked(null) })
+      .catch(err => setError(errText(err, "Couldn't delete the intake.")))
+  }
+  const years = plan ? [...new Set(plan.map(m => m.year))].sort() : []
+  const TYPES = [['common', 'common'], ['specialised', 'specialised'], ['elective', 'elective']]
+
+  return (
+    <div className="flex-1 min-h-0 flex flex-col lg:flex-row gap-4 overflow-y-auto lg:overflow-visible">
+      <section aria-label="Intakes" className="emp-tile w-full lg:w-88 shrink-0 max-h-[28rem] lg:max-h-none bg-white border rounded-2xl flex flex-col overflow-hidden">
+        <div className="p-3 flex items-center gap-2 border-b border-slate-200">
+          <p className="m-0 flex-1 text-sm text-muted">Newest first</p>
+          <button type="button" onClick={() => setAdding(true)} className="head-cta h-9 px-3.5 text-sm">+ Add intake</button>
+        </div>
+        <ul className="flex-1 overflow-y-auto m-0 p-0 list-none">
+          {intakes.length === 0 && <li className="p-4 text-sm text-slate-500">No intakes yet. Add the first one; it copies the programme's list.</li>}
+          {intakes.map(i => (
+            <li key={i.id}>
+              <button type="button" aria-current={sel?.id === i.id ? 'true' : undefined} onClick={() => { setPicked(i.id); setCodesDraft(null) }}
+                className={`w-full text-left flex items-center justify-between gap-3 px-4 py-2.5 border-b border-slate-100 ${sel?.id === i.id
+                  ? 'bg-accent-soft shadow-[inset_3px_0_0_var(--color-accent)]' : 'hover:bg-slate-50'}`}>
+                <span className="min-w-0">
+                  <span className="block text-sm font-semibold text-ink font-mono">{i.code}</span>
+                  <span className="block text-xs text-slate-600">Starts {i.start_date ? shortDay(i.start_date) : '—'} · {i.students} student{i.students === 1 ? '' : 's'}</span>
+                </span>
+                {i.latest && <span className="shrink-0 text-xs font-bold rounded-full px-2 py-0.5 bg-accent-soft text-accent-strong">Latest</span>}
+              </button>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section aria-label="Intake details" className="emp-tile shrink-0 lg:shrink lg:flex-1 min-w-0 flex flex-col bg-white border rounded-2xl overflow-hidden">
+        {!sel ? <p className="p-6 text-sm text-slate-500">Add an intake to start.</p> : (<>
+          <div className="px-6 pt-5 pb-3 flex flex-wrap items-center gap-3">
+            <h2 className="intake-code m-0">{sel.code}</h2>
+            {sel.latest && <span className="text-xs font-bold rounded-full px-2 py-0.5 bg-accent-soft text-accent-strong">Latest</span>}
+            <span className="ml-auto flex gap-2">
+              <button type="button" onClick={() => onOpen(sel)} className="acad-btn edit">Edit list</button>
+              {sel.students === 0 && <button type="button" onClick={() => remove(sel)} className="acad-btn red">Delete</button>}
+            </span>
+          </div>
+          <div className="flex-1 min-h-0 overflow-y-auto px-6 pb-5" tabIndex={0} aria-label={`Details of intake ${sel.code}`}>
+            {error && <p role="alert" className="text-sm text-rose-600 mb-3">{error}</p>}
+            <dl className="intake-facts">
+              <div><dt>Starts</dt><dd>{sel.start_date ? shortDay(sel.start_date) : '—'}</dd></div>
+              <div><dt>Students</dt><dd>{sel.students}</dd></div>
+              <div><dt>Later codes (Year 2, Year 3)</dt>
+                {codesDraft === null ? (
+                  <dd className="flex items-center gap-2">{sel.other_codes || 'None yet'}
+                    <button type="button" onClick={() => setCodesDraft(sel.other_codes || '')} aria-label={`Edit later codes of ${sel.code}`} className="inline-flex items-center gap-1 h-7 px-2 rounded-lg text-xs font-bold text-accent-strong bg-accent-soft border border-[#c8d7f4] hover:bg-[#d6e2f8]">
+                      <svg aria-hidden="true" className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 20h4L19 9l-4-4L4 16Z" /><path d="M13 7l4 4" /></svg>Edit</button></dd>
+                ) : (
+                  <dd className="flex flex-wrap items-center gap-2">
+                    <label htmlFor="later-codes" className="sr-only">Later codes of {sel.code}</label>
+                    <input id="later-codes" value={codesDraft} onChange={e => setCodesDraft(e.target.value)} maxLength={200} autoFocus
+                      placeholder="e.g. APU2F2609SE, APU3F2709SE" className="h-9 w-64 max-w-full px-3 text-sm font-normal border border-line-strong rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                    <button type="button" onClick={saveCodes} disabled={saving} className="head-cta h-9 px-3 text-sm disabled:opacity-50">{saving ? <Busy>Saving…</Busy> : 'Save'}</button>
+                    <button type="button" onClick={() => setCodesDraft(null)} disabled={saving} className="text-sm font-semibold text-muted hover:text-ink">Cancel</button>
+                  </dd>
+                )}</div>
+              <div><dt>Module list</dt><dd className={sel.changes ? 'text-partial-strong' : ''}>{sel.compared_with
+                ? (sel.changes ? `${sel.changes} change${sel.changes > 1 ? 's' : ''} from ${sel.compared_with}` : `Same as ${sel.compared_with}`)
+                : 'First intake'}</dd></div>
+            </dl>
+            {sel.students > 0 && <p className="intake-note">Can't be deleted: {sel.students} student{sel.students === 1 ? ' is' : 's are'} on this intake.</p>}
+            <h3 className="mt-5 mb-1 text-base font-bold text-ink">Its module list · {sel.modules}</h3>
+            <p className="m-0 mb-3 text-xs text-slate-500">One intake is one group of students through their whole degree, so its list covers every year. Their timetable code changes each year (shown beside the year). Other intakes keep their own lists.</p>
+            {plan === null ? <p className="text-sm text-slate-500">Loading…</p> : years.map(y => {
+              const mods = plan.filter(m => m.year === y)
+              const n = (t) => mods.filter(m => (m.type || '').toLowerCase() === t).length
+              return (
+                <div key={y} className="intake-yr">
+                  <span><b className="block">Year {y}</b><span className={`block font-mono text-[11px] ${codeFor(y) ? 'text-ink-soft' : 'text-muted'}`}>{codeFor(y) || 'code not added'}</span></span>
+                  <span className="intake-bar" aria-hidden="true">{TYPES.map(([t]) => n(t) > 0 && <i key={t} className={t} style={{ flex: n(t) }} />)}</span>
+                  <span className="text-xs text-ink-soft">{TYPES.map(([t, l]) => `${n(t)} ${l}`).join(' · ')}</span>
+                </div>
+              )
+            })}
+            {years.length > 0 && <p className="intake-key"><span><i className="common" />Common</span><span><i className="specialised" />Specialised</span><span><i className="elective" />Elective</span></p>}
+            {years.map(y => (
+              <div key={`n${y}`} className="mt-4">
+                <h4 className="m-0 mb-1.5 text-sm font-bold text-ink">Year {y} modules · {plan.filter(m => m.year === y).length}{codeFor(y) && <span className="ml-2 font-mono text-xs font-medium text-muted">{codeFor(y)}</span>}</h4>
+                <ul className="intake-names">{plan.filter(m => m.year === y).map(m => <li key={m.id} className={(m.type || '').toLowerCase()}>{m.name}</li>)}</ul>
+              </div>
+            ))}
+          </div>
+        </>)}
+      </section>
+
+      {adding && <AddIntake programmeId={programmeId} intakes={intakes} onCancel={() => setAdding(false)}
+        onAdded={(list) => { setIntakes(list); setAdding(false); setPicked(list[0]?.id ?? null) }} />}
+    </div>
+  )
+}
+
+// Adding an intake: a dialog with the same fields and rules as before
+function AddIntake({ programmeId, intakes, onAdded, onCancel }) {
   const [code, setCode] = useState('')
   const [start, setStart] = useState('')
   const [others, setOthers] = useState('')
   const [copyFrom, setCopyFrom] = useState(intakes[0]?.id ?? '')
   const [error, setError] = useState('')
   const [busy, setBusy] = useState(false)
-  // 21 Oct (her review: gaps between columns uneven): the rows' table lays its columns out by their content, so spare
-  // width is shared out evenly; the title strip above copies those widths
-  const body = useRef(null)
-  const strip = useRef(null)
-  const [widths, setWidths] = useState([])
-  useLayoutEffect(() => {
-    const t = body.current
-    if (!t) return
-    const read = () => setWidths([...(t.rows[0]?.cells || [])].map(c => c.getBoundingClientRect().width))
-    read()
-    const ro = new ResizeObserver(read)
-    ro.observe(t)
-    return () => ro.disconnect()
-  }, [intakes])
-
   const add = (e) => {
     e.preventDefault(); setBusy(true); setError('')
     api.post('/admin/intakes', { programme_id: programmeId, code, start_date: start, other_codes: others,
       copy_from: copyFrom === '' ? null : Number(copyFrom) })
-      .then(res => { setIntakes(res.data.intakes); setCode(''); setStart(''); setOthers(''); setCopyFrom(res.data.intakes[0]?.id ?? '') })
+      .then(res => onAdded(res.data.intakes))
       .catch(err => setError(errText(err, "Couldn't add the intake.")))
       .finally(() => setBusy(false))
   }
-  const remove = (i) => {
-    setError('')
-    api.delete(`/admin/intakes/${i.id}`).then(res => setIntakes(res.data))
-      .catch(err => setError(errText(err, "Couldn't delete the intake.")))
-  }
   const field = 'w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500'
-
   return (
-    // the add form beside the list (same side-by-side layout as Modules), so the page uses its full width
-    // only the table scrolls (her 10 Oct): the row fills the space under the header, the table card scrolls inside it
-    // 21 Oct (her report: a narrow window cut the table off): below laptop width the form sits above the table and the
-    // page scrolls; the table scrolls sideways if it still doesn't fit (its title strip follows)
-    <div className="flex-1 min-h-0 flex flex-col lg:flex-row lg:items-start gap-4 overflow-y-auto lg:overflow-visible">
-      <form onSubmit={add} className="w-full lg:w-[26rem] shrink-0 bg-white border border-slate-200 rounded-2xl p-5 flex flex-col gap-3">
-        <h2 className="text-base font-semibold text-slate-900">Add an intake</h2>
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/30" onMouseDown={() => { if (!busy) onCancel() }}>
+      <div role="dialog" aria-modal="true" aria-labelledby="add-intake-title" onMouseDown={e => e.stopPropagation()}
+        onKeyDown={e => { if (e.key === 'Escape' && !busy) onCancel() }} className="bg-white rounded-2xl shadow-xl w-full max-w-md">
+      <form onSubmit={add} className="p-6 flex flex-col gap-3">
+        <h2 id="add-intake-title" className="text-lg font-bold text-ink m-0">Add an intake</h2>
         <div>
           <label htmlFor="intake-code" className="block text-xs font-medium text-slate-600 mb-1">Intake code (Year 1)</label>
-          <input id="intake-code" value={code} onChange={e => setCode(e.target.value)} placeholder="e.g. APU1F2609CS(DA)" maxLength={30} className={field} />
+          <input id="intake-code" value={code} onChange={e => setCode(e.target.value)} placeholder="e.g. APU1F2609CS(DA)" maxLength={30} className={field} autoFocus />
         </div>
         <div>
           <label htmlFor="intake-start" className="block text-xs font-medium text-slate-600 mb-1">Starts</label>
@@ -313,72 +418,20 @@ function Intakes({ programmeId, intakes, setIntakes, onOpen }) {
             {intakes.map((i, n) => <option key={i.id} value={i.id}>{i.code}{n === 0 ? ' (latest)' : ''} · {i.modules} modules</option>)}
           </select>
         </div>
-        {error && <p role="alert" className="text-sm text-rose-600">{error}</p>}
-        <button type="submit" disabled={busy || code.trim().length < 3 || !start}
-          className="px-4 py-2 text-sm font-medium rounded-lg bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-40">Add intake</button>
-        <p className="text-xs text-slate-500">Change the copied list with Edit list; other intakes keep their own lists.</p>
+        <p className="m-0 text-xs text-slate-500">Change the copied list with Edit list; other intakes keep their own lists.</p>
+        {error && <p role="alert" className="m-0 text-sm text-rose-600">{error}</p>}
+        <div className="flex justify-end gap-2 pt-1">
+          <button type="button" onClick={onCancel} disabled={busy} className="px-3.5 h-10 text-sm font-semibold rounded-[10px] border border-line-strong bg-white hover:bg-well">Cancel</button>
+          <button type="submit" disabled={busy || code.trim().length < 3 || !start} className="head-cta h-10 px-4 text-sm disabled:opacity-40">
+            {busy ? <Busy>Adding…</Busy> : 'Add intake'}</button>
+        </div>
       </form>
-      <div className="shrink-0 lg:shrink lg:flex-1 min-w-0 lg:self-stretch flex flex-col">
-      {/* 21 Oct (her report): the column titles stay outside the scrolling part, so the scrollbar and the rows start
-          under them (as on Users) */}
-      <div className="min-h-0 flex flex-col bg-white border border-slate-200 rounded-2xl overflow-hidden">
-        <div ref={strip} aria-hidden="true" className="shrink-0 overflow-hidden [scrollbar-gutter:stable] bg-slate-50 border-b border-slate-200">
-          <table className="w-full min-w-[36rem] table-fixed text-xs" style={widths.length ? { width: widths.reduce((a, b) => a + b, 0) } : undefined}>
-            <colgroup>{TITLES.map((n, k) => <col key={k} style={widths[k] ? { width: widths[k] } : undefined} />)}</colgroup>
-            <thead>
-              {/* 21 Oct: grey titles on every table, as blue means clickable */}
-              <tr className="text-left text-slate-500">
-                {TITLES.map((n, k) => <th key={k} className="font-semibold px-3 py-3">{n}</th>)}
-              </tr>
-            </thead>
-          </table>
-        </div>
-        <div className="relative min-h-0 overflow-auto [scrollbar-gutter:stable]"
-          onScroll={e => { if (strip.current) strip.current.scrollLeft = e.currentTarget.scrollLeft }}>
-        <table ref={body} className="w-full min-w-[36rem] text-sm">
-          {/* real column titles for screen readers; the visible ones are the strip above. Each holds its title's
-              width (invisible), so a column is never narrower than its title */}
-          <thead>
-            <tr>{TITLES.map((n, k) => (
-              <th key={k} scope="col" className="px-3 py-0 h-0 leading-[0] text-xs font-semibold whitespace-nowrap">
-                <span className="invisible" aria-hidden="true">{n}</span><span className="sr-only">{n || 'Actions'}</span></th>
-            ))}</tr>
-          </thead>
-          <tbody className="divide-y divide-slate-100">
-            {intakes.length === 0 && <tr><td colSpan={5} className="px-4 py-5 text-slate-500">No intakes yet. Add the first one; it copies the programme's list.</td></tr>}
-            {intakes.map(i => (
-              <tr key={i.id}>
-                <td className="px-3 py-3 whitespace-nowrap">
-                  <span className="font-medium text-slate-800">{i.code}</span>
-                  {i.other_codes && <span className="block text-xs text-slate-500">{i.other_codes}</span>}
-                </td>
-                <td className="px-3 py-3 text-slate-700 whitespace-nowrap">{i.start_date ? shortDay(i.start_date) : '—'}</td>
-                <td className="px-3 py-3 text-slate-700">
-                  <span className="whitespace-nowrap">{i.modules} modules
-                    {i.latest && <span className="ml-1.5 text-xs font-medium rounded-full px-2 py-0.5 bg-blue-50 text-blue-700">Latest</span>}</span>
-                  <span className={`block text-xs ${i.changes ? 'text-amber-700' : 'text-slate-500'}`}>{i.compared_with
-                    ? (i.changes ? `${i.changes} change${i.changes > 1 ? 's' : ''} from ${i.compared_with}` : `Same as ${i.compared_with}`)
-                    : 'First intake'}</span>
-                </td>
-                <td className="px-3 py-3 text-slate-700 tabular-nums">{i.students}</td>
-                <td className="px-3 py-3 whitespace-nowrap">
-                  <button type="button" onClick={() => onOpen(i)} className="text-sm text-blue-700 hover:underline">Edit list</button>
-                  {i.students === 0 && (
-                    <button type="button" onClick={() => remove(i)} className="ml-3 text-sm text-rose-700 hover:underline">Delete</button>
-                  )}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        </div>
-      </div>
       </div>
     </div>
   )
 }
 
-const TITLES = ['Intake', 'Starts', 'Module list', 'Students', '']
+
 
 // ── Add a module to the list: from the catalogue (keeps its description and skills), or a new one ─────────────────
 function AddModule({ scope, scopeLabel, onAdded, onNew, onCancel }) {
@@ -581,20 +634,31 @@ export default function AdminAcademic() {
     if (next) set({ m: String(next.id) })
   }
 
-  const tabCls = (on) => `pb-3 text-sm border-b-2 -mb-px ${on ? 'border-blue-600 text-blue-700 font-semibold' : 'border-transparent text-slate-500 hover:text-slate-800'}`
+  const tabCls = (on) => `h-9 px-4 rounded-full text-sm font-semibold transition-colors ${on ? 'bg-accent text-white shadow-[0_6px_14px_-8px_rgb(37_87_196/70%)]' : 'text-ink-soft hover:bg-white/70'}`
 
   return (
-    <div className="h-screen flex flex-col">
+    <div className="h-[calc(100dvh-var(--bar-h))] flex flex-col">
       <PageHeader>
         <div className="pt-0">
-          <p className="text-[11px] font-semibold text-blue-600 uppercase tracking-widest mb-2">Admin</p>
+          <p className="text-[11px] font-semibold text-blue-600 uppercase tracking-widest mb-2">Admin · Academics</p>
           <h1 className="text-2xl font-semibold tracking-tight text-slate-900">Academic structure</h1>
-          <p className="text-sm text-slate-500 mt-1">Check the skills found in each module's description.</p>
+          <p className="text-sm text-slate-500 mt-1 pb-4">Check the skills found in each module's description.</p>
+        </div>
+      </PageHeader>
+      {/* 20 Nov (her review): tabs left under the header card, Programme / Intake on the same line at the right */}
+      <div className="shrink-0 px-8">
+          <div className="pt-3 flex flex-wrap items-center gap-x-5 gap-y-2">
+          <div role="tablist" className="tab-track flex gap-1">
+            <button role="tab" aria-selected={tab === 'modules'} className={tabCls(tab === 'modules')}
+              onClick={() => set({ tab: '' })}>Modules <span className={`font-normal ml-0.5 ${tab === 'modules' ? 'text-white/85' : 'text-muted'}`}>{modules.length || ''}</span></button>
+            <button role="tab" aria-selected={tab === 'intakes'} className={tabCls(tab === 'intakes')}
+              onClick={() => set({ tab: 'intakes' })}>Intakes <span className={`font-normal ml-0.5 ${tab === 'intakes' ? 'text-white/85' : 'text-muted'}`}>{data?.intakes.length ?? ''}</span></button>
+          </div>
           {data && (
-            <div className="mt-3 flex flex-wrap items-center gap-2">
+            <div className="ml-auto flex flex-wrap items-center gap-2 min-w-0">
               <label htmlFor="programme" className="text-sm font-medium text-slate-700">Programme</label>
               <select id="programme" value={programmeId} onChange={e => { setQ(''); set({ p: e.target.value, i: '', m: '' }) }}
-                className="w-124 max-w-full min-w-0 px-3 py-1.5 text-sm bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                className="w-96 max-w-full min-w-0 px-3 py-1.5 text-sm bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                 {data.programmes.map(p => (
                   <option key={p.id} value={p.id}>{p.name}{p.to_review ? ` (${p.to_review} to review)` : ''}</option>
                 ))}
@@ -610,16 +674,10 @@ export default function AdminAcademic() {
               </>)}
             </div>
           )}
-          <div role="tablist" className="flex gap-6 mt-4">
-            <button role="tab" aria-selected={tab === 'modules'} className={tabCls(tab === 'modules')}
-              onClick={() => set({ tab: '' })}>Modules <span className="text-slate-500 font-normal ml-0.5">{modules.length || ''}</span></button>
-            <button role="tab" aria-selected={tab === 'intakes'} className={tabCls(tab === 'intakes')}
-              onClick={() => set({ tab: 'intakes' })}>Intakes <span className="text-slate-500 font-normal ml-0.5">{data?.intakes.length ?? ''}</span></button>
           </div>
-        </div>
-      </PageHeader>
+      </div>
 
-      <div className="flex-1 min-h-0 px-8 py-6 flex flex-col">
+      <div className="flex-1 min-h-0 px-8 pt-3.5 pb-4 flex flex-col">
         {error && <p className="text-sm text-rose-600">{error}</p>}
         {!data && !error && <AcademicSkeleton />}
         {data && tab === 'intakes' && (
@@ -627,7 +685,7 @@ export default function AdminAcademic() {
             setIntakes={() => reload()} onOpen={i => set({ tab: '', i: String(i.id), m: '' })} />
         )}
         {data && tab === 'modules' && (
-          <p className="-mt-2 mb-3 text-sm text-slate-600">
+          <p className="acad-scope">
             {intake
               ? <>Module list of intake <b className="font-semibold">{intake.code}</b>{intake.latest ? ' (latest)' : ''}. Changes apply to this intake only{intake.compared_with ? <>; marked against {intake.compared_with}</> : ''}.</>
               : <>No intakes yet: this is the programme's list, copied into its first intake.</>}
@@ -637,7 +695,7 @@ export default function AdminAcademic() {
           // 21 Oct (her report: a narrow window squeezed the module's details): below laptop width the list sits above
           // the details (the list scrolls in its own box) and the page scrolls
           <div className="flex-1 min-h-0 flex flex-col lg:flex-row gap-4 overflow-y-auto lg:overflow-visible">
-            <section aria-label="Modules" className="w-full lg:w-88 shrink-0 max-h-[28rem] lg:max-h-none bg-white border border-slate-200 rounded-2xl flex flex-col overflow-hidden">
+            <section aria-label="Modules" className="emp-tile w-full lg:w-88 shrink-0 max-h-[28rem] lg:max-h-none bg-white border rounded-2xl flex flex-col overflow-hidden">
               <div className="p-3 flex flex-wrap gap-2 border-b border-slate-200">
                 <div className="basis-full flex"><SearchBox value={q} onChange={setQ} label="Search modules" placeholder="Search modules" /></div>
                 <button type="button" aria-pressed={onlyToReview} onClick={() => set({ show: onlyToReview ? '' : 'todo' })}
@@ -647,7 +705,7 @@ export default function AdminAcademic() {
                   To review <span className="font-semibold tabular-nums">{toReview}</span>
                 </button>
                 <button type="button" onClick={() => setPicking(true)}
-                  className="ml-auto shrink-0 px-3 py-1.5 text-sm font-medium rounded-lg bg-blue-600 text-white hover:bg-blue-700">+ Add module</button>
+                  className="ml-auto shrink-0 head-cta h-9 px-3.5 text-sm">+ Add module</button>
               </div>
               <div className="flex-1 overflow-y-auto">
                 {shown.length === 0 && <p className="p-4 text-sm text-slate-500">{onlyToReview && !q ? 'All modules are reviewed.' : 'No modules match.'}</p>}
@@ -662,7 +720,7 @@ export default function AdminAcademic() {
                         <li key={m.id}>
                           <button type="button" aria-current={m.id === selected ? 'true' : undefined} onClick={() => { setNotice(''); set({ m: String(m.id) }) }}
                             className={`w-full text-left flex items-center justify-between gap-3 px-4 py-2.5 border-b border-slate-100 ${m.id === selected
-                              ? 'bg-blue-50 shadow-[inset_3px_0_0_#2563eb]' : 'hover:bg-slate-50'}`}>
+                              ? 'bg-accent-soft shadow-[inset_3px_0_0_var(--color-accent)]' : 'hover:bg-slate-50'}`}>
                             <span className="min-w-0">
                               <span className="block text-sm text-slate-800 line-clamp-2">{m.name}</span>
                               <span className="block text-xs text-slate-600">{m.code} · {m.skills} skill{m.skills === 1 ? '' : 's'}
@@ -698,7 +756,7 @@ export default function AdminAcademic() {
                 )}
               </div>
             </section>
-            <section aria-label="Module details" className="shrink-0 lg:shrink lg:flex-1 min-w-0 flex flex-col bg-white border border-slate-200 rounded-2xl overflow-hidden">
+            <section aria-label="Module details" className="emp-tile shrink-0 lg:shrink lg:flex-1 min-w-0 flex flex-col bg-white border rounded-2xl overflow-hidden">
               {notice && <p role="status" className="mx-6 mt-5 -mb-1 text-sm text-amber-800 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2">{notice}</p>}
               {selected ? <ModuleDetails key={`${selected}-${tick}`} id={selected} programmeId={programmeId} row={selectedRow} onChanged={onChanged} onReviewed={onReviewed}
                   onEdit={mod => openForm({ mode: 'edit', module: mod })} onRemove={mod => { setFormError(''); setRemoving(mod) }} />

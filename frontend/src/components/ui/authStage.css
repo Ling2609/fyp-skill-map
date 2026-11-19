@@ -1,0 +1,251 @@
+/* SkillMap intro stage (19 Nov, approved mock review/auth-intro.html). Generated from the mock's CSS and scoped under
+   .sm-stage so none of these short class names (.card, .chip, .el …) can reach the rest of the app. The stage is drawn
+   at 560×400 and scaled to its box (--k, set by AuthIntro.jsx). */
+.sm-stage{--ink:var(--color-ink);--ink-soft:var(--color-ink-soft);--muted:var(--color-muted);--line:var(--color-line);--line-strong:var(--color-line-strong);
+  --well:var(--color-well);--accent:var(--color-accent);--accent-strong:var(--color-accent-strong);--accent-soft:var(--color-accent-soft);
+  --have:var(--color-have);--have-strong:var(--color-have-strong);--have-soft:var(--color-have-soft);
+  --miss:var(--color-missing);--miss-strong:var(--color-missing-strong);--miss-soft:var(--color-missing-soft);
+  --shadow-card:0 1px 2px rgb(20 30 60/.05),0 12px 32px -18px rgb(20 30 60/.22);--shadow-lift:0 2px 4px rgb(20 30 60/.05),0 22px 44px -22px rgb(20 30 60/.32);
+  --sans:var(--font-sans);--display:var(--font-display);--mono:var(--font-mono);font-family:var(--font-sans);color:var(--color-ink);line-height:1.5;text-align:left}
+.sm-stage{position:absolute;left:0;top:0;width:560px;height:400px;transform-origin:0 0;transform:scale(var(--k,1));
+  border-radius:28px;overflow:hidden;background:rgb(255 255 255/.55);border:1px solid rgb(255 255 255/.9);
+  box-shadow:var(--shadow-lift);backdrop-filter:blur(14px) saturate(1.2)}
+.sm-stage::before{content:"";position:absolute;inset:0;background:url("/topo.svg") 0 0/420px 320px;opacity:.9}
+.sm-stage::after{content:"";position:absolute;inset:auto -80px -120px auto;width:340px;height:340px;border-radius:50%;
+  background:radial-gradient(closest-side,rgb(37 87 196/.14),transparent);pointer-events:none}
+.sm-stage .el{position:absolute;left:0;top:0;opacity:0;transition:transform .8s cubic-bezier(.2,.75,.2,1),opacity .5s ease;will-change:transform,opacity}
+
+.sm-stage .card{background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow-card)}
+.sm-stage .chip{display:inline-flex;align-items:center;gap:6px;height:30px;padding:0 12px;border-radius:999px;font-weight:600;font-size:13px;white-space:nowrap}
+.sm-stage .chip.have{background:var(--have-soft);color:var(--have-strong);border:1px solid #b5e3dd}
+.sm-stage .chip.miss{background:#fff;color:var(--miss-strong);border:1.5px dashed var(--miss)}
+.sm-stage .chip.ask{background:var(--accent-soft);color:var(--accent-strong);border:1px solid #c8d7f4}
+.sm-stage .k{z-index:2}
+.sm-stage .chip .tick{width:0;overflow:hidden;transition:width .35s .5s}
+.sm-stage .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+
+/* student · beat 1: modules give skills */
+.sm-stage .mod{width:206px;padding:12px 14px;display:flex;gap:11px;align-items:center}
+.sm-stage .mod i{flex:none;width:34px;height:34px;border-radius:10px;background:var(--accent-soft);display:grid;place-items:center}
+.sm-stage .mod i svg{width:18px;height:18px;color:var(--accent)}
+.sm-stage .mod b{display:block;font-size:13.5px;line-height:1.25}
+.sm-stage .mod small{font-size:12px;color:var(--muted)}
+.sm-stage .mod .g{font-family:var(--mono);color:var(--have-strong);font-weight:500}
+.sm-stage .link{stroke:var(--have);stroke-width:1.6;stroke-dasharray:3 4;fill:none}
+
+/* the job ad */
+.sm-stage .ad{width:236px;height:306px;padding:16px}
+.sm-stage .ad h3{margin:6px 0 2px;font-size:16px;letter-spacing:-.02em;line-height:1.2}
+.sm-stage .ad .meta{font-size:12px;color:var(--muted)}
+.sm-stage .ad .asks{margin-top:14px;padding-top:12px;border-top:1px solid var(--line)}
+.sm-stage .ad .sum{position:absolute;left:16px;right:16px;bottom:14px;display:flex;justify-content:space-between;align-items:baseline;font-size:12.5px;color:var(--muted);opacity:0;transition:opacity .5s 1.3s}
+.sm-stage .ad .sum b{font-family:var(--display);font-size:22px;color:var(--have-strong);letter-spacing:-.03em}
+.sm-stage .ad .slot{position:absolute}
+
+/* beat 3: where you stand */
+.sm-stage .score{font-family:var(--display);font-weight:800;letter-spacing:-.06em;line-height:.9}
+.sm-stage .score b{font-size:104px;color:var(--ink)}
+.sm-stage .score span{font-size:44px;color:var(--muted)}
+.sm-stage .standtxt{width:230px;font-size:15px;color:var(--ink-soft);font-weight:600;line-height:1.35}
+.sm-stage .next{width:226px;padding:14px}
+.sm-stage .next .row{display:flex;justify-content:space-between;align-items:center;margin-top:10px;font-weight:600;font-size:14px}
+.sm-stage .next .bar{height:6px;border-radius:9px;background:var(--well);margin-top:5px;overflow:hidden}
+.sm-stage .next .bar i{display:block;height:100%;width:0;background:var(--miss);border-radius:inherit;transition:width .9s 1s cubic-bezier(.2,.75,.2,1)}
+.sm-stage .trail{width:520px;height:110px}
+.sm-stage .trail .step{opacity:0;transform:translateY(6px);transition:opacity .35s,transform .35s}
+.sm-stage .trail text{font:700 13px var(--sans);fill:var(--ink)}
+
+/* beat 4: meet the employer */
+.sm-stage .meetmap{width:520px;height:150px}
+.sm-stage .pin{transition:transform 1.6s cubic-bezier(.45,.05,.2,1) .2s}
+.sm-stage .app{width:430px;padding:16px 18px}
+.sm-stage .app .top{display:flex;justify-content:space-between;align-items:center}
+.sm-stage .app b{font-size:15px}
+.sm-stage .app small{display:block;color:var(--muted);font-size:12.5px}
+.sm-stage .badge{font-size:12px;font-weight:700;padding:4px 10px;border-radius:999px;background:var(--have-soft);color:var(--have-strong);opacity:0;transition:opacity .4s 2.3s}
+.sm-stage .track{display:grid;grid-template-columns:repeat(4,1fr);margin-top:16px;position:relative}
+.sm-stage .track::before{content:"";position:absolute;left:12.5%;right:12.5%;top:9px;height:2px;background:var(--line)}
+.sm-stage .track .fill{position:absolute;left:12.5%;top:9px;height:2px;width:0;background:var(--accent);transition:width 1.2s 1s linear}
+.sm-stage .track div{position:relative;text-align:center;font-size:12px;color:var(--muted);font-weight:600}
+.sm-stage .track div::before{content:"";display:block;width:20px;height:20px;margin:0 auto 6px;border-radius:50%;background:#fff;border:2px solid var(--line-strong);transition:background .3s,border-color .3s}
+
+/* beat 4: the AI Assistant closes a gap */
+.sm-stage .chat{width:318px;padding:14px 16px;min-height:236px}
+.sm-stage .chat .hd{display:flex;align-items:center;gap:9px;padding-bottom:10px;border-bottom:1px solid var(--line);font-weight:700;font-size:13.5px}
+.sm-stage .chat .hd i{width:26px;height:26px;border-radius:8px;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center}
+.sm-stage .chat .hd i svg{width:15px;height:15px}
+.sm-stage .chat .hd small{margin-left:auto;font-weight:600;color:var(--muted);font-size:11.5px}
+.sm-stage .bub{margin-top:10px;max-width:88%;padding:9px 12px;border-radius:14px;font-size:13px;line-height:1.4;opacity:0;transform:translateY(6px);transition:opacity .35s,transform .35s}
+.sm-stage .bub.me{margin-left:auto;width:max-content;background:var(--accent);color:#fff;border-bottom-right-radius:4px}
+.sm-stage .bub.ai{background:var(--well);color:var(--ink);border-bottom-left-radius:4px}
+.sm-stage .bub.ai ol{margin:4px 0 0;padding-left:18px}.sm-stage .bub.ai li{margin:2px 0}
+.sm-stage .bub.typing{position:absolute;left:16px;top:104px}
+.sm-stage .dots{display:inline-flex;gap:4px}.sm-stage .dots b{width:6px;height:6px;border-radius:50%;background:var(--muted);animation:sm-blink 1s infinite}
+.sm-stage .dots b:nth-child(2){animation-delay:.15s}.sm-stage .dots b:nth-child(3){animation-delay:.3s}
+@keyframes sm-blink{50%{opacity:.25}}
+@keyframes sm-gone{to{opacity:0}}
+.sm-stage .gap{width:170px}
+.sm-stage .gap .swap{position:relative;height:34px;margin:8px 0 16px}
+.sm-stage .gap .swap .chip{position:absolute;left:0;top:0;transition:opacity .5s,transform .5s}
+.sm-stage .gap .swap .have{opacity:0;transform:scale(.8)}
+.sm-stage .gap .now{font-family:var(--display);font-weight:800;letter-spacing:-.05em;line-height:1}
+.sm-stage .gap .now b{position:relative;display:inline-block;font-size:72px}.sm-stage .gap .now span{font-size:30px;color:var(--muted)}
+.sm-stage .gap .now b i{font-style:normal;transition:opacity .3s}
+.sm-stage .gap .now b .n5{position:absolute;left:0;top:0;opacity:0}
+.sm-stage .gap .was{font-size:12.5px;color:var(--muted);font-weight:600;margin-top:4px}
+.sm-stage .gap .plus{display:inline-block;margin-top:12px;font-size:12.5px;font-weight:700;color:var(--have-strong);background:var(--have-soft);padding:4px 10px;border-radius:999px;opacity:0;transition:opacity .4s 2.6s}
+.sm-stage .s.chat{transform:translate(24px,60px)} .sm-stage .s.gap{transform:translate(372px,80px)}
+.sm-stage[data-beat="4"] .s.chat{opacity:1;transform:translate(24px,50px)}
+.sm-stage[data-beat="4"] .s.gap{opacity:1;transform:translate(372px,70px);transition-delay:.3s}
+.sm-stage[data-beat="4"] .bub.me{opacity:1;transform:none;transition-delay:.4s}
+.sm-stage[data-beat="4"] .bub.typing{opacity:1;transform:none;transition-delay:.8s;animation:sm-gone 0s 1.5s forwards}
+.sm-stage[data-beat="4"] .bub.ai.full{opacity:1;transform:none;transition-delay:1.5s}
+.sm-stage[data-beat="4"] .gap .swap .miss{opacity:0;transform:scale(.8);transition-delay:2.1s}
+.sm-stage[data-beat="4"] .gap .swap .have{opacity:1;transform:none;transition-delay:2.1s}
+.sm-stage[data-beat="4"] .gap .now b .n4{opacity:0;transition-delay:2.2s}
+.sm-stage[data-beat="4"] .gap .now b .n5{opacity:1;transition-delay:2.2s}
+.sm-stage[data-beat="4"] .gap .plus{opacity:1}
+
+/* employer story */
+.sm-stage .grad{width:300px;padding:11px 14px;display:flex;align-items:center;gap:12px}
+.sm-stage .av{flex:none;width:34px;height:34px;border-radius:50%;background:var(--accent-soft);color:var(--accent-strong);font-weight:800;font-size:12px;display:grid;place-items:center}
+.sm-stage .grad b{display:block;font-size:13.5px}
+.sm-stage .grad small{font-size:12px;color:var(--muted)}
+.sm-stage .grad .fit{margin-left:auto;text-align:right;font-family:var(--display);font-weight:800;font-size:20px;letter-spacing:-.03em;color:var(--have-strong)}
+.sm-stage .grad .fit small{display:block;font-family:var(--sans);font-weight:600;font-size:11px;color:var(--muted);letter-spacing:0}
+.sm-stage .typed{display:block;height:8px;border-radius:9px;background:var(--well);margin-top:8px;width:0;transition:width .7s}
+.sm-stage .evid{width:330px;padding:14px 16px}
+.sm-stage .evid .r{display:flex;align-items:center;gap:10px;margin-top:10px;font-size:13px;opacity:0;transform:translateX(-8px);transition:opacity .4s,transform .4s}
+.sm-stage .evid .r .src{color:var(--muted)}
+.sm-stage .evid .r .chip{height:26px;font-size:12px}
+
+/* ── beat states (student) ── */
+.sm-stage[data-story=s] .e{display:none}
+.sm-stage[data-story=e] .s{display:none}
+.sm-stage[data-beat="1"] .s.mod{opacity:1}
+.sm-stage[data-beat="1"] .s.m1{transform:translate(22px,62px)} .sm-stage[data-beat="1"] .s.m2{transform:translate(22px,162px);transition-delay:.12s} .sm-stage[data-beat="1"] .s.m3{transform:translate(22px,262px);transition-delay:.24s}
+.sm-stage .s.m1{transform:translate(-30px,62px)} .sm-stage .s.m2{transform:translate(-30px,162px)} .sm-stage .s.m3{transform:translate(-30px,262px)}
+.sm-stage[data-beat="2"] .s.mod{opacity:.4} .sm-stage[data-beat="2"] .s.m1{transform:translate(22px,62px)} .sm-stage[data-beat="2"] .s.m2{transform:translate(22px,162px)} .sm-stage[data-beat="2"] .s.m3{transform:translate(22px,262px)}
+.sm-stage[data-beat="1"] .s.links{opacity:1;transition-delay:.3s}
+.sm-stage .s.links{width:560px;height:400px}
+.sm-stage .s.k{transform:translate(var(--x0),var(--y0)) scale(.6)}
+.sm-stage[data-beat="1"] .s.k{opacity:1;transform:translate(var(--x1),var(--y1))}
+.sm-stage[data-beat="1"] .s.k1{transition-delay:.35s} .sm-stage[data-beat="1"] .s.k2{transition-delay:.45s} .sm-stage[data-beat="1"] .s.k3{transition-delay:.55s} .sm-stage[data-beat="1"] .s.k4{transition-delay:.65s}
+.sm-stage[data-beat="2"] .s.k{opacity:1;transform:translate(var(--x2),var(--y2))}
+.sm-stage[data-beat="2"] .s.k2{transition-delay:.1s} .sm-stage[data-beat="2"] .s.k3{transition-delay:.2s} .sm-stage[data-beat="2"] .s.k4{transition-delay:.3s}
+.sm-stage[data-beat="2"] .s.k .tick{width:12px}
+.sm-stage .s.ad{transform:translate(330px,58px) scale(.96)}
+.sm-stage[data-beat="2"] .s.ad{opacity:1;transform:translate(300px,56px)}
+.sm-stage[data-beat="1"] .s.ad{opacity:.38;transform:translate(318px,58px) scale(.97);transition-delay:.5s}   /* step 2 waits in view, so step 1 is never half empty */
+.sm-stage[data-beat="2"] .s.ad .sum{opacity:1}
+.sm-stage .s.ad .slot{opacity:0;transition:opacity .4s .9s}
+.sm-stage[data-beat="2"] .s.ad .slot{opacity:1}
+
+.sm-stage .s.score{transform:translate(24px,40px)} .sm-stage .s.standtxt{transform:translate(28px,160px)} .sm-stage .s.next{transform:translate(310px,46px)} .sm-stage .s.trail{transform:translate(20px,266px)}
+.sm-stage[data-beat="3"] .s.score{opacity:1;transform:translate(24px,30px)}
+.sm-stage[data-beat="3"] .s.standtxt{opacity:1;transform:translate(28px,150px);transition-delay:.15s}
+.sm-stage[data-beat="3"] .s.next{opacity:1;transform:translate(310px,36px);transition-delay:.4s}
+.sm-stage[data-beat="3"] .s.next .bar i{width:var(--w)}
+.sm-stage[data-beat="3"] .s.trail{opacity:1;transform:translate(20px,256px)}
+.sm-stage[data-beat="3"] .trail .step{opacity:1;transform:none}
+
+/* beat 4 (both stories) */
+.sm-stage .meetmap{transform:translate(20px,40px)} .sm-stage .app{transform:translate(65px,232px)}
+.sm-stage[data-beat="5"] .meetmap{opacity:1;transform:translate(20px,26px)}
+.sm-stage[data-beat="5"] .app{opacity:1;transform:translate(65px,212px);transition-delay:.3s}
+.sm-stage[data-beat="5"] .pin.you{transform:translateX(150px)} .sm-stage[data-beat="5"] .pin.emp{transform:translateX(-150px)}
+.sm-stage .hello{opacity:0;transition:opacity .4s 1.7s}.sm-stage[data-beat="5"] .hello{opacity:1}
+.sm-stage[data-beat="5"] .track .fill{width:50%}
+.sm-stage[data-beat="5"] .track div::before{transition-delay:var(--d)}
+.sm-stage[data-beat="5"] .track div:not(:last-child)::before{border-color:var(--accent);background:var(--accent) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 8.5l2.6 2.5L12 5.5' fill='none' stroke='%23fff' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/12px no-repeat}
+.sm-stage[data-beat="5"] .track div:last-child::before{border-style:dashed}
+.sm-stage[data-beat="5"] .badge{opacity:1}
+
+/* ── beat states (employer) ── */
+.sm-stage .e.ad{transform:translate(30px,52px)}
+.sm-stage[data-beat="1"] .e.ad{opacity:1;transform:translate(30px,42px)}
+.sm-stage[data-beat="1"] .e.ad .typed{width:var(--w)}
+.sm-stage[data-beat="1"] .e.ad .typed:nth-of-type(2){transition-delay:.3s} .sm-stage[data-beat="1"] .e.ad .typed:nth-of-type(3){transition-delay:.6s}
+.sm-stage .e.k{transform:translate(var(--x0),var(--y0)) scale(.6)}
+.sm-stage[data-beat="1"] .e.k{opacity:1;transform:translate(var(--x1),var(--y1))}
+.sm-stage[data-beat="1"] .e.k1{transition-delay:.6s} .sm-stage[data-beat="1"] .e.k2{transition-delay:.7s} .sm-stage[data-beat="1"] .e.k3{transition-delay:.8s} .sm-stage[data-beat="1"] .e.k4{transition-delay:.9s}
+.sm-stage[data-beat="2"] .e.ad{opacity:.4;transform:translate(30px,42px)}
+.sm-stage .e.grad{transform:translate(250px,var(--y))}
+.sm-stage[data-beat="2"] .e.grad{opacity:1;transform:translate(232px,var(--y))}
+.sm-stage[data-beat="2"] .e.g2{transition-delay:.15s} .sm-stage[data-beat="2"] .e.g3{transition-delay:.3s}
+.sm-stage[data-beat="3"] .e.grad.g1{opacity:1;transform:translate(130px,40px)}
+.sm-stage .e.evid{transform:translate(115px,130px)}
+.sm-stage[data-beat="3"] .e.evid{opacity:1;transform:translate(115px,112px);transition-delay:.25s}
+.sm-stage[data-beat="3"] .e.evid .r{opacity:1;transform:none}
+.sm-stage[data-beat="3"] .e.evid .r:nth-child(3){transition-delay:.7s} .sm-stage[data-beat="3"] .e.evid .r:nth-child(4){transition-delay:1s} .sm-stage[data-beat="3"] .e.evid .r:nth-child(5){transition-delay:1.3s}
+
+.sm-stage[data-story=s] .e-only{display:none}
+.sm-stage[data-story=e] .s-only{display:none}
+
+/* ── the entry screens around the stage (19 Nov) ─────────────────────────────────────────────────────────────── */
+/* the split: equal halves; it leans toward the form while you type, back toward the story when you leave */
+.auth2 { min-height: 100dvh; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); transition: grid-template-columns .6s cubic-bezier(.2, .7, .2, 1); }
+.auth2:has(.auth-card :is(input, select, textarea, button):focus-visible), .auth2:has(.auth-card :is(input, select, textarea):focus) { grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); }
+.auth2-intro { position: relative; display: flex; flex-direction: column; min-width: 0; padding: 28px 36px 24px 48px; }
+.auth2-brand { display: flex; align-items: center; gap: 10px; font-family: var(--font-display); font-weight: 800; font-size: 20px; letter-spacing: -0.03em; color: var(--color-ink); width: max-content; }
+.auth2-form { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px 40px; }
+/* the divider: a soft hairline with a grip; the grip turns blue while you type */
+.auth2-form::before { content: ""; position: absolute; left: 0; top: 8%; bottom: 8%; width: 1px; background: linear-gradient(transparent, rgb(37 87 196 / 22%) 20%, rgb(37 87 196 / 22%) 80%, transparent); }
+.auth2-form::after { content: ""; position: absolute; left: -3px; top: calc(50% - 22px); width: 7px; height: 44px; border-radius: 9px; background: #fff; border: 1px solid var(--color-line-strong); box-shadow: 0 1px 2px rgb(20 30 60 / 5%), 0 12px 32px -18px rgb(20 30 60 / 22%); transition: background .3s, border-color .3s; }
+.auth2:has(.auth-card :is(input, select, textarea):focus) .auth2-form::after { background: var(--color-accent); border-color: var(--color-accent); }
+.auth2-mbrand { display: none; }
+
+/* the story column */
+.sm-lede { --stage-w: min(720px, calc((100dvh - 320px) * 1.4)); margin: auto 0; padding: 18px 0 8px; display: flex; flex-direction: column; gap: 14px; max-width: 720px; }
+.sm-h1 { margin: 0; font-family: var(--font-display); font-weight: 800; font-size: clamp(30px, 3.1vw, 44px); line-height: 1.04; letter-spacing: -0.045em; color: var(--color-ink); }
+.sm-h1 em { font-style: normal; color: var(--color-accent); }
+.sm-caption { position: relative; height: 64px; }
+.sm-caption p { position: absolute; inset: 0; margin: 0; opacity: 0; transform: translateY(6px); transition: opacity .45s, transform .45s; }
+.sm-caption p.on { opacity: 1; transform: none; }
+.sm-caption b { display: block; font-size: 19px; letter-spacing: -0.02em; color: var(--color-ink); }
+.sm-caption p > span { color: var(--color-muted); font-size: 15px; }
+.sm-caption .n { font-family: var(--font-mono); font-size: 12px; color: var(--color-accent); margin-right: 8px; font-weight: 500; }
+.sm-stagebox { position: relative; width: 100%; max-width: var(--stage-w); aspect-ratio: 560 / 400; }
+.sm-chapters { display: flex; gap: 8px; margin: 4px 0 0; padding: 0; list-style: none; width: 100%; max-width: var(--stage-w); }
+.sm-chapters li { flex: 1; min-width: 0; }
+.sm-chapters button { display: block; width: 100%; padding: 10px 0; border-radius: 6px; text-align: left; }
+.sm-chapters .bar { display: block; height: 4px; border-radius: 9px; background: rgb(37 87 196 / 16%); overflow: hidden; }
+.sm-chapters .bar i { display: block; height: 100%; width: 0; background: var(--color-accent); border-radius: inherit; }
+.sm-chapters .done .bar i { width: 100%; }
+.sm-chapters .now .bar i { animation: sm-fill var(--beat) linear forwards; }
+.sm-chapters.paused .now .bar i { animation-play-state: paused; }
+@keyframes sm-fill { to { width: 100%; } }
+.sm-chapters .lbl { display: block; margin-top: 6px; font-size: 12px; color: var(--color-muted); font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sm-chapters .now .lbl { color: var(--color-accent-strong); }
+.sm-chapters .held { color: var(--color-muted); font-weight: 500; }
+
+/* short laptops */
+@media (max-height: 820px) and (min-width: 1024px) { .auth2-intro { padding-top: 20px; padding-bottom: 16px; } .sm-lede { gap: 10px; } }
+@media (max-height: 780px) and (min-width: 1024px) { .sm-lede { gap: 8px; } .sm-caption { height: 58px; } .auth2-form { padding-top: 14px; padding-bottom: 14px; } }
+
+/* tablets and phones: one column. Sign in shows the form first (returning people never wait); Register shows the
+   story first (new people see what SkillMap does) */
+@media (max-width: 1023px) {
+  .auth2, .auth2:has(.auth-card :is(input, select, textarea):focus) { display: flex; flex-direction: column; }
+  .auth2-intro { padding: 16px 16px 8px; }
+  .sm-lede { --stage-w: 100%; margin: 0; padding: 16px 0 0; gap: 10px; max-width: none; }
+  .sm-h1 { font-size: 28px; }
+  .sm-caption { height: 62px; } .sm-caption b { font-size: 16px; } .sm-caption p > span { font-size: 14px; }
+  .sm-chapters .lbl { display: none; }
+  .auth2-form { padding: 8px 16px 28px; }
+  .auth2-form::before, .auth2-form::after { display: none; }
+  .auth2.form-first .auth2-form { order: -1; padding-top: 16px; }
+  .auth2.form-first .auth2-intro .auth2-brand { display: none; }
+  .auth2.form-first .auth2-mbrand { display: flex; align-self: flex-start; margin: 0 0 16px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .auth2, .sm-caption p { transition: none !important; }
+  .sm-chapters .now .bar i { animation: none; width: 100%; }
+  .sm-stage *, .sm-stage *::before, .sm-stage *::after { transition-duration: 0s !important; transition-delay: 0s !important; animation: none !important; }
+}
+
+/* the AI plan in the stage keeps its 1-2-3 (the app base removes list markers) */
+.sm-stage ol { list-style: decimal; }
+/* short laptops: the entry card tightens so Register fits with every message showing */
+@media (max-height: 820px) and (min-width: 1024px) { .auth-card input:not([type=checkbox]) { height: 42px; } .auth-card form { gap: 10px; } .auth-card h2 { font-size: 27px; } }
+@media (max-height: 740px) and (min-width: 1024px) { .auth-card input:not([type=checkbox]) { height: 40px; } .auth-card form { gap: 8px; } }
