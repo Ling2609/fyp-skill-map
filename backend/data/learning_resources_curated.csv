@@ -6,6 +6,9 @@ SQL,structured query language,PostgreSQL Tutorial (SQL language),https://www.pos
 Java,java programming; core java,Learn Java,https://dev.java/learn/,Oracle (dev.java),docs,free,
 JavaScript,js; ecmascript,JavaScript Guide,https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide,MDN Web Docs,docs,free,
 JavaScript,js; ecmascript,The Modern JavaScript Tutorial,https://javascript.info/,javascript.info,tutorial,free,
+TypeScript,ts,Everyday Types,https://www.typescriptlang.org/docs/handbook/2/everyday-types.html,TypeScript,docs,free,2026-11-20
+TypeScript,ts,More on Functions,https://www.typescriptlang.org/docs/handbook/2/functions.html,TypeScript,docs,free,2026-11-20
+TypeScript,ts,TypeScript Playground,https://www.typescriptlang.org/play/,TypeScript,practice,free,2026-11-20
 TypeScript,ts,The TypeScript Handbook,https://www.typescriptlang.org/docs/handbook/intro.html,TypeScript,docs,free,
 HTML,html5,Learn web development,https://developer.mozilla.org/en-US/docs/Learn,MDN Web Docs,course,free,
 CSS,css3,Learn CSS,https://web.dev/learn/css,web.dev (Google),course,free,

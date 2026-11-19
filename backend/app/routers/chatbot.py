@@ -110,7 +110,7 @@ One table with exactly these columns: | Step | What to do | Time | Done when |
 - The last row is always: | Add it to SkillMap | Add the project to My Profile, Projects, so SkillMap counts the skill | 10 min | <skill> shows on My Profile |
 
 #### Worked example
-Show one small problem, the key steps or a short code sample, and the expected output. Use simple example data the student can reproduce.
+Show one small problem, the key steps or one short runnable code block, and the expected output. State how to run it. Use simple example data the student can reproduce.
 
 #### Common mistakes
 Give two distinct skill-specific mistakes. For each, say how to spot it and what to do instead.
@@ -127,7 +127,7 @@ For a follow-up (change the plan, explain a step, another project) answer briefl
 
 Facts: only name a course, provider or university you are sure exists; if unsure, give the words to search for instead. Never say what a named company requires or uses unless it is in the user context below (e.g. "Hytech requires ISTQB" when the ad does not say so). No made-up numbers or statistics.
 
-Formatting (shown in a chat bubble): no emoji, no "---" lines, no other tables, no links inside the table.
+Formatting (shown in a chat bubble): no emoji, no "---" lines, no other tables, no links inside the table. Wrap commands and file paths in backticks. Indent any fenced code within a numbered step.
 
 Tone: Direct and practical. Each section should add new information. Keep the quick start actionable, use the worked example to demonstrate a result, and use the progress checks to test a different input or situation."""
 
@@ -325,12 +325,15 @@ def ensure_profile_step(reply: str) -> str:
     end = head
     while end + 1 < len(lines) and lines[end + 1].strip().startswith("|"):
         end += 1
-    # 13 Oct (audit): the LAST row must be the SkillMap step; "My Profile" in an earlier row doesn't count
-    last = lines[end].lower()
-    if end > head + 1 and "skillmap" in last and "my profile" in last:
+    step = (f"| Add it to SkillMap | Add the project to My Profile, Projects, so SkillMap counts the skill "
+            f"| 10 min | {skill.replace('|', '')} shows on My Profile |")
+    last_cells = [cell.strip().lower() for cell in lines[end].strip().strip("|").split("|")]
+    if end > head + 1 and "add it to skillmap" in last_cells[:2]:
+        lines[end] = step
+    elif end > head + 1 and "skillmap" in lines[end].lower() and "my profile" in lines[end].lower() and len(last_cells) == 4:
         return reply
-    lines.insert(end + 1, f"| Add it to SkillMap | Add the project to My Profile, Projects, so SkillMap counts the skill "
-                          f"| 10 min | {skill} shows on My Profile |")
+    else:
+        lines.insert(end + 1, step)
     return "\n".join(lines)
 
 
@@ -597,6 +600,7 @@ def plan_pdf(req: PlanPdfIn, current_user: User = Depends(get_current_user), db:
     skill = learning_resources.plan_title(content)
     if not skill:
         raise HTTPException(status_code=400, detail="This message isn't a learning plan.")
+    content = ensure_profile_step(content)
     job, have, missing = None, [], []
     if req.job_id:
         try:

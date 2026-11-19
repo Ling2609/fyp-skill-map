@@ -120,6 +120,39 @@
    ],
    "resources": [
     {
+     "name": "Everyday Types",
+     "url": "https://www.typescriptlang.org/docs/handbook/2/everyday-types.html",
+     "provider": "TypeScript",
+     "kind": "docs",
+     "cost": "free",
+     "checked": "2026-11-20",
+     "ok": true,
+     "page_title": "Everyday Types",
+     "checked_by_hand": "2026-11-20"
+    },
+    {
+     "name": "More on Functions",
+     "url": "https://www.typescriptlang.org/docs/handbook/2/functions.html",
+     "provider": "TypeScript",
+     "kind": "docs",
+     "cost": "free",
+     "checked": "2026-11-20",
+     "ok": true,
+     "page_title": "More on Functions",
+     "checked_by_hand": "2026-11-20"
+    },
+    {
+     "name": "TypeScript Playground",
+     "url": "https://www.typescriptlang.org/play/",
+     "provider": "TypeScript",
+     "kind": "practice",
+     "cost": "free",
+     "checked": "2026-11-20",
+     "ok": true,
+     "page_title": "TypeScript Playground",
+     "checked_by_hand": "2026-11-20"
+    },
+    {
      "name": "The TypeScript Handbook",
      "url": "https://www.typescriptlang.org/docs/handbook/intro.html",
      "provider": "TypeScript",
@@ -196,7 +229,7 @@
      "cost": "free",
      "checked": "2026-10-13",
      "ok": true,
-     "page_title": "Quick Start - React",
+     "page_title": "Quick Start – React",
      "checked_by_hand": null
     }
    ]
@@ -749,7 +782,7 @@
      "cost": "free",
      "checked": "2026-10-13",
      "ok": true,
-     "page_title": "Learn C++ - Skill up with our free tutorials",
+     "page_title": "Learn C++ – Skill up with our free tutorials",
      "checked_by_hand": null
     }
    ]

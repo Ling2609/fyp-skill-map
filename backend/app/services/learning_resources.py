@@ -106,6 +106,14 @@ _MD_LINK = re.compile(r"\[([^\]]*)\]\(\s*<?(https?://[^)\s>]+)>?(?:\s+\"[^\"]*\"
 _BARE = re.compile(r"https?://[^\s)<>\]\"']+")
 
 
+_CODE = re.compile(
+    r"^ {0,3}(`{3,}|~{3,})[^\r\n]*\r?\n.*?(?:^ {0,3}\1[`~]*[ \t]*(?:\r?\n|\Z)|\Z)"
+    r"|(?<!`)(`+)(?!`)[^\r\n]*?(?<!`)\2(?!`)",
+    re.MULTILINE | re.DOTALL,
+)
+_REMOVED_URL = "\x00url\x00"
+
+
 def strip_unlisted_links(text: str) -> tuple[str, int]:
     """Remove every link that is not in the checked list: a Markdown link keeps its words, a bare URL goes.
     Returns the text and how many links were removed."""
@@ -113,15 +121,19 @@ def strip_unlisted_links(text: str) -> tuple[str, int]:
     removed = 0
     kept: list[str] = []
 
+    def hold(value):
+        kept.append(value)
+        return f"\x00{len(kept) - 1}\x00"
+
     def md(m):
         nonlocal removed
         if norm_url(m.group(2)) in ok:
-            kept.append(m.group(0))
-            return f"\x00{len(kept) - 1}\x00"       # set aside, so the bare-link pass below leaves it alone
+            return hold(m.group(0))
         removed += 1
         return m.group(1)
 
-    out = _MD_LINK.sub(md, text or "")
+    out = _CODE.sub(lambda match: hold(match.group(0)), text or "")
+    out = _MD_LINK.sub(md, out)
 
     def bare(m):
         nonlocal removed
@@ -129,10 +141,12 @@ def strip_unlisted_links(text: str) -> tuple[str, int]:
         if norm_url(url) in ok:
             return m.group(0)
         removed += 1
-        return m.group(0)[len(url):]
+        return _REMOVED_URL + m.group(0)[len(url):]
 
     out = _BARE.sub(bare, out)
-    out = re.sub(r"\(\s*\)|<\s*>", "", out)            # "( )" left where a bare link was in brackets
+    wrapped_url = re.escape(_REMOVED_URL)
+    out = re.sub(rf"\([ \t]*{wrapped_url}[ \t]*\)|<[ \t]*{wrapped_url}[ \t]*>", "", out)
+    out = out.replace(_REMOVED_URL, "")
     out = re.sub(r" +([.,;:])(?=\s|$)", r"\1", out)   # "and ." -> "and."
     out = re.sub(r"[ \t]+(?=\n|$)", "", out)
     out = re.sub(r"\x00(\d+)\x00", lambda m: kept[int(m.group(1))], out)
@@ -167,7 +181,7 @@ def format_plan_resources(markdown: str) -> str:
         entries = find_skills(title)
         exact = next((e for e in entries if title.casefold() in {n.casefold() for n in _names(e)}), None)
         direct = [r for r in checked(exact) if norm_url(r["url"]) not in SEARCH_PAGES] if exact else []
-        if direct and exact["skill"] in {"Digital Marketing", "Docker", "Power BI"}:
+        if direct and exact["skill"] in {"Digital Marketing", "Docker", "Power BI", "TypeScript"}:
             rows = [f"- [{r['name']}]({r['url']})" for r in direct[:3]]
             return match.group(1) + "\n" + "\n".join(rows) + "\n\n"
 

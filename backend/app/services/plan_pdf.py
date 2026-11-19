@@ -18,7 +18,7 @@ from reportlab.lib.enums import TA_LEFT
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.styles import ParagraphStyle
 from reportlab.lib.units import mm
-from reportlab.platypus import (Flowable, HRFlowable, KeepTogether, ListFlowable, ListItem, Paragraph,
+from reportlab.platypus import (Flowable, HRFlowable, KeepTogether, ListFlowable, ListItem, Paragraph, Preformatted,
                                 SimpleDocTemplate, Spacer, Table, TableStyle)
 
 # 13 Oct (audit): say what the check does and doesn't cover, and that search links are searches
@@ -36,6 +36,7 @@ S = {
     "h": ParagraphStyle("h", fontSize=11.5, leading=14, spaceBefore=10, spaceAfter=2,
                         **{**_base, "fontName": "Helvetica-Bold"}),
     "body": ParagraphStyle("body", fontSize=9.5, leading=13.5, spaceAfter=4, **_base),
+    "code": ParagraphStyle("code", fontName="Courier", fontSize=8.5, leading=12, spaceAfter=4),
     "cell": ParagraphStyle("cell", fontSize=9, leading=12, **_base),
     "head": ParagraphStyle("head", fontSize=9, leading=12, **{**_base, "fontName": "Helvetica-Bold"}),
     "note": ParagraphStyle("note", fontSize=8, leading=10.5, **_base),
@@ -106,10 +107,17 @@ def _table(rows: list[list[str]], width: float) -> Table:
 
 def plan_flowables(markdown: str, width: float, skip_title: bool = True) -> list:
     """The plan's Markdown as PDF blocks, in order."""
-    tokens, out, i = MD.parse(markdown or ""), [], 0
+    return _blocks(MD.parse(markdown or ""), width, skip_title)
+
+
+def _blocks(tokens, width, skip_title=False):
+    out, i = [], 0
+    next_number = 1
     first_heading = True
     while i < len(tokens):
         t = tokens[i]
+        if t.type not in ("fence", "code_block", "ordered_list_open"):
+            next_number = 1
         if t.type == "heading_open":
             text = _inline(tokens[i + 1])
             if not (skip_title and first_heading and tokens[i + 1].content.lower().startswith("learning plan")):
@@ -118,28 +126,27 @@ def plan_flowables(markdown: str, width: float, skip_title: bool = True) -> list
             first_heading = False
             i += 3
         elif t.type in ("fence", "code_block"):          # a command block: monospace, wrapped like any text
-            code = "<br/>".join(escape(line) for line in t.content.rstrip("\n").split("\n"))
-            out.append(Paragraph(f'<font name="Courier">{code}</font>', S["body"]))
+            out.append(Preformatted(t.content.rstrip("\n"), S["code"], maxLineLength=88))
             i += 1
         elif t.type == "paragraph_open":
             out.append(Paragraph(_inline(tokens[i + 1]), S["body"]))
             i += 3
         elif t.type in ("bullet_list_open", "ordered_list_open"):
-            depth, items, j = 0, [], i
-            while j < len(tokens):
-                tj = tokens[j]
-                if tj.type in ("bullet_list_open", "ordered_list_open"):
-                    depth += 1
-                elif tj.type in ("bullet_list_close", "ordered_list_close"):
-                    depth -= 1
-                    if depth == 0:
-                        break
-                elif tj.type == "inline":
-                    items.append(("    " * (depth - 1)) + _inline(tj))
-                j += 1
+            items, j = [], i + 1
+            while tokens[j].type == "list_item_open":
+                item_end, depth = j + 1, 1
+                while depth:
+                    kind = tokens[item_end].type
+                    depth += (kind == "list_item_open") - (kind == "list_item_close")
+                    item_end += 1
+                blocks = _blocks(tokens[j + 1:item_end - 1], max(1, width - 12))
+                items.append(ListItem(blocks or [Paragraph("", S["body"])], leftIndent=12))
+                j = item_end
             ordered = t.type == "ordered_list_open"
-            out.append(ListFlowable([ListItem(Paragraph(x, S["body"]), leftIndent=12) for x in items],
-                                    bulletType="1" if ordered else "bullet", start="1" if ordered else None,
+            start = int(t.attrGet("start") or next_number) if ordered else None
+            if ordered:
+                next_number = start + len(items)
+            out.append(ListFlowable(items, bulletType="1" if ordered else "bullet", start=start,
                                     bulletFontSize=8 if not ordered else 9.5, leftIndent=12))
             i = j + 1
         elif t.type == "table_open":
