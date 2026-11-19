@@ -267,7 +267,7 @@ export default function AdminDashboard() {
                       <li key={g.skill} className="adm-gap-row text-sm">
                         {/* 20 Nov (her approved mock): tick up to 4 to plan a workshop on them */}
                         <input type="checkbox" aria-label={`Plan a workshop on ${skillName(g.skill)}`} checked={plan.includes(g.skill)}
-                          disabled={!plan.includes(g.skill) && plan.length >= 4} onChange={() => togglePlan(g.skill)} className="h-4 w-4 accent-(--color-accent)]" />
+                          disabled={!plan.includes(g.skill) && plan.length >= 4} onChange={() => togglePlan(g.skill)} className="h-4 w-4 accent-(--color-accent)" />
                         <span className="truncate text-slate-800">{skillName(g.skill)}</span>
                         <Bar value={g.students} max={g.of_students} colour={gapColour(g.students / Math.max(...gaps.map(x => x.students)))} />
                         <span className="flex items-center justify-end gap-1.5">

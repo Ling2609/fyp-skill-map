@@ -524,7 +524,7 @@ function ChooseTile({ data, busy, onGoal, onCounsellor }) {
         <div role="radiogroup" aria-label="Job types that fit your skills" className="mt-3 grid gap-2">
           {shown.map(b => (
             <label key={b.category} className={`grid cursor-pointer grid-cols-[20px_minmax(0,1fr)_96px_56px] items-center gap-2.5 rounded-2xl border bg-card px-3 py-2.5 max-sm:grid-cols-[20px_minmax(0,1fr)_auto] ${choice === b.category ? 'border-accent' : 'border-line'}`}>
-              <input type="radio" name="best-fit" checked={choice === b.category} onChange={() => setChoice(b.category)} className="h-4 w-4 accent-(--color-accent)]" />
+              <input type="radio" name="best-fit" checked={choice === b.category} onChange={() => setChoice(b.category)} className="h-4 w-4 accent-(--color-accent)" />
               <span className="min-w-0 text-body text-ink">{b.category}</span>
               <span aria-hidden="true" className="h-2.5 overflow-hidden rounded-full bg-track max-sm:hidden"><i className={`block h-full rounded-full ${fitTone(b.have / b.of)}`} style={{ width: `${(b.have / b.of) * 100}%` }} /></span>
               <b className="text-right text-small tabular-nums">{b.have} of {b.of}</b>
