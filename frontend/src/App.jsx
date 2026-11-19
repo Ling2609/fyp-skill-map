@@ -1,4 +1,6 @@
-import { Fragment, lazy, Suspense, useEffect, useState } from 'react'
+import { SESSION_EXPIRED } from './api'
+import ConfirmationDialog from './components/ConfirmationDialog'
+import { Fragment, lazy, Suspense, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom'
 import { SidebarProvider } from './components/SidebarContext'
 import { useAuth } from './context/useAuth'
@@ -116,6 +118,25 @@ function Fresh({ children }) {
   return <Fragment key={pathname}>{children}</Fragment>
 }
 
+function Logout() {
+  const { logout } = useAuth()
+  const { state } = useLocation()
+  const navigate = useNavigate()
+  const started = useRef(false)
+
+  useEffect(() => {
+    if (started.current) return
+    started.current = true
+    if (state?.logout === true) {
+      try { sessionStorage.clear() } catch { /* storage blocked */ }
+      logout()
+    }
+    const reason = state?.expiredReason
+    navigate(reason ? `/login?expired=${reason}` : '/login', { replace: true })
+  }, [logout, navigate, state])
+  return null
+}
+
 function AppRoutes() {
   return (
     // fallback null: a page's code arrives in well under a second, too short to need a loading sign (NN/g)
@@ -123,6 +144,7 @@ function AppRoutes() {
     <Routes>
       <Route path="/" element={<Navigate to="/login" />} />
       <Route path="/register" element={<Register />} />
+      <Route path="/logout" element={<Logout />} />
       <Route path="/login" element={<Login />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/privacy" element={<Privacy />} />
@@ -158,10 +180,38 @@ function AppRoutes() {
   )
 }
 
+function SessionExpiredDialog() {
+  const [reason, setReason] = useState('')
+  const navigate = useNavigate()
+  useLayoutEffect(() => {
+    const handleExpiry = event => {
+      event.preventDefault()
+      setReason(event.detail)
+    }
+    window.addEventListener(SESSION_EXPIRED, handleExpiry)
+    return () => window.removeEventListener(SESSION_EXPIRED, handleExpiry)
+  }, [])
+  if (!reason) return null
+  return (
+    <ConfirmationDialog wording={{
+      title: reason === 'deactivated' ? 'Account deactivated' : 'You’ve been signed out',
+      message: reason === 'password' ? 'Your password changed. Sign in again to continue.'
+        : reason === 'deactivated' ? 'Contact the career office if you need help with your account.'
+          : 'Your session expired. Sign in again to continue.',
+      confirmLabel: reason === 'deactivated' ? 'Return to sign in' : 'Sign in again',
+      cancelLabel: null,
+    }} onAnswer={() => {
+      setReason('')
+      navigate('/logout', { replace: true, state: { logout: true, expiredReason: reason } })
+    }} />
+  )
+}
+
 export default function App() {
   return (
     <SidebarProvider>
       <AppRoutes />
+      <SessionExpiredDialog />
     </SidebarProvider>
   )
 }

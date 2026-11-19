@@ -63,7 +63,7 @@ const NAV_ITEMS = [
       </svg>
     ),
   },
-  { to: '/my-plans', label: 'My plans', icon: PLANS_ICON },
+  { to: '/my-plans', label: 'My Plans', icon: PLANS_ICON },
 ]
 
 export const ADMIN_COUNTS_CHANGED = 'admin-counts-changed'
@@ -196,7 +196,7 @@ export function Bell({ className = '' }) {
 
 export default function Sidebar() {
   const navigate = useNavigate()
-  const { user, logout: authLogout } = useAuth()
+  const { user } = useAuth()
   const { items, counts, waiting, bellTo } = useNavCounts()
   // 20 Nov (her review): the sidebar folds to an icon rail (remembered); under 1280px it is always the rail
   // the same fold state as her sidebar before the redesign (SidebarContext: open by default)
@@ -205,11 +205,7 @@ export default function Sidebar() {
   const rail = folded || narrow
   const fold = () => setCollapsed(!folded)
 
-  const logout = () => {
-    sessionStorage.clear()
-    authLogout()
-    navigate('/login')
-  }
+  const logout = () => navigate('/logout', { replace: true, state: { logout: true } })
 
   // User menu (4 Oct): the name opens a small menu with Account settings and Logout (LinkedIn "Me" menu pattern,
   // references.md "Personal details page"). Closes on a click outside, Esc, or choosing an item.

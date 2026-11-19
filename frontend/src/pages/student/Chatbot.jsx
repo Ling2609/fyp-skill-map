@@ -1,6 +1,7 @@
 import { useState, useEffect, useLayoutEffect, useRef, useCallback } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import ChatMarkdown from './ChatMarkdown'
+import { downloadLearningPlan } from './downloadLearningPlan'
 import api from '../../api'
 import { Bar, LoadingLabel } from '../../components/Skeleton'
 import { cached, ALL_MATCHES } from '../../pageCache'
@@ -350,15 +351,7 @@ export default function Chatbot() {
   const downloadPlan = async (msg, idx) => {
     setDownloading(idx); setPdfError('')
     try {
-      const res = await api.post('/chatbot/plan-pdf', { content: msg.content, job_id: chatCtx.job_id || null }, { responseType: 'blob' })
-      // named from the plan's title (the browser can't read the server's file name across origins)
-      const skill = /Learning plan:\s*(.+)/.exec(msg.content)?.[1] || ''
-      const name = `learning-plan-${skill.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'skill'}.pdf`
-      const url = URL.createObjectURL(res.data)
-      const a = document.createElement('a')
-      a.href = url; a.download = name
-      document.body.appendChild(a); a.click(); a.remove()
-      setTimeout(() => URL.revokeObjectURL(url), 1000)
+      await downloadLearningPlan(msg.content, chatCtx.job_id)
     } catch {
       setPdfError("Couldn't make the PDF. Please try again.")
     } finally {

@@ -1,3 +1,4 @@
+import { useUnsavedChanges } from '../../components/useUnsavedChanges'
 import { useCallback, useEffect, useState } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import api from '../../api'
@@ -43,7 +44,7 @@ export default function ProfilePrivacy() {
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
   const [saved, setSaved] = useState(false)
-  const [asking, setAsking] = useState('')        // '' | 'discard' | 'leave'
+  const [asking, setAsking] = useState('')        // '' | 'discard'
   // back from GitHub's sign-in (Connect GitHub): "GitHub connected as …"; the address is tidied so a reload doesn't repeat it
   const [params, setParams] = useSearchParams()
   const [githubNote, setGithubNote] = useState(() => params.get('github') || '')
@@ -60,17 +61,12 @@ export default function ProfilePrivacy() {
   useEffect(() => { load() }, [load])
 
   const changed = !!form && JSON.stringify(form) !== JSON.stringify(initial)
-  // Closing or reloading the browser tab with changes not saved: the browser's own warning (the only one allowed)
-  useEffect(() => {
-    const onLeave = (e) => { if (changed) { e.preventDefault(); e.returnValue = '' } }
-    window.addEventListener('beforeunload', onLeave)
-    return () => window.removeEventListener('beforeunload', onLeave)
-  }, [changed])
+  const leaveConfirmation = useUnsavedChanges(changed)
 
   const set = (key, value) => { setForm(f => ({ ...f, [key]: value })); setSaved(false) }
   const setLink = (i, key, value) => set('other_links', form.other_links.map((l, j) => (j === i ? { ...l, [key]: value } : l)))
   const setLang = (i, key, value) => set('languages', form.languages.map((l, j) => (j === i ? { ...l, [key]: value } : l)))
-  const back = () => (changed ? setAsking('leave') : navigate('/profile'))
+  const back = () => navigate('/profile')
 
   const save = async () => {
     setBusy(true); setError('')
@@ -103,10 +99,9 @@ export default function ProfilePrivacy() {
     <div className="h-[calc(100dvh-var(--bar-h))] flex flex-col">
       <div className="relative">
         <BackLink label="My Profile" onClick={back} />
-        {asking === 'leave' && <div className="absolute left-4 sm:left-8 top-9"><Popconfirm text="You have changes that aren't saved."
-          confirmLabel="Leave without saving" cancelLabel="Stay" danger onConfirm={() => navigate('/profile')} onCancel={() => setAsking('')} /></div>}
       </div>
       {/* 20 Nov (her review: "undone yet?"): the glass header of every other page */}
+      {leaveConfirmation}
       <PageHeader>
       <div className="pb-4 flex flex-wrap items-center justify-between gap-x-6 gap-y-3">
         <div className="min-w-0">

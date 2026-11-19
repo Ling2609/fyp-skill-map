@@ -18,6 +18,7 @@ api.interceptors.request.use((config) => {
 // Pages keep slow answers for a short while (pageCache.js), so moving between pages does not reload them (6 Oct).
 // Any change to the profile (grades, projects, certificates) makes them out of date: drop them straight away.
 export const PAGE_CACHE = 'pageCache'
+export const SESSION_EXPIRED = 'skillmap-session-expired'
 // 19 Oct (her report: coming back from the AI Assistant, the job page loaded again): the same answers are also kept
 // in memory while the app is open, because sessionStorage has a size limit and is wiped whole when it is full.
 // Each entry remembers whose token it was saved under, so another user signing in never sees it.
@@ -41,12 +42,14 @@ api.interceptors.response.use(
     const onPublicPage = ['/', '/login', '/register', '/forgot-password'].includes(window.location.pathname)
     if (error.response?.status === 401 && !isLoginCall && !onPublicPage && localStorage.getItem('token')) {
       localStorage.removeItem('token')
-      sessionStorage.clear()
+      try { sessionStorage.clear() } catch { /* storage blocked */ }
+      memoryCache.clear()
       // Password changed on another device (4 Oct): say so, instead of "session expired"
-      const detail = error.response.data?.detail || ''
+      const detail = typeof data?.detail === 'string' ? data.detail : ''
       const reason = detail.startsWith('Your password was changed') ? 'password'
         : detail.startsWith('This account has been deactivated') ? 'deactivated' : '1'
-      window.location.href = `/login?expired=${reason}`
+      const unhandled = window.dispatchEvent(new CustomEvent(SESSION_EXPIRED, { detail: reason, cancelable: true }))
+      if (unhandled) window.location.href = `/login?expired=${reason}`
     }
     return Promise.reject(error)
   }

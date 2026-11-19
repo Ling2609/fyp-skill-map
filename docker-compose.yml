@@ -49,8 +49,6 @@ services:
     depends_on:
       db:
         condition: service_healthy
-      mongo:
-        condition: service_healthy
     healthcheck:                     # the first start loads the models and the job cache: give it time
       test: ["CMD", "python", "-c", "import urllib.request as u; u.urlopen('http://127.0.0.1:8000/openapi.json', timeout=5)"]
       interval: 15s

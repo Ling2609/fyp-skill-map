@@ -490,11 +490,24 @@ export default function MyApplications() {
   const see = params.get('see')
   const seeAll = (which) => setParams(which ? { see: which } : {})
   const toast = useToast()
+  const [supplementalErrors, setSupplementalErrors] = useState({})
+  const [supplementalAttempt, setSupplementalAttempt] = useState(0)
   useEffect(() => {
     api.get('/applications/mine').then(res => setRows(res.data)).catch(err => setError(errText(err, "Couldn't load your applications.")))
-    api.get('/applications/outside').then(res => setOutside(res.data)).catch(() => {})
-    api.get('/applications/invitations').then(res => setInvites(res.data)).catch(() => {})
   }, [])
+  useEffect(() => {
+    const request = new AbortController()
+    const fetchSection = (name, path, setItems) => {
+      api.get(path, { signal: request.signal }).then(({ data }) => {
+        if (!request.signal.aborted) setItems(data)
+      }).catch(() => {
+        if (!request.signal.aborted) setSupplementalErrors(previous => ({ ...previous, [name]: true }))
+      })
+    }
+    fetchSection('external applications', '/applications/outside', setOutside)
+    fetchSection('invitations', '/applications/invitations', setInvites)
+    return () => request.abort()
+  }, [supplementalAttempt])
   // 25 Oct (option D): "No thanks" asks for an optional reason first; the employer sees the answer
   const [declining, setDeclining] = useState(null)
   const [declineBusy, setDeclineBusy] = useState(false)
@@ -605,6 +618,15 @@ export default function MyApplications() {
       {/* 20 Oct (her review): in "See all" only the list of records scrolls; the filters and the section title stay */}
       <div ref={scrollBox} className={`flex-1 min-h-0 px-4 sm:px-8 py-4 ${see ? 'flex flex-col' : 'overflow-y-auto'}`}><div className={`flex flex-col gap-3.5 ${see ? 'flex-1 min-h-0' : ''}`}>
         {error && <p role="alert" className="text-sm text-rose-700 bg-rose-50 border border-rose-200 rounded-lg px-4 py-2.5">{error}</p>}
+        {Object.keys(supplementalErrors).length > 0 && (
+          <div className="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-rose-200 bg-rose-50 px-4 py-2">
+            <p role="alert" className="text-sm text-rose-700">Couldn’t load {Object.keys(supplementalErrors).join(' and ')}.</p>
+            <button type="button" className="acad-btn edit min-h-11" onClick={() => {
+              setSupplementalErrors({})
+              setSupplementalAttempt(n => n + 1)
+            }}>Try again</button>
+          </div>
+        )}
 
         {/* 20 Nov (her question: several invitations): the newest shows; the others open with "Show N more" */}
         {!see && invites.slice(0, allInvites ? invites.length : 1).map(inv => (
@@ -642,7 +664,7 @@ export default function MyApplications() {
           {!see && <Link to="/recommend" className="more-jobs"><span>Find <b>more jobs that fit you</b> in Job Matches</span><span aria-hidden="true">→</span></Link>}
           </div>
         )}
-        {rows?.length === 0 && outside.length === 0 && (
+        {rows?.length === 0 && outside.length === 0 && !supplementalErrors['external applications'] && (
           <div className="bg-white border border-slate-200 rounded-2xl p-8 text-center">
             <h2 className="text-base font-semibold text-slate-900">No applications yet</h2>
             <p className="text-sm text-slate-500 mt-1">Jobs marked "Apply on SkillMap" in Job Matches can be applied for here with your profile.</p>
@@ -669,7 +691,7 @@ export default function MyApplications() {
               more={!see && <MoreButton total={outsideShown.length} shown={nOut} onClick={() => seeAll('other')} />} />
             <div className={`${LIST} src-list self ${see ? 'min-h-0 overflow-y-auto' : ''}`}>
               {(see ? outsideShown : outsideShown.slice(0, nOut)).map(o => <OutsideCard key={o.id} o={o} onStatus={setStatus} onRemove={remove} />)}
-              {outsideShown.length === 0 && (outside.length
+              {!supplementalErrors['external applications'] && outsideShown.length === 0 && (outside.length
                 ? <Empty>None {tab === 'all' ? 'here' : `with “${TABS.find(t => t[0] === tab)[1]}”`}.</Empty>
                 : <Empty>None yet. After you apply on another site through “Apply on …”, answer “Yes, I applied” on the job and it shows here.</Empty>)}
             </div>

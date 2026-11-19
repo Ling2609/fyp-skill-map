@@ -1,3 +1,4 @@
+import { useConfirmation } from '../../components/useConfirmation'
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import api from '../../api'
@@ -10,6 +11,7 @@ const newProposal = '/admin/workshop?new=1'
 const unavailable = 'Saving isn’t available right now. Try again in a moment.'
 
 export default function SavedWorkshopProposals() {
+  const { confirm, confirmation } = useConfirmation()
   const [proposals, setProposals] = useState(null)
   const [loadFailed, setLoadFailed] = useState(false)
   const [attempt, setAttempt] = useState(0)
@@ -31,7 +33,12 @@ export default function SavedWorkshopProposals() {
   }
 
   const remove = async proposal => {
-    if (!window.confirm(`Delete “${proposal.title}”? This permanently removes it from Saved proposals.`)) return
+    if (!await confirm({
+      title: 'Delete saved proposal?',
+      message: `“${proposal.title}” will be permanently deleted from Saved proposals.`,
+      confirmLabel: 'Delete proposal',
+      danger: true,
+    })) return
     setDeleting(proposal.id)
     setError('')
     setNotice('')
@@ -48,6 +55,7 @@ export default function SavedWorkshopProposals() {
 
   return (
     <>
+      {confirmation}
       <PageHeader>
         <div className="flex flex-wrap items-end justify-between gap-3 pb-4">
           <div>

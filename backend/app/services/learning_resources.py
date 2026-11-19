@@ -146,3 +146,24 @@ def plan_title(markdown: str) -> str | None:
         if s.lower().startswith("learning plan:"):
             return s.split(":", 1)[1].strip(" *") or None
     return None
+
+
+_RESOURCE_METADATA = re.compile(
+    r"[ \t]*\(([^()\r\n]+?),[ \t]*(free(?: to audit)?|paid)\)", re.IGNORECASE
+)
+
+
+def format_plan_resources(markdown: str) -> str:
+    """Clean legacy provider and access labels within the Resources section."""
+    if not plan_title(markdown):
+        return markdown
+    in_resources = False
+    lines = markdown.split("\n")
+    for index, line in enumerate(lines):
+        heading = re.match(r"^\s*#{1,6}\s+(.+)$", line)
+        if heading:
+            in_resources = heading.group(1).strip().rstrip(":").casefold() == "resources"
+        elif in_resources and re.match(r"^\s*[-*+]\s+", line):
+            clean = _RESOURCE_METADATA.sub(r" · \1 · \2", line)
+            lines[index] = re.sub(r"[ \t]+\(search results\)", " · search results", clean, flags=re.IGNORECASE)
+    return "\n".join(lines)

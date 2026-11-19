@@ -26,6 +26,7 @@ from app.config import settings
 _client = None
 _lock = threading.Lock()
 _indexes_done = False
+_workshop_index_done = False
 CHAT_KEEP_DAYS = 548        # 18 months
 
 
@@ -54,8 +55,13 @@ def chat_sessions():
 def workshop_proposals():
     """20 Nov: the career office's saved workshop proposals (routers/workshop.py), one document each:
     {_id, admin_id, title, skills: [...], proposal: {title, facts, background, ...}, created_at, updated_at}."""
+    global _workshop_index_done
     col = get_db()["workshop_proposals"]
-    col.create_index([("updated_at", DESCENDING)])
+    if not _workshop_index_done:
+        with _lock:
+            if not _workshop_index_done:
+                col.create_index([("updated_at", DESCENDING)])
+                _workshop_index_done = True
     return col
 
 

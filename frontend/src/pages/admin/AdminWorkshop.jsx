@@ -1,6 +1,9 @@
+import { useUnsavedChanges } from '../../components/useUnsavedChanges'
+import { useConfirmation } from '../../components/useConfirmation'
 import { useEffect, useState } from 'react'
 import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import api from '../../api'
+import { useAuth } from '../../context/useAuth'
 import PageHeader from '../../components/PageHeader'
 import BackLink from '../../components/BackLink'
 import { Busy } from '../../components/Spinner'
@@ -70,9 +73,12 @@ export default function AdminWorkshop() {
 }
 
 function WorkshopEditor() {
+  const { confirm, confirmation } = useConfirmation()
   const navigate = useNavigate()
   const [params] = useSearchParams()
   const proposalId = params.get('proposal')
+  const { user } = useAuth()
+  const recoveryKey = proposalId && user?.id ? `${DRAFT_KEY}:${user.id}:${proposalId}` : null
   const { key } = useLocation()
   const scope = params.has('new') || params.has('skills') ? key : null
   const [initialDraft] = useState(() => proposalId ? null : readDraft(scope))
@@ -89,6 +95,7 @@ function WorkshopEditor() {
   const [savedSnapshot, setSavedSnapshot] = useState(initialDraft?.snapshot ?? null)
   const [openState, setOpenState] = useState(proposalId ? 'loading' : '')
   const [error, setError] = useState('')
+  const [recovered, setRecovered] = useState(false)
   const body = () => {
     const { source: _source, ...proposal } = p // eslint-disable-line no-unused-vars
     return { skills, proposal }
@@ -104,10 +111,17 @@ function WorkshopEditor() {
     if (proposalId) {
       api.get(`/admin/workshop/proposals/${proposalId}`).then(({ data }) => {
         if (!active) return
-        setP(data.proposal)
-        setSkills(data.skills)
+        const snapshot = JSON.stringify({ skills: data.skills, proposal: data.proposal })
+        let cachedDraft = null
+        try {
+          if (recoveryKey) cachedDraft = JSON.parse(sessionStorage.getItem(recoveryKey))
+        } catch { /* storage blocked */ }
+        const restore = cachedDraft?.snapshot === snapshot && cachedDraft.proposal
+        setP(restore ? cachedDraft.proposal : data.proposal)
+        setSkills(restore ? cachedDraft.skills : data.skills)
+        setRecovered(!!restore)
         setSavedId(data.id)
-        setSavedSnapshot(JSON.stringify({ skills: data.skills, proposal: data.proposal }))
+        setSavedSnapshot(snapshot)
         setOpenState('')
       }).catch(err => {
         if (!active) return
@@ -116,7 +130,7 @@ function WorkshopEditor() {
       })
     }
     return () => { active = false }
-  }, [proposalId])
+  }, [proposalId, recoveryKey])
 
   useEffect(() => {
     if (proposalId) return
@@ -130,21 +144,30 @@ function WorkshopEditor() {
   }, [p, proposalId, savedId, savedSnapshot, scope, skills])
 
   useEffect(() => {
-    if (!dirty) return
-    const warn = event => {
-      event.preventDefault()
-      event.returnValue = ''
-    }
-    window.addEventListener('beforeunload', warn)
-    return () => window.removeEventListener('beforeunload', warn)
-  }, [dirty])
+    if (!recoveryKey || !p) return
+    try {
+      if (dirty) sessionStorage.setItem(recoveryKey, JSON.stringify({ proposal: p, skills, snapshot: savedSnapshot }))
+      else sessionStorage.removeItem(recoveryKey)
+    } catch { /* storage blocked */ }
+  }, [dirty, p, recoveryKey, savedSnapshot, skills])
 
-  const leaveEditor = () => !dirty || window.confirm('Leave this proposal with unsaved changes?')
-  const newProposal = () => {
-    if (leaveEditor()) navigate('/admin/workshop?new=1')
-  }
+  const leaveConfirmation = useUnsavedChanges(dirty, {
+    includeSearch: true,
+    onDiscard() {
+      try {
+        if (recoveryKey) sessionStorage.removeItem(recoveryKey)
+        else {
+          localStorage.removeItem(DRAFT_KEY)
+          localStorage.removeItem(DRAFT_KEY + '-id')
+          localStorage.removeItem(DRAFT_KEY + '-details')
+        }
+      } catch { /* storage blocked */ }
+    },
+  })
+
+  const newProposal = () => navigate('/admin/workshop?new=1')
   const open = id => {
-    if (id && leaveEditor()) navigate(`/admin/workshop?proposal=${encodeURIComponent(id)}`)
+    if (id) navigate(`/admin/workshop?proposal=${encodeURIComponent(id)}`)
   }
   const save = async () => {
     setBusy('save')
@@ -155,6 +178,7 @@ function WorkshopEditor() {
         ? await api.put(`/admin/workshop/proposals/${savedId}`, payload)
         : await api.post('/admin/workshop/proposals', payload)
       setSavedId(data.id)
+      setRecovered(false)
       setSavedSnapshot(JSON.stringify(payload))
       setSaved(previous => [data, ...(Array.isArray(previous) ? previous : []).filter(item => item.id !== data.id)])
     } catch (err) {
@@ -171,7 +195,13 @@ function WorkshopEditor() {
   const toggle = s => setSkills(x => x.includes(s) ? x.filter(y => y !== s) : x.length < 4 ? [...x, s] : x)
   const set = (k, v) => setP(x => ({ ...x, [k]: v }))
   const draft = async () => {
-    if (dirty && !window.confirm('Replace your unsaved edits with a new draft?')) return
+    if (dirty && !await confirm({
+      title: 'Redraft this proposal?',
+      message: 'Drafting again will replace the current proposal, including your unsaved edits.',
+      confirmLabel: 'Redraft proposal',
+      cancelLabel: 'Keep editing',
+      danger: true,
+    })) return
     setBusy('draft')
     setError('')
     try {
@@ -201,8 +231,10 @@ function WorkshopEditor() {
 
   return (
     <div className="flex flex-col h-[calc(100dvh-var(--bar-h))]">
+      {confirmation}
+      {leaveConfirmation}
       <BackLink label={proposalId ? 'Saved proposals' : 'Dashboard'} onClick={() => {
-        if (!busy && leaveEditor()) navigate(proposalId ? '/admin/workshop/proposals' : '/dashboard')
+        if (!busy) navigate(proposalId ? '/admin/workshop/proposals' : '/dashboard')
       }} />
       <PageHeader>
         <div className="pb-4 flex flex-wrap items-end justify-between gap-x-6 gap-y-3">
@@ -246,13 +278,14 @@ function WorkshopEditor() {
               </p>
             )}
             <Link to="/admin/workshop/proposals" onClick={event => {
-              if (busy || !leaveEditor()) event.preventDefault()
+              if (busy) event.preventDefault()
             }} className="ws-saved-all">View all saved proposals</Link>
           </div>
         </details>
         </div>
       </PageHeader>
       {saved === false && <p role="status" className="mx-4 mt-2 text-sm text-ink-soft sm:mx-8">{SAVING_UNAVAILABLE}. You can still draft and export a PDF, or retry saving.</p>}
+      {recovered && <p role="status" className="mx-4 mt-2 text-sm text-ink-soft sm:mx-8">Restored unsaved edits from this tab.</p>}
       {error && <p role="alert" className="mx-4 mt-2 text-sm text-rose-700 sm:mx-8">{error}</p>}
 
       <div className="ws-grid flex-1 min-h-0 px-4 sm:px-8 pt-3.5 pb-4">

@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useId, isValidElement, cloneElement } from 'react'
+import { useState, useLayoutEffect, useRef, useCallback, useId, isValidElement, cloneElement } from 'react'
 import { skillName } from '../../skillName'
 import { ADDED_BY_YOU, errText } from './profileUtils'
 import Spinner from '../../components/Spinner'
@@ -55,18 +55,26 @@ export { Spinner }
 export function Modal({ title, onClose, dirty = false, wide = false, size, children }) {
   const [asking, setAsking] = useState(false)
   const tryClose = useCallback(() => { if (dirty) setAsking(true); else onClose() }, [dirty, onClose])
-  useEffect(() => {
-    const onKey = (e) => { if (e.key === 'Escape') tryClose() }
-    window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
-  }, [tryClose])
+  const dialogRef = useRef(null)
+  const closeRef = useRef(null)
+  useLayoutEffect(() => {
+    const dialog = dialogRef.current
+    const previous = document.activeElement
+    dialog.showModal()
+    closeRef.current.focus()
+    return () => {
+      dialog.close()
+      if (previous?.isConnected) previous.focus()
+    }
+  }, [])
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/30" onMouseDown={tryClose}>
-      <div role="dialog" aria-modal="true" aria-label={title} onMouseDown={e => e.stopPropagation()}
-        className={`bg-white rounded-2xl shadow-xl w-full ${size === 'form' ? 'max-w-[46rem]' : wide ? 'max-w-2xl' : 'max-w-lg'} max-h-[90vh] overflow-y-auto`}>
+    <dialog ref={dialogRef} aria-label={title} className={`m-auto w-[calc(100%_-_2rem)] overflow-visible bg-transparent ${size === 'form' ? 'max-w-[46rem]' : wide ? 'max-w-2xl' : 'max-w-lg'} backdrop:bg-slate-900/30`}
+      onCancel={event => { event.preventDefault(); tryClose() }}
+      onMouseDown={event => { if (event.target === event.currentTarget) tryClose() }}>
+      <div className="max-h-[90dvh] overflow-y-auto rounded-2xl bg-white shadow-xl">
         <div className="flex items-center justify-between px-6 pt-5 pb-1">
           <h3 className="text-base font-semibold text-gray-800">{title}</h3>
-          <button type="button" onClick={tryClose} aria-label="Close" className="text-gray-500 hover:text-gray-700 p-1 rounded-lg hover:bg-gray-100">
+          <button ref={closeRef} type="button" onClick={tryClose} aria-label="Close" className="text-gray-500 hover:text-gray-700 p-1 rounded-lg hover:bg-gray-100">
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
           </button>
         </div>
@@ -81,7 +89,7 @@ export function Modal({ title, onClose, dirty = false, wide = false, size, child
         )}
         <div className="px-6 pb-6 pt-3">{children}</div>
       </div>
-    </div>
+    </dialog>
   )
 }
 

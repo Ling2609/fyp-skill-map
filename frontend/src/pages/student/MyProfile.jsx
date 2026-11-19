@@ -1,3 +1,4 @@
+import { useUnsavedChanges } from '../../components/useUnsavedChanges'
 import { useCallback, useEffect, useState } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import api from '../../api'
@@ -98,11 +99,7 @@ export default function MyProfile() {
     setTab(key)
     setSearchParams(key === 'modules' ? {} : { tab: key }, { replace: true })
   }
-  useEffect(() => {
-    const onLeave = (e) => { if (gradesUnsaved) { e.preventDefault(); e.returnValue = '' } }
-    window.addEventListener('beforeunload', onLeave)
-    return () => window.removeEventListener('beforeunload', onLeave)
-  }, [gradesUnsaved])
+  const leaveConfirmation = useUnsavedChanges(gradesUnsaved || dirty)
   const saved = () => { close(); load() }
 
   if (error && !data) return <div className="p-8"><p role="alert" className="text-sm text-red-600 bg-red-50 rounded-lg px-4 py-3">{error}</p></div>
@@ -136,6 +133,7 @@ export default function MyProfile() {
   return (
     // Wide screens: the page fills the window and only the open tab's list scrolls; narrow: the page scrolls
     <div className="min-h-[calc(100dvh-var(--bar-h))] lg:h-[calc(100dvh-var(--bar-h))] flex flex-col">
+      {leaveConfirmation}
       <PageHeader>
         {/* 19 Nov (her approved mock review/student-pages.html; her review: "too large, things shrink below"): name,
             visibility and links on one line, the programme on one line, the counts in the white strip. The two

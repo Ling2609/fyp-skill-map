@@ -23,7 +23,7 @@ from groq import Groq
 from app.config import settings
 from app.database import get_db
 from app.models.user import User
-from app.mongo import chat_sessions, history_ok
+from app.mongo import chat_sessions
 from app.models.module import Module
 from app.models.profile import UserAward, UserCertification, UserExperience, UserProject
 from app.models.programme import Programme
@@ -96,8 +96,11 @@ When the student asks to learn a skill or asks for a plan, answer in exactly thi
 ### Learning plan: <skill>
 One or two sentences: why the skill matters for their target job or career goal. When the context quotes the job ad, use the quote and say whether the ad requires the skill or lists it as nice to have.
 
+#### Quick start
+Give one practical task they can finish in 15–30 minutes. Name any setup they need and describe the result they should have.
+
 #### Resources
-2 to 4 bullets: **name** (provider, free or paid), then what to use it for. Link a resource ONLY with a URL listed under "Checked resources" in the context, copied exactly. When the context gives search links instead, you may add them as "Search Coursera" / "Search YouTube" and say they are search results; for a skill with neither, build the search links the same way (https://www.coursera.org/search?query=<skill+words> and https://www.youtube.com/results?search_query=learn+<skill+words>). For any other resource write its name and the words to search for. Never write any other URL.
+2 to 4 bullets: **name** — provider, access details, and what to use it for. Use plain text for provider and access details, without parentheses. Only state pricing when the context supports it. Link a resource ONLY with a URL listed under "Checked resources" in the context, copied exactly. When the context gives search links instead, you may add them as "Search Coursera" / "Search YouTube" and say they are search results; for a skill with neither, build the search links the same way (https://www.coursera.org/search?query=<skill+words> and https://www.youtube.com/results?search_query=learn+<skill+words>). For any other resource write its name and the words to search for. Never write any other URL.
 
 #### Your plan
 One table with exactly these columns: | Step | What to do | Time | Done when |
@@ -108,6 +111,9 @@ One table with exactly these columns: | Step | What to do | Time | Done when |
 
 #### Show it: portfolio project
 One project that uses this skill and, if possible, other skills they are still missing (2 or 3 sentences).
+
+#### Check your progress
+Give two observable checks the student can try independently on a small example. Tie them to the portfolio project and suggest what to practise if a check is difficult.
 
 When the student doesn't know what to learn, suggest 2 or 3 skills from the missing skills in the context (the ones most of their matched jobs ask for), one line each on why, and ask which one to plan; no plan yet.
 
@@ -388,11 +394,13 @@ def save_exchange(req: ChatRequest, user: User, reply: str) -> str | None:
 @router.get("/sessions")
 def list_sessions(current_user: User = Depends(get_current_user)):
     """The student's past chats, newest first (no messages: the list only needs titles)."""
-    if not history_ok():
-        raise HTTPException(status_code=503, detail=HISTORY_OFF)
-    docs = chat_sessions().aggregate([
-        {"$match": {"user_id": current_user.id}}, {"$sort": {"updated_at": -1}}, {"$limit": 50},
-        {"$project": {"mode": 1, "title": 1, "context": 1, "updated_at": 1, "count": {"$size": "$messages"}}}])
+    try:
+        docs = list(chat_sessions().aggregate([
+            {"$match": {"user_id": current_user.id}}, {"$sort": {"updated_at": -1}}, {"$limit": 50},
+            {"$project": {"mode": 1, "title": 1, "context": 1, "updated_at": 1, "count": {"$size": "$messages"}}},
+        ]))
+    except PyMongoError:
+        raise HTTPException(status_code=503, detail=HISTORY_OFF) from None
     return [{"id": d["_id"], "mode": d["mode"], "title": d.get("title") or "Chat", "context": d.get("context") or {},
              "updated_at": d["updated_at"], "message_count": d.get("count", 0)} for d in docs]
 
@@ -422,6 +430,7 @@ def list_plans(page: int = Query(default=1, ge=1, le=1000000),
             {"$match": {"messages.role": "assistant", "messages.content": heading,
                         "messages.plan_hidden": {"$ne": True}}},
             {"$project": {"message": "$messages", "message_index": 1,
+                          "job_id": "$context.job_id",
                           "created_at": {"$ifNull": ["$messages.at", "$updated_at"]}}},
             {"$sort": {"created_at": direction, "_id": 1, "message_index": direction}},
             {"$skip": (page - 1) * PLAN_PAGE_SIZE},
@@ -436,7 +445,8 @@ def list_plans(page: int = Query(default=1, ge=1, le=1000000),
         content = message["content"]
         title = learning_resources.plan_title(content)
         plans.append({"session_id": doc["_id"], "message_index": doc["message_index"], "key": _plan_key(message),
-                      "created_at": doc["created_at"], "title": title or "Learning plan", "content": content})
+                      "created_at": doc["created_at"], "title": title or "Learning plan",
+                      "job_id": doc.get("job_id"), "content": learning_resources.format_plan_resources(content)})
     return {"plans": plans, "has_next": len(docs) > PLAN_PAGE_SIZE}
 
 
@@ -468,7 +478,8 @@ def get_session(session_id: str, current_user: User = Depends(get_current_user))
     doc = _own_session(session_id, current_user)
     return {"id": doc["_id"], "mode": doc["mode"], "title": doc.get("title") or "Chat",
             "context": doc.get("context") or {},
-            "messages": [{"role": m["role"], "content": m["content"]} for m in doc.get("messages", [])]}
+            "messages": [{"role": m["role"], "content": learning_resources.format_plan_resources(m["content"])
+                         if m["role"] == "assistant" else m["content"]} for m in doc.get("messages", [])]}
 
 
 @router.delete("/sessions/{session_id}", status_code=204)
@@ -560,6 +571,7 @@ def chat(req: ChatRequest, current_user: User = Depends(get_current_user), db: S
         print(f"[chatbot] removed {removed} link(s) not on the checked list")
     if req.mode == "skill_development":
         reply = ensure_profile_step(reply)
+    reply = learning_resources.format_plan_resources(reply)
     session_id = save_exchange(req, current_user, reply)
     return {"reply": reply, "mode": req.mode, "session_id": session_id, "saved": session_id is not None}
 
@@ -575,6 +587,7 @@ def plan_pdf(req: PlanPdfIn, current_user: User = Depends(get_current_user), db:
     so a saved chat from before a link failed its check doesn't print it."""
     from app.services.plan_pdf import build_pdf
     content, _ = learning_resources.strip_unlisted_links(req.content)
+    content = learning_resources.format_plan_resources(content)
     skill = learning_resources.plan_title(content)
     if not skill:
         raise HTTPException(status_code=400, detail="This message isn't a learning plan.")
