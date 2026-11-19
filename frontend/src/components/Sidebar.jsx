@@ -122,6 +122,7 @@ const ICON_ROUTES = [
   { to: '/jobs', icon: NAV_ITEMS[2].icon },
   { to: '/employer/applications', icon: ADMIN_ITEMS[1].icon },
   { to: '/employer/graduates', icon: ADMIN_ITEMS[1].icon },
+  { to: '/admin/workshop', icon: NAV_ITEMS[0].icon },
 ]
 // eslint-disable-next-line react-refresh/only-export-components
 export function navIcon(path) {

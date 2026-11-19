@@ -1238,7 +1238,7 @@ select:disabled { opacity: 0.6; cursor: not-allowed; }
   .adm-col > .adm-prof .adm-prof-bars li > :first-child { font-size: 12.5px; line-height: 1.25; }
 }
 /* AI card (20 Nov): questions together at the top, a question box at the foot */
-@media (min-width: 1024px) { .dash-asks { flex: 0 1 auto !important; justify-content: flex-start !important; gap: 6px !important; } }
+
 .dash-askbox { margin-top: auto; padding-top: 10px; display: flex; gap: 6px; }
 .dash-askbox input { flex: 1; min-width: 0; height: 36px; padding: 0 12px; border-radius: 11px; border: 1px solid #cfd5e2; background: #fff; font: inherit; font-size: 13px; }
 .dash-askbox input:focus { outline: 2px solid var(--color-accent); outline-offset: 1px; border-color: transparent; }
@@ -1247,6 +1247,81 @@ select:disabled { opacity: 0.6; cursor: not-allowed; }
 .dash-askbox svg { width: 17px; height: 17px; }
 /* the counts' labels stay on one line in a narrow card */
 .dash-appstats > div { padding: 4px 10px !important; min-width: 0; } .dash-appstats dt { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 11.5px; }
-@media (min-width: 1024px) { .dash-asks { flex: 1 1 0 !important; min-height: 34px; } }
+
 .fit-seg { min-width: 24px; }
 .dash-appstats > div { padding: 4px 8px !important; } .dash-appstats dt { font-size: 11px; }
+/* 20 Nov (her call): without a goal, three cards: choosing on the left over two rows, job matches and the skills
+   employers want on the right (My Applications and the AI Assistant only show once there is a goal) */
+@media (min-width: 1024px) {
+  .dash-bento.no-goal { grid-template-areas: "goal goal goal goal goal goal goal jobs jobs jobs jobs jobs"
+                                             "goal goal goal goal goal goal goal side side side side side" !important; grid-template-rows: minmax(0, 1fr) auto !important; }
+}
+@media (max-width: 1023px) and (min-width: 768px) {
+  .dash-bento.no-goal { grid-template-areas: "goal goal" "jobs side" !important; grid-template-rows: auto minmax(0, 1fr) !important; }
+}
+.dash-invite { display: flex; align-items: center; gap: 12px; margin-top: 8px; padding: 8px 10px 8px 10px; border-radius: 16px;
+  background: linear-gradient(100deg, var(--color-invite-soft), #fff 70%); border: 1.5px solid var(--color-invite); }
+.dash-invite .invite-ic { width: 32px; height: 32px; border-radius: 10px; }
+.dash-invite-go { height: 32px; padding: 0 14px; border-radius: 10px; display: inline-flex; align-items: center; font-weight: 700; font-size: 13px; color: #fff; background: var(--color-invite); white-space: nowrap; }
+.adm-plan { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--color-line); flex: none; }
+/* Workshop planner (20 Nov): set-up | proposal; the proposal scrolls inside its card */
+.ws-grid { display: grid; grid-template-columns: minmax(280px, 340px) minmax(0, 1fr); gap: 14px; }
+.ws-set { display: flex; flex-direction: column; gap: 4px; padding: 18px 20px; min-height: 0; overflow-y: auto; }
+.ws-f { border: 0; margin: 10px 0 0; padding: 0; min-width: 0; }
+.ws-f legend, .ws-lbl { display: block; padding: 0; margin-bottom: 6px; font-size: 12.5px; font-weight: 600; color: var(--color-ink-soft); }
+.ws-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.ws-chips button { padding: 6px 12px; border-radius: 99px; border: 1px solid #cfd5e2; background: #fff; font-size: 13px; color: var(--color-ink); }
+.ws-chips button.on { background: var(--color-accent); border-color: var(--color-accent); color: #fff; }
+.ws-chips button.gap { background: var(--color-missing-soft); border-color: #f3c3b3; color: var(--color-missing-strong); font-weight: 600; }
+.ws-chips button.gap.on { background: var(--color-missing-strong); border-color: var(--color-missing-strong); color: #fff; }
+.ws-chips button span { font-weight: 500; opacity: .8; }
+.ws-chips button:disabled { opacity: .45; cursor: not-allowed; }
+.ws-text { width: 100%; resize: none; overflow: hidden; font: inherit; font-size: 14px; color: var(--color-ink-soft); padding: 8px 10px; border-radius: 10px; border: 1px solid transparent; background: transparent; }
+.ws-text.border, .ws-text:hover, .ws-text:focus { border-color: #cfd5e2; background: #fff; }
+.ws-text:focus, .ws-doc input:focus { outline: 2px solid var(--color-accent); outline-offset: 0; }
+.ws-doc { display: flex; flex-direction: column; min-height: 0; overflow: hidden; }
+.ws-bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 12px; padding: 12px 18px; border-bottom: 1px solid var(--color-line); flex: none; }
+.ws-body { flex: 1; min-height: 0; overflow-y: auto; padding: 18px 30px 26px; }
+.ws-body h3 { margin: 16px 0 4px; font-size: 14px; font-weight: 700; color: var(--color-ink); }
+.ws-eb { margin: 0; font: 500 11px var(--font-mono); letter-spacing: .09em; text-transform: uppercase; color: var(--color-accent); }
+.ws-title { width: 100%; margin: 4px 0 2px; padding: 4px 8px; margin-left: -8px; border: 1px solid transparent; border-radius: 10px; background: transparent;
+  font-family: var(--font-display); font-weight: 800; font-size: 24px; letter-spacing: -.035em; color: var(--color-ink); }
+.ws-title:hover { border-color: #cfd5e2; }
+.ws-facts { margin: 0 0 4px; font-size: 13px; color: var(--color-muted); }
+.ws-li, .ws-row { display: grid; align-items: center; gap: 8px; margin: 2px 0; }
+.ws-li { grid-template-columns: 12px minmax(0, 1fr) 28px; } .ws-row { grid-template-columns: 110px minmax(0, 1fr) 28px; }
+.ws-li input, .ws-row input { min-width: 0; padding: 6px 10px; border-radius: 9px; border: 1px solid transparent; background: transparent; font: inherit; font-size: 14px; color: var(--color-ink-soft); }
+.ws-row input { border-bottom-color: var(--color-line); border-radius: 0; }
+.ws-li input:hover, .ws-row input:hover, .ws-li input:focus, .ws-row input:focus { border-color: #cfd5e2; border-radius: 9px; background: #fff; }
+.ws-li button, .ws-row button { width: 28px; height: 28px; border-radius: 8px; color: var(--color-faint); font-size: 17px; }
+.ws-li button:hover, .ws-row button:hover { background: var(--color-well); color: var(--color-ink); }
+.ws-add { margin: 4px 0 0 10px; font-size: 13px; font-weight: 600; color: var(--color-accent-strong); } .ws-add:hover { text-decoration: underline; }
+.ws-todo { padding: 0 5px; border-radius: 5px; background: #fff4d6; color: #6b4a00; }
+.ws-empty { margin: auto; max-width: 360px; padding: 24px; text-align: center; }
+@media (max-width: 899px) { .ws-grid { grid-template-columns: 1fr; overflow-y: auto; } .ws-set, .ws-doc { overflow: visible; } .ws-body { overflow: visible; } }
+.ws-chips button span { opacity: 1; font-weight: 500; }
+.ws-set > button { flex: none; margin-top: 14px; }
+.ws-set { gap: 0; padding: 14px 18px; } .ws-f { margin-top: 8px; } .ws-chips { gap: 5px; } .ws-chips button { padding: 4px 11px; }
+.ws-set .ws-text.border { min-height: 54px; }
+@media (max-width: 899px) { .ws-grid { grid-auto-rows: max-content; align-content: start; } .ws-doc { min-height: 320px; } }
+/* 20 Nov (her review): the AI card as before, the ready questions spread over the card, whole ones only */
+@media (min-width: 1024px) { .dash-asks { flex: 1 1 0 !important; min-height: 34px; justify-content: space-evenly !important; } }
+/* one line for every chip and label on the dashboards (her review: "keep things in one line") */
+.a-want li { white-space: nowrap; max-width: 100%; overflow: hidden; text-overflow: ellipsis; }
+.dash-want-list li > b { flex: none; }
+.adm-gaps li.adm-gap-row { display: grid !important; grid-template-columns: 18px minmax(0, 9rem) minmax(0, 1fr) auto !important; grid-template-rows: auto !important; align-items: center; gap: 12px !important; }
+.adm-gaps li.adm-gap-row > * { grid-row: 1 !important; grid-column: auto !important; }
+/* planner: skills checklist and highlighted fill-ins (20 Nov) */
+.ws-skills { margin: 0; padding: 0; list-none: none; list-style: none; display: flex; flex-direction: column; gap: 2px; }
+.ws-skills label { display: flex; align-items: center; gap: 10px; padding: 5px 8px; border-radius: 9px; cursor: pointer; font-size: 13.5px; color: var(--color-ink); }
+.ws-skills label:hover { background: var(--color-well); } .ws-skills label.on { background: var(--color-missing-soft); font-weight: 600; }
+.ws-skills input { width: 16px; height: 16px; flex: none; accent-color: var(--color-missing-strong); }
+.ws-skills input:disabled + span { color: var(--color-faint); }
+.ws-n { flex: none; font-size: 12px; font-weight: 500; color: var(--color-missing-strong); }
+.ws-grow { position: relative; }
+.ws-grow-back, .ws-grow .ws-text { font: inherit; font-size: 14px; line-height: 1.5; padding: 8px 10px; white-space: pre-wrap; overflow-wrap: break-word; letter-spacing: normal; }
+.ws-grow-back { color: var(--color-ink-soft); border: 1px solid transparent; border-radius: 10px; visibility: visible; }
+.ws-grow .ws-text { position: absolute; inset: 0; height: 100%; color: transparent; caret-color: var(--color-ink); background: transparent !important; }
+.ws-grow .ws-text::selection { color: var(--color-ink); background: rgb(37 87 196 / 25%); }
+.ws-grow:hover .ws-grow-back, .ws-grow:focus-within .ws-grow-back { border-color: #cfd5e2; background: #fff; }
+.ws-mark { background: #fff1c2; color: #6b4a00; border-radius: 4px; padding: 0 1px; }

@@ -478,7 +478,7 @@ function WantTile({ wanted }) {
           <ul aria-label="Your skills employers want, with how often these ads ask for each" tabIndex={0} className="dash-want-list m-0 mt-2.5 flex list-none flex-wrap content-start gap-1.5 p-0">
             {wanted.map(w => (
               <li key={w.skill} className={`inline-flex items-center gap-1.5 rounded-full py-1 pl-1 pr-2.5 text-[13px] font-semibold text-ink ${wantTone(w.share)}`}>
-                <b className="rounded-full bg-card px-1.5 text-[11.5px] tabular-nums">{pct(w.share)}</b>{skillName(w.skill)}
+                <b className="rounded-full bg-card px-1.5 text-[11.5px] tabular-nums">{pct(w.share)}</b><span className="min-w-0 truncate" title={skillName(w.skill)}>{skillName(w.skill)}</span>
               </li>
             ))}
           </ul>
@@ -491,14 +491,6 @@ function WantTile({ wanted }) {
 
 // AI Assistant: the two chat modes, three ready questions, and the last chat to continue (if any)
 function AiTile({ chat, asks }) {
-  // 20 Nov (her review: big gaps between the questions): the questions sit together at the top and a box to type
-  // your own question fills the card's foot; it opens the chat with the question in the box, not yet sent
-  const navigate = useNavigate()
-  const [q, setQ] = useState('')
-  const ask = (e) => {
-    e.preventDefault()
-    if (q.trim()) navigate(`/chatbot?mode=career_counsellor&ask=${encodeURIComponent(q.trim())}`, { state: { from: 'Dashboard' } })
-  }
   return (
     <Tile n={5} look="glow" area="a-ai" labelledBy="t-ai" icon="ai" title="AI Assistant" className="flex-1"
       action={<Link to="/chatbot" state={chat ? { from: 'Dashboard', openSession: chat.id } : { from: 'Dashboard' }} className={LINK}>{chat ? 'Continue' : 'Open'}</Link>}>
@@ -509,13 +501,6 @@ function AiTile({ chat, asks }) {
             className="block w-full truncate rounded-xl bg-accent-soft px-3 py-1.5 text-left text-[13px] font-semibold text-accent-strong transition-colors hover:bg-accent hover:text-on-accent">{a.text}</button></li>
         ))}
       </ul>
-      <form onSubmit={ask} className="dash-askbox">
-        <label htmlFor="dash-q" className="sr-only">Ask the AI Assistant</label>
-        <input id="dash-q" value={q} onChange={e => setQ(e.target.value)} maxLength={300} placeholder="Ask your own question…" autoComplete="off" />
-        <button type="submit" aria-label="Open the chat with this question" disabled={!q.trim()}>
-          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
-        </button>
-      </form>
     </Tile>
   )
 }
@@ -765,6 +750,17 @@ export default function Dashboard() {
         )}
         <Bell className="ml-auto self-center" />
         <div className="w-full empty:hidden"><PrivacyBanner /></div>
+        {/* without a goal the My Applications card is hidden, so an invitation shows as a slim violet line */}
+        {!hasGoal && invites.length > 0 && (
+          <div className="dash-invite w-full">
+            <span className="invite-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="5" width="18" height="14" rx="2.5" /><path d="m4 7 8 6 8-6" /></svg></span>
+            <p className="m-0 min-w-0 flex-1 truncate text-body"><b className="inv-word">{invites.length > 1 ? `${invites.length} employers` : invites[0].company}</b> invited you to apply
+              {invites.length === 1 && <span className="text-muted"> · {invites[0].title}</span>}</p>
+            <Link to={invites.length > 1 ? '/applications' : `/jobs/${encodeURIComponent(invites[0].job_ref)}`} state={{ from: 'Dashboard' }} className="dash-invite-go">
+              {invites.length > 1 ? 'See invitations' : 'View job'}</Link>
+            {invites.length === 1 && <button type="button" onClick={() => { setDeclineError(''); setDeclining(invites[0]) }} className="text-small font-semibold text-muted hover:text-ink">No thanks</button>}
+          </div>
+        )}
       </div>
       {loadError && <p role="alert" className="mb-3 rounded-control bg-missing-soft px-4 py-3 text-body text-missing-strong">{loadError}</p>}
       {declining && <DeclineInvite inv={declining} busy={declineBusy} error={declineError}
@@ -777,7 +773,8 @@ export default function Dashboard() {
           {hasGoal
             ? <GoalTile key={goalData.goal} data={goalData} picked={picked} busy={busy} onGoal={changeGoal} />
             : <ChooseTile key={goalData.goal_saved || 'none'} data={goalData} busy={busy} onGoal={changeGoal} onCounsellor={counsellor} />}
-          <AppsTile invites={invites} apps={apps} outside={outside} onDecline={(inv) => { setDeclineError(''); setDeclining(inv) }} />
+          {/* 20 Nov (her call): without a goal, choosing one is the point; My Applications and the AI Assistant wait */}
+          {hasGoal && <AppsTile invites={invites} apps={apps} outside={outside} onDecline={(inv) => { setDeclineError(''); setDeclining(inv) }} />}
           {hasGoal && <GrowTile data={goalData} picked={picked} toggle={toggle} onPlan={plan} more={[...moreToLearn, ...allToLearn.filter(x => !moreToLearn.some(y => y.skill.toLowerCase() === x.skill.toLowerCase()))]} />}
           <JobsTile matches={matches} others={allMatches} scope={scope}
             onOpen={job => navigate(`/jobs/${encodeURIComponent(job.job_id)}`, { state: { from: 'Dashboard' } })}
@@ -788,7 +785,7 @@ export default function Dashboard() {
             }} />
           <div className="dash-side">
             <WantTile wanted={goalData.wanted} />
-            <AiTile chat={chat} asks={asks} />
+            {hasGoal && <AiTile chat={chat} asks={asks} />}
           </div>
         </div>
       )}

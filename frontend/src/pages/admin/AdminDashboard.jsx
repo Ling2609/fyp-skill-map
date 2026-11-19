@@ -91,6 +91,8 @@ export default function AdminDashboard() {
 
   const todo = data?.todo
   const waiting = todo ? todo.pending_employers.length : 0
+  const [plan, setPlan] = useState([])
+  const togglePlan = (skill) => setPlan(p => p.includes(skill) ? p.filter(x => x !== skill) : p.length < 4 ? [...p, skill] : p)
   // employers shown: 2, or 1 on a short screen; never a scroll inside this card (20 Nov, her review)
   const short = useShort()
   const showEmp = short ? 1 : SHOW_WAITING
@@ -196,7 +198,7 @@ export default function AdminDashboard() {
               <ul className="adm-prof-bars m-0 p-0 list-none text-sm">
                 {[
                   ['Grades entered', p.with_grades],
-                  ['Added a project or certificate', p.with_project_or_cert],
+                  ['Project or certificate', p.with_project_or_cert],
                   ['Visible to employers', p.visible_to_employers],
                 ].map(([label, n]) => (
                   <li key={label}>
@@ -240,7 +242,10 @@ export default function AdminDashboard() {
                 {gaps?.length > 0 && (
                   <ul tabIndex={0} aria-label="Most common skill gaps" className="flex-1 flex flex-col justify-evenly gap-3">
                     {gaps.map(g => (
-                      <li key={g.skill} className="grid grid-cols-[minmax(0,10rem)_1fr_auto] items-center gap-3 text-sm">
+                      <li key={g.skill} className="adm-gap-row text-sm">
+                        {/* 20 Nov (her approved mock): tick up to 4 to plan a workshop on them */}
+                        <input type="checkbox" aria-label={`Plan a workshop on ${skillName(g.skill)}`} checked={plan.includes(g.skill)}
+                          disabled={!plan.includes(g.skill) && plan.length >= 4} onChange={() => togglePlan(g.skill)} className="h-4 w-4 accent-[var(--color-accent)]" />
                         <span className="truncate text-slate-800">{skillName(g.skill)}</span>
                         <Bar value={g.students} max={g.of_students} colour={gapColour(g.students / Math.max(...gaps.map(x => x.students)))} />
                         <span className="text-xs text-slate-500 tabular-nums">{g.students} of {g.of_students}</span>
@@ -249,6 +254,13 @@ export default function AdminDashboard() {
                   </ul>
                 )}
                 {gaps?.length > 0 && <p className="adm-scale m-0"><span>fewer</span><i /><span>more students</span></p>}
+                {gaps?.length > 0 && (
+                  <div className="adm-plan">
+                    <span className="text-xs text-muted">{plan.length ? <><b className="text-ink">{plan.length} ticked</b> · up to 4 per workshop</> : 'Tick skills to plan a workshop on them'}</span>
+                    <Link to={`/admin/workshop?skills=${encodeURIComponent(plan.join('|'))}`} aria-disabled={!plan.length}
+                      onClick={e => { if (!plan.length) e.preventDefault() }} className={`head-cta h-9 px-3.5 text-sm ${plan.length ? '' : 'opacity-45 pointer-events-none'}`}>✦ Plan a workshop</Link>
+                  </div>
+                )}
               </div>
             </section>
             
