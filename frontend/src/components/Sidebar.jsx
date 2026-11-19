@@ -5,6 +5,13 @@ import { useAuth } from '../context/useAuth'
 import { Logo } from './ui/index.jsx'
 import { useSidebar } from './SidebarContext'
 
+const PLANS_ICON = (
+  <svg className="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75}
+      d="M13 3H6a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9l-6-6ZM13 3v6h6M8 13h8m-8 4h6" />
+  </svg>
+)
+
 const NAV_ITEMS = [
   {
     to: '/dashboard',
@@ -56,6 +63,7 @@ const NAV_ITEMS = [
       </svg>
     ),
   },
+  { to: '/my-plans', label: 'My plans', icon: PLANS_ICON },
 ]
 
 export const ADMIN_COUNTS_CHANGED = 'admin-counts-changed'

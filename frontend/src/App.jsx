@@ -13,6 +13,7 @@ const Dashboard = lazy(() => import('./pages/student/Dashboard'))
 const Recommend = lazy(() => import('./pages/student/Recommend'))
 const JobDetail = lazy(() => import('./pages/student/JobDetail'))
 const Chatbot = lazy(() => import('./pages/student/Chatbot'))
+const MyPlans = lazy(() => import('./pages/student/MyPlans'))
 const GithubCallback = lazy(() => import('./pages/student/GithubCallback'))
 const MyProfile = lazy(() => import('./pages/student/MyProfile'))
 const StudySetup = lazy(() => import('./pages/student/StudySetup'))
@@ -143,6 +144,7 @@ function AppRoutes() {
       <Route path="/jobs/:jobId" element={<RoleRoute><Layout><JobDetail /></Layout></RoleRoute>} />
       {/* 21 Oct: what the employer will see, before applying (/jobs/:jobId/check) and from My Profile (/profile/preview) */}
       <Route path="/jobs/:jobId/check" element={<RoleRoute roles={['student']}><Layout><EmployerPreview /></Layout></RoleRoute>} />
+      <Route path="/my-plans" element={<RoleRoute roles={['student']}><Layout><MyPlans /></Layout></RoleRoute>} />
       <Route path="/chatbot" element={<RoleRoute roles={['student']}><Layout><Chatbot /></Layout></RoleRoute>} />
       {/* 8 Oct: My Profile and Skill Profile are one page; the old /my-profile address still works */}
       <Route path="/profile" element={<RoleRoute roles={['student']}><Layout><MyProfile /></Layout></RoleRoute>} />

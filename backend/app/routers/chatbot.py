@@ -8,12 +8,14 @@ Context-aware: receives user skill profile, target job, and exact skill gaps.
 Conversations are saved in MongoDB (app/mongo.py, 6 Oct): each reply is added to the student's chat session, and
 the page lists past chats to continue. If MongoDB is off, the chat still works; it is just not saved.
 """
+import hashlib
 import re
 import time
 import uuid
 from datetime import datetime, timezone
+from typing import Literal
 
-from fastapi import APIRouter, Depends, HTTPException, Response
+from fastapi import APIRouter, Depends, HTTPException, Query, Response
 from sqlalchemy.orm import Session
 from pydantic import BaseModel, Field
 from pymongo.errors import PyMongoError
@@ -393,6 +395,72 @@ def list_sessions(current_user: User = Depends(get_current_user)):
         {"$project": {"mode": 1, "title": 1, "context": 1, "updated_at": 1, "count": {"$size": "$messages"}}}])
     return [{"id": d["_id"], "mode": d["mode"], "title": d.get("title") or "Chat", "context": d.get("context") or {},
              "updated_at": d["updated_at"], "message_count": d.get("count", 0)} for d in docs]
+
+
+PLAN_HEADING = r"^#{1,4}[^\S\r\n]*Learning plan:[^\S\r\n]*(.*)$"
+PLAN_PAGE_SIZE = 12
+
+
+def _plan_key(message):
+    identity = f"{message.get('at')}\n{message['content']}"
+    return hashlib.sha256(identity.encode()).hexdigest()
+
+
+@router.get("/plans")
+def list_plans(page: int = Query(default=1, ge=1, le=1000000),
+               order: Literal["newest", "oldest"] = "newest",
+               current_user: User = Depends(get_current_user)):
+    """Learning plan replies already retained in this student's chat history."""
+    heading = {"$regex": PLAN_HEADING, "$options": "im"}
+    direction = -1 if order == "newest" else 1
+    try:
+        docs = list(chat_sessions().aggregate([
+            {"$match": {"user_id": current_user.id, "messages": {"$elemMatch": {
+                "role": "assistant", "content": heading, "plan_hidden": {"$ne": True},
+            }}}},
+            {"$unwind": {"path": "$messages", "includeArrayIndex": "message_index"}},
+            {"$match": {"messages.role": "assistant", "messages.content": heading,
+                        "messages.plan_hidden": {"$ne": True}}},
+            {"$project": {"message": "$messages", "message_index": 1,
+                          "created_at": {"$ifNull": ["$messages.at", "$updated_at"]}}},
+            {"$sort": {"created_at": direction, "_id": 1, "message_index": direction}},
+            {"$skip": (page - 1) * PLAN_PAGE_SIZE},
+            {"$limit": PLAN_PAGE_SIZE + 1},
+        ]))
+    except PyMongoError:
+        raise HTTPException(status_code=503, detail=HISTORY_OFF) from None
+
+    plans = []
+    for doc in docs[:PLAN_PAGE_SIZE]:
+        message = doc["message"]
+        content = message["content"]
+        title = learning_resources.plan_title(content)
+        plans.append({"session_id": doc["_id"], "message_index": doc["message_index"], "key": _plan_key(message),
+                      "created_at": doc["created_at"], "title": title or "Learning plan", "content": content})
+    return {"plans": plans, "has_next": len(docs) > PLAN_PAGE_SIZE}
+
+
+@router.delete("/plans/{session_id}/{plan_key}", status_code=204)
+def remove_plan(session_id: str, plan_key: str, current_user: User = Depends(get_current_user)):
+    """Hide the plan in My plans while preserving its message in the conversation."""
+    owner = {"_id": session_id, "user_id": current_user.id}
+    try:
+        col = chat_sessions()
+        doc = col.find_one(owner, {"messages": 1})
+        for message in (doc or {}).get("messages", []):
+            if (message.get("role") == "assistant"
+                    and re.search(PLAN_HEADING, message.get("content", ""), re.IM)
+                    and _plan_key(message) == plan_key):
+                match = {"role": "assistant", "content": message["content"], "at": message.get("at")}
+                result = col.update_one({**owner, "messages": {"$elemMatch": match}},
+                                        {"$set": {"messages.$[plan].plan_hidden": True}},
+                                        array_filters=[{f"plan.{field}": value for field, value in match.items()}])
+                if result.matched_count:
+                    return Response(status_code=204)
+                break
+    except PyMongoError:
+        raise HTTPException(status_code=503, detail=HISTORY_OFF) from None
+    raise HTTPException(status_code=404, detail="Learning plan no longer available.")
 
 
 @router.get("/sessions/{session_id}")
