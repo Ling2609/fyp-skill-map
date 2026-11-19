@@ -134,7 +134,7 @@ def taxonomy_report(counts: Counter):
     line("exact after dropping filler words", [r for r in rows if r[1] == "filler"])
     sb = [r for r in rows if r[1] == "sbert"]
     for lo, hi in [(0.9, 1.01), (0.8, 0.9), (0.7, 0.8), (0.6, 0.7), (0.0, 0.6)]:
-        line(f"SBERT similarity {lo:.1f}–{min(hi, 1):.1f}", [r for r in sb if lo <= r[3] < hi])
+        line(f"SBERT similarity {lo:.1f}-{min(hi, 1):.1f}", [r for r in sb if lo <= r[3] < hi])
 
     print("\nMost used skills with NO close taxonomy skill (similarity < 0.6), i.e. gaps in the taxonomy:")
     for name, _, sugg, sim, n in sorted((r for r in sb if r[3] < 0.6), key=lambda r: -r[4])[:15]:

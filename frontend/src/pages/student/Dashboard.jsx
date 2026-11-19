@@ -166,9 +166,9 @@ function Tile({ n, look = 'plain', area, labelledBy, icon, title, action, classN
   return (
     <section ref={ref} aria-labelledby={labelledBy} onPointerMove={onMove} style={{ '--n': n }}
       className={`dash-tile ${area} ${seen ? '' : 'dash-wait'} relative flex min-h-0 flex-col rounded-[24px] border px-5 pt-4 pb-4 dash-short:pt-3.5 dash-short:pb-3.5 ${looks[look]} shadow-card ${className}`}>
-      <div className="flex min-h-[24px] flex-wrap items-center justify-between gap-x-2 gap-y-1.5">
+      <div className="flex min-h-6 flex-wrap items-center justify-between gap-x-2 gap-y-1.5">
         <h2 id={labelledBy} className="m-0 flex min-w-0 items-center gap-2 text-[12px] font-bold uppercase leading-[1.3] tracking-[0.08em] text-muted">
-          <span aria-hidden="true" className="grid h-[21px] w-[21px] shrink-0 place-items-center rounded-[7px] bg-accent-soft text-accent-strong">
+          <span aria-hidden="true" className="grid h-5.25 w-5.25 shrink-0 place-items-center rounded-chip bg-accent-soft text-accent-strong">
             <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d={ICONS[icon]} /></svg>
           </span>
           {title}
@@ -233,7 +233,7 @@ function Trail({ readiness, picked, goal }) {
   const stepW = (x1 - x0 - 32) / Math.max(1, steps.length - 1)
   const k = Math.max(0.85, Math.min(1.45, stepW / 26))
   return (
-    <div ref={box} className="relative min-h-[70px] min-w-0 max-h-[150px] flex-1">
+    <div ref={box} className="relative min-h-17.5 min-w-0 max-h-37.5 flex-1">
       <svg viewBox={`0 0 ${W} ${H}`} className="absolute inset-0 block h-full w-full overflow-visible" role="img"
         aria-label={`Footprints toward ${goal}: ${have.length} skills on your profile (${have.map(r => skillName(r.skill)).join(', ')}); ${picked.length} in your plan; ${gaps.length - picked.length} still to learn`}>
         <path d={d} fill="none" stroke="#fff" strokeWidth="14" strokeLinecap="round" opacity=".75" />
@@ -247,7 +247,7 @@ function Trail({ readiness, picked, goal }) {
             <g key={s.skill} transform={`translate(${x.toFixed(1)} ${(pathY(x) + side * 8 * k).toFixed(1)}) rotate(${ang.toFixed(1)}) scale(${side < 0 ? -k : k} ${k})`}>
               <title>{`${skillName(s.skill)}: ${label[s.k]}`}</title>
               <path d={TOPO_PRINT} style={{ '--i': i }}
-                className={`dash-step ${s.k === 'have' ? 'fill-have' : s.k === 'plan' ? 'fill-plan' : 'fill-white stroke-missing-strong [stroke-width:1.5] [stroke-dasharray:3_2]'}`} />
+                className={`dash-step ${s.k === 'have' ? 'fill-have' : s.k === 'plan' ? 'fill-plan' : 'fill-white stroke-missing-strong [stroke-1.5] [stroke-dasharray:3_2]'}`} />
             </g>
           )
         })}
@@ -381,9 +381,9 @@ function GrowTile({ data, picked, toggle, onPlan, more = [] }) {
             <label key={r.skill} className="grid shrink-0 cursor-pointer grid-cols-[22px_minmax(0,1fr)] items-center gap-x-2.5 rounded-lg py-0.5 hover:bg-well/60">
               <input type="checkbox" checked={on} onChange={() => toggle(r.skill)} className="dash-check row-span-2 h-5 w-5" />
               <span className="text-body font-semibold leading-tight text-ink">{skillName(r.skill)}</span>
-              <span aria-hidden="true" className="relative mt-0.5 h-[17px] rounded-md bg-track">
+              <span aria-hidden="true" className="relative mt-0.5 h-4.25 rounded-md bg-track">
                 <i style={{ width: `${r.opens_count ? Math.max(40, (r.opens_count / max) * 100) : Math.max(22, r.share * 100)}%`, '--k': Math.min(k, 6) }}
-                  className={`dash-grow absolute inset-y-0 left-0 min-w-[112px] rounded-md ${on ? 'bg-[#c4532f]' : 'bg-missing-soft shadow-[inset_0_0_0_2px_var(--color-missing)]'}`} />
+                  className={`dash-grow absolute inset-y-0 left-0 min-w-28 rounded-md ${on ? 'bg-[#c4532f]' : 'bg-missing-soft shadow-[inset_0_0_0_2px_var(--color-missing)]'}`} />
                 <b className={`absolute left-2 top-1/2 -translate-y-1/2 whitespace-nowrap text-[11.5px] font-extrabold ${on ? 'text-white' : 'text-learn-ink'}`}>
                   {r.opens_count ? `+${r.opens_count} ${r.opens_count === 1 ? 'job' : 'jobs'} you'd fit` : `in ${pct(r.share)} of ads`}
                 </b>
@@ -455,7 +455,7 @@ function JobsTile({ matches, others = [], scope, onOpen, onSee }) {
             {fits.length ? `The ${fits.length === 1 ? 'one' : Math.min(SHOW, fits.length)} that ${fits.length === 1 ? 'fits' : 'fit'} best` : 'Closest matches'}
             {fits.length > SHOW && <button type="button" onClick={() => onSee('half')} className={`${LINK} inline-flex min-h-6 items-center`}>+{fits.length - SHOW} more that fit</button>}
           </p>
-          <ul aria-label="Jobs that fit you best" tabIndex={0} className="scroll-y dash-joblist m-0 min-h-[52px] flex-1 list-none divide-y divide-line p-0">
+          <ul aria-label="Jobs that fit you best" tabIndex={0} className="scroll-y dash-joblist m-0 min-h-13 flex-1 list-none divide-y divide-line p-0">
             {shown.map(job => jobRow(job))}
             {behind.length > 0 && <li className="dash-behind" aria-hidden="true">Close behind</li>}
             {behind.map(job => jobRow(job))}
@@ -524,7 +524,7 @@ function ChooseTile({ data, busy, onGoal, onCounsellor }) {
         <div role="radiogroup" aria-label="Job types that fit your skills" className="mt-3 grid gap-2">
           {shown.map(b => (
             <label key={b.category} className={`grid cursor-pointer grid-cols-[20px_minmax(0,1fr)_96px_56px] items-center gap-2.5 rounded-2xl border bg-card px-3 py-2.5 max-sm:grid-cols-[20px_minmax(0,1fr)_auto] ${choice === b.category ? 'border-accent' : 'border-line'}`}>
-              <input type="radio" name="best-fit" checked={choice === b.category} onChange={() => setChoice(b.category)} className="h-4 w-4 accent-[var(--color-accent)]" />
+              <input type="radio" name="best-fit" checked={choice === b.category} onChange={() => setChoice(b.category)} className="h-4 w-4 accent-(--color-accent)]" />
               <span className="min-w-0 text-body text-ink">{b.category}</span>
               <span aria-hidden="true" className="h-2.5 overflow-hidden rounded-full bg-track max-sm:hidden"><i className={`block h-full rounded-full ${fitTone(b.have / b.of)}`} style={{ width: `${(b.have / b.of) * 100}%` }} /></span>
               <b className="text-right text-small tabular-nums">{b.have} of {b.of}</b>
@@ -740,7 +740,7 @@ export default function Dashboard() {
 
   return (
     // Laptop/tablet: exactly one screen; the bottom row takes what is left. Phone: one column, AI Assistant last
-    <div className="dash-fit mx-auto flex w-full max-w-[1240px] flex-col px-4 pb-4 pt-3 sm:px-6">
+    <div className="dash-fit mx-auto flex w-full max-w-310 flex-col px-4 pb-4 pt-3 sm:px-6">
       {/* soft colour drifting behind the glass goal card */}
       <div className="dash-orbs" aria-hidden="true"><i /><i /><i /></div>
       <div className="dash-rise-in mb-3 flex flex-wrap items-baseline gap-x-4 gap-y-1">

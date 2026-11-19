@@ -14,7 +14,8 @@ React,react.js; reactjs,Learn React,https://react.dev/learn,React,docs,free,
 Node.js,nodejs; node,Learn Node.js,https://nodejs.org/en/learn,Node.js,docs,free,
 Git,version control; github; gitlab,Pro Git (book),https://git-scm.com/book/en/v2,git-scm.com,book,free,
 Git,version control; github; gitlab,Learn Git Branching,https://learngitbranching.js.org/,Learn Git Branching,practice,free,
-Docker,containers; containerisation; containerization; docker compose,Docker: Get started,https://docs.docker.com/get-started/,Docker,docs,free,
+Docker,containers; containerisation; containerization; docker compose,Get started with Docker containers,https://docs.docker.com/learn/paths/get-started-with-docker-containers/,Docker,course,free,2026-11-20
+Docker,containers; containerisation; containerization; docker compose,Docker Compose Quickstart,https://docs.docker.com/compose/gettingstarted/,Docker,tutorial,free,2026-11-20
 Kubernetes,k8s,Learn Kubernetes Basics,https://kubernetes.io/docs/tutorials/kubernetes-basics/,Kubernetes,tutorial,free,
 AWS,amazon web services,AWS Skill Builder,https://skillbuilder.aws/,Amazon Web Services,course,free and paid,
 AWS,amazon web services,Getting Started on AWS,https://aws.amazon.com/getting-started/,Amazon Web Services,tutorial,free,
@@ -48,3 +49,6 @@ Network security,firewalls; cybersecurity; cyber security; security,Cisco Networ
 Network security,firewalls; cybersecurity; cyber security; security,Professor Messer (CompTIA Security+ videos),https://www.professormesser.com/,Professor Messer,course,free,
 Prompt engineering,generative ai; llms; large language models,Prompt Engineering Guide,https://www.promptingguide.ai/,DAIR.AI,docs,free,
 Software engineering (general),developer roadmap,Developer roadmaps,https://roadmap.sh/,roadmap.sh,docs,free,
+Digital Marketing,digital marketing strategy; online marketing,Digital Marketing Certification Course,https://academy.hubspot.com/courses/digital-marketing,HubSpot Academy,course,free,2026-11-20
+Digital Marketing,digital marketing strategy; online marketing,SEO Starter Guide,https://developers.google.com/search/docs/fundamentals/seo-starter-guide,Google Search Central,docs,free,2026-11-20
+Power BI,powerbi; microsoft power bi,Get started with Microsoft data analytics,https://learn.microsoft.com/en-us/training/paths/data-analytics-microsoft/,Microsoft Learn,course,free,2026-11-20

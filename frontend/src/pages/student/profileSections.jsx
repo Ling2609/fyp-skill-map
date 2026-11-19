@@ -266,7 +266,7 @@ export function AwardsTab({ awards, onRefresh }) {
 // Work experience (internship, placement, part-time) and activities (clubs, hackathons, volunteering) in one tab,
 // in two groups, each newest first with the ones still going on top (references.md "What employers look for").
 
-const period = (e) => `${monthLabel(e.start_month)} – ${e.end_month ? monthLabel(e.end_month) : 'now'}`
+const period = (e) => `${monthLabel(e.start_month)} - ${e.end_month ? monthLabel(e.end_month) : 'now'}`
 
 export function ExperienceTab({ items, onRefresh }) {
   const s = useItems('/profile/experiences', onRefresh)

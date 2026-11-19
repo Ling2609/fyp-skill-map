@@ -1476,7 +1476,7 @@
   },
   "awscertification || awscertifiedsecurityspecialty": {
    "a": "AWS Certification",
-   "b": "AWS Certified Security – Specialty",
+   "b": "AWS Certified Security - Specialty",
    "checked": "2026-10-09",
    "same": false,
    "similarity": 0.85
@@ -12448,8 +12448,8 @@
    "verified": false
   },
   "sapcertifiedassociateprojectmanagersapactivate || sapcertifiedspecialistprojectmanagersapactivate": {
-   "a": "SAP Certified Associate – Project Manager – SAP Activate",
-   "b": "SAP Certified Specialist – Project Manager – SAP Activate",
+   "a": "SAP Certified Associate - Project Manager - SAP Activate",
+   "b": "SAP Certified Specialist - Project Manager - SAP Activate",
    "checked": "2026-10-09",
    "same": false,
    "similarity": 0.947

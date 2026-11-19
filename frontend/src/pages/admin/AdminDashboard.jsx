@@ -177,7 +177,7 @@ export default function AdminDashboard() {
                     <CompanyChecks u={u} />
                   </div>
                   <button onClick={() => { setAskError(''); setRejecting(u) }} disabled={busy === u.id}
-                    className="px-3.5 h-9 text-sm font-semibold rounded-[10px] border border-line-strong bg-white text-ink hover:bg-well disabled:opacity-50">Reject</button>
+                    className="px-3.5 h-9 text-sm font-semibold rounded-control border border-line-strong bg-white text-ink hover:bg-well disabled:opacity-50">Reject</button>
                   <button onClick={() => decide(u.id, 'approve')} disabled={busy === u.id}
                     className="head-cta h-9 px-3.5 text-sm disabled:opacity-50">Approve</button>
                 </li>
@@ -267,7 +267,7 @@ export default function AdminDashboard() {
                       <li key={g.skill} className="adm-gap-row text-sm">
                         {/* 20 Nov (her approved mock): tick up to 4 to plan a workshop on them */}
                         <input type="checkbox" aria-label={`Plan a workshop on ${skillName(g.skill)}`} checked={plan.includes(g.skill)}
-                          disabled={!plan.includes(g.skill) && plan.length >= 4} onChange={() => togglePlan(g.skill)} className="h-4 w-4 accent-[var(--color-accent)]" />
+                          disabled={!plan.includes(g.skill) && plan.length >= 4} onChange={() => togglePlan(g.skill)} className="h-4 w-4 accent-(--color-accent)]" />
                         <span className="truncate text-slate-800">{skillName(g.skill)}</span>
                         <Bar value={g.students} max={g.of_students} colour={gapColour(g.students / Math.max(...gaps.map(x => x.students)))} />
                         <span className="flex items-center justify-end gap-1.5">

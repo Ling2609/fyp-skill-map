@@ -24,13 +24,13 @@ def test_draft_uses_skillmap_numbers_and_the_model_text(client, users, monkeypat
     monkeypatch.setattr(chatbot, "get_client", _fake_client(json.dumps({
         "title": "Data to decisions", "background_rest": "A practical session would help.",
         "objectives": ["Build a report"], "outcomes": "They can build a report.",
-        "agenda": [["0:00–0:30", "Intro"], ["0:30–4:00", "Hands-on"]]})))
+        "agenda": [["0:00-0:30", "Intro"], ["0:30-4:00", "Hands-on"]]})))
     r = client.post("/admin/workshop/draft", headers=users.h(users.admin()), json={"skills": ["Reporting", "Analytics"]})
     assert r.status_code == 200, r.text
     d = r.json()
     assert d["source"] == "ai" and d["title"] == "Data to decisions"
     assert d["background"].startswith("In SkillMap's job matching, 6 of 9 students lack Reporting; 5 of 9 students lack Analytics")
-    assert "[to fill in]" in d["resources"] and d["agenda"][0] == ["0:00–0:30", "Intro"]
+    assert "[to fill in]" in d["resources"] and d["agenda"][0] == ["0:00-0:30", "Intro"]
     assert "speaker" in d["partners"] and "[to fill in]" in d["partners"]
 
 
@@ -52,7 +52,7 @@ def test_only_listed_gaps_and_choices_and_only_admins(client, users, monkeypatch
 
 def test_the_proposal_exports_as_a_pdf(client, users):
     body = {"title": "Data to decisions", "facts": ["Half day"], "background": "B", "objectives": ["O"], "outcomes": "L",
-            "participants": "P", "partners": "Contact: [to fill in]", "agenda": [["0:00–0:30", "Intro"]], "resources": "R", "evaluation": "E"}
+            "participants": "P", "partners": "Contact: [to fill in]", "agenda": [["0:00-0:30", "Intro"]], "resources": "R", "evaluation": "E"}
     r = client.post("/admin/workshop/pdf", headers=users.h(users.admin()), json=body)
     assert r.status_code == 200 and r.content[:4] == b"%PDF"
     assert "workshop-proposal-data-to-decisions" in r.headers["content-disposition"]

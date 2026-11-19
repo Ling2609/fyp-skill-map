@@ -149,21 +149,39 @@ def plan_title(markdown: str) -> str | None:
 
 
 _RESOURCE_METADATA = re.compile(
-    r"[ \t]*\(([^()\r\n]+?),[ \t]*(free(?: to audit)?|paid)\)", re.IGNORECASE
+    r"[^\S\r\n]*\(([^()\r\n]+?),[^\S\r\n]*(free(?:(?: to)? audit)?|paid)\)"
+    r"|[^\S\r\n]*·[^·\r\n]+·[^\S\r\n]*(free(?:(?: to)? audit)?|paid)\b",
+    re.IGNORECASE,
 )
+_RESOURCE_SECTION = re.compile(r"^(#{1,6}[ \t]+Resources:?[ \t]*)\r?\n(.*?)(?=^#{1,6}[ \t]+|\Z)", re.IGNORECASE | re.MULTILINE | re.S)
 
 
 def format_plan_resources(markdown: str) -> str:
-    """Clean legacy provider and access labels within the Resources section."""
-    if not plan_title(markdown):
+    """Show verified resource titles without old provider and pricing suffixes."""
+    title = plan_title(markdown)
+    if not title:
         return markdown
-    in_resources = False
-    lines = markdown.split("\n")
-    for index, line in enumerate(lines):
-        heading = re.match(r"^\s*#{1,6}\s+(.+)$", line)
-        if heading:
-            in_resources = heading.group(1).strip().rstrip(":").casefold() == "resources"
-        elif in_resources and re.match(r"^\s*[-*+]\s+", line):
-            clean = _RESOURCE_METADATA.sub(r" · \1 · \2", line)
-            lines[index] = re.sub(r"[ \t]+\(search results\)", " · search results", clean, flags=re.IGNORECASE)
-    return "\n".join(lines)
+
+    def clean_section(match):
+        section = match.group(2)
+        entries = find_skills(title)
+        exact = next((e for e in entries if title.casefold() in {n.casefold() for n in _names(e)}), None)
+        direct = [r for r in checked(exact) if norm_url(r["url"]) not in SEARCH_PAGES] if exact else []
+        if direct and exact["skill"] in {"Digital Marketing", "Docker", "Power BI"}:
+            rows = [f"- [{r['name']}]({r['url']})" for r in direct[:3]]
+            return match.group(1) + "\n" + "\n".join(rows) + "\n\n"
+
+        lines = []
+        seen = set()
+        for line in section.splitlines():
+            if re.match(r"^[ \t]*[-*+][ \t]+", line):
+                line = _RESOURCE_METADATA.sub("", line)
+                line = re.sub(r"[ \t]+\(search results\)", " · search results", line, flags=re.IGNORECASE)
+                key = " ".join(line.casefold().split())
+                if key in seen:
+                    continue
+                seen.add(key)
+            lines.append(line)
+        return match.group(1) + "\n" + "\n".join(lines).rstrip() + "\n\n"
+
+    return _RESOURCE_SECTION.sub(clean_section, markdown, count=1).rstrip() + ("\n" if markdown.endswith("\n") else "")

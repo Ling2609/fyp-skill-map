@@ -16,7 +16,7 @@ export default function ConfirmationDialog({ wording, onAnswer }) {
   }, [])
 
   return (
-    <dialog ref={dialogRef} aria-label={wording.title} className="m-auto w-[calc(100%_-_2rem)] max-w-md rounded-2xl border border-line bg-white p-5 text-ink shadow-xl backdrop:bg-slate-900/35 sm:p-6"
+    <dialog ref={dialogRef} aria-label={wording.title} className="m-auto w-[calc(100%-2rem)] max-w-md rounded-2xl border border-line bg-white p-5 text-ink shadow-xl backdrop:bg-slate-900/35 sm:p-6"
       onCancel={event => { event.preventDefault(); onAnswer(false) }}>
       <h2 className="text-base font-semibold">{wording.title}</h2>
       <p className="mt-2 wrap-anywhere text-sm text-ink-soft">{wording.message}</p>
@@ -24,7 +24,9 @@ export default function ConfirmationDialog({ wording, onAnswer }) {
         {wording.cancelLabel !== null && <button ref={initialFocus} type="button" className="acad-btn edit min-h-11" onClick={() => onAnswer(false)}>
           {wording.cancelLabel || 'Cancel'}
         </button>}
-        <button ref={wording.cancelLabel === null ? initialFocus : undefined} type="button" className={`acad-btn min-h-11 ${wording.danger ? 'red' : 'edit'}`} onClick={() => onAnswer(true)}>
+        <button ref={wording.cancelLabel === null ? initialFocus : undefined} type="button" className={wording.cancelLabel === null
+          ? 'head-cta min-h-11 w-full justify-center px-4 text-sm sm:w-auto'
+          : `acad-btn min-h-11 ${wording.danger ? 'red' : 'edit'}`} onClick={() => onAnswer(true)}>
           {wording.confirmLabel}
         </button>
       </div>

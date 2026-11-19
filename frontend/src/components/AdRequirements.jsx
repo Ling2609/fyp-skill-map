@@ -29,7 +29,7 @@ export function AdRequirementPills({ req }) {
   )
 }
 
-// "MYR 108000 – MYR 144000" a year -> "about RM 9,000 – 12,000 a month" (rounded to the nearest 100)
+// "MYR 108000 - MYR 144000" a year -> "about RM 9,000 - 12,000 a month" (rounded to the nearest 100)
 function perMonth(amount) {
   const nums = (amount.match(/\d[\d,]*(?:\.\d+)?\s?k?/gi) || []).map(n => {
     const v = parseFloat(n.replace(/,/g, ''))
@@ -37,7 +37,7 @@ function perMonth(amount) {
   }).filter(v => v >= 1000)
   if (!nums.length) return ''
   const fmt = v => (Math.round(v / 12 / 100) * 100).toLocaleString('en-GB')
-  return `about RM ${nums.map(fmt).join(' – ')} a month`
+  return `about RM ${nums.map(fmt).join(' - ')} a month`
 }
 
 // The salary written in the ad text, for a job whose salary field is empty (her finding, 19 Oct)

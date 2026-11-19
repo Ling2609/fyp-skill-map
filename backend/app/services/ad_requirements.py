@@ -49,7 +49,7 @@ _SALARY_CONTEXT = r"(salary|pay|remuneration|compensation|per\s+month|/\s?month|
 
 def _sentences(text: str) -> list[str]:
     """Ads mix full stops, bullets and run-on lines: split on all of them."""
-    parts = re.split(r"(?<=[.!?;])\s+|\n+|\s{2,}|•|·|•|(?<=\w)\s[-–]\s(?=[A-Z])(?!RM|MYR|SGD|USD|S\$)", text or "")
+    parts = re.split(r"(?<=[.!?;])\s+|\n+|\s{2,}|•|·|•|(?<=\w)\s[--]\s(?=[A-Z])(?!RM|MYR|SGD|USD|S\$)", text or "")
     return [p.strip() for p in parts if p and p.strip()]
 
 
@@ -129,9 +129,9 @@ def salary_in_ad(text: str) -> dict | None:
         first = amounts[0]
         amount = first.group(0).strip()
         rest = window[first.end():]
-        m2 = re.match(r"\s*(?:-|–|to|~)?\s*((?:rm|myr|sgd|s\$|usd|us\$|\$)?\s?\d[\d,]*(?:\.\d+)?\s?(?:k\b)?)", rest, re.I)
+        m2 = re.match(r"\s*(?:-|-|to|~)?\s*((?:rm|myr|sgd|s\$|usd|us\$|\$)?\s?\d[\d,]*(?:\.\d+)?\s?(?:k\b)?)", rest, re.I)
         if m2 and re.search(r"\d{3,}|\d+\s?k\b", m2.group(1), re.I):
-            amount = f"{amount} – {m2.group(1).strip()}"
+            amount = f"{amount} - {m2.group(1).strip()}"
         start = max(0, first.start() - 40)
         quote = window[start: first.end() + 40].strip()
         # per year or per month, so the page can also show a yearly amount per month (19 Oct)

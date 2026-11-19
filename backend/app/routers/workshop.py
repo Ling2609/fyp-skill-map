@@ -113,7 +113,7 @@ def _agenda(names: list[str], minutes: int) -> list[list[str]]:
     rows, t = [], 0
     for label, share in blocks:
         d = max(15, round(minutes * share / 15) * 15)
-        rows.append([f"{t // 60}:{t % 60:02d}–{(t + d) // 60}:{(t + d) % 60:02d}", label])
+        rows.append([f"{t // 60}:{t % 60:02d}-{(t + d) // 60}:{(t + d) % 60:02d}", label])
         t += d
     return rows
 
@@ -141,7 +141,7 @@ PROMPT = """You write activity proposals for a Malaysian university's career off
 exactly these keys: "title" (one line), "background_rest" (2-3 sentences that follow the given first sentence; no new
 numbers), "objectives" (3-4 short items), "outcomes" (one or two sentences: what participants can do by the end),
 "partners_advice" (2 sentences: how the career office could bring in a speaker or an industry partner, e.g. a
-guest talk, a real case study or mentors; name no company), "agenda" (list of [time, session] for the given total minutes, starting at 0:00, times like "0:30–1:45", one break if
+guest talk, a real case study or mentors; name no company), "agenda" (list of [time, session] for the given total minutes, starting at 0:00, times like "0:30-1:45", one break if
 over 2 hours). Plain English, no marketing words. Do not invent names, dates, venues, prices or statistics.
 Reply with the JSON only."""
 

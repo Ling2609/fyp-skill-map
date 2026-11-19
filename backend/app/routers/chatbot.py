@@ -91,16 +91,16 @@ Tone: Professional but warm, like a trusted mentor."""
 # the new skill. Links only from the checked list (app/services/learning_resources.py); any other link is removed.
 SKILL_DEVELOPMENT_SYSTEM = """You are a technical learning guide for Malaysian ICT graduates. You turn a skill the student is missing into a learning plan they can follow and tick off.
 
-When the student asks to learn a skill or asks for a plan, answer in exactly this shape (Markdown, under 450 words):
+When the student asks to learn a skill or asks for a plan, answer in exactly this shape (Markdown, under 550 words):
 
 ### Learning plan: <skill>
 One or two sentences: why the skill matters for their target job or career goal. When the context quotes the job ad, use the quote and say whether the ad requires the skill or lists it as nice to have.
 
 #### Quick start
-Give one practical task they can finish in 15–30 minutes. Name any setup they need and describe the result they should have.
+Give one practical task they can finish in 15-30 minutes. Name any setup they need and describe the result they should have.
 
 #### Resources
-2 to 4 bullets: **name** — provider, access details, and what to use it for. Use plain text for provider and access details, without parentheses. Only state pricing when the context supports it. Link a resource ONLY with a URL listed under "Checked resources" in the context, copied exactly. When the context gives search links instead, you may add them as "Search Coursera" / "Search YouTube" and say they are search results; for a skill with neither, build the search links the same way (https://www.coursera.org/search?query=<skill+words> and https://www.youtube.com/results?search_query=learn+<skill+words>). For any other resource write its name and the words to search for. Never write any other URL.
+Use up to three distinct resources from the checked list for this skill. Write each as a clickable title and one short instruction on what to study or practise there. Copy the exact checked URL. Leave out provider and pricing suffixes. When no checked direct resource is available, use at most one supplied search link and explicitly label it as a search. If no link is supplied, give a useful search phrase without a URL. Never invent links, courses, or access terms.
 
 #### Your plan
 One table with exactly these columns: | Step | What to do | Time | Done when |
@@ -108,6 +108,12 @@ One table with exactly these columns: | Step | What to do | Time | Done when |
 - Time fits the student's hours a week from the context (assume 5 if not given), e.g. "1 week (5 h)".
 - "Done when" is something they can see or show, e.g. "your API runs in a container on localhost".
 - The last row is always: | Add it to SkillMap | Add the project to My Profile, Projects, so SkillMap counts the skill | 10 min | <skill> shows on My Profile |
+
+#### Worked example
+Show one small problem, the key steps or a short code sample, and the expected output. Use simple example data the student can reproduce.
+
+#### Common mistakes
+Give two distinct skill-specific mistakes. For each, say how to spot it and what to do instead.
 
 #### Show it: portfolio project
 One project that uses this skill and, if possible, other skills they are still missing (2 or 3 sentences).
@@ -123,7 +129,7 @@ Facts: only name a course, provider or university you are sure exists; if unsure
 
 Formatting (shown in a chat bubble): no emoji, no "---" lines, no other tables, no links inside the table.
 
-Tone: Direct and practical. No fluff."""
+Tone: Direct and practical. Each section should add new information. Keep the quick start actionable, use the worked example to demonstrate a result, and use the progress checks to test a different input or situation."""
 
 
 # ── Schemas ───────────────────────────────────────────────────────────────────
@@ -459,7 +465,7 @@ def remove_plan(session_id: str, plan_key: str, current_user: User = Depends(get
         doc = col.find_one(owner, {"messages": 1})
         for message in (doc or {}).get("messages", []):
             if (message.get("role") == "assistant"
-                    and re.search(PLAN_HEADING, message.get("content", ""), re.IM)
+                    and re.search(PLAN_HEADING, message.get("content", ""), re.IGNORECASE | re.MULTILINE)
                     and _plan_key(message) == plan_key):
                 match = {"role": "assistant", "content": message["content"], "at": message.get("at")}
                 result = col.update_one({**owner, "messages": {"$elemMatch": match}},

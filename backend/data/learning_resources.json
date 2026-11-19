@@ -196,7 +196,7 @@
      "cost": "free",
      "checked": "2026-10-13",
      "ok": true,
-     "page_title": "Quick Start – React",
+     "page_title": "Quick Start - React",
      "checked_by_hand": null
     }
    ]
@@ -263,15 +263,26 @@
    ],
    "resources": [
     {
-     "name": "Docker: Get started",
-     "url": "https://docs.docker.com/get-started/",
+     "name": "Get started with Docker containers",
+     "url": "https://docs.docker.com/learn/paths/get-started-with-docker-containers/",
      "provider": "Docker",
-     "kind": "docs",
+     "kind": "course",
      "cost": "free",
-     "checked": "2026-10-13",
+     "checked": "2026-11-20",
      "ok": true,
-     "page_title": "Get started | Docker Docs",
-     "checked_by_hand": null
+     "page_title": "Get started with Docker containers",
+     "checked_by_hand": "2026-11-20"
+    },
+    {
+     "name": "Docker Compose Quickstart",
+     "url": "https://docs.docker.com/compose/gettingstarted/",
+     "provider": "Docker",
+     "kind": "tutorial",
+     "cost": "free",
+     "checked": "2026-11-20",
+     "ok": true,
+     "page_title": "Docker Compose Quickstart",
+     "checked_by_hand": "2026-11-20"
     }
    ]
   },
@@ -456,6 +467,17 @@
      "ok": true,
      "page_title": "Power BI documentation - Power BI | Microsoft Learn",
      "checked_by_hand": null
+    },
+    {
+     "name": "Get started with Microsoft data analytics",
+     "url": "https://learn.microsoft.com/en-us/training/paths/data-analytics-microsoft/",
+     "provider": "Microsoft Learn",
+     "kind": "course",
+     "cost": "free",
+     "checked": "2026-11-20",
+     "ok": true,
+     "page_title": "Get started with Microsoft data analytics",
+     "checked_by_hand": "2026-11-20"
     }
    ]
   },
@@ -727,7 +749,7 @@
      "cost": "free",
      "checked": "2026-10-13",
      "ok": true,
-     "page_title": "Learn C++ – Skill up with our free tutorials",
+     "page_title": "Learn C++ - Skill up with our free tutorials",
      "checked_by_hand": null
     }
    ]
@@ -838,6 +860,37 @@
      "ok": true,
      "page_title": "Developer Roadmaps - roadmap.sh",
      "checked_by_hand": null
+    }
+   ]
+  },
+  {
+   "skill": "Digital Marketing",
+   "aliases": [
+    "digital marketing strategy",
+    "online marketing"
+   ],
+   "resources": [
+    {
+     "name": "Digital Marketing Certification Course",
+     "url": "https://academy.hubspot.com/courses/digital-marketing",
+     "provider": "HubSpot Academy",
+     "kind": "course",
+     "cost": "free",
+     "checked": "2026-11-20",
+     "ok": true,
+     "page_title": "Digital Marketing Course",
+     "checked_by_hand": "2026-11-20"
+    },
+    {
+     "name": "SEO Starter Guide",
+     "url": "https://developers.google.com/search/docs/fundamentals/seo-starter-guide",
+     "provider": "Google Search Central",
+     "kind": "docs",
+     "cost": "free",
+     "checked": "2026-11-20",
+     "ok": true,
+     "page_title": "SEO Starter Guide",
+     "checked_by_hand": "2026-11-20"
     }
    ]
   }

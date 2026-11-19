@@ -31,7 +31,7 @@ def classify_seniority(title: str) -> str:
 
 
 # "8+ years of programming experience", "Minimum 2 years of experience", "3-5 yrs relevant experience"
-_YEARS = re.compile(r"(\d{1,2})\s*\+?\s*(?:(?:-|–|to)\s*\d{1,2}\s*)?(?:years?|yrs?)\b(?:\W+\w+){0,5}?\W+experience",
+_YEARS = re.compile(r"(\d{1,2})\s*\+?\s*(?:(?:-|-|to)\s*\d{1,2}\s*)?(?:years?|yrs?)\b(?:\W+\w+){0,5}?\W+experience",
                     re.I)
 SENIOR_YEARS = 5     # LinkedIn's "Mid-Senior level" is 5-10+ years (references.md "Years of experience")
 

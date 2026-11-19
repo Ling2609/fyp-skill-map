@@ -300,7 +300,7 @@ select:disabled { opacity: 0.6; cursor: not-allowed; }
   .map-scene .cinema .employer-person, .map-scene .cinema .employer-thread, .map-scene .cinema .student-tag { animation: none !important; opacity: 1 !important; transform: none; }
 }
 
-/* ── Dashboard tiles (17 Nov, DESIGN-SYSTEM.md §5–6) ──────────────────────────────────────────────────────────
+/* ── Dashboard tiles (17 Nov, DESIGN-SYSTEM.md §5-6) ──────────────────────────────────────────────────────────
    Laptop and tablet: exactly one screen; the two rows share the height and each chart takes what is left.
    Phones: one column, the page scrolls, the tab bar sits at the bottom. All motion is off under reduced motion. */
 @custom-variant dash-short (@media (min-width: 768px) and (max-height: 820px));
@@ -380,7 +380,7 @@ select:disabled { opacity: 0.6; cursor: not-allowed; }
 .dash-tile :is(button, a, input, select):focus-visible { box-shadow: 0 0 0 4px var(--color-accent-soft); }
 @media (prefers-reduced-motion: reduce) { .dash-fan { animation: none !important; } .dash-step { transition: none; } }
 
-/* 1024–1279 wide and short: the goal card's number shrinks a step so its key stays inside the card */
+/* 1024-1279 wide and short: the goal card's number shrinks a step so its key stays inside the card */
 @media (min-width: 768px) and (max-width: 1279px) and (max-height: 820px) {
   .dash-tile .font-display.text-\[92px\] { font-size: 60px; }
 }
@@ -464,7 +464,7 @@ select:disabled { opacity: 0.6; cursor: not-allowed; }
   .dash-bento, .dash-bento.no-goal { grid-template-rows: none; }
   .a-jobs [aria-pressed] { min-height: 120px; }
 }
-/* very short laptops (720–760 tall) keep one ready question; narrow laptops drop the modes line */
+/* very short laptops (720-760 tall) keep one ready question; narrow laptops drop the modes line */
 @media (min-width: 1024px) and (max-width: 1279px) { .a-ai > p { display: none; } }
 @media (min-width: 1024px) and (max-width: 1279px) and (max-height: 820px) { .a-want li { padding-block: 1px; } }
 /* 20 Nov (her review: blank in the AI card): the card takes the column's spare height and shows as many ready
@@ -620,8 +620,8 @@ select:disabled { opacity: 0.6; cursor: not-allowed; }
 .head-cta:hover { background: #2a5fd0; } .head-cta:active { transform: translateY(3px); box-shadow: 0 0 0 var(--color-accent-strong); }
 .head-cta svg { width: 16px; height: 16px; }
 
-/* one page width for every screen (19 Nov, her review: pages were 40–1400 while the Dashboard and Job Matches are
-   124–1316): a page with the glass header is centred at 1192px of content (1256 minus its 32px sides), the same
+/* one page width for every screen (19 Nov, her review: pages were 40-1400 while the Dashboard and Job Matches are
+   124-1316): a page with the glass header is centred at 1192px of content (1256 minus its 32px sides), the same
    edges as the top bar */
 #main > :has(> .page-glass) { width: 100%; max-width: 1256px; margin-inline: auto; }
 

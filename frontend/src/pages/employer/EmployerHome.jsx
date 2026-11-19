@@ -60,9 +60,9 @@ function SpecialBadge({ children }) {
 function DecideCell({ j }) {
   if (j.status !== 'open') {
     const why = CLOSE_REASONS.find(([k]) => k === j.close_reason)?.[1]
-    return <p className="text-slate-600">{j.closed_at ? fmtDate(j.closed_at) : '–'}{why && <span className="block text-xs text-slate-500">{why}</span>}</p>
+    return <p className="text-slate-600">{j.closed_at ? fmtDate(j.closed_at) : '-'}{why && <span className="block text-xs text-slate-500">{why}</span>}</p>
   }
-  if (!j.decide_by) return <span className="text-slate-500">–</span>
+  if (!j.decide_by) return <span className="text-slate-500">-</span>
   const days = daysUntil(j.decide_by)
   const late = j.past_date && j.waiting
   return (

@@ -5,8 +5,8 @@
 export const FIT_BANDS = [
   { key: 'none', label: 'None', tone: 'bg-neutral', test: (s) => s === 0 },
   { key: 'under', label: 'Under 25%', tone: 'bg-fit1', test: (s) => s > 0 && s < 0.25 },
-  { key: 'quarter', label: '25–49%', tone: 'bg-fit2', test: (s) => s >= 0.25 && s < 0.5 },
-  { key: 'mid', label: '50–74%', tone: 'bg-fit3', test: (s) => s >= 0.5 && s < 0.75 },
+  { key: 'quarter', label: '25-49%', tone: 'bg-fit2', test: (s) => s >= 0.25 && s < 0.5 },
+  { key: 'mid', label: '50-74%', tone: 'bg-fit3', test: (s) => s >= 0.5 && s < 0.75 },
   { key: 'top', label: '75% or more', tone: 'bg-fit4', test: (s) => s >= 0.75 },
 ]
 

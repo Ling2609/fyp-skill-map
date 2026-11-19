@@ -68,7 +68,7 @@ export function Modal({ title, onClose, dirty = false, wide = false, size, child
     }
   }, [])
   return (
-    <dialog ref={dialogRef} aria-label={title} className={`m-auto w-[calc(100%_-_2rem)] overflow-visible bg-transparent ${size === 'form' ? 'max-w-[46rem]' : wide ? 'max-w-2xl' : 'max-w-lg'} backdrop:bg-slate-900/30`}
+    <dialog ref={dialogRef} aria-label={title} className={`m-auto w-[calc(100%-2rem)] overflow-visible bg-transparent ${size === 'form' ? 'max-w-184' : wide ? 'max-w-2xl' : 'max-w-lg'} backdrop:bg-slate-900/30`}
       onCancel={event => { event.preventDefault(); tryClose() }}
       onMouseDown={event => { if (event.target === event.currentTarget) tryClose() }}>
       <div className="max-h-[90dvh] overflow-y-auto rounded-2xl bg-white shadow-xl">

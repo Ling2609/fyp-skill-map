@@ -60,7 +60,7 @@ def role_of(title: str) -> str:
     """'Senior Software Engineer (Java) - KL' -> 'Software Engineer'. Case is kept so
     is_ict_title can still tell 'IT' from 'it'; compare roles with .lower()."""
     t = re.sub(r"\(.*?\)|\[.*?\]", " ", title or "")            # drop bracketed details
-    t = re.split(r"\s[-–|@/]\s|,|\sfor\s|\sat\s", t)[0]   # keep the part before " - ", ",", " for "...
+    t = re.split(r"\s[--|@/]\s|,|\sfor\s|\sat\s", t)[0]   # keep the part before " - ", ",", " for "...
     t = NOT_ROLE_WORDS.sub(" ", t)
     t = re.sub(r"[^\w\s/+#.]", " ", t)                           # stray punctuation, keep UI/UX, C++, C#, .NET
     for pattern, spelling in SPELLINGS:

@@ -88,7 +88,7 @@ export default function MyPlans() {
         setResult(null)
         setAttempt(n => n + 1)
       } else {
-        setRemoveError('Couldn’t remove the plan. Try again.')
+        setRemoveError("Couldn't remove the plan. Try again.")
       }
     } finally {
       setRemoving(null)
@@ -96,7 +96,7 @@ export default function MyPlans() {
   }
 
   return (
-    <div className="flex h-[calc(100dvh-var(--bar-h))] flex-col max-sm:h-[calc(100dvh_-_var(--bar-h)_-_6rem)]">
+    <div className="flex h-[calc(100dvh-var(--bar-h))] flex-col max-sm:h-[calc(100dvh-var(--bar-h)-6rem)]">
       {confirmation}
       <PageHeader>
         <div className="flex flex-wrap items-start justify-between gap-3 pb-4 pt-1">
@@ -170,59 +170,71 @@ export default function MyPlans() {
                         </time>
                       )}
                     </div>
-                    <div className={`ml-auto flex flex-wrap items-center justify-end gap-2 ${open ? 'max-sm:w-full' : ''}`}>
-                      {open && <>
-                        <button type="button" disabled={!!downloading} onClick={() => download(plan)}
-                          className="inline-flex min-h-11 items-center justify-center gap-2 rounded-[10px] bg-accent-strong px-3 text-[13px] font-bold text-white transition-colors hover:bg-accent active:bg-blue-950 disabled:opacity-60 sm:px-3.5">
-                          {downloading === plan ? <Busy>Making PDF…</Busy> : (
-                            <>
-                              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
-                                <path d="M12 3v12m-5-5 5 5 5-5M5 16v4h14v-4" strokeLinecap="round" strokeLinejoin="round" />
-                              </svg>
-                              Download PDF
-                            </>
-                          )}
-                        </button>
-                        <details className="relative" onBlur={event => {
-                          if (event.relatedTarget && !event.currentTarget.contains(event.relatedTarget)) event.currentTarget.open = false
-                        }} onKeyDown={event => {
-                          if (event.key !== 'Escape' || !event.currentTarget.open) return
-                          event.stopPropagation()
-                          event.currentTarget.open = false
-                          event.currentTarget.querySelector('summary').focus()
-                        }}>
-                          <summary className="acad-btn edit min-h-11 cursor-pointer list-none gap-1.5 px-3 sm:px-3.5 [&::-webkit-details-marker]:hidden">
-                            More actions
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-                              <path d="m6 9 6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
-                            </svg>
-                          </summary>
-                          <div className="absolute right-0 z-10 mt-1 w-48 rounded-xl border border-line bg-white p-1 shadow-lg">
-                            <Link to="/chatbot" state={{ from: 'My Plans', openSession: plan.session_id }}
-                              className="flex min-h-11 items-center rounded-lg px-3 text-sm font-medium text-ink hover:bg-well">
-                              Open conversation
-                            </Link>
-                            <button type="button" disabled={!!removing} onClick={() => removePlan(plan)}
-                              className="flex min-h-11 w-full items-center rounded-lg border-t border-line px-3 text-left text-sm font-medium text-rose-800 hover:bg-rose-50 disabled:opacity-60">
-                              {removing === plan ? <Busy>Removing…</Busy> : 'Remove from My Plans'}
-                            </button>
-                          </div>
-                        </details>
-                      </>}
+                    <div className="ml-auto flex flex-wrap items-center justify-end gap-1">
                       <button type="button" aria-expanded={open} aria-controls={contentId}
                         onClick={() => setExpanded(open ? null : id)}
-                        className={`inline-flex min-h-11 shrink-0 items-center gap-1 whitespace-nowrap rounded-lg px-2 text-xs font-medium text-blue-700 hover:bg-well ${open ? '' : 'after:absolute after:inset-0 after:rounded-2xl'}`}>
+                        className="inline-flex min-h-11 shrink-0 items-center gap-1 whitespace-nowrap rounded-lg px-2 text-xs font-medium text-blue-700 hover:bg-well after:absolute after:inset-0 after:cursor-pointer after:rounded-2xl">
                         {open ? 'Hide' : 'Details'}
                         <svg className={open ? 'rotate-180' : ''} width="14" height="14" viewBox="0 0 24 24"
                           fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
                           <path d="m6 9 6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
                         </svg>
                       </button>
+                      <details className="relative z-10" onBlur={event => {
+                        if (event.relatedTarget && !event.currentTarget.contains(event.relatedTarget)) event.currentTarget.open = false
+                      }} onKeyDown={event => {
+                        if (event.key !== 'Escape' || !event.currentTarget.open) return
+                        event.stopPropagation()
+                        event.currentTarget.open = false
+                        event.currentTarget.querySelector('summary').focus()
+                      }}>
+                        <summary aria-label={removing === plan ? 'Removing plan' : 'More actions'}
+                          title="More actions"
+                          className="grid size-11 cursor-pointer list-none place-items-center rounded-lg text-blue-700 hover:bg-well open:bg-well [&::-webkit-details-marker]:hidden">
+                          {removing === plan ? <Busy> </Busy> : (
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                              <circle cx="5" cy="12" r="1.75" /><circle cx="12" cy="12" r="1.75" /><circle cx="19" cy="12" r="1.75" />
+                            </svg>
+                          )}
+                        </summary>
+                        <div className="absolute right-0 z-10 mt-1 w-56 max-w-[calc(100vw-3rem)] rounded-xl border border-line bg-white p-1 shadow-lg">
+                          <button type="button" disabled={!!downloading} aria-label={downloading === plan ? 'Making PDF…' : 'Download PDF'} onClick={() => download(plan)}
+                            className="flex min-h-11 w-full items-center gap-2 rounded-lg px-3 text-left text-sm font-medium text-ink hover:bg-well disabled:opacity-60">
+                            {downloading === plan ? <Busy>Making PDF…</Busy> : (
+                              <>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
+                                  <path d="M12 3v12m-5-5 5 5 5-5M5 16v4h14v-4" strokeLinecap="round" strokeLinejoin="round" />
+                                </svg>
+                                Download PDF
+                              </>
+                            )}
+                          </button>
+                          <Link to="/chatbot" state={{ from: 'My Plans', openSession: plan.session_id }}
+                            className="flex min-h-11 items-center gap-2 rounded-lg px-3 text-sm font-medium text-ink hover:bg-well">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" aria-hidden="true">
+                              <path d="M5 5h14v11h-7l-4 4v-4H5zM8 9h8m-8 3h5" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
+                            Open conversation
+                          </Link>
+                          <button type="button" disabled={!!removing} onClick={event => {
+                            const menu = event.currentTarget.closest('details')
+                            menu.open = false
+                            menu.querySelector('summary').focus()
+                            removePlan(plan)
+                          }}
+                            className="flex min-h-11 w-full items-center gap-2 rounded-lg border-t border-line px-3 text-left text-sm font-medium whitespace-nowrap text-rose-800 hover:bg-rose-50 disabled:opacity-60">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" aria-hidden="true">
+                              <path d="M4 7h16M9 7V4h6v3m3 0-1 13H7L6 7m4 4v5m4-5v5" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
+                            Remove from My Plans
+                          </button>
+                        </div>
+                      </details>
                     </div>
-                    {open && downloadError === plan && <p role="alert" className="basis-full text-right text-sm text-rose-800">Couldn’t make the PDF. Try again.</p>}
+                    {downloadError === plan && <p role="alert" className="basis-full text-right text-sm text-rose-800">Couldn’t make the PDF. Try again.</p>}
                   </div>
                   <div id={contentId} hidden={!open} className="min-w-0 border-t border-line px-4 py-4 sm:px-5">
-                    {open && <ChatMarkdown>{plan.content}</ChatMarkdown>}
+                    {open && <ChatMarkdown>{plan.content.replace(/^#{1,4}[ \t]*Learning plan:[^\r\n]*\r?\n(?:[ \t]*\r?\n)*/i, '')}</ChatMarkdown>}
                   </div>
                 </li>
               )

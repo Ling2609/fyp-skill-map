@@ -166,7 +166,7 @@ function MatchPanel({ fit, you }) {
           ))}
           {fit.missing.map(name => (
             <li key={name} className="py-2 flex items-start gap-2.5">
-              <span className="text-slate-300 font-bold" aria-hidden="true">–</span>
+              <span className="text-slate-300 font-bold" aria-hidden="true">-</span>
               <p className="text-sm text-slate-500">{skillName(name)} <span className="text-xs">· not in {whose} record yet</span></p>
             </li>
           ))}
@@ -215,7 +215,7 @@ export function ApplicantCards({ s, fit, withFit = true, you, aside }) {
               <div className="py-2">
                 <div className="flex items-baseline justify-between gap-4">
                   <p className="text-sm font-medium text-slate-900 min-w-0">{e.role} <span className="font-normal text-slate-600">· {e.organisation}</span></p>
-                  <span className="shrink-0 text-xs text-slate-500 whitespace-nowrap">{monthLabel(e.start)} – {e.end ? monthLabel(e.end) : 'now'}</span>
+                  <span className="shrink-0 text-xs text-slate-500 whitespace-nowrap">{monthLabel(e.start)} - {e.end ? monthLabel(e.end) : 'now'}</span>
                 </div>
                 <p className="text-xs leading-5 text-slate-500">{e.category_label}{e.description && ` · ${e.description}`}</p>
                 <Skills skills={e.skills} relevant={e.relevant} />
