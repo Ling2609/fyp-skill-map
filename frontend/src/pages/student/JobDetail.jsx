@@ -482,31 +482,42 @@ export default function JobDetail() {
               <h2 id="jd-gap" className="jd-tt"><i aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="9" /><circle cx="12" cy="12" r="5" /><circle cx="12" cy="12" r="1.2" fill="currentColor" /></svg></i>Skill gap</h2>
             </div>
             <div className="jd-tbody" tabIndex={0} aria-label="Skill gap details">
-              <div className="jd-sec">
-                <h3 className="jd-sh">{BasisWord} skills to learn <span className="c m">{gapRows.length}</span></h3>
+              <div className={`jd-gap-group ${gapRows.length ? 'jd-gap-missing' : 'jd-gap-complete'}`}>
+                <div className="jd-gap-group-head">
+                  <span className="jd-gap-symbol" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><circle cx="12" cy="12" r="9" /><path d={gapRows.length ? 'M8 12h8' : 'm8 12 3 3 5-6'} /></svg></span>
+                  <div><h3 className="jd-sh">To learn <span className="c">{gapRows.length}</span></h3><p className="jd-gap-caption">{BasisWord} for this job</p></div>
+                </div>
                 {gapRows.length === 0 ? (
-                  <p className="text-sm text-muted m-0">None. You have every {basisWord} skill this job lists.</p>
+                  <p className="jd-gap-empty">You have every {basisWord} skill this job lists.</p>
                 ) : (
                   <ul className="jd-learn">
                     {gapRows.map((item, idx) => (
                       <li key={idx}>
-                        {/* why it's asked for, in the ad's own words (objective 3: an explained gap) */}
                         <div className="min-w-0">
                           <b>{skillName(item.job_skill)}</b>
-                          {item.ad_quote && <small title={item.ad_quote}>From the ad: “{item.ad_quote}”</small>}
+                          {item.ad_quote && <details className="jd-ad-evidence"><summary>Ad evidence<svg aria-hidden="true" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6" /></svg></summary><p>“{item.ad_quote}”</p></details>}
                         </div>
-                        <button type="button" onClick={() => openChat(item.job_skill)} className="jd-lbtn">Learn<span className="sr-only"> {skillName(item.job_skill)} with the AI Assistant</span></button>
+                        <button type="button" onClick={() => openChat(item.job_skill)} className="jd-lbtn">Learn<span className="sr-only"> {skillName(item.job_skill)} with the AI Assistant</span><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M5 12h14m-6-6 6 6-6 6" /></svg></button>
                       </li>
                     ))}
                   </ul>
                 )}
               </div>
 
-              <div className="jd-sec">
-                <h3 className="jd-sh">{BasisWord} skills you have <span className="c h">{matchedRows.length}</span><span className="of">of {totalRequired}</span></h3>
+              <div className="jd-gap-group jd-gap-have">
+                <div className="jd-gap-group-head">
+                  <span className="jd-gap-symbol" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><circle cx="12" cy="12" r="9" /><path d="m8 12 3 3 5-6" /></svg></span>
+                  <div><h3 className="jd-sh">You have <span className="c">{matchedRows.length}</span></h3><p className="jd-gap-caption">Of {totalRequired} {basisWord} skills</p></div>
+                </div>
                 {matchedRows.length === 0 ? (
-                  <p className="text-sm text-muted m-0">None of this job's skills match your record yet.</p>
-                ) : sourceGroups.map(([source, group]) => (
+                  <p className="jd-gap-empty">No matches in your profile yet.</p>
+                ) : <>
+                  <p className="jd-chips jd-matched-overview">
+                    {matchedRows.map((item, idx) => <span key={idx} className="jd-chip"><svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><path d="m5 12 4 4L19 6" /></svg>{skillName(item.job_skill)}</span>)}
+                  </p>
+                  <details className="jd-profile-evidence">
+                    <summary>Profile evidence <span>{sourceGroups.length} source{sourceGroups.length === 1 ? '' : 's'}</span><svg aria-hidden="true" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6" /></svg></summary>
+                    {sourceGroups.map(([source, group]) => (
                   <div key={source} className="jd-src">
                     <p className="jd-from">
                       <b>{group.label}</b>
@@ -525,11 +536,13 @@ export default function JobDetail() {
                       ))}
                     </p>
                   </div>
-                ))}
+                    ))}
+                  </details>
+                </>}
               </div>
 
               {(niceToHave.length > 0 || gainInRole.length > 0 || (gap?.soft_skills || []).length > 0) && (
-                <div className="jd-sec">
+                <div className="jd-gap-group jd-gap-other">
                   {[[niceToHave, 'Nice to have', 'not counted in the score'], [gainInRole, "You'll gain in this role", 'not expected before you start']]
                     .filter(([list]) => list.length > 0).map(([list, title, note]) => (
                       <div key={title} className="mb-3">

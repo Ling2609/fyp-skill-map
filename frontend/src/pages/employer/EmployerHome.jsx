@@ -90,7 +90,7 @@ const CLOSE_REASONS = [
   ['filled_other', 'Filled another way', 'You hired someone who did not apply here'],
   ['not_filling', 'Not filling now', 'On hold or cancelled'],
 ]
-function Dialog({ title, busy, onCancel, children, action, onAction, disabled, wide = false, fit = false }) {
+function Dialog({ title, busy, onCancel, children, action, onAction, disabled, wide = false, fit = false, danger = false }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/30" onMouseDown={() => { if (!busy) onCancel() }}>
       <div role="dialog" aria-modal="true" aria-labelledby="dlg-title" onMouseDown={e => e.stopPropagation()} className={`bg-white rounded-2xl shadow-xl max-h-[calc(100dvh-2rem)] overflow-y-auto ${fit ? 'w-full sm:w-fit max-w-2xl' : wide ? 'w-full max-w-2xl' : 'w-full max-w-xl'}`}>
@@ -100,7 +100,7 @@ function Dialog({ title, busy, onCancel, children, action, onAction, disabled, w
         </div>
         <div className="flex flex-wrap justify-end gap-2 px-5 py-4 sm:px-7 bg-slate-50 border-t border-slate-200 rounded-b-2xl">
           <button type="button" onClick={onCancel} disabled={busy} className="min-h-11 max-sm:flex-1 px-4 py-2 text-sm font-medium rounded-lg border border-slate-200 bg-white text-slate-700 hover:bg-slate-50">Cancel</button>
-          <button type="button" onClick={onAction} disabled={busy || disabled} className="min-h-11 max-sm:flex-1 px-4 py-2 text-sm font-medium rounded-lg bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-40">
+          <button type="button" onClick={onAction} disabled={busy || disabled} className={`min-h-11 max-sm:flex-1 px-4 py-2 text-sm font-medium rounded-lg text-white disabled:opacity-40 disabled:cursor-not-allowed focus-visible:outline-2 focus-visible:outline-offset-2 ${danger ? 'bg-rose-700 hover:bg-rose-800 focus-visible:outline-rose-700' : 'bg-blue-600 hover:bg-blue-700 focus-visible:outline-blue-600'}`}>
             {busy ? <Busy>Saving…</Busy> : action}
           </button>
         </div>
@@ -113,7 +113,7 @@ function CloseDialog({ job, busy, onCancel, onClose }) {
   const [reason, setReason] = useState('')
   const n = job.waiting
   return (
-    <Dialog title={`Why are you closing "${job.title}"?`} busy={busy} onCancel={onCancel} action="Close job"
+    <Dialog danger title={`Why are you closing "${job.title}"?`} busy={busy} onCancel={onCancel} action="Close job"
       onAction={() => onClose(reason)} disabled={!reason}>
       <div role="radiogroup" aria-label="Reason" className="mt-3 grid gap-2">
         {CLOSE_REASONS.map(([key, label, hint]) => (
@@ -123,7 +123,10 @@ function CloseDialog({ job, busy, onCancel, onClose }) {
           </label>
         ))}
       </div>
-      <p className="text-sm text-slate-600 mt-3">{n > 0 ? `The ${n} applicant${n === 1 ? '' : 's'} still waiting will see "Not selected" with this reason.` : 'Students will no longer see this job.'}</p>
+      <div role="note" className="mt-4 flex items-start gap-2.5 rounded-xl border border-amber-200 bg-amber-50 px-3.5 py-3 text-sm leading-relaxed text-amber-900">
+        <svg aria-hidden="true" className="mt-0.5 h-5 w-5 shrink-0 text-amber-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="m10.3 3.9-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.7-3.1l-8-14a2 2 0 0 0-3.4 0Z" /><path d="M12 9v4m0 4h.01" /></svg>
+        <p>{n > 0 ? `The ${n} applicant${n === 1 ? '' : 's'} still waiting will see "Not selected" with this reason.` : 'Students will no longer see this job.'}</p>
+      </div>
     </Dialog>
   )
 }

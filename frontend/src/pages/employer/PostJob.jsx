@@ -100,7 +100,7 @@ function OtherRequirements({ reqs, setReqs }) {
               onChange={e => setReqs(r => ({ ...r, min_qualification: e.target.value }))} />
           )}
         </div>
-        <div className="flex-[2] basis-64">
+        <div className="flex-2 basis-64">
           <label htmlFor="pj-field" className={label}>Field of study</label>
           <input id="pj-field" value={reqs.study_field} maxLength={200} placeholder="e.g. Computer Science, IT or related"
             onChange={e => setReqs(r => ({ ...r, study_field: e.target.value }))} className={field} />
@@ -259,7 +259,7 @@ export default function PostJob() {
   const byLevel = useMemo(() => Object.fromEntries(BOXES.map(b => [b.level, skills.filter(s => s.level === b.level)])), [skills])
 
   return (
-    <div className="flex flex-col h-[calc(100dvh-var(--bar-h))] max-sm:h-[calc(100dvh_-_var(--bar-h)_-_6rem)]">
+    <div className="flex flex-col h-[calc(100dvh-var(--bar-h))] max-sm:h-[calc(100vh-var(--bar-h)-6rem)]">
       <PageHeader>
         <div className="pb-5 flex flex-wrap items-center gap-x-6 gap-y-3">
           <div className="min-w-0 flex-1 basis-96">
@@ -343,11 +343,19 @@ export default function PostJob() {
           )}
           {!read && (
             <details className="post-tips" open={tipsOpen} onToggle={toggleTips}>
-              <summary><span className="post-tips-title">Tips for finding the right graduates</span></summary>
+              <summary>
+                <span className="post-tips-title">Tips for finding the right graduates</span>
+                <span className="post-tips-toggle" aria-hidden="true">
+                  <span className="post-tips-hide">Hide</span><span className="post-tips-show">Show</span>
+                  <svg className="post-tips-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6" /></svg>
+                </span>
+              </summary>
               <ul>
                 <li>Name each skill you need, e.g. "SQL", "REST APIs". SkillMap uses these to find graduates who have them.</li>
                 <li>Say which skills are a must and which are nice to have.</li>
                 <li>Skills you will teach on the job, e.g. "you will learn Docker", are not held against anyone.</li>
+                <li>Describe two or three day-to-day tasks so graduates know what the role involves.</li>
+                <li>Say whether coursework, personal projects or internships count as relevant experience.</li>
               </ul>
             </details>
           )}

@@ -761,8 +761,6 @@ select:disabled { opacity: 0.6; cursor: not-allowed; }
 .post-tips summary { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 8px; font-weight: 700; font-size: 13px; color: var(--color-accent-strong); cursor: pointer; list-style: none; }
 .post-tips summary::-webkit-details-marker { display: none; }
 .post-tips summary::before { content: "💡"; }
-.post-tips summary::after { content: "Hide"; margin-left: auto; font-weight: 600; font-size: 12px; text-decoration: underline; text-underline-offset: 3px; }
-.post-tips:not([open]) summary::after { content: "Show ▸"; }
 .post-tips:not([open]) { align-self: stretch; padding-block: 9px; }
 .post-tips[open] summary { margin-bottom: 4px; }
 .post-tips ul { margin: 0; padding-left: 18px; list-style: disc; font-size: 13px; color: var(--color-ink-soft); }
@@ -1489,23 +1487,10 @@ select:disabled { opacity: 0.6; cursor: not-allowed; }
   select:not([multiple]):not([size]) option::checkmark { color: var(--color-accent); }
 }
 
-.post-tips summary::after {
-  content: "Hide";
-  padding-right: 20px;
-  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23204795' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 15 6-6 6 6'/%3E%3C/svg%3E") no-repeat right center / 16px 16px;
-  white-space: nowrap;
-}
-.post-tips:not([open]) summary::after {
-  content: "Show";
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23204795' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
-}
-
 /* Reserve space for the toggle rather than squeezing it against the title. */
 .post-tips { min-width: 0; }
 .post-tips-title { min-width: 0; line-height: 1.45; overflow-wrap: anywhere; }
 .post-tips summary::before { align-self: start; }
-.post-tips summary::after { min-width: 58px; box-sizing: border-box; justify-self: end; margin-left: 4px; }
-
 .job-status-notice {
   display: inline-flex;
   align-items: baseline;
@@ -1523,4 +1508,82 @@ select:disabled { opacity: 0.6; cursor: not-allowed; }
   border-radius: 50%;
   background: #e9a20a;
   box-shadow: 0 0 0 3px #fff0ca;
+}
+
+/* The label and chevron form one compact toggle; the title owns the flexible column. */
+.post-tips-toggle { display: inline-flex; align-items: center; justify-content: flex-end; gap: 6px; white-space: nowrap; font-size: 12px; font-weight: 600; line-height: 20px; }
+.post-tips-chevron { display: block; flex: none; width: 16px; height: 16px; }
+.post-tips[open] .post-tips-chevron { transform: rotate(180deg); }
+.post-tips[open] .post-tips-show, .post-tips:not([open]) .post-tips-hide { display: none; }
+
+/* Quiet section markers retain the dashboard's established card system. */
+.emp-card-title { display: flex; align-items: center; gap: 9px; min-width: 0; }
+.emp-card-icon { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; flex: none; border-radius: 9px; background: #edf3ff; color: #2557c4; }
+.emp-card-icon-attention { background: #fff0d7; color: #986100; }
+.emp-card-icon-fit, .emp-card-icon-record { background: #e4f5f0; color: #087c70; }
+.emp-card-title > svg { flex: none; }
+
+@media (max-width: 639px) {
+  .employer-dashboard .emp-action-row { display: grid; grid-template-columns: 32px minmax(0, 1fr); align-items: start; gap: 10px; }
+  .employer-dashboard .emp-action-row > span:first-child { width: 32px; height: 32px; }
+  .employer-dashboard .emp-action-row > a:last-child { grid-column: 2; justify-self: start; min-height: 40px; display: inline-flex; align-items: center; }
+  .employer-dashboard .emp-person-row { display: grid; grid-template-columns: 32px minmax(0, 1fr) auto; gap: 8px; }
+  .employer-dashboard .emp-person-row > span:first-child { width: 32px; height: 32px; }
+  .employer-dashboard .emp-person-row > div { grid-column: 2 / -1; }
+  .employer-dashboard .emp-person-row > .w-40 { grid-column: 2 / -1; width: auto; }
+  .employer-dashboard .emp-person-row > .emp-match { grid-column: 2; justify-self: start; }
+  .employer-dashboard .emp-person-row > a:last-child,
+  .employer-dashboard .emp-person-row > span:last-child:not(.emp-match) { grid-column: 3; justify-self: end; width: auto; }
+}
+
+/* Skill gap groups: preserve the match colours independently of shared header chips. */
+.jd-gap .jd-gap-group { --gap-ink: #167565; --gap-border: #bee2d8; margin: 0 0 14px; padding: 16px; border: 1px solid var(--gap-border); border-radius: 16px; background: #eff9f5; }
+.jd-gap .jd-gap-missing { --gap-ink: #a43c20; --gap-border: #f1c8b8; background: #fff5ef; }
+.jd-gap .jd-gap-other { --gap-ink: #2557a7; --gap-border: #ccdcef; background: #f3f7ff; }
+.jd-gap-group-head { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+.jd-gap-symbol { display: grid; place-items: center; width: 34px; height: 34px; flex: none; border-radius: 11px; background: white; color: var(--gap-ink); border: 1px solid var(--gap-border); }
+.jd-gap-symbol svg { width: 20px; height: 20px; }
+.jd-gap-group .jd-sh { flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 0; font-size: 16px; color: var(--gap-ink); }
+.jd-gap-group .jd-sh .c { background: white; color: var(--gap-ink); border: 1px solid var(--gap-border); font-weight: 700; }
+.jd-gap-caption { margin: 2px 0 0; font-size: 12px; color: var(--color-muted); }
+.jd-gap-empty { margin: 0; font-size: 13px; color: var(--color-ink-soft); }
+.jd-gap .jd-learn li { align-items: start; gap: 12px; padding: 10px 0; border-color: #f1d9cf; }
+.jd-gap .jd-learn li:last-child { padding-bottom: 0; }
+.jd-gap .jd-learn b { font-size: 14px; overflow-wrap: anywhere; }
+.jd-gap .jd-learn b::before { display: none; }
+.jd-gap .jd-lbtn { gap: 5px; min-height: 36px; height: auto; background: white; border-color: #e7b9a7; color: #a43c20; }
+.jd-gap .jd-chips { display: flex; margin: 0; align-items: flex-start; }
+.jd-gap .jd-chip { min-height: 30px; height: auto; max-width: 100%; padding: 5px 9px; white-space: normal; overflow-wrap: anywhere; line-height: 1.4; background: #dff2eb; border-color: #aedbcb; color: #116452; }
+.jd-gap .jd-chip svg { flex: none; }
+.jd-gap .jd-chip.m { background: #fff4ed; color: #a43c20; border-color: #e7b9a7; }
+.jd-gap .jd-chip.n { background: white; border-color: #ccdcef; color: #405476; }
+.jd-gap .jd-chip .via { overflow-wrap: anywhere; }
+.jd-ad-evidence summary, .jd-profile-evidence > summary { display: flex; align-items: center; gap: 6px; list-style: none; cursor: pointer; font-size: 12px; font-weight: 600; }
+.jd-ad-evidence summary::-webkit-details-marker, .jd-profile-evidence > summary::-webkit-details-marker { display: none; }
+.jd-ad-evidence summary { margin-top: 4px; color: #8d4f38; }
+.jd-ad-evidence summary svg, .jd-profile-evidence > summary svg { width: 14px; height: 14px; flex: none; fill: none; stroke: currentColor; stroke-width: 2; }
+.jd-ad-evidence[open] > summary svg, .jd-profile-evidence[open] > summary svg { transform: rotate(180deg); }
+.jd-ad-evidence p { margin: 6px 0 0; font-size: 12px; line-height: 1.5; color: var(--color-ink-soft); overflow-wrap: anywhere; }
+.jd-profile-evidence { margin-top: 14px; padding-top: 10px; border-top: 1px solid #c8e5dc; }
+.jd-profile-evidence > summary { color: #116452; }
+.jd-profile-evidence > summary span { margin-left: auto; color: var(--color-muted); font-weight: 400; }
+.jd-profile-evidence .jd-src { margin-top: 8px; border-color: #c8e5dc; }
+.jd-profile-evidence .jd-from { line-height: 1.5; overflow-wrap: anywhere; }
+.jd-gap .jd-gap-other .jd-sh { margin-bottom: 8px; }
+.post-tips .post-writing-more { margin-top: 8px; border-top: 1px solid #c5d6f6; padding-top: 8px; }
+.post-tips .post-writing-more > summary { display: inline-flex; gap: 6px; font-size: 12px; font-weight: 600; }
+.post-tips .post-writing-more > summary::before { display: none; }
+.post-writing-more[open] > summary svg { transform: rotate(180deg); }
+@media (max-width: 639px) {
+ .jd-gap .jd-gap-group { padding: 12px; }
+ .jd-gap .jd-lbtn { min-height: 40px; }
+ .jd-gap .jd-tbody { padding-inline: 12px; }
+}
+
+@media (max-width: 639px) {
+ .employer-dashboard .page-glass-body { padding-left: 16px; }
+ .employer-dashboard .emp-header-intro { padding-left: 52px; }
+ .employer-dashboard .head-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); width: 100%; max-width: 100%; }
+ .employer-dashboard .page-glass .head-stats > div { min-width: 0; padding: 6px 8px; }
+ .employer-dashboard .head-stats dt { font-size: 11px; overflow-wrap: anywhere; }
 }

@@ -34,6 +34,18 @@ const SEE = 'shrink-0 text-sm font-medium text-blue-700 hover:underline'
 // beside its title in "Your open jobs" (the key) and in each graduate's row with the job's name, so the colour is never
 // the only cue. Not grey, blue, green or red: those already mean a status in the jobs' bars.
 const JOB_DOT = ['bg-violet-500', 'bg-amber-500', 'bg-cyan-500', 'bg-fuchsia-500', 'bg-lime-500', 'bg-orange-500']
+const CARD_ICONS = {
+  attention: 'M12 8v4m0 4h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z',
+  fit: 'M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2m20 0v-2a4 4 0 0 0-3-3.87M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8m8-7.87a4 4 0 0 1 0 7.75',
+  jobs: 'M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M4 7h16a1 1 0 0 1 1 1v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a1 1 0 0 1 1-1Zm-1 6a24 24 0 0 0 18 0m-9-2v4',
+  tips: 'm12 3 2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5L12 3Z',
+  record: 'm12 3 8 3v6c0 5-8 9-8 9s-8-4-8-9V6l8-3Zm-4 9 3 3 5-6',
+  activity: 'M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-5v5l3 2',
+}
+function CardIcon({ kind }) {
+  return <span className={`emp-card-icon emp-card-icon-${kind}`} aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d={CARD_ICONS[kind]} /></svg></span>
+}
+
 function JobDot({ cls }) {
   return <span aria-hidden="true" className={`w-2.5 h-2.5 rounded-full shrink-0 ${cls}`} />
 }
@@ -65,7 +77,7 @@ const GROUP = 'px-5 pt-3 pb-1.5 text-xs font-semibold text-slate-500 border-t bo
 const MARK = {
   late: ['bg-rose-100 text-rose-700', 'M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z'],
   wait: ['bg-amber-100 text-amber-700', 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z'],
-  tip: ['bg-slate-100 text-slate-600', 'M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z'],
+  tip: ['bg-blue-50 text-blue-700', 'M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z'],
 }
 function Mark({ kind }) {
   const [cls, d] = MARK[kind]
@@ -85,7 +97,7 @@ function Match({ have, total }) {
   const full = total > 0 && have === total
   return (
     <span title={`Has ${have} of the job's ${total} required skills`}
-      className={`text-xs font-semibold rounded-full px-2.5 py-1 whitespace-nowrap ${full ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-800'}`}>
+      className={`emp-match text-xs font-semibold rounded-full px-2.5 py-1 whitespace-nowrap ${full ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-800'}`}>
       {have} of {total} required
     </span>
   )
@@ -141,7 +153,7 @@ export default function EmployerDashboard() {
   }
   // 25 Oct: one row each, shared by the card and its "Show all" pop-up
   const reviewRow = a => (
-    <li key={a.id} className="px-5 py-3.5 flex items-center gap-3.5">
+    <li key={a.id} className="emp-person-row px-5 py-3.5 flex items-center gap-3.5">
       <Avatar name={a.name} />
       <div className="flex-1 min-w-0">
         <p className={`text-sm text-slate-900 truncate ${a.opened ? 'font-semibold' : 'font-bold'}`}>
@@ -157,7 +169,7 @@ export default function EmployerDashboard() {
   const manyJobs = new Set((data?.graduates || []).map(g => g.job_id)).size > 1
   const jobDot = (id) => JOB_DOT[Math.max(0, (data?.open_jobs || []).findIndex(j => j.id === id)) % JOB_DOT.length]
   const gradRow = g => (
-    <li key={g.student_id} className="px-5 py-3 flex items-center gap-3">
+    <li key={g.student_id} className="emp-person-row px-5 py-3 flex items-center gap-3">
       <Avatar name={g.name} small />
       <div className="flex-1 min-w-0">
         <Link to={`/employer/graduates/${g.student_id}?job=${g.job_id}`} className="block text-sm font-semibold text-slate-900 truncate hover:text-blue-700">{g.name}</Link>
@@ -209,13 +221,13 @@ export default function EmployerDashboard() {
   const gradJob = data && one(data.graduates.map(g => g.job_id))
 
   return (
-    <div className="flex flex-col h-[calc(100dvh-var(--bar-h))]">
+    <div className="employer-dashboard flex flex-col h-[calc(100dvh-var(--bar-h))] max-sm:h-[calc(100dvh_-_var(--bar-h)_-_6rem)]">
       {/* 12 Oct (her review): the same header as the student and admin dashboards (eyebrow, greeting, one line);
           Post a Job lives in the sidebar */}
       <PageHeader bell>
         {/* 20 Nov (her approved mock): the counts in the white strip, Post a job as the page's main action */}
         <div className="pb-5 pt-1 flex flex-wrap items-center gap-x-6 gap-y-3">
-          <div className="min-w-0 flex-1 basis-72">
+          <div className="emp-header-intro min-w-0 flex-1 basis-72">
             <p className="text-[11px] font-semibold text-blue-600 uppercase tracking-widest mb-2">Dashboard</p>
             <h1 className="text-2xl font-semibold tracking-tight text-slate-900">{greeting(user?.first_name)} 👋</h1>
             <p className="text-sm text-slate-500 mt-1">
@@ -233,7 +245,7 @@ export default function EmployerDashboard() {
 
       {error && <p role="alert" className="mx-8 mt-6 text-sm text-rose-700 bg-rose-50 border border-rose-200 rounded-lg px-4 py-2.5">{error}</p>}
       {!data && !error && (
-        <div className="flex-1 min-h-0 px-8 py-6 grid grid-cols-1 lg:grid-cols-[minmax(0,1.55fr)_minmax(0,1fr)] gap-5 content-start" aria-busy="true">
+        <div className="flex-1 min-h-0 px-4 sm:px-8 py-6 grid grid-cols-1 lg:grid-cols-[minmax(0,1.55fr)_minmax(0,1fr)] gap-5 content-start" aria-busy="true">
           <LoadingLabel>Loading your dashboard…</LoadingLabel>
           <CardSkeleton rows={5} />
           <div className="flex flex-col gap-5"><CardSkeleton rows={3} /><CardSkeleton rows={3} /></div>
@@ -241,7 +253,7 @@ export default function EmployerDashboard() {
       )}
 
       {noJobs && (
-        <div className="flex-1 px-8 py-6">
+        <div className="flex-1 px-4 sm:px-8 py-6">
           {/* 19 Oct (her review: "make it fit screen"): the card fills the width; the three steps sit side by side
               (they are a real sequence, so they keep their numbers) and stack on a narrow screen */}
           <div className="bg-white border border-slate-200 rounded-2xl p-8">
@@ -273,7 +285,7 @@ export default function EmployerDashboard() {
         // share the screen height exactly; a card with more than fits scrolls inside itself. Phones keep one column.
         // 21 Oct (her report: a row cut in half on a shorter screen): each row is at least its cards' headers plus one
         // whole row (FitList's minimum); the shares above apply when there is room, and a short screen scrolls instead
-        <div className="flex-1 min-h-0 overflow-y-auto px-8 py-6 lg:py-5">
+        <div className="flex-1 min-h-0 overflow-y-auto px-4 sm:px-8 py-6 lg:py-5">
           <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1.55fr)_minmax(0,1fr)] lg:grid-rows-[minmax(0,1fr)] lg:h-full gap-5 lg:gap-4">
             {/* 25 Oct (her review: crowded cards beside cards with large blank space): two columns whose cards are as
                 tall as their content. Later 25 Oct (her review: "still doesn't fit the screen"): on a laptop the columns
@@ -286,7 +298,7 @@ export default function EmployerDashboard() {
               {/* 21 Oct (her review): amber, like the admin's "Needs your action", while there is something to act on */}
               <section className={`${act ? card.replace('border-slate-200', 'border-[#f6d3c6] emp-needs') : card} ${data.to_review.length ? 'flex-1' : 'shrink-0'}`} aria-labelledby="review-h">
                 <div className={`px-5 py-4 flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 ${act ? 'bg-[#fff6f2]' : ''}`}>
-                  <h2 id="review-h" className={`text-base font-semibold ${act ? 'text-missing-strong' : 'text-slate-900'}`}>Needs your attention</h2>
+                  <h2 id="review-h" className={`emp-card-title text-base font-semibold ${act ? 'text-missing-strong' : 'text-slate-900'}`}><CardIcon kind="attention" />Needs your attention</h2>
                   {data.attention.review_days && <span className="text-xs text-slate-500">You view applications within {data.attention.review_days} day{data.attention.review_days === 1 ? '' : 's'} on average · students see this</span>}
                 </div>
                 {(data.attention.waiting_long.length > 0 || data.attention.quiet_jobs.length > 0 || data.attention.past_date?.length > 0) && (
@@ -295,21 +307,21 @@ export default function EmployerDashboard() {
                   <ul tabIndex={0} aria-label="Things that need you" className="shrink min-h-[64px] overflow-y-auto border-t border-slate-200 divide-y divide-slate-100">
                     {/* 14 Oct (transparency flow): the employer's own decision date passed with applicants still waiting */}
                     {(data.attention.past_date || []).map(p => (
-                      <li key={`d${p.job_id}`} className="px-5 py-3 flex items-center gap-3.5 bg-rose-50/60 text-sm text-slate-700">
+                      <li key={`d${p.job_id}`} className="emp-action-row px-5 py-3 flex items-center gap-3.5 bg-rose-50/60 text-sm text-slate-700">
                         <Mark kind="late" />
                         <span className="flex-1 min-w-0"><b className="font-semibold text-rose-900">{p.title}: your decision date has passed</b> with {p.waiting} applicant{p.waiting === 1 ? '' : 's'} waiting. New applications are paused; theirs stay pending until you decide.</span>
                         <Link to={`/employer/jobs/${p.job_id}`} className={ACTION}>Decide</Link>
                       </li>
                     ))}
                     {data.attention.waiting_long.map(w => (
-                      <li key={w.application_id} className="px-5 py-3 flex items-center gap-3.5 text-sm text-slate-700">
+                      <li key={w.application_id} className="emp-action-row px-5 py-3 flex items-center gap-3.5 text-sm text-slate-700">
                         <Mark kind="wait" />
                         <span className="flex-1 min-w-0"><b className="font-semibold text-amber-900">{w.name} has waited {w.days} days</b> for {w.job_title}. Students are told to look elsewhere after 14 days.</span>
                         <Link to={`/employer/applications/${w.application_id}`} className={ACTION}>Decide</Link>
                       </li>
                     ))}
                     {data.attention.quiet_jobs.map(q => (
-                      <li key={q.job_id} className="px-5 py-3 flex items-center gap-3.5 text-sm text-slate-700">
+                      <li key={q.job_id} className="emp-action-row px-5 py-3 flex items-center gap-3.5 text-sm text-slate-700">
                         <Mark kind="wait" />
                         <span className="flex-1 min-w-0"><b className="font-semibold text-slate-900">{q.title}</b> has no applicants after a week.{q.fit > 0 && ` ${q.fit} visible graduate${q.fit === 1 ? ' fits' : 's fit'} it.`}</span>
                         {q.fit > 0 && <Link to={`/employer/jobs/${q.job_id}`} className={ACTION}>Invite</Link>}
@@ -342,9 +354,9 @@ export default function EmployerDashboard() {
               </section>
               {/* Left, last: graduates who fit (visible students who haven't applied, best match first); fills the column */}
               {/* only a card with rows stretches; an empty one would just be a large blank card */}
-              <section className={`${card} flex-1`} aria-labelledby="fit-h">
+              <section className={`${card} shrink-0`} aria-labelledby="fit-h">
                 <div className="px-5 pt-4 pb-3">
-                  <h2 id="fit-h" className="text-base font-semibold text-slate-900">Graduates who fit your jobs</h2>
+                  <h2 id="fit-h" className="emp-card-title text-base font-semibold text-slate-900"><CardIcon kind="fit" />Graduates who fit your jobs</h2>
                   {/* 25 Oct (her review): "See all" on the description's line, as on View applicants */}
                   <div className="mt-1 flex items-baseline justify-between gap-3">
                     <p className="text-xs text-slate-500 min-w-0">Best match first, invited ones last. Invite several at once from the job's page.</p>
@@ -355,7 +367,7 @@ export default function EmployerDashboard() {
                 {data.graduates.length === 0 ? (
                   <p className="px-5 pb-4 text-sm text-slate-500">{data.open_jobs.length ? 'No visible graduate has at least half of your required skills yet. New profiles are matched as students add them.' : 'Open a job to see graduates who fit it.'}</p>
                 ) : (
-                  <FitList fill={lg} last onShown={setNGrads} className="border-t border-slate-200" items={data.graduates} renderItem={gradRow}
+                  <FitList max={lg ? 3 : 5} onShown={setNGrads} className="border-t border-slate-200" items={data.graduates} renderItem={gradRow}
                     after={<p className="border-t border-slate-100 px-5 py-3 text-xs text-slate-500">That's everyone who fits for now. New profiles are matched as students add them.</p>} />
                 )}
               </section>
@@ -365,7 +377,7 @@ export default function EmployerDashboard() {
               <section className={`${card} ${data.open_jobs.length ? 'flex-1' : 'shrink-0'}`} aria-labelledby="jobs-h">
                 <div className="px-5 pt-4 pb-3 lg:pb-2.5">
                   <div className="flex items-baseline justify-between gap-3">
-                    <h2 id="jobs-h" className="text-base font-semibold text-slate-900">Your open jobs</h2>
+                    <h2 id="jobs-h" className="emp-card-title text-base font-semibold text-slate-900"><CardIcon kind="jobs" />Your open jobs</h2>
                     <Link to="/employer/jobs" className={SEE}>{nJobs < data.open_jobs.length ? `See all ${data.open_jobs.length} →` : 'My Jobs'}</Link>
                   </div>
                   {anyApplicants && (
@@ -409,10 +421,10 @@ export default function EmployerDashboard() {
                   their own plain card; "Needs your attention" keeps only what the employer owes students */}
               {steps.length > 0 && (
                 <section className={`${card} shrink-0`} aria-labelledby="tips-h">
-                  <h2 id="tips-h" className="px-5 pt-4 pb-3 text-base font-semibold text-slate-900">What you can do now</h2>
+                  <h2 id="tips-h" className="emp-card-title px-5 pt-4 pb-3 text-base font-semibold text-slate-900"><CardIcon kind="tips" />What you can do now</h2>
                   <ul className="border-t border-slate-200 divide-y divide-slate-100">
                     {steps.map(s => (
-                      <li key={s.key} className="px-5 py-3 lg:py-2.5 flex items-center gap-3.5 text-sm text-slate-700">
+                      <li key={s.key} className="emp-action-row px-5 py-3 lg:py-2.5 flex items-center gap-3.5 text-sm text-slate-700">
                         <Mark kind="tip" />
                         <span className="flex-1 min-w-0">{s.text}</span>
                         {s.to.startsWith('#')
@@ -426,7 +438,7 @@ export default function EmployerDashboard() {
               {/* Row 2, right (20 Oct, mock-up E3): what students see about this employer (improvement #1), kept short */}
               <section className={`${card} shrink-0`} aria-labelledby="record-h">
                 <div className="px-5 py-4 lg:py-3">
-                  <h2 id="record-h" className="text-base font-semibold text-slate-900">
+                  <h2 id="record-h" className="emp-card-title text-base font-semibold text-slate-900"><CardIcon kind="record" />
                     Your reply record <InfoTip label="How the record is counted">{RECORD_TIP}</InfoTip>
                   </h2>
                   {data.record?.shown ? (
@@ -439,13 +451,13 @@ export default function EmployerDashboard() {
               </section>
               {/* Right, last: recent activity; fills the column */}
               {/* recent activity has no page of its own (her review), so it shows the newest that fit */}
-              <section className={`${card} flex-1`} aria-labelledby="activity-h">
+              <section className={`${card} ${data.activity.length ? 'flex-1' : 'shrink-0'}`} aria-labelledby="activity-h">
                 <div className="px-5 py-4 flex items-baseline justify-between gap-3">
-                  <h2 id="activity-h" className="text-base font-semibold text-slate-900">Recent activity</h2>
+                  <h2 id="activity-h" className="emp-card-title text-base font-semibold text-slate-900"><CardIcon kind="activity" />Recent activity</h2>
                   <span className="text-xs text-slate-500">Last 14 days</span>
                 </div>
                 {data.activity.length === 0
-                  ? <p className="px-5 pb-4 text-sm text-slate-500">Nothing in the last 14 days. Applications, your status changes and invitations will be listed here.</p>
+                  ? <p className="shrink-0 px-5 pb-4 text-sm text-slate-500">Nothing in the last 14 days. Applications, your status changes and invitations will be listed here.</p>
                   : (<>
                     {/* 25 Oct (her review: blank space under one activity): once every event shows, a quiet line right
                         under the last one says that's all, so the empty part of the card reads as finished */}
