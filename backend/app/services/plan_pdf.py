@@ -14,7 +14,7 @@ from xml.sax.saxutils import escape  # nosec B406
 
 from markdown_it import MarkdownIt
 from reportlab.lib import colors
-from reportlab.lib.enums import TA_LEFT
+from reportlab.lib.enums import TA_JUSTIFY, TA_LEFT
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.styles import ParagraphStyle
 from reportlab.lib.units import mm
@@ -41,6 +41,7 @@ S = {
     "head": ParagraphStyle("head", fontSize=9, leading=12, **{**_base, "fontName": "Helvetica-Bold"}),
     "note": ParagraphStyle("note", fontSize=8, leading=10.5, **_base),
 }
+S["prose"] = ParagraphStyle("prose", parent=S["body"], alignment=TA_JUSTIFY)
 
 
 class TickBox(Flowable):
@@ -110,7 +111,7 @@ def plan_flowables(markdown: str, width: float, skip_title: bool = True) -> list
     return _blocks(MD.parse(markdown or ""), width, skip_title)
 
 
-def _blocks(tokens, width, skip_title=False):
+def _blocks(tokens, width, skip_title=False, *, in_list=False):
     out, i = [], 0
     next_number = 1
     first_heading = True
@@ -129,7 +130,7 @@ def _blocks(tokens, width, skip_title=False):
             out.append(Preformatted(t.content.rstrip("\n"), S["code"], maxLineLength=88))
             i += 1
         elif t.type == "paragraph_open":
-            out.append(Paragraph(_inline(tokens[i + 1]), S["body"]))
+            out.append(Paragraph(_inline(tokens[i + 1]), S["body" if in_list else "prose"]))
             i += 3
         elif t.type in ("bullet_list_open", "ordered_list_open"):
             items, j = [], i + 1
@@ -139,7 +140,7 @@ def _blocks(tokens, width, skip_title=False):
                     kind = tokens[item_end].type
                     depth += (kind == "list_item_open") - (kind == "list_item_close")
                     item_end += 1
-                blocks = _blocks(tokens[j + 1:item_end - 1], max(1, width - 12))
+                blocks = _blocks(tokens[j + 1:item_end - 1], max(1, width - 12), in_list=True)
                 items.append(ListItem(blocks or [Paragraph("", S["body"])], leftIndent=12))
                 j = item_end
             ordered = t.type == "ordered_list_open"
