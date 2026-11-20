@@ -57,8 +57,9 @@ export default function SavedWorkshopProposals() {
     <>
       {confirmation}
       <PageHeader>
-        <div className="flex flex-wrap items-end justify-between gap-3 pb-4">
-          <div>
+        <div className="pb-4 flex flex-wrap items-end justify-between gap-x-6 gap-y-3">
+          <div className="min-w-0 flex-1">
+            <p className="text-[11px] font-semibold text-blue-600 uppercase tracking-widest mb-2">Admin · Workshop planner</p>
             <h1 className="text-2xl font-semibold tracking-tight text-ink">Saved proposals</h1>
             <p className="mt-1 text-sm text-muted">Reopen a workshop proposal to edit it or export a PDF.</p>
           </div>
