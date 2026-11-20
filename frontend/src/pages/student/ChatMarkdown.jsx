@@ -34,5 +34,5 @@ const MD = {
 }
 
 export default function ChatMarkdown({ children }) {
-  return <Markdown remarkPlugins={[remarkGfm]} components={MD}>{children}</Markdown>
+  return <div className="learning-plan-reading"><Markdown remarkPlugins={[remarkGfm]} components={MD}>{children}</Markdown></div>
 }

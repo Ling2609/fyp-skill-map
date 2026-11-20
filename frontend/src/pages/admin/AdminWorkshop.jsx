@@ -1,3 +1,4 @@
+import InfoTip from '../../components/InfoTip'
 import { useUnsavedChanges } from '../../components/useUnsavedChanges'
 import { useConfirmation } from '../../components/useConfirmation'
 import { useEffect, useState } from 'react'
@@ -192,6 +193,44 @@ function WorkshopEditor() {
       setBusy('')
     }
   }
+  const discard = async () => {
+    if (busy || !dirty) return
+    if (!await confirm({
+      title: savedId ? 'Discard unsaved changes?' : 'Discard this draft?',
+      message: savedId ? 'The proposal will return to its last saved version.' : 'This draft will be cleared.',
+      confirmLabel: savedId ? 'Discard changes' : 'Discard draft',
+      cancelLabel: 'Keep editing',
+      danger: true,
+    })) return
+
+    setBusy('discard')
+    setError('')
+    try {
+      let snapshot = savedSnapshot ? JSON.parse(savedSnapshot) : null
+      if (savedId && !snapshot) {
+        const { data } = await api.get(`/admin/workshop/proposals/${savedId}`)
+        snapshot = { skills: data.skills || [], proposal: data.proposal }
+      }
+      if (savedId && snapshot) {
+        setP(snapshot.proposal)
+        setSkills(snapshot.skills)
+        setSavedSnapshot(JSON.stringify(snapshot))
+      } else {
+        setP(null)
+        setSavedId(null)
+        setSavedSnapshot(null)
+      }
+      setRecovered(false)
+      if (recoveryKey) {
+        try { sessionStorage.removeItem(recoveryKey) } catch { /* storage blocked */ }
+      }
+    } catch (err) {
+      setError(errText(err, "Couldn't restore the saved proposal. Try again."))
+    } finally {
+      setBusy('')
+    }
+  }
+
   const toggle = s => setSkills(x => x.includes(s) ? x.filter(y => y !== s) : x.length < 4 ? [...x, s] : x)
   const set = (k, v) => setP(x => ({ ...x, [k]: v }))
   const draft = async () => {
@@ -263,7 +302,7 @@ function WorkshopEditor() {
           <div className="ws-saved-panel">
             {Array.isArray(saved) && saved.length > 0 ? (
               <>
-                <p className="px-4 pt-3 pb-1 text-xs font-semibold text-muted">Recently updated</p>
+                <p className="border-b border-line bg-well px-4 py-2 text-[11px] font-semibold uppercase tracking-widest text-muted">Recently updated</p>
                 <ul className="ws-saved-list" aria-label="Recently updated proposals">
                   {saved.slice(0, RECENT_PROPOSAL_LIMIT).map(item => (
                     <li key={item.id}>
@@ -285,7 +324,6 @@ function WorkshopEditor() {
         </div>
       </PageHeader>
       {saved === false && <p role="status" className="mx-4 mt-2 text-sm text-ink-soft sm:mx-8">{SAVING_UNAVAILABLE}. You can still draft and export a PDF, or retry saving.</p>}
-      {recovered && <p role="status" className="mx-4 mt-2 text-sm text-ink-soft sm:mx-8">Restored unsaved edits from this tab.</p>}
       {error && <p role="alert" className="mx-4 mt-2 text-sm text-rose-700 sm:mx-8">{error}</p>}
 
       <div className="ws-grid flex-1 min-h-0 px-4 sm:px-8 pt-3.5 pb-4">
@@ -345,14 +383,32 @@ function WorkshopEditor() {
               {openState === 'failed' && <Link to="/admin/workshop/proposals" className="ws-add">Back to saved proposals</Link>}
             </div>
           ) : (<>
-            <div className="ws-bar">
-              <h2 className="m-0 text-sm font-semibold text-ink">Proposal editor</h2>
-              <div className="flex flex-wrap items-center gap-2">
-                <p role="status" className={`ws-save-state ${savedId && !dirty ? 'is-saved' : ''}`}>
-                  <span className="ws-save-dot" aria-hidden="true" />
-                  {busy === 'save' ? 'Saving…' : savedId ? dirty ? 'Unsaved changes' : 'All changes saved' : 'Unsaved draft'}
+            <div className="flex shrink-0 flex-wrap items-center justify-between gap-x-3 gap-y-2 border-b border-line px-4 py-3">
+              <div className="flex min-h-10 items-center gap-1">
+                <h2 className="m-0 text-[15px] font-semibold normal-case tracking-normal text-ink">Proposal editor</h2>
+                <InfoTip label="About saving and exporting">
+                  Export PDF uses the current editor version, including unsaved changes. Save changes to update Saved proposals.
+                </InfoTip>
+              </div>
+              <div className="ml-auto flex flex-wrap items-center justify-end gap-1.5">
+                <p role="status" title={recovered && dirty ? 'Unsaved edits restored from this tab' : undefined} className={`m-0 inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold ${dirty ? 'bg-amber-100 text-amber-900' : 'bg-have-soft text-have-strong'}`}>
+                  {recovered && dirty ? (
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
+                      <path d="M3 10a9 9 0 1 1 2 8M3 4v6h6" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  ) : <span className="ws-save-dot" aria-hidden="true" />}
+                  {busy === 'save' ? 'Saving…' : dirty ? recovered ? 'Unsaved changes' : savedId ? 'Unsaved changes' : 'Unsaved draft' : 'All changes saved'}
                 </p>
-                <button type="button" onClick={exportPdf} disabled={!!busy} className="acad-btn edit min-h-11">
+                {dirty && (
+                  <button type="button" onClick={discard} disabled={!!busy}
+                    className="inline-flex min-h-10 items-center gap-1.5 rounded-control border border-rose-300 bg-white px-2.5 text-[13px] font-semibold text-rose-800 hover:border-rose-400 hover:bg-rose-50 disabled:opacity-50">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
+                      <path d="M9 5 4 10l5 5M4 10h10a6 6 0 0 1 0 12" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                    {busy === 'discard' ? <Busy>Discarding…</Busy> : savedId ? 'Discard changes' : 'Discard draft'}
+                  </button>
+                )}
+                <button type="button" onClick={exportPdf} disabled={!!busy} className="inline-flex min-h-10 items-center justify-center gap-2 rounded-control border border-line-strong bg-white px-3 text-[13px] font-semibold text-accent-strong hover:bg-accent-soft disabled:opacity-50">
                   {busy === 'pdf' ? <Busy>Making PDF…</Busy> : (
                     <>
                       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
@@ -364,7 +420,7 @@ function WorkshopEditor() {
                   )}
                 </button>
                 <button type="button" onClick={save} disabled={!!busy || saved === null || !dirty || !p.title.trim()}
-                  className="head-cta min-h-11 px-4 text-sm disabled:opacity-45">
+                  className="inline-flex min-h-10 items-center justify-center rounded-control bg-accent px-3 text-[13px] font-bold text-white hover:bg-accent-strong active:bg-blue-950 disabled:opacity-45">
                   {busy === 'save' ? <Busy>Saving…</Busy> : savedId ? 'Save changes' : 'Save proposal'}
                 </button>
               </div>
@@ -383,7 +439,13 @@ function WorkshopEditor() {
             <div className="ws-body">
               <p className="ws-eb">Activity proposal · Career office</p>
               <input aria-label="Title" value={p.title} maxLength={160} onChange={e => set('title', e.target.value)} className="ws-title" />
-              <p className="ws-facts">{p.facts.join(' · ')}</p>
+              <div className="mt-1 mb-2">
+                <Grow label="Workshop details" value={p.facts.join(' · ')} rows={1}
+                  onChange={value => {
+                    const facts = value.split(' · ')
+                    if (facts.length <= 6) set('facts', facts)
+                  }} />
+              </div>
               <h3>1. Background</h3><Grow label="Background" value={p.background} onChange={v => set('background', v)} rows={3} />
               <h3>2. Objectives</h3>
               {p.objectives.map((o, i) => (

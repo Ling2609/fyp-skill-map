@@ -7,13 +7,21 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true)
   const [serverDown, setServerDown] = useState(false)
 
+  const [retryAttempt, setRetryAttempt] = useState(0)
+  const [retrying, setRetrying] = useState(false)
+  const retryConnection = () => {
+    if (retrying) return
+    setRetrying(true)
+    setRetryAttempt(attempt => attempt + 1)
+  }
+
   useEffect(() => {
     let cancelled = false
 
     const init = async () => {
       const token = localStorage.getItem('token')
       if (!token) {
-        if (!cancelled) { setUser(null); setLoading(false) }
+        if (!cancelled) { setUser(null); setLoading(false); setRetrying(false) }
         return
       }
       // Only a 401 means the token is bad. A network error or 500 (e.g. uvicorn reloading) used to log the
@@ -21,7 +29,7 @@ export function AuthProvider({ children }) {
       // show "can't reach the server" instead of the login page.
       for (let attempt = 0; attempt < 4 && !cancelled; attempt++) {
         try {
-          const res = await api.get('/auth/me')
+          const res = await api.get('/auth/me', { timeout: 10000 })
           if (!cancelled) { setUser(res.data); setServerDown(false) }
           break
         } catch (err) {
@@ -34,12 +42,12 @@ export function AuthProvider({ children }) {
           await new Promise(r => setTimeout(r, 1500))
         }
       }
-      if (!cancelled) setLoading(false)
+      if (!cancelled) { setLoading(false); setRetrying(false) }
     }
 
     init()
     return () => { cancelled = true }
-  }, [])
+  }, [retryAttempt])
 
   const login = async (token) => {
     sessionStorage.clear()   // don't show a previous user's cached job matches
@@ -65,7 +73,7 @@ export function AuthProvider({ children }) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, loading, serverDown, login, logout, setUser }}>
+    <AuthContext.Provider value={{ user, loading, serverDown, retrying, retryConnection, login, logout, setUser }}>
       {children}
     </AuthContext.Provider>
   )

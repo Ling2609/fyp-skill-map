@@ -1396,3 +1396,17 @@ select:disabled { opacity: 0.6; cursor: not-allowed; }
 .ws-editor-note .ws-todo { background: #ffe18a; color: #573b00; font-weight: 700; white-space: nowrap; }
 .ws-save-dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
 
+
+
+/* Reading rhythm for learning plans and workshop proposals. */
+.learning-plan-reading { line-height: 1.5; }
+.learning-plan-reading > p { margin-block: 10px; line-height: 1.5; }
+.learning-plan-reading > p.font-semibold { margin-top: 24px; margin-bottom: 8px; padding-bottom: 6px; border-bottom: 1px solid var(--color-line); }
+.learning-plan-reading > p.font-semibold:first-child { margin-top: 0; }
+.learning-plan-reading pre, .learning-plan-reading table { text-align: left; }
+.ws-body h3 { margin-top: 24px; margin-bottom: 8px; padding-bottom: 6px; border-bottom: 1px solid var(--color-line); }
+.ws-body .ws-grow-back, .ws-body .ws-grow .ws-text { line-height: 1.5; }
+@media (min-width: 640px) {
+  .learning-plan-reading > p:not(.font-semibold) { text-align: justify; }
+  .ws-body .ws-grow-back, .ws-body .ws-grow .ws-text { text-align: justify; }
+}

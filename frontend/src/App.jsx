@@ -1,3 +1,4 @@
+import { Busy } from './components/Spinner'
 import { SESSION_EXPIRED } from './api'
 import ConfirmationDialog from './components/ConfirmationDialog'
 import { Fragment, lazy, Suspense, useEffect, useLayoutEffect, useRef, useState } from 'react'
@@ -36,7 +37,7 @@ const ProfilePrivacy = lazy(() => import('./pages/student/ProfilePrivacy'))
 const Privacy = lazy(() => import('./pages/Privacy'))
 
 function RoleRoute({ children, roles }) {
-  const { user, loading, serverDown } = useAuth()
+  const { user, loading, serverDown, retrying, retryConnection } = useAuth()
   const { pathname } = useLocation()
   if (loading) return null
   if (!user && serverDown) return (
@@ -44,8 +45,8 @@ function RoleRoute({ children, roles }) {
       <div className="bg-white rounded-xl shadow p-6 text-center max-w-sm">
         <p className="font-semibold text-slate-800">Can't reach the server</p>
         <p className="text-sm text-slate-500 mt-1">You're still signed in. Check that the backend is running, then retry.</p>
-        <button onClick={() => window.location.reload()}
-          className="mt-4 px-4 py-2 rounded-lg bg-blue-600 text-white text-sm font-medium hover:bg-blue-700">Retry</button>
+        <button type="button" onClick={retryConnection} disabled={retrying} aria-busy={retrying}
+          className="mt-4 px-4 py-2 rounded-lg bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 disabled:opacity-65"><span role="status">{retrying ? <Busy>Retrying…</Busy> : 'Retry'}</span></button>
       </div>
     </div>
   )

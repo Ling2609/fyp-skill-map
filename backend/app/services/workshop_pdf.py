@@ -3,11 +3,18 @@ from io import BytesIO
 from xml.sax.saxutils import escape  # nosec B406
 
 from reportlab.lib import colors
+from reportlab.lib.enums import TA_JUSTIFY
+from reportlab.lib.styles import ParagraphStyle
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.units import mm
 from reportlab.platypus import Paragraph, SimpleDocTemplate, Spacer, Table, TableStyle
 
-from app.services.plan_pdf import S, plain_text
+from app.services.plan_pdf import S as PLAN_STYLES, plain_text
+
+S = {name: ParagraphStyle("proposal_" + name, parent=style) for name, style in PLAN_STYLES.items()}
+S["body"] = ParagraphStyle("proposal_body", parent=S["body"], fontName="Times-Roman", fontSize=11, leading=16.5, alignment=TA_JUSTIFY, spaceAfter=8)
+S["h"] = ParagraphStyle("proposal_heading", parent=S["h"], fontName="Helvetica-Bold", fontSize=11, leading=15, spaceBefore=17, spaceAfter=7, keepWithNext=True)
+S["title"] = ParagraphStyle("proposal_title", parent=S["title"], fontName="Times-Bold", fontSize=20, leading=25, spaceAfter=10)
 
 SECTIONS = [("background", "1. Background"), ("objectives", "2. Objectives"), ("outcomes", "3. Learning outcomes"),
             ("participants", "4. Participants"), ("agenda", "5. Agenda"), ("partners", "6. Speakers and industry partners"),
@@ -33,10 +40,10 @@ def build_workshop_pdf(p: dict) -> bytes:
         story.append(_p(heading, "h"))
         value = p.get(key)
         if key == "objectives":
-            story += [_p(f"• {o}") for o in value or []]
+            story += [_p(f"• {o}", "info") for o in value or []]
         elif key == "agenda":
             rows = [[_p("Time", "head"), _p("Session", "head")]] + [[_p(t, "cell"), _p(s, "cell")] for t, s in value or []]
-            t = Table(rows, colWidths=[32 * mm, doc.width - 32 * mm])
+            t = Table(rows, repeatRows=1, colWidths=[32 * mm, doc.width - 32 * mm])
             t.setStyle(TableStyle([("LINEBELOW", (0, 0), (-1, -1), 0.4, colors.HexColor("#d6dce5")),
                                    ("VALIGN", (0, 0), (-1, -1), "TOP"), ("BOTTOMPADDING", (0, 0), (-1, -1), 4)]))
             story.append(t)
