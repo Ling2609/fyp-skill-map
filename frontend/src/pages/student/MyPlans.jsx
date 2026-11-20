@@ -45,6 +45,16 @@ export default function MyPlans() {
     return () => request.abort()
   }, [page, order, attempt])
 
+  useEffect(() => {
+    const closeOutsideMenus = event => {
+      for (const menu of document.querySelectorAll('details[data-plan-actions][open]')) {
+        if (!menu.contains(event.target)) menu.open = false
+      }
+    }
+    document.addEventListener('pointerdown', closeOutsideMenus, true)
+    return () => document.removeEventListener('pointerdown', closeOutsideMenus, true)
+  }, [])
+
   const changePage = next => {
     setExpanded(null)
     setResult(null)
@@ -180,7 +190,7 @@ export default function MyPlans() {
                           <path d="m6 9 6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
                         </svg>
                       </button>
-                      <details className="relative z-10" onBlur={event => {
+                      <details data-plan-actions className="relative z-10" onBlur={event => {
                         if (event.relatedTarget && !event.currentTarget.contains(event.relatedTarget)) event.currentTarget.open = false
                       }} onKeyDown={event => {
                         if (event.key !== 'Escape' || !event.currentTarget.open) return

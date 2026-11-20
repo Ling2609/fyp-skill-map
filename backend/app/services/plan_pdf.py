@@ -45,14 +45,19 @@ S["prose"] = ParagraphStyle("prose", parent=S["body"], alignment=TA_JUSTIFY)
 
 
 class TickBox(Flowable):
-    """An empty square to tick by hand."""
-    def __init__(self, size=4 * mm):
+    """A fillable PDF checkbox that also prints as an empty square."""
+    def __init__(self, label, size=4 * mm):
         super().__init__()
+        self.label = label
         self.width = self.height = size
 
     def draw(self):
-        self.canv.setLineWidth(0.8)
-        self.canv.rect(0, 0, self.width, self.height)
+        self.canv.acroForm.checkboxRelative(
+            tooltip=self.label, x=0, y=0, size=self.width,
+            checked=False, buttonStyle="check", borderWidth=0.8,
+            borderColor=colors.black, fillColor=colors.white, textColor=colors.black,
+            annotationFlags="print", fieldFlags="",
+        )
 
 
 def _inline(token) -> str:
@@ -88,7 +93,10 @@ def _table(rows: list[list[str]], width: float) -> Table:
     head, body = rows[0], rows[1:]
     n = len(head)
     data = [[Paragraph(h, S["head"]) for h in head] + [Paragraph("Done", S["head"])]]
-    data += [[Paragraph(c, S["cell"]) for c in (r + [""] * n)[:n]] + [TickBox()] for r in body]
+    for index, row in enumerate(body, start=1):
+        cells = [Paragraph(c, S["cell"]) for c in (row + [""] * n)[:n]]
+        step = cells[0].getPlainText() or str(index)
+        data.append(cells + [TickBox(f"Mark step {step} as done")])
     done_w = 13 * mm
     weights = [1.0] * n
     for i, h in enumerate(head):
