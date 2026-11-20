@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useId, useRef, useState } from 'react'
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 import InfoTip from '../../components/InfoTip'
 import api from '../../api'
@@ -32,6 +32,100 @@ const gradeLabel = (grade) => (grade == null ? '' : GRADE_LETTERS[Number(grade).
 // B4 (decided 27 Sep, built 9 Oct): a grade says how strong the academic evidence is, never how skilled she is, and it
 // never decides a match. A/A- strong, B+/B/B- good, below fair.
 const evidenceStrength = (grade) => (grade == null ? '' : grade >= 3.7 ? 'strong evidence' : grade >= 2.7 ? 'good evidence' : 'fair evidence')
+
+function SkillStatusList({ matched, missing, basis, openChat, showBasis = true }) {
+  const [expanded, setExpanded] = useState(null)
+  const prefix = useId()
+  const row = (item, index, has) => {
+    const key = `${has ? 'matched' : 'missing'}-${index}`
+    const open = expanded === key
+    const name = skillName(item.job_skill)
+    const panel = `${prefix}-${key}`
+    const module = item.evidence_source === 'module'
+    return <li key={key} className={`skill-ledger-item ${has ? 'is-matched' : 'is-missing'}`}>
+      <div className="skill-ledger-row">
+        <span className="skill-ledger-mark" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><path d={has ? 'm5 12 4 4L19 6' : 'M5 12h14'} /></svg></span>
+        <span className="skill-ledger-name">{name}</span>
+        <div className="skill-ledger-actions">
+          {!has && <button type="button" className="skill-ledger-learn" onClick={() => openChat(item.job_skill)}>Learn <svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M5 12h14m-6-6 6 6-6 6" /></svg><span className="sr-only"> {name} with the AI Assistant</span></button>}
+          <button type="button" className="skill-ledger-expand" aria-label={`Evidence for ${name}`} aria-expanded={open} aria-controls={panel} onClick={() => setExpanded(open ? null : key)}>Evidence<svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="m6 9 6 6 6-6" /></svg></button>
+        </div>
+      </div>
+      <div id={panel} hidden={!open} role="region" aria-label={`Evidence for ${name}`} className="skill-ledger-evidence">
+        {has ? <>
+          <dl><div><dt>Profile source</dt><dd>{item.matched_via_module || 'Your profile'}</dd></div>
+            {module && gradeLabel(item.grade) && <div><dt>Academic evidence</dt><dd>Grade {gradeLabel(item.grade)} · {evidenceStrength(item.grade)}</dd></div>}
+            {item.matched_graduate_skill && item.matched_graduate_skill.toLowerCase() !== item.job_skill.toLowerCase() && <div><dt>Matched through</dt><dd>{skillName(item.matched_graduate_skill)}</dd></div>}
+          </dl>
+          {!module && item.matched_via_module && item.matched_via_module !== 'Other' && <span className={sourcePillCls} title={SELF_DECLARED_TIP}>Self-declared</span>}
+        </> : <p className="skill-ledger-no-match">No matching evidence in your saved profile yet.</p>}
+        {item.ad_quote && <blockquote><span>From the job ad</span><p>“{item.ad_quote}”</p></blockquote>}
+      </div>
+    </li>
+  }
+  return <div className="skill-ledger">
+    <section className="skill-ledger-section is-missing" data-skill-group="basis-missing" tabIndex={-1} aria-label="Skills to learn">
+      <h3><span>To learn</span><b>{missing.length}</b>{showBasis && <small>{basis}</small>}</h3>
+      {missing.length ? <ul>{missing.map((item, index) => row(item, index, false))}</ul> : <p className="skill-ledger-empty">All {basis} skills are matched.</p>}
+    </section>
+    <section className="skill-ledger-section is-matched" data-skill-group="basis-have" tabIndex={-1} aria-label="Skills you have">
+      <h3><span>You have</span><b>{matched.length}</b>{showBasis && <small>{basis}</small>}</h3>
+      {matched.length ? <ul>{matched.map((item, index) => row(item, index, true))}</ul> : <p className="skill-ledger-empty">No profile matches yet.</p>}
+    </section>
+  </div>
+}
+
+function AdditionalSkillSections({ optional, gained, soft, openChat, includeOptional = true }) {
+  return <div className="skillgap-additional">
+    {includeOptional && optional.length > 0 && <section className="skillgap-info-section" data-skill-group="optional" tabIndex={-1} aria-label="Nice-to-have skills">
+      <header><h3>Nice to have <span>{optional.length}</span></h3><p>Optional · outside your match score</p></header>
+      <div className="skillgap-token-list">{[...optional].sort((a, b) => Number(b.has) - Number(a.has)).map((item, index) => item.has
+        ? <span key={index} className="skillgap-token have" title={item.ad_quote || undefined}><span aria-hidden="true">✓</span>{skillName(item.job_skill)}<span className="sr-only"> — matched</span></span>
+        : <button key={index} type="button" className="skillgap-token missing" title={item.ad_quote || undefined} onClick={() => openChat(item.job_skill)}><span aria-hidden="true">−</span>{skillName(item.job_skill)}<span aria-hidden="true">↗</span><span className="sr-only"> — learn with the AI Assistant</span></button>)}</div>
+    </section>}
+    {gained.length > 0 && <section className="skillgap-info-section" aria-label="Skills gained in the role">
+      <header><h3>Skills gained in the role <span>{gained.length}</span></h3><p>Not expected before you start</p></header>
+      <div className="skillgap-token-list">{gained.map((item, index) => <button key={index} type="button" className="skillgap-token role" title={item.ad_quote || undefined} onClick={() => openChat(item.job_skill)}><span aria-hidden="true">+</span>{skillName(item.job_skill)}<span className="sr-only"> — explore with the AI Assistant</span></button>)}</div>
+    </section>}
+    {soft.length > 0 && <section className="skillgap-info-section" aria-label="Soft skills">
+      <header><h3>Soft skills <span>{soft.length}</span></h3><p>Build these through practical exercises, projects and experience. Select a skill to practise with the AI Assistant.</p></header>
+      <div className="skillgap-token-list">{soft.map(skill => <button key={skill} type="button" className="skillgap-token soft" onClick={() => openChat(skill)}>{skill}<span aria-hidden="true">↗</span><span className="sr-only"> — practise with the AI Assistant</span></button>)}</div>
+    </section>}
+  </div>
+}
+
+function SkillCoverageChart({ matched, missing, basis, optional, onList }) {
+  const total = matched.length + missing.length
+  const requiredLabel = `${basis[0].toUpperCase() + basis.slice(1)} skills`
+  const details = (group, has) => onList(group === 'basis' ? has ? 'basis-have' : 'basis-missing' : 'optional')
+  const coverage = (group, label, have, total, note) => (
+    <figure className="jd-coverage-chart">
+      <figcaption><span>{label}</span><b>{have} <small>of {total}</small></b></figcaption>
+      {total > 0 ? <div className="jd-coverage-track skillgap-interactive-bar" role="group" aria-label={`${label}: ${have} matched, ${total - have} to learn, ${total} total`}>
+        {have > 0 && <button type="button" className="jd-coverage-matched" style={{ flexGrow: have }} aria-label={`View matched ${label.toLowerCase()} in List (${have})`} onClick={() => details(group, true)} />}
+        {total > have && <button type="button" className="jd-coverage-missing" style={{ flexGrow: total - have }} aria-label={`View missing ${label.toLowerCase()} in List (${total - have})`} onClick={() => details(group, false)} />}
+      </div> : <p className="jd-gap-empty">No skills listed in this group.</p>}
+      <div className="jd-coverage-legend skillgap-chart-controls">
+        <button type="button" disabled={!have} onClick={() => details(group, true)}><i className="have" aria-hidden="true" />{have} matched<span className="sr-only"> {label.toLowerCase()} — view in List</span></button>
+        <button type="button" disabled={total === have} onClick={() => details(group, false)}><i className="missing" aria-hidden="true" />{total - have} to learn<span className="sr-only"> {label.toLowerCase()} — view in List</span></button>
+        {note && <small>{note}</small>}
+      </div>
+    </figure>
+  )
+  return <div className="jd-chart-view">
+    <div className="jd-chart-intro"><h3>Skill coverage</h3><InfoTip label="What the skill coverage chart means">This chart counts matched and missing skills. It does not measure proficiency. Grades describe academic evidence, not a skill level.</InfoTip></div>
+    <p className="skillgap-chart-hint">Select a segment to view its skills in List.</p>
+    {coverage('basis', requiredLabel, matched.length, total)}
+    {basis !== 'preferred' && optional.length > 0 && coverage('optional', 'Nice to have', optional.filter(item => item.has).length, optional.length, 'Outside your match score')}
+    <section className="jd-chart-next" aria-label="Next step">
+      <div className="jd-chart-next-icon" aria-hidden="true">↗</div>
+      <div><h4>{total === 0 ? 'Explore the details' : missing.length > 0 ? 'Your next step' : 'Keep building your skills'}</h4>
+        <p>{total === 0 ? 'Check the additional skills listed for this job.' : missing.length > 0 ? `Build your missing skills with a practical learning plan.` : `Explore your evidence and additional skills.`}</p>
+        <button type="button" onClick={() => onList(missing.length > 0 ? 'basis-missing' : null)}>{missing.length > 0 ? 'Explore skills to learn' : 'Explore skill details'} <span aria-hidden="true">→</span></button>
+      </div>
+    </section>
+  </div>
+}
 
 // "today", "3 days ago", "2 weeks ago"
 const daysSince = (iso) => (iso ? Math.floor((Date.now() - new Date(iso).getTime()) / 86400000) : 0)
@@ -235,7 +329,7 @@ export default function JobDetail() {
   // The job's id goes too (E3, 9 Oct): the chatbot reads this job's skill gap itself (what she has, what is missing,
   // the ad's words), so its plan uses the same numbers as this page. (The old &reason= was never read.)
   const openChat = (skill) => {
-    navigate(location.pathname, { replace: true, state: { ...location.state, tab: activeTab } })
+    navigate(location.pathname, { replace: true, state: { ...location.state, tab: activeTab, gapView } })
     navigate(`/chatbot?skill=${encodeURIComponent(skill)}&job=${encodeURIComponent(gap?.job?.job_title || '')}`
       + `&job_id=${encodeURIComponent(gap?.job?.job_id || '')}`, { state: { from: gap?.job?.job_title || 'job' } })
   }
@@ -250,6 +344,21 @@ export default function JobDetail() {
   const [chosenTab] = useState(location.state?.tab || null)
   // 19 Nov (her review): on a phone the two tiles stacked made a very long page, so a switch shows one at a time
   const [phoneView, setPhoneView] = useState(location.state?.tab === 'description' ? 'ad' : 'gap')
+  const [gapView, setGapView] = useState(location.state?.gapView === 'list' ? 'list' : 'chart')
+  const [listFocus, setListFocus] = useState(null)
+  const gapBody = useRef(null)
+  const showList = (target = null) => { setListFocus(target); setGapView('list') }
+  useEffect(() => {
+    const body = gapBody.current
+    if (!body) return
+    body.scrollTo({ top: 0 })
+    if (gapView !== 'list' || !listFocus) return
+    const target = body.querySelector(`[data-skill-group="${listFocus}"]`)
+    if (!target) return
+    target.focus({ preventScroll: true })
+    if (window.matchMedia('(min-width: 1024px)').matches) body.scrollTop = target.getBoundingClientRect().top - body.getBoundingClientRect().top
+    else target.scrollIntoView({ block: 'start' })
+  }, [gapView, listFocus])
   const activeTab = chosenTab || (skillmapApp.app?.status === 'rejected' ? 'gap' : 'description')
   const [bullets, setBullets] = useState(() => peek(`/jobs/${encodeURIComponent(jobId)}/description`)?.bullets ?? null)
   const [bulletsLoading, setBulletsLoading] = useState(false)
@@ -323,30 +432,9 @@ export default function JobDetail() {
       evidence_source: m.evidence_source || 'module',
     }))
 
-  // "Show where these come from": group matched skills by their source (module / project / cert)
-  const sourceGroups = Object.entries(
-    matchedRows.reduce((acc, m) => {
-      const key = m.matched_via_module || 'Other'
-      if (!acc[key]) {
-        acc[key] = {
-          // Module names like "Project in Software Engineering" read like a project, so say what it is
-          label: m.evidence_source === 'module' && key !== 'Other' ? `Module: ${key}` : key,
-          grade: m.evidence_source === 'module' ? gradeLabel(m.grade) : '',
-          strength: m.evidence_source === 'module' ? evidenceStrength(m.grade) : '',
-          selfDeclared: m.evidence_source !== 'module' && key !== 'Other',
-          items: [],
-        }
-      }
-      acc[key].items.push(m)
-      return acc
-    }, {})
-  ).sort((a, b) => b[1].items.length - a[1].items.length)
-
-  const totalRequired = gapRows.length + matchedRows.length
   // Stage 3A: the % counts required skills; a job that requires nothing specific is scored on its preferred ones
   // What the % counts: required skills; if the ad requires none, the skills it lists without a level, else its preferred ones
   const basisWord = { preferred: 'preferred', unspecified: 'listed' }[gap?.summary?.coverage_basis] || 'required'
-  const BasisWord = basisWord[0].toUpperCase() + basisWord.slice(1)
   // Nice-to-have skills: shown apart, never in the %. Soft skills are left out of the % too and not listed (they are in
   // the description).
   const niceToHave = gap?.nice_to_have || []
@@ -478,78 +566,28 @@ export default function JobDetail() {
 
           {/* the skill gap: to learn (each opens the AI Assistant), you have (by where it comes from), the rest */}
           <section className="jd-tile jd-gap jd-gap-clean" aria-labelledby="jd-gap">
-            <div className="jd-thead">
+            <div className="jd-thead jd-gap-toolbar">
               <h2 id="jd-gap" className="jd-tt"><i aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="9" /><circle cx="12" cy="12" r="5" /><circle cx="12" cy="12" r="1.2" fill="currentColor" /></svg></i>Skill gap</h2>
+              <div className="jd-gap-view-switch" role="tablist" aria-label="Skill gap view" onKeyDown={event => {
+                if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return
+                event.preventDefault()
+                const next = event.key === 'Home' ? 'chart' : event.key === 'End' ? 'list' : gapView === 'list' ? 'chart' : 'list'
+                setListFocus(null)
+                setGapView(next)
+                event.currentTarget.querySelectorAll('[role="tab"]')[next === 'chart' ? 0 : 1].focus()
+              }}>
+                <button id="jd-gap-chart-tab" type="button" role="tab" aria-selected={gapView === 'chart'} aria-controls="jd-gap-panel" tabIndex={gapView === 'chart' ? 0 : -1} onClick={() => { setListFocus(null); setGapView('chart') }}><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M4 19V5m0 14h16M8 15v-3m5 3V8m5 7V4" /></svg>Chart</button>
+                <button id="jd-gap-list-tab" type="button" role="tab" aria-selected={gapView === 'list'} aria-controls="jd-gap-panel" tabIndex={gapView === 'list' ? 0 : -1} onClick={() => showList()}><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M8 6h12M8 12h12M8 18h12M3 6h.01M3 12h.01M3 18h.01" /></svg>List</button>
+              </div>
             </div>
-            <div className="jd-tbody" tabIndex={0} aria-label="Skill gap details">
-              <div className={`jd-gap-group ${gapRows.length ? 'jd-gap-missing' : 'jd-gap-complete'}`}>
-                <div className="jd-gap-group-head">
-                  <span className="jd-gap-symbol" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><circle cx="12" cy="12" r="9" /><path d={gapRows.length ? 'M8 12h8' : 'm8 12 3 3 5-6'} /></svg></span>
-                  <h3 className="jd-sh">To learn <span className="c">{gapRows.length}</span></h3><span className="jd-gap-kind">{BasisWord}</span>
-                </div>
-                {gapRows.length === 0 ? <p className="jd-gap-empty">You have every {basisWord} skill this job lists.</p> : (
-                  <ul className="jd-learn">
-                    {gapRows.map((item, idx) => <li key={idx}>
-                      <div className="min-w-0">
-                        <b className="jd-missing-label">{skillName(item.job_skill)}</b>
-                        {item.ad_quote && <details className="jd-ad-evidence"><summary>Ad evidence<svg aria-hidden="true" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6" /></svg></summary><p>“{item.ad_quote}”</p></details>}
-                      </div>
-                      <button type="button" onClick={() => openChat(item.job_skill)} className="jd-lbtn">Learn<span className="sr-only"> {skillName(item.job_skill)} with the AI Assistant</span><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M5 12h14m-6-6 6 6-6 6" /></svg></button>
-                    </li>)}
-                  </ul>
-                )}
-              </div>
-              <div className="jd-gap-group jd-gap-have">
-                <div className="jd-gap-group-head">
-                  <span className="jd-gap-symbol" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><circle cx="12" cy="12" r="9" /><path d="m8 12 3 3 5-6" /></svg></span>
-                  <h3 className="jd-sh">You have <span className="c">{matchedRows.length} of {totalRequired}</span></h3><span className="jd-gap-kind">{BasisWord}</span>
-                </div>
-                {matchedRows.length === 0 ? <p className="jd-gap-empty">No matches in your profile yet.</p> : sourceGroups.map(([source, group]) => (
-                  <div key={source} className="jd-src">
-                    <div className="jd-source-heading">
-                      <p className="jd-from"><svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="m3 8 9-5 9 5-9 5-9-5Zm3 2v7l6 4 6-4v-7" /></svg><b>{group.label}</b></p>
-                      {group.grade && <span className="jd-source-grade" aria-label={`Grade ${group.grade}`}>{group.grade}</span>}
-                      {group.strength && <InfoTip label={`Academic evidence for ${group.label}`}>Grade {group.grade}: {group.strength}. Grades describe academic evidence; they do not change whether a skill matches.</InfoTip>}
-                      {group.selfDeclared && <span className={`${sourcePillCls} jd-self-declared`} title={SELF_DECLARED_TIP}>Self-declared</span>}
-                    </div>
-                    <p className="jd-chips">
-                      {group.items.map((item, idx) => <span key={idx} className="jd-chip" title={item.ad_quote ? `From the ad: “${item.ad_quote}”` : undefined}>
-                        <svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><path d="m5 12 4 4L19 6" /></svg>{skillName(item.job_skill)}
-                        {item.matched_graduate_skill && item.matched_graduate_skill.toLowerCase() !== item.job_skill.toLowerCase() && <span className="via">via {skillName(item.matched_graduate_skill)}</span>}
-                      </span>)}
-                    </p>
-                  </div>
-                ))}
-              </div>
-
-              {(niceToHave.length > 0 || gainInRole.length > 0 || (gap?.soft_skills || []).length > 0) && (
-                <div className="jd-gap-group jd-gap-other">
-                  {[[niceToHave, 'Nice to have', 'not counted in the score'], [gainInRole, "You'll gain in this role", 'not expected before you start']]
-                    .filter(([list]) => list.length > 0).map(([list, title, note]) => (
-                      <div key={title} className={`mb-3 ${list === gainInRole ? 'jd-role-skills' : ''}`}>
-                        <h3 className="jd-sh">{title} <span className="of">{note}</span></h3>
-                        {/* her review 5 Oct / 19 Oct: the ones you have first; the others open the AI Assistant */}
-                        <p className="jd-chips">
-                          {[...list].sort((x, y) => Number(y.has) - Number(x.has)).map((item, idx) => item.has ? (
-                            <span key={idx} className="jd-chip" title={item.ad_quote ? `From the ad: “${item.ad_quote}”` : undefined}>✓ {skillName(item.job_skill)}</span>
-                          ) : (
-                            <button key={idx} type="button" className="jd-chip m" onClick={() => openChat(item.job_skill)}
-                              title={item.ad_quote ? `From the ad: “${item.ad_quote}” · Learn more` : 'Learn more'}>
-                              {skillName(item.job_skill)} <span aria-hidden="true">→</span>
-                            </button>
-                          ))}
-                        </p>
-                      </div>
-                    ))}
-                  {(gap?.soft_skills || []).length > 0 && (
-                    <>
-                      <h3 className="jd-sh">Soft skills it asks for</h3>
-                      <p className="jd-chips">{gap.soft_skills.map(s => <span key={s} className="jd-chip n">{s}</span>)}</p>
-                      <p className="text-xs text-muted mt-1.5 mb-0">Show these through your projects and experience.</p>
-                    </>
-                  )}
-                </div>
-              )}
+            <div ref={gapBody} id="jd-gap-panel" className="jd-tbody" role="tabpanel" tabIndex={0} aria-labelledby={`jd-gap-${gapView}-tab`}>
+              {gapView === 'list' ? <>
+                <section className="skillgap-required-section" aria-label={`${basisWord} skill details`}>
+                  <header className="skillgap-section-intro"><h3>{basisWord[0].toUpperCase() + basisWord.slice(1)} skills <span>{matchedRows.length + gapRows.length}</span></h3><p>Counted in your match</p></header>
+                  <SkillStatusList matched={matchedRows} missing={gapRows} basis={basisWord} openChat={openChat} showBasis={false} />
+                </section>
+                <AdditionalSkillSections optional={niceToHave} gained={gainInRole} soft={gap?.soft_skills || []} openChat={openChat} />
+              </> : <SkillCoverageChart matched={matchedRows} missing={gapRows} basis={basisWord} optional={niceToHave} onList={showList} />}
             </div>
           </section>
         </div>

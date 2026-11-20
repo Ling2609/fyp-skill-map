@@ -62,15 +62,10 @@ const LANGUAGES = ['English', 'Malay', 'Mandarin', 'Cantonese', 'Tamil', 'Japane
 // "Other" is always there (her rule, 19 Oct): a qualification or languages in the employer's own words
 const KNOWN_QUALS = QUALIFICATIONS.map(([v]) => v)
 
-function OtherRequirements({ reqs, setReqs }) {
-  const known = KNOWN_QUALS.includes(reqs.min_qualification)
-  const [qualOther, setQualOther] = useState(!known)
-  const typedLangs = reqs.languages.filter(l => !LANGUAGES.includes(l))
-  const [langOther, setLangOther] = useState(typedLangs.length > 0)
-  const [langText, setLangText] = useState(typedLangs.join(', '))
+function OtherRequirements({ reqs, setReqs, qualOther, setQualOther, langOther, setLangOther, langText, setLangText }) {
   const listed = reqs.languages.filter(l => LANGUAGES.includes(l))
-  const setLangs = (picked, text) => setReqs(r => ({ ...r, languages: [...picked,
-    ...text.split(',').map(x => x.trim()).filter(Boolean)] }))
+  const setLangs = (picked, text) => setReqs(r => ({ ...r, languages: [...new Set([...picked,
+    ...text.split(',').map(x => x.trim()).filter(Boolean)])] }))
   const toggle = (lang) => setLangs(listed.includes(lang) ? listed.filter(x => x !== lang) : [...listed, lang], langOther ? langText : '')
   const pill = (on) => `text-sm font-medium rounded-full px-3.5 py-1.5 border ${on
     ? 'bg-blue-600 border-blue-600 text-white' : 'bg-white border-slate-300 text-slate-700 hover:border-blue-300'}`
@@ -95,9 +90,13 @@ function OtherRequirements({ reqs, setReqs }) {
             </select>
           </div>
           {qualOther && (
-            <input aria-label="Other qualification" value={reqs.min_qualification} maxLength={40}
-              placeholder="e.g. SPM, professional certificate" className={field}
-              onChange={e => setReqs(r => ({ ...r, min_qualification: e.target.value }))} />
+            <div>
+              <label htmlFor="pj-other-qualification" className={label}>Other qualification <span className="text-rose-700" aria-hidden="true">*</span></label>
+              <input id="pj-other-qualification" value={reqs.min_qualification} maxLength={40} required aria-describedby="pj-other-qualification-help"
+                placeholder="e.g. SPM, professional certificate" className={field}
+                onChange={e => setReqs(r => ({ ...r, min_qualification: e.target.value }))} />
+              <p id="pj-other-qualification-help" className="mt-1 text-xs text-slate-500">Required when Other is selected. Choose Not required to leave this unspecified.</p>
+            </div>
           )}
         </div>
         <div className="flex-2 basis-64">
@@ -117,9 +116,13 @@ function OtherRequirements({ reqs, setReqs }) {
             onClick={() => { setLangOther(!langOther); setLangs(listed, langOther ? '' : langText) }}>Other…</button>
         </div>
         {langOther && (
-          <input aria-label="Other languages" value={langText} maxLength={120}
-            placeholder="e.g. Hokkien, French (separate with commas)" className={field}
-            onChange={e => { setLangText(e.target.value); setLangs(listed, e.target.value) }} />
+          <div>
+            <label htmlFor="pj-other-languages" className={label}>Other languages <span className="text-rose-700" aria-hidden="true">*</span></label>
+            <input id="pj-other-languages" value={langText} maxLength={120} required aria-describedby="pj-other-languages-help"
+              placeholder="e.g. Hokkien, French (separate with commas)" className={field}
+              onChange={e => { setLangText(e.target.value); setLangs(listed, e.target.value) }} />
+            <p id="pj-other-languages-help" className="mt-1 text-xs text-slate-500">Enter at least one language, or deselect Other.</p>
+          </div>
         )}
       </div>
     </div>
@@ -150,6 +153,9 @@ export default function PostJob() {
   // 19 Oct (E6, option F): what the job asks for besides skills, chosen here (not read from the ad); students see them
   // as pills on Job Detail. All optional.
   const [reqs, setReqs] = useState({ min_qualification: '', study_field: '', languages: [] })
+  const [qualOther, setQualOther] = useState(false)
+  const [langOther, setLangOther] = useState(false)
+  const [otherLanguageText, setOtherLanguageText] = useState('')
   const [error, setError] = useState('')
   const [asksMore, setAsksMore] = useState(false)    // 21 Oct: the edit asked for more after people applied (409)
   const skillsRef = useRef(null)
@@ -168,6 +174,9 @@ export default function PostJob() {
       setAd({ title: j.title, location: j.location || '', salary: j.salary || '', category: j.category || '', description: j.description })
       setSkills(j.skills); setSoft(j.soft)
       setReqs({ min_qualification: j.min_qualification || '', study_field: j.study_field || '', languages: j.languages || [] })
+      setQualOther(!KNOWN_QUALS.includes(j.min_qualification || ''))
+      setLangOther((j.languages || []).some(language => !LANGUAGES.includes(language)))
+      setOtherLanguageText((j.languages || []).filter(language => !LANGUAGES.includes(language)).join(', '))
       setReadFor(`${j.title.trim()}\n${j.description.trim()}`)     // the saved skills belong to the saved ad
     }).catch(err => setError(errText(err, "Couldn't load this job.")))
   }, [editing, jobId])
@@ -178,7 +187,10 @@ export default function PostJob() {
   useEffect(() => {
     if (editing || !copy) return
     setAd(copy.ad); setSkills(copy.skills); setSoft(copy.soft); setReqs(copy.reqs)  // eslint-disable-line react-hooks/set-state-in-effect
-    setEditJob(null); setError(''); setAsksMore(false); setRecordId(null)       // the same page was showing the edit
+    setEditJob(null); setError(''); setAsksMore(false); setRecordId(null)
+    setQualOther(!KNOWN_QUALS.includes(copy.reqs.min_qualification || ''))
+    setLangOther((copy.reqs.languages || []).some(language => !LANGUAGES.includes(language)))
+    setOtherLanguageText((copy.reqs.languages || []).filter(language => !LANGUAGES.includes(language)).join(', '))       // the same page was showing the edit
     setReadFor(`${copy.ad.title.trim()}\n${copy.ad.description.trim()}`)
   }, [editing, copy])
 
@@ -198,6 +210,8 @@ export default function PostJob() {
   const detailsMissing = [
     ad.location.trim().length < 2 && 'where the job is based',
     !ad.category && 'a job category',
+    qualOther && !reqs.min_qualification.trim() && 'the other qualification',
+    langOther && !otherLanguageText.split(',').some(language => language.trim()) && 'the other language',
   ].filter(Boolean)
   const required = skills.filter(s => s.level === 'required').length
   const canPublish = read && !stale && !tooLong && required > 0 && !detailsMissing.length && !publishing
@@ -239,6 +253,7 @@ export default function PostJob() {
       : [...prev, { name, level, quote: '', group: '' }])
   const remove = (skill) => setSkills(prev => prev.filter(s => s !== skill))
   const publish = () => {
+    if (!canPublish) return
     setPublishing(true); setError(''); setAsksMore(false)
     const req = editing
       ? api.put(`/employer/jobs/${jobId}`, { description: ad.description, salary: ad.salary, skills, soft, record_id: recordId, ...reqs })
@@ -413,7 +428,7 @@ export default function PostJob() {
                 </p>
               )}
               {BOXES.map(b => <ChipBox key={b.level} box={b} skills={byLevel[b.level]} onRemove={remove} onAdd={add(b.level)} />)}
-              <OtherRequirements key={editJob ? `edit-${editJob.id}` : 'new'} reqs={reqs} setReqs={setReqs} />
+              <OtherRequirements key={editJob ? `edit-${editJob.id}` : 'new'} reqs={reqs} setReqs={setReqs} qualOther={qualOther} setQualOther={setQualOther} langOther={langOther} setLangOther={setLangOther} langText={otherLanguageText} setLangText={setOtherLanguageText} />
               {error && (asksMore ? (
                 <div role="alert" className="text-sm text-amber-900 bg-amber-50 border border-amber-200 rounded-lg px-3.5 py-3">
                   <p>{error}</p>
