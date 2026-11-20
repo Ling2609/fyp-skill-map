@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 
 // The "⋯" button at the end of a Users row (7 Oct, her pick B): one button per row, so the table keeps no room for
 // buttons a row doesn't have. Few actions shown directly, more behind a kebab menu (uxdesign.cc, "Let's design data
@@ -6,33 +7,33 @@ import { useEffect, useRef, useState } from 'react'
 // screen (not inside the list), so it isn't cut off by the list's scroll area; it opens upwards near the bottom.
 // 13 Oct (her review: the first item looked greyed out, as if disabled): the grey focus band shows only for keyboard
 // users (focus-visible), not when the menu is opened with the mouse.
-// items: [{ label, onSelect, danger?, success? }] (danger red, success green: 13 Oct, Close job red / Reopen job green). Esc, a click outside or scrolling closes it; arrow keys move between items.
+// items: [{ label, onSelect, danger?, success? }] (danger red, success green: 13 Oct, Close job red / Reopen job green). Esc, a click outside closes it; scrolling keeps it anchored; arrow keys move between items.
 export default function RowMenu({ label, items, disabled }) {
   const [pos, setPos] = useState(null)          // null = closed; else { top | bottom, right }
   const button = useRef(null)
   const menu = useRef(null)
 
-  const open = () => {
+  const open = useCallback(() => {
     const r = button.current.getBoundingClientRect()
     const below = window.innerHeight - r.bottom > 44 * items.length + 16
-    setPos({ right: window.innerWidth - r.right, ...(below ? { top: r.bottom + 4 } : { bottom: window.innerHeight - r.top + 4 }) })
-  }
+    setPos({ right: Math.max(8, Math.min(window.innerWidth - r.right, window.innerWidth - Math.min(208, window.innerWidth - 16) - 8)), ...(below ? { top: r.bottom + 4 } : { bottom: window.innerHeight - r.top + 4 }) })
+  }, [items.length])
   const close = (refocus) => { setPos(null); if (refocus) button.current?.focus() }
 
   useEffect(() => {
     if (!pos) return
-    menu.current?.querySelector('[role="menuitem"]')?.focus()
+    menu.current?.querySelector('[role="menuitem"]')?.focus({ preventScroll: true })
     const onDown = (e) => { if (!menu.current?.contains(e.target) && !button.current?.contains(e.target)) close() }
-    const onScroll = () => close()
-    window.addEventListener('mousedown', onDown)
+    const onScroll = event => { if (!menu.current?.contains(event.target)) open() }
+    window.addEventListener('pointerdown', onDown)
     window.addEventListener('scroll', onScroll, true)
     window.addEventListener('resize', onScroll)
     return () => {
-      window.removeEventListener('mousedown', onDown)
+      window.removeEventListener('pointerdown', onDown)
       window.removeEventListener('scroll', onScroll, true)
       window.removeEventListener('resize', onScroll)
     }
-  }, [pos])
+  }, [pos, open])
 
   const onKey = (e) => {
     const all = [...menu.current.querySelectorAll('[role="menuitem"]')]
@@ -48,14 +49,14 @@ export default function RowMenu({ label, items, disabled }) {
       {/* 25 Oct (her review: "make the ⋯ button a bit more obvious"): darker border and dots, larger dots, a tooltip */}
       <button ref={button} type="button" aria-label={label} title="More actions" aria-haspopup="menu" aria-expanded={!!pos} disabled={disabled}
         onClick={() => (pos ? close() : open())}
-        className={`w-8 h-8 inline-flex items-center justify-center rounded-lg border border-slate-300 text-slate-700 shadow-sm hover:bg-slate-100 hover:border-slate-400 hover:text-slate-900 disabled:opacity-50 ${pos ? 'bg-slate-100 border-slate-400' : 'bg-white'}`}>
-        <svg aria-hidden="true" className="w-[18px] h-[18px]" viewBox="0 0 20 20" fill="currentColor">
+        className={`row-menu-trigger w-8 h-8 min-w-8 shrink-0 inline-flex items-center justify-center rounded-lg border border-slate-300 text-slate-700 shadow-sm hover:bg-slate-100 hover:border-slate-400 hover:text-slate-900 disabled:opacity-50 ${pos ? 'bg-slate-100 border-slate-400' : 'bg-white'}`}>
+        <svg aria-hidden="true" className="w-[18px] h-[18px] shrink-0" viewBox="0 0 20 20" fill="currentColor">
           <circle cx="4" cy="10" r="2" /><circle cx="10" cy="10" r="2" /><circle cx="16" cy="10" r="2" />
         </svg>
       </button>
-      {pos && (
+      {pos && createPortal(
         <div ref={menu} role="menu" aria-label={label} onKeyDown={onKey} style={{ position: 'fixed', ...pos }}
-          className="z-40 w-52 bg-white border border-slate-200 rounded-xl shadow-lg p-1.5 text-sm text-left whitespace-normal">
+          className="z-40 w-52 max-w-[calc(100vw-16px)] bg-white border border-slate-200 rounded-xl shadow-lg p-1.5 text-sm text-left whitespace-normal">
           {items.map(it => (
             <button key={it.label} type="button" role="menuitem" tabIndex={-1}
               onClick={() => { close(); it.onSelect() }}
@@ -64,8 +65,10 @@ export default function RowMenu({ label, items, disabled }) {
               {it.label}
             </button>
           ))}
-        </div>
+        </div>, document.body
       )}
     </>
   )
 }
+
+

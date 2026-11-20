@@ -259,7 +259,7 @@ export default function PostJob() {
   const byLevel = useMemo(() => Object.fromEntries(BOXES.map(b => [b.level, skills.filter(s => s.level === b.level)])), [skills])
 
   return (
-    <div className="flex flex-col h-[calc(100dvh-var(--bar-h))]">
+    <div className="flex flex-col h-[calc(100dvh-var(--bar-h))] max-sm:h-[calc(100dvh_-_var(--bar-h)_-_6rem)]">
       <PageHeader>
         <div className="pb-5 flex flex-wrap items-center gap-x-6 gap-y-3">
           <div className="min-w-0 flex-1 basis-96">
@@ -299,7 +299,7 @@ export default function PostJob() {
             <div aria-hidden="true" className="space-y-2"><Bar className="h-3 w-24" /><Bar className="h-48 w-full rounded-lg" /></div>
           </section>
         )}
-        <section className={`post-card emp-tile bg-white border border-slate-200 rounded-2xl p-6 flex flex-col gap-4 min-h-0 overflow-y-auto ${loadingJob ? 'hidden' : ''}`}>
+        <section className={`post-card emp-tile flex-1 bg-white border border-slate-200 rounded-2xl p-6 flex flex-col gap-4 min-h-0 overflow-y-auto ${loadingJob ? 'hidden' : ''}`}>
           {/* 20 Nov (her approved mock): before the skills are read, the short fields sit left and the description fills
               the right, so the form fits one screen with nothing empty */}
           <div className={read ? 'flex flex-col gap-4' : 'post-grid'}>
@@ -343,7 +343,7 @@ export default function PostJob() {
           )}
           {!read && (
             <details className="post-tips" open={tipsOpen} onToggle={toggleTips}>
-              <summary>Tips for finding the right graduates</summary>
+              <summary><span className="post-tips-title">Tips for finding the right graduates</span></summary>
               <ul>
                 <li>Name each skill you need, e.g. "SQL", "REST APIs". SkillMap uses these to find graduates who have them.</li>
                 <li>Say which skills are a must and which are nice to have.</li>
@@ -355,22 +355,23 @@ export default function PostJob() {
           <div className={read ? '' : 'flex-1 min-h-0 flex flex-col'}>
             <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-0.5">
               <label htmlFor="pj-description" className={label}>Description</label>
-              <div className="flex items-baseline gap-3 ml-auto">
-              <p className="text-xs text-amber-800">{tooLong ? `Shorten the description to ${MAX_DESCRIPTION.toLocaleString()} characters to read the skills.`
-                  : missing.length > 0 && `To read the skills, add ${missing.join(' and ')}.`}</p>
-                <p className={`text-xs tabular-nums shrink-0 ${tooLong ? 'text-rose-700 font-medium' : 'text-slate-500'}`}>{ad.description.length.toLocaleString()} / {MAX_DESCRIPTION.toLocaleString()}</p>
-              </div>
+              <p className={`text-xs tabular-nums shrink-0 ${tooLong ? 'text-rose-700 font-medium' : 'text-slate-500'}`}>{ad.description.length.toLocaleString()} / {MAX_DESCRIPTION.toLocaleString()}</p>
             </div>
-            <textarea id="pj-description" rows={read ? 10 : undefined} value={ad.description} onChange={set('description')}
+            <textarea id="pj-description" aria-describedby="pj-read-help" rows={read ? 10 : undefined} value={ad.description} onChange={set('description')}
               placeholder="What the graduate will do, and the skills you ask for, prefer, or will teach"
               className={`${field} leading-relaxed ${read ? 'resize-y' : 'flex-1 min-h-40 resize-none'}`} />
           </div>
           </div>
 
+          {read && (tooLong || missing.length > 0) && <p id="pj-read-help" className="text-xs text-rose-700">{tooLong ? `Shorten the description to ${MAX_DESCRIPTION.toLocaleString()} characters.` : `To read the skills, add ${missing.join(' and ')}.`}</p>}
           {!read && (
-            <div className="pt-4 border-t border-slate-200 flex flex-wrap items-center justify-between gap-3">
+            <div className="post-form-actions shrink-0 pt-3 border-t border-slate-200 flex flex-wrap items-center justify-between gap-3">
               <Link to="/employer/jobs" className="text-sm text-slate-600 hover:underline">Cancel</Link>
-              <div className="flex flex-wrap items-center gap-3 ml-auto">
+              <div className="post-read-action flex flex-wrap items-center justify-end gap-3 ml-auto min-w-0">
+              <p id="pj-read-help" className={`post-read-help text-xs ${tooLong ? 'text-rose-700' : 'text-muted'}`}>
+                {tooLong ? `Shorten the description to ${MAX_DESCRIPTION.toLocaleString()} characters.`
+                  : missing.length > 0 ? `To read the skills, add ${missing.join(' and ')}.` : 'Your ad is ready for the skills check.'}
+              </p>
               <button type="button" onClick={readSkills} disabled={reading || cantRead}
                 className="head-cta disabled:opacity-40 disabled:cursor-not-allowed">
                 {reading ? <Busy>Reading the skills…</Busy> : 'Read the skills'}
@@ -385,8 +386,11 @@ export default function PostJob() {
               <div className="flex flex-wrap items-baseline justify-between gap-3">
                 <h2 className="text-[15px] font-semibold text-slate-900">Skills students are matched on</h2>
                 <button type="button" onClick={readSkills} disabled={reading || cantRead}
-                  className="text-sm font-medium text-blue-700 hover:underline disabled:text-slate-300 disabled:no-underline">
-                  {reading ? <Busy>Reading the skills…</Busy> : 'Read the skills again'}
+                  className="inline-flex min-h-11 items-center gap-2 rounded-lg px-2 text-sm font-semibold text-blue-700 hover:bg-blue-50 focus-visible:outline-2 focus-visible:outline-blue-600 disabled:opacity-45 disabled:cursor-not-allowed">
+                  {reading ? <Busy>Reading the skills…</Busy> : <>
+                    <svg aria-hidden="true" className="h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 7v5h-5M4 17v-5h5" /><path d="M6.1 7a7 7 0 0 1 11.6-1L20 9M4 15l2.3 3A7 7 0 0 0 17.9 17" /></svg>
+                    Read the skills again
+                  </>}
                 </button>
               </div>
               {readerDown && !reading && (

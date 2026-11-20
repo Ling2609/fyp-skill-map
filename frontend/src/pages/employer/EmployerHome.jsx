@@ -52,7 +52,7 @@ const daysUntil = (iso) => Math.ceil((new Date(iso).getTime() - Date.now()) / 86
 
 // 20 Oct (T2): only the states the tab doesn't already say
 function SpecialBadge({ children }) {
-  return <span className="shrink-0 text-[11px] font-medium text-amber-800 bg-amber-50 border border-amber-200 rounded-full px-2 py-0.5">{children}</span>
+  return <span className="job-status-notice"><span aria-hidden="true" className="job-status-dot" />{children}</span>
 }
 
 // The promised decision date with the days left (red once it has passed with applicants waiting); for a closed job,
@@ -67,10 +67,19 @@ function DecideCell({ j }) {
   const late = j.past_date && j.waiting
   return (
     <p className={late ? 'text-rose-700 font-medium' : 'text-slate-800'}>
-      {fmtDate(j.decide_by)}
-      <span className={`text-xs ${late ? '' : 'text-slate-500'}`}> · {late ? 'passed' : days <= 0 ? 'today' : `${days} day${days === 1 ? '' : 's'} left`}</span>
+      <span className="whitespace-nowrap">{fmtDate(j.decide_by)}</span>
+      <span className={`block whitespace-nowrap text-xs mt-0.5 ${late ? '' : 'text-slate-500'}`}>{late ? 'passed' : days <= 0 ? 'today' : `${days} day${days === 1 ? '' : 's'} left`}</span>
       {j.decide_extended && <span className="block text-xs text-slate-500">moved once</span>}
     </p>
+  )
+}
+
+function JobSkills({ job }) {
+  return (
+    <span className="inline-flex flex-col gap-1 text-xs">
+      <span className="inline-flex items-center gap-1.5 whitespace-nowrap text-blue-800"><span aria-hidden="true" className="h-1.5 w-1.5 shrink-0 rounded-full bg-blue-600" />{job.required} required</span>
+      {job.preferred > 0 && <span className="inline-flex items-center gap-1.5 whitespace-nowrap text-teal-800"><span aria-hidden="true" className="h-1.5 w-1.5 shrink-0 rounded-full bg-teal-600" />{job.preferred} nice to have</span>}
+    </span>
   )
 }
 
@@ -81,17 +90,17 @@ const CLOSE_REASONS = [
   ['filled_other', 'Filled another way', 'You hired someone who did not apply here'],
   ['not_filling', 'Not filling now', 'On hold or cancelled'],
 ]
-function Dialog({ title, busy, onCancel, children, action, onAction, disabled }) {
+function Dialog({ title, busy, onCancel, children, action, onAction, disabled, wide = false, fit = false }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/30" onMouseDown={() => { if (!busy) onCancel() }}>
-      <div role="dialog" aria-modal="true" aria-labelledby="dlg-title" onMouseDown={e => e.stopPropagation()} className="bg-white rounded-2xl shadow-xl w-full max-w-md">
-        <div className="px-6 pt-5 pb-4">
+      <div role="dialog" aria-modal="true" aria-labelledby="dlg-title" onMouseDown={e => e.stopPropagation()} className={`bg-white rounded-2xl shadow-xl max-h-[calc(100dvh-2rem)] overflow-y-auto ${fit ? 'w-full sm:w-fit max-w-2xl' : wide ? 'w-full max-w-2xl' : 'w-full max-w-xl'}`}>
+        <div className="px-5 pt-5 pb-5 sm:px-7 sm:pt-6 sm:pb-6 leading-relaxed">
           <h2 id="dlg-title" className="text-base font-semibold text-slate-900">{title}</h2>
           {children}
         </div>
-        <div className="flex justify-end gap-2 px-6 py-4 bg-slate-50 border-t border-slate-200 rounded-b-2xl">
-          <button type="button" onClick={onCancel} disabled={busy} className="px-4 py-2 text-sm font-medium rounded-lg border border-slate-200 bg-white text-slate-700 hover:bg-slate-50">Cancel</button>
-          <button type="button" onClick={onAction} disabled={busy || disabled} className="px-4 py-2 text-sm font-medium rounded-lg bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-40">
+        <div className="flex flex-wrap justify-end gap-2 px-5 py-4 sm:px-7 bg-slate-50 border-t border-slate-200 rounded-b-2xl">
+          <button type="button" onClick={onCancel} disabled={busy} className="min-h-11 max-sm:flex-1 px-4 py-2 text-sm font-medium rounded-lg border border-slate-200 bg-white text-slate-700 hover:bg-slate-50">Cancel</button>
+          <button type="button" onClick={onAction} disabled={busy || disabled} className="min-h-11 max-sm:flex-1 px-4 py-2 text-sm font-medium rounded-lg bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-40">
             {busy ? <Busy>Saving…</Busy> : action}
           </button>
         </div>
@@ -125,14 +134,14 @@ function CloseDialog({ job, busy, onCancel, onClose }) {
 const daysLeft = (iso) => Math.ceil((new Date(iso).getTime() - Date.now()) / 86400000)
 function StopDialog({ job, stopped, busy, onCancel, onConfirm }) {
   const left = daysLeft(job.decide_by)
-  const date = <b className="font-semibold text-slate-800">{fmtDate(job.decide_by)}</b>
+  const date = <b className="font-semibold text-slate-800 whitespace-nowrap">{fmtDate(job.decide_by)}</b>
   return (
-    <Dialog title={stopped ? `Stop new applications for "${job.title}"?` : `Take applications again for "${job.title}"?`}
+    <Dialog fit title={stopped ? `Stop new applications for "${job.title}"?` : `Take applications again for "${job.title}"?`}
       busy={busy} onCancel={onCancel} action={stopped ? 'Stop new applications' : 'Take applications again'} onAction={onConfirm}>
-      <ul className="mt-2 space-y-1.5 text-sm text-slate-600 list-disc pl-5">
+      <ul className="mt-3 space-y-2 text-sm text-slate-600 list-disc pl-5">
         {stopped ? <>
           <li>Students stop seeing it in Job Matches and can't apply.</li>
-          <li>{job.waiting ? `The ${job.waiting} applicant${job.waiting === 1 ? '' : 's'} still waiting keep their place.` : 'People who already applied keep their place.'} Your decision date stays {date}.</li>
+          <li>Existing applicants keep their place. Decision date: {date}.</li>
           <li>You can take applications again any time before {date}.</li>
         </> : <>
           <li>It shows in Job Matches again, marked "Apply on SkillMap".</li>
@@ -154,19 +163,21 @@ function ExtendDialog({ job, busy, onCancel, onExtend }) {
   const [reason, setReason] = useState('')
   const short = reason.trim().length < 5
   return (
-    <Dialog title={`Move the decision date for "${job.title}"?`} busy={busy} onCancel={onCancel} action="Move the date"
+    <Dialog wide title={`Move the decision date for "${job.title}"?`} busy={busy} onCancel={onCancel} action="Move the date"
       onAction={() => onExtend(days, reason)} disabled={short}>
-      <p className="text-sm text-slate-600 mt-1.5">Now <b className="font-semibold text-slate-800">{fmtDate(job.decide_by)}</b>.
+      <p className="text-sm text-slate-600 mt-1.5">Now <b className="font-semibold text-slate-800 whitespace-nowrap">{fmtDate(job.decide_by)}</b>.
         You can move it <b className="font-semibold text-slate-800">once</b>, by <b className="font-semibold text-slate-800">up to 2 weeks</b>, and only before this date passes.</p>
-      <div className="mt-3 flex gap-2">
+      <div className="mt-3 grid grid-cols-2 gap-2">
         {[[7, '1 week later'], [14, '2 weeks later']].map(([d, label]) => (
           <button key={d} type="button" aria-pressed={days === d} onClick={() => setDays(d)}
-            className={`text-sm font-medium rounded-full px-3.5 py-1.5 border ${days === d ? 'bg-blue-600 border-blue-600 text-white' : 'bg-white border-slate-300 text-slate-700 hover:border-blue-300'}`}>
-            {label} <span className={days === d ? 'text-blue-100' : 'text-slate-500'}>· {fmtDate(later(job.decide_by, d))}</span></button>
+            className={`min-w-0 text-sm font-medium rounded-xl px-2 py-3 border ${days === d ? 'bg-blue-600 border-blue-600 text-white' : 'bg-white border-slate-300 text-slate-700 hover:border-blue-300'}`}>
+            <span className="block">{label}</span>
+            <span className={`block mt-1 whitespace-nowrap text-xs ${days === d ? 'text-blue-100' : 'text-slate-500'}`}>{fmtDate(later(job.decide_by, d))}</span></button>
         ))}
       </div>
       <label className="block mt-3">
-        <span className="text-xs text-slate-500">Why (applicants see this; a few words at least)</span>
+        <span className="text-sm font-medium text-slate-700">Reason for changing the date</span>
+        <span className="block mt-1 text-xs text-slate-500">Applicants will see this reason. Enter at least 5 characters.</span>
         <input value={reason} maxLength={REASON_MAX} onChange={e => setReason(e.target.value)} placeholder="e.g. Interviews are taking longer than planned"
           className="mt-1 w-full text-sm border border-slate-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
         <span className="block text-xs text-slate-500 mt-1 text-right">{reason.length} / {REASON_MAX}</span>
@@ -180,6 +191,8 @@ export function MyJobs() {
   const { state } = useLocation()
   const [jobs, setJobs] = useState(null)
   const [tab, setTab] = useState('open')
+  const [query, setQuery] = useState('')
+  const [sort, setSort] = useState('newest')
   const [busy, setBusy] = useState(null)
   const [error, setError] = useState('')
   const [notice, setNotice] = useState(state?.posted ? `"${state.posted}" is live in students' Job Matches.`
@@ -224,7 +237,19 @@ export function MyJobs() {
   }
   const open = (jobs || []).filter(j => j.status === 'open')
   const closed = (jobs || []).filter(j => j.status !== 'open')
-  const shown = tab === 'open' ? open : closed
+  const search = query.trim().toLocaleLowerCase()
+  const dateValue = value => {
+    const time = Date.parse(value)
+    return Number.isFinite(time) ? time : null
+  }
+  const shown = (tab === 'open' ? open : closed)
+    .filter(job => !search || [job.title, job.location, job.category].filter(Boolean).join(' ').toLocaleLowerCase().includes(search))
+    .sort((a, b) => {
+      const key = sort === 'decision' ? 'decide_by' : 'posted_at'
+      const first = dateValue(a[key]), second = dateValue(b[key])
+      if (first === null || second === null) return first === second ? 0 : first === null ? 1 : -1
+      return (sort === 'newest' ? second - first : first - second) || String(a.id).localeCompare(String(b.id))
+    })
   const strip = useRef(null)
 
   // 19 Nov: one copy of each cell, used by the laptop table and the phone cards, so the two never drift apart
@@ -289,12 +314,16 @@ export function MyJobs() {
       </PageHeader>
 
       <div className="flex-1 min-h-0 overflow-y-auto px-8 py-6 flex flex-col gap-4">
-        {notice && <div role="status" className="flex items-start gap-3 text-sm text-emerald-800 bg-emerald-50 border border-emerald-200 rounded-lg px-4 py-2.5">
-          <p className="flex-1 min-w-0">{notice}
+        {notice && <div role="status" className="flex items-start gap-3 text-sm text-emerald-900 bg-emerald-50 border border-emerald-300 border-l-4 border-l-emerald-600 rounded-xl px-4 py-3 shadow-sm">
+          <span aria-hidden="true" className="mt-0.5 inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-emerald-600 text-white"><svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m5 12 4 4L19 6" /></svg></span>
+          <div className="flex-1 min-w-0">
+          <p className="font-semibold text-emerald-950">{state?.posted ? 'Job published' : 'Changes saved'}</p>
+          <p className="mt-0.5 leading-relaxed">{notice}
           {fitNote > 0 && notice.includes('is live') && <> {fitAll > 0
             ? `${fitAll} graduate${fitAll === 1 ? ' already has' : 's already have'} all its required skills.`
             : `${fitNote} graduate${fitNote === 1 ? ' already has' : 's already have'} at least half of its required skills.`} <Link to="/dashboard" className="font-semibold underline">Invite them from your Dashboard</Link></>}</p>
-          <button type="button" onClick={() => setNotice('')} aria-label="Close" className="shrink-0 text-emerald-700 hover:text-emerald-900">×</button>
+          </div>
+          <button type="button" onClick={() => setNotice('')} aria-label="Dismiss notification" className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-xl text-emerald-800 hover:bg-emerald-100 focus-visible:outline-2 focus-visible:outline-emerald-700">×</button>
         </div>}
         {askClose && <CloseDialog job={askClose} busy={busy === askClose.id} onCancel={() => setAskClose(null)}
           onClose={(reason) => close(askClose, reason)} />}
@@ -313,13 +342,28 @@ export function MyJobs() {
         )}
         {jobs?.length > 0 && (
           <>
-            <div role="tablist" className="flex gap-2">
+            <div className="flex flex-wrap items-center gap-3">
+              <div className="relative w-80 max-w-full min-w-0 max-sm:w-full">
+                <svg aria-hidden="true" className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="10.5" cy="10.5" r="6.5" /><path d="m16 16 4 4" /></svg>
+                <input type="search" aria-label="Search your jobs" value={query} onChange={event => setQuery(event.target.value)} placeholder="Search jobs" className="min-h-11 w-full rounded-xl border border-line bg-white py-2 pl-9 pr-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+              </div>
+            <div role="tablist" aria-label="Job status" className="flex gap-2">
               {[['open', `Open (${open.length})`], ['closed', `Closed (${closed.length})`]].map(([key, text]) => (
                 <button key={key} role="tab" aria-selected={tab === key} onClick={() => setTab(key)}
                   className={`text-sm font-medium px-3.5 py-1.5 rounded-full border ${tab === key
                     ? 'bg-blue-600 border-blue-600 text-white' : 'bg-white border-slate-200 text-slate-600 hover:border-blue-300'}`}>{text}</button>
               ))}
             </div>
+              <label className="flex items-center gap-2 text-sm text-muted ml-auto max-sm:ml-0 max-sm:w-full">
+                <span className="shrink-0">Sort by</span>
+                <select aria-label="Sort jobs" value={sort} onChange={event => setSort(event.target.value)} className="min-h-11 min-w-0 sm:w-56 rounded-xl border border-line bg-white px-3 py-2 text-sm text-ink focus:outline-none focus:ring-2 focus:ring-blue-500 max-sm:flex-1">
+                  <option value="newest">Newest posted</option>
+                  <option value="oldest">Oldest posted</option>
+                  <option value="decision">Decision date: soonest</option>
+                </select>
+              </label>
+            </div>
+            <p role="status" className="sr-only">{shown.length} {tab} jobs shown{search ? ` for ${query.trim()}` : ''}.</p>
             {/* 21 Oct (her report: in a narrow window the Job column was squeezed to nothing; then "fixed header"): the
                 table keeps a minimum width; the column titles sit in their own strip and only the rows scroll under them,
                 up and down and, in a narrow window, sideways (the strip follows), as on the admin's Users page */}
@@ -355,12 +399,12 @@ export function MyJobs() {
                   {shown.map(j => (
                     <tr key={j.id} className="hover:bg-blue-50/40">
                       <td className="px-5 py-3.5">
-                        <div className="flex items-center gap-2 min-w-0">
-                          {j.status === 'hidden' ? <p className="font-medium text-slate-900 truncate">{j.title}</p>
-                            : <Link to={`/employer/jobs/${j.id}/edit`} title={`Open ${j.title}`} className="job-open font-medium truncate">{j.title}</Link>}
-                          {badgesOf(j)}
+                        <div className="min-w-0">
+                          {j.status === 'hidden' ? <p className="font-medium text-slate-900 wrap-anywhere">{j.title}</p>
+                            : <Link to={`/employer/jobs/${j.id}/edit`} title={`Open ${j.title}`} className="job-open font-medium wrap-anywhere">{j.title}</Link>}
                         </div>
                         <p className="text-xs text-slate-500 mt-0.5">{[j.location, j.category, `posted ${fmtDate(j.posted_at)}`].filter(Boolean).join(' · ')}</p>
+                        <div className="mt-1 flex flex-col gap-1 empty:hidden">{badgesOf(j)}</div>
                       </td>
                       {/* 12 Oct: the total, and how many still wait for a status */}
                       {/* 19 Nov (her review: "1 · 1 to review" looked squeezed): two calm lines like "Decide by": the
@@ -369,7 +413,7 @@ export function MyJobs() {
                         {applicantsOf(j)}
                       </td>
                       <td className="px-5 py-3.5"><DecideCell j={j} /></td>
-                      <td className="px-5 py-3.5 text-xs text-slate-600">{j.required} required{j.preferred ? <><br />{j.preferred} nice to have</> : ''}</td>
+                      <td className="px-5 py-3.5 text-xs text-slate-600"><JobSkills job={j} /></td>
                       <td className="px-5 py-3.5 whitespace-nowrap">
                         {/* 13 Oct (her pick after research, references.md "Editing a published job"): the row's main action,
                             then a ⋯ menu beside it, like Indeed's menu beside each job */}
@@ -379,7 +423,7 @@ export function MyJobs() {
                   ))}
                   {shown.length === 0 && (
                     <tr><td colSpan={5} className="px-5 py-8 text-center text-sm text-slate-500">
-                      {tab === 'open' ? 'No open jobs.' : 'No closed jobs.'}
+                      {search ? 'No jobs match your search. Try a different title, location or category.' : tab === 'open' ? 'No open jobs.' : 'No closed jobs.'}
                     </td></tr>
                   )}
                 </tbody>
@@ -393,17 +437,17 @@ export function MyJobs() {
                 <li key={j.id} className="bg-white border border-slate-200 rounded-2xl px-4 py-3.5">
                   {j.status === 'hidden' ? <p className="m-0 font-semibold text-slate-900">{j.title}</p>
                     : <Link to={`/employer/jobs/${j.id}/edit`} className="job-open font-semibold">{j.title}</Link>}
-                  <div className="flex flex-wrap gap-1.5 mt-1 empty:hidden">{badgesOf(j)}</div>
                   <p className="m-0 mt-1 text-xs text-slate-500">{[j.location, j.category, `posted ${fmtDate(j.posted_at)}`].filter(Boolean).join(' · ')}</p>
+                  <div className="flex flex-wrap gap-1.5 mt-1 empty:hidden">{badgesOf(j)}</div>
                   <dl className="m-0 mt-3 grid grid-cols-2 gap-3 text-sm">
                     <div><dt className="text-xs font-semibold text-slate-500">Applicants</dt><dd className="m-0 mt-0.5 text-slate-600">{applicantsOf(j)}</dd></div>
                     <div><dt className="text-xs font-semibold text-slate-500">{tab === 'open' ? 'Decide by' : 'Closed'}</dt><dd className="m-0 mt-0.5"><DecideCell j={j} /></dd></div>
                   </dl>
-                  <p className="m-0 mt-2 text-xs text-slate-600">{j.required} required{j.preferred ? ` · ${j.preferred} nice to have` : ''}</p>
+                  <p className="m-0 mt-2 text-xs text-slate-600"><JobSkills job={j} /></p>
                   <div className="mt-3 pt-3 border-t border-slate-100">{actionsOf(j)}</div>
                 </li>
               ))}
-              {shown.length === 0 && <li className="bg-white border border-slate-200 rounded-2xl px-4 py-6 text-center text-sm text-slate-500">{tab === 'open' ? 'No open jobs.' : 'No closed jobs.'}</li>}
+              {shown.length === 0 && <li className="bg-white border border-slate-200 rounded-2xl px-4 py-6 text-center text-sm text-slate-500">{search ? 'No jobs match your search. Try a different title, location or category.' : tab === 'open' ? 'No open jobs.' : 'No closed jobs.'}</li>}
             </ul>
           </>
         )}
