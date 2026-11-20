@@ -93,12 +93,12 @@ const CLOSE_REASONS = [
 function Dialog({ title, busy, onCancel, children, action, onAction, disabled, wide = false, fit = false, danger = false }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/30" onMouseDown={() => { if (!busy) onCancel() }}>
-      <div role="dialog" aria-modal="true" aria-labelledby="dlg-title" onMouseDown={e => e.stopPropagation()} className={`bg-white rounded-2xl shadow-xl max-h-[calc(100dvh-2rem)] overflow-y-auto ${fit ? 'w-full sm:w-fit max-w-2xl' : wide ? 'w-full max-w-2xl' : 'w-full max-w-xl'}`}>
-        <div className="px-5 pt-5 pb-5 sm:px-7 sm:pt-6 sm:pb-6 leading-relaxed">
+      <div role="dialog" aria-modal="true" aria-labelledby="dlg-title" onMouseDown={e => e.stopPropagation()} className={`app-modal-shell bg-white rounded-2xl shadow-xl max-h-[calc(100dvh-2rem)] flex flex-col overflow-hidden ${fit ? 'w-full sm:w-fit max-w-2xl' : wide ? 'w-full max-w-2xl' : 'w-full max-w-xl'}`}>
+        <div className="app-modal-body min-h-0 overflow-y-auto px-5 pt-5 pb-5 sm:px-7 sm:pt-6 sm:pb-6 leading-relaxed">
           <h2 id="dlg-title" className="text-base font-semibold text-slate-900">{title}</h2>
           {children}
         </div>
-        <div className="flex flex-wrap justify-end gap-2 px-5 py-4 sm:px-7 bg-slate-50 border-t border-slate-200 rounded-b-2xl">
+        <div className="app-modal-footer shrink-0 flex flex-wrap justify-end gap-2 px-5 py-4 sm:px-7 bg-slate-50 border-t border-slate-200 rounded-b-2xl">
           <button type="button" onClick={onCancel} disabled={busy} className="min-h-11 max-sm:flex-1 px-4 py-2 text-sm font-medium rounded-lg border border-slate-200 bg-white text-slate-700 hover:bg-slate-50">Cancel</button>
           <button type="button" onClick={onAction} disabled={busy || disabled} className={`min-h-11 max-sm:flex-1 px-4 py-2 text-sm font-medium rounded-lg text-white disabled:opacity-40 disabled:cursor-not-allowed focus-visible:outline-2 focus-visible:outline-offset-2 ${danger ? 'bg-rose-700 hover:bg-rose-800 focus-visible:outline-rose-700' : 'bg-blue-600 hover:bg-blue-700 focus-visible:outline-blue-600'}`}>
             {busy ? <Busy>Saving…</Busy> : action}

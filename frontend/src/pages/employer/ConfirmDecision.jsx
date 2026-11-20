@@ -17,15 +17,15 @@ export default function ConfirmDecision({ app, d, busy, onConfirm, onCancel, tit
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/30" onMouseDown={() => { if (!busy) onCancel() }}>
       <div role="alertdialog" aria-modal="true" aria-labelledby="decide-title" aria-describedby="decide-text"
-        onMouseDown={e => e.stopPropagation()} className="bg-white rounded-2xl shadow-xl w-full max-w-md">
-        <div className="px-6 pt-5 pb-4">
+        onMouseDown={e => e.stopPropagation()} className="app-modal-shell bg-white rounded-2xl shadow-xl w-full max-w-md max-h-[calc(100dvh-2rem)] flex flex-col overflow-hidden">
+        <div className="app-modal-body min-h-0 overflow-y-auto px-6 pt-5 pb-4">
           <h2 id="decide-title" className="text-base font-semibold text-slate-900">{title || `${d.action.replace('Mark as', `Mark ${app.name} as`)}?`}</h2>
           <p id="decide-text" className="text-sm text-slate-600 mt-1.5 leading-relaxed">
             {text || <>They will see <b>"{d.see}"</b> for {app.job_title} on their My Applications page straight away.{d.extra || ''}</>}
           </p>
           {d.danger && <div className="mt-4"><ReasonPicker value={why} onChange={setWhy} /></div>}
         </div>
-        <div className="flex justify-end gap-2 px-6 py-4 bg-slate-50 border-t border-slate-200 rounded-b-2xl">
+        <div className="app-modal-footer shrink-0 flex flex-wrap justify-end gap-2 px-6 py-4 bg-slate-50 border-t border-slate-200 rounded-b-2xl">
           <button type="button" onClick={onCancel} disabled={busy}
             className="px-4 py-2 text-sm font-medium rounded-lg border border-slate-200 bg-white text-slate-700 hover:bg-slate-50">Cancel</button>
           <button type="button" autoFocus={!d.danger} onClick={() => onConfirm(why)} disabled={busy || !reasonOk(why)}
