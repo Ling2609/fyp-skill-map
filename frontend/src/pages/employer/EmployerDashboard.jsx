@@ -204,7 +204,7 @@ export default function EmployerDashboard() {
     setInviting(g.student_id); setError('')
     api.post('/employer/invitations', { job_id: g.job_id, student_id: g.student_id })
       .then(res => setData(d => ({ ...d,
-        graduates: d.graduates.map(x => x.student_id === g.student_id ? { ...x, invited_at: res.data.invited_at,
+        graduates: d.graduates.map(x => x.student_id === g.student_id && x.job_id === g.job_id ? { ...x, invited_at: res.data.invited_at,
           invite: { state: 'invited', label: 'Invited', at: res.data.invited_at, invited_at: res.data.invited_at } } : x),
         activity: [{ kind: 'invited', at: res.data.invited_at, job: g.job_title, job_id: g.job_id, student: g.name, student_id: g.student_id }, ...d.activity] })))
       .catch(err => setError(errText(err, "Couldn't send the invitation. Try again.")))
@@ -384,9 +384,9 @@ data.attention.quiet_jobs.map(q => (<li key={q.job_id} className="px-5 py-3 flex
                 {alerts.length > 0 && <FitList fill={false} max={shortWindow ? 1 : 2} label="Things that need you" onShown={setNAlerts} items={alerts} renderItem={row => row} className="emp-alert-preview border-t border-slate-200" /> }
                 {data.to_review.length > 0 && (
                   <div className={`${GROUP} flex items-baseline justify-between gap-3`}>
-                    <span>To review ({sum.new}) · across all your jobs, newest first</span>
-                    {nReview < sum.new && <Link to={reviewJob ? `/employer/jobs/${reviewJob}` : '/employer/jobs'} className={SEE}>
-                      {reviewJob ? `See all ${sum.new} →` : 'See all in My Jobs →'}</Link>}
+                    <span>To review ({data.to_review.length}) · across all your jobs, newest first</span>
+                    {nReview < data.to_review.length && <Link to={reviewJob ? `/employer/jobs/${reviewJob}` : '/employer/jobs'} className={SEE}>
+                      {reviewJob ? `See all ${data.to_review.length} →` : 'See all in My Jobs →'}</Link>}
                   </div>
                 )}
                 {data.to_review.length === 0 ? (
