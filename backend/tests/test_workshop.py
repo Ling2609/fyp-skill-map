@@ -123,3 +123,24 @@ def test_skill_gaps_keep_one_copy_a_week(client, users, monkeypatch):
     adm._snapshot([{"skill": "Git", "students": 3, "of_students": 9}])      # later the same week: the first is kept
     hist = client.get("/admin/skill-gaps/history", headers=users.h(users.admin())).json()
     assert len(hist) == 1 and hist[0]["gaps"] == [{"skill": "Git", "students": 7}]
+
+
+def test_the_given_first_sentence_is_never_repeated(client, users, monkeypatch):
+    """22 Nov: the model repeated the first sentence; it shows once."""
+    _gaps(monkeypatch)
+    lead = "In SkillMap's job matching, 6 of 9 students lack Reporting"
+    monkeypatch.setattr(chatbot, "get_client", _fake_client(json.dumps({
+        "title": "T", "background_rest": lead + " in their top job matches, across 0 live ICT job ads. It matters.",
+        "objectives": ["O"], "outcomes": "L", "agenda": [["0:00–0:30", "Intro"]]})))
+    d = client.post("/admin/workshop/draft", headers=users.h(users.admin()), json={"skills": ["Reporting"]}).json()
+    assert d["background"].count("6 of 9 students lack Reporting") == 1 and d["background"].endswith("It matters.")
+
+
+def test_a_proposal_reopens_with_its_setup(client, users, monkeypatch):
+    import app.mongo
+    col = FakeCol()
+    monkeypatch.setattr(app.mongo, "workshop_proposals", lambda: col)
+    h = users.h(users.admin())
+    setup = {"length": "2h", "format": "online", "audience": "final_year", "note": "Use Power BI"}
+    pid = client.post("/admin/workshop/proposals", headers=h, json={**BODY, "setup": setup}).json()["id"]
+    assert client.get(f"/admin/workshop/proposals/{pid}", headers=h).json()["setup"] == setup

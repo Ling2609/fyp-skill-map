@@ -1,7 +1,6 @@
-import InfoTip from '../../components/InfoTip'
 import { useUnsavedChanges } from '../../components/useUnsavedChanges'
 import { useConfirmation } from '../../components/useConfirmation'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import api from '../../api'
 import { useAuth } from '../../context/useAuth'
@@ -9,6 +8,8 @@ import PageHeader from '../../components/PageHeader'
 import BackLink from '../../components/BackLink'
 import { Busy } from '../../components/Spinner'
 import { skillName } from '../../skillName'
+import RowMenu from './RowMenu'
+import { AUTOSAVE_MS, copyTitle, factsFor, saveState, statusText } from './autosave'
 
 // 20 Nov (her approved mock review/workshop-planner.html): the career office plans a workshop on the most common
 // skill gaps. Left: the choices; right: the drafted activity proposal, every part editable, then Export PDF.
@@ -16,6 +17,10 @@ import { skillName } from '../../skillName'
 const LENGTHS = [['2h', '2 hours'], ['half', 'Half day'], ['full', 'Full day']]
 const FORMATS = [['in_person', 'In person'], ['online', 'Online'], ['hybrid', 'Hybrid']]
 const AUDIENCES = [['all', 'All students'], ['final_year', 'Final-year students']]
+// what the content was drafted from; any difference shows the set-up note (22 Nov, her review)
+const setupOf = ({ skills, length, format, audience, note }) => JSON.stringify({ skills: [...skills].sort(), length, format, audience, note: (note || '').trim() })
+// the text of a proposal without its details line (that line follows the set-up, so it is not a hand edit)
+const bodyOf = (x) => JSON.stringify({ ...x, facts: undefined })
 const SAVING_UNAVAILABLE = 'Saving isn’t available right now'
 const errText = (err, fallback) => {
   if (err.response?.status === 503) return SAVING_UNAVAILABLE
@@ -90,17 +95,29 @@ function WorkshopEditor() {
   const [note, setNote] = useState('')
   const [p, setP] = useState(initialDraft?.proposal ?? null)
   const [busy, setBusy] = useState('')
+  const [draftBody, setDraftBody] = useState(null)   // the AI's text as drafted; null = opened, unknown
+  const [drafts, setDrafts] = useState(0)   // counts finished drafts: the new text fades in
   const [saved, setSaved] = useState(null)
   const [savedId, setSavedId] = useState(initialDraft?.proposal ? initialDraft.id : null)
   const [savedSnapshot, setSavedSnapshot] = useState(initialDraft?.snapshot ?? null)
   const [openState, setOpenState] = useState(proposalId ? 'loading' : '')
   const [error, setError] = useState('')
-  const [recovered, setRecovered] = useState(false)
+  const [, setRecovered] = useState(false)
+  // 22 Nov (her approved mock): saved by itself after a pause; the version before the last save, for Undo
+  const [failed, setFailed] = useState(false)
+  // the set-up the content was last drafted with; a different one means the agenda may need a redraft
+  const [draftedWith, setDraftedWith] = useState(null)
+  const [savedAt, setSavedAt] = useState(null)
+  const [undoTo, setUndoTo] = useState(null)
+  const [now, setNow] = useState(() => Date.now())
+  const saving = useRef(false)
   const body = () => {
     const { source: _source, ...proposal } = p // eslint-disable-line no-unused-vars
     return { skills, proposal }
   }
-  const dirty = !!p && (!savedId || JSON.stringify(body()) !== savedSnapshot)
+  // 22 Nov (her question): the set-up choices count as edits too, so changing only them saves as well
+  const full = () => ({ ...body(), setup: { length, format, audience, note } })
+  const dirty = !!p && (!savedId || JSON.stringify(full()) !== savedSnapshot)
 
   useEffect(() => {
     let active = true
@@ -111,7 +128,8 @@ function WorkshopEditor() {
     if (proposalId) {
       api.get(`/admin/workshop/proposals/${proposalId}`).then(({ data }) => {
         if (!active) return
-        const snapshot = JSON.stringify({ skills: data.skills, proposal: data.proposal })
+        const setup = { length: data.setup?.length || 'half', format: data.setup?.format || 'in_person', audience: data.setup?.audience || 'all', note: data.setup?.note || '' }
+        const snapshot = JSON.stringify({ skills: data.skills, proposal: data.proposal, setup })
         let cachedDraft = null
         try {
           if (recoveryKey) cachedDraft = JSON.parse(sessionStorage.getItem(recoveryKey))
@@ -122,6 +140,8 @@ function WorkshopEditor() {
         setRecovered(!!restore)
         setSavedId(data.id)
         setSavedSnapshot(snapshot)
+        setLength(setup.length); setFormat(setup.format); setAudience(setup.audience); setNote(setup.note)
+        setDraftedWith(setupOf({ ...setup, skills: restore ? cachedDraft.skills : data.skills }))
         setOpenState('')
       }).catch(err => {
         if (!active) return
@@ -134,13 +154,16 @@ function WorkshopEditor() {
 
   useEffect(() => {
     if (proposalId) return
-    try {
-      localStorage.setItem(DRAFT_KEY + '-details', JSON.stringify({ scope, skills, snapshot: savedSnapshot }))
-      if (p) localStorage.setItem(DRAFT_KEY, JSON.stringify(p))
-      else localStorage.removeItem(DRAFT_KEY)
-      if (savedId) localStorage.setItem(DRAFT_KEY + '-id', savedId)
-      else localStorage.removeItem(DRAFT_KEY + '-id')
-    } catch { /* storage blocked */ }
+    const t = setTimeout(() => {
+      try {
+        localStorage.setItem(DRAFT_KEY + '-details', JSON.stringify({ scope, skills, snapshot: savedSnapshot }))
+        if (p) localStorage.setItem(DRAFT_KEY, JSON.stringify(p))
+        else localStorage.removeItem(DRAFT_KEY)
+        if (savedId) localStorage.setItem(DRAFT_KEY + '-id', savedId)
+        else localStorage.removeItem(DRAFT_KEY + '-id')
+      } catch { /* storage blocked */ }
+    }, 800)
+    return () => clearTimeout(t)
   }, [p, proposalId, savedId, savedSnapshot, scope, skills])
 
   useEffect(() => {
@@ -165,74 +188,101 @@ function WorkshopEditor() {
     },
   })
 
-  const newProposal = () => navigate('/admin/workshop?new=1')
   const save = async () => {
-    setBusy('save')
-    setError('')
-    const payload = body()
+    if (saving.current) return
+    saving.current = true
+    setBusy(b => b || 'save')
+    setFailed(false)
+    // 22 Nov (her pick): the set-up choices are saved with the proposal and come back when it is opened
+    const payload = full()
+    const before = savedSnapshot
     try {
       const { data } = savedId
         ? await api.put(`/admin/workshop/proposals/${savedId}`, payload)
         : await api.post('/admin/workshop/proposals', payload)
+      if (!savedId) {
+        // the new proposal now has an address, so a reload opens it (no remount: the page keeps its state)
+        window.history.replaceState(window.history.state, '', `/admin/workshop?proposal=${encodeURIComponent(data.id)}`)
+      }
+      if (before) setUndoTo(before)
       setSavedId(data.id)
       setRecovered(false)
       setSavedSnapshot(JSON.stringify(payload))
+      setSavedAt(Date.now())
       setSaved(previous => [data, ...(Array.isArray(previous) ? previous : []).filter(item => item.id !== data.id)])
     } catch (err) {
       if (err.response?.status === 404) {
         setSavedId(null)
         setError('This proposal was deleted. Save to create a new copy.')
       } else {
+        setFailed(true)
         setError(errText(err, "Couldn't save the proposal. Check the title and section lengths, then try again."))
       }
     } finally {
-      setBusy('')
+      saving.current = false
+      setBusy(b => (b === 'save' ? '' : b))
     }
   }
-  const discard = async () => {
-    if (busy || !dirty) return
-    if (!await confirm({
-      title: savedId ? 'Discard unsaved changes?' : 'Discard this draft?',
-      message: savedId ? 'The proposal will return to its last saved version.' : 'This draft will be cleared.',
-      confirmLabel: savedId ? 'Discard changes' : 'Discard draft',
-      cancelLabel: 'Keep editing',
-      danger: true,
-    })) return
-
-    setBusy('discard')
-    setError('')
+  const canSave = !!p && saved !== false && !openState && !!p.title.trim()
+  useEffect(() => {
+    if (!dirty || !canSave || failed || busy === 'draft') return
+    const t = setTimeout(save, AUTOSAVE_MS)
+    return () => clearTimeout(t)
+  }, [p, skills, length, format, audience, note, dirty, canSave, failed, busy]) // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => {      // "Saved · 2 min ago" stays true
+    const t = setInterval(() => setNow(Date.now()), 30_000)
+    return () => clearInterval(t)
+  }, [])
+  const undo = () => {
+    if (!undoTo) return
+    const back = JSON.parse(undoTo)
+    setUndoTo(null)
+    setP(x => ({ ...back.proposal, source: x?.source }))
+    setSkills(back.skills)
+    if (back.setup) { setLength(back.setup.length); setFormat(back.setup.format); setAudience(back.setup.audience); setNote(back.setup.note) }
+  }
+  const makeCopy = async () => {
+    setBusy('copy'); setError('')
     try {
-      let snapshot = savedSnapshot ? JSON.parse(savedSnapshot) : null
-      if (savedId && !snapshot) {
-        const { data } = await api.get(`/admin/workshop/proposals/${savedId}`)
-        snapshot = { skills: data.skills || [], proposal: data.proposal }
-      }
-      if (savedId && snapshot) {
-        setP(snapshot.proposal)
-        setSkills(snapshot.skills)
-        setSavedSnapshot(JSON.stringify(snapshot))
-      } else {
-        setP(null)
-        setSavedId(null)
-        setSavedSnapshot(null)
-      }
-      setRecovered(false)
-      if (recoveryKey) {
-        try { sessionStorage.removeItem(recoveryKey) } catch { /* storage blocked */ }
-      }
+      const { proposal } = body()
+      const { data } = await api.post('/admin/workshop/proposals', { skills, proposal: { ...proposal, title: copyTitle(proposal.title) } })
+      navigate(`/admin/workshop?proposal=${encodeURIComponent(data.id)}`)
     } catch (err) {
-      setError(errText(err, "Couldn't restore the saved proposal. Try again."))
-    } finally {
+      setError(errText(err, "Couldn't make a copy. Try again."))
+    } finally { setBusy('') }
+  }
+  const remove = async () => {
+    if (!await confirm({ title: 'Delete this proposal?', message: `“${p.title}” will be permanently deleted.`, confirmLabel: 'Delete proposal', danger: true })) return
+    setBusy('delete'); setError('')
+    try {
+      if (savedId) await api.delete(`/admin/workshop/proposals/${savedId}`)
+      try { localStorage.removeItem(DRAFT_KEY); localStorage.removeItem(DRAFT_KEY + '-id'); localStorage.removeItem(DRAFT_KEY + '-details') } catch { /* storage blocked */ }
+      setSavedSnapshot(JSON.stringify(body()))     // nothing left to save, so leaving asks nothing
+      navigate('/admin/workshop/proposals')
+    } catch (err) {
+      setError(errText(err, "Couldn't delete the proposal. Try again."))
       setBusy('')
     }
   }
-
+  // a set-up click rewrites the details line at once (her question, 22 Nov)
+  const pick = (key, value) => {
+    const next = { length, format, audience, [key]: value }
+    ;({ length: setLength, format: setFormat, audience: setAudience })[key](value)
+    setP(x => (x ? { ...x, facts: factsFor(x.facts || [], next) } : x))
+  }
+  // dismissed for this set-up only: a later change shows the note again
+  const setupKey = setupOf({ skills, length, format, audience, note })
+  const [noteHidden, setNoteHidden] = useState('')
+  const setupChanged = !!p && !!draftedWith && draftedWith !== setupKey
+  const state = saveState({ dirty, saving: busy === 'save', failed, available: saved !== false })
   const toggle = s => setSkills(x => x.includes(s) ? x.filter(y => y !== s) : x.length < 4 ? [...x, s] : x)
   const set = (k, v) => setP(x => ({ ...x, [k]: v }))
   const draft = async () => {
-    if (dirty && !await confirm({
+    // 22 Nov: ask only when the text was edited by hand (or opened from saved); a set-up change alone redrafts at once
+    const edited = !!p && (draftBody === null || bodyOf(p) !== draftBody)
+    if (edited && !await confirm({
       title: 'Redraft this proposal?',
-      message: 'Drafting again will replace the current proposal, including your unsaved edits.',
+      message: 'Drafting again replaces the agenda, objectives and other text, including your own edits.',
       confirmLabel: 'Redraft proposal',
       cancelLabel: 'Keep editing',
       danger: true,
@@ -242,6 +292,9 @@ function WorkshopEditor() {
     try {
       const { data } = await api.post('/admin/workshop/draft', { skills, length, format, audience, note })
       setP(data)
+      setDraftBody(bodyOf(data))
+      setDrafts(n => n + 1)
+      setDraftedWith(setupOf({ skills, length, format, audience, note }))
       setSkills(skills)
     } catch (err) {
       setError(errText(err, "Couldn't draft the proposal. Try again."))
@@ -285,14 +338,6 @@ function WorkshopEditor() {
         <section className="emp-tile ws-set bg-white rounded-2xl border" aria-labelledby="ws-set-h">
           <div className="flex shrink-0 flex-wrap items-center justify-between gap-x-2">
             <h2 id="ws-set-h" className="adm-tt">Set up</h2>
-            {p && (
-              <button type="button" disabled={!!busy} onClick={newProposal} className="ws-new">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-                  <path d="M12 5v14M5 12h14" strokeLinecap="round" />
-                </svg>
-                New proposal
-              </button>
-            )}
           </div>
           <fieldset className="ws-f">
             <legend>Skills to cover <span className="font-normal text-muted">· up to 4</span></legend>
@@ -309,9 +354,9 @@ function WorkshopEditor() {
               ))}
             </ul>
           </fieldset>
-          <Chips label="Length" options={LENGTHS} value={length} onChange={setLength} />
-          <Chips label="Format" options={FORMATS} value={format} onChange={setFormat} />
-          <Chips label="Open to" options={AUDIENCES} value={audience} onChange={setAudience} />
+          <Chips label="Length" options={LENGTHS} value={length} onChange={v => pick('length', v)} />
+          <Chips label="Format" options={FORMATS} value={format} onChange={v => pick('format', v)} />
+          <Chips label="Open to" options={AUDIENCES} value={audience} onChange={v => pick('audience', v)} />
           <div className="ws-f">
             <label htmlFor="ws-note" className="ws-lbl">Anything to add <span className="font-normal text-muted">(optional)</span></label>
             <textarea id="ws-note" rows={2} maxLength={300} value={note} onChange={e => setNote(e.target.value)}
@@ -324,7 +369,7 @@ function WorkshopEditor() {
         <article className="emp-tile ws-doc bg-white rounded-2xl border" aria-label="Proposal">
           {!p ? (
             <div className="ws-empty">
-              {!openState && (
+              {!openState && busy !== 'draft' && (
                 <span className="mx-auto mb-4 grid size-12 place-items-center rounded-xl bg-accent-soft text-accent-strong" aria-hidden="true">
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75"
                     strokeLinecap="round" strokeLinejoin="round">
@@ -333,53 +378,44 @@ function WorkshopEditor() {
                   </svg>
                 </span>
               )}
-              <p className="m-0 font-semibold text-ink">{openState === 'loading' ? 'Opening proposal…' : openState === 'failed' ? 'Proposal unavailable' : 'Your proposal appears here'}</p>
-              {!openState && <p className="m-0 mt-1 text-sm text-muted">Choose the skills to cover, then select Draft proposal.</p>}
+              {busy === 'draft' && <span className="ws-spin mx-auto mb-3" aria-hidden="true" />}
+              <p className="m-0 font-semibold text-ink">{busy === 'draft' ? 'Drafting your proposal…' : openState === 'loading' ? 'Opening proposal…' : openState === 'failed' ? 'Proposal unavailable' : 'Your proposal appears here'}</p>
+              {!openState && <p className="m-0 mt-1 text-sm text-muted">{busy === 'draft' ? 'The AI writes it from the skill gaps. This takes a few seconds.' : 'Choose the skills to cover, then select Draft proposal.'}</p>}
               {openState === 'failed' && <Link to="/admin/workshop/proposals" className="ws-add">Back to saved proposals</Link>}
             </div>
           ) : (<>
-            <div className="flex shrink-0 flex-wrap items-center justify-between gap-x-3 gap-y-2 border-b border-line px-4 py-3">
-              <div className="flex min-h-10 items-center gap-1">
-                <h2 className="m-0 text-[15px] font-semibold normal-case tracking-normal text-ink">Proposal editor</h2>
-                <InfoTip label="About saving and exporting">
-                  Export PDF uses the current editor version, including unsaved changes. Save changes to update Saved proposals.
-                </InfoTip>
-              </div>
-              <div className="ml-auto flex flex-wrap items-center justify-end gap-1.5">
-                <p role="status" title={recovered && dirty ? 'Unsaved edits restored from this tab' : undefined} className={`m-0 inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold ${dirty ? 'bg-amber-100 text-amber-900' : 'bg-have-soft text-have-strong'}`}>
-                  {recovered && dirty ? (
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
-                      <path d="M3 10a9 9 0 1 1 2 8M3 4v6h6" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                  ) : <span className="ws-save-dot" aria-hidden="true" />}
-                  {busy === 'save' ? 'Saving…' : dirty ? recovered ? 'Unsaved changes' : savedId ? 'Unsaved changes' : 'Unsaved draft' : 'All changes saved'}
-                </p>
-                {dirty && (
-                  <button type="button" onClick={discard} disabled={!!busy}
-                    className="inline-flex min-h-10 items-center gap-1.5 rounded-control border border-rose-300 bg-white px-2.5 text-[13px] font-semibold text-rose-800 hover:border-rose-400 hover:bg-rose-50 disabled:opacity-50">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
-                      <path d="M9 5 4 10l5 5M4 10h10a6 6 0 0 1 0 12" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                    {busy === 'discard' ? <Busy>Discarding…</Busy> : savedId ? 'Discard changes' : 'Discard draft'}
-                  </button>
-                )}
-                <button type="button" onClick={exportPdf} disabled={!!busy} className="inline-flex min-h-10 items-center justify-center gap-2 rounded-control border border-line-strong bg-white px-3 text-[13px] font-semibold text-accent-strong hover:bg-accent-soft disabled:opacity-50">
-                  {busy === 'pdf' ? <Busy>Making PDF…</Busy> : (
-                    <>
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
-                        <path d="M12 3v12m-5-5 5 5 5-5M5 16v4a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-4"
-                          strokeLinecap="round" strokeLinejoin="round" />
-                      </svg>
-                      Export PDF
-                    </>
-                  )}
+            <div className="ws-edbar">
+              <h2 className="m-0 text-[15px] font-semibold text-ink">Proposal</h2>
+              <span className="ml-auto flex items-center gap-3">
+              <p role="status" className={`ws-state ${state}`}>
+                <span className="ws-state-ic" aria-hidden="true">{state === 'saved' ? '✓' : state === 'error' ? '!' : state === 'off' ? '–' : ''}</span>
+                {statusText(state, savedAt, now)}
+                {state === 'error' && <button type="button" onClick={() => { setFailed(false); save() }} className="ws-link">Try again</button>}
+                {state === 'saved' && undoTo && <button type="button" onClick={undo} className="ws-link">Undo</button>}
+              </p>
+                <button type="button" onClick={exportPdf} disabled={!!busy && busy !== 'save'} className="head-cta h-10 px-4 text-sm disabled:opacity-50">
+                  {busy === 'pdf' ? <Busy>Making PDF…</Busy> : <>
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+                      <path d="M12 3v12m-5-5 5 5 5-5M5 16v4a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-4" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>Export PDF</>}
                 </button>
-                <button type="button" onClick={save} disabled={!!busy || saved === null || !dirty || !p.title.trim()}
-                  className="inline-flex min-h-10 items-center justify-center rounded-control bg-accent px-3 text-[13px] font-bold text-white hover:bg-accent-strong active:bg-blue-950 disabled:opacity-45">
-                  {busy === 'save' ? <Busy>Saving…</Busy> : savedId ? 'Save changes' : 'Save proposal'}
-                </button>
-              </div>
+                <RowMenu label="More actions for this proposal" disabled={!!busy && busy !== 'save'} items={[
+                  ...(saved !== false ? [{ label: 'Make a copy', onSelect: makeCopy }] : []),
+                  { label: 'Delete…', danger: true, onSelect: remove },
+                ]} />
+              </span>
             </div>
+            {setupChanged && noteHidden !== setupKey && (
+              <div className="ws-setup-note" role="status">
+                <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><circle cx="12" cy="12" r="9" /><path d="M12 7v6m0 3.5h.01" /></svg>
+                <span className="ws-setup-txt">Set-up changed. <span className="ws-setup-more">The agenda and objectives still follow the old one.</span></span>
+                <button type="button" onClick={draft} disabled={!!busy} className="ws-redraft">
+                  {busy === 'draft' ? <><span className="ws-spin ws-spin-sm" aria-hidden="true" />Redrafting…</> : <>
+                  <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 11a8 8 0 1 0-2.3 5.7M20 4v7h-7" /></svg>
+                  Redraft</>}</button>
+                <button type="button" onClick={() => setNoteHidden(setupKey)} aria-label="Dismiss" className="ws-note-x">×</button>
+              </div>
+            )}
             <div className="ws-editor-note">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" aria-hidden="true">
                 <circle cx="12" cy="12" r="9" />
@@ -391,7 +427,16 @@ function WorkshopEditor() {
                 Replace any <span className="ws-todo">[to fill in]</span> placeholders with your workshop details.
               </p>
             </div>
-            <div className="ws-body">
+            {busy === 'draft' && (
+              <div className="ws-redrafting" role="status">
+                <div className="ws-redrafting-card">
+                  <span className="ws-spin" aria-hidden="true" />
+                  <p className="m-0 font-semibold text-ink">Redrafting with the new set-up…</p>
+                  <p className="m-0 text-sm text-muted">The AI rewrites the agenda and objectives. This takes a few seconds.</p>
+                </div>
+              </div>
+            )}
+            <div key={drafts} className={`ws-body${drafts > 1 ? ' ws-fresh' : ''}`} aria-busy={busy === 'draft'}>
               <p className="ws-eb">Activity proposal · Career office</p>
               <input aria-label="Title" value={p.title} maxLength={160} onChange={e => set('title', e.target.value)} className="ws-title" />
               <div className="mt-1 mb-2">

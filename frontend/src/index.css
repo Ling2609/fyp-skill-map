@@ -1959,3 +1959,136 @@ button.skillgap-token { cursor: pointer; }
 @media (max-width: 639px) { .doc-row { grid-template-columns: 1fr; } }
 /* employer status counts: zero in a darker grey (axe contrast) */
 .emp-status-count.is-zero { color: #5d6680 !important; }
+/* 22 Nov (her review: "still much spacing in the cards"): two real columns, as the admin dashboard. Each card is as
+   tall as its content; only the last card of each column (Graduates who fit, Recent activity) takes what is left and
+   shows the whole rows that fit. No row is shared across columns, so no gap opens under a short card. */
+@media (min-width: 1024px) {
+  .emp-balanced-grid { grid-template-rows: minmax(0, 1fr) !important; align-items: stretch; }
+  .emp-balanced-column { display: flex !important; flex-direction: column; gap: 16px; min-height: 0; min-width: 0; }
+  .emp-balanced-column > .emp-tile { grid-column: auto !important; grid-row: auto !important; flex: none !important; align-self: stretch !important; }
+  .emp-balanced-column > .emp-tile:last-child { flex: 1 1 0 !important; min-height: 0 !important; }
+  .emp-balanced-column > [aria-labelledby="review-h"]:not(:last-child) { flex: 0 1 auto !important; }
+  .emp-balanced-column > [aria-labelledby="review-h"]:not(:last-child):has(.emp-preview-list) { min-height: 150px !important; }
+  .emp-balanced-column > [aria-labelledby="jobs-h"] { flex: 0 1 auto !important; min-height: 120px !important; }
+  .emp-balanced-grid [aria-labelledby="activity-h"] .emp-preview-rows { display: block !important; }
+  .emp-balanced-grid [aria-labelledby="activity-h"] .emp-preview-rows > li + li { border-left: 0 !important; }
+  .emp-balanced-grid [aria-labelledby="tips-h"] { grid-column: auto !important; grid-row: auto !important; }
+}
+@media (min-width: 1024px) {
+  .emp-balanced-column > .emp-tile:last-child .emp-preview-list { flex: 1 1 0 !important; min-height: 0 !important; }
+}
+/* planner editor bar (22 Nov): status left, one main action, the rest in the menu */
+.ws-edbar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; padding: 10px 16px; border-bottom: 1px solid var(--color-line); flex: none; }
+.ws-state { display: inline-flex; align-items: center; gap: 7px; margin: 0; font-size: 13px; font-weight: 600; color: var(--color-muted); }
+.ws-state-ic { width: 18px; height: 18px; border-radius: 50%; display: grid; place-items: center; font-size: 11px; font-weight: 800; flex: none; }
+.ws-state.saved { color: var(--color-have-strong); } .ws-state.saved .ws-state-ic { background: var(--color-have-soft); }
+.ws-state.saving .ws-state-ic, .ws-state.pending .ws-state-ic { border: 2px solid #cfd5e2; border-top-color: var(--color-accent); }
+@media (prefers-reduced-motion: no-preference) { .ws-state.saving .ws-state-ic { animation: ws-spin .8s linear infinite; } }
+@keyframes ws-spin { to { transform: rotate(360deg); } }
+.ws-state.error { color: #b42318; } .ws-state.error .ws-state-ic { background: #fde8e6; }
+.ws-state.off .ws-state-ic { background: var(--color-well); }
+.ws-link { margin-left: 4px; font-size: 13px; font-weight: 700; color: var(--color-accent-strong); text-decoration: underline; text-underline-offset: 3px; }
+/* 22 Nov (her review): the useful cards show more; Recent activity is the 5 newest at its own height, so Your open
+   jobs takes the right column's spare height */
+@media (min-width: 1024px) {
+  .emp-balanced-column > [aria-labelledby="activity-h"]:last-child { flex: none !important; }
+  .emp-balanced-column > [aria-labelledby="activity-h"]:last-child .emp-preview-list { flex: none !important; }
+  .emp-balanced-column > [aria-labelledby="jobs-h"] { flex: 1 1 0 !important; min-height: 120px !important; }
+  .emp-balanced-column > [aria-labelledby="jobs-h"] .emp-preview-list { flex: 1 1 0 !important; min-height: 0 !important; }
+}
+/* tips under a complete list (22 Nov): they take the card's spare height; tips that don't fit whole are hidden */
+@media (min-width: 1024px) {
+  .emp-preview-list:has(.emp-more) { display: flex; flex-direction: column; }
+  .emp-preview-list:has(.emp-more) > ul.emp-preview-rows:not(.emp-preview-measure) { flex: none; }
+}
+.emp-more { flex: 1 1 0; min-height: 0; display: flex; flex-direction: column; padding: 12px 20px 10px; background: linear-gradient(#f7f9fd, #fff 70%); border-top: 1px solid #edf0f7; }
+.emp-more-h { margin: 0 0 6px; font: 500 11px var(--font-mono); letter-spacing: .09em; text-transform: uppercase; color: var(--color-ink-soft); flex: none; }
+.emp-more-list { margin: 0; padding: 0; list-style: none; flex: 1 1 0; min-height: 0; overflow: hidden;
+  display: flex; flex-direction: column; flex-wrap: wrap; align-content: flex-start; column-gap: 400px; }
+.emp-more-list > li { width: 100%; display: flex; align-items: flex-start; gap: 9px; padding: 5px 0; font-size: 13px; line-height: 1.45; color: var(--color-ink-soft); }
+.emp-more-dot { width: 6px; height: 6px; margin-top: 7px; border-radius: 50%; background: var(--color-accent); flex: none; }
+@media (max-width: 1023px) { .emp-more-list { flex-wrap: nowrap; overflow: visible; } }
+@media (min-width: 1024px) { .emp-balanced-column > [aria-labelledby="tips-h"] { display: none !important; } }
+/* 22 Nov (her review: "not obvious"): the tips block in a soft blue tint with a lightbulb heading */
+.emp-more { background: #eef3fd !important; border-top: 1px solid #d9e4f8 !important; }
+.emp-more-h { display: flex; align-items: center; gap: 7px; color: var(--color-accent-strong) !important; font-weight: 600 !important; }
+.emp-more-h svg { width: 15px; height: 15px; flex: none; }
+.emp-more-list > li { color: var(--color-ink) !important; }
+/* phones (22 Nov): a review / graduate row wraps: name and details on the first line, match and button on the next */
+@media (max-width: 639px) {
+  .emp-row { flex-wrap: wrap; row-gap: 8px; }
+  .emp-row > .flex-1 { flex: 1 1 calc(100% - 56px) !important; }
+  .emp-row > .w-40 { display: none !important; }
+  .emp-row > .w-36 { width: auto !important; margin-left: auto; }
+  .emp-row > :nth-child(n+3) { margin-left: auto; }
+  .emp-row > :nth-child(3) { margin-left: 52px; }
+}
+.ws-state { font-weight: 500; font-size: 12.5px; }
+.ws-state.pending { color: var(--color-muted); } .ws-state.pending .ws-state-ic { border: 0; color: var(--color-partial-strong); font-size: 16px; }
+.adm-gap-skel { flex: 1; display: flex; flex-direction: column; justify-content: space-evenly; gap: 6px; }
+.adm-gap-skel .adm-gap-row { display: grid; grid-template-columns: 18px minmax(0, 9rem) minmax(0, 1fr) auto; align-items: center; gap: 12px; }
+.emp-more[data-empty="1"] { visibility: hidden; }
+/* status on one line: the icon is centred on the text (22 Nov) */
+.ws-state { line-height: 18px; }
+.ws-state .ws-state-ic { box-sizing: border-box; }
+.ws-state.pending .ws-state-ic, .ws-state.saving .ws-state-ic { border: 2px solid #cfd5e2 !important; border-top-color: var(--color-accent) !important; width: 14px; height: 14px; font-size: 0; }
+@media (prefers-reduced-motion: no-preference) { .ws-state.pending .ws-state-ic { animation: ws-spin .8s linear infinite; } }
+.ws-state.pending { color: var(--color-muted); }
+/* tips scroll inside when longer than the space (22 Nov) */
+.emp-more-list { flex-wrap: nowrap !important; overflow-y: auto !important; column-gap: 0 !important; }
+/* Profile & privacy (22 Nov, her review: messy): clearer separators and a bit more air between sections */
+.pp-sec { padding: 18px 0 18px; }
+.pp-sec + .pp-sec { border-top: 1px solid #d3dae6; }
+@media (min-width: 900px) { .pp-col + .pp-col { border-left-color: #d3dae6 !important; } }
+.pp-sec h2 { font-size: 16px !important; }
+.emp-more[data-tight="1"] .emp-more-h { display: none; } .emp-more[data-tight="1"] { padding-top: 8px; padding-bottom: 6px; }
+.ws-setup-note { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; margin: 10px 16px 0; padding: 8px 12px; border-radius: 10px;
+  background: #fff4d6; border: 1px solid #f2c75c; color: #6b4a00; font-size: 13px; }
+/* employer dashboard charts (22 Nov, Recharts) */
+.emp-chart-box { flex: 1 1 0; min-height: 0; display: flex; flex-direction: column; padding: 12px 16px 8px 20px; border-top: 1px solid #edf0f7; }
+.emp-chart { flex: 1 1 0; min-height: 120px; margin: 0; }
+.emp-chart-sm { height: 92px; flex: none; min-height: 0; }
+.emp-chart-strip { padding: 0 16px 6px 20px; }
+.emp-chart-empty { margin: 0; font-size: 13px; color: var(--color-muted); }
+@media (max-width: 1023px) { .emp-chart-box { min-height: 220px; } }
+.emp-chart-top { flex: none; padding: 0 16px 8px 12px; } .emp-chart-top .emp-chart { height: 100%; min-height: 0; }
+/* 22 Nov (charts): the open jobs card at its own height (chart + rows); recent activity takes what is left */
+@media (min-width: 1024px) {
+  .emp-balanced-column > [aria-labelledby="jobs-h"] { flex: 0 1 auto !important; min-height: 0 !important; }
+  .emp-balanced-column > [aria-labelledby="jobs-h"] .emp-preview-list { flex: none !important; }
+  .emp-balanced-column > [aria-labelledby="jobs-h"] .emp-more { display: none; }
+  .emp-balanced-column > [aria-labelledby="activity-h"]:last-child { flex: 1 1 0 !important; min-height: 150px !important; }
+  .emp-balanced-column > [aria-labelledby="activity-h"]:last-child .emp-preview-list { flex: 1 1 0 !important; min-height: 0 !important; }
+}
+/* admin skill gaps chart (22 Nov, Recharts) */
+.gap-chart { flex: 1 1 0; min-height: 200px; }
+.gap-tip { display: flex; flex-direction: column; gap: 2px; padding: 8px 12px; border-radius: 10px; background: #fff; border: 1px solid var(--color-line);
+  box-shadow: 0 12px 24px -14px rgb(20 30 60 / 40%); font-size: 12.5px; color: var(--color-ink-soft); }
+.gap-tip b { color: var(--color-ink); font-size: 13.5px; } .gap-tip-hint { margin-top: 2px; color: var(--color-accent-strong); font-weight: 600; }
+/* 22 Nov (her review): the set-up note = one line under the bar, never two; the long half drops out first */
+.ws-setup-note { display: flex !important; flex-wrap: nowrap !important; align-items: center !important; gap: 8px !important; min-width: 0;
+  margin: 10px 16px 0 !important; padding: 4px 6px 4px 12px !important; border-radius: 10px !important; font-size: 13px !important; font-weight: 600; flex: none; }
+.ws-setup-note > svg { width: 16px; height: 16px; flex: none; color: #b07d00; }
+.ws-setup-txt { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ws-setup-more { font-weight: 500; }
+.ws-redraft { display: inline-flex; align-items: center; gap: 5px; height: 28px; padding: 0 11px; border-radius: 8px; flex: none;
+  background: #fff; border: 1px solid #e2c26a; font-size: 13px; font-weight: 700; color: #6b4a00; }
+.ws-redraft:hover { background: #fffaf0; } .ws-redraft svg { width: 14px; height: 14px; }
+.ws-note-x { width: 28px; height: 28px; flex: none; border-radius: 8px; font-size: 18px; line-height: 1; color: #8a6a1a; }
+.ws-note-x:hover { background: rgb(224 162 26 / 15%); }
+@media (max-width: 1100px) { .ws-setup-more { display: none; } }
+/* 22 Nov (her review: redraft "just lags, then a sudden change"): progress while the AI writes, then a soft fade-in */
+.ws-doc { position: relative; }
+.ws-spin { display: block; width: 28px; height: 28px; border-radius: 50%; border: 3px solid #d9e1f2; border-top-color: var(--color-accent); flex: none; }
+.ws-spin-sm { display: inline-block; width: 14px; height: 14px; border-width: 2px; border-color: #ead9a6; border-top-color: #6b4a00; }
+@media (prefers-reduced-motion: no-preference) { .ws-spin { animation: ws-spin .8s linear infinite; } }
+.ws-redrafting { position: absolute; inset: 0; z-index: 5; display: grid; place-items: center; padding: 16px; border-radius: inherit;
+  background: rgb(255 255 255 / 72%); backdrop-filter: blur(2px); }
+.ws-redrafting-card { display: flex; flex-direction: column; align-items: center; gap: 6px; max-width: 340px; padding: 20px 24px; text-align: center;
+  background: #fff; border: 1px solid var(--color-line); border-radius: 14px; box-shadow: 0 10px 30px rgb(22 20 43 / 10%); }
+.ws-redrafting-card .ws-spin { margin-bottom: 6px; }
+@media (prefers-reduced-motion: no-preference) {
+  .ws-fresh { animation: ws-fresh .45s ease-out; }
+  @keyframes ws-fresh { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+}
+@media (max-width: 1023px) { .ws-redrafting { place-items: start center; padding-top: 110px; } }

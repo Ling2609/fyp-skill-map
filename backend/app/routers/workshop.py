@@ -137,6 +137,14 @@ def template(data: DraftIn, n: dict) -> dict:
     }
 
 
+def _join_background(lead: str, rest: str) -> str:
+    """22 Nov (her report: the first sentence showed twice): the model sometimes repeats the sentence it was given, so
+    every copy of it is taken out of its part before the two are joined."""
+    while lead in rest:
+        rest = rest.replace(lead, "", 1)
+    return f"{lead} {' '.join(rest.split())}".strip()
+
+
 PROMPT = """You write activity proposals for a Malaysian university's career office. Write a workshop proposal as JSON with
 exactly these keys: "title" (one line), "background_rest" (2-3 sentences that follow the given first sentence; no new
 numbers), "objectives" (3-4 short items), "outcomes" (one or two sentences: what participants can do by the end),
@@ -166,7 +174,7 @@ def ai_draft(data: DraftIn, n: dict) -> dict:
         objectives = [_clean(o, 200) for o in got.get("objectives", []) if str(o).strip()][:6]
         return {**base, "source": "ai",
                 "title": _clean(got.get("title"), 160) or base["title"],
-                "background": base["background"].split(" A short")[0] + " " + _clean(got.get("background_rest"), 1200),
+                "background": _join_background(_background_lead(n), _clean(got.get("background_rest"), 1200)),
                 "objectives": objectives or base["objectives"],
                 "outcomes": _clean(got.get("outcomes"), 800) or base["outcomes"],
                 "agenda": agenda[:12] or base["agenda"],
@@ -191,9 +199,18 @@ def pdf(p: Proposal, admin: User = Depends(require_admin)):
 
 
 # ── Saved proposals (20 Nov, her pick): MongoDB, like the chats: a proposal is one document of free-form sections ──
+class Setup(BaseModel):
+    """22 Nov (her pick): the choices a proposal was drafted with, so it reopens with them."""
+    length: str = "half"
+    format: str = "in_person"
+    audience: str = "all"
+    note: str = Field(default="", max_length=300)
+
+
 class SaveIn(BaseModel):
     skills: list[str] = Field(default_factory=list, max_length=4)
     proposal: Proposal
+    setup: Setup | None = None
 
 
 def _proposals():
@@ -225,7 +242,7 @@ def get_proposal(pid: str, admin: User = Depends(require_admin)):
     d = _saving(lambda: _proposals().find_one({"_id": pid}))
     if not d:
         raise HTTPException(status_code=404, detail="That proposal was deleted.")
-    return {**_summary(d), "proposal": d["proposal"]}
+    return {**_summary(d), "proposal": d["proposal"], "setup": d.get("setup")}
 
 
 @router.post("/proposals")
@@ -236,6 +253,7 @@ def save_proposal(body: SaveIn, admin: User = Depends(require_admin)):
     doc = {"_id": uuid.uuid4().hex, "admin_id": admin.id,
            "admin_name": " ".join(filter(None, [admin.first_name, admin.last_name])) or admin.username,
            "title": body.proposal.title, "skills": body.skills, "proposal": body.proposal.model_dump(),
+           "setup": body.setup.model_dump() if body.setup else None,
            "created_at": now, "updated_at": now}
     _saving(lambda: _proposals().insert_one(doc))
     return _summary(doc)
@@ -246,7 +264,8 @@ def update_proposal(pid: str, body: SaveIn, admin: User = Depends(require_admin)
     from datetime import datetime, timezone
     now = datetime.now(timezone.utc)
     res = _saving(lambda: _proposals().update_one({"_id": pid}, {"$set": {
-        "title": body.proposal.title, "skills": body.skills, "proposal": body.proposal.model_dump(), "updated_at": now}}))
+        "title": body.proposal.title, "skills": body.skills, "proposal": body.proposal.model_dump(),
+        **({"setup": body.setup.model_dump()} if body.setup else {}), "updated_at": now}}))
     if not res.matched_count:
         raise HTTPException(status_code=404, detail="That proposal was deleted.")
     return {"id": pid, "title": body.proposal.title, "skills": body.skills, "updated_at": now}

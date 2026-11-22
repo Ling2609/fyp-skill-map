@@ -2,11 +2,11 @@ import { useCallback, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import api from '../../api'
 import PageHeader, { HeadStats } from '../../components/PageHeader'
-import { skillName } from '../../skillName'
 import { ADMIN_COUNTS_CHANGED } from '../../components/Sidebar'
 import { useAuth } from '../../context/useAuth'
 import ReasonDialog from './ReasonDialog'
 import { CompanyChecks } from './CompanyChecks'
+import GapsChart from './GapsChart'
 import { DECISIONS } from './decisions'
 import { Bar as SkBar, CardSkeleton, StatsSkeleton, LoadingLabel } from '../../components/Skeleton'
 import { greeting } from '../../greeting'
@@ -27,8 +27,6 @@ const ago = (iso) => {
 
 // 20 Nov (her approved mock): a bar's colour says what the number means. gap: light to deep coral as more students
 // lack the skill. progress: teal from 70% (on track), gold 40-70% (some behind), coral under 40% (most behind)
-const mix = (a, b, t) => `rgb(${a.map((v, i) => Math.round(v + (b[i] - v) * t)).join(' ')})`
-const gapColour = (t) => mix([248, 196, 176], [164, 60, 32], Math.min(1, t))
 const progressColour = (t) => t >= 0.7 ? 'linear-gradient(90deg,#b9ebe4,#13998c 45%,#064740)'
   : t >= 0.4 ? 'linear-gradient(90deg,#fde6a8,#e0a21a 45%,#7d5600)' : 'linear-gradient(90deg,#fbd5c7,#e9795a 45%,#86301a)'
 function Bar({ value, max, colour }) {
@@ -59,13 +57,6 @@ function useShort() {
   return m
 }
 
-// the change in students lacking a skill since the last weekly copy: fewer is good (teal), more is coral
-function Trend({ now, then }) {
-  if (then === undefined) return <span className="adm-trend new" title="Not in last week's list">new</span>
-  const d = now - then
-  if (!d) return <span className="adm-trend same" title="Same as last time">=</span>
-  return <span className={`adm-trend ${d < 0 ? 'down' : 'up'}`} title={`${Math.abs(d)} ${d < 0 ? 'fewer' : 'more'} than last time`}>{d < 0 ? '▼' : '▲'} {Math.abs(d)}</span>
-}
 const isoWeek = (d) => {
   const t = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()))
   t.setUTCDate(t.getUTCDate() + 4 - (t.getUTCDay() || 7))
@@ -259,29 +250,23 @@ export default function AdminDashboard() {
                   ? <> Change since <b className="font-semibold text-ink-soft">{shortDate(before.at)}</b>.</> : ' Use it to plan workshops.'}</p>
               </div>
               <div className="flex-1 flex flex-col px-5 py-4">
-                {gaps === null && <p className="text-sm text-slate-500">Working it out for every student…</p>}
-                {gaps?.length === 0 && <p className="text-sm text-slate-500">No student has a skill profile yet.</p>}
-                {gaps?.length > 0 && (
-                  <ul tabIndex={0} aria-label="Most common skill gaps" className="flex-1 flex flex-col justify-evenly gap-3">
-                    {gaps.map(g => (
-                      <li key={g.skill} className="adm-gap-row text-sm">
-                        {/* 20 Nov (her approved mock): tick up to 4 to plan a workshop on them */}
-                        <input type="checkbox" aria-label={`Plan a workshop on ${skillName(g.skill)}`} checked={plan.includes(g.skill)}
-                          disabled={!plan.includes(g.skill) && plan.length >= 4} onChange={() => togglePlan(g.skill)} className="h-4 w-4 accent-(--color-accent)" />
-                        <span className="truncate text-slate-800">{skillName(g.skill)}</span>
-                        <Bar value={g.students} max={g.of_students} colour={gapColour(g.students / Math.max(...gaps.map(x => x.students)))} />
-                        <span className="flex items-center justify-end gap-1.5">
-                          {before && <Trend now={g.students} then={before.gaps.find(x => x.skill.toLowerCase() === g.skill.toLowerCase())?.students} />}
-                          <span className="text-xs text-slate-500 tabular-nums">{g.students} of {g.of_students}</span>
-                        </span>
-                      </li>
+                {gaps === null && (
+                  <div role="status" aria-label="Loading the skill gaps" className="adm-gap-skel">
+                    <p className="m-0 text-xs text-muted">Matching every student's profile to the live jobs…</p>
+                    {Array.from({ length: 7 }, (_, i) => (
+                      <div key={i} className="adm-gap-row text-sm" aria-hidden="true">
+                        <span className="h-4 w-4 rounded bg-well" /><SkBar className="h-3.5" style={{ width: `${70 - i * 6}%` }} />
+                        <SkBar className="h-2.5 w-full rounded-full" /><SkBar className="h-4 w-12 rounded-full" />
+                      </div>
                     ))}
-                  </ul>
+                  </div>
                 )}
-                {gaps?.length > 0 && <p className="adm-scale m-0"><span>fewer</span><i /><span>more students</span></p>}
+                {gaps?.length === 0 && <p className="text-sm text-slate-500">No student has a skill profile yet.</p>}
+                {/* 22 Nov (her call): a Recharts bar chart; click a bar to pick it for a workshop */}
+                {gaps?.length > 0 && <GapsChart gaps={gaps} before={before} since={before ? shortDate(before.at) : ''} picked={plan} onToggle={togglePlan} />}
                 {gaps?.length > 0 && (
                   <div className="adm-plan">
-                    <span className="text-xs text-muted">{plan.length ? <><b className="text-ink">{plan.length} ticked</b> · up to 4 per workshop</> : 'Tick skills to plan a workshop on them'}</span>
+                    <span className="text-xs text-muted">{plan.length ? <><b className="text-ink">{plan.length} picked</b> · up to 4 per workshop</> : 'Tick skills to plan a workshop on them'}</span>
                     <Link to={`/admin/workshop?skills=${encodeURIComponent(plan.join('|'))}`} aria-disabled={!plan.length}
                       onClick={e => { if (!plan.length) e.preventDefault() }} className={`head-cta h-9 px-3.5 text-sm ${plan.length ? '' : 'opacity-45 pointer-events-none'}`}>✦ Plan a workshop</Link>
                   </div>

@@ -406,7 +406,7 @@ export function MyJobs() {
                           {j.status === 'hidden' ? <p className="font-medium text-slate-900 wrap-anywhere">{j.title}</p>
                             : <Link to={`/employer/jobs/${j.id}/edit`} title={`Open ${j.title}`} className="job-open font-medium wrap-anywhere">{j.title}</Link>}
                         </div>
-                        <p className="text-xs text-slate-500 mt-0.5">{[j.location, j.category, `posted ${fmtDate(j.posted_at)}`].filter(Boolean).join(' · ')}</p>
+                        <p className="text-xs text-slate-500 mt-0.5">{[j.location, j.category].filter(Boolean).join(' · ')}<span className="block">Posted {fmtDate(j.posted_at)}</span></p>
                         <div className="mt-1 flex flex-col gap-1 empty:hidden">{badgesOf(j)}</div>
                       </td>
                       {/* 12 Oct: the total, and how many still wait for a status */}
@@ -440,7 +440,7 @@ export function MyJobs() {
                 <li key={j.id} className="bg-white border border-slate-200 rounded-2xl px-4 py-3.5">
                   {j.status === 'hidden' ? <p className="m-0 font-semibold text-slate-900">{j.title}</p>
                     : <Link to={`/employer/jobs/${j.id}/edit`} className="job-open font-semibold">{j.title}</Link>}
-                  <p className="m-0 mt-1 text-xs text-slate-500">{[j.location, j.category, `posted ${fmtDate(j.posted_at)}`].filter(Boolean).join(' · ')}</p>
+                  <p className="m-0 mt-1 text-xs text-slate-500">{[j.location, j.category].filter(Boolean).join(' · ')}<span className="block">Posted {fmtDate(j.posted_at)}</span></p>
                   <div className="flex flex-wrap gap-1.5 mt-1 empty:hidden">{badgesOf(j)}</div>
                   <dl className="m-0 mt-3 grid grid-cols-2 gap-3 text-sm">
                     <div><dt className="text-xs font-semibold text-slate-500">Applicants</dt><dd className="m-0 mt-0.5 text-slate-600">{applicantsOf(j)}</dd></div>

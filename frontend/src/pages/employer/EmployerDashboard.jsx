@@ -1,5 +1,6 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { ActivityChart, StatusChart } from './DashboardCharts'
 import api from '../../api'
 import PageHeader, { HeadStats } from '../../components/PageHeader'
 import { useAuth } from '../../context/useAuth'
@@ -18,8 +19,6 @@ import { RECORD_TIP } from '../../components/EmployerRecord'
 // Left: applications to review across all jobs, newest first (Greenhouse's "Applications to Review").
 // Right: open jobs with a stacked status bar (Workable's job pipeline), then graduates who fit (visible students who
 // haven't applied, best match first). The page fills the screen and each card scrolls on its own (her rule).
-const BAR = [['applied', 'Applied', 'bg-blue-500'], ['shortlisted', 'Shortlisted', 'bg-violet-500'],
-  ['accepted', 'Accepted', 'bg-emerald-500'], ['rejected', 'Rejected', 'bg-rose-300']]
 const AVATAR = ['bg-blue-700', 'bg-violet-700', 'bg-cyan-700', 'bg-pink-700', 'bg-orange-700', 'bg-emerald-700', 'bg-indigo-700', 'bg-teal-700']   // -700: white initials readable (WCAG 4.5:1)
 const initials = (name) => name.split(/\s+/).map(w => w[0]).join('').slice(0, 2).toUpperCase()
 const avatarCls = (name) => AVATAR[[...name].reduce((n, c) => n + c.charCodeAt(0), 0) % AVATAR.length]
@@ -128,7 +127,7 @@ const SECTION_ICON = {
 function SectionIcon({ name }) {
  return <span className={`emp-section-icon emp-section-${name}`} aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d={SECTION_ICON[name]} /></svg></span>
 }
-function FitList({ fill: desktop, items, renderItem, onShown, label, max: mobileMax = 3, className = '' }) {
+function FitList({ fill: desktop, items, renderItem, onShown, label, max: mobileMax = 3, className = '', after = null }) {
   const box = useRef(null)
   const measureList = useRef(null)
   const [count, setCount] = useState(0)
@@ -162,8 +161,52 @@ function FitList({ fill: desktop, items, renderItem, onShown, label, max: mobile
   useEffect(() => { onShown?.(visible.length) }, [visible.length, onShown])
   return <div ref={box} className={'emp-preview-list ' + className} style={desktop ? { contain: 'size', position: 'relative' } : undefined}>
     <ul className="emp-preview-rows" aria-label={label}>{visible.map(renderItem)}</ul>
+    {/* 22 Nov: once every row shows, a quiet line says so, so the space under it reads as finished */}
+    {visible.length === items.length && after}
     {desktop && <ul ref={measureList} className="emp-preview-rows emp-preview-measure" aria-hidden="true" inert>{items.map(renderItem)}</ul>}
   </div>
+}
+
+// 22 Nov (her review: "if it shows blank anyway, add something informative"): short tips about features SkillMap
+// really has, under a list that is complete; .emp-more shows only the tips that fit whole (no half tip)
+function MoreTips({ title, tips }) {
+  const list = useRef(null)
+  useLayoutEffect(() => {
+    const ul = list.current
+    if (!ul) return
+    // 22 Nov: shown whenever there is room for a line (longer lists scroll inside, with the fade); checked again
+    // whenever the card or the list changes size, so it never stays hidden
+    const box = ul.closest('.emp-more')
+    const check = () => {
+      if (!box) return
+      box.dataset.tight = ''
+      if (ul.clientHeight < 34) box.dataset.tight = '1'      // little room: the tips without their heading
+      box.dataset.empty = ul.clientHeight < 30 ? '1' : ''
+    }
+    check()
+    let frame = 0
+    const ro = new ResizeObserver(() => { cancelAnimationFrame(frame); frame = requestAnimationFrame(check) })
+    ro.observe(ul); if (box?.parentElement) ro.observe(box.parentElement)
+    const card = ul.closest('section'); if (card) ro.observe(card)
+    return () => { ro.disconnect(); cancelAnimationFrame(frame) }
+  }, [tips.length])
+  if (!tips.length) return null
+  return (
+    <div className="emp-more">
+      <p className="emp-more-h">
+        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.6 10.8c.6.5 1 1.2 1 2V16h5.2v-.2c0-.8.4-1.5 1-2A6 6 0 0 0 12 3Z" /></svg>
+        {title}</p>
+      <ul ref={list} tabIndex={0} aria-label={title} className="emp-more-list">
+        {tips.map(t => (
+          <li key={t.key}>
+            <span aria-hidden="true" className="emp-more-dot" />
+            <span className="min-w-0 flex-1">{t.text}</span>
+            {t.to && <Link to={t.to} className="shrink-0 text-xs font-semibold text-blue-700 hover:underline">{t.action}</Link>}
+          </li>
+        ))}
+      </ul>
+    </div>
+  )
 }
 
 function DashboardListDialog({ title, onClose, children }) {
@@ -212,7 +255,7 @@ export default function EmployerDashboard() {
   }
   // 25 Oct: one row each, shared by the card and its "Show all" pop-up
   const reviewRow = a => (
-    <li key={a.id} className="px-5 py-3.5 flex items-center gap-3.5">
+    <li key={a.id} className="emp-row px-5 py-3.5 flex items-center gap-3.5">
       <Avatar name={a.name} />
       <div className="flex-1 min-w-0">
         <p className={`text-sm text-slate-900 truncate ${a.opened ? 'font-semibold' : 'font-bold'}`}>
@@ -228,7 +271,7 @@ export default function EmployerDashboard() {
   const manyJobs = new Set((data?.graduates || []).map(g => g.job_id)).size > 1
   const jobDot = (id) => JOB_DOT[Math.max(0, (data?.open_jobs || []).findIndex(j => j.id === id)) % JOB_DOT.length]
   const gradRow = g => (
-    <li key={g.student_id} className="px-5 py-3 flex items-center gap-3">
+    <li key={g.student_id} className="emp-row px-5 py-3 flex items-center gap-3">
       <Avatar name={g.name} small />
       <div className="flex-1 min-w-0">
         <Link to={`/employer/graduates/${g.student_id}?job=${g.job_id}`} className="block text-sm font-semibold text-slate-900 truncate hover:text-blue-700">{g.name}</Link>
@@ -381,7 +424,7 @@ data.attention.quiet_jobs.map(q => (<li key={q.job_id} className="px-5 py-3 flex
                   <h2 id="review-h" className={`text-base font-semibold ${act ? 'text-missing-strong' : 'text-slate-900'}`}><SectionIcon name="review-h" />Needs your attention</h2>{alerts.length > nAlerts && <button type="button" className={SEE} onClick={() => setExpanded('alerts')}>See all {alerts.length} →</button>}
                   {data.attention.review_days && <span className="text-xs text-slate-500">You view applications within {data.attention.review_days} day{data.attention.review_days === 1 ? '' : 's'} on average · students see this</span>}
                 </div>
-                {alerts.length > 0 && <FitList fill={false} max={shortWindow ? 1 : 2} label="Things that need you" onShown={setNAlerts} items={alerts} renderItem={row => row} className="emp-alert-preview border-t border-slate-200" /> }
+                {alerts.length > 0 && <FitList fill={false} max={3} label="Things that need you" onShown={setNAlerts} items={alerts} renderItem={row => row} className="emp-alert-preview border-t border-slate-200" /> }
                 {data.to_review.length > 0 && (
                   <div className={`${GROUP} flex items-baseline justify-between gap-3`}>
                     <span>To review ({data.to_review.length}) · across all your jobs, newest first</span>
@@ -394,7 +437,7 @@ data.attention.quiet_jobs.map(q => (<li key={q.job_id} className="px-5 py-3 flex
                     {sum.applicants ? 'All caught up: every application has a status.' : 'No applications yet. Your jobs are in students\' Job Matches, marked "Apply on SkillMap".'}
                   </p>
                 ) : (
-                  <FitList fill={false} max={shortWindow ? 1 : 2} onShown={setNReview} className="border-t border-slate-200" items={data.to_review} renderItem={reviewRow} />
+                  <FitList fill={false} max={shortWindow ? 3 : 4} onShown={setNReview} className="border-t border-slate-200" items={data.to_review} renderItem={reviewRow} />
                 )}
                 {/* 21 Oct (her review: blank space once the tips hide after people apply): when nothing is late or waiting
                     long, say so, with the nearest decision date, so the card reads "on track" rather than empty */}
@@ -421,7 +464,17 @@ data.attention.quiet_jobs.map(q => (<li key={q.job_id} className="px-5 py-3 flex
                   <p className="px-5 pb-4 text-sm text-slate-500">{data.open_jobs.length ? 'No visible graduate has at least half of your required skills yet. New profiles are matched as students add them.' : 'Open a job to see graduates who fit it.'}</p>
                 ) : (
                   <FitList fill={lg} last onShown={setNGrads} className="border-t border-slate-200" items={data.graduates} renderItem={gradRow}
-                    after={<p className="border-t border-slate-100 px-5 py-3 text-xs text-slate-500">That's everyone who fits for now. New profiles are matched as students add them.</p>} />
+                    after={<>
+                      <p className="border-t border-slate-100 px-5 py-3 text-center text-xs text-slate-500">That's everyone who fits for now. New profiles are matched as students add them.</p>
+                      <MoreTips title="Reach more graduates" tips={[
+                        { key: 'inv', text: <>An invitation shows in violet on the student's Dashboard and in Job Matches, so they see it first.</> },
+                        { key: 'nice', text: <>Graduates with your nice-to-have skills are listed first, so adding a few helps you find stronger matches.</> },
+                        ...steps,
+                        { key: 'vis', text: <>Only graduates who made their profile visible to employers are listed here.</> },
+                        { key: 'short', text: <>A student's email and phone show once you shortlist them, not before.</> },
+                        { key: 'prev', text: <>Before applying, students can preview exactly what you will see about them.</> },
+                      ]} />
+                    </>} />
                 )}
               </section>
             </div>
@@ -434,10 +487,14 @@ data.attention.quiet_jobs.map(q => (<li key={q.job_id} className="px-5 py-3 flex
                     <Link to="/employer/jobs" className={SEE}>{nJobs < data.open_jobs.length ? `See all ${data.open_jobs.length} →` : 'My Jobs'}</Link>
                   </div>
                 </div>
+                {/* 22 Nov (her call): applicants by status for every open job, at a glance */}
+                {data.open_jobs.some(j => Object.values(j.counts).some(n => n > 0)) && (
+                  <div className="emp-chart-top" style={{ height: 46 + 30 * data.open_jobs.length }}><StatusChart jobs={data.open_jobs} /></div>
+                )}
                 {data.open_jobs.length === 0
                   ? <p className="px-5 pb-4 text-sm text-slate-500">No open jobs. Reopen one in My Jobs, or post a new one.</p>
                   : (
-                    <FitList fill={false} max={shortWindow ? 1 : 2} onShown={setNJobs} className="border-t border-slate-200" items={data.open_jobs} renderItem={j => {
+                    <FitList fill={false} max={4} onShown={setNJobs} className="border-t border-slate-200" items={data.open_jobs} renderItem={j => {
 
                         const total = Object.values(j.counts).reduce((x, y) => x + y, 0)
                         const days = j.decide_by ? daysUntil(j.decide_by) : null
@@ -448,7 +505,7 @@ data.attention.quiet_jobs.map(q => (<li key={q.job_id} className="px-5 py-3 flex
                                 {manyJobs && <JobDot cls={jobDot(j.id)} />}<span className="truncate">{j.title}</span></p>
                               <Link to={`/employer/jobs/${j.id}`} className="shrink-0 text-sm font-medium text-blue-700 hover:underline">View</Link>
                             </div>
-{total > 0 && <div className="emp-status-counts" aria-label="Applicant status counts">{BAR.map(([key, label]) => <span key={key} className={'emp-status-count emp-status-' + key + (j.counts[key] ? '' : ' is-zero')}><i aria-hidden="true" /><span>{label}</span><b>{j.counts[key] || 0}</b></span>)}</div>}
+{/* 22 Nov: the statuses are in the chart above the list, so the row stays one line */}
                             <p className="text-xs text-slate-500 mt-0.5">
                               {total ? `${total} applicant${total === 1 ? '' : 's'}` : 'No applicants yet'}
                               {j.counts.applied > 0 && <> · <span className="font-semibold text-blue-700">{j.counts.applied} to review</span></>}
@@ -456,7 +513,13 @@ data.attention.quiet_jobs.map(q => (<li key={q.job_id} className="px-5 py-3 flex
                             </p>
                           </li>
                         )
-                      }} />
+                      }} after={<>
+                      <MoreTips title="How students see your jobs" tips={[
+                        { key: 'm', text: <>Each job is in students' Job Matches as "Apply on SkillMap", with how many of its skills they have.</> },
+                        { key: 'd', text: <>Students see your decision date before applying. If you need more time, you can move it once.</>, to: '/employer/jobs', action: 'My Jobs' },
+                        { key: 'r', text: <>Deciding by that date builds your reply record, which students also see.</> },
+                      ]} />
+                    </>} />
 
                   )}
               </section>
@@ -489,13 +552,21 @@ data.attention.quiet_jobs.map(q => (<li key={q.job_id} className="px-5 py-3 flex
                   <h2 id="activity-h" className="text-base font-semibold text-slate-900"><SectionIcon name="activity-h" />Recent activity</h2>
                   {data.activity.length > nActivity ? <button type="button" className={SEE} onClick={() => setExpanded('activity')}>See all {data.activity.length} →</button> : <span className="text-xs text-slate-500">Last 14 days</span>}
                 </div>
+                <div className="emp-chart-strip"><ActivityChart activity={data.activity} /></div>
                 {data.activity.length === 0
                   ? <p className="px-5 pb-4 text-sm text-slate-500">No activity in the last 14 days.</p>
                   : (<>
                     {/* 25 Oct (her review: blank space under one activity): once every event shows, a quiet line right
                         under the last one says that's all, so the empty part of the card reads as finished */}
-                    <FitList fill={false} onShown={setNActivity} max={3} className="border-t border-slate-200" items={data.activity} renderItem={(e, i) => <ActivityRow key={i} e={e} />}
-                      after={<p className="border-t border-slate-100 px-5 py-3 text-xs text-slate-500">That's everything from the last 14 days. New applications, your decisions and invitations appear here.</p>} />
+                    <FitList fill={lg} onShown={setNActivity} max={5} className="border-t border-slate-200" items={data.activity} renderItem={(e, i) => <ActivityRow key={i} e={e} />}
+                      after={<>
+                      <p className="border-t border-slate-100 px-5 py-3 text-center text-xs text-slate-500">That's everything from the last 14 days.</p>
+                      <MoreTips title="What shows here" tips={[
+                        { key: 'a', text: <>New applications and students' replies to your invitations.</> },
+                        { key: 'y', text: <>Your own steps: posts, invitations and decisions.</> },
+                        { key: 'r', text: <>Each entry opens the applicant or job it is about.</> },
+                      ]} />
+                    </>} />
                   </>)}
               </section>
             </div>

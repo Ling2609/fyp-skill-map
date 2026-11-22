@@ -145,59 +145,7 @@ export default function ProfilePrivacy() {
               <p className="text-[11px] text-slate-500 mt-1 flex justify-between gap-3"><span>What role you want and what you enjoy.</span>
                 <span className="tabular-nums">{form.about.length} / {ABOUT_MAX}</span></p>
             </Section>
-            <Section grow title="Languages" sub="Employers in Malaysia often ask for English. Test result is optional, e.g. MUET Band 5 or IELTS 7.0.">
-              <div className="flex flex-col gap-2">
-                {form.languages.map((l, i) => (
-                  <div key={i} className="grid grid-cols-[1fr_1.7fr_1fr_auto] gap-2 items-center">
-                    <input aria-label="Language" value={l.language} maxLength={40} className={field} placeholder="e.g. English"
-                      onChange={e => setLang(i, 'language', e.target.value)} />
-                    <select aria-label={`How well you speak ${l.language || 'it'}`} value={l.level} className={field}
-                      onChange={e => setLang(i, 'level', e.target.value)}>
-                      {LANGUAGE_LEVELS.map(([k, v]) => <option key={k} value={k}>{v}</option>)}
-                    </select>
-                    <input aria-label="Test result" value={l.test} maxLength={40} className={field} placeholder="Test result"
-                      onChange={e => setLang(i, 'test', e.target.value)} />
-                    <button type="button" aria-label={`Remove ${l.language || 'this language'}`} className="text-slate-500 hover:text-slate-700 text-lg px-1"
-                      onClick={() => set('languages', form.languages.filter((_, j) => j !== i))}>×</button>
-                  </div>
-                ))}
-              </div>
-              {form.languages.length < 8 && (
-                <button type="button" className="mt-2 text-sm font-medium text-blue-700 hover:underline"
-                  onClick={() => set('languages', [...form.languages, { ...BLANK_LANG }])}>+ Add language</button>
-              )}
-            </Section>
-          </div>
-          <div className="pp-col">
-            <Section title="Results" sub="Shown to employers only if you switch them on.">
-              <div className="flex items-center gap-3">
-                <label htmlFor="pp-cgpa" className="text-sm font-medium text-slate-800">CGPA</label>
-                <input id="pp-cgpa" inputMode="decimal" value={form.cgpa} maxLength={4} placeholder="3.72"
-                  className={`${field} !w-20`} onChange={e => set('cgpa', e.target.value.replace(/[^0-9.]/g, ''))} />
-                <span className="text-xs text-slate-500">as on your transcript</span>
-              </div>
-              <div className="mt-2 space-y-1">
-                <Toggle id="pp-show-cgpa" checked={cgpaSet && form.show_cgpa} disabled={!cgpaSet} onChange={v => set('show_cgpa', v)}
-                  label="Show my CGPA to employers" hint={!cgpaSet ? 'Type your CGPA first.' : form.show_cgpa ? 'Employers see it beside your programme.' : 'Off: employers see no CGPA.'} />
-                <Toggle id="pp-show-grades" checked={form.show_grades_to_employers} onChange={v => set('show_grades_to_employers', v)}
-                  label="Show my module grades to employers" hint={form.show_grades_to_employers ? 'Employers see your grade for each module.' : 'Off: they see your modules without grades.'} />
-              </div>
-            </Section>
-            <Section title="Contact" sub="Employers see these only after they shortlist you.">
-              {/* 20 Nov (her question): the sign-up email is already shared on shortlist, so it shows here, not asked again */}
-              <p className="m-0 mb-3 text-sm text-ink-soft">Email <b className="font-semibold text-ink">{user?.email}</b>
-                <span className="text-slate-500"> · change it in </span>
-                <Link to="/account" className="font-medium text-blue-700 hover:underline">Account settings</Link></p>
-              <div className="grid sm:grid-cols-3 gap-3">
-                <div><label htmlFor="pp-phone" className={label}>Phone</label>
-                  <input id="pp-phone" type="tel" value={form.phone} maxLength={30} className={field} placeholder="012-345 6789" onChange={e => set('phone', e.target.value)} /></div>
-                <div><label htmlFor="pp-city" className={label}>City</label>
-                  <input id="pp-city" value={form.city} maxLength={80} className={field} placeholder="Kuala Lumpur" onChange={e => set('city', e.target.value)} /></div>
-                <div><label htmlFor="pp-from" className={label}>Available from</label>
-                  <input id="pp-from" type="month" value={form.available_from} className={field} onChange={e => set('available_from', e.target.value)} /></div>
-              </div>
-            </Section>
-            <Section grow title="Other profiles" sub="Links employers can open.">
+            <Section title="Other profiles" sub="Links employers can open.">
               <div className="grid sm:grid-cols-2 gap-3">
                 <div><label htmlFor="pp-linkedin" className={label}>LinkedIn</label>
                   <input id="pp-linkedin" type="url" value={form.linkedin_url} maxLength={300} className={field}
@@ -227,6 +175,57 @@ export default function ProfilePrivacy() {
               {form.other_links.length < 5 && (
                 <button type="button" className="mt-2 text-sm font-medium text-blue-700 hover:underline"
                   onClick={() => set('other_links', [...form.other_links, { ...BLANK_LINK }])}>+ Add link</button>
+              )}
+            </Section>
+          </div>
+          <div className="pp-col">
+            <Section title="Results" sub="Shown to employers only if you switch them on.">
+              <div className="flex items-center gap-3">
+                <label htmlFor="pp-cgpa" className="text-sm font-medium text-slate-800">CGPA</label>
+                <input id="pp-cgpa" inputMode="decimal" value={form.cgpa} maxLength={4} placeholder="3.72"
+                  className={`${field} !w-20`} onChange={e => set('cgpa', e.target.value.replace(/[^0-9.]/g, ''))} />
+                <span className="text-xs text-slate-500">as on your transcript</span>
+              </div>
+              <div className="mt-2 space-y-1">
+                <Toggle id="pp-show-cgpa" checked={cgpaSet && form.show_cgpa} disabled={!cgpaSet} onChange={v => set('show_cgpa', v)}
+                  label="Show my CGPA to employers" hint={!cgpaSet ? 'Type your CGPA first.' : form.show_cgpa ? 'Employers see it beside your programme.' : 'Off: employers see no CGPA.'} />
+                <Toggle id="pp-show-grades" checked={form.show_grades_to_employers} onChange={v => set('show_grades_to_employers', v)}
+                  label="Show my module grades to employers" hint={form.show_grades_to_employers ? 'Employers see your grade for each module.' : 'Off: they see your modules without grades.'} />
+              </div>
+            </Section>
+            <Section title="Contact" sub="Employers see these only after they shortlist you.">
+              {/* 20 Nov (her question): the sign-up email is already shared on shortlist, so it shows here, not asked again */}
+              <p className="m-0 mb-3 text-sm text-ink-soft">Email <b className="font-semibold text-ink">{user?.email}</b>
+                <Link to="/account" className="ml-2 font-medium text-blue-700 hover:underline">Change</Link></p>
+              <div className="grid sm:grid-cols-3 gap-3">
+                <div><label htmlFor="pp-phone" className={label}>Phone</label>
+                  <input id="pp-phone" type="tel" value={form.phone} maxLength={30} className={field} placeholder="012-345 6789" onChange={e => set('phone', e.target.value)} /></div>
+                <div><label htmlFor="pp-city" className={label}>City</label>
+                  <input id="pp-city" value={form.city} maxLength={80} className={field} placeholder="Kuala Lumpur" onChange={e => set('city', e.target.value)} /></div>
+                <div><label htmlFor="pp-from" className={label}>Available from</label>
+                  <input id="pp-from" type="month" value={form.available_from} className={field} onChange={e => set('available_from', e.target.value)} /></div>
+              </div>
+            </Section>
+            <Section title="Languages" sub="Employers in Malaysia often ask for English. Test result is optional, e.g. MUET Band 5 or IELTS 7.0.">
+              <div className="flex flex-col gap-2">
+                {form.languages.map((l, i) => (
+                  <div key={i} className="grid grid-cols-[1fr_1.7fr_1fr_auto] gap-2 items-center">
+                    <input aria-label="Language" value={l.language} maxLength={40} className={field} placeholder="e.g. English"
+                      onChange={e => setLang(i, 'language', e.target.value)} />
+                    <select aria-label={`How well you speak ${l.language || 'it'}`} value={l.level} className={field}
+                      onChange={e => setLang(i, 'level', e.target.value)}>
+                      {LANGUAGE_LEVELS.map(([k, v]) => <option key={k} value={k}>{v}</option>)}
+                    </select>
+                    <input aria-label="Test result" value={l.test} maxLength={40} className={field} placeholder="Test result"
+                      onChange={e => setLang(i, 'test', e.target.value)} />
+                    <button type="button" aria-label={`Remove ${l.language || 'this language'}`} className="text-slate-500 hover:text-slate-700 text-lg px-1"
+                      onClick={() => set('languages', form.languages.filter((_, j) => j !== i))}>×</button>
+                  </div>
+                ))}
+              </div>
+              {form.languages.length < 8 && (
+                <button type="button" className="mt-2 text-sm font-medium text-blue-700 hover:underline"
+                  onClick={() => set('languages', [...form.languages, { ...BLANK_LANG }])}>+ Add language</button>
               )}
             </Section>
           </div>
