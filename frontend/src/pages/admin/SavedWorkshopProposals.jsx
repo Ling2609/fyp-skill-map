@@ -5,7 +5,9 @@ import api from '../../api'
 import PageHeader from '../../components/PageHeader'
 import { Busy } from '../../components/Spinner'
 import { skillName } from '../../skillName'
+import RowMenu from './RowMenu'
 
+const FOLDER = <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /></svg>
 const updatedDate = new Intl.DateTimeFormat('en-SG', { dateStyle: 'medium' })
 const newProposal = '/admin/workshop?new=1'
 const unavailable = 'Saving isn’t available right now. Try again in a moment.'
@@ -18,6 +20,7 @@ export default function SavedWorkshopProposals() {
   const [deleting, setDeleting] = useState(null)
   const [notice, setNotice] = useState('')
   const [error, setError] = useState('')
+  const [exporting, setExporting] = useState(null)
 
   useEffect(() => {
     let active = true
@@ -53,21 +56,38 @@ export default function SavedWorkshopProposals() {
     }
   }
 
+  // the PDF straight from the list (22 Nov): the saved version, through the same export as the planner
+  const exportPdf = async proposal => {
+    setExporting(proposal.id); setError(''); setNotice('')
+    try {
+      const { data } = await api.get(`/admin/workshop/proposals/${proposal.id}`)
+      const res = await api.post('/admin/workshop/pdf', data.proposal, { responseType: 'blob' })
+      const url = URL.createObjectURL(res.data)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `workshop-proposal-${proposal.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 60) || 'workshop'}.pdf`
+      document.body.appendChild(a); a.click(); a.remove()
+      setTimeout(() => URL.revokeObjectURL(url), 1000)
+    } catch (err) {
+      setError(err.response?.status === 503 ? unavailable : 'Couldn’t make the PDF. Try again.')
+    } finally { setExporting(null) }
+  }
+
   return (
     <>
       {confirmation}
       <PageHeader>
         <div className="pb-4 flex flex-wrap items-end justify-between gap-x-6 gap-y-3">
           <div className="min-w-0 flex-1">
-            <p className="text-[11px] font-semibold text-blue-600 uppercase tracking-widest mb-2">Admin · Workshop planner</p>
-            <h1 className="text-2xl font-semibold tracking-tight text-ink">Saved proposals</h1>
-            <p className="mt-1 text-sm text-muted">Reopen a workshop proposal to edit it or export a PDF.</p>
+            <p className="text-[11px] font-semibold text-blue-600 uppercase tracking-widest mb-2">Admin · Workshops</p>
+            <h1 className="text-2xl font-semibold tracking-tight text-ink">Workshops</h1>
+            <p className="mt-1 text-sm text-muted">Plan workshops on the skills students lack. Saved proposals stay here to edit or export.</p>
           </div>
-          <Link to={newProposal} className="head-cta inline-flex min-h-11 items-center px-4 text-sm">+ New proposal</Link>
+          <Link to={newProposal} className="head-cta inline-flex min-h-11 items-center px-4 text-sm">+ Plan a workshop</Link>
         </div>
       </PageHeader>
 
-      <section aria-label="Workshop proposals" className="mx-4 mt-4 mb-8 sm:mx-8">
+      <section aria-label="Workshop proposals" className="mx-4 mt-3.5 mb-4 sm:mx-8">
         {notice && <p role="status" className="mb-3 text-sm text-ink-soft">{notice}</p>}
         {error && <p role="alert" className="mb-3 text-sm text-rose-700">{error}</p>}
         {loadFailed ? (
@@ -83,30 +103,28 @@ export default function SavedWorkshopProposals() {
             <p className="mt-1 text-sm text-muted">Draft a workshop and save it to see it here.</p>
           </div>
         ) : (
-          <ul className="divide-y divide-line rounded-2xl border border-line bg-white">
-            {proposals.map(proposal => (
-              <li key={proposal.id} className="flex flex-wrap items-center justify-between gap-x-6 gap-y-2 px-4 py-3 sm:px-5">
-                <div className="min-w-0 flex-[1_1_16rem]">
-                  <h2 className="wrap-anywhere text-base font-semibold text-ink">{proposal.title}</h2>
-                  <p className="mt-1 text-sm text-muted">
-                    Updated <time dateTime={proposal.updated_at}>{updatedDate.format(new Date(proposal.updated_at))}</time>
-                    {proposal.by && <> · Created by {proposal.by}</>}
-                  </p>
-                  {proposal.skills?.length > 0 && (
-                    <p className="mt-1 wrap-anywhere text-sm text-ink-soft">{proposal.skills.map(skillName).join(' · ')}</p>
-                  )}
-                </div>
-                <div className="flex flex-wrap items-center gap-2">
-                  <Link to={`/admin/workshop?proposal=${encodeURIComponent(proposal.id)}`}
-                    aria-label={`Open ${proposal.title}`} className="acad-btn edit min-h-11">Open proposal</Link>
-                  <button type="button" onClick={() => remove(proposal)} disabled={!!deleting}
-                    aria-label={`Delete ${proposal.title}`} className="min-h-11 rounded-lg px-3 text-sm font-semibold text-rose-700 hover:bg-rose-50 disabled:opacity-45">
-                    {deleting === proposal.id ? <Busy>Deleting…</Busy> : 'Delete'}
-                  </button>
-                </div>
-              </li>
-            ))}
-          </ul>
+          <div className="emp-tile doc-card bg-white rounded-2xl border">
+            <div className="adm-th"><h2 className="adm-tt"><i>{FOLDER}</i>Saved proposals</h2><span className="text-xs text-muted">{proposals.length} · newest first</span></div>
+            <ul className="doc-list">
+              {proposals.map(proposal => (
+                <li key={proposal.id} className="doc-row">
+                  <div className="min-w-0">
+                    <h3 className="doc-title">{proposal.title}</h3>
+                    <p className="doc-meta">Updated <time dateTime={proposal.updated_at}>{updatedDate.format(new Date(proposal.updated_at))}</time>
+                      {proposal.by && <> · by {proposal.by}</>}{exporting === proposal.id && <> · <Busy>Making PDF…</Busy></>}</p>
+                    {proposal.skills?.length > 0 && <p className="doc-chips">{proposal.skills.map(k => <span key={k}>{skillName(k)}</span>)}</p>}
+                  </div>
+                  <div className="doc-acts">
+                    <Link to={`/admin/workshop?proposal=${encodeURIComponent(proposal.id)}`} aria-label={`Open ${proposal.title}`} className="acad-btn edit h-9">Open</Link>
+                    <RowMenu label={`More actions for ${proposal.title}`} disabled={!!deleting || !!exporting} items={[
+                      { label: 'Export PDF', onSelect: () => exportPdf(proposal) },
+                      { label: 'Delete…', danger: true, onSelect: () => remove(proposal) },
+                    ]} />
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
         )}
       </section>
     </>

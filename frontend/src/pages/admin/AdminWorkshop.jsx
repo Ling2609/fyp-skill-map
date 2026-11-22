@@ -23,7 +23,6 @@ const errText = (err, fallback) => {
   return typeof detail === 'string' ? detail : fallback
 }
 const DRAFT_KEY = 'workshop-draft'
-const RECENT_PROPOSAL_LIMIT = 5
 
 function readDraft(scope) {
   try {
@@ -167,9 +166,6 @@ function WorkshopEditor() {
   })
 
   const newProposal = () => navigate('/admin/workshop?new=1')
-  const open = id => {
-    if (id) navigate(`/admin/workshop?proposal=${encodeURIComponent(id)}`)
-  }
   const save = async () => {
     setBusy('save')
     setError('')
@@ -272,55 +268,14 @@ function WorkshopEditor() {
     <div className="flex flex-col h-[calc(100dvh-var(--bar-h))]">
       {confirmation}
       {leaveConfirmation}
-      <BackLink label={proposalId ? 'Saved proposals' : 'Dashboard'} onClick={() => {
-        if (!busy) navigate(proposalId ? '/admin/workshop/proposals' : '/dashboard')
-      }} />
+      <BackLink label="Workshops" onClick={() => { if (!busy) navigate('/admin/workshop/proposals') }} />
       <PageHeader>
         <div className="pb-4 flex flex-wrap items-end justify-between gap-x-6 gap-y-3">
         <div className="min-w-0 flex-1">
-          <p className="text-[11px] font-semibold text-blue-600 uppercase tracking-widest mb-2">Admin · Workshop planner</p>
+          <p className="text-[11px] font-semibold text-blue-600 uppercase tracking-widest mb-2">Admin · Workshops</p>
           <h1 className="text-2xl font-semibold tracking-tight text-slate-900">Plan a workshop</h1>
           <p className="text-sm text-slate-500 mt-1">From the skills students most often lack. The AI drafts the text; the figures are SkillMap's.</p>
         </div>
-        <details className="ws-saved" onBlur={event => {
-          if (event.relatedTarget && !event.currentTarget.contains(event.relatedTarget)) {
-            event.currentTarget.open = false
-          }
-        }} onKeyDown={event => {
-          if (event.key === 'Escape' && event.currentTarget.open) {
-            event.preventDefault()
-            event.currentTarget.open = false
-            event.currentTarget.querySelector('summary').focus()
-          }
-        }}>
-          <summary className="acad-btn edit min-h-11">
-            Saved proposals
-            <svg className="ws-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-              <path d="m6 9 6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </summary>
-          <div className="ws-saved-panel">
-            {Array.isArray(saved) && saved.length > 0 ? (
-              <>
-                <p className="border-b border-line bg-well px-4 py-2 text-[11px] font-semibold uppercase tracking-widest text-muted">Recently updated</p>
-                <ul className="ws-saved-list" aria-label="Recently updated proposals">
-                  {saved.slice(0, RECENT_PROPOSAL_LIMIT).map(item => (
-                    <li key={item.id}>
-                      <button type="button" disabled={!!busy} onClick={() => open(item.id)}>{item.title}</button>
-                    </li>
-                  ))}
-                </ul>
-              </>
-            ) : (
-              <p className="px-3 py-2 text-sm text-muted">
-                {saved === null ? 'Loading proposals…' : saved === false ? 'Saved proposals are unavailable' : 'No saved proposals yet'}
-              </p>
-            )}
-            <Link to="/admin/workshop/proposals" onClick={event => {
-              if (busy) event.preventDefault()
-            }} className="ws-saved-all">View all saved proposals</Link>
-          </div>
-        </details>
         </div>
       </PageHeader>
       {saved === false && <p role="status" className="mx-4 mt-2 text-sm text-ink-soft sm:mx-8">{SAVING_UNAVAILABLE}. You can still draft and export a PDF, or retry saving.</p>}

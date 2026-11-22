@@ -104,7 +104,8 @@ const ADMIN_ITEMS = [
       </svg>
     ),
   },
-  { to: '/admin/workshop/proposals', label: 'Saved proposals', icon: PROPOSALS_ICON },
+  // 22 Nov (her review): one place for workshops; the planner opens from it, so the item stays lit there too
+  { to: '/admin/workshop/proposals', label: 'Workshops', icon: PROPOSALS_ICON, also: '/admin/workshop' },
 ]
 
 // Employer (11 Oct, batch 1; 12 Oct dashboard E): Dashboard is their home (/dashboard), My Jobs carries a badge for
@@ -137,7 +138,7 @@ const ICON_ROUTES = [
   { to: '/jobs', icon: NAV_ITEMS[2].icon },
   { to: '/employer/applications', icon: ADMIN_ITEMS[1].icon },
   { to: '/employer/graduates', icon: ADMIN_ITEMS[1].icon },
-  { to: '/admin/workshop', icon: NAV_ITEMS[0].icon },
+  { to: '/admin/workshop', icon: PROPOSALS_ICON },
 ]
 // eslint-disable-next-line react-refresh/only-export-components
 export function navIcon(path) {
@@ -198,6 +199,7 @@ export default function Sidebar() {
   const navigate = useNavigate()
   const { user } = useAuth()
   const { items, counts, waiting, bellTo } = useNavCounts()
+  const { pathname } = useLocation()
   // 20 Nov (her review): the sidebar folds to an icon rail (remembered); under 1280px it is always the rail
   // the same fold state as her sidebar before the redesign (SidebarContext: open by default)
   const { collapsed: folded, setCollapsed } = useSidebar()
@@ -249,7 +251,7 @@ export default function Sidebar() {
 
       <nav aria-label="SkillMap menu" className="sb-nav">
         {items.map(item => (
-          <NavLink key={item.to} to={item.to} title={item.label} className={({ isActive }) => `sb-item${isActive ? ' on' : ''}`}>
+          <NavLink key={item.to} to={item.to} title={item.label} className={({ isActive }) => `sb-item${isActive || (item.also && pathname.startsWith(item.also)) ? ' on' : ''}`}>
             <span className="sb-ic" aria-hidden="true">{item.icon}</span>
             <span className="sb-label">{item.label}</span>
             {item.badge && counts[item.badge] > 0 && (

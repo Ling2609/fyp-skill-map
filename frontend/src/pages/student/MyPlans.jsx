@@ -1,11 +1,12 @@
 import { useConfirmation } from '../../components/useConfirmation'
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import api from '../../api'
 import PageHeader from '../../components/PageHeader'
 import { Busy } from '../../components/Spinner'
 import ChatMarkdown from './ChatMarkdown'
 import { downloadLearningPlan } from './downloadLearningPlan'
+import RowMenu from '../admin/RowMenu'
 
 const dateFormat = new Intl.DateTimeFormat('en-SG', { dateStyle: 'medium' })
 
@@ -20,6 +21,7 @@ function PlanIcon() {
 
 export default function MyPlans() {
   const { confirm, confirmation } = useConfirmation()
+  const navigate = useNavigate()
   const [expanded, setExpanded] = useState(null)
   const [order, setOrder] = useState('newest')
   const [downloading, setDownloading] = useState(null)
@@ -45,15 +47,6 @@ export default function MyPlans() {
     return () => request.abort()
   }, [page, order, attempt])
 
-  useEffect(() => {
-    const closeOutsideMenus = event => {
-      for (const menu of document.querySelectorAll('details[data-plan-actions][open]')) {
-        if (!menu.contains(event.target)) menu.open = false
-      }
-    }
-    document.addEventListener('pointerdown', closeOutsideMenus, true)
-    return () => document.removeEventListener('pointerdown', closeOutsideMenus, true)
-  }, [])
 
   const changePage = next => {
     setExpanded(null)
@@ -124,27 +117,9 @@ export default function MyPlans() {
         </div>
       </PageHeader>
 
-      <section aria-labelledby="learning-plans-title" className="min-h-0 flex-1 overflow-y-auto px-4 py-4 sm:px-8">
+      <section aria-labelledby="learning-plans-title" className="min-h-0 flex-1 overflow-y-auto px-4 pt-3.5 pb-4 sm:px-8">
         {notice && <p role="status" className="mb-3 text-sm text-have-strong">{notice}</p>}
         {removeError && <p role="alert" className="mb-3 text-sm text-rose-700">{removeError}</p>}
-        <div className="src-head mb-3 justify-between">
-          <h2 id="learning-plans-title">Learning plans</h2>
-          <div role="group" aria-label="Sort plans by date" className="flex flex-wrap gap-2">
-            {[['newest', 'Newest first'], ['oldest', 'Oldest first']].map(([value, label]) => (
-              <button key={value} type="button" aria-pressed={order === value} disabled={!!removing}
-                onClick={() => {
-                  if (order === value) return
-                  setOrder(value)
-                  changePage(1)
-                }}
-                className={`min-h-11 rounded-full border px-3.5 text-sm font-medium disabled:opacity-50 ${order === value
-                  ? 'border-blue-600 bg-blue-600 text-white'
-                  : 'border-slate-200 bg-white text-slate-600 hover:border-blue-300'}`}>
-                {label}
-              </button>
-            ))}
-          </div>
-        </div>
         {error ? (
           <div className="rounded-2xl border border-line bg-white p-5">
             <p role="alert" className="text-sm text-ink-soft">{error}</p>
@@ -164,92 +139,51 @@ export default function MyPlans() {
             {page === 1 && <p className="mx-auto mt-1 max-w-sm text-sm text-muted">Ask for a learning plan in AI Assistant. It will appear here when the chat is saved.</p>}
           </div>
         ) : (
-          <ul className="grid gap-3">
-            {result.plans.map((plan, index) => {
-              const id = `${plan.session_id}-${plan.message_index}`
-              const open = expanded === id
-              const contentId = `plan-content-${index}`
-              return (
-                <li key={id} className={`relative isolate rounded-2xl border bg-white has-[details[open]]:z-20 ${open ? 'border-line-strong shadow-sm' : 'border-line'}`}>
-                  <div className="relative flex flex-wrap items-center gap-x-4 gap-y-1 px-4 py-2.5 sm:px-5">
-                    <div className="min-w-0 flex-1 basis-32">
-                      <h3 className="wrap-anywhere text-[15px] font-semibold text-blue-700">{plan.title}</h3>
-                      {plan.created_at && (
-                        <time className="mt-0.5 block text-[13px] text-muted" dateTime={plan.created_at}>
-                          {dateFormat.format(new Date(plan.created_at))}
-                        </time>
-                      )}
+          <div className="emp-tile doc-card bg-white rounded-2xl border">
+            <div className="adm-th">
+              <h2 id="learning-plans-title" className="adm-tt"><i><PlanIcon /></i>Learning plans</h2>
+              <span className="text-xs text-muted">{result.plans.length}{result.has_next || page > 1 ? ` on page ${page}` : ''}</span>
+              <div role="group" aria-label="Sort plans by date" className="doc-sort ml-auto">
+                {[['newest', 'Newest'], ['oldest', 'Oldest']].map(([value, label]) => (
+                  <button key={value} type="button" aria-pressed={order === value} disabled={!!removing}
+                    onClick={() => { if (order !== value) { setOrder(value); changePage(1) } }}>{label} first</button>
+                ))}
+              </div>
+            </div>
+            <ul className="doc-list">
+              {result.plans.map((plan, index) => {
+                const id = `${plan.session_id}-${plan.message_index}`
+                const open = expanded === id
+                const contentId = `plan-content-${index}`
+                return (
+                  <li key={id}>
+                    <div className="doc-row">
+                      <div className="min-w-0">
+                        <h3 className="doc-title">{plan.title}</h3>
+                        <p className="doc-meta">
+                          {plan.created_at && <time dateTime={plan.created_at}>{dateFormat.format(new Date(plan.created_at))}</time>}
+                          {downloading === plan && <> · <Busy>Making PDF…</Busy></>}
+                        </p>
+                        {downloadError === plan && <p role="alert" className="doc-meta text-rose-800">Couldn’t make the PDF. Try again.</p>}
+                      </div>
+                      <div className="doc-acts">
+                        <button type="button" aria-expanded={open} aria-controls={contentId} onClick={() => setExpanded(open ? null : id)} className="acad-btn edit h-9">
+                          {open ? 'Hide plan' : 'View plan'}</button>
+                        <RowMenu label={`More actions for ${plan.title}`} disabled={!!removing || !!downloading} items={[
+                          { label: 'Download PDF', onSelect: () => download(plan) },
+                          { label: 'Open conversation', onSelect: () => navigate('/chatbot', { state: { from: 'My Plans', openSession: plan.session_id } }) },
+                          { label: 'Remove from My Plans…', danger: true, onSelect: () => removePlan(plan) },
+                        ]} />
+                      </div>
                     </div>
-                    <div className="ml-auto flex flex-wrap items-center justify-end gap-1">
-                      <button type="button" aria-expanded={open} aria-controls={contentId}
-                        onClick={() => setExpanded(open ? null : id)}
-                        className="inline-flex min-h-11 shrink-0 items-center gap-1 whitespace-nowrap rounded-lg px-2 text-xs font-medium text-blue-700 hover:bg-well after:absolute after:inset-0 after:cursor-pointer after:rounded-2xl">
-                        {open ? 'Hide' : 'Details'}
-                        <svg className={open ? 'rotate-180' : ''} width="14" height="14" viewBox="0 0 24 24"
-                          fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-                          <path d="m6 9 6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
-                        </svg>
-                      </button>
-                      <details data-plan-actions className="relative z-10" onBlur={event => {
-                        if (event.relatedTarget && !event.currentTarget.contains(event.relatedTarget)) event.currentTarget.open = false
-                      }} onKeyDown={event => {
-                        if (event.key !== 'Escape' || !event.currentTarget.open) return
-                        event.stopPropagation()
-                        event.currentTarget.open = false
-                        event.currentTarget.querySelector('summary').focus()
-                      }}>
-                        <summary aria-label={removing === plan ? 'Removing plan' : 'More actions'}
-                          title="More actions"
-                          className="grid size-11 cursor-pointer list-none place-items-center rounded-lg text-blue-700 hover:bg-well open:bg-well [&::-webkit-details-marker]:hidden">
-                          {removing === plan ? <Busy> </Busy> : (
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                              <circle cx="5" cy="12" r="1.75" /><circle cx="12" cy="12" r="1.75" /><circle cx="19" cy="12" r="1.75" />
-                            </svg>
-                          )}
-                        </summary>
-                        <div className="absolute right-0 z-10 mt-1 w-56 max-w-[calc(100vw-3rem)] rounded-xl border border-line bg-white p-1 shadow-lg">
-                          <button type="button" disabled={!!downloading} aria-label={downloading === plan ? 'Making PDF…' : 'Download PDF'} onClick={() => download(plan)}
-                            className="flex min-h-11 w-full items-center gap-2 rounded-lg px-3 text-left text-sm font-medium text-ink hover:bg-well disabled:opacity-60">
-                            {downloading === plan ? <Busy>Making PDF…</Busy> : (
-                              <>
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
-                                  <path d="M12 3v12m-5-5 5 5 5-5M5 16v4h14v-4" strokeLinecap="round" strokeLinejoin="round" />
-                                </svg>
-                                Download PDF
-                              </>
-                            )}
-                          </button>
-                          <Link to="/chatbot" state={{ from: 'My Plans', openSession: plan.session_id }}
-                            className="flex min-h-11 items-center gap-2 rounded-lg px-3 text-sm font-medium text-ink hover:bg-well">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" aria-hidden="true">
-                              <path d="M5 5h14v11h-7l-4 4v-4H5zM8 9h8m-8 3h5" strokeLinecap="round" strokeLinejoin="round" />
-                            </svg>
-                            Open conversation
-                          </Link>
-                          <button type="button" disabled={!!removing} onClick={event => {
-                            const menu = event.currentTarget.closest('details')
-                            menu.open = false
-                            menu.querySelector('summary').focus()
-                            removePlan(plan)
-                          }}
-                            className="flex min-h-11 w-full items-center gap-2 rounded-lg border-t border-line px-3 text-left text-sm font-medium whitespace-nowrap text-rose-800 hover:bg-rose-50 disabled:opacity-60">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" aria-hidden="true">
-                              <path d="M4 7h16M9 7V4h6v3m3 0-1 13H7L6 7m4 4v5m4-5v5" strokeLinecap="round" strokeLinejoin="round" />
-                            </svg>
-                            Remove from My Plans
-                          </button>
-                        </div>
-                      </details>
+                    <div id={contentId} hidden={!open} className="doc-body">
+                      {open && <ChatMarkdown>{plan.content.replace(/^#{1,4}[ \t]*Learning plan:[^\r\n]*\r?\n(?:[ \t]*\r?\n)*/i, '')}</ChatMarkdown>}
                     </div>
-                    {downloadError === plan && <p role="alert" className="basis-full text-right text-sm text-rose-800">Couldn’t make the PDF. Try again.</p>}
-                  </div>
-                  <div id={contentId} hidden={!open} className="min-w-0 border-t border-line px-4 py-4 sm:px-5">
-                    {open && <ChatMarkdown>{plan.content.replace(/^#{1,4}[ \t]*Learning plan:[^\r\n]*\r?\n(?:[ \t]*\r?\n)*/i, '')}</ChatMarkdown>}
-                  </div>
-                </li>
-              )
-            })}
-          </ul>
+                  </li>
+                )
+              })}
+            </ul>
+          </div>
         )}
 
         {(page > 1 || result?.has_next) && (
