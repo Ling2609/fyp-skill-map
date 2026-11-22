@@ -244,8 +244,11 @@ function WorkshopEditor() {
   const makeCopy = async () => {
     setBusy('copy'); setError('')
     try {
-      const { proposal } = body()
-      const { data } = await api.post('/admin/workshop/proposals', { skills, proposal: { ...proposal, title: copyTitle(proposal.title) } })
+      const payload = full()
+      const { data } = await api.post('/admin/workshop/proposals', {
+        ...payload,
+        proposal: { ...payload.proposal, title: copyTitle(payload.proposal.title) },
+      })
       navigate(`/admin/workshop?proposal=${encodeURIComponent(data.id)}`)
     } catch (err) {
       setError(errText(err, "Couldn't make a copy. Try again."))
