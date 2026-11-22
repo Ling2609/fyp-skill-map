@@ -204,7 +204,7 @@ export default function AdminUsers() {
         {error && <p className="text-sm text-rose-600">{error}</p>}
 
         <div className="emp-tile min-h-0 flex flex-col bg-white rounded-2xl border overflow-hidden">
-          <div ref={strip} className="overflow-hidden scrollbar-gutter-stable bg-slate-50 border-b border-slate-200">
+          <div ref={strip} className="relative overflow-hidden scrollbar-gutter-stable bg-slate-50 border-b border-slate-200">
             <table role="presentation" className="w-full min-w-190 table-fixed text-xs">
               {colgroup}
               <thead>

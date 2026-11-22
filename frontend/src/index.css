@@ -2092,3 +2092,37 @@ button.skillgap-token { cursor: pointer; }
   @keyframes ws-fresh { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
 }
 @media (max-width: 1023px) { .ws-redrafting { place-items: start center; padding-top: 110px; } }
+/* 22 Nov (her phone check): admin dashboard on phones and tablets = one column; nothing wider than the screen */
+@media (max-width: 1023px) {
+  .adm-grid { grid-template-columns: minmax(0, 1fr) !important; grid-template-rows: none !important; grid-auto-rows: auto; }
+  .adm-needs, .adm-prof, .adm-recent, .adm-gaps { grid-column: 1 !important; grid-row: auto !important; min-width: 0; }
+  .adm-needs { order: 1; } .adm-gaps { order: 2; } .adm-prof { order: 3; } .adm-recent { order: 4; }
+  .adm-gaps .gap-chart { flex: none; height: calc(var(--rows, 8) * 46px + 22px); min-height: 0; }
+  .adm-prof-bars li { grid-template-columns: minmax(0, 1fr) 3.5rem !important; row-gap: 6px !important; }
+  .adm-prof-bars li > :nth-child(2) { grid-column: 1 / -1 !important; grid-row: 2 !important; }
+  .adm-prof-bars li > :nth-child(3) { grid-column: 2 !important; grid-row: 1 !important; }
+}
+/* four header counts: two by two on narrow phones */
+@media (max-width: 559px) {
+  .page-glass .head-stats:has(> div:nth-child(4)) { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); width: 100%; }
+  .page-glass .head-stats:has(> div:nth-child(4)) > div { min-width: 0; }
+  .page-glass .head-stats:has(> div:nth-child(4)) > div:nth-child(odd) { border-left: 0; }
+  .page-glass .head-stats:has(> div:nth-child(4)) > div:nth-child(n + 3) { border-top: 1px solid var(--color-line); }
+}
+@media (max-width: 1023px) {
+  .adm-col { display: contents; }
+  .adm-recent-list.fit-rows { flex-wrap: nowrap; overflow: visible !important; }
+  .adm-needs > div:last-child, .adm-needs > div:last-child > ul { overflow: visible !important; min-height: 0; }
+}
+/* phones: the employer's details get the full width, Reject / Approve go under them */
+@media (max-width: 639px) {
+  .adm-needs .adm-emps .adm-row { flex-wrap: wrap; row-gap: 10px; }
+  .adm-needs .adm-emps .adm-row > .flex-1 { flex-basis: calc(100% - 48px); }
+  .adm-needs .adm-emps .adm-row > button:first-of-type { margin-left: auto; }
+}
+/* below 1024 the admin dashboard is a normal scrolling page (one scroll, room for the phone tab bar) */
+@media (max-width: 1023px) {
+  .adm-page { height: auto !important; min-height: calc(100dvh - var(--bar-h)); }
+  .adm-page .adm-grid { flex: none; overflow: visible !important; }
+}
+.gap-chart { position: relative; }

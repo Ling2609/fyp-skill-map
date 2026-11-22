@@ -53,7 +53,7 @@ export default function GapsChart({ gaps, before, since, picked, onToggle }) {
     )
   }
   return (
-    <div className="gap-chart">
+    <div className="gap-chart" style={{ '--rows': rows.length }}>
       <figure className="m-0 h-full" aria-hidden="true">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={rows} layout="vertical" margin={{ top: 18, right: 4, bottom: 0, left: 4 }} barSize={10}

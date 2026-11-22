@@ -370,7 +370,7 @@ export function MyJobs() {
             {/* 21 Oct (her report: in a narrow window the Job column was squeezed to nothing; then "fixed header"): the
                 table keeps a minimum width; the column titles sit in their own strip and only the rows scroll under them,
                 up and down and, in a narrow window, sideways (the strip follows), as on the admin's Users page */}
-            <div className="min-h-0 flex flex-col bg-white border border-slate-200 rounded-2xl overflow-hidden max-md:hidden">
+            <div className="min-h-0 flex flex-col bg-white border border-slate-200 rounded-2xl overflow-hidden max-lg:hidden">
               {/* 12 Oct (her review): the Job column takes the spare width; the others are fixed, so no wide gaps; every
                   column left-aligned and the actions are buttons. 20 Oct (her pick T2): no Status column (the tab already
                   says Open / Closed; a badge beside the title only for the special states); the decision date is its own
@@ -435,7 +435,7 @@ export function MyJobs() {
             </div>
             {/* 19 Nov (her pick): on a phone the five columns can't fit, so each job is a card with the same facts:
                 title and badges, where and when, applicants beside the decision date, the skills, then its actions */}
-            <ul className="md:hidden m-0 p-0 list-none flex flex-col gap-3" aria-label={tab === 'open' ? 'Open jobs' : 'Closed jobs'}>
+            <ul className="lg:hidden m-0 p-0 list-none flex flex-col gap-3" aria-label={tab === 'open' ? 'Open jobs' : 'Closed jobs'}>
               {shown.map(j => (
                 <li key={j.id} className="bg-white border border-slate-200 rounded-2xl px-4 py-3.5">
                   {j.status === 'hidden' ? <p className="m-0 font-semibold text-slate-900">{j.title}</p>

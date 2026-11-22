@@ -114,7 +114,7 @@ export default function AdminDashboard() {
 
   return (
     // 21 Oct (her report): the heading stays put and only the content under it scrolls, as on the other dashboards
-    <div className="h-[calc(100dvh-var(--bar-h))] flex flex-col">
+    <div className="adm-page h-[calc(100dvh-var(--bar-h))] flex flex-col">
       <PageHeader bell>
         <div className="pb-5 flex flex-wrap items-center gap-x-6 gap-y-3">
           <div className="min-w-0 flex-1 basis-72">

@@ -59,8 +59,8 @@ export default function ApplicantProfile() {
         : <BackLink label={`Dashboard · fits ${data.job.title}`} onClick={() => navigate('/dashboard')} />)}
       {/* 21 Oct (her pick D): a thicker line, apart from the CV below */}
       <PageHeader strong>
-        <div className="pb-4 flex items-end justify-between gap-4">
-          <div className="min-w-0 flex-1">
+        <div className="pb-4 flex items-end justify-between gap-4 max-sm:flex-wrap max-sm:gap-3">
+          <div className="min-w-0 flex-1 max-sm:basis-full">
             {s ? <ApplicantHeading s={s} note={data.application && !s.contact ? 'Email and phone appear after you shortlist this applicant.' : ''} />
               : <h1 className="text-2xl font-semibold tracking-tight text-slate-900 mt-2">Applicant</h1>}
             {data && !data.application && <p className="text-xs text-slate-500 mt-2">
@@ -68,7 +68,7 @@ export default function ApplicantProfile() {
             </p>}
           </div>
           {data?.application && (
-            <div className="shrink-0 flex items-end gap-5">
+            <div className="shrink-0 flex items-end gap-5 max-sm:w-full max-sm:flex-wrap max-sm:justify-between max-sm:gap-3">
             {/* 12 Oct: go on to the next application for this job still at Applied, without going back to the list */}
             {data.next_to_review && <Link to={`/employer/applications/${data.next_to_review.id}`} className="text-sm font-medium text-blue-700 hover:underline pb-2">Next to review: {data.next_to_review.name} ›</Link>}
             <label className="shrink-0 text-xs text-slate-500 flex flex-col gap-1">
