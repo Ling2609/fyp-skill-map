@@ -183,7 +183,7 @@ export default function ProfilePrivacy() {
               <div className="flex items-center gap-3">
                 <label htmlFor="pp-cgpa" className="text-sm font-medium text-slate-800">CGPA</label>
                 <input id="pp-cgpa" inputMode="decimal" value={form.cgpa} maxLength={4} placeholder="3.72"
-                  className={`${field} !w-20`} onChange={e => set('cgpa', e.target.value.replace(/[^0-9.]/g, ''))} />
+                  className={`${field} w-20!`} onChange={e => set('cgpa', e.target.value.replace(/[^0-9.]/g, ''))} />
                 <span className="text-xs text-slate-500">as on your transcript</span>
               </div>
               <div className="mt-2 space-y-1">

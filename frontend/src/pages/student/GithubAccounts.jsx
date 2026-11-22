@@ -113,7 +113,7 @@ export default function GithubAccounts({ blocked, compact = false }) {
         {connected && (
           <ul className="border-t border-slate-200 divide-y divide-slate-100">
             {accounts.map(a => (
-              <li key={a.id} className="flex items-center gap-3 pr-4 py-2.5 pl-[4.5rem]">
+              <li key={a.id} className="flex items-center gap-3 pr-4 py-2.5 pl-18">
                 <a href={a.url} target="_blank" rel="noopener noreferrer" className="flex-1 min-w-0 truncate text-sm text-gray-800 hover:text-blue-700">
                   github.com/<b className="font-semibold">{a.login}</b> <span className="text-blue-700">↗</span>
                 </a>
@@ -126,7 +126,7 @@ export default function GithubAccounts({ blocked, compact = false }) {
                 </span>
               </li>
             ))}
-            <li className="pr-4 py-2.5 pl-[4.5rem]">
+            <li className="pr-4 py-2.5 pl-18">
               <button type="button" onClick={connect} disabled={cantConnect}
                 className="flex items-center gap-2 text-sm font-medium text-blue-700 hover:underline disabled:text-gray-400 disabled:no-underline">
                 {opening ? <><Spinner size="sm" />Taking you to GitHub…</> : '+ Connect another account'}
