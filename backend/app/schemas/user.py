@@ -159,3 +159,14 @@ class ResetPasswordIn(BaseModel):
     @classmethod
     def valid_password(cls, v: str) -> str:
         return check_password(v)
+
+
+# ── Registration email verification (23 Nov) ──────────────────────────────────
+
+class VerifyEmailIn(BaseModel):
+    ticket: str                # from /auth/register or a 403 email_not_verified sign-in: NOT a sign-in token
+    code: str = Field(max_length=20)   # 6 digits; spaces and dashes from a pasted code are removed
+
+
+class TicketIn(BaseModel):
+    ticket: str

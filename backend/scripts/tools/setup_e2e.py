@@ -43,7 +43,9 @@ if "e2e" not in db_name.lower():
 
 # The app reads these at import: the e2e database, no AI keys (nothing here needs AI), no MongoDB writes
 os.environ.update(DATABASE_URL=URL, MONGODB_URL="mongodb://localhost:1", RELATION_MODEL_DIR="",
-                  GROQ_API_KEY="", GEMINI_API_KEY="", COHERE_API_KEY="", JSEARCH_KEY="")
+                  GROQ_API_KEY="", GEMINI_API_KEY="", COHERE_API_KEY="", JSEARCH_KEY="",
+                  # 23 Nov: setting up sends no email (the accounts below are marked verified here, on purpose)
+                  SMTP_USER="", SMTP_PASSWORD="", E2E_OUTBOX="")
 sys.path.insert(0, str(BACKEND))
 
 print(f"Emptying {db_name} ...")
@@ -84,7 +86,11 @@ with _eng.begin() as c:
         c.execute(text("update modules set skills_reviewed_at = now() where id=:m"), {"m": mid})
 _eng.dispose()
 
+from datetime import datetime, timezone  # noqa: E402
+import shutil  # noqa: E402
 from app.auth.utils import hash_password  # noqa: E402
+from app.services.mailer import OUTBOX  # noqa: E402
+shutil.rmtree(OUTBOX, ignore_errors=True)   # 23 Nov: each run starts with an empty e2e outbox
 from app.database import SessionLocal  # noqa: E402
 from app.models.user import User, UserRole  # noqa: E402
 
@@ -103,12 +109,17 @@ with TestClient(app) as client:
             body["company_name"] = company
             body.update(company_website="e2e-company.example", company_ssm="202301000001")   # 20 Nov: required
         ok(client.post("/auth/register", json=body))
+        # 23 Nov: the ready-made e2e accounts skip email verification, explicitly here (TC-51's new employer does not:
+        # it signs up and verifies through the pages, reading the code from backend/.e2e_outbox)
+        db.execute(text("update users set email_verified_at = now() where email = :e"), {"e": body["email"]})
+        db.commit()
         token = ok(client.post("/auth/login", json={"email": body["email"], "password": E2E_PASSWORD}))["access_token"]
         return {"Authorization": f"Bearer {token}"}
 
     db = SessionLocal()
     db.add(User(username="e2e_admin", email="e2e.admin@example.com", first_name="Career", last_name="Office",
-                hashed_password=hash_password(E2E_PASSWORD), role=UserRole.admin))
+                hashed_password=hash_password(E2E_PASSWORD), role=UserRole.admin,
+                email_verified_at=datetime.now(timezone.utc)))
     db.commit()
     admin = {"Authorization": "Bearer " + ok(client.post("/auth/login", json={
         "email": "e2e.admin@example.com", "password": E2E_PASSWORD}))["access_token"]}

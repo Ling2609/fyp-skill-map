@@ -59,8 +59,12 @@ You need three terminals.
 2. Start the backend on that database:
 
    ```bash
-   DATABASE_URL="postgresql://postgres:<password>@localhost:5432/skillmap_e2e" uvicorn app.main:app --port 8000
+   E2E_OUTBOX=1 DATABASE_URL="postgresql://postgres:<password>@localhost:5432/skillmap_e2e" uvicorn app.main:app --port 8000
    ```
+
+   `E2E_OUTBOX=1` (23 Nov, email verification): emails are written to `backend/.e2e_outbox/` instead of being sent, so
+   TC-51 can read the new employer's verification code. The backend refuses to start with it on any other database;
+   the folder is git-ignored and `setup_e2e.py` empties it. The database must be named exactly `skillmap_e2e`.
 
 **Terminal 2, frontend** (from `frontend/`):
 

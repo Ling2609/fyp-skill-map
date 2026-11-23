@@ -23,6 +23,7 @@ test('TC-66 the pages and pop-ups of each role have no accessibility problems th
   await page.goto('/login'); pages.push(await scan(page, 'Sign in'))
   await page.goto('/register'); pages.push(await scan(page, 'Register'))
   await page.goto('/forgot-password'); pages.push(await scan(page, 'Forgot password'))
+  await page.goto('/verify-email'); pages.push(await scan(page, 'Check your email (opened without a ticket)'))   // 23 Nov
   await page.goto('/privacy'); pages.push(await scan(page, 'Privacy notice'))
 
   await signIn(page, STUDENT); pages.push(await scan(page, 'Student Dashboard'))

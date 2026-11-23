@@ -12,6 +12,7 @@ import Sidebar from './components/Sidebar'
 import Register from './pages/auth/Register';
 import Login from './pages/auth/Login';
 import ForgotPassword from './pages/auth/ForgotPassword'
+import VerifyEmail from './pages/auth/VerifyEmail'
 const Dashboard = lazy(() => import('./pages/student/Dashboard'))
 const Recommend = lazy(() => import('./pages/student/Recommend'))
 const JobDetail = lazy(() => import('./pages/student/JobDetail'))
@@ -148,6 +149,7 @@ function AppRoutes() {
       <Route path="/logout" element={<Logout />} />
       <Route path="/login" element={<Login />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route path="/verify-email" element={<VerifyEmail />} />
       <Route path="/privacy" element={<Privacy />} />
       <Route path="/dashboard" element={<RoleRoute><Layout><Home /></Layout></RoleRoute>} />
       <Route path="/admin/users" element={<RoleRoute roles={['admin']}><Layout><AdminUsers /></Layout></RoleRoute>} />

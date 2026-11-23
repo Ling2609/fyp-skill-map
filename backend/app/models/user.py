@@ -25,6 +25,9 @@ class User(Base):
     # Set when the password is changed or reset; sign-in tokens issued under an older password are refused
     # (4 Oct, migrations/migrate_account_security.py)
     password_changed_at     = Column(DateTime(timezone=True), nullable=True)
+    # 23 Nov (registration email verification): when the owner proved the email is theirs. NULL = not verified, so
+    # every new account starts unverified; no default on purpose (migrations/migrate_email_verified.py)
+    email_verified_at       = Column(DateTime(timezone=True), nullable=True)
     # Admin + Employer flows (7 Oct, migrations/migrate_admin_structure.py)
     programme_id    = Column(Integer, ForeignKey("programmes.id", ondelete="SET NULL"), nullable=True)  # students
     intake_id       = Column(Integer, ForeignKey("intakes.id", ondelete="SET NULL"), nullable=True)     # students

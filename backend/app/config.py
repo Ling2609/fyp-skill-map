@@ -25,6 +25,10 @@ class Settings(BaseSettings):
     smtp_port: int = 587
     smtp_user: str = ""
     smtp_password: str = ""
+    # Browser tests only (23 Nov, email verification): E2E_OUTBOX=1 writes every email to backend/.e2e_outbox/
+    # instead of sending it, so the tests can read the code. Allowed only on the skillmap_e2e database; on any other
+    # database the backend refuses to start (app/services/mailer.py check_outbox).
+    e2e_outbox: bool = False
     # Websites allowed to call the API (13 Oct audit): comma-separated, e.g. for a Docker / demo address
     # CORS_ORIGINS=http://localhost:5173,http://192.168.1.20:5173
     cors_origins: str = "http://localhost:5173"

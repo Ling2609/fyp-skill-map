@@ -30,7 +30,8 @@ BACKEND = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(BACKEND))
 os.chdir(BACKEND)
 # No AI is needed (every skill is given), so no key is used even if one is set
-os.environ.update(GROQ_API_KEY="", GEMINI_API_KEY="", COHERE_API_KEY="", MISTRAL_API_KEY="")
+os.environ.update(GROQ_API_KEY="", GEMINI_API_KEY="", COHERE_API_KEY="", MISTRAL_API_KEY="",
+                  SMTP_USER="", SMTP_PASSWORD="", E2E_OUTBOX="")   # 23 Nov: seeding sends no email
 
 DOMAIN = "skillmap-demo.example.com"    # example.com is reserved (RFC 2606): never a real mailbox
 DEMO_PASSWORD = "Teal-Harbour-58"
@@ -213,6 +214,9 @@ def add():
                 body["company_name"] = company
                 body.update(company_website=website, company_ssm=ssm)   # 20 Nov: required for employers
             ok(client.post("/auth/register", json=body))
+            # 23 Nov: demo accounts skip email verification, explicitly here (their addresses are not real mailboxes)
+            db.execute(text("update users set email_verified_at = now() where email = :e"), {"e": email(key)})
+            db.commit()
             if role == "employer":
                 return None
             return login(key)

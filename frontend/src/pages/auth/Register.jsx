@@ -139,7 +139,7 @@ export default function Register() {
     setError('')
     setLoading(true)
     try {
-      await api.post('/auth/register', {
+      const res = await api.post('/auth/register', {
         username: form.username,
         first_name: form.first_name,
         last_name: form.last_name,
@@ -151,7 +151,8 @@ export default function Register() {
         company_ssm: form.role === 'employer' ? form.company_ssm.trim() : null,
         accept_privacy: accepted,
       })
-      navigate('/login', { state: { message: 'Account created successfully! Please sign in.' } })
+      // 23 Nov: the account starts unverified; the code was emailed, so the next step is Check your email
+      navigate('/verify-email', { state: { ticket: res.data.ticket, verification: res.data.verification, from: 'register' } })
     } catch (err) {
       // FastAPI sends a string for our own errors, but a list for validation (422) errors
       const detail = err.response?.data?.detail

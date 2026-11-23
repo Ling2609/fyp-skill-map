@@ -35,32 +35,6 @@ Live jobs (JSearch) + jobs posted on SkillMap ──► skill extraction with qu
 - **Employer** (approved by the career office): post and edit jobs (skills read from the ad, checked by the employer), review applicants, invite graduates who fit and chose to be visible
 - **Admin** (career office): approve employers, deactivate accounts, keep programmes, intakes and module lists, review the skills found in each module
 
-## Employer recruitment availability (16 Nov 2026)
-
-An employer post accepts new applications only while its owner is an **active,
-approved employer**, the post is not gone, closed, hidden or manually paused, and
-its stored decision deadline has not been reached. These checks apply on the
-server to discovery, recommendations, invitations and direct application requests.
-
-- Suspending or rejecting an employer stops new recruitment without deleting the
-  job or changing existing application outcomes. Reactivation/reapproval restores
-  eligibility only if the other job restrictions still allow it.
-- At `decide_by`, new applications and invitations pause. Existing Applied and
-  Shortlisted applications stay pending; the employer can still review and decide.
-  Students see that the promised date was missed, not an automatic rejection.
-- The existing one-time 7/14-day extension remains available **before** the date.
-  Reopening/resuming does not change the promise or bypass an expired deadline.
-- External jobs and legacy undated employer posts keep their previous rules.
-- An already loaded browser result may remain in the 15-minute cache. The fresh
-  availability endpoint and application API independently enforce the restriction.
-
-No schema migration or ERD change is required: this uses existing account/job
-fields. The intake pause is calculated at request time, not by deleting records,
-changing applicant status, writing a manual pause timestamp or running a scheduler.
-See [transparency rules](docs/transparency.md) and [data flow](docs/data_flow.md).
-The experimental admin hide/restore page was reverted; no new reporting or
-moderation workflow is included. The forest/cream UI remains an isolated mock.
-
 ## Folder map
 
 The backend follows a **layered architecture** (FastAPI's "bigger applications" structure): routers receive HTTP requests, services and nlp hold the logic, models define the database. Routers are grouped **by feature**, because features such as login and jobs are shared by several roles. The frontend groups pages **by role**, because each role has its own screens.
@@ -267,6 +241,7 @@ Groq's free tier allows about 200,000 tokens a day (≈ 100 jobs). Don't run two
 | `migrate_profile_more_evidence.py` | 21 Oct 2026 | new table `user_experiences` (work experience and activities, with their skills); adds `users.languages`, `cgpa`, `show_cgpa` (CGPA shown to employers only if switched on) and `user_projects.role`, `team_size`, `outcome`, `demo_url`. The API refuses to start until this has run |
 | `migrate_application_copy.py` | 21 Oct 2026 | adds `applications.sent_profile` and `sent_at`: a copy of what the employer was shown when the student applied (her profile and match, no contact details). The employer sees it by default, with "see latest" when the profile changed since. Older applications stay empty and show the latest profile. The API refuses to start until this has run |
 | `migrate_invitation_replies.py` | 25 Oct 2026 | adds `job_invitations.decline_reason` and `decline_note`: the optional reason a student gives when saying "No thanks" to an employer's invitation (shown to the employer). The API refuses to start until this has run |
+| `migrate_email_verified.py` | 23 Nov 2026 | registration email verification: adds `users.email_verified_at` (no default: new accounts start unverified) and the table `email_code_sends` (cooldown and daily limit for codes); marks every account that exists at the first run as verified. One transaction; a rerun only checks and never marks anyone verified. The API refuses to start until this has run |
 
 A **new, empty** database gets its tables from `app/models/` when the API starts (the 12 Oct tables `application_events` and `job_invitations` too), but three of these scripts also load **data** a new install needs, so after the first start run, in this order: `migrate_admin_structure.py`, `migrate_all_programmes.py`, `migrate_intake_modules.py` (17 programmes, 198 modules, demo intakes), then `python scripts/pipeline/extract_module_skills.py` (module skills, Groq) and `python scripts/tools/create_admin.py` (the career-office account). Checked by `tests/test_install.py` on a brand-new database. Post a job lists the job categories already in the database, so load the JobStreet data (or fetch live jobs) before employers post. To apply one: `python migrations/<file>.py` from `backend/`.
 
@@ -287,9 +262,9 @@ Then start the API on the copy and sign in. The backup file also lets you go bac
 
 ## Tests
 
-`backend/tests/` (12 Oct 2026) runs the real API on a **throwaway** PostgreSQL database that is dropped and made again on every run, so your own data is never touched. It checks a brand-new install (start-up, data migrations, running every migration twice), sign-up and sign-in, role checks, admin decisions, applying and the student's progress (Viewed, Shortlisted, Undo, the 14- and 30-day notes, closing a job), invitations, editing a posted job, contact details only after shortlisting, decision dates, stopping and closing with a reason, reasons for Not selected (one or many), where a student stands among applicants, the employer's on-time record, the privacy notice at sign-up and the version accepted, Download my data, deleting an account (including retrying after a partial failure), chats expiring after 18 months, a database one migration behind, learning plans (only checked links, the PDF), the Dashboard's "what opens up" counts, accepted grades, and that nobody reaches another person's records by changing an id. Since 21 Oct also: work experience, languages and the opt-in CGPA (export and deletion included), agreeing to an updated privacy notice, the copy of each application as sent (and "See latest"), shortlisting several at once (only those at Applied), and that after anyone applies a job can ask for less but not more, with an edit and an application at the same moment taking turns (a row lock). Evidence of each run is kept in `docs/evidence/tests/`. Historical full-suite results remain dated; recent focused checks are listed below and must not be described as a full-suite run. Skill extraction and matching quality are not tested here (see `docs/evidence/`): the embedding model is replaced by a small stand-in and the relationship model is off, so the tests are fast and need no API keys.
+`backend/tests/` (12 Oct 2026) runs the real API on a **throwaway** PostgreSQL database that is dropped and made again on every run, so your own data is never touched. It checks a brand-new install (start-up, data migrations, running every migration twice), sign-up and sign-in, role checks, admin decisions, applying and the student's progress (Viewed, Shortlisted, Undo, the 14- and 30-day notes, closing a job), invitations, editing a posted job, contact details only after shortlisting, decision dates, stopping and closing with a reason, reasons for Not selected (one or many), where a student stands among applicants, the employer's on-time record, the privacy notice at sign-up and the version accepted, Download my data, deleting an account (including retrying after a partial failure), chats expiring after 18 months, a database one migration behind, learning plans (only checked links, the PDF), the Dashboard's "what opens up" counts, accepted grades, and that nobody reaches another person's records by changing an id. Since 21 Oct also: work experience, languages and the opt-in CGPA (export and deletion included), agreeing to an updated privacy notice, the copy of each application as sent (and "See latest"), shortlisting several at once (only those at Applied), and that after anyone applies a job can ask for less but not more, with an edit and an application at the same moment taking turns (a row lock). Evidence of each run: `docs/evidence/tests/` (latest: 21 Oct, 136 passed on Windows). Skill extraction and matching quality are not tested here (see `docs/evidence/`): the embedding model is replaced by a small stand-in and the relationship model is off, so the tests are fast and need no API keys.
 
-`backend/tests_unit/` (22 Oct) holds the **unit tests**: the rules SkillMap's answers rest on, tested without PostgreSQL, an API server or an AI model (some availability/date tests execute SQL filters against isolated in-memory SQLite): the match and gap counts (required skills, either-or groups, nice-to-haves and skills learnt in the role kept out of the %), grade weights, a skill read from an ad must be quoted from it, job levels from titles and years, made-up links removed from learning plans, password rules, and that after anyone applies a job can ask for less but not more. `python -m pytest tests_unit` runs them alone in a few seconds. `backend/tests/test_mongodb_real.py` checks the real MongoDB server (in a separate `skillmap_test` database): the chat expiry indexes, saving and reopening chats, and that Download my data and Delete my account cover MongoDB; it is skipped when MongoDB isn't running. The **front-end unit tests** (27 Oct; Vitest and Testing Library) are the `*.test.js` and `*.test.jsx` files in `frontend/src/`: the saved-answer cache and the sign-in expiry in `api.js` and `pageCache.js`, the live password guidance, and small components and rules (level tag, confirm box, info tip, toast, skill names, greeting, profile checklist, admin decisions). `npm test` from `frontend/` runs them in a few seconds; `npm run test:coverage` adds a coverage table. The **browser (end-to-end) tests** are in `frontend/e2e/` (`docs/testing/e2e.md`); the system test cases in `docs/testing/`.
+`backend/tests_unit/` (22 Oct) holds the **unit tests**: the rules SkillMap's answers rest on, each tested as a plain function with no database, server or AI model: the match and gap counts (required skills, either-or groups, nice-to-haves and skills learnt in the role kept out of the %), grade weights, a skill read from an ad must be quoted from it, job levels from titles and years, made-up links removed from learning plans, password rules, and that after anyone applies a job can ask for less but not more. `python -m pytest tests_unit` runs them alone in about a second. `backend/tests/test_mongodb_real.py` checks the real MongoDB server (in a separate `skillmap_test` database): the chat expiry indexes, saving and reopening chats, and that Download my data and Delete my account cover MongoDB; it is skipped when MongoDB isn't running. The **front-end unit tests** (27 Oct; Vitest and Testing Library) are the `*.test.js` and `*.test.jsx` files in `frontend/src/`: the saved-answer cache and the sign-in expiry in `api.js` and `pageCache.js`, the live password guidance, and small components and rules (level tag, confirm box, info tip, toast, skill names, greeting, profile checklist, admin decisions). `npm test` from `frontend/` runs them in a few seconds; `npm run test:coverage` adds a coverage table. The **browser (end-to-end) tests** are in `frontend/e2e/` (`docs/testing/e2e.md`); the system test cases in `docs/testing/`.
 
 From `backend/` with the venv active, run `python -m pytest` (unit and integration tests together). It uses the server, user and password of `DATABASE_URL` in `backend/.env` with a separate database called `skillmap_test`, made for the run (your own database is never touched). To use a different throwaway database, set `TEST_DATABASE_URL` first (its name must contain "test"). If your database user may not create databases, make it once as `postgres` (pgAdmin Query Tool or psql): `CREATE DATABASE skillmap_test OWNER <your user>;` — the tests then empty it at the start of each run. Takes about two to three minutes.
 
@@ -298,31 +273,6 @@ From `backend/` with the venv active, run `python -m pytest` (unit and integrati
 **Front-end unit tests** (27 Oct): the `*.test.js` and `*.test.jsx` files in `frontend/src/` (Vitest and Testing Library). `npm test` from `frontend/` runs them in a few seconds; `npm run test:coverage` adds a coverage table. They check the saved-answer cache and the sign-in expiry (`api.js`, `pageCache.js`), the live password guidance and small components and rules (level tag, confirm box, info tip, toast, skill names, greeting, profile checklist, admin decisions). Pages are covered by the browser tests, not by these.
 
 **Load test** (27 Oct): `python scripts/evaluation/evaluate_load.py` from `backend/` (about 20 minutes; do not use the computer for anything heavy meanwhile). It starts the API itself and uses test students it removes again. The pass rule was fixed before the first run: no failed call and every call's p95 under 1 s with 5, 10 and 20 students, under 10 s with 40. Results, three runs and what changed between them: `docs/evidence/performance/` and `docs/planning/references.md`.
-
-### Focused recruitment regression evidence (16 Nov 2026)
-
-- Latest saved local unit run: **50 passed in 1.59 s** —
-  `docs/evidence/tests/pytest_2026-11-16_130941_unit.txt`.
-- Earlier suspension regression: **35 passed** —
-  `docs/evidence/tests/pytest_2026-11-15_233248_employer_regression.txt`.
-- Latest saved local deadline/recruitment API run: **38 passed in 101.18 s** —
-  `docs/evidence/tests/pytest_2026-11-16_130948_deadline_regression.txt`.
-  The final pytest summary was checked, not just collection or partial PASSED lines.
-- Matching quality, live-browser behaviour and the entire backend suite are
-  separate checks; these focused results do not establish those outcomes.
-
-From `backend/`, in Git Bash with the virtual environment active, show each test
-and save the same output to a uniquely dated evidence file:
-
-```bash
-PYTHONIOENCODING=utf-8 python -m pytest tests_unit -v 2>&1 | tee "../docs/evidence/tests/pytest_$(date +%Y-%m-%d_%H%M%S)_unit.txt"
-PYTHONIOENCODING=utf-8 python -m pytest tests/test_decision_deadline.py tests/test_employer_availability.py tests/test_applications.py tests/test_transparency.py tests/test_invitations.py -v 2>&1 | tee "../docs/evidence/tests/pytest_$(date +%Y-%m-%d_%H%M%S)_deadline_regression.txt"
-```
-
-The second command uses the existing disposable PostgreSQL test database and
-resets its test schema. Never point `TEST_DATABASE_URL` at data you need. After a
-`tee` pipeline, `${PIPESTATUS[0]}` is pytest's exit code (capture it immediately if
-needed); the pipeline's ordinary `$?` can reflect `tee` rather than pytest.
 
 ## Known limitations
 

@@ -6,6 +6,7 @@ Usage (from backend/, venv active):  python scripts/tools/create_admin.py
 """
 import getpass
 import sys
+from datetime import datetime, timezone
 
 sys.path.append(".")
 
@@ -34,7 +35,8 @@ def main():
         if db.query(User).filter((User.username == username) | (func.lower(User.email) == email)).first():
             raise SystemExit("That username or email is already used: nothing created.")
         db.add(User(username=username, email=email, first_name=first, last_name=last,
-                    hashed_password=hash_password(password), role=UserRole.admin))
+                    hashed_password=hash_password(password), role=UserRole.admin,
+                    email_verified_at=datetime.now(timezone.utc)))   # 23 Nov: made by whoever runs SkillMap
         db.commit()
     finally:
         db.close()

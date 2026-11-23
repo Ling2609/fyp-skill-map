@@ -1,7 +1,28 @@
 // A new employer signs up, waits, and the career office approves them; the career office adds an intake.
 // System test cases TC-51, TC-48, TC-50 (docs/testing/SkillMap_system_test_cases.xlsx).
+import fs from 'node:fs'
+import path from 'node:path'
 import { test, expect } from '@playwright/test'
 import { signIn, shot, PASSWORD, ADMIN } from './helpers'
+
+// 23 Nov (email verification): the backend runs with E2E_OUTBOX=1 on skillmap_e2e, so emails are written to
+// backend/.e2e_outbox/ instead of being sent (docs/testing/e2e.md). Reads the newest code sent to `to` and deletes the
+// file, so no code is left behind; codes never appear in the evidence screenshots.
+const OUTBOX = path.resolve('../backend/.e2e_outbox')
+async function codeFor(to) {
+  const safe = to.toLowerCase().replace(/[^a-z0-9@._-]+/g, '_')
+  for (let i = 0; i < 50; i++) {
+    const files = fs.existsSync(OUTBOX) ? fs.readdirSync(OUTBOX).filter(f => f.endsWith(`_${safe}.txt`)).sort() : []
+    if (files.length) {
+      const file = path.join(OUTBOX, files.at(-1))
+      const code = fs.readFileSync(file, 'utf8').match(/^\s{4}(\d{6})$/m)?.[1]
+      fs.unlinkSync(file)
+      if (code) return code
+    }
+    await new Promise(r => setTimeout(r, 200))
+  }
+  throw new Error(`No verification email for ${to} in ${OUTBOX}. Is the backend running with E2E_OUTBOX=1?`)
+}
 
 const NEW_EMPLOYER = 'e2e.newemployer@example.com'
 const COMPANY = 'Lantern Labs Sdn Bhd'
@@ -15,14 +36,21 @@ test.describe.serial('Career office', () => {
     await page.getByLabel('Email').fill(NEW_EMPLOYER)
     await page.getByLabel('Password', { exact: true }).fill(PASSWORD)
     await page.getByLabel('Confirm Password').fill(PASSWORD)
-    await page.getByRole('button', { name: 'Employer' }).click()
+    await page.getByRole('button', { name: 'Employer', exact: true }).click()
     await page.getByLabel('Company name').fill(COMPANY)
     await page.getByLabel('Company website').fill('e2e-company.example')
     await page.getByLabel('SSM registration number').fill('202301000002')
     await page.getByRole('checkbox').check()                       // the privacy notice
     await expect(page.getByText('Username is available')).toBeVisible()   // the name check has answered
     await page.getByRole('button', { name: 'Create account' }).click()
+
+    // 23 Nov: the account starts unverified; the code from the email verifies it, then Sign in
+    await page.waitForURL('**/verify-email')
+    await expect(page.getByText(/Step 2 of 3/)).toBeVisible()                   // employers: then the career office review
+    await page.getByLabel('6-digit code').fill(await codeFor(NEW_EMPLOYER))
+    await page.getByRole('button', { name: 'Verify email' }).click()
     await page.waitForURL('**/login')
+    await expect(page.getByText('Email verified.')).toBeVisible()
 
     await signIn(page, NEW_EMPLOYER)
     await expect(page.getByText(`${COMPANY} is waiting for approval`)).toBeVisible()

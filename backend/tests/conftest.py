@@ -149,7 +149,7 @@ class Users:
     def h(self, email):
         return self.tokens.get(email) or self._login(email)
 
-    def register(self, role="student", company=None):
+    def register(self, role="student", company=None, verified=True):
         self.n += 1
         email = f"{role}{self.n}@example.com"
         body = {"username": f"{role}{self.n}", "first_name": role.title(), "last_name": f"No{self.n}", "email": email,
@@ -161,6 +161,8 @@ class Users:
         r = self.client.post("/auth/register", json=body)
         assert r.status_code in (200, 201), r.text
         self.ids[email] = sql(self.db, "select id from users where email=:e", e=email).scalar()
+        if verified:   # 23 Nov: most tests need a usable account, so they skip email verification here, on purpose
+            sql(self.db, "update users set email_verified_at = now() where id=:i", i=self.ids[email])
         return email
 
     def admin(self):
@@ -170,7 +172,8 @@ class Users:
         from app.models.user import User, UserRole   # as scripts/tools/create_admin.py does (no sign-up for admins)
         self.db.rollback()
         self.db.add(User(username=f"admin{self.n}", email=email, first_name="Career", last_name="Office",
-                         hashed_password=hash_password(PASSWORD), role=UserRole.admin))
+                         hashed_password=hash_password(PASSWORD), role=UserRole.admin,
+                         email_verified_at=text("now()")))
         self.db.commit()
         self.ids[email] = sql(self.db, "select id from users where email=:e", e=email).scalar()
         return email

@@ -48,3 +48,6 @@ htmlcov/
 docker/db/*.dump
 # the optional settings file next to docker-compose.yml (passwords, VITE_API_URL)
 /.env
+
+# 23 Nov: emails written by the browser tests (E2E_OUTBOX=1); they hold verification codes
+backend/.e2e_outbox/

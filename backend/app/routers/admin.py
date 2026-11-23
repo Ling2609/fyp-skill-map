@@ -103,6 +103,11 @@ def _user_row(u: User, last: dict | None = None) -> dict:
     return row
 
 
+# 23 Nov (registration email verification): an account that hasn't verified its email is not shown or counted on
+# the admin pages, and every admin action refuses it (_target), so no decision can be recorded against it.
+VERIFIED = User.email_verified_at.isnot(None)
+
+
 def common_skill_gaps(db: Session) -> list[dict]:
     """Skills most often in students' own "skills to learn next", counted over students (top 8 shown), most students first."""
     from app.routers.recommend import RecommendRequest, recommend_jobs
@@ -110,7 +115,7 @@ def common_skill_gaps(db: Session) -> list[dict]:
     if _gaps_cache["value"] is not None and now - _gaps_cache["at"] < GAPS_CACHE_SECONDS:
         return _gaps_cache["value"]
     counts, names, students = Counter(), {}, 0
-    for student in db.query(User).filter(User.role == UserRole.student, User.is_active.is_(True)):
+    for student in db.query(User).filter(User.role == UserRole.student, User.is_active.is_(True), VERIFIED):
         try:
             result = recommend_jobs(RecommendRequest(top_n=0), db, student)
         except HTTPException:          # empty profile: nothing to count
@@ -163,7 +168,7 @@ RECENT_DAYS = 30     # the same window as the header's "new in 30 days"
 def _recent(db: Session, n: int = 8) -> list[dict]:
     """The newest n events of the last RECENT_DAYS days: sign-ups (students, employers) and admin decisions."""
     since = datetime.now(timezone.utc) - timedelta(days=RECENT_DAYS)
-    joined = (db.query(User).filter(User.role != UserRole.admin, User.created_at >= since)
+    joined = (db.query(User).filter(User.role != UserRole.admin, User.created_at >= since, VERIFIED)
               .order_by(User.created_at.desc()).limit(n).all())
     events = [{"kind": "joined", "at": u.created_at, "name": u.company_name if u.role == UserRole.employer and u.company_name
                else " ".join(filter(None, [u.first_name, u.last_name])) or u.username, "role": u.role.value} for u in joined]
@@ -178,12 +183,12 @@ def _recent(db: Session, n: int = 8) -> list[dict]:
 
 @router.get("/dashboard")
 def dashboard(db: Session = Depends(get_db), admin: User = Depends(require_admin)):
-    pending = (db.query(User).filter(User.role == UserRole.employer, User.employer_status == "pending")
+    pending = (db.query(User).filter(User.role == UserRole.employer, User.employer_status == "pending", VERIFIED)
                .order_by(User.created_at).all())
     unreviewed = db.query(Module).filter(Module.skills_reviewed_at.is_(None)).order_by(Module.level, Module.code)
     live = db.query(Job).filter(Job.source == "live", Job.gone_at.is_(None), Job.hidden_by_admin_at.is_(None))
 
-    student_ids = db.query(User.id).filter(User.role == UserRole.student, User.is_active.is_(True))
+    student_ids = db.query(User.id).filter(User.role == UserRole.student, User.is_active.is_(True), VERIFIED)
     with_grades = db.query(func.count(func.distinct(UserModule.user_id))).filter(
         UserModule.user_id.in_(student_ids)).scalar()
     with_extra = len({uid for (uid,) in db.query(UserProject.user_id).filter(UserProject.user_id.in_(student_ids))}
@@ -199,10 +204,10 @@ def dashboard(db: Session = Depends(get_db), admin: User = Depends(require_admin
         },
         "counts": {
             "students": students,
-            "employers": db.query(User).filter(User.role == UserRole.employer,
+            "employers": db.query(User).filter(User.role == UserRole.employer, VERIFIED,
                                                User.employer_status == "approved").count(),
             "live_jobs": live.count(),
-            "students_new_30d": db.query(User).filter(User.role == UserRole.student, User.is_active.is_(True),
+            "students_new_30d": db.query(User).filter(User.role == UserRole.student, User.is_active.is_(True), VERIFIED,
                                                       User.created_at >= month_ago).count(),
             "employers_pending": len(pending),
             "modules": db.query(Module).count(),
@@ -212,7 +217,7 @@ def dashboard(db: Session = Depends(get_db), admin: User = Depends(require_admin
         # 20 Nov (her review: a card of what happened lately): the newest sign-ups and the latest admin decisions, one list
         "recent": _recent(db),
         "profiles": {"students": students, "with_grades": with_grades, "with_project_or_cert": with_extra,
-                     "visible_to_employers": db.query(User).filter(User.role == UserRole.student,
+                     "visible_to_employers": db.query(User).filter(User.role == UserRole.student, VERIFIED,
                                                                    User.is_active.is_(True),
                                                                    User.is_visible_to_employers.is_(True)).count()},
     }
@@ -233,7 +238,7 @@ def skill_gap_history(admin: User = Depends(require_admin)):
 @router.get("/counts")
 def counts(db: Session = Depends(get_db), admin: User = Depends(require_admin)):
     """The sidebar's badges: two small counts, cheap enough to ask on every page."""
-    return {"pending_employers": db.query(User).filter(User.role == UserRole.employer,
+    return {"pending_employers": db.query(User).filter(User.role == UserRole.employer, VERIFIED,
                                                        User.employer_status == "pending").count(),
             "modules_to_review": db.query(Module).filter(Module.skills_reviewed_at.is_(None)).count()}
 
@@ -251,7 +256,7 @@ def _search(query, q: str):
 @router.get("/users/counts")
 def user_counts(q: str = "", db: Session = Depends(get_db), admin: User = Depends(require_admin)):
     """The numbers on the Users filter buttons (7 Oct), for the current search text."""
-    base = _search(db.query(User), q)
+    base = _search(db.query(User).filter(VERIFIED), q)
     return {"all": base.count(),
             "students": base.filter(User.role == UserRole.student).count(),
             "employers": base.filter(User.role == UserRole.employer).count(),
@@ -265,8 +270,8 @@ def user_counts(q: str = "", db: Session = Depends(get_db), admin: User = Depend
 def list_users(role: str = "", status: str = "", q: str = "", db: Session = Depends(get_db),
                admin: User = Depends(require_admin)):
     """All accounts, newest first. role: student / employer / admin; status: pending / approved / rejected /
-    inactive; q: part of a name, username, email or company."""
-    query = db.query(User)
+    inactive; q: part of a name, username, email or company. Unverified accounts are left out (23 Nov)."""
+    query = db.query(User).filter(VERIFIED)
     if role:
         if role not in {r.value for r in UserRole}:
             raise HTTPException(status_code=400, detail="Unknown role.")
@@ -318,6 +323,8 @@ def _target(user_id: int, db: Session, admin: User) -> User:
         raise HTTPException(status_code=404, detail="User not found.")
     if user.id == admin.id:
         raise HTTPException(status_code=400, detail="You can't change your own account here.")
+    if user.email_verified_at is None:   # 23 Nov: the rule itself, not just a hidden row (a direct request too)
+        raise HTTPException(status_code=409, detail="This account hasn't verified its email yet.")
     return user
 
 

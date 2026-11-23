@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate, Link, useLocation } from 'react-router-dom'
 import api from '../../api'
 import { useAuth } from '../../context/useAuth'
-import { AuthShell, AUTH_FIELD, AUTH_TONE, RevealButton } from '../../components/ui'
+import { AuthShell, AUTH_FIELD, AUTH_TONE, Notice, RevealButton } from '../../components/ui'
 import { PressButton } from '../../components/ui'
 import { Busy } from '../../components/Spinner'
 
@@ -42,7 +42,8 @@ export default function Login() {
   const navigate = useNavigate()
   const location = useLocation()
   const { login } = useAuth()
-  const [form, setForm] = useState({ email: '', password: '' })
+  const [form, setForm] = useState({ email: location.state?.email || '', password: '' })
+  const justVerified = location.state?.verified   // 23 Nov: arrived from Check your email
   const expiredReason = new URLSearchParams(location.search).get('expired')
   const sessionExpired = !!expiredReason
   const [error, setError] = useState(!sessionExpired ? ''
@@ -70,6 +71,12 @@ export default function Login() {
       await login(res.data.access_token)
       navigate('/dashboard')
     } catch (err) {
+      // 23 Nov: the right password for an account whose email isn't verified yet: back to Check your email
+      const d = err.response?.data?.detail
+      if (err.response?.status === 403 && d?.code === 'email_not_verified') {
+        navigate('/verify-email', { state: { ticket: d.ticket, verification: d.verification, from: 'signin' } })
+        return
+      }
       setError(err.response?.data?.detail
         || (err.response ? 'Invalid email or password' : "Can't reach the server. Is the backend running?"))
     } finally {
@@ -86,6 +93,11 @@ export default function Login() {
       formFirst
     >
       {showToast && <Toast message={toastMessage || location.state?.message} onClose={() => setShowToast(false)} />}
+
+      {justVerified && !error && (
+        <Notice tone="good"><span role="status"><b>Email verified.</b> Sign in to continue.{location.state?.role === 'employer'
+          && ' Next, the career office reviews your company; you can post jobs once they approve it.'}</span></Notice>
+      )}
 
       {error && (
         <p role="alert" className="m-0 rounded-[11px] border border-missing/30 bg-missing-soft px-3.5 py-2.5 text-body leading-snug text-missing-strong">

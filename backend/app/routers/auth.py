@@ -6,6 +6,7 @@ import secrets
 from datetime import datetime, timedelta, timezone
 
 from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Request, Response
+from fastapi.encoders import jsonable_encoder
 from fastapi.responses import PlainTextResponse
 from fastapi.security import OAuth2PasswordBearer
 from pydantic import BaseModel, Field
@@ -18,10 +19,10 @@ from app.models.login_throttle import LoginThrottle
 from app.models.password_reset import PasswordResetOTP
 from app.models.user import User, UserRole
 from app.schemas.user import (EmailChange, EmailCodeIn, ForgotPasswordIn, NameUpdate, PasswordChange, ResetPasswordIn,
-                              Token, UserLogin, UserOut, UserRegister, VerifyCodeIn)
+                              TicketIn, Token, UserLogin, UserOut, UserRegister, VerifyCodeIn, VerifyEmailIn)
 from app.auth.utils import hash_password, verify_password, create_access_token, decode_token
 from app.config import settings
-from app.services import account_emails
+from app.services import account_emails, email_verification
 from app.services.mailer import send_email
 from app.services.password_policy import common_passwords, password_problem
 
@@ -106,14 +107,26 @@ def check_account_schema():
     if "password_changed_at" not in columns or "purpose" not in otp_columns:
         raise RuntimeError("Database not updated: run  python migrations/migrate_account_security.py  "
                            "from the backend folder, then start the backend again.")
+    # 23 Nov: registration email verification (column, send records and their index)
+    tables = set(inspect(engine).get_table_names())
+    indexes = ({i["name"] for i in inspect(engine).get_indexes("email_code_sends")}
+               if "email_code_sends" in tables else set())
+    if ("email_verified_at" not in columns or "email_code_sends" not in tables
+            or "ix_email_code_sends_user_purpose_sent" not in indexes):
+        raise RuntimeError("Database not updated: run  python migrations/migrate_email_verified.py  "
+                           "from the backend folder, then start the backend again.")
 
 
 def delete_old_codes():
-    """Start-up tidy: used or expired codes are never needed again."""
+    """Start-up tidy: used or expired codes are never needed again; send records older than 48 h neither
+    (only the last 24 h count towards the daily limit)."""
+    from app.models.email_code_send import EmailCodeSend
     db = SessionLocal()
     try:
         db.query(PasswordResetOTP).filter(or_(PasswordResetOTP.used.is_(True),
                                               PasswordResetOTP.expires_at < datetime.now(timezone.utc))) \
+            .delete(synchronize_session=False)
+        db.query(EmailCodeSend).filter(EmailCodeSend.sent_at < datetime.now(timezone.utc) - timedelta(hours=48)) \
             .delete(synchronize_session=False)
         db.commit()
     finally:
@@ -431,8 +444,18 @@ def check_username(username: str, db: Session = Depends(get_db)):
     return {"available": True, "message": "Username is available"}
 
 
-@router.post("/register", response_model=UserOut, status_code=201)
+@router.post("/register", status_code=201)
 def register(payload: UserRegister, db: Session = Depends(get_db)):
+    """Creates the account UNVERIFIED (23 Nov) and emails a 6-digit code. The reply carries a verification ticket
+    for the Check your email page (not a sign-in token) and what that page shows. If the email couldn't be sent the
+    account still exists; the page offers Send again (and signing in later brings the owner back there)."""
+    user = _create_account(payload, db)
+    state = email_verification.request_code(db, user, explicit=False)
+    return {**UserOut.model_validate(user).model_dump(mode="json"),
+            "ticket": email_verification.make_ticket(user), "verification": state}
+
+
+def _create_account(payload: UserRegister, db: Session) -> User:
     if not payload.accept_privacy:
         raise HTTPException(status_code=400, detail="Please read and accept the privacy notice to create an account.")
     # Validate username format
@@ -521,8 +544,51 @@ def login(payload: UserLogin, request: Request, db: Session = Depends(get_db)):
         db.commit()
     if not user.is_active:   # told only after the right password, so it reveals nothing to a guesser
         raise HTTPException(status_code=403, detail=DEACTIVATED)
+    if user.email_verified_at is None:
+        # 23 Nov: no session until the email is verified. Also only after the right password, so a wrong one is
+        # answered exactly as before. Signing in is the way back: a usable code is reused, otherwise a new one is
+        # sent if the limits allow (email_verification.request_code).
+        state = email_verification.request_code(db, user, explicit=False)
+        raise HTTPException(status_code=403, detail={"code": "email_not_verified",
+                                                     "ticket": email_verification.make_ticket(user),
+                                                     "verification": jsonable_encoder(state)})
     # Bandit B105: reviewed, the OAuth2 token type, not a password
     return {"access_token": _login_token(user), "token_type": "bearer"}  # nosec B105
+
+
+# ── Registration email verification (23 Nov) ─────────────────────────────────────────────────────────────────────
+
+@router.post("/verify-email")
+def verify_email(payload: VerifyEmailIn, db: Session = Depends(get_db)):
+    """The right code verifies the account. No session is given: the page sends the owner to Sign in, where the
+    usual rules apply (study set-up for students, approval for employers)."""
+    user = email_verification.read_ticket(payload.ticket, db)
+    if not user:
+        raise HTTPException(status_code=400, detail=email_verification.TICKET_EXPIRED)
+    code = "".join(ch for ch in payload.code if ch.isdigit())   # a pasted "123 456" or "123-456" works
+    try:
+        otp = _check_code(user, email_verification.PURPOSE, code, db)
+    except HTTPException as e:
+        db.rollback()
+        if db.get(User, user.id).email_verified_at is not None:   # a second, simultaneous correct submission
+            raise HTTPException(status_code=409, detail="This email is already verified. Sign in to continue.")
+        # the page says how many tries this code has left (0 = send a new code); the message is the shared one
+        left = email_verification.usable_code(db, user.id)
+        raise HTTPException(status_code=e.status_code, detail={
+            "message": e.detail, "tries_left": email_verification.MAX_WRONG - left.attempt_count if left else 0})
+    otp.used = True
+    user.email_verified_at = datetime.now(timezone.utc)
+    db.commit()
+    return {"verified": True, "role": user.role.value}
+
+
+@router.post("/verify-email/resend")
+def resend_verification(payload: TicketIn, db: Session = Depends(get_db)):
+    """Send again: replaces the current code, within the cooldown and the daily limit."""
+    user = email_verification.read_ticket(payload.ticket, db)
+    if not user:
+        raise HTTPException(status_code=400, detail=email_verification.TICKET_EXPIRED)
+    return jsonable_encoder(email_verification.request_code(db, user, explicit=True))
 
 
 # ── Forgot password (4 Oct; OWASP Forgot Password Cheat Sheet, references.md) ──────────────────────────────────
@@ -553,9 +619,11 @@ def _code_hash(user_id: int, code: str, purpose: str) -> str:
     return hmac.new(settings.secret_key.encode(), f"{purpose}:{user_id}:{code}".encode(), hashlib.sha256).hexdigest()
 
 
-def _issue_code(user: User, purpose: str, db: Session, new_email: str | None = None) -> str | None:
+def _issue_code(user: User, purpose: str, db: Session, new_email: str | None = None,
+                minutes: int = RESET_CODE_MINUTES) -> str | None:
     """New 6-digit code for this user and purpose; None if one was sent less than a minute ago.
-    Older codes of the same purpose are deleted: only the newest works, and old rows don't pile up."""
+    Older codes of the same purpose are deleted: only the newest works, and old rows don't pile up.
+    (Registration codes have their own sender with send limits: app/services/email_verification.py.)"""
     now = datetime.now(timezone.utc)
     mine = db.query(PasswordResetOTP).filter(PasswordResetOTP.user_id == user.id, PasswordResetOTP.purpose == purpose)
     latest = mine.order_by(PasswordResetOTP.created_at.desc()).first()
@@ -565,17 +633,20 @@ def _issue_code(user: User, purpose: str, db: Session, new_email: str | None = N
     code = f"{secrets.randbelow(1_000_000):06d}"
     db.add(PasswordResetOTP(user_id=user.id, purpose=purpose, new_email=new_email,
                             otp_hash=_code_hash(user.id, code, purpose),
-                            expires_at=now + timedelta(minutes=RESET_CODE_MINUTES)))
+                            expires_at=now + timedelta(minutes=minutes)))
     db.commit()
     return code
 
 
 def _check_code(user: User, purpose: str, code: str, db: Session) -> PasswordResetOTP:
-    """The user's current code for this purpose if `code` matches it; otherwise 400 (wrong tries are counted)."""
+    """The user's current code for this purpose if `code` matches it; otherwise 400 (wrong tries are counted).
+    23 Nov: the code row is locked (SELECT ... FOR UPDATE) for the whole check, so simultaneous wrong submissions
+    are counted one after another (never more than 5 tries), and a correct code returned still locked: the caller
+    marks it used and commits, so two simultaneous correct submissions use it once."""
     otp = (db.query(PasswordResetOTP)
            .filter(PasswordResetOTP.user_id == user.id, PasswordResetOTP.purpose == purpose,
                    PasswordResetOTP.used.is_(False), PasswordResetOTP.expires_at > datetime.now(timezone.utc))
-           .order_by(PasswordResetOTP.created_at.desc()).first())
+           .order_by(PasswordResetOTP.created_at.desc()).with_for_update().first())
     if not otp:
         raise HTTPException(status_code=400, detail=INVALID_CODE)
     if otp.attempt_count >= RESET_MAX_ATTEMPTS:
@@ -631,7 +702,8 @@ def reset_password(payload: ResetPasswordIn, background: BackgroundTasks, db: Se
         user_id, otp_id = int(claims["sub"]), int(claims["otp"])
     except (JWTError, KeyError, TypeError, ValueError):
         raise HTTPException(status_code=400, detail=EXPIRED_PASS)
-    otp = db.query(PasswordResetOTP).filter(PasswordResetOTP.id == otp_id).first()
+    # 23 Nov: locked, so two simultaneous resets with the same pass can't both go through
+    otp = db.query(PasswordResetOTP).filter(PasswordResetOTP.id == otp_id).with_for_update().first()
     user = db.query(User).filter(User.id == user_id).first()
     if (not otp or not user or otp.user_id != user.id or otp.purpose != "reset"
             or otp.used):   # used = already reset; a newer code deletes this row
@@ -640,6 +712,10 @@ def reset_password(payload: ResetPasswordIn, background: BackgroundTasks, db: Se
     user.hashed_password = hash_password(payload.new_password)
     _password_changed(user)   # signs out every device
     otp.used = True
+    if user.email_verified_at is None:
+        # 23 Nov: the whole reset succeeded with a code sent to this address, so the owner controls it. Only here:
+        # asking for or checking a reset code changes nothing. Employer approval stays a separate step.
+        user.email_verified_at = datetime.now(timezone.utc)
     # owner proved access: lift sign-in pauses on her account, from any IP
     db.query(LoginThrottle).filter(LoginThrottle.identifier == user.username).delete(synchronize_session=False)
     db.commit()

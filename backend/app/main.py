@@ -6,6 +6,7 @@ from app.database import Base, engine
 from app.routers import admin, admin_academic, workshop, applications, auth, employer, modules, jobs, recommend, skillgap, chatbot, profile, experience, github_connect
 from app.models import user, module, job, programme, application  # noqa: F401
 from app.models import profile as profile_model  # noqa: F401 — registers tables with Base
+from app.models import email_code_send  # noqa: F401 — 23 Nov, registration email verification
 
 
 @asynccontextmanager
@@ -14,6 +15,8 @@ async def lifespan(app: FastAPI):
     limit_blas_threads()     # 18 Oct (E5): small matrix products are faster on one core
     from app.routers.auth import check_account_schema, delete_old_codes
     check_account_schema()   # stops with a clear message if migrate_account_security.py hasn't been run
+    from app.services.mailer import check_outbox
+    check_outbox()           # 23 Nov: E2E_OUTBOX only on the skillmap_e2e database
     from app.routers.profile import check_profile_schema
     check_profile_schema()   # the same for migrate_profile_skill_evidence.py
     from app.routers.jobs import check_jobs_schema
