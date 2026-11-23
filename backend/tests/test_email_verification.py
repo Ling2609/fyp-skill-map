@@ -401,3 +401,36 @@ def test_the_migration_backfills_once_and_never_on_a_rerun(client, db, users):
     assert sql(db, "select email_verified_at from users where username='fresh1'").scalar() is None   # still untouched
     sql(db, "create index ix_email_code_sends_user_purpose_sent on email_code_sends (user_id, purpose, sent_at)")
     sql(db, "delete from users where username='fresh1'")
+
+
+# ── 24 Nov: coming from Sign in, the right code also signs in (no second password) ────────────────────────────
+
+def _ticket_from_sign_in(client, email):
+    r = sign_in(client, email)
+    assert r.status_code == 403
+    return r.json()["detail"]["ticket"]
+
+
+def test_from_sign_in_the_right_code_also_signs_in(client, mailbox):
+    email, _ = sign_up(client, 30)
+    ticket = _ticket_from_sign_in(client, email)
+    r = client.post("/auth/verify-email", json={"ticket": ticket, "code": code_in(mailbox[-1])})
+    assert r.status_code == 200 and r.json()["access_token"]
+    me = client.get("/auth/me", headers={"Authorization": f"Bearer {r.json()['access_token']}"})
+    assert me.status_code == 200 and me.json()["email"] == email
+
+
+def test_from_sign_in_but_the_password_changed_since_no_session(client, db, mailbox):
+    email, _ = sign_up(client, 31)
+    ticket = _ticket_from_sign_in(client, email)
+    sql(db, "update users set password_changed_at = now() where email = :e", e=email)   # e.g. changed elsewhere
+    r = client.post("/auth/verify-email", json={"ticket": ticket, "code": code_in(mailbox[-1])})
+    assert r.status_code == 200 and r.json()["verified"] is True and "access_token" not in r.json()
+
+
+def test_from_sign_in_but_deactivated_since_no_session(client, db, mailbox):
+    email, _ = sign_up(client, 32)
+    ticket = _ticket_from_sign_in(client, email)
+    sql(db, "update users set is_active = false where email = :e", e=email)
+    r = client.post("/auth/verify-email", json={"ticket": ticket, "code": code_in(mailbox[-1])})
+    assert r.status_code == 200 and "access_token" not in r.json()

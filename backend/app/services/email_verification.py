@@ -57,25 +57,31 @@ def _ticket_key() -> str:
     return settings.secret_key + "|verify-email"   # not the login-token key, not the reset key
 
 
-def make_ticket(user: User) -> str:
-    return jwt.encode({"sub": str(user.id), "email": (user.email or "").lower(), "purpose": "verify-email",
-                       "exp": _now() + timedelta(minutes=TICKET_MINUTES)}, _ticket_key(), algorithm=settings.algorithm)
+def make_ticket(user: User, via: str = "register", pwd: int | None = None) -> str:
+    """via: "register" (after Create account) or "login" (after the right password at Sign in; 24 Nov, her review:
+    then the right code signs the owner in, instead of asking for the password a second time). pwd: the password
+    stamp at that sign-in, so a password change in between stops the ticket from signing anyone in."""
+    claims = {"sub": str(user.id), "email": (user.email or "").lower(), "purpose": "verify-email", "via": via,
+              "exp": _now() + timedelta(minutes=TICKET_MINUTES)}
+    if pwd is not None:
+        claims["pwd"] = pwd
+    return jwt.encode(claims, _ticket_key(), algorithm=settings.algorithm)
 
 
-def read_ticket(ticket: str, db: Session) -> User | None:
-    """The unverified account the ticket was issued for, or None (expired, tampered, account gone, already
-    verified, or its email has changed since)."""
+def read_ticket(ticket: str, db: Session) -> tuple[User | None, dict]:
+    """The unverified account the ticket was issued for and the ticket's claims, or (None, {}) (expired, tampered,
+    account gone, already verified, or its email has changed since)."""
     try:
         claims = jwt.decode(ticket or "", _ticket_key(), algorithms=[settings.algorithm])
         user_id, email = int(claims["sub"]), claims["email"]
         if claims.get("purpose") != "verify-email":
-            return None
+            return None, {}
     except (PyJWTError, KeyError, TypeError, ValueError):
-        return None
+        return None, {}
     user = db.get(User, user_id)
     if not user or user.email_verified_at is not None or (user.email or "").lower() != email:
-        return None
-    return user
+        return None, {}
+    return user, claims
 
 
 def usable_code(db: Session, user_id: int) -> PasswordResetOTP | None:

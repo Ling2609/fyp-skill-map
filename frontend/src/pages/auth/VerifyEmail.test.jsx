@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event'
 import { MemoryRouter, Route, Routes, useLocation } from 'react-router-dom'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import api from '../../api'
+import { AuthContext } from '../../context/useAuth'
 import VerifyEmail from './VerifyEmail'
 
 // 23 Nov: Check your email (registration email verification). The network is replaced by api.post.
@@ -15,17 +16,22 @@ const inMin = (m) => new Date(Date.now() + m * 60_000).toISOString()
 const SENT = { result: 'sent', email: 'student@example.com', role: 'student', sent_at: inMin(0), expires_at: inMin(10),
   next_send_at: inMin(1), limit: 'cooldown', minutes: 10 }
 
+const login = vi.fn()
+
 function SignIn() {
   const { state } = useLocation()
   return <p>Sign in page{state?.verified ? ' · verified' : ''}</p>
 }
 const open = (state) => render(
-  <MemoryRouter initialEntries={[{ pathname: '/verify-email', state }]}>
-    <Routes>
-      <Route path="/verify-email" element={<VerifyEmail />} />
-      <Route path="/login" element={<SignIn />} />
-    </Routes>
-  </MemoryRouter>)
+  <AuthContext.Provider value={{ login }}>
+    <MemoryRouter initialEntries={[{ pathname: '/verify-email', state }]}>
+      <Routes>
+        <Route path="/verify-email" element={<VerifyEmail />} />
+        <Route path="/login" element={<SignIn />} />
+        <Route path="/dashboard" element={<p>Dashboard</p>} />
+      </Routes>
+    </MemoryRouter>
+  </AuthContext.Provider>)
 
 // the intro beside the card measures its stage; the test browser (jsdom) has no ResizeObserver or matchMedia
 vi.stubGlobal('ResizeObserver', class { observe() {} unobserve() {} disconnect() {} })
@@ -71,6 +77,14 @@ describe('Check your email', () => {
     await userEvent.type(screen.getByLabelText('6-digit code'), '123456{Enter}')
     expect(await screen.findByText('Sign in page · verified')).toBeInTheDocument()
     expect(api.post).toHaveBeenCalledWith('/auth/verify-email', { ticket: 't', code: '123456' })
+  })
+
+  it('coming from Sign in, the right code signs in and goes to the dashboard (no second password)', async () => {
+    api.post.mockResolvedValue({ data: { verified: true, role: 'student', access_token: 'tok', token_type: 'bearer' } })
+    open({ ticket: 't', verification: SENT, from: 'signin' })
+    await userEvent.type(screen.getByLabelText('6-digit code'), '123456{Enter}')
+    expect(await screen.findByText('Dashboard')).toBeInTheDocument()
+    expect(login).toHaveBeenCalledWith('tok')
   })
 
   it('at the daily limit the code box still works while the code is usable, and says when to ask again', () => {

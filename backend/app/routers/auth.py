@@ -550,7 +550,8 @@ def login(payload: UserLogin, request: Request, db: Session = Depends(get_db)):
         # sent if the limits allow (email_verification.request_code).
         state = email_verification.request_code(db, user, explicit=False)
         raise HTTPException(status_code=403, detail={"code": "email_not_verified",
-                                                     "ticket": email_verification.make_ticket(user),
+                                                     "ticket": email_verification.make_ticket(
+                                                         user, via="login", pwd=_pw_stamp(user)),
                                                      "verification": jsonable_encoder(state)})
     # Bandit B105: reviewed, the OAuth2 token type, not a password
     return {"access_token": _login_token(user), "token_type": "bearer"}  # nosec B105
@@ -560,9 +561,13 @@ def login(payload: UserLogin, request: Request, db: Session = Depends(get_db)):
 
 @router.post("/verify-email")
 def verify_email(payload: VerifyEmailIn, db: Session = Depends(get_db)):
-    """The right code verifies the account. No session is given: the page sends the owner to Sign in, where the
+    """The right code verifies the account.
+    After Create account: no session; the page sends the owner to Sign in (one sign-in, as for anyone new).
+    24 Nov (her review: password, code, then the password AGAIN felt wrong): when the ticket came from Sign in, the
+    right password was checked moments before, so the right code also signs the owner in, as that sign-in would
+    have. Only if the password hasn't changed since (stamp in the ticket) and the account is still active; then the
     usual rules apply (study set-up for students, approval for employers)."""
-    user = email_verification.read_ticket(payload.ticket, db)
+    user, claims = email_verification.read_ticket(payload.ticket, db)
     if not user:
         raise HTTPException(status_code=400, detail=email_verification.TICKET_EXPIRED)
     code = "".join(ch for ch in payload.code if ch.isdigit())   # a pasted "123 456" or "123-456" works
@@ -579,13 +584,17 @@ def verify_email(payload: VerifyEmailIn, db: Session = Depends(get_db)):
     otp.used = True
     user.email_verified_at = datetime.now(timezone.utc)
     db.commit()
-    return {"verified": True, "role": user.role.value}
+    db.refresh(user)
+    out = {"verified": True, "role": user.role.value}
+    if claims.get("via") == "login" and claims.get("pwd") == _pw_stamp(user) and user.is_active:
+        out.update(access_token=_login_token(user), token_type="bearer")  # nosec B105 (token type, not a password)
+    return out
 
 
 @router.post("/verify-email/resend")
 def resend_verification(payload: TicketIn, db: Session = Depends(get_db)):
     """Send again: replaces the current code, within the cooldown and the daily limit."""
-    user = email_verification.read_ticket(payload.ticket, db)
+    user, _ = email_verification.read_ticket(payload.ticket, db)
     if not user:
         raise HTTPException(status_code=400, detail=email_verification.TICKET_EXPIRED)
     return jsonable_encoder(email_verification.request_code(db, user, explicit=True))

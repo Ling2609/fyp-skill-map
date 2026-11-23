@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import api from '../../api'
+import { useAuth } from '../../context/useAuth'
 import { Busy } from '../../components/Spinner'
 import { AuthShell, AUTH_FIELD, AUTH_TONE, Notice, PressButton } from '../../components/ui'
 
@@ -8,12 +9,14 @@ import { AuthShell, AUTH_FIELD, AUTH_TONE, Notice, PressButton } from '../../com
 // Opened after Create account, or after signing in to an account that isn't verified yet. The page gets a
 // verification ticket (not a sign-in token) in the navigation state only: a reload or a new tab has none, so it says
 // "This page has expired" and sends the owner to Sign in, which brings them back here with a new ticket.
-// The right code verifies the email but signs nobody in: the page goes to Sign in with "Email verified".
+// The right code verifies the email. After Create account the page goes to Sign in with "Email verified";
+// 24 Nov (her review): after Sign in (the password was just checked) the server also signs the owner in, so the page
+// goes straight to the app instead of asking for the password a second time.
 
 const clock = (iso) => {
   if (!iso) return ''
   const d = new Date(iso), today = new Date()
-  const t = d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+  const t = d.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })
   if (d.toDateString() === today.toDateString()) return t
   const tomorrow = new Date(today); tomorrow.setDate(today.getDate() + 1)
   return d.toDateString() === tomorrow.toDateString() ? `${t} tomorrow` : `${t} on ${d.toLocaleDateString([], { day: 'numeric', month: 'short' })}`
@@ -23,6 +26,7 @@ const mmss = (s) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`
 
 export default function VerifyEmail() {
   const navigate = useNavigate()
+  const { login } = useAuth()
   const { state: nav } = useLocation()
   const ticket = nav?.ticket
   const fromSignIn = nav?.from === 'signin'
@@ -63,7 +67,12 @@ export default function VerifyEmail() {
     setBusy('verify'); setError('')
     try {
       const r = await api.post('/auth/verify-email', { ticket, code })
-      navigate('/login', { replace: true, state: { verified: true, role: r.data.role, email: v.email } })
+      if (r.data.access_token) {          // came from Sign in: signed in now
+        await login(r.data.access_token)
+        navigate('/dashboard', { replace: true })
+      } else {
+        navigate('/login', { replace: true, state: { verified: true, role: r.data.role, email: v.email } })
+      }
     } catch (err) {
       const d = err.response?.data?.detail
       if (err.response?.status === 409) {
@@ -105,7 +114,7 @@ export default function VerifyEmail() {
       <AuthShell title={<span ref={headRef} tabIndex={-1} className="outline-none">This page has expired</span>}
         sub="For your security, a verification page lasts 30 minutes and can't be reopened."
         intro={{ headline: <>One last step: <em>your email</em>.</> }} formFirst>
-        <Notice tone="info"><span>Sign in again with your username and password, and we&apos;ll bring you back here to finish.</span></Notice>
+        <Notice tone="info" icon><span>Sign in again with your username and password, and we&apos;ll bring you back here to finish.</span></Notice>
         <Link to="/login" className="grid h-[50px] place-items-center rounded-[12px] bg-accent font-display text-[16px] font-bold text-white no-underline hover:bg-accent-strong">Sign in</Link>
       </AuthShell>
     )
@@ -119,7 +128,7 @@ export default function VerifyEmail() {
     : daily ? { tone: 'warn', role: 'status', text: <>You&apos;ve asked for 5 codes in the last 24 hours. You can ask again at <b>{clock(v.next_send_at)}</b>.{usable && <> Your latest code still works until <b>{clock(v.expires_at)}</b>.</>}</> }
     : fromSignIn ? { tone: 'warn', role: 'status', text: <>You need to verify your email before you can sign in. {r === 'sent' ? 'We sent a new code just now.' : usable ? <>Your code from <b>{clock(v.sent_at)}</b> still works, so we didn&apos;t send another.</> : ''}</> }
     : r === 'reused' ? { tone: 'info', role: 'status', text: <>Your code from <b>{clock(v.sent_at)}</b> still works, so we didn&apos;t send another.</> }
-    : employer ? { tone: 'info', role: 'status', text: <>Next, once your email is verified, the career office reviews your company. That isn&apos;t instant: until they approve it, you can sign in but can&apos;t post jobs.</> }
+    : employer ? { tone: 'info', role: 'status', text: <>After you verify, the career office reviews your company. Until it&apos;s approved, you can sign in but not post jobs.</> }
     : null
   const steps = employer ? ['Account details', 'Verify email', 'Career office review'] : ['Account details', 'Verify email']
 
@@ -131,7 +140,7 @@ export default function VerifyEmail() {
       intro={{ headline: <>One last step: <em>your email</em>.</>, story: employer ? 'e' : 's' }}
       formFirst
     >
-      {note && <Notice tone={note.tone}><span role={note.role}>{note.text}</span></Notice>}
+      {note && <Notice tone={note.tone} icon><span role={note.role}>{note.text}</span></Notice>}
       <p className="sr-only" role="status" aria-live="polite">{announce}</p>
 
       <form onSubmit={verify} noValidate className="flex flex-col gap-1.5">

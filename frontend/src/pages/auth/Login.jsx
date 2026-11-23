@@ -95,8 +95,8 @@ export default function Login() {
       {showToast && <Toast message={toastMessage || location.state?.message} onClose={() => setShowToast(false)} />}
 
       {justVerified && !error && (
-        <Notice tone="good"><span role="status"><b>Email verified.</b> Sign in to continue.{location.state?.role === 'employer'
-          && ' Next, the career office reviews your company; you can post jobs once they approve it.'}</span></Notice>
+        <Notice tone="good" icon><span role="status"><b>Email verified.</b> Sign in to continue.{location.state?.role === 'employer'
+          && ' You can post jobs once your company is approved.'}</span></Notice>
       )}
 
       {error && (
