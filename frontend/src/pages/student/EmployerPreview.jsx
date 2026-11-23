@@ -72,7 +72,7 @@ export default function EmployerPreview() {
         {error && <p role="alert" className="m-4 sm:mx-8 text-sm text-rose-700 bg-rose-50 border border-rose-200 rounded-lg px-4 py-2.5">{error}</p>}
         {!data && !error && (<div className="px-4 sm:px-8 py-5"><LoadingLabel>Loading the preview…</LoadingLabel>
           <div className="grid lg:grid-cols-[1fr_23rem] gap-4"><CardSkeleton rows={6} /><CardSkeleton rows={5} /></div></div>)}
-        {s && <div className="lg:flex-1 lg:min-h-0 mx-4 sm:mx-8 mt-3 mb-4 overflow-hidden emp-tile border border-slate-200 rounded-2xl"><ApplicantCards s={s} fit={data.fit} withFit={!!jobId}
+        {s && <div className="max-lg:shrink-0 lg:flex-1 lg:min-h-0 mx-4 sm:mx-8 mt-3 mb-4 overflow-hidden emp-tile border border-slate-200 rounded-2xl"><ApplicantCards s={s} fit={data.fit} withFit={!!jobId}
           aside={!jobId && <NotShownYet s={s} />} /></div>}
       </div>
     </div>

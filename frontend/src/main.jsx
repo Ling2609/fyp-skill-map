@@ -5,8 +5,10 @@ import { AuthProvider } from './context/AuthContext'
 import App from './App.jsx'
 import './index.css'
 import { startScrollFade } from './scrollFade'
+import { startKeepInView } from './keepInView'
 
 startScrollFade()
+startKeepInView()
 
 const router = createBrowserRouter([{
   path: '*',

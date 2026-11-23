@@ -32,14 +32,14 @@ export default function ProfileTracker({ done, onGo }) {
   return (
     <div ref={box} className="relative">
       <button type="button" onClick={() => setOpen(v => !v)} aria-expanded={open} aria-label={`Your profile: ${count} of ${ITEMS.length} done`}
-        className="flex items-center gap-2 h-[34px] text-[13px] font-semibold text-blue-700 bg-white border border-slate-300 rounded-[10px] px-3 hover:bg-slate-50">
+        className="flex items-center gap-2 h-8.5 text-[13px] font-semibold text-blue-700 bg-white border border-slate-300 rounded-control px-3 hover:bg-slate-50">
         <span className="flex gap-0.5" aria-hidden="true">
           {ITEMS.map(i => <span key={i.key} className={`w-2 h-2 rounded-full ${done[i.key] ? 'bg-blue-600' : 'bg-slate-200'}`} />)}
         </span>
         {count} of {ITEMS.length} done <span aria-hidden="true">{open ? '▴' : '▾'}</span>
       </button>
       {open && (
-        <div className="absolute right-0 top-full mt-2 z-30 w-[24rem] bg-white border border-slate-200 rounded-xl shadow-lg p-2">
+        <div data-keep-in-view className="absolute right-0 top-full mt-2 z-30 w-[24rem] bg-white border border-slate-200 rounded-xl shadow-lg p-2">
           {ITEMS.map(i => done[i.key] ? (
             <p key={i.key} className="flex items-center gap-3 px-3 py-2 text-sm text-slate-500">
               <span className="w-5 text-emerald-600 font-semibold" aria-hidden="true">✓</span>{i.title}

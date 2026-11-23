@@ -277,15 +277,17 @@ export default function EmployerDashboard() {
         <Link to={`/employer/graduates/${g.student_id}?job=${g.job_id}`} className="block text-sm font-semibold text-slate-900 truncate hover:text-blue-700">{g.name}</Link>
         {/* 24 Oct: the nice-to-have skills they also have, which put them higher in the list */}
         {/* 25 Oct: the nice-to-haves first, so a long programme name can't cut them off */}
-        <p className="text-xs text-slate-500 truncate">{g.nice > 0 && <span className="text-emerald-700 font-medium">+{g.nice} nice to have · </span>}{g.programme}</p>
+        <p className="text-xs text-slate-500 truncate">{/* 22 Nov (layout check): under 1280px the job moves here, so the row keeps room for the name */}
+          {manyJobs && <span className="xl:hidden font-medium text-slate-700"><span aria-hidden="true" className={`inline-block w-2 h-2 mr-1 rounded-full align-middle ${jobDot(g.job_id)}`} /><span className="sr-only">Fits </span>{g.job_title} · </span>}
+          {g.nice > 0 && <span className="text-emerald-700 font-medium">+{g.nice} nice to have · </span>}{g.programme}</p>
       </div>
       {/* only when the graduates fit different jobs; with one open job every row would repeat the same name */}
-      {manyJobs && <span className="w-40 shrink-0 flex items-center gap-1.5 text-xs font-medium text-slate-700 min-w-0" title={`Fits ${g.job_title}`}>
+      {manyJobs && <span className="max-xl:hidden w-40 shrink-0 flex items-center gap-1.5 text-xs font-medium text-slate-700 min-w-0" title={`Fits ${g.job_title}`}>
         <JobDot cls={jobDot(g.job_id)} /><span className="truncate"><span className="sr-only">Fits </span>{g.job_title}</span>
       </span>}
       <Match have={g.have} total={g.total} />
       {/* a fixed-width last column, so "Invited 25 Oct" and the Invite button keep every row's columns in line */}
-      <span className="w-36 shrink-0 min-w-0 flex justify-end">
+      <span className="w-28 xl:w-36 shrink-0 min-w-0 flex justify-end">
         {g.invite
           ? <InviteLabel invite={g.invite} className="max-w-full" />
           : <button onClick={() => invite(g)} disabled={inviting === g.student_id}

@@ -101,7 +101,7 @@ function GoalPicker({ goal, categories, fit, busy, onChange, showLabel = true })
         {goal || 'Open to all ICT roles'} <span aria-hidden="true" className="text-faint">▾</span>
       </button>
       {open && (
-        <div className="absolute left-0 top-full mt-1.5 z-20 w-full sm:w-120 bg-card border border-line-strong rounded-panel shadow-lg p-1.5">
+        <div data-keep-in-view className="absolute left-0 top-full mt-1.5 z-20 w-full sm:w-120 bg-card border border-line-strong rounded-panel shadow-lg p-1.5">
           <p className="px-3 pt-1.5 pb-1 text-small text-faint">
             {failed ? "Couldn't compare careers just now. You can still pick one." : "How many of each career's top skills you have"}
           </p>

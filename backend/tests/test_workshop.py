@@ -144,3 +144,16 @@ def test_a_proposal_reopens_with_its_setup(client, users, monkeypatch):
     setup = {"length": "2h", "format": "online", "audience": "final_year", "note": "Use Power BI"}
     pid = client.post("/admin/workshop/proposals", headers=h, json={**BODY, "setup": setup}).json()["id"]
     assert client.get(f"/admin/workshop/proposals/{pid}", headers=h).json()["setup"] == setup
+
+
+def test_a_reworded_or_renumbered_lead_is_dropped_too():
+    """23 Nov: the full test run showed the repeat check needed an exact copy; other figures or small rewording
+    still count as the same sentence. A different sentence is kept."""
+    from app.routers.workshop import _join_background
+    lead = "In SkillMap's job matching, 6 of 9 students lack Reporting in their top job matches, across 47 live ICT job ads."
+    rest = ("In SkillMap's job matching, 6 of 9 students lack Reporting in their top job matches, across 0 live ICT job ads. "
+            "In SkillMap job matching 6 of 9 students are missing Reporting in their top job matches across 47 live ICT ads. "
+            "Reporting is asked for in many graduate roles. It matters.")
+    out = _join_background(lead, rest)
+    assert out.count("6 of 9") == 1
+    assert out == lead + " Reporting is asked for in many graduate roles. It matters."

@@ -137,12 +137,32 @@ def template(data: DraftIn, n: dict) -> dict:
     }
 
 
+def _words(text: str) -> list[str]:
+    """Lower-case words with every number as '#', so "0 live jobs" and "47 live jobs" read the same."""
+    return re.sub(r"\d+", "#", re.sub(r"[^a-z0-9 ]+", " ", re.sub(r"['’]s\b", "", text.lower()))).split()
+
+
+def _repeats(sentence: str, lead: str) -> bool:
+    """True when a sentence is the given first sentence again, even with other numbers or a few words changed."""
+    w, lw = _words(sentence), _words(lead)
+    if len(w) < 4 or len(lw) < 4:
+        return False
+    if w[:6] == lw[:6]:
+        return True
+    a, b = set(w), set(lw)
+    return len(a & b) / len(a | b) >= 0.7
+
+
 def _join_background(lead: str, rest: str) -> str:
-    """22 Nov (her report: the first sentence showed twice): the model sometimes repeats the sentence it was given, so
-    every copy of it is taken out of its part before the two are joined."""
+    """22 Nov (her report: the first sentence showed twice): the model sometimes repeats the sentence it was given.
+    23 Nov: it can also repeat it with other figures or small rewording, so any sentence of its part that is the lead
+    again is dropped, not only an exact copy."""
     while lead in rest:
         rest = rest.replace(lead, "", 1)
-    return f"{lead} {' '.join(rest.split())}".strip()
+    lead_parts = [p for p in re.split(r"(?<=[.!?])\s+", lead) if p.strip()]
+    keep = [p for p in re.split(r"(?<=[.!?])\s+", " ".join(rest.split())) if p.strip()
+            and not any(_repeats(p, lp) for lp in lead_parts)]
+    return f"{lead} {' '.join(keep)}".strip()
 
 
 PROMPT = """You write activity proposals for a Malaysian university's career office. Write a workshop proposal as JSON with
