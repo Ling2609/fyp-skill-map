@@ -50,7 +50,11 @@ def _to_outbox(to: str, subject: str, body: str) -> None:
                                                                            encoding="utf-8")
 
 
+LOGO = Path(__file__).resolve().parents[1] / "assets" / "email-logo.png"
+
+
 def _message(to: str, subject: str, body: str, html: str | None) -> EmailMessage:
+    from app.services.account_emails import LOGO_CID
     msg = EmailMessage()
     msg["From"] = f"SkillMap <{settings.smtp_user}>"
     msg["To"] = to
@@ -58,6 +62,10 @@ def _message(to: str, subject: str, body: str, html: str | None) -> EmailMessage
     msg.set_content(body)                       # plain text first: mail apps without HTML show this
     if html:
         msg.add_alternative(html, subtype="html")
+        if f"cid:{LOGO_CID}" in html and LOGO.exists():
+            # the logo travels inside the email (multipart/related), so no image is fetched from anywhere
+            msg.get_payload()[1].add_related(LOGO.read_bytes(), "image", "png", cid=f"<{LOGO_CID}>",
+                                             filename="skillmap.png", disposition="inline")
     return msg
 
 

@@ -364,7 +364,18 @@ def test_the_html_email_escapes_names_and_keeps_a_plain_text_part():
     subject, text, html = account_emails.verify_code("<b>Ann</b>", "ann_1", "123456", 10)
     assert "123456" in text and "123456" in html and "10 minutes" in html
     assert "<b>Ann</b>" in text and "&lt;b&gt;Ann&lt;/b&gt;" in html and "<b>Ann</b>" not in html
-    assert "<img" not in html and "src=" not in html and "url(" not in html          # nothing loaded from outside
+    srcs = re.findall(r'src="([^"]+)"', html)
+    assert srcs == ["cid:skillmap-logo"] and "url(" not in html     # the only image travels inside the email
+
+
+def test_the_logo_is_attached_inside_the_email():
+    from app.services import account_emails
+    from app.services.mailer import _message
+    msg = _message("ann@example.com", *account_emails.verify_code("Ann", "ann_1", "123456", 10))
+    parts = {p.get_content_type(): p for p in msg.walk()}
+    assert "text/plain" in parts and "text/html" in parts             # plain text kept for mail apps without HTML
+    logo = parts["image/png"]
+    assert logo["Content-ID"] == "<skillmap-logo>" and logo.get_payload(decode=True)[:4] == b"\x89PNG"
 
 
 def test_the_migration_backfills_once_and_never_on_a_rerun(client, db, users):

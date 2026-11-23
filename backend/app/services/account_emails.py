@@ -24,6 +24,10 @@ INK, SOFT, MUTED, LINE = "#16142b", "#3a3754", "#5c5976", "#e3e6ee"
 ACCENT, ACCENT_STRONG, ACCENT_SOFT = "#2557c4", "#1d469f", "#e3ebfa"
 WARN_BG, WARN_INK = "#fff4d6", "#6b4a00"
 FONT = "'Plus Jakarta Sans',Segoe UI,Helvetica,Arial,sans-serif"
+# 23 Nov (her review: "use the correct icon"): the app's own mark (components/ui/Logo.jsx, "meet on the map"), as a
+# PNG attached INSIDE the email (an inline image, Content-ID): Gmail shows no SVG, and nothing is loaded from outside.
+# app/services/mailer.py attaches app/assets/email-logo.png under this id.
+LOGO_CID = "skillmap-logo"
 
 
 def _when() -> str:
@@ -78,8 +82,8 @@ def _email(subject: str, heading: str, first_name: str, paragraphs: list[str], *
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px">
     <tr><td style="padding:0 6px 14px">
       <table role="presentation" cellpadding="0" cellspacing="0"><tr>
-        <td style="width:30px;height:30px;border-radius:9px;background:{ACCENT};color:#ffffff;font-weight:800;font-size:16px;text-align:center">S</td>
-        <td style="padding-left:10px;font-size:20px;font-weight:800;letter-spacing:-0.5px;color:{INK}">SkillMap</td>
+        <td style="width:32px;height:32px;line-height:0"><img src="cid:{LOGO_CID}" width="32" height="32" alt="" style="display:block;border:0"></td>
+        <td style="padding-left:9px;font-size:20px;font-weight:800;letter-spacing:-0.5px;color:{INK}">SkillMap</td>
       </tr></table>
     </td></tr>
     <tr><td style="background:#ffffff;border:1px solid {LINE};border-radius:18px;padding:30px 30px 26px">
