@@ -29,6 +29,18 @@ class Settings(BaseSettings):
     # instead of sending it, so the tests can read the code. Allowed only on the skillmap_e2e database; on any other
     # database the backend refuses to start (app/services/mailer.py check_outbox).
     e2e_outbox: bool = False
+    # 24 Nov (deployment audit, item 2): PRODUCTION=1 on a real server. The backend then refuses to start without
+    # email (SMTP), a strong SECRET_KEY and a real database password, refuses the e2e outbox, and never prints an
+    # email (or its code) to the log (app/services/production.py). Unset = local development, as before.
+    production: bool = False
+    # 24 Nov (deployment audit, item 3): AI requests per user, all AI features together (app/services/rate_limit.py).
+    # Starting values: adjust after measuring real use
+    ai_requests_per_hour: int = 60
+    ai_requests_per_day: int = 200
+    ai_parallel_per_user: int = 2      # AI calls one user may have running at the same moment
+    # Per-address limits x this number. Only for tests and local browser runs, where every request comes from one
+    # address; PRODUCTION=1 refuses a value above 1 (app/services/production.py)
+    ip_limit_multiplier: int = 1
     # Websites allowed to call the API (13 Oct audit): comma-separated, e.g. for a Docker / demo address
     # CORS_ORIGINS=http://localhost:5173,http://192.168.1.20:5173
     cors_origins: str = "http://localhost:5173"

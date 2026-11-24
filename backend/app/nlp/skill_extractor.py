@@ -325,7 +325,8 @@ class SkillExtractor:
         """Call Groq API and parse JSON array response."""
         for attempt in range(retries):
             try:
-                response = self.client.chat.completions.create(
+                from app.services.rate_limit import ai_create
+                response = ai_create(self.client,
                     model=self.model,
                     messages=[
                         {"role": "system", "content": system},
@@ -341,6 +342,8 @@ class SkillExtractor:
                 if attempt < retries - 1:
                     time.sleep(2)
             except Exception as e:
+                if getattr(e, "status_code", None) == 429 and type(e).__name__ == "AILimitReached":
+                    raise                # AI limit reached: tell the user, don't fall back
                 print(f"  API error on attempt {attempt + 1}: {e}")
                 if attempt < retries - 1:
                     time.sleep(5)
@@ -434,7 +437,8 @@ class SkillExtractor:
                 extra = {"max_completion_tokens": EVIDENCE_MAX_TOKENS}
                 if self._reasoning_ok:
                     extra["reasoning_effort"] = EVIDENCE_REASONING
-                response = self.client.chat.completions.create(
+                from app.services.rate_limit import ai_create
+                response = ai_create(self.client,
                     model=self.model, messages=messages, temperature=0, response_format=self._evidence_format[0], **extra)
                 choice = response.choices[0]
                 usage = getattr(response, "usage", None)
@@ -448,6 +452,8 @@ class SkillExtractor:
                         out[entry["id"]] = [sk for sk in entry.get("skills", []) if isinstance(sk, dict) and sk.get("skill")]
                 return out
             except Exception as e:
+                if type(e).__name__ == "AILimitReached":
+                    raise                # AI limit reached: tell the user, don't fall back
                 text = str(e).lower()
                 if "tokens per day" in text or "tpd" in text:
                     raise
@@ -485,7 +491,8 @@ class SkillExtractor:
         from google.genai import types
         for attempt in range(retries):
             try:
-                response = gemini.models.generate_content(
+                from app.services.rate_limit import ai_generate   # a limit falls back to the rule-based layout
+                response = ai_generate(gemini,
                     model=GEMINI_MODEL,
                     contents=prompt,
                     config=types.GenerateContentConfig(

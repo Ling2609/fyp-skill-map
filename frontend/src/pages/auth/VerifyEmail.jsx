@@ -115,7 +115,7 @@ export default function VerifyEmail() {
         sub="For your security, a verification page lasts 30 minutes and can't be reopened."
         intro={{ headline: <>One last step: <em>your email</em>.</> }} formFirst>
         <Notice tone="info" icon><span>Sign in again with your username and password, and we&apos;ll bring you back here to finish.</span></Notice>
-        <Link to="/login" className="grid h-[50px] place-items-center rounded-[12px] bg-accent font-display text-[16px] font-bold text-white no-underline hover:bg-accent-strong">Sign in</Link>
+        <Link to="/login" className="grid h-12.5 place-items-center rounded-x1 bg-accent font-display text-[16px] font-bold text-white no-underline hover:bg-accent-strong">Sign in</Link>
       </AuthShell>
     )
   }
@@ -135,7 +135,7 @@ export default function VerifyEmail() {
   return (
     <AuthShell
       title={<span ref={headRef} tabIndex={-1} className="outline-none">{fromSignIn ? 'Verify your email first' : 'Check your email'}</span>}
-      sub={<>We sent a 6-digit code to <span className="inline-flex max-w-full rounded-full bg-well px-2.5 py-0.5 font-semibold text-ink [overflow-wrap:anywhere]">{v.email}</span></>}
+      sub={<>We sent a 6-digit code to <span className="inline-flex max-w-full rounded-full bg-well px-2.5 py-0.5 font-semibold text-ink wrap-anywhere">{v.email}</span></>}
       steps={steps} step={1}
       intro={{ headline: <>One last step: <em>your email</em>.</>, story: employer ? 'e' : 's' }}
       formFirst
@@ -151,7 +151,7 @@ export default function VerifyEmail() {
           // no maxLength: a pasted "123 456" or "123-456" is cleaned first, then cut to 6
           onChange={e => { setCode(e.target.value.replace(/\D/g, '').slice(0, 6)); setError('') }}
           aria-invalid={!!error || undefined} aria-describedby={`verify-times${error ? ' verify-err' : ''}`}
-          className={`${AUTH_FIELD} ${error ? AUTH_TONE.bad : AUTH_TONE.idle} h-[58px] text-center font-mono text-[26px] tracking-[0.5em] disabled:bg-well disabled:text-faint`}
+          className={`${AUTH_FIELD} ${error ? AUTH_TONE.bad : AUTH_TONE.idle} h-14.5 text-center font-mono text-[26px] tracking-[0.5em] disabled:bg-well disabled:text-faint`}
         />
         {error && <p id="verify-err" role="alert" className="m-0 text-small font-bold text-missing-strong">{error}</p>}
         <div id="verify-times" className="mb-2 flex flex-wrap justify-between gap-x-3 text-small text-muted">

@@ -15,6 +15,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
+from app.services.rate_limit import ai_limit
 from app.database import get_db
 from app.models.profile import EXPERIENCE_CATEGORIES, UserExperience
 from app.models.user import User
@@ -147,6 +148,7 @@ def _apply(exp: UserExperience, data: ExperienceIn):
 def suggest_experience_skills(data: ExperienceSuggestIn, current_user: User = Depends(get_current_user)):
     """Skills for the pop-up (nothing is stored), each with the student's words that show it. Needs a sentence or so
     about what she did: a role alone is too thin."""
+    ai_limit(current_user)   # 24 Nov: per-user AI limit (deployment audit item 3)
     _check(data)
     role, org, description = " ".join(data.role.split()), " ".join(data.organisation.split()), data.description.strip()
     if len(description) < MIN_DESCRIPTION:

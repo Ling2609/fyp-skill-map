@@ -31,7 +31,8 @@ sys.path.insert(0, str(BACKEND))
 os.chdir(BACKEND)
 # No AI is needed (every skill is given), so no key is used even if one is set
 os.environ.update(GROQ_API_KEY="", GEMINI_API_KEY="", COHERE_API_KEY="", MISTRAL_API_KEY="",
-                  SMTP_USER="", SMTP_PASSWORD="", E2E_OUTBOX="")   # 23 Nov: seeding sends no email
+                  SMTP_USER="", SMTP_PASSWORD="", E2E_OUTBOX="",   # 23 Nov: seeding sends no email
+                  IP_LIMIT_MULTIPLIER="1000")   # 24 Nov: seeding signs up and in many times from one address
 
 DOMAIN = "skillmap-demo.example.com"    # example.com is reserved (RFC 2606): never a real mailbox
 DEMO_PASSWORD = "Teal-Harbour-58"

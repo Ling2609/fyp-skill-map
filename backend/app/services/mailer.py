@@ -75,7 +75,10 @@ def send_email_now(to: str, subject: str, body: str, html: str | None = None) ->
         _to_outbox(to, subject, body)
         return
     if not mail_configured():
-        print(f"[mail not configured] to={to} | {subject}\n{body}")
+        if settings.production:
+            # 24 Nov (deployment audit): never print an email (or its code) on a real server; never claim success
+            raise MailNotSent("email is not set up")
+        print(f"[mail not configured] to={to} | {subject}\n{body}")   # local development only
         return
     try:
         with smtplib.SMTP(settings.smtp_host, settings.smtp_port, timeout=15) as smtp:

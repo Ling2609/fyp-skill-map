@@ -20,6 +20,7 @@ from sqlalchemy.orm import Session
 from pydantic import BaseModel, Field
 from pymongo.errors import PyMongoError
 from groq import Groq
+from app.services.rate_limit import AILimitReached, ai_create, ai_limit
 from app.config import settings
 from app.database import get_db
 from app.models.user import User
@@ -503,6 +504,7 @@ def delete_session(session_id: str, current_user: User = Depends(get_current_use
 
 @router.post("/")
 def chat(req: ChatRequest, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    ai_limit(current_user)   # 24 Nov: per-user AI limit (deployment audit item 3)
     t_start = time.perf_counter()
     if req.mode not in ("career_counsellor", "skill_development"):
         raise HTTPException(status_code=400, detail="mode must be 'career_counsellor' or 'skill_development'")
@@ -543,7 +545,7 @@ def chat(req: ChatRequest, current_user: User = Depends(get_current_user), db: S
     for model in (MODEL, FALLBACK_MODEL):
         try:
             t_model = time.perf_counter()
-            response = get_client().chat.completions.create(
+            response = ai_create(get_client(),
                 model=model,
                 messages=groq_messages,
                 temperature=0.7,
@@ -551,6 +553,8 @@ def chat(req: ChatRequest, current_user: User = Depends(get_current_user), db: S
                 max_completion_tokens=3000,
                 reasoning_effort="low",
             )
+        except AILimitReached:
+            raise                            # AI limit reached: tell the user, don't fall back
         except Exception as e:
             # The real error stays in the server log; the student gets a plain message (external audit, 6 Oct)
             print(f"[chatbot] Groq call failed ({model}): {type(e).__name__}: {e}")

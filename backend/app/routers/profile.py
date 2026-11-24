@@ -25,6 +25,7 @@ from sqlalchemy.orm import Session
 from pydantic import BaseModel, Field
 from groq import Groq
 
+from app.services.rate_limit import AILimitReached, ai_create, ai_limit
 from app.database import get_db
 from app.models.profile import ADDED_BY_YOU, UserAward, UserProject, UserCertification
 from app.routers.auth import get_current_user
@@ -194,7 +195,7 @@ _PLANNED = re.compile(r"\b(plan(ning|s)? to|planned|future (work|improvements?|e
 def _ask_json(prompt: str, label: str):
     """Groq call that must answer with JSON; None if it failed (the item is still saved, just without skills)."""
     try:
-        resp = get_client().chat.completions.create(
+        resp = ai_create(get_client(),
             model=MODEL, messages=[{"role": "user", "content": prompt}], temperature=0.1, **EXTRACT_LIMITS)
         raw = (resp.choices[0].message.content or "").strip()
         if raw.startswith("```"):
@@ -203,6 +204,8 @@ def _ask_json(prompt: str, label: str):
             print(f"[{label}] empty answer (finish_reason={resp.choices[0].finish_reason})")
             return None
         return json.loads(raw)
+    except AILimitReached:
+        raise                                # AI limit reached: tell the user, don't fall back
     except Exception as e:
         print(f"[{label}] extraction failed: {e}")
         return None
@@ -559,6 +562,7 @@ def _review_project(data: ProjectIn, quotes: dict[str, str], project: UserProjec
 def suggest_project_skills(data: ProjectSuggestIn, current_user: User = Depends(get_current_user)):
     """A project's skills for the pop-up, nothing saved: the AI reads the student's words (if there is at least a
     sentence) and GitHub gives the repo's main languages. The student removes or adds chips, then saves."""
+    ai_limit(current_user)   # 24 Nov: per-user AI limit (deployment audit item 3)
     for label, value in (("Project name", data.name), ("Description", data.description), ("GitHub link", data.github_url)):
         _check_length(label, value)
     name, description = " ".join(data.name.split()), data.description.strip()
@@ -716,6 +720,7 @@ def _cert_skills(data: CertIn, added: list[str]) -> tuple[list[str], str]:
 @router.post("/certifications/suggest")
 def suggest_cert_skills(data: CertSuggestIn, current_user: User = Depends(get_current_user)):
     """Skills for the pop-up to show before saving (nothing is stored); [] if the AI doesn't know the certificate."""
+    ai_limit(current_user)   # 24 Nov: per-user AI limit (deployment audit item 3)
     if not data.cert_name.strip() or not data.issuer.strip():
         raise HTTPException(status_code=400, detail="Certificate name and issuer are required")
     found = _estimate_cert(data.cert_name.strip(), data.issuer.strip())
@@ -905,6 +910,7 @@ def _clean_skills(names: list[str]) -> list[str]:
 @router.post("/awards/suggest")
 def suggest_award_skills(data: AwardSuggestIn, current_user: User = Depends(get_current_user)):
     """Skills for the pop-up to show before saving (nothing is stored)."""
+    ai_limit(current_user)   # 24 Nov: per-user AI limit (deployment audit item 3)
     if not data.title.strip() or not data.issuer.strip():
         raise HTTPException(status_code=400, detail="Award title and who gave it are required")
     found = _suggest_award(data.title.strip(), data.issuer.strip(), data.description.strip())

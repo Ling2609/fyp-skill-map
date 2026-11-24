@@ -13,6 +13,7 @@ from pydantic import BaseModel, Field
 import jwt
 from jwt import PyJWTError as JWTError   # PyJWT (22 Oct, security audit: replaced python-jose)
 from sqlalchemy import func, inspect, or_
+from sqlalchemy.dialects.postgresql import insert as pg_insert
 from sqlalchemy.orm import Session
 from app.database import SessionLocal, engine, get_db
 from app.models.login_throttle import LoginThrottle
@@ -23,6 +24,7 @@ from app.schemas.user import (EmailChange, EmailCodeIn, ForgotPasswordIn, NameUp
 from app.auth.utils import hash_password, verify_password, create_access_token, decode_token
 from app.config import settings
 from app.services import account_emails, email_verification
+from app.services.rate_limit import ip_limit
 from app.services.mailer import send_email
 from app.services.password_policy import common_passwords, password_problem
 
@@ -115,6 +117,9 @@ def check_account_schema():
             or "ix_email_code_sends_user_purpose_sent" not in indexes):
         raise RuntimeError("Database not updated: run  python migrations/migrate_email_verified.py  "
                            "from the backend folder, then start the backend again.")
+    if "request_counts" not in tables:   # 24 Nov: usage limits (deployment audit item 3)
+        raise RuntimeError("Database not updated: run  python migrations/migrate_request_counts.py  "
+                           "from the backend folder, then start the backend again.")
 
 
 def delete_old_codes():
@@ -128,6 +133,8 @@ def delete_old_codes():
             .delete(synchronize_session=False)
         db.query(EmailCodeSend).filter(EmailCodeSend.sent_at < datetime.now(timezone.utc) - timedelta(hours=48)) \
             .delete(synchronize_session=False)
+        from app.services.rate_limit import delete_old_counts
+        delete_old_counts(db)   # 24 Nov: usage-limit windows older than 2 days
         db.commit()
     finally:
         db.close()
@@ -445,10 +452,11 @@ def check_username(username: str, db: Session = Depends(get_db)):
 
 
 @router.post("/register", status_code=201)
-def register(payload: UserRegister, db: Session = Depends(get_db)):
+def register(request: Request, payload: UserRegister, db: Session = Depends(get_db)):
     """Creates the account UNVERIFIED (23 Nov) and emails a 6-digit code. The reply carries a verification ticket
     for the Check your email page (not a sign-in token) and what that page shows. If the email couldn't be sent the
     account still exists; the page offers Send again (and signing in later brings the owner back there)."""
+    ip_limit(request, "register")   # 24 Nov: per-address limit (deployment audit item 3)
     user = _create_account(payload, db)
     state = email_verification.request_code(db, user, explicit=False)
     return {**UserOut.model_validate(user).model_dump(mode="json"),
@@ -510,12 +518,29 @@ LOCK_MINUTES = 15
 _DUMMY_HASH = hash_password("not-a-real-password-just-for-timing")
 
 
+def _count_failed_login(db: Session, key: str, ip: str, now: datetime) -> None:
+    """24 Nov (deployment audit, item 4): one atomic statement, so simultaneous wrong passwords can't overwrite each
+    other's count (the old read, add 1 in Python, write could lose counts), and two requests creating the first row
+    at once can't collide: INSERT ... ON CONFLICT DO UPDATE SET failed_count = failed_count + 1, reading back the new
+    count. Reaching the limit pauses the pair; the WHERE makes only one request do that."""
+    stmt = (pg_insert(LoginThrottle).values(identifier=key, ip=ip, failed_count=1)
+            .on_conflict_do_update(index_elements=[LoginThrottle.identifier, LoginThrottle.ip],
+                                   set_={"failed_count": LoginThrottle.failed_count + 1})
+            .returning(LoginThrottle.failed_count))
+    count = db.execute(stmt).scalar_one()
+    if count >= MAX_FAILED_LOGINS:
+        db.query(LoginThrottle).filter(LoginThrottle.identifier == key, LoginThrottle.ip == ip,
+                                       LoginThrottle.failed_count >= MAX_FAILED_LOGINS)             .update({"failed_count": 0, "locked_until": now + timedelta(minutes=LOCK_MINUTES)}, synchronize_session=False)
+    db.commit()
+
+
 def _client_ip(request: Request) -> str:
     return request.client.host if request.client else "unknown"   # not X-Forwarded-For: anyone can fake that
 
 
 @router.post("/login", response_model=Token)
 def login(payload: UserLogin, request: Request, db: Session = Depends(get_db)):
+    ip_limit(request, "login")   # 24 Nov: per-address limit (deployment audit item 3)
     # Try email first, then username; both case-insensitive (usernames are stored in lower case, emails compared
     # with lower() so accounts saved before this fix still match)
     ident = payload.email.strip().lower()
@@ -531,16 +556,10 @@ def login(payload: UserLogin, request: Request, db: Session = Depends(get_db)):
                             f"minute{'s' if minutes != 1 else ''}, or reset your password.")
     password_ok = verify_password(payload.password, user.hashed_password if user else _DUMMY_HASH)
     if not user or not password_ok:
-        throttle = throttle or LoginThrottle(identifier=key, ip=_client_ip(request), failed_count=0)
-        throttle.failed_count = (throttle.failed_count or 0) + 1
-        if throttle.failed_count >= MAX_FAILED_LOGINS:
-            throttle.failed_count = 0
-            throttle.locked_until = now + timedelta(minutes=LOCK_MINUTES)
-        db.add(throttle)
-        db.commit()
+        _count_failed_login(db, key, _client_ip(request), now)
         raise HTTPException(status_code=401, detail="Invalid credentials")
-    if throttle:
-        db.delete(throttle)   # a successful sign-in clears the count
+    if throttle:   # a successful sign-in clears the count
+        db.query(LoginThrottle).filter(LoginThrottle.identifier == key, LoginThrottle.ip == _client_ip(request))             .delete(synchronize_session=False)
         db.commit()
     if not user.is_active:   # told only after the right password, so it reveals nothing to a guesser
         raise HTTPException(status_code=403, detail=DEACTIVATED)
@@ -587,13 +606,14 @@ def verify_email(payload: VerifyEmailIn, db: Session = Depends(get_db)):
     db.refresh(user)
     out = {"verified": True, "role": user.role.value}
     if claims.get("via") == "login" and claims.get("pwd") == _pw_stamp(user) and user.is_active:
-        out.update(access_token=_login_token(user), token_type="bearer")  # nosec B105 (token type, not a password)
+        out.update(access_token=_login_token(user), token_type="bearer")  # nosec B106 (token type, not a password)
     return out
 
 
 @router.post("/verify-email/resend")
-def resend_verification(payload: TicketIn, db: Session = Depends(get_db)):
+def resend_verification(request: Request, payload: TicketIn, db: Session = Depends(get_db)):
     """Send again: replaces the current code, within the cooldown and the daily limit."""
+    ip_limit(request, "resend")   # 24 Nov: per-address limit (deployment audit item 3)
     user, _ = email_verification.read_ticket(payload.ticket, db)
     if not user:
         raise HTTPException(status_code=400, detail=email_verification.TICKET_EXPIRED)
@@ -633,10 +653,14 @@ def _issue_code(user: User, purpose: str, db: Session, new_email: str | None = N
     """New 6-digit code for this user and purpose; None if one was sent less than a minute ago.
     Older codes of the same purpose are deleted: only the newest works, and old rows don't pile up.
     (Registration codes have their own sender with send limits: app/services/email_verification.py.)"""
+    # 24 Nov (deployment audit, item 5): the account row is locked first, so two simultaneous requests can't both
+    # pass the one-a-minute check and send competing codes; the second waits, then sees the first code
+    db.query(User).filter(User.id == user.id).with_for_update().one()
     now = datetime.now(timezone.utc)
     mine = db.query(PasswordResetOTP).filter(PasswordResetOTP.user_id == user.id, PasswordResetOTP.purpose == purpose)
     latest = mine.order_by(PasswordResetOTP.created_at.desc()).first()
     if latest and latest.created_at and now - latest.created_at < timedelta(seconds=RESET_RESEND_SECONDS):
+        db.commit()   # releases the lock
         return None
     mine.delete(synchronize_session=False)
     code = f"{secrets.randbelow(1_000_000):06d}"
@@ -676,7 +700,8 @@ def _find_user(identifier: str, db: Session) -> User | None:
 
 
 @router.post("/forgot-password")
-def forgot_password(payload: ForgotPasswordIn, background: BackgroundTasks, db: Session = Depends(get_db)):
+def forgot_password(request: Request, payload: ForgotPasswordIn, background: BackgroundTasks, db: Session = Depends(get_db)):
+    ip_limit(request, "forgot")   # 24 Nov: per-address limit (deployment audit item 3)
     # Format only (4 Oct): reveals nothing about which accounts exist, but stops typos like "qwertyjkl;"
     ident = payload.identifier.strip()
     if not (EMAIL_SHAPE.match(ident) or USERNAME_REGEX.match(ident)):

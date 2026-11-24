@@ -26,6 +26,7 @@ from pydantic import BaseModel, Field
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
+from app.services.rate_limit import ai_limit
 from app.database import get_db
 from app.models.application import Application, ApplicationEvent, JobInvitation
 from app.models.job import Job, JobSkill
@@ -191,6 +192,7 @@ def _check_ad(title: str, description: str):
 @router.post("/jobs/read")
 def read_skills(data: AdIn, employer: User = Depends(require_employer)):
     """The skills SkillMap reads in the ad, for the employer to check. Nothing is saved."""
+    ai_limit(employer)   # 24 Nov: per-user AI limit (deployment audit item 3)
     _check_ad(data.title, data.description)
     from app.routers.jobs import get_extractor
     try:

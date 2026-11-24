@@ -211,6 +211,21 @@ Run every script from `backend/` with the venv active, e.g. `python scripts/tool
 
 Groq's free tier allows about 200,000 tokens a day (≈ 100 jobs). Don't run two Groq-heavy scripts on the same day. To save long output: `PYTHONIOENCODING=utf-8 python <script> 2>&1 | tee out.txt`.
 
+## Deploying to a real server (24 Nov 2026, deployment audit)
+
+Set `PRODUCTION=1` in `backend/.env` on the server. The backend then refuses to start, listing what is wrong, if email
+(`SMTP_USER`, `SMTP_PASSWORD`) isn't set up, `SECRET_KEY` is shorter than 32 characters, the database password is
+missing or the local default, `E2E_OUTBOX` is on, or `IP_LIMIT_MULTIPLIER` is above 1. It also never prints an email
+(or a code) to the log. Run every migration first, including `migrate_email_verified.py` and `migrate_request_counts.py`.
+
+Usage limits (`app/services/rate_limit.py`): AI requests per user, all AI features together (`AI_REQUESTS_PER_HOUR`,
+default 60; `AI_REQUESTS_PER_DAY`, 200; at most `AI_PARALLEL_PER_USER`, 2, running at the same moment), enforced at every
+Groq / Gemini call so any route that reaches the AI counts, and per address: sign-ups 20 an hour, sign-ins 60 per 10 minutes, password
+resets and code resends 20 an hour. These are starting values; adjust them after measuring real use. Behind a reverse
+proxy (HTTPS), start uvicorn with `--proxy-headers --forwarded-allow-ips=<the proxy's address>`, otherwise every
+visitor looks like the proxy and shares one per-address count. Still to set for the chosen host: the public HTTPS
+address, `CORS_ORIGINS`, `FRONTEND_URL` and the GitHub OAuth callback, and only the web port open to the internet.
+
 ## Database migrations
 
 `migrations/` holds one-off scripts that change an **existing** database (add a column, create or drop a table). They were run in this order and each is safe to run again:
@@ -242,6 +257,7 @@ Groq's free tier allows about 200,000 tokens a day (≈ 100 jobs). Don't run two
 | `migrate_application_copy.py` | 21 Oct 2026 | adds `applications.sent_profile` and `sent_at`: a copy of what the employer was shown when the student applied (her profile and match, no contact details). The employer sees it by default, with "see latest" when the profile changed since. Older applications stay empty and show the latest profile. The API refuses to start until this has run |
 | `migrate_invitation_replies.py` | 25 Oct 2026 | adds `job_invitations.decline_reason` and `decline_note`: the optional reason a student gives when saying "No thanks" to an employer's invitation (shown to the employer). The API refuses to start until this has run |
 | `migrate_email_verified.py` | 23 Nov 2026 | registration email verification: adds `users.email_verified_at` (no default: new accounts start unverified) and the table `email_code_sends` (cooldown and daily limit for codes); marks every account that exists at the first run as verified. One transaction; a rerun only checks and never marks anyone verified. The API refuses to start until this has run |
+| `migrate_request_counts.py` | 24 Nov 2026 | usage limits (deployment audit): new table `request_counts` (requests per key and time window: AI requests per user, sign-ups / sign-ins / resets per address). The API refuses to start until this has run |
 
 A **new, empty** database gets its tables from `app/models/` when the API starts (the 12 Oct tables `application_events` and `job_invitations` too), but three of these scripts also load **data** a new install needs, so after the first start run, in this order: `migrate_admin_structure.py`, `migrate_all_programmes.py`, `migrate_intake_modules.py` (17 programmes, 198 modules, demo intakes), then `python scripts/pipeline/extract_module_skills.py` (module skills, Groq) and `python scripts/tools/create_admin.py` (the career-office account). Checked by `tests/test_install.py` on a brand-new database. Post a job lists the job categories already in the database, so load the JobStreet data (or fetch live jobs) before employers post. To apply one: `python migrations/<file>.py` from `backend/`.
 

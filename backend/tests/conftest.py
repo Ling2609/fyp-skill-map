@@ -28,25 +28,48 @@ from sqlalchemy import create_engine, text
 from sqlalchemy.engine import make_url
 
 BACKEND = Path(__file__).resolve().parents[1]
+from dotenv import dotenv_values  # noqa: E402
+_ENV = dotenv_values(BACKEND / ".env")
+MAIN_URL = os.environ.get("DATABASE_URL") or _ENV.get("DATABASE_URL", "")   # read BEFORE it is replaced below
 TEST_URL = os.environ.get("TEST_DATABASE_URL", "")
 if not TEST_URL:
     # 12 Oct (her first run): typing the password into a command is error-prone, so by default the tests use the
     # same server, user and password as DATABASE_URL in backend/.env, with the database name "skillmap_test"
-    from dotenv import dotenv_values
-    main_url = os.environ.get("DATABASE_URL") or dotenv_values(BACKEND / ".env").get("DATABASE_URL", "")
-    if not main_url:
+    if not MAIN_URL:
         pytest.exit("No DATABASE_URL in backend/.env and no TEST_DATABASE_URL set (see tests/conftest.py).", returncode=2)
-    u = make_url(main_url)
+    u = make_url(MAIN_URL)
     TEST_URL = u.set(database="skillmap_test", drivername="postgresql+psycopg2" if u.drivername == "postgresql" else u.drivername
                      ).render_as_string(hide_password=False)
 _url = make_url(TEST_URL)
-if "test" not in (_url.database or ""):
-    pytest.exit(f'TEST_DATABASE_URL must name a database with "test" in it (got "{_url.database}").', returncode=2)
+
+
+def _target(url: str):
+    """Which database a URL points at: (host, port, name), ignoring user, password and driver."""
+    u = make_url(url)
+    host = (u.host or "localhost").lower().replace("127.0.0.1", "localhost").replace("::1", "localhost")
+    return host, u.port or 5432, (u.database or "").lower()
+
+
+# 24 Nov (deployment audit, item 7): this suite DROPS the public schema of the database it is given, so the guard
+# is stricter than "the name contains test": the name must have "test" as a word (skillmap_test, skillmap_x_test;
+# not "latest" or "contest"), and it must not be the main database (DATABASE_URL) or the browser-test database
+# (E2E_DATABASE_URL), whatever its name. Even safer: run with test credentials that have no rights on the real one.
+import re as _re  # noqa: E402
+if not _re.search(r"(^|_)test(_|$)", (_url.database or "").lower()):
+    pytest.exit(f'The test database name must contain "test" as a word, e.g. skillmap_test (got "{_url.database}").',
+                returncode=2)
+for _name, _other in (("DATABASE_URL", MAIN_URL), ("E2E_DATABASE_URL", os.environ.get("E2E_DATABASE_URL") or _ENV.get("E2E_DATABASE_URL", ""))):
+    if _other and _target(_other) == _target(TEST_URL):
+        pytest.exit(f"Refusing: the test database is the same database as {_name}. The tests would wipe it.", returncode=2)
 
 # Settings for the app under test: environment variables win over backend/.env (pydantic-settings)
 os.environ.update(DATABASE_URL=TEST_URL, SECRET_KEY="test-secret-key-for-the-regression-suite-only", MONGODB_URL="mongodb://localhost:1",
                   RELATION_MODEL_DIR="", GROQ_API_KEY="", GEMINI_API_KEY="", COHERE_API_KEY="", JSEARCH_KEY="",
-                  SMTP_USER="", SMTP_PASSWORD="")
+                  SMTP_USER="", SMTP_PASSWORD="",
+                  # 24 Nov: every test request comes from one address and the suite signs up hundreds of accounts, so
+                  # the usage limits are raised here (test_rate_limits.py checks the real ones)
+                  IP_LIMIT_MULTIPLIER="100000", AI_REQUESTS_PER_HOUR="100000", AI_REQUESTS_PER_DAY="100000",
+                  AI_PARALLEL_PER_USER="100000")
 sys.path.insert(0, str(BACKEND))
 
 

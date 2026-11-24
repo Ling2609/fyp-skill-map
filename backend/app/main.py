@@ -7,6 +7,7 @@ from app.routers import admin, admin_academic, workshop, applications, auth, emp
 from app.models import user, module, job, programme, application  # noqa: F401
 from app.models import profile as profile_model  # noqa: F401 — registers tables with Base
 from app.models import email_code_send  # noqa: F401 — 23 Nov, registration email verification
+from app.models import request_count  # noqa: F401 — 24 Nov, usage limits (deployment audit)
 
 
 @asynccontextmanager
@@ -17,6 +18,8 @@ async def lifespan(app: FastAPI):
     check_account_schema()   # stops with a clear message if migrate_account_security.py hasn't been run
     from app.services.mailer import check_outbox
     check_outbox()           # 23 Nov: E2E_OUTBOX only on the skillmap_e2e database
+    from app.services.production import check_production
+    check_production()       # 24 Nov (deployment audit): PRODUCTION=1 refuses unsafe settings
     from app.routers.profile import check_profile_schema
     check_profile_schema()   # the same for migrate_profile_skill_evidence.py
     from app.routers.jobs import check_jobs_schema
@@ -46,6 +49,25 @@ async def lifespan(app: FastAPI):
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="FYP Skill Map API", version="0.1.0", lifespan=lifespan)
+
+
+@app.middleware("http")
+async def bind_ai_user(request, call_next):
+    """24 Nov (deployment audit re-check): who is asking, for the AI limits at every Groq / Gemini call
+    (app/services/rate_limit.py). Only reads the user id from the sign-in token; whether the token is valid is still
+    decided by the route itself (get_current_user)."""
+    from app.auth.utils import decode_token
+    from app.services.rate_limit import bind_request
+    user_id = None
+    auth = request.headers.get("authorization", "")
+    if auth.lower().startswith("bearer "):
+        try:
+            user_id = int(decode_token(auth[7:]).get("sub"))
+        except Exception:   # noqa: BLE001 — a bad token is the route's business (401), not the limiter's
+            user_id = None
+    bind_request(user_id)
+    return await call_next(request)
+
 
 app.add_middleware(
     CORSMiddleware,

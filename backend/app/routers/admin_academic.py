@@ -27,6 +27,7 @@ from pydantic import BaseModel, Field
 from sqlalchemy import func
 from sqlalchemy.orm import Session
 
+from app.services.rate_limit import ai_limit
 from app.database import get_db
 from app.models.module import Module, ModuleSkill
 from app.models.programme import Intake, IntakeModule, Programme, ProgrammeModule
@@ -251,6 +252,7 @@ class SuggestIn(BaseModel):
 @router.post("/modules/suggest")
 def suggest_skills(body: SuggestIn, admin: User = Depends(require_admin)):
     """Skills in a new module's description, for the admin to check before the module is added. Saves nothing."""
+    ai_limit(admin)   # 24 Nov: per-user AI limit (deployment audit item 3)
     text = " ".join(body.description.split())
     if len(text) < 20:
         raise HTTPException(status_code=400, detail="Please write at least a sentence: skills are found in this text.")
@@ -314,6 +316,7 @@ def add_module(body: NewModule, db: Session = Depends(get_db), admin: User = Dep
     """A new module in the list being looked at (the intake's, else the programme's). From the pop-up (10 Oct, her
     flow) the skills come with it, found and checked before adding, so it starts "Reviewed". Without skills (older
     callers) they are found after saving and it starts "To review"; if the AI doesn't answer, the reply says so."""
+    ai_limit(admin)   # 24 Nov: per-user AI limit (deployment audit item 3)
     prog, intake = _scope(db, body.programme_id, body.intake_id)
     name = _check_fields(body)
     code = "".join(body.code.split()).upper()
@@ -513,6 +516,7 @@ def remove_skill(module_id: int, body: SkillName, db: Session = Depends(get_db),
 def extract_again(module_id: int, db: Session = Depends(get_db), admin: User = Depends(require_admin)):
     """Find the skills again from the saved description (one Groq call). Skills an admin added are kept; the module
     goes back to "to review"."""
+    ai_limit(admin)   # 24 Nov: per-user AI limit (deployment audit item 3)
     mod = _module(db, module_id)
     if not (mod.description or "").strip():
         raise HTTPException(status_code=400, detail="Add a description first: skills are found in it.")

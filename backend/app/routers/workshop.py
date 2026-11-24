@@ -19,6 +19,7 @@ from fastapi.responses import Response
 from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 
+from app.services.rate_limit import AILimitReached, ai_create, ai_limit
 from app.database import get_db
 from sqlalchemy import func, or_
 
@@ -182,11 +183,13 @@ def ai_draft(data: DraftIn, n: dict) -> dict:
            "note_from_career_office": _clean(data.note, 300)}
     for model in (MODEL, FALLBACK_MODEL):
         try:
-            res = get_client().chat.completions.create(
+            res = ai_create(get_client(),
                 model=model, temperature=0.5, max_completion_tokens=2000, reasoning_effort="low",
                 messages=[{"role": "system", "content": PROMPT}, {"role": "user", "content": json.dumps(ask)}])
             text = (res.choices[0].message.content or "").strip()
             got = json.loads(re.sub(r"^```(?:json)?|```$", "", text, flags=re.M).strip())
+        except AILimitReached:
+            raise                   # AI limit reached: tell the user, don't fall back
         except Exception as e:      # the model is a helper: any failure falls back to the template
             print(f"[workshop] draft with {model} failed: {type(e).__name__}: {e}")
             continue
@@ -205,6 +208,7 @@ def ai_draft(data: DraftIn, n: dict) -> dict:
 
 @router.post("/draft")
 def draft(data: DraftIn, db: Session = Depends(get_db), admin: User = Depends(require_admin)):
+    ai_limit(admin)   # 24 Nov: per-user AI limit (deployment audit item 3)
     if data.length not in LENGTHS or data.format not in FORMATS or data.audience not in AUDIENCES:
         raise HTTPException(status_code=400, detail="Choose a length, format and audience from the list.")
     return ai_draft(data, _numbers(data.skills, db))
