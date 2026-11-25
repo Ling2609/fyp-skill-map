@@ -1,0 +1,24 @@
+Test student 341 (Software Engineering profile, 30 modules). 3 rounds, 20 warm calls each.
+Round 1: server ready after 37.1 s
+Round 2: server ready after 36.0 s
+Round 3: server ready after 40.1 s
+
+E5 response times: server answer times seen by a client on the same machine (seconds)
+3 server starts; cold = first call after each start; warm = 20 calls per round, pooled
+
+Server start until the API answers: 37.1, 36.0, 40.1 s
+
+Page / call                                 cold (each start)      warm median  warm p95  warm max
+Job Matches · POST /recommend/              7.83, 9.04, 8.78             0.277     0.334     0.371
+Job Matches · GET /profile/skills           0.05, 0.06, 0.05             0.022     0.027     0.050
+Job Matches · GET /jobs/subcategories       0.01, 0.02, 0.02             0.011     0.012     0.013
+Job Detail · POST /skillgap/                0.03, 0.06, 0.06             0.046     0.060     0.065
+Job Detail · GET /jobs/{id}/description     0.01, 0.01                   0.017     0.030     0.031
+                                            first view of an untidied description (calls Gemini): 12.11, 7.68, 8.02, 6.08, 8.33, 6.49, 8.60, 6.87, 7.27, 5.50, 16.21, 14.86, 11.07, 6.61, 5.96, 13.94, 6.80, 5.25, 5.77, 11.08, 14.56, 5.38, 6.52, 7.57, 10.29, 21.47, 11.88 s (not in the rule)
+Dashboard · GET /recommend/goal             0.17, 0.13, 0.13             0.137     0.246     0.299
+Dashboard · GET /recommend/fit              0.07, 0.07, 0.07             0.061     0.111     0.122
+
+PASS: every warm p95 under 1 s and every cold call under 10 s (the rule fixed beforehand)
+Machine: os Windows-11-10.0.26300-SP0, cpu Intel64 Family 6 Model 170 Stepping 4, GenuineIntel, cores 22, python 3.13.7, ram_gb 31.5, gpu none (CPU)
+[evaluation_runs] saved run e365e453 at commit 5c87353 (files changed since this commit: not exactly repeatable)
+Written ../docs/evidence/performance\response_times.csv and ../docs/evidence/performance\summary.txt.

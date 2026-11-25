@@ -1,0 +1,63 @@
+20 test students from 10 programme profiles.
+Server ready after 28.5 s. Warming up ...
+Stage 1/5: 5 students (190 s) ...
+   ... 31 s of 190 s, server CPU 170%
+   ... 61 s of 190 s, server CPU 174%
+   ... 92 s of 190 s, server CPU 177%
+   ... 122 s of 190 s, server CPU 11%
+   ... 153 s of 190 s, server CPU 347%
+   ... 183 s of 190 s, server CPU 94%
+Stage 2/5: 10 students (190 s) ...
+   ... 31 s of 190 s, server CPU 87%
+   ... 61 s of 190 s, server CPU 121%
+   ... 92 s of 190 s, server CPU 11%
+   ... 123 s of 190 s, server CPU 286%
+   ... 153 s of 190 s, server CPU 101%
+   ... 184 s of 190 s, server CPU 6%
+Stage 3/5: 20 students (190 s) ...
+   ... 31 s of 190 s, server CPU 13%
+   ... 61 s of 190 s, server CPU 349%
+   ... 92 s of 190 s, server CPU 277%
+   ... 122 s of 190 s, server CPU 493%
+   ... 153 s of 190 s, server CPU 557%
+   ... 183 s of 190 s, server CPU 187%
+Stage 4/5: 40 students (190 s) ...
+   ... 31 s of 190 s, server CPU 934%
+   ... 61 s of 190 s, server CPU 468%
+   ... 92 s of 190 s, server CPU 483%
+   ... 122 s of 190 s, server CPU 522%
+   ... 153 s of 190 s, server CPU 300%
+   ... 183 s of 190 s, server CPU 801%
+Stage 5/5: stress: 20 students, no reading time (190 s) ...
+   ... 31 s of 190 s, server CPU 1175%
+   ... 61 s of 190 s, server CPU 1054%
+   ... 92 s of 190 s, server CPU 1264%
+   ... 122 s of 190 s, server CPU 1005%
+   ... 153 s of 190 s, server CPU 1182%
+   ... 184 s of 190 s, server CPU 1241%
+
+Load test: students using SkillMap at the same time (one uvicorn process, client on the same machine)
+Each stage 180 s counted after 10 s of starting users; server start until it answered: 28.5 s
+
+Stage                                       calls  calls/s  failed   server CPU mean/max %   result
+5 students                                    479      2.6       0                99 / 476   pass
+10 students                                   914      5.1       0               133 / 416   pass
+20 students                                  1794     10.0       0               325 / 747   pass
+40 students                                  3566     19.8       0              557 / 1097   pass
+stress: 20 students, no reading time         7476     41.4       0             1125 / 1414   no rule (stress)
+
+p95 per call (seconds)
+Call                              5 students   10 students   20 students   40 students        stress
+GET /auth/me                           0.017         0.025         0.020         0.031         0.260
+POST /recommend/                       0.320         0.480         0.290         1.100         2.200
+GET /profile/skills                    0.026         0.035         0.026         0.038         0.230
+GET /jobs/subcategories                0.014         0.017         0.014         0.021         0.220
+POST /skillgap/                        0.069         0.100         0.051         0.200         0.700
+GET /jobs/{id}/description             0.019         0.022         0.017         0.027         0.160
+GET /recommend/goal                    0.150         0.280         0.210         0.390         1.600
+GET /recommend/fit                     0.064         0.084         0.085         0.170         1.100
+
+PASS: every rule stage met its limit (1 s up to 20 students, 10 s at 40); every call's p95 stayed under 1 s up to 20 students (the rule fixed beforehand)
+Machine: os Windows-11-10.0.26300-SP0, cpu Intel64 Family 6 Model 170 Stepping 4, GenuineIntel, cores 22, python 3.13.7, ram_gb 31.5, locust 2.47.0
+[evaluation_runs] saved run b2c3dd06 at commit 5c87353 (files changed since this commit: not exactly repeatable)
+Written ../docs/evidence/performance/load\summary.txt and the Locust tables in ../docs/evidence/performance/load.
