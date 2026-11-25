@@ -37,6 +37,7 @@ export default function VerifyEmail() {
   const [busy, setBusy] = useState('')                            // '' | 'verify' | 'resend'
   const [wait, setWait] = useState(() => secondsUntil(nav?.verification?.next_send_at))
   const [announce, setAnnounce] = useState('')
+  const [sendError, setSendError] = useState('')        // a problem sending a new code (not a wrong code)
   const codeRef = useRef(null)
   const headRef = useRef(null)
 
@@ -96,14 +97,16 @@ export default function VerifyEmail() {
   }
 
   const resend = async () => {
-    setBusy('resend'); setError(''); setAnnounce('')
+    setBusy('resend'); setError(''); setSendError(''); setAnnounce('')
     try {
       const r = await api.post('/auth/verify-email/resend', { ticket })
       setV(r.data)
       if (r.data.result === 'sent') { setCode(''); setAnnounce('A new code is on its way. Check your email.') }
     } catch (err) {
       if (err.response?.status === 400) pageExpired()
-      else setError(err.response ? 'Something went wrong. Please try again.' : "Can't reach the server. Is the backend running?")
+      // 25 Nov: too many code requests from this network (per-address limit) says so, with the wait time
+      else if (err.response?.status === 429 && typeof err.response.data?.detail === 'string') setSendError(err.response.data.detail)
+      else setSendError(err.response ? "Couldn't ask for a new code. Please try again." : "Can't reach the server. Is the backend running?")
     } finally {
       setBusy('')
     }
@@ -115,7 +118,7 @@ export default function VerifyEmail() {
         sub="For your security, a verification page lasts 30 minutes and can't be reopened."
         intro={{ headline: <>One last step: <em>your email</em>.</> }} formFirst>
         <Notice tone="info" icon><span>Sign in again with your username and password, and we&apos;ll bring you back here to finish.</span></Notice>
-        <Link to="/login" className="grid h-12.5 place-items-center rounded-x1 bg-accent font-display text-[16px] font-bold text-white no-underline hover:bg-accent-strong">Sign in</Link>
+        <Link to="/login" className="grid h-12.5 place-items-center rounded-xl bg-accent font-display text-[16px] font-bold text-white no-underline hover:bg-accent-strong">Sign in</Link>
       </AuthShell>
     )
   }
@@ -141,6 +144,7 @@ export default function VerifyEmail() {
       formFirst
     >
       {note && <Notice tone={note.tone} icon><span role={note.role}>{note.text}</span></Notice>}
+      {sendError && <Notice tone="bad" icon><span role="alert">{sendError}</span></Notice>}
       <p className="sr-only" role="status" aria-live="polite">{announce}</p>
 
       <form onSubmit={verify} noValidate className="flex flex-col gap-1.5">

@@ -6,6 +6,19 @@ import { Busy } from '../../components/Spinner'
 import { FieldSkeleton, LoadingLabel } from '../../components/Skeleton'
 import { CATEGORIES } from './experienceKinds'
 
+// 25 Nov: a form's error sits near the foot of a scrolling dialog, where it was easy to miss (and faded by the scroll
+// cue). It now scrolls itself into view whenever it changes, and is announced.
+function FormError({ text }) {
+  const ref = useRef(null)
+  useEffect(() => {
+    if (!text) return
+    const still = typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches
+    ref.current?.scrollIntoView?.({ block: 'center', behavior: still ? 'auto' : 'smooth' })
+  }, [text])
+  if (!text) return null
+  return <p ref={ref} role="alert" className="text-xs font-medium text-red-700 bg-red-50 rounded-lg px-3 py-2">{text}</p>
+}
+
 // Every pop-up form on My Profile (8-9 Oct). Each one is opened by a button on the page and closes itself through
 // onDone / onCancel; onDirty tells the pop-up there is something typed, so a stray click outside asks first.
 // Project, certificate and award forms moved here unchanged from the old Skill Profile tabs.
@@ -167,7 +180,7 @@ export function ProjectForm({ project, onDone, onCancel, onDirty }) {
           Skills appear here after Find skills, for you to check before {editing ? 'saving' : 'adding'}.
         </p>
       )}
-      {error && <p className="text-xs text-red-500 bg-red-50 rounded-lg px-3 py-2">{error}</p>}
+      <FormError text={error} />
       {dupe
         ? <DuplicateAsk message={dupe} yesLabel={editing ? 'Yes, save it' : 'Yes, add it'} busy={!!busy}
             onYes={() => save(true)} onBack={() => setDupe('')} />
@@ -280,7 +293,7 @@ export function CertForm({ cert, onDone, onCancel, onDirty }) {
         <input type="url" value={form.credly_url} onChange={e => setForm(c => ({ ...c, credly_url: e.target.value }))}
           placeholder="https://www.credly.com/badges/..." className={inputCls} maxLength={500} />
       </Field>
-      {error && <p className="text-xs text-red-500 bg-red-50 rounded-lg px-3 py-2">{error}</p>}
+      <FormError text={error} />
       {dupe
         ? <DuplicateAsk message={dupe} yesLabel={editing ? 'Yes, save it' : 'Yes, add it'} busy={busy !== ''}
             onYes={() => save(true)} onBack={() => setDupe('')} />
@@ -400,7 +413,7 @@ export function AwardForm({ award, onDone, onCancel, onDirty }) {
         <p className="text-xs text-gray-500 mt-1.5">Suggested by AI from the title and description. Remove any that don't fit.</p>
         {note && <p className="text-xs text-amber-700 bg-amber-50 rounded-lg px-3 py-2 mt-2">{note}</p>}
       </div>
-      {error && <p className="text-xs text-red-500 bg-red-50 rounded-lg px-3 py-2">{error}</p>}
+      <FormError text={error} />
       {dupe
         ? <DuplicateAsk message={dupe} yesLabel={editing ? 'Yes, save it' : 'Yes, add it'} busy={busy !== ''}
             onYes={() => save(true)} onBack={() => setDupe('')} />
@@ -492,7 +505,7 @@ export function StudyForm({ onDone, onCancel, onDirty }) {
       <p className="text-xs text-gray-500">Your modules follow your programme and intake. Grades for modules in both lists are kept.</p>
       {options ? <StudyFields options={options} value={study} onChange={v => { setStudy(v); setLeaving(null) }} />
         : !error && <><LoadingLabel>Loading programmes…</LoadingLabel><FieldSkeleton n={2} /></>}
-      {error && <p className="text-xs text-red-500 bg-red-50 rounded-lg px-3 py-2">{error}</p>}
+      <FormError text={error} />
       {leaving ? (
         <div role="alert" className="bg-amber-50 border border-amber-200 rounded-xl p-3.5">
           <p className="text-sm font-medium text-amber-900">{leaving.message} Their grades will be removed from your profile:</p>
@@ -665,7 +678,7 @@ export function ExperienceForm({ item, kind: newKind, onDone, onCancel, onDirty 
         <p className="text-xs text-gray-500 mt-1.5">Suggested from your own words only. Remove any that don't fit.</p>
         {note && <p className="text-xs text-amber-700 bg-amber-50 rounded-lg px-3 py-2 mt-2">{note}</p>}
       </div>
-      {error && <p className="text-xs text-red-500 bg-red-50 rounded-lg px-3 py-2">{error}</p>}
+      <FormError text={error} />
       {dupe
         ? <DuplicateAsk message={dupe} yesLabel={editing ? 'Yes, save it' : 'Yes, add it'} busy={busy !== ''}
             onYes={() => save(true)} onBack={() => setDupe('')} />

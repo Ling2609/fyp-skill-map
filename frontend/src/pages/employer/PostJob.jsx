@@ -391,10 +391,13 @@ export default function PostJob() {
             <div className="post-form-actions shrink-0 pt-3 border-t border-slate-200 flex flex-wrap items-center justify-between gap-3">
               <Link to="/employer/jobs" className="text-sm text-slate-600 hover:underline">Cancel</Link>
               <div className="post-read-action flex flex-wrap items-center justify-end gap-3 ml-auto min-w-0">
+              {/* 25 Nov: a reading error (incl. the AI usage limit) shows here, beside the button, instead of below the
+                  card where a short laptop screen cut it off */}
+              {error ? <p id="pj-read-help" role="alert" className="post-read-help text-sm font-medium text-rose-700">{error}</p> : (
               <p id="pj-read-help" className={`post-read-help text-xs ${tooLong ? 'text-rose-700' : 'text-muted'}`}>
                 {tooLong ? `Shorten the description to ${MAX_DESCRIPTION.toLocaleString()} characters.`
                   : missing.length > 0 ? `To read the skills, add ${missing.join(' and ')}.` : 'Your ad is ready for the skills check.'}
-              </p>
+              </p>)}
               <button type="button" onClick={readSkills} disabled={reading || cantRead}
                 className="head-cta disabled:opacity-40 disabled:cursor-not-allowed">
                 {reading ? <Busy>Reading the skills…</Busy> : 'Read the skills'}
@@ -402,7 +405,6 @@ export default function PostJob() {
               </div>
             </div>
           )}
-          {!read && error && <p role="alert" className="text-sm text-rose-600">{error}</p>}
 
           {read && (
             <div ref={skillsRef} className="pt-5 border-t border-slate-200 flex flex-col gap-5 scroll-mt-4">
