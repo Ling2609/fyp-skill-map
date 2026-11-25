@@ -54,6 +54,8 @@ export default function RowMenu({ label, items, disabled }) {
           <circle cx="4" cy="10" r="2" /><circle cx="10" cy="10" r="2" /><circle cx="16" cy="10" r="2" />
         </svg>
       </button>
+      {/* 25 Nov (axe, rule "region"): drawn inside the page's <main> landmark, not at the end of <body>, so screen
+          readers moving by landmark don't miss it. Still position: fixed (main has no transform), so it stays in view */}
       {pos && createPortal(
         <div ref={menu} role="menu" aria-label={label} onKeyDown={onKey} style={{ position: 'fixed', ...pos }}
           className="z-40 w-52 max-w-[calc(100vw-16px)] bg-white border border-slate-200 rounded-xl shadow-lg p-1.5 text-sm text-left whitespace-normal">
@@ -65,7 +67,7 @@ export default function RowMenu({ label, items, disabled }) {
               {it.label}
             </button>
           ))}
-        </div>, document.body
+        </div>, document.getElementById('main') || document.body
       )}
     </>
   )

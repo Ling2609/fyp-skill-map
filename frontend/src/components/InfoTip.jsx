@@ -42,7 +42,7 @@ export default function InfoTip({ label, children }) {
       {open && at && createPortal(
         <span role="status" data-tip style={{ position: 'fixed', top: at.top, left: at.left, width: TIP_W }} className="z-[60] rounded-lg bg-slate-900 text-white text-xs leading-relaxed px-3 py-2 shadow-lg">
           {children}
-        </span>, document.body
+        </span>, document.getElementById('main') || document.body   // 25 Nov: inside <main> (axe "region")
       )}
     </span>
   )
