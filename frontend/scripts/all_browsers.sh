@@ -25,7 +25,9 @@ for b in "${BROWSERS[@]}"; do
   dir=../docs/evidence/e2e; [ "$b" != chromium ] && dir=../docs/evidence/e2e/$b
   mkdir -p "$dir"
   (cd ../backend && python scripts/tools/setup_e2e.py) | tail -2
-  (cd ../backend && DATABASE_URL="$E2E_URL" exec uvicorn app.main:app --port 8000 > "../docs/evidence/e2e/.backend_$b.log" 2>&1) &
+  # 25 Nov: the same two settings as a manual run (docs/testing/e2e.md): emails to backend/.e2e_outbox/ (TC-51 reads
+  # the code there) and per-address limits raised (every test signs in from this one address)
+  (cd ../backend && E2E_OUTBOX=1 IP_LIMIT_MULTIPLIER=100 DATABASE_URL="$E2E_URL" exec uvicorn app.main:app --port 8000 > "../docs/evidence/e2e/.backend_$b.log" 2>&1) &
   backend=$!
   for i in $(seq 1 180); do curl -s -o /dev/null http://localhost:8000/docs && break; sleep 1; done   # the model loads first
   BROWSER=$b npx playwright test 2>&1 | tee "$dir/run_$DAY.txt"
