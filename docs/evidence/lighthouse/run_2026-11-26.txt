@@ -1,0 +1,35 @@
+100  signed out    Sign in
+100  signed out    Register
+100  signed out    Forgot password
+100  signed out    Privacy notice
+100  new student   Study set-up (first sign-in)
+100  student       Student Dashboard
+100  student       My Profile: Modules
+100  student       My Profile: Projects
+100  student       My Profile: Experience
+100  student       My Profile: Certificates
+100  student       My Profile: Awards
+100  student       Profile & privacy
+100  student       Preview as employer
+100  student       Job Matches
+100  student       Job Detail
+100  student       What the employer will see
+100  student       My Applications
+100  student       AI Assistant
+100  student       Account settings (student)
+100  new employer  Employer waiting for approval
+100  employer      Employer Dashboard
+100  employer      My Jobs
+100  employer      Post a Job
+100  employer      View applicants
+100  employer      Applicant
+100  employer      Graduate who fits
+100  employer      Edit job
+100  employer      Account settings (employer)
+100  career office Career office Dashboard
+100  career office Users
+100  career office Academics: Modules
+100  career office Academics: Intakes
+100  career office Account settings (admin)
+
+33 of 33 pages score 100. Table: docs/evidence/lighthouse/all/summary.md
