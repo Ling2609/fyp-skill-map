@@ -4,6 +4,7 @@ import { useAuth } from '../../context/useAuth'
 import api from '../../api'
 import { cached, peek } from '../../pageCache'
 import LevelTag from '../../components/LevelTag'
+import PageHeader from '../../components/PageHeader'
 import { Bar, LoadingLabel } from '../../components/Skeleton'
 import { skillName } from '../../skillName'
 import { Busy } from '../../components/Spinner'
@@ -38,7 +39,15 @@ const monogram = (name = '') => (name.match(/[A-Za-z]+/g) || []).slice(0, 2).map
 function NoSkillsState() {
   const navigate = useNavigate()
   return (
-    <div className="h-screen flex flex-col items-center justify-center gap-5 px-4 sm:px-8 text-center">
+    // 25 Nov (axe on a new student's page: no h1): the same header as the full page, the message under it
+    <div className="flex h-[calc(100dvh-var(--bar-h))] flex-col">
+      <PageHeader>
+        <div className="pb-4">
+          <p className="text-[11px] font-semibold text-blue-600 uppercase tracking-widest mb-2">Job Matches</p>
+          <h1 className="text-2xl font-semibold tracking-tight text-slate-900">Jobs that fit your skills</h1>
+        </div>
+      </PageHeader>
+    <div className="flex-1 min-h-0 flex flex-col items-center justify-center gap-5 px-4 sm:px-8 text-center">
       <div className="w-12 h-12 rounded-tile bg-accent-soft flex items-center justify-center">
         <svg className="w-6 h-6 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
@@ -57,6 +66,7 @@ function NoSkillsState() {
         </svg>
         Go to My Profile
       </button>
+    </div>
     </div>
   )
 }
@@ -238,15 +248,16 @@ export default function Recommend() {
   if (skillCount === null) return (
     <div className="flex h-[calc(100dvh-var(--bar-h))] flex-col" aria-busy="true">
       <LoadingLabel>Loading your job matches…</LoadingLabel>
-      <div className="shrink-0 px-4 pb-2 pt-3 sm:px-6">
-        <div className="pb-4 pt-1">
-          <h1 className="m-0 font-display text-[27px] font-bold leading-[1.1] tracking-[-0.03em] text-ink">Job matches</h1>
+      <PageHeader>
+        <div className="pb-4">
+          <p className="text-[11px] font-semibold text-blue-600 uppercase tracking-widest mb-2">Job Matches</p>
+          <h1 className="text-2xl font-semibold tracking-tight text-slate-900">Jobs that fit your skills</h1>
           <Bar className="mt-2 h-3.5 w-72" />
           <Bar className="mt-4 h-11 w-full rounded-control" />
           <div className="mt-3 flex gap-2">{['w-28', 'w-36', 'w-36'].map((w, i) => <Bar key={i} className={`h-9 ${w} rounded-pill`} />)}</div>
         </div>
-      </div>
-      <div className="flex-1 overflow-hidden px-4 pb-4 sm:px-6"><JobCardsSkeleton /></div>
+      </PageHeader>
+      <div className="flex-1 overflow-hidden px-4 pb-4 pt-3 sm:px-8"><JobCardsSkeleton /></div>
     </div>
   )
 
@@ -392,15 +403,17 @@ export default function Recommend() {
   const nOn = [location !== 'all', activeCategory !== 'all', fit !== 'all', hideSenior].filter(Boolean).length
   return (
     <div className="mx-auto flex h-[calc(100dvh-var(--bar-h))] w-full max-w-[1240px] flex-col">
-      <div className="shrink-0 px-4 pt-3 pb-3 sm:px-6">
-        <div className="dash-featured dash-rise-in rounded-[28px] border px-5 pt-4 pb-1 sm:px-6">
-          <div className="mb-3 flex items-start justify-between gap-4">
-            {/* 20 Nov (her review): the line sits beside the title, so the card is one line lower */}
-            <div className="min-w-0 flex flex-wrap items-baseline gap-x-3 gap-y-0.5">
-              <h1 className="m-0 font-display text-[32px] font-extrabold leading-[1.05] tracking-[-0.04em] text-ink max-sm:text-[26px]">Job matches</h1>
-              <p className="m-0 text-small text-muted max-sm:hidden">
+      {/* 25 Nov (her review: "make it same as other pages"): the shared glass header (icon tile, blue label, title,
+          one line), with the search and the filters inside it */}
+      <PageHeader>
+        <div>
+          <div className="mb-3 flex items-start justify-between gap-4 max-sm:items-center">
+            <div className="min-w-0">
+              <p className="text-[11px] font-semibold text-blue-600 uppercase tracking-widest mb-2">Job Matches</p>
+              <h1 className="text-2xl font-semibold tracking-tight text-slate-900">Jobs that fit your skills</h1>
+              <p className="text-sm text-slate-500 mt-1">
                 From your skill profile
-                {results && <span className="text-faint"> · {results.total_jobs_compared} openings compared</span>}
+                {results && <span> · {results.total_jobs_compared} openings compared</span>}
               </p>
             </div>
             {/* A visible button: matches come from the profile, so updating it is the main way to change them */}
@@ -449,9 +462,9 @@ export default function Recommend() {
             <div className="ml-auto">{sortSelect}</div>
           </div>
         </div>
-      </div>
+      </PageHeader>
 
-      <div ref={listRef} className="scroll-y min-h-0 flex-1 px-4 pb-4 sm:px-6">
+      <div ref={listRef} className="scroll-y min-h-0 flex-1 px-4 pt-3 pb-4 sm:px-8">
         {loading && (
           <>
           <div className="flex flex-col items-center justify-center pt-6 pb-5 gap-4">
