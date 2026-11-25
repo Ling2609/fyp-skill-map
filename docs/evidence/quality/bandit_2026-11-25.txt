@@ -1,0 +1,15 @@
+[tester]	WARNING	nosec encountered (B105), but no failed test on file app\nlp\skill_extractor.py:406
+[tester]	WARNING	nosec encountered (B105), but no failed test on file app\nlp\skill_extractor.py:420
+[manager]	WARNING	Test in comment: token is not a test name or id, ignoring
+[manager]	WARNING	Test in comment: type is not a test name or id, ignoring
+[manager]	WARNING	Test in comment: not is not a test name or id, ignoring
+[manager]	WARNING	Test in comment: a is not a test name or id, ignoring
+[manager]	WARNING	Test in comment: password is not a test name or id, ignoring
+[tester]	WARNING	nosec encountered (B105), but no failed test on file app\routers\auth.py:255
+[tester]	WARNING	nosec encountered (B105), but no failed test on file app\routers\auth.py:255
+[tester]	WARNING	nosec encountered (B105), but no failed test on file app\routers\auth.py:576
+[tester]	WARNING	nosec encountered (B105), but no failed test on file app\routers\auth.py:576
+[tester]	WARNING	nosec encountered (B106), but no failed test on file app\routers\auth.py:609
+[tester]	WARNING	nosec encountered (B607), but no failed test on file app\services\evaluation_runs.py:44
+[tester]	WARNING	nosec encountered (B603), but no failed test on file app\services\evaluation_runs.py:44
+[tester]	WARNING	nosec encountered (B615), but no failed test on file app\services\skill_relation.py:75

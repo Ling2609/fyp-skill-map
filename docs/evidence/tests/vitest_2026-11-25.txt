@@ -1,0 +1,13 @@
+
+> frontend@0.0.0 test
+> vitest run
+
+
+ RUN  v5.0.5 C:/Users/Ling/Desktop/fyp-skill-map/frontend
+
+
+ Test Files  17 passed (17)
+      Tests  125 passed (125)
+   Start at  15:48:16
+   Duration  9.78s (environment 83%, setup 10%, tests 4%, import 2%, transform 1%)
+

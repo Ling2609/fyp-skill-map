@@ -1,0 +1,28 @@
+Found 21 known vulnerabilities in 5 packages
+Name       Version ID                  Fix Versions
+---------- ------- ------------------- ------------
+dnspython  2.8.0   CVE-2026-114605     2.9.0
+dnspython  2.8.0   CVE-2026-128089     2.9.2
+filelock   3.32.6  CVE-2026-112940     4.2.1
+filelock   3.32.6  CVE-2026-112913     4.2.1
+filelock   3.32.6  CVE-2026-112907     4.2.1
+filelock   3.32.6  CVE-2026-112938     4.2.1
+filelock   3.32.6  CVE-2026-112936     4.0.9
+filelock   3.32.6  CVE-2026-112910     4.2.1
+filelock   3.32.6  CVE-2026-112909     4.2.1
+filelock   3.32.6  CVE-2026-112911     4.2.1
+filelock   3.32.6  CVE-2026-112939     4.2.1
+filelock   3.32.6  CVE-2026-112915     4.2.1
+filelock   3.32.6  CVE-2026-112935     4.2.1
+filelock   3.32.6  CVE-2026-112912     4.2.1
+filelock   3.32.6  CVE-2026-112908     4.2.1
+pyasn1     0.6.4   CVE-2026-119196     0.6.5
+pyasn1     0.6.4   CVE-2026-119194     0.6.5
+pyasn1     0.6.4   CVE-2026-119197     0.6.5
+pyasn1     0.6.4   CVE-2026-119195     0.6.5
+pymongo    4.18.2  CVE-2026-106435     4.18.3
+setuptools 84.0.0  GHSA-xmj3-9gf7-h52w 84.1.0
+
+Name           Skip Reason
+-------------- -----------------------------------------------------------------------------
+en-core-web-sm Dependency not found on PyPI and could not be audited: en-core-web-sm (3.8.0)

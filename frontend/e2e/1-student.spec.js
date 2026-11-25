@@ -61,7 +61,9 @@ test.describe.serial('Student', () => {
     expect(took, 'applying took longer than 1 second (RAIL)').toBeLessThan(1000)
     await page.goto('/applications')
     await expect(page.getByText('Graduate Software Engineer').first()).toBeVisible()
-    await expect(page.getByText('Applied').first()).toBeVisible()
+    // 25 Nov: the phone tab bar's "Applied" label is in the page too (hidden on a laptop), so look in the page's
+    // content (main) and only at what shows
+    await expect(page.getByRole('main').getByText('Applied', { exact: true }).filter({ visible: true }).first()).toBeVisible()
     await shot(page, 'TC-28_applied')
   })
 })
