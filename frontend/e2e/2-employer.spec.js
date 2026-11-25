@@ -20,8 +20,8 @@ test.describe.serial('Employer', () => {
     await page.goto('/employer/jobs')
     await page.getByRole('row', { name: /Graduate Software Engineer/ }).getByRole('link', { name: 'View applicants' }).click()
     await page.getByText('Daniel Lim').click()
-    // before: no email, and the page says why
-    await expect(page.getByText('Email and phone appear after you shortlist this applicant.')).toBeVisible()
+    // before: no email, and the page says why (19 Nov redesign: "Email and phone are hidden until you shortlist Daniel.")
+    await expect(page.getByText('Email and phone are hidden', { exact: true })).toBeVisible()
     await expect(page.getByRole('link', { name: APPLICANT })).toHaveCount(0)
     // shortlist: the email appears
     await page.getByLabel('Status for this job').selectOption('shortlisted')

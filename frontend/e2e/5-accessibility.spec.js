@@ -33,8 +33,8 @@ test('TC-66 the pages and pop-ups of each role have no accessibility problems th
     await page.goto(path); pages.push(await scan(page, name))
   }
   await page.goto('/recommend')
-  await page.getByRole('link', { name: 'Graduate Software Engineer' }).click(); pages.push(await scan(page, 'Job Detail'))
-  await page.getByRole('tab', { name: 'Skill Gap Analysis' }).click(); pages.push(await scan(page, 'Job Detail: skill gap'))
+  // 19 Nov redesign: no tabs; the ad and the skill gap are side by side, so one scan covers both
+  await page.getByRole('link', { name: 'Graduate Software Engineer' }).click(); pages.push(await scan(page, 'Job Detail (ad + skill gap)'))
   // pop-ups and forms appear only after a click, so each is opened and scanned too (then closed, nothing saved)
   await page.goto('/profile?tab=projects')
   await page.getByRole('button', { name: '+ Add project' }).first().click(); pages.push(await scan(page, 'Add project form'))
