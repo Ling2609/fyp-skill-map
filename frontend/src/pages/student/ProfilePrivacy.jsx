@@ -109,13 +109,14 @@ export default function ProfilePrivacy() {
           <h1 className="text-2xl font-semibold tracking-tight text-slate-900">Profile &amp; privacy</h1>
           <p className="text-sm text-slate-500 mt-1">What employers read about you, and what they can see.</p>
         </div>
-        <div className="pp-visible text-right">
-          <div className="flex items-center justify-end gap-5">
-            <label className="flex items-center gap-2.5 text-sm text-slate-700 cursor-pointer">
+        {/* 25 Nov (her phone review): on a phone the switch and the preview link each keep one line, left-aligned */}
+        <div className="pp-visible text-right max-sm:text-left max-sm:w-full">
+          <div className="flex items-center justify-end gap-5 max-sm:flex-wrap max-sm:justify-start max-sm:gap-y-2">
+            <label className="flex items-center gap-2.5 text-sm text-slate-700 cursor-pointer whitespace-nowrap">
               <Switch checked={form.visible_to_employers} onChange={v => set('visible_to_employers', v)} />
               Visible to employers
             </label>
-            <Link to="/profile/preview" className="text-sm font-medium text-blue-700 hover:underline">Preview as employer</Link>
+            <Link to="/profile/preview" className="text-sm font-medium text-blue-700 hover:underline whitespace-nowrap">Preview as employer</Link>
           </div>
           <p className="text-xs text-slate-500 mt-1">{form.visible_to_employers
             ? 'Employers whose jobs fit you can find you and invite you to apply.'

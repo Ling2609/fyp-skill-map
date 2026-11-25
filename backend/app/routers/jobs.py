@@ -119,39 +119,39 @@ def get_locations(db: Session = Depends(get_db)):
     return [{"country": country, "location": location} for country, location in rows]
 
 
-@router.get("/{job_id}/description")
-def get_job_description(
-    job_id: str,
-    db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user),  # logged-in only: this can call Groq
-):
-    decoded_id = job_id.replace("%2E", ".").replace("%20", " ")
-    job = db.query(Job).filter(Job.job_id == decoded_id).first()
-    if not job:
-        raise HTTPException(status_code=404, detail="Job not found")
+def cached_bullets(job: Job) -> list[str] | None:
+    """The stored tidy version, if it is a good one (has headings, isn't one wall of text); None means redo it."""
+    if not job.formatted_description:
+        return None
+    try:
+        bullets = json.loads(job.formatted_description)
+    except json.JSONDecodeError:
+        return None
+    # 25 Nov: the ad's own text laid out by rules (saved when Gemini's version isn't safe) is final too; before, it
+    # had no headings, so every visit asked Gemini again (5-21 s each, counted in the student's AI allowance)
+    if bullets and bullets == format_description_rules(job.description or ""):
+        return bullets
+    has_headers = any(b.startswith('## ') for b in bullets)
+    is_wall = len(bullets) <= 1 and any(len(b) > 300 for b in bullets)
+    return bullets if bullets and has_headers and not is_wall else None
 
+
+def description_of(job: Job, db: Session) -> dict:
+    """The job ad as Job Detail shows it. 25 Nov: one function for the page and for
+    scripts/tools/format_all_descriptions.py (tidies every live ad before testers come), so the two can't drift."""
     # 18 Oct: an employer's own post is shown as the employer wrote it (line breaks and headings only), never
     # rewritten by an AI: Gemini turned a post that said only "test ttttt..." into a full invented advert
     if job.source == "employer":
         return {"bullets": format_description_rules(job.description or ""), "cached": True}
 
-    # Return cached version only if it looks well-formatted
-    if job.formatted_description:
-        try:
-            bullets = json.loads(job.formatted_description)
-            has_headers = any(b.startswith('## ') for b in bullets)
-            is_wall = len(bullets) <= 1 and any(len(b) > 300 for b in bullets)
-            if bullets and has_headers and not is_wall:
-                return {"bullets": bullets, "cached": True}
-            # Bad cache — fall through to regenerate
-        except json.JSONDecodeError:
-            pass
+    bullets = cached_bullets(job)          # a bad stored version falls through and is made again
+    if bullets:
+        return {"bullets": bullets, "cached": True}
 
     if not job.description:
         return {"bullets": [], "cached": False}
 
     bullets = []
-
     try:
         extractor = get_extractor()
         llm_bullets = extractor.format_job_description(job.job_title, job.description)   # Gemini
@@ -173,6 +173,19 @@ def get_job_description(
         db.commit()
 
     return {"bullets": bullets, "cached": False}
+
+
+@router.get("/{job_id}/description")
+def get_job_description(
+    job_id: str,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),  # logged-in only: this can call Groq
+):
+    decoded_id = job_id.replace("%2E", ".").replace("%20", " ")
+    job = db.query(Job).filter(Job.job_id == decoded_id).first()
+    if not job:
+        raise HTTPException(status_code=404, detail="Job not found")
+    return description_of(job, db)
 
 @router.get("/")
 def get_jobs(skip: int = 0, limit: int = 20, db: Session = Depends(get_db)):

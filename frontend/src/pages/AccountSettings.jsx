@@ -35,19 +35,21 @@ function Field({ label, children }) {
 function Row({ label, value, action, onAction, note, open, children, danger }) {
   return (
     <div className="acct-row py-4 border-t border-slate-200 first:border-t-0">
-      <div className="flex items-center gap-4">
-        <p className="w-32 shrink-0 text-sm text-slate-500">{label}</p>
-        <p className="flex-1 min-w-0 text-sm text-slate-800 truncate">{value}</p>
+      {/* 25 Nov (her phone review): on a phone, label and action on one line, the value on its own line under them
+          (the email was cut to "e2e.stud…" and "Download my data" wrapped) */}
+      <div className="flex items-center gap-4 max-sm:grid max-sm:grid-cols-[1fr_auto] max-sm:gap-x-3 max-sm:gap-y-0.5">
+        <p className="w-32 shrink-0 text-sm text-slate-500 max-sm:w-auto max-sm:row-start-1">{label}</p>
+        <p className="flex-1 min-w-0 text-sm text-slate-800 truncate max-sm:col-span-2 max-sm:row-start-2 max-sm:whitespace-normal max-sm:break-words">{value}</p>
         {action && !open && (
           <button onClick={onAction}
-            className={`text-sm font-semibold focus:outline-none focus-visible:ring-2 ${danger
+            className={`max-sm:col-start-2 max-sm:row-start-1 max-sm:justify-self-end text-sm font-semibold focus:outline-none focus-visible:ring-2 ${danger
               ? 'acct-danger' : 'px-2 py-1 rounded text-blue-600 hover:text-blue-800 focus-visible:ring-blue-200'}`}>
             {action}
           </button>
         )}
-        {note && <span className="text-xs text-slate-500">{note}</span>}
+        {note && <span className="text-xs text-slate-500 max-sm:col-span-2">{note}</span>}
       </div>
-      {open && <div className="mt-4 ml-36 max-w-md">{children}</div>}
+      {open && <div className="mt-4 sm:ml-36 max-w-md">{children}</div>}
     </div>
   )
 }

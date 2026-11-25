@@ -99,7 +99,7 @@ export default function MyPlans() {
   }
 
   return (
-    <div className="flex h-[calc(100dvh-var(--bar-h))] flex-col max-sm:h-[calc(100dvh-var(--bar-h)-6rem)]">
+    <div className="flex h-[calc(100dvh-var(--bar-h))] flex-col">
       {confirmation}
       <PageHeader>
         <div className="flex flex-wrap items-start justify-between gap-3 pb-4 pt-1">

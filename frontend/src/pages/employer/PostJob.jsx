@@ -274,7 +274,7 @@ export default function PostJob() {
   const byLevel = useMemo(() => Object.fromEntries(BOXES.map(b => [b.level, skills.filter(s => s.level === b.level)])), [skills])
 
   return (
-    <div className="flex flex-col h-[calc(100dvh-var(--bar-h))] max-sm:h-[calc(100vh-var(--bar-h)-6rem)]">
+    <div className="flex flex-col h-[calc(100dvh-var(--bar-h))]">
       <PageHeader>
         <div className="pb-5 flex flex-wrap items-center gap-x-6 gap-y-3">
           <div className="min-w-0 flex-1 basis-96">

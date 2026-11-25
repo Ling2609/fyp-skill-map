@@ -115,18 +115,18 @@ export default function MyProfile() {
           {/* 21 Oct (her pick after research: LinkedIn shows its profile meter on the profile page) */}
             <ProfileTracker done={doneFrom({ ...data, projects, experiences, certifications: certs, awards })} onGo={chooseTab} />
             {/* 21 Oct (her idea): what employers see, any time (pages/student/EmployerPreview.jsx) */}
-            <Link to="/profile/preview" aria-label="Preview as employer" title="Preview as employer" className="flex items-center gap-2 h-9 text-[13px] font-semibold text-ink border border-line-strong bg-white rounded-control px-3 hover:bg-well">
+            <Link to="/profile/preview" aria-label="Preview as employer" title="Preview as employer" className="ph-icon flex items-center gap-2 h-9 text-[13px] font-semibold text-ink border border-line-strong bg-white rounded-control px-3 hover:bg-well">
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
               </svg>
-              Preview</Link>
+              <span className="ph-sr">Preview</span></Link>
             {/* 21 Oct (her rename): Links & visibility became the Profile & privacy page (ProfilePrivacy.jsx) */}
-            <Link to="/profile/settings" aria-label="Profile and privacy" title="Profile & privacy" className="flex items-center gap-2 h-9 text-[13px] font-semibold text-accent-strong border border-[#c8d7f4] bg-accent-soft rounded-control px-3 hover:bg-[#d6e2f8]">
+            <Link to="/profile/settings" aria-label="Profile and privacy" title="Profile & privacy" className="ph-icon flex items-center gap-2 h-9 text-[13px] font-semibold text-accent-strong border border-[#c8d7f4] bg-accent-soft rounded-control px-3 hover:bg-[#d6e2f8]">
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
               </svg>
-              Privacy
+              <span className="ph-sr">Privacy</span>
             </Link>
     </>
   )

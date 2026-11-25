@@ -345,7 +345,12 @@ export default function Chatbot() {
   }, [chatKey]) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
+    // 25 Nov (her phone review): scroll only the message list. scrollIntoView also moved the page itself, which on a
+    // phone pushed the header under the top bar
+    const end = bottomRef.current
+    let box = end?.parentElement
+    while (box && !/(auto|scroll)/.test(getComputedStyle(box).overflowY)) box = box.parentElement
+    if (box) box.scrollTo({ top: box.scrollHeight, behavior: 'smooth' })
   }, [messages, loading])
 
   const downloadPlan = async (msg, idx) => {

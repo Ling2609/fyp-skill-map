@@ -1,132 +1,61 @@
 """
-Format All Job Descriptions
-============================
-Pre-processes all job descriptions using Groq and stores results in DB.
-Run once — results cached permanently.
+Tidy every live job ad before testers come (rewritten 25 Nov 2026)
+==================================================================
+The first student to open a job ad that has never been tidied waits while Gemini rewrites it (5-21 s in the
+25 Nov response-time test, docs/evidence/performance/summary.txt). Run this once before user testing, and after
+fetching new live jobs, so nobody waits.
 
-Usage:
-  cd backend
-  python scripts/tools/format_all_descriptions.py
+It does exactly what Job Detail does, through the same function (app/routers/jobs.py description_of):
+  - only ads students can see now (current_jobs_filter), never an employer's own post (shown as written, 18 Oct)
+  - an ad that already has a good tidy version is left alone (a bad one is made again, as the page would)
+  - Gemini tidies the ad; if it adds any text that isn't in the ad, or gives fewer than 3 points, the ad's own
+    text is laid out by rules instead (18 Oct grounding check)
+  - one Gemini call at a time, with a pause between them (default 6 s, about 10 a minute, inside the free tier)
 
-Options:
-  --preview    Show first 5 jobs without saving (dry run)
-  --reset      Clear all cached descriptions before processing
+Usage (backend/, venv on; uses DATABASE_URL from .env):
+  python scripts/tools/format_all_descriptions.py --dry-run     # only count what would be tidied
+  python scripts/tools/format_all_descriptions.py               # tidy them
+  python scripts/tools/format_all_descriptions.py --pause 10    # slower, if Gemini says "too many requests"
 """
 
-import sys
-import json
-import time
 import argparse
+import sys
+import time
+
 sys.path.append(".")
 
-from app.database import SessionLocal
-from app.models.job import Job
-from app.nlp.skill_extractor import SkillExtractor
-
-
-def preview_jobs(db, extractor, limit=5):
-    """Show formatting preview without saving."""
-    jobs = db.query(Job).limit(limit).all()
-    print(f"\n{'='*60}")
-    print("PREVIEW MODE — not saving to DB")
-    print(f"{'='*60}")
-
-    for job in jobs:
-        if not job.description:
-            continue
-        print(f"\n--- {job.job_title} @ {job.company} ---")
-        print(f"Raw description length: {len(job.description)} chars")
-        print(f"Double spaces: {job.description.count('  ')}")
-        print("\nFormatted output:")
-        bullets = extractor.format_job_description(job.job_title, job.description)
-        for b in bullets:
-            if b.startswith('## '):
-                print(f"\n  [{b}]")
-            elif b.startswith('### '):
-                print(f"    [{b}]")
-            else:
-                print(f"  • {b[:80]}{'...' if len(b) > 80 else ''}")
-        time.sleep(2)
-
-
-def process_all(db, extractor, reset=False):
-    """Process all jobs and cache formatted descriptions."""
-    if reset:
-        print("Resetting all cached descriptions...")
-        db.query(Job).update({Job.formatted_description: None})
-        db.commit()
-        print("Done.\n")
-
-    jobs = db.query(Job).all()
-    total = len(jobs)
-    skipped = 0
-    processed = 0
-    failed = 0
-
-    print(f"\n{'='*60}")
-    print(f"Processing {total} jobs...")
-    print(f"{'='*60}")
-
-    for i, job in enumerate(jobs, 1):
-        # Skip if already formatted
-        if job.formatted_description and not reset:
-            skipped += 1
-            continue
-
-        if not job.description:
-            skipped += 1
-            continue
-
-        print(f"\n[{i}/{total}] {job.job_title[:50]}")
-        print(f"  Length: {len(job.description)} | Double spaces: {job.description.count('  ')}")
-
-        try:
-            bullets = extractor.format_job_description(job.job_title, job.description)
-
-            from app.services.description_check import ungrounded
-            if bullets and ungrounded(bullets, job.description):     # 18 Oct: never save text that isn't in the ad
-                print("  ✗ Gemini added text not in the ad — skipping (Job Detail shows the ad's own text)")
-                failed += 1
-            elif bullets and len(bullets) >= 2:
-                job.formatted_description = json.dumps(bullets)
-                db.commit()
-                processed += 1
-                print(f"  ✓ Formatted: {len(bullets)} bullets")
-            else:
-                print(f"  ✗ Too few bullets ({len(bullets)}) — skipping")
-                failed += 1
-
-        except Exception as e:
-            print(f"  ✗ Error: {e}")
-            failed += 1
-
-        # Rate limit
-        if i < total:
-            time.sleep(2)
-
-    print(f"\n{'='*60}")
-    print("COMPLETE")
-    print(f"{'='*60}")
-    print(f"  Processed:  {processed}")
-    print(f"  Skipped:    {skipped} (already done or no description)")
-    print(f"  Failed:     {failed}")
-    print(f"  Total:      {total}")
+from app.database import SessionLocal  # noqa: E402
+from app.models.job import Job  # noqa: E402
+from app.routers.jobs import cached_bullets, current_jobs_filter, description_of, format_description_rules  # noqa: E402
 
 
 def main():
-    parser = argparse.ArgumentParser(description='Format all job descriptions')
-    parser.add_argument('--preview', action='store_true', help='Preview first 5 jobs without saving')
-    parser.add_argument('--reset', action='store_true', help='Clear all cached descriptions before processing')
+    parser = argparse.ArgumentParser(description="Tidy every live job ad, as Job Detail would")
+    parser.add_argument("--dry-run", action="store_true", help="only count the ads that would be tidied")
+    parser.add_argument("--pause", type=float, default=6.0, help="seconds between Gemini calls (default 6)")
     args = parser.parse_args()
 
-    extractor = SkillExtractor()
     db = SessionLocal()
-
     try:
-        if args.preview:
-            preview_jobs(db, extractor)
-        else:
-            process_all(db, extractor, reset=args.reset)
+        live = current_jobs_filter(db.query(Job)).filter(Job.source != "employer").order_by(Job.id).all()
+        todo = [j for j in live if j.description and cached_bullets(j) is None]
+        print(f"{len(live)} live ads (employer posts are shown as written and not counted); {len(todo)} to tidy")
+        if args.dry_run or not todo:
+            return
+        by_ai = by_rules = 0
+        for i, job in enumerate(todo, 1):
+            started = time.time()
+            bullets = description_of(job, db)["bullets"]
+            # the page saves Gemini's version, or the ad's own text laid out by rules when Gemini's isn't safe
+            rules = bullets == format_description_rules(job.description)
+            by_rules += rules
+            by_ai += not rules
+            print(f"[{i}/{len(todo)}] {job.job_title[:55]:<55} {'own text (rules)' if rules else 'tidied by Gemini'}"
+                  f"  {time.time() - started:4.1f} s")
+            if i < len(todo):
+                time.sleep(args.pause)
+        print(f"\nDone: {by_ai} tidied by Gemini, {by_rules} kept as the ad's own text. "
+              f"Run again with --dry-run: it should say 0 to tidy.")
     finally:
         db.close()
 

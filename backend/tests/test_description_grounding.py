@@ -55,3 +55,17 @@ def test_invented_answer_for_a_live_ad_is_dropped(client, users, db, monkeypatch
     saved = sql(db, "select formatted_description from jobs where job_id='live_grounding_t'").scalar()
     assert "dental" not in (saved or "")
     assert json.loads(saved) == bullets
+
+
+def test_the_ads_own_layout_is_final(client, users, db, monkeypatch):
+    """25 Nov: once Gemini's version was rejected and the ad's own text saved, later visits don't ask Gemini again
+    (before, a saved layout without headings was redone on every visit)"""
+    from app.routers.jobs import format_description_rules
+    ad = "Junior Developer.  Python and SQL.  Good English."          # no section headings, so no "## " lines
+    sql(db, "insert into jobs (job_id, job_title, company, location, description, formatted_description, source) "
+            "values ('live_own_layout_t', 'Junior Developer', 'Acme', 'Kuala Lumpur', :d, :f, 'live')",
+        d=ad, f=json.dumps(format_description_rules(ad)))
+    monkeypatch.setattr(jobs_router, "get_extractor", lambda: Boom())   # any Gemini call fails the test
+    r = client.get("/jobs/live_own_layout_t/description", headers=users.h(users.student()))
+    assert r.status_code == 200, r.text
+    assert r.json() == {"bullets": format_description_rules(ad), "cached": True}
