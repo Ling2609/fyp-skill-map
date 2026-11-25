@@ -33,7 +33,9 @@ test.describe.serial('Employer', () => {
     await signIn(page, APPLICANT)
     await page.goto('/applications')
     await expect(page.getByText('Graduate Software Engineer').first()).toBeVisible()
-    await expect(page.getByText('Shortlisted').first()).toBeVisible()
+    // the application's progress: the "Shortlisted" step is done (the first "Shortlisted" text on the page is a hidden
+    // word in the closed "How it works" pop-over, so the test looks at the progress steps themselves)
+    await expect(page.getByLabel('Progress').first().getByRole('listitem').filter({ hasText: 'Shortlisted' })).toContainText('done')
     await shot(page, 'TC-38_student_sees_shortlisted')
   })
 })

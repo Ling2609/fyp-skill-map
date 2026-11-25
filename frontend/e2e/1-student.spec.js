@@ -35,10 +35,10 @@ test.describe.serial('Student', () => {
     await page.getByText('Graduate Software Engineer').first().click()
     await page.waitForURL(/\/jobs\//)
     // Python matched (from her module); SQL and Git are the gap. 19 Nov redesign: no tabs; the gap sits beside the ad,
-    // with a fit bar ("You have 1 of the 3 required skills") and two groups, "You have" (1) and "To learn" (2)
+    // with a fit bar in the header and a Skill gap panel that opens on its Chart view: 1 matched, 2 to learn, of 3
     await expect(page.getByRole('img', { name: /You have 1 of the 3 required skills/ })).toBeVisible()
-    await expect(page.getByRole('heading', { name: /^You have\s*1/ })).toBeVisible()
-    await expect(page.getByRole('heading', { name: /^To learn\s*2/ })).toBeVisible()
+    await expect(page.getByRole('figure', { name: 'Required skills 1 of 3' })).toBeVisible()
+    await expect(page.getByRole('group', { name: /1 matched, 2 to learn, 3 total/ })).toBeVisible()
     await shot(page, 'TC-16_job_detail_gap')
   })
 
