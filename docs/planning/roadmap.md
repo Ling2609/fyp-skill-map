@@ -1,8 +1,23 @@
 # SkillMap Roadmap & To-do
 
-Last updated: 16 Nov 2026 (see Start here). Before: 10 Nov 2026. Before: 29 Oct 2026. Before: 28 Oct 2026. Before: 25 Oct 2026. Before: 24 Oct 2026. Before: 21 Oct 2026, evening. Earlier: 8 Oct 2026, 13:50. Pushed and verified today: c0379d5, 9d18feb, a26855d, bc636e4, 2778718, ab88194, 28d5a44, 807852f, 25c884d (first relation model run), d24d998 (small fixes), df9266b (its CHANGELOG entry), f5d81ce + fffdb3d + d2037dc + ca9b64a (Stage 2B reference set, 3 judges). **Morning 2 Oct:** merge script → her ~50 spot-check (own judgement, no AI) → evaluation script (cosine vs model on 204 unanimous / 374 majority, per band + weighted) → decide 2C or v2; Groq budget: last 4 seed-7 ads, E1 level check, paid-Groq decision; book Mr Au. Next: when Groq resets — last 4 seed-7 ads, reference set of real SkillMap pairs (3 judges), v2 training pairs; then compare cosine vs model on real pairs before the model goes into the app.
+Last updated: 25 Nov 2026 (see Start here). Before: 16 Nov 2026. Before: 10 Nov 2026. Before: 29 Oct 2026. Before: 28 Oct 2026. Before: 25 Oct 2026. Before: 24 Oct 2026. Before: 21 Oct 2026, evening. Earlier: 8 Oct 2026, 13:50. Pushed and verified today: c0379d5, 9d18feb, a26855d, bc636e4, 2778718, ab88194, 28d5a44, 807852f, 25c884d (first relation model run), d24d998 (small fixes), df9266b (its CHANGELOG entry), f5d81ce + fffdb3d + d2037dc + ca9b64a (Stage 2B reference set, 3 judges). **Morning 2 Oct:** merge script → her ~50 spot-check (own judgement, no AI) → evaluation script (cosine vs model on 204 unanimous / 374 majority, per band + weighted) → decide 2C or v2; Groq budget: last 4 seed-7 ads, E1 level check, paid-Groq decision; book Mr Au. Next: when Groq resets — last 4 seed-7 ads, reference set of real SkillMap pairs (3 judges), v2 training pairs; then compare cosine vs model on real pairs before the model goes into the app.
 
 ## ▶ Start here next session
+
+### Current update — 25 Nov 2026: feature-complete; test, deploy, then user testing
+
+- **Built since 16 Nov** (details in CHANGELOG, 17–25 Nov): UI redesign, workshop planner, My Plans, registration email
+  verification, deployment audit items 2–7 (production checks, atomic counters, usage limits per user and per address),
+  limit messages shown where users look. Latest commit `1b3372c`.
+- **Design documents updated 25 Nov** (in `fyp_diagram`): class diagrams (entity with composition/aggregation + design
+  class diagram with methods), 8 sequence diagrams (reviewed against the code), use case specification with the common
+  exception CE01 for limits, logical architecture (Gmail SMTP, Gemini, PostgreSQL 18, MongoDB contents).
+- **Next, in order** (deadline 16 Dec; full report to the supervisor by 11 Dec):
+  1. Full local test run on `1b3372c`: quality (ruff, bandit, eslint, build), Vitest, pytest with coverage, pip/npm audit,
+     Playwright e2e, other browsers, phone sizes, Lighthouse, performance. Evidence in `docs/evidence/`.
+  2. Deploy: Azure for Students VM (Docker Compose), HTTPS, `PRODUCTION=1` (deployment audit item 1). Then a smoke test.
+  3. User acceptance testing with at least 3 real users (student, employer, career office), with SUS; on the live site.
+  4. Deployment diagram + Azure in the architecture diagram; report chapters 4–6.
 
 ### Current update — 16 Nov 2026: decision-date intake guard
 

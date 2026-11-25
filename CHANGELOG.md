@@ -3,6 +3,31 @@
 What changed, when, and in which commit. Newest first. Built from `git log` (full detail: `git log --oneline`).
 Planning, reasoning and research behind each decision are in the project roadmap and references.
 
+## 17–25 Nov 2026 — Redesign, workshop planner, My Plans, email verification and the deployment audit fixes
+
+- **UI redesign (`7b55088`, 19 Nov; then `9cbf918` … `280fe29`, 20–22 Nov):** sidebar navigation (icon rail on tablets,
+  bottom tab bar on phones), glass page headers with count strips, every list and dashboard page fits one screen (long lists
+  scroll inside their card), charts on the admin and employer dashboards, phone and tablet layouts for the admin pages,
+  My Jobs and the applicant page. Employer registration asks for the company's SSM number (website optional).
+- **Workshop planner for the career office (`49ef78c`, `67c261e`, `40af96d`, `8d53017`):** pick skill gaps, draft a
+  proposal (Groq, with a template fallback), autosave to MongoDB `workshop_proposals`, redraft, copy, PDF.
+- **My Plans (`e0c4c31`, `c5dc7aa`, `5a09fb6`, `1cfe846`, `24fa72b`):** learning plans from the AI Assistant listed in one
+  place (read from saved chats, no new collection); PDFs with fillable tick boxes and justified text.
+- **Sessions and pop-ups (`5bcfd18`, `e58318d`):** a clear "signed out" path when a session expires, confirmation dialogs,
+  pop-ups and tooltips kept inside the window.
+- **Registration email verification (`cc96377`, `96dc46e`, `92ecad5`, 23–24 Nov):** a new account is unverified until its
+  6-digit emailed code is entered (10 minutes, 5 tries, 60 s between sends, 5 sends a day); HTML account emails with the
+  logo; verifying from Sign in signs the user straight in. Column `users.email_verified_at` and table `email_code_sends`
+  (`migrations/migrate_email_verified.py`; existing accounts were marked verified). Tests: `tests/test_email_verification.py`.
+- **Deployment audit, items 2–7 (`636c92d`, 25 Nov):** production start-up checks (`PRODUCTION=1` refuses weak or test
+  settings); failed sign-ins counted in one atomic statement; usage limits per user for every AI call (60 an hour, 200 a
+  day, at most 2 at once, slots renewed while a call runs) and per network address (sign-ups, sign-ins, password resets,
+  code resends), kept in the new table `request_counts` (`migrations/migrate_request_counts.py`). Tests: `tests/test_rate_limits.py`,
+  `tests/test_audit_concurrency.py`, `tests_unit/test_production_settings.py`. Item 1 (hosting) waits for the server.
+- **Limit messages where users look (`1b3372c`, 25 Nov):** Post a Job shows a reading error beside its button; profile
+  forms scroll their error into view; "Send again" on Check your email shows its own message.
+- **Not yet done:** the full test run on this commit (see `docs/evidence/tests/` once run), deployment, user acceptance testing.
+
 ## 16 Nov 2026 — First full test run since 26 Oct: 217 passed; one test made independent of leftover data
 
 - **Full backend suite (her laptop, Windows, Python 3.13.7, pytest 9.0.3, `tests/` and `tests_unit/`):** first run on the current
