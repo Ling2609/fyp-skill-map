@@ -262,7 +262,7 @@ export default function Applicants() {
               {/* 25 Oct (her ask): a tick box in the title strip selects every applicant shown that can still be
                   decided (Applied or Shortlisted); the strip is a layout-only table, so only that box is read out */}
               <div ref={strip} className={`shrink-0 overflow-hidden scrollbar-gutter-stable border-b ${sel.length ? 'bg-blue-50 border-blue-200' : 'bg-slate-50 border-slate-200'}`}>
-                <table role="presentation" className="w-full min-w-3xl table-fixed text-sm">
+                <table role="presentation" className="ph-strip w-full min-w-3xl table-fixed text-sm">
                   {APP_COLS}
                   <thead className="text-left text-xs font-semibold text-slate-500">
                     <tr><td className="pl-5 h-11 py-0 align-middle">
@@ -282,7 +282,7 @@ export default function Applicants() {
               </div>
               <div className="relative min-h-0 overflow-auto scrollbar-gutter-stable"
                 onScroll={e => { if (strip.current) strip.current.scrollLeft = e.currentTarget.scrollLeft }}>
-              <table className="w-full min-w-3xl table-fixed text-sm">
+              <table className="ph-cards w-full min-w-3xl table-fixed text-sm">
                 {APP_COLS}
                 {/* real column titles for screen readers; the visible ones are the strip above */}
                 <thead>
@@ -356,7 +356,7 @@ export default function Applicants() {
               more={!see && <MoreButton total={fitList.length} shown={gradsNow.length} onClick={() => seeAll('graduates')} />} />
             <div className={`${CARD} ${see ? 'min-h-0' : ''} flex flex-col overflow-hidden`}>
               <div ref={gstrip} className={`shrink-0 overflow-hidden scrollbar-gutter-stable border-b ${selG.length ? 'bg-blue-50 border-blue-200' : 'bg-slate-50 border-slate-200'}`}>
-                <table role="presentation" className="w-full min-w-3xl table-fixed text-sm">
+                <table role="presentation" className="ph-strip w-full min-w-3xl table-fixed text-sm">
                   {APP_COLS}
                   <thead className="text-left text-xs font-semibold text-slate-500">
                     <tr><td className="pl-5 h-11 py-0 align-middle">
@@ -374,7 +374,7 @@ export default function Applicants() {
               </div>
               <div className="relative min-h-0 overflow-auto scrollbar-gutter-stable"
                 onScroll={e => { if (gstrip.current) gstrip.current.scrollLeft = e.currentTarget.scrollLeft }}>
-              <table className="w-full min-w-3xl table-fixed text-sm">
+              <table className="ph-cards w-full min-w-3xl table-fixed text-sm">
                 {APP_COLS}
                 <thead>
                   <tr>{['Select', 'Graduate', 'Required skills they have', 'Nice to have', 'Invitation'].map(n =>

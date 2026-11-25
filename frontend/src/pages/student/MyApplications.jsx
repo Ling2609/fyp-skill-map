@@ -1,6 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import api from '../../api'
+import { cached, ALL_MATCHES } from '../../pageCache'
 import PageHeader, { HeadStats } from '../../components/PageHeader'
 import { Logo } from '../../components/ui/index.jsx'
 import { ADMIN_COUNTS_CHANGED } from '../../components/Sidebar'
@@ -19,12 +20,12 @@ import BackLink from '../../components/BackLink'
 // applying elsewhere, after 30 that this one is unlikely (MyCareersFuture: follow up after 1-2 weeks, move on after
 // about a month). Employers' invitations to apply sit on top. One column across the page width, newest update first (her review, 12 Oct). References: references.md "Application progress".
 const fmtDay = (iso) => iso ? new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }) : ''
-// 20 Oct (her review; blue is kept for things to click): grey = waiting, violet = moving forward, green = good news,
+// 20 Oct (her review; blue is kept for things to click): grey = waiting, gold = moving forward (25 Nov: violet became blue in the Ocean palette, and blue is for clicks), green = good news,
 // red = not selected. Statuses on other sites use the same colours (their select).
 const PILL = {
-  applied: 'bg-slate-100 text-slate-700', viewed: 'bg-slate-100 text-slate-700', shortlisted: 'bg-violet-50 text-violet-800',
+  applied: 'bg-slate-100 text-slate-700', viewed: 'bg-slate-100 text-slate-700', shortlisted: 'bg-amber-50 text-amber-800',
   accepted: 'bg-green-50 text-green-800', rejected: 'bg-rose-50 text-rose-700', closed: 'bg-slate-100 text-slate-600',
-  interviewing: 'bg-violet-50 text-violet-800', offer: 'bg-green-50 text-green-800', not_selected: 'bg-rose-50 text-rose-700',
+  interviewing: 'bg-amber-50 text-amber-800', offer: 'bg-green-50 text-green-800', not_selected: 'bg-rose-50 text-rose-700',
   withdrew: 'bg-slate-50 text-slate-500 border border-slate-200',
 }
 // 14 Oct (transparency flow): every outcome says why. Reasons the employer picked, or why the job closed.
@@ -166,7 +167,7 @@ function Note({ r }) {
   if (r.status === 'shortlisted') {
     const ask = `I've been shortlisted for ${r.title} at ${r.company}. Help me prepare for this interview: what they are likely to ask about this job, and how to answer with my own projects.`
     return (
-      <div className="mt-4 text-sm text-violet-900 bg-violet-50 rounded-lg px-3.5 py-2.5 flex flex-wrap items-center justify-between gap-x-4 gap-y-1">
+      <div className="mt-4 text-sm text-amber-900 bg-amber-50 rounded-lg px-3.5 py-2.5 flex flex-wrap items-center justify-between gap-x-4 gap-y-1">
         <p><b>Get ready: {r.company} may contact you soon.</b> Keep an eye on your email and phone.</p>
         <Link to={`/chatbot?ask=${encodeURIComponent(ask)}&job=${encodeURIComponent(r.title)}&job_id=${encodeURIComponent(r.job_ref)}&purpose=interview`}
           state={{ from: 'My Applications' }} className="shrink-0 font-medium text-blue-700 hover:underline">Prepare for the interview →</Link>
@@ -333,10 +334,11 @@ function AppCard({ r, open, onToggle }) {
         {open ? <span className="hidden lg:block" /> : <MiniSteps steps={steps} />}
         {open ? <span className="hidden lg:block" />
           : warn ? <p className="text-[13px] text-amber-700 whitespace-nowrap">{warn[0]} <b className="font-semibold">{warn[1]}</b></p>
-          : r.status === 'shortlisted' ? <p className="text-[13px] text-violet-800 whitespace-nowrap"><b className="font-semibold">Get ready</b> · watch your email</p>
+          : r.status === 'shortlisted' ? <p className="text-[13px] leading-tight text-amber-800"><b className="block font-semibold">Get ready</b>Watch your email</p>
           : <Labelled label="Reply by" value={when} />}
-        <div className="flex items-center gap-3 lg:justify-end">
-          <span data-pill={r.id} className={`shrink-0 text-xs font-semibold rounded-full px-2.5 py-0.5 ${PILL[key]}`}>{label}</span>
+        <div className="flex items-center gap-3 lg:justify-between">
+          <span data-pill={r.id} className={`shrink-0 inline-flex items-center gap-1.5 text-xs font-semibold rounded-full px-2.5 py-0.5 ${PILL[key]}`}>
+            <span aria-hidden="true" className="size-1.5 rounded-full bg-current" />{label}</span>
           <button type="button" onClick={onToggle} aria-expanded={open}
             className="text-xs font-medium text-blue-700 hover:underline whitespace-nowrap">{open ? 'Hide ▴' : 'Details ▾'}</button>
         </div>
@@ -400,7 +402,7 @@ function OutsideCard({ o, onStatus, onRemove }) {
         </div>
         <MiniSteps steps={outsideSteps(o)} />
         <span className="hidden lg:block" />
-        <div className="flex items-center gap-3 lg:justify-end">
+        <div className="flex items-center gap-3 lg:justify-between">
           <label className="sr-only" htmlFor={`os-${o.id}`}>Status of {o.title}</label>
           <select id={`os-${o.id}`} value={o.status} onChange={e => onStatus(o, e.target.value)}
             className={`text-xs font-semibold rounded-lg pl-2 pr-1 py-1 border border-transparent ${PILL[o.status] || 'bg-white border-slate-300'}`}>
@@ -416,6 +418,42 @@ function OutsideCard({ o, onStatus, onRemove }) {
 // 19 Nov (her mock review: the "What happens next" card took room on every visit): help she pulls up when she needs
 // it, a pill by the title opening a popover (contextual help, Adobe Spectrum). It pings three times until opened once.
 const HOW_SEEN = 'sm-how-seen'
+// 25 Nov (her phone mock): phones only, under the lists, so a short page ends on the next thing to do instead of blank.
+// The same cached request Job Matches and the Dashboard send (pageCache), so a phone rarely asks again; jobs already
+// applied for are left out
+const PHONE = '(max-width: 639px)'
+function ApplyNext({ applied }) {
+  const [jobs, setJobs] = useState(null)
+  useEffect(() => {
+    if (typeof matchMedia !== 'function' || !matchMedia(PHONE).matches) return
+    let live = true
+    cached('/recommend/', ALL_MATCHES).then(rec => { if (live) setJobs(rec?.recommendations || []) }).catch(() => { if (live) setJobs([]) })
+    return () => { live = false }
+  }, [])
+  const next = (jobs || []).filter(j => !applied.has(j.job_id) && j.skills_matched > 0)
+    .sort((a, b) => b.skills_matched / (b.skills_total || 1) - a.skills_matched / (a.skills_total || 1)).slice(0, 3)
+  if (!next.length) return null
+  return (
+    <section aria-labelledby="next-h" className="phone-only bg-card rounded-2xl border border-line px-4 py-3">
+      <div className="flex items-center justify-between gap-3">
+        <h2 id="next-h" className="font-mono text-[11px] font-medium uppercase tracking-widest text-muted m-0">Apply next</h2>
+        <Link to="/recommend" className="inline-flex items-center min-h-6 py-1 text-[13px] font-semibold text-accent-strong">Job Matches ›</Link>
+      </div>
+      <ul className="m-0 p-0 list-none">
+        {next.map((j, i) => (
+          <li key={j.job_id} className={i ? 'border-t border-line' : ''}>
+            <Link to={`/jobs/${encodeURIComponent(j.job_id)}`} state={{ from: 'My Applications' }} className="flex items-center justify-between gap-3 py-2.5">
+              <span className="min-w-0"><span className="block truncate font-bold text-ink">{j.job_title}</span>
+                <span className="block truncate text-small text-muted">{j.company}</span></span>
+              <span className="shrink-0 text-small text-muted"><b className="text-ink">{j.skills_matched}</b> of {j.skills_total} skills</span>
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )
+}
+
 function HowItWorks() {
   const pop = useRef(null)
   const [fresh, setFresh] = useState(() => { try { return localStorage.getItem(HOW_SEEN) !== '1' } catch { return false } })
@@ -434,7 +472,7 @@ function HowItWorks() {
     <>
       <button type="button" popoverTarget="how-apps" className={`how-pill ${fresh ? 'fresh' : ''}`}>
         <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><circle cx="12" cy="12" r="9" /><path d="M9.5 9.5a2.5 2.5 0 0 1 4.8 1c0 1.7-2.3 2-2.3 3.5M12 17h.01" /></svg>
-        How it works
+        <span className="how-text">How it works</span>
       </button>
       <div ref={pop} id="how-apps" popover="auto" className="how-pop" aria-label="How applications work">
         <p className="how-title">What happens next</p>
@@ -606,11 +644,12 @@ export default function MyApplications() {
             </div>
             <p className="text-sm text-slate-500 mt-1 head-line">Newest update first. Jobs on SkillMap update as the employer acts; jobs on other sites you update yourself.</p>
           </div>
-          {hasAny && <HeadStats items={[
+          {/* phones: the filter chips below say the same numbers (her phone mock) */}
+          {hasAny && <div className="phone-hide"><HeadStats items={[
             [(rows?.length || 0) + outside.length, 'Applied', 'blue'],
             [(rows || []).filter(r => groupOf(r) === 'progress').length + outside.filter(o => outsideGroup(o) === 'progress').length, 'In progress'],
             [(rows || []).filter(r => groupOf(r) === 'offer').length + outside.filter(o => outsideGroup(o) === 'offer').length, 'Offers', 'good'],
-          ]} />}
+          ]} /></div>}
         </div>
       </PageHeader>
       {see && <BackLink label="all applications" onClick={() => seeAll(null)} />}
@@ -651,7 +690,7 @@ export default function MyApplications() {
         {rows === null && !error && <AppsSkeleton />}
         {(rows?.length > 0 || outside.length > 0) && (
           <div className="flex flex-wrap items-center gap-2 shrink-0">
-          <div role="tablist" className="flex flex-wrap gap-2">
+          <div role="tablist" className="apps-tabs flex flex-wrap gap-2">
             {TABS.map(([t, text]) => (
               <button key={t} role="tab" aria-selected={tab === t} onClick={() => setTab(t)}
                 className={`text-sm font-medium px-3.5 py-1.5 rounded-full border ${tab === t
@@ -697,6 +736,7 @@ export default function MyApplications() {
             </div>
           </section>
         )}
+        {!see && rows && <ApplyNext applied={new Set([...rows.map(r => r.job_ref), ...outside.map(o => o.job_ref)])} />}
 
       </div></div>
       {toast.ui}

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { STAGE_HTML } from './authStage'
 import './authStage.css'
 
@@ -38,8 +38,9 @@ export function AuthIntro({ story = 's', headline }) {
   const [shownStory, setShownStory] = useState(story)
   if (shownStory !== story) { setShownStory(story); setBeat(1) }
 
-  // the stage: drawn at 560×400, scaled to its box
-  useEffect(() => {
+  // the stage: drawn at 560×400, scaled to its box. 25 Nov (devices check): before the first paint, else a phone shows
+  // the 560px stage for a moment and the page scrolls sideways
+  useLayoutEffect(() => {
     const el = box.current
     if (!el) return
     const fit = () => stage.current?.style.setProperty('--k', el.clientWidth / 560)
@@ -92,10 +93,12 @@ export function AuthIntro({ story = 's', headline }) {
       <ol className={`sm-chapters ${paused ? 'paused' : ''}`}>
         {list.map((b, i) => {
           const n = i + 1, now = n === beat
+          // 25 Nov (Lighthouse, WCAG 2.5.3 Label in Name): the spoken name starts with the words on screen
+          const shown = b[0] + (now && paused && !still ? ' · paused' : '')
           return (
             <li key={b[0]} className={n < beat ? 'done' : now ? 'now' : ''} style={{ '--beat': `${b[4]}s` }}>
               <button type="button" onClick={() => pick(n)}
-                aria-label={now && !still ? `${held.user ? 'Play' : 'Pause'} the intro at chapter ${n}: ${b[1]}` : `Chapter ${n}: ${b[1]}`}
+                aria-label={now && !still ? `${shown}. ${held.user ? 'Play' : 'Pause'} the intro at chapter ${n}: ${b[1]}` : `${shown}. Chapter ${n}: ${b[1]}`}
                 aria-current={now ? 'step' : undefined} aria-pressed={now && !still ? held.user : undefined}>
                 {/* the bar fills over the chapter's time; when it is full the next chapter starts */}
                 <span className="bar"><i key={`${story}-${beat}`} onAnimationEnd={now && !still ? next : undefined} /></span>

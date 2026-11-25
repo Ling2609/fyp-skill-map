@@ -299,7 +299,7 @@ export function MyJobs() {
             19 Nov (her approved mock review/page-headers.html): the counts that matter to an employer in one strip
             (open jobs, applicants waiting for a status, all applicants) and Post a job as the page's one main action */}
         <div className="pb-5 flex flex-wrap items-center gap-x-6 gap-y-3">
-          <div className="min-w-0 flex-1">
+          <div className="min-w-0 flex-1 max-sm:basis-0!">
             <p className="text-[11px] font-semibold text-blue-600 uppercase tracking-widest mb-2">My Jobs</p>
             <h1 className="text-2xl font-semibold tracking-tight text-slate-900">Your job posts</h1>
             <p className="text-sm text-slate-500 mt-1">Posted jobs appear in students' Job Matches straight away, marked "Apply on SkillMap".</p>
@@ -309,7 +309,7 @@ export function MyJobs() {
             [open.reduce((n, j) => n + (j.new_applicants || 0), 0), 'To review', open.some(j => j.new_applicants > 0) ? 'todo' : ''],
             [(jobs || []).reduce((n, j) => n + (j.applicants || 0), 0), 'Applicants'],
           ]} />}
-          <Link to="/employer/post" className="head-cta">
+          <Link to="/employer/post" className="head-cta max-sm:order-2">{/* phones: at the title's right (her review) */}
             <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round"><path d="M12 5v14M5 12h14" /></svg>
             Post a job
           </Link>

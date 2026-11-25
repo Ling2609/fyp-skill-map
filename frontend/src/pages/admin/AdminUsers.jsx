@@ -205,7 +205,7 @@ export default function AdminUsers() {
 
         <div className="emp-tile min-h-0 flex flex-col bg-white rounded-2xl border overflow-hidden">
           <div ref={strip} className="relative overflow-hidden scrollbar-gutter-stable bg-slate-50 border-b border-slate-200">
-            <table role="presentation" className="w-full min-w-190 table-fixed text-xs">
+            <table role="presentation" className="ph-strip users w-full min-w-190 table-fixed text-xs">
               {colgroup}
               <thead>
                 {/* 21 Oct (her review: admin blue, employer grey): every table's titles grey, as blue means clickable */}
@@ -219,7 +219,7 @@ export default function AdminUsers() {
           </div>
           <div className="relative flex-1 min-h-0 overflow-auto scrollbar-gutter-stable"
             onScroll={e => { if (strip.current) strip.current.scrollLeft = e.currentTarget.scrollLeft }}>
-            <table className="w-full text-sm min-w-190 table-fixed">
+            <table className="ph-cards users w-full text-sm min-w-190 table-fixed">
               {colgroup}
               {/* real column titles for screen readers; the visible ones are the strip above */}
               <thead>

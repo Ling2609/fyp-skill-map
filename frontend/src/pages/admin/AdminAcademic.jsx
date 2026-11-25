@@ -639,14 +639,14 @@ export default function AdminAcademic() {
   return (
     <div className="h-[calc(100dvh-var(--bar-h))] flex flex-col">
       <PageHeader>
-        <div className="pt-0">
+        <div className="pt-0 pb-4">{/* 25 Nov: the space under the title belongs to the header (phones hide the line) */}
           <p className="text-[11px] font-semibold text-blue-600 uppercase tracking-widest mb-2">Admin · Academics</p>
           <h1 className="text-2xl font-semibold tracking-tight text-slate-900">Academic structure</h1>
-          <p className="text-sm text-slate-500 mt-1 pb-4">Check the skills found in each module's description.</p>
+          <p className="text-sm text-slate-500 mt-1">Check the skills found in each module's description.</p>
         </div>
       </PageHeader>
       {/* 20 Nov (her review): tabs left under the header card, Programme / Intake on the same line at the right */}
-      <div className="shrink-0 px-8">
+      <div className="shrink-0 px-4 sm:px-8">
           <div className="pt-3 flex flex-wrap items-center gap-x-5 gap-y-2">
           <div role="tablist" className="tab-track flex gap-1">
             <button role="tab" aria-selected={tab === 'modules'} className={tabCls(tab === 'modules')}

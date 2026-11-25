@@ -344,7 +344,9 @@ export default function JobDetail() {
   const [chosenTab] = useState(location.state?.tab || null)
   // 19 Nov (her review): on a phone the two tiles stacked made a very long page, so a switch shows one at a time
   const [phoneView, setPhoneView] = useState(location.state?.tab === 'description' ? 'ad' : 'gap')
-  const [gapView, setGapView] = useState(location.state?.gapView === 'list' ? 'list' : 'chart')
+  // 25 Nov (her phone mock): phones open the gap on the list (what to learn), not the chart
+  const [gapView, setGapView] = useState(() => location.state?.gapView === 'list'
+    || (typeof matchMedia === 'function' && matchMedia('(max-width: 639px)').matches) ? 'list' : 'chart')
   const [listFocus, setListFocus] = useState(null)
   const gapBody = useRef(null)
   const showList = (target = null) => { setListFocus(target); setGapView('list') }

@@ -16,6 +16,7 @@ const NAV_ITEMS = [
   {
     to: '/dashboard',
     label: 'Dashboard',
+    short: 'Home',                   // 25 Nov (her phone mock): one word under each phone tab
     icon: (
       <svg className="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
@@ -27,6 +28,7 @@ const NAV_ITEMS = [
     // results on Job Matches and the AI Assistant mean much (input first, then results)
     to: '/profile',
     label: 'My Profile',
+    short: 'Profile',
     icon: (
       <svg className="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
@@ -36,6 +38,7 @@ const NAV_ITEMS = [
   {
     to: '/recommend',
     label: 'Job Matches',
+    short: 'Jobs',
     icon: (
       <svg className="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
@@ -46,6 +49,7 @@ const NAV_ITEMS = [
     // 11 Oct (Employer flow batch 2): jobs applied for on SkillMap and their status
     to: '/applications',
     label: 'My Applications',
+    short: 'Applied',
     badge: 'invitations',            // 12 Oct: employers' invitations to apply, waiting for an answer
     badgeLabel: 'invitations',
     icon: (
@@ -57,13 +61,14 @@ const NAV_ITEMS = [
   {
     to: '/chatbot',
     label: 'AI Assistant',
+    short: 'AI',
     icon: (
       <svg className="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
       </svg>
     ),
   },
-  { to: '/my-plans', label: 'My Plans', icon: PLANS_ICON },
+  { to: '/my-plans', label: 'My Plans', icon: PLANS_ICON, phoneMenu: true },   // phones: in the account menu (5 tabs)
 ]
 
 export const ADMIN_COUNTS_CHANGED = 'admin-counts-changed'
@@ -112,10 +117,11 @@ const ADMIN_ITEMS = [
 // new applications, Post a Job. Not approved yet: home only (it shows where they stand)
 const EMPLOYER_ITEMS = [
   NAV_ITEMS[0],
-  { ...NAV_ITEMS[2], to: '/employer/jobs', label: 'My Jobs', badge: 'new_applicants', badgeLabel: 'new' },
+  { ...NAV_ITEMS[2], to: '/employer/jobs', label: 'My Jobs', short: 'My Jobs', badge: 'new_applicants', badgeLabel: 'new' },
   {
     to: '/employer/post',
     label: 'Post a Job',
+    short: 'Post',
     icon: (
       <svg className="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M12 4v16m8-8H4" />
@@ -251,8 +257,11 @@ export default function Sidebar() {
 
       <nav aria-label="SkillMap menu" className="sb-nav">
         {items.map(item => (
-          <NavLink key={item.to} to={item.to} title={item.label} className={({ isActive }) => `sb-item${isActive || (item.also && pathname.startsWith(item.also)) ? ' on' : ''}`}>
+          <NavLink key={item.to} to={item.to} title={item.label}
+            className={({ isActive }) => `sb-item${isActive || (item.also && pathname.startsWith(item.also)) ? ' on' : ''}${item.phoneMenu ? ' sb-phone-menu' : ''}`}>
             <span className="sb-ic" aria-hidden="true">{item.icon}</span>
+            {/* phones show the one word; it comes first in the name, so "tap Jobs" works (WCAG 2.5.3) */}
+            {item.short && <span className="sb-short">{item.short}</span>}
             <span className="sb-label">{item.label}</span>
             {item.badge && counts[item.badge] > 0 && (
               <span className={`sb-badge${item.badge === 'invitations' ? ' inv' : ''}`} aria-label={`${counts[item.badge]} ${item.badgeLabel || 'waiting'}`}>{counts[item.badge]}</span>
@@ -281,6 +290,13 @@ export default function Sidebar() {
                 <p className="text-body font-medium text-ink truncate m-0">{fullName}</p>
                 <p className="text-small text-faint truncate m-0">{user?.email}</p>
               </div>
+              {items.filter(i => i.phoneMenu).map(i => (
+                <button key={i.to} role="menuitem" onClick={() => { setMenuOpen(false); navigate(i.to) }}
+                  className="sb-menu-phone w-full flex items-center gap-2.5 px-3.5 py-2 text-body text-muted hover:bg-well hover:text-ink">
+                  <span className="w-4 h-4 text-faint [&>svg]:w-4 [&>svg]:h-4" aria-hidden="true">{i.icon}</span>
+                  {i.label}
+                </button>
+              ))}
               <button role="menuitem" onClick={() => { setMenuOpen(false); navigate('/account') }}
                 className="w-full flex items-center gap-2.5 px-3.5 py-2 text-body text-muted hover:bg-well hover:text-ink">
                 <span className="w-4 h-4 text-faint [&>svg]:w-4 [&>svg]:h-4" aria-hidden="true">{GEAR}</span>

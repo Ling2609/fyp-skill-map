@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { useAuth } from '../context/useAuth'
+import BackLink from '../components/BackLink'
 import { VERSIONS } from './privacyText'
 
 // The privacy notice (14 Oct). Content: the eight items Malaysia's PDPA 2010 s.7 asks for, in English and Bahasa
@@ -34,7 +35,6 @@ const rich = (text) => text.split(/\*\*(.+?)\*\*/g).map((part, i) =>
       ? [<a key={`c${i}${j}`} href={`mailto:${CONTACT}`} className="text-blue-700 underline hover:no-underline">{CONTACT}</a>, bit] : [bit]))
 
 // her review: the back link in blue, underlined on hover or tap, so it is easy to see
-const backCls = 'text-sm font-medium text-blue-700 hover:underline focus-visible:underline focus:outline-none'
 const card = 'pt-6 border-t border-slate-200 first:border-t-0 first:pt-0'
 
 export default function Privacy() {
@@ -58,21 +58,21 @@ export default function Privacy() {
       {/* 14 Oct (her review): like the app's detail pages (Job detail, an applicant's profile): a grey "← back"
           link above the title on the left, no logo row; the language button on the right */}
       {/* 20 Nov (her approved mock): the glass header every page has, at the page width */}
-      <header className="shrink-0 mx-auto w-full max-w-[1256px] px-4 sm:px-8 pt-3">
-        <div className="page-glass relative px-4 sm:px-7 py-5 flex items-end justify-between gap-4">
+      {/* 25 Nov (her review): the back link sits outside the header, on the page colour, as on every other page */}
+      {fromSignup
+        ? <BackLink text={L.backSignup} onClick={() => { window.close(); setTimeout(() => navigate('/register'), 150) }} />
+        : <BackLink text={fromAccount ? L.backAccount : user ? L.back : L.backSignin}
+            onClick={() => navigate(fromAccount ? '/account' : user ? '/dashboard' : '/login')} />}
+      <header className="shrink-0 mx-auto w-full max-w-[1256px] px-4 sm:px-8 pt-4 sm:pt-0">
+        {/* 25 Nov (her phone check): on a phone the language button wraps under the text, so the title stays on one line */}
+        <div className="page-glass relative px-4 sm:px-7 py-5 flex flex-wrap items-end justify-between gap-x-4 gap-y-3">
           <span className="page-glass-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 3 5 6v6c0 4 3 7.5 7 9 4-1.5 7-5 7-9V6Z" /><path d="m9 12 2 2 4-4" /></svg></span>
-          <div className="min-w-0 page-glass-body !pl-[70px] sm:!pl-[70px]">
-            {fromSignup ? (
-              <button type="button" onClick={() => { window.close(); setTimeout(() => navigate('/register'), 150) }} className={backCls}>← {L.backSignup}</button>
-            ) : (
-              <Link to={fromAccount ? '/account' : user ? '/dashboard' : '/login'} className={backCls}>
-                ← {fromAccount ? L.backAccount : user ? L.back : L.backSignin}</Link>
-            )}
-            <h1 className="text-2xl font-semibold tracking-tight text-slate-900 mt-2">{L.title}</h1>
+          <div className="min-w-0 flex-1 basis-60 page-glass-body !pl-[70px] sm:!pl-[70px]">
+            <h1 className="text-2xl font-semibold tracking-tight text-slate-900">{L.title}</h1>
             <p className="text-sm text-slate-500 mt-1">{L.updated} {version.label[lang]}</p>
           </div>
           <button type="button" onClick={() => setLang(lang === 'en' ? 'ms' : 'en')} lang={lang === 'en' ? 'ms' : 'en'}
-            className="shrink-0 h-10 px-4 text-sm font-bold rounded-[12px] bg-white border border-[#c8d7f4] text-accent-strong shadow-card hover:bg-accent-soft transition">
+            className="shrink-0 ml-4 sm:ml-0 h-10 px-4 text-sm font-bold rounded-[12px] bg-white border border-[#c8d7f4] text-accent-strong shadow-card hover:bg-accent-soft transition">
             {L.other}
           </button>
         </div>

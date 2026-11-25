@@ -507,10 +507,15 @@ select:disabled { opacity: 0.6; cursor: not-allowed; }
   .page-glass .head-stats > div { padding: 5px 13px; }
 }
 @media (max-width: 639px) {
-  .page-glass-ic { left: 16px; top: 18px; width: 40px; height: 40px; border-radius: 12px; }
-  .page-glass-ic svg { width: 20px; height: 20px; }
-  .page-glass-body { padding-left: 68px; }
+  /* 25 Nov (her phone mock review/phone-minimal.html): a phone header is the title and its one action. The icon tile,
+     the small heading above the title and the description line are hidden; facts written inline (an applicant
+     list's job and reply date) stay */
+  .page-glass-ic { display: none; }
+  .page-glass-body { padding-left: 16px !important; }
+  .page-glass p.uppercase.tracking-widest { display: none; }
+  .page-glass p.text-sm.mt-1:not(.inline):not(.inline-block) { display: none; }
   .page-glass h1 { font-size: 24px; }
+  .page-glass .phone-hide { display: none; }
 }
 
 /* ── Ocean palette for every screen (18 Nov preview shots/ocean-preview, built 19 Nov) ─────────────────────────────
@@ -560,7 +565,7 @@ select:disabled { opacity: 0.6; cursor: not-allowed; }
 .head-stats dd { margin: 0; font-family: var(--font-display); font-weight: 800; font-size: 24px; letter-spacing: -0.04em; line-height: 1.1; color: var(--color-ink); }
 .head-stats dt { font-size: 12px; font-weight: 600; color: var(--color-ink-soft); }
 .head-stats .blue dd { color: var(--color-accent-strong); } .head-stats .good dd { color: var(--color-have-strong); } .head-stats .todo dd { color: var(--color-missing-strong); }
-@media (min-width: 1280px) { .head-line { white-space: nowrap; } }
+/* 25 Nov: no nowrap any more. With the sidebar the line ran under the count strip at 1366 px; it wraps only when it must */
 /* How it works: a filled pill by the title, a popover under it (centred where anchoring isn't supported) */
 .how-pill { display: inline-flex; align-items: center; gap: 7px; height: 34px; padding: 0 14px 0 10px; border-radius: 999px; border: 1px solid #c8d7f4;
   background: var(--color-accent-soft); color: var(--color-accent-strong); font-weight: 700; font-size: 13.5px; anchor-name: --how;
@@ -1013,6 +1018,8 @@ select:disabled { opacity: 0.6; cursor: not-allowed; }
 .sb.rail .sb-nav .sb-badge { top: 7px; right: 9px; min-width: 0; width: 9px; height: 9px; padding: 0; font-size: 0; background: var(--color-missing); box-shadow: 0 0 0 2px #fff; }
 .sb.rail .sb-top .sb-brand { padding-bottom: 0; }
 @media (max-width: 639px) { .sb-fold { display: none; } }
+.sb-short { display: none; }
+@media (min-width: 640px) { .sb-menu-phone { display: none !important; } }
 /* the page's bell: top right, on the greeting line or in the page header */
 .page-bell { position: relative; flex: none; width: 40px; height: 40px; border-radius: 13px; display: grid; place-items: center;
   background: #fff; border: 1px solid var(--color-line); color: var(--color-ink-soft); box-shadow: 0 6px 16px -12px rgb(20 30 60 / 40%); transition: background-color .15s, color .15s; }
@@ -1031,6 +1038,10 @@ select:disabled { opacity: 0.6; cursor: not-allowed; }
     border-radius: 22px; border: 1px solid var(--color-line); background: var(--color-card); box-shadow: 0 -8px 30px -18px rgb(20 30 60 / 45%); overflow: visible; }
   .sb-nav .sb-item { flex: 1 1 0; min-width: 0; flex-direction: column; justify-content: center; gap: 3px; height: auto; min-height: 54px; padding: 6px 2px; border-radius: 16px; font-size: 10px; line-height: 1.15; }
   .sb-nav .sb-label { white-space: normal; text-align: center; overflow: visible; }
+  /* 25 Nov (her phone mock): one word per tab; the full name stays for screen readers; My Plans moves to the account menu */
+  .sb-nav .sb-item:has(.sb-short) .sb-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  .sb-nav .sb-short { display: block; font-size: 11px; font-weight: 600; white-space: nowrap; }
+  .sb-nav .sb-phone-menu { display: none; }
   .sb-nav .sb-badge { position: absolute; top: 2px; right: 16%; min-width: 17px; height: 17px; padding: 0 4px; font-size: 10px; }
   .sb-foot { margin: 0 0 0 auto; padding: 0; border: 0; flex-direction: row; align-items: center; gap: 2px; }
   .sb-bell { width: 40px; height: 40px; padding: 0; justify-content: center; }
@@ -2134,3 +2145,52 @@ button.skillgap-token { cursor: pointer; }
    moves any that would stick out back inside */
 [popover], [role="menu"], [role="listbox"], [role="tooltip"] { max-width: calc(100vw - 16px); max-height: calc(100dvh - 16px); }
 [popover], [role="menu"], [role="listbox"] { overflow-y: auto; }
+
+/* 25 Nov (her phone mock review/phone-minimal.html): phones show one fact once. Hidden here, still on tablet and laptop */
+.phone-only { display: none; }
+@media (max-width: 639px) {
+  .phone-only { display: block; }
+  .more-jobs, .src-badge, .app-meta .l2 { display: none !important; }
+  .apps-tabs { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; margin-inline: -16px; padding-inline: 16px; }
+  .apps-tabs > button { flex: none; }
+  .how-pill .how-text { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  /* the ? sits at the title's right, not on a line of its own */
+  .page-glass:has(.how-pill) h1 { padding-right: 44px; }
+  .page-glass .how-pill { position: absolute; right: 16px; top: 18px; }
+}
+@media (max-width: 639px) {
+  .jd-eb { display: none; }                               /* Job Detail: "Job · category" (the title says it) */
+  .jd-progress > :first-child { display: none; }          /* the step track lives in My Applications; nudges stay */
+}
+
+/* 25 Nov (her phone review: "the table is the thing"): on phones the Applicants, Graduates-who-fit and Users tables
+   become one card per row. The markup stays a real table (screen readers keep the column names); only the layout
+   changes. Applicants/Graduates: tick box at the left; the person and the fit; then the date or skills and the status.
+   Users: the name and the ... menu; then role, joined and status. The title strip keeps only what acts (select all,
+   the bulk buttons, the Joined sort) */
+@media (max-width: 639px) {
+  .ph-strip, .ph-cards { min-width: 0 !important; table-layout: auto; }
+  .ph-strip colgroup, .ph-cards colgroup { display: none; }
+  .ph-strip, .ph-strip thead { display: block; }
+  .ph-strip tr { display: flex; align-items: center; gap: 12px; min-height: 44px; padding-right: 12px; }
+  .ph-strip td[aria-hidden="true"] { display: none; }
+  .ph-strip td[colspan] { flex: 1; }
+  .ph-strip.users th:not(:nth-child(3)) { display: none; }
+  .ph-cards, .ph-cards tbody { display: block; }
+  .ph-cards tbody tr { display: grid; grid-template-columns: 24px minmax(0, 1fr) auto; column-gap: 12px; row-gap: 6px; align-items: center; padding: 12px 16px; }
+  .ph-cards tbody tr:has(> td[colspan]) { display: block; }
+  .ph-cards tbody td { display: block; min-width: 0; padding: 0 !important; }
+  .ph-cards td:nth-child(1) { grid-column: 1; grid-row: 1 / span 2; align-self: start; padding-top: 2px !important; }
+  .ph-cards td:nth-child(2) { grid-column: 2; grid-row: 1; }
+  .ph-cards td:nth-child(3) { grid-column: 3; grid-row: 1; justify-self: end; }
+  .ph-cards td:nth-child(3) > span + span { display: none; }          /* "missing ..." is on the applicant's page */
+  .ph-cards td:nth-child(4) { grid-column: 2; grid-row: 2; font-size: 12px; }
+  .ph-cards td:nth-child(5) { grid-column: 3; grid-row: 2; justify-self: end; }
+  .ph-cards.users tbody tr { grid-template-columns: auto auto minmax(0, 1fr) auto; }
+  .ph-cards.users td:nth-child(1) { grid-column: 1 / 4; grid-row: 1; align-self: center; padding-top: 0 !important; }
+  .ph-cards.users td:nth-child(2) { grid-column: 1; grid-row: 2; }
+  .ph-cards.users td:nth-child(3) { grid-column: 2; grid-row: 2; justify-self: start; font-size: 12px; }
+  .ph-cards.users td:nth-child(4) { grid-column: 3; grid-row: 2; font-size: 12px; }
+  .ph-cards.users td:nth-child(5) { grid-column: 4; grid-row: 1; justify-self: end; }
+}
+@media (max-width: 639px) { .page-glass .head-stats { order: 3; } }   /* phones: the title and its action first, the counts under them */

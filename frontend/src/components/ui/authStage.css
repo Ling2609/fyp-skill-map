@@ -205,7 +205,7 @@
 .sm-caption b { display: block; font-size: 19px; letter-spacing: -0.02em; color: var(--color-ink); }
 .sm-caption p > span { color: var(--color-muted); font-size: 15px; }
 .sm-caption .n { font-family: var(--font-mono); font-size: 12px; color: var(--color-accent); margin-right: 8px; font-weight: 500; }
-.sm-stagebox { position: relative; width: 100%; max-width: var(--stage-w); aspect-ratio: 560 / 400; }
+.sm-stagebox { position: relative; width: 100%; max-width: var(--stage-w); aspect-ratio: 560 / 400; overflow: clip; }
 .sm-chapters { display: flex; gap: 8px; margin: 4px 0 0; padding: 0; list-style: none; width: 100%; max-width: var(--stage-w); }
 .sm-chapters li { flex: 1; min-width: 0; }
 .sm-chapters button { display: block; width: 100%; padding: 10px 0; border-radius: 6px; text-align: left; }
@@ -249,3 +249,28 @@
 /* short laptops: the entry card tightens so Register fits with every message showing */
 @media (max-height: 820px) and (min-width: 1024px) { .auth-card input:not([type=checkbox]) { height: 42px; } .auth-card form { gap: 10px; } .auth-card h2 { font-size: 27px; } }
 @media (max-height: 740px) and (min-width: 1024px) { .auth-card input:not([type=checkbox]) { height: 40px; } .auth-card form { gap: 8px; } }
+
+/* 25 Nov (her phone mock review/phone-minimal.html, A-C): phones under 640px. A light colour wash (never dark) holds
+   the logo, the headline and the intro; the form sits on a white sheet at the bottom (thumb reach). Sign in, Verify
+   email and Forgot password keep the intro; Register shows only the logo, as its form needs the room. Tablets keep
+   the layout above */
+@media (max-width: 639px) {
+  .auth2, .auth2:has(.auth-card :is(input, select, textarea):focus) {
+    background: radial-gradient(70% 30% at 0% 0%, #cfdff9 0%, transparent 70%), radial-gradient(60% 26% at 100% 12%, #cdeee8 0%, transparent 70%),
+                radial-gradient(70% 22% at 85% 45%, #fde3d8 0%, transparent 70%), linear-gradient(180deg, #eef3fc 0%, #f4f7fb 100%); }
+  .auth2-intro { padding: 18px 16px 12px; }
+  .auth2.form-first .auth2-form { order: 0; padding-top: 0; }
+  .auth2.form-first .auth2-intro .auth2-brand { display: flex; }
+  .auth2.form-first .auth2-mbrand { display: none; }
+  .sm-lede { padding-top: 12px; gap: 8px; }
+  .sm-h1 { font-size: 26px; }
+  .sm-caption { display: none; }
+  .sm-chapters { margin: 0; }
+  .sm-chapters button { padding: 8px 0; }
+  .auth2-intro { flex: 1 0 auto; }
+  .sm-lede { margin: auto 0; }                              /* the intro sits in the middle of the free space */
+  .auth2:not(.form-first) :is(.sm-stagebox, .sm-chapters) { display: none; }   /* Register: the headline only */
+  .auth2-form { margin-top: auto; padding: 0; }
+  .auth2 .auth-card { max-width: none; border: 0; border-radius: 26px 26px 0 0; padding: 24px 20px 28px;
+    box-shadow: 0 -8px 24px rgb(20 30 60 / 10%); animation: none; }
+}

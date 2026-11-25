@@ -77,8 +77,9 @@ export default function SavedWorkshopProposals() {
     <>
       {confirmation}
       <PageHeader>
-        <div className="pb-4 flex flex-wrap items-end justify-between gap-x-6 gap-y-3">
-          <div className="min-w-0 flex-1">
+        {/* 25 Nov (her phone review): on a phone the button sits at the title's right, not under it */}
+        <div className="pb-4 flex flex-wrap items-end justify-between gap-x-6 gap-y-3 max-sm:flex-nowrap max-sm:items-center max-sm:gap-x-3">
+          <div className="min-w-0 flex-1 max-sm:basis-0!">
             <p className="text-[11px] font-semibold text-blue-600 uppercase tracking-widest mb-2">Admin · Workshops</p>
             <h1 className="text-2xl font-semibold tracking-tight text-ink">Workshops</h1>
             <p className="mt-1 text-sm text-muted">Plan workshops on the skills students lack. Saved proposals stay here to edit or export.</p>

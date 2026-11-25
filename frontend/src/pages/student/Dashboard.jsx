@@ -450,7 +450,8 @@ function JobsTile({ matches, others = [], scope, onOpen, onSee }) {
             <span className="text-have-strong"><CountUp to={fits.length} /></span> {fits.length === 1 ? 'job fits' : 'jobs fit'} you by 50% or more. <span className="text-muted">Out of {matches.length} live.</span>
           </p>
           {fresh > 0 && <p className="m-0 mt-1 text-small text-muted"><b className="text-ink">{fresh}</b> new this week</p>}
-          <FitStrip shares={matches.map(shareOf)} onPick={onSee} className="mt-2.5 shrink-0" />
+          {/* 25 Nov (her phone mock): phones skip the fit chart; the list under it says the same */}
+          <FitStrip shares={matches.map(shareOf)} onPick={onSee} className="mt-2.5 shrink-0 max-sm:hidden" />
           <p className="m-0 mt-2 flex items-baseline justify-between gap-3 text-small font-bold text-have-strong">
             {fits.length ? `The ${fits.length === 1 ? 'one' : Math.min(SHOW, fits.length)} that ${fits.length === 1 ? 'fits' : 'fit'} best` : 'Closest matches'}
             {fits.length > SHOW && <button type="button" onClick={() => onSee('half')} className={`${LINK} inline-flex min-h-6 items-center`}>+{fits.length - SHOW} more that fit</button>}
@@ -746,7 +747,7 @@ export default function Dashboard() {
       <div className="dash-rise-in mb-3 flex flex-wrap items-baseline gap-x-4 gap-y-1">
         <h1 className="m-0 font-display text-[32px] font-extrabold leading-tight tracking-[-0.04em] text-ink dash-short:text-[27px] max-sm:text-[26px]">{greeting(firstName)} 👋</h1>
         {goalData && !hasGoal && (
-          <p className="m-0 text-body text-muted">{goalData.goal_saved ? 'Your goal has no live jobs this week. Here are close ones.' : "Let's start by choosing where you want to go."}</p>
+          <p className={`m-0 text-body text-muted ${goalData.goal_saved ? '' : 'max-sm:hidden'}`}>{goalData.goal_saved ? 'Your goal has no live jobs this week. Here are close ones.' : "Let's start by choosing where you want to go."}</p>
         )}
         <Bell className="ml-auto self-center" />
         <div className="w-full empty:hidden"><PrivacyBanner /></div>

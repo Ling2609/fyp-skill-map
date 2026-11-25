@@ -26,12 +26,33 @@ async function call(method, url, body, token) {
   return r.json()
 }
 const login = async (email) => (await call('POST', '/auth/login', { email, password: PASSWORD })).access_token
+// 25 Nov: since 23 Nov a new account verifies its email before it can sign in. The backend runs with E2E_OUTBOX=1
+// (docs/testing/e2e.md), so the code is read from backend/.e2e_outbox/, as TC-51 does (e2e/3-admin.spec.js)
+const OUTBOX = path.resolve('../backend/.e2e_outbox')
+async function codeFor(to) {
+  const safe = to.toLowerCase().replace(/[^a-z0-9@._-]+/g, '_')
+  for (let i = 0; i < 50; i++) {
+    const files = fs.existsSync(OUTBOX) ? fs.readdirSync(OUTBOX).filter(f => f.endsWith(`_${safe}.txt`)).sort() : []
+    if (files.length) {
+      const file = path.join(OUTBOX, files.at(-1))
+      const code = fs.readFileSync(file, 'utf8').match(/^\s{4}(\d{6})$/m)?.[1]
+      fs.unlinkSync(file)
+      if (code) return code
+    }
+    await new Promise(r => setTimeout(r, 200))
+  }
+  throw new Error(`No verification email for ${to} in ${OUTBOX}. Is the backend running with E2E_OUTBOX=1?`)
+}
 async function newAccount(role) {                    // a fresh account for the pages only a new account sees
   const n = Date.now().toString(36)
   const body = { username: `lh_${role}_${n}`, first_name: 'Test', last_name: role === 'student' ? 'Student' : 'Employer',
                  email: `lh.${role}.${n}@example.com`, password: PASSWORD, role, accept_privacy: true }
-  if (role === 'employer') body.company_name = 'Waiting Test Sdn Bhd'
-  await call('POST', '/auth/register', body)
+  if (role === 'employer') {                         // 20 Nov: employers give their SSM number (12 digits)
+    body.company_name = 'Waiting Test Sdn Bhd'
+    body.company_ssm = '2026' + String(Date.now() % 1e8).padStart(8, '0')
+  }
+  const { ticket } = await call('POST', '/auth/register', body)
+  await call('POST', '/auth/verify-email', { ticket, code: await codeFor(body.email) })
   return login(body.email)
 }
 

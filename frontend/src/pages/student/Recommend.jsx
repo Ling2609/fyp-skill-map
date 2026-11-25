@@ -107,6 +107,7 @@ export default function Recommend() {
   const [results, setResults] = useState(null)
   const [shownQuery, setShownQuery] = useState('')   // the search the shown results are for
   const [sortBy, setSortBy] = useState('fit')   // 'fit' | 'skills'
+  const [filtersOpen, setFiltersOpen] = useState(false)   // 25 Nov: phones fold the four filters behind one button
   const [loading, setLoading] = useState(false)
   const [loadingStep, setLoadingStep] = useState(0)
   const [loadingProgress, setLoadingProgress] = useState(0)
@@ -388,6 +389,7 @@ export default function Recommend() {
     </span>
   )
 
+  const nOn = [location !== 'all', activeCategory !== 'all', fit !== 'all', hideSenior].filter(Boolean).length
   return (
     <div className="mx-auto flex h-[calc(100dvh-var(--bar-h))] w-full max-w-[1240px] flex-col">
       <div className="shrink-0 px-4 pt-3 pb-3 sm:px-6">
@@ -396,7 +398,7 @@ export default function Recommend() {
             {/* 20 Nov (her review): the line sits beside the title, so the card is one line lower */}
             <div className="min-w-0 flex flex-wrap items-baseline gap-x-3 gap-y-0.5">
               <h1 className="m-0 font-display text-[32px] font-extrabold leading-[1.05] tracking-[-0.04em] text-ink max-sm:text-[26px]">Job matches</h1>
-              <p className="m-0 text-small text-muted">
+              <p className="m-0 text-small text-muted max-sm:hidden">
                 From your skill profile
                 {results && <span className="text-faint"> · {results.total_jobs_compared} openings compared</span>}
               </p>
@@ -420,7 +422,15 @@ export default function Recommend() {
           </div>
           {/* Filters (3 Oct): one row of identical buttons, sort on the right (Indeed-style top bar, references.md
               "How job sites lay out search + filters"). A button shows its value when set and clears with ✕. */}
+          {/* 25 Nov (her phone mock): on phones one "Filters" button (with how many are on) opens the four filters;
+              Sort stays in view. Tablet and laptop keep the whole row */}
           <div className="flex flex-wrap items-center gap-2 pb-4">
+            <button type="button" onClick={() => setFiltersOpen(o => !o)} aria-expanded={filtersOpen} aria-controls="rec-filters"
+              className={`${PILL} sm:hidden px-3.5 py-1.5 inline-flex items-center gap-1.5 ${nOn ? PILL_ON : PILL_OFF}`}>
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path strokeLinecap="round" strokeWidth={2} d="M4 6h16M7 12h10M10 18h4" /></svg>
+              Filters{nOn > 0 && ` · ${nOn}`}
+            </button>
+            <div id="rec-filters" className={`${filtersOpen ? 'flex' : 'hidden'} sm:contents order-last w-full flex-wrap items-center gap-2`}>
             <FilterButton label="Location" display={locationLabel(location)} active={location !== 'all'}
               value={location} onChange={handleLocation} onClear={() => handleLocation('all')}>{locationOptions}</FilterButton>
             <FilterButton label="Job category" display={activeCategory} active={activeCategory !== 'all'}
@@ -435,6 +445,7 @@ export default function Recommend() {
               className={`${PILL} px-3.5 py-1.5 ${hideSenior ? PILL_ON : PILL_OFF}`}>
               Hide senior roles{hideSenior && <span aria-hidden="true" className="ml-2">✕</span>}
             </button>
+            </div>
             <div className="ml-auto">{sortSelect}</div>
           </div>
         </div>
@@ -499,28 +510,31 @@ export default function Recommend() {
                     onPointerMove={e => { const r = e.currentTarget.getBoundingClientRect(); e.currentTarget.style.setProperty('--mx', `${e.clientX - r.left}px`); e.currentTarget.style.setProperty('--my', `${e.clientY - r.top}px`) }}
                     className="jm-card group relative flex cursor-pointer rounded-[20px] border border-transparent bg-card">
                     <div className="flex min-w-0 flex-1 flex-wrap items-start gap-3 px-3.5 py-3 sm:flex-nowrap">
-                      <span aria-hidden="true" className="grid h-10 w-10 shrink-0 place-items-center rounded-[12px] bg-accent-soft font-display text-label font-bold text-accent-strong">
+                      {/* 25 Nov (her phone mock): phones show title + fit, company · place · pay, one line of skills */}
+                      <span aria-hidden="true" className="grid h-10 w-10 shrink-0 place-items-center rounded-[12px] bg-accent-soft font-display text-label font-bold text-accent-strong max-sm:hidden">
                         {monogram(job.company)}
                       </span>
-                      <div className="min-w-0 flex-1 max-sm:basis-[calc(100%-52px)]">
+                      <div className="min-w-0 flex-1 max-sm:basis-full">
                         <div className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1 sm:flex-nowrap">
                           <a href={`/jobs/${encodeURIComponent(job.job_id)}`}
                             onClick={e => { e.stopPropagation(); if (e.ctrlKey || e.metaKey || e.shiftKey || e.button) return; e.preventDefault(); openJob(job.job_id) }}
                             className="min-w-0 rounded font-display text-body font-bold leading-snug text-ink sm:truncate transition group-hover:text-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/40">{job.job_title}</a>
                           {mine[job.job_id]?.applied ? <AppliedPill m={mine[job.job_id]} />
-                            : job.source === 'employer' ? <span className="shrink-0 rounded-pill border border-accent/30 bg-accent-soft px-2 py-0.5 text-label font-medium text-accent">On SkillMap</span>
-                            : job.source === 'live' ? <span className="shrink-0 rounded-pill border border-line bg-band px-2 py-0.5 text-label font-medium text-muted">{job.publisher || 'employer site'} ↗</span>
+                            : job.source === 'employer' ? <span className="shrink-0 rounded-pill border border-accent/30 bg-accent-soft px-2 py-0.5 text-label font-medium text-accent max-sm:hidden">On SkillMap</span>
+                            : job.source === 'live' ? <span className="shrink-0 rounded-pill border border-line bg-band px-2 py-0.5 text-label font-medium text-muted max-sm:hidden">{job.publisher || 'employer site'} ↗</span>
                             : null}
                           {mine[job.job_id]?.invited && <span className="shrink-0 rounded-pill border border-c3/40 bg-c3/15 px-2 py-0.5 text-label font-medium text-ink-soft">Invited</span>}
+                          {job.skills_total > 0 && <span className="sm:hidden ml-auto shrink-0 rounded-pill bg-have-soft px-2 py-0.5 font-mono text-label font-medium tabular text-have-strong">{job.skills_matched}/{job.skills_total}<span className="sr-only"> {BASIS_WORD[job.coverage_basis] || 'required'} skills</span></span>}
                         </div>
                         <p className="m-0 mt-0.5 truncate text-small text-faint">
-                          {job.company} · {job.location}{daysAgo(job.posted_days_ago) && ` · ${daysAgo(job.posted_days_ago)}`}
+                          {job.company} · {job.location}{daysAgo(job.posted_days_ago) && <span className="max-sm:hidden"> · {daysAgo(job.posted_days_ago)}</span>}
+                          {job.salary && job.salary !== 'nan' && <span className="sm:hidden"> · {job.salary}</span>}
                         </p>
                         <div className="mt-2 flex flex-wrap items-center gap-1.5">
                           <LevelTag level={job.level} />
-                          <span className="rounded-chip bg-well px-2 py-0.5 text-label font-medium text-ink-soft">{job.subcategory}</span>
+                          <span className="rounded-chip bg-well px-2 py-0.5 text-label font-medium text-ink-soft max-sm:hidden">{job.subcategory}</span>
                           {job.salary && job.salary !== 'nan' && (
-                            <span className="rounded-chip bg-well px-2 py-0.5 text-label font-medium text-ink-soft">{job.salary}</span>
+                            <span className="rounded-chip bg-well px-2 py-0.5 text-label font-medium text-ink-soft max-sm:hidden">{job.salary}</span>
                           )}
                           {job.top_job_skills?.slice(0, 3).map(skill => (
                             <span key={skill} className={skill === job.search_skill
@@ -529,7 +543,7 @@ export default function Recommend() {
                           ))}
                         </div>
                       </div>
-                      <div className="flex w-28 shrink-0 flex-col items-end gap-1.5 max-sm:w-full max-sm:flex-row max-sm:items-center max-sm:gap-3 max-sm:pl-[52px]">
+                      <div className="flex w-28 shrink-0 flex-col items-end gap-1.5 max-sm:hidden">
                         <span title={BASIS_TIP[job.coverage_basis] || BASIS_TIP.required}
                           className="rounded-pill bg-have-soft px-2 py-0.5 font-mono text-label font-medium tabular text-have-strong whitespace-nowrap">
                           {job.skills_total ? `${job.skills_matched}/${job.skills_total} ${BASIS_WORD[job.coverage_basis] || 'required'}` : `${job.match_percent}%`}
