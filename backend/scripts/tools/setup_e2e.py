@@ -45,7 +45,7 @@ if "e2e" not in db_name.lower():
 os.environ.update(DATABASE_URL=URL, MONGODB_URL="mongodb://localhost:1", RELATION_MODEL_DIR="",
                   GROQ_API_KEY="", GEMINI_API_KEY="", COHERE_API_KEY="", JSEARCH_KEY="",
                   # 23 Nov: setting up sends no email (the accounts below are marked verified here, on purpose)
-                  SMTP_USER="", SMTP_PASSWORD="", E2E_OUTBOX="",
+                  SMTP_USER="", SMTP_PASSWORD="", E2E_OUTBOX="0",   # "0", not "": the setting is a strict yes/no
                   IP_LIMIT_MULTIPLIER="1000")   # 24 Nov: setting up signs up and in many times from one address
 sys.path.insert(0, str(BACKEND))
 
