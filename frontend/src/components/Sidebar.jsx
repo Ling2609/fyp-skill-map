@@ -68,7 +68,7 @@ const NAV_ITEMS = [
       </svg>
     ),
   },
-  { to: '/my-plans', label: 'My Plans', icon: PLANS_ICON, phoneMenu: true },   // phones: in the account menu (5 tabs)
+  { to: '/my-plans', label: 'My Plans', short: 'Plans', icon: PLANS_ICON },   // 26 Nov (her review): a phone tab too, not hidden in the account menu
 ]
 
 export const ADMIN_COUNTS_CHANGED = 'admin-counts-changed'
@@ -91,6 +91,7 @@ const ADMIN_ITEMS = [
   {
     to: '/admin/users',
     label: 'Users',
+    short: 'Users',
     badge: 'pending_employers',
     icon: (
       <svg className="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -100,6 +101,7 @@ const ADMIN_ITEMS = [
   },
   {
     to: '/admin/academic',
+    short: 'Academics',
     label: 'Academics',          // page title "Academic structure"; the full name doesn't fit the 192px sidebar with its badge
     badge: 'modules_to_review',
     badgeLabel: 'to review',
@@ -110,7 +112,7 @@ const ADMIN_ITEMS = [
     ),
   },
   // 22 Nov (her review): one place for workshops; the planner opens from it, so the item stays lit there too
-  { to: '/admin/workshop/proposals', label: 'Workshops', icon: PROPOSALS_ICON, also: '/admin/workshop' },
+  { to: '/admin/workshop/proposals', label: 'Workshops', short: 'Workshops', icon: PROPOSALS_ICON, also: '/admin/workshop' },
 ]
 
 // Employer (11 Oct, batch 1; 12 Oct dashboard E): Dashboard is their home (/dashboard), My Jobs carries a badge for
