@@ -46,6 +46,9 @@ htmlcov/
 
 # 28 Oct: Docker. The database dump holds real accounts and their data: never commit it
 docker/db/*.dump
+# 26 Nov: the server's MongoDB dump (chat history) and its settings file hold real data and passwords
+docker/mongo/*.archive
+.env.prod
 # the optional settings file next to docker-compose.yml (passwords, VITE_API_URL)
 /.env
 

@@ -1,0 +1,112 @@
+# SkillMap on a server (26 Nov 2026, deployment: Google Cloud VM, docs/deploy/google-cloud.md). The same containers as
+# docker-compose.yml, plus Caddy in front for HTTPS. Start on the server with:
+#   docker compose -f docker-compose.prod.yml up -d --build
+# Needs, next to this file, a .env with SITE and POSTGRES_PASSWORD (see .env.prod.example), backend/.env (your keys,
+# SMTP, SECRET_KEY ...), backend/data/ (the relationship model folder and caches) and docker/db/skillmap.dump.
+#
+#   visitor ──https──> caddy :443 ──> frontend (nginx :80) ─┬─ the built app
+#                                                           └─ /api/* ──> backend :8000 ──> db (PostgreSQL), mongo
+# Only Caddy has ports on the server; the backend, database and MongoDB are reachable only inside this network.
+name: skillmap
+
+services:
+  db:
+    image: postgres:18          # the same major version as the PostgreSQL the dump is made with
+    environment:
+      POSTGRES_USER: skillmap
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env (see .env.prod.example)}
+      POSTGRES_DB: skillmap
+    volumes:
+      - pgdata:/var/lib/postgresql
+      - ./docker/db:/dump:ro
+      - ./docker/db/restore.sh:/docker-entrypoint-initdb.d/10-restore.sh:ro   # first start only: restores the dump
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U skillmap -d skillmap"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    restart: unless-stopped
+
+  mongo:
+    image: mongo:9
+    volumes:
+      - mongodata:/data/db
+      - ./docker/mongo:/dump:ro     # skillmap.archive (mongodump --archive --gzip), restored by hand once (guide)
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.runCommand({ ping: 1 }).ok"]
+      interval: 5s
+      timeout: 10s
+      retries: 20
+    restart: unless-stopped
+
+  backend:
+    build:
+      context: ./backend
+      args:
+        TORCH_INDEX: https://download.pytorch.org/whl/cpu
+    env_file: backend/.env
+    environment:                     # these win over backend/.env
+      DATABASE_URL: postgresql://skillmap:${POSTGRES_PASSWORD}@db:5432/skillmap
+      MONGODB_URL: mongodb://mongo:27017
+      PRODUCTION: "1"                # refuses unsafe settings, sends real emails (app/services/production.py)
+      E2E_OUTBOX: "0"
+      IP_LIMIT_MULTIPLIER: "1"
+      CORS_ORIGINS: https://${SITE}
+      FRONTEND_URL: https://${SITE}  # where GitHub sends students back after "Connect GitHub"
+    # the visitor's address comes from X-Forwarded-For, trusted only from Caddy and nginx inside this network (read
+    # from the right, so a visitor can't fake it): the per-address sign-in limits keep working
+    command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--timeout-keep-alive", "15",
+              "--proxy-headers", "--forwarded-allow-ips", "10.89.0.0/24"]
+    volumes:
+      - ./backend/data:/app/data     # the relationship model folder and the caches (not in git)
+    depends_on:
+      db:
+        condition: service_healthy
+      mongo:
+        condition: service_healthy
+    healthcheck:                     # the first start loads the models and the job cache: give it time
+      test: ["CMD", "python", "-c", "import urllib.request as u; u.urlopen('http://127.0.0.1:8000/openapi.json', timeout=5)"]
+      interval: 15s
+      timeout: 10s
+      retries: 20
+      start_period: 180s
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        VITE_API_URL: /api           # one address: nginx passes /api to the backend
+        VITE_PRIVACY_CONTACT: ${PRIVACY_CONTACT:-careers@university.example}
+    volumes:
+      - ./frontend/nginx.prod.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+  caddy:
+    image: caddy:2
+    environment:
+      SITE: ${SITE:?set SITE in .env, e.g. 34-87-12-34.sslip.io}
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./docker/caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data             # the HTTPS certificate, kept across restarts
+      - caddy_config:/config
+    depends_on:
+      - frontend
+    restart: unless-stopped
+
+networks:
+  default:
+    ipam:
+      config:
+        - subnet: 10.89.0.0/24       # named, so the backend can trust exactly this range (above)
+
+volumes:
+  pgdata:
+  mongodata:
+  caddy_data:
+  caddy_config:

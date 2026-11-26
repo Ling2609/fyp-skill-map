@@ -115,10 +115,15 @@ def _load_cache():
 
 
 def _save_cache():
+    # 26 Nov (deployment test): a cache that can't be written (read-only or full disk) must not break Job Matches; the
+    # scores stay in memory and the next save tries again, as the embedding cache does (app/nlp/embedder.py)
     tmp = CACHE_FILE + ".tmp"
-    with open(tmp, "w", encoding="utf-8") as f:
-        json.dump({"model": _cache_model, "pairs": _cache}, f)
-    os.replace(tmp, CACHE_FILE)                 # never a half-written cache
+    try:
+        with open(tmp, "w", encoding="utf-8") as f:
+            json.dump({"model": _cache_model, "pairs": _cache}, f)
+        os.replace(tmp, CACHE_FILE)             # never a half-written cache
+    except OSError as e:
+        print(f"[relation] could not save the score cache ({type(e).__name__}: {e}); will retry later")
 
 
 def _score(a: list[str], b: list[str]) -> np.ndarray:

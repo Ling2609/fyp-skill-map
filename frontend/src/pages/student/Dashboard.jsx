@@ -267,7 +267,8 @@ function GoalTile({ data, picked, busy, onGoal }) {
   return (
     <Tile n={0} look="glass" area="a-goal" labelledBy="t-goal" icon="goal" title="Your goal"
       action={<GoalPicker goal={data.goal} categories={data.categories} busy={busy} onChange={onGoal} showLabel={false} />}>
-      <p className="m-0 -mt-0.5 text-small text-muted">Here's where you stand for {data.goal}.</p>
+      {/* 26 Nov (her phone review): phones skip this line; the goal picker right above says the same */}
+      <p className="m-0 -mt-0.5 text-small text-muted max-sm:hidden">Here's where you stand for {data.goal}.</p>
       <div className="mt-1 grid min-h-0 flex-1 gap-x-6 gap-y-2 md:grid-cols-[minmax(0,190px)_minmax(0,1fr)]">
         <div className="flex flex-col justify-center">
           <p className="m-0 font-display text-[68px] font-extrabold leading-[.85] tracking-[-0.06em] text-ink tabular-nums dash-short:text-[58px] dash-tight:text-[50px]">
