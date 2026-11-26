@@ -738,6 +738,8 @@ select:disabled { opacity: 0.6; cursor: not-allowed; }
 .usr-role svg { width: 14px; height: 14px; }
 .usr-role.student { border-color: #c8d7f4; background: var(--color-accent-soft); color: var(--color-accent-strong); }
 .usr-role.admin { border-color: #b5e3dd; background: var(--color-have-soft); color: var(--color-have-strong); }
+/* 26 Nov (her review: the white Employer chip looked unset): violet, the colour SkillMap already uses for employers' invitations */
+.usr-role.employer { border-color: #d6c6f6; background: var(--color-invite-soft); color: var(--color-invite-strong); }
 /* admin dashboard parts, as the mock (20 Nov) */
 .adm-th { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; padding: 16px 20px 8px; }
 .adm-tt { display: flex; align-items: center; gap: 9px; margin: 0; font-family: var(--font-mono); font-size: 11.5px !important; font-weight: 500 !important; letter-spacing: .09em; text-transform: uppercase; color: var(--color-ink-soft) !important; }
@@ -814,6 +816,15 @@ select:disabled { opacity: 0.6; cursor: not-allowed; }
 .co-check.link { background: var(--color-accent-soft); color: var(--color-accent-strong); text-decoration: none; } .co-check.link:hover { text-decoration: underline; }
 .co-check.ok { background: var(--color-have-soft); color: var(--color-have-strong); }
 .co-check.warn { background: var(--color-partial-soft); color: var(--color-partial-strong); }
+/* 26 Nov (her review): one line, two chips; the email check is a mark on the website chip, the SSM chip has icon buttons */
+.co-check.link { gap: 5px; }
+.co-mark { display: grid; place-items: center; width: 15px; height: 15px; border-radius: 50%; font-size: 10px; line-height: 1; }
+.co-mark.ok { background: var(--color-have); color: #fff; } .co-mark.warn { background: var(--color-partial-strong); color: #fff; }
+.co-check.co-ssm { gap: 4px; padding-right: 3px; overflow: visible; }
+.co-num { font-family: var(--font-mono); font-size: 11.5px; font-weight: 500; color: var(--color-ink); }
+.co-ico { display: grid; place-items: center; width: 20px; height: 20px; border-radius: 5px; color: var(--color-accent-strong); cursor: pointer; }
+.co-ico svg { width: 13px; height: 13px; } .co-ico:hover { background: #fff; } .co-ico.done { color: var(--color-have-strong); }
+.co-ico:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 1px; }
 
 /* 20 Nov (her review): an invitation to apply stands out from the lists under it */
 .invite-note { background: linear-gradient(100deg, var(--color-accent-soft), #fff 70%); border: 2px solid var(--color-accent);
@@ -941,7 +952,7 @@ select:disabled { opacity: 0.6; cursor: not-allowed; }
 .fit-strip { display: flex; gap: 3px; height: 14px; }
 .fit-seg { flex-basis: 0; min-width: 10px; border-radius: 5px; transition: transform .15s, filter .15s; }
 .fit-seg:hover { transform: translateY(-2px); filter: brightness(.95); }
-.fit-key { display: flex; flex-wrap: wrap; gap: 4px 14px; margin: 8px 0 0; padding: 0; list-style: none; font-size: 12px; color: var(--color-muted); }
+.fit-key { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 12px; margin: 8px 0 0; padding: 0; list-style: none; font-size: 12px; color: var(--color-muted); }
 .fit-key li { display: inline-flex; align-items: center; gap: 5px; } .fit-key li.hi { color: var(--color-have-strong); font-weight: 600; }
 .fit-key i { width: 9px; height: 9px; border-radius: 3px; } .fit-key b { color: var(--color-ink); font-weight: 800; }
 /* Profile & privacy: one card, sections in two balanced columns (20 Nov) */

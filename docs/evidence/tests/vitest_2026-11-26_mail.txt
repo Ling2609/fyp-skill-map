@@ -1,0 +1,9 @@
+
+ RUN  v5.0.5 C:/Users/Ling/Desktop/fyp-skill-map/frontend
+
+
+ Test Files  17 passed (17)
+      Tests  125 passed (125)
+   Start at  22:52:36
+   Duration  10.72s (environment 79%, setup 11%, tests 6%, import 3%, transform 1%)
+

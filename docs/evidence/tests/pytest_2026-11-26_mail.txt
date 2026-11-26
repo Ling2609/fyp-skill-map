@@ -1,0 +1,57 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.7, pytest-9.0.3, pluggy-1.6.0
+rootdir: C:\Users\Ling\Desktop\fyp-skill-map\backend
+configfile: pytest.ini
+testpaths: tests, tests_unit
+plugins: anyio-4.15.1, locust-2.47.0, platformdirs-4.12.2, cov-7.1.0
+collected 296 items
+
+tests\test_ad_requirements.py .......                                    [  2%]
+tests\test_admin.py .....                                                [  4%]
+tests\test_applications.py ............                                  [  8%]
+tests\test_audit_concurrency.py ....                                     [  9%]
+tests\test_audit_fixes.py .........                                      [ 12%]
+tests\test_auth.py ........                                              [ 15%]
+tests\test_career_fit.py ..                                              [ 15%]
+tests\test_counsellor_cv.py ..                                           [ 16%]
+tests\test_decision_deadline.py ...                                      [ 17%]
+tests\test_delete_account.py ...                                         [ 18%]
+tests\test_description_grounding.py .....                                [ 20%]
+tests\test_edit_job.py ........                                          [ 22%]
+tests\test_email_verification.py .............................           [ 32%]
+tests\test_employer_availability.py ...                                  [ 33%]
+tests\test_employer_details.py .....                                     [ 35%]
+tests\test_employer_preview.py .....                                     [ 37%]
+tests\test_evaluation_runs.py ...                                        [ 38%]
+tests\test_extraction_records.py ......                                  [ 40%]
+tests\test_github_connect.py .......                                     [ 42%]
+tests\test_grades.py ..                                                  [ 43%]
+tests\test_install.py ....                                               [ 44%]
+tests\test_invitations.py ..........                                     [ 47%]
+tests\test_learning_plan.py .........                                    [ 51%]
+tests\test_load_test.py .........                                        [ 54%]
+tests\test_match_speed.py ...                                            [ 55%]
+tests\test_module_extraction_eval.py .                                   [ 55%]
+tests\test_module_prompt_v2.py ..                                        [ 56%]
+tests\test_mongodb_real.py ....                                          [ 57%]
+tests\test_more_evidence.py .........                                    [ 60%]
+tests\test_other_links.py ...                                            [ 61%]
+tests\test_outside_applications.py ....                                  [ 62%]
+tests\test_permissions.py ...                                            [ 63%]
+tests\test_personal_data.py ...                                          [ 64%]
+tests\test_ranking_eval.py ..                                            [ 65%]
+tests\test_rate_limits.py .........                                      [ 68%]
+tests\test_response_times.py ...                                         [ 69%]
+tests\test_spacy_baseline.py ...                                         [ 70%]
+tests\test_transparency.py ..........                                    [ 73%]
+tests\test_upgrade_module_skills_v2.py .                                 [ 74%]
+tests\test_whatif.py .                                                   [ 74%]
+tests\test_workshop.py ..........                                        [ 78%]
+tests_unit\test_core_rules.py ................................           [ 88%]
+tests_unit\test_decision_window_rules.py ........                        [ 91%]
+tests_unit\test_employer_availability_rules.py ..........                [ 94%]
+tests_unit\test_mail_from.py ..                                          [ 95%]
+tests_unit\test_production_settings.py ...........                       [ 99%]
+tests_unit\test_relation_cache.py ..                                     [100%]
+
+======================= 296 passed in 594.26s (0:09:54) =======================

@@ -7,7 +7,7 @@ export default function FitBars({ shares, active = 'all', onPick, fill = false, 
   const counts = countBands(shares)
   const max = Math.max(1, ...counts)
   return (
-    <div className={`grid grid-cols-5 gap-2 ${fill ? 'min-h-[84px]' : ''} ${className}`}>
+    <div className={`grid grid-cols-5 gap-2 ${fill ? 'min-h-21' : ''} ${className}`}>
       {FIT_BANDS.map((b, i) => {
         const n = counts[i]
         const on = active === b.key || (active === 'half' && (b.key === 'mid' || b.key === 'top'))
@@ -16,9 +16,9 @@ export default function FitBars({ shares, active = 'all', onPick, fill = false, 
             aria-pressed={on}
             aria-label={`${n} ${n === 1 ? 'job' : 'jobs'} where you have ${b.key === 'none' ? 'none' : b.label.toLowerCase()} of the skills${on ? ' (shown)' : ''}`}
             className={`group flex min-h-0 flex-col rounded-lg px-0.5 text-center transition-colors enabled:hover:bg-well/70 disabled:cursor-default ${on ? 'bg-accent-soft/60 ring-2 ring-accent/50' : ''}`}>
-            <span className={`relative flex min-h-0 items-end border-b border-line-strong px-1 pt-5 ${fill ? 'flex-1' : 'h-[64px]'}`}>
-              <span style={{ height: `${(n / max) * 100}%`, '--k': i }} className={`dash-rise relative block w-full min-h-[5px] rounded-t-md ${b.tone}`}>
-                <span className="absolute -top-[18px] inset-x-0 text-[12.5px] font-extrabold tabular-nums text-ink">{n}</span>
+            <span className={`relative flex min-h-0 items-end border-b border-line-strong px-1 pt-5 ${fill ? 'flex-1' : 'h-16'}`}>
+              <span style={{ height: `${(n / max) * 100}%`, '--k': i }} className={`dash-rise relative block w-full min-h-1.25 rounded-t-md ${b.tone}`}>
+                <span className="absolute -top-4.5 inset-x-0 text-[12.5px] font-extrabold tabular-nums text-ink">{n}</span>
               </span>
             </span>
             <span className={`mt-1 whitespace-nowrap text-[11px] leading-tight ${b.key === 'mid' || b.key === 'top' ? 'font-bold text-have-strong' : 'text-muted'} group-enabled:group-hover:underline`}>{b.label}</span>
@@ -46,7 +46,7 @@ export function FitStrip({ shares, onPick, className = '' }) {
       </div>
       <ul className="fit-key" aria-hidden="true">
         {FIT_BANDS.map((b, i) => (
-          <li key={b.key} className={b.key === 'mid' || b.key === 'top' ? 'hi' : ''}><i className={b.tone} />{b.label} <b>{counts[i]}</b></li>
+          <li key={b.key} className={b.key === 'mid' || b.key === 'top' ? 'hi' : ''} title={b.label}><i className={b.tone} />{b.short} <b>{counts[i]}</b></li>
         ))}
       </ul>
     </div>
