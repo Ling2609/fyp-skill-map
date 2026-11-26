@@ -190,17 +190,73 @@ const SECTIONS_1021 = revise(revise(SECTIONS, 'en', [
   ['Padam projek, sijil, anugerah', 'Padam projek, pengalaman, sijil, anugerah'],
 ])
 
+// 27 Nov 2026 version (deployment): where SkillMap's data is kept (Google Cloud, Singapore), the email service (Brevo,
+// France), the SSM number and optional website employers give (20 Nov), and the internet (IP) address kept for usage
+// limits. Made from the 21 Oct text the same way, so the 21 Oct entry below keeps exactly what people agreed to then.
+const addItems = (sections, lang, id, items, first) => ({ ...sections, [lang]: sections[lang].map(([sid, title, list]) =>
+  sid === id ? [sid, title, first ? [...items, ...list] : [...list, ...items]] : [sid, title, list]) })
+const employerRows = {
+  en: [['Company name and SSM registration number (employers)', 'Required', 'So the career office can check and approve the company'],
+       ['Company website (employers)', 'Optional', 'Helps the career office check the company']],
+  ms: [['Nama syarikat dan nombor pendaftaran SSM (majikan)', 'Wajib', 'Supaya pejabat kerjaya boleh menyemak dan meluluskan syarikat'],
+       ['Laman web syarikat (majikan)', 'Pilihan', 'Membantu pejabat kerjaya menyemak syarikat']],
+}
+const DATA_TABLE_1127 = {
+  en: { ...DATA_TABLE_1021.en, rows: DATA_TABLE_1021.en.rows.flatMap(r => r[0] === 'Company name (employers)' ? employerRows.en : [r]) },
+  ms: { ...DATA_TABLE_1021.ms, rows: DATA_TABLE_1021.ms.rows.flatMap(r => r[0] === 'Nama syarikat (majikan)' ? employerRows.ms : [r]) },
+}
+const IN_SHORT_1127 = {
+  en: { ...IN_SHORT.en, lines: [...IN_SHORT.en.lines.slice(0, 4),
+    ['Your data is kept', 'on Google Cloud servers in Singapore; emails are sent through Brevo (France).'], IN_SHORT.en.lines[4]] },
+  ms: { ...IN_SHORT.ms, lines: [...IN_SHORT.ms.lines.slice(0, 4),
+    ['Data anda disimpan', 'pada pelayan Google Cloud di Singapura; e-mel dihantar melalui Brevo (Perancis).'], IN_SHORT.ms.lines[4]] },
+}
+let SECTIONS_1127 = revise(revise(SECTIONS_1021, 'en', [
+  ['and security records (failed sign-ins, one-time codes that expire).',
+   'and security records (failed sign-ins, one-time codes that expire, and your internet (IP) address, used to limit how often sign-up, sign-in and password resets can be tried).'],
+  ['**Service providers:** our AI provider (Groq) and our email service, only to run SkillMap.',
+   '**Service providers**, only to run SkillMap: **Google Cloud** (hosts SkillMap and stores its data), our AI providers (**Groq**, and **Gemini** for job advertisements) and our email service (**Brevo**, which sends sign-up codes and account emails).'],
+]), 'ms', [
+  ['dan rekod keselamatan (log masuk yang gagal, kod sekali guna yang tamat tempoh).',
+   'dan rekod keselamatan (log masuk yang gagal, kod sekali guna yang tamat tempoh, dan alamat internet (IP) anda, untuk mengehadkan kekerapan cubaan mendaftar, log masuk dan menetapkan semula kata laluan).'],
+  ['**Penyedia perkhidmatan:** pembekal AI kami (Groq) dan perkhidmatan e-mel kami, hanya untuk mengendalikan SkillMap.',
+   '**Penyedia perkhidmatan**, hanya untuk mengendalikan SkillMap: **Google Cloud** (menempatkan SkillMap dan menyimpan datanya), pembekal AI kami (**Groq**, dan **Gemini** untuk iklan pekerjaan) dan perkhidmatan e-mel kami (**Brevo**, yang menghantar kod pendaftaran dan e-mel akaun).'],
+])
+SECTIONS_1127 = addItems(SECTIONS_1127, 'en', 'abroad', [
+  'SkillMap and all its data are stored on **Google Cloud servers in Singapore**. Connections to SkillMap are encrypted (HTTPS).',
+  'Emails (your name, your email address and the message, such as a one-time code) are sent through **Brevo**, an email service in the **European Union (France)**.',
+], true)
+SECTIONS_1127 = addItems(SECTIONS_1127, 'ms', 'abroad', [
+  'SkillMap dan semua datanya disimpan pada **pelayan Google Cloud di Singapura**. Sambungan ke SkillMap disulitkan (HTTPS).',
+  'E-mel (nama anda, alamat e-mel anda dan mesejnya, seperti kod sekali guna) dihantar melalui **Brevo**, perkhidmatan e-mel di **Kesatuan Eropah (Perancis)**.',
+], true)
+SECTIONS_1127 = addItems(SECTIONS_1127, 'en', 'keep', [
+  'Counts of requests per internet (IP) address are deleted automatically after two days; a failed sign-in record is deleted when you next sign in, reset your password or delete your account.',
+])
+SECTIONS_1127 = addItems(SECTIONS_1127, 'ms', 'keep', [
+  'Kiraan permintaan bagi setiap alamat internet (IP) dipadam secara automatik selepas dua hari; rekod log masuk yang gagal dipadam apabila anda log masuk semula, menetapkan semula kata laluan atau memadam akaun anda.',
+])
+
 // Every version of the notice, newest first (14 Oct, her question: are old versions kept and can they be seen?).
 // A change adds a new entry on top with a short summary of what changed; older entries keep their own text, so
 // /privacy?version=<date> still shows exactly what someone agreed to. users.privacy_version stores the date of the
 // version a person accepted; backend/app/routers/auth.py PRIVACY_VERSION must equal VERSIONS[0].date (a test checks).
 export const VERSIONS = [
   {
+    date: '2026-11-27',
+    label: { en: '27 November 2026', ms: '27 November 2026' },
+    short: 'where your data is kept and our email service.',
+    changes: { en: 'SkillMap now runs on Google Cloud servers in Singapore, and emails are sent through Brevo (France). Employers also give an SSM number and, optionally, a website. Your internet (IP) address is kept briefly to limit repeated sign-up and sign-in attempts.',
+               ms: 'SkillMap kini beroperasi pada pelayan Google Cloud di Singapura, dan e-mel dihantar melalui Brevo (Perancis). Majikan juga memberikan nombor SSM dan, secara pilihan, laman web. Alamat internet (IP) anda disimpan seketika untuk mengehadkan cubaan mendaftar dan log masuk yang berulang.' },
+    text: { inShort: IN_SHORT_1127, table: DATA_TABLE_1127, sections: SECTIONS_1127 },
+  },
+  {
     date: '2026-10-21',
     label: { en: '21 October 2026', ms: '21 Oktober 2026' },
     short: 'work experience, languages and CGPA.',
     changes: { en: 'Added work experience, activities, languages and an optional CGPA (shown to employers only if you switch it on).',
                ms: 'Ditambah pengalaman kerja, aktiviti, bahasa dan PNGK pilihan (ditunjukkan kepada majikan hanya jika anda menghidupkannya).' },
+    note: { en: "All of these are optional. If you'd rather not share them, just leave them empty." },
     text: { inShort: IN_SHORT, table: DATA_TABLE_1021, sections: SECTIONS_1021 },
   },
   {

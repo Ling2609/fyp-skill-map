@@ -257,7 +257,7 @@ def change_password(payload: PasswordChange, background: BackgroundTasks, db: Se
 
 # The privacy notice a new user accepts: the date of the newest entry in frontend/src/pages/privacyText.js VERSIONS
 # (tests/test_audit_fixes.py checks the two agree). Change both when the notice changes.
-PRIVACY_VERSION = "2026-10-21"
+PRIVACY_VERSION = "2026-11-27"   # 27 Nov: hosting (Google Cloud, Singapore), Brevo, SSM, IP address
 
 
 # ── Delete my account (13 Oct; audit: grades and profiles are personal data, Malaysia's PDPA 2010) ─────────────────

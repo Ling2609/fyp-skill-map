@@ -146,7 +146,7 @@ def test_someone_on_the_old_notice_can_agree_to_the_new_one(client, users, db):
     assert client.get("/auth/me", headers=h).json()["privacy_version"] == "2026-10-14"
     assert client.post("/auth/me/privacy", headers=h, json={"version": "2026-10-14"}).status_code == 409
     r = client.post("/auth/me/privacy", headers=h, json={"version": PRIVACY_VERSION})
-    assert r.status_code == 200 and r.json()["privacy_version"] == PRIVACY_VERSION == "2026-10-21"
+    assert r.status_code == 200 and r.json()["privacy_version"] == PRIVACY_VERSION == "2026-11-27"
 
 
 def test_strongest_modules_put_the_jobs_skills_first(client, users, post_job, db):

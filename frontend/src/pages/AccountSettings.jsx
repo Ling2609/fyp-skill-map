@@ -32,7 +32,7 @@ function Field({ label, children }) {
 }
 
 // One line of a section: label, current value, and a button that opens the row's form
-function Row({ label, value, action, onAction, note, open, children, danger }) {
+function Row({ label, value, action, onAction, note, open, children, danger, wide }) {
   return (
     <div className="acct-row py-4 border-t border-slate-200 first:border-t-0">
       {/* 25 Nov (her phone review): on a phone, label and action on one line, the value on its own line under them
@@ -49,7 +49,7 @@ function Row({ label, value, action, onAction, note, open, children, danger }) {
         )}
         {note && <span className="text-xs text-slate-500 max-sm:col-span-2">{note}</span>}
       </div>
-      {open && <div className="mt-4 sm:ml-36 max-w-md">{children}</div>}
+      {open && <div className={`mt-4 sm:ml-36 ${wide ? '' : 'max-w-md'}`}>{children}</div>}
     </div>
   )
 }
@@ -287,11 +287,11 @@ export default function AccountSettings() {
             onAction={() => navigate('/privacy?from=account')} />
 
           {user?.role === 'student' && (
-            <Row label="Delete account" value="Remove your account and your data" action="Delete account…" danger
+            <Row label="Delete account" value="Remove your account and your data" action="Delete account…" danger wide
               onAction={() => start('delete')} open={open === 'delete'}>
               <form onSubmit={deleteAccount} className="space-y-3">
-                <p className="text-sm text-slate-700">This deletes your profile, grades, projects, certificates, awards, applications and AI Assistant chats. Employers no longer see you. It can't be undone.</p>
-                <Field label="Your password"><input type="password" className={inputClass} value={form.current_password || ''} onChange={set('current_password')} autoComplete="current-password" autoFocus /></Field>
+                <p className="text-sm text-slate-700">This deletes your profile, grades, projects, certificates, awards, applications and AI Assistant chats.<br className="max-sm:hidden" /> Employers no longer see you. It can&apos;t be undone.</p>
+                <div className="max-w-md"><Field label="Your password"><input type="password" className={inputClass} value={form.current_password || ''} onChange={set('current_password')} autoComplete="current-password" autoFocus /></Field></div>
                 {errorBox}
                 <div className="flex items-center gap-2 pt-1">
                   <button type="submit" disabled={saving || !form.current_password}

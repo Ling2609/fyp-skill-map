@@ -1,7 +1,7 @@
 PASS  1. the API answers  (HTTP 200)
 PASS  2. the browser may call the API (CORS for https://34-126-94-25.sslip.io)  (HTTP 200, allow-origin: https://34-126-94-25.sslip.io)
 PASS  3. the web app is served, and a deep link (/login) gets the same page  (/ HTTP 200, /login HTTP 200)
-PASS  4. the built JavaScript file is served  (/assets/index-RGf4eXvi.js HTTP 200)
+PASS  4. the built JavaScript file is served  (/assets/index-HJS6GVsZ.js HTTP 200)
 PASS  5. the database holds job data  (10 job categories)
 SKIP  6. a student can register and sign in  (live site: needs the emailed code; done by hand in the browser)
 SKIP  7. a signed-in call reads the database (/profile/skills)  (live site: needs the emailed code; done by hand in the browser)

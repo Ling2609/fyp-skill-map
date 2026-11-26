@@ -1,0 +1,107 @@
+
+iPhone 12 (390x844)
+pass  signed out    Sign in
+pass  signed out    Register
+pass  signed out    Forgot password
+pass  signed out    Privacy notice
+pass  new student   Study set-up (first sign-in)
+pass  student       Student Dashboard
+pass  student       My Profile: Modules
+pass  student       My Profile: Projects
+pass  student       My Profile: Experience
+pass  student       My Profile: Certificates
+pass  student       My Profile: Awards
+pass  student       Profile & privacy
+pass  student       Preview as employer
+pass  student       Job Matches
+pass  student       Job Detail
+pass  student       What the employer will see
+pass  student       My Applications
+pass  student       AI Assistant
+pass  student       Account settings (student)
+pass  new employer  Employer waiting for approval
+pass  employer      Employer Dashboard
+pass  employer      My Jobs
+pass  employer      Post a Job
+pass  employer      View applicants
+pass  employer      Applicant
+pass  employer      Graduate who fits
+pass  employer      Edit job
+pass  employer      Account settings (employer)
+pass  career office Career office Dashboard
+pass  career office Users
+pass  career office Academics: Modules
+pass  career office Academics: Intakes  (look: span.block.font-mono "APU1F2701SE")
+pass  career office Account settings (admin)
+
+iPad (768x1024)
+pass  signed out    Sign in
+pass  signed out    Register
+pass  signed out    Forgot password
+pass  signed out    Privacy notice
+pass  new student   Study set-up (first sign-in)
+pass  student       Student Dashboard
+pass  student       My Profile: Modules
+pass  student       My Profile: Projects
+pass  student       My Profile: Experience
+pass  student       My Profile: Certificates
+pass  student       My Profile: Awards
+pass  student       Profile & privacy
+pass  student       Preview as employer
+pass  student       Job Matches
+pass  student       Job Detail
+pass  student       What the employer will see
+pass  student       My Applications
+pass  student       AI Assistant
+pass  student       Account settings (student)
+pass  new employer  Employer waiting for approval
+pass  employer      Employer Dashboard
+pass  employer      My Jobs
+pass  employer      Post a Job
+pass  employer      View applicants
+pass  employer      Applicant
+pass  employer      Graduate who fits
+pass  employer      Edit job
+pass  employer      Account settings (employer)
+pass  career office Career office Dashboard
+pass  career office Users
+pass  career office Academics: Modules
+pass  career office Academics: Intakes  (look: span.block.font-mono "APU1F2701SE")
+pass  career office Account settings (admin)
+
+Laptop (1366x768)
+pass  signed out    Sign in
+pass  signed out    Register
+pass  signed out    Forgot password
+pass  signed out    Privacy notice
+pass  new student   Study set-up (first sign-in)
+pass  student       Student Dashboard
+pass  student       My Profile: Modules
+pass  student       My Profile: Projects
+pass  student       My Profile: Experience
+pass  student       My Profile: Certificates
+pass  student       My Profile: Awards
+pass  student       Profile & privacy
+pass  student       Preview as employer
+pass  student       Job Matches
+pass  student       Job Detail
+pass  student       What the employer will see
+pass  student       My Applications
+pass  student       AI Assistant
+pass  student       Account settings (student)
+pass  new employer  Employer waiting for approval
+pass  employer      Employer Dashboard
+pass  employer      My Jobs
+pass  employer      Post a Job
+pass  employer      View applicants
+pass  employer      Applicant
+pass  employer      Graduate who fits
+pass  employer      Edit job
+pass  employer      Account settings (employer)
+pass  career office Career office Dashboard
+pass  career office Users
+pass  career office Academics: Modules
+pass  career office Academics: Intakes
+pass  career office Account settings (admin)
+
+99 of 99 checks pass. Table: docs/evidence/ui/devices/summary.md

@@ -18,8 +18,8 @@ Lighthouse 13.4.1, desktop, Accessibility only; `node scripts/lighthouse_all.mjs
 | student | [Profile & privacy](profile_privacy.html) | `/profile/settings` | 100 | - |
 | student | [Preview as employer](preview_as_employer.html) | `/profile/preview` | 100 | - |
 | student | [Job Matches](job_matches.html) | `/recommend` | 100 | - |
-| student | [Job Detail](job_detail.html) | `/jobs/skillmap-0228376d2464` | 100 | - |
-| student | [What the employer will see](what_the_employer_will_see.html) | `/jobs/skillmap-0228376d2464/check` | 100 | - |
+| student | [Job Detail](job_detail.html) | `/jobs/skillmap-8fd7cce076b6` | 100 | - |
+| student | [What the employer will see](what_the_employer_will_see.html) | `/jobs/skillmap-8fd7cce076b6/check` | 100 | - |
 | student | [My Applications](my_applications.html) | `/applications` | 100 | - |
 | student | [AI Assistant](ai_assistant.html) | `/chatbot` | 100 | - |
 | student | [Account settings (student)](account_settings_student.html) | `/account` | 100 | - |

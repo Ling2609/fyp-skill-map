@@ -446,6 +446,8 @@ export function StudyFields({ options, value, onChange }) {
           <option value="" disabled>Pick your programme</option>
           {options.programmes.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
         </select>
+        {/* 27 Nov (her review): a closed box cuts a long name ("…with a specialism i"); the full name shows under it */}
+        {programme && programme.name.length > 60 && <p className="text-xs text-gray-600 mt-1.5">{programme.name}</p>}
       </div>
       <div>
         <label htmlFor="study-intake" className="block text-xs font-medium text-gray-600 mb-1.5">Intake <span className="text-red-400">*</span></label>

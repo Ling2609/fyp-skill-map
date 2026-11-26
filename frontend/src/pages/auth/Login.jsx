@@ -6,37 +6,8 @@ import { AuthShell, AUTH_FIELD, AUTH_TONE, Notice, RevealButton } from '../../co
 import { PressButton } from '../../components/ui'
 import { Busy } from '../../components/Spinner'
 
-// Toast: shows the message the previous page passed ("Account created…", "Password changed…"); it used to be
-// hard-coded to "Account created!" (4 Oct)
-const Toast = ({ message, onClose }) => {
-  useEffect(() => {
-    const timer = setTimeout(onClose, 8000)
-    return () => clearTimeout(timer)
-  }, [onClose])
-
-  return (
-    <div
-      role="status"
-      className="fixed inset-x-4 top-4 z-50 mx-auto flex max-w-sm items-start gap-2.5 rounded-tile border border-have/30 bg-card px-3.5 py-2.5 shadow-lifted sm:inset-x-auto sm:right-6 sm:mx-0"
-    >
-      <span aria-hidden="true" className="mt-px grid h-5 w-5 shrink-0 place-items-center rounded-full bg-have-soft text-have-strong">
-        <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.6} d="M5 13l4 4L19 7" />
-        </svg>
-      </span>
-      <p className="m-0 min-w-0 flex-1 text-small font-medium leading-snug text-ink-soft">{message}</p>
-      <button
-        onClick={onClose}
-        aria-label="Dismiss"
-        className="-mr-1 -mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-chip text-muted transition-colors duration-150 hover:bg-well hover:text-ink-soft"
-      >
-        <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-        </svg>
-      </button>
-    </div>
-  )
-}
+// 27 Nov (her review: the floating message covered "Welcome back"): the message the previous page passed ("Account
+// created…", "Password changed…", "…were deleted") now sits inside the card, like "Email verified"
 
 export default function Login() {
   const navigate = useNavigate()
@@ -55,7 +26,7 @@ export default function Login() {
   // 13 Oct: after "Delete my account" the page opens as /login?deleted=1 (a fresh load, so no navigate state)
   const deleted = new URLSearchParams(location.search).get('deleted') === '1'
   const toastMessage = deleted ? 'Your account and its data were deleted.' : location.state?.message
-  const [showToast, setShowToast] = useState(!!toastMessage)
+  const shownMessage = toastMessage || location.state?.message
 
   // Show "session expired" once, then tidy the URL so a refresh doesn't show it again
   useEffect(() => {
@@ -92,7 +63,7 @@ export default function Login() {
       intro={{ headline: <>Your next step is <em>waiting</em>.</> }}
       formFirst
     >
-      {showToast && <Toast message={toastMessage || location.state?.message} onClose={() => setShowToast(false)} />}
+      {shownMessage && !justVerified && !error && <Notice tone="good" icon><span role="status">{shownMessage}</span></Notice>}
 
       {justVerified && !error && (
         <Notice tone="good" icon><span role="status"><b>Email verified.</b> Sign in to continue.{location.state?.role === 'employer'

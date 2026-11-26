@@ -27,7 +27,8 @@ export default function ProfileTracker({ done, onGo }) {
   }, [open])
   if (!done) return null
   const count = ITEMS.filter(i => done[i.key]).length
-  if (count === 0 || count === ITEMS.length) return null      // nothing yet: the start card asks; all done: gone
+  // 27 Nov (her review): shown from 0 too; a new student lands on My Profile after set-up, not on the Dashboard's start card
+  if (count === ITEMS.length) return null      // all done: gone
 
   return (
     <div ref={box} className="relative">

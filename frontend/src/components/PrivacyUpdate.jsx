@@ -47,9 +47,9 @@ export default function PrivacyUpdate() {
           <p className="text-sm text-slate-800 mt-1">{LATEST.changes.en}</p>
         </div>
         <p className="text-sm text-slate-600 mt-3">Everything else is the same.{' '}
-          <a href="/privacy" target="_blank" rel="noopener noreferrer" className="font-medium text-blue-700 hover:underline">Read the full notice ↗</a></p>
-        <p className="text-sm text-slate-600 mt-2">All of these are optional. If you'd rather not share them, just leave them empty.
-          Questions? Email the career office at <a href={`mailto:${CONTACT}`} className="text-blue-700 hover:underline">{CONTACT}</a>.</p>
+          <a href="/privacy" target="_blank" rel="noopener noreferrer" className="font-medium text-blue-700 underline underline-offset-2">Read the full notice ↗</a></p>
+        {/* 27 Nov: the "all optional" line belongs to a version that added optional fields (21 Oct), not to every update */}
+        <p className="text-sm text-slate-600 mt-2">{LATEST.note?.en && <>{LATEST.note.en}{' '}</>}Questions? Email the career office at <a href={`mailto:${CONTACT}`} className="text-blue-700 underline underline-offset-2">{CONTACT}</a>.</p>
         {error && <p role="alert" className="text-sm text-rose-700 bg-rose-50 rounded-lg px-3 py-2 mt-3">{error}</p>}
         <div className="mt-5 flex justify-end gap-2">
           <button type="button" onClick={later} className="text-sm font-medium text-slate-700 border border-slate-300 rounded-lg px-4 py-2 hover:bg-slate-50">Not now</button>

@@ -68,7 +68,7 @@ export default function StudySetup() {
   return (
     <main className="min-h-screen flex items-center justify-center p-4">
       {step === 1 ? (
-      <form onSubmit={saveStudy} className="bg-white rounded-2xl border border-slate-200 shadow-sm w-full max-w-lg p-8 space-y-5">
+      <form onSubmit={saveStudy} className="bg-white rounded-2xl border border-slate-200 shadow-sm w-full max-w-2xl p-8 space-y-5">
         <div>
           <p className="text-[11px] font-semibold text-blue-600 uppercase tracking-widest mb-2">Step 1 of 2</p>
           <h1 className="text-xl font-semibold text-slate-900">Welcome{user?.first_name ? `, ${user.first_name}` : ''}</h1>
@@ -89,7 +89,7 @@ export default function StudySetup() {
         </div>
       </form>
       ) : (
-      <form onSubmit={saveGoal} className="bg-white rounded-2xl border border-slate-200 shadow-sm w-full max-w-lg p-8 space-y-5">
+      <form onSubmit={saveGoal} className="bg-white rounded-2xl border border-slate-200 shadow-sm w-full max-w-2xl p-8 space-y-5">
         <div>
           <p className="text-[11px] font-semibold text-blue-600 uppercase tracking-widest mb-2">Step 2 of 2</p>
           <h1 className="text-xl font-semibold text-slate-900">What kind of job are you working towards?</h1>
