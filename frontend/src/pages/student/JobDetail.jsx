@@ -15,7 +15,7 @@ import { useOutsideApplication } from '../../components/useOutsideApplication'
 import { AdRequirementPills, SalaryFromAd } from '../../components/AdRequirements'
 
 // 19 Nov: the company's initials in the header's tile (as the Job Matches cards)
-const initials = (name = '') => name.replace(/\b(sdn|bhd|berhad|ltd|limited|plc|inc)\b\.?/gi, '').trim().split(/\s+/).filter(Boolean).slice(0, 2).map(w => w[0]).join('').toUpperCase() || '·'
+const initials = (name = '') => (w => w.length > 1 ? w.map(x => x[0]).join('') : (w[0] || '').slice(0, 2))(name.replace(/\b(sdn|bhd|berhad|ltd|limited|plc|inc)\b\.?/gi, '').trim().split(/\s+/).filter(Boolean).slice(0, 2)).toUpperCase() || '·'
 // 19 Nov: mark the job's skill words inside a line of the ad (case-insensitive, whole words)
 const esc = (t) => t.replace(/[.*+?^${}()|[\]\\/]/g, '\\$&')
 function markSkills(text, marks) {
@@ -459,7 +459,7 @@ export default function JobDetail() {
       {/* 19 Nov (her approved mock review/job-detail.html): the page width every screen uses; the glass header; the two
           tabs became two tiles side by side (the ad with its skill words marked | the skill gap), so nothing hides
           behind a tab and the page fits one screen; each tile scrolls inside. Phone: the gap first, then the ad */}
-      <div className="mx-auto flex w-full max-w-[1256px] min-h-0 flex-1 flex-col px-4 pb-4 sm:px-8">
+      <div className="mx-auto flex w-full max-w-314 min-h-0 flex-1 flex-col px-4 pb-4 sm:px-8">
 
         <section className="page-glass jd-head mt-3 shrink-0" aria-labelledby="jd-title">
           <span className="page-glass-ic jd-ic" aria-hidden="true">{initials(gap?.job?.company)}</span>

@@ -435,7 +435,7 @@ function JobsTile({ matches, others = [], scope, onOpen, onSee }) {
     <li key={job.job_id}>
       <button type="button" onClick={() => onOpen(job)} className="group grid w-full grid-cols-[minmax(0,1fr)_auto] items-center gap-3 rounded-lg py-1.5 dash-tight:py-1 text-left hover:bg-well/60">
         <span className="min-w-0">
-          <span className="block truncate text-body font-bold text-ink group-hover:text-accent-strong">{job.job_title}</span>
+          <span className="block truncate max-sm:line-clamp-2 max-sm:whitespace-normal text-body font-bold text-ink group-hover:text-accent-strong" title={job.job_title}>{job.job_title}</span>
           <span className="block truncate text-small text-muted">{job.company}</span>
         </span>
         <span className="text-right text-small text-muted whitespace-nowrap"><b className="text-[15px] text-ink">{job.skills_matched}</b> of {job.skills_total} skills</span>

@@ -34,7 +34,7 @@ const inLocation = (job, loc) => loc === 'all'
 // would hide most suitable jobs. Off by default; the level penalty already ranks these lower.
 const SENIOR_LEVELS = ['senior', 'lead', 'manager']
 
-const monogram = (name = '') => (name.match(/[A-Za-z]+/g) || []).slice(0, 2).map(w => w[0]).join('').toUpperCase() || '·'
+const monogram = (name = '') => (w => w.length > 1 ? w.map(x => x[0]).join('') : (w[0] || '').slice(0, 2))((name.match(/[A-Za-z]+/g) || []).slice(0, 2)).toUpperCase() || '·'   // 26 Nov: one word -> 2 letters (EX)
 
 function NoSkillsState() {
   const navigate = useNavigate()
@@ -105,7 +105,7 @@ const ENDED = ['rejected', 'not_selected', 'withdrew']
 function AppliedPill({ m }) {
   const ended = ENDED.includes(m.status)
   const text = `✓ Applied${m.site ? ` on ${m.site}` : ''}${m.status !== 'applied' ? ` · ${m.status_label}` : ''}`
-  return <span className={`shrink-0 text-[11px] font-medium border rounded-full px-2 py-0.5 ${ended
+  return <span className={`shrink-0 text-small font-medium border rounded-full px-2 py-0.5 ${ended
     ? 'text-ink-soft bg-well border-line' : 'text-green-800 bg-green-50 border-green-200'}`}>{text}</span>
 }
 
@@ -402,7 +402,7 @@ export default function Recommend() {
 
   const nOn = [location !== 'all', activeCategory !== 'all', fit !== 'all', hideSenior].filter(Boolean).length
   return (
-    <div className="mx-auto flex h-[calc(100dvh-var(--bar-h))] w-full max-w-[1240px] flex-col">
+    <div className="mx-auto flex h-[calc(100dvh-var(--bar-h))] w-full max-w-310 flex-col">
       {/* 25 Nov (her review: "make it same as other pages"): the shared glass header (icon tile, blue label, title,
           one line), with the search and the filters inside it */}
       <PageHeader>
@@ -524,14 +524,14 @@ export default function Recommend() {
                     className="jm-card group relative flex cursor-pointer rounded-[20px] border border-transparent bg-card">
                     <div className="flex min-w-0 flex-1 flex-wrap items-start gap-3 px-3.5 py-3 sm:flex-nowrap">
                       {/* 25 Nov (her phone mock): phones show title + fit, company · place · pay, one line of skills */}
-                      <span aria-hidden="true" className="grid h-10 w-10 shrink-0 place-items-center rounded-[12px] bg-accent-soft font-display text-label font-bold text-accent-strong max-sm:hidden">
+                      <span aria-hidden="true" className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-accent-soft font-display text-label font-bold text-accent-strong max-sm:hidden">
                         {monogram(job.company)}
                       </span>
                       <div className="min-w-0 flex-1 max-sm:basis-full">
                         <div className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1 sm:flex-nowrap">
                           <a href={`/jobs/${encodeURIComponent(job.job_id)}`}
                             onClick={e => { e.stopPropagation(); if (e.ctrlKey || e.metaKey || e.shiftKey || e.button) return; e.preventDefault(); openJob(job.job_id) }}
-                            className="min-w-0 rounded font-display text-body font-bold leading-snug text-ink sm:truncate transition group-hover:text-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/40">{job.job_title}</a>
+                            className="min-w-0 rounded font-display text-lead font-bold leading-snug text-ink sm:truncate transition group-hover:text-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/40">{job.job_title}</a>
                           {mine[job.job_id]?.applied ? <AppliedPill m={mine[job.job_id]} />
                             : job.source === 'employer' ? <span className="shrink-0 rounded-pill border border-accent/30 bg-accent-soft px-2 py-0.5 text-label font-medium text-accent max-sm:hidden">On SkillMap</span>
                             : job.source === 'live' ? <span className="shrink-0 rounded-pill border border-line bg-band px-2 py-0.5 text-label font-medium text-muted max-sm:hidden">{job.publisher || 'employer site'} ↗</span>
@@ -539,26 +539,26 @@ export default function Recommend() {
                           {mine[job.job_id]?.invited && <span className="shrink-0 rounded-pill border border-c3/40 bg-c3/15 px-2 py-0.5 text-label font-medium text-ink-soft">Invited</span>}
                           {job.skills_total > 0 && <span className="sm:hidden ml-auto shrink-0 rounded-pill bg-have-soft px-2 py-0.5 font-mono text-label font-medium tabular text-have-strong">{job.skills_matched}/{job.skills_total}<span className="sr-only"> {BASIS_WORD[job.coverage_basis] || 'required'} skills</span></span>}
                         </div>
-                        <p className="m-0 mt-0.5 truncate text-small text-faint">
+                        <p className="m-0 mt-0.5 truncate text-[13px] leading-4.5 text-muted">
                           {job.company} · {job.location}{daysAgo(job.posted_days_ago) && <span className="max-sm:hidden"> · {daysAgo(job.posted_days_ago)}</span>}
                           {job.salary && job.salary !== 'nan' && <span className="sm:hidden"> · {job.salary}</span>}
                         </p>
                         <div className="mt-2 flex flex-wrap items-center gap-1.5">
                           <LevelTag level={job.level} />
-                          <span className="rounded-chip bg-well px-2 py-0.5 text-label font-medium text-ink-soft max-sm:hidden">{job.subcategory}</span>
+                          <span className="rounded-chip bg-well px-2 py-0.5 text-small font-medium text-ink-soft max-sm:hidden">{job.subcategory}</span>
                           {job.salary && job.salary !== 'nan' && (
-                            <span className="rounded-chip bg-well px-2 py-0.5 text-label font-medium text-ink-soft max-sm:hidden">{job.salary}</span>
+                            <span className="rounded-chip bg-well px-2 py-0.5 text-small font-medium text-ink-soft max-sm:hidden">{job.salary}</span>
                           )}
                           {job.top_job_skills?.slice(0, 3).map(skill => (
                             <span key={skill} className={skill === job.search_skill
-                              ? 'rounded-chip border border-accent/30 bg-accent-soft px-2 py-0.5 text-label font-medium text-accent'
-                              : 'rounded-chip border border-line px-2 py-0.5 text-label text-muted'}>{skillName(skill)}</span>
+                              ? 'rounded-chip border border-accent/30 bg-accent-soft px-2 py-0.5 text-small font-medium text-accent'
+                              : 'rounded-chip border border-line px-2 py-0.5 text-small text-muted'}>{skillName(skill)}</span>
                           ))}
                         </div>
                       </div>
                       <div className="flex w-28 shrink-0 flex-col items-end gap-1.5 max-sm:hidden">
                         <span title={BASIS_TIP[job.coverage_basis] || BASIS_TIP.required}
-                          className="rounded-pill bg-have-soft px-2 py-0.5 font-mono text-label font-medium tabular text-have-strong whitespace-nowrap">
+                          className="rounded-pill bg-have-soft px-2 py-0.5 font-mono text-small font-medium tabular text-have-strong whitespace-nowrap">
                           {job.skills_total ? `${job.skills_matched}/${job.skills_total} ${BASIS_WORD[job.coverage_basis] || 'required'}` : `${job.match_percent}%`}
                         </span>
                         {job.skills_total ? (

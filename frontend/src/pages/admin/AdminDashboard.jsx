@@ -48,7 +48,7 @@ const TT = {
   cap: ic(<><path d="M2 9l10-5 10 5-10 5Z" /><path d="M6 11v5c3 2 9 2 12 0v-5" /></>),
   clock: ic(<><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></>),
 }
-const initials = (t = '') => t.split(/\s+/).filter(Boolean).slice(0, 2).map(w => w[0]).join('').toUpperCase()
+const initials = (t = '') => (w => w.length > 1 ? w.map(x => x[0]).join('') : (w[0] || '').slice(0, 2))(t.split(/\s+/).filter(Boolean).slice(0, 2)).toUpperCase()
 
 // a short laptop screen (her ~1440x735): one waiting employer shown instead of two
 function useShort() {

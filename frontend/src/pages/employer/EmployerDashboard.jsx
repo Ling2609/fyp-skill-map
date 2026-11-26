@@ -19,9 +19,8 @@ import { RECORD_TIP } from '../../components/EmployerRecord'
 // Left: applications to review across all jobs, newest first (Greenhouse's "Applications to Review").
 // Right: open jobs with a stacked status bar (Workable's job pipeline), then graduates who fit (visible students who
 // haven't applied, best match first). The page fills the screen and each card scrolls on its own (her rule).
-const AVATAR = ['bg-blue-700', 'bg-violet-700', 'bg-cyan-700', 'bg-pink-700', 'bg-orange-700', 'bg-emerald-700', 'bg-indigo-700', 'bg-teal-700']   // -700: white initials readable (WCAG 4.5:1)
-const initials = (name) => name.split(/\s+/).map(w => w[0]).join('').slice(0, 2).toUpperCase()
-const avatarCls = (name) => AVATAR[[...name].reduce((n, c) => n + c.charCodeAt(0), 0) % AVATAR.length]
+const initials = (name) => (w => w.length > 1 ? w.map(x => x[0]).join('') : (w[0] || '').slice(0, 2))(name.split(/\s+/).filter(Boolean).slice(0, 2)).toUpperCase()
+const avatarCls = () => 'bg-blue-700'   // 26 Nov review: one tint (colours elsewhere carry meaning); -700 keeps white initials at 4.5:1
 const ago = (iso) => {
   const days = Math.floor((Date.now() - new Date(iso).getTime()) / 86400000)
   return days <= 0 ? 'today' : days === 1 ? 'yesterday' : days < 14 ? `${days} days ago` : new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })

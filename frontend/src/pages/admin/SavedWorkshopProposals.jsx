@@ -74,7 +74,8 @@ export default function SavedWorkshopProposals() {
   }
 
   return (
-    <>
+    // 26 Nov (her review): the page fits the window; the card head stays put and only the rows scroll (as My Plans)
+    <div className="flex h-[calc(100dvh-var(--bar-h))] flex-col">
       {confirmation}
       <PageHeader>
         {/* 25 Nov (her phone review): on a phone the button sits at the title's right, not under it */}
@@ -88,9 +89,9 @@ export default function SavedWorkshopProposals() {
         </div>
       </PageHeader>
 
-      <section aria-label="Workshop proposals" className="mx-4 mt-3.5 mb-4 sm:mx-8">
-        {notice && <p role="status" className="mb-3 text-sm text-ink-soft">{notice}</p>}
-        {error && <p role="alert" className="mb-3 text-sm text-rose-700">{error}</p>}
+      <section aria-label="Workshop proposals" className="flex min-h-0 flex-1 flex-col overflow-y-auto px-4 pt-3.5 pb-4 sm:px-8">
+        {notice && <p role="status" className="mb-3 shrink-0 text-sm text-ink-soft">{notice}</p>}
+        {error && <p role="alert" className="mb-3 shrink-0 text-sm text-rose-700">{error}</p>}
         {loadFailed ? (
           <div className="rounded-2xl border border-line bg-white p-5">
             <p role="alert" className="text-sm text-ink-soft">{unavailable}</p>
@@ -104,9 +105,9 @@ export default function SavedWorkshopProposals() {
             <p className="mt-1 text-sm text-muted">Draft a workshop and save it to see it here.</p>
           </div>
         ) : (
-          <div className="emp-tile doc-card bg-white rounded-2xl border">
-            <div className="adm-th"><h2 className="adm-tt"><i>{FOLDER}</i>Saved proposals</h2><span className="text-xs text-muted">{proposals.length} · newest first</span></div>
-            <ul className="doc-list">
+          <div className="emp-tile doc-card flex min-h-0 flex-col overflow-hidden! bg-white rounded-2xl border">
+            <div className="adm-th shrink-0"><h2 className="adm-tt"><i>{FOLDER}</i>Saved proposals</h2><span className="text-xs text-muted">{proposals.length} · newest first</span></div>
+            <ul className="doc-list min-h-0 overflow-y-auto">
               {proposals.map(proposal => (
                 <li key={proposal.id} className="doc-row">
                   <div className="min-w-0">
@@ -128,6 +129,6 @@ export default function SavedWorkshopProposals() {
           </div>
         )}
       </section>
-    </>
+    </div>
   )
 }

@@ -1,4 +1,4 @@
-# Devices: every page at phone, tablet and laptop size (2026-11-25)
+# Devices: every page at phone, tablet and laptop size (2026-11-26)
 
 `node scripts/devices_all.mjs` on the e2e data, Chromium with device emulation (as Chrome DevTools' device toolbar). Pass = no sideways scroll, nothing past the screen edge, and (phone, signed in) the bottom tab bar shows. Click a result for its screenshot.
 

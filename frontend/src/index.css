@@ -579,8 +579,9 @@ select:disabled { opacity: 0.6; cursor: not-allowed; }
 .jd-points .jd-sub { margin: 8px 0 2px; font-weight: 600; color: var(--color-ink); }
 .jd-points .jd-pt { position: relative; padding: 4px 0 4px 16px; color: var(--color-ink-soft); line-height: 1.55; }
 .jd-points .jd-pt::before { content: ""; position: absolute; left: 2px; top: 13px; width: 5px; height: 5px; border-radius: 50%; background: #a3bcec; }
-.jd-mark { background: none; color: inherit; font-weight: 700; border-bottom: 3px solid var(--color-have); padding: 0 1px; }
-.jd-mark.m { border-bottom-color: var(--color-missing); }
+/* 26 Nov review: a soft tint + a thin line under it, so a skill word no longer reads as a spell-check mark */
+.jd-mark { background: var(--color-have-soft); color: inherit; font-weight: 700; border-bottom: 2px solid var(--color-have); border-radius: 3px 3px 0 0; padding: 0 2px; }
+.jd-mark.m { background: var(--color-missing-soft); border-bottom-color: var(--color-missing); }
 .jd-chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; }
 .jd-chip { display: inline-flex; align-items: center; gap: 5px; min-height: 28px; padding: 0 11px; border-radius: 999px; background: var(--color-have-soft); color: var(--color-have-strong); border: 1px solid #b5e3dd; font-weight: 600; font-size: 12.5px; }
 .jd-chip .via { font-weight: 500; font-size: 11px; color: var(--color-muted); }
@@ -1428,7 +1429,7 @@ dialog, [role="dialog"], [role="alertdialog"], .app-modal-body { scrollbar-gutte
 .jd-coverage-track { display: flex; gap: 3px; height: 26px; border-radius: 8px; overflow: hidden; background: #f1f4f8; }
 .jd-coverage-track > span { flex-basis: 0; min-width: 0; }
 .jd-coverage-matched { background: #159681; }
-.jd-coverage-missing { background: repeating-linear-gradient(135deg, #f5a17d 0 6px, #ffd1bc 6px 10px); }
+.jd-coverage-missing { background: #f5a17d; }   /* 26 Nov review: solid, stripes read as loading */
 .jd-coverage-legend { display: flex; align-items: center; flex-wrap: wrap; gap: 6px 16px; margin-top: 8px; font-size: 12px; color: var(--color-muted); }
 .jd-coverage-legend > span { display: inline-flex; align-items: center; gap: 5px; }
 .jd-coverage-legend i { width: 9px; height: 9px; border-radius: 3px; }
@@ -1487,7 +1488,7 @@ dialog, [role="dialog"], [role="alertdialog"], .app-modal-body { scrollbar-gutte
 /* List explains evidence; Chart summarises coverage and reveals only the selected skills. */
 .skillgap-section-intro, .skillgap-info-section > header { margin-bottom: 12px; }
 .skillgap-section-intro h3, .skillgap-info-section h3 { display: flex; align-items: center; gap: 7px; margin: 0; color: var(--color-ink); font-size: 14px; font-weight: 700; }
-.skillgap-section-intro h3 > span, .skillgap-info-section h3 > span { border-radius: 6px; padding: 1px 6px; background: #f0f3f9; color: #63718b; font-size: 11px; font-weight: 600; }
+.skillgap-section-intro h3 > span, .skillgap-info-section h3 > span { border-radius: 6px; padding: 1px 6px; background: #f0f3f9; color: var(--color-ink-soft);   /* 26 Nov: #63718b was 4.42:1 on #f0f3f9 (axe) */ font-size: 11px; font-weight: 600; }
 .skillgap-section-intro p, .skillgap-info-section header p { margin: 4px 0 0; font-size: 12px; line-height: 1.45; color: var(--color-muted); }
 .skillgap-info-section { padding-top: 16px; margin-top: 16px; border-top: 1px solid var(--color-line); }
 .skillgap-token-list { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 7px; }

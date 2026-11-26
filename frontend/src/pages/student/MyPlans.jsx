@@ -117,9 +117,9 @@ export default function MyPlans() {
         </div>
       </PageHeader>
 
-      <section aria-labelledby="learning-plans-title" className="min-h-0 flex-1 overflow-y-auto px-4 pt-3.5 pb-4 sm:px-8">
-        {notice && <p role="status" className="mb-3 text-sm text-have-strong">{notice}</p>}
-        {removeError && <p role="alert" className="mb-3 text-sm text-rose-700">{removeError}</p>}
+      <section aria-labelledby="learning-plans-title" className="flex min-h-0 flex-1 flex-col overflow-y-auto px-4 pt-3.5 pb-4 sm:px-8">
+        {notice && <p role="status" className="mb-3 shrink-0 text-sm text-have-strong">{notice}</p>}
+        {removeError && <p role="alert" className="mb-3 shrink-0 text-sm text-rose-700">{removeError}</p>}
         {error ? (
           <div className="rounded-2xl border border-line bg-white p-5">
             <p role="alert" className="text-sm text-ink-soft">{error}</p>
@@ -139,8 +139,8 @@ export default function MyPlans() {
             {page === 1 && <p className="mx-auto mt-1 max-w-sm text-sm text-muted">Ask for a learning plan in AI Assistant. It will appear here when the chat is saved.</p>}
           </div>
         ) : (
-          <div className="emp-tile doc-card bg-white rounded-2xl border">
-            <div className="adm-th">
+          <div className="emp-tile doc-card flex min-h-0 flex-col overflow-hidden! bg-white rounded-2xl border">
+            <div className="adm-th shrink-0">
               <h2 id="learning-plans-title" className="adm-tt"><i><PlanIcon /></i>Learning plans</h2>
               <span className="text-xs text-muted">{result.plans.length}{result.has_next || page > 1 ? ` on page ${page}` : ''}</span>
               <div role="group" aria-label="Sort plans by date" className="doc-sort ml-auto">
@@ -150,7 +150,8 @@ export default function MyPlans() {
                 ))}
               </div>
             </div>
-            <ul className="doc-list">
+            {/* 26 Nov (her review): the card head stays put; only the rows scroll */}
+            <ul className="doc-list min-h-0 overflow-y-auto">
               {result.plans.map((plan, index) => {
                 const id = `${plan.session_id}-${plan.message_index}`
                 const open = expanded === id
@@ -187,7 +188,7 @@ export default function MyPlans() {
         )}
 
         {(page > 1 || result?.has_next) && (
-          <nav aria-label="Learning plan pages" className="mt-4 flex flex-wrap items-center gap-3">
+          <nav aria-label="Learning plan pages" className="mt-4 flex shrink-0 flex-wrap items-center gap-3">
             <button type="button" className="acad-btn edit min-h-11 disabled:opacity-50" disabled={removing || page === 1 || (!result && !error)}
               onClick={() => changePage(page - 1)}>Previous</button>
             <span className="text-sm text-muted">Page {page}</span>
