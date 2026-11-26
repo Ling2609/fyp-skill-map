@@ -25,6 +25,9 @@ class Settings(BaseSettings):
     smtp_port: int = 587
     smtp_user: str = ""
     smtp_password: str = ""
+    # 26 Nov (Google Cloud: Gmail refuses SMTP logins from the server's address): a sending service such as Brevo logs
+    # in with its own user name, so the From address is set apart. Empty = SMTP_USER (Gmail, as before)
+    smtp_from: str = ""
     # Browser tests only (23 Nov, email verification): E2E_OUTBOX=1 writes every email to backend/.e2e_outbox/
     # instead of sending it, so the tests can read the code. Allowed only on the skillmap_e2e database; on any other
     # database the backend refuses to start (app/services/mailer.py check_outbox).

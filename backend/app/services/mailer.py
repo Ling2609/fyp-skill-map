@@ -56,7 +56,7 @@ LOGO = Path(__file__).resolve().parents[1] / "assets" / "email-logo.png"
 def _message(to: str, subject: str, body: str, html: str | None) -> EmailMessage:
     from app.services.account_emails import LOGO_CID
     msg = EmailMessage()
-    msg["From"] = f"SkillMap <{settings.smtp_user}>"
+    msg["From"] = f"SkillMap <{settings.smtp_from or settings.smtp_user}>"
     msg["To"] = to
     msg["Subject"] = subject
     msg.set_content(body)                       # plain text first: mail apps without HTML show this

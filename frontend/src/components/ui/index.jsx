@@ -91,7 +91,7 @@ export function Badge({ tone = 'neutral', mono = false, className = '', children
 }
 
 // ── Field: label, control, hint or error, wired together ─────────────────────
-import { useId } from 'react'
+import { useEffect, useId, useRef } from 'react'
 
 const CONTROL =
   'w-full rounded-[11px] border-[1.5px] border-line-strong bg-white text-ink text-body placeholder:text-[#8a8aa0] ' +
@@ -147,9 +147,19 @@ const NOTICE_ICONS = {
   bad: <><circle cx="12" cy="12" r="9" /><path d="M12 7v6M12 16.5h.01" strokeLinecap="round" /></>,
 }
 
-export function Notice({ tone = 'info', icon = false, className = '', children }) {
+// 26 Nov (her report: "Email already registered" sat above a scrolled form and was only seen after switching tabs):
+// an error notice always has its mark and scrolls itself into view when it appears
+export function Notice({ tone = 'info', icon, className = '', children }) {
+  const box = useRef(null)
+  const bad = tone === 'bad'
+  useEffect(() => {
+    if (!bad || !box.current) return
+    const calm = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+    box.current.scrollIntoView?.({ block: 'nearest', behavior: calm ? 'auto' : 'smooth' })
+  }, [bad])
+  if (icon === undefined) icon = bad
   return (
-    <div className={`flex items-start gap-2.5 rounded-panel border px-3.5 py-2.5 text-body leading-snug ${NOTICE_TONES[tone]} ${className}`}>
+    <div ref={box} className={`flex items-start gap-2.5 rounded-panel border px-3.5 py-2.5 text-body leading-snug ${NOTICE_TONES[tone]} ${className}`}>
       {icon && (
         <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.1" className="mt-px h-[18px] w-[18px] shrink-0">
           {NOTICE_ICONS[tone]}

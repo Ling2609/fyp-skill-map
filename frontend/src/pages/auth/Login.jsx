@@ -99,11 +99,7 @@ export default function Login() {
           && ' You can post jobs once your company is approved.'}</span></Notice>
       )}
 
-      {error && (
-        <p role="alert" className="m-0 rounded-[11px] border border-missing/30 bg-missing-soft px-3.5 py-2.5 text-body leading-snug text-missing-strong">
-          {error}
-        </p>
-      )}
+      {error && <Notice tone="bad"><span role="alert">{error}</span></Notice>}
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-3.5">
         {/* 22 Oct (found by the browser tests): each box updates from the latest form (f => ...), so filling both

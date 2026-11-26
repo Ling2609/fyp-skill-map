@@ -7,6 +7,11 @@ library only (no packages needed), and removes the account it makes:
 
   python scripts/tools/docker_smoke.py            # defaults: API http://localhost:8000, web app http://localhost:5173
   python scripts/tools/docker_smoke.py --api http://localhost:8000 --web http://localhost:5173
+  python scripts/tools/docker_smoke.py --live --api https://<site>/api --web https://<site>   # the live server (26 Nov)
+
+--live: the server runs with PRODUCTION=1, so a new account must type the emailed code before it can sign in. Checks
+6-8 are then skipped (SKIP, not counted) and done by hand in the browser: register with a real address, type the
+code, sign in, delete the account (screenshots in docs/evidence/deploy/). Nothing is left behind on the server.
 
 What it checks, in this order (each prints PASS or FAIL; the exit code is 1 if any check fails):
   1. the API answers                                 6. a student can register and sign in
@@ -53,12 +58,15 @@ def call(method, url, body=None, headers=None, timeout=30):
 def keep_alive_check(api, idle_seconds):
     """Two calls on ONE connection with a pause between them: the second fails if the server closed the idle connection."""
     u = urlparse(api)
-    conn = http.client.HTTPConnection(u.hostname, u.port or 80, timeout=30)
+    # 26 Nov: https and a path prefix too (the live site answers on https://<site>/api; port 80 only redirects)
+    conn = (http.client.HTTPSConnection(u.hostname, u.port or 443, timeout=30) if u.scheme == "https"
+            else http.client.HTTPConnection(u.hostname, u.port or 80, timeout=30))
+    path = u.path.rstrip("/") + "/openapi.json"
     try:
-        conn.request("GET", "/openapi.json")
+        conn.request("GET", path)
         conn.getresponse().read()
         time.sleep(idle_seconds)
-        conn.request("GET", "/openapi.json")
+        conn.request("GET", path)
         return conn.getresponse().status == 200, ""
     except (http.client.HTTPException, ConnectionError, OSError) as e:
         return False, f"the server closed the connection after {idle_seconds} s idle: {type(e).__name__}"
@@ -70,6 +78,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--api", default="http://localhost:8000")
     ap.add_argument("--web", default="http://localhost:5173")
+    ap.add_argument("--live", action="store_true", help="the live server: skip checks 6-8 (they need the emailed code; do them by hand)")
     ap.add_argument("--idle", type=float, default=7, help="seconds to leave a connection idle in check 9 (default 7, above uvicorn's 5 s default)")
     a = ap.parse_args()
     api, web = a.api.rstrip("/"), a.web.rstrip("/")
@@ -102,6 +111,15 @@ def main():
     except ValueError:
         n = 0
     check("5. the database holds job data", n > 0, f"{n} job categories" if n else "none: restore docker/db/skillmap.dump or load jobs")
+
+    if a.live:
+        for n in ("6. a student can register and sign in", "7. a signed-in call reads the database (/profile/skills)",
+                  "8. the student can delete their account again"):
+            print(f"SKIP  {n}  (live site: needs the emailed code; done by hand in the browser)", flush=True)
+        ok, why = keep_alive_check(api, a.idle)
+        check(f"9. an idle connection stays open for {a.idle:g} s (uvicorn --timeout-keep-alive 15)", ok, why)
+        print(f"\n{sum(results)} of {len(results)} checks passed (3 skipped: done by hand).")
+        sys.exit(0 if all(results) else 1)
 
     tag = secrets.token_hex(3)
     user, password = f"dockersmoke{tag}", f"violet-harbour-lantern-{secrets.token_hex(4)}"
