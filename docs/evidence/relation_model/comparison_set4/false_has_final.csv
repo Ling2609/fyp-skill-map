@@ -1,0 +1,14 @@
+id,a,b,cosine,band,p_satisfies,label3_majority,label_claude,label_gpt_oss,label_qwen
+88,embedded computing,computer architecture,0.609,0.55-0.65,0.966,RELATED,RELATED,NARROWER,RELATED
+10,Software quality metrics,Quality metrics reporting,0.744,0.65-0.75,0.939,RELATED,RELATED,BROADER,RELATED
+22,concurrency fundamentals,Concurrency patterns,0.815,0.75-0.85,0.91,RELATED,RELATED,BROADER,BROADER
+19,middleware integration,Integration Tools,0.562,0.55-0.65,0.902,RELATED,RELATED,NARROWER,RELATED
+20,database normalisation,database queries,0.564,0.55-0.65,0.861,RELATED,RELATED,RELATED,DIFFERENT
+18,CSS styling,CSS System,0.789,0.75-0.85,0.848,RELATED,RELATED,RELATED,BROADER
+77,layered architecture,Architectural modeling,0.64,0.55-0.65,0.82,RELATED,RELATED,RELATED,RELATED
+83,system-level programming,Programmability,0.618,0.55-0.65,0.806,RELATED,RELATED,NARROWER,RELATED
+36,requirements gathering,Requirement Tracking,0.753,0.75-0.85,0.742,RELATED,RELATED,RELATED,RELATED
+55,System testing,Test systems operation,0.807,0.75-0.85,0.717,RELATED,DIFFERENT,RELATED,RELATED
+29,Software project management,Software Management,0.837,0.75-0.85,0.685,RELATED,RELATED,NARROWER,RELATED
+8,mathematical optimisation,System Optimization,0.717,0.65-0.75,0.629,NOT,DIFFERENT,RELATED,DIFFERENT
+31,Requirements analysis,Requirements Specification,0.835,0.75-0.85,0.607,RELATED,RELATED,BROADER,RELATED

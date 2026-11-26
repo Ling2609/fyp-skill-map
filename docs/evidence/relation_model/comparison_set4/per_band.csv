@@ -1,0 +1,41 @@
+model,band,n,accuracy
+SBERT cosine >= 0.7 (before the model),0.75-0.85,35,0.457
+SBERT cosine >= 0.7 (before the model),0.65-0.75,43,0.581
+SBERT cosine >= 0.7 (before the model),0.55-0.65,39,0.333
+SBERT cosine >= 0.7 (before the model),<0.55,15,0.933
+Untuned nli-deberta-v3-base (zero-shot),0.75-0.85,35,0.543
+Untuned nli-deberta-v3-base (zero-shot),0.65-0.75,43,0.651
+Untuned nli-deberta-v3-base (zero-shot),0.55-0.65,39,0.564
+Untuned nli-deberta-v3-base (zero-shot),<0.55,15,0.933
+Run 1 - ESCO/O*NET only (BERT),0.75-0.85,35,0.457
+Run 1 - ESCO/O*NET only (BERT),0.65-0.75,43,0.163
+Run 1 - ESCO/O*NET only (BERT),0.55-0.65,39,0.256
+Run 1 - ESCO/O*NET only (BERT),<0.55,15,0.867
+Run 2 - SkillMap pairs only (BERT),0.75-0.85,35,0.429
+Run 2 - SkillMap pairs only (BERT),0.65-0.75,43,0.744
+Run 2 - SkillMap pairs only (BERT),0.55-0.65,39,0.564
+Run 2 - SkillMap pairs only (BERT),<0.55,15,0.8
+Run 3 - ESCO/O*NET + SkillMap (BERT),0.75-0.85,35,0.629
+Run 3 - ESCO/O*NET + SkillMap (BERT),0.65-0.75,43,0.628
+Run 3 - ESCO/O*NET + SkillMap (BERT),0.55-0.65,39,0.538
+Run 3 - ESCO/O*NET + SkillMap (BERT),<0.55,15,0.867
+Run 3b - + reweighting (BERT),0.75-0.85,35,0.629
+Run 3b - + reweighting (BERT),0.65-0.75,43,0.651
+Run 3b - + reweighting (BERT),0.55-0.65,39,0.538
+Run 3b - + reweighting (BERT),<0.55,15,0.667
+Run 4 - NLI start (RoBERTa),0.75-0.85,35,0.571
+Run 4 - NLI start (RoBERTa),0.65-0.75,43,0.698
+Run 4 - NLI start (RoBERTa),0.55-0.65,39,0.667
+Run 4 - NLI start (RoBERTa),<0.55,15,0.8
+Run 5 - + SkillMap v3 (RoBERTa),0.75-0.85,35,0.6
+Run 5 - + SkillMap v3 (RoBERTa),0.65-0.75,43,0.698
+Run 5 - + SkillMap v3 (RoBERTa),0.55-0.65,39,0.59
+Run 5 - + SkillMap v3 (RoBERTa),<0.55,15,0.8
+"Run 6a - soft labels, 3 seeds (RoBERTa)",0.75-0.85,35,0.571
+"Run 6a - soft labels, 3 seeds (RoBERTa)",0.65-0.75,43,0.744
+"Run 6a - soft labels, 3 seeds (RoBERTa)",0.55-0.65,39,0.564
+"Run 6a - soft labels, 3 seeds (RoBERTa)",<0.55,15,0.667
+"Run 6 - soft labels, 3 seeds (DeBERTa-v3) = FINAL",0.75-0.85,35,0.657
+"Run 6 - soft labels, 3 seeds (DeBERTa-v3) = FINAL",0.65-0.75,43,0.791
+"Run 6 - soft labels, 3 seeds (DeBERTa-v3) = FINAL",0.55-0.65,39,0.513
+"Run 6 - soft labels, 3 seeds (DeBERTa-v3) = FINAL",<0.55,15,0.933
