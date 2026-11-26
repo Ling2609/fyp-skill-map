@@ -240,7 +240,8 @@ export default function Sidebar() {
     <header className={`sb${rail ? ' rail' : ''}`}>
       {/* 20 Nov (her review): the fold button sits at the sidebar's top right */}
       <div className="sb-top">
-        <Link to="/" aria-label="SkillMap home" className="sb-brand">
+        {/* 26 Nov (her phone: the logo went to the sign-in page): signed in, home is the Dashboard */}
+        <Link to="/dashboard" aria-label="SkillMap home" className="sb-brand">
           <Logo />
           <span className="sb-name">SkillMap</span>
         </Link>

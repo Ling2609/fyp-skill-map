@@ -2,7 +2,7 @@ import { Busy } from './components/Spinner'
 import { SESSION_EXPIRED } from './api'
 import ConfirmationDialog from './components/ConfirmationDialog'
 import { Fragment, lazy, Suspense, useEffect, useLayoutEffect, useRef, useState } from 'react'
-import { Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom'
+import { Routes, Route, Navigate, ScrollRestoration, useLocation, useNavigate } from 'react-router-dom'
 import { SidebarProvider } from './components/SidebarContext'
 import { useAuth } from './context/useAuth'
 import PrivacyUpdate from './components/PrivacyUpdate'
@@ -213,6 +213,9 @@ function SessionExpiredDialog() {
 export default function App() {
   return (
     <SidebarProvider>
+      {/* 26 Nov (her phone: a page opened scrolled to the middle or the end of the last one): a new page starts at the
+          top; Back returns to where you were (React Router's own scroll restoration) */}
+      <ScrollRestoration />
       <AppRoutes />
       <SessionExpiredDialog />
     </SidebarProvider>

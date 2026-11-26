@@ -23,7 +23,8 @@ export function StatusChart({ jobs }) {
           <XAxis type="number" allowDecimals={false} hide />
           <YAxis type="category" dataKey="job" width={120} tick={AXIS} tickFormatter={short} axisLine={false} tickLine={false} />
           <Tooltip cursor={{ fill: '#f3f6fb' }} contentStyle={{ borderRadius: 10, fontSize: 12.5 }} />
-          <Legend iconType="circle" iconSize={8} verticalAlign="top" height={26} wrapperStyle={{ fontSize: 12 }} />
+          {/* 26 Nov (her review): the key in a column at the right, not a line above the bars */}
+          <Legend iconType="circle" iconSize={8} layout="vertical" align="right" verticalAlign="middle" wrapperStyle={{ fontSize: 12, paddingLeft: 12, lineHeight: '20px' }} />
           {STATUS.map(([k, l, c], i) => (
             <Bar key={k} dataKey={k} name={l} stackId="s" fill={c} isAnimationActive={false}
               radius={i === STATUS.length - 1 ? [0, 5, 5, 0] : 0} />

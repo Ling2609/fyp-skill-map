@@ -1900,11 +1900,12 @@ button.skillgap-token { cursor: pointer; }
   .chat-mode-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
   .chat-starters { display: none !important; }
 }
-/* 26 Nov (her phone): while typing (a text box has focus) the bottom tab bar hides and its space goes to the page, so
-   it doesn't ride up on the keyboard and squeeze the chat. It is back as soon as the keyboard closes */
+/* 26 Nov (her phone): while the on-screen keyboard is open (src/keyboardWatch.js sets data-keyboard) the bottom tab
+   bar hides and its space goes to the page, so it doesn't ride up on the keyboard and squeeze the chat. A text box
+   that only has focus (keyboard closed) keeps the tab bar */
 @media (max-width: 639px) {
-  body:has(:is(textarea, input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"])):focus) .sb-nav { display: none; }
-  :root:has(:is(textarea, input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"])):focus) { --bar-h: var(--top-h); }
-  body:has(:is(textarea, input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"])):focus) .app-main { padding-bottom: 0; }
+  :root[data-keyboard] .sb-nav { display: none; }
+  :root[data-keyboard] { --bar-h: var(--top-h); }
+  :root[data-keyboard] .app-main { padding-bottom: 0; }
 }
 .gap-key-rays { display: inline-block; vertical-align: -1px; margin-right: 3px; }

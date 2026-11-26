@@ -6,9 +6,11 @@ import App from './App.jsx'
 import './index.css'
 import { startScrollFade } from './scrollFade'
 import { startKeepInView } from './keepInView'
+import { startKeyboardWatch } from './keyboardWatch'
 
 startScrollFade()
 startKeepInView()
+startKeyboardWatch()
 
 const router = createBrowserRouter([{
   path: '*',
