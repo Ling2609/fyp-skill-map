@@ -1,3 +1,4 @@
+import { useLayoutEffect, useRef, useState } from 'react'
 import { Bar, BarChart, Cell, LabelList, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import { skillName } from '../../skillName'
 
@@ -6,11 +7,46 @@ import { skillName } from '../../skillName'
 const mix = (a, b, t) => `rgb(${a.map((v, i) => Math.round(v + (b[i] - v) * t)).join(' ')})`
 const colour = (t) => mix([248, 196, 176], [164, 60, 32], Math.min(1, t))
 
+// 26 Nov (her review: "explain and give colours for new, increase, decrease"): one colour per meaning, always with
+// its symbol, so colour is never the only sign (WCAG 1.4.1). Up = more students lack it (worse, coral); down = fewer
+// (better, teal); new = not in the list last time (information, blue); = no change (grey). GapKey explains them.
+const TREND = {
+  up: { tone: '#a8432a', label: 'more students lack it' },
+  down: { tone: '#0b6b61', label: 'fewer students lack it' },
+  new: { tone: '#2557c4', label: 'not in the list then' },
+  same: { tone: '#5d6680', label: 'no change' },
+}
 function trendOf(now, then) {
-  if (then === undefined) return { text: 'new', tone: '#5d6680' }
+  if (then === undefined) return { kind: 'new', text: 'new', tone: TREND.new.tone }
   const d = now - then
-  if (!d) return { text: '=', tone: '#5d6680' }
-  return { text: `${d < 0 ? '▼' : '▲'} ${Math.abs(d)}`, tone: d < 0 ? '#0b6b61' : '#a8432a' }
+  if (!d) return { kind: 'same', text: '=', tone: TREND.same.tone }
+  const kind = d < 0 ? 'down' : 'up'
+  return { kind, text: `${d < 0 ? '▼' : '▲'} ${Math.abs(d)}`, tone: TREND[kind].tone }
+}
+function said(t, since) {
+  if (t.kind === 'new') return `new: not in the list on ${since}`
+  if (t.kind === 'same') return `no change since ${since}`
+  const n = Number(t.text.slice(2))
+  return `${n} ${t.kind === 'up' ? 'more' : 'fewer'} ${n === 1 ? 'student lacks' : 'students lack'} it than on ${since}`
+}
+
+// 26 Nov (her review: "new" needs a mark like the arrows): three short lines bursting out, drawn in the new colour
+const NEW_RAYS = 'M1 9.5h3.5M2.6 3.4l2.8 2.8M9 1.2v3.6'
+const NewMark = ({ x = 0, y = 0 }) => (
+  <path d={NEW_RAYS} transform={`translate(${x} ${y})`} fill="none" stroke={TREND.new.tone} strokeWidth={1.8} strokeLinecap="round" />
+)
+
+// the key in the card's info tip: what each change mark means
+export function GapKey({ since }) {
+  const items = [['▲', 'up'], ['▼', 'down'], ['new', 'new'], ['=', 'same']]
+  return (
+    <ul className="gap-key" aria-label={`What the change marks mean, compared with ${since}`}>
+      <li className="gap-key-head">Compared with {since}:</li>
+      {items.map(([mark, kind]) => (
+        <li key={kind}><b data-kind={kind}>{kind === 'new' && <svg aria-hidden="true" viewBox="0 0 11 11" width="12" height="12" className="gap-key-rays"><path d={NEW_RAYS} fill="none" stroke="currentColor" strokeWidth={1.6} strokeLinecap="round" /></svg>}{mark}</b> {TREND[kind].label}</li>
+      ))}
+    </ul>
+  )
 }
 
 function Tip({ active, payload }) {
@@ -20,9 +56,25 @@ function Tip({ active, payload }) {
     <div className="gap-tip">
       <b>{r.name}</b>
       <span>{r.students} of {r.of} students lack it</span>
-      {r.trend && r.trend.text !== 'new' && <span style={{ color: r.trend.tone }}>{r.trend.text === '=' ? 'Same as' : r.trend.text + ' since'} {r.since}</span>}
+      {r.trend && <span style={{ color: r.trend.tone }}>{said(r.trend, r.since)}</span>}
       <span className="gap-tip-hint">{r.picked ? 'Picked for the workshop · click to remove' : 'Click to pick for a workshop'}</span>
     </div>
+  )
+}
+
+// the count and its change mark at the row's right; "new" also gets the rays, placed by measuring the text
+function Count({ x, y, r }) {
+  const ref = useRef(null)
+  const [left, setLeft] = useState(null)
+  useLayoutEffect(() => { if (r.trend?.kind === 'new' && ref.current) setLeft(ref.current.getBBox().x) }, [x, y, r.trend?.kind, r.students])
+  return (
+    <>
+      {r.trend?.kind === 'new' && left !== null && <NewMark x={left - 15} y={y - 13} />}
+      <text ref={ref} x={x} y={y} textAnchor="end" fontSize={12.5} fill="#5d6680">
+        {r.trend && <tspan fill={r.trend.tone} fontWeight={700}>{r.trend.text}</tspan>}
+        <tspan dx={r.trend ? 8 : 0} fontWeight={600} fill="#2d3348">{r.students}/{r.of}</tspan>
+      </text>
+    </>
   )
 }
 
@@ -45,10 +97,7 @@ export default function GapsChart({ gaps, before, since, picked, onToggle }) {
           stroke={r.picked ? '#2557c4' : full ? '#d5dae5' : '#8a93a8'} strokeWidth={1.5} />
         {r.picked && <path d={`M${x + 4} ${y - 13} l3 3 l5.5 -6`} fill="none" stroke="#fff" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />}
         <text x={x + 23} y={y - 8} fontSize={13} fill={!r.picked && full ? '#8a93a8' : '#2d3348'} fontWeight={r.picked ? 700 : 500}>{r.name}</text>
-        <text x={right} y={y - 7} textAnchor="end" fontSize={12.5} fill="#5d6680">
-          {r.trend && <tspan fill={r.trend.tone} fontWeight={700}>{r.trend.text}</tspan>}
-          <tspan dx={r.trend ? 8 : 0} fontWeight={600} fill="#2d3348">{r.students}/{r.of}</tspan>
-        </text>
+        <Count x={right} y={y - 7} r={r} />
       </g>
     )
   }
@@ -75,7 +124,7 @@ export default function GapsChart({ gaps, before, since, picked, onToggle }) {
         {rows.map(r => (
           <label key={r.skill}>
             <input type="checkbox" checked={r.picked} disabled={!r.picked && full} onChange={() => onToggle(r.skill)} />
-            {r.name}: {r.students} of {r.of} students lack it{r.trend ? `, ${r.trend.text === 'new' ? 'new this week' : r.trend.text === '=' ? 'no change' : r.trend.text.replace('▼', 'down').replace('▲', 'up') + ' since ' + since}` : ''}
+            {r.name}: {r.students} of {r.of} students lack it{r.trend ? `, ${said(r.trend, since)}` : ''}
           </label>
         ))}
       </div>

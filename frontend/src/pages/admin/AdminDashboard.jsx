@@ -6,7 +6,8 @@ import { ADMIN_COUNTS_CHANGED } from '../../components/Sidebar'
 import { useAuth } from '../../context/useAuth'
 import ReasonDialog from './ReasonDialog'
 import { CompanyChecks } from './CompanyChecks'
-import GapsChart from './GapsChart'
+import GapsChart, { GapKey } from './GapsChart'
+import InfoTip from '../../components/InfoTip'
 import { DECISIONS } from './decisions'
 import { Bar as SkBar, CardSkeleton, StatsSkeleton, LoadingLabel } from '../../components/Skeleton'
 import { greeting } from '../../greeting'
@@ -247,7 +248,9 @@ export default function AdminDashboard() {
               <div className="px-5 pt-4 pb-2">
                 <h2 className="adm-tt"><i>{TT.chart}</i>Most common skill gaps</h2>
                 <p className="text-xs text-slate-500 mt-1">Skills students most often lack in their top job matches.{before
-                  ? <> Change since <b className="font-semibold text-ink-soft">{shortDate(before.at)}</b>.</> : ' Use it to plan workshops.'}</p>
+                  ? <> Change since <span className="whitespace-nowrap"><b className="font-semibold text-ink-soft">{shortDate(before.at)}</b>.{' '}
+                    {/* 26 Nov (her review): what the change marks mean, in the ⓘ (tap or click), not on the card */}
+                    <InfoTip label="What the change marks mean"><GapKey since={shortDate(before.at)} /></InfoTip></span></> : ' Use it to plan workshops.'}</p>
               </div>
               <div className="flex-1 flex flex-col px-5 py-4">
                 {gaps === null && (

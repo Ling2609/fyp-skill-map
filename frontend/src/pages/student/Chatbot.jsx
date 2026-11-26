@@ -350,7 +350,18 @@ export default function Chatbot() {
     const end = bottomRef.current
     let box = end?.parentElement
     while (box && !/(auto|scroll)/.test(getComputedStyle(box).overflowY)) box = box.parentElement
-    if (box) box.scrollTo({ top: box.scrollHeight, behavior: 'smooth' })
+    if (!box) return
+    const behavior = matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'
+    // 26 Nov (her phone: "show the reply from its first line"): a new answer is shown from its start, so it is read
+    // downwards; while she sends or it is thinking, the list goes to the bottom as before
+    const last = messages[messages.length - 1]
+    const bubble = end.previousElementSibling
+    if (!loading && last?.role === 'assistant' && messages.length > 1 && bubble) {
+      const top = bubble.getBoundingClientRect().top - box.getBoundingClientRect().top + box.scrollTop - 12
+      box.scrollTo({ top, behavior })
+    } else {
+      box.scrollTo({ top: box.scrollHeight, behavior })
+    }
   }, [messages, loading])
 
   const downloadPlan = async (msg, idx) => {
@@ -478,8 +489,8 @@ export default function Chatbot() {
       {backTo && <BackLink label={backTo} onClick={() => navigate(-1)} />}
 
       <PageHeader>
-        <div className="flex flex-wrap items-start justify-between gap-3 pb-4 pt-1">
-          <div>
+        <div className="chat-head flex flex-wrap items-start justify-between gap-3 pb-4 pt-1">
+          <div className="min-w-0">
             <p className="text-[11px] font-semibold text-blue-600 uppercase tracking-widest mb-2">AI Assistant</p>
             <h1 className="text-2xl font-semibold tracking-tight text-slate-900">{currentMode.label}</h1>
             {/* 19 Oct (design review, her pick 3): what this mode does, as every page's one line under the title; the
@@ -494,6 +505,8 @@ export default function Chatbot() {
                 key={m.key}
                 onClick={() => switchMode(m.key)}
                 disabled={loading}
+                title={m.label}
+                aria-pressed={mode === m.key}
                 className={`flex items-center gap-1.5 h-[38px] px-3.5 rounded-[10px] text-[13.5px] font-bold transition-all disabled:cursor-not-allowed ${
                   mode === m.key
                     ? 'bg-accent text-white'
@@ -501,7 +514,8 @@ export default function Chatbot() {
                 }`}
               >
                 {m.icon}
-                {m.label}
+                {/* 26 Nov (her phone): phones show the icon only, the name stays for screen readers (index.css) */}
+                <span className="chat-mode-label">{m.label}</span>
               </button>
             ))}
           </div>
@@ -580,9 +594,10 @@ export default function Chatbot() {
         </aside>
         )}
 
-        <div className="flex-1 flex flex-col min-w-0">
+        {/* 26 Nov (her real phone): min-h-0, so on a short screen the message list shrinks and the message box stays in view */}
+        <div className="flex-1 flex flex-col min-w-0 min-h-0">
         {/* Messages */}
-        <div className="chat-glow flex-1 overflow-y-auto px-3 sm:px-6 py-5">
+        <div className="chat-glow flex-1 min-h-0 overflow-y-auto px-3 sm:px-6 py-5">
           <div className="space-y-4">
             {messages.map((msg, idx) => (
               <MessageBubble key={idx} msg={msg} downloading={downloading === idx}

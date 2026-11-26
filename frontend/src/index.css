@@ -1880,3 +1880,31 @@ button.skillgap-token { cursor: pointer; }
   .ph-icon { width: 36px; padding: 0 !important; justify-content: center; }
   .ph-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 }
+/* 26 Nov (her review): the key to the skill-gap change marks (pages/admin/GapsChart.jsx GapKey) */
+.gap-key { display: flex; flex-direction: column; gap: 4px; margin: 0; padding: 0; list-style: none; font-size: 12.5px; }
+.gap-key-head { font-weight: 600; margin-bottom: 2px; }
+/* the key sits in the dark ⓘ tip: lighter shades of the same colours, so they read on it (axe colour contrast) */
+.gap-key b[data-kind="up"] { color: #ffab91; } .gap-key b[data-kind="down"] { color: #6fe0d2; }
+.gap-key b[data-kind="new"] { color: #a9c4ff; } .gap-key b[data-kind="same"] { color: #c9cfdc; }
+.gap-key b { font-weight: 700; margin-right: 2px; }
+/* the card's older list rules (.adm-gaps ul / li, with !important) must not spread the key out */
+.adm-col .adm-gaps.emp-tile ul.gap-key, .adm-gaps ul.gap-key { flex: none; justify-content: flex-start !important; gap: 4px 14px !important; overflow: visible !important; padding: 0; }
+.adm-gaps .gap-key li { display: block; font-size: 12px !important; }
+/* 26 Nov (her phone review, AI Assistant): on a phone the two modes are icon buttons at the title's right (names stay
+   for screen readers and as tooltips), and the suggestion buttons are hidden, so the chat gets the room */
+@media (max-width: 639px) {
+  .chat-head { flex-wrap: nowrap; align-items: center; }
+  .chat-head .chat-modes { width: auto; flex: none; margin-top: 0; }
+  .chat-modes > button { flex: none; width: 40px; padding: 0; justify-content: center; }
+  .chat-modes > button svg { display: block !important; width: 18px; height: 18px; }
+  .chat-mode-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  .chat-starters { display: none !important; }
+}
+/* 26 Nov (her phone): while typing (a text box has focus) the bottom tab bar hides and its space goes to the page, so
+   it doesn't ride up on the keyboard and squeeze the chat. It is back as soon as the keyboard closes */
+@media (max-width: 639px) {
+  body:has(:is(textarea, input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"])):focus) .sb-nav { display: none; }
+  :root:has(:is(textarea, input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"])):focus) { --bar-h: var(--top-h); }
+  body:has(:is(textarea, input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"])):focus) .app-main { padding-bottom: 0; }
+}
+.gap-key-rays { display: inline-block; vertical-align: -1px; margin-right: 3px; }
