@@ -8,6 +8,8 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
+    "build:public": "vite build --mode public",
+    "serve:public": "vite preview",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage"
   },
