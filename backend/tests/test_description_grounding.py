@@ -69,3 +69,20 @@ def test_the_ads_own_layout_is_final(client, users, db, monkeypatch):
     r = client.get("/jobs/live_own_layout_t/description", headers=users.h(users.student()))
     assert r.status_code == 200, r.text
     assert r.json() == {"bullets": format_description_rules(ad), "cached": True}
+
+
+class Busy:
+    def format_job_description(self, *a):
+        return []                                      # what the extractor returns after Gemini's 503 retries fail
+
+
+def test_a_gemini_outage_is_not_saved(client, users, db, monkeypatch):
+    """26 Nov (her server run, Gemini "503 high demand"): the ad is shown as its own text but not saved, so the next
+    visit (or format_all_descriptions.py) asks Gemini again instead of keeping the plain layout for good"""
+    monkeypatch.setattr(jobs_router, "get_extractor", lambda: Busy())
+    ad = "Junior Developer.  Requirements:  Python and SQL.  Good English."
+    sql(db, "insert into jobs (job_id, job_title, company, location, description, source) "
+            "values ('live_busy_t', 'Junior Developer', 'Acme', 'Kuala Lumpur', :d, 'live')", d=ad)
+    r = client.get("/jobs/live_busy_t/description", headers=users.h(users.student()))
+    assert r.status_code == 200 and any("Python and SQL" in b for b in r.json()["bullets"])
+    assert sql(db, "select formatted_description from jobs where job_id='live_busy_t'").scalar() is None

@@ -61,7 +61,7 @@ cd skillmap
 gcloud storage cp -r gs://BUCKET/<model folder name> backend/data/
 gcloud storage cp gs://BUCKET/relation_cache.json gs://BUCKET/embedding_cache.npz backend/data/
 gcloud storage cp gs://BUCKET/skillmap.dump docker/db/
-mkdir -p docker/mongo && gcloud storage cp gs://BUCKET/skillmap.archive docker/mongo/
+mkdir -p docker/mongo && gcloud storage cp gs://BUCKET/skillmap.archive docker/mongo/   # only if you made one
 ```
 
 ```bash
@@ -99,7 +99,7 @@ Finally, **delete the files from the bucket** (they hold real data) and the GitH
 | See what runs | `docker compose -f docker-compose.prod.yml ps` |
 | Backend log | `docker compose -f docker-compose.prod.yml logs -f backend` |
 | Deploy a code change (pushed to GitHub) | `git pull && docker compose -f docker-compose.prod.yml up -d --build` |
-| Fetch live jobs | `docker compose -f docker-compose.prod.yml exec backend python scripts/live_jobs/fetch_live_jobs.py --use-cache`, then restart: `docker compose -f docker-compose.prod.yml restart backend` |
+| Fetch live jobs | `docker compose -f docker-compose.prod.yml exec backend python scripts/live_jobs/fetch_live_jobs.py --use-cache` (new jobs show on the next Job Matches; both caches update themselves) |
 | Back up the database | `docker compose -f docker-compose.prod.yml exec -T db pg_dump -U skillmap -Fc skillmap > backup-$(date +%F).dump` |
 
 **Before the trial ends** (90 days after sign-up): make a backup, download it (SSH window → ⋮ → Download file), then

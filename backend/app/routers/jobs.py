@@ -152,9 +152,11 @@ def description_of(job: Job, db: Session) -> dict:
         return {"bullets": [], "cached": False}
 
     bullets = []
+    answered = False          # did Gemini give an answer at all? (an outage, a 503 or no key gives nothing)
     try:
         extractor = get_extractor()
         llm_bullets = extractor.format_job_description(job.job_title, job.description)   # Gemini
+        answered = bool(llm_bullets)
         # 18 Oct: every bullet must be found in the advert (app/services/description_check.py); one invented
         # line and the whole answer is dropped for the advert's own text
         bad = ungrounded(llm_bullets or [], job.description)
@@ -168,7 +170,10 @@ def description_of(job: Job, db: Session) -> dict:
     if len(bullets) < 3:
         bullets = format_description_rules(job.description)
 
-    if bullets:
+    # 26 Nov (her server run: Gemini "503 high demand"): the ad's own layout is saved as final only when Gemini
+    # answered and its version was refused. When Gemini gave nothing (busy, down, no key) it is shown but not saved,
+    # so the next visit or the next run of format_all_descriptions.py asks Gemini again
+    if bullets and answered:
         job.formatted_description = json.dumps(bullets)
         db.commit()
 
