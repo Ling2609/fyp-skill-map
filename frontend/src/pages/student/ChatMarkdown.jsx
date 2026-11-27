@@ -61,11 +61,18 @@ const MD = {
   hr: () => <hr className="my-3 border-line" />,
   code: ({ children }) => <code className="text-[13px] bg-sunken text-ink rounded px-1 py-0.5">{children}</code>,
   pre: ({ children }) => <pre className="my-2 bg-sunken border border-line rounded-lg p-3 overflow-x-auto [&>code]:bg-transparent [&>code]:p-0">{children}</pre>,
-  table: ({ children }) => (
-    <div tabIndex={0} className="plan-table my-3 overflow-x-auto rounded-xl border border-line shadow-card">
-      <table className="w-full text-xs text-left">{children}</table>
-    </div>
-  ),
+  table: ({ children, node }) => {
+    // 27 Nov (her phone screenshots: the resources table was being card-styled like the step table, and its columns
+    // overlapped). Only the plan's step table gets that treatment — recognised by its first header cell saying "Step".
+    const text = (n) => (n?.value || (n?.children || []).map(text).join('')).toLowerCase()
+    const header = text(node?.children?.find?.(c => c.tagName === 'thead') || {}).trim()
+    const isSteps = header.startsWith('step')
+    return (
+      <div tabIndex={0} className={`plan-table my-3 overflow-x-auto rounded-xl border border-line shadow-card ${isSteps ? 'step-table' : ''}`}>
+        <table className="w-full text-xs text-left">{children}</table>
+      </div>
+    )
+  },
   thead: ({ children }) => <thead className="bg-accent-soft text-accent-strong">{children}</thead>,
   th: ({ children }) => <th className="px-3 py-2 font-semibold whitespace-nowrap">{children}</th>,
   tbody: ({ children }) => (

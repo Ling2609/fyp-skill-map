@@ -1256,19 +1256,19 @@ select:disabled { opacity: 0.6; cursor: not-allowed; }
 .learning-plan-reading pre, .learning-plan-reading table { text-align: left; }
 /* A plan's step table reads as a route: the number cell is a badge on a line that joins the steps, the time cell is
    quiet, and the last row (the "Add it to SkillMap" finish) is tinted. Only plan replies get this (`.is-plan`). */
-.learning-plan-reading.is-plan table tbody td:first-child { width: 2.75rem; padding-left: 0; text-align: center;
+.learning-plan-reading.is-plan .step-table tbody td:first-child { width: 2.75rem; padding-left: 0; text-align: center;
   font-weight: 800; font-variant-numeric: tabular-nums; color: var(--color-accent); position: relative; }
-.learning-plan-reading.is-plan table tbody td:first-child::before { content: ""; position: absolute; left: 50%;
+.learning-plan-reading.is-plan .step-table tbody td:first-child::before { content: ""; position: absolute; left: 50%;
   top: 0; bottom: 0; width: 2px; transform: translateX(-50%); background: var(--color-accent-soft); z-index: 0; }
-.learning-plan-reading.is-plan table tbody td:first-child > * { position: relative; z-index: 1; }
-.learning-plan-reading.is-plan table tbody td:first-child { z-index: 1; }
-.learning-plan-reading.is-plan table tbody tr:first-child td:first-child::before { top: 55%; border-radius: 2px 2px 0 0; }
-.learning-plan-reading.is-plan table tbody tr:last-child td:first-child::before { bottom: 55%; border-radius: 0 0 2px 2px; }
-.learning-plan-reading.is-plan table tbody td:nth-child(3) { white-space: nowrap; color: var(--color-muted); }
-.learning-plan-reading.is-plan table tbody tr:last-child td { font-weight: 600; color: var(--color-have-strong); }
-.learning-plan-reading.is-plan table tbody tr:last-child td:first-child { width: auto; padding-left: 10px;
+.learning-plan-reading.is-plan .step-table tbody td:first-child > * { position: relative; z-index: 1; }
+.learning-plan-reading.is-plan .step-table tbody td:first-child { z-index: 1; }
+.learning-plan-reading.is-plan .step-table tbody tr:first-child td:first-child::before { top: 55%; border-radius: 2px 2px 0 0; }
+.learning-plan-reading.is-plan .step-table tbody tr:last-child td:first-child::before { bottom: 55%; border-radius: 0 0 2px 2px; }
+.learning-plan-reading.is-plan .step-table tbody td:nth-child(3) { white-space: nowrap; color: var(--color-muted); }
+.learning-plan-reading.is-plan .step-table tbody tr:last-child td { font-weight: 600; color: var(--color-have-strong); }
+.learning-plan-reading.is-plan .step-table tbody tr:last-child td:first-child { width: auto; padding-left: 10px;
   text-align: left; white-space: nowrap; font-size: 11.5px; color: var(--color-have-strong); }
-.learning-plan-reading.is-plan table tbody tr:last-child td:first-child::before { background: transparent; }
+.learning-plan-reading.is-plan .step-table tbody tr:last-child td:first-child::before { background: transparent; }
 .ws-body h3 { margin-top: 24px; margin-bottom: 8px; padding-bottom: 6px; border-bottom: 1px solid var(--color-line); }
 .ws-body .ws-grow-back, .ws-body .ws-grow .ws-text { line-height: 1.5; }
 @media (min-width: 640px) {
@@ -1279,22 +1279,22 @@ select:disabled { opacity: 0.6; cursor: not-allowed; }
 /* The plan's step table on a laptop (27 Nov, her review: it read like a spreadsheet): a small labelled head, the step
    number on a rail, the action as the widest column, time right-aligned and quiet, and a tick outline before "done
    when" so the column reads as the thing to check off. */
-.learning-plan-reading.is-plan .plan-table table { table-layout: auto; }
-.learning-plan-reading.is-plan .plan-table thead th { font-size: 11px; font-weight: 600; letter-spacing: .01em;
+.learning-plan-reading.is-plan .plan-table.step-table table { table-layout: auto; }
+.learning-plan-reading.is-plan .plan-table.step-table thead th { font-size: 11px; font-weight: 600; letter-spacing: .01em;
   color: var(--color-ink-soft); padding-top: 8px; padding-bottom: 8px; }
-.learning-plan-reading.is-plan .plan-table thead th:nth-child(1) { text-align: center; white-space: nowrap; }
-.learning-plan-reading.is-plan .plan-table thead th:nth-child(3) { text-align: right; white-space: nowrap; }
-.learning-plan-reading.is-plan .plan-table thead th:nth-child(4) { width: 34%; }
-.learning-plan-reading.is-plan .plan-table tbody td { padding-top: 11px; padding-bottom: 11px; vertical-align: top;
+.learning-plan-reading.is-plan .plan-table.step-table thead th:nth-child(1) { text-align: center; white-space: nowrap; }
+.learning-plan-reading.is-plan .plan-table.step-table thead th:nth-child(3) { text-align: right; white-space: nowrap; }
+.learning-plan-reading.is-plan .plan-table.step-table thead th:nth-child(4) { width: 34%; }
+.learning-plan-reading.is-plan .plan-table.step-table tbody td { padding-top: 11px; padding-bottom: 11px; vertical-align: top;
   border-top: 1px solid var(--color-line); }
-.learning-plan-reading.is-plan .plan-table tbody td:nth-child(2) { color: var(--color-ink); }
-.learning-plan-reading.is-plan .plan-table tbody td:nth-child(3) { text-align: right; font-variant-numeric: tabular-nums;
+.learning-plan-reading.is-plan .plan-table.step-table tbody td:nth-child(2) { color: var(--color-ink); }
+.learning-plan-reading.is-plan .plan-table.step-table tbody td:nth-child(3) { text-align: right; font-variant-numeric: tabular-nums;
   font-weight: 600; color: var(--color-ink-soft); white-space: nowrap; }
-.learning-plan-reading.is-plan .plan-table tbody td:nth-child(4) { color: var(--color-ink-soft); }
-.learning-plan-reading.is-plan .plan-table tbody td:nth-child(4)::before { content: "✓"; margin-right: 5px;
+.learning-plan-reading.is-plan .plan-table.step-table tbody td:nth-child(4) { color: var(--color-ink-soft); }
+.learning-plan-reading.is-plan .plan-table.step-table tbody td:nth-child(4)::before { content: "✓"; margin-right: 5px;
   color: var(--color-have); font-weight: 700; }
-.learning-plan-reading.is-plan .plan-table tbody tr:last-child td:nth-child(4)::before { border-color: var(--color-have); }
-.learning-plan-reading.is-plan .plan-table tbody tr:last-child td { padding-top: 11px; padding-bottom: 11px; }
+.learning-plan-reading.is-plan .plan-table.step-table tbody tr:last-child td:nth-child(4)::before { border-color: var(--color-have); }
+.learning-plan-reading.is-plan .plan-table.step-table tbody tr:last-child td { padding-top: 11px; padding-bottom: 11px; }
 
 /* 27 Nov (her review: on a phone the plan read like "elderly mode" — everything too big): one step down everywhere. */
 @media (max-width: 639px) {
@@ -1306,80 +1306,73 @@ select:disabled { opacity: 0.6; cursor: not-allowed; }
   .learning-plan-reading pre { font-size: 12.5px; }
 }
 
+/* 27 Nov (her phone screenshot: a bit of sideways scroll and white edges at the end of a table): inside a plan, no
+   table scrolls on a phone. Everything wraps inside its own cell, and the wrapper stops being a scroll container. */
+@media (max-width: 639px) {
+  .learning-plan-reading .plan-table { overflow: visible !important; }
+  .learning-plan-reading .plan-table table { width: 100%; table-layout: fixed; }
+  .learning-plan-reading .plan-table th, .learning-plan-reading .plan-table td { white-space: normal !important;
+    overflow-wrap: anywhere; }
+}
+
+/* Other tables in a plan (her resources table: name + address + what it covers) keep a normal table shape — they only
+   need to stop long addresses pushing the row wide. */
+.learning-plan-reading .plan-table:not(.step-table) td,
+.learning-plan-reading .plan-table:not(.step-table) th { overflow-wrap: anywhere; }
+@media (max-width: 639px) {
+  /* fixed widths so a long address wraps inside its cell instead of widening the table */
+  .learning-plan-reading .plan-table:not(.step-table) table { font-size: 11.5px; table-layout: fixed; }
+  .learning-plan-reading .plan-table:not(.step-table) th:first-child,
+  .learning-plan-reading .plan-table:not(.step-table) td:first-child { width: 52%; }
+  .learning-plan-reading .plan-table:not(.step-table) th,
+  .learning-plan-reading .plan-table:not(.step-table) td { padding: 6px 8px; }
+}
+
 /* The plan's step table on a phone (27 Nov, her review: it scrolled sideways and read like a spreadsheet; then the
    cards were uneven). Each step is a card: the number in the margin, the action on its own line, then the time as a
    small chip followed by what "done" looks like. */
 @media (max-width: 639px) {
-  .learning-plan-reading.is-plan table thead { display: none; }
-  .learning-plan-reading.is-plan table tbody tr { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 6px;
+  .learning-plan-reading.is-plan .step-table thead { display: none; }
+  .learning-plan-reading.is-plan .step-table tbody tr { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 6px;
     position: relative; padding: 10px 12px 11px 46px; border-top: 1px solid var(--color-line); }
-  .learning-plan-reading.is-plan table tbody tr:first-child { border-top: 0; }
-  .learning-plan-reading.is-plan table tbody td { display: block; border: 0; padding: 0; }
-  .learning-plan-reading.is-plan table tbody td:first-child { position: absolute; left: 12px; top: 11px; width: 26px;
+  .learning-plan-reading.is-plan .step-table tbody tr:first-child { border-top: 0; }
+  .learning-plan-reading.is-plan .step-table tbody td { display: block; border: 0; padding: 0; }
+  .learning-plan-reading.is-plan .step-table tbody td:first-child { position: absolute; left: 12px; top: 11px; width: 26px;
     text-align: right; font-size: 12px; line-height: 1.2; }
-  .learning-plan-reading.is-plan table tbody td:first-child::before { display: none; }
-  .learning-plan-reading.is-plan table tbody td:nth-child(2) { flex: 1 1 100%; font-size: 13px; line-height: 1.4;
+  .learning-plan-reading.is-plan .step-table tbody td:first-child::before { display: none; }
+  .learning-plan-reading.is-plan .step-table tbody td:nth-child(2) { flex: 1 1 100%; font-size: 13px; line-height: 1.4;
     color: var(--color-ink); }
-  .learning-plan-reading.is-plan table tbody td:nth-child(3) { display: inline-block; margin-top: 2px;
+  .learning-plan-reading.is-plan .step-table tbody td:nth-child(3) { display: inline-block; margin-top: 2px;
     background: var(--color-accent-soft); border-radius: 999px; padding: 1px 8px; font-size: 11px; font-weight: 700;
     color: var(--color-accent-strong); }
-  .learning-plan-reading.is-plan table tbody td:nth-child(3)::after { content: none; }
-  .learning-plan-reading.is-plan table tbody td:nth-child(4) { flex: 1 1 auto; font-size: 11.5px; color: var(--color-muted); }
-  .learning-plan-reading.is-plan table tbody td:nth-child(4)::before { content: "✓"; margin-right: 4px;
+  .learning-plan-reading.is-plan .step-table tbody td:nth-child(3)::after { content: none; }
+  .learning-plan-reading.is-plan .step-table tbody td:nth-child(4) { flex: 1 1 auto; font-size: 11.5px; color: var(--color-muted); }
+  .learning-plan-reading.is-plan .step-table tbody td:nth-child(4)::before { content: "✓"; margin-right: 4px;
     color: var(--color-have); font-weight: 700; border: 0; width: auto; height: auto; display: inline; }
-  .learning-plan-reading.is-plan table tbody tr:last-child { background: var(--color-have-soft); border-radius: 10px;
-    border-top: 0; margin-top: 6px; padding: 11px 14px 12px; }
+  .learning-plan-reading.is-plan .step-table tbody tr:last-child { background: var(--color-have-soft); border-radius: 10px;
+    border-top: 0; margin-top: 6px; padding: 10px 12px 11px 46px; }
   /* the laptop rule draws a hairline on every cell; here the card's own border does that job */
-  .learning-plan-reading.is-plan .plan-table tbody td { border-top: 0; }
-  .learning-plan-reading.is-plan table tbody tr:last-child td:first-child { position: static; width: auto;
-    text-align: left; margin-bottom: 4px; font-size: 10.5px; font-weight: 700; letter-spacing: .09em;
-    text-transform: uppercase; }
-  .learning-plan-reading.is-plan table tbody tr:last-child td:nth-child(2) { color: var(--color-have-strong); }
-  .learning-plan-reading.is-plan table tbody tr:last-child td:nth-child(3) { background: transparent; padding-left: 0; }
+  .learning-plan-reading.is-plan .plan-table.step-table tbody td { border-top: 0; }
+  .learning-plan-reading.is-plan .step-table tbody tr:last-child td:first-child { position: absolute; left: 12px;
+    top: 11px; width: 26px; text-align: right; font-size: 0; line-height: 1.2; }
+  .learning-plan-reading.is-plan .step-table tbody tr:last-child td:first-child::after { content: "✓";
+    font-size: 12px; font-weight: 700; color: var(--color-have-strong); }
+  .learning-plan-reading.is-plan .step-table tbody tr:last-child td:nth-child(2) { color: var(--color-have-strong); }
+  .learning-plan-reading.is-plan .step-table tbody tr:last-child td:nth-child(3) { background: rgba(255,255,255,.85);
+    color: var(--color-have-strong); }
 }
 
-/* The plan's trail (27 Nov): footprints already walked (teal), the one this plan adds (coral), a flag at the ad's
-   bar. Tiny, quiet, and it tells a student they are not starting from zero. */
-.plan-trail { margin-bottom: 12px; padding: 10px 12px; border: 1px solid var(--color-line); border-radius: 12px;
+/* The plan's gap as one slim bar (27 Nov, her second review: the footprints and flag read as childish): teal for the
+   skills already on the profile, a pale track for the rest, a coral tick where this plan's skill sits. */
+.plan-trail { margin-bottom: 14px; padding: 12px 14px; border: 1px solid var(--color-line); border-radius: 12px;
   background: var(--color-canvas); }
-.plan-trail-copy { margin: 0 0 8px; font-size: 13px; line-height: 1.45; color: var(--color-ink-soft); }
+.plan-trail-copy { margin: 0 0 9px; font-size: 13px; line-height: 1.45; color: var(--color-ink-soft); }
 .plan-trail-copy b { color: var(--color-ink); }
-.plan-trail-track { display: flex; align-items: center; gap: 3px; margin: 0; padding: 0; list-style: none; flex-wrap: wrap; }
-.plan-trail-track li { display: grid; place-items: center; width: 17px; height: 17px; }
-.plan-trail-track svg { width: 16px; height: 16px; }
-.plan-trail-track .had { color: var(--color-have); }
-.plan-trail-track .need { color: color-mix(in srgb, var(--color-missing) 38%, #fff); }
-.plan-trail-track .goal { margin-left: 4px; color: var(--color-accent); }
-/* alternate feet, so the row reads as walking rather than as dots */
-.plan-trail-track li:nth-child(odd) svg { transform: rotate(-13deg); }
-.plan-trail-track li:nth-child(even) svg { transform: rotate(11deg) translateY(1px); }
-/* phones: one row, smaller feet, so the flag never drops to a line of its own */
-@media (max-width: 639px) {
-  .plan-trail-track { flex-wrap: nowrap; gap: 2px; }
-  .plan-trail-track li { width: 14px; height: 14px; }
-  .plan-trail-track svg { width: 13px; height: 13px; }
-}
-@media (prefers-reduced-motion: no-preference) {
-  .plan-trail-track .goal { animation: plan-flag 2.4s ease-in-out 1; }
-  @keyframes plan-flag { 0%, 100% { transform: none; } 45% { transform: translateY(-2px); } }
-}
-@media (prefers-reduced-motion: reduce) { .plan-trail-track .goal { animation: none; } }
-
-/* Phone cards for a plain data table (27 Nov, the same treatment the learning plan uses): add `card-table` to the
-   wrapper and `data-label="<column name>"` to each cell. Under 640px each row becomes a card and no table scrolls
-   sideways; from 640px up it is an ordinary table again. */
-@media (max-width: 639px) {
-  .card-table table, .card-table tbody, .card-table tr, .card-table td { display: block; width: auto; }
-  .card-table thead { display: none; }
-  .card-table tbody tr { padding: 10px 0; border-top: 1px solid var(--color-line); }
-  .card-table tbody tr:first-child { border-top: 0; }
-  .card-table td { padding: 0 !important; border: 0 !important; }
-  .card-table td + td { margin-top: 5px; }
-  .card-table td[data-label]::before { content: attr(data-label); display: block; font-size: 10.5px; font-weight: 700;
-    letter-spacing: .07em; text-transform: uppercase; color: var(--color-muted); margin-bottom: 1px; }
-  .card-table td:first-child::before { content: none; }
-  .card-table td:first-child { font-weight: 600; }
-}
+.plan-bar { position: relative; height: 8px; border-radius: 999px; }
+.plan-bar-track { position: absolute; inset: 0; border-radius: 999px; background: var(--color-line); }
+.plan-bar-fill { position: absolute; top: 0; bottom: 0; left: 0; border-radius: 999px; background: var(--color-have); }
+.plan-bar-marker { position: absolute; top: -3px; bottom: -3px; width: 2px; border-radius: 2px;
+  background: var(--color-missing); transform: translateX(-1px); }
 
 /* Keep the initial job form within the available card; small screens scroll naturally. */
 .post-card { min-width: 0; }

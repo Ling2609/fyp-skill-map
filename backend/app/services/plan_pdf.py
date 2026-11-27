@@ -7,6 +7,7 @@ and white (no shading or coloured backgrounds).
 The plan is the assistant's Markdown reply; markdown-it reads it (headings, paragraphs, lists, the plan table).
 Links are printed as their address, since paper can't be clicked.
 """
+import re
 from datetime import date
 from io import BytesIO
 # Bandit B406: reviewed, escapes text written INTO the PDF; no XML is read or parsed
@@ -52,6 +53,8 @@ S = {
     "step": ParagraphStyle("step", fontSize=9.5, leading=12, **{**_base, "fontName": "Helvetica-Bold", "textColor": ACCENT}),
     "last": ParagraphStyle("last", fontSize=9, leading=12, **{**_base, "textColor": HAVE_STRONG, "fontName": "Helvetica-Bold"}),
     "note": ParagraphStyle("note", fontSize=8, leading=10.5, **_base),
+    "url": ParagraphStyle("url", **{**_base, "fontName": "Courier", "fontSize": 7.2, "leading": 9, "textColor": ACCENT}),
+    "res": ParagraphStyle("res", fontSize=9, leading=12, **{**_base, "fontName": "Helvetica-Bold", "textColor": INK}),
 }
 S["prose"] = ParagraphStyle("prose", parent=S["body"], alignment=TA_JUSTIFY)
 
@@ -108,30 +111,32 @@ def mark_for(text: str) -> str | None:
     return None
 
 
-class Trail(Flowable):
-    """The gap as a trail: a filled dot per skill the student has, a pale one per skill still missing, a flag at the
-    end. It is the same idea as the dots on Job Detail, drawn small so it costs one line."""
-    def __init__(self, have: int, missing: int, size=3.0 * mm, gap=1.2 * mm, cap=14):
+class GapBar(Flowable):
+    """How much of the ad's skill list the student already has, as one slim bar: teal for what they have, a pale track
+    for the rest, and a small coral tick where this plan's skill sits. Clean on paper and readable in greyscale."""
+    def __init__(self, have: int, missing: int, bar_w: float, height=3.2 * mm):
         super().__init__()
         self.have, self.missing = have, missing
-        self.size, self.gap, self.cap = size, gap, cap
-        total = min(have + missing, cap)
-        self.total = total
-        self.width, self.height = total * (size + gap) + 4 * mm, size
+        self.width, self.height = bar_w, height
 
     def draw(self):
-        c, size, step = self.canv, self.size, self.size + self.gap
-        y = self.size / 2
-        for i in range(self.total):
-            x = i * step + size / 2
-            if i < self.have:
-                c.setFillColor(colors.HexColor("#0f9d8f")); c.circle(x, y, size / 2 - 0.4, stroke=0, fill=1)
-            else:
-                c.setFillColor(colors.HexColor("#f6ded6")); c.circle(x, y, size / 2 - 0.4, stroke=0, fill=1)
-        fx = self.total * step + 1.5 * mm
-        c.setStrokeColor(ACCENT); c.setLineWidth(1.3); c.line(fx, 0.4 * mm, fx, size - 0.2 * mm)
-        p = c.beginPath(); p.moveTo(fx, size - 0.4 * mm); p.lineTo(fx + 2.6 * mm, size - 1.3 * mm)
-        p.lineTo(fx, size - 2.3 * mm); p.close(); c.setFillColor(ACCENT); c.drawPath(p, stroke=0, fill=1)
+        c, w, h = self.canv, self.width, self.height
+        total = max(self.have + self.missing, 1)
+        r = h / 2
+        # the track
+        c.setFillColor(colors.HexColor("#e8eef9"))
+        c.roundRect(0, 0, w, h, r, stroke=0, fill=1)
+        # what they have
+        if self.have:
+            c.setFillColor(colors.HexColor("#13998c"))
+            c.roundRect(0, 0, max(w * self.have / total, h), h, r, stroke=0, fill=1)
+        # where this plan's skill sits: the first skill still missing
+        if self.have < total:
+            x = w * self.have / total
+            c.setFillColor(colors.HexColor("#e9795a"))
+            c.setStrokeColor(colors.HexColor("#e9795a"))
+            c.setLineWidth(1.4)
+            c.line(x, -1.1 * mm, x, h + 1.1 * mm)
 
 
 class TickBox(Flowable):
@@ -178,40 +183,149 @@ def _inline(token) -> str:
     return "".join(out)
 
 
-def _table(rows: list[list[str]], width: float) -> Table:
-    """The plan table with a 'Done' box at the end of every step; the widest column is 'What to do'."""
-    head, body = rows[0], rows[1:]
-    n = len(head)
-    data = [[Paragraph(h, S["head"]) for h in head] + [Paragraph("Done", S["head"])]]
-    for index, row in enumerate(body, start=1):
-        last_row = index == len(body)          # "Add it to SkillMap": the finish
-        style = S["last"] if last_row else S["cell"]
-        cells = [Paragraph(c, S["step"] if (i == 0 and not last_row) else style)
-                 for i, c in enumerate((row + [""] * n)[:n])]
-        step = cells[0].getPlainText() or str(index)
-        data.append(cells + [TickBox(f"Mark step {step} as done")])
-    done_w = 13 * mm
-    weights = [1.0] * n
-    for i, h in enumerate(head):
-        low = h.lower()
-        weights[i] = 2.6 if "what" in low else 1.7 if "done when" in low else 0.9 if "time" in low else 1.1
-    unit = (width - done_w) / sum(weights)
-    t = Table(data, colWidths=[w * unit for w in weights] + [done_w], repeatRows=1)
-    style_rows = [
-        ("LINEBELOW", (0, 0), (-1, -1), 0.5, LINE),
-        ("LINEABOVE", (0, 0), (-1, 0), 0.5, LINE),
-        ("BACKGROUND", (0, 0), (-1, 0), ACCENT_SOFT),
-        ("BACKGROUND", (0, len(body)), (-1, len(body)), HAVE_SOFT),   # the finish row
-        ("LINEBEFORE", (0, 0), (0, -2), 2.5, ACCENT),                # the step numbers read as a rail
+def _is_heading(flow) -> bool:
+    """A section heading is a one-row table (mark + text); everything else is body."""
+    return isinstance(flow, Table) and len(getattr(flow, "_cellvalues", [])) == 1
+
+
+def _generic_table(rows: list[list[str]], width: float) -> list:
+    """Any other table the assistant writes: plain rows, wrapping cells, one width per column."""
+    n = max(len(r) for r in rows)
+    data = [[Paragraph(cell or "", S["cell"]) for cell in (r + [""] * (n - len(r)))] for r in rows]
+    table = Table(data, colWidths=[width / n] * n, repeatRows=1)
+    table.setStyle(TableStyle([
         ("VALIGN", (0, 0), (-1, -1), "TOP"),
-        ("ALIGN", (-1, 1), (-1, -1), "CENTER"), ("ALIGN", (2, 1), (2, -1), "RIGHT"),
-        ("TOPPADDING", (0, 0), (-1, -1), 4), ("BOTTOMPADDING", (0, 0), (-1, -1), 5),
-        ("LEFTPADDING", (0, 0), (-1, -1), 5), ("RIGHTPADDING", (0, 0), (-1, -1), 5),
-    ]
-    t.setStyle(TableStyle(style_rows))
-    t.spaceBefore = 6
-    t.spaceAfter = 8
-    return t
+        ("BACKGROUND", (0, 0), (-1, 0), ACCENT_SOFT),
+        ("LINEBELOW", (0, 0), (-1, -1), 0.4, LINE),
+        ("LEFTPADDING", (0, 0), (-1, -1), 0), ("RIGHTPADDING", (0, 0), (-1, -1), 4),
+        ("TOPPADDING", (0, 0), (-1, -1), 4), ("BOTTOMPADDING", (0, 0), (-1, -1), 4),
+    ]))
+    table.spaceBefore = 4
+    table.spaceAfter = 6
+    return [table]
+
+
+def _steps(rows: list[list[str]], width: float) -> list:
+    """The plan's steps as blocks instead of a five-column grid: number on the left, the action beside it, the tick box
+    at the right edge, and one quiet line under it for the time and what "done" looks like. Blocks cannot fall out of
+    line the way narrow table columns do, and they read in one pass on paper."""
+    head, body = rows[0], rows[1:]
+    out = []
+    tick_w = 9 * mm
+    num_w = 8 * mm
+    for index, row in enumerate(body, start=1):
+        cells = (row + [""] * len(head))[:len(head)]
+        label = (cells[0] or str(index)).strip()
+        what = (cells[1] if len(cells) > 1 else "").strip()
+        time = (cells[2] if len(cells) > 2 else "").strip()
+        when = (cells[3] if len(cells) > 3 else "").strip()
+        last = index == len(body) and "skillmap" in label.lower()
+        row_style = S["last"] if last else S["cell"]
+        block = Table([[Paragraph(escape("✓" if last else label), S["step"] if not last else S["last"]),
+                        Paragraph(what, row_style),
+                        TickBox(f"Mark step {label} as done")]],
+                      colWidths=[num_w, width - num_w - tick_w, tick_w])
+        block.setStyle(TableStyle([
+            ("VALIGN", (0, 0), (-1, -1), "TOP"),
+            ("ALIGN", (2, 0), (2, 0), "RIGHT"),
+            ("LEFTPADDING", (0, 0), (-1, -1), 0), ("RIGHTPADDING", (0, 0), (-1, -1), 0),
+            ("TOPPADDING", (0, 0), (-1, -1), 0), ("BOTTOMPADDING", (0, 0), (-1, -1), 0),
+        ]))
+        meta = " · ".join(x for x in (time, f"Done when: {when}" if when else "") if x)
+        out.append(KeepTogether([Spacer(1, 5), block,
+                                 Paragraph(meta, S["meta"] if not last else S["last"])]))
+    return out
+
+
+def _inline_md(text: str) -> str:
+    """Plain text with **bold** and `code` turned into the PDF's own markup, for a step's action.
+    Done by hand rather than with a regex: the replacement strings must not be read as back references."""
+    text = escape(text)
+    while "`" in text:
+        head, _, rest = text.partition("`")
+        code, sep, tail = rest.partition("`")
+        if not sep:
+            break
+        text = head + '<font face="Courier">' + code + "</font>" + tail
+    while "**" in text:
+        head, _, rest = text.partition("**")
+        bold, sep, tail = rest.partition("**")
+        if not sep:
+            break
+        text = head + "<b>" + bold + "</b>" + tail
+    return text
+
+
+def _plain(tokens) -> str:
+    """One list item's text with its links kept as [title](url), so the resources table can split them."""
+    for token in tokens:
+        if token.type != "inline":
+            continue
+        out, in_link, href = "", False, ""
+        for child in token.children or []:
+            if child.type == "link_open":
+                out += "["
+                in_link = True
+                href = child.attrGet("href") or ""      # the address sits on link_open, not on link_close
+            elif child.type == "link_close":
+                out += "](" + href + ")"
+                in_link = False
+            elif child.type == "code_inline":
+                out += "`" + child.content + "`"
+            elif child.type in ("text", "html_inline") and not (in_link and child.type == "html_inline"):
+                out += child.content
+        return out.strip()
+    return ""
+
+
+def _resources_table(items: list[str] | list[list[str]], width: float) -> Table:
+    """The Resources section as a table (her review: a title with its long address in the same cell ran off the line):
+    the name, what it covers, and the address in its own narrow column, which wraps instead of overflowing."""
+    rows = [[Paragraph("Resource", S["head"]), Paragraph("What it covers", S["head"]), Paragraph("Address", S["head"])]]
+    for item in items:
+        if isinstance(item, list):          # a markdown table row: | Resource | What it covers |
+            name, url, note = _split_resource(item[0] if item else "")
+            given = (item[1] if len(item) > 1 else "").strip()
+            note = " ".join(x for x in (note, given) if x).strip() or note
+        else:
+            name, url, note = _split_resource(item)
+        rows.append([Paragraph(escape(name), S["res"]),
+                     Paragraph(escape(note), S["cell"]),
+                     Paragraph(escape(url), S["url"])])
+    table = Table(rows, colWidths=[width * 0.34, width * 0.38, width * 0.28], repeatRows=1)
+    table.setStyle(TableStyle([
+        ("VALIGN", (0, 0), (-1, -1), "TOP"),
+        ("BACKGROUND", (0, 0), (-1, 0), ACCENT_SOFT),
+        ("LINEBELOW", (0, 0), (-1, -1), 0.4, LINE),
+        ("LEFTPADDING", (0, 0), (-1, -1), 0), ("RIGHTPADDING", (0, 0), (-1, -1), 4),
+        ("TOPPADDING", (0, 0), (-1, -1), 4), ("BOTTOMPADDING", (0, 0), (-1, -1), 4),
+    ]))
+    table.spaceBefore = 4
+    table.spaceAfter = 6
+    return table
+
+
+def _split_resource(item: str) -> tuple[str, str, str]:
+    """'**FastAPI Tutorial** – https://… | Parts 1-3 …' -> (name, url, note). Understands bold names, [name](url)
+    links, and a bare address in the text, so every shape the assistant writes lands in the right column."""
+    text = (item or "").strip()
+    name, url, note = text, "", ""
+    if text.startswith("[") and "](" in text:
+        name, rest = text[1:].split("](", 1)
+        url, _, note = rest.partition(")")
+    else:
+        found = re.search(r"https?://[^\s)|]+", text)
+        if found:
+            url = found.group(0).rstrip(".,;)")
+            name = (text[:found.start()] + text[found.end():]).strip()
+    for dash in ("—", "–", " - "):
+        if dash in name:
+            head, _, tail = name.partition(dash)
+            name, note = head, (tail + (" " + note if note else ""))
+            break
+    name = re.sub(r"<[^>]+>", "", name)                 # markup from the table path
+    name = re.sub(r"\*\*", "", name)                    # bold markers from the list path
+    return name.strip(" .;*"), url.strip(), note.strip(" .;*")
 
 
 def plan_flowables(markdown: str, width: float, skip_title: bool = True) -> list:
@@ -221,6 +335,7 @@ def plan_flowables(markdown: str, width: float, skip_title: bool = True) -> list
 
 def _blocks(tokens, width, skip_title=False, *, in_list=False):
     out, i = [], 0
+    section = ""          # the heading the following blocks belong to (27 Nov: "Resources" gets a table)
     next_number = 1
     first_heading = True
     while i < len(tokens):
@@ -229,6 +344,7 @@ def _blocks(tokens, width, skip_title=False, *, in_list=False):
             next_number = 1
         if t.type == "heading_open":
             text = _inline(tokens[i + 1])
+            section = (tokens[i + 1].content or "").strip() if not skip_title or not first_heading else section
             if not (skip_title and first_heading and tokens[i + 1].content.lower().startswith("learning plan")):
                 kind = mark_for(tokens[i + 1].content)
                 head = Table([[Glyph(kind) if kind else "", Paragraph(text, S["h"])]],
@@ -250,6 +366,20 @@ def _blocks(tokens, width, skip_title=False, *, in_list=False):
         elif t.type == "paragraph_open":
             out.append(Paragraph(_inline(tokens[i + 1]), S["body" if in_list else "prose"]))
             i += 3
+        elif t.type in ("bullet_list_open", "ordered_list_open") and "resource" in section.lower():
+            # 27 Nov (her review): the resources read as a list of title + long address in one cell; as a table they line
+            # up, and the address has a column of its own that wraps.
+            raw, j = [], i + 1
+            while tokens[j].type == "list_item_open":
+                item_end, depth = j + 1, 1
+                while depth:
+                    kind = tokens[item_end].type
+                    depth += (kind == "list_item_open") - (kind == "list_item_close")
+                    item_end += 1
+                raw.append(_plain(tokens[j + 1:item_end - 1]))
+                j = item_end
+            out.append(_resources_table(raw, width))
+            i = j + 1
         elif t.type in ("bullet_list_open", "ordered_list_open"):
             items, j = [], i + 1
             while tokens[j].type == "list_item_open":
@@ -280,7 +410,13 @@ def _blocks(tokens, width, skip_title=False, *, in_list=False):
                     row.append(_inline(tj))
                 j += 1
             if rows:
-                out += [_table(rows, width), Spacer(1, 4)]
+                first = " ".join(rows[0]).lower() if rows[0] else ""
+                if "resource" in first:
+                    out.append(_resources_table(rows[1:], width))
+                elif "step" in first:
+                    out += _steps(rows, width)
+                else:
+                    out.extend(_generic_table(rows, width))
             i = j + 1
         else:
             i += 1
@@ -320,27 +456,12 @@ def build_pdf(markdown: str, *, student: str, goal: str | None, job: str | None,
         line = f"{len(have)} of {total} of this ad's skills are already yours"
         if missing:
             line += f" · still to learn: {', '.join(missing[:4])}"
-        story += [Spacer(1, 4), Trail(len(have), len(missing)), Spacer(1, 2),
+        story += [Spacer(1, 5), GapBar(len(have), len(missing), doc.width), Spacer(1, 3),
                   Paragraph(escape(line + "."), S["meta"])]
     story.append(Spacer(1, 4))
-    # 27 Nov (her review: a section's heading sat at the bottom of one page and its steps on the next): each section
-    # is kept on one page when it fits. A section taller than a page still splits — nothing can avoid that — but a
-    # normal plan now reads page by page instead of breaking in the middle.
-    def _is_heading(flow):
-        return isinstance(flow, Table) and len(getattr(flow, "_cellvalues", [])) == 1
-
-    groups, current = [], []
-    for flow in plan_flowables(markdown, doc.width):
-        if _is_heading(flow):
-            if current:
-                groups.append(current)
-            current = [flow]
-        else:
-            current.append(flow)
-    if current:
-        groups.append(current)
-    for group in groups:
-        story.append(KeepTogether(group) if len(group) > 1 else group[0])
+    # 27 Nov: a whole section kept together pushed short plans onto a second page with a nearly empty first one, so
+    # only each step block is kept together (see _steps); sections flow and fill the page.
+    story += plan_flowables(markdown, doc.width)
     story += [Spacer(1, 10), KeepTogether([HRFlowable(width="100%", thickness=0.5, color=LINE, spaceAfter=4),
                                            Paragraph(escape(DISCLAIMER), S["note"])])]
 
