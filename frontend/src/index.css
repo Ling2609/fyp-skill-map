@@ -1246,10 +1246,10 @@ select:disabled { opacity: 0.6; cursor: not-allowed; }
 .learning-plan-reading > p { margin-block: 10px; line-height: 1.5; }
 /* 27 Nov (her review: on screen a plan read as one flat block, the title and the sections looking the same): the plan
    title and its section labels now differ from each other and from the body. The printed PDF stays black and white. */
-.learning-plan-reading > .plan-title { margin: 2px 0 10px; padding-bottom: 8px; border-bottom: 1px solid var(--color-line);
+.learning-plan-reading > .plan-title { margin: 2px 0 16px; padding-bottom: 10px; border-bottom: 1px solid var(--color-line);
   font-size: 17px; font-weight: 800; line-height: 1.25; letter-spacing: -0.02em; color: var(--color-accent-strong); }
 .learning-plan-reading > .plan-title:first-child { margin-top: 0; }
-.learning-plan-reading > .plan-section { display: flex; align-items: center; gap: 6px; margin: 22px 0 6px;
+.learning-plan-reading > .plan-section { display: flex; align-items: center; gap: 6px; margin: 36px 0 12px;
   font-size: 11px; font-weight: 700; line-height: 1.4; text-transform: uppercase; letter-spacing: .09em;
   color: var(--color-accent); }
 .learning-plan-reading > .plan-section:first-child { margin-top: 0; }
@@ -1279,22 +1279,32 @@ select:disabled { opacity: 0.6; cursor: not-allowed; }
 /* The plan's step table on a laptop (27 Nov, her review: it read like a spreadsheet): a small labelled head, the step
    number on a rail, the action as the widest column, time right-aligned and quiet, and a tick outline before "done
    when" so the column reads as the thing to check off. */
-.learning-plan-reading.is-plan .plan-table table { table-layout: fixed; }
-.learning-plan-reading.is-plan .plan-table thead th { font-size: 10px; letter-spacing: .09em; text-transform: uppercase;
-  padding-top: 7px; padding-bottom: 7px; }
-.learning-plan-reading.is-plan .plan-table thead th:nth-child(1) { width: 3.1rem; text-align: center; }
-.learning-plan-reading.is-plan .plan-table thead th:nth-child(3) { width: 7.5rem; text-align: right; }
+.learning-plan-reading.is-plan .plan-table table { table-layout: auto; }
+.learning-plan-reading.is-plan .plan-table thead th { font-size: 11px; font-weight: 600; letter-spacing: .01em;
+  color: var(--color-ink-soft); padding-top: 8px; padding-bottom: 8px; }
+.learning-plan-reading.is-plan .plan-table thead th:nth-child(1) { text-align: center; white-space: nowrap; }
+.learning-plan-reading.is-plan .plan-table thead th:nth-child(3) { text-align: right; white-space: nowrap; }
 .learning-plan-reading.is-plan .plan-table thead th:nth-child(4) { width: 34%; }
-.learning-plan-reading.is-plan .plan-table tbody td { padding-top: 9px; padding-bottom: 9px; vertical-align: top; }
+.learning-plan-reading.is-plan .plan-table tbody td { padding-top: 11px; padding-bottom: 11px; vertical-align: top;
+  border-top: 1px solid var(--color-line); }
 .learning-plan-reading.is-plan .plan-table tbody td:nth-child(2) { color: var(--color-ink); }
 .learning-plan-reading.is-plan .plan-table tbody td:nth-child(3) { text-align: right; font-variant-numeric: tabular-nums;
-  font-weight: 600; }
+  font-weight: 600; color: var(--color-ink-soft); white-space: nowrap; }
 .learning-plan-reading.is-plan .plan-table tbody td:nth-child(4) { color: var(--color-ink-soft); }
-.learning-plan-reading.is-plan .plan-table tbody td:nth-child(4)::before { content: ""; display: inline-block;
-  width: 10px; height: 10px; margin-right: 6px; vertical-align: -1px; border: 1.5px solid var(--color-line-strong);
-  border-radius: 3px; }
+.learning-plan-reading.is-plan .plan-table tbody td:nth-child(4)::before { content: "✓"; margin-right: 5px;
+  color: var(--color-have); font-weight: 700; }
 .learning-plan-reading.is-plan .plan-table tbody tr:last-child td:nth-child(4)::before { border-color: var(--color-have); }
 .learning-plan-reading.is-plan .plan-table tbody tr:last-child td { padding-top: 11px; padding-bottom: 11px; }
+
+/* 27 Nov (her review: on a phone the plan read like "elderly mode" — everything too big): one step down everywhere. */
+@media (max-width: 639px) {
+  .learning-plan-reading > .plan-title { font-size: 16px; }
+  .learning-plan-reading > p { font-size: 13.5px; line-height: 1.55; }
+  .learning-plan-reading ul, .learning-plan-reading ol { font-size: 13.5px; line-height: 1.55; }
+  .learning-plan-reading > .plan-section { margin: 30px 0 9px; font-size: 10px; }
+  .learning-plan-reading code { font-size: 12.5px; }
+  .learning-plan-reading pre { font-size: 12.5px; }
+}
 
 /* The plan's step table on a phone (27 Nov, her review: it scrolled sideways and read like a spreadsheet; then the
    cards were uneven). Each step is a card: the number in the margin, the action on its own line, then the time as a
@@ -1308,16 +1318,19 @@ select:disabled { opacity: 0.6; cursor: not-allowed; }
   .learning-plan-reading.is-plan table tbody td:first-child { position: absolute; left: 12px; top: 11px; width: 26px;
     text-align: right; font-size: 12px; line-height: 1.2; }
   .learning-plan-reading.is-plan table tbody td:first-child::before { display: none; }
-  .learning-plan-reading.is-plan table tbody td:nth-child(2) { flex: 1 1 100%; font-size: 14px; line-height: 1.35;
+  .learning-plan-reading.is-plan table tbody td:nth-child(2) { flex: 1 1 100%; font-size: 13px; line-height: 1.4;
     color: var(--color-ink); }
-  .learning-plan-reading.is-plan table tbody td:nth-child(3) { background: var(--color-canvas); border-radius: 6px;
-    padding: 1px 7px; font-size: 11.5px; font-weight: 700; color: var(--color-ink-soft); }
+  .learning-plan-reading.is-plan table tbody td:nth-child(3) { display: inline-block; margin-top: 2px;
+    background: var(--color-accent-soft); border-radius: 999px; padding: 1px 8px; font-size: 11px; font-weight: 700;
+    color: var(--color-accent-strong); }
   .learning-plan-reading.is-plan table tbody td:nth-child(3)::after { content: none; }
-  .learning-plan-reading.is-plan table tbody td:nth-child(4) { flex: 1 1 auto; font-size: 12px; color: var(--color-muted); }
+  .learning-plan-reading.is-plan table tbody td:nth-child(4) { flex: 1 1 auto; font-size: 11.5px; color: var(--color-muted); }
   .learning-plan-reading.is-plan table tbody td:nth-child(4)::before { content: "✓"; margin-right: 4px;
     color: var(--color-have); font-weight: 700; border: 0; width: auto; height: auto; display: inline; }
   .learning-plan-reading.is-plan table tbody tr:last-child { background: var(--color-have-soft); border-radius: 10px;
     border-top: 0; margin-top: 6px; padding: 11px 14px 12px; }
+  /* the laptop rule draws a hairline on every cell; here the card's own border does that job */
+  .learning-plan-reading.is-plan .plan-table tbody td { border-top: 0; }
   .learning-plan-reading.is-plan table tbody tr:last-child td:first-child { position: static; width: auto;
     text-align: left; margin-bottom: 4px; font-size: 10.5px; font-weight: 700; letter-spacing: .09em;
     text-transform: uppercase; }

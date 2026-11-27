@@ -62,7 +62,7 @@ const MD = {
   code: ({ children }) => <code className="text-[13px] bg-sunken text-ink rounded px-1 py-0.5">{children}</code>,
   pre: ({ children }) => <pre className="my-2 bg-sunken border border-line rounded-lg p-3 overflow-x-auto [&>code]:bg-transparent [&>code]:p-0">{children}</pre>,
   table: ({ children }) => (
-    <div tabIndex={0} className="my-3 overflow-x-auto rounded-xl border border-line shadow-card">
+    <div tabIndex={0} className="plan-table my-3 overflow-x-auto rounded-xl border border-line shadow-card">
       <table className="w-full text-xs text-left">{children}</table>
     </div>
   ),

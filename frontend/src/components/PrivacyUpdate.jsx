@@ -40,8 +40,11 @@ export default function PrivacyUpdate() {
   }
   return (
     <div className="fixed inset-0 z-50 bg-slate-900/30 flex items-center justify-center p-4">
-      <div role="dialog" aria-modal="true" aria-labelledby="pn-title" className="w-full max-w-152 bg-white rounded-2xl shadow-xl p-7">
-        <h2 id="pn-title" className="text-lg font-semibold text-slate-900">We updated our privacy notice</h2>
+      {/* 27 Nov (phone pass, so every screen reads the same on a phone): full width, scrolls inside if the text is
+          long, and the buttons stack at 44px so a thumb can hit them */}
+      <div role="dialog" aria-modal="true" aria-labelledby="pn-title"
+        className="w-full max-w-152 max-h-[calc(100dvh-2rem)] overflow-y-auto bg-white rounded-2xl shadow-xl p-5 sm:p-7">
+        <h2 id="pn-title" className="text-base sm:text-lg font-semibold text-slate-900">We updated our privacy notice</h2>
         <p className="text-sm text-slate-500">{LATEST.label.en}</p>
         <div className="mt-4 rounded-xl bg-slate-50 border border-slate-200 px-4 py-3">
           {/* 27 Nov (her review): the mark alone, after the words and turned the same way as the Contents mark,
@@ -55,9 +58,11 @@ export default function PrivacyUpdate() {
         {/* 27 Nov: the "all optional" line belongs to a version that added optional fields (21 Oct), not to every update */}
         <p className="text-sm text-slate-600 mt-2">{LATEST.note?.en && <>{LATEST.note.en}{' '}</>}Questions? Email the career office at <a href={`mailto:${CONTACT}`} className="text-blue-700 underline underline-offset-2">{CONTACT}</a>.</p>
         {error && <p role="alert" className="text-sm text-rose-700 bg-rose-50 rounded-lg px-3 py-2 mt-3">{error}</p>}
-        <div className="mt-5 flex justify-end gap-2">
-          <button type="button" onClick={later} className="text-sm font-medium text-slate-700 border border-slate-300 rounded-lg px-4 py-2 hover:bg-slate-50">Not now</button>
-          <button type="button" onClick={agree} disabled={busy} autoFocus className="text-sm font-semibold text-white bg-blue-700 hover:bg-blue-800 rounded-lg px-5 py-2 disabled:opacity-50">
+        <div className="mt-5 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+          <button type="button" onClick={later}
+            className="min-h-11 w-full sm:w-auto text-sm font-medium text-slate-700 border border-slate-300 rounded-lg px-4 py-2 hover:bg-slate-50">Not now</button>
+          <button type="button" onClick={agree} disabled={busy} autoFocus
+            className="min-h-11 w-full sm:w-auto text-sm font-semibold text-white bg-blue-700 hover:bg-blue-800 rounded-lg px-5 py-2 disabled:opacity-50">
             {busy ? <Busy>Saving…</Busy> : 'I agree'}</button>
         </div>
       </div>

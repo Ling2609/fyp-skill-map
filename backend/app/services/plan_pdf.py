@@ -42,9 +42,10 @@ S = {
     "title": ParagraphStyle("title", fontSize=17, leading=21, spaceBefore=4, spaceAfter=4,
                             **{**_base, "fontName": "Helvetica-Bold", "textColor": ACCENT_STRONG}),
     "info": ParagraphStyle("info", fontSize=9.5, leading=13, spaceAfter=2, **{**_base, "textColor": INK}),
-    "h": ParagraphStyle("h", fontSize=11.5, leading=14, spaceBefore=16, spaceAfter=5,
+    # 27 Nov (her review: the sections sat too close on paper): 24pt above a section label, 8pt under it
+    "h": ParagraphStyle("h", fontSize=11.5, leading=14, spaceBefore=24, spaceAfter=8,
                         **{**_base, "fontName": "Helvetica-Bold", "textColor": ACCENT_STRONG}),
-    "body": ParagraphStyle("body", fontSize=9.5, leading=14.25, spaceAfter=7, **_base),
+    "body": ParagraphStyle("body", fontSize=9.5, leading=14.5, spaceAfter=9, **_base),
     "code": ParagraphStyle("code", fontName="Courier", fontSize=8.5, leading=12, spaceAfter=4),
     "cell": ParagraphStyle("cell", fontSize=9, leading=12, **_base),
     "head": ParagraphStyle("head", fontSize=9, leading=12, **{**_base, "fontName": "Helvetica-Bold", "textColor": ACCENT_STRONG}),
@@ -208,6 +209,8 @@ def _table(rows: list[list[str]], width: float) -> Table:
         ("LEFTPADDING", (0, 0), (-1, -1), 5), ("RIGHTPADDING", (0, 0), (-1, -1), 5),
     ]
     t.setStyle(TableStyle(style_rows))
+    t.spaceBefore = 6
+    t.spaceAfter = 8
     return t
 
 
@@ -234,7 +237,11 @@ def _blocks(tokens, width, skip_title=False, *, in_list=False):
                                           ("LEFTPADDING", (0, 0), (-1, -1), 0), ("RIGHTPADDING", (0, 0), (-1, -1), 0),
                                           ("TOPPADDING", (0, 0), (-1, -1), 0), ("BOTTOMPADDING", (0, 0), (-1, -1), 2),
                                           ("BOTTOMPADDING", (0, 0), (-1, 0), 0)]))
-                out += [head, HRFlowable(width="100%", thickness=0.8, color=LINE, spaceBefore=1, spaceAfter=4)]
+                # 27 Nov: the heading is a one-row table, so the Paragraph's own spaceBefore is ignored — the gap has to
+                # be set on the table itself, or sections run into each other exactly as she saw.
+                head.spaceBefore = 0 if first_heading else 26
+                head.spaceAfter = 2
+                out += [head, HRFlowable(width="100%", thickness=0.8, color=LINE, spaceBefore=0, spaceAfter=6)]
             first_heading = False
             i += 3
         elif t.type in ("fence", "code_block"):          # a command block: monospace, wrapped like any text
@@ -306,14 +313,15 @@ def build_pdf(markdown: str, *, student: str, goal: str | None, job: str | None,
              Paragraph(escape(f"Learning plan: {skill}" if skill else "Learning plan"), S["title"])]
     who = [f"For: {student}"] + ([f"Goal: {goal}"] if goal else []) + ([f"Job: {job}"] if job else [])
     story.append(Paragraph(escape(" · ".join(who)), S["info"]))
+    # 27 Nov (her review: "You already have: ... Missing for this job: ... You already have 2 of 3 of this ad's
+    # skills" said it three times): the trail shows how far along she is, one line says what is left.
     if have or missing:
-        parts = ([f"You already have: {', '.join(have)}."] if have else []) + \
-                ([f"Missing for this job: {', '.join(missing)}."] if missing else [])
-        story.append(Paragraph(escape(" ".join(parts)), S["info"]))
-    if have or missing:
-        story += [Spacer(1, 3), Trail(len(have), len(missing)),
-                  Paragraph(escape(f"You already have {len(have)} of {len(have) + len(missing)} of this ad's skills."
-                                   if have else ""), S["meta"])]
+        total = len(have) + len(missing)
+        line = f"{len(have)} of {total} of this ad's skills are already yours"
+        if missing:
+            line += f" · still to learn: {', '.join(missing[:4])}"
+        story += [Spacer(1, 4), Trail(len(have), len(missing)), Spacer(1, 2),
+                  Paragraph(escape(line + "."), S["meta"])]
     story.append(Spacer(1, 4))
     story += plan_flowables(markdown, doc.width)
     story += [Spacer(1, 10), KeepTogether([HRFlowable(width="100%", thickness=0.5, color=LINE, spaceAfter=4),
