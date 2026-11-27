@@ -15,7 +15,7 @@ from xml.sax.saxutils import escape  # nosec B406
 
 from markdown_it import MarkdownIt
 from reportlab.lib import colors
-from reportlab.lib.enums import TA_JUSTIFY, TA_LEFT
+from reportlab.lib.enums import TA_JUSTIFY, TA_LEFT, TA_RIGHT
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.styles import ParagraphStyle
 from reportlab.lib.units import mm
@@ -53,8 +53,13 @@ S = {
     "step": ParagraphStyle("step", fontSize=9.5, leading=12, **{**_base, "fontName": "Helvetica-Bold", "textColor": ACCENT}),
     "last": ParagraphStyle("last", fontSize=9, leading=12, **{**_base, "textColor": HAVE_STRONG, "fontName": "Helvetica-Bold"}),
     "note": ParagraphStyle("note", fontSize=8, leading=10.5, **_base),
-    "url": ParagraphStyle("url", **{**_base, "fontName": "Courier", "fontSize": 7.2, "leading": 9, "textColor": ACCENT}),
+    "url": ParagraphStyle("url", **{**_base, "fontName": "Courier", "fontSize": 8, "leading": 10.5,
+                                    "textColor": colors.HexColor("#333a48")}),
     "res": ParagraphStyle("res", fontSize=9, leading=12, **{**_base, "fontName": "Helvetica-Bold", "textColor": INK}),
+    "stepmeta": ParagraphStyle("stepmeta", fontSize=8.6, leading=11.5, **{**_base, "textColor": colors.HexColor("#4b5566")}),
+    "caption": ParagraphStyle("caption", fontSize=8.2, leading=11,
+                              **{**_base, "textColor": colors.HexColor("#4b5566"), "alignment": TA_RIGHT}),
+    "thead": ParagraphStyle("thead", fontSize=8.4, leading=10.5, **{**_base, "fontName": "Helvetica-Bold", "textColor": ACCENT_STRONG}),
 }
 S["prose"] = ParagraphStyle("prose", parent=S["body"], alignment=TA_JUSTIFY)
 
@@ -114,7 +119,7 @@ def mark_for(text: str) -> str | None:
 class GapBar(Flowable):
     """How much of the ad's skill list the student already has, as one slim bar: teal for what they have, a pale track
     for the rest, and a small coral tick where this plan's skill sits. Clean on paper and readable in greyscale."""
-    def __init__(self, have: int, missing: int, bar_w: float, height=3.2 * mm):
+    def __init__(self, have: int, missing: int, bar_w: float, height=4.4 * mm):
         super().__init__()
         self.have, self.missing = have, missing
         self.width, self.height = bar_w, height
@@ -135,8 +140,9 @@ class GapBar(Flowable):
             x = w * self.have / total
             c.setFillColor(colors.HexColor("#e9795a"))
             c.setStrokeColor(colors.HexColor("#e9795a"))
-            c.setLineWidth(1.4)
-            c.line(x, -1.1 * mm, x, h + 1.1 * mm)
+            c.setLineWidth(1.6)
+            c.line(x, -1.3 * mm, x, h + 1.3 * mm)
+
 
 
 class TickBox(Flowable):
@@ -195,7 +201,7 @@ def _generic_table(rows: list[list[str]], width: float) -> list:
     table = Table(data, colWidths=[width / n] * n, repeatRows=1)
     table.setStyle(TableStyle([
         ("VALIGN", (0, 0), (-1, -1), "TOP"),
-        ("BACKGROUND", (0, 0), (-1, 0), ACCENT_SOFT),
+        ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#eef3fc")),
         ("LINEBELOW", (0, 0), (-1, -1), 0.4, LINE),
         ("LEFTPADDING", (0, 0), (-1, -1), 0), ("RIGHTPADDING", (0, 0), (-1, -1), 4),
         ("TOPPADDING", (0, 0), (-1, -1), 4), ("BOTTOMPADDING", (0, 0), (-1, -1), 4),
@@ -231,9 +237,17 @@ def _steps(rows: list[list[str]], width: float) -> list:
             ("LEFTPADDING", (0, 0), (-1, -1), 0), ("RIGHTPADDING", (0, 0), (-1, -1), 0),
             ("TOPPADDING", (0, 0), (-1, -1), 0), ("BOTTOMPADDING", (0, 0), (-1, -1), 0),
         ]))
-        meta = " · ".join(x for x in (time, f"Done when: {when}" if when else "") if x)
-        out.append(KeepTogether([Spacer(1, 5), block,
-                                 Paragraph(meta, S["meta"] if not last else S["last"])]))
+        # 27 Nov (her question): a little colour, but only where it helps scanning — the time in accent blue, the
+        # "Done when:" label grey, and the condition itself in ink, so the line has three levels instead of one grey run.
+        parts = []
+        if time:
+            parts.append(f'<font color="#2557c4"><b>{time}</b></font>')
+        if when:
+            parts.append(f'<font color="#6b7280">Done when:</font> <font color="#1f2430">{when}</font>')
+        meta = "&nbsp;&nbsp;·&nbsp;&nbsp;".join(parts)
+        lead = [Spacer(1, 7)] if index == 1 else [Spacer(1, 9), HRFlowable(width="100%", thickness=0.4, color=LINE,
+                                                                          spaceBefore=0, spaceAfter=5)]
+        out.append(KeepTogether(lead + [block, Paragraph(meta, S["stepmeta"]), Spacer(1, 2)]))
     return out
 
 
@@ -281,7 +295,7 @@ def _plain(tokens) -> str:
 def _resources_table(items: list[str] | list[list[str]], width: float) -> Table:
     """The Resources section as a table (her review: a title with its long address in the same cell ran off the line):
     the name, what it covers, and the address in its own narrow column, which wraps instead of overflowing."""
-    rows = [[Paragraph("Resource", S["head"]), Paragraph("What it covers", S["head"]), Paragraph("Address", S["head"])]]
+    rows = [[Paragraph("Resource", S["thead"]), Paragraph("What it covers", S["thead"]), Paragraph("Address", S["thead"])]]
     for item in items:
         if isinstance(item, list):          # a markdown table row: | Resource | What it covers |
             name, url, note = _split_resource(item[0] if item else "")
@@ -292,16 +306,16 @@ def _resources_table(items: list[str] | list[list[str]], width: float) -> Table:
         rows.append([Paragraph(escape(name), S["res"]),
                      Paragraph(escape(note), S["cell"]),
                      Paragraph(escape(url), S["url"])])
-    table = Table(rows, colWidths=[width * 0.34, width * 0.38, width * 0.28], repeatRows=1)
+    table = Table(rows, colWidths=[width * 0.30, width * 0.46, width * 0.24], repeatRows=1)
     table.setStyle(TableStyle([
         ("VALIGN", (0, 0), (-1, -1), "TOP"),
-        ("BACKGROUND", (0, 0), (-1, 0), ACCENT_SOFT),
+        ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#eef3fc")),
         ("LINEBELOW", (0, 0), (-1, -1), 0.4, LINE),
         ("LEFTPADDING", (0, 0), (-1, -1), 0), ("RIGHTPADDING", (0, 0), (-1, -1), 4),
-        ("TOPPADDING", (0, 0), (-1, -1), 4), ("BOTTOMPADDING", (0, 0), (-1, -1), 4),
+        ("TOPPADDING", (0, 0), (-1, -1), 5), ("BOTTOMPADDING", (0, 0), (-1, -1), 6),
     ]))
     table.spaceBefore = 4
-    table.spaceAfter = 6
+    table.spaceAfter = 8
     return table
 
 
@@ -456,8 +470,14 @@ def build_pdf(markdown: str, *, student: str, goal: str | None, job: str | None,
         line = f"{len(have)} of {total} of this ad's skills are already yours"
         if missing:
             line += f" · still to learn: {', '.join(missing[:4])}"
-        story += [Spacer(1, 5), GapBar(len(have), len(missing), doc.width), Spacer(1, 3),
-                  Paragraph(escape(line + "."), S["meta"])]
+        # 27 Nov (her review): the bar on the left, the sentence to its right, both on one line
+        bar_w = doc.width * 0.40
+        row = Table([[GapBar(len(have), len(missing), bar_w), Paragraph(escape(line + "."), S["caption"])]],
+                    colWidths=[bar_w + 5 * mm, doc.width - bar_w - 5 * mm])
+        row.setStyle(TableStyle([("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+                                 ("LEFTPADDING", (0, 0), (-1, -1), 0), ("RIGHTPADDING", (0, 0), (-1, -1), 0),
+                                 ("TOPPADDING", (0, 0), (-1, -1), 0), ("BOTTOMPADDING", (0, 0), (-1, -1), 0)]))
+        story += [Spacer(1, 6), row]
     story.append(Spacer(1, 4))
     # 27 Nov: a whole section kept together pushed short plans onto a second page with a nearly empty first one, so
     # only each step block is kept together (see _steps); sections flow and fill the page.

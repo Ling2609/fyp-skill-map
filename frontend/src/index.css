@@ -598,6 +598,11 @@ select:disabled { opacity: 0.6; cursor: not-allowed; }
 /* ── AI Assistant (19 Nov, approved mock review/student-pages.html) ─────────────────────────────────────────── */
 .chat-ib { width: 34px; height: 34px; border-radius: 10px; border: 1px solid var(--color-line-strong); background: #fff; display: grid; place-items: center; color: var(--color-ink-soft); transition: background .15s; }
 .chat-ib:hover { background: var(--color-well); }
+/* 27 Nov: the chat dims behind the floating "Your chats" panel on a phone, so the panel is the focus */
+.chat-scrim { position: absolute; inset: 0; z-index: 15; border: 0; padding: 0; background: rgb(22 20 43 / 38%);
+  backdrop-filter: blur(1px); cursor: pointer; animation: scrim-in .18s ease-out; }
+@keyframes scrim-in { from { opacity: 0; } to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .chat-scrim { animation: none; } }
 .chat-glow { background: radial-gradient(320px 240px at 100% 0%, rgb(37 87 196 / 7%), transparent 70%), radial-gradient(300px 220px at 0% 100%, rgb(19 153 140 / 6%), transparent 70%), #fbfcfe; }
 .chat-starter { height: 32px; padding: 0 13px; border-radius: 999px; border: 1px solid #c8d7f4; background: var(--color-accent-soft); color: var(--color-accent-strong); font-weight: 600; font-size: 13px; transition: transform .15s; }
 .chat-starter:hover { transform: translateY(-2px); }
@@ -1275,6 +1280,10 @@ select:disabled { opacity: 0.6; cursor: not-allowed; }
   .learning-plan-reading > p { text-align: justify; }
   .ws-body .ws-grow-back, .ws-body .ws-grow .ws-text { text-align: justify; }
 }
+
+/* Row colours belong to the step table alone: a faint stripe for scanning, and the finish row in teal. */
+.learning-plan-reading.is-plan .plan-table.step-table tbody tr:nth-child(even) { background: var(--color-canvas); }
+.learning-plan-reading.is-plan .plan-table.step-table tbody tr:last-child { background: var(--color-have-soft); }
 
 /* The plan's step table on a laptop (27 Nov, her review: it read like a spreadsheet): a small labelled head, the step
    number on a rail, the action as the widest column, time right-aligned and quiet, and a tick outline before "done

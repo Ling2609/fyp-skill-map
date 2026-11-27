@@ -31,10 +31,12 @@ export default function MyPlans() {
     if (!nextId) return
     requestAnimationFrame(() => {
       const list = listRef.current
-      const body = document.getElementById(`plan-content-${index}`)
-      if (!list || !body) return
-      const delta = body.getBoundingClientRect().top - list.getBoundingClientRect().top
-      list.scrollTo({ top: list.scrollTop + delta - 6, behavior: 'smooth' })
+      // 27 Nov (her review: the plan opened with its title scrolled out of view): scroll to the row, so the plan's
+      // name, its date and the buttons stay at the top and the content starts underneath them.
+      const row = document.getElementById(`plan-row-${index}`)
+      if (!list || !row) return
+      const delta = row.getBoundingClientRect().top - list.getBoundingClientRect().top
+      list.scrollTo({ top: list.scrollTop + delta - 4, behavior: 'smooth' })
     })
   }
   const [order, setOrder] = useState('newest')
@@ -188,7 +190,7 @@ export default function MyPlans() {
                 const open = expanded === id
                 const contentId = `plan-content-${index}`
                 return (
-                  <li key={id}>
+                  <li key={id} id={`plan-row-${index}`}>
                     <div className="doc-row">
                       <div className="min-w-0">
                         <h3 className="doc-title">{plan.title}</h3>

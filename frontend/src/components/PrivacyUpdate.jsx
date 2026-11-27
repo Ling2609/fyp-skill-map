@@ -43,7 +43,7 @@ export default function PrivacyUpdate() {
       {/* 27 Nov (phone pass, so every screen reads the same on a phone): full width, scrolls inside if the text is
           long, and the buttons stack at 44px so a thumb can hit them */}
       <div role="dialog" aria-modal="true" aria-labelledby="pn-title"
-        className="w-full max-w-[38rem] max-h-[calc(100dvh-2rem)] overflow-y-auto bg-white rounded-2xl shadow-xl p-5 sm:p-7">
+        className="w-full max-w-152 max-h-[calc(100dvh-2rem)] overflow-y-auto bg-white rounded-2xl shadow-xl p-5 sm:p-7">
         <h2 id="pn-title" className="text-base sm:text-lg font-semibold text-slate-900">We updated our privacy notice</h2>
         <p className="text-sm text-slate-500">{LATEST.label.en}</p>
         <div className="mt-4 rounded-xl bg-slate-50 border border-slate-200 px-4 py-3">

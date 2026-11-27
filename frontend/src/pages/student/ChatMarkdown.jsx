@@ -75,9 +75,9 @@ const MD = {
   },
   thead: ({ children }) => <thead className="bg-accent-soft text-accent-strong">{children}</thead>,
   th: ({ children }) => <th className="px-3 py-2 font-semibold whitespace-nowrap">{children}</th>,
-  tbody: ({ children }) => (
-    <tbody className="[&>tr:nth-child(even)]:bg-canvas [&>tr:last-child]:bg-have-soft/70">{children}</tbody>
-  ),
+  // 27 Nov: no row colours here — they belong to the step table only (a resources table's last row turned green,
+  // which read as "done"). See .step-table in index.css.
+  tbody: ({ children }) => <tbody>{children}</tbody>,
   td: ({ children }) => <td className="px-3 py-2 align-top text-ink-soft border-t border-line">{children}</td>,
 }
 
