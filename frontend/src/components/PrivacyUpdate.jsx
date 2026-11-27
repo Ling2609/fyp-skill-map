@@ -53,10 +53,28 @@ export default function PrivacyUpdate() {
             What's new<NewRays mirrored className="h-3 w-3" /></p>
           <p className="text-sm text-slate-800 mt-1">{LATEST.changes.en}</p>
         </div>
-        <p className="text-sm text-slate-600 mt-3">Everything else is the same.{' '}
-          <a href="/privacy" target="_blank" rel="noopener noreferrer" className="font-medium text-blue-700 underline underline-offset-2">Read the full notice ↗</a></p>
-        {/* 27 Nov: the "all optional" line belongs to a version that added optional fields (21 Oct), not to every update */}
-        <p className="text-sm text-slate-600 mt-2">{LATEST.note?.en && <>{LATEST.note.en}{' '}</>}Questions? Email the career office at <a href={`mailto:${CONTACT}`} className="text-blue-700 underline underline-offset-2">{CONTACT}</a>.</p>
+        {/* 27 Nov (her second review: one joined line read as crowded): the two endings become a quiet footer, each
+            on its own line with its own small mark, set apart from the box by a rule. */}
+        <div className="mt-4 border-t border-slate-200 pt-3 space-y-2">
+          <p className="flex items-start gap-2 text-sm text-slate-600">
+            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"
+              strokeLinecap="round" strokeLinejoin="round" className="mt-0.5 h-4 w-4 shrink-0 text-accent">
+              <path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H19v15H6.5A2.5 2.5 0 0 0 4 20.5z" /><path d="M4 5.5v15" />
+            </svg>
+            <span>Everything else is the same.{' '}
+              <a href="/privacy" target="_blank" rel="noopener noreferrer"
+                className="font-medium text-blue-700 underline underline-offset-2">Read the full notice ↗</a></span>
+          </p>
+          {LATEST.note?.en && <p className="text-sm text-slate-600">{LATEST.note.en}</p>}
+          <p className="flex items-start gap-2 text-sm text-slate-600">
+            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"
+              strokeLinecap="round" strokeLinejoin="round" className="mt-0.5 h-4 w-4 shrink-0 text-accent">
+              <rect x="3" y="5" width="18" height="14" rx="2.5" /><path d="m4 7 8 6 8-6" />
+            </svg>
+            <span>Questions? Email the career office at{' '}
+              <a href={`mailto:${CONTACT}`} className="text-blue-700 underline underline-offset-2">{CONTACT}</a>.</span>
+          </p>
+        </div>
         {error && <p role="alert" className="text-sm text-rose-700 bg-rose-50 rounded-lg px-3 py-2 mt-3">{error}</p>}
         <div className="mt-5 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
           <button type="button" onClick={later}

@@ -323,7 +323,24 @@ def build_pdf(markdown: str, *, student: str, goal: str | None, job: str | None,
         story += [Spacer(1, 4), Trail(len(have), len(missing)), Spacer(1, 2),
                   Paragraph(escape(line + "."), S["meta"])]
     story.append(Spacer(1, 4))
-    story += plan_flowables(markdown, doc.width)
+    # 27 Nov (her review: a section's heading sat at the bottom of one page and its steps on the next): each section
+    # is kept on one page when it fits. A section taller than a page still splits — nothing can avoid that — but a
+    # normal plan now reads page by page instead of breaking in the middle.
+    def _is_heading(flow):
+        return isinstance(flow, Table) and len(getattr(flow, "_cellvalues", [])) == 1
+
+    groups, current = [], []
+    for flow in plan_flowables(markdown, doc.width):
+        if _is_heading(flow):
+            if current:
+                groups.append(current)
+            current = [flow]
+        else:
+            current.append(flow)
+    if current:
+        groups.append(current)
+    for group in groups:
+        story.append(KeepTogether(group) if len(group) > 1 else group[0])
     story += [Spacer(1, 10), KeepTogether([HRFlowable(width="100%", thickness=0.5, color=LINE, spaceAfter=4),
                                            Paragraph(escape(DISCLAIMER), S["note"])])]
 

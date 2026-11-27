@@ -150,8 +150,10 @@ export default function Privacy() {
                   <ul className="mt-3 space-y-2 text-[15px] text-slate-700 leading-relaxed list-disc pl-5">
                     {points.map(p => <li key={p}>{isNew(p) && <NewTag label={L.newTag} className="mr-1" />} {rich(p)}</li>)}
                   </ul>
+                  {/* 27 Nov (phone pass): the data table uses the same card treatment as the plan table — one card per
+                      row, each cell keeping its column name as a small label. No sideways scrolling on a phone. */}
                   {id === 'collect' && (
-                    <div className="mt-4 overflow-x-auto">
+                    <div className="mt-4 card-table">
                       <table className="w-full text-sm text-left">
                         <thead><tr className="border-b border-slate-200 text-slate-500">
                           {rows.head.map(h => <th key={h} scope="col" className="py-2 pr-4 font-medium">{h}</th>)}
@@ -159,10 +161,10 @@ export default function Privacy() {
                         <tbody>
                           {rows.rows.map(([what, need, why]) => (
                             <tr key={what} className="border-b border-slate-200 last:border-0">
-                              <td className="py-2 pr-4 text-slate-800">{isNew([what, need, why].join('|')) && <NewTag label={L.newTag} className="mr-1 align-[1px]" />} {what}</td>
-                              <td className="py-2 pr-4"><span className={`text-xs font-semibold rounded-full px-2 py-0.5 ${
+                              <td data-label={rows.head[0]} className="py-2 pr-4 text-slate-800">{isNew([what, need, why].join('|')) && <NewTag label={L.newTag} className="mr-1 align-[1px]" />} {what}</td>
+                              <td data-label={rows.head[1]} className="py-2 pr-4"><span className={`text-xs font-semibold rounded-full px-2 py-0.5 ${
                                 need === 'Required' || need === 'Wajib' ? 'bg-slate-100 text-slate-700' : 'bg-emerald-50 text-emerald-700'}`}>{need}</span></td>
-                              <td className="py-2 text-slate-600">{why}</td>
+                              <td data-label={rows.head[2]} className="py-2 text-slate-600">{why}</td>
                             </tr>
                           ))}
                         </tbody>
