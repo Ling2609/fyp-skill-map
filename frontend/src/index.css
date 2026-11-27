@@ -1775,6 +1775,15 @@ button.skillgap-token { cursor: pointer; }
 /* phones: the toggle is two arrows, so each needs a thumb-sized hit area */
 @media (max-width: 639px) { .doc-sort button { height: 32px; padding: 0 8px; font-size: 12px; } }
 .doc-sort button[aria-pressed="true"] { background: #fff; color: var(--color-accent-strong); box-shadow: 0 1px 2px rgb(20 30 60 / 12%); }
+/* 27 Nov (phone pass, her review): the card head is one row — title, count and the sort button centred together —
+   instead of the button dropping to a line of its own. */
+@media (max-width: 639px) {
+  .doc-card .adm-th { flex-wrap: nowrap; align-items: center; gap: 8px; padding: 14px 14px 10px; }
+  .doc-card .adm-tt { min-width: 0; }
+  .doc-card .adm-tt + .text-xs { white-space: nowrap; }
+  .doc-card .doc-sort-btn { flex: none; margin-left: auto; }
+}
+
 /* A thin bar under the card head while the next page of plans loads (27 Nov, instead of the list blinking away). */
 .doc-progress { position: relative; height: 2px; overflow: hidden; background: var(--color-accent-soft); flex: none; }
 .doc-progress::after { content: ""; position: absolute; top: 0; bottom: 0; width: 38%; border-radius: 2px;

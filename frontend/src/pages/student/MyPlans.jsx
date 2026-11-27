@@ -120,13 +120,15 @@ export default function MyPlans() {
     <div className="flex h-[calc(100dvh-var(--bar-h))] flex-col">
       {confirmation}
       <PageHeader>
-        <div className="flex flex-wrap items-start justify-between gap-3 pb-4 pt-1">
+        {/* 27 Nov (her screenshot: the button sat lower than the title): the title and the button are centred on the
+            same line, on a phone where only the title is left, and on a laptop against the whole heading block */}
+        <div className="flex flex-wrap items-center justify-between gap-3 pb-4 pt-1">
           <div className="min-w-0">
             <p className="mb-2 text-[11px] font-semibold uppercase tracking-widest text-accent">My Plans</p>
             <h1 className="text-2xl font-semibold tracking-tight text-ink">My Learning Plans</h1>
             <p className="mt-1 text-sm text-muted">Revisit learning plans from your AI Assistant chats.</p>
           </div>
-          <Link to="/chatbot" className="head-cta mt-1 min-h-11 shrink-0 px-4 text-sm">
+          <Link to="/chatbot" className="head-cta min-h-11 shrink-0 px-4 text-sm">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" aria-hidden="true">
               <path d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-5l-5 5v-5Z" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
