@@ -1249,8 +1249,9 @@ select:disabled { opacity: 0.6; cursor: not-allowed; }
 .learning-plan-reading > .plan-title { margin: 2px 0 10px; padding-bottom: 8px; border-bottom: 1px solid var(--color-line);
   font-size: 17px; font-weight: 800; line-height: 1.25; letter-spacing: -0.02em; color: var(--color-accent-strong); }
 .learning-plan-reading > .plan-title:first-child { margin-top: 0; }
-.learning-plan-reading > .plan-section { margin: 22px 0 6px; font-size: 11px; font-weight: 700; line-height: 1.4;
-  text-transform: uppercase; letter-spacing: .09em; color: var(--color-accent); }
+.learning-plan-reading > .plan-section { display: flex; align-items: center; gap: 6px; margin: 22px 0 6px;
+  font-size: 11px; font-weight: 700; line-height: 1.4; text-transform: uppercase; letter-spacing: .09em;
+  color: var(--color-accent); }
 .learning-plan-reading > .plan-section:first-child { margin-top: 0; }
 .learning-plan-reading pre, .learning-plan-reading table { text-align: left; }
 /* A plan's step table reads as a route: the number cell is a badge on a line that joins the steps, the time cell is
@@ -1274,6 +1275,82 @@ select:disabled { opacity: 0.6; cursor: not-allowed; }
   .learning-plan-reading > p { text-align: justify; }
   .ws-body .ws-grow-back, .ws-body .ws-grow .ws-text { text-align: justify; }
 }
+
+/* The plan's step table on a laptop (27 Nov, her review: it read like a spreadsheet): a small labelled head, the step
+   number on a rail, the action as the widest column, time right-aligned and quiet, and a tick outline before "done
+   when" so the column reads as the thing to check off. */
+.learning-plan-reading.is-plan .plan-table table { table-layout: fixed; }
+.learning-plan-reading.is-plan .plan-table thead th { font-size: 10px; letter-spacing: .09em; text-transform: uppercase;
+  padding-top: 7px; padding-bottom: 7px; }
+.learning-plan-reading.is-plan .plan-table thead th:nth-child(1) { width: 3.1rem; text-align: center; }
+.learning-plan-reading.is-plan .plan-table thead th:nth-child(3) { width: 7.5rem; text-align: right; }
+.learning-plan-reading.is-plan .plan-table thead th:nth-child(4) { width: 34%; }
+.learning-plan-reading.is-plan .plan-table tbody td { padding-top: 9px; padding-bottom: 9px; vertical-align: top; }
+.learning-plan-reading.is-plan .plan-table tbody td:nth-child(2) { color: var(--color-ink); }
+.learning-plan-reading.is-plan .plan-table tbody td:nth-child(3) { text-align: right; font-variant-numeric: tabular-nums;
+  font-weight: 600; }
+.learning-plan-reading.is-plan .plan-table tbody td:nth-child(4) { color: var(--color-ink-soft); }
+.learning-plan-reading.is-plan .plan-table tbody td:nth-child(4)::before { content: ""; display: inline-block;
+  width: 10px; height: 10px; margin-right: 6px; vertical-align: -1px; border: 1.5px solid var(--color-line-strong);
+  border-radius: 3px; }
+.learning-plan-reading.is-plan .plan-table tbody tr:last-child td:nth-child(4)::before { border-color: var(--color-have); }
+.learning-plan-reading.is-plan .plan-table tbody tr:last-child td { padding-top: 11px; padding-bottom: 11px; }
+
+/* The plan's step table on a phone (27 Nov, her review: it scrolled sideways and read like a spreadsheet; then the
+   cards were uneven). Each step is a card: the number in the margin, the action on its own line, then the time as a
+   small chip followed by what "done" looks like. */
+@media (max-width: 639px) {
+  .learning-plan-reading.is-plan table thead { display: none; }
+  .learning-plan-reading.is-plan table tbody tr { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 6px;
+    position: relative; padding: 10px 12px 11px 46px; border-top: 1px solid var(--color-line); }
+  .learning-plan-reading.is-plan table tbody tr:first-child { border-top: 0; }
+  .learning-plan-reading.is-plan table tbody td { display: block; border: 0; padding: 0; }
+  .learning-plan-reading.is-plan table tbody td:first-child { position: absolute; left: 12px; top: 11px; width: 26px;
+    text-align: right; font-size: 12px; line-height: 1.2; }
+  .learning-plan-reading.is-plan table tbody td:first-child::before { display: none; }
+  .learning-plan-reading.is-plan table tbody td:nth-child(2) { flex: 1 1 100%; font-size: 14px; line-height: 1.35;
+    color: var(--color-ink); }
+  .learning-plan-reading.is-plan table tbody td:nth-child(3) { background: var(--color-canvas); border-radius: 6px;
+    padding: 1px 7px; font-size: 11.5px; font-weight: 700; color: var(--color-ink-soft); }
+  .learning-plan-reading.is-plan table tbody td:nth-child(3)::after { content: none; }
+  .learning-plan-reading.is-plan table tbody td:nth-child(4) { flex: 1 1 auto; font-size: 12px; color: var(--color-muted); }
+  .learning-plan-reading.is-plan table tbody td:nth-child(4)::before { content: "✓"; margin-right: 4px;
+    color: var(--color-have); font-weight: 700; border: 0; width: auto; height: auto; display: inline; }
+  .learning-plan-reading.is-plan table tbody tr:last-child { background: var(--color-have-soft); border-radius: 10px;
+    border-top: 0; margin-top: 6px; padding: 11px 14px 12px; }
+  .learning-plan-reading.is-plan table tbody tr:last-child td:first-child { position: static; width: auto;
+    text-align: left; margin-bottom: 4px; font-size: 10.5px; font-weight: 700; letter-spacing: .09em;
+    text-transform: uppercase; }
+  .learning-plan-reading.is-plan table tbody tr:last-child td:nth-child(2) { color: var(--color-have-strong); }
+  .learning-plan-reading.is-plan table tbody tr:last-child td:nth-child(3) { background: transparent; padding-left: 0; }
+}
+
+/* The plan's trail (27 Nov): footprints already walked (teal), the one this plan adds (coral), a flag at the ad's
+   bar. Tiny, quiet, and it tells a student they are not starting from zero. */
+.plan-trail { margin-bottom: 12px; padding: 10px 12px; border: 1px solid var(--color-line); border-radius: 12px;
+  background: var(--color-canvas); }
+.plan-trail-copy { margin: 0 0 8px; font-size: 13px; line-height: 1.45; color: var(--color-ink-soft); }
+.plan-trail-copy b { color: var(--color-ink); }
+.plan-trail-track { display: flex; align-items: center; gap: 3px; margin: 0; padding: 0; list-style: none; flex-wrap: wrap; }
+.plan-trail-track li { display: grid; place-items: center; width: 17px; height: 17px; }
+.plan-trail-track svg { width: 16px; height: 16px; }
+.plan-trail-track .had { color: var(--color-have); }
+.plan-trail-track .need { color: color-mix(in srgb, var(--color-missing) 38%, #fff); }
+.plan-trail-track .goal { margin-left: 4px; color: var(--color-accent); }
+/* alternate feet, so the row reads as walking rather than as dots */
+.plan-trail-track li:nth-child(odd) svg { transform: rotate(-13deg); }
+.plan-trail-track li:nth-child(even) svg { transform: rotate(11deg) translateY(1px); }
+/* phones: one row, smaller feet, so the flag never drops to a line of its own */
+@media (max-width: 639px) {
+  .plan-trail-track { flex-wrap: nowrap; gap: 2px; }
+  .plan-trail-track li { width: 14px; height: 14px; }
+  .plan-trail-track svg { width: 13px; height: 13px; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .plan-trail-track .goal { animation: plan-flag 2.4s ease-in-out 1; }
+  @keyframes plan-flag { 0%, 100% { transform: none; } 45% { transform: translateY(-2px); } }
+}
+@media (prefers-reduced-motion: reduce) { .plan-trail-track .goal { animation: none; } }
 
 /* Keep the initial job form within the available card; small screens scroll naturally. */
 .post-card { min-width: 0; }

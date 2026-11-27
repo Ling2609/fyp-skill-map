@@ -1,5 +1,5 @@
 import { useConfirmation } from '../../components/useConfirmation'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import api from '../../api'
 import PageHeader from '../../components/PageHeader'
@@ -23,6 +23,20 @@ export default function MyPlans() {
   const { confirm, confirmation } = useConfirmation()
   const navigate = useNavigate()
   const [expanded, setExpanded] = useState(null)
+  const listRef = useRef(null)
+  // 27 Nov (her review: "View plan" opened it where the button was, so the plan's first line was off-screen and she
+  // had to scroll back up): once it opens, the list scrolls so the plan starts at the top of the list.
+  const openPlan = (nextId, index) => {
+    setExpanded(nextId)
+    if (!nextId) return
+    requestAnimationFrame(() => {
+      const list = listRef.current
+      const body = document.getElementById(`plan-content-${index}`)
+      if (!list || !body) return
+      const delta = body.getBoundingClientRect().top - list.getBoundingClientRect().top
+      list.scrollTo({ top: list.scrollTop + delta - 6, behavior: 'smooth' })
+    })
+  }
   const [order, setOrder] = useState('newest')
   const [downloading, setDownloading] = useState(null)
   const [downloadError, setDownloadError] = useState(null)
@@ -151,7 +165,7 @@ export default function MyPlans() {
               </div>
             </div>
             {/* 26 Nov (her review): the card head stays put; only the rows scroll */}
-            <ul className="doc-list min-h-0 overflow-y-auto">
+            <ul ref={listRef} className="doc-list min-h-0 overflow-y-auto">
               {result.plans.map((plan, index) => {
                 const id = `${plan.session_id}-${plan.message_index}`
                 const open = expanded === id
@@ -168,7 +182,7 @@ export default function MyPlans() {
                         {downloadError === plan && <p role="alert" className="doc-meta text-rose-800">Couldn’t make the PDF. Try again.</p>}
                       </div>
                       <div className="doc-acts">
-                        <button type="button" aria-expanded={open} aria-controls={contentId} onClick={() => setExpanded(open ? null : id)} className="acad-btn edit h-9">
+                        <button type="button" aria-expanded={open} aria-controls={contentId} onClick={() => openPlan(open ? null : id, index)} className="acad-btn edit h-9">
                           {open ? 'Hide plan' : 'View plan'}</button>
                         <RowMenu label={`More actions for ${plan.title}`} disabled={!!removing || !!downloading} items={[
                           { label: 'Download PDF', onSelect: () => download(plan) },

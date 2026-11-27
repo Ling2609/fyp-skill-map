@@ -27,21 +27,110 @@ DISCLAIMER = ("Made by SkillMap's AI Assistant from your profile and the job's s
               "so pick a result yourself. Check each resource before you rely on it.")
 MD = MarkdownIt("commonmark").enable("table").enable("strikethrough")
 
+INK = colors.HexColor("#16142b")
+ACCENT = colors.HexColor("#2557c4")
+ACCENT_STRONG = colors.HexColor("#1d469f")
+ACCENT_SOFT = colors.HexColor("#e3ebfa")
+HAVE_SOFT = colors.HexColor("#dcf2ef")
+HAVE_STRONG = colors.HexColor("#0f7a70")
+PARTIAL = colors.HexColor("#e0a21a")
+LINE = colors.HexColor("#c9d5ee")
+
 _base = dict(fontName="Helvetica", textColor=colors.black, alignment=TA_LEFT)
 S = {
-    "meta": ParagraphStyle("meta", fontSize=8.5, leading=11, **_base),
+    "meta": ParagraphStyle("meta", fontSize=8.5, leading=11, **{**_base, "textColor": ACCENT}),
     "title": ParagraphStyle("title", fontSize=17, leading=21, spaceBefore=4, spaceAfter=4,
-                            **{**_base, "fontName": "Helvetica-Bold"}),
-    "info": ParagraphStyle("info", fontSize=9.5, leading=13, spaceAfter=2, **_base),
+                            **{**_base, "fontName": "Helvetica-Bold", "textColor": ACCENT_STRONG}),
+    "info": ParagraphStyle("info", fontSize=9.5, leading=13, spaceAfter=2, **{**_base, "textColor": INK}),
     "h": ParagraphStyle("h", fontSize=11.5, leading=14, spaceBefore=16, spaceAfter=5,
-                        **{**_base, "fontName": "Helvetica-Bold"}),
+                        **{**_base, "fontName": "Helvetica-Bold", "textColor": ACCENT_STRONG}),
     "body": ParagraphStyle("body", fontSize=9.5, leading=14.25, spaceAfter=7, **_base),
     "code": ParagraphStyle("code", fontName="Courier", fontSize=8.5, leading=12, spaceAfter=4),
     "cell": ParagraphStyle("cell", fontSize=9, leading=12, **_base),
-    "head": ParagraphStyle("head", fontSize=9, leading=12, **{**_base, "fontName": "Helvetica-Bold"}),
+    "head": ParagraphStyle("head", fontSize=9, leading=12, **{**_base, "fontName": "Helvetica-Bold", "textColor": ACCENT_STRONG}),
+    "step": ParagraphStyle("step", fontSize=9.5, leading=12, **{**_base, "fontName": "Helvetica-Bold", "textColor": ACCENT}),
+    "last": ParagraphStyle("last", fontSize=9, leading=12, **{**_base, "textColor": HAVE_STRONG, "fontName": "Helvetica-Bold"}),
     "note": ParagraphStyle("note", fontSize=8, leading=10.5, **_base),
 }
 S["prose"] = ParagraphStyle("prose", parent=S["body"], alignment=TA_JUSTIFY)
+
+
+class Glyph(Flowable):
+    """A small section mark drawn with canvas primitives: no icon font is bundled, so these are lines and arcs."""
+    def __init__(self, kind, size=3.4 * mm):
+        super().__init__()
+        self.kind, self.width, self.height = kind, size, size
+
+    def draw(self):
+        c, u = self.canv, self.width / 16.0
+        c.saveState()
+        c.setStrokeColor(ACCENT)
+        c.setLineWidth(1.3)
+        c.setLineCap(1)
+        c.setLineJoin(1)
+        if self.kind == "play":
+            p = c.beginPath(); p.moveTo(4 * u, 2 * u); p.lineTo(4 * u, 14 * u); p.lineTo(13 * u, 8 * u); p.close()
+            c.setFillColor(ACCENT); c.drawPath(p, stroke=0, fill=1)
+        elif self.kind == "book":
+            c.rect(3 * u, 2.5 * u, 10 * u, 11 * u, stroke=1, fill=0)
+            c.line(6.4 * u, 2.5 * u, 6.4 * u, 13.5 * u)
+        elif self.kind == "route":
+            c.circle(4.5 * u, 12 * u, 1.6 * u, stroke=1, fill=0)
+            c.circle(11.5 * u, 4 * u, 1.6 * u, stroke=1, fill=0)
+            c.line(6.1 * u, 12 * u, 9 * u, 12 * u); c.line(9 * u, 12 * u, 9 * u, 4 * u); c.line(9 * u, 4 * u, 9.9 * u, 4 * u)
+        elif self.kind == "code":
+            c.line(6 * u, 5 * u, 3 * u, 8 * u); c.line(3 * u, 8 * u, 6 * u, 11 * u)
+            c.line(10 * u, 5 * u, 13 * u, 8 * u); c.line(13 * u, 8 * u, 10 * u, 11 * u)
+        elif self.kind == "alert":
+            p = c.beginPath(); p.moveTo(8 * u, 13.5 * u); p.lineTo(14 * u, 3 * u); p.lineTo(2 * u, 3 * u); p.close()
+            c.drawPath(p, stroke=1, fill=0); c.line(8 * u, 6 * u, 8 * u, 9 * u)
+        elif self.kind == "case":
+            c.rect(2 * u, 3 * u, 12 * u, 9 * u, stroke=1, fill=0)
+            c.line(6 * u, 12 * u, 6 * u, 13.5 * u); c.line(6 * u, 13.5 * u, 10 * u, 13.5 * u); c.line(10 * u, 13.5 * u, 10 * u, 12 * u)
+        elif self.kind == "check":
+            c.circle(8 * u, 8 * u, 6 * u, stroke=1, fill=0)
+            c.line(5 * u, 8 * u, 7.3 * u, 10.3 * u); c.line(7.3 * u, 10.3 * u, 11 * u, 6 * u)
+        c.restoreState()
+
+
+SECTION_MARKS = [
+    ("quick start", "play"), ("resource", "book"), ("your plan", "route"), ("worked example", "code"),
+    ("common mistake", "alert"), ("show it", "case"), ("portfolio", "case"), ("check your progress", "check"),
+]
+
+
+def mark_for(text: str) -> str | None:
+    low = (text or "").lower()
+    for needle, kind in SECTION_MARKS:
+        if needle in low:
+            return kind
+    return None
+
+
+class Trail(Flowable):
+    """The gap as a trail: a filled dot per skill the student has, a pale one per skill still missing, a flag at the
+    end. It is the same idea as the dots on Job Detail, drawn small so it costs one line."""
+    def __init__(self, have: int, missing: int, size=3.0 * mm, gap=1.2 * mm, cap=14):
+        super().__init__()
+        self.have, self.missing = have, missing
+        self.size, self.gap, self.cap = size, gap, cap
+        total = min(have + missing, cap)
+        self.total = total
+        self.width, self.height = total * (size + gap) + 4 * mm, size
+
+    def draw(self):
+        c, size, step = self.canv, self.size, self.size + self.gap
+        y = self.size / 2
+        for i in range(self.total):
+            x = i * step + size / 2
+            if i < self.have:
+                c.setFillColor(colors.HexColor("#0f9d8f")); c.circle(x, y, size / 2 - 0.4, stroke=0, fill=1)
+            else:
+                c.setFillColor(colors.HexColor("#f6ded6")); c.circle(x, y, size / 2 - 0.4, stroke=0, fill=1)
+        fx = self.total * step + 1.5 * mm
+        c.setStrokeColor(ACCENT); c.setLineWidth(1.3); c.line(fx, 0.4 * mm, fx, size - 0.2 * mm)
+        p = c.beginPath(); p.moveTo(fx, size - 0.4 * mm); p.lineTo(fx + 2.6 * mm, size - 1.3 * mm)
+        p.lineTo(fx, size - 2.3 * mm); p.close(); c.setFillColor(ACCENT); c.drawPath(p, stroke=0, fill=1)
 
 
 class TickBox(Flowable):
@@ -55,7 +144,7 @@ class TickBox(Flowable):
         self.canv.acroForm.checkboxRelative(
             tooltip=self.label, x=0, y=0, size=self.width,
             checked=False, buttonStyle="check", borderWidth=0.8,
-            borderColor=colors.black, fillColor=colors.white, textColor=colors.black,
+            borderColor=ACCENT, fillColor=colors.white, textColor=ACCENT,
             annotationFlags="print", fieldFlags="",
         )
 
@@ -94,7 +183,10 @@ def _table(rows: list[list[str]], width: float) -> Table:
     n = len(head)
     data = [[Paragraph(h, S["head"]) for h in head] + [Paragraph("Done", S["head"])]]
     for index, row in enumerate(body, start=1):
-        cells = [Paragraph(c, S["cell"]) for c in (row + [""] * n)[:n]]
+        last_row = index == len(body)          # "Add it to SkillMap": the finish
+        style = S["last"] if last_row else S["cell"]
+        cells = [Paragraph(c, S["step"] if (i == 0 and not last_row) else style)
+                 for i, c in enumerate((row + [""] * n)[:n])]
         step = cells[0].getPlainText() or str(index)
         data.append(cells + [TickBox(f"Mark step {step} as done")])
     done_w = 13 * mm
@@ -104,13 +196,18 @@ def _table(rows: list[list[str]], width: float) -> Table:
         weights[i] = 2.6 if "what" in low else 1.7 if "done when" in low else 0.9 if "time" in low else 1.1
     unit = (width - done_w) / sum(weights)
     t = Table(data, colWidths=[w * unit for w in weights] + [done_w], repeatRows=1)
-    t.setStyle(TableStyle([
-        ("GRID", (0, 0), (-1, -1), 0.6, colors.black),
+    style_rows = [
+        ("LINEBELOW", (0, 0), (-1, -1), 0.5, LINE),
+        ("LINEABOVE", (0, 0), (-1, 0), 0.5, LINE),
+        ("BACKGROUND", (0, 0), (-1, 0), ACCENT_SOFT),
+        ("BACKGROUND", (0, len(body)), (-1, len(body)), HAVE_SOFT),   # the finish row
+        ("LINEBEFORE", (0, 0), (0, -2), 2.5, ACCENT),                # the step numbers read as a rail
         ("VALIGN", (0, 0), (-1, -1), "TOP"),
-        ("ALIGN", (-1, 1), (-1, -1), "CENTER"),
+        ("ALIGN", (-1, 1), (-1, -1), "CENTER"), ("ALIGN", (2, 1), (2, -1), "RIGHT"),
         ("TOPPADDING", (0, 0), (-1, -1), 4), ("BOTTOMPADDING", (0, 0), (-1, -1), 5),
         ("LEFTPADDING", (0, 0), (-1, -1), 5), ("RIGHTPADDING", (0, 0), (-1, -1), 5),
-    ]))
+    ]
+    t.setStyle(TableStyle(style_rows))
     return t
 
 
@@ -130,8 +227,14 @@ def _blocks(tokens, width, skip_title=False, *, in_list=False):
         if t.type == "heading_open":
             text = _inline(tokens[i + 1])
             if not (skip_title and first_heading and tokens[i + 1].content.lower().startswith("learning plan")):
-                out += [Paragraph(text, S["h"]), HRFlowable(width="100%", thickness=0.6, color=colors.black,
-                                                            spaceBefore=1, spaceAfter=4)]
+                kind = mark_for(tokens[i + 1].content)
+                head = Table([[Glyph(kind) if kind else "", Paragraph(text, S["h"])]],
+                             colWidths=[5.5 * mm, width - 5.5 * mm] if kind else [0, width])
+                head.setStyle(TableStyle([("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+                                          ("LEFTPADDING", (0, 0), (-1, -1), 0), ("RIGHTPADDING", (0, 0), (-1, -1), 0),
+                                          ("TOPPADDING", (0, 0), (-1, -1), 0), ("BOTTOMPADDING", (0, 0), (-1, -1), 2),
+                                          ("BOTTOMPADDING", (0, 0), (-1, 0), 0)]))
+                out += [head, HRFlowable(width="100%", thickness=0.8, color=LINE, spaceBefore=1, spaceAfter=4)]
             first_heading = False
             i += 3
         elif t.type in ("fence", "code_block"):          # a command block: monospace, wrapped like any text
@@ -207,14 +310,19 @@ def build_pdf(markdown: str, *, student: str, goal: str | None, job: str | None,
         parts = ([f"You already have: {', '.join(have)}."] if have else []) + \
                 ([f"Missing for this job: {', '.join(missing)}."] if missing else [])
         story.append(Paragraph(escape(" ".join(parts)), S["info"]))
+    if have or missing:
+        story += [Spacer(1, 3), Trail(len(have), len(missing)),
+                  Paragraph(escape(f"You already have {len(have)} of {len(have) + len(missing)} of this ad's skills."
+                                   if have else ""), S["meta"])]
     story.append(Spacer(1, 4))
     story += plan_flowables(markdown, doc.width)
-    story += [Spacer(1, 10), KeepTogether([HRFlowable(width="100%", thickness=0.4, color=colors.black, spaceAfter=4),
+    story += [Spacer(1, 10), KeepTogether([HRFlowable(width="100%", thickness=0.5, color=LINE, spaceAfter=4),
                                            Paragraph(escape(DISCLAIMER), S["note"])])]
 
     def footer(canvas, d):
         canvas.saveState()
         canvas.setFont("Helvetica", 8)
+        canvas.setFillColor(ACCENT)
         canvas.drawRightString(A4[0] - 18 * mm, 10 * mm, f"Page {d.page}")
         canvas.restoreState()
 

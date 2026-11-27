@@ -8,12 +8,43 @@ import remarkGfm from 'remark-gfm'
 // same): "### Learning plan: X" gets its own title style, the "#### Section" labels become small accent labels,
 // and the plan table gets a coloured head, striped rows and a tinted last row (the "Add it to SkillMap" step).
 // The PDF stays black and white on purpose (she prints it).
+// 27 Nov (her review: "add some icon, make it interesting a bit"): one small mark per plan section, so the shape of a
+// plan is visible at a glance. Decorative only (aria-hidden), the words carry the meaning.
+const ICONS = {
+  play: <path d="M5 3.5v13l11-6.5z" />,
+  book: <><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H19v15H6.5A2.5 2.5 0 0 0 4 20.5z" /><path d="M4 5.5v15" /></>,
+  route: <><circle cx="5.5" cy="5.5" r="1.8" /><circle cx="18" cy="18" r="1.8" /><path d="M7.3 5.5h6.2a3 3 0 0 1 0 6H9a3 3 0 0 0 0 6h7" /></>,
+  code: <><path d="M8.5 8 5 11.5 8.5 15" /><path d="M15.5 8 19 11.5 15.5 15" /></>,
+  alert: <><path d="M12 4.5 21 20H3z" /><path d="M12 10v4.5M12 17.5v.01" /></>,
+  case: <><rect x="3.5" y="7.5" width="17" height="12" rx="2" /><path d="M9 7.5V6a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v1.5" /></>,
+  check: <><circle cx="12" cy="12" r="8.5" /><path d="m8.5 12 2.5 2.5 4.5-5" /></>,
+}
+const SECTION = [
+  [/quick start/i, 'play'],
+  [/resource/i, 'book'],
+  [/your plan/i, 'route'],
+  [/worked example/i, 'code'],
+  [/common mistake/i, 'alert'],
+  [/show it|portfolio/i, 'case'],
+  [/check your progress|check/i, 'check'],
+]
+const textOf = (node) => (typeof node === 'string' ? node
+  : Array.isArray(node) ? node.map(textOf).join('') : node?.props?.children ? textOf(node.props.children) : '')
+function SectionIcon({ children }) {
+  const key = SECTION.find(([re]) => re.test(textOf(children)))?.[1]
+  if (!key) return null
+  return (
+    <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8}
+      strokeLinecap="round" strokeLinejoin="round" className="h-3.5 w-3.5 shrink-0">{ICONS[key]}</svg>
+  )
+}
+
 const MD = {
   h1: ({ children }) => <p className="plan-title">{children}</p>,
   h2: ({ children }) => <p className="plan-title">{children}</p>,
   h3: ({ children }) => <p className="plan-title">{children}</p>,
-  h4: ({ children }) => <p className="plan-section">{children}</p>,
-  h5: ({ children }) => <p className="plan-section">{children}</p>,
+  h4: ({ children }) => <p className="plan-section"><SectionIcon>{children}</SectionIcon>{children}</p>,
+  h5: ({ children }) => <p className="plan-section"><SectionIcon>{children}</SectionIcon>{children}</p>,
   h6: ({ children }) => <p className="plan-section">{children}</p>,
   p: ({ children }) => <p className="text-sm text-ink-soft leading-relaxed my-1.5">{children}</p>,
   strong: ({ children }) => <strong className="font-semibold text-ink">{children}</strong>,

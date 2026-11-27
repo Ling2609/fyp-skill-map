@@ -1,6 +1,7 @@
 import { useState, useEffect, useLayoutEffect, useRef, useCallback } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import ChatMarkdown from './ChatMarkdown'
+import PlanTrail from './PlanTrail'
 import { downloadLearningPlan } from './downloadLearningPlan'
 import api from '../../api'
 import { Bar, LoadingLabel } from '../../components/Skeleton'
@@ -96,7 +97,10 @@ function MessageBubble({ msg, onDownload, downloading, onChoose }) {
       >
         {isUser
           ? <p className="text-sm text-white leading-relaxed">{msg.content}</p>
-          : <ChatMarkdown plan={/^#{1,4}\s*Learning plan:/i.test(msg.content)}>{msg.content}</ChatMarkdown>
+          : <>
+              {msg.plan && <PlanTrail plan={msg.plan} />}
+              <ChatMarkdown plan={/^#{1,4}\s*Learning plan:/i.test(msg.content)}>{msg.content}</ChatMarkdown>
+            </>
         }
         {onChoose && (
           <div className="mt-3 flex flex-wrap gap-2" role="group" aria-label="Hours a week">
@@ -245,7 +249,8 @@ export default function Chatbot() {
       try {
         const data = await cached('/recommend/', ALL_MATCHES)   // usually already loaded by Dashboard / Job Matches
         // 13 Oct: the skills most often missing in her matches, for "I don't know what to learn"
-        toLearn.current = (data.skills_to_learn || []).slice(0, 8).map(s => s.skill)
+        // 27 Nov: keep the counts too ({skill, jobs, of_top}), so a plan can say how many matches ask for the skill
+        toLearn.current = (data.skills_to_learn || []).slice(0, 8).map(s => ({ skill: s.skill, jobs: s.jobs, of_top: s.of_top }))
         topJobs.current = data.recommendations?.slice(0, 3).map(j => ({
           job_title: j.job_title,
           company: j.company,
@@ -257,7 +262,10 @@ export default function Chatbot() {
       }
     }
     if (topJobs.current?.length) ctx.matched_jobs = topJobs.current
-    if (toLearn.current.length && !chatCtx.job_id) ctx.missing_skills = toLearn.current
+    if (toLearn.current.length && !chatCtx.job_id) {
+      ctx.missing_skills = toLearn.current.map(s => s.skill)
+      ctx.skill_demand = toLearn.current
+    }
     if (chatCtx.job_title) ctx.job_title = chatCtx.job_title
     if (chatCtx.target_skill) ctx.target_skill = chatCtx.target_skill
     if (chatCtx.job_id) ctx.job_id = chatCtx.job_id
@@ -277,7 +285,7 @@ export default function Chatbot() {
         ...(mode === 'skill_development' && hours.current ? { hours_per_week: hours.current } : {}),
         session_id: sessionRef.current,
       })
-      setMessages(prev => [...prev, { role: 'assistant', content: res.data.reply }])
+      setMessages(prev => [...prev, { role: 'assistant', content: res.data.reply, plan: res.data.plan }])
       if (res.data.session_id) {
         sessionRef.current = res.data.session_id
         setSessionId(res.data.session_id)

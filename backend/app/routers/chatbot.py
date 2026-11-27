@@ -101,7 +101,7 @@ One or two sentences: why the skill matters for their target job or career goal.
 Give one practical task they can finish in 15-30 minutes. Name any setup they need and describe the result they should have.
 
 #### Resources
-Use up to three distinct resources from the checked list for this skill. Write each as a clickable title and one short instruction on what to study or practise there. Copy the exact checked URL. Leave out provider and pricing suffixes. When no checked direct resource is available, use at most one supplied search link and explicitly label it as a search. If no link is supplied, give a useful search phrase without a URL. Never invent links, courses, or access terms. Prefer a practice exercise over a page to read when both are supplied, and if the resource is likely too advanced for where they are, say so in one clause and name the smaller first step.
+Use up to three distinct resources from the checked list for this skill. Write each as a clickable title and one short instruction on what to study or practise there. Copy the exact checked URL. Leave out provider and pricing suffixes. When no checked direct resource is available, use at most one supplied search link and explicitly label it as a search. If no link is supplied, give a useful search phrase without a URL. Never invent links, courses, or access terms. Prefer a practice exercise over a page to read when both are supplied. Always leave at least two options: when the checked list has fewer than two for this skill, add one labelled search link, so a student is never given a single link. If the resource is likely too advanced for where they are, say so in one clause and name the smaller first step.
 
 #### Your plan
 One table with exactly these columns: | Step | What to do | Time | Done when |
@@ -148,6 +148,9 @@ class ChatRequest(BaseModel):
     messages: list[Message] = Field(max_length=40)  # keeps each Groq call small
     user_skills: list[str] | None = None
     missing_skills: list[str] | None = None
+    # 27 Nov: [{skill, jobs, of_top}] from /recommend/ (skills_to_learn), so a plan that starts without a job can
+    # still say how many of the student's matches ask for the skill
+    skill_demand: list[dict] | None = Field(default=None, max_length=10)
     matched_jobs: list[dict] | None = None
     target_skill: str | None = None
     job_title: str | None = None
@@ -594,7 +597,29 @@ def chat(req: ChatRequest, current_user: User = Depends(get_current_user), db: S
         reply = ensure_profile_step(reply)
     reply = learning_resources.format_plan_resources(reply)
     session_id = save_exchange(req, current_user, reply)
-    return {"reply": reply, "mode": req.mode, "session_id": session_id, "saved": session_id is not None}
+    return {"reply": reply, "mode": req.mode, "session_id": session_id, "saved": session_id is not None,
+            "plan": plan_strip(gap, req.target_skill, req.skill_demand) if req.mode == "skill_development" else None}
+
+
+# 27 Nov: one dot per skill of the ad for the strip above a learning plan (teal = has it, coral = missing), so the
+# plan starts with the gap it closes instead of only prose. Capped, because a 30-skill ad would not fit a row.
+PLAN_DOTS = 14
+def plan_strip(gap: dict | None, target_skill: str | None, demand: list[dict] | None = None) -> dict | None:
+    if not gap:
+        # no ad behind this plan: say how many of the student's top matches ask for the skill instead
+        want = (target_skill or "").strip().lower()
+        hit = next((d for d in demand or [] if str(d.get("skill", "")).strip().lower() == want), None)
+        if not hit or not want:
+            return None
+        return {"skill": target_skill, "have": None, "of": None, "dots": [],
+                "demand": {"jobs": hit.get("jobs"), "of": hit.get("of_top")}}
+    s = gap.get("summary") or {}
+    have = [{"name": m["job_skill"], "have": True} for m in gap.get("matched_skills") or []]
+    miss = [{"name": m["job_skill"], "have": False} for m in gap.get("missing_skills") or []]
+    dots = (have + miss)[:PLAN_DOTS]
+    return {"skill": target_skill, "have": s.get("matched_skills"), "of": s.get("job_skills_total"),
+            "basis": s.get("coverage_basis"), "dots": dots,
+            "job": {"title": gap["job"].get("job_title"), "company": gap["job"].get("company")}}
 
 # ── Download plan (PDF) ───────────────────────────────────────────────────────
 class PlanPdfIn(BaseModel):
