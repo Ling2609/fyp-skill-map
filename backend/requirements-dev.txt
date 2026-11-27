@@ -1,6 +1,7 @@
 # Tools for checking the code and testing the load, not needed to run SkillMap (26 Oct). Install with:
 #   pip install -r requirements-dev.txt
 ruff==0.15.11
+pytest==9.0.3      # 27 Nov: moved out of the runtime image
 bandit==1.9.4
 coverage==7.17.0
 pytest-cov==7.1.0

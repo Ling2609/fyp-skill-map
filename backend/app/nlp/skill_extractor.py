@@ -465,6 +465,18 @@ class SkillExtractor:
                     print("  reasoning_effort refused, using the default")
                     self._reasoning_ok = False
                     continue
+                # 27 Nov (her run): a long advert plus the instructions can go over the organisation's
+                # tokens-per-minute limit (HTTP 413 "Request too large"), and retrying the same batch never
+                # gets under it. Ask for half the batch instead, and half again if needed.
+                if len(numbered) > 1 and ("413" in text or "request too large" in text or "tokens per minute" in text):
+                    half = len(numbered) // 2
+                    print(f"  request too large for {len(numbered)} sentences, asking in two halves")
+                    time.sleep(3)
+                    first = self._ask_sentences(title, numbered[:half], retries)
+                    second = self._ask_sentences(title, numbered[half:], retries)
+                    if first is None and second is None:
+                        return None
+                    return {**(first or {}), **(second or {})}
                 self.last_calls.append(("error", None))
                 print(f"  attempt {attempt + 1} failed: {str(e)[:120]}")
                 if attempt < retries - 1:          # 24 Oct (TC-64): no wait after the last try

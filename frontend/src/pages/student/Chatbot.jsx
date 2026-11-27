@@ -96,7 +96,7 @@ function MessageBubble({ msg, onDownload, downloading, onChoose }) {
       >
         {isUser
           ? <p className="text-sm text-white leading-relaxed">{msg.content}</p>
-          : <ChatMarkdown>{msg.content}</ChatMarkdown>
+          : <ChatMarkdown plan={/^#{1,4}\s*Learning plan:/i.test(msg.content)}>{msg.content}</ChatMarkdown>
         }
         {onChoose && (
           <div className="mt-3 flex flex-wrap gap-2" role="group" aria-label="Hours a week">
@@ -499,7 +499,7 @@ export default function Chatbot() {
           </div>
           {/* Mode switcher */}
           {/* 19 Nov (her approved mock): a white strip with the chosen mode solid blue, like the other headers' strips */}
-          <div className="chat-modes flex gap-1 bg-white rounded-[14px] p-1 mt-1 border border-[rgb(20_30_60/8%)] shadow-card">
+          <div className="chat-modes flex gap-1 bg-white rounded-panel p-1 mt-1 border border-[rgb(20_30_60/8%)] shadow-card">
             {MODES.map(m => (
               <button
                 key={m.key}
@@ -507,7 +507,7 @@ export default function Chatbot() {
                 disabled={loading}
                 title={m.label}
                 aria-pressed={mode === m.key}
-                className={`flex items-center gap-1.5 h-[38px] px-3.5 rounded-[10px] text-[13.5px] font-bold transition-all disabled:cursor-not-allowed ${
+                className={`flex items-center gap-1.5 h-9.5 px-3.5 rounded-control text-[13.5px] font-bold transition-all disabled:cursor-not-allowed ${
                   mode === m.key
                     ? 'bg-accent text-white'
                     : 'text-ink-soft hover:bg-well'
@@ -537,7 +537,7 @@ export default function Chatbot() {
         {!listOpen ? (
           // 19 Nov (her approved mock): folded, the chats are a slim rail: the panel icon and New chat
           <aside className="chat-rail w-14 shrink-0 bg-white border-r border-line flex flex-col items-center gap-2 py-3.5">
-            <button onClick={toggleList} title="Show your chats" aria-label="Show your chats" aria-expanded="false" className="chat-ib"><svg className="w-[17px] h-[17px]" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="3" /><path d="M9 4v16" /></svg></button>
+            <button onClick={toggleList} title="Show your chats" aria-label="Show your chats" aria-expanded="false" className="chat-ib"><svg className="w-4.25 h-4.25" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="3" /><path d="M9 4v16" /></svg></button>
             <button onClick={() => newChat()} disabled={loading} title="New chat" aria-label="New chat"
               className="chat-ib text-[20px] leading-none disabled:opacity-40 disabled:cursor-not-allowed">+</button>
           </aside>
@@ -545,7 +545,7 @@ export default function Chatbot() {
         <aside className="w-64 shrink-0 bg-white border-r border-line flex flex-col min-h-0 max-md:absolute max-md:inset-y-0 max-md:left-0 max-md:z-20 max-md:shadow-xl">
           <div className="px-4 pt-3.5 pb-2 flex items-center gap-2">
             <p className="m-0 font-mono text-[11.5px] tracking-[.09em] uppercase text-ink-soft">Your chats</p>
-            <button onClick={toggleList} title="Hide your chats" aria-label="Hide your chats" aria-expanded="true" className="chat-ib ml-auto"><svg className="w-[17px] h-[17px]" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="3" /><path d="M9 4v16" /></svg></button>
+            <button onClick={toggleList} title="Hide your chats" aria-label="Hide your chats" aria-expanded="true" className="chat-ib ml-auto"><svg className="w-4.25 h-4.25" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="3" /><path d="M9 4v16" /></svg></button>
           </div>
           <div className="px-3 pb-2">
             <button onClick={() => newChat()} disabled={loading} className="head-cta w-full justify-center h-10 text-sm disabled:opacity-40 disabled:cursor-not-allowed">

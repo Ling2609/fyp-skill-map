@@ -1,5 +1,5 @@
 {
- "about": "The AI Assistant's learning links. Built by scripts/pipeline/build_learning_resources.py from data/learning_resources_curated.csv (which resources) and the most-asked skills in stage1_dryrun_evidence-v8.csv (213 live ads); see backend/data/README.md. A link is shown to students only when scripts/tools/check_learning_links.py has opened it (ok = true).",
+ "about": "The AI Assistant's learning links. Built by scripts/pipeline/build_learning_resources.py from data/learning_resources_curated.csv (which resources) and the most-asked skills in stage1_dryrun_evidence-v8.csv (213 live ads); see backend/data/README.md. A link is shown to students only when scripts/tools/check_learning_links.py has opened it (ok = true). 27 Nov: a practice exercise was added for the skills that only had a page to read; new links have ok=false until check_learning_links.py has opened them.",
  "skills": [
   {
    "skill": "Python",
@@ -14,9 +14,9 @@
      "provider": "Python.org",
      "kind": "docs",
      "cost": "free",
-     "checked": "2026-10-13",
+     "checked": "2026-11-27",
      "ok": true,
-     "page_title": "The Python Tutorial — Python 3.15.0 documentation",
+     "page_title": "The Python Tutorial — Python 3.15.2 documentation",
      "checked_by_hand": null
     },
     {
@@ -25,9 +25,20 @@
      "provider": "Dr Chuck (University of Michigan)",
      "kind": "course",
      "cost": "free",
-     "checked": "2026-10-13",
+     "checked": "2026-11-27",
      "ok": true,
      "page_title": "PY4E - Python for Everybody",
+     "checked_by_hand": null
+    },
+    {
+     "name": "Exercism: Python track",
+     "url": "https://exercism.org/tracks/python",
+     "provider": "Exercism",
+     "kind": "practice",
+     "cost": "free",
+     "checked": "2026-11-27",
+     "ok": true,
+     "page_title": "Python on Exercism",
      "checked_by_hand": null
     }
    ]
@@ -44,7 +55,7 @@
      "provider": "SQLBolt",
      "kind": "practice",
      "cost": "free",
-     "checked": "2026-10-13",
+     "checked": "2026-11-27",
      "ok": true,
      "page_title": "SQLBolt - Learn SQL - Introduction to SQL",
      "checked_by_hand": null
@@ -55,9 +66,20 @@
      "provider": "PostgreSQL",
      "kind": "docs",
      "cost": "free",
-     "checked": "2026-10-13",
+     "checked": "2026-11-27",
      "ok": true,
-     "page_title": "PostgreSQL: Documentation: 18: Part I. Tutorial",
+     "page_title": "PostgreSQL: Documentation: 19: Part I. Tutorial",
+     "checked_by_hand": null
+    },
+    {
+     "name": "PG Exercises",
+     "url": "https://pgexercises.com/",
+     "provider": "PG Exercises",
+     "kind": "practice",
+     "cost": "free",
+     "checked": "2026-11-27",
+     "ok": true,
+     "page_title": "PostgreSQL Exercises",
      "checked_by_hand": null
     }
    ]
@@ -75,9 +97,20 @@
      "provider": "Oracle (dev.java)",
      "kind": "docs",
      "cost": "free",
-     "checked": "2026-10-13",
+     "checked": "2026-11-27",
      "ok": true,
-     "page_title": "Learn Java - Dev.java",
+     "page_title": "General Tutorials - Dev.java",
+     "checked_by_hand": null
+    },
+    {
+     "name": "Exercism: Java track",
+     "url": "https://exercism.org/tracks/java",
+     "provider": "Exercism",
+     "kind": "practice",
+     "cost": "free",
+     "checked": "2026-11-27",
+     "ok": true,
+     "page_title": "Java on Exercism",
      "checked_by_hand": null
     }
    ]
@@ -95,7 +128,7 @@
      "provider": "MDN Web Docs",
      "kind": "docs",
      "cost": "free",
-     "checked": "2026-10-13",
+     "checked": "2026-11-27",
      "ok": true,
      "page_title": "JavaScript Guide - JavaScript | MDN",
      "checked_by_hand": null
@@ -106,9 +139,20 @@
      "provider": "javascript.info",
      "kind": "tutorial",
      "cost": "free",
-     "checked": "2026-10-13",
+     "checked": "2026-11-27",
      "ok": true,
      "page_title": "The Modern JavaScript Tutorial",
+     "checked_by_hand": null
+    },
+    {
+     "name": "Exercism: JavaScript track",
+     "url": "https://exercism.org/tracks/javascript",
+     "provider": "Exercism",
+     "kind": "practice",
+     "cost": "free",
+     "checked": "2026-11-27",
+     "ok": true,
+     "page_title": "JavaScript on Exercism",
      "checked_by_hand": null
     }
    ]
@@ -125,9 +169,9 @@
      "provider": "TypeScript",
      "kind": "docs",
      "cost": "free",
-     "checked": "2026-11-20",
+     "checked": "2026-11-27",
      "ok": true,
-     "page_title": "Everyday Types",
+     "page_title": "TypeScript: Documentation - Everyday Types",
      "checked_by_hand": "2026-11-20"
     },
     {
@@ -136,9 +180,9 @@
      "provider": "TypeScript",
      "kind": "docs",
      "cost": "free",
-     "checked": "2026-11-20",
+     "checked": "2026-11-27",
      "ok": true,
-     "page_title": "More on Functions",
+     "page_title": "TypeScript: Documentation - More on Functions",
      "checked_by_hand": "2026-11-20"
     },
     {
@@ -147,9 +191,9 @@
      "provider": "TypeScript",
      "kind": "practice",
      "cost": "free",
-     "checked": "2026-11-20",
+     "checked": "2026-11-27",
      "ok": true,
-     "page_title": "TypeScript Playground",
+     "page_title": "TypeScript: TS Playground - An online editor for exploring TypeScript and JavaScript",
      "checked_by_hand": "2026-11-20"
     },
     {
@@ -158,9 +202,20 @@
      "provider": "TypeScript",
      "kind": "docs",
      "cost": "free",
-     "checked": "2026-10-13",
+     "checked": "2026-11-27",
      "ok": true,
      "page_title": "TypeScript: Handbook - The TypeScript Handbook",
+     "checked_by_hand": null
+    },
+    {
+     "name": "Exercism: TypeScript track",
+     "url": "https://exercism.org/tracks/typescript",
+     "provider": "Exercism",
+     "kind": "practice",
+     "cost": "free",
+     "checked": "2026-11-27",
+     "ok": true,
+     "page_title": "TypeScript on Exercism",
      "checked_by_hand": null
     }
    ]
@@ -177,9 +232,20 @@
      "provider": "MDN Web Docs",
      "kind": "course",
      "cost": "free",
-     "checked": "2026-10-13",
+     "checked": "2026-11-27",
      "ok": true,
      "page_title": "Learn web development | MDN",
+     "checked_by_hand": null
+    },
+    {
+     "name": "Flexbox Froggy",
+     "url": "https://flexboxfroggy.com/",
+     "provider": "Flexbox Froggy",
+     "kind": "practice",
+     "cost": "free",
+     "checked": "2026-11-27",
+     "ok": true,
+     "page_title": "Flexbox Froggy - A game for learning CSS flexbox",
      "checked_by_hand": null
     }
    ]
@@ -196,7 +262,7 @@
      "provider": "web.dev (Google)",
      "kind": "course",
      "cost": "free",
-     "checked": "2026-10-13",
+     "checked": "2026-11-27",
      "ok": true,
      "page_title": "Learn CSS | web.dev",
      "checked_by_hand": null
@@ -207,9 +273,20 @@
      "provider": "MDN Web Docs",
      "kind": "course",
      "cost": "free",
-     "checked": "2026-10-13",
+     "checked": "2026-11-27",
      "ok": true,
      "page_title": "Learn web development | MDN",
+     "checked_by_hand": null
+    },
+    {
+     "name": "Grid Garden",
+     "url": "https://cssgridgarden.com/",
+     "provider": "Grid Garden",
+     "kind": "practice",
+     "cost": "free",
+     "checked": "2026-11-27",
+     "ok": true,
+     "page_title": "Grid Garden - A game for learning CSS grid layout",
      "checked_by_hand": null
     }
    ]
@@ -227,9 +304,20 @@
      "provider": "React",
      "kind": "docs",
      "cost": "free",
-     "checked": "2026-10-13",
+     "checked": "2026-11-27",
      "ok": true,
      "page_title": "Quick Start – React",
+     "checked_by_hand": null
+    },
+    {
+     "name": "React: quick start tutorial",
+     "url": "https://react.dev/learn/tutorial-tic-tac-toe",
+     "provider": "React",
+     "kind": "tutorial",
+     "cost": "free",
+     "checked": "2026-11-27",
+     "ok": true,
+     "page_title": "Tutorial: Tic-Tac-Toe – React",
      "checked_by_hand": null
     }
    ]
@@ -247,7 +335,7 @@
      "provider": "Node.js",
      "kind": "docs",
      "cost": "free",
-     "checked": "2026-10-13",
+     "checked": "2026-11-27",
      "ok": true,
      "page_title": "Learn Node.js | Node.js Learn",
      "checked_by_hand": null
@@ -268,7 +356,7 @@
      "provider": "git-scm.com",
      "kind": "book",
      "cost": "free",
-     "checked": "2026-10-13",
+     "checked": "2026-11-27",
      "ok": true,
      "page_title": "Git",
      "checked_by_hand": null
@@ -279,7 +367,7 @@
      "provider": "Learn Git Branching",
      "kind": "practice",
      "cost": "free",
-     "checked": "2026-10-13",
+     "checked": "2026-11-27",
      "ok": true,
      "page_title": "Learn Git Branching",
      "checked_by_hand": null
@@ -301,9 +389,9 @@
      "provider": "Docker",
      "kind": "course",
      "cost": "free",
-     "checked": "2026-11-20",
+     "checked": "2026-11-27",
      "ok": true,
-     "page_title": "Get started with Docker containers",
+     "page_title": "Get started with Docker containers | Docker Learn",
      "checked_by_hand": "2026-11-20"
     },
     {
@@ -312,10 +400,21 @@
      "provider": "Docker",
      "kind": "tutorial",
      "cost": "free",
-     "checked": "2026-11-20",
+     "checked": "2026-11-27",
      "ok": true,
-     "page_title": "Docker Compose Quickstart",
+     "page_title": "Docker Compose Quickstart | Docker Docs",
      "checked_by_hand": "2026-11-20"
+    },
+    {
+     "name": "Play with Docker",
+     "url": "https://labs.play-with-docker.com/",
+     "provider": "Docker",
+     "kind": "practice",
+     "cost": "free",
+     "checked": "2026-11-27",
+     "ok": true,
+     "page_title": "Play with Docker",
+     "checked_by_hand": null
     }
    ]
   },
@@ -331,9 +430,20 @@
      "provider": "Kubernetes",
      "kind": "tutorial",
      "cost": "free",
-     "checked": "2026-10-13",
+     "checked": "2026-11-27",
      "ok": true,
      "page_title": "Learn Kubernetes Basics | Kubernetes",
+     "checked_by_hand": null
+    },
+    {
+     "name": "Killercoda: Kubernetes playground",
+     "url": "https://killercoda.com/kubernetes",
+     "provider": "Killercoda",
+     "kind": "practice",
+     "cost": "free",
+     "checked": "2026-11-27",
+     "ok": true,
+     "page_title": "Kubernetes Scenarios and Playground | Killercoda",
      "checked_by_hand": null
     }
    ]
@@ -350,7 +460,7 @@
      "provider": "Amazon Web Services",
      "kind": "course",
      "cost": "free and paid",
-     "checked": "2026-10-13",
+     "checked": "2026-11-27",
      "ok": true,
      "page_title": "AWS Skill Builder",
      "checked_by_hand": null
@@ -361,7 +471,7 @@
      "provider": "Amazon Web Services",
      "kind": "tutorial",
      "cost": "free",
-     "checked": "2026-10-13",
+     "checked": "2026-11-27",
      "ok": true,
      "page_title": "Getting Started - Cloud Computing Tutorials for Building on AWS",
      "checked_by_hand": null
@@ -380,7 +490,7 @@
      "provider": "Microsoft Learn",
      "kind": "course",
      "cost": "free",
-     "checked": "2026-10-13",
+     "checked": "2026-11-27",
      "ok": true,
      "page_title": "Training for Azure | Microsoft Learn",
      "checked_by_hand": null
@@ -402,7 +512,7 @@
      "provider": "MDN Web Docs",
      "kind": "docs",
      "cost": "free",
-     "checked": "2026-10-13",
+     "checked": "2026-11-27",
      "ok": true,
      "page_title": "HTTP: Hypertext Transfer Protocol | MDN",
      "checked_by_hand": null
@@ -413,7 +523,7 @@
      "provider": "FastAPI",
      "kind": "tutorial",
      "cost": "free",
-     "checked": "2026-10-13",
+     "checked": "2026-11-27",
      "ok": true,
      "page_title": "Tutorial - User Guide - FastAPI",
      "checked_by_hand": null
@@ -424,9 +534,20 @@
      "provider": "Spring",
      "kind": "tutorial",
      "cost": "free",
-     "checked": "2026-10-13",
+     "checked": "2026-11-27",
      "ok": true,
      "page_title": "",
+     "checked_by_hand": null
+    },
+    {
+     "name": "Postman: API fundamentals",
+     "url": "https://learning.postman.com/docs/introduction/overview/",
+     "provider": "Postman",
+     "kind": "practice",
+     "cost": "free",
+     "checked": "2026-11-27",
+     "ok": true,
+     "page_title": "Get started in Postman | Postman Docs",
      "checked_by_hand": null
     }
    ]
@@ -446,9 +567,9 @@
      "provider": "Linux Journey (LabEx)",
      "kind": "course",
      "cost": "free",
-     "checked": null,
-     "ok": null,
-     "page_title": null,
+     "checked": "2026-11-27",
+     "ok": true,
+     "page_title": "Linux Journey Official Site | Learn Linux for Free",
      "checked_by_hand": "2026-10-13"
     },
     {
@@ -457,9 +578,20 @@
      "provider": "Ubuntu",
      "kind": "tutorial",
      "cost": "free",
-     "checked": "2026-10-13",
+     "checked": "2026-11-27",
      "ok": true,
      "page_title": "The Linux command line for beginners | Ubuntu",
+     "checked_by_hand": null
+    },
+    {
+     "name": "OverTheWire: Bandit",
+     "url": "https://overthewire.org/wargames/bandit/",
+     "provider": "OverTheWire",
+     "kind": "practice",
+     "cost": "free",
+     "checked": "2026-11-27",
+     "ok": true,
+     "page_title": "OverTheWire: Bandit",
      "checked_by_hand": null
     }
    ]
@@ -476,9 +608,20 @@
      "provider": "PostgreSQL",
      "kind": "docs",
      "cost": "free",
-     "checked": "2026-10-13",
+     "checked": "2026-11-27",
      "ok": true,
-     "page_title": "PostgreSQL: Documentation: 18: Part I. Tutorial",
+     "page_title": "PostgreSQL: Documentation: 19: Part I. Tutorial",
+     "checked_by_hand": null
+    },
+    {
+     "name": "PG Exercises",
+     "url": "https://pgexercises.com/",
+     "provider": "PG Exercises",
+     "kind": "practice",
+     "cost": "free",
+     "checked": "2026-11-27",
+     "ok": true,
+     "page_title": "PostgreSQL Exercises",
      "checked_by_hand": null
     }
    ]
@@ -496,7 +639,7 @@
      "provider": "Microsoft Learn",
      "kind": "docs",
      "cost": "free",
-     "checked": "2026-10-13",
+     "checked": "2026-11-27",
      "ok": true,
      "page_title": "Power BI documentation - Power BI | Microsoft Learn",
      "checked_by_hand": null
@@ -507,9 +650,9 @@
      "provider": "Microsoft Learn",
      "kind": "course",
      "cost": "free",
-     "checked": "2026-11-20",
+     "checked": "2026-11-27",
      "ok": true,
-     "page_title": "Get started with Microsoft data analytics",
+     "page_title": "Get started with Microsoft data analytics - Training | Microsoft Learn",
      "checked_by_hand": "2026-11-20"
     }
    ]
@@ -524,7 +667,7 @@
      "provider": "Tableau",
      "kind": "course",
      "cost": "free",
-     "checked": "2026-10-13",
+     "checked": "2026-11-27",
      "ok": null,
      "page_title": "Access Denied",
      "checked_by_hand": "2026-10-13"
@@ -544,7 +687,7 @@
      "provider": "Kaggle",
      "kind": "course",
      "cost": "free",
-     "checked": "2026-10-13",
+     "checked": "2026-11-27",
      "ok": null,
      "page_title": "Checking your browser - reCAPTCHA",
      "checked_by_hand": "2026-10-13"
@@ -555,9 +698,20 @@
      "provider": "pandas",
      "kind": "docs",
      "cost": "free",
-     "checked": "2026-10-13",
+     "checked": "2026-11-27",
      "ok": true,
-     "page_title": "Getting started — pandas 3.0.6 documentation",
+     "page_title": "Getting started — pandas 3.1.1 documentation",
+     "checked_by_hand": null
+    },
+    {
+     "name": "Kaggle: datasets to practise on",
+     "url": "https://www.kaggle.com/datasets",
+     "provider": "Kaggle",
+     "kind": "practice",
+     "cost": "free",
+     "checked": "2026-11-27",
+     "ok": null,
+     "page_title": "Checking your browser - reCAPTCHA",
      "checked_by_hand": null
     }
    ]
@@ -574,7 +728,7 @@
      "provider": "Kaggle",
      "kind": "course",
      "cost": "free",
-     "checked": "2026-10-13",
+     "checked": "2026-11-27",
      "ok": null,
      "page_title": "Checking your browser - reCAPTCHA",
      "checked_by_hand": "2026-10-13"
@@ -585,7 +739,7 @@
      "provider": "scikit-learn",
      "kind": "docs",
      "cost": "free",
-     "checked": "2026-10-13",
+     "checked": "2026-11-27",
      "ok": true,
      "page_title": "Getting Started — scikit-learn 1.9.1 documentation",
      "checked_by_hand": null
@@ -606,7 +760,7 @@
      "provider": "Scrum.org / Scrum Inc.",
      "kind": "docs",
      "cost": "free",
-     "checked": "2026-10-13",
+     "checked": "2026-11-27",
      "ok": true,
      "page_title": "Scrum Guide | Scrum Guides",
      "checked_by_hand": null
@@ -617,7 +771,7 @@
      "provider": "Atlassian",
      "kind": "tutorial",
      "cost": "free",
-     "checked": "2026-10-13",
+     "checked": "2026-11-27",
      "ok": true,
      "page_title": "Jira Tutorials: Learn Agile With Jira | Atlassian",
      "checked_by_hand": null
@@ -634,7 +788,7 @@
      "provider": "Atlassian",
      "kind": "tutorial",
      "cost": "free",
-     "checked": "2026-10-13",
+     "checked": "2026-11-27",
      "ok": true,
      "page_title": "Jira Tutorials: Learn Agile With Jira | Atlassian",
      "checked_by_hand": null
@@ -655,9 +809,20 @@
      "provider": "GitHub",
      "kind": "docs",
      "cost": "free",
-     "checked": "2026-10-13",
+     "checked": "2026-11-27",
      "ok": true,
      "page_title": "GitHub Actions documentation - GitHub Docs",
+     "checked_by_hand": null
+    },
+    {
+     "name": "GitHub Skills",
+     "url": "https://skills.github.com/",
+     "provider": "GitHub",
+     "kind": "practice",
+     "cost": "free",
+     "checked": "2026-11-27",
+     "ok": true,
+     "page_title": "Redirecting to GitHub Learn",
      "checked_by_hand": null
     }
    ]
@@ -672,7 +837,7 @@
      "provider": "Jenkins",
      "kind": "tutorial",
      "cost": "free",
-     "checked": "2026-10-13",
+     "checked": "2026-11-27",
      "ok": true,
      "page_title": "Tutorials overview",
      "checked_by_hand": null
@@ -694,7 +859,7 @@
      "provider": "pytest",
      "kind": "docs",
      "cost": "free",
-     "checked": "2026-10-13",
+     "checked": "2026-11-27",
      "ok": true,
      "page_title": "Get Started - pytest documentation",
      "checked_by_hand": null
@@ -705,7 +870,7 @@
      "provider": "JUnit",
      "kind": "docs",
      "cost": "free",
-     "checked": "2026-10-13",
+     "checked": "2026-11-27",
      "ok": true,
      "page_title": "Overview :: JUnit User Guide",
      "checked_by_hand": null
@@ -724,7 +889,7 @@
      "provider": "HashiCorp",
      "kind": "tutorial",
      "cost": "free",
-     "checked": "2026-10-13",
+     "checked": "2026-11-27",
      "ok": true,
      "page_title": "Tutorials | Terraform | HashiCorp Developer",
      "checked_by_hand": null
@@ -741,9 +906,20 @@
      "provider": "Ansible",
      "kind": "docs",
      "cost": "free",
-     "checked": "2026-10-13",
+     "checked": "2026-11-27",
      "ok": true,
      "page_title": "Getting started with Ansible — Ansible Community Documentation",
+     "checked_by_hand": null
+    },
+    {
+     "name": "Ansible workshops",
+     "url": "https://ansible.github.io/workshops/",
+     "provider": "Red Hat",
+     "kind": "practice",
+     "cost": "free",
+     "checked": "2026-11-27",
+     "ok": true,
+     "page_title": "Ansible Workshops | Training Course for Ansible Automation Platform",
      "checked_by_hand": null
     }
    ]
@@ -761,9 +937,20 @@
      "provider": "Microsoft Learn",
      "kind": "docs",
      "cost": "free",
-     "checked": "2026-10-13",
+     "checked": "2026-11-27",
      "ok": true,
      "page_title": "C# Guide - .NET managed language - C# | Microsoft Learn",
+     "checked_by_hand": null
+    },
+    {
+     "name": "Exercism: C# track",
+     "url": "https://exercism.org/tracks/csharp",
+     "provider": "Exercism",
+     "kind": "practice",
+     "cost": "free",
+     "checked": "2026-11-27",
+     "ok": true,
+     "page_title": "C# on Exercism",
      "checked_by_hand": null
     }
    ]
@@ -780,9 +967,20 @@
      "provider": "LearnCpp.com",
      "kind": "tutorial",
      "cost": "free",
-     "checked": "2026-10-13",
+     "checked": "2026-11-27",
      "ok": true,
      "page_title": "Learn C++ – Skill up with our free tutorials",
+     "checked_by_hand": null
+    },
+    {
+     "name": "Exercism: C++ track",
+     "url": "https://exercism.org/tracks/cpp",
+     "provider": "Exercism",
+     "kind": "practice",
+     "cost": "free",
+     "checked": "2026-11-27",
+     "ok": true,
+     "page_title": "C++ on Exercism",
      "checked_by_hand": null
     }
    ]
@@ -805,7 +1003,7 @@
      "provider": "Cisco",
      "kind": "course",
      "cost": "free and paid",
-     "checked": "2026-10-13",
+     "checked": "2026-11-27",
      "ok": true,
      "page_title": "Cisco Networking Academy: Learn Cybersecurity, Python & More",
      "checked_by_hand": null
@@ -816,9 +1014,20 @@
      "provider": "Professor Messer",
      "kind": "course",
      "cost": "free",
-     "checked": "2026-10-13",
+     "checked": "2026-11-27",
      "ok": true,
      "page_title": "Home - Professor Messer IT Certification Training - CompTIA A+, Network+, Security+",
+     "checked_by_hand": null
+    },
+    {
+     "name": "Subnetting practice",
+     "url": "https://subnettingpractice.com/",
+     "provider": "SubnettingPractice",
+     "kind": "practice",
+     "cost": "free",
+     "checked": "2026-11-27",
+     "ok": true,
+     "page_title": "Subnetting Questions - subnettingpractice.com",
      "checked_by_hand": null
     }
    ]
@@ -838,7 +1047,7 @@
      "provider": "Cisco",
      "kind": "course",
      "cost": "free and paid",
-     "checked": "2026-10-13",
+     "checked": "2026-11-27",
      "ok": true,
      "page_title": "Cisco Networking Academy: Learn Cybersecurity, Python & More",
      "checked_by_hand": null
@@ -849,9 +1058,20 @@
      "provider": "Professor Messer",
      "kind": "course",
      "cost": "free",
-     "checked": "2026-10-13",
+     "checked": "2026-11-27",
      "ok": true,
      "page_title": "Home - Professor Messer IT Certification Training - CompTIA A+, Network+, Security+",
+     "checked_by_hand": null
+    },
+    {
+     "name": "TryHackMe: free rooms",
+     "url": "https://tryhackme.com/",
+     "provider": "TryHackMe",
+     "kind": "practice",
+     "cost": "free",
+     "checked": "2026-11-27",
+     "ok": true,
+     "page_title": "Learn Cyber Security | TryHackMe Cyber Training",
      "checked_by_hand": null
     }
    ]
@@ -870,7 +1090,7 @@
      "provider": "DAIR.AI",
      "kind": "docs",
      "cost": "free",
-     "checked": "2026-10-13",
+     "checked": "2026-11-27",
      "ok": true,
      "page_title": "Prompt Engineering Guide | Prompt Engineering Guide<!-- -->",
      "checked_by_hand": null
@@ -889,7 +1109,7 @@
      "provider": "roadmap.sh",
      "kind": "docs",
      "cost": "free",
-     "checked": "2026-10-13",
+     "checked": "2026-11-27",
      "ok": true,
      "page_title": "Developer Roadmaps - roadmap.sh",
      "checked_by_hand": null
@@ -909,9 +1129,9 @@
      "provider": "HubSpot Academy",
      "kind": "course",
      "cost": "free",
-     "checked": "2026-11-20",
+     "checked": "2026-11-27",
      "ok": true,
-     "page_title": "Digital Marketing Course",
+     "page_title": "HubSpot Academy",
      "checked_by_hand": "2026-11-20"
     },
     {
@@ -920,9 +1140,9 @@
      "provider": "Google Search Central",
      "kind": "docs",
      "cost": "free",
-     "checked": "2026-11-20",
+     "checked": "2026-11-27",
      "ok": true,
-     "page_title": "SEO Starter Guide",
+     "page_title": "SEO Starter Guide: The Basics | Google Search Central | Documentation | Google for Developers",
      "checked_by_hand": "2026-11-20"
     }
    ]

@@ -9,9 +9,11 @@ JobStreet ICT subcategory, so every search can be traced back to real market dem
   2. Skip manager- and lead-level titles (not graduate roles) and non-ICT titles.
   3. Reduce each title to its role: "Senior Software Engineer (Java) - KL" -> "software engineer",
      one spelling per role ("front end" = "frontend"); one-word roles such as "developer" are too vague.
-  4. Take the top role of every subcategory (every ICT area is searched), then fill the budget
-     with the most common remaining roles overall. A role that only adds words to a chosen one
-     ("IT support executive" after "IT support") is skipped: the shorter search already finds it.
+  4. Take the top role of every subcategory (every ICT area is searched), then keep going until
+     each subcategory has --per-subcat roles (2 by default), so a small area such as Security or
+     Testing has more than one search, then fill the budget with the most common remaining roles
+     overall. A role that only adds words to a chosen one ("IT support executive" after "IT support")
+     is skipped: the shorter search already finds it.
   5. Save the list to data/live_job_queries.json, which fetch_live_jobs.py reads.
 
 Nothing is fetched here, so it costs no API credits. Look at the preview, then commit the JSON:
@@ -22,6 +24,7 @@ Usage (from backend/, venv active):
   python scripts/live_jobs/generate_live_queries.py --roles         # preview + top roles of every subcategory
   python scripts/live_jobs/generate_live_queries.py --save          # write data/live_job_queries.json
   python scripts/live_jobs/generate_live_queries.py --my 25 --sg 3  # budget (default 25 Malaysia + 3 Singapore)
+  python scripts/live_jobs/generate_live_queries.py --my 35 --per-subcat 2 --save   # wider (27 Nov)
 """
 import argparse
 import json
@@ -80,6 +83,8 @@ def main():
     parser.add_argument("--my", type=int, default=25, help="number of Malaysia queries (2 credits each)")
     parser.add_argument("--sg", type=int, default=3, help="number of Singapore queries (1 credit each)")
     parser.add_argument("--save", action="store_true", help=f"write {OUTPUT}")
+    parser.add_argument("--per-subcat", type=int, default=2,
+                        help="keep adding roles until every subcategory has this many queries (default 2)")
     parser.add_argument("--roles", action="store_true", help="also list the top roles of every subcategory")
     args = parser.parse_args()
 
@@ -123,6 +128,7 @@ def main():
     # A role that only adds words to a chosen one ("IT support executive" after "IT support") is
     # skipped: searching the shorter role already returns those jobs.
     chosen = {}                                    # role -> (postings, subcategory)
+    protected = set()                              # coverage roles: kept even when the budget is smaller
 
     def covered(key):
         words = set(key.split())
@@ -133,14 +139,31 @@ def main():
         for key, n in ranked[subcat]:
             if not covered(key):
                 chosen[key] = (n, subcat)
+                protected.add(key)
                 break
+    # 27 Nov (her review): a second pass, so the small areas (Security, Testing, Project Management)
+    # get more than one search instead of giving every spare query to Developers
+    for _ in range(max(0, args.per_subcat - 1)):
+        for subcat in by_size:
+            have = sum(1 for k in chosen if chosen[k][1] == subcat)
+            if have >= args.per_subcat:
+                continue
+            for key, n in ranked[subcat]:
+                if not covered(key):
+                    chosen[key] = (n, subcat)
+                    protected.add(key)
+                    break
     for n, key, subcat in sorted(((n, k, s) for s in ranked for k, n in ranked[s]), reverse=True):
         if len(chosen) >= args.my:
             break
         if key not in chosen and not covered(key):
             chosen[key] = (n, subcat)
-    # A budget smaller than the number of subcategories keeps the most common roles
-    chosen = dict(sorted(chosen.items(), key=lambda kv: -kv[1][0])[:args.my])
+    # Over budget: drop the least common roles that were not taken for coverage
+    if len(chosen) > args.my:
+        spare = sorted((k for k in chosen if k not in protected), key=lambda k: chosen[k][0])
+        for key in spare[:len(chosen) - args.my]:
+            del chosen[key]
+    chosen = dict(sorted(chosen.items(), key=lambda kv: -kv[1][0]))
 
     queries = [{"query": f"{written(key)} in Malaysia", "country": "my", "subcategory": subcat,
                 "postings_2024": n} for key, (n, subcat) in chosen.items()]
@@ -171,10 +194,11 @@ def main():
         with open(OUTPUT, "w", encoding="utf-8") as f:
             json.dump({
                 "generated": date.today().isoformat(),
-                "method": ("Top ICT role of every JobStreet 2024 ICT subcategory, then the most common remaining "
-                           "roles overall (manager/lead titles excluded, overlapping roles skipped)"),
+                "method": (f"Top ICT role of every JobStreet 2024 ICT subcategory, then up to {args.per_subcat} "
+                           f"roles per subcategory, then the most common remaining roles overall (manager/lead "
+                           f"titles excluded, overlapping roles skipped)"),
                 "source": DATASET,
-                "budget": {"my": args.my, "sg": args.sg},
+                "budget": {"my": args.my, "sg": args.sg, "per_subcat": args.per_subcat},
                 "queries": queries,
             }, f, indent=2)
         print(f"Saved to {OUTPUT}. fetch_live_jobs.py now uses these queries.")

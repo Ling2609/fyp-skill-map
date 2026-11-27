@@ -1,6 +1,6 @@
 import json
 import re
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 from app.database import get_db
 from app.models.job import Job, JobSkill
@@ -193,7 +193,9 @@ def get_job_description(
     return description_of(job, db)
 
 @router.get("/")
-def get_jobs(skip: int = 0, limit: int = 20, db: Session = Depends(get_db)):
+def get_jobs(skip: int = 0, limit: int = Query(20, ge=1, le=100), db: Session = Depends(get_db)):
+    # 27 Nov (deployment audit): this route is public and reads a job's skills row by row, so `limit` was capped
+    # (a request for 100,000 jobs made the server run thousands of queries).
     jobs = db.query(Job).offset(skip).limit(limit).all()
     result = []
     for job in jobs:

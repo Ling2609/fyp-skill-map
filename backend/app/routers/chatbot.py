@@ -101,7 +101,7 @@ One or two sentences: why the skill matters for their target job or career goal.
 Give one practical task they can finish in 15-30 minutes. Name any setup they need and describe the result they should have.
 
 #### Resources
-Use up to three distinct resources from the checked list for this skill. Write each as a clickable title and one short instruction on what to study or practise there. Copy the exact checked URL. Leave out provider and pricing suffixes. When no checked direct resource is available, use at most one supplied search link and explicitly label it as a search. If no link is supplied, give a useful search phrase without a URL. Never invent links, courses, or access terms.
+Use up to three distinct resources from the checked list for this skill. Write each as a clickable title and one short instruction on what to study or practise there. Copy the exact checked URL. Leave out provider and pricing suffixes. When no checked direct resource is available, use at most one supplied search link and explicitly label it as a search. If no link is supplied, give a useful search phrase without a URL. Never invent links, courses, or access terms. Prefer a practice exercise over a page to read when both are supplied, and if the resource is likely too advanced for where they are, say so in one clause and name the smaller first step.
 
 #### Your plan
 One table with exactly these columns: | Step | What to do | Time | Done when |
@@ -109,6 +109,7 @@ One table with exactly these columns: | Step | What to do | Time | Done when |
 - Time fits the student's hours a week from the context (assume 5 if not given), e.g. "1 week (5 h)".
 - "Done when" is something they can see or show, e.g. "your API runs in a container on localhost".
 - The last row is always: | Add it to SkillMap | Add the project to My Profile, Projects, so SkillMap counts the skill | 10 min | <skill> shows on My Profile |
+- End with one line, outside the table: what this ad does not need, so they do not over-learn (e.g. "the ad does not ask for Kubernetes, so start with Docker only").
 
 #### Worked example
 Show one small problem, the key steps or one short runnable code block, and the expected output. State how to run it. Use simple example data the student can reproduce.
@@ -121,6 +122,8 @@ One project that uses this skill and, if possible, other skills they are still m
 
 #### Check your progress
 Give two observable checks the student can try independently on a small example. Tie them to the portfolio project and suggest what to practise if a check is difficult.
+
+If the skill is a way of working rather than a tool (communication, collaboration, teamwork, problem-solving, documentation, mentoring, stakeholder management), there is no course to point at: give no links, and instead put three practice actions in "Your plan" that they can do this week with a lecturer, supervisor or teammate, each ending in evidence they can show (a written summary, feedback in writing, a review note). Keep the same table and the same "Add it to SkillMap" last step, using that evidence as the project.
 
 When the student doesn't know what to learn, suggest 2 or 3 skills from the missing skills in the context (the ones most of their matched jobs ask for), one line each on why, and ask which one to plan; no plan yet.
 
@@ -415,6 +418,8 @@ def list_sessions(current_user: User = Depends(get_current_user)):
              "updated_at": d["updated_at"], "message_count": d.get("count", 0)} for d in docs]
 
 
+MAX_HISTORY_MESSAGES = 20      # 27 Nov: the longest conversation sent to Groq in one call
+
 PLAN_HEADING = r"^#{1,4}[^\S\r\n]*Learning plan:[^\S\r\n]*(.*)$"
 PLAN_PAGE_SIZE = 12
 
@@ -535,7 +540,10 @@ def chat(req: ChatRequest, current_user: User = Depends(get_current_user), db: S
             "content": f"User context (use this to personalise your responses):\n{context}"
         })
 
-    for msg in req.messages:
+    # 27 Nov (deployment audit): the client may send 40 messages of 4,000 characters, and all of them went to
+    # Groq on every call (up to ~160,000 characters, most of the free daily allowance). The last 20 carry the
+    # conversation that matters, so older turns are dropped here.
+    for msg in req.messages[-MAX_HISTORY_MESSAGES:]:
         if msg.role not in ("user", "assistant"):
             continue
         groq_messages.append({"role": msg.role, "content": msg.content})

@@ -178,7 +178,7 @@ export default function MyPlans() {
                       </div>
                     </div>
                     <div id={contentId} hidden={!open} className="doc-body">
-                      {open && <ChatMarkdown>{plan.content.replace(/^#{1,4}[ \t]*Learning plan:[^\r\n]*\r?\n(?:[ \t]*\r?\n)*/i, '')}</ChatMarkdown>}
+                      {open && <ChatMarkdown plan>{plan.content.replace(/^#{1,4}[ \t]*Learning plan:[^\r\n]*\r?\n(?:[ \t]*\r?\n)*/i, '')}</ChatMarkdown>}
                     </div>
                   </li>
                 )
