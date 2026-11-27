@@ -3,6 +3,7 @@ import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { useAuth } from '../context/useAuth'
 import BackLink from '../components/BackLink'
 import { VERSIONS } from './privacyText'
+import NewTag, { NewRays } from '../components/NewTag'
 
 // The privacy notice (14 Oct). Content: the eight items Malaysia's PDPA 2010 s.7 asks for, in English and Bahasa
 // Malaysia (s.7(3)); question-style headings as in the UK Ministry of Justice template. Layout from NN/g "Privacy
@@ -15,12 +16,16 @@ import { VERSIONS } from './privacyText'
 const LABELS = {
   en: { title: 'Privacy notice', contents: 'Contents', back: 'Back to SkillMap', backSignup: 'Back to sign-up',
         backSignin: 'Back to sign in', backAccount: 'Back to Account settings', other: 'Bahasa Malaysia',
+        eyebrow: 'Privacy',
         updated: 'Last updated', older: 'You are reading an earlier version, dated', current: 'Read the current version',
-        history: 'Changes to this notice', thisOne: 'this version', view: 'View' },
+        history: 'Changes to this notice', thisOne: 'this version', view: 'View',
+        whatsNew: "What's new in this version", newTag: 'New', since: 'marks changes since' },
   ms: { title: 'Notis privasi', contents: 'Kandungan', back: 'Kembali ke SkillMap', backSignup: 'Kembali ke pendaftaran',
         backSignin: 'Kembali ke log masuk', backAccount: 'Kembali ke Tetapan Akaun', other: 'English',
+        eyebrow: 'Privasi',
         updated: 'Kemas kini terakhir', older: 'Anda sedang membaca versi terdahulu, bertarikh', current: 'Baca versi semasa',
-        history: 'Perubahan kepada notis ini', thisOne: 'versi ini', view: 'Lihat' },
+        history: 'Perubahan kepada notis ini', thisOne: 'versi ini', view: 'Lihat',
+        whatsNew: 'Apa yang baharu dalam versi ini', newTag: 'Baharu', since: 'menandakan perubahan sejak' },
 }
 
 // The data user under the PDPA is the university's career office that runs SkillMap, not its developer; its address
@@ -51,6 +56,14 @@ export default function Privacy() {
   const L = LABELS[lang]
   const { inShort, table, sections } = version.text
   const short = inShort[lang], rows = table[lang], body = sections[lang]
+  // 27 Nov (her ask): what differs from the version before is marked "New", found by comparing the two texts, so a
+  // later version is marked the same way with no extra work
+  const prev = VERSIONS[VERSIONS.indexOf(version) + 1]
+  const before = new Set(prev ? [...prev.text.sections[lang].flatMap(([, , items]) => items),
+    ...prev.text.table[lang].rows.map(r => r.join('|')), ...prev.text.inShort[lang].lines.map(l => l.join('|'))] : [])
+  const isNew = (key) => !!prev && !before.has(key)
+  const newIn = new Set(body.filter(([, , items]) => items.some(isNew)).map(([id]) => id))
+  if (rows.rows.some(r => isNew(r.join('|')))) newIn.add('collect')
   const toc = [...body.map(([id, title]) => [id, title]), ['changes', L.history]]
 
   return (
@@ -63,23 +76,31 @@ export default function Privacy() {
         ? <BackLink text={L.backSignup} onClick={() => { window.close(); setTimeout(() => navigate('/register'), 150) }} />
         : <BackLink text={fromAccount ? L.backAccount : user ? L.back : L.backSignin}
             onClick={() => navigate(fromAccount ? '/account' : user ? '/dashboard' : '/login')} />}
-      <header className="shrink-0 mx-auto w-full max-w-[1256px] px-4 sm:px-8 pt-4 sm:pt-0">
+      <header className="shrink-0 mx-auto w-full max-w-314 px-4 sm:px-8 pt-4 sm:pt-0">
         {/* 25 Nov (her phone check): on a phone the language button wraps under the text, so the title stays on one line */}
-        <div className="page-glass relative px-4 sm:px-7 py-5 flex flex-wrap items-end justify-between gap-x-4 gap-y-3">
+        <div className="page-glass relative pr-4 pb-5 sm:pr-7 flex flex-wrap items-end justify-between gap-x-4 gap-y-3">
           <span className="page-glass-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 3 5 6v6c0 4 3 7.5 7 9 4-1.5 7-5 7-9V6Z" /><path d="m9 12 2 2 4-4" /></svg></span>
-          <div className="min-w-0 flex-1 basis-60 page-glass-body !pl-[70px] sm:!pl-[70px]">
+          <div className="min-w-0 flex-1 basis-60 page-glass-body pt-5">
+            {/* 27 Nov (her review): the blue eyebrow every other page header has, so this header sits the same way
+                (mock review/admin-account-pages.html?page=privacy: "Privacy" over "Privacy notice") */}
+            <p className="text-[11px] font-semibold text-blue-600 uppercase tracking-widest mb-2">{L.eyebrow}</p>
             <h1 className="text-2xl font-semibold tracking-tight text-slate-900">{L.title}</h1>
-            <p className="text-sm text-slate-500 mt-1">{L.updated} {version.label[lang]}</p>
+            <p className="text-sm text-slate-500 mt-1 max-sm:block!">{L.updated} {version.label[lang]}</p>
+            {/* 27 Nov (her review): the key for the New tag sits at the top, tag first, and names the version it compares
+                with, so the marks in Contents and the tables are explained before they are met */}
+            {prev && (
+              <p className="mt-2 hidden sm:block text-sm text-slate-600"><NewTag label={L.newTag} className="mr-1 align-[1px]" /> {L.since} {prev.label[lang]}</p>
+            )}
           </div>
           <button type="button" onClick={() => setLang(lang === 'en' ? 'ms' : 'en')} lang={lang === 'en' ? 'ms' : 'en'}
-            className="shrink-0 ml-4 sm:ml-0 h-10 px-4 text-sm font-bold rounded-[12px] bg-white border border-[#c8d7f4] text-accent-strong shadow-card hover:bg-accent-soft transition">
+            className="shrink-0 ml-4 sm:ml-0 h-10 px-4 text-sm font-bold rounded-xl bg-white border border-[#c8d7f4] text-accent-strong shadow-card hover:bg-accent-soft transition">
             {L.other}
           </button>
         </div>
       </header>
 
       {/* only the content scrolls; the header stays */}
-      <main lang={lang} className="flex-1 min-h-0 mx-auto w-full max-w-[1256px] px-4 sm:px-8 pt-3.5 pb-4 flex flex-col">
+      <main lang={lang} className="flex-1 min-h-0 mx-auto w-full max-w-314 px-4 sm:px-8 pt-3.5 pb-4 flex flex-col">
         <div className="emp-tile flex-1 min-h-0 overflow-y-auto bg-white border rounded-2xl px-5 sm:px-8 py-6">
           {!isCurrent && (
             <p role="status" className="mb-5 text-sm text-amber-900 bg-amber-50 border border-amber-200 rounded-xl px-4 py-3">
@@ -87,12 +108,21 @@ export default function Privacy() {
             </p>
           )}
 
+          {prev && (
+            <section aria-labelledby="whats-new" className="mb-4 rounded-xl border border-accent/25 bg-white px-5 sm:px-6 py-4">
+              <h2 id="whats-new" className="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-base font-semibold text-accent-strong">
+                <span className="flex items-center gap-2"><NewRays className="h-3.5 w-3.5" />{L.whatsNew}</span>
+                <span className="basis-full sm:basis-auto font-normal text-slate-500">· {version.label[lang]}</span></h2>
+              <p className="mt-1.5 text-[15px] leading-relaxed text-slate-700">{version.changes[lang]}</p>
+            </section>
+          )}
+
           <section aria-labelledby="in-short" className="rounded-xl bg-accent-soft/60 border border-[#c8d7f4] px-5 sm:px-6 py-4">
             <h2 id="in-short" className="text-base font-semibold text-slate-900">{short.title}</h2>
             <dl className="mt-3 divide-y divide-slate-100">
               {short.lines.map(([k, v]) => (
                 <div key={k} className="py-2.5 sm:grid sm:grid-cols-[11rem_1fr] sm:gap-4">
-                  <dt className="text-[15px] font-semibold text-slate-900">{k}</dt>
+                  <dt className="text-[15px] font-semibold text-slate-900">{isNew(`${k}|${v}`) && <NewTag label={L.newTag} className="mr-1 align-[1px]" />} {k}</dt>
                   <dd className="text-[15px] text-slate-700 leading-relaxed">{v}</dd>
                 </div>
               ))}
@@ -106,7 +136,8 @@ export default function Privacy() {
                 <ol className="space-y-1 text-sm">
                   {toc.map(([id, title], i) => (
                     <li key={id}><a href={`#${id}`} className="flex gap-2 text-slate-700 hover:text-blue-700 py-0.5">
-                      <span className="w-5 shrink-0 text-slate-500 tabular-nums">{i + 1}.</span>{title}</a></li>
+                      <span className="w-5 shrink-0 text-slate-500 tabular-nums">{i + 1}.</span>
+                      <span>{title}{newIn.has(id) && <NewRays mirrored className="ml-1.5 inline h-2.5 w-2.5 align-[-1px] text-accent-strong" />}</span></a></li>
                   ))}
                 </ol>
               </div>
@@ -117,7 +148,7 @@ export default function Privacy() {
                 <section key={id} id={id} className={`scroll-mt-4 ${card}`}>
                   <h2 className="text-lg font-semibold text-slate-900"><span className="text-slate-500 tabular-nums mr-2">{i + 1}.</span>{title}</h2>
                   <ul className="mt-3 space-y-2 text-[15px] text-slate-700 leading-relaxed list-disc pl-5">
-                    {points.map(p => <li key={p}>{rich(p)}</li>)}
+                    {points.map(p => <li key={p}>{isNew(p) && <NewTag label={L.newTag} className="mr-1" />} {rich(p)}</li>)}
                   </ul>
                   {id === 'collect' && (
                     <div className="mt-4 overflow-x-auto">
@@ -128,7 +159,7 @@ export default function Privacy() {
                         <tbody>
                           {rows.rows.map(([what, need, why]) => (
                             <tr key={what} className="border-b border-slate-200 last:border-0">
-                              <td className="py-2 pr-4 text-slate-800">{what}</td>
+                              <td className="py-2 pr-4 text-slate-800">{isNew([what, need, why].join('|')) && <NewTag label={L.newTag} className="mr-1 align-[1px]" />} {what}</td>
                               <td className="py-2 pr-4"><span className={`text-xs font-semibold rounded-full px-2 py-0.5 ${
                                 need === 'Required' || need === 'Wajib' ? 'bg-slate-100 text-slate-700' : 'bg-emerald-50 text-emerald-700'}`}>{need}</span></td>
                               <td className="py-2 text-slate-600">{why}</td>
