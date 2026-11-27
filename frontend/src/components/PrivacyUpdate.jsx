@@ -3,6 +3,7 @@ import api from '../api'
 import { useAuth } from '../context/useAuth'
 import { VERSIONS } from '../pages/privacyText'
 import { Busy } from './Spinner'
+import { NewRays } from './NewTag'
 
 // 21 Oct (her pick "2+3"; references.md "Telling users the privacy notice changed"): a student who agreed to an older
 // privacy notice is told what changed, once per visit, in a pop-up devoted to the change ("actively brought to the
@@ -39,11 +40,14 @@ export default function PrivacyUpdate() {
   }
   return (
     <div className="fixed inset-0 z-50 bg-slate-900/30 flex items-center justify-center p-4">
-      <div role="dialog" aria-modal="true" aria-labelledby="pn-title" className="w-full max-w-[38rem] bg-white rounded-2xl shadow-xl p-7">
+      <div role="dialog" aria-modal="true" aria-labelledby="pn-title" className="w-full max-w-152 bg-white rounded-2xl shadow-xl p-7">
         <h2 id="pn-title" className="text-lg font-semibold text-slate-900">We updated our privacy notice</h2>
         <p className="text-sm text-slate-500">{LATEST.label.en}</p>
         <div className="mt-4 rounded-xl bg-slate-50 border border-slate-200 px-4 py-3">
-          <p className="text-xs font-semibold text-slate-600">What's new</p>
+          {/* 27 Nov (her review): the mark alone, after the words and turned the same way as the Contents mark,
+              so the pop-up and the notice page read alike */}
+          <p className="flex items-center gap-1.5 text-xs font-semibold text-accent-strong">
+            What's new<NewRays mirrored className="h-3 w-3" /></p>
           <p className="text-sm text-slate-800 mt-1">{LATEST.changes.en}</p>
         </div>
         <p className="text-sm text-slate-600 mt-3">Everything else is the same.{' '}
@@ -67,10 +71,14 @@ export function PrivacyBanner() {
   const { user } = useAuth()
   if (!stale(user)) return null
   return (
-    <div role="status" className="flex flex-wrap items-center gap-x-4 gap-y-1 rounded-xl bg-blue-50 border border-blue-200 px-4 py-2.5 text-sm">
-      <p className="text-blue-900"><b className="font-semibold">Privacy notice updated</b> on {LATEST.label.en}: {LATEST.short}</p>
+    <div role="status" className="flex items-center gap-x-3 rounded-xl bg-partial-soft border border-partial/45 px-3 py-2 sm:px-4 sm:py-2.5 text-sm">
+      {/* a phone keeps this to one line: the date and the summary are for wider screens, where there is room for them */}
+      <p className="min-w-0 flex-1 text-partial-strong"><b className="font-semibold">Privacy notice updated</b>
+        <span className="hidden sm:inline"> on {LATEST.label.en}: {LATEST.short}</span></p>
+      {/* 27 Nov (her review): looks like a button, so it is obviously clickable */}
       <button type="button" onClick={() => window.dispatchEvent(new Event(PRIVACY_REVIEW))}
-        className="font-semibold text-blue-700 hover:underline whitespace-nowrap">Review and agree</button>
+        className="shrink-0 rounded-lg border border-partial/60 bg-white px-3 py-1 text-xs font-semibold text-partial-strong shadow-card transition hover:bg-partial-soft active:translate-y-px sm:px-3.5 sm:py-1.5 sm:text-sm">
+        Review and agree</button>
     </div>
   )
 }

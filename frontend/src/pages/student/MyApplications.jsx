@@ -22,11 +22,30 @@ import BackLink from '../../components/BackLink'
 const fmtDay = (iso) => iso ? new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }) : ''
 // 20 Oct (her review; blue is kept for things to click): grey = waiting, gold = moving forward (25 Nov: violet became blue in the Ocean palette, and blue is for clicks), green = good news,
 // red = not selected. Statuses on other sites use the same colours (their select).
+// 27 Nov (her review: applied, shortlisted and the rest all read as the same grey): one colour per stage, using the
+// app's own meanings (blue = what happened, violet = the employer looked, gold = waiting on you, teal = good end,
+// coral = no, grey = ended another way). The dots, the joining lines, the labels, the pills and the "other sites"
+// dropdown all read this one table, so a stage is never two colours in the same row.
+const STAGE = {
+  applied: { color: 'var(--color-accent)', soft: 'bg-accent-soft text-accent-strong', text: 'text-accent-strong' },
+  viewed: { color: 'var(--color-invite)', soft: 'bg-invite-soft text-invite-strong', text: 'text-invite-strong' },
+  shortlisted: { color: 'var(--color-partial)', soft: 'bg-partial-soft text-partial-strong', text: 'text-partial-strong' },
+  interviewing: { color: 'var(--color-partial)', soft: 'bg-partial-soft text-partial-strong', text: 'text-partial-strong' },
+  decision: { color: 'var(--color-have)', soft: 'bg-have-soft text-have-strong', text: 'text-have-strong' },
+  accepted: { color: 'var(--color-have)', soft: 'bg-have-soft text-have-strong', text: 'text-have-strong' },
+  offer: { color: 'var(--color-have)', soft: 'bg-have-soft text-have-strong', text: 'text-have-strong' },
+  rejected: { color: 'var(--color-missing)', soft: 'bg-missing-soft text-missing-strong', text: 'text-missing-strong' },
+  not_selected: { color: 'var(--color-missing)', soft: 'bg-missing-soft text-missing-strong', text: 'text-missing-strong' },
+  closed: { color: 'var(--color-line-strong)', soft: 'bg-slate-100 text-slate-600', text: 'text-slate-600' },
+  withdrew: { color: 'var(--color-line-strong)', soft: 'bg-slate-100 text-slate-600', text: 'text-slate-600' },
+}
+const stageOf = (step) => step.key === 'decision' && step.at && /not selected/i.test(step.label || '')
+  ? STAGE.rejected : STAGE[step.key] || STAGE.closed
 const PILL = {
-  applied: 'bg-slate-100 text-slate-700', viewed: 'bg-slate-100 text-slate-700', shortlisted: 'bg-amber-50 text-amber-800',
-  accepted: 'bg-green-50 text-green-800', rejected: 'bg-rose-50 text-rose-700', closed: 'bg-slate-100 text-slate-600',
-  interviewing: 'bg-amber-50 text-amber-800', offer: 'bg-green-50 text-green-800', not_selected: 'bg-rose-50 text-rose-700',
-  withdrew: 'bg-slate-50 text-slate-500 border border-slate-200',
+  applied: STAGE.applied.soft, viewed: STAGE.viewed.soft, shortlisted: STAGE.shortlisted.soft,
+  accepted: STAGE.accepted.soft, rejected: STAGE.rejected.soft, closed: STAGE.closed.soft,
+  interviewing: STAGE.interviewing.soft, offer: STAGE.offer.soft, not_selected: STAGE.not_selected.soft,
+  withdrew: STAGE.withdrew.soft,
 }
 // 14 Oct (transparency flow): every outcome says why. Reasons the employer picked, or why the job closed.
 const REASON_TEXT = {
@@ -91,11 +110,13 @@ function DetailSteps({ steps, decided }) {
         const skipped = !done && decided && s.key !== 'decision'
         return (
           <li key={s.key} className="flex-1 flex flex-col items-center relative">
-            {i > 0 && <span aria-hidden="true" className={`absolute z-0 top-3.25 right-1/2 w-full h-0.5 ${done || skipped ? 'bg-blue-500' : 'bg-slate-200'}`} />}
+            {i > 0 && <span aria-hidden="true" className={`absolute z-0 top-3.25 right-1/2 w-full h-0.5 ${done || skipped ? '' : 'bg-slate-200'}`}
+              style={done || skipped ? { backgroundColor: stageOf(steps[i - 1]).color } : undefined} />}
             {/* 20 Oct (her review): the circle is drawn above the line, not under it */}
             <span aria-hidden="true" className={`relative z-10 mt-0.5 w-6 h-6 rounded-full border-2 flex items-center justify-center text-[11px] leading-none text-white ${
-              done ? 'bg-blue-600 border-blue-600' : 'bg-white border-slate-300'}`}>{done ? '✓' : ''}</span>
-            <span className={`text-xs leading-4 mt-1.5 whitespace-nowrap ${i === last ? 'font-semibold text-slate-900' : done ? 'text-slate-600' : 'text-slate-500'}`}>
+              done ? '' : 'bg-white border-slate-300'}`}
+              style={done ? { backgroundColor: stageOf(s).color, borderColor: stageOf(s).color } : undefined}>{done ? '✓' : ''}</span>
+            <span className={`text-xs leading-4 mt-1.5 whitespace-nowrap ${i === last ? 'font-semibold' : ''} ${done ? stageOf(s).text : 'text-slate-500'}`}>
               {s.label}{done ? ` · ${fmtDay(s.at)}` : skipped ? ' · —' : ''}
             </span>
             <span className="sr-only">{done ? 'done' : skipped ? 'skipped' : 'not yet'}</span>
@@ -218,9 +239,10 @@ const ROW = 'grid gap-x-4 gap-y-2 lg:grid-cols-[minmax(0,22rem)_13.5rem_8.5rem_1
 
 // 19 Nov (her pick, mock review/page-headers.html): a finished step is a filled dot with a tick, so "done" doesn't
 // rest on colour alone; good news (Accepted, Offer) is teal
-const GOOD = ['Accepted', 'Offer']
 function StepDot({ s }) {
-  return <span aria-hidden="true" className={`step-dot ${s.at ? 'on' : ''} ${s.at && GOOD.includes(s.label) ? 'good' : ''}`} />
+  const tone = stageOf(s)
+  return <span aria-hidden="true" className={`step-dot ${s.at ? 'on' : ''}`}
+    style={s.at ? { borderColor: tone.color, backgroundColor: tone.color } : undefined} />
 }
 
 function MiniSteps({ steps }) {
@@ -234,8 +256,9 @@ function MiniSteps({ steps }) {
       <ol className="hidden xl:flex flex-nowrap items-center gap-1.5 whitespace-nowrap">
         {steps.map((s, i) => (
           <li key={s.key} className="flex items-center gap-1.5">
-            {i > 0 && <span aria-hidden="true" className={`w-3 h-0.5 rounded-full ${s.at ? 'bg-accent' : 'bg-line-strong'}`} />}
-            <span className={`flex items-center gap-1.5 text-[13px] ${i === last ? 'font-semibold text-slate-900' : s.at ? 'text-slate-600' : 'text-slate-500'}`}>
+            {i > 0 && <span aria-hidden="true" className={`w-3 h-0.5 rounded-full ${s.at ? '' : 'bg-line-strong'}`}
+              style={s.at ? { backgroundColor: stageOf(s).color } : undefined} />}
+            <span className={`flex items-center gap-1.5 text-[13px] ${i === last ? 'font-semibold' : ''} ${s.at ? stageOf(s).text : 'text-slate-500'}`}>
               <StepDot s={s} />
               {s.label}{i === last && date(s) && <span className="font-normal text-slate-500 whitespace-nowrap"> {date(s)}</span>}
               <span className="sr-only">{s.at ? ' done' : ' not yet'}</span>
@@ -406,7 +429,9 @@ function OutsideCard({ o, onStatus, onRemove }) {
           <label className="sr-only" htmlFor={`os-${o.id}`}>Status of {o.title}</label>
           <select id={`os-${o.id}`} value={o.status} onChange={e => onStatus(o, e.target.value)}
             className={`text-xs font-semibold rounded-lg pl-2 pr-1 py-1 border border-transparent ${PILL[o.status] || 'bg-white border-slate-300'}`}>
-            {OUTSIDE.map(([k, l]) => <option key={k} value={k}>{l}</option>)}
+            {OUTSIDE.map(([k, l]) => (
+              <option key={k} value={k} style={{ color: (STAGE[k] || STAGE.closed).color, fontWeight: 600 }}>{l}</option>
+            ))}
           </select>
           <button type="button" onClick={() => onRemove(o)} className="text-xs font-medium text-slate-500 hover:text-rose-700 hover:underline">Remove</button>
         </div>
